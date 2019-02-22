@@ -15,7 +15,7 @@ class PricingSeeder
       request_hash = Dir["#{DUMMY_DATA_PATH}/#{tenant.subdomain}/*.xlsx"]
                      .each_with_object({}) do |file_path, obj|
         file_name = File.basename(file_path, '.xlsx')
-        subdomain, sheet_type, other_info = *file_name.split('__')
+        _subdomain, sheet_type, _other_info = *file_name.split('__')
 
         if %w(hubs freight_rates local_charges).include?(sheet_type)
           obj[sheet_type] = { 'xlsx' => File.open(file_path) }
@@ -27,8 +27,6 @@ class PricingSeeder
       seed_local_charges(request_hash['local_charges'], shipper)
     end
   end
-
-  private
 
   def self.seed_hubs(req, shipper)
     if req.nil?

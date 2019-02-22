@@ -6,6 +6,9 @@ AllCops:
     - 'db/schema.rb'
     - '**/Rakefile'
 
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
+
 Metrics/AbcSize:
   Max: 25
   Exclude:
@@ -15,29 +18,30 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Max: 25
   Exclude:
+    - '**/*_spec.rb'
     - '**/*.gemspec'
+    - '**/*.rake'
+    - '**/*/factories/*.rb'
     - config/**/*.rb
     - db/migrate/*.rb
     - engines/*/db/migrate/*.rb
-    - engines/*/spec/**/*_spec.rb
-    - spec/**/*_spec.rb
+    - Gemfile
 
 Metrics/LineLength:
   Max: 120
   IgnoreCopDirectives: true
   Exclude:
-    - engines/*/spec/**/*_spec.rb
-    - qa/features/**/*.feature
-    - spec/**/*_spec.rb
+    - '**/*_spec.rb'
     - db/custom_seeds/*.rb
+    - qa/features/**/*_steps.rb
+    - qa/features/**/*.feature
 
 Metrics/MethodLength:
   Max: 25
   Exclude:
+    - '**/*_spec.rb'
     - db/migrate/*.rb
     - engines/*/db/migrate/*.rb
-    - engines/*/spec/**/*_spec.rb
-    - spec/**/*_spec.rb
 
 Metrics/ParameterLists:
   Max: 5
@@ -53,7 +57,7 @@ Naming/VariableNumber:
 
 Style/BlockDelimiters:
   Exclude:
-    - spec/**/*_spec.rb
+    - '**/*_spec.rb'
 
 # Disable Time over DateTime for legacy specs
 Style/DateTime:
@@ -76,8 +80,6 @@ Style/IfUnlessModifier:
 # value to a local variable for those cases.
 Style/MethodCalledOnDoEndBlock:
   Enabled: true
-  Exclude:
-    - spec/*
 
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:

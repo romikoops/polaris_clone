@@ -57,7 +57,7 @@ module DataValidator
 
     private
 
-    def validate_prices
+    def validate_prices # rubocop:disable Metrics/AbcSize
       @itineraries.each do |itinerary|
         @validation_results[itinerary.id] = [] unless @validation_results[itinerary.id]
         results = itinerary.test_pricings(@dummy_data, @user)
@@ -68,10 +68,9 @@ module DataValidator
             invalid_keys.push(target) if !result[:quote][target] && @expected_values[target]
           end
           if !invalid_keys.empty?
-            @validation_results[itinerary.id] << "Itinerary #{itinerary.id} level: #{result[:service_level].name} is missing: #{invalid_keys.map(&:to_s).join(', ')} "
+            @validation_results[itinerary.id] << "Itinerary #{itinerary.id} level: #{result[:service_level].name} is missing: #{invalid_keys.map(&:to_s).join(', ')} " # rubocop:disable Metrics/LineLength
           else
-
-            @validation_results[itinerary.id] << "Itinerary #{itinerary.id} level: #{result[:service_level].name} is valid!"
+            @validation_results[itinerary.id] << "Itinerary #{itinerary.id} level: #{result[:service_level].name} is valid!" # rubocop:disable Metrics/LineLength
           end
         end
       end

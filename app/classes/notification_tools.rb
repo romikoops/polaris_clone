@@ -46,7 +46,7 @@ module NotificationTools
 
   def update_convo(user, messages)
     convo_id = "#{user.tenant_id}_#{user.id}"
-    $db['messages'].update_one({ _id: convo_id }, messages)
+    $db['messages'].update_one({ _id: convo_id }, messages) # rubocop:disable Style/GlobalVars
   end
 
   def update_admin_convo(ref, messages)
@@ -54,13 +54,13 @@ module NotificationTools
     selected_messages = { 'conversations' => {}, 'tenant_id' => data_point['tenant_id'] }
 
     messages['conversations'].each do |k, v|
-      if v['messages'][0]['user_id'] == data_point['user_id'] && v['messages'][0]['tenant_id'] == data_point['tenant_id']
+      if v['messages'][0]['user_id'] == data_point['user_id'] && v['messages'][0]['tenant_id'] == data_point['tenant_id'] # rubocop:disable Metrics/LineLength
         selected_messages['conversations'][k] = v
       end
     end
 
     convo_id = "#{data_point['tenant_id']}_#{data_point['user_id']}"
-    $db['messages'].update_one({ _id: convo_id }, selected_messages)
+    $db['messages'].update_one({ _id: convo_id }, selected_messages) # rubocop:disable Style/GlobalVars
   end
 
   def add_message_to_convo(user, message, _admin)

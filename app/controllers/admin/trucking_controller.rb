@@ -49,15 +49,15 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   private
 
-  def clone_dv(k, v, keys = %w(upper lower))
-    if k.include?(keys[0]) || k.include?(keys[1])
-      v.clone.to_f
+  def clone_dv(key, value, keys = %w(upper lower))
+    if key.include?(keys[0]) || key.include?(keys[1])
+      value.clone.to_f
     else
-      v.clone
+      value.clone
     end
   end
 
-  def create_query(dv)
+  def create_query(dv) # rubocop:disable Naming/UncommunicativeMethodParamName
     query = {}
     dv.each do |key, val|
       query[key] = clone_dv(key, val)
@@ -65,7 +65,7 @@ class Admin::TruckingController < Admin::AdminBaseController
     query
   end
 
-  def populate_query_holder(dv, dir, dk)
+  def populate_query_holder(dv, dir, dk) # rubocop:disable Naming/UncommunicativeMethodParamName
     query_holder[dir][dk] = [] unless query_holder[dir][dk]
 
     query = create_query(dv)
@@ -93,11 +93,11 @@ class Admin::TruckingController < Admin::AdminBaseController
     @query_holder ||= {}
   end
 
-  def truckingQueries
+  def truckingQueries # rubocop:disable Naming/MethodName
     @truckingQueries ||= []
   end
 
-  def truckingPricings
+  def truckingPricings # rubocop:disable Naming/MethodName
     @truckingPricings ||= []
   end
 
@@ -105,7 +105,7 @@ class Admin::TruckingController < Admin::AdminBaseController
     @directions ||= meta['direction'] == 'either' ? %w(import export) : [meta['direction']]
   end
 
-  def truckingHubId
+  def truckingHubId # rubocop:disable Naming/MethodName
     @truckingHubId = "#{meta['nexus_id']}_#{meta['loadType']}_#{current_user.tenant_id}"
   end
 
@@ -126,7 +126,7 @@ class Admin::TruckingController < Admin::AdminBaseController
     end
   end
 
-  def temp_hash(dt)
+  def temp_hash(dt) # rubocop:disable Naming/UncommunicativeMethodParamName
     tmp = {}
     dt.each do |key, val|
       tmp[key] = clone_dv(key, val, %w(min max))
@@ -134,7 +134,7 @@ class Admin::TruckingController < Admin::AdminBaseController
     tmp
   end
 
-  def populate_trucking_pricing(dir, dk, dv)
+  def populate_trucking_pricing(dir, dk, dv) # rubocop:disable Naming/UncommunicativeMethodParamName
     query = query_holder[dir][dk]
     dv['table'].each_with_index do |dt, _i|
       tmp = temp_hash(dt)
@@ -155,19 +155,19 @@ class Admin::TruckingController < Admin::AdminBaseController
     end
   end
 
-  def update_item_truckingPricings
+  def update_item_truckingPricings # rubocop:disable Naming/MethodName
     truckingPricings.each do |k|
       update_item('truckingPricings', { _id: k[:_id] }, k)
     end
   end
 
-  def update_item_truckingQueries
+  def update_item_truckingQueries # rubocop:disable Naming/MethodName
     truckingQueries.each do |k|
       update_item('truckingQueries', { _id: k[:_id] }, k)
     end
   end
 
-  def update_item_truckingHubs
+  def update_item_truckingHubs # rubocop:disable Naming/MethodName
     update_item('truckingHubs',
                 { _id: truckingHubId },
                 type: meta['type'].to_s,

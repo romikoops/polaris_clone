@@ -441,28 +441,30 @@ module DataValidator
       result.deep_symbolize_keys!
       result_for_printing = {}
       begin
-      expected_result.each do |key1, value1|
-        if value1 && value1[:value]
-          result_for_printing[key1] = diff_result_string(result, [key1], expected_result)
-        elsif key1 == 'cargo'
-          value1[:cargo_item].each do |key2, _value2|
-            if key2.to_s != 'edited_total' || key2.to_s != 'total'
-              result_for_printing[key1] = {} unless result_for_printing[key1]
-              result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
+        expected_result.each do |key_1, value_1|
+          if value_1 && value_1[:value]
+            result_for_printing[key_1] = diff_result_string(result, [key_1], expected_result)
+          elsif key_1 == 'cargo'
+            value_1[:cargo_item].each do |key_2, _value_2|
+              if key_2.to_s != 'edited_total' || key_2.to_s != 'total'
+                result_for_printing[key_1] = {} unless result_for_printing[key_1]
+                result_for_printing[key_1][key_2] = diff_result_string(result, [key_1, key_2], expected_result)
+              end
             end
-          end
-        elsif value1 && !value1.keys.empty?
-          value1.each do |key2, _value2|
-            if key2.to_s != 'edited_total' || key2.to_s != 'total'
-              result_for_printing[key1] = {} unless result_for_printing[key1]
-              result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
+          elsif value_1 && !value_1.keys.empty?
+            value_1.each do |key_2, _value_2|
+              if key_2.to_s != 'edited_total' || key_2.to_s != 'total'
+                result_for_printing[key_1] = {} unless result_for_printing[key_1]
+                result_for_printing[key_1][key_2] = diff_result_string(result, [key_1, key_2], expected_result)
+              end
             end
           end
         end
+      rescue StandardError => e
+        Rails.logger.error e.message
       end
-      rescue Exception => e
-    end
-      final_result = {
+
+      {
         result: result,
         expected: expected_result,
         number: example_index,

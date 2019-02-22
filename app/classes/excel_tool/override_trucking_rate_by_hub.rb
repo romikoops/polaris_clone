@@ -158,9 +158,17 @@ module ExcelTool
           range = row_data[2].delete(' ').split('-')
           @zip_char_length ||= range[0].length
           zones[zone_name] << if identifier_type == 'distance' && identifier_modifier == 'return'
-                                { min: (range[0].to_i / 2.0).ceil, max: (range[1].to_i / 2.0).ceil, country: row_data[3].strip }
+                                {
+                                  min: (range[0].to_i / 2.0).ceil,
+                                  max: (range[1].to_i / 2.0).ceil,
+                                  country: row_data[3].strip
+                                }
                               else
-                                { min: range[0].to_i, max: range[1].to_i, country: row_data[3].strip }
+                                {
+                                  min: range[0].to_i,
+                                  max: range[1].to_i,
+                                  country: row_data[3].strip
+                                }
                               end
 
         elsif row_data[1] && row_data[2]
@@ -176,10 +184,16 @@ module ExcelTool
     def load_ident_values_and_countries
       current_country = { name: nil, code: nil }
       zones.each do |zone_name, idents_and_countries|
-        current_country = { name: Country.find_by_code(idents_and_countries.first[:country]).name, code: idents_and_countries.first[:country] }
+        current_country = {
+          name: Country.find_by_code(idents_and_countries.first[:country]).name,
+          code: idents_and_countries.first[:country]
+        }
         all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
           if current_country[:code] != idents_and_country[:country]
-            current_country = { name: Country.find_by_code(idents_and_country[:country]).name, code: idents_and_country[:country] }
+            current_country = {
+              name: Country.find_by_code(idents_and_country[:country]).name,
+              code: idents_and_country[:country]
+            }
           end
           if idents_and_country[:min] && idents_and_country[:max]
             (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
@@ -381,7 +395,11 @@ module ExcelTool
 
           defaults[mod_key] = {} unless defaults[mod_key]
           min_max_arr = cell.split(' - ')
-          defaults[mod_key][i] = { "min_#{mod_key}": min_max_arr[0].to_d, "max_#{mod_key}": min_max_arr[1].to_d, min_value: nil }.symbolize_keys
+          defaults[mod_key][i] = {
+            "min_#{mod_key}": min_max_arr[0].to_d,
+            "max_#{mod_key}": min_max_arr[1].to_d,
+            min_value: nil
+          }.symbolize_keys
         end
       end
     end

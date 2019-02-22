@@ -342,8 +342,8 @@ module DataValidator
       if (!result_currency.nil? && !expected_currency.nil?) && (result_currency != expected_currency)
         result_value = convert_value(value, result_currency, expected_currency)
         keys.each_with_index do |key, i|
-          if i > 0 && keys[i - 1] && result[:quote][keys[i - 1]][key][:value] = result_value
-            result[:quote][keys[i - 1]][key][:value] = "#{result_value.try(:round, 3)} (#{result_currency} #{value.try(:round, 3)})"
+          if i.positive? && keys[i - 1] && (result[:quote][keys[i - 1]][key][:value] = result_value)
+            result[:quote][keys[i - 1]][key][:value] = "#{result_value.try(:round, 3)} (#{result_currency} #{value.try(:round, 3)})" # rubocop:disable Metrics/LineLength
             result[:quote][keys[i - 1]][key][:currency] = expected_currency
           end
         end
@@ -351,7 +351,7 @@ module DataValidator
         result_value = value
       end
 
-      return nil if (result_value.blank? || result_value == 0) || (expected_value.blank? || expected_value == 0)
+      return nil if (result_value.blank? || result_value.zero?) || (expected_value.blank? || expected_value.zero?)
 
       diff_val = (result_value - expected_value).try(:round, 3)
       diff_percent = ((diff_val / expected_value) * 100).try(:round, 3)
@@ -361,32 +361,34 @@ module DataValidator
       "#{expected_currency} #{diff_val} (#{diff_percent}%)"
     end
 
-    def validate_result(result, expected_result, example_index, data)
+    def validate_result(result, expected_result, example_index, data) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
       result.deep_symbolize_keys!
       result_for_printing = {}
       begin
-      expected_result.each do |key1, value1|
-        if value1 && value1[:value]
-          result_for_printing[key1] = diff_result_string(result, [key1], expected_result)
-        elsif key1 == 'cargo'
-          value1[:cargo_item].each do |key2, _value2|
-            if key2.to_s != 'edited_total' || key2.to_s != 'total'
-              result_for_printing[key1] = {} unless result_for_printing[key1]
-              result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
+        expected_result.each do |key_1, value_1|
+          if value_1 && value_1[:value]
+            result_for_printing[key_1] = diff_result_string(result, [key_1], expected_result)
+          elsif key_1 == 'cargo'
+            value_1[:cargo_item].each do |key_2, _value_2|
+              if key_2.to_s != 'edited_total' || key_2.to_s != 'total'
+                result_for_printing[key_1] = {} unless result_for_printing[key_1]
+                result_for_printing[key_1][key_2] = diff_result_string(result, [key_1, key_2], expected_result)
+              end
             end
-          end
-        elsif value1 && !value1.keys.empty?
-          value1.each do |key2, _value2|
-            if key2.to_s != 'edited_total' || key2.to_s != 'total'
-              result_for_printing[key1] = {} unless result_for_printing[key1]
-              result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
+          elsif value_1 && !value_1.keys.empty?
+            value_1.each do |key_2, _value_2|
+              if key_2.to_s != 'edited_total' || key_2.to_s != 'total'
+                result_for_printing[key_1] = {} unless result_for_printing[key_1]
+                result_for_printing[key_1][key_2] = diff_result_string(result, [key_1, key_2], expected_result)
+              end
             end
           end
         end
+      rescue StandardError => e
+        Rails.logger.error e.message
       end
-      rescue Exception => e
-    end
-      final_result = {
+
+      {
         result: result,
         expected: expected_result,
         number: example_index,

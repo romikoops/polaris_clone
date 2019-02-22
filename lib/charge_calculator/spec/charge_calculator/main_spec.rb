@@ -179,8 +179,8 @@ RSpec.describe ChargeCalculator::Main do
           node_tree = subject.price.to_h
           expect(node_tree.to_json).to match_json_schema('main/price')
 
-          cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
-          cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
+          # cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
+          # cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
 
           expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
             # cargo_item_1_payload * BigDecimal("23.42") * 2
@@ -250,8 +250,8 @@ RSpec.describe ChargeCalculator::Main do
           node_tree = subject.price.to_h
           expect(node_tree.to_json).to match_json_schema('main/price')
 
-          cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
-          cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
+          # cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
+          # cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
 
           expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
             # (cargo_item_1_payload / 100).ceil * BigDecimal("51.25") * 2
@@ -308,8 +308,8 @@ RSpec.describe ChargeCalculator::Main do
           node_tree = subject.price.to_h
           expect(node_tree.to_json).to match_json_schema('main/price')
 
-          cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
-          cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
+          # cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
+          # cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
 
           expect(node_tree.dig(:children, 0, :children, 0, :amount)).to eq(
             200

@@ -197,8 +197,8 @@ RSpec.describe ChargeCalculator do
         node_tree = result.to_h
         expect(node_tree.to_json).to match_json_schema('main/price')
 
-        cargo_item_1_volume  = BigDecimal('100.0')**3 / 1_000_000
-        wm_conversion_ratio  = BigDecimal('1000')
+        # cargo_item_1_volume  = BigDecimal('100.0')**3 / 1_000_000
+        # wm_conversion_ratio  = BigDecimal('1000')
 
         cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
 

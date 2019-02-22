@@ -49,9 +49,10 @@ module DocumentService
     private
 
     def filtered_results
-      _results = unfiltered_results.select { |ufr| ufr['truckingPricing']['load_type'] == target_load_type }
-      _results.sort_by! { |res| res[identifier][0][0].to_i } if identifier == 'distance'
-      _results
+      results = unfiltered_results.select { |ufr| ufr['truckingPricing']['load_type'] == target_load_type }
+      results.sort_by! { |res| res[identifier][0][0].to_i } if identifier == 'distance'
+
+      results
     end
 
     def prepare_sheet_data(meta, ufr)
@@ -156,17 +157,17 @@ module DocumentService
     end
 
     def update_zones(ufr)
-      unless zones.include?(idents: ufr[identifier], country_code: ufr['countryCode'])
-        zones.push(idents: ufr[identifier], country_code: ufr['countryCode'])
-      end
+      return unless zones.include?(idents: ufr[identifier], country_code: ufr['countryCode'])
+
+      zones.push(idents: ufr[identifier], country_code: ufr['countryCode'])
     end
 
-    def write_fees_to_sheet(truck_type, currency)
+    def write_fees_to_sheet(truck_type, currency) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
       row = 1
       fee_header_values.each_with_index { |hv, i| fees_sheet.write(0, i, hv, header_format) }
       dir_fees.deep_symbolize_keys!
-      dir_fees.each do |carriage_dir, fees|
-        fees.each do |key, fee|
+      dir_fees.each do |carriage_dir, fees| # rubocop:disable Metrics/BlockLength
+        fees.each do |key, fee| # rubocop:disable Metrics/BlockLength
           fees_sheet.write(row, 0, fee[:name])
           fees_sheet.write(row, 1, hub.hub_type)
           fees_sheet.write(row, 2, key)

@@ -37,8 +37,7 @@ When('I select {string} as {string}') do |place, type|
       end
     end
 
-    #find a close backdrop if it is there
-
+    # find a close backdrop if it is there
     backdrop = all('.ccb_backdrop')
 
     backdrop.first.click() unless backdrop.empty?

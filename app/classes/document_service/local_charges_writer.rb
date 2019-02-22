@@ -112,7 +112,7 @@ module DocumentService
       end
     end
 
-    def worksheet_conditional_builder(worksheet, row, fee, range_fee = nil)
+    def worksheet_conditional_builder(worksheet, row, fee, range_fee = nil) # rubocop:disable Metrics/PerceivedComplexity, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize
       case fee[:rate_basis]
       when 'PER_CONTAINER'
         worksheet.write(row, 18, fee[:value])

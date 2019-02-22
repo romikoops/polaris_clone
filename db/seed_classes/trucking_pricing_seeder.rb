@@ -15,12 +15,12 @@ class TruckingPricingSeeder
 
       Dir["#{DUMMY_DATA_PATH}/#{tenant.subdomain}/*.xlsx"].each do |file_path|
         file_name = File.basename(file_path, '.xlsx')
-        subdomain, sheet_type, hub_name = *file_name.split('__')
+        _subdomain, sheet_type, hub_name = *file_name.split('__')
 
         trucking_load_type_match_data = sheet_type.match(/trucking_(.)/)
         next if trucking_load_type_match_data.nil?
 
-        trucking_load_type = trucking_load_type_match_data[1]
+        # trucking_load_type = trucking_load_type_match_data[1]
 
         if hub_name.nil?
           puts "(!) No hub supplied for trucking sheet #{file_name} (!)".red

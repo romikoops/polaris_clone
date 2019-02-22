@@ -199,43 +199,141 @@ module ExcelTool
         'title' => row[:title],
         'text' => text_object_from_csv(row[:text_array]),
         'read_more' => row[:read_more],
-        'additional_info_text' => row[:additional_info],
-        'addon_type' => row[:addon_type]
+        'additional_info_text' => row[:additional_info]
 
       }
     end
 
     def build_charge(row)
-      case row[:rate_basis].upcase
-      when 'PER_SHIPMENT'
-        charge = { currency: row[:currency], value: row[:shipment], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_CONTAINER'
-        charge = { currency: row[:currency], value: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_BILL'
-        charge = { currency: row[:currency], min: row[:minimum], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_CBM'
-        charge = { currency: row[:currency], min: row[:minimum], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_KG'
-        charge = { currency: row[:currency], min: row[:minimum], value: row[:kg], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_TON'
-        charge = { currency: row[:currency], ton: row[:ton], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_WM'
-        charge = { currency: row[:currency], value: row[:wm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_ITEM'
-        charge = { currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_CBM_TON'
-        charge = { currency: row[:currency], cbm: row[:cbm], ton: row[:ton], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_SHIPMENT_CONTAINER'
-        charge = { currency: row[:currency], shipment: row[:shipment], container: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_BILL_CONTAINER'
-        charge = { currency: row[:currency], bill: row[:bill], container: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_CBM_KG'
-        charge = { currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when 'PER_KG_RANGE'
-        charge = { currency: row[:currency], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], range_min: row[:range_min], range_max: row[:range_max] }
-      when 'UNKNOWN'
-        charge = { currency: row[:currency], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], unknown: true }
-      end
+      charge = case row[:rate_basis].upcase
+               when 'PER_SHIPMENT'
+                 {
+                   currency: row[:currency],
+                   value: row[:shipment],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_CONTAINER'
+                 {
+                   currency: row[:currency],
+                   value: row[:container],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_BILL'
+                 {
+                   currency: row[:currency],
+                   min: row[:minimum],
+                   value: row[:bill],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_CBM'
+                 {
+                   currency: row[:currency],
+                   min: row[:minimum],
+                   value: row[:cbm],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_KG'
+                 {
+                   currency: row[:currency],
+                   min: row[:minimum],
+                   value: row[:kg],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_TON'
+                 {
+                   currency: row[:currency],
+                   ton: row[:ton],
+                   min: row[:minimum],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_WM'
+                 {
+                   currency: row[:currency],
+                   value: row[:wm],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_ITEM'
+                 {
+                   currency: row[:currency],
+                   value: row[:item],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_CBM_TON'
+                 {
+                   currency: row[:currency],
+                   cbm: row[:cbm],
+                   ton: row[:ton],
+                   min: row[:minimum],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_SHIPMENT_CONTAINER'
+                 {
+                   currency: row[:currency],
+                   shipment: row[:shipment],
+                   container: row[:container],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_BILL_CONTAINER'
+                 {
+                   currency: row[:currency],
+                   bill: row[:bill],
+                   container: row[:container],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_CBM_KG'
+                 {
+                   currency: row[:currency],
+                   cbm: row[:cbm],
+                   kg: row[:kg],
+                   min: row[:minimum],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee]
+                 }
+               when 'PER_KG_RANGE'
+                 {
+                   currency: row[:currency],
+                   kg: row[:kg],
+                   min: row[:minimum],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee],
+                   range_min: row[:range_min],
+                   range_max: row[:range_max]
+                 }
+               when 'UNKNOWN'
+                 {
+                   currency: row[:currency],
+                   kg: row[:kg],
+                   min: row[:minimum],
+                   rate_basis: row[:rate_basis],
+                   key: row[:fee_code],
+                   name: row[:fee],
+                   unknown: true
+                 }
+               end
 
       charge[:expiration_date] = row[:expiration_date]
       charge[:effective_date] = row[:effective_date]
@@ -243,10 +341,9 @@ module ExcelTool
     end
 
     def update_hashes(row, addons, tenant_vehicles, counterparts)
-      charge = build_charge(row)
-      addons = addon_load_setter(
+      addon_load_setter(
         addons,
-        charge,
+        build_charge(row),
         row[:cargo_class].downcase,
         row[:direction].downcase,
         tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || 'general',
@@ -256,12 +353,12 @@ module ExcelTool
       )
     end
 
-    def attach_text(row, addons, tenant_vehicles, counterparts)
-      tv_id =  tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || 'general'
-      cph_id = counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || 'general'
-      dir = row[:direction].downcase
-      lt = row[:cargo_class].downcase
-      add_on = addons[tv_id][dir][lt]
+    def attach_text(row, _addons, _tenant_vehicles, _counterparts)
+      # tv_id =  tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || 'general'
+      # cph_id = counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || 'general'
+      # dir = row[:direction].downcase
+      # lt = row[:cargo_class].downcase
+      # add_on = addons[tv_id][dir][lt]
       v['title'] = row[:title]
       v['text'] = text_object_from_csv(row[:text_array])
       v['read_more'] = row[:read_more]
@@ -342,12 +439,12 @@ module ExcelTool
       }
     end
 
-    def set_range_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id)
+    def set_range_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id) # rubocop:disable Metrics/AbcSize, Metrics/ParameterLists
       existing_charge = all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]]
       if existing_charge && existing_charge[:range]
-        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]][:range] << pushable_charg(charge)
+        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]][:range] << pushable_charg(charge) # rubocop:disable Metrics/LineLength
       else
-        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]] = expanded_charge(charge)
+        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]] = expanded_charge(charge) # rubocop:disable Metrics/LineLength
       end
       all_charges
     end
@@ -382,7 +479,7 @@ module ExcelTool
 
     def set_general_addon(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id, type)
       if charge[:rate_basis].include? 'RANGE'
-        if load_type === 'fcl'
+        if load_type == 'fcl'
           %w(fcl_20 fcl_40 fcl_40_hq).each do |lt|
             set_range_fee(all_charges, charge, lt, direction, tenant_vehicle_id, mot, counterpart_hub_id, type)
           end
@@ -395,7 +492,7 @@ module ExcelTool
     end
 
     def set_regular_addon(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id, type)
-      if load_type === 'fcl'
+      if load_type == 'fcl'
         %w(fcl_20 fcl_40 fcl_40_hq).each do |lt|
           all_charges[counterpart_hub_id][tenant_vehicle_id][direction][lt][type]['fees'][charge[:key]] = charge
         end

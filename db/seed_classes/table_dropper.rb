@@ -12,7 +12,7 @@ class TableDropper
         break
       end
       model.delete_all
-    rescue StandardError => e
+    rescue StandardError
       models_to_delete << model
     end
 

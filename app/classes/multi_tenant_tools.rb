@@ -229,11 +229,13 @@ module MultiTenantTools
       min_ttl: 0
     }
     price_class = 'PriceClass_All'
-    viewer_certificate = { cloud_front_default_certificate: false,
-                           ssl_support_method: 'sni-only',
-                           acm_certificate_arn: 'arn:aws:acm:us-east-1:003688427525:certificate/fa0a9dca-a804-4fee-8a97-a273f827b1c5' }
+    viewer_certificate = {
+      cloud_front_default_certificate: false,
+      ssl_support_method: 'sni-only',
+      acm_certificate_arn: 'arn:aws:acm:us-east-1:003688427525:certificate/fa0a9dca-a804-4fee-8a97-a273f827b1c5'
+    }
     comment = '-'
-    enabled = true
+
     resp = cloudfront.create_distribution \
       distribution_config: {
         caller_reference: caller_reference,
@@ -277,13 +279,13 @@ module MultiTenantTools
     new_record(domain, resp[:distribution][:domain_name])
   end
 
-  def new_record(domain, cf_name)
+  def new_record(domain, cf_name) # rubocop:disable Metrics/MethodLength
     client = Aws::Route53::Client.new(
       access_key_id: Settings.aws.access_key_id,
       secret_access_key: Settings.aws.secret_access_key,
       region: Settings.aws.region
     )
-    resp = client.change_resource_record_sets(
+    client.change_resource_record_sets(
       hosted_zone_id: 'Z3TZQVG8RI9CYN', # required
       change_batch: { # required
         comment: 'Multi Tenant System',
@@ -305,7 +307,8 @@ module MultiTenantTools
         ]
       }
     )
-    resp = client.change_resource_record_sets(
+
+    client.change_resource_record_sets(
       hosted_zone_id: 'Z3TZQVG8RI9CYN', # required
       change_batch: { # required
         comment: 'Hydra6',
@@ -328,7 +331,7 @@ module MultiTenantTools
     )
   end
 
-  def seed_demo_site(subdomain, tld)
+  def seed_demo_site(subdomain, tld) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     tenant = Tenant.find_by_subdomain(subdomain)
     tenant.users.destroy_all
     admin = tenant.users.new(
@@ -471,26 +474,27 @@ module MultiTenantTools
     shipper = t.users.shipper.first
     public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
     req = { 'xlsx' => public_pricings }
-    overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)
-    overwrite_mongo_lcl_pricings(req, dedicated = true, shipper)
+    overwrite_mongo_lcl_pricings(req, false, shipper)
+    overwrite_mongo_lcl_pricings(req, true, shipper)
   end
 
-  def invalidate(cfId, subdomain)
+  def invalidate(cloudfront_id, subdomain)
     cloudfront = Aws::CloudFront::Client.new(
       access_key_id: Settings.aws.access_key_id,
       secret_access_key: Settings.aws.secret_access_key,
       region: Settings.aws.region
     )
-    invalArray = ["/#{subdomain}.html", '/config.js']
-    invalStr = Time.now.to_i.to_s + '_subdomain'
-    resp = cloudfront.create_invalidation(
-      distribution_id: cfId, # required
+    invalidate_array = ["/#{subdomain}.html", '/config.js']
+    invalidate_string = Time.now.to_i.to_s + '_subdomain'
+
+    cloudfront.create_invalidation(
+      distribution_id: cloudfront_id, # required
       invalidation_batch: { # required
         paths: { # required
-          quantity: invalArray.length, # required
-          items: invalArray
+          quantity: invalidate_array.length, # required
+          items: invalidate_array
         },
-        caller_reference: invalStr.to_s # required
+        caller_reference: invalidate_string.to_s # required
       }
     )
   end

@@ -99,8 +99,8 @@ module ExcelTool
 
     def overwrite_clients
       client_rows
-      @client_rows.map do |_client_row|
-        @client_row = _client_row
+      @client_rows.map do |client_row|
+        @client_row = client_row
         client
         update_or_create_client
       end

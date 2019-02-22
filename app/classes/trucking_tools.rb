@@ -108,12 +108,11 @@ module TruckingTools
            when 'PER_CBM_KG'
              cbm_value = cargo['volume'] * fee[:cbm]
              kg_value = cargo['weight'] * fee[:kg]
-             min = fee[:min_value] || 0
              [kg_value, cbm_value].max
 
            when /RANGE/
              handle_range_fare(fee, cargo)
-    end
+           end
 
     final_result = round_fare(fare, scope['continuous_rounding'])
     { currency: fee[:currency], value: final_result, key: key }
@@ -136,7 +135,7 @@ module TruckingTools
 
                value = fee_range.nil? ? 0 : fee_range[:rate]
                [value, min].max
-    end
+             end
 
     result
   end
@@ -208,6 +207,7 @@ module TruckingTools
       result[:km] = trucking_pricing['rates']['km'][0]['rate']['value']
       result[:min_value] = trucking_pricing['rates']['unit'][0]['min_value']
       result[:currency] = trucking_pricing['rates']['unit'][0]['rate']['currency']
+
       return { rate: result, fees: trucking_pricing['fees'] }
     end
     {}
@@ -249,7 +249,7 @@ module TruckingTools
               cargos.first
             else
               consolidate_cargo(cargos)
-    end
+            end
     calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
   end
 
@@ -300,7 +300,6 @@ module TruckingTools
   end
 
   def get_container_object(containers)
-    cargo_total_items = containers.map(&:quantity).sum
     containers.each_with_object({}) do |cargo, cargo_object|
       cargo_object["container_#{cargo.id}"] = {
         'weight' => cargo.payload_in_kg,
