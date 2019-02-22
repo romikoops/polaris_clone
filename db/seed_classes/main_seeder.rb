@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Dir["#{Rails.root}/db/seed_classes/*.rb"].each { |file| require file }
 
 class MainSeeder

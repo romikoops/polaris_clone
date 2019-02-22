@@ -17,19 +17,19 @@ module AdmiraltyAssets
     include AdmiraltyAssets::ApplicationHelper
 
     describe 'controller_classes' do
-      it 'should return controller specific CSS class names' do
+      it 'returns controller specific CSS class names' do
         expect(controller_classes).to eq('application application application_')
       end
     end
 
     describe 'controller_class' do
-      it 'should return namespaces class' do
+      it 'returns namespaces class' do
         expect(controller_class).to eq('application')
       end
     end
 
     describe 'controller_action_class' do
-      it 'should return controller class with action' do
+      it 'returns controller class with action' do
         expect(controller_action_class).to eq('application_')
       end
     end

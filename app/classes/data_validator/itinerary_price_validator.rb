@@ -6,7 +6,7 @@ module DataValidator
 
     def post_initialize(args)
       itinerary_ids = @tenant.itineraries.ids.reject do |id|
-        Pricing.where(itinerary_id: id).for_load_type( args[:load_type]).empty?
+        Pricing.where(itinerary_id: id).for_load_type(args[:load_type]).empty?
       end
       @itineraries = @tenant.itineraries.where(id: itinerary_ids)
       @user = @user ||= tenant.users.shipper.first
@@ -25,7 +25,7 @@ module DataValidator
           }
         ],
         load_type: 'cargo_item'
-      } : 
+      } :
       {
         has_pre_carriage: args[:has_pre_carriage],
         has_on_carriage: args[:has_on_carriage],
@@ -34,7 +34,7 @@ module DataValidator
         cargo_units: [
           {
             size_class: 'fcl_20',
-            payload_in_kg: 10000,
+            payload_in_kg: 10_000,
             payload_in_kg: 1000
           }
         ],
@@ -56,25 +56,22 @@ module DataValidator
     end
 
     private
+
     def validate_prices
       @itineraries.each do |itinerary|
         @validation_results[itinerary.id] = [] unless @validation_results[itinerary.id]
         results = itinerary.test_pricings(@dummy_data, @user)
         results.each do |result|
-
           invalid_keys = []
           result.deep_symbolize_keys!
-          [:export, :import, :cargo].each do |target|
-
-            if (!result[:quote][target] && @expected_values[target])
-              invalid_keys.push(target)
-            end
+          %i(export import cargo).each do |target|
+            invalid_keys.push(target) if !result[:quote][target] && @expected_values[target]
           end
-          if invalid_keys.length > 0
-            @validation_results[itinerary.id] << "Itinerary #{itinerary.id} level: #{result[:service_level].name } is missing: #{invalid_keys.map{|key| key.to_s}.join(', ')} "
+          if !invalid_keys.empty?
+            @validation_results[itinerary.id] << "Itinerary #{itinerary.id} level: #{result[:service_level].name} is missing: #{invalid_keys.map(&:to_s).join(', ')} "
           else
-            
-            @validation_results[itinerary.id] << "Itinerary #{itinerary.id} level: #{result[:service_level].name } is valid!"
+
+            @validation_results[itinerary.id] << "Itinerary #{itinerary.id} level: #{result[:service_level].name} is valid!"
           end
         end
       end

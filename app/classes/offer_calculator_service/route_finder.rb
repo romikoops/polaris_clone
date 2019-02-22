@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # require "#{Rails.root}/app/non_activerecord_models/route.rb"
 module OfferCalculatorService
   class RouteFinder < Base
@@ -9,6 +10,7 @@ module OfferCalculatorService
       )
 
       raise ApplicationError::NoRoute if routes_attributes.nil?
+
       routes_attributes.map { |attributes| Route.new(attributes) }
     end
   end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module OfferCalculatorService
   class RouteFilter < Base
     def perform(routes)

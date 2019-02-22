@@ -9,8 +9,8 @@ module ChargeCalculator
       #     x         |   cm
       #     y         |   cm
       #     z         |   cm
-      #   volume      |   m3    
-      #   payload     |   kg    
+      #   volume      |   m3
+      #   payload     |   kg
 
       def volume
         @volume ||= data.fetch(:volume) { volume_from_dimensions }
@@ -18,8 +18,8 @@ module ChargeCalculator
 
       def price(pricing:)
         Models::Price.new(
-          children:    prices(pricing: pricing),
-          category:    :cargo_unit,
+          children: prices(pricing: pricing),
+          category: :cargo_unit,
           description: "cargo_unit_#{id}".to_sym
         )
       end

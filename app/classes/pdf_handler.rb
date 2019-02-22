@@ -234,5 +234,4 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
 
     response.body
   end
-
 end

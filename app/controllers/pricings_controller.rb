@@ -22,7 +22,7 @@ class PricingsController < ApplicationController
       {
         itineraries: itineraries,
         transportCategories: @transports,
-        lastUpdate:          last_updated
+        lastUpdate: last_updated
       }
     end
     response_handler(response)
@@ -41,7 +41,7 @@ class PricingsController < ApplicationController
   def request_dedicated_pricing
     new_pricing_request = pricing_request_params.to_h.symbolize_keys
     PricingMailer.request_email(new_pricing_request).deliver_later
-    
+
     new_pricing_request[:status] = 'requested'
     @pricing_request = PricingRequest.create!(new_pricing_request)
 
@@ -70,6 +70,7 @@ class PricingsController < ApplicationController
         ded_pricing.tenant_vehicle_id == pricing.tenant_vehicle_id &&
         ded_pricing.transport_category == pricing.transport_category
       end.empty?
+
       dedicated_pricings << pricing
     end
     dedicated_pricings

@@ -7,7 +7,7 @@ RSpec.describe ChargeCalculator::Reducers::Base do
 
   context 'instance methods' do
     describe '#apply' do
-      it 'should return raise an exception' do
+      it 'returns raise an exception' do
         expect { subject.apply }.to raise_error NotImplementedError
       end
     end

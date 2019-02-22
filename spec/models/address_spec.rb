@@ -31,7 +31,7 @@ RSpec.describe Address do
 
   describe '.create_and_geocode' do
     it 'successfully' do
-      address = Address.create_and_geocode('city' => 'Gothenburg', 'country' => 'Sweden')
+      address = described_class.create_and_geocode('city' => 'Gothenburg', 'country' => 'Sweden')
 
       expect(address.city).to eq 'Gothenburg'
     end
@@ -39,7 +39,7 @@ RSpec.describe Address do
 
   describe '.self.geocoded_address' do
     it 'successfully' do
-      address = Address.geocoded_address('Gothenburg, Sweden')
+      address = described_class.geocoded_address('Gothenburg, Sweden')
 
       expect(address.city).to eq 'Gothenburg'
       expect(address.latitude).to eq 57.7072326
@@ -48,13 +48,13 @@ RSpec.describe Address do
 
   describe '.new_from_raw_params' do
     it 'successfully' do
-      expect(Address.new_from_raw_params('city' => 'Gothenburg', 'country' => 'Sweden').city).to eq 'Gothenburg'
+      expect(described_class.new_from_raw_params('city' => 'Gothenburg', 'country' => 'Sweden').city).to eq 'Gothenburg'
     end
   end
 
   describe '.create_from_raw_params!' do
     it 'successfully' do
-      address = Address.create_from_raw_params!('city' => 'Gothenburg', 'country' => 'Sweden')
+      address = described_class.create_from_raw_params!('city' => 'Gothenburg', 'country' => 'Sweden')
       expect(address).to be_valid
       expect(address.city).to eq 'Gothenburg'
     end
@@ -95,8 +95,8 @@ RSpec.describe Address do
     it 'successfully' do
       user.addresses = create_list(:address, 2)
 
-      expect(user.addresses.first.primary_for?(user)).to be_truthy
-      expect(user.addresses.last.primary_for?(user)).to be_falsey
+      expect(user.addresses.first).to be_primary_for(user)
+      expect(user.addresses.last).not_to be_primary_for(user)
     end
   end
 

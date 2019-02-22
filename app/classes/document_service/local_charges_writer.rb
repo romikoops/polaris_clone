@@ -11,7 +11,7 @@ module DocumentService
       @tenant           = tenant_finder(options[:tenant_id])
       @hubs             = tenant_hubs
       @results_by_hub   = prepare_results_by_hub
-      @filename         = filename_formatter(options, "local_charges_")
+      @filename         = filename_formatter(options, 'local_charges_')
       @directory        = "tmp/#{filename}"
       @header_values    = local_charges_header_test
       @workbook         = create_workbook(@directory)
@@ -20,8 +20,8 @@ module DocumentService
     def perform
       results_by_hub.each do |hub, results|
         row = 1
-        hub_string = hub.dup()
-        workbook_hash = add_worksheet_to_workbook(workbook, header_values, hub_string.gsub('/', ''))
+        hub_string = hub.dup
+        workbook_hash = add_worksheet_to_workbook(workbook, header_values, hub_string.delete('/'))
         @workbook = workbook_hash[:workbook]
         worksheet = workbook_hash[:worksheet]
         results.each do |result|
@@ -29,24 +29,25 @@ module DocumentService
           counterpart_hub_name = hub_name(result)
           tenant_vehicle_name, carrier_name = service_level_and_carrier(result)
           next unless result[:fees]
+
           result[:fees].each do |key, fee|
             write_data = local_write_data(fee, key, result, counterpart_hub_name, tenant_vehicle_name, carrier_name)
             if fee[:range] && !fee[:range].empty?
               fee[:range].each do |range_fee|
-                worksheet = worksheet_builder({worksheet: worksheet, row: row, start: 0,
-                  data: write_data, fee: fee}, range_fee)
+                worksheet = worksheet_builder({ worksheet: worksheet, row: row, start: 0,
+                                                data: write_data, fee: fee }, range_fee)
                 row += 1
               end
             else
-              worksheet = worksheet_builder({worksheet: worksheet, row: row, start: 0,
-                  data: write_data, fee: fee})
+              worksheet = worksheet_builder(worksheet: worksheet, row: row, start: 0,
+                                            data: write_data, fee: fee)
               row += 1
             end
           end
         end
       end
       workbook.close
-      write_to_aws(directory, tenant, filename, "local_charges_sheet")
+      write_to_aws(directory, tenant, filename, 'local_charges_sheet')
     end
 
     private
@@ -55,16 +56,16 @@ module DocumentService
       if result[:counterpart_hub_id]
         Hub.find(result[:counterpart_hub_id]).name
       else
-        ""
+        ''
       end
     end
 
     def service_level_and_carrier(result)
       if result[:tenant_vehicle_id]
         tenant_vehicle = TenantVehicle.find(result[:tenant_vehicle_id])
-          [tenant_vehicle.name, tenant_vehicle&.carrier&.name]
+        [tenant_vehicle.name, tenant_vehicle&.carrier&.name]
       else
-        ""
+        ''
       end
     end
 
@@ -96,13 +97,13 @@ module DocumentService
 
     def local_charges_header_test
       %w(EFFECTIVE_DATE EXPIRATION_DATE
-      DESTINATION SERVICE_LEVEL CARRIER FEE MOT
-      FEE_CODE LOAD_TYPE DIRECTION CURRENCY
-      RATE_BASIS TON CBM KG ITEM SHIPMENT
-      BILL CONTAINER MINIMUM MAXIMUM WM RANGE_MIN RANGE_MAX BASE DANGEROUS)
+         DESTINATION SERVICE_LEVEL CARRIER FEE MOT
+         FEE_CODE LOAD_TYPE DIRECTION CURRENCY
+         RATE_BASIS TON CBM KG ITEM SHIPMENT
+         BILL CONTAINER MINIMUM MAXIMUM WM RANGE_MIN RANGE_MAX BASE DANGEROUS)
     end
 
-    def worksheet_builder(options, range_fee=nil)
+    def worksheet_builder(options, range_fee = nil)
       worksheet = write_to_sheet(options[:worksheet], options[:row], options[:start], options[:data])
       if range_fee
         worksheet_conditional_builder(worksheet,  options[:row], options[:fee], range_fee)
@@ -111,45 +112,45 @@ module DocumentService
       end
     end
 
-    def worksheet_conditional_builder(worksheet,  row, fee, range_fee=nil)
+    def worksheet_conditional_builder(worksheet, row, fee, range_fee = nil)
       case fee[:rate_basis]
-      when "PER_CONTAINER"
+      when 'PER_CONTAINER'
         worksheet.write(row, 18, fee[:value])
-      when "PER_ITEM"
+      when 'PER_ITEM'
         worksheet.write(row, 15, fee[:value])
-      when "PER_BILL"
+      when 'PER_BILL'
         worksheet.write(row, 17, fee[:value])
-      when "PER_SHIPMENT"
+      when 'PER_SHIPMENT'
         worksheet.write(row, 16, fee[:value])
-      when "PER_CBM_TON"
+      when 'PER_CBM_TON'
         worksheet.write(row, 12, fee[:ton])
         worksheet.write(row, 13, fee[:cbm])
         worksheet.write(row, 19, fee[:min])
         worksheet.write(row, 20, fee[:max])
-      when "PER_TON"
+      when 'PER_TON'
         worksheet.write(row, 12, fee[:ton])
         worksheet.write(row, 19, fee[:min])
         worksheet.write(row, 20, fee[:max])
-      when "PER_CBM"
+      when 'PER_CBM'
         worksheet.write(row, 13, fee[:value])
         worksheet.write(row, 19, fee[:min])
         worksheet.write(row, 20, fee[:max])
-      when "PER_CBM_KG"
+      when 'PER_CBM_KG'
         worksheet.write(row, 14, fee[:kg])
         worksheet.write(row, 13, fee[:cbm])
         worksheet.write(row, 19, fee[:min])
         worksheet.write(row, 20, fee[:max])
-      when "PER_X_KG"
+      when 'PER_X_KG'
         worksheet.write(row, 14, fee[:kg])
         worksheet.write(row, 24, fee[:base])
         worksheet.write(row, 19, fee[:min])
         worksheet.write(row, 20, fee[:max])
-      when "PER_X_KG_FLAT"
+      when 'PER_X_KG_FLAT'
         worksheet.write(row, 14, fee[:value])
         worksheet.write(row, 24, fee[:base])
         worksheet.write(row, 19, fee[:min])
         worksheet.write(row, 20, fee[:max])
-      when "PER_WM"
+      when 'PER_WM'
         if range_fee
           worksheet.write(row, 21, range_fee[:rate])
           worksheet.write(row, 19, fee[:min])
@@ -157,7 +158,7 @@ module DocumentService
         else
           worksheet.write(row, 21, fee[:value])
         end
-      when "PER_KG"
+      when 'PER_KG'
         if range_fee
           worksheet.write(row, 14, range_fee[:rate])
         else
@@ -165,7 +166,7 @@ module DocumentService
         end
         worksheet.write(row, 19, fee[:min])
         worksheet.write(row, 20, fee[:max])
-      when "PER_KG_RANGE"
+      when 'PER_KG_RANGE'
         if range_fee
           worksheet.write(row, 14, range_fee[:rate])
         else

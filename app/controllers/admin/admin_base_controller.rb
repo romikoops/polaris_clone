@@ -1,12 +1,12 @@
+# frozen_string_literal: true
+
 class Admin::AdminBaseController < ApplicationController
   before_action :require_login_and_role_is_admin
 
   protected
 
   def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?("admin") && is_current_tenant?
-      return
-    end
+    return unless user_signed_in? && current_user.role.name.include?('admin') && is_current_tenant?
   end
 
   def open_file(file)

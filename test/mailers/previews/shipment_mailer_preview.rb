@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShipmentMailerPreview < ActionMailer::Preview
   def tenant_notification
     @shipment = Shipment.where(status: 'requested').first

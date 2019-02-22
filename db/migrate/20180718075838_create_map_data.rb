@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateMapData < ActiveRecord::Migration[5.1]
   def change
     create_table :map_data do |t|

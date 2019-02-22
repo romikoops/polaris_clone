@@ -4,13 +4,13 @@ module Translator
   class BaseTranslator
     attr_reader :results, :origin_language, :target_language, :text, :tenant
 
-    def initialize(args={ _user: current_user })
+    def initialize(args = { _user: current_user })
       params = args[:params]
       @text = args[:text]
       @target_language = args[:target_language]
       @origin_language = args[:origin_language]
       @results = _results
-      
+
       post_initialize(args)
     end
 
@@ -26,7 +26,7 @@ module Translator
 
     def _stats
       {
-        type: "trucking"
+        type: 'trucking'
       }.merge(local_stats)
     end
 
@@ -39,7 +39,7 @@ module Translator
     end
 
     def open_json(path)
-      JSON.parse(File.read("#{Rails.root}#{path.to_s}"))
+      JSON.parse(File.read("#{Rails.root}#{path}"))
     end
 
     def uuid
@@ -49,6 +49,5 @@ module Translator
     def debug_message(message)
       puts message if DEBUG
     end
-
   end
 end

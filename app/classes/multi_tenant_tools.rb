@@ -11,14 +11,14 @@ module MultiTenantTools
 
   def s3_signer
     Aws::S3::Presigner.new(
-      access_key_id:     Settings.aws.access_key_id,
+      access_key_id: Settings.aws.access_key_id,
       secret_access_key: Settings.aws.secret_access_key
     )
   end
 
   def deploy_bucket
     Aws::S3::Client.new(
-      access_key_id:     Settings.aws.access_key_id,
+      access_key_id: Settings.aws.access_key_id,
       secret_access_key: Settings.aws.secret_access_key,
       region: 'us-east-1'
     )
@@ -26,7 +26,7 @@ module MultiTenantTools
 
   def asset_bucket
     Aws::S3::Client.new(
-      access_key_id:     Settings.aws.access_key_id,
+      access_key_id: Settings.aws.access_key_id,
       secret_access_key: Settings.aws.secret_access_key
     )
   end
@@ -182,9 +182,9 @@ module MultiTenantTools
     end
 
     s3 = Aws::S3::Client.new(
-      access_key_id:     Settings.aws.access_key_id,
+      access_key_id: Settings.aws.access_key_id,
       secret_access_key: Settings.aws.secret_access_key,
-      region:            'us-east-1'
+      region: 'us-east-1'
     )
     objKey = tenant.subdomain + '.html'
     newHtml = indexHtml.to_html
@@ -199,9 +199,9 @@ module MultiTenantTools
 
   def create_distribution(subd)
     cloudfront = Aws::CloudFront::Client.new(
-      access_key_id:     Settings.aws.access_key_id,
+      access_key_id: Settings.aws.access_key_id,
       secret_access_key: Settings.aws.secret_access_key,
-      region:            Settings.aws.region
+      region: Settings.aws.region
     )
     caller_reference = subd
     path = "#{subd}.html"
@@ -211,57 +211,57 @@ module MultiTenantTools
     origin_domain = 'multi.itsmycargo.com.s3.amazonaws.com'
     origins = {
       quantity: 1,
-      items:    [
-        { id:               origin_id,
-          domain_name:      origin_domain,
-          origin_path:      '',
+      items: [
+        { id: origin_id,
+          domain_name: origin_domain,
+          origin_path: '',
           s3_origin_config: { origin_access_identity: '' } }
       ]
     }
     default_cache_behavior = {
-      target_origin_id:       origin_id,
-      forwarded_values:       { query_string: false, cookies: { forward: 'none' } },
-      trusted_signers:        { enabled: false, quantity: 0 },
+      target_origin_id: origin_id,
+      forwarded_values: { query_string: false, cookies: { forward: 'none' } },
+      trusted_signers: { enabled: false, quantity: 0 },
       viewer_protocol_policy: 'redirect-to-https',
 
-      compress:               true,
+      compress: true,
 
-      min_ttl:                0
+      min_ttl: 0
     }
     price_class = 'PriceClass_All'
     viewer_certificate = { cloud_front_default_certificate: false,
-                           ssl_support_method:              'sni-only',
-                           acm_certificate_arn:             'arn:aws:acm:us-east-1:003688427525:certificate/fa0a9dca-a804-4fee-8a97-a273f827b1c5' }
+                           ssl_support_method: 'sni-only',
+                           acm_certificate_arn: 'arn:aws:acm:us-east-1:003688427525:certificate/fa0a9dca-a804-4fee-8a97-a273f827b1c5' }
     comment = '-'
     enabled = true
     resp = cloudfront.create_distribution \
       distribution_config: {
-        caller_reference:       caller_reference,
-        origins:                origins,
-        aliases:                {
+        caller_reference: caller_reference,
+        origins: origins,
+        aliases: {
           quantity: 1, # required
-          items:    [domain]
+          items: [domain]
         },
         default_cache_behavior: default_cache_behavior,
-        comment:                comment,
-        default_root_object:    path,
-        price_class:            price_class,
-        viewer_certificate:     viewer_certificate,
-        enabled:                true,
+        comment: comment,
+        default_root_object: path,
+        price_class: price_class,
+        viewer_certificate: viewer_certificate,
+        enabled: true,
 
         custom_error_responses: {
           quantity: 2, # required
-          items:    [
+          items: [
             {
-              error_code:            403, # required
-              response_page_path:    "/#{subd}.html",
-              response_code:         '200',
+              error_code: 403, # required
+              response_page_path: "/#{subd}.html",
+              response_code: '200',
               error_caching_min_ttl: 1
             },
             {
-              error_code:            404, # required
-              response_page_path:    "/#{subd}.html",
-              response_code:         '200',
+              error_code: 404, # required
+              response_page_path: "/#{subd}.html",
+              response_code: '200',
               error_caching_min_ttl: 1
             }
           ]
@@ -279,25 +279,25 @@ module MultiTenantTools
 
   def new_record(domain, cf_name)
     client = Aws::Route53::Client.new(
-      access_key_id:     Settings.aws.access_key_id,
+      access_key_id: Settings.aws.access_key_id,
       secret_access_key: Settings.aws.secret_access_key,
-      region:            Settings.aws.region
+      region: Settings.aws.region
     )
     resp = client.change_resource_record_sets(
       hosted_zone_id: 'Z3TZQVG8RI9CYN', # required
-      change_batch:   { # required
+      change_batch: { # required
         comment: 'Multi Tenant System',
         changes: [ # required
           {
-            action:              'CREATE', # required, accepts CREATE, DELETE, UPSERT
+            action: 'CREATE', # required, accepts CREATE, DELETE, UPSERT
             resource_record_set: { # required
-              name:         domain, # required
-              type:         'A', # required, accepts SOA, A, TXT, NS, CNAME, MX, NAPTR, PTR, SRV, SPF, AAAA
+              name: domain, # required
+              type: 'A', # required, accepts SOA, A, TXT, NS, CNAME, MX, NAPTR, PTR, SRV, SPF, AAAA
 
               alias_target: {
-                hosted_zone_id:         'Z2FDTNDATAQYW2', # required
-                dns_name:               cf_name, # required
-                evaluate_target_health: false, # required
+                hosted_zone_id: 'Z2FDTNDATAQYW2', # required
+                dns_name: cf_name, # required
+                evaluate_target_health: false # required
               }
 
             }
@@ -307,19 +307,19 @@ module MultiTenantTools
     )
     resp = client.change_resource_record_sets(
       hosted_zone_id: 'Z3TZQVG8RI9CYN', # required
-      change_batch:   { # required
+      change_batch: { # required
         comment: 'Hydra6',
         changes: [ # required
           {
-            action:              'CREATE', # required, accepts CREATE, DELETE, UPSERT
+            action: 'CREATE', # required, accepts CREATE, DELETE, UPSERT
             resource_record_set: { # required
-              name:         domain, # required
-              type:         'AAAA', # required, accepts SOA, A, TXT, NS, CNAME, MX, NAPTR, PTR, SRV, SPF, AAAA
+              name: domain, # required
+              type: 'AAAA', # required, accepts SOA, A, TXT, NS, CNAME, MX, NAPTR, PTR, SRV, SPF, AAAA
 
               alias_target: {
-                hosted_zone_id:         'Z2FDTNDATAQYW2', # required
-                dns_name:               cf_name, # required
-                evaluate_target_health: false, # required
+                hosted_zone_id: 'Z2FDTNDATAQYW2', # required
+                dns_name: cf_name, # required
+                evaluate_target_health: false # required
               }
             }
           }
@@ -332,66 +332,66 @@ module MultiTenantTools
     tenant = Tenant.find_by_subdomain(subdomain)
     tenant.users.destroy_all
     admin = tenant.users.new(
-      role:                  Role.find_by_name('admin'),
+      role: Role.find_by_name('admin'),
 
-      company_name:          tenant.name,
-      first_name:            'Admin',
-      last_name:             'Admin',
-      phone:                 '123456789',
+      company_name: tenant.name,
+      first_name: 'Admin',
+      last_name: 'Admin',
+      phone: '123456789',
 
-      email:                 "admin@#{subdomain}.#{tld}",
-      password:              'demo123456789',
+      email: "admin@#{subdomain}.#{tld}",
+      password: 'demo123456789',
       password_confirmation: 'demo123456789',
 
-      confirmed_at:          DateTime.new(2017, 1, 20)
+      confirmed_at: DateTime.new(2017, 1, 20)
     )
 
     admin.save!
     shipper = tenant.users.new(
-      role:                  Role.find_by_name('shipper'),
+      role: Role.find_by_name('shipper'),
 
-      company_name:          'Example Shipper Company',
-      first_name:            'John',
-      last_name:             'Smith',
-      phone:                 '123456789',
+      company_name: 'Example Shipper Company',
+      first_name: 'John',
+      last_name: 'Smith',
+      phone: '123456789',
 
-      email:                 "demo@#{tenant.subdomain}.#{tld}",
-      password:              'demo123456789',
+      email: "demo@#{tenant.subdomain}.#{tld}",
+      password: 'demo123456789',
       password_confirmation: 'demo123456789',
 
-      confirmed_at:          DateTime.new(2017, 1, 20)
+      confirmed_at: DateTime.new(2017, 1, 20)
     )
     # shipper.skip_confirmation!
     shipper.save!
     # Create dummy addresses for shipper
     dummy_addresses = [
       {
-        street:        'Kehrwieder',
+        street: 'Kehrwieder',
         street_number: '2',
-        zip_code:      '20457',
-        city:          'Hamburg',
-        country:       'Germany'
+        zip_code: '20457',
+        city: 'Hamburg',
+        country: 'Germany'
       },
       {
-        street:        'Carer del Cid',
+        street: 'Carer del Cid',
         street_number: '13',
-        zip_code:      '08001',
-        city:          'Barcelona',
-        country:       'Spain'
+        zip_code: '08001',
+        city: 'Barcelona',
+        country: 'Spain'
       },
       {
-        street:        'College Rd',
+        street: 'College Rd',
         street_number: '1',
-        zip_code:      'PO1 3LX',
-        city:          'Portsmouth',
-        country:       'United Kingdom'
+        zip_code: 'PO1 3LX',
+        city: 'Portsmouth',
+        country: 'United Kingdom'
       },
       {
-        street:        'Tuna St',
+        street: 'Tuna St',
         street_number: '64',
-        zip_code:      '90731',
-        city:          'San Pedro',
-        country:       'USA'
+        zip_code: '90731',
+        city: 'San Pedro',
+        country: 'USA'
       }
     ]
 
@@ -404,38 +404,38 @@ module MultiTenantTools
     dummy_contacts = [
       {
         company_name: 'Example Shipper Company',
-        first_name:   'John',
-        last_name:    'Smith',
-        phone:        '123456789',
-        email:        "demo@#{tenant.subdomain}.com"
+        first_name: 'John',
+        last_name: 'Smith',
+        phone: '123456789',
+        email: "demo@#{tenant.subdomain}.com"
       },
       {
         company_name: 'Another Example Shipper Company',
-        first_name:   'Jane',
-        last_name:    'Doe',
-        phone:        '123456789',
-        email:        'jane@doe.com'
+        first_name: 'Jane',
+        last_name: 'Doe',
+        phone: '123456789',
+        email: 'jane@doe.com'
       },
       {
         company_name: 'Yet Another Example Shipper Company',
-        first_name:   'Javier',
-        last_name:    'Garcia',
-        phone:        '0034123456789',
-        email:        'javi@shipping.com'
+        first_name: 'Javier',
+        last_name: 'Garcia',
+        phone: '0034123456789',
+        email: 'javi@shipping.com'
       },
       {
         company_name: 'Forwarder Company',
-        first_name:   'Gertrude',
-        last_name:    'Hummels',
-        phone:        '0049123456789',
-        email:        'gerti@fwd.com'
+        first_name: 'Gertrude',
+        last_name: 'Hummels',
+        phone: '0049123456789',
+        email: 'gerti@fwd.com'
       },
       {
         company_name: 'Another Forwarder Company',
-        first_name:   'Jerry',
-        last_name:    'Lin',
-        phone:        '001123456789',
-        email:        'jerry@fwder2.com'
+        first_name: 'Jerry',
+        last_name: 'Lin',
+        phone: '001123456789',
+        email: 'jerry@fwder2.com'
       }
     ]
 
@@ -477,20 +477,20 @@ module MultiTenantTools
 
   def invalidate(cfId, subdomain)
     cloudfront = Aws::CloudFront::Client.new(
-      access_key_id:     Settings.aws.access_key_id,
+      access_key_id: Settings.aws.access_key_id,
       secret_access_key: Settings.aws.secret_access_key,
-      region:            Settings.aws.region
+      region: Settings.aws.region
     )
     invalArray = ["/#{subdomain}.html", '/config.js']
     invalStr = Time.now.to_i.to_s + '_subdomain'
     resp = cloudfront.create_invalidation(
-      distribution_id:    cfId, # required
+      distribution_id: cfId, # required
       invalidation_batch: { # required
-        paths:            { # required
+        paths: { # required
           quantity: invalArray.length, # required
-          items:    invalArray
+          items: invalArray
         },
-        caller_reference: invalStr.to_s, # required
+        caller_reference: invalStr.to_s # required
       }
     )
   end

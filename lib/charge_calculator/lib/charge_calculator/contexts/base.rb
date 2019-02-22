@@ -15,7 +15,7 @@ module ChargeCalculator
         call_if_proc(hash[key])
       end
 
-      def fetch(key, default=nil, &block)
+      def fetch(key, default = nil, &block)
         call_if_proc(hash.fetch(key, default, &block))
       end
 

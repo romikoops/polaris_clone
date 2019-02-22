@@ -26,9 +26,9 @@ class TruckingAvailabilityController < ApplicationController
   def build_response_hash(trucking_pricings, nexus_ids, hub_ids, truck_type_object)
     {
       trucking_available: !trucking_pricings.empty?,
-      nexus_ids:          nexus_ids,
-      hub_ids:            hub_ids,
-      truck_type_object:  truck_type_object
+      nexus_ids: nexus_ids,
+      hub_ids: hub_ids,
+      truck_type_object: truck_type_object
     }.deep_transform_keys { |k| k.to_s.camelize(:lower) }
   end
 
@@ -37,8 +37,8 @@ class TruckingAvailabilityController < ApplicationController
       tenant_id: params[:tenant_id],
       load_type: params[:load_type],
       address: Address.new(latitude: params[:lat], longitude: params[:lng]).reverse_geocode,
-      hub_ids:   params[:hub_ids].split(',').map(&:to_i),
-      carriage:  params[:carriage]
+      hub_ids: params[:hub_ids].split(',').map(&:to_i),
+      carriage: params[:carriage]
     )
   end
 end

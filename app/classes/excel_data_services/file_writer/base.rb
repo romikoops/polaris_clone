@@ -83,6 +83,7 @@ module ExcelDataServices
 
       def header_format
         return @header_format if @header_format
+
         @header_format = xlsx.add_format
         @header_format.set_bold
         @header_format
@@ -99,6 +100,7 @@ module ExcelDataServices
 
       def date_dd_mm_yyyy_format
         return @date_dd_mm_yyyy_format if @date_dd_mm_yyyy_format
+
         @date_dd_mm_yyyy_format = xlsx.add_format
         @date_dd_mm_yyyy_format.set_num_format('dd.mm.yyyy')
         @date_dd_mm_yyyy_format

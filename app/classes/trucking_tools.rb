@@ -29,6 +29,7 @@ module TruckingTools
 
     fees.each do |_k, fee|
       next unless fee
+
       if !result['value']
         result['value'] = fee[:value]
       else
@@ -153,6 +154,7 @@ module TruckingTools
         rate['rate']['min_value'] = rate['min_value']
         return { rate: rate['rate'], fees: trucking_pricing['fees'] }
       end
+
       trucking_pricing['rates']['kg'].each do |rate|
         if cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
           rate['rate']['min_value'] = rate['min_value']
@@ -176,12 +178,14 @@ module TruckingTools
       result = { rate_basis: 'PER_CBM_KG' }
       trucking_pricing['rates']['kg'].each do |rate|
         next unless cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
+
         result['kg'] = rate['rate']['value']
         result['min_value'] = rate['min_value']
         result['currency'] = rate['rate']['currency']
       end
       trucking_pricing['rates']['cbm'].each do |rate|
         next unless cargo_values['volume'] <= rate['max_cbm'].to_i && cargo_values['volume'] >= rate['min_cbm'].to_i
+
         result['cbm'] = rate['rate']['value']
         result['min_value'] = rate['min_value']
         result['currency'] = rate['rate']['currency']
@@ -212,16 +216,16 @@ module TruckingTools
   def get_cargo_item_object(trucking_pricing, cargos)
     cargo_object = {
       'stackable' => {
-        'volume'          => 0,
-        'weight'          => 0,
+        'volume' => 0,
+        'weight' => 0,
         'number_of_items' => 0
       }, 'non_stackable' => {
-        'volume'          => 0,
-        'weight'          => 0,
+        'volume' => 0,
+        'weight' => 0,
         'number_of_items' => 0
       }
     }
-    
+
     if trucking_pricing.tenant.scope.dig('consolidation', 'trucking', 'load_meterage_only')
       consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
     elsif trucking_pricing.tenant.scope.dig('consolidation', 'trucking', 'calculation')
@@ -231,7 +235,7 @@ module TruckingTools
         determine_load_meterage(trucking_pricing, cargo_object, cargo)
       end
     end
-    
+
     target = "#{trucking_pricing.trucking_pricing_scope.carriage}_carriage"
     total_chargeable_weight =
       cargo_object.dig('stackable', 'weight') + cargo_object.dig('non_stackable', 'weight')
@@ -242,24 +246,23 @@ module TruckingTools
 
   def consolidated_trucking_cargo(trucking_pricing, cargo_object, cargos)
     cargo = if cargos.first.is_a? AggregatedCargo
-      cargos.first
-    else
-      consolidate_cargo(cargos)
+              cargos.first
+            else
+              consolidate_cargo(cargos)
     end
     calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
-
   end
 
   def consolidate_cargo(cargo_array)
     cargo = {
-      id:                'ids',
-      dimension_x:       0,
-      dimension_y:       0,
-      dimension_z:       0,
-      volume:            0,
-      payload_in_kg:     0,
-      cargo_class:       '',
-      num_of_items:      0
+      id: 'ids',
+      dimension_x: 0,
+      dimension_y: 0,
+      dimension_z: 0,
+      volume: 0,
+      payload_in_kg: 0,
+      cargo_class: '',
+      num_of_items: 0
     }
     cargo_array.each do |cargo_unit|
       cargo[:id] += "-#{cargo_unit.id}"
@@ -300,7 +303,7 @@ module TruckingTools
     cargo_total_items = containers.map(&:quantity).sum
     containers.each_with_object({}) do |cargo, cargo_object|
       cargo_object["container_#{cargo.id}"] = {
-        'weight'          => cargo.payload_in_kg,
+        'weight' => cargo.payload_in_kg,
         'number_of_items' => cargo.quantity
       }
     end
@@ -366,8 +369,6 @@ module TruckingTools
 
     cargo_object
   end
-
-
 
   def calc_aggregated_cargo_load_meterage(trucking_pricing, cargo_object, cargo)
     load_meterage = (cargo.volume / 1.3) / 2.4

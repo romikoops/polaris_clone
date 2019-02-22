@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTruckingPricingScopes < ActiveRecord::Migration[5.1]
   def change
     create_table :trucking_pricing_scopes do |t|

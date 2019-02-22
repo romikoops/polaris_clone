@@ -1,25 +1,27 @@
+# frozen_string_literal: true
+
 require "#{Rails.root}/db/seed_helpers/interface_helpers.rb"
 
 class ActionInterface
   include InterfaceHelpers
 
   def initialize(args = {})
-    @actions         = args[:actions]         || args["actions"]         || {}
-    @welcome_message = args[:welcome_message] || args["welcome_message"]
+    @actions         = args[:actions]         || args['actions'] || {}
+    @welcome_message = args[:welcome_message] || args['welcome_message']
     add_exit_action
   end
 
   def init
-    system "clear"
+    system 'clear'
     log_welcome_message
 
     loop do
       log_list_of_actions
       log_choose_your_action_text
-      
+
       @options = ask_user_for_options(@actions.keys)
       run_chosen_actions
-      
+
       break if should_exit?
 
       log_separator
@@ -33,7 +35,7 @@ class ActionInterface
   end
 
   def exit
-    puts nil, "Exiting..."
+    puts nil, 'Exiting...'
   end
 
   def should_exit?
@@ -41,9 +43,10 @@ class ActionInterface
   end
 
   def run_chosen_actions
-    system "clear"
+    system 'clear'
     @actions.each do |action_name, action|
       next unless @options.include?(action_name)
+
       puts
       action.call
       puts
@@ -59,7 +62,7 @@ class ActionInterface
   end
 
   def action_log_format(action_name)
-    action_name.to_s.gsub("__", " [+]").underscore.humanize
+    action_name.to_s.gsub('__', ' [+]').underscore.humanize
   end
 
   def log_choose_your_action_text

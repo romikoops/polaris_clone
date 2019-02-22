@@ -32,12 +32,12 @@ class Admin::ClientsController < Admin::AdminBaseController
   def create
     json = JSON.parse(params[:new_client])
     user_data = {
-      email:                 json['email'],
-      company_name:          json['companyName'],
-      first_name:            json['firstName'],
-      phone:                 json['phone'],
-      last_name:             json['lastName'],
-      password:              json['password'],
+      email: json['email'],
+      company_name: json['companyName'],
+      first_name: json['firstName'],
+      phone: json['phone'],
+      last_name: json['lastName'],
+      password: json['password'],
       password_confirmation: json['password_confirmation']
     }
     new_user = current_user.tenant.users.create!(user_data)

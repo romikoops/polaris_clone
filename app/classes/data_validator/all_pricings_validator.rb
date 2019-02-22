@@ -80,6 +80,7 @@ module DataValidator
           end
         end
         next unless example[:expected][:delivery_address] || @hubs[pricing.itinerary_id][:destination].mandatory_charge.import_charges
+
         @local_charges.dig(pricing.itinerary_id, example[:data][:tenant_vehicle_id])[:import]&.fees.each do |fee_key, _fee|
           example[:expected][:import] = {} unless example[:expected][:import]
           example[:expected][:import][fee_key.to_sym] = {}
@@ -163,6 +164,7 @@ module DataValidator
         itinerary_ids = @tenant.itineraries.ids.each do |id|
           pricing = Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type)
           next if pricing.empty?
+
           @itineraries[id] = Itinerary.find(id)
           @pricings[id] = [] unless @pricings[id]
           @pricings[id] << pricing
@@ -275,6 +277,7 @@ module DataValidator
 
     def string_to_currency_value(str)
       return nil unless str
+
       currency, value = str.split(' ')
       { value: value, currency: currency }
     end
@@ -283,6 +286,7 @@ module DataValidator
       cargos = []
       @cargo_unit_keys.compact.each do |key_hash|
         next unless column[key_hash.values.first]
+
         new_cargo = {}
         key_hash.each do |key, value|
           new_cargo[key] = column[value]
@@ -374,6 +378,7 @@ module DataValidator
       value = result.dig(:quote, *keys, :value)
       expected_value = expected_result.dig(*keys, :value).try(:to_d)
       return nil if value.blank? || expected_value.blank?
+
       (value - expected_value).abs.try(:round, 3)
     end
 
@@ -381,6 +386,7 @@ module DataValidator
       value = result.dig(:quote, *keys, :value)
       expected_value = expected_result.dig(*keys, :value).try(:to_d)
       return nil if (value.blank? || value == 0) || (expected_value.blank? || expected_value == 0)
+
       (((value - expected_value) / expected_value) * 100).try(:round, 3)
     end
 
@@ -388,6 +394,7 @@ module DataValidator
       currency = result.dig(:quote, *keys, :currency)
 
       return '' if currency.blank?
+
       currency
     end
 
@@ -426,6 +433,7 @@ module DataValidator
       diff_percent = ((diff_val / expected_value) * 100).try(:round, 3)
 
       return nil if diff_val.nil?
+
       "#{expected_currency} #{diff_val} (#{diff_percent}%)"
     end
 
@@ -452,7 +460,7 @@ module DataValidator
           end
         end
       end
-    rescue Exception => e
+      rescue Exception => e
     end
       final_result = {
         result: result,

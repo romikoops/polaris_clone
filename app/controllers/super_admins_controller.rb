@@ -5,7 +5,7 @@ class SuperAdminsController < ApplicationController
   include MultiTenantTools
   include Response
   include AwsConfig
-  
+
   def new_demo_site
     if params[:file]
       tenant = JSON.parse(File.read(params[:file].tempfile))
@@ -17,16 +17,16 @@ class SuperAdminsController < ApplicationController
   end
 
   def upload_image
-    file = params[:file]    
-    obj_key = "images/demo_images/" + file.original_filename
+    file = params[:file]
+    obj_key = 'images/demo_images/' + file.original_filename
     save_asset(file, obj_key)
 
-    response_handler(url: "#{asset_url << obj_key}")
+    response_handler(url: (asset_url << obj_key).to_s)
   end
 
   private
 
   def require_login_and_role_is_super_admin
-    response_handler(false) unless user_signed_in? && current_user.role.name == "super_admin"
+    response_handler(false) unless user_signed_in? && current_user.role.name == 'super_admin'
   end
 end

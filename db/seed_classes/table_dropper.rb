@@ -1,19 +1,19 @@
+# frozen_string_literal: true
+
 class TableDropper
-  def self.perform(options={})
+  def self.perform(options = {})
     models_to_delete = determine_models_to_delete(options)
     undelete_models  = []
 
     models_to_delete.each_with_index do |model, i|
-      begin
-        if i > 1000
-          undelete_models = models_to_delete[1001..-1].uniq
-          log_not_deleted_models(undelete_models)
-          break
-        end
-        model.delete_all
-      rescue StandardError => e
-        models_to_delete << model
+      if i > 1000
+        undelete_models = models_to_delete[1001..-1].uniq
+        log_not_deleted_models(undelete_models)
+        break
       end
+      model.delete_all
+    rescue StandardError => e
+      models_to_delete << model
     end
 
     deleted_models = (models_to_delete - undelete_models).map(&:to_s)
@@ -32,7 +32,7 @@ class TableDropper
   end
 
   def self.log_success_message(deleted_models)
-    puts "Successfully deleted all data from the " \
+    puts 'Successfully deleted all data from the ' \
          "following models: #{deleted_models.log_format}".green
   end
 
@@ -40,9 +40,7 @@ class TableDropper
     return options[:only] if valid_array_option_passed?(options[:only])
 
     Rails.application.eager_load!
-    if valid_array_option_passed?(options[:except])
-      return ApplicationRecord.descendants - options[:except]
-    end
+    return ApplicationRecord.descendants - options[:except] if valid_array_option_passed?(options[:except])
 
     ApplicationRecord.descendants
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTruckTypeAvailabilities < ActiveRecord::Migration[5.1]
   def change
     create_table :truck_type_availabilities do |t|

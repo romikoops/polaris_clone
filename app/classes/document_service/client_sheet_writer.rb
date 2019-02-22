@@ -5,7 +5,7 @@ module DocumentService
     include AwsConfig
     include WritingTool
     attr_reader :tenant, :hubs, :filename, :directory, :workbook, :worksheet
-    
+
     def initialize(options)
       @tenant = Tenant.find(options[:tenant_id])
       @hubs = @tenant.hubs
@@ -45,11 +45,12 @@ module DocumentService
       trips.each do |trip|
         layovers = trip.layovers.order(:stop_index)
         next if layovers.length < 2
+
         write_client_data(row, layovers, trip)
         row += 1
       end
       workbook.close
-      write_to_aws(directory, tenant, filename, "schedules_sheet")
+      write_to_aws(directory, tenant, filename, 'schedules_sheet')
     end
   end
 end

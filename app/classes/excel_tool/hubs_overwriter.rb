@@ -58,8 +58,8 @@ module ExcelTool
     def hub_type_name
       @hub_type_name ||= {
         'ocean' => 'Port',
-        'air'   => 'Airport',
-        'rail'  => 'Railyard',
+        'air' => 'Airport',
+        'rail' => 'Railyard',
         'truck' => 'Depot'
       }
     end
@@ -79,38 +79,38 @@ module ExcelTool
 
     def _nexus
       Nexus.find_by(
-        name:             hub_row[:hub_name],
-        country:          country,
-        tenant_id:        @user.tenant_id
+        name: hub_row[:hub_name],
+        country: country,
+        tenant_id: @user.tenant_id
       )
     end
 
     def _nexus_create
       Nexus.create!(
-        name:             hub_row[:hub_name],
-        latitude:         hub_row[:latitude],
-        longitude:        hub_row[:longitude],
-        photo:            hub_row[:photo],
-        country:          country,
-        tenant_id:        @user.tenant_id
+        name: hub_row[:hub_name],
+        latitude: hub_row[:latitude],
+        longitude: hub_row[:longitude],
+        photo: hub_row[:photo],
+        country: country,
+        tenant_id: @user.tenant_id
       )
     end
 
     def _nexus_update
       @nexus.update!(
-        latitude:         hub_row[:latitude],
-        longitude:        hub_row[:longitude],
-        photo:            hub_row[:photo]
+        latitude: hub_row[:latitude],
+        longitude: hub_row[:longitude],
+        photo: hub_row[:photo]
       )
     end
 
     def find_or_create_address
       Address.find_or_create_by(
-        name:             hub_row[:hub_name],
-        latitude:         hub_row[:latitude],
-        longitude:        hub_row[:longitude],
-        country:          country,
-        city:             hub_row[:hub_name],
+        name: hub_row[:hub_name],
+        latitude: hub_row[:latitude],
+        longitude: hub_row[:longitude],
+        country: country,
+        city: hub_row[:hub_name],
         geocoded_address: hub_row[:geocoded_address]
       )
     end
@@ -125,24 +125,24 @@ module ExcelTool
 
     def hub
       @hub = Hub.find_by(
-        nexus_id:  nexus.id,
+        nexus_id: nexus.id,
         tenant_id: user.tenant_id,
-        hub_type:  hub_row[:hub_type],
+        hub_type: hub_row[:hub_type],
         name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}"
       )
     end
 
     def update_hub
       @hub.update_attributes(
-        nexus_id:         nexus.id,
-        address_id:      address.id,
-        tenant_id:        user.tenant_id,
-        hub_type:         hub_row[:hub_type],
-        trucking_type:    hub_row[:trucking_type],
-        latitude:         hub_row[:latitude],
-        longitude:        hub_row[:longitude],
-        name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
-        photo:            hub_row[:photo],
+        nexus_id: nexus.id,
+        address_id: address.id,
+        tenant_id: user.tenant_id,
+        hub_type: hub_row[:hub_type],
+        trucking_type: hub_row[:trucking_type],
+        latitude: hub_row[:latitude],
+        longitude: hub_row[:longitude],
+        name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
+        photo: hub_row[:photo],
         mandatory_charge: @mandatory_charge
       )
     end
@@ -161,15 +161,15 @@ module ExcelTool
 
     def create_nexus_hub
       nexus.hubs.create!(
-        nexus_id:         nexus.id,
-        address_id:      address.id,
-        tenant_id:        user.tenant_id,
-        hub_type:         hub_row[:hub_type],
-        trucking_type:    hub_row[:trucking_type],
-        latitude:         hub_row[:latitude],
-        longitude:        hub_row[:longitude],
-        name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
-        photo:            hub_row[:photo],
+        nexus_id: nexus.id,
+        address_id: address.id,
+        tenant_id: user.tenant_id,
+        hub_type: hub_row[:hub_type],
+        trucking_type: hub_row[:trucking_type],
+        latitude: hub_row[:latitude],
+        longitude: hub_row[:longitude],
+        name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
+        photo: hub_row[:photo],
         mandatory_charge: @mandatory_charge
       )
     end
@@ -195,6 +195,7 @@ module ExcelTool
 
     def geoplace
       return @geoplace if @geoplace
+
       country_names = hub_rows.map { |hub| hub[:country] }
       @geoplace = Country.geo_find_by_names(country_names)
     end

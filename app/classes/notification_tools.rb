@@ -4,27 +4,29 @@ module NotificationTools
   def get_messages_for_user(user)
     conversations = user.conversations.each_with_object(Hash.new(0)) do |conversation, return_h|
       next unless conversation.shipment
+
       return_h[conversation.shipment.imc_reference] = {
-        messages:     conversation.messages.order(:updated_at),
+        messages: conversation.messages.order(:updated_at),
         conversation: conversation
       }
     end
     unread = user.conversations.flat_map { |c| c.messages.where(read: false) }.count
-    resp = { "conversations" => conversations, "unread" => unread }
+    resp = { 'conversations' => conversations, 'unread' => unread }
     resp
   end
 
   def get_messages_for_admin(user)
     conversations = user.tenant.conversations.each_with_object(Hash.new(0)) do |conversation, return_h|
       next unless conversation.shipment
+
       return_h[conversation.shipment.imc_reference] = {
-        messages:     conversation.messages.order(:updated_at),
+        messages: conversation.messages.order(:updated_at),
         conversation: conversation
       }
     end
     unread = user.tenant.conversations.flat_map { |c| c.messages.where(read: false) }.count
 
-    master_resp = { "conversations" => conversations, "unread" => unread }
+    master_resp = { 'conversations' => conversations, 'unread' => unread }
     master_resp
   end
 
@@ -32,33 +34,33 @@ module NotificationTools
     mananger_conversations = Conversation.where(manager_id: user.id)
     converstaions = mananger_conversations.each_with_object(Hash.new(0)) do |conversation, return_h|
       return_h[conversation.shipment.imc_reference] = {
-        messages:     conversation.messages.order(:updated_at),
+        messages: conversation.messages.order(:updated_at),
         conversation: conversation
       }
     end
     unread = mananger_conversations.flat_map { |c| c.messages.where(read: false) }.count
 
-    resp = { "conversations" => conversations, "unread" => unread }
+    resp = { 'conversations' => conversations, 'unread' => unread }
     resp
   end
 
   def update_convo(user, messages)
     convo_id = "#{user.tenant_id}_#{user.id}"
-    $db["messages"].update_one({ _id: convo_id }, messages)
+    $db['messages'].update_one({ _id: convo_id }, messages)
   end
 
   def update_admin_convo(ref, messages)
-    data_point = messages["conversations"][ref]["messages"][0]
-    selected_messages = { "conversations" => {}, "tenant_id" => data_point["tenant_id"] }
+    data_point = messages['conversations'][ref]['messages'][0]
+    selected_messages = { 'conversations' => {}, 'tenant_id' => data_point['tenant_id'] }
 
-    messages["conversations"].each do |k, v|
-      if v["messages"][0]["user_id"] == data_point["user_id"] && v["messages"][0]["tenant_id"] == data_point["tenant_id"]
-        selected_messages["conversations"][k] = v
+    messages['conversations'].each do |k, v|
+      if v['messages'][0]['user_id'] == data_point['user_id'] && v['messages'][0]['tenant_id'] == data_point['tenant_id']
+        selected_messages['conversations'][k] = v
       end
     end
 
     convo_id = "#{data_point['tenant_id']}_#{data_point['user_id']}"
-    $db["messages"].update_one({ _id: convo_id }, selected_messages)
+    $db['messages'].update_one({ _id: convo_id }, selected_messages)
   end
 
   def add_message_to_convo(user, message, _admin)

@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
 class VehicleSeeder
-  VEHICLE_NAMES = %w[
+  VEHICLE_NAMES = %w(
     ocean_default
     rail_default
     air_default
     truck_default
-  ].freeze
-  TRANSPORT_CATEGORY_NAMES = %w[
+  ).freeze
+  TRANSPORT_CATEGORY_NAMES = %w(
     dry_goods
     liquid_bulk
     gas_bulk
     any
-  ].freeze
-  CARGO_CLASSES = %w[
+  ).freeze
+  CARGO_CLASSES = %w(
     fcl_20
     fcl_40
     fcl_40_hq
     lcl
-  ].freeze
+  ).freeze
 
   def self.perform(filter = {})
     Tenant.where(filter).each do |tenant|

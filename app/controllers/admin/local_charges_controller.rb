@@ -18,11 +18,11 @@ class Admin::LocalChargesController < ApplicationController
     end
 
     resp = {
-      hub_id:           params[:id],
-      charges:          hub.local_charges,
-      customs:          hub.customs_fees,
-      serviceLevels:    service_levels,
-      counterpartHubs:  counter_part_hubs
+      hub_id: params[:id],
+      charges: hub.local_charges,
+      customs: hub.customs_fees,
+      serviceLevels: service_levels,
+      counterpartHubs: counter_part_hubs
     }
     response_handler(resp)
   end

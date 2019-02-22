@@ -3,7 +3,7 @@
 RSpec.describe ChargeCalculator do
   describe '#calculate' do
     context 'with valid arguments' do
-      it 'should return a price (node tree)' do
+      it 'returns a price (node tree)' do
         expect(described_class.calculate(
                  shipment_params: {},
                  pricings: []
@@ -12,7 +12,7 @@ RSpec.describe ChargeCalculator do
     end
 
     context 'with invalid arguments' do
-      it 'should raise an ArgumentError' do
+      it 'raises an ArgumentError' do
         expect { described_class.calculate }.to raise_error(ArgumentError)
       end
     end

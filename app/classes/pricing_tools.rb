@@ -143,6 +143,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
     null_cargo_hash = { weight: 0, volume: 0, quantity: 0 }
     charge_results = unit_charges_array.map do |charge_object|
       next if charge_object['fees'].empty?
+
       relevant_cargos = if %w(lcl shipment).include?(charge_object['load_type'])
                           cargos
                         else

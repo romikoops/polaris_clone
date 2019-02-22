@@ -3,13 +3,13 @@
 class TruckingPriceRulesMachine
   attr_reader :total_price
 
-  def initialize(pricing, km, weight_in_tons, volume_in_cm3, units, zip_code=1000)
+  def initialize(pricing, km, weight_in_tons, volume_in_cm3, units, zip_code = 1000)
     @total_price = rule_evaluation(pricing, km.to_f, weight_in_tons.to_f, volume_in_cm3.to_f, units.to_i, zip_code)
   end
 
   def rule_evaluation(pricing, km, weight_in_tons, volume_in_cm3, units, zip_code)
     if volume_in_cm3 / 1_000_000 > pricing.fcl_limit_m3_40_foot || weight_in_tons > pricing.fcl_limit_tons_40_foot
-      raise "Volume and/or weight are out of bounds!"
+      raise 'Volume and/or weight are out of bounds!'
       return false
     end
 
@@ -45,6 +45,7 @@ class TruckingPriceRulesMachine
     table.keys.each do |zip_code_range_string|
       zip_code_range_array = JSON.parse(zip_code_range_string)
       next unless zip_code.between?(zip_code_range_array.first, zip_code_range_array.last)
+
       table[zip_code_range_string].keys.each do |multiplier_range_string|
         multiplier_range_array = JSON.parse(multiplier_range_string)
         if multiplier.between?(multiplier_range_array.first, multiplier_range_array.last)

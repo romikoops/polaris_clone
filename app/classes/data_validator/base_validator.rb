@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module DataValidator
   class BaseValidator
     attr_reader :results, :stats, :hub, :tenant, :path, :hub_id
 
-    def initialize(args={ _user: current_user })
+    def initialize(args = { _user: current_user })
       @tenant = Tenant.find(args[:tenant])
       post_initialize(args)
     end
@@ -19,7 +21,7 @@ module DataValidator
 
     def _stats
       {
-        type: "trucking"
+        type: 'trucking'
       }.merge(local_stats)
     end
 
@@ -32,7 +34,7 @@ module DataValidator
     end
 
     def open_json(path)
-      JSON.parse(File.read("#{Rails.root}#{path.to_s}"))
+      JSON.parse(File.read("#{Rails.root}#{path}"))
     end
 
     def open_file(path)
@@ -47,6 +49,5 @@ module DataValidator
     def debug_message(message)
       puts message if DEBUG
     end
-
   end
 end

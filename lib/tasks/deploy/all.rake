@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :deploy do
-  task all: [:client, :backend] do
+  task all: %i(client backend) do
   end
 
   task client: :environment do

@@ -28,7 +28,7 @@ FactoryBot.define do
         trip = build(:trip, itinerary: itinerary)
         itinerary.trips << trip
         trip.layovers << build(:layover, stop_index: 0, trip: trip, stop: itinerary.stops.first, itinerary: itinerary)
-        trip.layovers << build(:layover, stop_index: 1, trip: trip, stop: itinerary.stops.last, itinerary: itinerary)  
+        trip.layovers << build(:layover, stop_index: 1, trip: trip, stop: itinerary.stops.last, itinerary: itinerary)
       end
     end
   end

@@ -20,9 +20,9 @@ module ChargeCalculator
         calculated_price_value = Reducers::Max.new.apply([calculated_price_value, min_price])
 
         Models::Price.new(
-          amount:      calculated_price_value,
-          currency:    currency,
-          category:    category,
+          amount: calculated_price_value,
+          currency: currency,
+          category: category,
           description: category
         )
       end

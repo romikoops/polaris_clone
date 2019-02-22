@@ -53,7 +53,7 @@ module AdmiraltyAuth
           post :create
 
           expect(response).to redirect_to('/')
-          expect(Users::User.exists?(email: email)).to be_truthy
+          expect(Users::User).to exist(email: email)
         end
       end
     end

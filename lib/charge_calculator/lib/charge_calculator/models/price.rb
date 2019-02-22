@@ -15,11 +15,11 @@ module ChargeCalculator
 
       def to_h
         {
-          amount:      amount,
-          currency:    currency,
-          category:    category,
+          amount: amount,
+          currency: currency,
+          category: category,
           description: description,
-          children:    children.map(&:to_h)
+          children: children.map(&:to_h)
         }
       end
     end

@@ -17,7 +17,7 @@ class Admin::TruckingController < Admin::AdminBaseController
   def edit
     tp = TruckingPricing.find(params[:id])
     ntp = params[:pricing].as_json
-    tp.update_attributes(ntp.except("id", "cargo_class", "load_type", "courier_id", "truck_type", "carriage"))
+    tp.update_attributes(ntp.except('id', 'cargo_class', 'load_type', 'courier_id', 'truck_type', 'carriage'))
     response_handler(tp)
   end
 
@@ -28,10 +28,10 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def overwrite_zonal_trucking_by_hub
     if params[:file]
-      req = { "xlsx" => params[:file] }
+      req = { 'xlsx' => params[:file] }
       resp = ExcelTool::OverrideTruckingRateByHub.new(
         params: req,
-        _user:  current_user,
+        _user: current_user,
         hub_id: params[:id]
       ).perform
       response_handler(resp)
@@ -44,12 +44,12 @@ class Admin::TruckingController < Admin::AdminBaseController
     options = params[:options].as_json.symbolize_keys
     options[:tenant_id] = current_user.tenant_id
     url = DocumentService::TruckingWriter.new(options).perform
-    response_handler(url: url, key: "trucking")
+    response_handler(url: url, key: 'trucking')
   end
 
   private
 
-  def clone_dv(k, v, keys=%w(upper lower))
+  def clone_dv(k, v, keys = %w(upper lower))
     if k.include?(keys[0]) || k.include?(keys[1])
       v.clone.to_f
     else
@@ -69,8 +69,8 @@ class Admin::TruckingController < Admin::AdminBaseController
     query_holder[dir][dk] = [] unless query_holder[dir][dk]
 
     query = create_query(dv)
-    query.delete("table")
-    query[:modifier] = meta["subModifier"]
+    query.delete('table')
+    query[:modifier] = meta['subModifier']
     query[:direction] = dir
     query[:trucking_hub_id] = truckingHubId
 
@@ -102,7 +102,7 @@ class Admin::TruckingController < Admin::AdminBaseController
   end
 
   def directions
-    @directions ||= meta["direction"] == "either" ? %w(import export) : [meta["direction"]]
+    @directions ||= meta['direction'] == 'either' ? %w(import export) : [meta['direction']]
   end
 
   def truckingHubId
@@ -136,13 +136,13 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def populate_trucking_pricing(dir, dk, dv)
     query = query_holder[dir][dk]
-    dv["table"].each_with_index do |dt, _i|
-      tmp =  temp_hash(dt)
+    dv['table'].each_with_index do |dt, _i|
+      tmp = temp_hash(dt)
       tmp[:_id] = SecureRandom.uuid
-      tmp["type"] = dk
-      tmp["trucking_hub_id"] = truckingHubId
-      tmp["trucking_query_id"] = query[:_id]
-      tmp["tenant_id"] = current_user.tenant_id
+      tmp['type'] = dk
+      tmp['trucking_hub_id'] = truckingHubId
+      tmp['trucking_query_id'] = query[:_id]
+      tmp['tenant_id'] = current_user.tenant_id
       truckingPricings << tmp
     end
   end
@@ -157,24 +157,24 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def update_item_truckingPricings
     truckingPricings.each do |k|
-      update_item("truckingPricings", { _id: k[:_id] }, k)
+      update_item('truckingPricings', { _id: k[:_id] }, k)
     end
   end
 
   def update_item_truckingQueries
     truckingQueries.each do |k|
-      update_item("truckingQueries", { _id: k[:_id] }, k)
+      update_item('truckingQueries', { _id: k[:_id] }, k)
     end
   end
 
   def update_item_truckingHubs
-    update_item("truckingHubs",
-      { _id: truckingHubId },
-      type:      meta["type"].to_s,
-      load_type: meta["loadType"],
-      modifier:  meta["modifier"].to_s,
-      tenant_id: current_user.tenant_id,
-      nexus_id:  meta["nexus_id"])
+    update_item('truckingHubs',
+                { _id: truckingHubId },
+                type: meta['type'].to_s,
+                load_type: meta['loadType'],
+                modifier: meta['modifier'].to_s,
+                tenant_id: current_user.tenant_id,
+                nexus_id: meta['nexus_id'])
   end
 
   def do_for_create

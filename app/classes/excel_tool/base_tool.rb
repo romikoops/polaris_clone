@@ -4,7 +4,7 @@ module ExcelTool
   class BaseTool
     attr_reader :results, :stats, :hub, :tenant, :xlsx, :hub_id
     include AwsConfig
-    def initialize(args={ _user: current_user })
+    def initialize(args = { _user: current_user })
       params = args[:params]
       @stats = _stats
       @results = _results
@@ -13,9 +13,9 @@ module ExcelTool
         @hub = Hub.find(@hub_id)
       end
       if params['xlsx']
-        @xlsx = open_file(params["xlsx"])
+        @xlsx = open_file(params['xlsx'])
       elsif params['key']
-        signed_url = get_file_url(params['key'], "assets.itsmycargo.com")
+        signed_url = get_file_url(params['key'], 'assets.itsmycargo.com')
         @xlsx = open_file(signed_url)
       end
       post_initialize(args)
@@ -33,7 +33,7 @@ module ExcelTool
 
     def _stats
       {
-        type: "trucking"
+        type: 'trucking'
       }.merge(local_stats)
     end
 
@@ -58,8 +58,8 @@ module ExcelTool
     end
 
     def set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
-      if charge[:rate_basis].include? "RANGE"
-        if load_type === "fcl"
+      if charge[:rate_basis].include? 'RANGE'
+        if load_type === 'fcl'
           %w(fcl_20 fcl_40 fcl_40_hq).each do |lt|
             set_range_fee(all_charges, charge, lt, direction, tenant_vehicle_id, mot, counterpart_hub_id)
           end
@@ -72,9 +72,9 @@ module ExcelTool
     end
 
     def set_regular_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id)
-      if load_type === "fcl"
+      if load_type === 'fcl'
         %w(fcl_20 fcl_40 fcl_40_hq).each do |lt|
-          all_charges[counterpart_hub_id][tenant_vehicle_id][direction][lt]["fees"][charge[:key]] = charge
+          all_charges[counterpart_hub_id][tenant_vehicle_id][direction][lt]['fees'][charge[:key]] = charge
         end
       else
         if !all_charges[counterpart_hub_id] ||
@@ -82,7 +82,7 @@ module ExcelTool
            !all_charges[counterpart_hub_id][tenant_vehicle_id][direction] ||
            !all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]
         end
-        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]] = charge
+        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]] = charge
       end
       all_charges
     end

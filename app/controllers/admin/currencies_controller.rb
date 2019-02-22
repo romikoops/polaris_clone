@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Admin::CurrenciesController < ApplicationController
   include CurrencyTools
 
   def currencies
-    currency = current_user ? current_user.currency : "USD"
+    currency = current_user ? current_user.currency : 'USD'
     results = get_currency_array(currency, params[:tenant_id])
     response_handler(results)
   end
@@ -26,19 +28,17 @@ class Admin::CurrenciesController < ApplicationController
 
   def toggle_mode
     tenant = Tenant.find(params[:tenant_id])
-    tenant.scope["fixed_exchange_rate"] = !tenant.scope["fixed_exchange_rate"]
+    tenant.scope['fixed_exchange_rate'] = !tenant.scope['fixed_exchange_rate']
     tenant.save!
-    currency = tenant ? tenant.currency : "USD"
+    currency = tenant ? tenant.currency : 'USD'
     rates = get_currency_array(currency, tenant.id)
     response_handler(tenant: tenant, rates: rates)
   end
 
   def set_rates
-
     currency = Currency.find_or_create_by(tenant_id: params[:tenant_id], base: params[:base])
     currency.update_attributes(today: params[:rates])
     results = get_currency_array(params[:base], params[:tenant_id])
     response_handler(results)
   end
-
 end

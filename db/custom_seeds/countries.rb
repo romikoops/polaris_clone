@@ -19,7 +19,7 @@ countries.each do |country|
       model: 'Country',
       model_id: country_obj.id.to_s
     )
-    end
+  end
   country['altSpellings'].each do |spell|
     AlternativeName.find_or_create_by!(
       name: spell,
@@ -27,7 +27,6 @@ countries.each do |country|
       model_id: country_obj.id.to_s
     )
   end
-
 end
 regions = %w(africa europe americas asia oceania)
 regions.each do |region|

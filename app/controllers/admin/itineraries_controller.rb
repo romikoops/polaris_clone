@@ -33,12 +33,12 @@ class Admin::ItinerariesController < Admin::AdminBaseController
 
   def show
     itinerary = Itinerary.find(params[:id])
-    resp = { hubs:          itinerary.hubs,
-             itinerary:     itinerary,
+    resp = { hubs: itinerary.hubs,
+             itinerary: itinerary,
              hubItinerarys: itinerary.as_options_json,
-             schedules:     itinerary.prep_schedules(10),
-             stops:         itinerary.stops.order(:index),
-             notes:         itinerary.notes }
+             schedules: itinerary.prep_schedules(10),
+             stops: itinerary.stops.order(:index),
+             notes: itinerary.notes }
     response_handler(resp)
   end
 
@@ -64,8 +64,8 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def find_or_create_itinerary_address(itinerary, address, index)
-    ItineraryLocation.find_or_create_by(itinerary:             itinerary,
-                                        address:              address,
+    ItineraryLocation.find_or_create_by(itinerary: itinerary,
+                                        address: address,
                                         position_in_hub_chain: (index + 1) / 2)
   end
 
@@ -81,8 +81,8 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   def itinerary_params
     {
       mode_of_transport: params['itinerary']['mot'],
-      name:              params['itinerary']['name'],
-      tenant_id:         current_user.tenant_id
+      name: params['itinerary']['name'],
+      tenant_id: current_user.tenant_id
     }
   end
 
@@ -98,8 +98,8 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   def app_error(message)
     ApplicationError.new(
       http_code: 400,
-      code:      SecureRandom.uuid,
-      message:   message
+      code: SecureRandom.uuid,
+      message: message
     )
   end
 
@@ -116,9 +116,9 @@ class Admin::ItinerariesController < Admin::AdminBaseController
 
   def itinerary_with_notes
     itinerary = Itinerary.find(params[:id])
-    itinerary.notes.find_or_create_by!(body:   params[:notes][:body],
+    itinerary.notes.find_or_create_by!(body: params[:notes][:body],
                                        header: params[:notes][:header],
-                                       level:  params[:notes][:level])
+                                       level: params[:notes][:level])
     itinerary.notes
   end
 

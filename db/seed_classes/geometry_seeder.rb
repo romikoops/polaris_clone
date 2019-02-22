@@ -67,13 +67,14 @@ class GeometrySeeder
     Location.import geometries_data,
                     on_duplicate_key_update: {
                       conflict_target: %i(postal_code suburb neighbourhood city province country),
-                      columns:         [:bounds]
+                      columns: [:bounds]
                     }
 
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
     puts 'Geometries seeded...'
   end
+
   def self.import_germany
     puts 'Reading from kml...'
     GeometrySeeder.get_s3_file('data/germany_postal.kml')
@@ -104,7 +105,8 @@ class GeometrySeeder
       polygons_raw_data = geo['MultiGeometry'] ? [geo['MultiGeometry']['Polygon']].flatten : [geo['Polygon']]
 
       polygons = polygons_raw_data.map do |polygon_raw_data|
-        next if !polygon_raw_data
+        next unless polygon_raw_data
+
         serialized_coordinate_pairs = polygon_raw_data['outerBoundaryIs']['LinearRing']['coordinates'].split
 
         points = serialized_coordinate_pairs.map do |serialized_coordinate_pair|
@@ -134,13 +136,14 @@ class GeometrySeeder
     Location.import geometries_data,
                     on_duplicate_key_update: {
                       conflict_target: %i(postal_code suburb neighbourhood city province country),
-                      columns:         [:bounds]
+                      columns: [:bounds]
                     }
 
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
     puts 'Geometries seeded...'
   end
+
   def self.import_sweden
     puts 'Reading from kml...'
     GeometrySeeder.get_s3_file('data/sweden_postal.kml')
@@ -170,7 +173,8 @@ class GeometrySeeder
       polygons_raw_data = geo['MultiGeometry'] ? [geo['MultiGeometry']['Polygon']].flatten : [geo['Polygon']]
 
       polygons = polygons_raw_data.map do |polygon_raw_data|
-        next if !polygon_raw_data
+        next unless polygon_raw_data
+
         serialized_coordinate_pairs = polygon_raw_data['outerBoundaryIs']['LinearRing']['coordinates'].split
 
         points = serialized_coordinate_pairs.map do |serialized_coordinate_pair|
@@ -200,7 +204,7 @@ class GeometrySeeder
     Location.import geometries_data,
                     on_duplicate_key_update: {
                       conflict_target: %i(postal_code suburb neighbourhood city province country),
-                      columns:         [:bounds]
+                      columns: [:bounds]
                     }
 
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)

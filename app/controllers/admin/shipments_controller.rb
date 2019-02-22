@@ -43,11 +43,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         cargoItems: @cargo_items.map(&:with_cargo_type),
         containers: @containers,
         aggregatedCargo: @shipment.aggregated_cargo,
-        contacts:        contacts,
-        documents:       @documents,
-        addresses:       addresses,
-        cargoItemTypes:  cargo_item_types,
-        accountHolder:   @shipment.user
+        contacts: contacts,
+        documents: @documents,
+        addresses: addresses,
+        cargoItemTypes: cargo_item_types,
+        accountHolder: @shipment.user
       }
     end
     response_handler(
@@ -386,7 +386,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def addresses
     @addresses ||= {
-      origin:      @shipment.origin_nexus,
+      origin: @shipment.origin_nexus,
       destination: @shipment.destination_nexus
     }
   end
@@ -417,8 +417,9 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @shipment_contacts = @shipment.shipment_contacts
     @shipment_contacts.each do |sc|
       next unless sc.contact
-      contacts.push(contact:  sc.contact,
-                    type:     sc.contact_type,
+
+      contacts.push(contact: sc.contact,
+                    type: sc.contact_type,
                     address: sc.contact.address)
     end
   end

@@ -23,8 +23,8 @@ module ExcelTools
   def price_split(basis, string)
     vals = string.split(' ')
     {
-      'currency'   => vals[1],
-      'rate'       => vals[0].to_i,
+      'currency' => vals[1],
+      'rate' => vals[0].to_i,
       'rate_basis' => basis
     }
   end
@@ -96,29 +96,29 @@ module ExcelTools
     existing_charge = all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]]
     if existing_charge && existing_charge[:range]
       all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]][:range] << {
-        currency:   charge[:currency],
+        currency: charge[:currency],
         rate_basis: charge[:rate_basis],
-        min:        charge[:range_min],
-        max:        charge[:range_max],
-        rate:       rate_value
+        min: charge[:range_min],
+        max: charge[:range_max],
+        rate: rate_value
       }
     else
       all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]] = {
         effective_date: charge[:effective_date],
         expiration_date: charge[:expiration_date],
-        currency:   charge[:currency],
+        currency: charge[:currency],
         rate_basis: charge[:rate_basis],
-        min:        charge[:min],
-        range:      [
+        min: charge[:min],
+        range: [
           {
             currency: charge[:currency],
-            min:      charge[:range_min],
-            max:      charge[:range_max],
-            rate:     rate_value
+            min: charge[:range_min],
+            max: charge[:range_max],
+            rate: rate_value
           }
         ],
-        key:        charge[:key],
-        name:       charge[:name]
+        key: charge[:key],
+        name: charge[:name]
       }
     end
     all_charges
@@ -132,6 +132,7 @@ module ExcelTools
     meta = {}
     sheet.row(1).each_with_index do |key, i|
       next if key.nil?
+
       meta[key.downcase] = sheet.row(2)[i]
     end
     meta.deep_symbolize_keys!

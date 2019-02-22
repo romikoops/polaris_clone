@@ -91,12 +91,14 @@ module DataValidator
     def get_diff_value(result, key, expected_result)
       value = result.dig(:quote, key.to_sym, :total, :value)
       return nil if value.nil? || expected_result[key.to_sym] < 1
+
       (value - expected_result[key.to_sym]).abs
     end
 
     def get_diff_percentage(result, key, expected_result)
       value = result.dig(:quote, key.to_sym, :total, :value)
       return nil if value.nil? || expected_result[key.to_sym] < 1
+
       ((value - expected_result[key.to_sym]) / expected_result[key.to_sym]) * 100
     end
 
@@ -119,22 +121,22 @@ module DataValidator
         result_comparisons[:all] << {
           example_number: example_index + 1,
           itinerary: result[:itinerary],
-          diff_val:  get_diff_value(result, :total, expected_result),
-          diff_percent:  get_diff_percentage(result, :total, expected_result),
-          trucking_pre_diff_val:  get_diff_value(result, :trucking_pre, expected_result),
-          trucking_pre_diff_percent:  get_diff_percentage(result, :trucking_pre, expected_result),
-          trucking_on_diff_val:  get_diff_value(result, :trucking_on, expected_result),
-          trucking_on_diff_percent:  get_diff_percentage(result, :trucking_on, expected_result),
+          diff_val: get_diff_value(result, :total, expected_result),
+          diff_percent: get_diff_percentage(result, :total, expected_result),
+          trucking_pre_diff_val: get_diff_value(result, :trucking_pre, expected_result),
+          trucking_pre_diff_percent: get_diff_percentage(result, :trucking_pre, expected_result),
+          trucking_on_diff_val: get_diff_value(result, :trucking_on, expected_result),
+          trucking_on_diff_percent: get_diff_percentage(result, :trucking_on, expected_result),
           service_level: result[:service_level],
           expected_total: expected_result[:total],
           expected_import: expected_result[:import],
           expected_export: expected_result[:export],
           import: result.dig(:quote, :import, :total, :value),
           export: result.dig(:quote, :export, :total, :value),
-          import_diff_val:  get_diff_value(result, :import, expected_result),
-          import_diff_percent:  get_diff_percentage(result, :import, expected_result),
-          export_diff_val:  get_diff_value(result, :export, expected_result),
-          export_diff_percent:  get_diff_percentage(result, :export, expected_result),
+          import_diff_val: get_diff_value(result, :import, expected_result),
+          import_diff_percent: get_diff_percentage(result, :import, expected_result),
+          export_diff_val: get_diff_value(result, :export, expected_result),
+          export_diff_percent: get_diff_percentage(result, :export, expected_result),
           expected_trucking_pre: expected_result[:trucking_pre],
           expected_trucking_on: expected_result[:trucking_on],
           total: result.dig(:quote, :total, :value),

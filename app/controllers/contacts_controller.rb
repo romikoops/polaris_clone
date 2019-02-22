@@ -21,6 +21,7 @@ class ContactsController < ApplicationController
     scs.each do |s|
       tmp_shipment = s.shipment
       next unless tmp_shipment
+
       shipments.push(tmp_shipment.with_address_index_json)
     end
     address = contact.address
@@ -71,7 +72,7 @@ class ContactsController < ApplicationController
 
     response_handler(
       pagination_options.merge(
-        contacts:        paginated_contacts.map(&:as_options_json),
+        contacts: paginated_contacts.map(&:as_options_json),
         numContactPages: paginated_contacts.total_pages
       )
     )
@@ -128,7 +129,7 @@ class ContactsController < ApplicationController
 
   def pagination_options
     {
-      page:     current_page,
+      page: current_page,
       per_page: params[:per_page]&.to_f
     }.compact
   end
