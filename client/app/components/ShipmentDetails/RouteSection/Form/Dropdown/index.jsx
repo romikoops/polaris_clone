@@ -25,13 +25,17 @@ const customStyles = `
 
 function getOptions (targets) {
   const labels = []
+  const options = []
 
-  return targets.map(routeOption).filter((option) => {
-    const isNewLabel = !labels.includes(option.label)
+  targets.forEach((target) => {
+    const option = routeOption(target)
+    if (labels.includes(option.label)) return
+
     labels.push(option.label)
-
-    return isNewLabel
+    options.push(option)
   })
+
+  return options.sort((a, b) => (a.label > b.label ? 1 : -1))
 }
 
 function Dropdown ({
