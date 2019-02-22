@@ -1,5 +1,4 @@
 {
-  "rebaseStalePrs": true,
   "packageRules": [
     {
       "packagePatterns": [ "babel" ],
