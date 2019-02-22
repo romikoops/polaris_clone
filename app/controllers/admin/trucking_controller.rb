@@ -33,6 +33,7 @@ class Admin::TruckingController < Admin::AdminBaseController
         params: req,
         hub_id: params[:id]
       ).perform
+
       response_handler(resp)
     else
       response_handler(false)

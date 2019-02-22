@@ -17,6 +17,8 @@ module Locations
     end
 
     def transliterated_name
+      return if name.nil?
+      
       locale = I18n.available_locales.find { |l| l[/#{country_code}/i] }
       I18n.with_locale(locale) do
         ActiveSupport::Inflector.transliterate(name)
@@ -51,4 +53,5 @@ end
 #  postal_code       :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  locode            :string
 #

@@ -18,7 +18,7 @@ module Locations
       return nil unless postal_location
 
       return postal_location unless terms.present?
-      
+
       name = Locations::NameFinder.find_in_postal_code(postal_bounds: postal_location.bounds, terms: terms)
 
       return name.location if name.present? && name.location
@@ -29,10 +29,17 @@ module Locations
       Locations::LocationSeeder.find_in_city(terms: terms, country_code: country_code, point: postal_location.bounds.point)
     end
 
+    def self.seeding_with_locode(locode:)
+      name = Locations::Name.find_by(locode: locode)
+      return name.location if name.present? && name.location
+
+      Locations::Location.smallest_contains(lat: name.point.y, lon: name.point.x).first
+    end
+
     def self.find_in_city(terms:, country_code:, point:)
       city = Locations::Location.contains(lat: point.y, lon: point.x).where('admin_level > 5').order(:admin_level).first
       return nil unless city
-      
+
       name = Locations::NameFinder.find_in_postal_code(postal_bounds: city.bounds, terms: terms)
       return nil unless name
 

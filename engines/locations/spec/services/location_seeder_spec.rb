@@ -63,6 +63,19 @@ RSpec.describe Locations::LocationSeeder do
       end
     end
 
+    describe '.seeding_with_locode' do
+      let!(:locode_location) { FactoryBot.create(:swedish_location, osm_id: 1234) }
+      let!(:locode_false_location) { FactoryBot.create(:xl_swedish_location, osm_id: 1235) }
+
+      it 'finds the correct location for the locode' do
+        FactoryBot.create(:locations_name, :reindex, osm_id: 100, locode: 'DEDRS', point: locode_location.bounds.centroid, place_rank: 40)
+        Locations::Name.reindex
+        result = Locations::LocationSeeder.seeding_with_locode(locode: 'DEDRS')
+        expect(result).to eq(locode_location)
+      end
+
+    end
+
     describe '.find_in_city' do
       let!(:location_1) { FactoryBot.create(:german_postal_location, admin_level: 6) }
 

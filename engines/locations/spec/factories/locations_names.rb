@@ -13,6 +13,7 @@ FactoryBot.define do
     osm_type { nil }
     state { nil }
     county { nil }
+    locode { nil }
 
     trait :reindex do
       after(:create) do |name, _evaluator|

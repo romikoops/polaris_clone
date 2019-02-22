@@ -89,7 +89,7 @@ FactoryBot.define do
     end
 
     factory :swedish_location, traits: [:in_sweden]
-    factory :xl_swedish_location, traits: [:in_sweden]
+    factory :xl_swedish_location, traits: [:in_sweden_large]
     factory :chinese_location, traits: [:in_china]
     factory :german_location, traits: [:in_germany]
     factory :german_postal_location, traits: [:postal_germany]

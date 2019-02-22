@@ -37,7 +37,6 @@ module Trucking
         load_ident_values_and_countries
         load_fees_and_charges
         overwrite_zonal_trucking_rates_by_hub
-        import_data
         # import_locations
         end_time = DateTime.now
         diff = (end_time - start_time) / 86_400
@@ -66,12 +65,6 @@ module Trucking
           trucking_rates:     [],
           trucking_locations: []
         }
-      end
-
-      def import_data
-        Location.import(@trucking_locations)
-        Rate.import(@trucking_rates)
-        Trucking.import(@trucking_truckings)
       end
 
       def overwrite_zonal_trucking_rates_by_hub
@@ -579,6 +572,8 @@ module Trucking
           'location_id'
         elsif identifier_type == 'POSTAL_CODE'
           %w(location_id postal_code)
+        elsif identifier_type == 'LOCODE'
+          %w(location_id locode)
         elsif identifier_type == 'POSTAL_CITY'
           %w(location_id postal_city)
         elsif identifier_type.include?('_')
@@ -602,6 +597,8 @@ module Trucking
       def find_geometry(idents_and_country)
         geometry = if @identifier_modifier == 'postal_code'
                     Locations::Location.find_by(postal_code: idents_and_country[:ident].upcase, country_code: idents_and_country[:country])
+                  elsif @identifier_modifier == 'locode'
+                    Locations::LocationSeeder.seeding_with_locode(locode: idents_and_country[:ident].upcase)
                   elsif @identifier_modifier == 'postal_city'
                     postal_code, name = idents_and_country[:ident].split('-').map{|string| string.strip.upcase }
                     Locations::LocationSeeder.seeding_with_postal_code(postal_code: postal_code, country_code: idents_and_country[:country].downcase, terms: name)
