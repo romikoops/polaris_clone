@@ -21,7 +21,7 @@ module SetupHelper
 
       _pricing_detail = pricing_detail(tenant: _user.tenant, pricing: _pricing,
                                        currency: args[:target_currency], rate: args[:rate]['BAS'] ? args[:rate]['BAS']['rate'] : nil,
-                                       min: args[:rate]['BAS'] ? args[:rate]['BAS']['min'] : nil, pricing: _pricing)
+                                       min: args[:rate]['BAS'] ? args[:rate]['BAS']['min'] : nil)
       _cargo_item = cargo_item(quantity: args[:quantity], dimension_x: args[:dimension_x],
                                dimension_y: args[:dimension_y], dimension_z: args[:dimension_z],
                                payload_in_kg: args[:payload_in_kg], cargo_class: args[:cargo_class])

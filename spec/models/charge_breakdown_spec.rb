@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ChargeBreakdown, type: :model do
+RSpec.describe ChargeBreakdown, type: :model do
   context 'instance methods' do
     let(:charge_breakdown)          { create(:charge_breakdown) }
     let(:price)                     { create(:price) }

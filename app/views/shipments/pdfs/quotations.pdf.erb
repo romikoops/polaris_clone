@@ -99,7 +99,7 @@
                 <tr>
                   <td class="table-title">
                     <p >
-                      <%= 
+                      <%=
                         [cargo.dimension_x, cargo.dimension_y, cargo.dimension_z]
                           .map{|v| "#{format('%.2f',v)} cm"}.join(' x ')
                       %>
@@ -133,7 +133,7 @@
                 </tr>
               </table>
             </div>
-             
+
           <% end %>
           <% s.containers.each_with_index do |container, i| %>
             <div class="no_page_break item-group">
@@ -145,7 +145,7 @@
                   <td class="table-title"><p>Quantity</p></td>
                   <td class="table-value"><span><%= container.quantity %></span></td>
                 </tr>
-               
+
                 <tr>
                   <td class="table-title"><p>Cargo Type</p></td>
                   <td class="table-value"><span><%= container.size_class.humanize.upcase %></span></sup></td>
@@ -237,9 +237,9 @@
             charge = s.selected_offer[charge_key]
           end %>
         <% next if !charge%>
-        <% charge_name =  if charge_key == 'cargo' && charge['name'] == 'Freight' 
+        <% charge_name =  if charge_key == 'cargo' && charge['name'] == 'Freight'
                             "#{s.mode_of_transport} Freight"
-                          else 
+                          else
                             charge["name"]
                           end
         %>
@@ -258,7 +258,7 @@
                                  .flat_map(&:keys).none? {|k| k.include?('unknown')}
               end %>
             <% if charge_key != 'cargo' &&
-                  no_custom_fees && 
+                  no_custom_fees &&
                   charge != "Grand Total" &&
                   !scope['hide_grand_total'] || (charge_key == 'cargo' && !hide_cargo_sub_totals && no_custom_fees)
             %>
@@ -290,12 +290,12 @@
                   end
                 %>
               <% sorted_charges_by_unit.each do |unit_and_sorted_charges| %>
-                <% 
+                <%
                   unit_id = unit_and_sorted_charges.first
                   sorted_charges = unit_and_sorted_charges.second
                   if scope['condense_local_fees_pdf']
                     desc = false
-                  elsif unit_id.present? && unit_id.is_number?
+                  elsif unit_id.present? && unit_id[%r{\A-?\d+(\.\d*)?\z}]
                     unit = s.cargo_units.find_by(id: unit_id.to_i)
                     desc = s.lcl? ? unit&.cargo_item_type&.description : unit.size_class.humanize.upcase
                   elsif unit_id == 'shipment'
@@ -353,7 +353,7 @@
                         <td class="table-title"><p><%= sub_charge_name %></p></td>
                         <td class="table-quantity">
                           <% if 'cargo' == charge_key && scope['fine_fee_detail'] %>
-                          
+
                             <p><%= cargo_data[:item_strings][s.id][sub_charge['item_id']] %></p>
                           <% end %>
                         </td>

@@ -2,6 +2,11 @@
 
 FactoryBot.define do
   factory :content do
+    component { 'main' }
+    section { 'main' }
+    text { 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
+
+    index { 0 }
   end
 end
 

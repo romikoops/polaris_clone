@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Address < ApplicationRecord
+class Address < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_many :user_addresses
   has_many :users, through: :user_addresses, dependent: :destroy
   has_many :shipments
@@ -20,7 +20,7 @@ class Address < ApplicationRecord
   geocoded_by :geocoded_address
 
   reverse_geocoded_by :latitude, :longitude do |address, results|
-    if geo = results.first
+    if (geo = results.first)
       premise_data = geo.address_components.find do |address_component|
         address_component['types'] == ['premise']
       end || {}
@@ -39,38 +39,11 @@ class Address < ApplicationRecord
   end
 
   # Class methods
-  def self.get_geocoded_address(user_input, hub_id, truck_carriage)
-    if truck_carriage
-      geocoded_address(user_input)
-    else
-      Address.where(id: hub_id).first
-    end
-  end
-
-  def self.from_short_name(input, address_type)
-    city, country_name = *input.split(' ,')
-    country = Country.geo_find_by_name(country_name)
-    address = Address.find_by(city: city, country: country, address_type: address_type)
-    return address unless address.nil?
-
-    temp_address = Address.new(geocoded_address: input)
-    temp_address.geocode
-    temp_address.reverse_geocode
-
-    address = Address.find_by(city: temp_address.city, country: temp_address.country, address_type: address_type)
-    return address unless address.nil?
-
-    address = temp_address
-
-    address.name = city
-    address.address_type = address_type
-    address.save!
-    address
-  end
-
   def set_geocoded_address_from_fields!
-    rawAddress = "#{street} #{street_number}, #{premise}, #{zip_code} #{city}, #{country.try(:name)}"
-    self.geocoded_address = rawAddress.remove_extra_spaces
+    raw_address = "#{street} #{street_number}, #{premise}, #{zip_code} #{city}, #{country&.name}"
+    self.geocoded_address = raw_address.gsub(/\s+/, ' ').gsub(/\s+,/, ',').strip
+                                       .gsub(/^,/, '').gsub(/,\z/, '').strip
+                                       .gsub(/,+/, ',')
   end
 
   def geocode_from_address_fields!
@@ -78,27 +51,6 @@ class Address < ApplicationRecord
     geocode
     save!
     self
-  end
-
-  def self.get_trucking_city(string)
-    l = new(geocoded_address: string)
-    l.geocode
-    l.reverse_geocode
-
-    l.city
-  end
-
-  def self.geocode_all_from_address_fields!(options = {})
-    # Example Usage:
-    #   1.Address.geocode_all_from_address_fields
-    #         Updates addresses with nil geocoded_address
-    #         Return Array of updated addresses
-    #   2.Address.geocode_all_from_address_fields(force: true)
-    #         Updates all addresses
-    #         Return Array of all addresses
-
-    filter = options[:force] ? nil : { geocoded_address: nil }
-    Address.where(filter).map(&:geocode_from_address_fields!)
   end
 
   def self.create_and_geocode(raw_address_params)
@@ -124,48 +76,12 @@ class Address < ApplicationRecord
     create!(address_params(raw_address_params))
   end
 
-  def self.nexuses
-    where(address_type: 'nexus')
-  end
+  def primary_for?(user)
+    user_address = user_addresses.find_by(user: user)
 
-  def self.nexuses_client(client)
-    client.pricings.map(&:route).map(&:get_nexuses).flatten.uniq
-  end
+    raise "This 'Location' object is not associated with a user!" unless user_address.present?
 
-  def self.nexuses_prepared_client(client)
-    nexuses_client(client).pluck(:id, :name).to_h.invert
-  end
-
-  def self.all_with_primary_for(user)
-    addresses = user.addresses
-    addresses.map do |loc|
-      prim = { primary: loc.is_primary_for?(user) }
-      loc.to_custom_hash.merge(prim)
-    end
-  end
-
-  def names
-    [postal_code, neighbourhood, city, province, country]
-  end
-
-  def is_primary_for?(user)
-    user_loc = UserAddress.find_by(address_id: id, user_id: user.id)
-    if user_loc.nil?
-      raise "This 'Location' object is not associated with a user!"
-    else
-      return !!user_loc.primary
-    end
-  end
-
-  def pretty_hub_type
-    case address_type
-    when 'hub_train'
-      'Train Hub'
-    when 'hub_ocean'
-      'Port'
-    else
-      raise 'Unknown Hub Type!'
-    end
+    user_address.primary
   end
 
   def city_country
@@ -173,29 +89,17 @@ class Address < ApplicationRecord
   end
 
   def full_address
-    part1 = [street, street_number].delete_if(&:blank?).join(' ')
-    part2 = [zip_code, city, country.name].delete_if(&:blank?).join(', ')
-    [part1, part2].delete_if(&:blank?).join(', ')
+    part_one = [street, street_number].delete_if(&:blank?).join(' ')
+    part_two = [zip_code, city, country.name].delete_if(&:blank?).join(', ')
+    [part_one, part_two].delete_if(&:blank?).join(', ')
   end
 
   def lat_lng_string
     "#{latitude},#{longitude}"
   end
 
-  def closest_hub
-    hubs = Address.where(address_type: 'nexus')
-    distances = []
-    hubs.each do |hub|
-      distances << Geocoder::Calculations.distance_between([latitude, longitude], [hub.latitude, hub.longitude])
-    end
-
-    lowest_distance = distances.min
-    hubs[distances.find_index(lowest_distance)]
-  end
-
   def closest_address_with_distance
-    nexuses = Nexus.all
-    distances = nexuses.map do |nexus|
+    Nexus.all.map do |nexus|
       Geocoder::Calculations.distance_between(
         [latitude, longitude],
         [nexus.latitude, nexus.longitude]
@@ -203,39 +107,10 @@ class Address < ApplicationRecord
     end
   end
 
-  def furthest_hub(hubs)
-    hubs.max do |hub_x, hub_y|
-      hub_x.distance_to(self) <=> hub_y.distance_to(self)
-    end
-  end
-
   def furthest_hubs(hubs)
     hubs.sort_by do |hub|
       hub.distance_to(self)
     end
-  end
-
-  def closest_hubs
-    hubs = Nexus.all
-    distances = {}
-    hubs.each_with_index do |hub, i|
-      distances[i] = Geocoder::Calculations.distance_between([latitude, longitude], [hub.latitude, hub.longitude])
-    end
-
-    distances = distances.sort_by { |_k, v| v }
-    hubs_array = []
-    distances.each do |key, _value|
-      hubs_array << hubs[key]
-    end
-
-    hubs_array
-  end
-
-  def self.cascading_find_by_name(raw_name)
-    name = raw_name.split.map(&:capitalize).join(' ')
-
-    sanitize_zip_code!
-    zip_code
   end
 
   def to_custom_hash
@@ -258,8 +133,6 @@ class Address < ApplicationRecord
     zip_code
   end
 
-  private
-
   def self.address_params(raw_address_params)
     country = Country.geo_find_by_name(raw_address_params['country'])
 
@@ -269,6 +142,8 @@ class Address < ApplicationRecord
 
     filtered_params.to_h.merge(country: country)
   end
+
+  private
 
   def sanitize_zip_code!
     return if zip_code.nil?

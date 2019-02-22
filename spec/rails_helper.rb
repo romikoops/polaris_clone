@@ -7,7 +7,6 @@ require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
-require 'webmock/rspec'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -24,8 +23,6 @@ require 'webmock/rspec'
 # require only the support files necessary.
 #
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
-
-WebMock.disable_net_connect!
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -47,7 +44,7 @@ RSpec.configure do |config|
   # You can disable this behaviour by removing the line below, and instead
   # explicitly tag your specs with their type, e.g.:
   #
-  #     RSpec.describe UsersController, :type => :controller do
+  #     RSpec.describeUsersController, :type => :controller do
   #       # ...
   #     end
   #
@@ -64,16 +61,6 @@ RSpec.configure do |config|
   config.include RequestSpecHelpers::AuthHelpers::Includables, type: :request
   config.extend RequestSpecHelpers::AuthHelpers::Extensions, type: :request
   config.include RequestSpecHelpers::FormatHelpers, type: :request
-  config.include_context 'with_tenant', type: :request
 
   config.include Rails.application.routes.url_helpers
-end
-
-VCR.configure do |config|
-  config.cassette_library_dir = 'spec/cassettes'
-  config.hook_into :webmock
-  config.default_cassette_options = { record: :once }
-  config.allow_http_connections_when_no_cassette = true
-  config.configure_rspec_metadata!
-  config.ignore_localhost = true
 end

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Geometry, type: :model do
+RSpec.describe Geometry, type: :model do
   context 'class methods' do
     describe '.cascading_find_by_names' do
       let(:geometry_1) { create(:geometry) }

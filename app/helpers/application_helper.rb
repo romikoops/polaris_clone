@@ -2,12 +2,12 @@
 
 module ApplicationHelper
   include FontAwesome::Rails::IconHelper
-  
+
   def asset_data_base64(path)
     asset = (Rails.application.assets || ::Sprockets::Railtie.build_environment(Rails.application)).find_asset(path)
     throw "Could not find asset '#{path}'" if asset.nil?
-    base64 = Base64.encode64(asset.to_s).gsub(/\s+/, "")
-    "data:#{asset.content_type};base64,#{Rack::Utils.escape(base64)}"
+    data = Base64.encode64(asset.to_s).gsub(/\s+/, '')
+    "data:#{asset.content_type};base64,#{Rack::Utils.escape(data)}"
   end
 
   def format_to_price(*args)
@@ -25,52 +25,38 @@ module ApplicationHelper
     price, currency = args
 
     if valid_price_hash?(args)
-      price    = args.first["val"] || args.first["value"]
-      currency = args.first["currency"]
+      price    = args.first['val'] || args.first['value']
+      currency = args.first['currency']
     end
 
     return 'Price to be finalised on booking completion' if price.nil?
-    
-    return format("%.2f", price) if currency.nil?
 
-    number_to_currency(price, unit: currency, format: "%n %u")
+    return format('%.2f', price) if currency.nil?
+
+    number_to_currency(price, unit: currency, format: '%n %u')
   end
 
   def valid_price_hash?(args)
     args.size == 1 &&
       args.first.is_a?(Hash)                     &&
-      (args.first["val"] || args.first["value"]) &&
-      args.first["currency"]
+      (args.first['val'] || args.first['value']) &&
+      args.first['currency']
   end
 
   def trunc(text)
-    truncate(text, length: 50, separator: /\w/, omission: "...")
+    truncate(text, length: 50, separator: /\w/, omission: '...')
   end
 
-  def line_wrap(text, col=40)
+  def line_wrap(text, col = 40)
     s = text.gsub(/(.{1,#{col}})( +|$\n?)|(.{1,#{col}})/, "\\1\\3\n")
-    truncate(s, length: 120, separator: /\w/, omission: "...")
-  end
-
-  def formatted_datetime_full(datetime)
-    datetime.strftime("%m/%d/%y (%d %b %Y) | %I:%M%p")
+    truncate(s, length: 120, separator: /\w/, omission: '...')
   end
 
   def formatted_datetime(datetime)
-    datetime&.strftime("%d %b %Y | %I:%M %p")
-  end
-
-  def formatted_date_full(datetime)
-    datetime.strftime("%m/%d/%y (%d %b %Y)")
+    datetime&.strftime('%d %b %Y | %I:%M %p')
   end
 
   def formatted_date(datetime)
-    datetime.strftime("%d %b %Y")
-  end
-
-  def flash_messages
-    flash.map do |type, text|
-      { id: text.object_id, type: type, text: text }
-    end
+    datetime.strftime('%d %b %Y')
   end
 end

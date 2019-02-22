@@ -4,7 +4,7 @@ module ChargeCalculator
   module Calculators
     class Base
       def result
-        raise NotImplementError
+        raise NotImplementedError
       end
 
       private

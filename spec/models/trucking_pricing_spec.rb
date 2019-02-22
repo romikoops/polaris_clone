@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe TruckingPricing, type: :model do
+RSpec.describe TruckingPricing, type: :model do
   context 'class methods' do
     describe '.find_by_filter' do
       let(:tenant) { create(:tenant) }

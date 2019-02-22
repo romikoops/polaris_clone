@@ -4,7 +4,7 @@ class Country < ApplicationRecord
   has_many :addresses
   has_many :nexuses
   Geoplace = Struct.new(:name, :code)
-  # Class Methods
+
   def self.geo_find_by_name(name)
     geocoder_results = Geocoder.search(country: name)
     return nil if geocoder_results.empty?

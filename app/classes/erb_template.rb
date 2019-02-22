@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ErbTemplate
-  include WickedPdfHelper
   include ApplicationHelper
   include ActionView::Helpers
   BASE_PATH = "#{Rails.root}/app/views"

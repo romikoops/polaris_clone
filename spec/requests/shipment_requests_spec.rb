@@ -6,7 +6,7 @@ Dir["#{Rails.root}/spec/support/auxiliary_constants/shipments/*.rb"].each do |fi
   require file_path
 end
 
-describe 'Shipment requests', type: :request do
+RSpec.describe 'Shipment requests', type: :request do
   let(:trip) { create(:trip) }
   let(:user) { create(:user, tenant: tenant) }
   let(:shipment) { create(:shipment, load_type: load_type, direction: direction, user: user, tenant: tenant, origin_nexus: origin_nexus, destination_nexus: destination_nexus, trip: itinerary.trips.first, itinerary: itinerary) }
@@ -36,10 +36,11 @@ describe 'Shipment requests', type: :request do
 
   context 'user logged in' do
     let(:direction) { 'import' }
-
     let(:load_type) { 'container' }
 
-    include_context 'logged_in'
+    before do
+      sign_in(:user)
+    end
 
     context '#subdomain_create_shipment_path' do
       let(:response_data) do

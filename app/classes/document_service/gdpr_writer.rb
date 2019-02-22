@@ -26,8 +26,8 @@ module DocumentService
     end
 
     def perform
-      write_user_Data
-      write_contacts_Data
+      write_user_data
+      write_contacts_data
       write_shipment_data
       workbook.close
       write_to_aws(directory, user.tenant, filename, 'gdpr')
@@ -50,7 +50,7 @@ module DocumentService
          uid)
     end
 
-    def write_user_Data
+    def write_user_data
       row = 1
       user_keys.each do |k|
         user_sheet.write(row, 0, k.humanize)
@@ -59,7 +59,7 @@ module DocumentService
       end
     end
 
-    def write_contacts_Data
+    def write_contacts_data
       row = 1
       user_contacts.each do |uc|
         uc.as_json.each do |k, value|

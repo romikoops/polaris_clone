@@ -5,10 +5,10 @@ FactoryBot.define do
     association :user
     association :address
     company_name { 'Example Company' }
-    first_name { 'John' }
-    last_name { 'Smith' }
-    phone { '1234567' }
-    email { 'email@email.com' }
+    sequence(:first_name) { |n| "John#{n}" }
+    sequence(:last_name) { |n| "Smith#{n}" }
+    sequence(:phone) { |n| "1234567#{n}" }
+    sequence(:email) { |n| "email#{n}@example.com" }
   end
 end
 

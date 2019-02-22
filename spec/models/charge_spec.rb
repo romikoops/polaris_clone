@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Charge, type: :model do
+RSpec.describe Charge, type: :model do
   schedule_charge = {
     'total' => { 'value' => '248.3048190554238675', 'currency' => 'USD' },
     'cargo' => { '43' => { 'BAS' => { 'value' => '0.0', 'currency' => 'USD' }, 'HAS' => { 'value' => 0, 'currency' => 'USD' }, 'total' => { 'value' => '0.0', 'currency' => 'USD' } }, 'total' => { 'value' => '0.0', 'currency' => 'USD' } },
