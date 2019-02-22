@@ -9,8 +9,14 @@ function CargoUnits ({
   cargoUnits,
   loadType,
   scope,
-  ...sharedProps
+  onDeleteUnit,
+  ...otherProps
 }) {
+  const sharedProps = {
+    onDeleteUnit: cargoUnits.length > 1 && onDeleteUnit,
+    ...otherProps
+  }
+
   if (loadType === 'cargo_item' && !aggregatedCargo) {
     return cargoUnits.map((cargoItem, i) => (
       <CargoItem
