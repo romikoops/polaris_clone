@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module Insertability
-      class LocalCharges < Base
+      class LocalCharges < ExcelDataServices::DataValidator::Insertability::Base
         private
 
         def check_single_row(row)

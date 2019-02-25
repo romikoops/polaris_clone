@@ -3,9 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module Format
-      class Base
-        include ExcelDataServices::DataValidator
-
+      class Base < ExcelDataServices::DataValidator::Base
         def perform
           data.each do |sheet_name, sheet_data|
             check_sheet(sheet_name, sheet_data)

@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module ValidationError
-      class Format < Base
+      class Format < ExcelDataServices::DataValidator::ValidationError::Base
         class InvalidHeaders < Format
         end
 

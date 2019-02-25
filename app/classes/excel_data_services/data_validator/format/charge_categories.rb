@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module Format
-      class ChargeCategories < Base
+      class ChargeCategories < ExcelDataServices::DataValidator::Format::Base
         private
 
         def check_row(row)

@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module ValidationError
-      class Insertability < Base
+      class Insertability < ExcelDataServices::DataValidator::ValidationError::Base
         class HubsNotFound < Insertability
         end
       end

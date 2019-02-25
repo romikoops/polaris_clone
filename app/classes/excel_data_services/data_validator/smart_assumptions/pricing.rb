@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module SmartAssumptions
-      class Pricing < Base
+      class Pricing < ExcelDataServices::DataValidator::SmartAssumptions::Base
         def check_data(_single_data)
         end
       end

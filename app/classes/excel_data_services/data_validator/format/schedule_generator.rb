@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module Format
-      class ScheduleGenerator < Base
+      class ScheduleGenerator < ExcelDataServices::DataValidator::Format::Base
         private
 
         def check_row(row)

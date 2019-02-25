@@ -3,9 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module BookingPossible
-      class Base
-        include ExcelDataServices::DataValidator
-
+      class Base < ExcelDataServices::DataValidator::Base
         def perform
         end
       end

@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module Format
-      class LocalCharges < Base
+      class LocalCharges < ExcelDataServices::DataValidator::Format::Base
         include ExcelDataServices::LocalChargesTool
 
         VALID_STATIC_HEADERS = %i(

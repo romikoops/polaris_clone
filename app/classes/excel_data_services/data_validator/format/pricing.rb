@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module Format
-      class Pricing < Base
+      class Pricing < ExcelDataServices::DataValidator::Format::Base
         include ExcelDataServices::PricingTool
 
         private

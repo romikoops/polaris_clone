@@ -3,9 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module Insertability
-      class Base
-        include ExcelDataServices::DataValidator
-
+      class Base < ExcelDataServices::DataValidator::Base
         alias chunked_data data
 
         def perform

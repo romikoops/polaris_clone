@@ -21,7 +21,7 @@ RSpec.describe ExcelDataServices::Loader::Uploader do
     it 'returns an error log when errors were put into the errors array' do
       expect(ExcelDataServices::FileParser).to receive(:get).and_return(generic_parser)
       expect(generic_parser).to receive(:parse).and_return({})
-      expect(ExcelDataServices::DataValidator).to receive(:get).and_return(generic_validator)
+      expect(ExcelDataServices::DataValidator::Base).to receive(:get).and_return(generic_validator)
       expect(generic_validator).to receive(:validate).and_return([{ row_nr: 1, reason: 'mock error message' }])
       expect(uploader.perform).to eq(has_errors: true, errors: [{ row_nr: 1, reason: 'mock error message' }])
     end

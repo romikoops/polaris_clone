@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module Insertability
-      class ChargeCategories < Base
+      class ChargeCategories < ExcelDataServices::DataValidator::Insertability::Base
         def check_single_row(row)
           # raise NotImplementedError
         end

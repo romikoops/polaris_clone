@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module ValidationError
-      class SmartAssumptions < Base
+      class SmartAssumptions < ExcelDataServices::DataValidator::ValidationError::Base
       end
     end
   end

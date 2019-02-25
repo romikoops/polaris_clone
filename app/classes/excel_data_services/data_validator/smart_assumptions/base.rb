@@ -3,9 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module SmartAssumptions
-      class Base
-        include ExcelDataServices::DataValidator
-
+      class Base < ExcelDataServices::DataValidator::Base
         def perform
           data.each do |single_data|
             row = ExcelDataServices::Row.get(klass_identifier).new(row_data: single_data, tenant: tenant)

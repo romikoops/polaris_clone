@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module ValidationError
-      class ErrorLog < Base
+      class ErrorLog < ExcelDataServices::DataValidator::ValidationError::Base
         attr_reader :errors_ary
 
         def initialize(errors_ary = [])

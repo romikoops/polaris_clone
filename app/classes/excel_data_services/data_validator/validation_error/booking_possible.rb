@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module ValidationError
-      class BookingPossible < Base
+      class BookingPossible < ExcelDataServices::DataValidator::ValidationError::Base
       end
     end
   end

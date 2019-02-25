@@ -11,11 +11,11 @@ module ExcelDataServices
 
       def perform
         @data = parse_and_sanitize_data
-        validate_format
+        validate('Format')
         @data = restructure_data
-        validate_insertability
-        validate_smart_assumptions
-        validate_booking_possible
+        validate('Insertability')
+        validate('Smart Assumptions')
+        # TODO: validate('Booking Possible')
         insertion_stats = insert_into_database
         insertion_stats
       rescue ExcelDataServices::DataValidator::ValidationError::ErrorLog => exception
@@ -35,30 +35,13 @@ module ExcelDataServices
         file_parser.parse(tenant: tenant, file_or_path: file_or_path)
       end
 
-      def validate_format
-        validate('Format')
-      end
-
       def restructure_data
         restructurer = ExcelDataServices::DataRestructurer.get(klass_identifier)
         restructurer.restructure_data(options)
       end
 
-      def validate_insertability
-        validate('Insertability')
-      end
-
-      def validate_smart_assumptions
-        validate('Smart Assumptions')
-      end
-
-      def validate_booking_possible
-        # TODO
-        # validate('Booking Possible')
-      end
-
       def validate(flavor)
-        validator = ExcelDataServices::DataValidator.get(flavor, klass_identifier)
+        validator = ExcelDataServices::DataValidator::Base.get(flavor, klass_identifier)
         errors = validator.validate(options)
         if errors.present? # rubocop:disable Style/GuardClause
           raise ExcelDataServices::DataValidator::ValidationError::ErrorLog.new(errors),
