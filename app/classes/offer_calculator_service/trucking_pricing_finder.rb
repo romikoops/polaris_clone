@@ -10,17 +10,20 @@ module OfferCalculatorService
     end
 
     def perform(hub_id, distance)
-      # TruckingPricing.find_by_filter(
-      # Use Engine based Trucking here
-      Trucking::Rate.find_by_filter(
+      args = {
         address:   @address,
         load_type:  @shipment.load_type,
         tenant_id:  @shipment.tenant_id,
         truck_type: @trucking_details['truck_type'],
-        carriage: @carriage,
-        hub_ids: [hub_id],
-        distance: distance.round
-      )
+        carriage:   @carriage,
+        hub_ids:    [hub_id],
+        distance:   distance.round
+      }
+      experiment = Experiments::Trucking::FindByFilter.new(name: 'oc_trucking_find_by_filter')
+      experiment.use { TruckingPricing.find_by_filter(args) }
+      experiment.try { Trucking::Rate.find_by_filter(args) }
+
+      experiment.run
     end
   end
 end

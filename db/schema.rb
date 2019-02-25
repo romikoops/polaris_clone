@@ -414,7 +414,6 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.datetime "expiration_date"
     t.integer "user_id"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }
-    t.index ["uuid"], name: "index_local_charges_on_uuid", unique: true
   end
 
   create_table "locations", force: :cascade do |t|
@@ -641,12 +640,10 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "tenant_vehicle_id"
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }
     t.index ["itinerary_id"], name: "index_pricings_on_itinerary_id"
     t.index ["tenant_id"], name: "index_pricings_on_tenant_id"
     t.index ["transport_category_id"], name: "index_pricings_on_transport_category_id"
     t.index ["user_id"], name: "index_pricings_on_user_id"
-    t.index ["uuid"], name: "index_pricings_on_uuid", unique: true
   end
 
   create_table "quotations", force: :cascade do |t|

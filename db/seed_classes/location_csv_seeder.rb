@@ -4,9 +4,9 @@ require 'csv'
 
 class LocationCsvSeeder
   TMP_PATH = 'tmp/tmp_csv.gz'
-  DOWNLOADS_PATH = '/Users/warwickbeamish/Downloads/loc182csv/netherlands_locodes.csv.gz'
-  # DOWNLOADS_PATH = '/Users/warwickbeamish/Downloads/drydock_europe.csv.gz'
-  DOWNLOADS_NAME_PATH = '/Users/warwickbeamish/Downloads/netherlands_osm_2.csv.gz'
+  # DOWNLOADS_PATH = '/Users/warwickbeamish/Downloads/loc182csv/netherlands_locodes.csv.gz'
+  DOWNLOADS_PATH = '/Users/warwickbeamish/Downloads/drydock_asia_1.csv.gz'
+  # DOWNLOADS_NAME_PATH = '/Users/warwickbeamish/Downloads/netherlands_osm_2.csv.gz'
   def self.perform
     # load_map_data('data/location_data/europe.csv.gz')
     # load_name_data('data/location_data/germany_osm_1.csv.gz')
@@ -14,16 +14,17 @@ class LocationCsvSeeder
     # load_name_data('data/location_data/china_osm_2.csv.gz')
     # load_map_data('data/location_data/europe.csv.gz')
     # load_name_data('data/location_data/netherlands_osm_2.csv.gz')
-    load_locode_data('data/location_data/UNLOCODE_ListPart1.csv.gz')
-    # load_locode_data('data/location_data/UNLOCODE_ListPart2.csv.gz')
-    # load_locode_data('data/location_data/UNLOCODE_ListPart3.csv.gz')
-    
+    # load_locode_data('/Users/warwickbeamish/Downloads/loc182csv/UNLOCODE_ListPart1.csv.gz')
+    # load_locode_data('/Users/warwickbeamish/Downloads/loc182csv/UNLOCODE_ListPart2.csv.gz')
+    # load_locode_data('/Users/warwickbeamish/Downloads/loc182csv/UNLOCODE_ListPart3.csv.gz')
+    germany_no_bounds
   end
 
   def self.load_map_data(url)
     # LocationCsvSeeder.get_s3_file(url)
 
     Zlib::GzipReader.open(DOWNLOADS_PATH) do |gz|
+      # binding.pry
       csv = CSV.new(gz, headers: true)
       puts 'Preparing Geometries attributes...'
 
@@ -33,8 +34,8 @@ class LocationCsvSeeder
           locations << {
             name: row.fetch('name'),
             bounds: row.fetch('way'),
-            osm_id: row.fetch('abs').to_i.abs,
-            # osm_id: row.fetch('osm_id').to_i.abs,
+            # osm_id: row.fetch('abs').to_i.abs,
+            osm_id: row.fetch('osm_id').to_i.abs,
             admin_level: row.fetch('admin_level'),
             country_code: ''
           }
@@ -55,7 +56,7 @@ class LocationCsvSeeder
   end
 
   def self.load_name_data(url)
-    # LocationCsvSeeder.get_s3_file(url)
+    LocationCsvSeeder.get_s3_file(url)
     keys = %i(name
       alternative_names
       osm_type
@@ -73,8 +74,8 @@ class LocationCsvSeeder
       country_code
       display_name)
 
-    # Zlib::GzipReader.open(TMP_PATH) do |gz|
-    Zlib::GzipReader.open(DOWNLOADS_NAME_PATH) do |gz|
+    Zlib::GzipReader.open(TMP_PATH) do |gz|
+    # Zlib::GzipReader.open(DOWNLOADS_NAME_PATH) do |gz|
       csv = CSV.new(gz, headers: false)
       puts
       puts 'Preparing Location Names attributes...'
@@ -117,10 +118,10 @@ class LocationCsvSeeder
   def self.load_locode_data(url)
     # LocationCsvSeeder.get_s3_file(url)
    
-    Zlib::GzipReader.open(DOWNLOADS_PATH, {encoding: Encoding::ISO_8859_1}) do |gz|
+    Zlib::GzipReader.open(url, {encoding: Encoding::ISO_8859_1}) do |gz|
       csv = CSV.new(gz, headers: false)
       puts
-      puts 'Preparing Location Names attributes...'
+      puts 'Preparing Location Names (LOCODE) attributes...'
       names = []
       csv.each do |row|
         next if row[2].blank? || (row[0] == '=')
@@ -137,7 +138,6 @@ class LocationCsvSeeder
           point = name.point
         else
           location = lat_lng_from_string(row[10])
-          binding.pry
           point = RGeo::Geographic.spherical_factory(:srid => 4326).point(location[:longitude], location[:latitude])
         end
         obj[:point] = point
@@ -166,16 +166,16 @@ class LocationCsvSeeder
     Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, headers: true)
       csv.each do |row|
-          data = {
-            city: row['ort'],
-            country: 'Germany',
-            postal_code: row['plz'],
-            province: row['landkreis']
-          }
-         location = Location.find_by(country: 'Germany', postal_code: row['plz'])
-         if !location 
-          raise "Location not found!"
-         else
+        data = {
+          city: row['ort'],
+          country: 'Germany',
+          postal_code: row['plz'],
+          province: row['landkreis']
+        }
+        location = Locations::Location.find_by(country_code: 'de', name: row['plz'])
+        if !location
+          # binding.pry
+        else
           location.update(data)
         end
       end

@@ -88,7 +88,7 @@ class GeometrySeeder
     new_completion_percentage = 0
     puts 'PROGRESS BAR'
     puts '_' * 100
-    binding.pry
+
     geometries_data = geometries.map.with_index do |geo, i|
       # Progress bar
 
@@ -182,11 +182,8 @@ class GeometrySeeder
 
       attributes = {
         bounds: multi_polygon,
-        postal_code: names[1],
-        neighbourhood: names[2],
-        city: nil,
-        province: nil,
-        country: 'Sweden'
+        name: names[1],
+        country_code: 'se'
       }
 
       attributes
@@ -195,12 +192,7 @@ class GeometrySeeder
     puts
     puts 'Writing Geometries to DB...'
 
-    Location.import geometries_data,
-                    on_duplicate_key_update: {
-                      conflict_target: %i(postal_code suburb neighbourhood city province country),
-                      columns: [:bounds]
-                    }
-
+    Locations::Location.import(geometries_data)
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
     puts 'Geometries seeded...'

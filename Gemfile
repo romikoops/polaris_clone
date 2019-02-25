@@ -54,6 +54,9 @@ gem 'rgeo-geojson'
 # Full Text Search
 gem 'pg_search'
 
+# Refactoring critical components
+gem 'scientist'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 
