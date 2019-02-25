@@ -3,8 +3,10 @@
 module ExcelDataServices
   module DatabaseInserter
     class Base
-      InsertionError = Class.new(StandardError)
-      InvalidDataExtractionMethodError = Class.new(InsertionError)
+      MOT_HUB_NAME_LOOKUP = { 'ocean' => 'Port',
+                              'air' => 'Airport',
+                              'rail' => 'Railyard',
+                              'truck' => 'Depot' }.freeze
 
       def self.insert(options)
         new(options).perform
@@ -40,10 +42,7 @@ module ExcelDataServices
       end
 
       def append_hub_suffix(name, mot)
-        name + ' ' + { 'ocean' => 'Port',
-                       'air' => 'Airport',
-                       'rail' => 'Railyard',
-                       'truck' => 'Depot' }[mot]
+        name + ' ' + MOT_HUB_NAME_LOOKUP[mot]
       end
     end
   end

@@ -3,6 +3,11 @@
 module ExcelDataServices
   module DataRestructurer
     class Base
+      MOT_HUB_NAME_LOOKUP = { 'ocean' => 'Port',
+                              'air' => 'Airport',
+                              'rail' => 'Railyard',
+                              'truck' => 'Depot' }.freeze
+
       def self.restructure_data(options)
         new(options).perform
       end
@@ -35,10 +40,7 @@ module ExcelDataServices
       end
 
       def append_hub_suffix(name, mot)
-        name + ' ' + { 'ocean' => 'Port',
-                       'air' => 'Airport',
-                       'rail' => 'Railyard',
-                       'truck' => 'Depot' }[mot]
+        name + ' ' + MOT_HUB_NAME_LOOKUP[mot]
       end
     end
   end

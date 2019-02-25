@@ -67,16 +67,15 @@ module ExcelDataServices
               row_index_to_skip_to += 1
             end
 
-            row_data.delete(:range_min) # already inside range hash
-            row_data.delete(:range_max) # already inside range hash
             row_data.delete(:fee) # already inside range hash, called 'rate'. Yes, it's ridiculous.
-            row_data.merge(range: ranges_values.blank? ? nil : ranges_values)
-          else # no ranges
-            row_data.delete(:range_min)
-            row_data.delete(:range_max)
-            row_data
+            row_data[:range] = ranges_values.blank? ? nil : ranges_values
           end
+
+          row_data.delete(:range_min) # already inside range hash
+          row_data.delete(:range_max) # already inside range hash
+          row_data
         end
+
         restructured_rows_data.compact
       end
 
@@ -93,7 +92,6 @@ module ExcelDataServices
            carrier
            service_level
            load_type
-           rate_basis
            currency)
       end
 

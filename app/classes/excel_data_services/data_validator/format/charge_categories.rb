@@ -6,8 +6,7 @@ module ExcelDataServices
       class ChargeCategories < ExcelDataServices::DataValidator::Format::Base
         private
 
-        def check_row(row)
-          # raise NotImplementedError
+        def check_row(_row)
         end
 
         def build_valid_headers(_data_extraction_method)

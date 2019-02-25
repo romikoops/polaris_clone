@@ -93,7 +93,9 @@ module ExcelDataServices
         new_pricing_details_ids = []
 
         pricing_detail_params_arr.each do |pricing_detail_params|
+          range_data = pricing_detail_params.delete(:range) if pricing_detail_params[:range]
           pricing_detail = pricing_to_update.pricing_details.find_or_initialize_by(pricing_detail_params)
+          pricing_detail.range = range_data if range_data
           add_stats(:pricing_details, pricing_detail)
           pricing_detail.save!
           new_pricing_details_ids << pricing_detail.id

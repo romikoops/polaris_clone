@@ -8,8 +8,7 @@ module ExcelDataServices
 
         private
 
-        def check_row(row)
-          # raise NotImplementedError
+        def check_row(_row)
         end
 
         def build_valid_headers(data_extraction_method)

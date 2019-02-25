@@ -13,8 +13,6 @@ module ExcelDataServices
           DYNAMIC_FEE_COLS_NO_RANGES_HEADERS
         when 'one_col_fee_and_ranges'
           ONE_COL_FEE_AND_RANGES_HEADERS
-        else
-          raise InvalidDataExtractionMethodError, 'Unknown data extraction method!'
         end
       end
     end
