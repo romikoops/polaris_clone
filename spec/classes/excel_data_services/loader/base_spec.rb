@@ -2,10 +2,6 @@
 
 require 'rails_helper'
 
-class Test
-  SPECIFIC_IDENTIFIERS = %w(OceanLcl LocalCharges ChargeCategories).freeze
-end
-
 RSpec.describe ExcelDataServices::Loader::Base do
   let(:tenant) { create(:tenant) }
   let(:base_loader) do
@@ -16,7 +12,7 @@ RSpec.describe ExcelDataServices::Loader::Base do
   end
 
   describe '#perform' do
-    Test::SPECIFIC_IDENTIFIERS.each do |specific_identifier|
+    %w(OceanLcl LocalCharges ChargeCategories).each do |specific_identifier|
       context "with #{specific_identifier}" do
         let(:specific_identifier) { specific_identifier }
         it 'raises a NotImplementedError' do
