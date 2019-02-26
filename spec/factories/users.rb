@@ -50,6 +50,7 @@ end
 #  currency               :string           default("EUR")
 #  vat_number             :string
 #  allow_password_change  :boolean          default(FALSE), not null
+#  optin_status           :jsonb
 #  optin_status_id        :integer
 #  external_id            :string
 #  agency_id              :integer

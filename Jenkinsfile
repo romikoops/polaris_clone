@@ -18,6 +18,10 @@ wrap.pipeline(timeout: 90) {
       containerTemplate(name: 'postgis', image: 'mdillon/postgis',
         resourceRequestCpu: '250m', resourceLimitCpu: '500m',
         resourceRequestMemory: '400Mi', resourceLimitMemory: '500Mi',
+      ),
+      containerTemplate(name: 'elasticsearch', image: 'elasticsearch',
+        resourceRequestCpu: '250m', resourceLimitCpu: '500m',
+        resourceRequestMemory: '500Mi', resourceLimitMemory: '700Mi',
       )
     ]
   ) { label ->
