@@ -4382,6 +4382,7 @@ exports[`shipment.eori is falsy 1`] = `
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={
+                    Object {
                       "colors": Object {
                         "primary": "#333",
                         "secondary": "#fafafa",
@@ -13546,6 +13547,7 @@ exports[`theme is falsy 1`] = `
                 Object {
                   "color": "black",
                 }
+              }
             >
               SHIPMENT_IMC_REFERENCE
             </h4>
