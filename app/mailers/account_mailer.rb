@@ -26,7 +26,7 @@ class AccountMailer < Devise::Mailer
   def reset_password_instructions(record, token, opts = {})
     tenant = record.tenant
     @primary_color = tenant.theme.dig('colors', 'primary')
-    attachments.inline['logo.png'] = URI.open(tenant.theme['emailLogo']).read
+    attachments.inline['logo.png'] = URI.open(tenant.theme['emailLogo']).read if tenant.theme['emailLogo']
     opts[:from] = Mail::Address.new("no-reply@#{tenant.subdomain}.#{Settings.emails.domain}")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
