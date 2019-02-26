@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<GmapsLoader
+  component={[Function]}
+  gMaps={
+    Object {
+      "InfoWindow": [Function],
+      "LatLngBounds": [Function],
+      "Map": [Function],
+      "MapTypeId": Object {
+        "ROADMAP": "",
+      },
+      "Marker": [Function],
+      "Point": [Function],
+      "Size": [Function],
+      "places": Object {
+        "Autocomplete": [Function],
+      },
+    }
+  }
+  has_on_carriage={true}
+  has_pre_carriage={true}
+  nextStageAttempts={0}
+  prevRequest={null}
+  routeIds={Array []}
+  setNotesIds={null}
+  shipmentData={null}
+  theme={
+    Object {
+      "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+      "colors": Object {
+        "brightPrimary": "#2491FD",
+        "brightSecondary": "#25ED36",
+        "primary": "#0D5BA9",
+        "secondary": "#23802A",
+      },
+      "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+      "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+      "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+      "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+    }
+  }
+>
+  <div
+    id="children"
+  />
+</GmapsLoader>
+`;
+
+exports[`with empty props 1`] = `
+<GmapsLoader
+  component={[Function]}
+  has_on_carriage={true}
+  has_pre_carriage={true}
+  nextStageAttempts={0}
+  prevRequest={null}
+  routeIds={Array []}
+  setNotesIds={null}
+  shipmentData={null}
+  theme={null}
+/>
+`;

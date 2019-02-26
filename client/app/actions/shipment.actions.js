@@ -3,6 +3,7 @@ import { push } from 'react-router-redux'
 import { shipmentConstants } from '../constants'
 import { shipmentService } from '../services'
 import { alertActions, userActions, appActions, errorActions } from './'
+import { deepSnakefyKeys } from '../helpers'
 
 function newShipment (type, redirect, reused) {
   function request (shipmentData, isReused) {
@@ -68,7 +69,8 @@ function getOffers (data, redirect) {
 
   return (dispatch) => {
     dispatch(request(data))
-    shipmentService.getOffers(data).then(
+    
+    shipmentService.getOffers(deepSnakefyKeys(data)).then(
       (resp) => {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
@@ -84,7 +86,7 @@ function getOffers (data, redirect) {
           }))
           const errorToRender = {
             ...newData,
-            componentName: "ShipmentLocationBox",
+            componentName: 'RouteSection',
             side: 'center'
           }
           dispatch(errorActions.setError(errorToRender))

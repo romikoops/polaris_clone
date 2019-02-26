@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`happy path 1`] = `
+<div
+  className="dropdown route_dropdown"
+>
+  <Formsy(FormsySelect)
+    className="select"
+    customStyles="
+  .Select-control {
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    border: 1px solid #f2f2f2 !important;
+  }
+  .Select-menu-outer {
+    box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    border: 1px solid #f2f2f2;
+  }
+  .Select-value {
+    background-color: #F9F9F9;
+    border: 1px solid #f2f2f2;
+  }
+  .Select-option {
+    background-color: #f9f9f9;
+  }
+"
+    innerRef={[Function]}
+    name="TARGET-nexus"
+    onChange={[Function]}
+    options={
+      Array [
+        Object {
+          "label": "Gothenburg",
+          "value": Object {
+            "country": "SE",
+            "id": 597,
+            "latitude": 57.694253,
+            "longitude": 11.854048,
+            "name": "Gothenburg",
+          },
+        },
+        Object {
+          "label": "Southampton",
+          "value": Object {
+            "country": "GB",
+            "id": 3282,
+            "latitude": 50.9097004,
+            "longitude": -1.4043509,
+            "name": "Southampton",
+          },
+        },
+      ]
+    }
+    placeholder="NO_TRANSLATION | key \\"shipment:TARGET\\""
+    required={true}
+    validationError=""
+    validationErrors={
+      Object {
+        "isDefaultRequiredValue": "Must not be blank",
+      }
+    }
+    validations={null}
+    value={null}
+  />
+</div>
+`;

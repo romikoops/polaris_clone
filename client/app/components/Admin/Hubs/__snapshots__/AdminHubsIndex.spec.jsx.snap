@@ -116,6 +116,7 @@ exports[`shallow render 1`] = `
                     },
                   }
                 }
+                wrapperContentClasses=""
               />
               
             </div>
@@ -263,6 +264,7 @@ exports[`user.internal is truthy 1`] = `
                     },
                   }
                 }
+                wrapperContentClasses=""
               />
               <CollapsingBar
                 collapsed={true}
@@ -365,6 +367,7 @@ exports[`user.internal is truthy 1`] = `
                     },
                   }
                 }
+                wrapperContentClasses=""
               />
               <CollapsingBar
                 collapsed={true}
@@ -425,6 +428,7 @@ exports[`user.internal is truthy 1`] = `
                     },
                   }
                 }
+                wrapperContentClasses=""
               />
             </div>
           }

@@ -17,7 +17,8 @@ export function humanizeSnakeCase (str) {
   return str.split('_').map(capitalize).join(' ')
 }
 export function camelizeSnakeCase (str) {
-  const tmpStr =  str.split('_').map(capitalize).join('')
+  const tmpStr = str.split('_').map(capitalize).join('')
+
   return tmpStr.charAt(0).toLowerCase() + tmpStr.slice(1)
 }
 
@@ -27,6 +28,12 @@ export function humanizeSnakeCaseUp (str) {
 
 export function capitalizeAndDashifyCamelCase (str) {
   return str.split(/(?=[A-Z])/).map(capitalize).join('-')
+}
+
+export function camelToSnakeCase (str) {
+  return str.split(/(?=[A-Z])/).map(
+    x => x.toLowerCase()
+  ).join('_')
 }
 
 export function renderHubType (mot) {

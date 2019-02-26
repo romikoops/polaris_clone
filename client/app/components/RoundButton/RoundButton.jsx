@@ -8,7 +8,8 @@ import {
 } from '../../helpers'
 
 export function RoundButton ({
-  text, theme, active, back, icon, iconClass, size, disabled, handleNext, handleDisabled, inverse, classNames, flexContainer
+  text, theme, active, back, icon, iconClass, size, disabled, handleNext,
+  handleDisabled, inverse, classNames, flexContainer, type
 }) {
   const activeBtnBackground =
     theme && theme.colors
@@ -67,6 +68,7 @@ export function RoundButton ({
           className={`${styles.round_btn} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}
           onClick={disabled ? handleDisabled : handleNext}
           style={btnStyle}
+          type={type}
         >
           <div className="layout-fill layout-row layout-align-space-around-center">
             <p className={styles.content}>
@@ -84,6 +86,7 @@ export function RoundButton ({
             <button
               className={`${styles.round_btn_inverse} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}
               onClick={disabled ? handleDisabled : handleNext}
+              type={type}
             >
               <div className="layout-fill layout-row layout-align-space-around-center">
                 <p className={styles.content}>

@@ -1,0 +1,631 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`happy path 1`] = `
+<div
+  className="date_sec layout-row flex-100 layout-wrap layout-align-center-center"
+>
+  <div
+    className="content_width_booking layout-row flex-none layout-align-start-center"
+  >
+    <div
+      className="layout-row flex-70 layout-align-start-center layout-wrap"
+    >
+      <div
+        className="flex-none layout-row layout-align-start-center"
+        style={
+          Object {
+            "paddingRight": "15px",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-align-space-between-end"
+        >
+          <TextHeading
+            color=""
+            size={3}
+            text="Available at appointed terminal:"
+            theme={
+              Object {
+                "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+                "colors": Object {
+                  "brightPrimary": "#2491FD",
+                  "brightSecondary": "#25ED36",
+                  "primary": "#0D5BA9",
+                  "secondary": "#23802A",
+                },
+                "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+                "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+                "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+                "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+              }
+            }
+          />
+        </div>
+        <Tooltip
+          color=""
+          icon="fa-info-circle"
+          text="planned_dropoff_date"
+          theme={
+            Object {
+              "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+              "colors": Object {
+                "brightPrimary": "#2491FD",
+                "brightSecondary": "#25ED36",
+                "primary": "#0D5BA9",
+                "secondary": "#23802A",
+              },
+              "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+              "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+              "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+              "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+            }
+          }
+          toolText=""
+        />
+      </div>
+      <div
+        className="flex-none layout-row dpb"
+        name="dayPicker"
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center dpb_icon"
+        >
+          <i
+            className="flex-none fa fa-calendar"
+          />
+        </div>
+        <Formsy(FormsyDayPickerInput)
+          dayPickerProps={
+            Object {
+              "disabledDays": Object {
+                "after": 2017-06-27T13:41:20.000Z,
+                "before": 2017-06-27T13:41:20.000Z,
+              },
+              "month": 2017-06-27T13:41:20.000Z,
+              "name": "dayPicker",
+            }
+          }
+          innerRef={[Function]}
+          inputProps={
+            Object {
+              "disabled": false,
+            }
+          }
+          name="selectedDay"
+          onDayChange={[Function]}
+          required={false}
+          validatePristine={false}
+          validationError=""
+          validationErrors={
+            Object {
+              "isBlank": "Must not be blank",
+              "noAvailableDate": "There are no schedules available for this route.",
+            }
+          }
+          validations={
+            Object {
+              "isBlank": [Function],
+              "noAvailableDate": [Function],
+            }
+          }
+          value="13/06/2017"
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-wrap layout-align-end-center"
+    >
+      <IncotermBox
+        direction="export"
+        errorStyles={null}
+        firstStep={true}
+        incoterm={Object {}}
+        nextStageAttempt={false}
+        onCarriage={false}
+        preCarriage={false}
+        setIncoterm={[Function]}
+        showIncotermError={false}
+        t={[Function]}
+        tenantScope={
+          Object {
+            "cargo_info_level": "hs_codes",
+            "carriage_options": Object {
+              "on_carriage": Object {
+                "export": "optional",
+                "import": "optional",
+              },
+              "pre_carriage": Object {
+                "export": "optional",
+                "import": "optional",
+              },
+            },
+            "closed_quotation_tool": false,
+            "closed_registration": false,
+            "closed_shop": false,
+            "consolidate_cargo": false,
+            "continuous_rounding": false,
+            "customs_export_paper": false,
+            "dangerous_goods": false,
+            "detailed_billing": false,
+            "fee_detail": "key_and_name",
+            "fixed_currency": false,
+            "fixed_exchange_rates": false,
+            "has_customs": true,
+            "has_insurance": true,
+            "incoterm_info_level": "text",
+            "links": Object {
+              "about": "",
+              "legal": "",
+            },
+            "modes_of_transport": Object {
+              "air": Object {
+                "cargo_item": true,
+                "container": true,
+              },
+              "ocean": Object {
+                "cargo_item": true,
+                "container": true,
+              },
+              "rail": Object {
+                "cargo_item": true,
+                "container": true,
+              },
+              "truck": Object {
+                "cargo_item": false,
+                "container": false,
+              },
+            },
+            "non_stackable_goods": true,
+            "open_quotation_tool": false,
+            "require_full_address": true,
+            "show_beta_features": true,
+            "terms": Array [
+              "You verify that all the information provided above is true",
+              "You agree to the presented terms and conditions.",
+              "Demo is to discuss the validity of the presented prices with the product owners.",
+            ],
+            "total_dimensions": true,
+          }
+        }
+        theme={
+          Object {
+            "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+            "colors": Object {
+              "brightPrimary": "#2491FD",
+              "brightSecondary": "#25ED36",
+              "primary": "#0D5BA9",
+              "secondary": "#23802A",
+            },
+            "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+            "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+          }
+        }
+        value={false}
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`pre carriage is true 1`] = `
+<div
+  className="date_sec layout-row flex-100 layout-wrap layout-align-center-center"
+>
+  <div
+    className="content_width_booking layout-row flex-none layout-align-start-center"
+  >
+    <div
+      className="layout-row flex-70 layout-align-start-center layout-wrap"
+    >
+      <div
+        className="flex-none layout-row layout-align-start-center"
+        style={
+          Object {
+            "paddingRight": "15px",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-align-space-between-end"
+        >
+          <TextHeading
+            color=""
+            size={3}
+            text="Cargo Ready Date:"
+            theme={
+              Object {
+                "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+                "colors": Object {
+                  "brightPrimary": "#2491FD",
+                  "brightSecondary": "#25ED36",
+                  "primary": "#0D5BA9",
+                  "secondary": "#23802A",
+                },
+                "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+                "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+                "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+                "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+              }
+            }
+          />
+        </div>
+        <Tooltip
+          color=""
+          icon="fa-info-circle"
+          text="planned_pickup_date"
+          theme={
+            Object {
+              "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+              "colors": Object {
+                "brightPrimary": "#2491FD",
+                "brightSecondary": "#25ED36",
+                "primary": "#0D5BA9",
+                "secondary": "#23802A",
+              },
+              "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+              "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+              "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+              "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+            }
+          }
+          toolText=""
+        />
+      </div>
+      <div
+        className="flex-none layout-row dpb"
+        name="dayPicker"
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center dpb_icon"
+        >
+          <i
+            className="flex-none fa fa-calendar"
+          />
+        </div>
+        <Formsy(FormsyDayPickerInput)
+          dayPickerProps={
+            Object {
+              "disabledDays": Object {
+                "after": 2017-07-26T07:41:20.000Z,
+                "before": 2017-07-26T07:41:20.000Z,
+              },
+              "month": 2017-07-26T07:41:20.000Z,
+              "name": "dayPicker",
+            }
+          }
+          innerRef={[Function]}
+          inputProps={
+            Object {
+              "disabled": false,
+            }
+          }
+          name="selectedDay"
+          onDayChange={[Function]}
+          required={false}
+          validatePristine={false}
+          validationError=""
+          validationErrors={
+            Object {
+              "isBlank": "Must not be blank",
+              "noAvailableDate": "There are no schedules available for this route.",
+            }
+          }
+          validations={
+            Object {
+              "isBlank": [Function],
+              "noAvailableDate": [Function],
+            }
+          }
+          value="11/07/2017"
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-wrap layout-align-end-center"
+    >
+      <IncotermBox
+        direction="export"
+        errorStyles={null}
+        firstStep={true}
+        incoterm={Object {}}
+        nextStageAttempt={false}
+        onCarriage={false}
+        preCarriage={true}
+        setIncoterm={[Function]}
+        showIncotermError={false}
+        t={[Function]}
+        tenantScope={
+          Object {
+            "cargo_info_level": "hs_codes",
+            "carriage_options": Object {
+              "on_carriage": Object {
+                "export": "optional",
+                "import": "optional",
+              },
+              "pre_carriage": Object {
+                "export": "optional",
+                "import": "optional",
+              },
+            },
+            "closed_quotation_tool": false,
+            "closed_registration": false,
+            "closed_shop": false,
+            "consolidate_cargo": false,
+            "continuous_rounding": false,
+            "customs_export_paper": false,
+            "dangerous_goods": false,
+            "detailed_billing": false,
+            "fee_detail": "key_and_name",
+            "fixed_currency": false,
+            "fixed_exchange_rates": false,
+            "has_customs": true,
+            "has_insurance": true,
+            "incoterm_info_level": "text",
+            "links": Object {
+              "about": "",
+              "legal": "",
+            },
+            "modes_of_transport": Object {
+              "air": Object {
+                "cargo_item": true,
+                "container": true,
+              },
+              "ocean": Object {
+                "cargo_item": true,
+                "container": true,
+              },
+              "rail": Object {
+                "cargo_item": true,
+                "container": true,
+              },
+              "truck": Object {
+                "cargo_item": false,
+                "container": false,
+              },
+            },
+            "non_stackable_goods": true,
+            "open_quotation_tool": false,
+            "require_full_address": true,
+            "show_beta_features": true,
+            "terms": Array [
+              "You verify that all the information provided above is true",
+              "You agree to the presented terms and conditions.",
+              "Demo is to discuss the validity of the presented prices with the product owners.",
+            ],
+            "total_dimensions": true,
+          }
+        }
+        theme={
+          Object {
+            "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+            "colors": Object {
+              "brightPrimary": "#2491FD",
+              "brightSecondary": "#25ED36",
+              "primary": "#0D5BA9",
+              "secondary": "#23802A",
+            },
+            "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+            "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+          }
+        }
+        value={false}
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`selected day is falsy 1`] = `
+<div
+  className="date_sec layout-row flex-100 layout-wrap layout-align-center-center"
+>
+  <div
+    className="content_width_booking layout-row flex-none layout-align-start-center"
+  >
+    <div
+      className="layout-row flex-70 layout-align-start-center layout-wrap"
+    >
+      <div
+        className="flex-none layout-row layout-align-start-center"
+        style={
+          Object {
+            "paddingRight": "15px",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-align-space-between-end"
+        >
+          <TextHeading
+            color=""
+            size={3}
+            text="Available at appointed terminal:"
+            theme={
+              Object {
+                "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+                "colors": Object {
+                  "brightPrimary": "#2491FD",
+                  "brightSecondary": "#25ED36",
+                  "primary": "#0D5BA9",
+                  "secondary": "#23802A",
+                },
+                "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+                "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+                "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+                "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+              }
+            }
+          />
+        </div>
+        <Tooltip
+          color=""
+          icon="fa-info-circle"
+          text="planned_dropoff_date"
+          theme={
+            Object {
+              "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+              "colors": Object {
+                "brightPrimary": "#2491FD",
+                "brightSecondary": "#25ED36",
+                "primary": "#0D5BA9",
+                "secondary": "#23802A",
+              },
+              "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+              "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+              "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+              "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+            }
+          }
+          toolText=""
+        />
+      </div>
+      <div
+        className="flex-none layout-row dpb"
+        name="dayPicker"
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center dpb_icon"
+        >
+          <i
+            className="flex-none fa fa-calendar"
+          />
+        </div>
+        <Formsy(FormsyDayPickerInput)
+          dayPickerProps={
+            Object {
+              "disabledDays": Object {
+                "after": 2017-07-11T21:41:20.000Z,
+                "before": 2017-07-11T21:41:20.000Z,
+              },
+              "month": 2017-07-11T21:41:20.000Z,
+              "name": "dayPicker",
+            }
+          }
+          innerRef={[Function]}
+          inputProps={
+            Object {
+              "disabled": false,
+            }
+          }
+          name="selectedDay"
+          onDayChange={[Function]}
+          required={false}
+          validatePristine={false}
+          validationError=""
+          validationErrors={
+            Object {
+              "isBlank": "Must not be blank",
+              "noAvailableDate": "There are no schedules available for this route.",
+            }
+          }
+          validations={
+            Object {
+              "isBlank": [Function],
+              "noAvailableDate": [Function],
+            }
+          }
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-wrap layout-align-end-center"
+    >
+      <IncotermBox
+        direction="export"
+        errorStyles={null}
+        firstStep={true}
+        incoterm={Object {}}
+        nextStageAttempt={false}
+        onCarriage={false}
+        preCarriage={false}
+        setIncoterm={[Function]}
+        showIncotermError={false}
+        t={[Function]}
+        tenantScope={
+          Object {
+            "cargo_info_level": "hs_codes",
+            "carriage_options": Object {
+              "on_carriage": Object {
+                "export": "optional",
+                "import": "optional",
+              },
+              "pre_carriage": Object {
+                "export": "optional",
+                "import": "optional",
+              },
+            },
+            "closed_quotation_tool": false,
+            "closed_registration": false,
+            "closed_shop": false,
+            "consolidate_cargo": false,
+            "continuous_rounding": false,
+            "customs_export_paper": false,
+            "dangerous_goods": false,
+            "detailed_billing": false,
+            "fee_detail": "key_and_name",
+            "fixed_currency": false,
+            "fixed_exchange_rates": false,
+            "has_customs": true,
+            "has_insurance": true,
+            "incoterm_info_level": "text",
+            "links": Object {
+              "about": "",
+              "legal": "",
+            },
+            "modes_of_transport": Object {
+              "air": Object {
+                "cargo_item": true,
+                "container": true,
+              },
+              "ocean": Object {
+                "cargo_item": true,
+                "container": true,
+              },
+              "rail": Object {
+                "cargo_item": true,
+                "container": true,
+              },
+              "truck": Object {
+                "cargo_item": false,
+                "container": false,
+              },
+            },
+            "non_stackable_goods": true,
+            "open_quotation_tool": false,
+            "require_full_address": true,
+            "show_beta_features": true,
+            "terms": Array [
+              "You verify that all the information provided above is true",
+              "You agree to the presented terms and conditions.",
+              "Demo is to discuss the validity of the presented prices with the product owners.",
+            ],
+            "total_dimensions": true,
+          }
+        }
+        theme={
+          Object {
+            "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+            "colors": Object {
+              "brightPrimary": "#2491FD",
+              "brightSecondary": "#25ED36",
+              "primary": "#0D5BA9",
+              "secondary": "#23802A",
+            },
+            "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+            "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+          }
+        }
+        value={false}
+      />
+    </div>
+  </div>
+</div>
+`;

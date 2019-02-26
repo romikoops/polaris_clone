@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`happy path 1`] = `
+<div
+  className="layout-row flex-none add_unit layout-wrap layout-align-center-center"
+  onClick={null}
+>
+  <i
+    className="fa fa-plus-square-o clip"
+    style={
+      Object {
+        "background": "-webkit-linear-gradient(left, #0D5BA9,#23802A)",
+      }
+    }
+  />
+  <p>
+    Add Cargo Group
+  </p>
+</div>
+`;
+
+exports[`with empty props 1`] = `
+<div
+  className="layout-row flex-none add_unit layout-wrap layout-align-center-center"
+>
+  <i
+    className="fa fa-plus-square-o clip"
+    style={
+      Object {
+        "background": "black",
+      }
+    }
+  />
+  <p>
+    Add Cargo Group
+  </p>
+</div>
+`;
