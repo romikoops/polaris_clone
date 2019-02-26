@@ -647,7 +647,7 @@ GEM
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
-    shoulda-matchers (4.0.0)
+    shoulda-matchers (4.0.1)
       activesupport (>= 4.2.0)
     signet (0.11.0)
       addressable (~> 2.3)
@@ -702,7 +702,6 @@ GEM
       unf_ext
     unf_ext (0.0.7.5)
     unicode-display_width (1.4.1)
-    vcr (2.8.0)
     warden (1.2.8)
       rack (>= 2.0.6)
     webmock (3.5.1)
@@ -820,7 +819,6 @@ DEPENDENCIES
   tzinfo-data
   undercover
   users!
-  vcr (~> 2.8.0)
   webmock
   will_paginate (~> 3.1.5)
   write_xlsx
