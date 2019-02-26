@@ -21,7 +21,7 @@ wrap.pipeline(timeout: 90) {
       ),
       containerTemplate(name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:6.6.1',
         resourceRequestCpu: '250m', resourceLimitCpu: '500m',
-        resourceRequestMemory: '500Mi', resourceLimitMemory: '700Mi',
+        resourceRequestMemory: '1000Mi', resourceLimitMemory: '1500Mi',
       )
     ]
   ) { label ->
