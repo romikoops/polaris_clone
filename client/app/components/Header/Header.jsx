@@ -80,7 +80,7 @@ class Header extends Component {
   }
 
   goHome () {
-    this.props.appDispatch.goTo('/')
+    this.props.appDispatch.goTo('/account')
   }
 
   hideAlert () {
