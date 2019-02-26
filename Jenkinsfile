@@ -19,7 +19,7 @@ wrap.pipeline(timeout: 90) {
         resourceRequestCpu: '250m', resourceLimitCpu: '500m',
         resourceRequestMemory: '400Mi', resourceLimitMemory: '500Mi',
       ),
-      containerTemplate(name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch',
+      containerTemplate(name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:6.6.1',
         resourceRequestCpu: '250m', resourceLimitCpu: '500m',
         resourceRequestMemory: '500Mi', resourceLimitMemory: '700Mi',
       )
