@@ -79,8 +79,8 @@ end
 
 When('I have shipment of {int} {string} with length {int}cm, width {int}cm, height {int}cm and weight {int}kg') do |count, colli, length, width, height, weight|
   # Select colli type
-  elem = find("input[name='0-colliType']", visible: false)
-  control = elem.first(:xpath, './/..//..//..')
+  colli_select = find('.colli_type')
+  control = colli_select.find('.Select')
   control.find(class: 'Select-arrow-zone').click
 
   find('.Select-option', text: colli).click
