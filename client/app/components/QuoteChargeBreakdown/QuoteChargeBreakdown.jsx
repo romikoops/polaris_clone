@@ -227,6 +227,7 @@ class QuoteChargeBreakdown extends Component {
         dimension_z: 0,
         payload_in_kg: 0,
         quantity: 0,
+        cargo_item_type: cargo[0].cargo_item_type,
         cargo_class: cargo[0].cargo_class
       }
       cargo.forEach((cargoItem) => {
