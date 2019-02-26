@@ -123,7 +123,7 @@ class Header extends Component {
     const accountLinks = user && user.role && user.role.name.includes('admin')
       ? [
         {
-          url: '/admin/dashboard',
+          url: '/admin/settings',
           text: t('nav:account'),
           fontAwesomeIcon: 'fa-cog',
           key: 'settings'
@@ -137,7 +137,7 @@ class Header extends Component {
       ]
       : [
         {
-          url: '/account',
+          url: '/account/profile',
           text: t('nav:account'),
           fontAwesomeIcon: 'fa-cog',
           key: 'settings'

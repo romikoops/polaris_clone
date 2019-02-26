@@ -51,7 +51,7 @@ exports[`error && error[currentStage] 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -147,7 +147,7 @@ exports[`invert is true 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -232,7 +232,7 @@ exports[`noMessages is true 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -317,7 +317,7 @@ exports[`scrollable is true 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -402,7 +402,7 @@ exports[`shallow render 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -487,7 +487,7 @@ exports[`showModal is true 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -693,7 +693,7 @@ exports[`showRegistration is true 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -778,7 +778,7 @@ exports[`tenant is falsy 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -863,7 +863,7 @@ exports[`theme has logoLarge 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -948,7 +948,7 @@ exports[`theme has logoWide 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -1033,7 +1033,7 @@ exports[`unread > 0 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -1118,7 +1118,7 @@ exports[`user && user.role && user.role.name.includes(admin) 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/admin/dashboard",
+                "url": "/admin/settings",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -1203,7 +1203,7 @@ exports[`user is falsy 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -1274,7 +1274,7 @@ exports[`user.role_id === 2 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/account",
+                "url": "/account/profile",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
