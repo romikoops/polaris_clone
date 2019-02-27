@@ -502,6 +502,10 @@ GEM
     mobility (0.8.7)
       i18n (>= 0.6.10, < 2)
       request_store (~> 1.0)
+    monetize (1.9.1)
+      money (~> 6.12)
+    money (6.13.2)
+      i18n (>= 0.6.4, <= 2)
     msgpack (1.2.6)
     multi_json (1.13.1)
     multi_xml (0.6.0)
@@ -856,6 +860,8 @@ DEPENDENCIES
   mini_magick
   mjml-rails (~> 4.1)
   mobility (~> 0.8.6)
+  monetize
+  money
   nokogiri
   omniauth
   os
@@ -914,4 +920,4 @@ DEPENDENCIES
   write_xlsx
 
 BUNDLED WITH
-   1.17.3
+   2.0.1

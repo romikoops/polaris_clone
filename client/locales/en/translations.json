@@ -209,6 +209,7 @@
       "uploadFailed": "Upload Failed!",
       "numberCreated": "No. created:",
       "numberUpdated": "No. updated:",
+      "numberDeleted": "No. deleted:",
       "noResults": "There are no results.",
       "feesAndCharges": "Fees & Charges",
       "baseCurrency": "Base Currency",

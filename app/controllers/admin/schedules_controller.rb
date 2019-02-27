@@ -39,7 +39,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
     options = { tenant: current_tenant,
                 specific_identifier: 'ScheduleGenerator',
                 file_or_path: file }
-    uploader = ExcelDataServices::Loader::Uploader.new(options)
+    uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
     response_handler(insertion_stats_or_errors)
