@@ -23,6 +23,8 @@
     "modify": "Modify",
     "reject": "Reject",
     "title": "Title",
+    "noResults": "No Results Found",
+    "noAreaResults": "No Area Results Found",
     "chargeble": "Chargeable",
     "pending": "Pending",
     "decline": "Decline",

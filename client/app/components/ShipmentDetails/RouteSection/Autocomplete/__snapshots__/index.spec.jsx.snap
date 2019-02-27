@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`happy path 1`] = `
+<div
+  className="auto_origin ccb_carriage flex-100 layout-row layout-wrap layout-align-center-center autocomplete_container"
+>
+  <div
+    className="flex-none ccb_backdrop hidden"
+    onClick={[Function]}
+  />
+  <div
+    className="flex-100 layout-row input_box_full autocomplete_input"
+    onClick={[Function]}
+  >
+    <input
+      autoComplete="remove"
+      data-hj-whitelist={true}
+      name="TARGET-fullAddress"
+      onBlur={[Function]}
+      onChange={[Function]}
+      type="text"
+    />
+  </div>
+  <div
+    className="
+          flex-100 layout-row layout-wrap results
+          show_results
+        "
+  >
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-start autocomplete_inner"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-start address
+                results_section hide_results"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center results_section_header"
+        >
+          <p
+            className="flex-none"
+          >
+             
+            Addresses
+          </p>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center-center pointy autocomplete_card"
+          key="UUID_MOCK_KEY_1"
+        >
+          <p
+            className="flex"
+          >
+            No Results Found
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
