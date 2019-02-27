@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'core'
 
+  s.add_dependency 'geocoder'
+
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'ffaker'
   s.add_development_dependency 'fuubar'
