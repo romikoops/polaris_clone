@@ -4,6 +4,10 @@ require 'rails_helper'
 
 RSpec.describe NewUserMailer, type: :mailer do
   let(:user) { create(:user) }
+  before do
+    stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
+    stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
+  end
 
   describe 'new user email' do
     let(:mail) { described_class.new_user_email(user_id: user.id).deliver_now }
