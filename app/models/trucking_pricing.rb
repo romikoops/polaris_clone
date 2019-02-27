@@ -11,6 +11,10 @@ class TruckingPricing < ApplicationRecord
   has_many :hub_truckings, dependent: :destroy
   has_many :hubs, through: :hub_truckings
   has_many :trucking_destinations, through: :hub_truckings
+
+  alias_attribute :scope, :trucking_pricing_scope
+  alias_attribute :truckings, :hub_truckings
+  alias_attribute :locations, :trucking_destinations
   include Queries::TruckingPricing
 
   SCOPING_ATTRIBUTE_NAMES = %i(load_type cargo_class carriage courier_id truck_type).freeze
