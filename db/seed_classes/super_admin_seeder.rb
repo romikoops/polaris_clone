@@ -2,8 +2,8 @@
 
 class SuperAdminSeeder
   def self.perform
-    puts "Seeding Super Admin..."
-    tenant = Tenant.find_by(subdomain: "demo")
+    puts 'Seeding Super Admin...'
+    tenant = Tenant.find_by(subdomain: 'demo')
 
     if tenant.nil?
       puts "Cannot seed super admin without tenant 'demo'".red
@@ -25,6 +25,6 @@ class SuperAdminSeeder
       confirmed_at: DateTime.new(2017, 1, 20)
     )
 
-    puts "Super Admin already existed".yellow unless super_admin_demo.save
+    puts 'Super Admin already existed'.yellow unless super_admin_demo.save
   end
 end

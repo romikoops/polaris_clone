@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-puts "Seeding Cargo Item Types..."
+puts 'Seeding Cargo Item Types...'
 cargo_item_types_data = [
   {
     category: 'Pallet',
@@ -51,8 +51,6 @@ cargo_item_types_data = [
   { category: 'Carton (only palletized)' },
   { category: 'Drum (only palletized)' }
 ]
-
-
 
 ATTR_NAMES = %i(dimension_x dimension_y area category).freeze
 

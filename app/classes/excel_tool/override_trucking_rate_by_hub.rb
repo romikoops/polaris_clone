@@ -40,7 +40,7 @@ module ExcelTool
 
     def local_stats
       {
-        trucking_pricings:     {
+        trucking_pricings: {
           number_updated: 0,
           number_created: 0
         },
@@ -53,7 +53,7 @@ module ExcelTool
 
     def _results
       {
-        trucking_pricings:     [],
+        trucking_pricings: [],
         trucking_destinations: []
       }
     end
@@ -70,17 +70,17 @@ module ExcelTool
         direction = meta[:direction] == 'import' ? 'on' : 'pre'
         courier = Courier.find_or_create_by(name: meta[:courier], tenant: tenant)
         scoping_attributes_hash = {
-          load_type:   load_type,
+          load_type: load_type,
           cargo_class: cargo_class,
-          courier_id:  courier.id,
-          truck_type:  row_truck_type,
-          carriage:    direction
+          courier_id: courier.id,
+          truck_type: row_truck_type,
+          carriage: direction
         }
 
         hub.truck_type_availabilities << TruckTypeAvailability.find_or_create_by(
           truck_type: row_truck_type,
-          carriage:   direction,
-          load_type:  load_type
+          carriage: direction,
+          load_type: load_type
         )
 
         modifier_position_objs = populate_modifier(rates_sheet)
@@ -108,6 +108,7 @@ module ExcelTool
             trucking_pricing.rates[mod_key] = mod_indexes.map do |m_index|
               val = row_data[m_index]
               next unless val
+
               trucking_rates(weight_min_row, val, meta, row_min_value, row_zone_name, m_index, mod_key)
             end
           end
@@ -157,16 +158,24 @@ module ExcelTool
           range = row_data[2].delete(' ').split('-')
           @zip_char_length ||= range[0].length
           zones[zone_name] << if identifier_type == 'distance' && identifier_modifier == 'return'
-                                { min: (range[0].to_i / 2.0).ceil, max: (range[1].to_i / 2.0).ceil, country: row_data[3].strip }
+                                {
+                                  min: (range[0].to_i / 2.0).ceil,
+                                  max: (range[1].to_i / 2.0).ceil,
+                                  country: row_data[3].strip
+                                }
                               else
-                                { min: range[0].to_i, max: range[1].to_i, country: row_data[3].strip }
+                                {
+                                  min: range[0].to_i,
+                                  max: range[1].to_i,
+                                  country: row_data[3].strip
+                                }
                               end
 
         elsif row_data[1] && row_data[2]
           zones[zone_name] << {
-            ident:     row_data[1].strip,
+            ident: row_data[1].strip,
             sub_ident: row_data[2].strip,
-            country:   row_data[3].strip
+            country: row_data[3].strip
           }
         end
       end
@@ -175,10 +184,16 @@ module ExcelTool
     def load_ident_values_and_countries
       current_country = { name: nil, code: nil }
       zones.each do |zone_name, idents_and_countries|
-        current_country = { name: Country.find_by_code(idents_and_countries.first[:country]).name, code: idents_and_countries.first[:country] }
+        current_country = {
+          name: Country.find_by_code(idents_and_countries.first[:country]).name,
+          code: idents_and_countries.first[:country]
+        }
         all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
           if current_country[:code] != idents_and_country[:country]
-            current_country = { name: Country.find_by_code(idents_and_country[:country]).name, code: idents_and_country[:country] }
+            current_country = {
+              name: Country.find_by_code(idents_and_country[:country]).name,
+              code: idents_and_country[:country]
+            }
           end
           if idents_and_country[:min] && idents_and_country[:max]
             (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
@@ -196,6 +211,7 @@ module ExcelTool
           elsif identifier_type == 'location_id'
             geometry = find_geometry(idents_and_country)
             next if geometry.nil?
+
             stats[:trucking_destinations][:number_created] += 1
 
             { ident: geometry&.id, country: idents_and_country[:country] }
@@ -210,28 +226,28 @@ module ExcelTool
       Location.import(@locations,
                       on_duplicate_key_update: {
                         conflict_target: %i(postal_code suburb neighbourhood city province country),
-                        columns:         %i(bounds)
+                        columns: %i(bounds)
                       })
     end
 
     def parse_fees_sheet
       fees_sheet.parse(
-        fee:        'FEE',
-        mot:        'MOT',
-        fee_code:   'FEE_CODE',
+        fee: 'FEE',
+        mot: 'MOT',
+        fee_code: 'FEE_CODE',
         truck_type: 'TRUCK_TYPE',
-        direction:  'DIRECTION',
-        currency:   'CURRENCY',
+        direction: 'DIRECTION',
+        currency: 'CURRENCY',
         rate_basis: 'RATE_BASIS',
-        ton:        'TON',
-        cbm:        'CBM',
-        kg:         'KG',
-        item:       'ITEM',
-        shipment:   'SHIPMENT',
-        bill:       'BILL',
-        container:  'CONTAINER',
-        minimum:    'MINIMUM',
-        wm:         'WM',
+        ton: 'TON',
+        cbm: 'CBM',
+        kg: 'KG',
+        item: 'ITEM',
+        shipment: 'SHIPMENT',
+        bill: 'BILL',
+        container: 'CONTAINER',
+        minimum: 'MINIMUM',
+        wm: 'WM',
         percentage: 'PERCENTAGE'
       )
     end
@@ -376,9 +392,14 @@ module ExcelTool
       modifier_position_objs.each do |mod_key, mod_indexes|
         header_row.each_with_index do |cell, i|
           next if !cell || !mod_indexes.include?(i)
+
           defaults[mod_key] = {} unless defaults[mod_key]
           min_max_arr = cell.split(' - ')
-          defaults[mod_key][i] = { "min_#{mod_key}": min_max_arr[0].to_d, "max_#{mod_key}": min_max_arr[1].to_d, min_value: nil }.symbolize_keys
+          defaults[mod_key][i] = {
+            "min_#{mod_key}": min_max_arr[0].to_d,
+            "max_#{mod_key}": min_max_arr[1].to_d,
+            min_value: nil
+          }.symbolize_keys
         end
       end
     end
@@ -396,24 +417,24 @@ module ExcelTool
 
     def create_trucking_pricing(meta)
       @trucking_pricing_scope = TruckingPricingScope.find_or_create_by(
-        carriage:    meta[:direction] == 'import' ? 'on' : 'pre',
+        carriage: meta[:direction] == 'import' ? 'on' : 'pre',
         cargo_class: meta[:cargo_class],
-        load_type:   meta[:load_type] == 'container' ? 'container' : 'cargo_item',
-        courier_id:  find_or_create_courier(meta[:courier]).id,
-        truck_type:  !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type]
+        load_type: meta[:load_type] == 'container' ? 'container' : 'cargo_item',
+        courier_id: find_or_create_courier(meta[:courier]).id,
+        truck_type: !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type]
       )
       TruckingPricing.new(
-        load_meterage:          {
-          ratio:        meta[:load_meterage_ratio],
+        load_meterage: {
+          ratio: meta[:load_meterage_ratio],
           height_limit: meta[:load_meterage_height],
-          area_limit:   meta[:load_meterage_area]
+          area_limit: meta[:load_meterage_area]
         },
-        rates:                  {},
-        fees:                   {},
-        cbm_ratio:              meta[:cbm_ratio],
-        modifier:               meta[:scale],
-        tenant_id:              tenant.id,
-        identifier_modifier:    identifier_modifier,
+        rates: {},
+        fees: {},
+        cbm_ratio: meta[:cbm_ratio],
+        modifier: meta[:scale],
+        tenant_id: tenant.id,
+        identifier_modifier: identifier_modifier,
         trucking_pricing_scope: @trucking_pricing_scope
       )
     end
@@ -425,21 +446,21 @@ module ExcelTool
       if defaults[mod_key]
         defaults[mod_key][m_index].clone.merge(
           min_value: [w_min, r_min].max,
-          rate:      {
-            value:      val,
+          rate: {
+            value: val,
             rate_basis: meta[:rate_basis],
-            currency:   meta[:currency],
-            base:       meta[:base]
+            currency: meta[:currency],
+            base: meta[:base]
           }
         )
       else
         {
           min_value: 0,
-          rate:      {
-            value:      val,
+          rate: {
+            value: val,
             rate_basis: meta[:rate_basis],
-            currency:   meta[:currency],
-            base:       meta[:base]
+            currency: meta[:currency],
+            base: meta[:base]
           }
         }
       end
@@ -541,6 +562,7 @@ module ExcelTool
       meta = {}
       sheet.row(1).each_with_index do |key, i|
         next if key.nil?
+
         meta[key.downcase] = sheet.row(2)[i]
       end
       meta.deep_symbolize_keys!
@@ -559,6 +581,7 @@ module ExcelTool
       if geometry.nil?
         geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
         return nil if geocoder_results.first.nil?
+
         coordinates = geocoder_results.first.geometry['location']
         geometry = Location.find_by_coordinates(coordinates['lat'], coordinates['lng'])
       end

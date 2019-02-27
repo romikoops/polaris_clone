@@ -83,6 +83,7 @@ module DataValidator
 
     def header_format(xlsx)
       return @header_format if @header_format
+
       @header_format = xlsx.add_format
       @header_format.set_bold
       @header_format

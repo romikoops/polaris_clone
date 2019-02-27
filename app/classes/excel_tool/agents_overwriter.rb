@@ -74,7 +74,7 @@ module ExcelTool
 
     def agency
       @agency = Agency.find_by(
-        name:  @agency_row[:company_name],
+        name: @agency_row[:company_name],
         tenant_id: @user.tenant_id
       )
     end
@@ -106,20 +106,20 @@ module ExcelTool
     def agency_manager
       @agency_manager = User.find_by(
         tenant_id: @user.tenant_id,
-        email:  @agency_row[:email],
+        email: @agency_row[:email],
         role: @manager_role
       )
     end
 
     def update_agency_manager
       @agency_manager.update_attributes(
-        first_name:  @agency_row[:first_name],
-        last_name:  @agency_row[:last_name],
+        first_name: @agency_row[:first_name],
+        last_name: @agency_row[:last_name],
         tenant_id: @user.tenant_id,
-        email:  @agency_row[:email],
-        phone:  @agency_row[:phone],
-        vat_number:  @agency_row[:vat_number],
-        external_id:  @agency_row[:external_id],
+        email: @agency_row[:email],
+        phone: @agency_row[:phone],
+        vat_number: @agency_row[:vat_number],
+        external_id: @agency_row[:external_id],
         agency_id: @agency.id,
         role: @manager_role
       )
@@ -127,13 +127,13 @@ module ExcelTool
 
     def create_agency_manager
       @user.tenant.users.create!(
-        first_name:  @agency_row[:first_name],
-        last_name:  @agency_row[:last_name],
+        first_name: @agency_row[:first_name],
+        last_name: @agency_row[:last_name],
         tenant_id: @user.tenant_id,
-        email:  @agency_row[:email],
-        phone:  @agency_row[:phone],
-        vat_number:  @agency_row[:vat_number],
-        external_id:  @agency_row[:external_id],
+        email: @agency_row[:email],
+        phone: @agency_row[:phone],
+        vat_number: @agency_row[:vat_number],
+        external_id: @agency_row[:external_id],
         agency_id: @agency.id,
         role: @manager_role
       )
@@ -161,7 +161,7 @@ module ExcelTool
     def agent
       @agent = User.find_by(
         tenant_id: @user.tenant_id,
-        email:  @agent_row[:email],
+        email: @agent_row[:email],
         agency_id: @agent_agency.id,
         role: @agent_role
       )
@@ -169,12 +169,12 @@ module ExcelTool
 
     def update_agent
       @agent.update_attributes(
-        first_name:  @agent_row[:first_name],
-        last_name:  @agent_row[:last_name],
+        first_name: @agent_row[:first_name],
+        last_name: @agent_row[:last_name],
         tenant_id: @user.tenant_id,
-        email:  @agent_row[:email],
-        phone:  @agent_row[:phone],
-        vat_number:  @agent_row[:vat_number],
+        email: @agent_row[:email],
+        phone: @agent_row[:phone],
+        vat_number: @agent_row[:vat_number],
         agency_id: @agent_agency.id,
         role: @agent_role
       )
@@ -182,12 +182,12 @@ module ExcelTool
 
     def create_agent
       @user.tenant.users.create!(
-        first_name:  @agent_row[:first_name],
-        last_name:  @agent_row[:last_name],
+        first_name: @agent_row[:first_name],
+        last_name: @agent_row[:last_name],
         tenant_id: @user.tenant_id,
-        email:  @agent_row[:email],
-        phone:  @agent_row[:phone],
-        vat_number:  @agent_row[:vat_number],
+        email: @agent_row[:email],
+        phone: @agent_row[:phone],
+        vat_number: @agent_row[:vat_number],
         password: @agent_row[:password],
         agency_id: @agent_agency.id,
         role: @agent_role

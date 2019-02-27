@@ -19,7 +19,7 @@ subdomains = [
   { cloudfront: 'EFYAT2X9Z0TQY', subdomain: 'schryver' }
 ]
 
-puts "Seeding Distributions..."
+puts 'Seeding Distributions...'
 
 subdomains.each do |s|
   tenant = Tenant.find_by_subdomain(s[:subdomain])

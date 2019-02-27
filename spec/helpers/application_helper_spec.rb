@@ -35,12 +35,12 @@ RSpec.describe ApplicationHelper do
 
   describe '.valid_price_hash?' do
     it 'with correct args' do
-      expect(helper.valid_price_hash?(['value' => 1.231234, 'currency' => 'EUR'])).to be_truthy
-      expect(helper.valid_price_hash?(['val' => 1.231234, 'currency' => 'EUR'])).to be_truthy
+      expect(helper).to be_valid_price_hash(['value' => 1.231234, 'currency' => 'EUR'])
+      expect(helper).to be_valid_price_hash(['val' => 1.231234, 'currency' => 'EUR'])
     end
 
     it 'with invalid args' do
-      expect(helper.valid_price_hash?(['amount' => 1.231234, 'symbol' => 'EUR'])).to be_falsey
+      expect(helper).not_to be_valid_price_hash(['amount' => 1.231234, 'symbol' => 'EUR'])
     end
   end
 

@@ -41,7 +41,7 @@ class Admin::HubsController < Admin::AdminBaseController
 
   def update_mandatory_charges
     response_handler(
-      hub:             create_hub_mandatory_charge.as_options_json,
+      hub: create_hub_mandatory_charge.as_options_json,
       mandatoryCharge: hub.mandatory_charge
     )
   end
@@ -59,11 +59,11 @@ class Admin::HubsController < Admin::AdminBaseController
       { label: hub.name, value: hub }
     end
     resp = {
-      hub:              hub.as_options_json,
-      routes:           hub_route_map(hub),
-      relatedHubs:      hub.nexus.hubs,
-      schedules:        hub.layovers.limit(20),
-      address:         hub.address,
+      hub: hub.as_options_json,
+      routes: hub_route_map(hub),
+      relatedHubs: hub.nexus.hubs,
+      schedules: hub.layovers.limit(20),
+      address: hub.address,
       mandatoryCharges: hub.mandatory_charge
     }
     response_handler(resp)

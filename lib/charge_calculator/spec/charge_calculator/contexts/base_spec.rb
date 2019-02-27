@@ -7,13 +7,13 @@ RSpec.describe ChargeCalculator::Contexts::Base do
 
   context 'instance methods' do
     describe '#to_h' do
-      it 'should return raise an exception' do
+      it 'returns raise an exception' do
         expect { subject.to_h }.to raise_error NotImplementedError
       end
     end
 
     describe '#hash' do
-      it 'should return raise an exception' do
+      it 'returns raise an exception' do
         expect { subject.hash }.to raise_error NotImplementedError
       end
     end

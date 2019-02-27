@@ -9,18 +9,18 @@ module ChargeCalculator
       end
 
       private
-      
+
       attr_reader :pricing, :cargo_unit
 
       def hash
         @hash ||= {
-          payload:            BigDecimal(cargo_unit.payload),
-          volume:             BigDecimal(cargo_unit.volume),
-          dimensions:         dimensions,
-          quantity:           cargo_unit.quantity.to_i,
+          payload: BigDecimal(cargo_unit.payload),
+          volume: BigDecimal(cargo_unit.volume),
+          dimensions: dimensions,
+          quantity: cargo_unit.quantity.to_i,
           chargeable_payload: chargeable_payload,
-          weight_measure:     weight_measure,
-          goods_value:        cargo_unit.goods_value
+          weight_measure: weight_measure,
+          goods_value: cargo_unit.goods_value
         }
       end
 

@@ -31,9 +31,7 @@ f.close
 hs4 = JSON.parse(File.read("#{Rails.root}/db/dummydata/classificationH4.json"))['results']
 
 hs4.each do |hs|
-  if hs['id'].length >= 6
-    update_item_fn(client, 'hsCodes', { parentCode: hs['id'] }, parent: hs)
-  end
+  update_item_fn(client, 'hsCodes', { parentCode: hs['id'] }, parent: hs) if hs['id'].length >= 6
 end
 
 client['hsCodes'].indexes.create_one('$**' => 'text')

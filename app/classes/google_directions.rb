@@ -14,10 +14,10 @@ class GoogleDirections
   BASE_URL  = 'https://maps.googleapis.com'
   BASE_PATH = '/maps/api/directions/xml'
   DEFAULT_OPTIONS = {
-    key:           Settings.google.api_key,
-    language:      'en',
-    alternative:   'false',
-    mode:          'driving',
+    key: Settings.google.api_key,
+    language: 'en',
+    alternative: 'false',
+    mode: 'driving',
     traffic_model: 'pessimistic'
     # avoid: "tolls|highways|ferries"
   }.freeze

@@ -31,8 +31,8 @@ module ChargeCalculator
         end
 
         Models::Price.new(
-          children:    [*pricing_shipment_prices, *pricing_cargo_unit_prices],
-          category:    :route,
+          children: [*pricing_shipment_prices, *pricing_cargo_unit_prices],
+          category: :route,
           description: pricing.route
         )
       end

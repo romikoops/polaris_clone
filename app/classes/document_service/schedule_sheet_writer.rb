@@ -19,7 +19,7 @@ module DocumentService
     def perform
       write_schedule_to_sheet
       workbook.close
-      write_to_aws(directory, tenant, filename, "schedules_sheet")
+      write_to_aws(directory, tenant, filename, 'schedules_sheet')
     end
 
     private
@@ -39,19 +39,19 @@ module DocumentService
     end
 
     def find_trip
-      #dates limited for performance reasons
+      # dates limited for performance reasons
       start_date = Date.today
-      end_date = Date.today + 3.months 
+      end_date = Date.today + 3.months
       # variables hardcoded until params are sent from front end
       if options[:mode_of_transport] && !options[:itinerary_id]
         Trip
           .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.mode_of_transport = '#{options[:mode_of_transport]}' AND itineraries.tenant_id = #{options[:tenant_id]}")
-          .where("start_date > ? AND end_date < ?", start_date, end_date)
+          .where('start_date > ? AND end_date < ?', start_date, end_date)
           .order(:start_date)
       else
         Trip
           .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.tenant_id = #{options[:tenant_id]}")
-          .where("start_date > ? AND end_date < ?", start_date, end_date)
+          .where('start_date > ? AND end_date < ?', start_date, end_date)
           .order(:start_date)
       end
     end
@@ -94,9 +94,10 @@ module DocumentService
       trips.each do |trip|
         layovers = trip.layovers.order(:stop_index)
         next if layovers.length < 2
+
         write_schedule_data(row, layovers, trip)
         row += 1
       end
     end
-  end 
+  end
 end

@@ -30,9 +30,9 @@ module Queries
         @klass
           .joins(:trucking_pricing_scope, hub_truckings: %i(trucking_destination hub))
           .where(
-            'hubs.tenant_id':                     @tenant_id,
-            'trucking_pricing_scopes.load_type':  @load_type,
-            'trucking_pricing_scopes.carriage':   @carriage,
+            'hubs.tenant_id': @tenant_id,
+            'trucking_pricing_scopes.load_type': @load_type,
+            'trucking_pricing_scopes.carriage': @carriage,
             'trucking_destinations.country_code': @country_code
           )
           .where(cargo_class_condition)

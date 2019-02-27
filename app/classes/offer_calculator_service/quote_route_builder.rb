@@ -33,8 +33,8 @@ module OfferCalculatorService
         closing_date: nil,
         trip_id: faux_trip.id,
         mode_of_transport: route.mode_of_transport,
-        vehicle_name:      faux_trip.tenant_vehicle.name,
-        carrier_name:      faux_trip.tenant_vehicle&.carrier&.name
+        vehicle_name: faux_trip.tenant_vehicle.name,
+        carrier_name: faux_trip.tenant_vehicle&.carrier&.name
       }
     end
   end

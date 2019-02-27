@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "#{Rails.root}/db/seed_helpers/interface_helpers.rb"
 
 class ChooseOptionInterface
@@ -6,8 +8,8 @@ class ChooseOptionInterface
   attr_reader :chosen_options
 
   def initialize(args = {})
-    @options     = args[:options]     || args["options"]     || []
-    @prompt_text = args[:prompt_text] || args["prompt_text"] || ""
+    @options     = args[:options]     || args['options']     || []
+    @prompt_text = args[:prompt_text] || args['prompt_text'] || ''
   end
 
   def run

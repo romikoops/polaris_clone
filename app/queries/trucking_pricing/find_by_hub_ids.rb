@@ -78,10 +78,11 @@ module Queries
       def deserialized_result
         @result.map do |row|
           next if row['ident_values'].nil?
+
           {
             'truckingPricing' => @klass.find(row['trucking_pricing_id']).as_options_json,
             row['ident_type'] => row['ident_values'].split(',').map { |range| range.split('*') },
-            'countryCode'     => row['country_code']
+            'countryCode' => row['country_code']
           }
         end.compact
       end

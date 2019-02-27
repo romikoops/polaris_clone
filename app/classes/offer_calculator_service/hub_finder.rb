@@ -21,11 +21,11 @@ module OfferCalculatorService
     def trucking_hub_ids(carriage)
       trucking_details = @shipment.trucking["#{carriage}_carriage"]
       TruckingPricing.find_by_filter(
-        address:  Address.find(trucking_details['address_id']),
-        load_type:  @shipment.load_type,
-        tenant_id:  @shipment.tenant_id,
+        address: Address.find(trucking_details['address_id']),
+        load_type: @shipment.load_type,
+        tenant_id: @shipment.tenant_id,
         truck_type: trucking_details['truck_type'],
-        carriage:   carriage
+        carriage: carriage
       ).pluck(:hub_id)
     end
   end

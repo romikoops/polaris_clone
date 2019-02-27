@@ -6,9 +6,9 @@ module ChargeCalculator
       def initialize(data: {})
         @data = data
       end
-      
+
       private
-      
+
       attr_reader :data
 
       alias hash data

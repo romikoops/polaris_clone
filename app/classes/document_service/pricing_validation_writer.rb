@@ -19,6 +19,7 @@ module DocumentService
       @data.each do |page, column_hash|
         @row = 0
         next if column_hash.values.empty?
+
         header_data = build_header_rows(column_hash)
         new_worksheet_hash = add_worksheet_to_workbook(@workbook, [], page)
         @worksheet = new_worksheet_hash[:worksheet]
@@ -124,6 +125,7 @@ module DocumentService
           unit_row = ["##{current_unit}-#{example_key}"]
           column_hash.keys.each do |c_key|
             next unless cargo_units[c_key][current_unit - 1]
+
             3.times do
               unit_row << if example_key == 'cargo_item_type_id'
                             CargoItemType.find(cargo_units[c_key][current_unit - 1][example_key]).name
@@ -256,8 +258,8 @@ module DocumentService
 
       {
         destination_layover: destination_layover,
-        origin_layover:      origin_layover,
-        aux_data:            aux_data
+        origin_layover: origin_layover,
+        aux_data: aux_data
       }
     end
 

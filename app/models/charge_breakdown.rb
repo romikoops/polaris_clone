@@ -24,7 +24,7 @@ class ChargeBreakdown < ApplicationRecord
     end
   end
 
-  scope :selected, -> {
+  scope :selected, lambda {
     joins(:shipment).where('charge_breakdowns.trip_id = shipments.trip_id').first
   }
 

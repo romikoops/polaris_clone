@@ -5,8 +5,8 @@ module ChargeCalculator
     NoSuchReducerError = Class.new(StandardError)
 
     REDUCERS = {
-      max:   Max,
-      sum:   Sum,
+      max: Max,
+      sum: Sum,
       first: First
     }.freeze
 

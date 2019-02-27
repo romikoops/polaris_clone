@@ -57,13 +57,13 @@ module ExcelTool
     def _nexus_create
       lat, lng = port_row[:lat_lng].split(', ')
       Address.create!(
-        name:             port_row[:name],
-        address_type:    'nexus',
-        latitude:         lat,
-        longitude:        lng,
-        photo:            port_row[:photo],
-        country:          country,
-        city:             port_row[:name],
+        name: port_row[:name],
+        address_type: 'nexus',
+        latitude: lat,
+        longitude: lng,
+        photo: port_row[:photo],
+        country: country,
+        city: port_row[:name],
         geocoded_address: port_row[:geocoded_address]
       )
     end
@@ -71,11 +71,11 @@ module ExcelTool
     def find_or_create_address
       lat, lng = port_row[:lat_lng].split(', ')
       Address.find_or_create_by(
-        name:             port_row[:name],
-        latitude:         lat,
-        longitude:        lng,
-        country:          country,
-        city:             port_row[:name],
+        name: port_row[:name],
+        latitude: lat,
+        longitude: lng,
+        country: country,
+        city: port_row[:name],
         geocoded_address: port_row[:geocoded_address],
         address_type: nil
       )
@@ -83,7 +83,7 @@ module ExcelTool
 
     def hub
       @port = Port.find_by(
-        nexus_id:  nexus.id,
+        nexus_id: nexus.id,
         name: port_row[:name]
       )
     end
@@ -91,30 +91,30 @@ module ExcelTool
     def update_port
       lat, lng = port_row[:lat_lng].split(', ')
       @port.update_attributes(
-        nexus_id:         nexus.id,
-        address_id:      address.id,
-        latitude:         lat,
-        longitude:        lng,
-        name:             port_row[:name],
-        code:             port_row[:code].delete!(' '),
-        web:              port_row[:web],
-        telephone:            port_row[:phone],
-        country:          @country
+        nexus_id: nexus.id,
+        address_id: address.id,
+        latitude: lat,
+        longitude: lng,
+        name: port_row[:name],
+        code: port_row[:code].delete!(' '),
+        web: port_row[:web],
+        telephone: port_row[:phone],
+        country: @country
       )
     end
 
     def create_nexus_port
       lat, lng = port_row[:lat_lng].split(', ')
       nexus.ports.create!(
-        nexus_id:         nexus.id,
-        address_id:      address.id,
-        latitude:         lat,
-        longitude:        lng,
-        name:             port_row[:name],
-        code:             port_row[:code].delete!(' '),
-        web:              port_row[:web],
-        telephone:            port_row[:phone],
-        country:          @country
+        nexus_id: nexus.id,
+        address_id: address.id,
+        latitude: lat,
+        longitude: lng,
+        name: port_row[:name],
+        code: port_row[:code].delete!(' '),
+        web: port_row[:web],
+        telephone: port_row[:phone],
+        country: @country
       )
     end
 
@@ -139,6 +139,7 @@ module ExcelTool
 
     def geoplace
       return @geoplace if @geoplace
+
       country_names = port_rows.map { |hub| hub[:country] }.uniq
       @geoplace = Country.geo_find_by_names(country_names)
     end
@@ -153,6 +154,7 @@ module ExcelTool
         @port_row = _port_row
         @country = country_by_code(port_row[:country])
         next unless @country
+
         @nexus = _nexus
         @nexus ||= _nexus_create
 

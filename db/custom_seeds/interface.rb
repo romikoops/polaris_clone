@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 Dir["#{Rails.root}/db/seed_classes/*.rb"].each { |file| require file }
 
 # Example Interface
-# 
+#
 # def test_me
 #   puts "This is a test"
 # end
@@ -13,10 +15,8 @@ Dir["#{Rails.root}/db/seed_classes/*.rb"].each { |file| require file }
 #   welcome_message: "Welcome to the Test Seeding Interface"
 # ).init
 
-
 tenant_subdomains = TenantSeeder::TENANT_DATA.map { |data| data[:subdomain] }
 table_names       = TableDropper.all_table_names
-
 
 ### Drop Tables ###
 
@@ -34,21 +34,20 @@ def tables_chosen_from_interface(prompt_verb)
 end
 
 def choose_tables_to_drop
-  TableDropper.perform(only: tables_chosen_from_interface("to drop"))
+  TableDropper.perform(only: tables_chosen_from_interface('to drop'))
 end
 
 def choose_exceptions
-  TableDropper.perform(except: tables_chosen_from_interface("not to drop"))
+  TableDropper.perform(except: tables_chosen_from_interface('not to drop'))
 end
-  
+
 drop_tables_actions = {
-  drop_all_tables:         -> { TableDropper.perform },
+  drop_all_tables: -> { TableDropper.perform },
   choose_tables_to_drop__: -> { choose_tables_to_drop },
-  choose_exceptions__:     -> { choose_exceptions }
+  choose_exceptions__: -> { choose_exceptions }
 }
 
 drop_tables = ActionInterface.new(actions: drop_tables_actions)
-
 
 ### Full Seed ###
 
@@ -72,7 +71,6 @@ def full_seed_without_geometries
   MainSeeder.perform(tenant_options_from_interface.merge(without_geometries: true))
 end
 
-
 ### Trucking Pricings ###
 
 trucking_pricings_actions = {
@@ -84,27 +82,25 @@ end
 
 trucking_pricings = ActionInterface.new(actions: trucking_pricings_actions)
 
-
 ### Shipments ###
 
 def shipments
   ShipmentSeeder.new(tenant_options_from_interface).perform
 end
 
-
 ########## MAIN ##########
 
 main = ActionInterface.new(
   actions: {
-    drop_tables__:                  -> { drop_tables.init },
-    full_seed__:                    -> { full_seed },
+    drop_tables__: -> { drop_tables.init },
+    full_seed__: -> { full_seed },
     full_seed_without_geometries__: -> { full_seed_without_geometries },
-    pricings:                       -> { puts "(!) Not implemented" },
-    trucking_pricings__:            -> { trucking_pricings.init },
-    shipments:                      -> { shipments },
-    geometries:                     -> { GeometrySeeder.perform }
+    pricings: -> { puts '(!) Not implemented' },
+    trucking_pricings__: -> { trucking_pricings.init },
+    shipments: -> { shipments },
+    geometries: -> { GeometrySeeder.perform }
   },
-  welcome_message: "Welcome to the ItsMyCargo Seeding Interface"
+  welcome_message: 'Welcome to the ItsMyCargo Seeding Interface'
 )
 
 main.init

@@ -25,6 +25,7 @@ class MaxAggregateDimensionsValidator < ActiveModel::Validator
     dimension_names.each do |dimension_name|
       max = max_dimensions[dimension_name]
       next unless sums[dimension_name] > max && max > 0
+
       message = "cannot be greater than #{max}"
       error_key = "Total #{humanized_dimension_name(dimension_name)} (#{dimension_name})"
       record.errors[error_key] << message
@@ -35,10 +36,10 @@ class MaxAggregateDimensionsValidator < ActiveModel::Validator
 
   def humanized_dimension_name(dimension_name)
     case dimension_name
-    when :dimension_x   then "length"
-    when :dimension_y   then "width"
-    when :dimension_z   then "height"
-    when :payload_in_kg then "weight"
+    when :dimension_x   then 'length'
+    when :dimension_y   then 'width'
+    when :dimension_z   then 'height'
+    when :payload_in_kg then 'weight'
     else dimension_name.to_s
     end
   end

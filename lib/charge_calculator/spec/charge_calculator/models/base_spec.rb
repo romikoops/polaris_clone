@@ -19,8 +19,8 @@ RSpec.describe ChargeCalculator::Models::Base do
     subject { described_class.new(data: { one: 1 }) }
 
     it 'successfully' do
-      expect(subject.respond_to?(:one)).to be_truthy
-      expect(subject.respond_to?(:two)).to be_falsey
+      expect(subject).to respond_to(:one)
+      expect(subject).not_to respond_to(:two)
     end
   end
 end

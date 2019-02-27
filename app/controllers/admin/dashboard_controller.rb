@@ -14,9 +14,9 @@ class Admin::DashboardController < Admin::AdminBaseController
     response = Rails.cache.fetch("#{@shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
       {
         itineraries: @detailed_itineraries,
-        hubs:        @hubs,
-        shipments:   shipments_hash,
-        mapData:     @map_data
+        hubs: @hubs,
+        shipments: shipments_hash,
+        mapData: @map_data
       }
     end
     response_handler(response)
@@ -40,7 +40,7 @@ class Admin::DashboardController < Admin::AdminBaseController
   def shipments_hash
     current_user.tenant.quotation_tool? ?
     {
-      quoted:   @quoted_shipments
+      quoted: @quoted_shipments
     } : {
       requested: @requested_shipments
     }

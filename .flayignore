@@ -3,6 +3,8 @@
 **/spec/*_helper.rb
 **/spec/**/*_spec.rb
 **/spec/factories/*
+app/classes/**/*.rb
+db/custom_seeds/*.rb
 db/schema.rb
 engines/*/lib/*/engine.rb
 engines/*/spec/dummy/*

@@ -14,7 +14,7 @@ module UsersDeviseTokenAuth
       return render_update_error_unauthorized unless @resource
 
       # make sure account doesn't use oauth2 provider
-      return render_update_error_password_not_required unless @resource.provider == "tenant_email" ## (!) ##
+      return render_update_error_password_not_required unless @resource.provider == 'tenant_email' ## (!) ##
 
       # ensure that password params were sent
       unless password_resource_params[:password] && password_resource_params[:password_confirmation]

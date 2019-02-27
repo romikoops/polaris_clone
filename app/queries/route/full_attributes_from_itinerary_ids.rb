@@ -3,9 +3,9 @@
 module Queries
   module Route
     class FullAttributesFromItineraryIds
-      def initialize(args={})
-        @itinerary_ids = args[:itinerary_ids] || args["itinerary_ids"]
-        @options       = args[:options]       || args["options"]
+      def initialize(args = {})
+        @itinerary_ids = args[:itinerary_ids] || args['itinerary_ids']
+        @options       = args[:options]       || args['options']
       end
 
       def perform

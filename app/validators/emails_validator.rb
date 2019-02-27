@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 class EmailsValidator < ActiveModel::EachValidator
-  BRANCHES = %w[sales support].freeze
+  BRANCHES = %w(sales support).freeze
 
   def validate_each(record, attribute, value)
     @record    = record
     @attribute = attribute
 
     unless value.is_a?(Hash)
-      add_error "must be a Hash"
+      add_error 'must be a Hash'
       return
     end
 
@@ -23,7 +23,7 @@ class EmailsValidator < ActiveModel::EachValidator
         next
       end
 
-      add_error "'#{branch}' branch must have a general email" unless value[branch]["general"]
+      add_error "'#{branch}' branch must have a general email" unless value[branch]['general']
 
       value[branch].each do |mode_of_transport, email|
         add_error "'#{branch} - #{mode_of_transport}' email must be a string" unless email.is_a?(String)

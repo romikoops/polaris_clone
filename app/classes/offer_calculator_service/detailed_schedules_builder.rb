@@ -71,7 +71,7 @@ module OfferCalculatorService
                             end
                           else
                             0
-      end
+                          end
 
       {
         load_type: shipment.load_type,

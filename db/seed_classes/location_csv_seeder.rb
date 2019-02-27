@@ -14,25 +14,23 @@ class LocationCsvSeeder
     Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, headers: true)
       csv.each do |row|
-          data = {
-            city: row['ort'],
-            country: 'Germany',
-            postal_code: row['plz'],
-            province: row['landkreis']
-          }
-         location = Location.find_by(country: 'Germany', postal_code: row['plz'])
-         if !location
+        data = {
+          city: row['ort'],
+          country: 'Germany',
+          postal_code: row['plz'],
+          province: row['landkreis']
+        }
+        location = Location.find_by(country: 'Germany', postal_code: row['plz'])
+        if !location
           binding.pry
-         else
+        else
           location.update(data)
-         end
+        end
       end
     end
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
     puts 'Germany Locations updated...'
-
-
   end
 
   def self.get_s3_file(key)

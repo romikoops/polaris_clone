@@ -28,15 +28,15 @@ module DataValidator
         begin
           @examples = []
           create_sheet_rows
-          
+
           create_cargo_key_hash
-          
+
           create_fees_key_hash('import')
-          
+
           create_fees_key_hash('export')
-          
+
           create_fees_key_hash('freight')
-         
+
           create_example_results
           calculate(sheet_name)
         rescue Exception => e # bad code.....
@@ -143,7 +143,7 @@ module DataValidator
             },
             result_index: column_index
           }
-         
+
           @fee_keys.deep_symbolize_keys!
           @fee_keys.each do |direction, fees|
             target_key = direction == :freight ? :cargo : direction
@@ -160,6 +160,7 @@ module DataValidator
 
     def string_to_currency_value(str)
       return nil unless str
+
       currency, value = str.split(' ')
       { value: value, currency: currency }
     end
@@ -168,6 +169,7 @@ module DataValidator
       cargos = []
       @cargo_unit_keys.compact.each do |key_hash|
         next unless column[key_hash.values.first]
+
         new_cargo = {}
         key_hash.each do |key, value|
           new_cargo[key] = column[value]
@@ -230,8 +232,8 @@ module DataValidator
       # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
       tenant_vehicle_id = @data_for_price_checker[:service_level].id
       pricings_by_cargo_class = example[:data][:itinerary].pricings
-                                                .where(tenant_vehicle_id: tenant_vehicle_id)
-                                                .for_cargo_class(cargo_classes)
+                                                          .where(tenant_vehicle_id: tenant_vehicle_id)
+                                                          .for_cargo_class(cargo_classes)
       pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date) if start_date && end_date
       pricings_by_cargo_class = pricings_by_cargo_class
                                 .select { |pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil? }
@@ -246,7 +248,8 @@ module DataValidator
           obj = {
             pricing_ids: {
               pricing.transport_category.cargo_class.to_s => pricing.id
-            }  }
+            }
+          }
           other_pricings.each do |other_pricing|
             if other_pricing.effective_date < obj[:schedules].first.etd && other_pricing.expiration_date > obj[:schedules].last.eta
               obj[:pricing_ids][other_pricing.transport_category.cargo_class] = other_pricing.id
@@ -299,6 +302,7 @@ module DataValidator
       value = result.dig(:quote, *keys, :value)
       expected_value = expected_result.dig(*keys, :value).try(:to_d)
       return nil if value.blank? || expected_value.blank?
+
       (value - expected_value).abs.try(:round, 3)
     end
 
@@ -306,6 +310,7 @@ module DataValidator
       value = result.dig(:quote, *keys, :value)
       expected_value = expected_result.dig(*keys, :value).try(:to_d)
       return nil if (value.blank? || value == 0) || (expected_value.blank? || expected_value == 0)
+
       (((value - expected_value) / expected_value) * 100).try(:round, 3)
     end
 
@@ -313,6 +318,7 @@ module DataValidator
       currency = result.dig(:quote, *keys, :currency)
 
       return '' if currency.blank?
+
       currency
     end
 
@@ -336,8 +342,8 @@ module DataValidator
       if (!result_currency.nil? && !expected_currency.nil?) && (result_currency != expected_currency)
         result_value = convert_value(value, result_currency, expected_currency)
         keys.each_with_index do |key, i|
-          if i > 0 && keys[i - 1] && result[:quote][keys[i - 1]][key][:value] = result_value
-            result[:quote][keys[i - 1]][key][:value] = "#{result_value.try(:round, 3)} (#{result_currency} #{value.try(:round, 3)})"
+          if i.positive? && keys[i - 1] && (result[:quote][keys[i - 1]][key][:value] = result_value)
+            result[:quote][keys[i - 1]][key][:value] = "#{result_value.try(:round, 3)} (#{result_currency} #{value.try(:round, 3)})" # rubocop:disable Metrics/LineLength
             result[:quote][keys[i - 1]][key][:currency] = expected_currency
           end
         end
@@ -345,42 +351,44 @@ module DataValidator
         result_value = value
       end
 
-      return nil if (result_value.blank? || result_value == 0) || (expected_value.blank? || expected_value == 0)
+      return nil if (result_value.blank? || result_value.zero?) || (expected_value.blank? || expected_value.zero?)
 
       diff_val = (result_value - expected_value).try(:round, 3)
       diff_percent = ((diff_val / expected_value) * 100).try(:round, 3)
 
       return nil if diff_val.nil?
+
       "#{expected_currency} #{diff_val} (#{diff_percent}%)"
     end
 
-    def validate_result(result, expected_result, example_index, data)
+    def validate_result(result, expected_result, example_index, data) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
       result.deep_symbolize_keys!
       result_for_printing = {}
       begin
-      expected_result.each do |key1, value1|
-        if value1 && value1[:value]
-          result_for_printing[key1] = diff_result_string(result, [key1], expected_result)
-        elsif key1 == 'cargo'
-          value1[:cargo_item].each do |key2, _value2|
-            if key2.to_s != 'edited_total' || key2.to_s != 'total'
-              result_for_printing[key1] = {} unless result_for_printing[key1]
-              result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
+        expected_result.each do |key_1, value_1|
+          if value_1 && value_1[:value]
+            result_for_printing[key_1] = diff_result_string(result, [key_1], expected_result)
+          elsif key_1 == 'cargo'
+            value_1[:cargo_item].each do |key_2, _value_2|
+              if key_2.to_s != 'edited_total' || key_2.to_s != 'total'
+                result_for_printing[key_1] = {} unless result_for_printing[key_1]
+                result_for_printing[key_1][key_2] = diff_result_string(result, [key_1, key_2], expected_result)
+              end
             end
-          end
-        elsif value1 && !value1.keys.empty?
-          value1.each do |key2, _value2|
-            if key2.to_s != 'edited_total' || key2.to_s != 'total'
-              result_for_printing[key1] = {} unless result_for_printing[key1]
-              result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
+          elsif value_1 && !value_1.keys.empty?
+            value_1.each do |key_2, _value_2|
+              if key_2.to_s != 'edited_total' || key_2.to_s != 'total'
+                result_for_printing[key_1] = {} unless result_for_printing[key_1]
+                result_for_printing[key_1][key_2] = diff_result_string(result, [key_1, key_2], expected_result)
+              end
             end
           end
         end
+      rescue StandardError => e
+        Rails.logger.error e.message
       end
-    rescue Exception => e
-     
-    end
-      final_result = {
+
+      {
         result: result,
         expected: expected_result,
         number: example_index,

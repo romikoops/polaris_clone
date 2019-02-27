@@ -38,7 +38,7 @@ class GeometryCsvSeeder
         Location.import([data],
                         on_duplicate_key_update: {
                           conflict_target: %i(postal_code suburb neighbourhood city province country),
-                          columns:         [:bounds]
+                          columns: [:bounds]
                         })
       end
     end
@@ -62,7 +62,7 @@ class GeometryCsvSeeder
                         }],
                         on_duplicate_key_update: {
                           conflict_target: %i(postal_code suburb neighbourhood city province country),
-                          columns:         %i(bounds)
+                          columns: %i(bounds)
                         })
       end
     end
@@ -76,7 +76,6 @@ class GeometryCsvSeeder
       csv = CSV.new(gz, col_sep: "\t", quote_char: "'")
 
       csv.each do |row|
-
         postal_code = row.first
         area_code, = postal_code.match(/([A-Z]+)(\d+)/).captures
         Location.import([{
@@ -89,7 +88,7 @@ class GeometryCsvSeeder
                         }],
                         on_duplicate_key_update: {
                           conflict_target: %i(postal_code suburb neighbourhood city province country),
-                          columns:         %i(bounds)
+                          columns: %i(bounds)
                         })
       end
     end

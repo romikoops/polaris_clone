@@ -23,6 +23,7 @@ module DocumentService
       pricings.each_with_index do |pricing, _i|
         pricing.deep_symbolize_keys!
         next if pricing[:expiration_date] < DateTime.now
+
         current_itinerary     = current_itinerary(pricing)
         origin_aux_data       = address_and_aux_data(pricing, 0, 'id')
         current_origin        = origin_aux_data[:address]
@@ -74,6 +75,7 @@ module DocumentService
         end
 
         next unless pricing[:exceptions] && !pricing[:exceptions].empty?
+
         pricing[:exceptions].each do |ex_pricing|
           ex_pricing[:data].each do |key, fee|
             data = ['TRUE', nil, current_itinerary.mode_of_transport, pricing[:load_type], ex_pricing[:effective_date], ex_pricing[:expiration_date], current_origin.name, current_destination.name, current_transit_time, pricing[:wm_rate], current_vehicle.name, key, fee[:currency], fee[:rate_basis], fee[:min], fee[:rate]]
@@ -114,7 +116,7 @@ module DocumentService
       end
       {
         current_vehicle: aux_data[:vehicle][pricing[:transport_category_id]],
-        aux_data:        aux_data
+        aux_data: aux_data
       }
     end
 
@@ -160,8 +162,8 @@ module DocumentService
 
       {
         destination_layover: destination_layover,
-        origin_layover:      origin_layover,
-        aux_data:            aux_data
+        origin_layover: origin_layover,
+        aux_data: aux_data
       }
     end
 

@@ -20,9 +20,9 @@ module OfferCalculatorService
 
       trucking_pricing_finder = TruckingPricingFinder.new(
         trucking_details: trucking_details,
-        address:          address,
-        carriage:         carriage,
-        shipment:         @shipment
+        address: address,
+        carriage: carriage,
+        shipment: @shipment
       )
       Hub.where(id: hub_ids).each_with_object({}) do |hub, obj|
         distance = calc_distance(address, hub)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module IteratorHelpers
   def nested_each_with_times(*args, &block)
     nested_each_with_times_argument_errors(args)

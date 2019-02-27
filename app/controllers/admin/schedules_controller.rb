@@ -7,7 +7,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   def index
     map_data = current_user.tenant.map_data
     response_handler(
-      mapData:     map_data,
+      mapData: map_data,
       itineraries: itinerary_route_json
     )
   end
@@ -19,18 +19,18 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def auto_generate_schedules
-    response_handler(air:         @air_schedules,
-                     train:       @train_schedules,
-                     ocean:       @ocean_schedules,
+    response_handler(air: @air_schedules,
+                     train: @train_schedules,
+                     ocean: @ocean_schedules,
                      itineraries: itineraries,
-                     stats:       itin_weekly_schedules)
+                     stats: itin_weekly_schedules)
   end
 
   def download_schedules
     options = params[:options].as_json.symbolize_keys
     options[:tenant_id] = current_user.tenant_id
     url = DocumentService::ScheduleSheetWriter.new(options).perform
-    response_handler(url: url, key: "schedules")
+    response_handler(url: url, key: 'schedules')
   end
 
   def destroy
@@ -45,8 +45,8 @@ class Admin::SchedulesController < Admin::AdminBaseController
   def schedules_by_itinerary
     if params[:file]
       itinerary = Itinerary.find(params[:id])
-      
-      req = { "xlsx" => params[:file], "itinerary" => itinerary }
+
+      req = { 'xlsx' => params[:file], 'itinerary' => itinerary }
       results = ExcelTool::OverwriteSchedulesByItinerary.new(params: req, _user: current_user).perform
       response_handler(results)
     else
@@ -56,8 +56,8 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def overwrite_trains
     if params[:file]
-      req = { "xlsx" => params[:file] }
-      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: "rail", _user: current_user).perform
+      req = { 'xlsx' => params[:file] }
+      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: 'rail', _user: current_user).perform
       response_handler(results)
     else
       response_handler(false)
@@ -66,8 +66,8 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def overwrite_vessels
     if params[:file]
-      req = { "xlsx" => params[:file] }
-      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: "ocean", _user: current_user).perform
+      req = { 'xlsx' => params[:file] }
+      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: 'ocean', _user: current_user).perform
       response_handler(results)
     else
       response_handler(false)
@@ -76,8 +76,8 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def overwrite_air
     if params[:file]
-      req = { "xlsx" => params[:file] }
-      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: "air", _user: current_user).perform
+      req = { 'xlsx' => params[:file] }
+      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: 'air', _user: current_user).perform
       response_handler(results)
     else
       response_handler(false)
@@ -87,10 +87,10 @@ class Admin::SchedulesController < Admin::AdminBaseController
   private
 
   def initialize_variables
-    @train_schedules = mot_schedule("rail")
-    @ocean_schedules = mot_schedule("ocean")
-    @air_schedules = mot_schedule("air")
-    @truck_schedules = mot_schedule("truck")
+    @train_schedules = mot_schedule('rail')
+    @ocean_schedules = mot_schedule('ocean')
+    @air_schedules = mot_schedule('air')
+    @truck_schedules = mot_schedule('truck')
   end
 
   def mot_schedule(mot)
@@ -117,7 +117,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def itin_weekly_schedules
     itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate],
-      params[:endDate], params[:weekdays], vehicle, params[:closing_date].to_i)
+                                        params[:endDate], params[:weekdays], vehicle, params[:closing_date].to_i)
   end
 
   def itinerary

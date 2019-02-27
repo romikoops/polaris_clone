@@ -8,10 +8,10 @@ module OfferCalculatorService
       sorted_schedules.each do |_key, schedules|
         charge_schedule = schedules.first
         grand_total_charge = ChargeCalculator.new(
-          schedule:      charge_schedule,
+          schedule: charge_schedule,
           trucking_data: trucking_data,
-          shipment:      @shipment,
-          user:          user
+          shipment: @shipment,
+          user: user
         ).perform
         next if grand_total_charge.nil?
 

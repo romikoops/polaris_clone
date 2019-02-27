@@ -29,18 +29,15 @@ When('I select {string} as {string}') do |place, type|
       box = find('.ccb_carriage')
       within(box) do
         letters = place.split('')
-        letters.each_with_index do |c, i|
+        letters.each_with_index do |c, _i|
           find('input').send_keys(c)
         end
         first_result = all(:css, '.ccb_result', wait: 30).first
-        if first_result
-          first_result.click
-        end
+        first_result&.click
       end
     end
 
-    #find a close backdrop if it is there
-
+    # find a close backdrop if it is there
     backdrop = all('.ccb_backdrop')
 
     backdrop.first.click() unless backdrop.empty?
@@ -113,7 +110,6 @@ When('I confirm cargo does not contain dangerous good') do
 end
 
 Then('I expect to see offers') do
-
   expect(page).to have_no_css('.ccb_loading', wait: 60)
   offers = all('.offer_result')
   expect(offers.count).to be >= 1

@@ -3,19 +3,14 @@
 class TruckingPriceRulesMachine
   attr_reader :total_price
 
-  def initialize(pricing, km, weight_in_tons, volume_in_cm3, units, zip_code=1000)
+  def initialize(pricing, km, weight_in_tons, volume_in_cm3, units, zip_code = 1000) # rubocop:disable Metrics/ParameterLists, Naming/UncommunicativeMethodParamName, Naming/VariableNumber
     @total_price = rule_evaluation(pricing, km.to_f, weight_in_tons.to_f, volume_in_cm3.to_f, units.to_i, zip_code)
   end
 
-  def rule_evaluation(pricing, km, weight_in_tons, volume_in_cm3, units, zip_code)
+  def rule_evaluation(pricing, km, weight_in_tons, volume_in_cm3, units, zip_code) # rubocop:disable Metrics/ParameterLists, Naming/UncommunicativeMethodParamName, Naming/VariableNumber
     if volume_in_cm3 / 1_000_000 > pricing.fcl_limit_m3_40_foot || weight_in_tons > pricing.fcl_limit_tons_40_foot
-      raise "Volume and/or weight are out of bounds!"
-      return false
+      raise 'Volume and/or weight are out of bounds!'
     end
-
-    # if volume_in_cm3 / 1000000 == pricing.fcl_limit_m3_40_foot || weight_in_tons == pricing.fcl_limit_tons_40_foot
-    #   return pricing.fcl_price
-    # end
 
     if pricing.has_steptable?
       steptable_price(pricing, weight_in_tons, volume_in_cm3, units, zip_code)
@@ -26,26 +21,26 @@ class TruckingPriceRulesMachine
 
   private
 
-  def formula_price(pricing, km, weight_in_tons, volume_in_cm3, units)
-    price1 = weight_in_tons * pricing.price_per_ton * units + km * pricing.price_per_km
-
-    price2 = volume_in_cm3 / 1_000_000 * pricing.price_per_m3 * units + km * pricing.price_per_km
-
-    total_price = price1 > price2 ? price1 : price2
+  def formula_price(pricing, km, weight_in_tons, volume_in_cm3, units) # rubocop:disable Naming/UncommunicativeMethodParamName, Naming/VariableNumber
+    [
+      (weight_in_tons * pricing.price_per_ton * units + km * pricing.price_per_km),
+      (volume_in_cm3 / 1_000_000 * pricing.price_per_m3 * units + km * pricing.price_per_km)
+    ].max
   end
 
-  def steptable_price(pricing, weight_in_tons, volume_in_cm3, units, zip_code)
+  def steptable_price(pricing, weight_in_tons, volume_in_cm3, units, zip_code) # rubocop:disable Naming/VariableNumber, Metrics/AbcSize
     table = pricing.steptable
     weight = weight_in_tons * units
     volume = volume_in_cm3 / 1_000_000 * units
 
-    multiplier = determine_mulitplier(weight, volume)
+    multiplier = determine_multiplier(weight, volume)
 
     price_per_part = nil
     table.keys.each do |zip_code_range_string|
       zip_code_range_array = JSON.parse(zip_code_range_string)
       next unless zip_code.between?(zip_code_range_array.first, zip_code_range_array.last)
-      table[zip_code_range_string].keys.each do |multiplier_range_string|
+
+      table[zip_code_range_string].each_key do |multiplier_range_string|
         multiplier_range_array = JSON.parse(multiplier_range_string)
         if multiplier.between?(multiplier_range_array.first, multiplier_range_array.last)
           price_per_part = table[zip_code_range_string][multiplier_range_string]
@@ -61,11 +56,9 @@ class TruckingPriceRulesMachine
     total_price
   end
 
-  def determine_mulitplier(weight, volume)
-    if volume >= weight * 1000 / 333
-      volume
-    else
-      weight * 1000 / 333
-    end
+  def determine_multiplier(weight, volume)
+    multiplier = (weight * 1000 / 333)
+
+    [volume, multiplier].max
   end
 end

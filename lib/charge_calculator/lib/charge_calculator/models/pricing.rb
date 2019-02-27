@@ -13,11 +13,11 @@ module ChargeCalculator
       end
 
       def cargo_unit_rates
-        @cargo_unit_rates ||= rates_for("cargo_unit")
+        @cargo_unit_rates ||= rates_for('cargo_unit')
       end
 
       def shipment_rates
-        @shipment_rates ||= rates_for("shipment")
+        @shipment_rates ||= rates_for('shipment')
       end
 
       def weight_measure

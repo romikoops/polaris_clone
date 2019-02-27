@@ -104,6 +104,7 @@ module DocumentService
       row = 1
       user_shipments.each do |shipment|
         next unless shipment.status != 'booking_process_started'
+
         shipment_sheet.write(row, 0, shipment.origin_hub.address.geocoded_address)
         shipment_sheet.write(row, 1, shipment.destination_hub.address.geocoded_address)
         shipment_sheet.write(row, 2, shipment.imc_reference)

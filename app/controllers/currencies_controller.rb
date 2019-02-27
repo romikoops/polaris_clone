@@ -4,7 +4,7 @@ class CurrenciesController < ApplicationController
   include CurrencyTools
 
   def currencies
-    currency = current_user ? current_user.currency : "EUR"
+    currency = current_user ? current_user.currency : 'EUR'
     results = get_currency_array(currency, params[:tenant_id] || current_user.tenant_id)
     response_handler(results)
   end

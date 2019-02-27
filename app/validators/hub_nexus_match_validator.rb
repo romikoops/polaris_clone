@@ -2,7 +2,7 @@
 
 class HubNexusMatchValidator < ActiveModel::Validator
   def validate(record)
-    %w[origin destination].each do |target|
+    %w(origin destination).each do |target|
       next unless has_hub?(record, target) && has_nexus?(record, target)
 
       if hub(record, target).nexus_id != nexus_id(record, target)

@@ -9,7 +9,7 @@ module AdmiraltyAuth
     describe '.current_user' do
       context 'user does not exists' do
         context 'unsigned' do
-          it 'should return nil' do
+          it 'returns nil' do
             expect(controller.current_user).to be_nil
           end
         end
@@ -21,7 +21,7 @@ module AdmiraltyAuth
             )
           end
 
-          it 'should return nil' do
+          it 'returns nil' do
             expect(controller.current_user).to be_nil
           end
         end
@@ -29,7 +29,7 @@ module AdmiraltyAuth
 
       context 'user does exists' do
         context 'unsigned' do
-          it 'should return nil' do
+          it 'returns nil' do
             expect(controller.current_user).to be_nil
           end
         end
@@ -41,7 +41,7 @@ module AdmiraltyAuth
             )
           end
 
-          it 'should return user' do
+          it 'returns user' do
             expect(controller.current_user).to eq(user)
           end
         end
@@ -56,7 +56,7 @@ module AdmiraltyAuth
       end
 
       context 'unsigned' do
-        it 'should redirect' do
+        it 'redirects' do
           get :index
           expect(response).to redirect_to('/login')
         end
@@ -67,7 +67,7 @@ module AdmiraltyAuth
           allow_any_instance_of(described_class).to receive(:current_user).and_return(user)
         end
 
-        it 'should return nil' do
+        it 'returns nil' do
           get :index
           expect(response).to be_successful
         end

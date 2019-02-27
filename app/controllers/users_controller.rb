@@ -21,10 +21,10 @@ class UsersController < ApplicationController
       end
 
       resp = {
-        shipments:         shipments_hash,
-        contacts:          @contacts,
+        shipments: shipments_hash,
+        contacts: @contacts,
         num_contact_pages: (current_user.contacts.count.to_f / 6).to_f.ceil,
-        addresses:         addresses
+        addresses: addresses
       }
     end
     response_handler(response)
@@ -116,7 +116,7 @@ class UsersController < ApplicationController
   def shipments_hash
     current_user.tenant.quotation_tool? ?
     {
-      quoted:   quoted_shipments.order(booking_placed_at: :desc).limit(3)&.map(&:with_address_index_json)
+      quoted: quoted_shipments.order(booking_placed_at: :desc).limit(3)&.map(&:with_address_index_json)
     } : {
       requested: requested_shipments.order(booking_placed_at: :desc).limit(3)&.map(&:with_address_index_json)
     }

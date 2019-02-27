@@ -3,10 +3,10 @@
 module Queries
   module Route
     class AttributesFromHubAndItineraryIds
-      def initialize(args={})
-        @origin_hub_ids      = args[:origin_hub_ids]      || args["origin_hub_ids"]
-        @destination_hub_ids = args[:destination_hub_ids] || args["destination_hub_ids"]
-        @itinerary_ids       = args[:itinerary_ids]       || args["itinerary_ids"]
+      def initialize(args = {})
+        @origin_hub_ids      = args[:origin_hub_ids]      || args['origin_hub_ids']
+        @destination_hub_ids = args[:destination_hub_ids] || args['destination_hub_ids']
+        @itinerary_ids       = args[:itinerary_ids]       || args['itinerary_ids']
       end
 
       def perform
@@ -19,9 +19,9 @@ module Queries
 
       def binds
         {
-          origin_hub_ids:      @origin_hub_ids,
+          origin_hub_ids: @origin_hub_ids,
           destination_hub_ids: @destination_hub_ids,
-          itinerary_ids:       @itinerary_ids
+          itinerary_ids: @itinerary_ids
         }
       end
 

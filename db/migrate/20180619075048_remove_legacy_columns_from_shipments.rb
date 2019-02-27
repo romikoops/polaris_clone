@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveLegacyColumnsFromShipments < ActiveRecord::Migration[5.1]
   def change
     remove_column :shipments, :pre_carriage_distance_km, :decimal

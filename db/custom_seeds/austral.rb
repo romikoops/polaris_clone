@@ -39,5 +39,4 @@ subdomains.each do |sub|
   req = { 'key' => trucking }
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
-
 end
