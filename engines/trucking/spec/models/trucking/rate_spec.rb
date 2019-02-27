@@ -243,7 +243,7 @@ module Trucking
             trucking_rates = described_class.find_by_hub_id(hub.id)
   
             expect(trucking_rates.first).to include('zipcode' => [%w(30001 30100)], 'countryCode' => 'SE')
-            expect(trucking_rates.first['truckingPricing']).to include(trucking_rate.as_options_json.except('FactoryBot.created_at', 'updated_at'))
+            expect(trucking_rates.first['truckingPricing']).to include(trucking_rate.as_options_json.except('created_at', 'updated_at'))
           end
   
           it 'finds the correct pricing and destinations for multiple range groups per zone' do
@@ -262,7 +262,7 @@ module Trucking
   
               expect(trucking_rates.first['zipcode']).to eq([["15001", "15100"], ["18001", "18100"]])
               expect(trucking_rates.first['countryCode']).to eq('SE')
-              expect(trucking_rates.first['truckingPricing']).to include(trucking_rate.as_options_json.except('FactoryBot.created_at', 'updated_at'))
+              expect(trucking_rates.first['truckingPricing']).to include(trucking_rate.as_options_json.except('created_at', 'updated_at'))
             end
           end
         end
@@ -278,7 +278,7 @@ module Trucking
               trucking_rates = described_class.find_by_hub_id(hub.id)
   
               expect(trucking_rates.first).to include('city' => [%w(Gothenburg Sweden)], 'countryCode' => 'SE')
-              expect(trucking_rates.first['truckingPricing']).to include(trucking_rate.as_options_json.except('FactoryBot.created_at', 'updated_at'))
+              expect(trucking_rates.first['truckingPricing']).to include(trucking_rate.as_options_json.except('created_at', 'updated_at'))
             end
           end
         end
