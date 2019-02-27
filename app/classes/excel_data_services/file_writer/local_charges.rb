@@ -41,7 +41,7 @@ module ExcelDataServices
         fee_values_h.with_indifferent_access[:range] || [nil]
       end
 
-      def build_row_data(local_charge, fee, range)
+      def build_row_data(local_charge, fee, range) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         fee.deep_symbolize_keys!
         hub = tenant.hubs.find(local_charge.hub_id)
         hub_name = remove_hub_suffix(hub.name, hub.hub_type)
@@ -84,7 +84,7 @@ module ExcelDataServices
           dangerous: local_charge.dangerous }
       end
 
-      def specific_charge_params_for_writing(rate_basis, data, range)
+      def specific_charge_params_for_writing(rate_basis, data, range) # rubocop:disable Metrics/AbcSize
         range = {} if range.nil?
         rate_basis = RateBasis.get_internal_key(rate_basis.upcase)
 

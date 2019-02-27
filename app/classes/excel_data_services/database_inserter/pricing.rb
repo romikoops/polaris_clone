@@ -70,7 +70,7 @@ module ExcelDataServices
         ) # returns a `TenantVehicle`!
       end
 
-      def create_pricing_with_pricing_details(group_of_row_data, row, tenant_vehicle, itinerary)
+      def create_pricing_with_pricing_details(group_of_row_data, row, tenant_vehicle, itinerary) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         pricing_params =
           { uuid: row.uuid,
             transport_category: find_transport_category(tenant_vehicle, row.load_type),
@@ -112,7 +112,7 @@ module ExcelDataServices
         )
       end
 
-      def build_pricing_detail_params_for_pricing(group_of_row_data)
+      def build_pricing_detail_params_for_pricing(group_of_row_data) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         group_of_row_data.map do |row_data|
           row = ExcelDataServices::Row.get(klass_identifier).new(row_data: row_data, tenant: tenant)
 

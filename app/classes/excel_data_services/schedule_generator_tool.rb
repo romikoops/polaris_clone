@@ -1,8 +1,7 @@
+# frozen_string_literal: true
+
 module ExcelDataServices
   module ScheduleGeneratorTool
-    # UnknownRateBasisReadingError = Class.new(parent::FileParser::Base::ParsingError)
-    # UnknownRateBasisWritingError = Class.new(parent::FileWriter::Base::WritingError)
-
     VALID_SCHEDULE_GENERATOR_HEADERS = %i(
       origin
       destination

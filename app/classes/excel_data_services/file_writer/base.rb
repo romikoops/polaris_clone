@@ -120,7 +120,9 @@ module ExcelDataServices
             cell_content = cell_content.to_datetime.iso8601(3).remove(/\+.+$/)
             worksheet.write_date_time(start_row_idx, start_col_idx + i, cell_content, date_dd_mm_yyyy_format)
           else
-            worksheet.write(start_row_idx, start_col_idx + i, cell_content, (header == :uuid ? uuid_format : cell_format))
+            worksheet.write(
+              start_row_idx, start_col_idx + i, cell_content, (header == :uuid ? uuid_format : cell_format)
+            )
           end
         end
       end

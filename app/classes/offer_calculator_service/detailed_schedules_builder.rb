@@ -185,7 +185,7 @@ module OfferCalculatorService
       closing_end_date = dates[:closing_end_date]
       pricings_by_cargo_class = schedules.first.trip.itinerary.pricings
                                          .where(tenant_vehicle_id: tenant_vehicle_id)
-                                         .for_cargo_class(cargo_classes)
+                                         .for_cargo_classes(cargo_classes)
       if start_date && end_date
         pricings_by_cargo_class_and_dates = pricings_by_cargo_class.for_dates(start_date, end_date)
       end

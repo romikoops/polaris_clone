@@ -18,7 +18,7 @@ module ExcelDataServices
 
           pricings = itinerary.pricings
                               .where(user: user, tenant_vehicle: find_tenant_vehicle(row))
-                              .for_cargo_class(row.load_type)
+                              .for_cargo_classes([row.load_type])
                               .for_dates(row.effective_date, row.expiration_date)
 
           if items_have_differing_uuids?(pricings, row.uuid) # rubocop:disable Style/GuardClause

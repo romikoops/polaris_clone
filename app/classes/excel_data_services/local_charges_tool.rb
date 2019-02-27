@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module LocalChargesTool
-    def specific_charge_params_for_reading(rate_basis, single_data)
+    def specific_charge_params_for_reading(rate_basis, single_data) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       rate_basis = RateBasis.get_internal_key(rate_basis.upcase)
 
       case rate_basis

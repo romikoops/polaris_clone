@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Pricing < ApplicationRecord
+class Pricing < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_paper_trail
   belongs_to :itinerary
   belongs_to :tenant
@@ -21,8 +21,12 @@ class Pricing < ApplicationRecord
   delegate :load_type, to: :transport_category
   delegate :cargo_class, to: :transport_category
   scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot.downcase }) }
-  scope :for_load_type, ->(load_type) { joins(:transport_category).where(transport_categories: { load_type: load_type.downcase }) }
-  scope :for_cargo_class, ->(cargo_class_or_classes) { joins(:transport_category).where(transport_categories: { cargo_class: [cargo_class_or_classes].flatten.map(&:downcase) }) }
+  scope :for_load_type, (lambda do |load_type|
+    joins(:transport_category).where(transport_categories: { load_type: load_type.downcase })
+  end)
+  scope :for_cargo_classes, (lambda do |cargo_classes|
+    joins(:transport_category).where(transport_categories: { cargo_class: cargo_classes.map(&:downcase) })
+  end)
   scope :for_dates, (lambda do |start_date, end_date|
     where(Arel::Nodes::InfixOperation.new(
             'OVERLAPS',
