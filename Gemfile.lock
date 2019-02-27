@@ -80,6 +80,7 @@ PATH
   specs:
     locations (0.0.1)
       core
+      rgeo
       rgeo-geojson
       searchkick
 
@@ -825,4 +826,4 @@ DEPENDENCIES
   write_xlsx
 
 BUNDLED WITH
-   1.16.6
+   1.17.3
