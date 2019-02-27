@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'core'
 
+  s.add_dependency 'rgeo'
   s.add_dependency 'rgeo-geojson'
   s.add_dependency 'searchkick'
 

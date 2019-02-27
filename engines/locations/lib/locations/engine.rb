@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'searchkick'
+require 'rgeo'
 require 'rgeo-geojson'
 
 module Locations
