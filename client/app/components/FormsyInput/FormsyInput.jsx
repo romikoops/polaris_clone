@@ -3,7 +3,6 @@ import { withFormsy } from 'formsy-react'
 import PropTypes from 'prop-types'
 import styles from './FormsyInput.scss'
 import errorStyles from '../../styles/errors.scss'
-import deprecated from '../../hocs/deprecated'
 
 class FormsyInput extends Component {
   constructor (props) {
@@ -89,4 +88,4 @@ FormsyInput.defaultProps = {
   className: ''
 }
 
-export default deprecated(withFormsy(FormsyInput))
+export default withFormsy(FormsyInput)

@@ -1,7 +1,4 @@
 :local {
-  .offer_error {
-    position: absolute;
-  }
   .error_box {
     max-width: 350px;
     max-height: 550px;
@@ -15,7 +12,7 @@
   .error_right {
     position: absolute;
     right: 5px;
-    top: 93px;
+    top: 92px;
     bottom: 5px;
   }
   .error_center {
@@ -29,7 +26,7 @@
   }
   .error_left {
     position: absolute;
-    top: 93px;
+    top: 92px;
     left: 5px;
     bottom: 5px;
   }
@@ -37,19 +34,17 @@
     width: 450px;
     opacity: 1;
     z-index: 20;
-    display: block;
   }
   .hide_error_drawer {
     width: 0;
-    display: none;
+    opacity: 0;
   }
   .error_content {
     width: 450px;
     padding: 15px;
     background: rgba(0, 0, 0, 0.55);
     color: white;
-    // TO ADD FOR COLLAPSING:
-    // height: 100%;
+    height: 100%;
     font-size: 14px;
     p {
       margin: 5px;
@@ -80,7 +75,7 @@
   }
   .close_row {
     position: absolute;
-    top: 130px;
+    top: 0;
     width: 100%;
     left: 0;
     right: 0;

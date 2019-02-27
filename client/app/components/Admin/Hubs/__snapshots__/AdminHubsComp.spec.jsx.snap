@@ -172,7 +172,6 @@ exports[`countries is truthy 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                   <CollapsingBar
                     collapsed={null}
@@ -257,7 +256,6 @@ exports[`countries is truthy 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                   <CollapsingBar
                     collapsed={null}
@@ -309,7 +307,6 @@ exports[`countries is truthy 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                 </div>
               </div>
@@ -508,7 +505,6 @@ exports[`shallow render 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                   <CollapsingBar
                     collapsed={null}
@@ -593,7 +589,6 @@ exports[`shallow render 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                   <CollapsingBar
                     collapsed={null}
@@ -634,7 +629,6 @@ exports[`shallow render 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                 </div>
               </div>
@@ -831,7 +825,6 @@ exports[`state.page > 0 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                   <CollapsingBar
                     collapsed={null}
@@ -916,7 +909,6 @@ exports[`state.page > 0 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                   <CollapsingBar
                     collapsed={null}
@@ -957,7 +949,6 @@ exports[`state.page > 0 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                 </div>
               </div>
@@ -1187,7 +1178,6 @@ exports[`state.searchFilters.hubType is truthy 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                   <CollapsingBar
                     collapsed={null}
@@ -1272,7 +1262,6 @@ exports[`state.searchFilters.hubType is truthy 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                   <CollapsingBar
                     collapsed={null}
@@ -1313,7 +1302,6 @@ exports[`state.searchFilters.hubType is truthy 1`] = `
                         },
                       }
                     }
-                    wrapperContentClasses=""
                   />
                 </div>
               </div>

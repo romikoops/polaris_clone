@@ -1,5 +1,4 @@
-import mapKeysDeep from 'map-keys-deep-lodash'
-import { camelize, camelToSnakeCase } from './stringTools'
+import { camelize } from './stringTools'
 
 export const isEmpty = obj => (
   Object.keys(obj).every(k => !Object.prototype.hasOwnProperty.call(obj, k))
@@ -14,12 +13,16 @@ export const camelizeKeys = (obj) => {
   return newObj
 }
 
-export function deepCamelizeKeys (obj) {
-  return mapKeysDeep(obj, (_, key) => camelize(key))
-}
+export const deepCamelizeKeys = (obj) => {
+  if (!obj || Object.keys(obj).length === 0) return obj
 
-export function deepSnakefyKeys (obj) {
-  return mapKeysDeep(obj, (_, key) => camelToSnakeCase(key))
+  const newObj = {}
+  Object.keys(obj).forEach((k) => {
+    newObj[camelize(k)] = deepCamelizeKeys(obj[k])
+    console.log(newObj)
+  })
+
+  return newObj
 }
 
 export function areEqual (obj1, obj2) {

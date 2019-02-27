@@ -119,7 +119,7 @@ exports[`state.newClient is true 1`] = `
             />
           </div>
         </div>
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -129,12 +129,14 @@ exports[`state.newClient is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="firstName"
           onChange={[Function]}
           placeholder="First Name *"
           required={true}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -145,7 +147,7 @@ exports[`state.newClient is true 1`] = `
           value="FIRST_NAME"
           wrapperClassName="input_50"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -155,12 +157,14 @@ exports[`state.newClient is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="lastName"
           onChange={[Function]}
           placeholder="Last Name *"
           required={true}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -176,7 +180,7 @@ exports[`state.newClient is true 1`] = `
         >
           <Component />
         </MailCheck>
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -186,12 +190,14 @@ exports[`state.newClient is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="phone"
           onChange={[Function]}
           placeholder="Phone *"
           required={true}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -202,7 +208,7 @@ exports[`state.newClient is true 1`] = `
           value="PHONE"
           wrapperClassName="input_33"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -212,12 +218,14 @@ exports[`state.newClient is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="companyName"
           onChange={[Function]}
           placeholder="Company Name *"
           required={true}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -228,7 +236,7 @@ exports[`state.newClient is true 1`] = `
           value="COMPANY_NAME"
           wrapperClassName="input_60"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -238,11 +246,14 @@ exports[`state.newClient is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="number"
           onChange={[Function]}
           placeholder="Number"
+          required={false}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -253,7 +264,7 @@ exports[`state.newClient is true 1`] = `
           value="NUMBER"
           wrapperClassName="input_no"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -263,11 +274,14 @@ exports[`state.newClient is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="street"
           onChange={[Function]}
           placeholder="Street"
+          required={false}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -278,7 +292,7 @@ exports[`state.newClient is true 1`] = `
           value="STREET"
           wrapperClassName="input_street"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -288,11 +302,14 @@ exports[`state.newClient is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="zipCode"
           onChange={[Function]}
           placeholder="Postal Code"
+          required={false}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -303,7 +320,7 @@ exports[`state.newClient is true 1`] = `
           value="ZIP_CODE"
           wrapperClassName="input_zip"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -313,11 +330,14 @@ exports[`state.newClient is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="city"
           onChange={[Function]}
           placeholder="City"
+          required={false}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -328,7 +348,7 @@ exports[`state.newClient is true 1`] = `
           value="CITY"
           wrapperClassName="input_cc"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -338,11 +358,14 @@ exports[`state.newClient is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="country"
           onChange={[Function]}
           placeholder="Country"
+          required={false}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -359,7 +382,7 @@ exports[`state.newClient is true 1`] = `
           <div
             className="flex-50 layout-row layout-wrap"
           >
-            <_class
+            <Formsy(FormsyInput)
               className="input"
               errorMessageStyles={
                 Object {
@@ -369,12 +392,14 @@ exports[`state.newClient is true 1`] = `
                   "position": "absolute",
                 }
               }
+              innerRef={[Function]}
               name="password"
               onChange={[Function]}
               placeholder="Password *"
               required={true}
               submitAttempted={false}
               type="password"
+              validationError=""
               validationErrors={
                 Object {
                   "isDefaultRequiredValue": "Must not be blank",
@@ -389,7 +414,7 @@ exports[`state.newClient is true 1`] = `
           <div
             className="flex-50 layout-row layout-wrap"
           >
-            <_class
+            <Formsy(FormsyInput)
               className="input"
               errorMessageStyles={
                 Object {
@@ -399,6 +424,7 @@ exports[`state.newClient is true 1`] = `
                   "position": "absolute",
                 }
               }
+              innerRef={[Function]}
               inputRef={[Function]}
               name="password_confirmation"
               onChange={[Function]}
@@ -406,6 +432,7 @@ exports[`state.newClient is true 1`] = `
               required={true}
               submitAttempted={false}
               type="password"
+              validationError=""
               validationErrors={
                 Object {
                   "isDefaultRequiredValue": "Must not be blank",
@@ -554,7 +581,7 @@ exports[`state.newClientBool is true 1`] = `
             />
           </div>
         </div>
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -564,12 +591,14 @@ exports[`state.newClientBool is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="firstName"
           onChange={[Function]}
           placeholder="First Name *"
           required={true}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -579,7 +608,7 @@ exports[`state.newClientBool is true 1`] = `
           validations="minLength:2"
           wrapperClassName="input_50"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -589,12 +618,14 @@ exports[`state.newClientBool is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="lastName"
           onChange={[Function]}
           placeholder="Last Name *"
           required={true}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -609,7 +640,7 @@ exports[`state.newClientBool is true 1`] = `
         >
           <Component />
         </MailCheck>
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -619,12 +650,14 @@ exports[`state.newClientBool is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="phone"
           onChange={[Function]}
           placeholder="Phone *"
           required={true}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -634,7 +667,7 @@ exports[`state.newClientBool is true 1`] = `
           validations="minLength:2"
           wrapperClassName="input_33"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -644,12 +677,14 @@ exports[`state.newClientBool is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="companyName"
           onChange={[Function]}
           placeholder="Company Name *"
           required={true}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -659,7 +694,7 @@ exports[`state.newClientBool is true 1`] = `
           validations="minLength:2"
           wrapperClassName="input_60"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -669,11 +704,14 @@ exports[`state.newClientBool is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="number"
           onChange={[Function]}
           placeholder="Number"
+          required={false}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -683,7 +721,7 @@ exports[`state.newClientBool is true 1`] = `
           validations="minLength:1"
           wrapperClassName="input_no"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -693,11 +731,14 @@ exports[`state.newClientBool is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="street"
           onChange={[Function]}
           placeholder="Street"
+          required={false}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -707,7 +748,7 @@ exports[`state.newClientBool is true 1`] = `
           validations="minLength:2"
           wrapperClassName="input_street"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -717,11 +758,14 @@ exports[`state.newClientBool is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="zipCode"
           onChange={[Function]}
           placeholder="Postal Code"
+          required={false}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -731,7 +775,7 @@ exports[`state.newClientBool is true 1`] = `
           validations="minLength:2"
           wrapperClassName="input_zip"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -741,11 +785,14 @@ exports[`state.newClientBool is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="city"
           onChange={[Function]}
           placeholder="City"
+          required={false}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -755,7 +802,7 @@ exports[`state.newClientBool is true 1`] = `
           validations="minLength:2"
           wrapperClassName="input_cc"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -765,11 +812,14 @@ exports[`state.newClientBool is true 1`] = `
               "position": "absolute",
             }
           }
+          innerRef={[Function]}
           name="country"
           onChange={[Function]}
           placeholder="Country"
+          required={false}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
@@ -785,7 +835,7 @@ exports[`state.newClientBool is true 1`] = `
           <div
             className="flex-50 layout-row layout-wrap"
           >
-            <_class
+            <Formsy(FormsyInput)
               className="input"
               errorMessageStyles={
                 Object {
@@ -795,12 +845,14 @@ exports[`state.newClientBool is true 1`] = `
                   "position": "absolute",
                 }
               }
+              innerRef={[Function]}
               name="password"
               onChange={[Function]}
               placeholder="Password *"
               required={true}
               submitAttempted={false}
               type="password"
+              validationError=""
               validationErrors={
                 Object {
                   "isDefaultRequiredValue": "Must not be blank",
@@ -814,7 +866,7 @@ exports[`state.newClientBool is true 1`] = `
           <div
             className="flex-50 layout-row layout-wrap"
           >
-            <_class
+            <Formsy(FormsyInput)
               className="input"
               errorMessageStyles={
                 Object {
@@ -824,6 +876,7 @@ exports[`state.newClientBool is true 1`] = `
                   "position": "absolute",
                 }
               }
+              innerRef={[Function]}
               inputRef={[Function]}
               name="password_confirmation"
               onChange={[Function]}
@@ -831,6 +884,7 @@ exports[`state.newClientBool is true 1`] = `
               required={true}
               submitAttempted={false}
               type="password"
+              validationError=""
               validationErrors={
                 Object {
                   "isDefaultRequiredValue": "Must not be blank",

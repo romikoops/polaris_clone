@@ -43,7 +43,6 @@ export function configureStore () {
       const bData = oldState.bookingData
       saveState({
         bookingData: bData,
-        bookingProcess: oldState.bookingProcess,
         tenant: oldState.tenant,
         admin: oldState.admin,
         bookingSummary: oldState.bookingSummary

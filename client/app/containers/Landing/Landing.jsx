@@ -7,7 +7,7 @@ import LandingTop from '../../components/LandingTop/LandingTop'
 import styles from './Landing.scss'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
-import { userActions, authenticationActions, bookingProcessActions } from '../../actions'
+import { userActions, authenticationActions } from '../../actions'
 import { gradientTextGenerator, isQuote, contentToHtml } from '../../helpers'
 import withContent from '../../hocs/withContent'
 import Footer from '../../components/Footer/Footer'
@@ -27,15 +27,13 @@ class Landing extends Component {
 
   bookNow () {
     const {
-      tenant, loggedIn, authDispatch, userDispatch, user, bookingProcessDispatch
+      tenant, loggedIn, authDispatch, userDispatch, user
     } = this.props
 
     if (tenant.scope.closed_shop && (!user || user.guest || !loggedIn)) {
       authDispatch.showLogin()
     } else if (loggedIn) {
       userDispatch.goTo('/booking')
-
-      bookingProcessDispatch.resetStore()
     } else {
       const unixTimeStamp = moment().unix().toString()
       const randNum = Math.floor(Math.random() * 100).toString()
@@ -54,8 +52,6 @@ class Landing extends Component {
         },
         '/booking'
       )
-
-      bookingProcessDispatch.resetStore()
     }
   }
 
@@ -205,8 +201,7 @@ Landing.defaultProps = {
 function mapDispatchToProps (dispatch) {
   return {
     userDispatch: bindActionCreators(userActions, dispatch),
-    authDispatch: bindActionCreators(authenticationActions, dispatch),
-    bookingProcessDispatch: bindActionCreators(bookingProcessActions, dispatch)
+    authDispatch: bindActionCreators(authenticationActions, dispatch)
   }
 }
 function mapStateToProps (state) {

@@ -122,11 +122,7 @@ class OfferError extends PureComponent {
     const sideStyle = styles[`error_${side}`]
 
     return (
-      <div className={`
-        flex-none layout-row layout-align-center-start layout-wrap
-        ${wrapperStyle} ${sideStyle} ${styles.offer_error}
-      `}
-      >
+      <div className={`flex-none layout-row layout-align-center-start layout-wrap ${wrapperStyle} ${sideStyle}`}>
         <div className={`flex-none layout-row layout-align-center-start layout-wrap ${styles.error_content}`}>
           <div className={`flex-100 layout-row layout-align-end ${styles.close_row}`}>
             <div

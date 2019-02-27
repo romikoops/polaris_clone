@@ -53,7 +53,6 @@
     "containerClass": "Container Class",
     "viewHsCodes": "View Hs Codes",
     "length": "Length",
-    "weight":"Weight",
     "chargeableWeight": "Chargeable Weight",
     "width": "Width",
     "volume": "Volume",
@@ -651,7 +650,6 @@
     "containers": "Containers",
     "cargoItems": "Cargo Items",
     "yourCargo": "Your Cargo",
-    "yourContainer": "Your Container",
     "cargoGroup": "Cargo Group {{index}}",
     "fillFormCargoDetails": "(Fill the form with your cargo details)",
     "nonStackableFirst": "We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
@@ -726,7 +724,6 @@
     "welcomeTextQuoteTail": "online quoting tool"
   },
   "shipment": {
-    "addUnit": "Add Unit",
     "reuseShipment": "Reuse Shipment",
     "estimatedTimeDelivery": "Estimated Time Delivery",
     "estimatedDelivery": "Estimated Delivery",
@@ -877,7 +874,6 @@
     "maxWeight": "Maximum weight is",
     "maxHeight": "Maximum height is",
     "maxLength": "Maximum length is",
-    "maxVolume": "Maximum volume is",
     "noRoutesFrom": "No routes found from {{origin}}",
     "noRoutesTo": "No routes found to {{destination}}",
     "noSchedulesForRoute": "There are no schedules available for this route.",

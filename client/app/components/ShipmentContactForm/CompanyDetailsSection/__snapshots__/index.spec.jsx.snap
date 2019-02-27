@@ -24,7 +24,7 @@ exports[`shallow rendering 1`] = `
           }
         }
       />
-      <_class
+      <Formsy(FormsyInput)
         className="input"
         errorMessageStyles={
           Object {
@@ -32,11 +32,13 @@ exports[`shallow rendering 1`] = `
             "fontSize": "12px",
           }
         }
+        innerRef={[Function]}
         name="companyName"
         placeholder="Company Name"
         required={true}
         submitAttempted={false}
         type="text"
+        validationError=""
         validationErrors={
           Object {
             "isDefaultRequiredValue": "Must be at least two characters long",
@@ -69,7 +71,7 @@ exports[`shallow rendering 1`] = `
       <div
         className="flex layout-row layout-wrap"
       >
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -77,11 +79,13 @@ exports[`shallow rendering 1`] = `
               "fontSize": "12px",
             }
           }
+          innerRef={[Function]}
           name="firstName"
           placeholder="First Name"
           required={true}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must be at least two characters long",
@@ -92,7 +96,7 @@ exports[`shallow rendering 1`] = `
           value="John"
           wrapperClassName="wrapper_input flex-100"
         />
-        <_class
+        <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
             Object {
@@ -100,11 +104,13 @@ exports[`shallow rendering 1`] = `
               "fontSize": "12px",
             }
           }
+          innerRef={[Function]}
           name="lastName"
           placeholder="Last Name"
           required={true}
           submitAttempted={false}
           type="text"
+          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must be at least two characters long",
@@ -135,7 +141,7 @@ exports[`shallow rendering 1`] = `
           }
         }
       />
-      <_class
+      <Formsy(FormsyInput)
         className="input"
         errorMessageStyles={
           Object {
@@ -143,12 +149,14 @@ exports[`shallow rendering 1`] = `
             "fontSize": "12px",
           }
         }
+        innerRef={[Function]}
         name="email"
         onBlur={[Function]}
         placeholder="Email"
         required={true}
         submitAttempted={false}
         type="text"
+        validationError=""
         validationErrors={
           Object {
             "isDefaultRequiredValue": "Must not be blank",
@@ -178,7 +186,7 @@ exports[`shallow rendering 1`] = `
           }
         }
       />
-      <_class
+      <Formsy(FormsyInput)
         className="input"
         errorMessageStyles={
           Object {
@@ -186,11 +194,13 @@ exports[`shallow rendering 1`] = `
             "fontSize": "12px",
           }
         }
+        innerRef={[Function]}
         name="phone"
         placeholder="Phone"
         required={true}
         submitAttempted={false}
         type="text"
+        validationError=""
         validationErrors={
           Object {
             "isDefaultRequiredValue": "Must be at least four characters long",

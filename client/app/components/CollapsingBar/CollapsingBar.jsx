@@ -22,7 +22,6 @@ export default class CollapsingBar extends React.PureComponent {
       theme,
       handleCollapser,
       headerWrapClasses,
-      wrapperContentClasses,
       content,
       text,
       faClass,
@@ -52,7 +51,6 @@ export default class CollapsingBar extends React.PureComponent {
         <CollapsingContent
           collapsed={collapsed != null ? collapsed : this.state.collapsed}
           content={content || children}
-          wrapperContentClasses={wrapperContentClasses}
           minHeight={minHeight}
         />
       </div>
@@ -67,7 +65,6 @@ CollapsingBar.propTypes = {
   handleCollapser: PropTypes.func,
   mainWrapperStyle: PropTypes.objectOf(PropTypes.any),
   content: PropTypes.node,
-  wrapperContentClasses: PropTypes.string,
   contentHeader: PropTypes.node,
   text: PropTypes.string,
   headerWrapClasses: PropTypes.string,
@@ -88,7 +85,6 @@ CollapsingBar.defaultProps = {
   headerWrapClasses: '',
   mainWrapperStyle: {},
   text: '',
-  wrapperContentClasses: '',
   faClass: '',
   minHeight: '',
   parentClass: '',
