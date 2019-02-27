@@ -188,10 +188,10 @@ module Trucking
       def load_ident_values_and_countries
         current_country = { name: nil, code: nil }
         zones.each do |zone_name, idents_and_countries|
-          current_country = { name: ::Country.find_by_code(idents_and_countries.first[:country]).name, code: idents_and_countries.first[:country] }
+          current_country = { name: Legacy::Country.find_by_code(idents_and_countries.first[:country]).name, code: idents_and_countries.first[:country] }
           all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
             if current_country[:code] != idents_and_country[:country]
-              current_country = { name: ::Country.find_by_code(idents_and_country[:country]).name, code: idents_and_country[:country] }
+              current_country = { name: Legacy::Country.find_by_code(idents_and_country[:country]).name, code: idents_and_country[:country] }
             end
             if idents_and_country[:min] && idents_and_country[:max]
               (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
@@ -610,8 +610,6 @@ module Trucking
                   end
 
         if geometry.nil?
-          require 'pry';
-          binding.pry
           geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
           return nil if geocoder_results.first.nil?
           coordinates = geocoder_results.first.geometry['location']
