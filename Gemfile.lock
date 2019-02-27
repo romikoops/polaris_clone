@@ -73,6 +73,7 @@ PATH
   specs:
     legacy (9999.1.0.0)
       core
+      geocoder
 
 PATH
   remote: engines/locations

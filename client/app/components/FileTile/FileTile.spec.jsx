@@ -3,7 +3,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   turnFalsy, theme, identity, firstDocument
-} from '../../mocks'
+} from '../../mocks/index'
 import FileTile from './FileTile'
 
 const propsBase = {

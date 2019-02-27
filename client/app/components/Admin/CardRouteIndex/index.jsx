@@ -11,7 +11,7 @@ import {
 
 import PricingSearchBar from './SubComponents/PricingSearchBar'
 import { filters } from '../../../helpers'
-import { user } from '../../../mocks';
+import { user } from '../../../mocks/index';
 
 class CardRoutesIndex extends Component {
   constructor (props) {

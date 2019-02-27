@@ -3,7 +3,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   theme, user, identity, tenant
-} from '../../mocks'
+} from '../../mocks/index'
 
 import { translatedLandingTop as LandingTop } from './LandingTop'
 

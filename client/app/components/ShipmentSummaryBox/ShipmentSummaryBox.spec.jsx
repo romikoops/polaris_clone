@@ -7,7 +7,7 @@ import {
   shipment,
   identity,
   theme
-} from '../../mocks'
+} from '../../mocks/index'
 // eslint-disable-next-line import/first no-named-as-default
 import ShipmentSummaryBox from './ShipmentSummaryBox'
 

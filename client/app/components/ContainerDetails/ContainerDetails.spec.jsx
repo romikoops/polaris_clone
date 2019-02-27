@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, firstCargoItem } from '../../mocks'
+import { theme, firstCargoItem } from '../../mocks/index'
 
 import ContainerDetails from './ContainerDetails'
 

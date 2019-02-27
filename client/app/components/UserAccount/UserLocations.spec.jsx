@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   theme, identity, user, addresses
-} from '../../mocks'
+} from '../../mocks/index'
 
 import UserLocations from './UserLocations'
 

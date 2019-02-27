@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import { AvailableRoutes } from './AvailableRoutes'
 import {
   identity, theme, user, routes
-} from '../../mocks'
+} from '../../mocks/index'
 
 const propsBase = {
   routes,

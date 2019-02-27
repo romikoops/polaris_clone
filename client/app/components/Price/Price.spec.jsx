@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { Price } from './Price'
-import { user } from '../../mocks'
+import { user } from '../../mocks/index'
 
 const propsBase = {
   value: 123.55,

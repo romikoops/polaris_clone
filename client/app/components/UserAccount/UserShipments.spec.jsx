@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, shipments, user } from '../../mocks'
+import { theme, identity, shipments, user } from '../../mocks/index'
 
 jest.mock('uuid', () => {
   let counter = -1

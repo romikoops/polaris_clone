@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { group } from '../../../../../mocks'
+import { group } from '../../../../../mocks/index'
 
 import CargoItemGroupAggregated from '.'
 

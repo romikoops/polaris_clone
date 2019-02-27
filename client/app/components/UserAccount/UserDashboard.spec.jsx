@@ -7,7 +7,7 @@ import {
   tenant,
   theme,
   user
-} from '../../mocks'
+} from '../../mocks/index'
 import UserDashboard from './UserDashboard'
 
 const propsBase = {

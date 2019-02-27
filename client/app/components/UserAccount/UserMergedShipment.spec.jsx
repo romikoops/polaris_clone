@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
-import { identity } from '../../mocks'
+import { identity } from '../../mocks/index'
 import { UserMergedShipment } from './UserMergedShipment'
 
 const propsBase = {

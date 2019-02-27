@@ -3,7 +3,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   change, shipment, identity, theme
-} from '../../mocks'
+} from '../../mocks/index'
 import AdminShipmentCard from './AdminShipmentCard'
 
 const propsBase = {

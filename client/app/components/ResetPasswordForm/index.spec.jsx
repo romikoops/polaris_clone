@@ -1,7 +1,7 @@
 import '../../mocks/libraries/react-redux'
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { user, theme } from '../../mocks'
+import { user, theme } from '../../mocks/index'
 
 import ResetPasswordForm from '.'
 

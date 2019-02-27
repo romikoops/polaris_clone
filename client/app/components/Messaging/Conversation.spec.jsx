@@ -8,7 +8,7 @@ import {
   theme,
   change,
   user
-} from '../../mocks'
+} from '../../mocks/index'
 
 import Conversation from './Conversation'
 

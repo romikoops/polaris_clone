@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { identity, gMaps, theme } from '../../mocks'
+import { identity, gMaps, theme } from '../../mocks/index'
 
 /**
  * ISSUE:

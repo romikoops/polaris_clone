@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { tenant, user, shipment, identity, match } from '../../mocks'
+import { tenant, user, shipment, identity, match } from '../../mocks/index'
 // eslint-disable-next-line import/first no-named-as-default
 import ShipmentDetails from './ShipmentDetails'
 

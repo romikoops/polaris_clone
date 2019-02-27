@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { mount, shallow } from 'enzyme'
-import { theme, identity } from '../../mocks'
+import { theme, identity } from '../../mocks/index'
 import Checkbox from './Checkbox'
 
 const propsBase = {

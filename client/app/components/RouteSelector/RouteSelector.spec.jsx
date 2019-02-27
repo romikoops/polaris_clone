@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, routes, identity } from '../../mocks'
+import { theme, routes, identity } from '../../mocks/index'
 
 import { RouteSelector } from './RouteSelector'
 

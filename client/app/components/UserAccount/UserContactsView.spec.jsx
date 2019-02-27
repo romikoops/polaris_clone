@@ -8,7 +8,7 @@ import {
   shipment,
   theme,
   turnFalsy
-} from '../../mocks'
+} from '../../mocks/index'
 
 import UserContactsView from './UserContactsView'
 

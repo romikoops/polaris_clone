@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
+import{ get } from 'lodash'
 import PropTypes from '../../prop-types'
 import styles from './CargoDetails.scss'
 import Checkbox from '../Checkbox/Checkbox'
@@ -20,13 +21,13 @@ class CargoDetails extends Component {
   static displayCustomsFee (customsData, target, customs, t) {
     if (target === 'total') {
       let newTotal = 0
-      if (customsData.import.bool && !customs.import.unknown) {
-        newTotal += parseFloat(customs.import.total.value)
+      if (customsData.import.bool && !get(customs, ['import', 'unknown'])) {
+        newTotal += parseFloat(get(customs, ['import', 'total', 'value'], 0))
       }
       if (customsData.export.bool && !customs.export.unknown) {
         newTotal += parseFloat(customs.export.total.value)
       }
-      if (newTotal === 0 && customs.import.unknown && customs.export.unknown) {
+      if (newTotal === 0 && get(customs, ['import', 'unknown']) && get(customs, ['export', 'unknown'])) {
         return t('cargo:priceLocalRegulations')
       }
 

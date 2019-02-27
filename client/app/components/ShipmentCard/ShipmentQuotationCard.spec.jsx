@@ -1,7 +1,7 @@
 import '../../mocks/libraries/moment'
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { shipment, theme, change } from '../../mocks'
+import { shipment, theme, change } from '../../mocks/index'
 import ShipmentQuotationCard from './ShipmentQuotationCard'
 
 const propsBase = {

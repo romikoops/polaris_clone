@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { CardLinkRow } from './CardLinkRow'
-import { theme, identity, cards } from '../../mocks'
+import { theme, identity, cards } from '../../mocks/index'
 
 const propsBase = {
   theme,

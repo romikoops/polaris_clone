@@ -6,7 +6,7 @@ import {
   tenant,
   change,
   theme
-} from '../../../mocks'
+} from '../../../mocks/index'
 
 import IncotermExtras from '.'
 

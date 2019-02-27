@@ -11,7 +11,7 @@ import {
   match,
   firstResult,
   user
-} from '../../mocks'
+} from '../../mocks/index'
 import ChooseOffer from './ChooseOffer'
 
 const propsBase = {

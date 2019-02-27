@@ -3,7 +3,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   identity, tenant, theme, change
-} from '../../mocks'
+} from '../../mocks/index'
 
 import ShopStageView from './ShopStageView'
 

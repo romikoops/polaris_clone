@@ -8,7 +8,7 @@ import {
   change,
   match,
   tenant
-} from '../../mocks'
+} from '../../mocks/index'
 
 import { BookingConfirmation } from './BookingConfirmation'
 

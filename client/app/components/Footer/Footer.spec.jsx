@@ -1,7 +1,7 @@
 import '../../mocks/libraries/react-redux'
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, tenant, identity } from '../../mocks'
+import { theme, tenant, identity } from '../../mocks/index'
 
 import Footer from './Footer'
 

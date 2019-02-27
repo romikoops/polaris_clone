@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 
-import { theme, identity, internalUser, user } from '../../../mocks'
+import { theme, identity, internalUser, user } from '../../../mocks/index'
 import CardRoutesIndex from '.'
 
 const propsBase = {

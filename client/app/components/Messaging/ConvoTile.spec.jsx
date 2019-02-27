@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { mount, shallow } from 'enzyme'
-import { theme, shipment, identity } from '../../mocks'
+import { theme, shipment, identity } from '../../mocks/index'
 
 import ConvoTile from './ConvoTile'
 

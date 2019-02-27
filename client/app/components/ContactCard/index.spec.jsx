@@ -2,7 +2,7 @@ import * as React from 'react'
 import { mount, shallow } from 'enzyme'
 import {
   theme, contact, firstAddress, identity, change
-} from '../../mocks'
+} from '../../mocks/index'
 
 import ContactCard from '.'
 

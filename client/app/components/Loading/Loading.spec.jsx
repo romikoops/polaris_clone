@@ -2,7 +2,7 @@ import '../../mocks/libraries/react-redux'
 import '../../mocks/libraries/react-router-dom'
 import * as React from 'react'
 import { render } from 'enzyme'
-import { identity, theme } from '../../mocks'
+import { identity, theme } from '../../mocks/index'
 
 import Loading from './Loading'
 

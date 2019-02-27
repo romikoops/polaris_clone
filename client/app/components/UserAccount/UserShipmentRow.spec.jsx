@@ -1,7 +1,7 @@
 import '../../mocks/libraries/moment'
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, shipment } from '../../mocks'
+import { theme, identity, shipment } from '../../mocks/index'
 
 import { UserShipmentRow } from './UserShipmentRow'
 

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { tenant, turnFalsy } from '../../../mocks'
+import { tenant, turnFalsy } from '../../../mocks/index'
 import HelpContact from '.'
 
 test('shallow render', () => {

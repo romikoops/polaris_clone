@@ -9,7 +9,7 @@ import {
   theme,
   change,
   user
-} from '../../mocks'
+} from '../../mocks/index'
 
 import UserShipmentView from './UserShipmentView'
 

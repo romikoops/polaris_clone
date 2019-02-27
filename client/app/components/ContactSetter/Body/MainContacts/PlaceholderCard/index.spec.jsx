@@ -5,7 +5,7 @@ import {
   contact,
   identity,
   theme
-} from '../../../../../mocks'
+} from '../../../../../mocks/index'
 
 import ShipmentContactsBoxMainContactsPlaceholderCard from '.'
 

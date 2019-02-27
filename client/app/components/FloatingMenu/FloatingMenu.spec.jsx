@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
-import { theme, user } from '../../mocks'
+import { theme, user } from '../../mocks/index'
 
 import FloatingMenu from './FloatingMenu'
 

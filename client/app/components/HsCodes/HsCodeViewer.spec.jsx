@@ -2,7 +2,7 @@ import * as React from 'react'
 import { mount, shallow } from 'enzyme'
 import {
   theme, identity, hsCodes, firstCargoItem
-} from '../../mocks'
+} from '../../mocks/index'
 import HsCodeViewer from './HsCodeViewer'
 
 const propsBase = {

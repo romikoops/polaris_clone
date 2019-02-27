@@ -6,7 +6,7 @@ import {
   notifyees,
   shipper,
   theme
-} from '../../../mocks'
+} from '../../../mocks/index'
 
 import ShipmentContactsBox from '.'
 
