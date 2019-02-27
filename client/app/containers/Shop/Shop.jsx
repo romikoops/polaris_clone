@@ -9,7 +9,7 @@ import ChooseShipment from '../../components/ChooseShipment/ChooseShipment'
 import Header from '../../components/Header/Header'
 import styles from './Shop.scss'
 import ShopStageView from '../../components/ShopStageView/ShopStageView'
-import ShipmentDetails from '../../components/ShipmentDetails'
+import ShipmentDetails from '../../components/ShipmentDetails/ShipmentDetails'
 import ChooseOffer from '../../components/ChooseOffer/ChooseOffer'
 import Loading from '../../components/Loading/Loading'
 import BookingDetails from '../../components/BookingDetails/BookingDetails'
@@ -30,7 +30,6 @@ class Shop extends Component {
       props.bookingData.response.stage5.shipment.status === 'requested'
     )
   }
-
   constructor (props) {
     super(props)
 
@@ -54,7 +53,6 @@ class Shop extends Component {
 
     props.bookingSummaryDispatch.update()
   }
-
   componentWillReceiveProps (nextProps) {
     if (Shop.statusRequested(nextProps) && !Shop.statusRequested(this.props)) {
       this.setState({ fakeLoading: true })
@@ -125,7 +123,6 @@ class Shop extends Component {
       showMessages: !this.state.showMessages
     })
   }
-
   determineForwardFunction (stage) {
     const { bookingData, shipmentDispatch } = this.props
     const { request } = bookingData
@@ -150,7 +147,6 @@ class Shop extends Component {
         break
     }
   }
-
   chooseOffer (obj) {
     const { shipmentDispatch, bookingSummaryDispatch, bookingData } = this.props
     const { schedule, total } = obj
@@ -209,7 +205,7 @@ class Shop extends Component {
             scrollable
             noRedirect
           />
-        </GenericError>
+        </GenericError >
         <GenericError theme={theme}>
 
           <ShopStageView
@@ -222,7 +218,7 @@ class Shop extends Component {
             goForward={() => this.determineForwardFunction(stageTracker.stage)}
             hasNextStage={Boolean(stageActions.hasNextStage(response, stageTracker.stage))}
           />
-        </GenericError>
+        </GenericError >
         <GenericError theme={theme}>
           <Route
             exact
@@ -240,7 +236,7 @@ class Shop extends Component {
               />
             )}
           />
-        </GenericError>
+        </GenericError >
         <GenericError theme={theme}>
           <Route
             path={`${match.url}/:shipmentId/shipment_details`}
@@ -264,7 +260,7 @@ class Shop extends Component {
               />
             )}
           />
-        </GenericError>
+        </GenericError >
         <GenericError theme={theme}>
           <Route
             path={`${match.url}/:shipmentId/choose_offer`}
@@ -288,7 +284,7 @@ class Shop extends Component {
               />
             )}
           />
-        </GenericError>
+        </GenericError >
 
         {response && response.stage3 ? (
           <GenericError theme={theme}>
@@ -314,7 +310,7 @@ class Shop extends Component {
                 />
               )}
             />
-          </GenericError>
+          </GenericError >
 
         ) : (
           ''
@@ -336,7 +332,7 @@ class Shop extends Component {
               />
             )}
           />
-        </GenericError>
+        </GenericError >
         <GenericError theme={theme}>
           <Route
             path={`${match.url}/:shipmentId/thank_you`}
@@ -352,7 +348,7 @@ class Shop extends Component {
               />
             )}
           />
-        </GenericError>
+        </GenericError >
 
         <div className={styles.pusher_bottom} />
       </div>

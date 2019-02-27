@@ -367,158 +367,144 @@ exports[`state.step2 is true 1`] = `
           <div
             className=" flex-33 layout-row layout-row layout-wrap layout-align-start-start input_box"
           >
-            <_class
+            <Formsy(FormsyInput)
+              innerRef={[Function]}
               name="min_weight"
               placeholder="Lower Limit"
+              required={false}
               type="number"
+              validationError=""
+              validationErrors={Object {}}
               validations="isNumeric"
             >
-              <Formsy(FormsyInput)
+              <FormsyInput
+                className=""
+                disabled={false}
+                errorMessageStyles={Object {}}
+                getErrorMessage={[Function]}
+                getErrorMessages={[Function]}
+                getValue={[Function]}
+                hasValue={[Function]}
+                id={null}
                 innerRef={[Function]}
+                isFormDisabled={[Function]}
+                isFormSubmitted={[Function]}
+                isPristine={[Function]}
+                isRequired={[Function]}
+                isValid={[Function]}
+                isValidValue={[Function]}
                 name="min_weight"
+                onBlur={null}
+                onChange={null}
+                onFocus={null}
                 placeholder="Lower Limit"
                 required={false}
+                resetValue={[Function]}
+                setValidations={[Function]}
+                setValue={[Function]}
+                showError={[Function]}
+                showRequired={[Function]}
+                submitAttempted={false}
                 type="number"
                 validationError=""
                 validationErrors={Object {}}
                 validations="isNumeric"
+                wrapperClassName=""
               >
-                <FormsyInput
-                  className=""
-                  disabled={false}
-                  errorMessageStyles={Object {}}
-                  getErrorMessage={[Function]}
-                  getErrorMessages={[Function]}
-                  getValue={[Function]}
-                  hasValue={[Function]}
-                  id={null}
-                  innerRef={[Function]}
-                  isFormDisabled={[Function]}
-                  isFormSubmitted={[Function]}
-                  isPristine={[Function]}
-                  isRequired={[Function]}
-                  isValid={[Function]}
-                  isValidValue={[Function]}
-                  name="min_weight"
-                  onBlur={null}
-                  onChange={null}
-                  onFocus={null}
-                  placeholder="Lower Limit"
-                  required={false}
-                  resetValue={[Function]}
-                  setValidations={[Function]}
-                  setValue={[Function]}
-                  showError={[Function]}
-                  showRequired={[Function]}
-                  submitAttempted={false}
-                  type="number"
-                  validationError=""
-                  validationErrors={Object {}}
-                  validations="isNumeric"
-                  wrapperClassName=""
+                <div
+                  className=" wrapper_input"
                 >
-                  <div
-                    className=" wrapper_input"
-                  >
-                    <input
-                      className=""
-                      disabled={false}
-                      id={null}
-                      name="min_weight"
-                      onBlur={null}
-                      onChange={[Function]}
-                      onFocus={null}
-                      placeholder="Lower Limit"
-                      style={Object {}}
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      className="error_message"
-                      style={Object {}}
-                    />
-                  </div>
-                </FormsyInput>
-              </Formsy(FormsyInput)>
-            </_class>
+                  <input
+                    className=""
+                    disabled={false}
+                    id={null}
+                    name="min_weight"
+                    onBlur={null}
+                    onChange={[Function]}
+                    onFocus={null}
+                    placeholder="Lower Limit"
+                    style={Object {}}
+                    type="number"
+                    value=""
+                  />
+                  <span
+                    className="error_message"
+                    style={Object {}}
+                  />
+                </div>
+              </FormsyInput>
+            </Formsy(FormsyInput)>
           </div>
           <div
             className=" flex-33 layout-row layout-row layout-wrap layout-align-start-start input_box"
           >
-            <_class
+            <Formsy(FormsyInput)
+              innerRef={[Function]}
               name="max_weight"
               placeholder="Upper Limit"
+              required={false}
               type="number"
+              validationError=""
+              validationErrors={Object {}}
               validations="isNumeric"
             >
-              <Formsy(FormsyInput)
+              <FormsyInput
+                className=""
+                disabled={false}
+                errorMessageStyles={Object {}}
+                getErrorMessage={[Function]}
+                getErrorMessages={[Function]}
+                getValue={[Function]}
+                hasValue={[Function]}
+                id={null}
                 innerRef={[Function]}
+                isFormDisabled={[Function]}
+                isFormSubmitted={[Function]}
+                isPristine={[Function]}
+                isRequired={[Function]}
+                isValid={[Function]}
+                isValidValue={[Function]}
                 name="max_weight"
+                onBlur={null}
+                onChange={null}
+                onFocus={null}
                 placeholder="Upper Limit"
                 required={false}
+                resetValue={[Function]}
+                setValidations={[Function]}
+                setValue={[Function]}
+                showError={[Function]}
+                showRequired={[Function]}
+                submitAttempted={false}
                 type="number"
                 validationError=""
                 validationErrors={Object {}}
                 validations="isNumeric"
+                wrapperClassName=""
               >
-                <FormsyInput
-                  className=""
-                  disabled={false}
-                  errorMessageStyles={Object {}}
-                  getErrorMessage={[Function]}
-                  getErrorMessages={[Function]}
-                  getValue={[Function]}
-                  hasValue={[Function]}
-                  id={null}
-                  innerRef={[Function]}
-                  isFormDisabled={[Function]}
-                  isFormSubmitted={[Function]}
-                  isPristine={[Function]}
-                  isRequired={[Function]}
-                  isValid={[Function]}
-                  isValidValue={[Function]}
-                  name="max_weight"
-                  onBlur={null}
-                  onChange={null}
-                  onFocus={null}
-                  placeholder="Upper Limit"
-                  required={false}
-                  resetValue={[Function]}
-                  setValidations={[Function]}
-                  setValue={[Function]}
-                  showError={[Function]}
-                  showRequired={[Function]}
-                  submitAttempted={false}
-                  type="number"
-                  validationError=""
-                  validationErrors={Object {}}
-                  validations="isNumeric"
-                  wrapperClassName=""
+                <div
+                  className=" wrapper_input"
                 >
-                  <div
-                    className=" wrapper_input"
-                  >
-                    <input
-                      className=""
-                      disabled={false}
-                      id={null}
-                      name="max_weight"
-                      onBlur={null}
-                      onChange={[Function]}
-                      onFocus={null}
-                      placeholder="Upper Limit"
-                      style={Object {}}
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      className="error_message"
-                      style={Object {}}
-                    />
-                  </div>
-                </FormsyInput>
-              </Formsy(FormsyInput)>
-            </_class>
+                  <input
+                    className=""
+                    disabled={false}
+                    id={null}
+                    name="max_weight"
+                    onBlur={null}
+                    onChange={[Function]}
+                    onFocus={null}
+                    placeholder="Upper Limit"
+                    style={Object {}}
+                    type="number"
+                    value=""
+                  />
+                  <span
+                    className="error_message"
+                    style={Object {}}
+                  />
+                </div>
+              </FormsyInput>
+            </Formsy(FormsyInput)>
           </div>
           <div
             className="flex-33 layout-row layout-align-center-center"

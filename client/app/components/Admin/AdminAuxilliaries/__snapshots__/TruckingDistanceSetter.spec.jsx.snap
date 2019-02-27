@@ -69,79 +69,73 @@ exports[`shallow render 1`] = `
           <div
             className="flex-100 layout-row layout-align-start-center input_box"
           >
-            <_class
+            <Formsy(FormsyInput)
+              innerRef={[Function]}
               name="lower_distance"
               placeholder="NO_TRANSLATION | key \\"admin:lowerDistance\\""
+              required={false}
               type="number"
+              validationError=""
+              validationErrors={Object {}}
+              validations={null}
             >
-              <Formsy(FormsyInput)
+              <FormsyInput
+                className=""
+                disabled={false}
+                errorMessageStyles={Object {}}
+                getErrorMessage={[Function]}
+                getErrorMessages={[Function]}
+                getValue={[Function]}
+                hasValue={[Function]}
+                id={null}
                 innerRef={[Function]}
+                isFormDisabled={[Function]}
+                isFormSubmitted={[Function]}
+                isPristine={[Function]}
+                isRequired={[Function]}
+                isValid={[Function]}
+                isValidValue={[Function]}
                 name="lower_distance"
+                onBlur={null}
+                onChange={null}
+                onFocus={null}
                 placeholder="NO_TRANSLATION | key \\"admin:lowerDistance\\""
                 required={false}
+                resetValue={[Function]}
+                setValidations={[Function]}
+                setValue={[Function]}
+                showError={[Function]}
+                showRequired={[Function]}
+                submitAttempted={false}
                 type="number"
                 validationError=""
                 validationErrors={Object {}}
                 validations={null}
+                wrapperClassName=""
               >
-                <FormsyInput
-                  className=""
-                  disabled={false}
-                  errorMessageStyles={Object {}}
-                  getErrorMessage={[Function]}
-                  getErrorMessages={[Function]}
-                  getValue={[Function]}
-                  hasValue={[Function]}
-                  id={null}
-                  innerRef={[Function]}
-                  isFormDisabled={[Function]}
-                  isFormSubmitted={[Function]}
-                  isPristine={[Function]}
-                  isRequired={[Function]}
-                  isValid={[Function]}
-                  isValidValue={[Function]}
-                  name="lower_distance"
-                  onBlur={null}
-                  onChange={null}
-                  onFocus={null}
-                  placeholder="NO_TRANSLATION | key \\"admin:lowerDistance\\""
-                  required={false}
-                  resetValue={[Function]}
-                  setValidations={[Function]}
-                  setValue={[Function]}
-                  showError={[Function]}
-                  showRequired={[Function]}
-                  submitAttempted={false}
-                  type="number"
-                  validationError=""
-                  validationErrors={Object {}}
-                  validations={null}
-                  wrapperClassName=""
+                <div
+                  className=" wrapper_input"
                 >
-                  <div
-                    className=" wrapper_input"
-                  >
-                    <input
-                      className=""
-                      disabled={false}
-                      id={null}
-                      name="lower_distance"
-                      onBlur={null}
-                      onChange={[Function]}
-                      onFocus={null}
-                      placeholder="NO_TRANSLATION | key \\"admin:lowerDistance\\""
-                      style={Object {}}
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      className="error_message"
-                      style={Object {}}
-                    />
-                  </div>
-                </FormsyInput>
-              </Formsy(FormsyInput)>
-            </_class>
+                  <input
+                    className=""
+                    disabled={false}
+                    id={null}
+                    name="lower_distance"
+                    onBlur={null}
+                    onChange={[Function]}
+                    onFocus={null}
+                    placeholder="NO_TRANSLATION | key \\"admin:lowerDistance\\""
+                    style={Object {}}
+                    type="number"
+                    value=""
+                  />
+                  <span
+                    className="error_message"
+                    style={Object {}}
+                  />
+                </div>
+              </FormsyInput>
+            </Formsy(FormsyInput)>
           </div>
         </div>
         <div
@@ -159,79 +153,73 @@ exports[`shallow render 1`] = `
           <div
             className="flex-100 layout-row layout-align-start-center input_box"
           >
-            <_class
+            <Formsy(FormsyInput)
+              innerRef={[Function]}
               name="upper_distance"
               placeholder="Upper Distance"
+              required={false}
               type="number"
+              validationError=""
+              validationErrors={Object {}}
+              validations={null}
             >
-              <Formsy(FormsyInput)
+              <FormsyInput
+                className=""
+                disabled={false}
+                errorMessageStyles={Object {}}
+                getErrorMessage={[Function]}
+                getErrorMessages={[Function]}
+                getValue={[Function]}
+                hasValue={[Function]}
+                id={null}
                 innerRef={[Function]}
+                isFormDisabled={[Function]}
+                isFormSubmitted={[Function]}
+                isPristine={[Function]}
+                isRequired={[Function]}
+                isValid={[Function]}
+                isValidValue={[Function]}
                 name="upper_distance"
+                onBlur={null}
+                onChange={null}
+                onFocus={null}
                 placeholder="Upper Distance"
                 required={false}
+                resetValue={[Function]}
+                setValidations={[Function]}
+                setValue={[Function]}
+                showError={[Function]}
+                showRequired={[Function]}
+                submitAttempted={false}
                 type="number"
                 validationError=""
                 validationErrors={Object {}}
                 validations={null}
+                wrapperClassName=""
               >
-                <FormsyInput
-                  className=""
-                  disabled={false}
-                  errorMessageStyles={Object {}}
-                  getErrorMessage={[Function]}
-                  getErrorMessages={[Function]}
-                  getValue={[Function]}
-                  hasValue={[Function]}
-                  id={null}
-                  innerRef={[Function]}
-                  isFormDisabled={[Function]}
-                  isFormSubmitted={[Function]}
-                  isPristine={[Function]}
-                  isRequired={[Function]}
-                  isValid={[Function]}
-                  isValidValue={[Function]}
-                  name="upper_distance"
-                  onBlur={null}
-                  onChange={null}
-                  onFocus={null}
-                  placeholder="Upper Distance"
-                  required={false}
-                  resetValue={[Function]}
-                  setValidations={[Function]}
-                  setValue={[Function]}
-                  showError={[Function]}
-                  showRequired={[Function]}
-                  submitAttempted={false}
-                  type="number"
-                  validationError=""
-                  validationErrors={Object {}}
-                  validations={null}
-                  wrapperClassName=""
+                <div
+                  className=" wrapper_input"
                 >
-                  <div
-                    className=" wrapper_input"
-                  >
-                    <input
-                      className=""
-                      disabled={false}
-                      id={null}
-                      name="upper_distance"
-                      onBlur={null}
-                      onChange={[Function]}
-                      onFocus={null}
-                      placeholder="Upper Distance"
-                      style={Object {}}
-                      type="number"
-                      value=""
-                    />
-                    <span
-                      className="error_message"
-                      style={Object {}}
-                    />
-                  </div>
-                </FormsyInput>
-              </Formsy(FormsyInput)>
-            </_class>
+                  <input
+                    className=""
+                    disabled={false}
+                    id={null}
+                    name="upper_distance"
+                    onBlur={null}
+                    onChange={[Function]}
+                    onFocus={null}
+                    placeholder="Upper Distance"
+                    style={Object {}}
+                    type="number"
+                    value=""
+                  />
+                  <span
+                    className="error_message"
+                    style={Object {}}
+                  />
+                </div>
+              </FormsyInput>
+            </Formsy(FormsyInput)>
           </div>
         </div>
         <div

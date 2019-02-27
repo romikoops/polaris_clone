@@ -72,7 +72,7 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -80,11 +80,13 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -1117,7 +1119,7 @@ exports[`customsData[target].unknown 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -1125,11 +1127,13 @@ exports[`customsData[target].unknown 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -2162,7 +2166,7 @@ exports[`scope.has_customs || scope.has_insurance || scope.customs_export_paper 
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -2170,11 +2174,13 @@ exports[`scope.has_customs || scope.has_insurance || scope.customs_export_paper 
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -2691,7 +2697,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -2699,11 +2705,13 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -3736,7 +3744,7 @@ exports[`shallow render 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -3744,11 +3752,13 @@ exports[`shallow render 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -4781,7 +4791,7 @@ exports[`shipment.has_pre_carriage ? 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -4789,11 +4799,13 @@ exports[`shipment.has_pre_carriage ? 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -5810,7 +5822,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -5818,11 +5830,13 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -6885,7 +6899,7 @@ exports[`state.customsView is true 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -6893,11 +6907,13 @@ exports[`state.customsView is true 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -7930,7 +7946,7 @@ exports[`state.insuranceView is false 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -7938,11 +7954,13 @@ exports[`state.insuranceView is false 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -9258,7 +9276,7 @@ exports[`state.showModal is true 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -9266,11 +9284,13 @@ exports[`state.showModal is true 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -10303,7 +10323,7 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -10311,11 +10331,13 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -11348,7 +11370,7 @@ exports[`tenant.scope.has_customs is false 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -11356,11 +11378,13 @@ exports[`tenant.scope.has_customs is false 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -12044,7 +12068,7 @@ exports[`tenant.scope.has_insurance is false 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -12052,11 +12076,13 @@ exports[`tenant.scope.has_insurance is false 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",
@@ -12926,7 +12952,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                 <div
                   className="flex-66 layout-row"
                 >
-                  <_class
+                  <Formsy(FormsyInput)
                     className="flex-100 ccb_total_goods_value cargo_input "
                     errorMessageStyles={
                       Object {
@@ -12934,11 +12960,13 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                         "fontSize": "13px",
                       }
                     }
+                    innerRef={[Function]}
                     name="totalGoodsValue"
                     onBlur={[Function]}
                     required={3370}
                     submitAttempted={false}
                     type="number"
+                    validationError=""
                     validationErrors={
                       Object {
                         "isDefaultRequiredValue": "Must be greater than 0",

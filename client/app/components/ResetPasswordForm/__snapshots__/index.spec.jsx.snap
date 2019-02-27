@@ -91,7 +91,7 @@ exports[`shallow rendering 1`] = `
           >
             Password
           </label>
-          <_class
+          <Formsy(FormsyInput)
             className="form_control"
             errorMessageStyles={
               Object {
@@ -100,11 +100,13 @@ exports[`shallow rendering 1`] = `
               }
             }
             id="password"
+            innerRef={[Function]}
             name="password"
             onBlur={[Function]}
             onFocus={[Function]}
             required={true}
             type="password"
+            validationError=""
             validationErrors={
               Object {
                 "isDefaultRequiredValue": "Must not be blank",
@@ -129,7 +131,7 @@ exports[`shallow rendering 1`] = `
           >
             Confirm Password
           </label>
-          <_class
+          <Formsy(FormsyInput)
             className="form_control"
             errorMessageStyles={
               Object {
@@ -138,10 +140,13 @@ exports[`shallow rendering 1`] = `
               }
             }
             id="password_confirmation"
+            innerRef={[Function]}
             name="password_confirmation"
             onBlur={[Function]}
             onFocus={[Function]}
+            required={false}
             type="password"
+            validationError=""
             validationErrors={
               Object {
                 "equalsField": "Must match password",
@@ -294,7 +299,7 @@ exports[`state.focus.password_confirmation is truthy 1`] = `
           >
             Password
           </label>
-          <_class
+          <Formsy(FormsyInput)
             className="form_control"
             errorMessageStyles={
               Object {
@@ -303,11 +308,13 @@ exports[`state.focus.password_confirmation is truthy 1`] = `
               }
             }
             id="password"
+            innerRef={[Function]}
             name="password"
             onBlur={[Function]}
             onFocus={[Function]}
             required={true}
             type="password"
+            validationError=""
             validationErrors={
               Object {
                 "isDefaultRequiredValue": "Must not be blank",
@@ -339,7 +346,7 @@ exports[`state.focus.password_confirmation is truthy 1`] = `
           >
             Confirm Password
           </label>
-          <_class
+          <Formsy(FormsyInput)
             className="form_control"
             errorMessageStyles={
               Object {
@@ -348,10 +355,13 @@ exports[`state.focus.password_confirmation is truthy 1`] = `
               }
             }
             id="password_confirmation"
+            innerRef={[Function]}
             name="password_confirmation"
             onBlur={[Function]}
             onFocus={[Function]}
+            required={false}
             type="password"
+            validationError=""
             validationErrors={
               Object {
                 "equalsField": "Must match password",
@@ -511,7 +521,7 @@ exports[`state.settingPassword is true 1`] = `
           >
             Password
           </label>
-          <_class
+          <Formsy(FormsyInput)
             className="form_control"
             errorMessageStyles={
               Object {
@@ -520,11 +530,13 @@ exports[`state.settingPassword is true 1`] = `
               }
             }
             id="password"
+            innerRef={[Function]}
             name="password"
             onBlur={[Function]}
             onFocus={[Function]}
             required={true}
             type="password"
+            validationError=""
             validationErrors={
               Object {
                 "isDefaultRequiredValue": "Must not be blank",
@@ -549,7 +561,7 @@ exports[`state.settingPassword is true 1`] = `
           >
             Confirm Password
           </label>
-          <_class
+          <Formsy(FormsyInput)
             className="form_control"
             errorMessageStyles={
               Object {
@@ -558,10 +570,13 @@ exports[`state.settingPassword is true 1`] = `
               }
             }
             id="password_confirmation"
+            innerRef={[Function]}
             name="password_confirmation"
             onBlur={[Function]}
             onFocus={[Function]}
+            required={false}
             type="password"
+            validationError=""
             validationErrors={
               Object {
                 "equalsField": "Must match password",
@@ -711,7 +726,7 @@ exports[`theme is falsy 1`] = `
           >
             Password
           </label>
-          <_class
+          <Formsy(FormsyInput)
             className="form_control"
             errorMessageStyles={
               Object {
@@ -720,11 +735,13 @@ exports[`theme is falsy 1`] = `
               }
             }
             id="password"
+            innerRef={[Function]}
             name="password"
             onBlur={[Function]}
             onFocus={[Function]}
             required={true}
             type="password"
+            validationError=""
             validationErrors={
               Object {
                 "isDefaultRequiredValue": "Must not be blank",
@@ -756,7 +773,7 @@ exports[`theme is falsy 1`] = `
           >
             Confirm Password
           </label>
-          <_class
+          <Formsy(FormsyInput)
             className="form_control"
             errorMessageStyles={
               Object {
@@ -765,10 +782,13 @@ exports[`theme is falsy 1`] = `
               }
             }
             id="password_confirmation"
+            innerRef={[Function]}
             name="password_confirmation"
             onBlur={[Function]}
             onFocus={[Function]}
+            required={false}
             type="password"
+            validationError=""
             validationErrors={
               Object {
                 "equalsField": "Must match password",

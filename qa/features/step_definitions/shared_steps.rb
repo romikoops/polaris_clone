@@ -39,12 +39,12 @@ When 'I have LCL shipment of {int} units {int} x {int} x {int} with weight of {i
   fill_in '0-quantity', with: count
 
   # Dimensions
-  fill_in '0-dimensionX', with: dim_x
-  fill_in '0-dimensionY', with: dim_y
-  fill_in '0-dimensionZ', with: dim_z
+  fill_in '0-dimension_x', with: dim_x
+  fill_in '0-dimension_y', with: dim_y
+  fill_in '0-dimension_z', with: dim_z
 
   # Weight
-  fill_in '0-payloadInKg', with: weight
+  fill_in '0-payload_in_kg', with: weight
 end
 
 And 'I am on the User Dashboard' do
