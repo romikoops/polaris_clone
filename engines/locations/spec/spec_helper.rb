@@ -98,7 +98,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     # reindex models
-    Locations::Name.search_index.delete if Locations::Name.search_index
+    # Locations::Name.search_index.delete if Locations::Name.search_index
     Locations::Name.reindex
 
     # and disable callbacks
