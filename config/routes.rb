@@ -121,6 +121,8 @@ Rails.application.routes.draw do
       post 'schedules/auto_generate',
            to: 'schedules#auto_generate_schedules'
       post 'schedules/download', to: 'schedules#download_schedules'
+      post 'schedules/auto_generate_sheet',
+           to: 'schedules#generate_schedules_from_sheet'
       get 'hubs', to: 'hubs#index'
       get 'search/hubs', to: 'hubs#search'
       get 'search/pricings', to: 'pricings#search'

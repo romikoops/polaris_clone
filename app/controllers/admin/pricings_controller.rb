@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class Admin::PricingsController < Admin::AdminBaseController
+class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable Metrics/ClassLength, Style/ClassAndModuleChildren
   include ExcelTools
   include PricingTools
   include ItineraryTools
 
-  def index
+  def index # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     tenant = current_user.tenant
     @itineraries = tenant.itineraries
     response = Rails.cache.fetch("#{@itineraries.cache_key}/pricings_index", expires_in: 12.hours) do
@@ -42,7 +42,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     response_handler(userPricings: @pricings, client: @client)
   end
 
-  def search
+  def search # rubocop:disable Metrics/AbcSize
     query = {
       tenant_id: current_user.tenant_id
     }
@@ -73,8 +73,8 @@ class Admin::PricingsController < Admin::AdminBaseController
     )
   end
 
-  def assign_dedicated
-    new_pricings = params[:clientIds].map do |client_id|
+  def assign_dedicated # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    new_pricings = params[:clientIds].map do |client_id| # rubocop:disable Metrics/BlockLength
       itinerary_id = params[:pricing][:itinerary_id]
       ex_pricing = Pricing.where(user_id: client_id, itinerary_id: itinerary_id).first
       pricing_to_update = ex_pricing || Pricing.new
@@ -135,7 +135,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     pricing_to_update = Pricing.find(params[:id])
     new_pricing_data = sanitized_params
     new_pricing_data.delete('cargo_class')
-    new_pricing_details = new_pricing_data.delete('data')
+    new_pricing_data.delete('data')
     pricing_to_update.update(new_pricing_data)
     update_pricing_details(pricing_to_update)
     update_pricing_exception_data(pricing_to_update)
@@ -156,20 +156,15 @@ class Admin::PricingsController < Admin::AdminBaseController
     mot = upload_params[:mot]
     load_type = upload_params[:load_type]
     new_load_type = load_type_renamed(load_type)
+    identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
 
-    klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
-
-    klass = ExcelDataServices::FileParser.const_get(klass_identifier)
-    options = { tenant: current_tenant, file_or_path: file }
-    sheets_data = klass.new(options).perform
-
-    klass = ExcelDataServices::DatabaseInserter.const_get(klass_identifier)
     options = { tenant: current_tenant,
-                data: sheets_data,
-                options: { should_generate_trips: false } }
-    insertion_stats = klass.new(options).perform
+                specific_identifier: identifier,
+                file_or_path: file }
+    uploader = ExcelDataServices::Loader::Uploader.new(options)
 
-    response_handler(insertion_stats)
+    insertion_stats_or_errors = uploader.perform
+    response_handler(insertion_stats_or_errors)
   end
 
   def download
@@ -177,14 +172,13 @@ class Admin::PricingsController < Admin::AdminBaseController
     load_type = download_params[:load_type]
     key = "pricing_#{load_type}"
     new_load_type = load_type_renamed(load_type)
+    klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
     file_name = "#{current_tenant.subdomain.downcase}__pricing_#{mot.downcase}_#{new_load_type.downcase}"
 
-    klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
+    options = { tenant: current_tenant, specific_identifier: klass_identifier, file_name: file_name }
+    downloader = ExcelDataServices::Loader::Downloader.new(options)
 
-    klass = ExcelDataServices::FileWriter.const_get(klass_identifier)
-    options = { tenant: current_tenant, file_name: file_name }
-
-    document = klass.new(options).perform
+    document = downloader.perform
 
     # TODO: When timing out, file will not be downloaded!!!
     response_handler(key: key, url: rails_blob_url(document.file, disposition: 'attachment'))
@@ -210,9 +204,9 @@ class Admin::PricingsController < Admin::AdminBaseController
     results = []
     prices.each do |_k, v|
       splits = v.split('_')
-      hub1 = splits[0].to_i
-      hub2 = splits[1].to_i
-      results.push(itin) if itin['first_stop_id'] == hub1 && itin['destination_stop_id'] == hub2
+      hub_1 = splits[0].to_i
+      hub_2 = splits[1].to_i
+      results.push(itin) if itin['first_stop_id'] == hub_1 && itin['destination_stop_id'] == hub_2
     end
     results
   end

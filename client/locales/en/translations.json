@@ -183,11 +183,14 @@
     "fcl_40_hq": "FCL 40' HQ",
     "lcl": "Cargo item",
     "route": "Route",
-    "route_plural": "Routes"
+    "route_plural": "Routes",
+    "serviceLevel": "Service Level",
+    "carrier": "Carrier"
   },
   "admin": {
       "savePricings": "Save Pricings",
       "editHub": "Edit Hub",
+      "generatorSheet": "Generator Sheet",
       "updateShopEmails": "Update Shop Emails",
       "updateQuotationPDFRemarks": "Update PDF Remarks",
       "addRemark": "Add Remark",
@@ -196,6 +199,7 @@
       "shipmentAccepted": "Shipment accepted!",
       "continue": "Continue",
       "uploadSuccessful": "Upload Successful!",
+      "uploadFailed": "Upload Failed!",
       "numberCreated": "No. created:",
       "numberUpdated": "No. updated:",
       "noResults": "There are no results.",
@@ -457,7 +461,12 @@
       "jumpTo": "Jump To...",
       "routeStops": "Route Stops",
       "schedules": "Schedules",
-      "confirmDeleteRoute": "This will delete the route and all related data (pricings, schedules etc)"
+      "confirmDeleteRoute": "This will delete the route and all related data (pricings, schedules etc)",
+      "conflictingIds": "Conflicting Pricings",
+      "reason": "Reason",
+      "rowNo": "Row Number",
+      "errorTip": "Please check your sheet for the errors contained in the rows listed above",
+      "pricingsTip": "To edit pricings we recommend downloading the pricing sheet and editing the values there. This allows us to ensure the correct pricings get updated and new ones created where necessary."
   },
   "itbox": {
     "component": "IncotermBox",

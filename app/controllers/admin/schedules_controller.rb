@@ -33,6 +33,18 @@ class Admin::SchedulesController < Admin::AdminBaseController
     response_handler(url: url, key: 'schedules')
   end
 
+  def generate_schedules_from_sheet
+    file = upload_params[:file].tempfile
+
+    options = { tenant: current_tenant,
+                specific_identifier: 'ScheduleGenerator',
+                file_or_path: file }
+    uploader = ExcelDataServices::Loader::Uploader.new(options)
+
+    insertion_stats_or_errors = uploader.perform
+    response_handler(insertion_stats_or_errors)
+  end
+
   def destroy
     Trip.find(params[:id]).destroy
     response_handler(true)
@@ -136,5 +148,9 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def trip
     @trip ||= Trip.find(params[:id])
+  end
+
+  def upload_params
+    params.permit(:file)
   end
 end

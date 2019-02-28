@@ -222,6 +222,19 @@ class AdminSchedules extends Component {
                         styles.action_section
                       } flex-100 layout-row layout-align-center-center layout-wrap`}
                     >
+                      <p className="flex-80">{t('admin:generatorSheet')}</p>
+                      <FileUploader
+                        theme={theme}
+                        dispatchFn={file => documentDispatch.uploadGeneratorSheet(file)}
+                        type="xlsx"
+                        text={t('admin:generatorSheet')}
+                      />
+                    </div>
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
                       <p className="flex-80">{t('admin:uploadAirSchedules')}</p>
                       <FileUploader
                         theme={theme}

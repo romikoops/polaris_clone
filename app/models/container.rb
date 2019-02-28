@@ -8,12 +8,14 @@ class Container < ApplicationRecord
   #
   # DESCRIPTIONS         = ContainerLookups.get_descriptions
   # WEIGHTS              = ContainerLookups.get_weights
+
   TARE_WEIGHTS = {
     fcl_20: 2370,
     fcl_40: 3750,
     fcl_40_hq: 4000
   }.freeze
-  PRICING_WEIGHT_STEPS = ContainerLookups.get_pricing_weight_steps
+
+  PRICING_WEIGHT_STEPS = [28.0, 24.0, 18.0, 14.0, 5.0].freeze
 
   belongs_to :shipment
 

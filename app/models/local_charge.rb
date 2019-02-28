@@ -7,8 +7,12 @@ class LocalCharge < ApplicationRecord
   belongs_to :tenant_vehicle, optional: true
   belongs_to :counterpart_hub, class_name: 'Hub', optional: true
 
-  scope :for_load_type, ->(load_type) { where(load_type: load_type) }
-  scope :for_mode_of_transport, ->(mot) { where(mode_of_transport: mot) }
+  before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
+
+  validates :uuid, uniqueness: true
+
+  scope :for_load_type, ->(load_type) { where(load_type: load_type.downcase) }
+  scope :for_mode_of_transport, ->(mot) { where(mode_of_transport: mot.downcase) }
   scope :for_dates, (lambda do |start_date, end_date|
     where(Arel::Nodes::InfixOperation.new(
             'OVERLAPS',

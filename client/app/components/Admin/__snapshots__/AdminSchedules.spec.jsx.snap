@@ -471,6 +471,34 @@ exports[`user.internal is truthy 1`] = `
                                 <p
                                   className="flex-80"
                                 >
+                                  Generator Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Generator Sheet"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
                                   Upload Air Schedules Sheet
                                 </p>
                                 <FileUploader

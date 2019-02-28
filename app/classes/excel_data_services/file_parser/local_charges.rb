@@ -3,20 +3,7 @@
 module ExcelDataServices
   module FileParser
     class LocalCharges < Base
-      include ExcelDataServices::LocalChargesTool
-      include DataRestructurer::LocalCharges
-
-      def initialize(tenant:, file_or_path:)
-        super
-
-        @missing_value_errors = []
-      end
-
       private
-
-      def build_valid_headers(_data_extraction_method)
-        VALID_STATIC_HEADERS
-      end
 
       def correct_capitalization(row_data)
         col_names_to_capitalize = %i(hub
@@ -50,7 +37,7 @@ module ExcelDataServices
 
       def replace_nil_equivalents_with_nil(row_data)
         row_data.each do |k, v|
-          row_data[k] = nil if v.is_a?(String) && ['n/a', '-', ''].include?(v.downcase)
+          row_data[k] = nil if v.to_s =~ %r{^n/a$|^-$|^$}i # 'n/a', '-', ''
         end
 
         row_data

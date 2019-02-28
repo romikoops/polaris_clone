@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 
-class Admin::LocalChargesController < ApplicationController
+class Admin::LocalChargesController < ApplicationController # rubocop:disable Style/ClassAndModuleChildren
   include ExcelTools
 
-  def hub_charges
+  def hub_charges # rubocop:disable Metrics/AbcSize
     hub = Hub.find(params[:id])
     charges = hub.local_charges
     service_levels = charges.map(&:tenant_vehicle).uniq.map(&:with_carrier).map do |tenant_vehicle|
-      carrier_name = tenant_vehicle['carrier'] ?
-      "#{tenant_vehicle['carrier']['name']} - #{tenant_vehicle['name']}" :
-      tenant_vehicle['name']
+      carrier_name = if tenant_vehicle['carrier']
+                       "#{tenant_vehicle['carrier']['name']} - #{tenant_vehicle['name']}"
+                     else
+                       tenant_vehicle['name']
+                     end
       { label: carrier_name.capitalize.to_s, value: tenant_vehicle['id'] }
     end
 
@@ -46,24 +48,30 @@ class Admin::LocalChargesController < ApplicationController
 
   def upload
     file = upload_params[:file].tempfile
+    identifier = 'LocalCharges'
 
-    options = { tenant: current_tenant, file_or_path: file }
-    sheets_data = ExcelDataServices::FileParser::LocalCharges.new(options).perform
+    options = { tenant: current_tenant,
+                specific_identifier: identifier,
+                file_or_path: file }
+    uploader = ExcelDataServices::Loader::Uploader.new(options)
 
-    options = { tenant: current_tenant, data: sheets_data }
-    insertion_stats = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform
-
-    response_handler(insertion_stats)
+    insertion_stats_or_errors = uploader.perform
+    response_handler(insertion_stats_or_errors)
   end
 
   def download
-    mot = download_params[:mot].downcase
+    mot = download_params[:mot]
+    key = 'local_charges'
+    klass_identifier = 'LocalCharges'
     file_name = "#{current_tenant.subdomain.downcase}__local_charges_#{mot}"
 
-    options = { tenant: current_tenant, file_name: file_name, mode_of_transport: mot }
-    document = ExcelDataServices::FileWriter::LocalCharges.new(options).perform
+    options = { tenant: current_tenant, specific_identifier: klass_identifier, file_name: file_name }
+    downloader = ExcelDataServices::Loader::Downloader.new(options)
 
-    response_handler(key: 'local_charges', url: rails_blob_url(document.file, disposition: 'attachment'))
+    document = downloader.perform
+
+    # TODO: When timing out, file will not be downloaded!!!
+    response_handler(key: key, url: rails_blob_url(document.file, disposition: 'attachment'))
   end
 
   private

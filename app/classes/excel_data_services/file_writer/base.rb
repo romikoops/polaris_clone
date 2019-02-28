@@ -4,6 +4,7 @@ module ExcelDataServices
   module FileWriter
     class Base
       WritingError = Class.new(StandardError)
+      UnknownSheetNameError = Class.new(WritingError)
 
       # Expected data structure:
       # {
@@ -24,7 +25,9 @@ module ExcelDataServices
       #   ]
       # }
 
-      attr_reader :tenant, :file_name, :xlsx
+      def self.write_document(options)
+        new(options).perform
+      end
 
       def initialize(tenant:, file_name:)
         @tenant = tenant
@@ -69,6 +72,8 @@ module ExcelDataServices
 
       private
 
+      attr_reader :tenant, :file_name, :xlsx
+
       def load_and_prepare_data
         raise NotImplementedError, "This method must be implemented in #{self.class.name}."
       end
@@ -82,39 +87,42 @@ module ExcelDataServices
       end
 
       def header_format
-        return @header_format if @header_format
+        @header_format ||= xlsx.add_format(locked: 0, bold: 1)
+      end
 
-        @header_format = xlsx.add_format
-        @header_format.set_bold
-        @header_format
+      def uuid_format
+        @uuid_format ||= xlsx.add_format(locked: 1)
+      end
+
+      def cell_format
+        @cell_format ||= xlsx.add_format(locked: 0)
       end
 
       def write_headers(worksheet, headers)
         worksheet.write_row(0, 0, headers, header_format)
       end
 
-      def setup_worksheet(worksheet, col_count)
-        worksheet.set_column(0, col_count - 1, 17) # set all columns to width 17
+      def setup_worksheet(worksheet, _col_count)
         worksheet.freeze_panes(1, 0) # freeze first row
+        worksheet.set_column('A:A', 17, uuid_format) # set first column to width 17 and lock
+        worksheet.set_column('B:XFD', 17, cell_format) # set all other columns to width 17 and unlocked
+        worksheet.protect # enable protections
       end
 
       def date_dd_mm_yyyy_format
-        return @date_dd_mm_yyyy_format if @date_dd_mm_yyyy_format
-
-        @date_dd_mm_yyyy_format = xlsx.add_format
-        @date_dd_mm_yyyy_format.set_num_format('dd.mm.yyyy')
-        @date_dd_mm_yyyy_format
+        @date_dd_mm_yyyy_format ||= xlsx.add_format(num_format: 'dd.mm.yyyy', locked: 0)
       end
 
       def format_and_write_row(worksheet, start_row_idx, start_col_idx, raw_headers, row_data)
         raw_headers.each_with_index do |header, i|
           cell_content = row_data[header]
-
           if cell_content.is_a?(ActiveSupport::TimeWithZone)
             cell_content = cell_content.to_datetime.iso8601(3).remove(/\+.+$/)
             worksheet.write_date_time(start_row_idx, start_col_idx + i, cell_content, date_dd_mm_yyyy_format)
           else
-            worksheet.write(start_row_idx, start_col_idx + i, cell_content)
+            worksheet.write(
+              start_row_idx, start_col_idx + i, cell_content, (header == :uuid ? uuid_format : cell_format)
+            )
           end
         end
       end
@@ -126,12 +134,11 @@ module ExcelDataServices
       end
 
       def remove_hub_suffix(name, mot)
-        str_to_remove = case mot
-                        when 'ocean' then 'Port'
-                        when 'air'   then 'Airport'
-                        when 'rail'  then 'Railyard'
-                        when 'truck' then 'Depot'
-                        end
+        str_to_remove = { 'ocean' => 'Port',
+                          'air' => 'Airport',
+                          'rail' => 'Railyard',
+                          'truck' => 'Depot' }[mot]
+
         name.remove(/ #{str_to_remove}$/)
       end
     end

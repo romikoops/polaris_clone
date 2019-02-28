@@ -428,6 +428,11 @@ exports[`shallow render 1`] = `
         flexOptions="flex-100"
         header="Data manager"
       />
+      <p
+        className="flex-100 tip"
+      >
+        To edit pricings we recommend downloading the pricing sheet and editing the values there. This allows us to ensure the correct pricings get updated and new ones created where necessary.
+      </p>
     </div>
   </div>
 </div>
@@ -859,6 +864,11 @@ exports[`state.page > 1 1`] = `
         flexOptions="flex-100"
         header="Data manager"
       />
+      <p
+        className="flex-100 tip"
+      >
+        To edit pricings we recommend downloading the pricing sheet and editing the values there. This allows us to ensure the correct pricings get updated and new ones created where necessary.
+      </p>
     </div>
   </div>
 </div>
@@ -1290,6 +1300,11 @@ exports[`user is internal 1`] = `
         flexOptions="flex-100"
         header="Data manager"
       />
+      <p
+        className="flex-100 tip"
+      >
+        To edit pricings we recommend downloading the pricing sheet and editing the values there. This allows us to ensure the correct pricings get updated and new ones created where necessary.
+      </p>
     </div>
   </div>
 </div>

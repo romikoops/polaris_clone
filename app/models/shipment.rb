@@ -34,7 +34,8 @@ class Shipment < ApplicationRecord
   # validates :total_goods_value, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   # ActiveRecord Callbacks
-  before_validation :assign_uuid, :generate_imc_reference,
+  before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
+  before_validation :generate_imc_reference,
                     :set_default_trucking, :set_tenant,
                     on: :create
   before_validation :update_carriage_properties!, :sync_nexuses, :set_default_destination_dates
@@ -262,7 +263,7 @@ class Shipment < ApplicationRecord
     start_date = planned_etd || desired_start_date
     end_date = planned_eta || desired_start_date
     self&.itinerary&.pricings
-        .for_cargo_class(cargo_classes)
+        .for_cargo_classes(cargo_classes)
         .for_dates(start_date, end_date)
         .where(tenant_vehicle_id: trip.tenant_vehicle_id)
         .order(expiration_date: :asc).first&.expiration_date
@@ -532,10 +533,6 @@ class Shipment < ApplicationRecord
     self.imc_reference = first_part + serial_code
   end
 
-  def assign_uuid
-    self.uuid = SecureRandom.uuid
-  end
-
   def find_contacts(type)
     Contact.find_by_sql("
       SELECT * FROM contacts
@@ -563,7 +560,7 @@ class Shipment < ApplicationRecord
   end
 
   def set_tenant
-    self.tenant_id ||= user.tenant_id
+    self.tenant_id ||= user&.tenant_id
   end
 
   def sync_nexuses

@@ -95,6 +95,9 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
+      className="flex-100 layout-row layout-align-center-center layout-wrap layout-padding"
+    />
+    <div
       className="flex-100 layout-row layout-align-end-center layout-wrap"
     >
       <RoundButton

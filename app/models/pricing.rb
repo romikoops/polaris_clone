@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Pricing < ApplicationRecord
+class Pricing < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_paper_trail
   belongs_to :itinerary
   belongs_to :tenant
@@ -11,11 +11,22 @@ class Pricing < ApplicationRecord
   has_many :pricing_exceptions, dependent: :destroy
   has_many :pricing_requests, dependent: :destroy
 
+  before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
+
+  validates :uuid, uniqueness: true
+  validates :transport_category, uniqueness: {
+    scope: %i(itinerary_id tenant_id user_id tenant_vehicle_id effective_date expiration_date)
+  }
+
   delegate :load_type, to: :transport_category
   delegate :cargo_class, to: :transport_category
-  scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot }) }
-  scope :for_load_type, ->(load_type) { joins(:transport_category).where(transport_categories: { load_type: load_type }) }
-  scope :for_cargo_class, ->(cargo_class) { joins(:transport_category).where(transport_categories: { cargo_class: cargo_class }) }
+  scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot.downcase }) }
+  scope :for_load_type, (lambda do |load_type|
+    joins(:transport_category).where(transport_categories: { load_type: load_type.downcase })
+  end)
+  scope :for_cargo_classes, (lambda do |cargo_classes|
+    joins(:transport_category).where(transport_categories: { cargo_class: cargo_classes.map(&:downcase) })
+  end)
   scope :for_dates, (lambda do |start_date, end_date|
     where(Arel::Nodes::InfixOperation.new(
             'OVERLAPS',
@@ -23,10 +34,6 @@ class Pricing < ApplicationRecord
             Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
           ))
   end)
-
-  validates :transport_category, uniqueness: {
-    scope: %i(itinerary_id tenant_id user_id tenant_vehicle_id effective_date expiration_date)
-  }
 
   self.per_page = 12
 
@@ -126,4 +133,5 @@ end
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  tenant_vehicle_id     :integer
+#  uuid                  :uuid
 #
