@@ -15,6 +15,7 @@ PATH
   specs:
     locations (0.0.1)
       core
+      rgeo
       rgeo-geojson
       searchkick
 
