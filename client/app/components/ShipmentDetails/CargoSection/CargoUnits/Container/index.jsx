@@ -9,14 +9,21 @@ import CheckboxWrapper from '../../../GetOffersSection/Checkboxes/CheckboxWrappe
 import { getTareWeight, getSizeClassOptions } from '../../../../../helpers'
 
 function Container ({
-  container, i, onChangeCargoUnitSelect, onDeleteUnit, theme, scope, t, onChangeCargoUnitCheckbox, onChangeCargoUnitInput, toggleModal
+  container, i, onChangeCargoUnitSelect, onDeleteUnit, theme, scope, t,
+  onChangeCargoUnitCheckbox, onChangeCargoUnitInput, toggleModal
 }) {
   // TODO: implement dynamic maxPayloadInKg for each Tenant
   const tareWeight = getTareWeight(container) || 2370
   const maxPayloadInKg = 35000 - tareWeight
 
   return (
-    <CargoUnitBox onChangeCargoUnitInput={onChangeCargoUnitInput} cargoUnit={container} i={i} onDeleteUnit={onDeleteUnit}>
+    <CargoUnitBox
+      onChangeCargoUnitInput={onChangeCargoUnitInput}
+      cargoUnit={container}
+      i={i}
+      onDeleteUnit={onDeleteUnit}
+      container
+    >
       <div style={{ position: 'relative' }}>
         <div className="layout-row flex-55">
           <CargoUnitNumberInput
@@ -37,7 +44,7 @@ function Container ({
         </div>
         <div className="flex-100 layout-row" />
         <div
-          className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
+          className={`layout-row flex-100 layout-wrap layout-align-space-between-center ${styles.padding_section}`}
           style={{ margin: '20px 0' }}
         >
 
@@ -49,7 +56,6 @@ function Container ({
                 name={`${i}-sizeClass`}
                 options={getSizeClassOptions()}
                 placeholder={t('common:containerSize')}
-                showErrors={showColliTypeErrors}
                 value={container.sizeClass}
                 onChange={(option) => { onChangeCargoUnitSelect(i, 'sizeClass', get(option, 'value')) }}
                 validationErrors={{ isDefaultRequiredValue: t('common:noBlank') }}
@@ -58,19 +64,8 @@ function Container ({
             </div>
           </div>
 
-          <div className="layout-row flex-35">
-            <CargoUnitNumberInput
-              labelText={t('cargo:cargoGrossWeight')}
-              name={`${i}-weight`}
-              onChange={onChangeCargoUnitInput}
-              unit="kg"
-              maxDimension={200000}
-              value={container.weight}
-            />
-          </div>
-
           <div
-            className="layout-row flex-25 layout-wrap layout-align-start-center"
+            className="layout-row flex-40 layout-wrap layout-align-start-center"
             onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
           >
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -88,7 +83,6 @@ function Container ({
               />
             </div>
           </div>
-
         </div>
       </div>
     </CargoUnitBox>

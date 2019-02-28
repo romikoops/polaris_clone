@@ -2,6 +2,7 @@ import { Promise } from 'es6-promise-promise'
 import { push } from 'react-router-redux'
 import { shipmentConstants } from '../constants'
 import { shipmentService } from '../services'
+import { deepSnakefyKeys } from '../helpers'
 import { alertActions, userActions, appActions, errorActions } from './'
 
 function newShipment (type, redirect, reused) {

@@ -11,11 +11,11 @@ class FormsyDayPickerInput extends Component {
     this.changeValue = this.changeValue.bind(this)
   }
 
-  changeValue (selectedDay, modifiers, dayPickerInput) {
-    const { onDayChange, setValue, format } = this.props
+  changeValue (selectedDay, modifiers) {
+    const { onDayChange, setValue, format, name } = this.props
 
     if (typeof onDayChange === 'function') {
-      onDayChange(selectedDay, modifiers, dayPickerInput)
+      onDayChange(selectedDay, modifiers, name)
     }
 
     // setValue() will set the value of the component, which in
@@ -51,6 +51,7 @@ class FormsyDayPickerInput extends Component {
     const fullInputProps = {
       ...inputProps,
       style: inputStyles,
+      autoComplete: 'off',
       value,
       name,
       placeholder,

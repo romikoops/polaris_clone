@@ -34,10 +34,13 @@ class GetOffersSection extends React.PureComponent {
     this.toggleNoDangerousGoodsConfirmed = this.toggleNoDangerousGoodsConfirmed.bind(this)
     this.toggleStackableGoodsConfirmed = this.toggleStackableGoodsConfirmed.bind(this)
     this.cargoContainsDangerousGoods = this.cargoContainsDangerousGoods.bind(this)
+    this.handleClickDangerousGoodsInfo = this.handleClickDangerousGoodsInfo.bind(this)
   }
 
   getOffersBtnIsActive () {
-    return this.noDangerousGoodsCondition() && this.stackableGoodsCondition()
+    const { getOffersDisabled } = this.props
+
+    return !getOffersDisabled && this.noDangerousGoodsCondition() && this.stackableGoodsCondition()
   }
 
   cargoContainsDangerousGoods () {
@@ -88,9 +91,8 @@ class GetOffersSection extends React.PureComponent {
   }
 
   handleClickDangerousGoodsInfo () {
-    // TODO: implement toggleModal
-    // toggleModal('dangerousGoodsInfo')
-    console.log(this.props)
+    const { bookingProcessDispatch } = this.props
+    bookingProcessDispatch.updateModals('dangerousGoodsInfo')
   }
 
   render () {
@@ -125,8 +127,17 @@ class GetOffersSection extends React.PureComponent {
     }
 
     return (
-      <div className={`get_offers_section layout-row flex-100 layout-wrap layout-align-center-center margin_top ${styles.get_offers_section}`}>
-        <div className={`${styles.border_divider} border_divider layout-row flex-100 layout-wrap layout-align-center-center`}>
+      <div
+        className={`
+          get_offers_section layout-row flex-100 layout-wrap
+          layout-align-center-center margin_top ${styles.get_offers_section}
+        `}
+      >
+        <div className={`
+          ${styles.border_divider} border_divider
+          layout-row flex-100 layout-wrap layout-align-center-center
+        `}
+        >
           <div
             className={
               `${styles.btn_sec} content_width_booking ` +
@@ -139,10 +150,11 @@ class GetOffersSection extends React.PureComponent {
               stackableGoodsConfirmed={stackableGoodsConfirmed}
               onChangeNoDangerousGoodsConfirmation={this.toggleNoDangerousGoodsConfirmed}
               onChangeStackableGoodsConfirmation={this.toggleStackableGoodsConfirmed}
+              onClickDangerousGoodsInfo={this.handleClickDangerousGoodsInfo}
               shakeClass={shakeClass}
               show={{
                 noDangerousGoodsConfirmed: !this.cargoContainsDangerousGoods(),
-                stackableGoodsConfirmed: aggregated
+                stackableGoodsConfirmed: aggregatedCargo
               }}
             />
 

@@ -1,11 +1,6 @@
-import moment from 'moment'
-
 const initialState = {
   shipment: {
-    // TODO: implement shipment type page
-    direction: 'export',
-    loadType: 'cargo_item',
-
+    aggregatedCargo: false,
     onCarriage: false,
     preCarriage: false,
     origin: {},
@@ -22,13 +17,30 @@ const initialState = {
       }
     }
   },
-
   // These keys should store only page specific auxiliary data
   ChooseShipment: {},
   ShipmentDetails: {},
   ChooseOffer: {},
-  BookingDetails: {},
+  BookingDetails: {
+    modals: {
+      dangerousGoodsInfo: false,
+      nonStackable: false,
+      noDangerousGoods: false,
+      maxDimensions: false
+    }
+  },
   BookingConfirmation: {}
+}
+
+function getUpdatedCargoUnits (state, { index, prop, newValue }) {
+  const updatedCargoUnits = [...state.shipment.cargoUnits]
+
+  updatedCargoUnits[index] = {
+    ...updatedCargoUnits[index],
+    [prop]: newValue
+  }
+
+  return updatedCargoUnits
 }
 
 export default function bookingProcess (state = initialState, action) {
@@ -41,6 +53,24 @@ export default function bookingProcess (state = initialState, action) {
         shipment: {
           ...state.shipment,
           ...action.payload
+        }
+      }
+    case 'UPDATE_BP_MODALS':
+      return {
+        ...state,
+        BookingDetails: {
+          ...state.BookingDetails,
+          modals: {
+            [action.payload]: !state.BookingDetails.modals[action.payload]
+          }
+        }
+      }
+    case 'UPDATE_CARGO_UNIT':
+      return {
+        ...state,
+        shipment: {
+          ...state.shipment,
+          cargoUnits: getUpdatedCargoUnits(state, action.payload)
         }
       }
     case 'ADD_CARGO_UNIT':

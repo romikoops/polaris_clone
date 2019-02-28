@@ -6,7 +6,7 @@ import CargoUnitBox from '../CargoUnit/Box'
 import styles from './index.scss'
 import CargoUnitNumberInput from '../CargoUnit/NumberInput'
 import Tooltip from '../../../../Tooltip/Tooltip'
-import { NamedSelect } from '../../../../NamedSelect/NamedSelect'
+import FormsySelect from '../../../../Formsy/Select'
 import kg from '../../../../../assets/images/cargo/kg.png'
 import length from '../../../../../assets/images/cargo/length.png'
 import width from '../../../../../assets/images/cargo/width.png'
@@ -14,7 +14,7 @@ import height from '../../../../../assets/images/cargo/height.png'
 import calcMaxDimensionsToApply from '../../../../../helpers/calcMaxDimensionsToApply'
 
 import CheckboxWrapper from './checkboxWrapper'
-import ChargableProperties from './ChargableProperties'
+import ChargeableProperties from './ChargeableProperties'
 
 const imageSources = {
   length,
@@ -53,6 +53,12 @@ class CargoItem extends React.PureComponent {
     this.getSharedProps = this.getSharedProps.bind(this)
     this.getImage = this.getImage.bind(this)
     this.getMaxDimensionsToApply = this.getMaxDimensionsToApply.bind(this)
+
+    const { scope } = props
+
+    this.allMots = Object.keys(scope.modes_of_transport).filter(mot => (
+      scope.modes_of_transport[mot].cargo_item
+    ))
   }
 
   getMaxDimensionsToApply () {
@@ -233,7 +239,7 @@ class CargoItem extends React.PureComponent {
           >
             <div className="layout-row flex-40 layout-wrap layout-align-start-center ccb_colli_type">
               <div style={{ width: '95%' }}>
-                <NamedSelect
+                <FormsySelect
                   placeholder={t('common:selectColliType')}
                   className={styles.select_100}
                   inputProps={{ name: `${i}-colliType` }}
@@ -266,8 +272,9 @@ class CargoItem extends React.PureComponent {
           </div>
         </div>
         <div className={`${styles.cargo_item_info} flex-100'`}>
-          <ChargableProperties
+          <ChargeableProperties
             availableMots={ShipmentDetails.availableMots}
+            allMots={this.allMots}
             cargoItem={cargoItem}
             maxDimensions={this.getMaxDimensionsToApply()}
             scope={scope}

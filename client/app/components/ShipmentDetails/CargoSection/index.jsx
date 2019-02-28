@@ -118,6 +118,10 @@ class CargoSection extends React.PureComponent {
       'aggregatedCargo',
       !shipment.aggregatedCargo
     )
+    bookingProcessDispatch.updateShipment(
+      'cargoUnits',
+      [this.getNewUnit()]
+    )
   }
 
   render () {
@@ -125,11 +129,18 @@ class CargoSection extends React.PureComponent {
       theme, scope, cargoItemTypes, maxDimensions, shipment, ShipmentDetails, toggleModal, totalShipmentErrors
     } = this.props
 
+    const { loadType, aggregatedCargo } = shipment
+    const contentWidthClass = loadType === 'cargo_item' ? 'content_width_booking' : 'content_width_booking_half'
+
     return (
       <div className="route_section_form layout-row flex-100 layout-wrap layout-align-center-center">
-        <div className="layout-row flex-none layout-wrap layout-align-center-center content_width_booking">
-          {shipment.loadType === 'cargo_item' && (
-            <CargoUnitToggleMode disabled={!scope.total_dimensions} checked={shipment.aggregatedCargo} onToggleAggregated={this.handleToggleAggregated} />
+        <div className={`layout-row flex-none layout-wrap layout-align-center-center ${contentWidthClass}`}>
+          {loadType === 'cargo_item' && (
+            <CargoUnitToggleMode
+              disabled={!scope.total_dimensions}
+              checked={shipment.aggregatedCargo}
+              onToggleAggregated={this.handleToggleAggregated}
+            />
           )}
           <CargoUnits
             ShipmentDetails={ShipmentDetails}
@@ -146,13 +157,35 @@ class CargoSection extends React.PureComponent {
             {...shipment}
           />
 
-          <div className="flex-100 layout-row layout-align-start">
-            <AddUnitButton theme={theme} onClick={this.handleAddUnit} />
-          </div>
+          {
+            !aggregatedCargo && (
+              <div className="flex-100 layout-row layout-align-start">
+                <AddUnitButton theme={theme} onClick={this.handleAddUnit} />
+              </div>
+            )
+          }
         </div>
       </div>
     )
   }
 }
 
-export default CargoSection
+function mapStateToProps (state) {
+  const { bookingProcess, app, bookingData } = state
+  const { shipment, ShipmentDetails } = bookingProcess
+  const { tenant } = app
+  const { theme, scope } = tenant
+  const { cargoItemTypes, maxDimensions } = get(bookingData, 'response.stage1', {})
+
+  return {
+    shipment, theme, scope, ShipmentDetails, maxDimensions, cargoItemTypes
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    bookingProcessDispatch: bindActionCreators(bookingProcessActions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CargoSection)

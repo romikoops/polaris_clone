@@ -1,10 +1,10 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
-import FormsyInput from '../../../../FormsyInput/FormsyInput'
 import Autocomplete from '../../Autocomplete'
-import CollapsingContent from '../../../../CollapsingBar/Content'
 import styles from './index.scss'
 import CollapsingBar from '../../../../CollapsingBar/CollapsingBar'
+
+import CollapsableFields from './CollapsableFields'
 
 function AddressFields ({
   map,
@@ -16,11 +16,11 @@ function AddressFields ({
   onInputBlur,
   formData,
   t,
-  countries
+  countries,
+  collapsed,
+  onClickCollapser,
+  truckingAvailable
 }) {
-  // TODO: Add Collapsing logic
-  const hideFields = false
-
   return (
     <div className={`ccb_route_section_form_${target} ${styles.route_section_form_wrapper}`}>
       <Autocomplete
@@ -44,67 +44,22 @@ function AddressFields ({
         <CollapsingBar
           headerWrapClasses={`${styles.header_wrapper}`}
           wrapperContentClasses={`${styles.content_wrapper}`}
+          collapsed={collapsed}
           contentHeader={(
-            <div className={`${styles.btn_address_form}`}>
-              <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
-              <i className={`${styles.up} flex-none fa fa-angle-double-up ccb_origin_expand`} />
+            <div className={`${styles.btn_address_form}`} onClick={() => onClickCollapser(target)}>
+              <i className={`${collapsed && styles.collapsed} flex-none fa fa-angle-double-down`} />
             </div>
           )}
-          content={(
-            <div>
-              <div className={`flex-100 layout-row ${styles.form_title}`}>
-                <h5>{target === 'origin' ? t('shipment:enterPickUp') : t('shipment:enterDelivery')}</h5>
-              </div>
-              <FormsyInput
-                wrapperClassName="flex-100 layout-row layout-align-center"
-                placeholder="Street"
-                name={`${target}-street`}
-                value={formData.street}
-                onBlur={onInputBlur}
-              />
-              <FormsyInput
-                wrapperClassName="flex-100 layout-row layout-align-center"
-                placeholder="Number"
-                name={`${target}-number`}
-                value={formData.number}
-                onBlur={onInputBlur}
-              />
-              <FormsyInput
-                wrapperClassName="flex-100 layout-row layout-align-center"
-                placeholder="ZIP Code"
-                name={`${target}-zipCode`}
-                value={formData.zipCode}
-                onBlur={onInputBlur}
-              />
-              <FormsyInput
-                wrapperClassName="flex-100 layout-row layout-align-center"
-                placeholder="City"
-                name={`${target}-city`}
-                value={formData.city}
-                onBlur={onInputBlur}
-              />
-              <FormsyInput
-                wrapperClassName="flex-100 layout-row layout-align-center"
-                placeholder="Country"
-                name={`${target}-country`}
-                value={FormData.street}
-                onBlur={onInputBlur}
-              />
-              <div className="flex-100 pointy layout-row layout-align-start-center">
-                <div
-                  className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
-                  onClick={console.log}
-                >
-                  <i className="fa fa-times flex-none" />
-                  <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
-                    {t('common:clear')}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-        />
-        <CollapsingContent collapsed={hideFields} />
+        >
+          <div className={`layout-row layout-align-center-center ${styles.collapsable_fields_wrapper}`}>
+            <CollapsableFields
+              target={target}
+              formData={formData}
+              onClickCollapser={onClickCollapser}
+              truckingAvailable={truckingAvailable}
+            />
+          </div>
+        </CollapsingBar>
       </div>
     </div>
   )

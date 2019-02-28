@@ -29,9 +29,24 @@ class RouteSection extends React.PureComponent {
     const { routes } = props
     this.countries = { origin: [], destination: [] }
     routes.forEach((route) => {
-      this.countries.origin.push(route.origin.country.toLowerCase())
-      this.countries.destination.push(route.destination.country.toLowerCase())
+      if (route.origin.truckTypes.length > 0) {
+        this.countries.origin.push(route.origin.country.toLowerCase())
+        route.origin.truckTypes.forEach(truckType => {
+          this.availableTruckTypes.origin.push(trucktype)
+        })
+      }
+      if (route.destination.truckTypes.length > 0) {
+        this.countries.destination.push(route.destination.country.toLowerCase())
+        route.destination.truckTypes.forEach(truckType => {
+          this.availableTruckTypes.destination.push(trucktype)
+        })
+      }      
     })
+
+    this.availableTruckTypes = {
+      container: [],
+      cargo_item: []
+    }
 
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -179,7 +194,7 @@ class RouteSection extends React.PureComponent {
       artificialEvent.target.id = `${carriage}-`
     } else if (!shipment.trucking[carriage].truckType) {
       // Set first truckType, if carriage is toggled on and truckType is empty
-      const truckType = this.truckTypes[shipment.loadType][0]
+      const truckType = this.availableTruckTypes[shipment.loadType].filter(onlyUnique)[0]
       artificialEvent.target.id = `${carriage}-${truckType}`
     }
 
@@ -315,7 +330,7 @@ class RouteSection extends React.PureComponent {
                     formData={origin}
                     availableTargets={origins}
                     availableCounterparts={destinations}
-                    countries={this.countries.origin}
+                    countries={this.countries.origin.filter(onlyUnique)}
                   />
                 </div>
               )
@@ -340,7 +355,7 @@ class RouteSection extends React.PureComponent {
                     formData={destination}
                     availableTargets={destinations}
                     availableCounterparts={origins}
-                    countries={this.countries.destination}
+                    countries={this.countries.destination.filter(onlyUnique)}
                   />
                 </div>
               )
