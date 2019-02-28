@@ -20,6 +20,7 @@ class AccountMailer < Devise::Mailer
     @links = tenant.email_links ? tenant.email_links['confirmation_instructions'] : []
 
     WelcomeMailer.welcome_email(record).deliver_later
+    NewUserMailer.new_user_email(user_id: record.id).deliver_later if tenant.scope['email_on_registration']
     super
   end
 
