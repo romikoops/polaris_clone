@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/mikian/pronto.git
-  revision: 81e69e0b438c57b7ac5737fee28a3d89eba7e84d
+  revision: 5197da7b01c46a7d3d6abd938f45efdc43f38c62
   branch: gh_status
   specs:
     pronto (0.10.0)
@@ -334,7 +334,7 @@ GEM
       ruby-progressbar (~> 1.4)
     geocoder (1.5.1)
     git (1.5.0)
-    gitlab (4.9.0)
+    gitlab (4.10.0)
       httparty (~> 0.14, >= 0.14.0)
       terminal-table (~> 1.5, >= 1.5.1)
     globalid (0.4.2)
