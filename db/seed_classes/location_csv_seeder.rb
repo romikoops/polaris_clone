@@ -28,13 +28,13 @@ class LocationCsvSeeder
       names = []
       csv.each do |row|
         names << row.to_hash
-        if names.length > 100
-          begin
-            Locations::Name.import(names)
-            names = []
-          rescue => e
-            binding.pry
-          end
+        next unless names.length > 100
+
+        begin
+          Locations::Name.import(names)
+          names = []
+        rescue StandardError => e
+          Rails.logger e
         end
       end
 
@@ -42,7 +42,7 @@ class LocationCsvSeeder
     end
   end
 
-  def self.load_map_data(url)
+  def self.load_map_data(_url)
     # LocationCsvSeeder.get_s3_file(url)
 
     Zlib::GzipReader.open(DOWNLOADS_PATH) do |gz|
@@ -67,11 +67,9 @@ class LocationCsvSeeder
           locations = []
         end
       end
-      unless locations.empty?
-        Locations::Location.import(locations)
-      end
+      Locations::Location.import(locations) unless locations.empty?
     end
-    
+
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
     puts 'Locations updated...'
@@ -80,24 +78,24 @@ class LocationCsvSeeder
   def self.load_name_data(url)
     LocationCsvSeeder.get_s3_file(url)
     keys = %i(name
-      alternative_names
-      osm_type
-      osm_id
-      class
-      type
-      coord
-      place_rank
-      importance
-      street
-      city
-      county
-      state
-      country
-      country_code
-      display_name)
+              alternative_names
+              osm_type
+              osm_id
+              class
+              type
+              coord
+              place_rank
+              importance
+              street
+              city
+              county
+              state
+              country
+              country_code
+              display_name)
 
     Zlib::GzipReader.open(TMP_PATH) do |gz|
-    # Zlib::GzipReader.open(DOWNLOADS_NAME_PATH) do |gz|
+      # Zlib::GzipReader.open(DOWNLOADS_NAME_PATH) do |gz|
       csv = CSV.new(gz, headers: false)
       puts
       puts 'Preparing Location Names attributes...'
@@ -139,28 +137,30 @@ class LocationCsvSeeder
 
   def self.load_locode_data(url)
     # LocationCsvSeeder.get_s3_file(url)
-   
-    Zlib::GzipReader.open(url, {encoding: Encoding::ISO_8859_1}) do |gz|
+
+    Zlib::GzipReader.open(url, encoding: Encoding::ISO_8859_1) do |gz|
       csv = CSV.new(gz, headers: false)
       puts
       puts 'Preparing Location Names (LOCODE) attributes...'
       names = []
       csv.each do |row|
         next if row[2].blank? || (row[0] == '=')
+
         obj = {
           language: 'en',
           country_code: row[1].downcase,
           locode: [row[1], row[2]].join,
           name: row[4]
         }
-        
+
         if row[10].blank?
           name = Locations::Name.search(row[4]).results.first
           next if name.nil?
+
           point = name.point
         else
           location = lat_lng_from_string(row[10])
-          point = RGeo::Geographic.spherical_factory(:srid => 4326).point(location[:longitude], location[:latitude])
+          point = RGeo::Geographic.spherical_factory(srid: 4326).point(location[:longitude], location[:latitude])
         end
         obj[:point] = point
         names << obj
@@ -208,9 +208,9 @@ class LocationCsvSeeder
   end
 
   def self.get_s3_file(key)
-    s3 = Aws::S3::Client.new
+    s_3 = Aws::S3::Client.new
 
-    file = s3.get_object(
+    file = s_3.get_object(
       bucket: 'assets.itsmycargo.com',
       key: key,
       response_content_disposition: 'application/x-gzip'
@@ -221,9 +221,9 @@ class LocationCsvSeeder
 
   def self.lat_lng_from_string(string)
     lat_string, lon_string = string.split
-    latitude = BigDecimal.new(lat_string[0..1]) + (BigDecimal.new(lat_string[2..3]) / 60)
+    latitude = BigDecimal(lat_string[0..1]) + (BigDecimal(lat_string[2..3]) / 60)
     latitude *= -1 if lat_string.ends_with?('S')
-    longitude = BigDecimal.new(lon_string[0..2]) + (BigDecimal.new(lon_string[3..4]) / 60)
+    longitude = BigDecimal(lon_string[0..2]) + (BigDecimal(lon_string[3..4]) / 60)
     longitude *= -1 if lon_string.ends_with?('W')
 
     { latitude: latitude, longitude: longitude }

@@ -1,16 +1,38 @@
+# frozen_string_literal: true
+
 class LocationName < ApplicationRecord
   belongs_to :location
   include PgSearch
 
   validates :location_id, uniqueness: {
-    scope:   %i(locality_2 locality_3 locality_4 locality_5 locality_6 locality_7 locality_8 locality_9 locality_10 locality_11 country),
+    scope: %i(locality_2
+              locality_3
+              locality_4
+              locality_5
+              locality_6
+              locality_7
+              locality_8
+              locality_9
+              locality_10
+              locality_11
+              country),
     message: ->(obj, _) { "is a duplicate for the names: #{obj.names.log_format}" }
   }
 
   pg_search_scope :autocomplete,
-                  :against => %i(locality_2 locality_3 locality_4 locality_5 locality_6 locality_7 locality_8 locality_9 locality_10 locality_11 country),
-                  :using => {
-                    :tsearch => {:prefix => true}
+                  against: %i(locality_2
+                              locality_3
+                              locality_4
+                              locality_5
+                              locality_6
+                              locality_7
+                              locality_8
+                              locality_9
+                              locality_10
+                              locality_11
+                              country),
+                  using: {
+                    tsearch: { prefix: true }
                   }
 end
 

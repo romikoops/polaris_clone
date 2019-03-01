@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Legacy
   class Address < ApplicationRecord
     self.table_name = 'addresses'
@@ -18,33 +20,32 @@ module Legacy
         address.geocoded_address = geo.address
         address.city             = geo.city
         address.zip_code         = geo.postal_code
-  
+
         address.country          = Country.find_by(code: geo.country_code)
       end
-  
+
       address
     end
 
     def self.cascading_find_by_name(raw_name)
       name = raw_name.split.map(&:capitalize).join(' ')
-  
+
       sanitize_zip_code!
       zip_code
     end
 
     def get_zip_code
       reverse_geocode if zip_code.nil?
-  
+
       sanitize_zip_code!
       zip_code
     end
 
     def sanitize_zip_code!
       return if zip_code.nil?
-  
+
       self.zip_code = zip_code.gsub(/[^a-zA-z\d]/, '')
     end
-
   end
 end
 

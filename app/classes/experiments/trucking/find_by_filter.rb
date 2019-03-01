@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Experiments
   module Trucking
     class FindByFilter
@@ -11,11 +13,12 @@ module Experiments
       end
 
       def enabled?
-        percent_enabled > 0 && rand(100) < percent_enabled
+        percent_enabled.positive? && rand(100) < percent_enabled
       end
 
       def publish(result)
-        Rails.logger.info "SCIENTIST: Results are equal: #{result.control.value.first&.rates == result.candidates.first.value.first&.rates}"
+        bool = result.control.value.first&.rates == result.candidates.first.value.first&.rates
+        Rails.logger.info "SCIENTIST: Results are equal: #{bool}"
       end
     end
   end

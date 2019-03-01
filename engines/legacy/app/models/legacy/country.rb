@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Legacy
   class Country < ApplicationRecord
     self.table_name = 'countries'

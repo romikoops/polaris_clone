@@ -28,7 +28,7 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def overwrite_zonal_trucking_by_hub
     if params[:file]
-      req = { "xlsx" => params[:file] }
+      req = { 'xlsx' => params[:file] }
       resp = Trucking::Excel::Inserter.new(
         params: req,
         hub_id: params[:id]

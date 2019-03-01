@@ -50,11 +50,11 @@ module OfferCalculatorService
 
         trucking_charge_data[key] = trucking_charges
       end
-    rescue TruckingDataBuilder::MissingTruckingData => e
+    rescue TruckingDataBuilder::MissingTruckingData
       raise ApplicationError::MissingTruckingData
     rescue TruckingTools::LoadMeterageExceeded
       raise ApplicationError::LoadMeterageExceeded
-    rescue StandardError => e
+    rescue StandardError
       raise ApplicationError::MissingTruckingData
     end
 

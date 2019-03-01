@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Legacy
   class Hub < ApplicationRecord
     self.table_name = 'hubs'
