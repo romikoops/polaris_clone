@@ -51,7 +51,7 @@
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
       <p>
-        Support: <%= mail_to(tenant.emails.dig('support', 'general') || 'support@itsmycargo.com') %> | <%= tenant.phones.dig('support') || '+49 151 59085855' %>
+        Support: <%= mail_to(tenant.emails.dig('support', 'general') || 'support@itsmycargo.com') %> | <%= tenant.phones.dig('support') || '' %>
       </p>
     </mj-text>    
   </mj-column>
