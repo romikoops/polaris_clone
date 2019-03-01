@@ -548,7 +548,7 @@ module Trucking
 
         <<-SQL
           WITH
-            td_ids   AS (SELECT id from trucking_locations WHERE id IN #{td_ids.string_sql_format}),
+            td_ids   AS (SELECT id from trucking_locations WHERE id IN #{string_sql_format(td_ids)}),
             hub_ids  AS (VALUES(#{hub_id})),
             t_stamps AS (VALUES(current_timestamp)),
             tp_ids AS (
@@ -617,6 +617,10 @@ module Trucking
         end
 
         geometry
+      end
+
+      def string_sql_format(array)
+        "(#{array.map{|x| "'#{x}'"}.join(', ')})"
       end
     end
   end
