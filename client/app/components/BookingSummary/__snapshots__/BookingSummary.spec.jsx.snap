@@ -452,7 +452,7 @@ exports[`theme is falsy 1`] = `
 </div>
 `;
 
-exports[`trucking.on_carriage is empty object 1`] = `
+exports[`trucking.onCarriage is empty object 1`] = `
 <div
   class="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
@@ -562,7 +562,7 @@ exports[`trucking.on_carriage is empty object 1`] = `
 </div>
 `;
 
-exports[`trucking.pre_carriage is empty object 1`] = `
+exports[`trucking.preCarriage is empty object 1`] = `
 <div
   class="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >

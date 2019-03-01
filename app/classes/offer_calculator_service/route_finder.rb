@@ -8,7 +8,7 @@ module OfferCalculatorService
       routes_attributes = Route.attributes_from_hub_and_itinerary_ids(
         hubs[:origin].ids, hubs[:destination].ids, tenant_itinerary_ids
       )
-        binding.pry
+
       raise ApplicationError::NoRoute if routes_attributes.nil?
 
       routes_attributes.map { |attributes| Route.new(attributes) }

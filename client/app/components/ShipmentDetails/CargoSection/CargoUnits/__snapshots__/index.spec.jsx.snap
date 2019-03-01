@@ -308,7 +308,7 @@ exports[`load type is cargo item 1`] = `
 `;
 
 exports[`load type is cargo item aggregated 1`] = `
-<Connect(CargoItemAggregated)
+<CargoItemAggregated
   ShipmentDetails={
     Object {
       "availableMots": Array [

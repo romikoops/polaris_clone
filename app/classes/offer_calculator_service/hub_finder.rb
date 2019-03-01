@@ -3,7 +3,6 @@
 module OfferCalculatorService
   class HubFinder < Base
     def perform
-      binding.pry
       { origin: 'pre', destination: 'on' }.reduce({}) do |hubs, (target, carriage)|
         hubs.merge(target => hubs_for_target(target, carriage))
       end

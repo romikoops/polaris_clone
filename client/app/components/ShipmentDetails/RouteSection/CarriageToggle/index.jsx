@@ -47,4 +47,8 @@ function CarriageToggle ({
   )
 }
 
+CarriageToggle.defaultProps = {
+  theme: { colors: { brightPrimary: 'blue' } }
+}
+
 export default withNamespaces('shipment')(CarriageToggle)

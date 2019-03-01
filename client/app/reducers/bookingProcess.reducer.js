@@ -19,7 +19,9 @@ const initialState = {
   },
   // These keys should store only page specific auxiliary data
   ChooseShipment: {},
-  ShipmentDetails: {},
+  ShipmentDetails: {
+    availableMots: []
+  },
   ChooseOffer: {},
   BookingDetails: {
     modals: {
