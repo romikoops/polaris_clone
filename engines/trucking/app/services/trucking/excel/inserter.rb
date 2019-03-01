@@ -4,7 +4,7 @@ require 'bigdecimal'
 
 module Trucking
   module Excel
-    class Inserter < Trucking::Excel::Base
+    class Inserter < ::Trucking::Excel::Base
       attr_reader :defaults, :trucking_rate_by_zone, :sheets, :zone_sheet,
                   :fees_sheet, :num_rows, :zip_char_length, :identifier_type, :identifier_modifier, :zones,
                   :all_ident_values_and_countries, :charges, :locations
