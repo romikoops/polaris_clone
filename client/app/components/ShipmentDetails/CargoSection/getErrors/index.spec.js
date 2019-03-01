@@ -132,6 +132,6 @@ test('trucking errors', () => {
     payloadInKg: {
       errors: [{ modeOfTransport: 'truckCarriage', max: 1000, actual: 1200 }],
       type: 'error'
-    },
+    }
   })
 })

@@ -8,7 +8,7 @@ module OfferCalculatorService
       schedules_by_pricings = grouped_schedules(schedules: schedules,
                                                 shipment: @shipment,
                                                 user: user).compact
-                                                
+
       raise ApplicationError::NoValidPricings if schedules_by_pricings.empty?
 
       detailed_schedules = schedules_by_pricings.map do |grouped_result|
@@ -195,7 +195,7 @@ module OfferCalculatorService
         pricings_by_cargo_class_and_dates = pricings_by_cargo_class
                                             .for_dates(closing_start_date, closing_end_date)
       end
-      
+
       pricings_by_cargo_class_and_dates
         .select { |pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil? }
         .group_by { |pricing| pricing.transport_category_id.to_s }
