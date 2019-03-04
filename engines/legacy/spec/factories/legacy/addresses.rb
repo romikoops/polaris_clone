@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :legacy_address, class: 'Legacy::Address' do
     name { 'Gothenburg' }
@@ -8,7 +10,7 @@ FactoryBot.define do
     city { 'Gothenburg' }
     association :country, factory: :legacy_country
 
-    trait :shanghai do 
+    trait :shanghai do
       name { 'Gothenburg' }
       latitude { '57.694253' }
       longitude { '11.854048' }

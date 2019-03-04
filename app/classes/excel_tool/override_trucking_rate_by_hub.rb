@@ -99,6 +99,7 @@ module ExcelTool
           row_key = "#{row_zone_name}_#{row_truck_type}"
           single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
           next if single_ident_values_and_country.nil? || single_ident_values_and_country.first.nil?
+
           single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
           trucking_pricing = create_trucking_pricing(meta)
           stats[:trucking_pricings][:number_created] += 1
@@ -204,13 +205,14 @@ module ExcelTool
               else
                 ident_value = ident
               end
-              
+
               @locations << { postal_code: ident_value, country: current_country[:name] }
               { ident: ident_value, country: idents_and_country[:country] }
             end
           elsif identifier_type == 'location_id'
             geometry = find_geometry(idents_and_country)
             next if geometry.nil?
+
             stats[:trucking_destinations][:number_created] += 1
 
             { ident: geometry&.id, country: idents_and_country[:country] }
@@ -580,6 +582,7 @@ module ExcelTool
       if geometry.nil?
         geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
         return nil if geocoder_results.first.nil?
+
         coordinates = geocoder_results.first.geometry['location']
         geometry = Location.find_by_coordinates(coordinates['lat'], coordinates['lng'])
       end
