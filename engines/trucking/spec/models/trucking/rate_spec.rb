@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 require 'timecop'
-module Trucking
+module Trucking # rubocop:disable Metrics/ModuleLength
   RSpec.describe Rate, type: :model do
     context 'class methods' do
       describe '.find_by_filter' do

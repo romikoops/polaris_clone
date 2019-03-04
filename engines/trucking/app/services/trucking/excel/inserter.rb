@@ -4,7 +4,7 @@ require 'bigdecimal'
 
 module Trucking
   module Excel
-    class Inserter < ::Trucking::Excel::Base
+    class Inserter < ::Trucking::Excel::Base # rubocop:disable Metrics/ClassLength
       attr_reader :defaults, :trucking_rate_by_zone, :sheets, :zone_sheet,
                   :fees_sheet, :num_rows, :zip_char_length, :identifier_type, :identifier_modifier, :zones,
                   :all_ident_values_and_countries, :charges, :locations
@@ -67,8 +67,8 @@ module Trucking
         }
       end
 
-      def overwrite_zonal_trucking_rates_by_hub
-        sheets.slice(2, sheets.length - 1).each do |sheet|
+      def overwrite_zonal_trucking_rates_by_hub # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+        sheets.slice(2, sheets.length - 1).each do |sheet| # rubocop:disable Metrics/BlockLength
           rates_sheet = xlsx.sheet(sheet)
           meta = generate_meta_from_sheet(rates_sheet)
           row_truck_type = !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type]
@@ -78,13 +78,6 @@ module Trucking
           cargo_class = meta[:cargo_class]
           direction = meta[:direction] == 'import' ? 'on' : 'pre'
           courier = Courier.find_or_create_by(name: meta[:courier], tenant: tenant)
-          scoping_attributes_hash = {
-            load_type: load_type,
-            cargo_class: cargo_class,
-            courier_id: courier.id,
-            truck_type: row_truck_type,
-            carriage: direction
-          }
 
           trucking_type_availability = TypeAvailability.find_or_create_by(
             truck_type: row_truck_type,
@@ -109,7 +102,6 @@ module Trucking
             row_data = rates_sheet.row(line)
             row_zone_name = row_data.shift
             row_min_value = row_data.shift
-            row_key = "#{row_zone_name}_#{row_truck_type}"
             single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
             next if single_ident_values_and_country.nil? || single_ident_values_and_country.first.nil?
 
@@ -152,8 +144,8 @@ module Trucking
         Rate.where(id: old_tp_ids).delete_all
       end
 
-      def load_zones
-        (2..num_rows).each do |line|
+      def load_zones # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
+        (2..num_rows).each do |line| # rubocop:disable Metrics/BlockLength
           row_data = zone_sheet.row(line)
           zone_name = row_data[0]
           zones[zone_name] = [] if zones[zone_name].nil?
@@ -186,13 +178,19 @@ module Trucking
         end
       end
 
-      def load_ident_values_and_countries
+      def load_ident_values_and_countries # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
         current_country = { name: nil, code: nil }
-        zones.each do |zone_name, idents_and_countries|
-          current_country = { name: Legacy::Country.find_by_code(idents_and_countries.first[:country]).name, code: idents_and_countries.first[:country] }
-          all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
+        zones.each do |zone_name, idents_and_countries| # rubocop:disable Metrics/BlockLength
+          current_country = {
+            name: Legacy::Country.find_by_code(idents_and_countries.first[:country]).name,
+            code: idents_and_countries.first[:country]
+          }
+          all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country| # rubocop:disable Metrics/BlockLength
             if current_country[:code] != idents_and_country[:country]
-              current_country = { name: Legacy::Country.find_by_code(idents_and_country[:country]).name, code: idents_and_country[:country] }
+              current_country = {
+                name: Legacy::Country.find_by_code(idents_and_country[:country]).name,
+                code: idents_and_country[:country]
+              }
             end
             if idents_and_country[:min] && idents_and_country[:max]
               (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
@@ -251,8 +249,8 @@ module Trucking
         )
       end
 
-      def load_fees_and_charges
-        parse_fees_sheet.each do |row|
+      def load_fees_and_charges # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        parse_fees_sheet.each do |row| # rubocop:disable Metrics/BlockLength
           fee_row_key = "#{row[:fee_code]}_#{row[:truck_type]}_#{row[:direction]}"
           case row[:rate_basis]
           when 'PER_SHIPMENT'
@@ -435,7 +433,7 @@ module Trucking
         )
       end
 
-      def trucking_rates(weight_min_row, val, meta, row_min_value, _row_zone_name, m_index, mod_key)
+      def trucking_rates(weight_min_row, val, meta, row_min_value, _row_zone_name, m_index, mod_key) # rubocop:disable Metrics/PerceivedComplexity, Metrics/ParameterLists
         val *= 2 if identifier_type == 'distance' && identifier_modifier == 'return' && mod_key == 'km'
         w_min = weight_min_row[m_index] || 0
         r_min = row_min_value || 0
@@ -568,7 +566,7 @@ module Trucking
         SQL
       end
 
-      def determine_identifier_type_and_modifier(identifier_type)
+      def determine_identifier_type_and_modifier(identifier_type) # rubocop:disable Metrics/PerceivedComplexity
         if identifier_type == 'CITY'
           'location_id'
         elsif identifier_type == 'POSTAL_CODE'
@@ -596,14 +594,21 @@ module Trucking
         meta.deep_symbolize_keys!
       end
 
-      def find_geometry(idents_and_country)
+      def find_geometry(idents_and_country) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         geometry = if @identifier_modifier == 'postal_code'
-                     Locations::Location.find_by(postal_code: idents_and_country[:ident].upcase, country_code: idents_and_country[:country])
+                     Locations::Location.find_by(
+                       postal_code: idents_and_country[:ident].upcase,
+                       country_code: idents_and_country[:country]
+                     )
                    elsif @identifier_modifier == 'locode'
                      Locations::LocationSeeder.seeding_with_locode(locode: idents_and_country[:ident].upcase)
                    elsif @identifier_modifier == 'postal_city'
                      postal_code, name = idents_and_country[:ident].split('-').map { |string| string.strip.upcase }
-                     Locations::LocationSeeder.seeding_with_postal_code(postal_code: postal_code, country_code: idents_and_country[:country].downcase, terms: name)
+                     Locations::LocationSeeder.seeding_with_postal_code(
+                       postal_code: postal_code,
+                       country_code: idents_and_country[:country].downcase,
+                       terms: name
+                     )
                    else
                      Locations::LocationSeeder.seeding(
                        idents_and_country[:sub_ident],
