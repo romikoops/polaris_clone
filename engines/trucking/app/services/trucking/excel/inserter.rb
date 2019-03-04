@@ -32,17 +32,17 @@ module Trucking
       end
 
       def perform
-        start_time = DateTime.now
-        load_zones
-        load_ident_values_and_countries
-        load_fees_and_charges
-        overwrite_zonal_trucking_rates_by_hub
-        # import_locations
-        end_time = DateTime.now
-        diff = (end_time - start_time) / 86_400
-        puts @missing_locations
-        puts "Time elapsed: #{diff}"
-        { results: results, stats: stats }
+        # start_time = DateTime.now
+        # load_zones
+        # load_ident_values_and_countries
+        # load_fees_and_charges
+        # overwrite_zonal_trucking_rates_by_hub
+        # # import_locations
+        # end_time = DateTime.now
+        # diff = (end_time - start_time) / 86_400
+        # puts @missing_locations
+        # puts "Time elapsed: #{diff}"
+        # { results: results, stats: stats }
       end
 
       private

@@ -28,11 +28,16 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def overwrite_zonal_trucking_by_hub
     if params[:file]
-      req = { 'xlsx' => params[:file] }
-      resp = Trucking::Excel::Inserter.new(
-        params: req,
-        hub_id: params[:id]
-      ).perform
+      args = {
+        params: { 'xlsx' => params[:file] },
+        hub_id: params[:id],
+        user: current_user
+      }
+      experiment = Experiments::Trucking::Inserter.new(name: 'trucking_uploader')
+      experiment.use { ExcelTool::OverrideTruckingRateByHub.new(args).perform }
+      experiment.try { Trucking::Excel::Inserter.new(args).perform }
+
+      resp = experiment.run
       response_handler(resp)
     else
       response_handler(false)

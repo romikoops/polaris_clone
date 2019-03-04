@@ -4,26 +4,14 @@ require 'csv'
 
 class LocationCsvSeeder
   TMP_PATH = 'tmp/tmp_csv.gz'
-  # DOWNLOADS_PATH = '/Users/warwickbeamish/Downloads/loc182csv/netherlands_locodes.csv.gz'
-  DOWNLOADS_PATH = '/Users/warwickbeamish/Downloads/drydock_asia_1.csv.gz'
-  NAMES_PATH = '/Users/warwickbeamish/Documents/imc/customers/locations/locations_names_dump.csv.gz'
-  # DOWNLOADS_NAME_PATH = '/Users/warwickbeamish/Downloads/netherlands_osm_2.csv.gz'
   def self.perform
-    # load_map_data('data/location_data/europe.csv.gz')
-    # load_name_data('data/location_data/germany_osm_1.csv.gz')
-    # load_map_data('data/location_data/asia.csv.gz')
-    # load_name_data('data/location_data/china_osm_2.csv.gz')
-    # load_map_data('data/location_data/europe.csv.gz')
-    # load_name_data('data/location_data/netherlands_osm_2.csv.gz')
-    # load_locode_data('/Users/warwickbeamish/Downloads/loc182csv/UNLOCODE_ListPart1.csv.gz')
-    # load_locode_data('/Users/warwickbeamish/Downloads/loc182csv/UNLOCODE_ListPart2.csv.gz')
-    # load_locode_data('/Users/warwickbeamish/Downloads/loc182csv/UNLOCODE_ListPart3.csv.gz')
-    # germany_no_bounds
+
     load_names_from_csv
   end
 
   def self.load_names_from_csv
-    Zlib::GzipReader.open(NAMES_PATH) do |gz|
+    LocationCsvSeeder.get_s3_file(url)
+    Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, headers: true)
       names = []
       csv.each do |row|
