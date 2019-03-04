@@ -79,7 +79,7 @@ module OfferCalculatorService
     def containers_params
       @params.require(:shipment).permit(
         containers_attributes: %i(
-          payload_in_kg size_class tareWeight quantity dangerous_goods
+          payload_in_kg sizeClass tareWeight quantity dangerous_goods
         )
       )[:containers_attributes].map do |container_attributes|
         container_attributes.to_h.deep_transform_keys { |k| k.to_s.underscore }

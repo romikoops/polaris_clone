@@ -4,14 +4,42 @@ import { camelCase } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { asyncComponent } from 'react-async-component'
+import { Promise } from 'es6-promise-promise'
 import styles from './index.scss'
 import listenerTools from '../../../../helpers/listeners'
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner'
 import { moment } from '../../../../constants'
 import addressFromPlace from './addressFromPlace'
-import addressFromLocation from './addressFromLocation'
-import searchLocations from './searchLocations'
 import { errorActions } from '../../../../actions'
+
+// WIP - Should be refactored out of this file
+import { getTenantApiUrl } from '../../../../constants/api.constants'
+import { authHeader } from '../../../../helpers'
+
+const { fetch } = window
+function searchLocations (input, countries, timestamp, callback) {
+  fetch(
+    `${getTenantApiUrl()}/locations?query=${input}&countries=${countries}`,
+    {
+      method: 'GET',
+      headers: authHeader()
+    }
+  ).then((promise) => {
+    promise.json().then((response) => {
+      if (response.data) {
+        const {
+          results
+        } = response.data
+        callback(results, timestamp)
+      } else {
+        callback([])
+      }
+    })
+  })
+}
+
+// /////////////////////////
 
 class Autocomplete extends PureComponent {
   static filterResults (results, options) {
@@ -256,7 +284,6 @@ class Autocomplete extends PureComponent {
     const {
       target, onAutocompleteTrigger, gMaps, map
     } = this.props
-
     this.getPlace(result.place_id, (place) => {
       addressFromPlace(place, gMaps, map, (address) => {
         onAutocompleteTrigger(target, address)
@@ -266,12 +293,11 @@ class Autocomplete extends PureComponent {
     this.setState({ hideResults: true, listenerSet: false })
   }
 
-  handleArea (location) {
+  handleArea (result) {
     listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
 
     const { target, onAutocompleteTrigger } = this.props
-
-    onAutocompleteTrigger(target, addressFromLocation(location))
+    onAutocompleteTrigger(target, result)
 
     this.setState({ hideResults: true, listenerSet: false })
   }
@@ -398,7 +424,7 @@ class Autocomplete extends PureComponent {
             onChange={this.shouldTriggerInputChange}
             onBlur={this.shouldTriggerInputChange}
             data-hj-whitelist
-            autoComplete="new-password"
+            autoComplete="remove"
           />
 
         </div>
@@ -449,6 +475,25 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withNamespaces(['common', 'errors'])(
+const SyncAutocomplete = withNamespaces(['common', 'errors'])(
   connect(null, mapDispatchToProps)(Autocomplete)
 )
+
+// For specs
+export { SyncAutocomplete }
+
+const AsyncAutocomplete = asyncComponent({
+  resolve: () => new Promise((resolve) => {
+    function resolveIfGoogleDefined () {
+      if (window.google) {
+        resolve(SyncAutocomplete)
+        clearInterval(interval)
+      }
+    }
+
+    const interval = setInterval(resolveIfGoogleDefined, 100)
+    resolveIfGoogleDefined()
+  })
+})
+
+export default AsyncAutocomplete

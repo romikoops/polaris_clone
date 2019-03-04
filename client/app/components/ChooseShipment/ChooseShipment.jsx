@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { bookingProcessActions } from '../../actions'
+import PropTypes from '../../prop-types'
 import styles from './ChooseShipment.scss'
 import defs from '../../styles/default_classes.scss'
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow'
 import { LOAD_TYPES } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
-import {
-  capitalize, gradientTextGenerator, hexToRGB, humanizedMotAndLoadType
-} from '../../helpers'
+import { capitalize, gradientTextGenerator, hexToRGB, humanizedMotAndLoadType } from '../../helpers'
 import TextHeading from '../TextHeading/TextHeading'
 
 class ChooseShipment extends Component {
@@ -27,7 +23,6 @@ class ChooseShipment extends Component {
     this.setLoadType = this.setLoadType.bind(this)
     this.setDirection = this.setDirection.bind(this)
     this.nextStep = this.nextStep.bind(this)
-    this.chooseShipmentDetails = this.chooseShipmentDetails.bind(this)
   }
 
   componentDidMount () {
@@ -75,28 +70,20 @@ class ChooseShipment extends Component {
       } else if (!showCargoTypes && !showDirections) {
         const direction = scope.default_direction
         const loadType = allowedCargoTypes.cargo_item ? 'cargo_item' : 'container'
-        this.chooseShipmentDetails({ loadType, direction })
+        this.props.selectLoadType({ loadType, direction })
       } else {
         this.setState({ allowedCargoTypes, showCargoTypes, showDirections })
       }
     }
   }
 
-  chooseShipmentDetails ({ loadType, direction }) {
-    const { selectLoadType, bookingProcessDispatch } = this.props
-    selectLoadType({ loadType, direction })
-
-    bookingProcessDispatch.updateShipment('loadType', loadType)
-    bookingProcessDispatch.updateShipment('direction', direction)
-  }
-
   nextStep () {
     const { loadType, direction } = this.state
-    this.chooseShipmentDetails({ loadType, direction })
+    this.props.selectLoadType({ loadType, direction })
   }
 
   render () {
-    const { theme, t } = this.props
+    const { theme, t, scope, user } = this.props
 
     const {
       loadType,
@@ -162,44 +149,33 @@ class ChooseShipment extends Component {
             `flex-none ${defs.content_width} layout-row layout-align-center-center layout-wrap`
           }
         >
-          {
-            showDirections
-              ? (
-                <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
-                  <div className="flex-100 layout-row layout-align-start-center">
-                    <TextHeading theme={theme} size={4} text={t('common:importOrExport')} />
-                  </div>
-                  {directionButtons}
-                </div>
-              )
-              : <div className={`flex-100 layout-row layout-wrap ${styles.empty_row} `} />
-          }
-          {
-            showCargoTypes
-              ? (
-                <div
-                  className={
-                    `flex-100 layout-row layout-wrap ${styles.section} ` +
-                  `${direction ? '' : styles.inactive}`
-                  }
-                >
-                  <div className="flex-100 layout-row layout-align-start-center">
-                    <TextHeading
-                      theme={theme}
-                      size={4}
-                      text={t('common:itemsOrContainers')}
-                    />
-                  </div>
-                  <CardLinkRow
-                    theme={theme}
-                    cards={this.cards}
-                    allowedCargoTypes={allowedCargoTypes}
-                    selectedType={loadType}
-                  />
-                </div>
-              )
-              : <div className={`flex-100 layout-row layout-wrap ${styles.empty_row} `} />
-          }
+          { showDirections ? <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
+            <div className="flex-100 layout-row layout-align-start-center">
+              <TextHeading theme={theme} size={4} text={t('common:importOrExport')} />
+            </div>
+            {directionButtons}
+          </div> : <div className={`flex-100 layout-row layout-wrap ${styles.empty_row} `} /> }
+          { showCargoTypes ? <div
+            className={
+              `flex-100 layout-row layout-wrap ${styles.section} ` +
+              `${direction ? '' : styles.inactive}`
+            }
+          >
+            <div className="flex-100 layout-row layout-align-start-center">
+              <TextHeading
+                theme={theme}
+                size={4}
+                text={t('common:itemsOrContainers')}
+              />
+            </div>
+            <CardLinkRow
+              theme={theme}
+              cards={this.cards}
+              allowedCargoTypes={allowedCargoTypes}
+              selectedType={loadType}
+            />
+          </div>
+            : <div className={`flex-100 layout-row layout-wrap ${styles.empty_row} `} /> }
           <div
             className={
               `${styles.next_step_sec} flex-100 layout-row layout-align-center ` +
@@ -230,38 +206,16 @@ class ChooseShipment extends Component {
   }
 }
 
+ChooseShipment.propTypes = {
+  theme: PropTypes.theme,
+  user: PropTypes.user.isRequired,
+  t: PropTypes.func.isRequired,
+  selectLoadType: PropTypes.func.isRequired,
+  scope: PropTypes.objectOf(PropTypes.any).isRequired
+}
+
 ChooseShipment.defaultProps = {
   theme: null
 }
 
-function mapStateToProps (state) {
-  const {
-    users, authentication, bookingData, app
-  } = state
-  const {
-    user, loggedIn, loggingIn, registering
-  } = authentication
-  const { currencies, tenant } = app
-  const { loading, modal } = bookingData
-
-  return {
-    user,
-    users,
-    tenant,
-    loggedIn,
-    bookingData,
-    modal,
-    loggingIn,
-    registering,
-    loading,
-    currencies
-  }
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    bookingProcessDispatch: bindActionCreators(bookingProcessActions, dispatch)
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces('shipment')(ChooseShipment))
+export default withNamespaces('shipment')(ChooseShipment)

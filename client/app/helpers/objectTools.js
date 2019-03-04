@@ -1,5 +1,4 @@
-import mapKeysDeep from 'map-keys-deep-lodash'
-import { camelize, camelToSnakeCase } from './stringTools'
+import { camelize } from './stringTools'
 
 export const isEmpty = obj => (
   Object.keys(obj).every(k => !Object.prototype.hasOwnProperty.call(obj, k))
@@ -40,8 +39,4 @@ export function isDefined (obj) {
 
 export function toQueryString (obj, connect) {
   return Object.keys(obj).map(key => `${connect ? '&' : ''}${key}=${obj[key]}`).join('&')
-}
-
-export function deepSnakefyKeys (obj) {
-  return mapKeysDeep(obj, (_, key) => camelToSnakeCase(key))
 }

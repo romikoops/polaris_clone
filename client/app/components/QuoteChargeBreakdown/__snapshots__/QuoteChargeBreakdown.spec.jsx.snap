@@ -75,7 +75,6 @@ Array [
     startCollapsed={false}
     text=""
     theme={null}
-    wrapperContentClasses=""
   />,
   <CollapsingBar
     collapsed={true}
@@ -344,7 +343,6 @@ Array [
     startCollapsed={false}
     text=""
     theme={null}
-    wrapperContentClasses=""
   />,
   <CollapsingBar
     collapsed={true}
@@ -419,7 +417,6 @@ Array [
     startCollapsed={false}
     text=""
     theme={null}
-    wrapperContentClasses=""
   />,
   <CollapsingBar
     collapsed={true}
@@ -503,7 +500,6 @@ Array [
     startCollapsed={false}
     text=""
     theme={null}
-    wrapperContentClasses=""
   />,
   <CollapsingBar
     collapsed={true}
@@ -578,7 +574,6 @@ Array [
     startCollapsed={false}
     text=""
     theme={null}
-    wrapperContentClasses=""
   />,
 ]
 `;

@@ -286,7 +286,6 @@ exports[`document.viewer is falsy 1`] = `
                   },
                 }
               }
-              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -346,7 +345,6 @@ exports[`document.viewer is falsy 1`] = `
                   },
                 }
               }
-              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -414,7 +412,6 @@ exports[`document.viewer is falsy 1`] = `
                   },
                 }
               }
-              wrapperContentClasses=""
             />
           </div>
         }
@@ -727,7 +724,6 @@ exports[`shallow render 1`] = `
                   },
                 }
               }
-              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -787,7 +783,6 @@ exports[`shallow render 1`] = `
                   },
                 }
               }
-              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -855,7 +850,6 @@ exports[`shallow render 1`] = `
                   },
                 }
               }
-              wrapperContentClasses=""
             />
           </div>
         }
@@ -1019,7 +1013,6 @@ exports[`state.showList is false 1`] = `
                   },
                 }
               }
-              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -1079,7 +1072,6 @@ exports[`state.showList is false 1`] = `
                   },
                 }
               }
-              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -1130,7 +1122,6 @@ exports[`state.showList is false 1`] = `
                   },
                 }
               }
-              wrapperContentClasses=""
             />
           </div>
         }
