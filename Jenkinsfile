@@ -311,7 +311,7 @@ void cucumberTests() {
                 sh "apk add --no-cache --update build-base"
                 sh "bundle install -j\$(nproc) --retry 3"
 
-                timeout(45) {
+                timeout(90) {
                   try {
                     sh "bundle exec knapsack cucumber \"--tags 'not @wip' --format junit --out . --format rerun --out rerun.txt --format pretty\""
                   } catch (hudson.AbortException e) {
