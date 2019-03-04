@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="flex-60 layout-row layout-wrap layout-align-start-center"
+>
+  <CheckboxWrapper
+    checked={null}
+    className="SHAKE_CLASS_DANGEROUS"
+    id="no_dangerous_goods_confirmation"
+    labelContent={
+      <p
+        style={
+          Object {
+            "fontSize": "14px",
+            "margin": 0,
+          }
+        }
+      >
+        I hereby confirm that none of the specified cargo units contain
+         
+        <span
+          className="emulate_link blue_link"
+          onClick={true}
+        >
+          Dangerous Goods
+        </span>
+        .
+      </p>
+    }
+    name="no_dangerous_goods_confirmation"
+    onChange={true}
+    size="30px"
+    style={
+      Object {
+        "marginBottom": "28px",
+      }
+    }
+    theme={
+      Object {
+        "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+        "colors": Object {
+          "brightPrimary": "#2491FD",
+          "brightSecondary": "#25ED36",
+          "primary": "#0D5BA9",
+          "secondary": "#23802A",
+        },
+        "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+        "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+      }
+    }
+  />
+  <CheckboxWrapper
+    checked={true}
+    className="SHAKE_CLASS_STACKABLE"
+    id="stackable_goods_confirmation"
+    labelContent={
+      <p
+        style={
+          Object {
+            "fontSize": "14px",
+            "margin": 0,
+            "width": "100%",
+          }
+        }
+      >
+        I hereby confirm that my cargo consists of stackable items exclusively.
+        <br />
+        <span
+          style={
+            Object {
+              "fontSize": "11px",
+              "width": "100%",
+            }
+          }
+        >
+          (
+          Should you wish to ship non-stackable cargo, please select
+           
+          Cargo Units
+          )
+        </span>
+      </p>
+    }
+    name="stackable_goods_confirmation"
+    onChange={true}
+    size="30px"
+    style={
+      Object {
+        "marginBottom": "15px",
+      }
+    }
+    theme={
+      Object {
+        "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+        "colors": Object {
+          "brightPrimary": "#2491FD",
+          "brightSecondary": "#25ED36",
+          "primary": "#0D5BA9",
+          "secondary": "#23802A",
+        },
+        "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+        "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+      }
+    }
+  />
+</div>
+`;

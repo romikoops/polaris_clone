@@ -16,7 +16,7 @@ export default function CollapsingHeading ({
   return (
     <div
       style={text ? { background: '#E0E0E0', color: '#4F4F4F' } : mainWrapperStyle}
-      className={`${styles.heading} pointy flex-100 layout-row layout-align-space-between-center`}
+      className={`${!contentHeader ? styles.heading : ''} pointy flex-100 layout-row layout-align-space-between-center`}
       onClick={handleCollapser}
     >
       {text ? (
@@ -34,13 +34,15 @@ export default function CollapsingHeading ({
           {contentHeader}
         </div>
       )}
-      <div
-        className={`flex-10 layout-row layout-align-center-center ${styles.arrow_index}`}
-      >
-        {showArrow ? (
+
+      {showArrow ? (
+        <div
+          className={`flex-10 layout-row layout-align-center-center ${styles.arrow_index}`}
+        >
           <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down pointy`} />
-        ) : '' }
-      </div>
+        </div>
+      ) : '' }
+
     </div>
   )
 }

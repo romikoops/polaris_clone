@@ -647,7 +647,7 @@
     "excessChargeableWeight": "Please note that the total chargeable weight for Air Freight shipments",
     "excessWeight": "The total weight of the specified cargo",
     "exceedsMaximum": "exceeds the maximum",
-    "excessDimensionsRequest": "Request excess dimensions",
+    "excessDimensionsRequest": "Request oversized cargo",
     "heightDataTip": "Please note that the maximum height for items in Air Freight shipments is",
     "widthDataTip": "Please note that the maximum width for items in Air Freight shipments is",
     "widthDataTipTwo": "Width is automatically set by 'Collie Type'",

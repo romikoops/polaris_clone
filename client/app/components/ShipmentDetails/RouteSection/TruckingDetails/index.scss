@@ -1,0 +1,47 @@
+:local {
+  .trucking_details {
+    height: 40px;
+    color: white;
+    background: transparent;
+    padding: 2px 3px;
+    h3 {
+      margin: 0 0 22px 0;
+    }
+    h5 {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0 0 5px 0;
+    }
+    .form_group {
+      position: relative;
+      padding: 8px 0;
+      font-size: 14px;
+      font-weight: normal;
+      label {
+        margin-left: 7px;
+      }
+      input {
+        margin: 3px;
+      }
+      .tooltip {
+        height: 25px;
+        margin-left: 4px;
+        display: inline-block;
+      }
+      .overlay {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 20;
+      }
+      &.disabled {
+        cursor: not-allowed;
+      }
+    }
+    .carriage_sec {
+      position: relative;
+    }
+  }
+}
