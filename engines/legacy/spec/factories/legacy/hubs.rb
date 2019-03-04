@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :legacy_hub, class: 'Legacy::Hub' do
     trait :with_lat_lng do

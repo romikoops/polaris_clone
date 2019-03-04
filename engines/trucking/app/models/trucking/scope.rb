@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Trucking
   class Scope < ApplicationRecord
-    has_many :rates, class_name: "Trucking::Rate"
-    belongs_to :courier, class_name: "Trucking::Courier"
+    has_many :rates, class_name: 'Trucking::Rate'
+    belongs_to :courier, class_name: 'Trucking::Courier'
   end
 end
 

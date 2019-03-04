@@ -5,7 +5,13 @@ module Locations
     MultipleResultsFound = Class.new(StandardError)
 
     def self.seeding(*terms)
-      name = Locations::NameFinder.seeding(terms, fields: %i(name display_name postal_code), limit: 1, match: :word_middle, operator: 'or')
+      name = Locations::NameFinder.seeding(
+        terms,
+        fields: %i(name display_name postal_code),
+        limit: 1,
+        match: :word_middle,
+        operator: 'or'
+      )
       return nil unless name
 
       return name.location if name.location
@@ -26,7 +32,11 @@ module Locations
       location = Locations::Location.smallest_contains(lat: name.point.y, lon: name.point.x).first
       return location unless location.nil?
 
-      Locations::LocationSeeder.find_in_city(terms: terms, country_code: country_code, point: postal_location.bounds.point)
+      Locations::LocationSeeder.find_in_city(
+        terms: terms,
+        country_code: country_code,
+        point: postal_location.bounds.point
+      )
     end
 
     def self.seeding_with_locode(locode:)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Trucking
   module Queries
     class FindByFilter

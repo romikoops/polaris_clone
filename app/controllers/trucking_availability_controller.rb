@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'scientist'
 class TruckingAvailabilityController < ApplicationController
   skip_before_action :require_authentication!
@@ -37,14 +38,12 @@ class TruckingAvailabilityController < ApplicationController
       tenant_id: params[:tenant_id],
       load_type: params[:load_type],
       address: Address.new(latitude: params[:lat], longitude: params[:lng]).reverse_geocode,
-      hub_ids:   params[:hub_ids].split(',').map(&:to_i),
-      carriage:  params[:carriage]
+      hub_ids: params[:hub_ids].split(',').map(&:to_i),
+      carriage: params[:carriage]
     }
     experiment = Experiments::Trucking::FindByFilter.new(name: 'trucking_find_by_filter')
     experiment.use { TruckingPricing.find_by_filter(args) }
     experiment.try { Trucking::Rate.find_by_filter(args) }
-    # binding.pry
     experiment.run
-
   end
 end

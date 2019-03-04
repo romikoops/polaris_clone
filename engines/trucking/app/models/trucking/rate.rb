@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Trucking
   class Rate < ApplicationRecord
     has_paper_trail

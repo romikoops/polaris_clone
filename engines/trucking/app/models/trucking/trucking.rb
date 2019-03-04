@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Trucking
   class Trucking < ApplicationRecord
     belongs_to :rate, class_name: 'Trucking::Rate'

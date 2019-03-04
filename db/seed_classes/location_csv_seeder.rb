@@ -125,7 +125,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
   def self.load_locode_data(url) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
     # LocationCsvSeeder.get_s3_file(url)
 
-    Zlib::GzipReader.open(url, encoding: Encoding::ISO_8859_1) do |gz|# rubocop:disable Metrics/BlockLength
+    Zlib::GzipReader.open(url, encoding: Encoding::ISO_8859_1) do |gz| # rubocop:disable Metrics/BlockLength
       csv = CSV.new(gz, headers: false)
       puts
       puts 'Preparing Location Names (LOCODE) attributes...'

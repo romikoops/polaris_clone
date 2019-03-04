@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Trucking
   class TypeAvailability < ApplicationRecord
     TRUCK_TYPES = %w(default chassis side_lifter).freeze
@@ -6,7 +8,7 @@ module Trucking
     validates :truck_type,
               uniqueness: {
                 scope: %i(carriage load_type),
-                message: lambda { |obj, msg|
+                message: lambda { |obj, _msg|
                   "#{obj.truck_type} taken for '#{obj.carriage}-carriage', #{obj.load_type}"
                 }
               }

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Trucking
-  module Queries
+  module Queries # rubocop:disable Metrics/ModuleLength
     RSpec.describe FindByFilter do
       context 'class methods' do
         describe '.perform' do
@@ -77,7 +77,7 @@ module Trucking
             it 'finds the correct trucking_rate with avulsed address filters' do
               trucking_rates = described_class.new(
                 klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage,   country_code: country_code,
+                carriage: carriage, country_code: country_code,
                 zipcode: zipcode
               ).perform
 
@@ -87,7 +87,7 @@ module Trucking
             it 'finds the correct trucking_rate with address object filter' do
               trucking_rates = described_class.new(
                 klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage,   country_code: country_code,
+                carriage: carriage, country_code: country_code,
                 address: address
               ).perform
 
@@ -97,7 +97,7 @@ module Trucking
             it 'finds the correct trucking_rate with cargo_class filter' do
               trucking_rates = described_class.new(
                 klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage,   country_code: country_code,
+                carriage: carriage, country_code: country_code,
                 address: address, cargo_class: 'lcl'
               ).perform
 
@@ -107,7 +107,7 @@ module Trucking
             it 'return empty collection if cargo_class filter does not match any item in db' do
               trucking_rates = described_class.new(
                 klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage,   country_code: country_code,
+                carriage: carriage, country_code: country_code,
                 address: address, cargo_class: 'some_string'
               ).perform
 
@@ -136,7 +136,7 @@ module Trucking
             it 'finds the correct trucking_rate with address object filter' do
               trucking_rates = described_class.new(
                 klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage,   country_code: country_code,
+                carriage: carriage, country_code: country_code,
                 address: address
               ).perform
 
@@ -146,7 +146,7 @@ module Trucking
             it 'finds the correct trucking_rate with cargo_class filter' do
               trucking_rates = described_class.new(
                 klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage,   country_code: country_code,
+                carriage: carriage, country_code: country_code,
                 address: address, cargo_class: 'lcl'
               ).perform
 
@@ -156,7 +156,7 @@ module Trucking
             it 'return empty collection if cargo_class filter does not match any item in db' do
               trucking_rates = described_class.new(
                 klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage,   country_code: country_code,
+                carriage: carriage, country_code: country_code,
                 address: address, cargo_class: 'some_string'
               ).perform
 
@@ -185,7 +185,7 @@ module Trucking
             it 'finds the correct trucking_rate with address object filter', pending: 'Outdated spec' do
               trucking_rates = described_class.new(
                 klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage,   country_code: country_code,
+                carriage: carriage, country_code: country_code,
                 address: address
               ).perform
 
@@ -195,7 +195,7 @@ module Trucking
             it 'finds the correct trucking_rate with cargo_class filter', pending: 'Outdated spec' do
               trucking_rates = described_class.new(
                 klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage,   country_code: country_code,
+                carriage: carriage, country_code: country_code,
                 address: address, cargo_class: 'lcl'
               ).perform
 
@@ -205,7 +205,7 @@ module Trucking
             it 'return empty collection if cargo_class filter does not match any item in db' do
               trucking_rates = described_class.new(
                 klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage,   country_code: country_code,
+                carriage: carriage, country_code: country_code,
                 address: address, cargo_class: 'some_string'
               ).perform
 

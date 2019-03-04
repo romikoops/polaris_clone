@@ -131,7 +131,6 @@ class GeometrySeeder
     puts 'Writing Geometries to DB...'
 
     Locations::Location.import(geometries_data)
-                 
 
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 

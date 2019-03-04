@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :trucking_location, class: 'Trucking::Location' do
     trait :zipcode do
