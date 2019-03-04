@@ -11,6 +11,9 @@ breezy:
 cors:
   origins: <%= ENV['CORS_ORIGINS'] %>
 
+elasticsearch:
+  url:
+
 emails:
   booking:
   domain:

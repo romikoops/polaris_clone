@@ -4,6 +4,9 @@ aws:
   region: eu-central-1
   bucket: imcdev
 
+elasticsearch:
+  url: <%= Rails.application.credentials.dig(:review, :elasticsearch, :url) %>
+
 emails:
   domain: itsmycargo.tech
 
