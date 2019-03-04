@@ -10,7 +10,8 @@ class LocationCsvSeeder
   end
 
   def self.load_names_from_csv
-    LocationCsvSeeder.get_s3_file(url)
+    s3_url = 'data/location_data/locations_names_dump.csv.gz'
+    LocationCsvSeeder.get_s3_file(s3_url)
     Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, headers: true)
       names = []
