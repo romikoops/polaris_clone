@@ -24,7 +24,7 @@ When('I select {string} as {string}') do |place, type|
       trucking_dir = 'on'
     end
     find(".ccb_#{trucking_dir}_carriage", wait: 60).click
-    elem = find('div', class: "ccb_route_section_form_#{type.downcase}", wait: 60)
+    elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 60)
     within(elem) do
       box = find('.ccb_carriage')
       within(box) do
@@ -41,11 +41,15 @@ When('I select {string} as {string}') do |place, type|
     backdrop = all('.ccb_backdrop')
 
     backdrop.first.click() unless backdrop.empty?
+    name_xpath = "@name='#{type.downcase}-street'"
 
     # wait for trucking pricing to return
 
     expect(page).to have_no_css('#floatingCirclesG', wait: 300)
     expect(page).to have_css(".ccb_#{type.downcase}_found", wait: 240, visible: false)
+
+
+
   else
     elem = find('div', class: 'Select-placeholder', text: type, wait: 60)
     elem.sibling('.Select-input').find('input').send_keys(place)
@@ -61,32 +65,41 @@ end
 
 When('I have shipment of {int} {string} with weight of {int}kg') do |count, size, weight|
   # Select container size
-  find('.ccb_size_class .Select-arrow-zone').click
-  find('.ccb_size_class .Select-option', text: size).click
+  elem = find("input[name='0-container_size']", visible: false)
+  control = elem.sibling(class: 'Select-control')
+
+  control.find(class: 'Select-arrow-zone').click
+
+  find('.Select-option', text: size).click
 
   # Weight
-  fill_in '0-payloadInKg', with: weight
+  fill_in '0-payload_in_kg', with: weight
 
   # Quantity
-  fill_in '0-quantity', with: count
+  control = find("input[name='0-quantity']", visible: false).sibling(class: 'Select-control')
+  control.find(class: 'Select-arrow-zone').click
+  control.sibling(class: 'Select-menu-outer').find('.Select-option', text: /\A#{count}\z/).click
 end
 
 When('I have shipment of {int} {string} with length {int}cm, width {int}cm, height {int}cm and weight {int}kg') do |count, colli, length, width, height, weight|
   # Select colli type
-  find('.ccb_colli_type .Select-arrow-zone').click
-  find('.ccb_colli_type .Select-option', text: colli).click
+  elem = find("input[name='0-colliType']", visible: false)
+  control = elem.first(:xpath, './/..//..//..')
+  control.find(class: 'Select-arrow-zone').click
+
+  find('.Select-option', text: colli).click
 
   # Length
-  fill_in '0-dimensionX', with: length
+  fill_in '0-dimension_x', with: length
 
   # Width
-  fill_in '0-dimensionY', with: width
+  fill_in '0-dimension_y', with: width
 
   # Height
-  fill_in '0-dimensionZ', with: height
+  fill_in '0-dimension_z', with: height
 
   # Weight
-  fill_in '0-payloadInKg', with: weight
+  fill_in '0-payload_in_kg', with: weight
 
   # Quantity
   fill_in '0-quantity', with: count

@@ -1,0 +1,241 @@
+:local {
+  .input_box {
+    height: 30px;
+    width: 170px;
+    border-radius: 3px;
+  }
+  .input_box input {
+    height: 36px;
+    border: 0;
+    font-size: 18px;
+    width: 95px !important;
+    background: transparent;
+    border-bottom: 1px solid #BDBDBD;
+    padding: 0 20px 5px 10px;
+    transition: all 0.2s ease;
+    &:focus {
+      outline: none;
+      border-bottom: 1.5px solid #828282;
+    }
+  }
+  .padding_section {
+    padding: 0 20px;
+  }
+  .cargo_unit_header {
+    background: #ECEBEB;
+    border-radius: 4px 4px 0 0;
+    h3 {
+      padding-left: 18px;
+      padding-right: 12px;
+      font-size: 15px;
+      margin: 10px 0;
+    }
+    p {
+      font-size: 10px;
+      color: #B5B5B5;
+      margin: 0;
+    }
+  }
+  .add_unit_wrapper {
+    position: relative;
+    padding-bottom: 50px;
+    &:hover + .new_container_placeholder {
+      opacity: 0.2;
+      visibility: visible;
+    }
+  }
+  .cargo_unit_check {
+    p {
+      padding-left: 10px;
+    }
+  }
+  .add_unit {
+    position: absolute;
+    left: 0;
+    margin-top: -20px;
+    letter-spacing: 0.25px;
+    cursor: pointer;
+    z-index: 100;
+    i {
+      opacity: 0.8;
+      font-size: 30px;
+      transition: all 0.3s ease;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    p {
+      margin-left: 15px;
+      font-weight: bold;
+      font-size: 17px;
+    }
+  }
+  .new_container_placeholder {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .cell_header {
+    font-size: 12px;
+    margin: 0;
+    letter-spacing: 0.25px;
+  }
+  .select_100{
+    width: 100%;
+  }
+  .select {
+    width: 97%;
+  }
+  p.input_label {
+    letter-spacing: 0.25px;
+    font-weight: 500;
+    line-height: normal;
+    font-size: 17px;
+  }
+  .input_value {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .subchargeable {
+    font-weight: 500;
+    font-size: 10px;
+    padding-right: 10px;
+  }
+  .charge_volume {
+    border-bottom: 1px solid white;
+  }
+  .single_charge {
+    padding-right: 10px;
+  }
+  .separator {
+    hr {
+      margin: 57px auto 15px auto;
+      border: 0.5px solid rgba(100, 100, 100, 0.5);
+      width: 64%;
+    }
+  }
+  .cargo_item_inputs {
+    background: rgba(black, 0.005);    
+    padding-top: 20px;
+    border-radius: 1px;
+    .expandIcon {
+      position: absolute;
+      bottom: -16px;
+      right: 9px;
+      font-size: 13.5px;
+      cursor: pointer;
+      i {
+        padding: 5px;
+        margin-left: 5px;
+        font-size: 12px;
+        transition: all 0.3s ease;
+        &.rotated {
+          transform: rotate(90deg);
+        }
+      }
+    }
+  }
+  .cargo_item_info {
+    padding-left: 20px;
+    background: #A2A2A2; 
+    color: white;   
+    border-radius: 0 0 1px 1px;
+    height: 0px;
+    overflow: hidden;
+    transition: all 0.8s ease;
+    &.expanded {
+      height: 70px;
+    }
+    .inner_cargo_item_info {
+      height: 70px;
+      .padding_left {
+        margin-left: 25px;
+      }
+    }
+  }
+  h3.unit_header {
+    margin: 40px 0px 0px;
+    font-size: 17px;
+    letter-spacing: 0.25px;
+  }
+  .delete_icon {
+    i {
+      font-size: 14px;
+      padding: 5px;      
+    }
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  .cargo_item_box {
+    font-size: 14px;
+  }
+  .chargeable_weight {
+    p.chargeable_weight_value {
+      margin: 0 0 0 5px;
+      font-size: 12px !important;
+    }
+  }
+  .cargo_unit_inputs {
+    border-left: 1px solid rgb(236, 236, 236);
+    border-right: 1px solid rgb(236, 236, 236);
+    border-bottom: 1px solid rgb(236, 236, 236);
+  }
+  input[type="number"]::-webkit-input-placeholder {
+    color: #BDBDBD;
+  }
+  .input_length img,
+  .input_width img,
+  .input_weight img,
+  .input_height img {
+    height: 27px;
+    padding-right: 12px;
+  }
+  .input_weight {
+    img {
+      padding: 0 !important;
+    }
+    input {
+      margin-left: 10px !important;
+    }
+  }
+  .input_length,
+  .input_width,
+  .input_weight,
+  .input_height {
+    padding-right: 25px;
+    h4 {
+      margin: 0;
+      margin-bottom: 7px;
+      padding-left: 40px;
+      font-size: 10px;
+    }
+  }
+  .input_weight {
+    h4 {
+      margin: 0;
+      margin-bottom: 7px;
+      padding-left: 50px;
+      font-size: 10px;
+    }
+    input {
+      width: 124px !important;
+    }
+  }
+  .total {
+    width: 100%;
+    position: relative;
+    font-style: italic;
+    p {
+      font-size: 16px !important;
+    }
+    font-weight: 650;
+    letter-spacing: 1.3px;
+  }
+}

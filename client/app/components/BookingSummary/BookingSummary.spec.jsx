@@ -25,8 +25,8 @@ const propsBase = {
     destination: 'FOO_DESTINATION_HUB'
   },
   trucking: {
-    onCarriage: { truckType: 'FOO_ON_CARRIAGE' },
-    preCarriage: { truckType: 'FOO_PRE_CARRIAGE' }
+    on_carriage: { truck_type: 'FOO_ON_CARRIAGE' },
+    pre_carriage: { truck_type: 'FOO_PRE_CARRIAGE' }
   }
 }
 
@@ -50,23 +50,23 @@ test('modeOfTransport is falsy', () => {
   expect(render(<BookingSummary {...props} />)).toMatchSnapshot()
 })
 
-test('trucking.onCarriage is empty object', () => {
+test('trucking.on_carriage is empty object', () => {
   const props = {
     ...propsBase,
     trucking: {
-      preCarriage: { truckType: 'FOO_PRE_CARRIAGE' },
-      onCarriage: { }
+      pre_carriage: { truck_type: 'FOO_PRE_CARRIAGE' },
+      on_carriage: { }
     }
   }
   expect(render(<BookingSummary {...props} />)).toMatchSnapshot()
 })
 
-test('trucking.preCarriage is empty object', () => {
+test('trucking.pre_carriage is empty object', () => {
   const props = {
     ...propsBase,
     trucking: {
-      onCarriage: { truckType: 'FOO_ON_CARRIAGE' },
-      preCarriage: { }
+      on_carriage: { truck_type: 'FOO_ON_CARRIAGE' },
+      pre_carriage: { }
     }
   }
   expect(render(<BookingSummary {...props} />)).toMatchSnapshot()

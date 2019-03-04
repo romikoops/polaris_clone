@@ -1,0 +1,44 @@
+:local {
+  .btn_sec{
+    height: 157px;
+    padding-top: 48px;
+  }
+
+  .trucking_sec {
+    height: 0px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    transition: all 0.6s ease;
+    &.visible {
+      height: 190px;
+    }
+  }
+  .cargo_sec {
+    margin-top: 50px;
+    min-height: 187px;
+    .toggle_aggregated_sec {
+      height: 60px;
+      border-top: 3px solid rgba(0, 0, 0, 0.2);
+      border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+      margin-bottom: 15px;
+      h3 {
+        font-weight: normal;      
+      }
+    }
+  }
+  .bottom_margin {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
+  .map_cont {
+    min-height: 550px;
+  }
+  .note_box {
+    padding-left: 3vw;
+    overflow: hidden;
+    transition: all 1250ms ease-in-out;
+  }
+  .closed_notes {
+    height: 0;
+  }
+}
