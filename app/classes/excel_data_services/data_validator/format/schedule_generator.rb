@@ -12,6 +12,8 @@ module ExcelDataServices
         def build_valid_headers(_data_extraction_method)
           %i(origin
              destination
+             carrier
+             service_level
              etd_days
              transit_time
              cargo_class)

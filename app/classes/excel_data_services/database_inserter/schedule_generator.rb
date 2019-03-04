@@ -19,7 +19,7 @@ module ExcelDataServices
         %i(trips)
       end
 
-      def generate_schedules(params) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def generate_schedules(params)
         itinerary = Itinerary.find_by(
           tenant_id: tenant.id,
           name: "#{params[:origin].titleize} - #{params[:destination].titleize}"
@@ -27,11 +27,7 @@ module ExcelDataServices
 
         return nil unless itinerary
 
-        tenant_vehicle_ids = itinerary
-                             .pricings
-                             .for_load_type(params[:cargo_class].to_s)
-                             .pluck(:tenant_vehicle_id)
-                             .uniq
+        tenant_vehicle_ids = relevant_tenant_vehicle_ids(itinerary, params)
         stops_in_order = itinerary.stops.order(:index)
         today = Date.today
         finish_date = today + 3.months
@@ -48,6 +44,24 @@ module ExcelDataServices
           )
           trip_results.each { |trip| add_stats(:trips, trip) }
         end
+      end
+
+      def relevant_tenant_vehicle_ids(itinerary, params)
+        tenant_vehicle_ids = itinerary
+                             .pricings
+                             .for_load_type(params[:cargo_class].to_s)
+                             .pluck(:tenant_vehicle_id)
+
+        query = TenantVehicle.where(id: tenant_vehicle_ids, tenant_id: tenant.id)
+
+        query = if params[:carrier]
+                  carrier = Carrier.find_by_name(params[:carrier])
+                  query.where(carrier_id: carrier.id)
+                else
+                  query.where(carrier_id: nil)
+                end
+        query = query.where(name: params[:service_level]) if params[:service_level]
+        query.pluck(:id)
       end
     end
   end

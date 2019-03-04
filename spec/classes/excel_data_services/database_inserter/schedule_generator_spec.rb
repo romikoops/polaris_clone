@@ -6,8 +6,8 @@ RSpec.describe ExcelDataServices::DatabaseInserter::ScheduleGenerator do
   describe '.perform' do
     let(:data) do
       [
-        { origin: 'DALIAN', destination: 'FELIXSTOWE', transit_time: 38, cargo_class: 'container', row_nr: 2, ordinals: [4] },
-        { origin: 'DALIAN', destination: 'FELIXSTOWE', transit_time: 38, cargo_class: 'cargo_item', row_nr: 2, ordinals: [4] }
+        { origin: 'DALIAN', destination: 'FELIXSTOWE', transit_time: 38, carrier: nil, service_level: nil, cargo_class: 'container', row_nr: 2, ordinals: [4] },
+        { origin: 'DALIAN', destination: 'FELIXSTOWE', transit_time: 38, carrier: nil, service_level: nil, cargo_class: 'cargo_item', row_nr: 2, ordinals: [4] }
       ]
     end
     let(:tenant) { create(:tenant) }
@@ -34,8 +34,8 @@ RSpec.describe ExcelDataServices::DatabaseInserter::ScheduleGenerator do
              ],
              tenant_vehicles: [tenant_vehicle_1])
     end
-    let(:tenant_vehicle_1) { create(:tenant_vehicle, name: 'cargo_item') }
-    let(:tenant_vehicle_2) { create(:tenant_vehicle, name: 'container') }
+    let(:tenant_vehicle_1) { create(:tenant_vehicle, name: 'cargo_item', tenant: tenant) }
+    let(:tenant_vehicle_2) { create(:tenant_vehicle, name: 'container', tenant: tenant) }
 
     let!(:itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe') }
     let!(:pricing_lcl) { create(:pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_1, transport_category: cargo_transport_category) }
