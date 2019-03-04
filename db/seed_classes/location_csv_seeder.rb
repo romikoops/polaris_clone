@@ -2,10 +2,9 @@
 
 require 'csv'
 
-class LocationCsvSeeder
+class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
   TMP_PATH = 'tmp/tmp_csv.gz'
   def self.perform
-
     load_names_from_csv
   end
 
@@ -31,11 +30,10 @@ class LocationCsvSeeder
     end
   end
 
-  def self.load_map_data(_url)
-    # LocationCsvSeeder.get_s3_file(url)
+  def self.load_map_data(url)
+    LocationCsvSeeder.get_s3_file(url)
 
-    Zlib::GzipReader.open(DOWNLOADS_PATH) do |gz|
-      # binding.pry
+    Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, headers: true)
       puts 'Preparing Geometries attributes...'
 
@@ -64,7 +62,7 @@ class LocationCsvSeeder
     puts 'Locations updated...'
   end
 
-  def self.load_name_data(url)
+  def self.load_name_data(url) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
     LocationCsvSeeder.get_s3_file(url)
     keys = %i(name
               alternative_names
@@ -83,7 +81,7 @@ class LocationCsvSeeder
               country_code
               display_name)
 
-    Zlib::GzipReader.open(TMP_PATH) do |gz|
+    Zlib::GzipReader.open(TMP_PATH) do |gz| # rubocop:disable Metrics/BlockLength
       # Zlib::GzipReader.open(DOWNLOADS_NAME_PATH) do |gz|
       csv = CSV.new(gz, headers: false)
       puts
@@ -124,10 +122,10 @@ class LocationCsvSeeder
     puts 'Location Names updated...'
   end
 
-  def self.load_locode_data(url)
+  def self.load_locode_data(url) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
     # LocationCsvSeeder.get_s3_file(url)
 
-    Zlib::GzipReader.open(url, encoding: Encoding::ISO_8859_1) do |gz|
+    Zlib::GzipReader.open(url, encoding: Encoding::ISO_8859_1) do |gz|# rubocop:disable Metrics/BlockLength
       csv = CSV.new(gz, headers: false)
       puts
       puts 'Preparing Location Names (LOCODE) attributes...'
@@ -168,8 +166,6 @@ class LocationCsvSeeder
   end
 
   def germany_no_bounds
-    s3 = Aws::S3::Client.new
-    bucket = 'assets.itsmycargo.com'
     puts 'Reading from csv...'
 
     LocationCsvSeeder.get_s3_file('data/germany_areas_no_data.csv.gz')

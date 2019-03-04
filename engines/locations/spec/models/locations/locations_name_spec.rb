@@ -1,5 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
+require 'rails_helper'
 
 RSpec.describe Locations::Name, type: :model do
   context 'validations' do
@@ -7,6 +8,4 @@ RSpec.describe Locations::Name, type: :model do
       expect(FactoryBot.build(:locations_name)).to be_valid
     end
   end
-
 end
-

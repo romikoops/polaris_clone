@@ -21,7 +21,6 @@ module Trucking
           signed_url = get_file_url(params['key'], 'assets.itsmycargo.com')
           @xlsx = open_file(signed_url)
         end
-
       end
 
       def perform
@@ -60,9 +59,9 @@ module Trucking
         puts message
       end
 
-      def set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
+      def set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id) # rubocop:disable Metrics/ParameterLists
         if charge[:rate_basis].include? 'RANGE'
-          if load_type === 'fcl'
+          if load_type == 'fcl'
             %w(fcl_20 fcl_40 fcl_40_hq).each do |lt|
               set_range_fee(all_charges, charge, lt, direction, tenant_vehicle_id, mot, counterpart_hub_id)
             end
@@ -74,8 +73,8 @@ module Trucking
         end
       end
 
-      def set_regular_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id)
-        if load_type === 'fcl'
+      def set_regular_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id) # rubocop:disable Metrics/ParameterLists
+        if load_type == 'fcl'
           %w(fcl_20 fcl_40 fcl_40_hq).each do |lt|
             all_charges[counterpart_hub_id][tenant_vehicle_id][direction][lt]['fees'][charge[:key]] = charge
           end

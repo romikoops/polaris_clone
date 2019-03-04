@@ -49,7 +49,7 @@ module Trucking
 
       def local_stats
         {
-          trucking_rates:     {
+          trucking_rates: {
             number_updated: 0,
             number_created: 0
           },
@@ -62,7 +62,7 @@ module Trucking
 
       def _results
         {
-          trucking_rates:     [],
+          trucking_rates: [],
           trucking_locations: []
         }
       end
@@ -79,17 +79,17 @@ module Trucking
           direction = meta[:direction] == 'import' ? 'on' : 'pre'
           courier = Courier.find_or_create_by(name: meta[:courier], tenant: tenant)
           scoping_attributes_hash = {
-            load_type:   load_type,
+            load_type: load_type,
             cargo_class: cargo_class,
-            courier_id:  courier.id,
-            truck_type:  row_truck_type,
-            carriage:    direction
+            courier_id: courier.id,
+            truck_type: row_truck_type,
+            carriage: direction
           }
 
           trucking_type_availability = TypeAvailability.find_or_create_by(
             truck_type: row_truck_type,
-            carriage:   direction,
-            load_type:  load_type
+            carriage: direction,
+            load_type: load_type
           )
           HubAvailability.find_or_create_by(
             hub_id: hub.id,
@@ -122,6 +122,7 @@ module Trucking
                 val = row_data[m_index]
 
                 next unless val
+
                 trucking_rates(weight_min_row, val, meta, row_min_value, row_zone_name, m_index, mod_key)
               end
             end
@@ -140,10 +141,10 @@ module Trucking
       def delete_previous_trucking_rates(hub, td_ids)
         old_tp_ids =
           Rate.joins(truckings: :location)
-                        .where('trucking_truckings.hub_id': hub.id)
-                        .where('trucking_locations.id': td_ids)
-                        .where(scope: @trucking_rate_scope)
-                        .distinct.ids
+              .where('trucking_truckings.hub_id': hub.id)
+              .where('trucking_locations.id': td_ids)
+              .where(scope: @trucking_rate_scope)
+              .distinct.ids
 
         return if old_tp_ids.empty?
 
@@ -177,9 +178,9 @@ module Trucking
 
           elsif row_data[1] && row_data[2]
             zones[zone_name] << {
-              ident:     row_data[1].strip,
+              ident: row_data[1].strip,
               sub_ident: row_data[2].strip,
-              country:   row_data[3].strip
+              country: row_data[3].strip
             }
           end
         end
@@ -210,7 +211,7 @@ module Trucking
               geometry = find_geometry(idents_and_country)
 
               if geometry.nil?
-              
+
                 @missing_locations << idents_and_country.values.join(', ')
                 next
               end
@@ -230,22 +231,22 @@ module Trucking
 
       def parse_fees_sheet
         fees_sheet.parse(
-          fee:        'FEE',
-          mot:        'MOT',
-          fee_code:   'FEE_CODE',
+          fee: 'FEE',
+          mot: 'MOT',
+          fee_code: 'FEE_CODE',
           truck_type: 'TRUCK_TYPE',
-          direction:  'DIRECTION',
-          currency:   'CURRENCY',
+          direction: 'DIRECTION',
+          currency: 'CURRENCY',
           rate_basis: 'RATE_BASIS',
-          ton:        'TON',
-          cbm:        'CBM',
-          kg:         'KG',
-          item:       'ITEM',
-          shipment:   'SHIPMENT',
-          bill:       'BILL',
-          container:  'CONTAINER',
-          minimum:    'MINIMUM',
-          wm:         'WM',
+          ton: 'TON',
+          cbm: 'CBM',
+          kg: 'KG',
+          item: 'ITEM',
+          shipment: 'SHIPMENT',
+          bill: 'BILL',
+          container: 'CONTAINER',
+          minimum: 'MINIMUM',
+          wm: 'WM',
           percentage: 'PERCENTAGE'
         )
       end
@@ -387,10 +388,10 @@ module Trucking
       end
 
       def add_values_to_defaults(modifier_position_objs, header_row)
-
         modifier_position_objs.each do |mod_key, mod_indexes|
           header_row.each_with_index do |cell, i|
             next if !cell || !mod_indexes.include?(i)
+
             defaults[mod_key] = {} unless defaults[mod_key]
             min_max_arr = cell.split(' - ')
             defaults[mod_key][i] = { "min_#{mod_key}": min_max_arr[0].to_d, "max_#{mod_key}": min_max_arr[1].to_d, min_value: nil }.symbolize_keys
@@ -412,24 +413,24 @@ module Trucking
 
       def create_trucking_rate(meta)
         @trucking_rate_scope = Scope.find_or_create_by(
-          carriage:    meta[:direction] == 'import' ? 'on' : 'pre',
+          carriage: meta[:direction] == 'import' ? 'on' : 'pre',
           cargo_class: meta[:cargo_class],
-          load_type:   meta[:load_type] == 'container' ? 'container' : 'cargo_item',
-          courier_id:  find_or_create_courier(meta[:courier]).id,
-          truck_type:  !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type]
+          load_type: meta[:load_type] == 'container' ? 'container' : 'cargo_item',
+          courier_id: find_or_create_courier(meta[:courier]).id,
+          truck_type: !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type]
         )
         Rate.new(
-          load_meterage:          {
-            ratio:        meta[:load_meterage_ratio],
+          load_meterage: {
+            ratio: meta[:load_meterage_ratio],
             height_limit: meta[:load_meterage_height],
-            area_limit:   meta[:load_meterage_area]
+            area_limit: meta[:load_meterage_area]
           },
-          rates:                  {},
-          fees:                   {},
-          cbm_ratio:              meta[:cbm_ratio],
-          modifier:               meta[:scale],
-          tenant_id:              tenant.id,
-          identifier_modifier:    identifier_modifier,
+          rates: {},
+          fees: {},
+          cbm_ratio: meta[:cbm_ratio],
+          modifier: meta[:scale],
+          tenant_id: tenant.id,
+          identifier_modifier: identifier_modifier,
           scope: @trucking_rate_scope
         )
       end
@@ -441,21 +442,21 @@ module Trucking
         if defaults[mod_key]
           defaults[mod_key][m_index].clone.merge(
             min_value: [w_min, r_min].max,
-            rate:      {
-              value:      val,
+            rate: {
+              value: val,
               rate_basis: meta[:rate_basis],
-              currency:   meta[:currency],
-              base:       meta[:base]
+              currency: meta[:currency],
+              base: meta[:base]
             }
           )
         else
           {
             min_value: 0,
-            rate:      {
-              value:      val,
+            rate: {
+              value: val,
               rate_basis: meta[:rate_basis],
-              currency:   meta[:currency],
-              base:       meta[:base]
+              currency: meta[:currency],
+              base: meta[:base]
             }
           }
         end
@@ -492,10 +493,10 @@ module Trucking
 
       def build_trucking_and_locations(single_ident_values_and_country, rate)
         single_ident_values_and_country.each do |values|
-          location = Location.find_or_initialize_by({
-            "country_code" => values[:country].downcase,
-            "#{identifier_type}" => values[:ident]
-          })
+          location = Location.find_or_initialize_by(
+            'country_code' => values[:country].downcase,
+            identifier_type.to_s => values[:ident]
+          )
           @trucking_locations << location
           trucking = Trucking.find_or_initialize_by(
             hub: @hub,
@@ -507,8 +508,8 @@ module Trucking
       end
 
       def build_td_query(single_ident_values, single_ident_values_and_country)
-        identifier_cast = case identifier_type 
-                          when'location_id'
+        identifier_cast = case identifier_type
+                          when 'location_id'
                             '::uuid'
                           when 'distance'
                             '::integer'
@@ -543,7 +544,7 @@ module Trucking
       end
 
       def build_insert_query(tp, td_ids)
-        tp_names = Rate.attribute_names.reject{|k| k == 'id'}
+        tp_names = Rate.attribute_names.reject { |k| k == 'id' }
         tp_insertable = tp.to_postgres_array(tp_names)
 
         <<-SQL
@@ -589,6 +590,7 @@ module Trucking
         meta = {}
         sheet.row(1).each_with_index do |key, i|
           next if key.nil?
+
           meta[key.downcase] = sheet.row(2)[i]
         end
         meta.deep_symbolize_keys!
@@ -596,22 +598,23 @@ module Trucking
 
       def find_geometry(idents_and_country)
         geometry = if @identifier_modifier == 'postal_code'
-                    Locations::Location.find_by(postal_code: idents_and_country[:ident].upcase, country_code: idents_and_country[:country])
-                  elsif @identifier_modifier == 'locode'
-                    Locations::LocationSeeder.seeding_with_locode(locode: idents_and_country[:ident].upcase)
-                  elsif @identifier_modifier == 'postal_city'
-                    postal_code, name = idents_and_country[:ident].split('-').map{|string| string.strip.upcase }
-                    Locations::LocationSeeder.seeding_with_postal_code(postal_code: postal_code, country_code: idents_and_country[:country].downcase, terms: name)
-                  else
-                    Locations::LocationSeeder.seeding(
-                      idents_and_country[:sub_ident],
-                      idents_and_country[:ident]
-                    )
+                     Locations::Location.find_by(postal_code: idents_and_country[:ident].upcase, country_code: idents_and_country[:country])
+                   elsif @identifier_modifier == 'locode'
+                     Locations::LocationSeeder.seeding_with_locode(locode: idents_and_country[:ident].upcase)
+                   elsif @identifier_modifier == 'postal_city'
+                     postal_code, name = idents_and_country[:ident].split('-').map { |string| string.strip.upcase }
+                     Locations::LocationSeeder.seeding_with_postal_code(postal_code: postal_code, country_code: idents_and_country[:country].downcase, terms: name)
+                   else
+                     Locations::LocationSeeder.seeding(
+                       idents_and_country[:sub_ident],
+                       idents_and_country[:ident]
+                     )
                   end
 
         if geometry.nil?
           geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
           return nil if geocoder_results.first.nil?
+
           coordinates = geocoder_results.first.geometry['location']
           geometry = Locations::Location.smallest_contains(lat: coordinates['lat'], lon: coordinates['lng']).first
         end
@@ -620,7 +623,7 @@ module Trucking
       end
 
       def string_sql_format(array)
-        "(#{array.map{|x| "'#{x}'"}.join(', ')})"
+        "(#{array.map { |x| "'#{x}'" }.join(', ')})"
       end
     end
   end

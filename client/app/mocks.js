@@ -244,8 +244,8 @@ export const selectedOffer = {
   },
   import: {
     total: { value: 0.0, currency: 'GBP' },
-    edited_total: null, 
-    name: 'Import', 
+    edited_total: null,
+    name: 'Import',
     imp: { value: 0.0, currency: 'GBP', name: 'Customs Clearance' }
   },
   trucking_pre: {
@@ -253,8 +253,9 @@ export const selectedOffer = {
     edited_total: null,
     name: 'Trucking Pre',
     trucking_lcl: {
-      total: { value: 0.54e3, currency: 'CNY' }, 
-      edited_total: null, name: 'Trucking Lcl', 
+      total: { value: 0.54e3, currency: 'CNY' },
+      edited_total: null,
+      name: 'Trucking Lcl',
       stackable: { value: 0.54e3, currency: 'CNY', name: 'Stackable' }
     }
   },
@@ -263,8 +264,9 @@ export const selectedOffer = {
     edited_total: null,
     name: 'Trucking On',
     trucking_lcl: {
-      total: { value: 0.8e2, currency: 'GBP' }, 
-      edited_total: null, name: 'Trucking Lcl', 
+      total: { value: 0.8e2, currency: 'GBP' },
+      edited_total: null,
+      name: 'Trucking Lcl',
       stackable: { value: 0.8e2, currency: 'GBP', name: 'Stackable' }
     }
   },
@@ -273,8 +275,9 @@ export const selectedOffer = {
     edited_total: null,
     name: 'Cargo',
     265: {
-      total: { value: 0.1875e3, currency: 'GBP' }, 
-      edited_total: null, name: 'Cargoitem', 
+      total: { value: 0.1875e3, currency: 'GBP' },
+      edited_total: null,
+      name: 'Cargoitem',
       bas: { value: 0.1875e3, currency: 'GBP', name: 'Bas' }
     }
   }

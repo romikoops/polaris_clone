@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :locations_name, class: 'Locations::Name' do
     language { 'en' }
-    osm_id { "-2222" }
+    osm_id { '-2222' }
     street { nil }
     country { nil }
     city { 'Shanghai' }
