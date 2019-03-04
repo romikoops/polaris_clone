@@ -1,4 +1,4 @@
-FROM ruby:2.5-alpine3.8 AS builder
+FROM ruby:2.5 AS builder
 LABEL maintainer="development@itsmycargo.com"
 
 ARG BUNDLE_WITHOUT="development test"
@@ -6,15 +6,32 @@ ARG BUNDLE_WITHOUT="development test"
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 
 # Minimal requirements to run a Rails app
-RUN apk add --no-cache --update \
-  build-base \
+RUN apt-get update && apt-get install -y \
+  apt-transport-https \
+  automake \
+  build-essential \
   cmake \
   git \
-  linux-headers \
-  nodejs \
-  npm \
-  postgresql-dev \
-  tzdata
+  libgeos-dev \
+  libpq-dev \
+  locales \
+  tzdata \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
+    locale-gen C.UTF-8 && \
+    /usr/sbin/update-locale LANG=C.UTF-8
+
+ENV LC_ALL C.UTF-8
+
+# Install Node
+ARG NODE_VERSION=node_10.x
+RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+  && echo "deb https://deb.nodesource.com/$NODE_VERSION stretch main" | tee /etc/apt/sources.list.d/nodesource.list \
+  && apt-get update && apt-get install -y \
+    nodejs \
+  && rm -rf /var/lib/apt/lists/*
+
 RUN npm install -g 'mjml@4.3.1'
 
 WORKDIR /app
@@ -34,28 +51,36 @@ RUN echo "$RELEASE" > ./REVISION
 
 RUN RAILS_ENV=production bin/rails assets:precompile
 
-FROM ruby:2.5-alpine3.8 AS app
+FROM ruby:2.5 AS app
 LABEL maintainer="development@itsmycargo.com"
 
 ENV MALLOC_ARENA_MAX 2
 
 # Minimal requirements to run a Rails app
-RUN apk add --no-cache --update \
-  less \
-  nodejs \
-  npm \
-  postgresql-client \
-  tzdata
+RUN apt-get update && apt-get install -y \
+  apt-transport-https \
+  libgeos-c1v5 \
+  libpq5 \
+  locales \
+  tzdata \
+  && rm -rf /var/lib/apt/lists/*
 
-ENV DOCKERIZE_VERSION v0.6.1
+ARG NODE_VERSION=node_10.x
+RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+  && echo "deb https://deb.nodesource.com/$NODE_VERSION stretch main" | tee /etc/apt/sources.list.d/nodesource.list \
+  && apt-get update && apt-get install -y \
+    nodejs \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g 'mjml@4.3.1'
+
+ARG DOCKERIZE_VERSION=v0.6.1
 RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-RUN npm install -g 'mjml@4.3.1'
-
 # Add user
-RUN addgroup -S app && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G app app
+RUN groupadd -r app && useradd -r -d /app/tmp -s /sbin/nologin -g app app
 
 # Copy app with gems from former build stage
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
@@ -66,6 +91,7 @@ USER app
 # Set Rails env
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
+ENV RAILS_ENV review
 
 WORKDIR /app
 

@@ -3,7 +3,7 @@
 wrap.pipeline(timeout: 90) {
   inPod(
     containers: [
-      containerTemplate(name: 'api', image: 'ruby:2.5-alpine3.8', ttyEnabled: true, command: 'cat',
+      containerTemplate(name: 'api', image: 'ruby:2.5', ttyEnabled: true, command: 'cat',
         resourceRequestCpu: '1000m', resourceLimitCpu: '1500m',
         resourceRequestMemory: '1000Mi', resourceLimitMemory: '1500Mi',
         envVars: [
@@ -32,20 +32,31 @@ wrap.pipeline(timeout: 90) {
         jobs['api'] = {
           container('api') {
             timeout(10) {
-              withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}"]) {
+              withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}", "LC_ALL=C.UTF-8"]) {
                 sh """
-                  apk add --no-cache --update \
-                    build-base \
+                  apt-get update && apt-get install -y \
+                    apt-transport-https \
+                    automake \
+                    build-essential \
                     cmake \
-                    dropbear-ssh \
                     git \
-                    linux-headers \
-                    nodejs \
-                    npm \
-                    postgresql-dev \
+                    libgeos-dev \
+                    libpq-dev \
+                    locales \
                     tzdata
+
+                  DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
+                      locale-gen C.UTF-8 && \
+                      /usr/sbin/update-locale LANG=C.UTF-8
+
+                  curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+                    && echo "deb https://deb.nodesource.com/node_10.x stretch main" | tee /etc/apt/sources.list.d/nodesource.list \
+                    && apt-get update && apt-get install -y \
+                      nodejs
+
                   npm install -g 'mjml@4.3.1'
                 """
+
                 sh 'scripts/prepare'
               }
             }
@@ -118,8 +129,8 @@ wrap.pipeline(timeout: 90) {
         if (env.CHANGE_ID) {
           try {
             parallel(
-              danger: { container('api') { codestyle.danger() } },
-              pronto: { container('api') { codestyle.pronto() } }
+              danger: { container('api') { withEnv(["LC_ALL=C.UTF-8"]) { codestyle.danger() } } },
+              pronto: { container('api') { withEnv(["LC_ALL=C.UTF-8"]) { codestyle.pronto() } } }
             )
           } catch (err) {
             error = err
