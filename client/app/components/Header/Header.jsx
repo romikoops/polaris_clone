@@ -80,7 +80,12 @@ class Header extends Component {
   }
 
   goHome () {
-    this.props.appDispatch.goTo('/account')
+    const { user, appDispatch, adminDispatch } = this.props
+    if (user && user.role && user.role.name.includes('admin')) {
+      adminDispatch.getDashboard(true)
+    } else {
+      appDispatch.goTo('/account')
+    }
   }
 
   hideAlert () {
