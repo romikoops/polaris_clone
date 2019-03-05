@@ -47,7 +47,7 @@ function AddressFields ({
           collapsed={collapsed}
           contentHeader={(
             <div className={`${styles.btn_address_form}`} onClick={() => onClickCollapser(target)}>
-              <i className={`${collapsed && styles.collapsed} flex-none fa fa-angle-double-down`} />
+              <i className={`${collapsed && styles.collapsed} flex-none fa fa-angle-double-${collapsed ? 'down' : 'up'}`} />
             </div>
           )}
         >

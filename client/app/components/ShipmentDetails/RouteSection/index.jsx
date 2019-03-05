@@ -160,7 +160,7 @@ class RouteSection extends React.PureComponent {
   handleTruckingDetailsChange (e) {
     const { shipment, bookingProcessDispatch } = this.props
     const [carriage, truckType] = e.target.id.split('-')
-
+    
     bookingProcessDispatch.updateShipment(
       'trucking',
       {
@@ -181,6 +181,7 @@ class RouteSection extends React.PureComponent {
     const { scope, shipment } = this.props
     const carriageOptionScope = scope.carriage_options[camelToSnakeCase(carriage)][shipment.direction]
     const changeShouldApply = carriageOptionScope === 'optional' || (options.force)
+
     if (!changeShouldApply) return
 
     const { bookingProcessDispatch } = this.props
@@ -285,6 +286,7 @@ class RouteSection extends React.PureComponent {
         } else {
           this.updateTruckingAvailability(target, 'animate_available')
           setTimeout(() => this.updateTruckingAvailability(target, 'available'), 1000)
+          setTimeout(() => this.updateCollapsedAddressFields(target, true), 5000)
 
           bookingProcessDispatch.updateShipment(target, { ...address, hubIds })
 
@@ -374,7 +376,7 @@ class RouteSection extends React.PureComponent {
                     </div>
                     <RouteSectionForm
                       {...sharedFormProps}
-                      collapsedAddressFields={collapsedAddressFields.origin}
+                      collapsed={collapsedAddressFields.origin}
                       onClickCollapser={this.handleClickCollapser}
                       target="origin"
                       carriage={preCarriage}
@@ -406,7 +408,7 @@ class RouteSection extends React.PureComponent {
                     </div>
                     <RouteSectionForm
                       {...sharedFormProps}
-                      collapsedAddressFields={collapsedAddressFields.destination}
+                      collapsed={collapsedAddressFields.destination}
                       onClickCollapser={this.handleClickCollapser}
                       target="destination"
                       carriage={onCarriage}
