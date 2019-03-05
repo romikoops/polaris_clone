@@ -49,6 +49,8 @@ class Location < ApplicationRecord
     return nil unless bounds.respond_to?(:centroid)
 
     %i(longitude latitude).zip(bounds.centroid.coordinates).to_h
+  rescue StandardError
+    nil
   end
 
   def as_result_json(options = {})

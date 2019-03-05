@@ -381,7 +381,7 @@ class RouteSection extends React.PureComponent {
                       formData={origin}
                       availableTargets={origins}
                       availableCounterparts={destinations}
-                      countries={this.countries.origin}
+                      countries={this.countries.origin.filter(onlyUnique)}
                       truckingAvailable={truckingAvailability.origin}
                     />
                   </div>
@@ -413,7 +413,7 @@ class RouteSection extends React.PureComponent {
                       formData={destination}
                       availableTargets={destinations}
                       availableCounterparts={origins}
-                      countries={this.countries.destination}
+                      countries={this.countries.destination.filter(onlyUnique)}
                       truckingAvailable={truckingAvailability.destination}
                     />
                   </div>
