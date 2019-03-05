@@ -3,7 +3,6 @@ import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { get, has } from 'lodash'
-import PropTypes from 'prop-types'
 import { adminActions, appActions } from '../../../../actions'
 import '../../../../styles/day-picker-custom.scss'
 import styles from '../../Admin.scss'
@@ -469,7 +468,7 @@ export class AdminHubFees extends Component {
     const {
       t, theme, localCharges, hubId
     } = this.props
-    if (!localCharges) return ''
+    if (!localCharges[hubId]) return ''
     const { serviceLevels, counterpartHubs } = localCharges[hubId]
     const {
       selectOptions,
