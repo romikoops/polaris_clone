@@ -33,7 +33,7 @@ module Locations
         expect(NameDecorator.new(location_names.first).geojson).to eq(example_bounds)
       end
       it 'returns the lat lon coordinates' do
-        expect(NameDecorator.new(location_names.first).lat_lng).to eq(lat: 31.2699895, lng: 121.9318879)
+        expect(NameDecorator.new(location_names.first).lat_lng).to eq(latitude: 31.2699895, longitude: 121.9318879)
       end
     end
   end

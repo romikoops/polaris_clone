@@ -50,7 +50,7 @@ module Locations
         expect(results.first.name).to eq('Baoshun')
         expect(results.first.city).to eq('Shanghai')
         expect(results.first.geojson).to eq(example_bounds)
-        expect(results.first.lat_lng).to eq({lat: 31.2699895, lng: 121.9318879})
+        expect(results.first.lat_lng).to eq({latitude: 31.2699895, longitude: 121.9318879})
         expect(results.first.class).to eq(Locations::NameDecorator)
       end
     end
