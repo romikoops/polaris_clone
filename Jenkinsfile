@@ -1,6 +1,6 @@
 #!groovy
 
-wrap.pipeline(timeout: 90) {
+wrap.pipeline(timeout: 120) {
   inPod(
     containers: [
       containerTemplate(name: 'api', image: 'ruby:2.5', ttyEnabled: true, command: 'cat',
