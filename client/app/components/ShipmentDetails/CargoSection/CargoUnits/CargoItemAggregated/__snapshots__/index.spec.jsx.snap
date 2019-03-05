@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div>
+  <div
+    style={
+      Object {
+        "position": "relative",
+      }
+    }
+  >
+    <div
+      className="layout-row layout-wrap layout-align-center content_width_booking"
+      style={
+        Object {
+          "padding": "30px 0 70px 0",
+        }
+      }
+    >
+      <div
+        className="input_box flex-45 layout-row"
+      >
+        <div
+          className="flex-45 layout-row layout-align-center-center"
+        >
+          Total Volume
+        </div>
+        <CargoUnitNumberInput
+          cargoItem={
+            Object {
+              "cargoItemTypeId": "",
+              "dangerousGoods": false,
+              "dimensionX": 0,
+              "dimensionY": 0,
+              "dimensionZ": 0,
+              "payloadInKg": 0,
+              "quantity": 1,
+              "stackable": true,
+              "totalVolume": 122,
+              "totalWeight": 346,
+            }
+          }
+          className="flex-100"
+          errorMessageStyles={
+            Object {
+              "top": "32px",
+            }
+          }
+          i={0}
+          image=""
+          maxDimension={1000}
+          maxDimensionsErrorText="NO_TRANSLATION | key \\"errors:maxVolume\\""
+          name="0-totalVolume"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onExcessDimensionsRequest={[Function]}
+          t={[Function]}
+          tooltip=""
+          unit=""
+          value={122}
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+        >
+          m³
+        </div>
+      </div>
+      <div
+        className="input_box flex-45 offset-10 layout-row"
+      >
+        <div
+          className="flex-45 layout-row layout-align-center-center"
+        >
+          Total Weight
+        </div>
+        <CargoUnitNumberInput
+          cargoItem={
+            Object {
+              "cargoItemTypeId": "",
+              "dangerousGoods": false,
+              "dimensionX": 0,
+              "dimensionY": 0,
+              "dimensionZ": 0,
+              "payloadInKg": 0,
+              "quantity": 1,
+              "stackable": true,
+              "totalVolume": 122,
+              "totalWeight": 346,
+            }
+          }
+          className="flex-100"
+          errorMessageStyles={
+            Object {
+              "top": "32px",
+            }
+          }
+          i={0}
+          image=""
+          maxDimension={1000}
+          maxDimensionsErrorText="Maximum weight is"
+          name="0-totalWeight"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onExcessDimensionsRequest={[Function]}
+          t={[Function]}
+          tooltip=""
+          unit=""
+          value={346}
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+        >
+          kg
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

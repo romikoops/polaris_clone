@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
+import { get } from 'lodash'
 import PropTypes from '../../prop-types'
 import { tooltips } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
@@ -11,7 +12,7 @@ export function Tooltip ({
 }) {
   const textStyle = color
     ? { color }
-    : gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+    : gradientTextGenerator(get(theme, ['colors', 'primary']), get(theme, ['colors', 'secondary']))
   const tipText = toolText || tooltips[text]
   const clipClass = color ? '' : 'clip'
   const id = v4()

@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="layout-row layout-wrap layout-align-start-center cargo_unit_number_input flex-85-mock"
+>
+  <h4>
+    LABEL_TEXT
+  </h4>
+  <div
+    className="flex-100 layout-row layout-align-start-end input_box"
+  >
+    <img
+      id="mock"
+      src="mock"
+    />
+    <div
+      id="tooltip"
+    />
+    <Formsy(FormsyInput)
+      errorMessageStyles={
+        Object {
+          "top": "32px",
+        }
+      }
+      innerRef={[Function]}
+      name="0-cargo_item"
+      onBlur={null}
+      onChange={null}
+      placeholder="0"
+      required={true}
+      type="number"
+      validationError=""
+      validationErrors={
+        Object {
+          "isDefaultRequiredValue": "Must be greater than 0",
+          "maxDimension": <p>
+            DIMENSIONS_ERROR_TEXT [object Object]
+            <br />
+            <span
+              className="emulate_link blue_link"
+              onClick={null}
+            >
+              Request oversized cargo
+            </span>
+          </p>,
+          "nonNegative": "Must be greater than 0",
+        }
+      }
+      validations={
+        Object {
+          "maxDimension": [Function],
+          "nonNegative": [Function],
+        }
+      }
+      value={11}
+      wrapperClassName="flex-75"
+    />
+    <div
+      className="layout-row layout-align-center-center unit"
+    >
+      sm
+    </div>
+  </div>
+</div>
+`;
+
+exports[`with empty props 1`] = `
+<div
+  className="layout-row layout-wrap layout-align-start-center cargo_unit_number_input "
+>
+  <h4 />
+  <div
+    className="flex-100 layout-row layout-align-start-end input_box"
+  >
+    <Formsy(FormsyInput)
+      errorMessageStyles={
+        Object {
+          "top": "32px",
+        }
+      }
+      innerRef={[Function]}
+      onBlur={[Function]}
+      onChange={[Function]}
+      placeholder="0"
+      required={true}
+      type="number"
+      validationError=""
+      validationErrors={
+        Object {
+          "isDefaultRequiredValue": "Must be greater than 0",
+          "maxDimension": <p>
+            undefined 1000
+            <br />
+            <span
+              className="emulate_link blue_link"
+            >
+              Request oversized cargo
+            </span>
+          </p>,
+          "nonNegative": "Must be greater than 0",
+        }
+      }
+      validations={
+        Object {
+          "maxDimension": [Function],
+          "nonNegative": [Function],
+        }
+      }
+      wrapperClassName="flex-75"
+    />
+    <div
+      className="layout-row layout-align-center-center unit"
+    />
+  </div>
+</div>
+`;
