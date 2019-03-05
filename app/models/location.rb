@@ -45,9 +45,17 @@ class Location < ApplicationRecord
     RGeo::GeoJSON.encode(RGeo::GeoJSON::Feature.new(bounds))
   end
 
+  def center
+    return nil unless bounds.respond_to?(:centroid)
+
+    %i(longitude latitude).zip(bounds.centroid.coordinates).to_h
+  rescue StandardError
+    nil
+  end
+
   def as_result_json(options = {})
     new_options = options.reverse_merge(
-      methods: %i(geojson description),
+      methods: %i(geojson center description),
       except: %i(bounds)
     )
     as_json(new_options)

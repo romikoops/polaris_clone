@@ -1,0 +1,146 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`carriage is on 1`] = `
+<div
+  className="flex-100 layout-row layout-align-end-end"
+>
+  <label
+    className="flex-100 layout-row layout-align-end-start layout-wrap carriage_label"
+    htmlFor="onCarriage"
+  >
+    <p
+      style={
+        Object {
+          "marginRight": "15px",
+        }
+      }
+    >
+      Delivery
+    </p>
+  </label>
+  <Toggle
+    checked={true}
+    className="flex-none ccb_on_carriage toggle"
+    icons={
+      Object {
+        "checked": <Unknown />,
+        "unchecked": <Unknown />,
+      }
+    }
+    id="onCarriage"
+    name="onCarriage"
+    onChange={null}
+    tabIndex="-1"
+  />
+  <style>
+    
+      .react-toggle--checked .react-toggle-track {
+        background: #2491FD !important;
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+      .react-toggle-track {
+        background: #bbb !important;
+      }
+      .react-toggle:hover .react-toggle-track{
+        background: rgba(200, 200, 200, 0.5);
+      }
+    
+  </style>
+</div>
+`;
+
+exports[`renders correctly 1`] = `
+<div
+  className="flex-100 layout-row layout-align-end-end"
+>
+  <label
+    className="flex-100 layout-row layout-align-end-start layout-wrap carriage_label"
+    htmlFor="preCarriage"
+  >
+    <p
+      style={
+        Object {
+          "marginRight": "15px",
+        }
+      }
+    >
+      Pick-up
+    </p>
+  </label>
+  <Toggle
+    checked={true}
+    className="flex-none ccb_pre_carriage toggle"
+    icons={
+      Object {
+        "checked": <Unknown />,
+        "unchecked": <Unknown />,
+      }
+    }
+    id="preCarriage"
+    name="preCarriage"
+    onChange={null}
+    tabIndex="-1"
+  />
+  <style>
+    
+      .react-toggle--checked .react-toggle-track {
+        background: #2491FD !important;
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+      .react-toggle-track {
+        background: #bbb !important;
+      }
+      .react-toggle:hover .react-toggle-track{
+        background: rgba(200, 200, 200, 0.5);
+      }
+    
+  </style>
+</div>
+`;
+
+exports[`with empty props 1`] = `
+<div
+  className="flex-100 layout-row layout-align-end-end"
+>
+  <label
+    className="flex-100 layout-row layout-align-end-start layout-wrap carriage_label"
+    htmlFor="undefinedCarriage"
+  >
+    <p
+      style={
+        Object {
+          "marginRight": "15px",
+        }
+      }
+    >
+      Delivery
+    </p>
+  </label>
+  <Toggle
+    className="flex-none ccb_undefined_carriage toggle"
+    icons={
+      Object {
+        "checked": <Unknown />,
+        "unchecked": <Unknown />,
+      }
+    }
+    id="undefinedCarriage"
+    name="undefinedCarriage"
+    tabIndex="-1"
+  />
+  <style>
+    
+      .react-toggle--checked .react-toggle-track {
+        background: blue !important;
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+      .react-toggle-track {
+        background: #bbb !important;
+      }
+      .react-toggle:hover .react-toggle-track{
+        background: rgba(200, 200, 200, 0.5);
+      }
+    
+  </style>
+</div>
+`;

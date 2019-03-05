@@ -4,6 +4,10 @@ import { theme, identity } from '../../mocks'
 
 import ChooseShipment from './ChooseShipment'
 
+jest.mock('react-redux', () => ({
+  connect: (mapStateToProps, mapDispatchToProps) => Component => Component
+}))
+
 const propsBase = {
   theme,
   messages: ['FOO', 'BAR'],

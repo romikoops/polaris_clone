@@ -44,6 +44,8 @@ gem 'aws-sdk-sqs', '~> 1.10.0'
 gem 'font-awesome-rails'
 gem 'shoryuken'
 
+# Used to ensure rgeo is rebuilt on deploy
+gem 'rgeo', git: 'https://github.com/rgeo/rgeo.git', tag: 'v2.0.0'
 gem 'rgeo-geojson'
 
 # Full Text Search
