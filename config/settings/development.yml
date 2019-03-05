@@ -3,9 +3,6 @@ aws:
   secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
   bucket: assets.itsmycargo.com
 
-elasticsearch:
-  url: https://localhost:9200
-
 emails:
   domain: itsmycargo.tech
 
