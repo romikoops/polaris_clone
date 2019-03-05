@@ -1,11 +1,17 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
+import { connect } from 'react-redux'
 import PropTypes from '../../../prop-types'
-import GenericError from '../../../components/ErrorHandling/Generic'
+import GenericError from '../../ErrorHandling/Generic'
 import styles from './AdminSettings.scss'
 import AdminEmailForm from './AdminEmailForm'
 import AdminRemarksEditor from './AdminRemarksEditor'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
+import { RoundButton } from '../../RoundButton/RoundButton'
+import { getTenantApiUrl } from '../../../constants/api.constants'
+import { authHeader } from '../../../helpers'
+
+const { fetch } = window
 
 class AdminSettings extends PureComponent {
   constructor (props) {
@@ -13,6 +19,7 @@ class AdminSettings extends PureComponent {
     this.state = {
       expander: {}
     }
+    this.handlePasswordChange = this.handlePasswordChange.bind(this)
   }
 
   toggleExpander (key) {
@@ -21,6 +28,20 @@ class AdminSettings extends PureComponent {
         ...this.state.expander,
         [key]: !this.state.expander[key]
       }
+    })
+  }
+
+  handlePasswordChange () {
+    const { email } = this.props
+    const payload = {
+      email,
+      redirect_url: ''
+    }
+
+    fetch(`${getTenantApiUrl()}/auth/password`, {
+      method: 'POST',
+      headers: { ...authHeader(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     })
   }
 
@@ -37,11 +58,13 @@ class AdminSettings extends PureComponent {
       expander
     } = this.state
 
-    const adminEmails = (<AdminEmailForm
-      theme={theme}
-      tenant={tenant}
-      tenantDispatch={tenantDispatch}
-    />)
+    const adminEmails = (
+      <AdminEmailForm
+        theme={theme}
+        tenant={tenant}
+        tenantDispatch={tenantDispatch}
+      />
+    )
 
     const quotationRemarks = (
       <AdminRemarksEditor
@@ -76,6 +99,15 @@ class AdminSettings extends PureComponent {
             faClass="fa fa-edit"
             content={quotationRemarks}
           />
+          <div className="flex-15 layout-row layout-align-center-center">
+            <RoundButton
+              theme={theme}
+              size="medium"
+              active
+              text={t('user:changeMyPassword')}
+              handleNext={this.handlePasswordChange}
+            />
+          </div>
         </div>
       </GenericError>
     )
@@ -96,7 +128,13 @@ AdminSettings.propTypes = {
 }
 
 AdminSettings.defaultProps = {
-  theme: null,
+  theme: null
+}
+function mapStateToProps (state) {
+  const { authentication } = state
+  const { user } = authentication
+
+  return user
 }
 
-export default withNamespaces('account')(AdminSettings)
+export default withNamespaces(['account', 'user'])(connect(mapStateToProps, {})(AdminSettings))
