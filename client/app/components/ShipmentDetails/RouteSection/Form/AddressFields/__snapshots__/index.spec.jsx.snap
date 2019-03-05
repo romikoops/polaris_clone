@@ -105,7 +105,7 @@ exports[`renders correctly 1`] = `
           onClick={[Function]}
         >
           <i
-            className="undefined flex-none fa fa-angle-double-down"
+            className="undefined flex-none fa fa-angle-double-up"
           />
         </div>
       }
