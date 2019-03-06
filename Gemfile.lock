@@ -20,6 +20,13 @@ GIT
       rugged (~> 0.24, >= 0.23.0)
       thor (~> 0.20.0)
 
+GIT
+  remote: https://github.com/rgeo/rgeo.git
+  revision: 43b35866c1bdd8e87bb08bde9fa4d6aab422190e
+  tag: v2.0.0
+  specs:
+    rgeo (2.0.0)
+
 PATH
   remote: engines/admiralty_assets
   specs:
@@ -558,7 +565,6 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     retriable (3.1.2)
-    rgeo (2.0.0)
     rgeo-activerecord (6.1.0)
       activerecord (~> 5.0)
       rgeo (>= 1.0.0)
@@ -791,6 +797,7 @@ DEPENDENCIES
   rails-erd
   rails-i18n
   recipient_interceptor
+  rgeo!
   rgeo-geojson
   roo
   roo-xls
