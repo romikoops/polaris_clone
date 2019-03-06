@@ -52,12 +52,12 @@ class CargoSection extends React.PureComponent {
     return loadType === 'cargo_item' ? { ...this.cargoItem } : { ...this.container }
   }
 
-  handleDeleteUnit (cargoUnit, i) {
+  handleDeleteUnit (i) {
     const { bookingProcessDispatch } = this.props
     bookingProcessDispatch.deleteCargoUnit(i)
   }
 
-  handleAddUnit (cargoUnit) {
+  handleAddUnit () {
     const { bookingProcessDispatch } = this.props
     bookingProcessDispatch.addCargoUnit(this.getNewUnit())
   }

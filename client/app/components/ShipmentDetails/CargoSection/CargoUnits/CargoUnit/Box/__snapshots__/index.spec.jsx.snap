@@ -3,7 +3,7 @@
 exports[`renders correctly 1`] = `
 <div
   className="layout-row flex-100 layout-wrap layout-align-stretch"
-  key="UNIQ_KEY"
+  key="cargo_item_0"
   name="0-cargoItem"
   style={
     Object {
