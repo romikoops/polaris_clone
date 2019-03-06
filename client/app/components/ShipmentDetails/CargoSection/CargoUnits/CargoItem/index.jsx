@@ -95,8 +95,6 @@ class CargoItem extends React.PureComponent {
       this.getMaxDimensionsToApply()[prop === 'collectiveWeight' ? 'payloadInKg' : prop]
     )
 
-    const value = prop === 'collectiveWeight' ? cargoItem.payloadInKg * cargoItem.quantity : cargoItem[prop]
-
     return {
       cargoItem,
       className: prop === 'payloadInKg' ? 'flex-30 offset-5' : 'flex-20',
@@ -105,7 +103,7 @@ class CargoItem extends React.PureComponent {
       name: `${i}-${prop}`,
       onBlur: onChangeCargoUnitInput,
       onExcessDimensionsRequest: () => toggleModal('maxDimensions'),
-      value
+      value: cargoItem[prop]
     }
   }
 
@@ -123,7 +121,6 @@ class CargoItem extends React.PureComponent {
       t,
       theme,
       toggleModal,
-      toggleStackable,
       uniqKey,
       totalShipmentErrors
     } = this.props
