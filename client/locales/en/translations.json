@@ -6,6 +6,7 @@
     "none": "None",
     "requested": "Requested",
     "request": "Request",
+    "weight": "Weight",
     "selectIncoterm": "Select Incoterm:",
     "uploadNewDocument": "Upload a New Document",
     "hsCodes": "HS Codes",

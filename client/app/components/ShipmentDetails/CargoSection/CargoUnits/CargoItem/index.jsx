@@ -145,7 +145,7 @@ class CargoItem extends React.PureComponent {
         i={i}
         onChangeCargoUnitInput={onChangeCargoUnitInput}
         onDeleteUnit={onDeleteUnit}
-        unqiKey={uniqKey}
+        uniqKey={uniqKey}
       >
         <div style={{ position: 'relative' }}>
           <div

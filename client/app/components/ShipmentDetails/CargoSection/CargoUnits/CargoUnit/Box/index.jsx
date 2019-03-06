@@ -12,7 +12,7 @@ function CargoUnitBox ({
 
   return (
     <div
-      key={uniqKey}
+      key={`cargo_item_${i}`}
       name={`${i}-${container ? 'container' : 'cargoItem'}`}
       className="layout-row flex-100 layout-wrap layout-align-stretch"
       style={{ position: 'relative', margin: '30px 0' }}
@@ -22,7 +22,7 @@ function CargoUnitBox ({
 
         {
           deletable && (
-            <div className={styles.delete_icon} onClick={onDeleteUnit}>
+            <div className={styles.delete_icon} onClick={() => onDeleteUnit(i)}>
               {t('common:delete')}
               <i className="fa fa-trash" />
             </div>

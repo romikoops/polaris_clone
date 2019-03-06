@@ -153,7 +153,6 @@ class ShipmentDetails extends React.PureComponent {
         style={{ minHeight: '90%' }}
       >
         {this.getVisibleModal()}
-
         <Formsy
           onValidSubmit={this.getOffers}
           onInvalidSubmit={this.handleInvalidGetOffersAttempt}
