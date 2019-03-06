@@ -75,12 +75,15 @@ class RouteSectionMapContent extends React.PureComponent {
     if (has(markers, [target, 'title'])) {
       markers[target].setMap(null)
     }
+    const newMarker = this.getMarker(target, address)
 
+    if (!newMarker) return null
+    
     this.setState(
       prevState => ({
         markers: {
           ...prevState.markers,
-          [target]: this.getMarker(target, address)
+          [target]: newMarker
         }
       }),
       () => {
@@ -90,7 +93,7 @@ class RouteSectionMapContent extends React.PureComponent {
       }
     )
 
-    if (address.geojson) {
+    if (has(address, ['geojson'])) {
       this.setArea(target, address.geojson)
     }
   }

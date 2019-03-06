@@ -103,7 +103,7 @@ class CargoItem extends React.PureComponent {
       i,
       maxDimension,
       name: `${i}-${prop}`,
-      onChange: onChangeCargoUnitInput,
+      onBlur: onChangeCargoUnitInput,
       onExcessDimensionsRequest: () => toggleModal('maxDimensions'),
       value
     }
