@@ -37,7 +37,7 @@ module Locations
     context '.search' do
      
       it 'returns results including the desired object' do
-        results = Autocomplete.search('Baoshun', ['China'], 'en')
+        results = Autocomplete.search(term: 'Baoshun', countries: ['China'], lang: 'en')
 
         expect(results).to include(target_result)
       end
