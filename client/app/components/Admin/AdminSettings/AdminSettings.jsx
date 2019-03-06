@@ -9,12 +9,8 @@ import AdminEmailForm from './AdminEmailForm'
 import AdminRemarksEditor from './AdminRemarksEditor'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
 import { RoundButton } from '../../RoundButton/RoundButton'
-import { getTenantApiUrl } from '../../../constants/api.constants'
-import { authHeader } from '../../../helpers'
 import { authenticationActions } from '../../../actions'
 import CircleCompletion from '../../CircleCompletion/CircleCompletion'
-
-const { fetch } = window
 
 class AdminSettings extends PureComponent {
   constructor (props) {
@@ -30,7 +26,7 @@ class AdminSettings extends PureComponent {
 
     if (nextProps.authentication.passwordEmailSent) {
       setTimeout(() => {
-        authenticationDispatch.updateReduxStore({ passwordEmailSent: false })
+        authenticationDispatch.updateReduxStore({ passwordEmailSent: false, passwordEmailRequested: false })
       }, 2000)
     }
   }

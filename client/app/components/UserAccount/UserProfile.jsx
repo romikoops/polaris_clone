@@ -1,25 +1,22 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import styles from './UserAccount.scss'
-import UserLocations from './UserLocations'
 import ProfileBox from './ProfileBox'
 import EditProfileBox from './EditProfileBox'
-import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.scss'
 import {
   gradientTextGenerator,
-  authHeader,
   isQuote
 } from '../../helpers'
-import { getTenantApiUrl } from '../../constants/api.constants'
 import { currencyOptions } from '../../constants'
 import DocumentsDownloader from '../Documents/Downloader'
 import GreyBox from '../GreyBox/GreyBox'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
+import { authenticationActions } from '../../actions'
 import DeleteAccountModal from './DeleteAccountModal'
-
-const { fetch } = window
 
 const EditNameBox = () => (
   <div className={`${styles.set_size} layout-row flex-100`} />
@@ -31,8 +28,6 @@ class UserProfile extends Component {
     this.state = {
       editBool: false,
       editObj: {},
-      passwordResetSent: false,
-      passwordResetRequested: false,
       currentCurrency: {}
     }
     this.makePrimary = this.makePrimary.bind(this)
@@ -50,6 +45,16 @@ class UserProfile extends Component {
   componentDidMount () {
     this.props.setNav('profile')
     window.scrollTo(0, 0)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const { authenticationDispatch } = this.props
+
+    if (nextProps.authentication.passwordEmailSent) {
+      setTimeout(() => {
+        authenticationDispatch.updateReduxStore({ passwordEmailSent: false, passwordEmailRequested: false })
+      }, 2000)
+    }
   }
 
   setCurrency (event) {
@@ -106,22 +111,9 @@ class UserProfile extends Component {
   }
 
   handlePasswordChange () {
-    const payload = {
-      email: this.props.user.email,
-      redirect_url: ''
-    }
-    fetch(`${getTenantApiUrl()}/auth/password`, {
-      method: 'POST',
-      headers: { ...authHeader(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    }).then((promise) => {
-      promise.json().then((
-        this.setState({
-          passwordResetSent: true,
-          passwordResetRequested: false
-        })))
-    })
-    this.setState({ passwordResetRequested: true })
+    const { authenticationDispatch, user } = this.props
+    const { email } = user
+    authenticationDispatch.changePassword(email, '')
   }
 
   saveEdit () {
@@ -132,13 +124,13 @@ class UserProfile extends Component {
 
   render () {
     const {
-      user, addresses, theme, userDispatch, tenant, t
+      user, addresses, theme, userDispatch, tenant, t, authentication
     } = this.props
     if (!user) {
       return ''
     }
     const {
-      editBool, editObj, passwordResetSent, passwordResetRequested, showDeleteAccountModal
+      editBool, editObj, showDeleteAccountModal
     } = this.state
     const textStyle = theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -192,7 +184,7 @@ class UserProfile extends Component {
               user={editObj}
               handleChange={this.handleChange}
               handlePasswordChange={this.handlePasswordChange}
-              passwordResetSent={this.passwordResetSent}
+              passwordResetSent={authentication.passwordEmailSent}
             />
           ) : (
             <div className={`flex-100 layout-row layout-align-start-stretch ${styles.username_title}`}>
@@ -238,8 +230,8 @@ class UserProfile extends Component {
                     theme={theme}
                     edit={this.editProfile}
                     handlePasswordChange={this.handlePasswordChange}
-                    passwordResetSent={passwordResetSent}
-                    passwordResetRequested={passwordResetRequested}
+                    passwordResetSent={authentication.passwordEmailSent}
+                    passwordResetRequested={authentication.passwordEmailRequested}
                     hideEdit={isQuote(tenant)}
                   />
                   {
@@ -321,4 +313,16 @@ UserProfile.defaultProps = {
   tenant: {}
 }
 
-export default withNamespaces(['common', 'footer', 'user', 'imc'])(UserProfile)
+function mapStateToProps (state) {
+  const { authentication } = state
+
+  return { authentication }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    authenticationDispatch: bindActionCreators(authenticationActions, dispatch)
+  }
+}
+
+export default withNamespaces(['common', 'footer', 'user', 'imc', 'account'])(connect(mapStateToProps, mapDispatchToProps)(UserProfile))

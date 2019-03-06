@@ -132,13 +132,15 @@ export default function (state = initialState, action) {
     case authenticationConstants.CHANGE_PASSWORD_REQUEST: {
       return {
         ...state,
-        passwordEmailSent: false
+        passwordEmailSent: false,
+        passwordEmailRequested: true
       }
     }
     case authenticationConstants.CHANGE_PASSWORD_SUCCESS: {
       return {
         ...state,
-        passwordEmailSent: true
+        passwordEmailSent: true,
+        passwordEmailRequested: false
       }
     }
     case 'GENERAL_UPDATE': {
