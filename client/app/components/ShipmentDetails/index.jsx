@@ -1,6 +1,7 @@
 import React from 'react'
 import Formsy from 'formsy-react'
 import { connect } from 'react-redux'
+import * as Scroll from 'react-scroll'
 import { bindActionCreators } from 'redux'
 import { get } from 'lodash'
 import { withNamespaces } from 'react-i18next'
@@ -13,10 +14,15 @@ import GetOffersSection from './GetOffersSection'
 import { shipmentActions, bookingProcessActions } from '../../actions'
 import { getTotalShipmentErrors } from './CargoSection/getErrors'
 
+
 class ShipmentDetails extends React.PureComponent {
   constructor (props) {
     super(props)
-    this.state = { totalShipmentErrors: {}, getOffersDisabled: false }
+    this.state = {
+      totalShipmentErrors: {},
+      getOffersDisabled: false,
+      addressErrors: { origin: false, destination: false }
+    }
 
     this.toggleModal = this.toggleModal.bind(this)
     this.getVisibleModal = this.getVisibleModal.bind(this)
@@ -100,7 +106,27 @@ class ShipmentDetails extends React.PureComponent {
     return this.modalsElements[visibleModalKey].jsx
   }
 
-  handleInvalidGetOffersAttempt () {
+  handleInvalidGetOffersAttempt (e) {
+    const { scope } = this.props
+    const addressErrors = { origin: false, destination: false }
+    if (
+      scope.require_full_address &&
+      (e['origin-street'] === '' || e['origin-number'] === '')
+    ) {
+      scrollTo('originAuto')
+      addressErrors.origin = true
+    }
+    if (
+      scope.require_full_address &&
+      (e['destination-street'] === '' || e['destination-number'] === '')
+    ) {
+      scrollTo('destinationAuto')
+      addressErrors.destination = true
+    }
+    if (e.selectedDay === '') {
+      scrollTo('dayPicker')
+    }
+    this.setState({ addressErrors })
     console.log('Invalid Attempt', this.props)
   }
 
@@ -118,7 +144,8 @@ class ShipmentDetails extends React.PureComponent {
   }
 
   render () {
-    const { totalShipmentErrors, getOffersDisabled } = this.state
+    const { totalShipmentErrors, getOffersDisabled, addressErrors } = this.state
+    const { scope } = this.props
 
     return (
       <div
@@ -134,7 +161,7 @@ class ShipmentDetails extends React.PureComponent {
           onInvalid={this.disableGetOffers}
           className="flex-100 layout-row layout-wrap"
         >
-          <RouteSection />
+          <RouteSection requiresFullAddress={scope.require_full_address} addressErrors={addressErrors}/>
           <DayPickerSection />
           <CargoSection toggleModal={this.toggleModal} totalShipmentErrors={totalShipmentErrors}/>
           <GetOffersSection totalShipmentErrors={totalShipmentErrors} getOffersDisabled={getOffersDisabled} />
@@ -145,12 +172,14 @@ class ShipmentDetails extends React.PureComponent {
 }
 
 function mapStateToProps (state) {
-  const { bookingProcess, bookingData } = state
+  const { bookingProcess, bookingData, app } = state
   const { response } = bookingData
+  const { tenant } = app
+  const { scope } = tenant
   const shipmentId = get(response, 'stage1.shipment.id')
   const maxAggregateDimensions = get(response, 'stage1.maxAggregateDimensions')
 
-  return { ...bookingProcess, shipmentId, maxAggregateDimensions }
+  return { ...bookingProcess, shipmentId, maxAggregateDimensions, scope }
 }
 
 function mapDispatchToProps (dispatch) {
@@ -160,5 +189,13 @@ function mapDispatchToProps (dispatch) {
   }
 }
 const connectedShipmentDetails = connect(mapStateToProps, mapDispatchToProps)(ShipmentDetails)
+
+function scrollTo (target, offset) {
+  Scroll.scroller.scrollTo(target, {
+    duration: 1500,
+    smooth: true,
+    offset: offset || -150
+  })
+}
 
 export default withNamespaces(['errors', 'cargo', 'common', 'dangerousGoods'])(connectedShipmentDetails)
