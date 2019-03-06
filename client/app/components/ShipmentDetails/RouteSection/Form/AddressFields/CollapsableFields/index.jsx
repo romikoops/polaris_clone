@@ -10,7 +10,8 @@ function CollapsableFields ({
   formData,
   onInputBlur,
   truckingAvailable,
-  t
+  t,
+  requiresFullAddress
 }) {
   if (truckingAvailable === 'request') return <LoadingSpinner size="medium" />
   if (truckingAvailable === 'animate_available') {
@@ -28,7 +29,7 @@ function CollapsableFields ({
   const truckingClass = truckingAvailable === 'available' ? `ccb_${target}_found` : ''
 
   return (
-    <div className={`flex-100 ${truckingClass}`}>
+    <div className={`flex-100 ${truckingClass}`} name={`${target}-address`}>
       <div className={`flex-100 layout-row ${styles.form_title}`}>
         <h5>{target === 'origin' ? t('shipment:enterPickUp') : t('shipment:enterDelivery')}</h5>
       </div>
@@ -39,6 +40,9 @@ function CollapsableFields ({
         name={`${target}-street`}
         value={formData.street}
         onBlur={onInputBlur}
+        validations={{
+          requiresFullAddress: (values, value) => requiresFullAddress && !!value
+        }}
       />
       <FormsyInput
         wrapperClassName="flex-100 layout-row layout-align-center"
@@ -46,6 +50,9 @@ function CollapsableFields ({
         name={`${target}-number`}
         value={formData.number}
         onBlur={onInputBlur}
+        validations={{
+          requiresFullAddress: (values, value) => requiresFullAddress && !!value
+        }}
       />
       <FormsyInput
         wrapperClassName="flex-100 layout-row layout-align-center"
@@ -53,6 +60,9 @@ function CollapsableFields ({
         name={`${target}-zipCode`}
         value={formData.zipCode}
         onBlur={onInputBlur}
+        validations={{
+          isBlank: (values, value) => !!value
+        }}
       />
       <FormsyInput
         wrapperClassName="flex-100 layout-row layout-align-center"
@@ -60,6 +70,9 @@ function CollapsableFields ({
         name={`${target}-city`}
         value={formData.city}
         onBlur={onInputBlur}
+        validations={{
+          isBlank: (values, value) => !!value
+        }}
       />
       <FormsyInput
         wrapperClassName="flex-100 layout-row layout-align-center"
@@ -67,6 +80,9 @@ function CollapsableFields ({
         name={`${target}-country`}
         value={formData.country}
         onBlur={onInputBlur}
+        validations={{
+          isBlank: (values, value) => !!value
+        }}
       />
       <div className="flex-100 pointy layout-row layout-align-start-center">
         <div

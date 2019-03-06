@@ -127,6 +127,7 @@ exports[`renders correctly 1`] = `
       >
         <CollapsableFields
           formData={Object {}}
+          onInputBlur={null}
           t={[Function]}
           target="TARGET"
         />

@@ -378,7 +378,10 @@ class Autocomplete extends PureComponent {
       ]
 
     return (
-      <div className={`auto_origin ccb_carriage flex-100 layout-row layout-wrap layout-align-center-center ${styles.autocomplete_container}`}>
+      <div
+        className={`auto_origin ccb_carriage flex-100 layout-row layout-wrap layout-align-center-center ${styles.autocomplete_container}`}
+        name={`${target}Auto`}
+      >
         <div
           className={`flex-none ccb_backdrop ${!hideResults && hasResults ? styles.exit_click : styles.hidden}`}
           onClick={() => {

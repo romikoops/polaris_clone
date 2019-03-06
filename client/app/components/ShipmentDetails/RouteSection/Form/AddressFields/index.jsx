@@ -19,7 +19,8 @@ function AddressFields ({
   countries,
   collapsed,
   onClickCollapser,
-  truckingAvailable
+  truckingAvailable,
+  requiresFullAddress
 }) {
   return (
     <div className={`ccb_route_section_form_${target} ${styles.route_section_form_wrapper}`}>
@@ -55,8 +56,10 @@ function AddressFields ({
             <CollapsableFields
               target={target}
               formData={formData}
+              onInputBlur={onInputBlur}
               onClickCollapser={onClickCollapser}
               truckingAvailable={truckingAvailable}
+              requiresFullAddress={requiresFullAddress}
             />
           </div>
         </CollapsingBar>

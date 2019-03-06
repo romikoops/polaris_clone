@@ -65,13 +65,14 @@ class RouteSection extends React.PureComponent {
 
   static getDerivedStateFromProps (nextProps, prevState) {
     const {
-      lookupTablesForRoutes, routes, shipment, tenant, bookingProcessDispatch, shipmentDispatch
+      lookupTablesForRoutes, routes, shipment, tenant, bookingProcessDispatch, shipmentDispatch, addressErrors
     } = nextProps
+    const { collapsedAddressFields } = prevState
     const {
       preCarriage, onCarriage, origin, destination
     } = shipment
     const nextState = {
-      preCarriage, onCarriage, origin, destination
+      preCarriage, onCarriage, origin, destination, collapsedAddressFields
     }
 
     if (
@@ -152,6 +153,12 @@ class RouteSection extends React.PureComponent {
         const country = preCarriage ? availableRoutes[0].origin.country : origin.country
         shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })
       }
+    }
+    if (addressErrors.origin) {
+      nextState.collapsedAddressFields.origin = false
+    }
+    if (addressErrors.destination) {
+      nextState.collapsedAddressFields.destination = false
     }
 
     return nextState
@@ -320,7 +327,7 @@ class RouteSection extends React.PureComponent {
 
   render () {
     const {
-      shipment, theme, scope, availableMots
+      shipment, theme, scope, availableMots, requiresFullAddress
     } = this.props
 
     const {
@@ -385,6 +392,7 @@ class RouteSection extends React.PureComponent {
                       availableCounterparts={destinations}
                       countries={this.countries.origin.filter(onlyUnique)}
                       truckingAvailable={truckingAvailability.origin}
+                      requiresFullAddress={requiresFullAddress}
                     />
                   </div>
                   <div className="flex-45 layout-row layout-wrap layout-align-start-start">
@@ -417,6 +425,7 @@ class RouteSection extends React.PureComponent {
                       availableCounterparts={origins}
                       countries={this.countries.destination.filter(onlyUnique)}
                       truckingAvailable={truckingAvailability.destination}
+                      requiresFullAddress={requiresFullAddress}
                     />
                   </div>
                   <OfferError availableMots={availableMots} componentName="RouteSection" />
