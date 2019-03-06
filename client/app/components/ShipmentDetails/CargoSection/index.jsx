@@ -81,6 +81,7 @@ class CargoSection extends React.PureComponent {
   }
 
   handleChangeCargoUnitInput (e) {
+    const { scope } = this.props
     const { target } = e
     const { name, value } = target
 
@@ -94,7 +95,7 @@ class CargoSection extends React.PureComponent {
       newValue
     })
 
-    if (['collectiveWeight', 'quantity'].includes(prop)) {
+    if (['collectiveWeight', 'quantity'].includes(prop) && get(scope, ['consolidation', 'cargo', 'frontend'], false)) {
       this.handleChangeCollectiveWeight(index)
     }
   }
