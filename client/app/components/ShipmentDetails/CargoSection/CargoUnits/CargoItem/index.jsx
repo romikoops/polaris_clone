@@ -266,6 +266,7 @@ class CargoItem extends React.PureComponent {
               onChange={(checked, e) => onChangeCargoUnitCheckbox(!checked, e)}
               prop="stackable"
               labelText={t('common:nonStackable')}
+              onWrapperClick={scope.non_stackable_goods ? '' : () => toggleModal('nonStackable')}
               checkedTransform={x => !x}
               {...sharedPropsCheckbox}
             />
