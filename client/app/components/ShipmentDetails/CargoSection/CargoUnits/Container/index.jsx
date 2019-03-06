@@ -30,7 +30,7 @@ function Container ({
             className={styles.padding_section}
             labelText={t('cargo:cargoGrossWeight')}
             name={`${i}-payloadInKg`}
-            onChange={onChangeCargoUnitInput}
+            onBlur={onChangeCargoUnitInput}
             unit="kg"
             onExcessDimensionsRequest={() => toggleModal('maxDimensions')}
             maxDimension={maxPayloadInKg}

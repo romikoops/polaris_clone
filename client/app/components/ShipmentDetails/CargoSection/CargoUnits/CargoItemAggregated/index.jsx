@@ -21,7 +21,7 @@ function CargoItemAggregated ({
     unit: '',
     i: 0,
     name: `0-${prop}`,
-    onChange: onChangeCargoUnitInput,
+    onBlur: onChangeCargoUnitInput,
     onExcessDimensionsRequest: () => toggleModal('maxDimensions'),
     value: cargoItem[prop]
   })
