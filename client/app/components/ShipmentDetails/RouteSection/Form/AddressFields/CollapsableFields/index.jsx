@@ -41,7 +41,7 @@ function CollapsableFields ({
         value={formData.street}
         onBlur={onInputBlur}
         validations={{
-          requiresFullAddress: (values, value) => requiresFullAddress && !!value
+          requiresFullAddress: (values, value) => (requiresFullAddress && !!value) || (!requiresFullAddress)
         }}
       />
       <FormsyInput
@@ -51,7 +51,7 @@ function CollapsableFields ({
         value={formData.number}
         onBlur={onInputBlur}
         validations={{
-          requiresFullAddress: (values, value) => requiresFullAddress && !!value
+          requiresFullAddress: (values, value) => (requiresFullAddress && !!value) || (!requiresFullAddress)
         }}
       />
       <FormsyInput
