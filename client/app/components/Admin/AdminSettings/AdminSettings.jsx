@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import PropTypes from '../../../prop-types'
 import GenericError from '../../ErrorHandling/Generic'
 import styles from './AdminSettings.scss'
@@ -10,6 +11,8 @@ import CollapsingBar from '../../CollapsingBar/CollapsingBar'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import { getTenantApiUrl } from '../../../constants/api.constants'
 import { authHeader } from '../../../helpers'
+import { authenticationActions } from '../../../actions'
+import CircleCompletion from '../../CircleCompletion/CircleCompletion'
 
 const { fetch } = window
 
@@ -22,6 +25,16 @@ class AdminSettings extends PureComponent {
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
   }
 
+  componentWillReceiveProps (nextProps) {
+    const { authenticationDispatch } = this.props
+
+    if (nextProps.authentication.passwordEmailSent) {
+      setTimeout(() => {
+        authenticationDispatch.updateReduxStore({ passwordEmailSent: false })
+      }, 2000)
+    }
+  }
+
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -32,17 +45,9 @@ class AdminSettings extends PureComponent {
   }
 
   handlePasswordChange () {
-    const { email } = this.props
-    const payload = {
-      email,
-      redirect_url: ''
-    }
-
-    fetch(`${getTenantApiUrl()}/auth/password`, {
-      method: 'POST',
-      headers: { ...authHeader(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
+    const { authenticationDispatch, authentication } = this.props
+    const { email } = authentication.user
+    authenticationDispatch.changePassword(email, '')
   }
 
   render () {
@@ -51,7 +56,8 @@ class AdminSettings extends PureComponent {
       theme,
       tenant,
       tenantDispatch,
-      remarkDispatch
+      remarkDispatch,
+      authentication
     } = this.props
 
     const {
@@ -99,7 +105,15 @@ class AdminSettings extends PureComponent {
             faClass="fa fa-edit"
             content={quotationRemarks}
           />
-          <div className="flex-15 layout-row layout-align-center-center">
+          <CircleCompletion
+            icon="fa fa-check"
+            iconColor={theme.colors.primary || 'green'}
+            animated={authentication.passwordEmailSent}
+            size="50px"
+            opacity={authentication.passwordEmailSent ? '1' : '0'}
+            optionalText={t('account:checkEmailForPassword')}
+          />
+          <div className="flex-100 layout-row layout-align-center-center">
             <RoundButton
               theme={theme}
               size="medium"
@@ -132,9 +146,14 @@ AdminSettings.defaultProps = {
 }
 function mapStateToProps (state) {
   const { authentication } = state
-  const { user } = authentication
 
-  return user
+  return { authentication }
 }
 
-export default withNamespaces(['account', 'user'])(connect(mapStateToProps, {})(AdminSettings))
+function mapDispatchToProps (dispatch) {
+  return {
+    authenticationDispatch: bindActionCreators(authenticationActions, dispatch)
+  }
+}
+
+export default withNamespaces(['account', 'user'])(connect(mapStateToProps, mapDispatchToProps)(AdminSettings))
