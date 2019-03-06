@@ -5,6 +5,8 @@ module ExcelDataServices
     VALID_SCHEDULE_GENERATOR_HEADERS = %i(
       origin
       destination
+      carrier
+      service_level
       etd_days
       transit_time
       cargo_class
