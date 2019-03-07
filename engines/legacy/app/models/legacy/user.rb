@@ -51,4 +51,5 @@ end
 #  external_id            :string
 #  agency_id              :integer
 #  internal               :boolean          default(FALSE)
+#  deleted_at             :datetime
 #

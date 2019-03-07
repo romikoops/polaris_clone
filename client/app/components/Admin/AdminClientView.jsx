@@ -74,6 +74,7 @@ export class AdminClientView extends Component {
     const { client } = clientData
     adminDispatch.deleteClient(client.id, true)
     this.closeConfirm()
+    adminDispatch.getClients(true)
   }
 
   confirmDelete () {
@@ -223,9 +224,9 @@ export class AdminClientView extends Component {
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
             <p className="flex-none"> 
-{' '}
-{user.company_name}
-</p>
+              {' '}
+              {user.company_name}
+            </p>
           </div>
         </div>
         <div className="flex-50 layout-row layout-align-start-start layout-wrap">
@@ -236,9 +237,9 @@ export class AdminClientView extends Component {
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
             <p className="flex-none"> 
-{' '}
-{user.email}
-</p>
+              {' '}
+              {user.email}
+            </p>
           </div>
         </div>
         <div className="flex-50 layout-row layout-align-start-start layout-wrap">
@@ -249,9 +250,9 @@ export class AdminClientView extends Component {
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
             <p className="flex-none"> 
-{' '}
-{user.phone}
-</p>
+              {' '}
+              {user.phone}
+            </p>
           </div>
         </div>
       </div>
@@ -340,6 +341,18 @@ export class AdminClientView extends Component {
             ) : (
               ''
             )}
+            <GreyBox
+              wrapperClassName="flex-25 layout-row layout-align-center-center card_margin_right"
+              contentClassName="layout-row flex-75 layout-align-center-center"
+            >
+              <RoundButton
+                theme={theme}
+                size="full"
+                text={t('common:delete')}
+                handleNext={() => this.confirmDelete()}
+                iconClass="fa-trash"
+              />
+            </GreyBox>
           </div>
         </div>
 

@@ -86,6 +86,47 @@ exports[`clientData.managerAssignments is falsy 1`] = `
         titleAction={false}
         wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
       />
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-row flex-75 layout-align-center-center"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-25 layout-row layout-align-center-center card_margin_right"
+      >
+        <RoundButton
+          active={false}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-trash"
+          inverse={false}
+          size="full"
+          text="Delete"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </GreyBox>
     </div>
   </div>
   <div
@@ -423,6 +464,47 @@ exports[`managerAssignments is truthy 1`] = `
         titleAction={false}
         wrapperClassName="flex-30 layout-row layout-align-start-start"
       />
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-row flex-75 layout-align-center-center"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-25 layout-row layout-align-center-center card_margin_right"
+      >
+        <RoundButton
+          active={false}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-trash"
+          inverse={false}
+          size="full"
+          text="Delete"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </GreyBox>
     </div>
   </div>
   <div
@@ -620,6 +702,47 @@ exports[`managers is falsy 1`] = `
         titleAction={false}
         wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
       />
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-row flex-75 layout-align-center-center"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-25 layout-row layout-align-center-center card_margin_right"
+      >
+        <RoundButton
+          active={false}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-trash"
+          inverse={false}
+          size="full"
+          text="Delete"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </GreyBox>
     </div>
   </div>
   <div
@@ -817,6 +940,47 @@ exports[`shallow render 1`] = `
         titleAction={false}
         wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
       />
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-row flex-75 layout-align-center-center"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-25 layout-row layout-align-center-center card_margin_right"
+      >
+        <RoundButton
+          active={false}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-trash"
+          inverse={false}
+          size="full"
+          text="Delete"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </GreyBox>
     </div>
   </div>
   <div
@@ -1014,6 +1178,47 @@ exports[`state.confirm is true 1`] = `
         titleAction={false}
         wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
       />
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-row flex-75 layout-align-center-center"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-25 layout-row layout-align-center-center card_margin_right"
+      >
+        <RoundButton
+          active={false}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-trash"
+          inverse={false}
+          size="full"
+          text="Delete"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </GreyBox>
     </div>
   </div>
   <div
@@ -1331,6 +1536,47 @@ exports[`state.showAddManager is true 1`] = `
         titleAction={false}
         wrapperClassName="flex-30 layout-row layout-align-start-start"
       />
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-row flex-75 layout-align-center-center"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-25 layout-row layout-align-center-center card_margin_right"
+      >
+        <RoundButton
+          active={false}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-trash"
+          inverse={false}
+          size="full"
+          text="Delete"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </GreyBox>
     </div>
   </div>
   <div
@@ -1521,6 +1767,40 @@ exports[`theme is falsy 1`] = `
         titleAction={false}
         wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
       />
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-row flex-75 layout-align-center-center"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-25 layout-row layout-align-center-center card_margin_right"
+      >
+        <RoundButton
+          active={false}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-trash"
+          inverse={false}
+          size="full"
+          text="Delete"
+          theme={null}
+        />
+      </GreyBox>
     </div>
   </div>
   <div
