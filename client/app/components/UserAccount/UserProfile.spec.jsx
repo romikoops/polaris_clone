@@ -11,6 +11,9 @@ const propsBase = {
   theme,
   user,
   tenant,
+  authentication: {
+    passwordEmailSent: false
+  },
   setNav: identity,
   appDispatch: {
     setCurrency: identity

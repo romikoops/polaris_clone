@@ -77,7 +77,6 @@ exports[`shallow render 1`] = `
               handlePasswordChange={[Function]}
               hide={false}
               hideEdit={true}
-              passwordResetRequested={false}
               passwordResetSent={false}
               style={
                 Object {
