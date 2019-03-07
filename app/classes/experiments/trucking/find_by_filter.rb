@@ -17,7 +17,7 @@ module Experiments
       end
 
       def publish(result)
-        bool = result.control.value.first&.rates == result.candidates.first.value.first&.rates
+        bool = result.control.value.first&.rates == result.candidates.first&.value&.first&.rates
         Rails.logger.info "SCIENTIST: Results are equal: #{bool}"
       end
     end
