@@ -9,7 +9,7 @@ import styles from './Header.scss'
 import { LoginPage } from '../../containers/LoginPage/LoginPage'
 import { Modal } from '../Modal/Modal'
 import {
-  appActions,
+  userActions,
   messagingActions,
   adminActions,
   authenticationActions,
@@ -80,11 +80,13 @@ class Header extends Component {
   }
 
   goHome () {
-    const { user, appDispatch, adminDispatch } = this.props
-    if (user && user.role && user.role.name.includes('admin')) {
+    const { user, userDispatch, adminDispatch } = this.props
+    if (user.guest) { 
+      this.toggleShowLogin()
+    } else if (user && user.role && user.role.name.includes('admin')) {
       adminDispatch.getDashboard(true)
     } else {
-      appDispatch.goTo('/account')
+      userDispatch.getDashboard(user.id, true)
     }
   }
 
@@ -315,7 +317,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    appDispatch: bindActionCreators(appActions, dispatch),
+    userDispatch: bindActionCreators(userActions, dispatch),
     authenticationDispatch: bindActionCreators(authenticationActions, dispatch),
     adminDispatch: bindActionCreators(adminActions, dispatch),
     shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
