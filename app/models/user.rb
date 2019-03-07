@@ -5,7 +5,7 @@ class User < Legacy::User
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable # , :omniauthable
-  
+
   include DeviseTokenAuth::Concerns::User
   before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
   before_create :set_default_currency
@@ -18,7 +18,7 @@ class User < Legacy::User
   }
 
   acts_as_paranoid
-  
+
   # Basic associations
   belongs_to :tenant
   belongs_to :role
