@@ -34,15 +34,18 @@ class DocumentsForm extends React.Component {
     this.onChange = this.onChange.bind(this)
     this.fileUpload = this.fileUpload.bind(this)
   }
+
   onFormSubmit (e) {
     e.preventDefault() // Stop form submit
     if (this.state.file) {
       this.fileUpload(this.state.file)
     }
   }
+
   onChange (e) {
     this.fileUpload(e.target.files[0])
   }
+
   fileUpload (baseFile) {
     const file = baseFile
     const {
@@ -68,6 +71,7 @@ class DocumentsForm extends React.Component {
         if (type) {
           file.doc_type = type
         }
+        this.uploaderInput.value = ''
 
         return dispatchFn(file)
       }
@@ -83,6 +87,7 @@ class DocumentsForm extends React.Component {
         body: formData
       }
       const uploadUrl = getTenantApiUrl() + url
+      this.uploaderInput.value = ''
 
       return fetch(uploadUrl, requestOptions).then(DocumentsForm.handleResponse)
     }
@@ -92,20 +97,25 @@ class DocumentsForm extends React.Component {
 
     return this.showFileTypeError()
   }
+
   showFileTypeError () {
     this.setState({ error: true })
     this.alertTimeout = setTimeout(() => this.setState({ error: false }), 5000)
   }
+
   clickUploaderInput (e) {
     e.preventDefault()
     this.uploaderInput.click()
   }
+
   confirmDelete (doc) {
     this.setState({ docToDelete: doc, showConfirm: true })
   }
+
   toggleShowConfim () {
     this.setState(prevState => ({ showConfirm: !prevState.showConfirm }))
   }
+
   deleteFile (e) {
     e.preventDefault()
     const { deleteFn } = this.props
@@ -117,6 +127,7 @@ class DocumentsForm extends React.Component {
     deleteFn(docToDelete)
     this.toggleShowConfim()
   }
+
   render () {
     const {
       theme,
@@ -135,7 +146,10 @@ class DocumentsForm extends React.Component {
     const errorStyle = this.state.error ? styles.error : ''
     const fileName = doc ? (
       <p className="flex-none pointy" onClick={() => DocumentsForm.downloadFile(doc.signed_url)}>
-        <Truncate lines={1}>{doc.text} </Truncate>
+        <Truncate lines={1}>
+{doc.text}
+{' '}
+ </Truncate>
       </p>
     ) : (
       ''
@@ -168,13 +182,15 @@ class DocumentsForm extends React.Component {
     )
     const iconRowStyle = viewer && !multiple ? styles.viewer_row : styles.icon_row
     const confirmModal = showConfirm
-      ? (<AdminPromptConfirm
+      ? (
+<AdminPromptConfirm
         theme={theme}
         heading={t('doc:deleteThisDoc')}
         text={t('doc:areYouSure')}
         confirm={() => this.deleteFile()}
         deny={() => this.toggleShowConfim()}
-      />) : ''
+      />
+) : ''
 
     return (
       <div
