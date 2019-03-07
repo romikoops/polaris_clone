@@ -15,7 +15,7 @@ class DocumentsMultiForm extends React.Component {
     if (!response.ok) {
       return Promise.reject(response.statusText)
     }
-
+    
     return response.json()
   }
 
@@ -33,15 +33,18 @@ class DocumentsMultiForm extends React.Component {
     this.onChange = this.onChange.bind(this)
     this.fileUpload = this.fileUpload.bind(this)
   }
+
   onFormSubmit (e) {
     e.preventDefault() // Stop form submit
     if (this.state.file) {
       this.fileUpload(this.state.file)
     }
   }
+
   onChange (e) {
     this.fileUpload(e.target.files[0])
   }
+
   fileUpload (baseFile) {
     const file = baseFile
     const {
@@ -67,6 +70,8 @@ class DocumentsMultiForm extends React.Component {
         if (type) {
           file.doc_type = type
         }
+        this.uploaderInput.value = ''
+
         return dispatchFn(file)
       }
       if (uploadFn) {
@@ -81,19 +86,24 @@ class DocumentsMultiForm extends React.Component {
         body: formData
       }
       const uploadUrl = getTenantApiUrl() + url
+      this.uploaderInput.value = ''
+      
       return fetch(uploadUrl, requestOptions).then(DocumentsMultiForm.handleResponse)
     }
+
     return this.showFileTypeError()
   }
+
   showFileTypeError () {
     this.setState({ error: true })
     this.alertTimeout = setTimeout(() => this.setState({ error: false }), 5000)
   }
+
   clickUploaderInput (e) {
     e.preventDefault()
     this.uploaderInput.click()
   }
-  
+
 
   render () {
     const {
@@ -116,11 +126,17 @@ class DocumentsMultiForm extends React.Component {
       ? documents.map((d) => {
         const link = d.signed_url ? (
           <p className="flex pointy" key={d.id} onClick={() => DocumentsMultiForm.downloadFile(d.signed_url)}>
-            <Truncate lines={1}>{d.text} </Truncate>
+            <Truncate lines={1}>
+              {d.text}
+              {' '}
+            </Truncate>
           </p>
         ) : (
           <p className="flex">
-            <Truncate lines={1}>{d.text} </Truncate>
+            <Truncate lines={1}>
+              {d.text}
+              {' '}
+            </Truncate>
           </p>
         )
 
@@ -154,7 +170,7 @@ class DocumentsMultiForm extends React.Component {
               data-tip={tooltip}
               data-for={tooltipId}
             >
-              <form >
+              <form>
                 <button
                   className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`}
                   onClick={e => this.clickUploaderInput(e)}
