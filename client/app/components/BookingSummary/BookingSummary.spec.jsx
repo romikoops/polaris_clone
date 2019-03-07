@@ -3,7 +3,7 @@ import '../../mocks/libraries/react-router-dom'
 
 import * as React from 'react'
 import { render } from 'enzyme'
-import { theme } from '../../mocks'
+import { theme } from '../../mocks/index'
 
 import BookingSummary from './BookingSummary'
 

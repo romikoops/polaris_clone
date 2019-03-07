@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme } from '../../../mocks'
+import { theme } from '../../../mocks/index'
 
 import NotesCard from '.'
 

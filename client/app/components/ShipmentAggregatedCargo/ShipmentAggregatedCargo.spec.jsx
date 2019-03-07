@@ -7,7 +7,7 @@ import {
   identity,
   theme,
   turnFalsy
-} from '../../mocks'
+} from '../../mocks/index'
 
 import ShipmentAggregatedCargo from './ShipmentAggregatedCargo'
 

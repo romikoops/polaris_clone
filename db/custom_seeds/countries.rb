@@ -7,7 +7,7 @@ countries_serialized = URI.open(countries_url).read
 countries = JSON.parse(countries_serialized)
 
 countries.each do |country|
-  country_obj = Country.find_or_create_by!(
+  country_obj = Legacy::Country.find_or_create_by!(
     name: country['name'],
     code: country['alpha2Code'],
     flag: country['flag']
@@ -34,7 +34,7 @@ regions.each do |region|
   region_serialized = URI.open(region_url).read
   region_countries = JSON.parse(region_serialized)
   region_countries.each do |rc|
-    country = Country.find_by_name(rc['name'])
+    country = Legacy::Country.find_by_name(rc['name'])
     Tag.find_or_create_by!(
       tag_type: 'region',
       name: region.capitalize,
@@ -50,7 +50,7 @@ region_blocs.each do |region_bloc|
   region_bloc_serialized = URI.opeen(region_bloc_url).read
   region_bloc_countries = JSON.parse(region_bloc_serialized)
   region_bloc_countries.each do |rc|
-    country = Country.find_by_name(rc['name'])
+    country = Legacy::Country.find_by_name(rc['name'])
     Tag.find_or_create_by!(
       tag_type: 'region_bloc',
       name: region_bloc,

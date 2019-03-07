@@ -8,7 +8,7 @@ import {
   shipment,
   selectedOffer,
   theme
-} from '../../../mocks'
+} from '../../../mocks/index'
 
 import QuoteCard from './index'
 

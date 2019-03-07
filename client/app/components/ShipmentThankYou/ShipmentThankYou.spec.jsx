@@ -8,7 +8,7 @@ import {
   theme,
   turnFalsy,
   user
-} from '../../mocks'
+} from '../../mocks/index'
 
 import ShipmentThankYou from './ShipmentThankYou'
 

@@ -7,7 +7,7 @@ import {
   theme,
   match,
   user
-} from '../../mocks'
+} from '../../mocks/index'
 import AdminShipmentAction from './AdminShipmentAction'
 
 const propsBase = {

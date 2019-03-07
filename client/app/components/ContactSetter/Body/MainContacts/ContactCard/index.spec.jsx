@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, contact } from '../../../../../mocks'
+import { theme, identity, contact } from '../../../../../mocks/index'
 
 import ShipmentContactsBoxMainContactsContactCard from '.'
 

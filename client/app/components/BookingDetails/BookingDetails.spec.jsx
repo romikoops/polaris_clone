@@ -11,7 +11,7 @@ import {
   match,
   theme,
   user
-} from '../../mocks'
+} from '../../mocks/index'
 
 import BookingDetails from './BookingDetails'
 

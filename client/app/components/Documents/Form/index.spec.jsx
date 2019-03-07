@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, firstDocument } from '../../../mocks'
+import { theme, identity, firstDocument } from '../../../mocks/index'
 
 import DocumentsForm from '.'
 

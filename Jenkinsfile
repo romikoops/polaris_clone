@@ -1,6 +1,6 @@
 #!groovy
 
-wrap.pipeline(timeout: 90) {
+wrap.pipeline(timeout: 120) {
   inPod(
     containers: [
       containerTemplate(name: 'api', image: 'ruby:2.5', ttyEnabled: true, command: 'cat',
@@ -18,6 +18,10 @@ wrap.pipeline(timeout: 90) {
       containerTemplate(name: 'postgis', image: 'mdillon/postgis',
         resourceRequestCpu: '250m', resourceLimitCpu: '500m',
         resourceRequestMemory: '400Mi', resourceLimitMemory: '500Mi',
+      ),
+      containerTemplate(name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:6.6.1',
+        resourceRequestCpu: '250m', resourceLimitCpu: '500m',
+        resourceRequestMemory: '1000Mi', resourceLimitMemory: '1500Mi',
       )
     ]
   ) { label ->
@@ -307,7 +311,7 @@ void cucumberTests() {
                 sh "apk add --no-cache --update build-base"
                 sh "bundle install -j\$(nproc) --retry 3"
 
-                timeout(45) {
+                timeout(90) {
                   try {
                     sh "bundle exec knapsack cucumber \"--tags 'not @wip' --format junit --out . --format rerun --out rerun.txt --format pretty\""
                   } catch (hudson.AbortException e) {

@@ -6,7 +6,7 @@ import {
   identity,
   tenant,
   user
-} from '../../mocks'
+} from '../../mocks/index'
 
 import { TPureCookieConsentBar as CookieConsentBar } from '.'
 

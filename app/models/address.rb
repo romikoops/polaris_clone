@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Address < ApplicationRecord # rubocop:disable Metrics/ClassLength
+class Address < Legacy::Address
   has_many :user_addresses
   has_many :users, through: :user_addresses, dependent: :destroy
   has_many :shipments

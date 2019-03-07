@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import Contact from './Contact'
-import { contact, turnFalsy, change } from '../../mocks'
+import { contact, turnFalsy, change } from '../../mocks/index'
 
 const propsBase = {
   contact,

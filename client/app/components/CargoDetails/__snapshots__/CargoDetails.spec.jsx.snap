@@ -3636,7 +3636,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                 className="flex-none center"
               >
                  
-                NaN EUR
+                100.00 EUR
               </h6>
             </div>
           </div>
@@ -4683,7 +4683,7 @@ exports[`shallow render 1`] = `
                 className="flex-none center"
               >
                  
-                NaN EUR
+                100.00 EUR
               </h6>
             </div>
           </div>
@@ -5714,7 +5714,7 @@ exports[`shipment.has_pre_carriage ? 1`] = `
                 className="flex-none center"
               >
                  
-                NaN EUR
+                100.00 EUR
               </h6>
             </div>
           </div>
@@ -6791,7 +6791,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                 className="flex-none center"
               >
                  
-                NaN EUR
+                100.00 EUR
               </h6>
             </div>
           </div>
@@ -7838,7 +7838,7 @@ exports[`state.customsView is true 1`] = `
                 className="flex-none center"
               >
                  
-                NaN EUR
+                100.00 EUR
               </h6>
             </div>
           </div>
@@ -8874,7 +8874,7 @@ exports[`state.insuranceView is false 1`] = `
                 className="flex-none center"
               >
                  
-                NaN EUR
+                100.00 EUR
               </h6>
             </div>
           </div>
@@ -10215,7 +10215,7 @@ exports[`state.showModal is true 1`] = `
                 className="flex-none center"
               >
                  
-                NaN EUR
+                100.00 EUR
               </h6>
             </div>
           </div>
@@ -11262,7 +11262,7 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
                 className="flex-none center"
               >
                  
-                NaN EUR
+                100.00 EUR
               </h6>
             </div>
           </div>
@@ -12844,7 +12844,7 @@ exports[`tenant.scope.has_insurance is false 1`] = `
                 className="flex-none center"
               >
                  
-                NaN EUR
+                100.00 EUR
               </h6>
             </div>
           </div>
@@ -13891,7 +13891,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                 className="flex-none center"
               >
                  
-                NaN EUR
+                100.00 EUR
               </h6>
             </div>
           </div>

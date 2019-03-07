@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { tenant, documents } from '../../mocks'
+import { tenant, documents } from '../../mocks/index'
 
 import CustomsExportPaper from './CustomsExportPaper'
 

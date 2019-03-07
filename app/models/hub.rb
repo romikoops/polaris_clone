@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-class Hub < ApplicationRecord
-  has_paper_trail
+class Hub < Legacy::Hub
   belongs_to :tenant
   belongs_to :nexus
   belongs_to :address
@@ -16,6 +15,9 @@ class Hub < ApplicationRecord
   has_many :notes, dependent: :destroy
   has_many :hub_truck_type_availabilities
   has_many :truck_type_availabilities, through: :hub_truck_type_availabilities
+  has_many :trucking_hub_availabilities, class_name: 'Trucking::HubAvailability'
+  has_many :truckings, class_name: 'Trucking::Trucking'
+  has_many :rates, -> { distinct }, through: :truckings
   belongs_to :mandatory_charge, optional: true
 
   MOT_HUB_NAME = {

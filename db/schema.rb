@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_13_141635) do
+ActiveRecord::Schema.define(version: 2019_02_22_093023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
   enable_extension "postgis"
   enable_extension "postgis_tiger_geocoder"
   enable_extension "postgis_topology"
+  enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -400,6 +401,26 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.index ["stop_id"], name: "index_layovers_on_stop_id"
   end
 
+  create_table "legacy_addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_countries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_hubs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_shipments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "local_charges", force: :cascade do |t|
     t.string "mode_of_transport"
     t.string "load_type"
@@ -434,6 +455,55 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.index "to_tsvector('english'::regconfig, (postal_code)::text)", name: "locations_to_tsvector_idx", using: :gin
     t.index "to_tsvector('english'::regconfig, (suburb)::text)", name: "locations_to_tsvector_idx1", using: :gin
     t.index ["postal_code", "suburb", "neighbourhood", "city", "province", "country"], name: "uniq_index", unique: true
+  end
+
+  create_table "locations_locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.geometry "bounds", limit: {:srid=>0, :type=>"geometry"}
+    t.bigint "osm_id"
+    t.string "name"
+    t.integer "admin_level"
+    t.string "country_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bounds"], name: "index_locations_locations_on_bounds", using: :gist
+    t.index ["osm_id"], name: "index_locations_locations_on_osm_id"
+  end
+
+  create_table "locations_names", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "language"
+    t.uuid "location_id"
+    t.bigint "osm_id"
+    t.bigint "place_rank"
+    t.bigint "importance"
+    t.string "osm_type"
+    t.string "street"
+    t.string "city"
+    t.string "osm_class"
+    t.string "name_type"
+    t.string "country"
+    t.string "county"
+    t.string "state"
+    t.string "country_code"
+    t.string "display_name"
+    t.string "alternative_names"
+    t.string "name"
+    t.geometry "point", limit: {:srid=>0, :type=>"geometry"}
+    t.string "postal_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "locode"
+    t.index "to_tsvector('english'::regconfig, (alternative_names)::text)", name: "locations_names_to_tsvector_idx8", using: :gin
+    t.index "to_tsvector('english'::regconfig, (city)::text)", name: "locations_names_to_tsvector_idx10", using: :gin
+    t.index "to_tsvector('english'::regconfig, (country)::text)", name: "locations_names_to_tsvector_idx1", using: :gin
+    t.index "to_tsvector('english'::regconfig, (country_code)::text)", name: "locations_names_to_tsvector_idx5", using: :gin
+    t.index "to_tsvector('english'::regconfig, (display_name)::text)", name: "locations_names_to_tsvector_idx6", using: :gin
+    t.index "to_tsvector('english'::regconfig, (language)::text)", name: "locations_names_to_tsvector_idx3", using: :gin
+    t.index "to_tsvector('english'::regconfig, (name)::text)", name: "locations_names_to_tsvector_idx7", using: :gin
+    t.index "to_tsvector('english'::regconfig, (osm_id)::text)", name: "locations_names_to_tsvector_idx4", using: :gin
+    t.index "to_tsvector('english'::regconfig, (postal_code)::text)", name: "locations_names_to_tsvector_idx9", using: :gin
+    t.index ["language", "osm_id", "street", "country", "country_code", "display_name", "name", "postal_code"], name: "uniq_index_1", unique: true
+    t.index ["osm_id"], name: "index_locations_names_on_osm_id"
+    t.index ["osm_type"], name: "index_locations_names_on_osm_type"
   end
 
   create_table "mandatory_charges", force: :cascade do |t|
@@ -792,6 +862,13 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "trucking_couriers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "trucking_destinations", force: :cascade do |t|
     t.string "zipcode"
     t.string "country_code"
@@ -804,6 +881,27 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
     t.index ["distance"], name: "index_trucking_destinations_on_distance"
     t.index ["zipcode"], name: "index_trucking_destinations_on_zipcode"
+  end
+
+  create_table "trucking_hub_availabilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "hub_id"
+    t.uuid "type_availability_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trucking_locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "zipcode"
+    t.string "country_code"
+    t.string "city_name"
+    t.integer "distance"
+    t.uuid "location_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["city_name"], name: "index_trucking_locations_on_city_name"
+    t.index ["country_code"], name: "index_trucking_locations_on_country_code"
+    t.index ["distance"], name: "index_trucking_locations_on_distance"
+    t.index ["zipcode"], name: "index_trucking_locations_on_zipcode"
   end
 
   create_table "trucking_pricing_scopes", force: :cascade do |t|
@@ -828,6 +926,48 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.string "identifier_modifier"
     t.integer "trucking_pricing_scope_id"
     t.index ["trucking_pricing_scope_id"], name: "index_trucking_pricings_on_trucking_pricing_scope_id"
+  end
+
+  create_table "trucking_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.jsonb "load_meterage"
+    t.integer "cbm_ratio"
+    t.string "modifier"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "rates"
+    t.jsonb "fees"
+    t.string "identifier_modifier"
+    t.uuid "scope_id"
+    t.index ["scope_id"], name: "index_trucking_rates_on_trucking_scope_id"
+  end
+
+  create_table "trucking_scopes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "load_type"
+    t.string "cargo_class"
+    t.string "carriage"
+    t.uuid "courier_id"
+    t.string "truck_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trucking_truckings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "hub_id"
+    t.uuid "location_id"
+    t.uuid "rate_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hub_id"], name: "index_trucking_truckings_on_hub_id"
+    t.index ["rate_id", "location_id", "hub_id"], name: "trucking_foreign_keys", unique: true
+  end
+
+  create_table "trucking_type_availabilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "load_type"
+    t.string "carriage"
+    t.string "truck_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "user_addresses", force: :cascade do |t|

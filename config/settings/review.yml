@@ -4,18 +4,21 @@ aws:
   region: eu-central-1
   bucket: imcdev
 
+elasticsearch:
+  url: <%= Rails.application.credentials.dig(:review, :elasticsearch, :url) %>
+
 emails:
   domain: itsmycargo.tech
 
 fixer:
   api_key: <%= Rails.application.credentials.dig(:review, :fixer, :api_key) %>
 
+google:
+  api_key: <%= Rails.application.credentials.dig(:review, :google, :api_key) %>
+
 google_sign_in:
   client_id: 924497825642-9tirmrp45vvjd82r45sjd4q8njj6laa2.apps.googleusercontent.com
   client_secret: <%= Rails.application.credentials.dig(:review, :google_sign_in, :client_secret) %>
-
-google:
-  api_key: <%= Rails.application.credentials.dig(:review, :google, :api_key) %>
 
 mailgun:
   api_key: <%= Rails.application.credentials.dig(:review, :mailgun, :api_key) %>

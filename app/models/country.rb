@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Country < ApplicationRecord
+class Country < Legacy::Country
   has_many :addresses
   has_many :nexuses
   Geoplace = Struct.new(:name, :code)

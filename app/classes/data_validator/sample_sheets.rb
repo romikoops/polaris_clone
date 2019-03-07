@@ -7,7 +7,7 @@ module DataValidator
     attr_reader :tenants, :n_sample_itineraries
 
     TRUCKING_ADDRESSES_PER_COUNTRY = {
-      'DE' => 'Afrikastraße 1, 20457 Hamburg, Germany',
+      'DE' => 'Afrikastrasse 1, 20457 Hamburg, Germany',
       'GB' => '1 Oxford St, Soho, London W1D 2DF, UK',
       'CN' => '88 Henan Middle Rd, Huangpu Qu, Shanghai Shi, China, 200002',
       'SE' => 'Torgny Segerstedtsgatan 80, 426 77 Västra Frölunda, Sweden'

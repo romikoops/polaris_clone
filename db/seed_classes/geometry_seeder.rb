@@ -4,13 +4,13 @@ class GeometrySeeder
   TMP_PATH = 'tmp/tmp_kml.kml'
   def self.perform
     # import_china
-    import_sweden
+    # import_sweden
     import_germany
   end
 
   def self.import_china
     puts 'Reading from kml...'
-    GeometrySeeder.get_s3_file('data/china.kml')
+    GeometrySeeder.get_s3_file('data/location_data/china.kml')
     geometry_hash = Hash.from_xml(File.open(TMP_PATH))
     geometries = geometry_hash['kml']['Document']['Folder']['Placemark']
 
@@ -77,7 +77,7 @@ class GeometrySeeder
 
   def self.import_germany
     puts 'Reading from kml...'
-    GeometrySeeder.get_s3_file('data/germany_postal.kml')
+    GeometrySeeder.get_s3_file('data/location_data/germany_postal.kml')
     geometry_hash = Hash.from_xml(File.open(TMP_PATH))
     geometries = geometry_hash['kml']['Document']['Folder']['Placemark']
 
@@ -117,14 +117,11 @@ class GeometrySeeder
         RGeo::Cartesian.factory.polygon(line_string)
       end
       multi_polygon = RGeo::Cartesian.factory.multi_polygon(polygons)
-      area_name = names[0].sub(names[1], '').strip
+
       attributes = {
         bounds: multi_polygon,
-        postal_code: names[1],
-        neighbourhood: area_name,
-        city: nil,
-        province: nil,
-        country: 'Germany'
+        name: names[1],
+        country_code: 'de'
       }
 
       attributes
@@ -133,11 +130,7 @@ class GeometrySeeder
     puts
     puts 'Writing Geometries to DB...'
 
-    Location.import geometries_data,
-                    on_duplicate_key_update: {
-                      conflict_target: %i(postal_code suburb neighbourhood city province country),
-                      columns: [:bounds]
-                    }
+    Locations::Location.import(geometries_data)
 
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
@@ -146,7 +139,7 @@ class GeometrySeeder
 
   def self.import_sweden
     puts 'Reading from kml...'
-    GeometrySeeder.get_s3_file('data/sweden_postal.kml')
+    GeometrySeeder.get_s3_file('data/location_data/sweden_postal.kml')
     geometry_hash = Hash.from_xml(File.open(TMP_PATH))
     geometries = geometry_hash['kml']['Document']['Folder']['Placemark']
 
@@ -188,11 +181,8 @@ class GeometrySeeder
 
       attributes = {
         bounds: multi_polygon,
-        postal_code: names[1],
-        neighbourhood: names[2],
-        city: nil,
-        province: nil,
-        country: 'Sweden'
+        name: names[1],
+        country_code: 'se'
       }
 
       attributes
@@ -201,12 +191,7 @@ class GeometrySeeder
     puts
     puts 'Writing Geometries to DB...'
 
-    Location.import geometries_data,
-                    on_duplicate_key_update: {
-                      conflict_target: %i(postal_code suburb neighbourhood city province country),
-                      columns: [:bounds]
-                    }
-
+    Locations::Location.import(geometries_data)
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
     puts 'Geometries seeded...'

@@ -17,6 +17,9 @@ gem 'activerecord-import'
 # Strong Migrations - Prevent Non Zero-Down time Migrations
 gem 'strong_migrations'
 
+# i18n support
+gem 'rails-i18n'
+
 # Easy Monitoring
 gem 'easymon'
 
@@ -50,6 +53,9 @@ gem 'rgeo-geojson'
 
 # Full Text Search
 gem 'pg_search'
+
+# Refactoring critical components
+gem 'scientist'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'

@@ -3,8 +3,6 @@ import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import '../../../../styles/react-toggle.scss'
 import styles from '../../Item/Group/CargoItemGroup.scss'
-import PropTypes from '../../../../prop-types'
-import CargoContainerGroupAggregated from './Aggregated'
 import { LOAD_TYPES, cargoGlossary } from '../../../../constants'
 import { gradientTextGenerator, numberSpacing } from '../../../../helpers'
 

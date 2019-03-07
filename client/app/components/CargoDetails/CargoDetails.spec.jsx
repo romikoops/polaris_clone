@@ -8,7 +8,7 @@ import {
   tenant,
   theme,
   turnFalsy
-} from '../../mocks'
+} from '../../mocks/index'
 
 import CargoDetails from './CargoDetails'
 

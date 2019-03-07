@@ -15,11 +15,15 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def to_postgres_insertable(attribute_names = self.class.given_attribute_names)
+    to_postgres_array(attribute_names).sql_format
+  end
+
+  def to_postgres_array(attribute_names = self.class.given_attribute_names)
     attribute_names.sort.map do |attr_name|
       val = self[attr_name]
       case val
-      when nil
-        'NULL'
+      when %w(created_at updated_at).include?(attr_name) && nil
+        "'#{DateTime.now}'"
       when Hash
         "'#{val.to_json}'::jsonb"
       when String
@@ -29,7 +33,7 @@ class ApplicationRecord < ActiveRecord::Base
       else
         val
       end
-    end.sql_format
+    end
   end
 
   def self.public_sanitize_sql(*args)

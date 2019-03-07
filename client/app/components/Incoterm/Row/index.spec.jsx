@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   change, feeHash, theme, tenant, shipment
-} from '../../../mocks'
+} from '../../../mocks/index'
 
 import IncotermRow from '.'
 

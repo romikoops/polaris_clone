@@ -1,17 +1,17 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
-  address,
+  firstAddress,
   contact,
   identity,
   theme
-} from '../../../../../mocks'
+} from '../../../../../mocks/index'
 
 import ContactSetterBodyNotifyeeContactsContactCard from '.'
 
 const propsBase = {
   contactData: {
-    address,
+    firstAddress,
     contact
   },
   removeFunc: identity,

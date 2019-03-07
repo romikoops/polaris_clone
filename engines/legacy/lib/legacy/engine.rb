@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'geocoder'
 
 module Legacy
   class Engine < ::Rails::Engine

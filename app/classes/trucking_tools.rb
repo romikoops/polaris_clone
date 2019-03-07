@@ -2,7 +2,7 @@
 
 require 'bigdecimal'
 
-module TruckingTools
+module TruckingTools # rubocop:disable Metrics/ModuleLength
   module_function
 
   LoadMeterageExceeded = Class.new(StandardError)
@@ -10,7 +10,7 @@ module TruckingTools
   LOAD_METERAGE_AREA_DIVISOR = 24_000
   CBM_VOLUME_DIVISOR = 1_000_000
   DEFAULT_MAX = 1_000_000
-  def calculate_trucking_price(pricing, cargo, _direction, km, scope)
+  def calculate_trucking_price(pricing, cargo, _direction, kms, scope) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     fees = {}
     result = {}
     total_fees = {}
@@ -19,13 +19,13 @@ module TruckingTools
     pricing.deep_symbolize_keys!
     pricing[:fees].each do |k, fee|
       if fee[:rate_basis] != 'PERCENTAGE'
-        results = fare_calculator(k, fee, cargo, km, scope)
+        results = fare_calculator(k, fee, cargo, kms, scope)
         fees[k] = results
       else
         total_fees[k] = fee
       end
     end
-    fees[:rate] = fare_calculator('rate', pricing[:rate], cargo, km, scope)
+    fees[:rate] = fare_calculator('rate', pricing[:rate], cargo, kms, scope)
 
     fees.each do |_k, fee|
       next unless fee
@@ -54,7 +54,7 @@ module TruckingTools
     end
   end
 
-  def fare_calculator(key, fee, cargo, km, scope)
+  def fare_calculator(key, fee, cargo, kms, scope) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     fee.symbolize_keys!
 
     fare = case fee[:rate_basis]
@@ -70,7 +70,7 @@ module TruckingTools
              [val, min].max
 
            when 'PER_X_KM'
-             val = ((km / fee[:x_base]) * fee[:rate]) + fee[:base_value]
+             val = ((kms / fee[:x_base]) * fee[:rate]) + fee[:base_value]
              min = fee[:min_value] || 0
              [val, min].max
            when 'PER_X_TON'
@@ -86,7 +86,7 @@ module TruckingTools
            when 'PER_CONTAINER'
              fee[:value] * cargo['number_of_items']
            when 'PER_CONTAINER_KM'
-             value = ((fee[:km] * km) + fee[:unit]) * cargo['number_of_items']
+             value = ((fee[:km] * kms) + fee[:unit]) * cargo['number_of_items']
              min = fee[:min_value] || 0
              [min, value].max
 
@@ -118,7 +118,7 @@ module TruckingTools
     { currency: fee[:currency], value: final_result, key: key }
   end
 
-  def handle_range_fare(fee, cargo)
+  def handle_range_fare(fee, cargo) # rubocop:disable Metrics/CyclomaticComplexity
     weight_kg = cargo[:weight]
     min = fee['min'] || 0
     result = case fee[:rate_basis]
@@ -140,9 +140,9 @@ module TruckingTools
     result
   end
 
-  def filter_trucking_pricings(trucking_pricing, cargo_values, _direction)
+  def filter_trucking_pricings(trucking_pricing, cargo_values, _direction) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     scope = trucking_pricing.tenant.scope
-    return {} if cargo_values['weight'].to_i == 0
+    return {} if cargo_values['weight'].to_i.zero?
 
     case trucking_pricing.modifier
     when 'kg'
@@ -236,7 +236,7 @@ module TruckingTools
       end
     end
 
-    target = "#{trucking_pricing.trucking_pricing_scope.carriage}_carriage"
+    target = "#{trucking_pricing.scope.carriage}_carriage"
     total_chargeable_weight =
       cargo_object.dig('stackable', 'weight') + cargo_object.dig('non_stackable', 'weight')
     cargos.first.shipment.set_trucking_chargeable_weight(target, total_chargeable_weight)
@@ -253,7 +253,7 @@ module TruckingTools
     calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
   end
 
-  def consolidate_cargo(cargo_array)
+  def consolidate_cargo(cargo_array) # rubocop:disable Metrics/AbcSize
     cargo = {
       id: 'ids',
       dimension_x: 0,
@@ -308,13 +308,13 @@ module TruckingTools
     end
   end
 
-  def calc_trucking_price(trucking_pricing, cargos, km, carriage)
+  def calc_trucking_price(trucking_pricing, cargos, kms, carriage) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     direction = carriage == 'pre' ? 'export' : 'import'
     cargo_object = if trucking_pricing.load_type == 'container'
                      get_container_object(cargos)
                    else
                      get_cargo_item_object(trucking_pricing, cargos)
-    end
+                   end
 
     trucking_pricings = {}
     scope = trucking_pricing.tenant.scope
@@ -324,7 +324,7 @@ module TruckingTools
 
     fees = {}
     trucking_pricings.each do |key, tp|
-      fees[key] = calculate_trucking_price(tp, cargo_object[key], direction, km, scope) if tp
+      fees[key] = calculate_trucking_price(tp, cargo_object[key], direction, kms, scope) if tp
     end
 
     total = { value: 0, currency: '' }
@@ -341,7 +341,7 @@ module TruckingTools
     fees
   end
 
-  def determine_load_meterage(trucking_pricing, cargo_object, cargo)
+  def determine_load_meterage(trucking_pricing, cargo_object, cargo) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if trucking_pricing.load_meterage && trucking_pricing.load_meterage['ratio']
       if cargo.is_a? AggregatedCargo
         calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
@@ -377,7 +377,7 @@ module TruckingTools
     cargo_object['non_stackable']['volume'] += cargo.volume
   end
 
-  def calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
+  def calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo) # rubocop:disable Metrics/AbcSize
     load_meterage = ((cargo.dimension_x * cargo.dimension_y) / LOAD_METERAGE_AREA_DIVISOR) * cargo.quantity
     load_meter_weight = load_meterage * trucking_pricing.load_meterage['ratio']
     cbm_var = (cargo.dimension_x * cargo.dimension_y * cargo.dimension_z * cargo.quantity) / CBM_VOLUME_DIVISOR
@@ -390,7 +390,7 @@ module TruckingTools
     cargo_object['non_stackable']['number_of_items'] += cargo.quantity
   end
 
-  def calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
+  def calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo) # rubocop:disable Metrics/AbcSize
     load_meter_var = (cargo.dimension_x * cargo.dimension_y * cargo.quantity) / LOAD_METERAGE_AREA_DIVISOR
     load_meter_weight = load_meter_var * trucking_pricing.load_meterage['ratio']
     cbm_var = (cargo.dimension_x * cargo.dimension_y * cargo.dimension_z * cargo.quantity) / CBM_VOLUME_DIVISOR

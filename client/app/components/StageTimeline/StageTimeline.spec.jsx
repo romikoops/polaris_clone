@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
-import { identity, theme } from '../../mocks'
+import { identity, theme } from '../../mocks/index'
 
 import StageTimeline from './StageTimeline'
 

@@ -3,7 +3,7 @@ import * as React from 'react'
 import { shallow, mount } from 'enzyme'
 import {
   theme, identity, user, shipmentData
-} from '../../mocks'
+} from '../../mocks/index'
 
 import { BestRoutesBox } from './BestRoutesBox'
 

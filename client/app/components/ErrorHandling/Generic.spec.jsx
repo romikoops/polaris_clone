@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import GenericError from './Generic'
-import { theme } from '../../mocks'
+import { theme } from '../../mocks/index'
 
 const propsBase = {
   theme,

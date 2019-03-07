@@ -3,7 +3,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   shipment, identity, theme, cargoItems
-} from '../../mocks'
+} from '../../mocks/index'
 
 import RouteFilterBox from './RouteFilterBox'
 

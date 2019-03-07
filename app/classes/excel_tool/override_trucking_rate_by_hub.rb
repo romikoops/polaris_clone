@@ -205,6 +205,7 @@ module ExcelTool
               else
                 ident_value = ident
               end
+
               @locations << { postal_code: ident_value, country: current_country[:name] }
               { ident: ident_value, country: idents_and_country[:country] }
             end

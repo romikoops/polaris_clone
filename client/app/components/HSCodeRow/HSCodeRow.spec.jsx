@@ -10,7 +10,7 @@ import {
   firstContainer,
   user,
   hsCodes
-} from '../../mocks'
+} from '../../mocks/index'
 
 import HSCodeRow from './HSCodeRow'
 

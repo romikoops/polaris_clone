@@ -3,7 +3,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   identity, tenant, theme, user, change
-} from '../../mocks'
+} from '../../mocks/index'
 import Header from './Header'
 
 const propsBase = {

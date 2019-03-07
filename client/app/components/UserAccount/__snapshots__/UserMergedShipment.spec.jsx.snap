@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-center pointy ship_row"
+  onClick={[Function]}
+>
+  <div
+    className="flex-40 layout-row layout-align-start-center ship_row_cell"
+  >
+    <p
+      className="flex-none"
+    >
+      FOO_ORIGIN
+       - 
+      FOO_DESTINATION
+    </p>
+  </div>
+  <div
+    className="flex-15 layout-row layout-align-start-center ship_row_cell"
+  >
+    <p
+      className="flex-none"
+    >
+      FOO_IMC
+    </p>
+  </div>
+  <div
+    className="flex-15 layout-row layout-align-start-center ship_row_cell"
+  >
+    <p
+      className="flex-none"
+    >
+      FOO_STATUS
+    </p>
+  </div>
+  <div
+    className="flex-15 layout-row layout-align-start-center ship_row_cell"
+  />
+  <div
+    className="flex-15 layout-row layout-align-start-center ship_row_cell"
+  >
+    <p
+      className="flex-none"
+    >
+      Yes
+    </p>
+  </div>
+</div>
+`;

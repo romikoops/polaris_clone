@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, notifyees } from '../../../../mocks'
+import { theme, identity, notifyees } from '../../../../mocks/index'
 import ContactSetterBodyNotifyeeContacts from '.'
 
 const propsBase = {

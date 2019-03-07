@@ -2,7 +2,7 @@
 import React from 'react'
 import { shallow, configure } from 'enzyme'
 import QuoteChargeBreakdown from './QuoteChargeBreakdown'
-import { selectedOffer, cargoItems } from '../../mocks'
+import { selectedOffer, cargoItems } from '../../mocks/index'
 
 describe('correctly determines whether to display subtotals based on currencies charged', () => {
   

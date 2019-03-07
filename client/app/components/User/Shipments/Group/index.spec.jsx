@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   user, theme, identity, shipment
-} from '../../../../mocks'
+} from '../../../../mocks/index'
 
 import UserShipmentsGroup from '.'
 

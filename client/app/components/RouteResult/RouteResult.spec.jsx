@@ -1,7 +1,7 @@
 import '../../mocks/libraries/moment'
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, oceanSchedule } from '../../mocks'
+import { theme, oceanSchedule } from '../../mocks/index'
 
 import RouteResult from './RouteResult'
 

@@ -4,7 +4,7 @@ import { shallow } from 'enzyme'
 import ContactsIndex from './ContactsIndex'
 import {
   change, contacts, theme, identity
-} from '../../mocks'
+} from '../../mocks/index'
 
 const contactsData = {
   contacts,

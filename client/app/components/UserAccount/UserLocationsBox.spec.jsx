@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { identity, firstAddress, secondAddress } from '../../mocks'
+import { identity, firstAddress, secondAddress } from '../../mocks/index'
 
 import UserLocationsBox from './UserLocationsBox'
 
