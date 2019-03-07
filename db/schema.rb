@@ -174,10 +174,10 @@ ActiveRecord::Schema.define(version: 2019_03_07_153922) do
     t.integer "user_id"
     t.integer "address_id"
     t.string "company_name"
-    t.string "first_name", comment: "MASKED WITH FUNCTION anon.random_first_name()"
-    t.string "last_name", comment: "MASKED WITH FUNCTION anon.random_last_name()"
-    t.string "phone", comment: "MASKED WITH FUNCTION anon.random_phone()"
-    t.string "email", comment: "MASKED WITH FUNCTION anon.random_email()"
+    t.string "first_name", comment: "MASKED WITH FirstName"
+    t.string "last_name", comment: "MASKED WITH LastName"
+    t.string "phone", comment: "MASKED WITH Phone"
+    t.string "email", comment: "MASKED WITH EmailAddress"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "alias", default: false
@@ -576,8 +576,8 @@ ActiveRecord::Schema.define(version: 2019_03_07_153922) do
     t.integer "itinerary_id"
     t.integer "hub_id"
     t.integer "trucking_pricing_id"
-    t.string "body", comment: "MASKED WITH CONSTANT \"\""
-    t.string "header", comment: "MASKED WITH CONSTANT \"\""
+    t.string "body", comment: "MASKED WITH literal:"
+    t.string "header", comment: "MASKED WITH literal:"
     t.string "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -989,7 +989,7 @@ ActiveRecord::Schema.define(version: 2019_03_07_153922) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", comment: "FILTER WITH users.email NOT LIKE '%@itsmycargo.com' AND users.email NOT LIKE '%demo%@%'", force: :cascade do |t|
     t.string "provider", default: "tenant_email", null: false
     t.string "uid", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -1007,12 +1007,12 @@ ActiveRecord::Schema.define(version: 2019_03_07_153922) do
     t.string "unconfirmed_email"
     t.string "nickname"
     t.string "image"
-    t.string "email", comment: "MASKED WITH FUNCTION anon.random_email()"
+    t.string "email", comment: "MASKED WITH EmailAddress"
     t.integer "tenant_id"
     t.string "company_name"
-    t.string "first_name", comment: "MASKED WITH FUNCTION anon.random_first_name()"
-    t.string "last_name", comment: "MASKED WITH FUNCTION anon.random_last_name()"
-    t.string "phone", comment: "MASKED WITH FUNCTION anon.random_phone()"
+    t.string "first_name", comment: "MASKED WITH FirstName"
+    t.string "last_name", comment: "MASKED WITH LastName"
+    t.string "phone", comment: "MASKED WITH Phone"
     t.json "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1050,7 +1050,7 @@ ActiveRecord::Schema.define(version: 2019_03_07_153922) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "versions", force: :cascade do |t|
+  create_table "versions", comment: "IGNORE DATA", force: :cascade do |t|
     t.string "item_type", null: false
     t.integer "item_id", null: false
     t.string "event", null: false
