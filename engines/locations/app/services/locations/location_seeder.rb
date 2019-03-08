@@ -29,6 +29,8 @@ module Locations
 
       return name.location if name.present? && name.location
 
+      return nil if name.nil?
+
       location = Locations::Location.smallest_contains(lat: name.point.y, lon: name.point.x).first
       return location unless location.nil?
 
