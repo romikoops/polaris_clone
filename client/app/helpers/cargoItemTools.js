@@ -45,8 +45,8 @@ export function fixedWeightChargeableString (cargoItems, fixedWeight, t, scope) 
     product + +item.payload_in_kg * item.quantity
   ), 0)
   const showVolume = volumeVal > (weightVal / 1000)
-  const chargeableWeightVal = fixedWeight
-  const chargeableVolumeVal = chargeableWeightVal / 1000
+  const chargeableWeightVal = numberSpacing(fixedWeight, 2)
+  const chargeableVolumeVal = numberSpacing(fixedWeight / 1000, 3)
 
   return chargeableString(chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope)
 }
@@ -123,12 +123,23 @@ export function chargeableString (volumeVal, weightVal, showVolume, t, scope) {
 }
 export function chargeableWeightValue (cargoItem, mot) {
   if (!cargoItem) return undefined
+  const item = cargoItem.dimensionX ? convertCargoItemAttributes(cargoItem) : cargoItem
 
   return Math.max(
-    +volume(cargoItem) * effectiveKgPerCubicMeter[mot],
-    +cargoItem.payloadInKg * cargoItem.quantity
+    +volume(item) * effectiveKgPerCubicMeter[mot],
+    +item.payload_in_kg * item.quantity
   )
 
+}
+
+export function convertCargoItemAttributes (cargoItem) {
+  return {
+    dimension_x: cargoItem.dimensionX,
+    dimension_y: cargoItem.dimensionY,
+    dimension_z: cargoItem.dimensionZ,
+    payload_in_kg: cargoItem.payloadInKg,
+    quantity: cargoItem.quantity
+  }
 }
 
 export function chargeableWeight (cargoItem, mot) {
@@ -147,7 +158,7 @@ export function chargeableVolume (cargoItem, mot) {
 
   const finalValue = Math.max(
     +volume(cargoItem),
-    +cargoItem.payloadInKg * cargoItem.quantity / effectiveKgPerCubicMeter[mot]
+    +cargoItem.payload_in_kg * cargoItem.quantity / effectiveKgPerCubicMeter[mot]
   )
 
   return numberSpacing(finalValue, 3)
@@ -157,7 +168,7 @@ export function volume (cargoItem) {
   if (!cargoItem) return undefined
 
   const unitVolume =
-    cargoItem.dimensionX * cargoItem.dimensionY * cargoItem.dimensionZ / 100 ** 3
+    +cargoItem.dimension_x * +cargoItem.dimension_y * +cargoItem.dimension_z / 100 ** 3
 
   return (unitVolume * cargoItem.quantity)
 }
@@ -165,7 +176,7 @@ export function singleVolume (cargoItem) {
   if (!cargoItem) return undefined
 
   const unitVolume =
-    cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
+    +cargoItem.dimension_x * +cargoItem.dimension_y * +cargoItem.dimension_z / 100 ** 3
 
   return unitVolume
 }
@@ -173,7 +184,7 @@ export function singleVolume (cargoItem) {
 export function weight (cargoItem) {
   if (!cargoItem) return undefined
 
-  return numberSpacing((cargoItem.payloadInKg * cargoItem.quantity), 1)
+  return numberSpacing((cargoItem.payload_in_kg * cargoItem.quantity), 1)
 }
 
 export function rawWeight (cargoItem) {
