@@ -32,6 +32,8 @@ module Locations
                                 .first
         return result if result
       end
+
+      nil
     end
   end
 end
