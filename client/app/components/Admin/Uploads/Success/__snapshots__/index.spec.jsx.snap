@@ -11,118 +11,137 @@ exports[`shallow render 1`] = `
   <div
     className="flex-none layout-row layout-wrap layout-align-start-start results_box"
   >
-    <div
-      className="flex-100 layout-row layout-align-start-center"
-    >
-      <TextHeading
-        color=""
-        size={3}
-        text="Upload Successful!"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-start-center layout-wrap"
+    <GreyBox
+      borderStyle=""
+      content={
+        Array [
+          "",
+        ]
+      }
+      contentClassName=""
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      isBox={false}
+      padding={false}
+      title=""
+      titleAction={false}
+      wrapperClassName="padd_20"
     >
       <div
-        className="stat_row flex-100 layout-row layout-align-space-between-center"
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <TextHeading
+          color=""
+          size={3}
+          text="Upload Successful!"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap"
       >
         <div
-          className="flex-33 layout-row layout-align-start-center"
+          className="stat_row flex-100 layout-row layout-align-space-between-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="flex-33 layout-row layout-align-start-center"
           >
-            <strong />
-          </p>
+            <p
+              className="flex-none"
+            >
+              <strong />
+            </p>
+          </div>
+          <div
+            className="flex-33 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none"
+            >
+              No. created: undefined
+            </p>
+          </div>
+          <div
+            className="flex-33 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none"
+            >
+              No. updated: undefined
+            </p>
+          </div>
         </div>
         <div
-          className="flex-33 layout-row layout-align-start-center"
+          className="stat_row flex-100 layout-row layout-align-space-between-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="flex-33 layout-row layout-align-start-center"
           >
-            No. created: undefined
-          </p>
-        </div>
-        <div
-          className="flex-33 layout-row layout-align-start-center"
-        >
-          <p
-            className="flex-none"
+            <p
+              className="flex-none"
+            >
+              <strong />
+            </p>
+          </div>
+          <div
+            className="flex-33 layout-row layout-align-start-center"
           >
-            No. updated: undefined
-          </p>
+            <p
+              className="flex-none"
+            >
+              No. created: undefined
+            </p>
+          </div>
+          <div
+            className="flex-33 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none"
+            >
+              No. updated: undefined
+            </p>
+          </div>
         </div>
       </div>
       <div
-        className="stat_row flex-100 layout-row layout-align-space-between-center"
-      >
-        <div
-          className="flex-33 layout-row layout-align-start-center"
-        >
-          <p
-            className="flex-none"
-          >
-            <strong />
-          </p>
-        </div>
-        <div
-          className="flex-33 layout-row layout-align-start-center"
-        >
-          <p
-            className="flex-none"
-          >
-            No. created: undefined
-          </p>
-        </div>
-        <div
-          className="flex-33 layout-row layout-align-start-center"
-        >
-          <p
-            className="flex-none"
-          >
-            No. updated: undefined
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-center-center layout-wrap layout-padding"
-    />
-    <div
-      className="flex-100 layout-row layout-align-end-center layout-wrap"
-    >
-      <RoundButton
-        active={true}
-        back={false}
-        classNames=""
-        disabled={false}
-        flexContainer="100"
-        handleDisabled={null}
-        handleNext={[Function]}
-        icon=""
-        iconClass="fa-chevron-right"
-        inverse={false}
-        size="small"
-        text="Continue"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
+        className="flex-100 layout-row layout-align-center-center layout-wrap layout-padding"
       />
-    </div>
+      <div
+        className="flex-100 layout-row layout-align-end-center layout-wrap"
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-chevron-right"
+          inverse={false}
+          size="small"
+          text="Continue"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </GreyBox>
   </div>
 </div>
 `;

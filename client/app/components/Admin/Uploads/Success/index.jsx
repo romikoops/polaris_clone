@@ -6,6 +6,7 @@ import { documentGlossary } from '../../../../constants'
 import { history } from '../../../../helpers'
 import TextHeading from '../../../TextHeading/TextHeading'
 import { RoundButton } from '../../../RoundButton/RoundButton'
+import GreyBox from '../../../GreyBox/GreyBox';
 
 export class AdminUploadsSuccess extends Component {
   static goBack () {
@@ -76,42 +77,44 @@ export class AdminUploadsSuccess extends Component {
             styles.results_box
           }`}
         >
-          <div className="flex-100 layout-row layout-align-start-center">
-            { stats.has_errors
-              ? <TextHeading theme={theme} text={t('admin:uploadFailed')} size={3} />
-              : <TextHeading theme={theme} text={t('admin:uploadSuccessful')} size={3} /> }
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-            {statView}
-          </div>
-          {stats.has_errors ? (
-            <div className={`flex-100 layout-row layout-align-start-center layout-wrap ${styles.error_box}`}>
-              <table className="flex-100 layout-row layout-align-start-start">
-                <tbody className="flex-100 layout-row layout-wrap">
-                  <thead className="flex-100 layout-row">
-                    <tr className="flex-100 layout-row">
-                      <th className={`flex-50 ${styles.error_reason}`}>{t('admin:reason')}</th>
-                      <th className={`flex-50 ${styles.error_row}`}>{t('admin:rowNo')}</th>
-                    </tr>
-                  </thead>
-                  {errorView}
-                </tbody>
-              </table>
+          <GreyBox wrapperClassName="padd_20">
+            <div className="flex-100 layout-row layout-align-start-center">
+              { stats.has_errors
+                ? <TextHeading theme={theme} text={t('admin:uploadFailed')} size={3} />
+                : <TextHeading theme={theme} text={t('admin:uploadSuccessful')} size={3} /> }
             </div>
-          ) : '' }
-          <div className="flex-100 layout-row layout-align-center-center layout-wrap layout-padding">
-            {stats.has_errors ? <p className="flex">{t('admin:errorTip')}</p> : ''}
-          </div>
-          <div className="flex-100 layout-row layout-align-end-center layout-wrap">
-            <RoundButton
-              text={t('admin:continue')}
-              theme={theme}
-              size="small"
-              handleNext={closeDialog}
-              iconClass="fa-chevron-right"
-              active
-            />
-          </div>
+            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+              {statView}
+            </div>
+            {stats.has_errors ? (
+              <div className={`flex-100 layout-row layout-align-start-center layout-wrap ${styles.error_box}`}>
+                <table className="flex-100 layout-row layout-align-start-start">
+                  <tbody className="flex-100 layout-row layout-wrap">
+                    <thead className="flex-100 layout-row">
+                      <tr className="flex-100 layout-row">
+                        <th className={`flex-50 ${styles.error_reason}`}>{t('admin:reason')}</th>
+                        <th className={`flex-50 ${styles.error_row}`}>{t('admin:rowNo')}</th>
+                      </tr>
+                    </thead>
+                    {errorView}
+                  </tbody>
+                </table>
+              </div>
+            ) : '' }
+            <div className="flex-100 layout-row layout-align-center-center layout-wrap layout-padding">
+              {stats.has_errors ? <p className="flex">{t('admin:errorTip')}</p> : ''}
+            </div>
+            <div className="flex-100 layout-row layout-align-end-center layout-wrap">
+              <RoundButton
+                text={t('admin:continue')}
+                theme={theme}
+                size="small"
+                handleNext={closeDialog}
+                iconClass="fa-chevron-right"
+                active
+              />
+            </div>
+          </GreyBox>
         </div>
       </div>
     )
