@@ -1,5 +1,6 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
+import { has } from 'lodash'
 import AlertModalBody from '../AlertModalBody/AlertModalBody'
 import { Modal } from '../Modal/Modal'
 
@@ -27,14 +28,18 @@ function DeleteAccountModal ({
                 <br />
               </span>
               <br />
-
-              <span style={{ marginRight: '10px' }}>
-                {' '}
-                {t('account:contactPhone')}
-                {':'}
-              </span>
-              <span>{tenant.phones.support}</span>
-              <br />
+              { has(tenant, ['phones', 'support'])
+                ? [
+                  <span style={{ marginRight: '10px' }}>
+                    {' '}
+                    {t('account:contactPhone')}
+                    {':'}
+                  </span>,
+                  <span>{tenant.phones.support}</span>,
+                  <br />
+                ]
+                : ''
+              }
               <span style={{ marginRight: '10px' }}>
                 {' '}
                 {t('account:contactEmail')}

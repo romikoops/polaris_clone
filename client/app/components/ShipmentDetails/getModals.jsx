@@ -1,4 +1,5 @@
 import React from 'react'
+import { has } from 'lodash'
 import { Modal } from '../Modal/Modal'
 import AlertModalBody from '../AlertModalBody/AlertModalBody'
 import { capitalize } from '../../helpers/stringTools'
@@ -85,14 +86,18 @@ export default function getModals (props, toggleFunc, t) {
             <br />
           </span>
           <br />
-
-          <span style={{ marginRight: '10px' }}>
-            {' '}
-            {t('dangerousGoods:contactPhone')}
-            {':'}
-          </span>
-          <span>{tenant.phones.support}</span>
-          <br />
+          { has(tenant, ['phones', 'support'])
+            ? [
+              <span style={{ marginRight: '10px' }}>
+                {' '}
+                {t('dangerousGoods:contactPhone')}
+                {':'}
+              </span>,
+              <span>{tenant.phones.support}</span>,
+              <br />
+            ]
+            : ''
+          }
           {supportEmailObjs ? (
             <span style={{ marginRight: '20px' }}>
               {' '}
@@ -124,14 +129,17 @@ export default function getModals (props, toggleFunc, t) {
             <br />
           </span>
           <br />
-
-          <span style={{ marginRight: '10px' }}>
-            {' '}
-            {t('dangerousGoods:contactPhone')}
-            {':'}
-          </span>
-          <span>{tenant.phones.support}</span>
-          <br />
+          { has(tenant, ['phones', 'support'])
+            ? [
+              <span style={{ marginRight: '10px' }}>
+                {' '}
+                {t('dangerousGoods:contactPhone')}
+                {':'}
+              </span>,
+              <span>{tenant.phones.support}</span>,
+              <br />
+            ] : ''
+          }
           {supportEmailObjs ? (
             <span style={{ marginRight: '20px' }}>
               {' '}
@@ -163,14 +171,17 @@ export default function getModals (props, toggleFunc, t) {
             <br />
           </span>
           <br />
-
-          <span style={{ marginRight: '10px' }}>
-            {' '}
-            {t('dangerousGoods:contactPhone')}
-            {':'}
-          </span>
-          <span>{tenant.phones.support}</span>
-          <br />
+          { has(tenant, ['phones', 'support'])
+            ? [
+              <span style={{ marginRight: '10px' }}>
+                {' '}
+                {t('dangerousGoods:contactPhone')}
+                {':'}
+              </span>,
+              <span>{tenant.phones.support}</span>,
+              <br />
+            ] : ''
+          }
           {supportEmailObjs ? (
             <span style={{ marginRight: '20px' }}>
               {' '}
