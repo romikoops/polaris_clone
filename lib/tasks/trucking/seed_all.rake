@@ -4,42 +4,42 @@ namespace :trucking do
   task :seed_all, [] => :environment do
     targets = {
       normanglobal: [
-        {
-          hub: 'Shanghai Port',
-          urls: ['data/normanglobal/normanglobal__trucking_ftl__shanghai_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__shanghai_port.xlsx']
-        },
-        {
-          hub: 'Dalian Port',
-          urls: ['data/normanglobal/normanglobal__trucking_ftl__dalian_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__dalian_port.xlsx']
-        },
-        {
-          hub: 'Tianjin Port',
-          urls: ['data/normanglobal/normanglobal__trucking_ftl__tianjin_xingang_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__tianjin_xingang_port.xlsx']
-        },
-        {
-          hub: 'Xingang Port',
-          urls: ['data/normanglobal/normanglobal__trucking_ftl__tianjin_xingang_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__tianjin_xingang_port.xlsx']
-        },
-        {
-          hub: 'Qingdao Port',
-          urls: ['data/normanglobal/normanglobal__trucking_ftl__qingdao_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__qingdao_port.xlsx']
-        },
-        {
-          hub: 'Hong Kong Port',
-          urls: ['data/normanglobal/normanglobal__trucking_ftl__hong_kong_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__hong_kong_port.xlsx']
-        },
-        {
-          hub: 'Shenzhen Port',
-          urls: ['data/normanglobal/normanglobal__trucking_ftl__shenzhen_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__shenzhen_port.xlsx']
-        },
-        {
-          hub: 'Xiamen Port',
-          urls: ['data/normanglobal/normanglobal__trucking_ftl__xiamen_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__xiamen_port.xlsx']
-        },
-        {
-          hub: 'Gothenburg Port',
-          urls: ['data/normanglobal/normanglobal__trucking_ftl__gothenburg_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__gothenburg_port.xlsx']
-        },
+        # {
+        #   hub: 'Shanghai Port',
+        #   urls: ['data/normanglobal/normanglobal__trucking_ftl__shanghai_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__shanghai_port.xlsx']
+        # },
+        # {
+        #   hub: 'Dalian Port',
+        #   urls: ['data/normanglobal/normanglobal__trucking_ftl__dalian_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__dalian_port.xlsx']
+        # },
+        # {
+        #   hub: 'Tianjin Port',
+        #   urls: ['data/normanglobal/normanglobal__trucking_ftl__tianjin_xingang_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__tianjin_xingang_port.xlsx']
+        # },
+        # {
+        #   hub: 'Xingang Port',
+        #   urls: ['data/normanglobal/normanglobal__trucking_ftl__tianjin_xingang_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__tianjin_xingang_port.xlsx']
+        # },
+        # {
+        #   hub: 'Qingdao Port',
+        #   urls: ['data/normanglobal/normanglobal__trucking_ftl__qingdao_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__qingdao_port.xlsx']
+        # },
+        # {
+        #   hub: 'Hong Kong Port',
+        #   urls: ['data/normanglobal/normanglobal__trucking_ftl__hong_kong_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__hong_kong_port.xlsx']
+        # },
+        # {
+        #   hub: 'Shenzhen Port',
+        #   urls: ['data/normanglobal/normanglobal__trucking_ftl__shenzhen_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__shenzhen_port.xlsx']
+        # },
+        # {
+        #   hub: 'Xiamen Port',
+        #   urls: ['data/normanglobal/normanglobal__trucking_ftl__xiamen_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__xiamen_port.xlsx']
+        # },
+        # {
+        #   hub: 'Gothenburg Port',
+        #   urls: ['data/normanglobal/normanglobal__trucking_ftl__gothenburg_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__gothenburg_port.xlsx']
+        # },
         {
           hub: 'Southampton Port',
           urls: ['data/normanglobal/normanglobal__trucking_ftl__southampton_port.xlsx', 'data/normanglobal/normanglobal__trucking_ltl__southampton_port.xlsx']

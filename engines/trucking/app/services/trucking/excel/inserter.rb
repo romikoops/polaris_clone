@@ -37,7 +37,6 @@ module Trucking
         load_ident_values_and_countries
         load_fees_and_charges
         overwrite_zonal_trucking_rates_by_hub
-        # import_locations
         end_time = DateTime.now
         diff = (end_time - start_time) / 86_400
         puts @missing_locations
@@ -202,7 +201,7 @@ module Trucking
                 else
                   ident_value = ident
                 end
-                @locations << { postal_code: ident_value, country: current_country[:name] }
+
                 { ident: ident_value, country: idents_and_country[:country] }
               end
             elsif identifier_type == 'location_id'
@@ -597,8 +596,8 @@ module Trucking
       def find_geometry(idents_and_country) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         geometry = if @identifier_modifier == 'postal_code'
                      Locations::Location.find_by(
-                       postal_code: idents_and_country[:ident].upcase,
-                       country_code: idents_and_country[:country]
+                       name: idents_and_country[:ident].upcase,
+                       country_code: idents_and_country[:country].downcase
                      )
                    elsif @identifier_modifier == 'locode'
                      Locations::LocationSeeder.seeding_with_locode(locode: idents_and_country[:ident].upcase)

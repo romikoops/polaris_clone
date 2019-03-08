@@ -4,8 +4,8 @@ class GeometrySeeder
   TMP_PATH = 'tmp/tmp_kml.kml'
   def self.perform
     # import_china
-    # import_sweden
-    import_germany
+    import_sweden
+    # import_germany
   end
 
   def self.import_china
@@ -177,7 +177,26 @@ class GeometrySeeder
 
         RGeo::Cartesian.factory.polygon(line_string)
       end
-      multi_polygon = RGeo::Cartesian.factory.multi_polygon(polygons)
+
+      return nil if polygons.compact.empty?
+      return nil if polygons.nil?
+
+      begin
+        multi_polygon = RGeo::Cartesian.factory.multi_polygon(polygons)
+      rescue => e
+
+        largest_polygon = polygons.sort_by {|p| p.area }.last
+        new_polygons = [largest_polygon]
+        polygons.each do |p| 
+          unless largest_polygon.contains?(p) || largest_polygon.intersects?(p)
+            new_polygons << p
+          end
+        end
+        multi_polygon = RGeo::Cartesian.factory.multi_polygon(new_polygons)
+        # binding.pry
+        # "98016"
+        # return nil
+      end
 
       attributes = {
         bounds: multi_polygon,
@@ -191,7 +210,7 @@ class GeometrySeeder
     puts
     puts 'Writing Geometries to DB...'
 
-    Locations::Location.import(geometries_data)
+    Locations::Location.import(geometries_data.compact)
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
     puts 'Geometries seeded...'
