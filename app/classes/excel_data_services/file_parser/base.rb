@@ -74,9 +74,17 @@ module ExcelDataServices
         strip_whitespaces(row_data)
       end
 
+      def parse_dates(row_data)
+        row_data[:effective_date] = Date.parse(row_data[:effective_date]) unless row_data[:effective_date].is_a? Date
+        row_data[:expiration_date] = Date.parse(row_data[:expiration_date]) unless row_data[:expiration_date].is_a? Date
+
+        row_data
+      end
+
       def build_row_obj(headers, row)
         row_data = headers.zip(row).to_h
-        sanitize_row_data(row_data)
+        row_data = sanitize_row_data(row_data)
+        parse_dates(row_data)
       end
     end
   end
