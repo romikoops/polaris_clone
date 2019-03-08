@@ -18,7 +18,7 @@ class CargoSection extends React.PureComponent {
     this.handleDeleteUnit = this.handleDeleteUnit.bind(this)
     this.handleChangeCargoUnitSelect = this.handleChangeCargoUnitSelect.bind(this)
 
-    this.handleChangeCargoUnitInput = debounce(this.handleChangeCargoUnitInput.bind(this), 500, e => e.persist())
+    this.handleChangeCargoUnitInput = this.handleChangeCargoUnitInput.bind(this)
     this.handleChangeCargoUnitCheckbox = debounce(
       this.handleChangeCargoUnitCheckbox.bind(this),
       200,
