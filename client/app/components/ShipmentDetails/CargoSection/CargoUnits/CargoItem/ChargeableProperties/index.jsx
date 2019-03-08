@@ -10,6 +10,7 @@ import {
   chargeableWeightTon,
   rawWeight,
   effectiveKgPerCubicMeter,
+  convertCargoItemAttributes,
   numberSpacing
 } from '../../../../../../helpers'
 import ChargeableProperty from './ChargeableProperty'
@@ -42,21 +43,23 @@ class ChargeableProperties extends React.PureComponent {
 
   getOption (mot) {
     const { scope, cargoItem } = this.props
+    const convertedItem = convertCargoItemAttributes(cargoItem)
 
     if (scope.chargeable_weight_view !== 'dynamic') return (scope.chargeable_weight_view || 'both')
 
-    const showVolume = volume(cargoItem) > (rawWeight(cargoItem) / effectiveKgPerCubicMeter[mot || 0])
+    const showVolume = volume(convertedItem) > (rawWeight(convertedItem) / effectiveKgPerCubicMeter[mot || 'ocean'])
 
     return showVolume ? 'volume' : 'weight'
   }
 
   getValue (mot, option) {
     const { cargoItem } = this.props
+    const convertedItem = convertCargoItemAttributes(cargoItem)
 
     return {
-      weight: chargeableWeight(cargoItem, mot),
-      volume: chargeableWeightTon(cargoItem, mot),
-      both: chargeableWeightTon(cargoItem, mot)
+      weight: chargeableWeight(convertedItem, mot),
+      volume: chargeableWeightTon(convertedItem, mot),
+      both: chargeableWeightTon(convertedItem, mot)
     }[option]
   }
 
@@ -72,6 +75,7 @@ class ChargeableProperties extends React.PureComponent {
 
   isAvailableMot (mot) {
     const { cargoItem, availableMots, maxDimensions } = this.props
+    const convertedItem = convertCargoItemAttributes(cargoItem)
 
     return !(
       (
@@ -81,7 +85,7 @@ class ChargeableProperties extends React.PureComponent {
         maxDimensions[mot] && (
           +cargoItem.dimensionZ > +maxDimensions[mot].dimensionZ ||
           +cargoItem.dimensionY > +maxDimensions[mot].dimensionY ||
-          chargeableWeight(cargoItem, mot) > +maxDimensions[mot].chargeableWeight
+          chargeableWeight(convertedItem, mot) > +maxDimensions[mot].chargeableWeight
         )
       )
     )
@@ -89,20 +93,21 @@ class ChargeableProperties extends React.PureComponent {
 
   render () {
     const { allMots, cargoItem } = this.props
+    const convertedItem = convertCargoItemAttributes(cargoItem)
 
     return (
       <div className={`${styles.inner_cargo_item_info} layout-row flex-100 layout-wrap layout-align-start`}>
         <div className="flex-100 layout-row layout-wrap">
           <div className="flex layout-wrap layout-row">
             <TotalProperty
-              value={numberSpacing(volume(cargoItem), 3)}
+              value={numberSpacing(volume(convertedItem), 3)}
               unit={<UnitSpan unit="m" />}
               property="volume"
             />
           </div>
           <div className="flex offset-5 layout-wrap layout-row">
             <TotalProperty
-              value={weight(cargoItem)}
+              value={weight(convertedItem)}
               unit={<UnitSpan unit="kg" />}
               property="weight"
             />
