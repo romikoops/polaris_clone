@@ -129,6 +129,26 @@ export default function (state = initialState, action) {
         showModal: false
       }
     }
+    case authenticationConstants.CHANGE_PASSWORD_REQUEST: {
+      return {
+        ...state,
+        passwordEmailSent: false,
+        passwordEmailRequested: true
+      }
+    }
+    case authenticationConstants.CHANGE_PASSWORD_SUCCESS: {
+      return {
+        ...state,
+        passwordEmailSent: true,
+        passwordEmailRequested: false
+      }
+    }
+    case 'GENERAL_UPDATE': {
+      return {
+        ...state,
+        ...action.payload
+      }
+    }
     default:
       return state
   }

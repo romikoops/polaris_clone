@@ -577,7 +577,8 @@
     "deleteAccountRequestParagraph": "Please refer to the following contacts if you wish to proceed with the request to delete your account",
     "contactPhone": "Contact via phone",
     "contactEmail": "Contact via email",
-    "userEmail": "User Email"
+    "userEmail": "User Email",
+    "checkEmailForPassword": "Please check your email for a link to reset your ItsMyCargo Account password."
   },
   "cargo": {
     "consolidatedCargoRate": "Consolidated Freight Rate",

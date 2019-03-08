@@ -167,6 +167,36 @@ function goTo (path, newTab) {
   }
 }
 
+function changePassword (email, redirect) {
+  function request (payload) {
+    return { type: authenticationConstants.CHANGE_PASSWORD_REQUEST, payload }
+  }
+  function success (response) {
+    return { type: authenticationConstants.CHANGE_PASSWORD_SUCCESS, response }
+  }
+  function failure (payload) {
+    return { type: authenticationConstants.CHANGE_PASSWORD_FAILURE, payload }
+  }
+
+  return (dispatch) => {
+    dispatch(request(email))
+
+    authenticationService.changePassword(email, redirect).then(
+      (response) => {
+        dispatch(success(response))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function updateReduxStore (payload) {
+  return dispatch => dispatch({ type: 'GENERAL_UPDATE', payload })
+}
+
 export const authenticationActions = {
   login,
   logout,
@@ -175,7 +205,9 @@ export const authenticationActions = {
   setUser,
   goTo,
   showLogin,
-  closeLogin
+  closeLogin,
+  changePassword,
+  updateReduxStore
 }
 
 export default authenticationActions

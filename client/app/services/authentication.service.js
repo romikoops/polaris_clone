@@ -13,6 +13,15 @@ function logout () {
   localStorage.removeItem('authHeader')
 }
 
+function handleResponse (response) {
+  const promise = Promise
+  if (!response.ok) {
+    return promise.reject(response.statusText)
+  }
+
+  return response.json()
+}
+
 function login (data) {
   const requestOptions = {
     method: 'POST',
@@ -128,12 +137,26 @@ function updateUser (user, req) {
     })
 }
 
+function changePassword (email, redirect) {
+  const payload = {
+    email,
+    redirect_url: redirect
+  }
+
+  return fetch(`${getTenantApiUrl()}/auth/password`, {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(handleResponse)
+}
+
 const authenticationService = {
   login,
   logout,
   register,
   getStoredUser,
-  updateUser
+  updateUser,
+  changePassword
 }
 
 export default authenticationService
