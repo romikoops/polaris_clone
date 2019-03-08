@@ -17,6 +17,8 @@ class User < Legacy::User
     message: ->(obj, _) { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" }
   }
 
+  acts_as_paranoid
+
   # Basic associations
   belongs_to :tenant
   belongs_to :role
@@ -303,4 +305,5 @@ end
 #  external_id            :string
 #  agency_id              :integer
 #  internal               :boolean          default(FALSE)
+#  deleted_at             :datetime
 #

@@ -35,6 +35,9 @@ gem 'config'
 gem 'devise_token_auth', '~> 0.1.43'
 gem 'omniauth'
 
+# soft delete users and other models
+gem "paranoia", "~> 2.2"
+
 gem 'sass-rails'
 gem 'sprockets-rails', require: 'sprockets/railtie'
 
