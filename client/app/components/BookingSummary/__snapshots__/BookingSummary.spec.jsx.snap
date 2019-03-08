@@ -58,7 +58,9 @@ exports[`loadType is cargo_item 1`] = `
         <h4
           class="flex-100"
         >
-          <span>
+          <span
+            data-tip="FOO_ORIGIN_CITY"
+          >
             <span />
             <span>
               FOO_ORIGIN_CITY
@@ -82,7 +84,19 @@ exports[`loadType is cargo_item 1`] = `
         <h4
           class="flex-100"
         >
-          FOO_DESTINATION_CITY
+          <span
+            data-tip="FOO_DESTINATION_CITY"
+          >
+            <span />
+            <span>
+              FOO_DESTINATION_CITY
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
           class="trucking_elem flex-none"
@@ -180,7 +194,9 @@ exports[`modeOfTransport is falsy 1`] = `
         <h4
           class="flex-100"
         >
-          <span>
+          <span
+            data-tip="FOO_ORIGIN_CITY"
+          >
             <span />
             <span>
               FOO_ORIGIN_CITY
@@ -204,7 +220,19 @@ exports[`modeOfTransport is falsy 1`] = `
         <h4
           class="flex-100"
         >
-          FOO_DESTINATION_CITY
+          <span
+            data-tip="FOO_DESTINATION_CITY"
+          >
+            <span />
+            <span>
+              FOO_DESTINATION_CITY
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
           class="trucking_elem flex-none"
@@ -290,7 +318,9 @@ exports[`render render 1`] = `
         <h4
           class="flex-100"
         >
-          <span>
+          <span
+            data-tip="FOO_ORIGIN_CITY"
+          >
             <span />
             <span>
               FOO_ORIGIN_CITY
@@ -314,7 +344,19 @@ exports[`render render 1`] = `
         <h4
           class="flex-100"
         >
-          FOO_DESTINATION_CITY
+          <span
+            data-tip="FOO_DESTINATION_CITY"
+          >
+            <span />
+            <span>
+              FOO_DESTINATION_CITY
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
           class="trucking_elem flex-none"
@@ -400,7 +442,9 @@ exports[`theme is falsy 1`] = `
         <h4
           class="flex-100"
         >
-          <span>
+          <span
+            data-tip="FOO_ORIGIN_CITY"
+          >
             <span />
             <span>
               FOO_ORIGIN_CITY
@@ -424,7 +468,19 @@ exports[`theme is falsy 1`] = `
         <h4
           class="flex-100"
         >
-          FOO_DESTINATION_CITY
+          <span
+            data-tip="FOO_DESTINATION_CITY"
+          >
+            <span />
+            <span>
+              FOO_DESTINATION_CITY
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
           class="trucking_elem flex-none"
@@ -510,7 +566,9 @@ exports[`trucking.onCarriage is empty object 1`] = `
         <h4
           class="flex-100"
         >
-          <span>
+          <span
+            data-tip="FOO_ORIGIN_CITY"
+          >
             <span />
             <span>
               FOO_ORIGIN_CITY
@@ -534,7 +592,19 @@ exports[`trucking.onCarriage is empty object 1`] = `
         <h4
           class="flex-100"
         >
-          FOO_NEXUSES_DESTINATION
+          <span
+            data-tip="FOO_NEXUSES_DESTINATION"
+          >
+            <span />
+            <span>
+              FOO_NEXUSES_DESTINATION
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
           class="trucking_elem flex-none"
@@ -620,7 +690,9 @@ exports[`trucking.preCarriage is empty object 1`] = `
         <h4
           class="flex-100"
         >
-          <span>
+          <span
+            data-tip="FOO_NEXUSES_ORIGIN"
+          >
             <span />
             <span>
               FOO_NEXUSES_ORIGIN
@@ -644,7 +716,19 @@ exports[`trucking.preCarriage is empty object 1`] = `
         <h4
           class="flex-100"
         >
-          FOO_DESTINATION_CITY
+          <span
+            data-tip="FOO_DESTINATION_CITY"
+          >
+            <span />
+            <span>
+              FOO_DESTINATION_CITY
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
           class="trucking_elem flex-none"

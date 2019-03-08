@@ -2,8 +2,8 @@ import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import Truncate from 'react-truncate'
 import { has } from 'lodash'
+import TruncateText from '../TruncateText'
 import styles from './BookingSummary.scss'
 import { dashedGradient, switchIcon, numberSpacing } from '../../helpers'
 
@@ -48,9 +48,9 @@ function BookingSummary (props) {
         <div className="flex-50 layout-row layout-align-space-between">
           <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
             <h4 className="flex-100">
-              <Truncate lines={1}>
+              <TruncateText lines={1}>
                 {trucking.preCarriage.truckType ? cities.origin : nexuses.origin}
-              </Truncate>
+              </TruncateText>
             </h4>
             <p className={`${styles.trucking_elem} flex-none`}>
               {
@@ -63,7 +63,9 @@ function BookingSummary (props) {
           </div>
           <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
             <h4 className="flex-100">
-              {trucking.onCarriage.truckType ? cities.destination : nexuses.destination}
+              <TruncateText lines={1}>
+                {trucking.onCarriage.truckType ? cities.destination : nexuses.destination}
+              </TruncateText>
             </h4>
             <p className={`${styles.trucking_elem} flex-none`}>
               {
