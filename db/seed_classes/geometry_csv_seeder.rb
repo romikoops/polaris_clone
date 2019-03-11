@@ -54,12 +54,12 @@ class GeometryCsvSeeder
       names = []
       csv.each do |row|
         location = Locations::Location.new(
-          country_code: 'GB',
+          country_code: 'gb',
           bounds: RGeo::GeoJSON.decode(row.second),
           name: row.first
         )
         name = Locations::Name.new(
-          country_code: 'GB',
+          country_code: 'gb',
           country: 'United Kingdom of Great Britain and Northern Ireland',
           name: row.first,
           postal_code: row.first,
@@ -85,12 +85,12 @@ class GeometryCsvSeeder
       csv.each do |row|
        ## AB10 -> bounds
         location = Locations::Location.new(
-          country_code: 'GB',
+          country_code: 'gb',
           bounds: RGeo::GeoJSON.decode(row.second),
           name: row.first
         )
         name = Locations::Name.new(
-          country_code: 'GB',
+          country_code: 'gb',
           country: 'United Kingdom of Great Britain and Northern Ireland',
           name: row.first,
           postal_code: row.first,

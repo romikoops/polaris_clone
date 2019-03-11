@@ -2,32 +2,32 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
-// import Truncate from 'react-truncate'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Toggle from 'react-toggle'
+import GmapsWrapper from '../../hocs/GmapsWrapper'
 import '../../styles/react-toggle.scss'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
-import hubStyles from './Hubs/index.scss'
 import {
   history,
   capitalize,
   nameToDisplay,
-  switchIcon,
-  gradientGenerator,
-  renderHubType
+  gradientGenerator
 } from '../../helpers'
 import { TruckingDisplayPanel } from './AdminAuxilliaries'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
-import DocumentsSelector from '../../components/Documents/Selector'
+import DocumentsSelector from '../Documents/Selector'
+import TruckingCoverage from './Trucking/Coverage'
+import TruckingRateTable from './Trucking/RateTable'
 import { documentActions } from '../../actions'
 import AdminUploadsSuccess from './Uploads/Success'
-import DocumentsDownloader from '../../components/Documents/Downloader'
+import DocumentsDownloader from '../Documents/Downloader'
 import { cargoClassOptions } from '../../constants'
 import GreyBox from '../GreyBox/GreyBox'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
+
 
 function getTruckingPricingKey (truckingPricing) {
   if (truckingPricing.zipcode) {
@@ -68,6 +68,7 @@ export class AdminTruckingView extends Component {
       cargoClass: { value: 'fcl_20', label: 'FCL 20ft' },
       expander: {}
     }
+    this.setCurrentTruckingPricing = this.setCurrentTruckingPricing.bind(this)
   }
 
   componentWillMount () {
@@ -75,6 +76,7 @@ export class AdminTruckingView extends Component {
       this.handleSearchChange({ target: { value: '' } })
     }
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
     if (this.state.filteredTruckingPricings.length === 0 &&
@@ -83,6 +85,7 @@ export class AdminTruckingView extends Component {
       this.handleLoadTypeToggle()
     }
   }
+
   filterTruckingPricingsByType (pricings) {
     const {
       loadTypeBool, directionBool, truckBool, cargoClass
@@ -106,9 +109,15 @@ export class AdminTruckingView extends Component {
   toggleNew () {
     this.setState({ newRow: !this.state.newRow })
   }
+
   selectTruckingPricing (truckingPricing) {
-    this.setState({ currentTruckingPricing: truckingPricing.truckingPricing.id })
+    this.setCurrentTruckingPricing(truckingPricing.truckingPricing.id)
   }
+
+  setCurrentTruckingPricing (id) {
+    this.setState({ currentTruckingPricing: id })
+  }
+
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -117,12 +126,14 @@ export class AdminTruckingView extends Component {
       }
     })
   }
+
   handleUpload (file, dir, type) {
     const { adminDispatch, truckingDetail } = this.props
     const { hub } = truckingDetail
     const url = `/admin/trucking/trucking_pricings/${hub.id}`
     adminDispatch.uploadTrucking(url, file, dir)
   }
+
   handleLoadTypeToggle (value) {
     this.setState({ loadTypeBool: !this.state.loadTypeBool }, () => {
       if (this.state.loadTypeBool) {
@@ -137,19 +148,23 @@ export class AdminTruckingView extends Component {
       this.handleSearchChange({ target: { value: '' } })
     })
   }
+
   handleDirectionToggle (value) {
     this.setState({ directionBool: !this.state.directionBool }, () => {
       this.handleSearchChange({ target: { value: '' } })
     })
   }
+
   handleCargoClass (selection) {
     this.setState({ cargoClass: selection }, () => {
       this.handleSearchChange({ target: { value: '' } })
     })
   }
+
   backToList () {
     this.setState({ currentTruckingPricing: false })
   }
+
   closeSuccessDialog () {
     const { documentDispatch } = this.props
     documentDispatch.closeViewer()
@@ -187,6 +202,7 @@ export class AdminTruckingView extends Component {
       searchFilter: event.target.value
     })
   }
+
   render () {
     const {
       t, theme, truckingDetail, adminDispatch, document
@@ -214,7 +230,7 @@ export class AdminTruckingView extends Component {
     ) : (
       ''
     )
-    const { hub } = truckingDetail
+    const { hub, coverage } = truckingDetail
     const { primary, secondary } = theme.colors
     const gradientBackground = gradientGenerator(primary, secondary)
     const truckingPricingToDisplay =
@@ -250,7 +266,7 @@ export class AdminTruckingView extends Component {
           const idenitfierKey = Object.keys(tp).filter(key => key !== 'truckingPricing' && key !== 'countryCode')[0]
 
           return (
-            <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-stretch five_p">
+            <div className="flex-100 layout-row layout-align-center-stretch five_p">
               <GreyBox
                 isBox
                 padding
@@ -263,20 +279,29 @@ export class AdminTruckingView extends Component {
                     onClick={() => this.selectTruckingPricing(tp)}
                   >
                     {loadTypeBool
-                      ? <div className="flex-66 layout-row layout-align-center-center">
-                        <p className="flex-50">{nameToDisplay(tp.truckingPricing.cargo_class)}</p>
-                        <p className={`flex-50 ${styles.truck_type_border}`}>{nameToDisplay(tp.truckingPricing.truck_type)}</p>
-                      </div>
+                      ? (
+                        <div className="flex-66 layout-row layout-align-center-center">
+                          <p className="flex-50">{nameToDisplay(tp.truckingPricing.cargo_class)}</p>
+                          <p className={`flex-50 ${styles.truck_type_border}`}>{nameToDisplay(tp.truckingPricing.truck_type)}</p>
+                        </div>
+                      )
                       : ''
                     }
                     {idenitfierKey === 'distance' ? (
                       <div className="flex-33 layout-column layout-wrap layout-align-center-center">
                         <p className="flex-90">{capitalize(idenitfierKey)}</p>
-                        <p className="flex-90"> {getTruckingPricingKey(tp)}</p>
+                        <p className="flex-90">
+                          {' '}
+                          {getTruckingPricingKey(tp)}
+                        </p>
                       </div>
                     ) : (
                       <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-                        <p className="flex-90">{capitalize(idenitfierKey)} {getTruckingPricingKey(tp)}</p>
+                        <p className="flex-90">
+                          {capitalize(idenitfierKey)}
+                          {' '}
+                          {getTruckingPricingKey(tp)}
+                        </p>
                       </div>
                     )}
 
@@ -299,70 +324,59 @@ export class AdminTruckingView extends Component {
       >
         <div className="flex-none layout-row layout-align-center-center">
           <i className="flex-none fa fa-angle-left" />
-          <p className="flex-none">&nbsp;&nbsp;{t('admin:backToList')}</p>
+          <p className="flex-none">
+&nbsp;&nbsp;
+            {t('admin:backToList')}
+          </p>
         </div>
       </div>)
     const truckView = currentTruckingPricing ? displayPanel : searchResults
     const truckFilter = loadTypeBool
-      ? (<div className="flex-100 layout-row layout-align-space-between-center">
-        <div className="flex-90 layout-row layout-align-space-between-center">
-          <p className="flex-none">{t('admin:sideLifter')}</p>
-          <div className="flex-5" />
-          <Toggle
-            className="flex-none"
-            id="unitView"
-            name="unitView"
-            checked={truckBool}
-            onChange={e => this.handleTruckToggle(e)}
-          />
-          <div className="flex-5" />
-          <p className="flex-none">{t('admin:chassis')}</p>
+      ? (
+        <div className="flex-100 layout-row layout-align-space-between-center">
+          <div className="flex-90 layout-row layout-align-space-between-center">
+            <p className="flex-none">{t('admin:sideLifter')}</p>
+            <div className="flex-5" />
+            <Toggle
+              className="flex-none"
+              id="unitView"
+              name="unitView"
+              checked={truckBool}
+              onChange={e => this.handleTruckToggle(e)}
+            />
+            <div className="flex-5" />
+            <p className="flex-none">{t('admin:chassis')}</p>
+          </div>
         </div>
-      </div>) : ''
+      ) : ''
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start padd_20">
         {uploadStatus}
-        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
+        <div className={`${styles.component_view} flex-100 layout-row layout-align-start-start`}>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-            <div
-              className={`
-                flex-100 layout-row layout-align-center-center
-                ${currentTruckingPricing ? 'margin_bottom' : ''}
-                ${hubStyles.hub_title}
-              `}
-              style={gradientBackground}
-            >
-              <div className={`flex-none layout-row layout-align-space-between-center ${hubStyles.hub_title_content}`}>
-                <div className="flex-70 layout-row layout-align-start-center">
-                  <h3 className="flex-none"> {hub.name}</h3>
-                </div>
-                <div className="flex-30 layout-row layout-align-end-center">
-                  <div className="flex-none layout-row layout-align-center-center">
-                    <h4 className="flex-none" > {renderHubType(hub.hub_type)}</h4>
-                  </div>
-                  <div className="flex-none layout-row layout-align-center-center" style={{ color: primary }} >
-                    {switchIcon(hub.hub_type)}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              className={`flex-85 layout-row layout-align-end-center ${
-                styles.sec_header
-              }`}
-            >
-              { currentTruckingPricing ? backBtn : ''}
-            </div>
-            <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
+            <div className="flex-60 layout-row layout-align-space-around-start layout-wrap">
               <div className="flex-100 layout-row layout-align-start-stretch layout-wrap">
-                {truckView}
+                <GmapsWrapper
+                  onMapClick={this.setCurrentTruckingPricing}
+                  location={hub}
+                  component={TruckingCoverage}
+                  coverage={coverage}
+                />
               </div>
             </div>
+
+            <div className="flex-40 layout-row layout-align-space-around-start layout-wrap">
+              <div className="flex-100 layout-row layout-align-start-stretch layout-wrap">
+                {/* {truckView} */}
+                <TruckingRateTable />
+              </div>
+            </div>
+
           </div>
           {styleTagJSX}
         </div>
-        <div className="flex-20 layout-row layout-wrap layout-align-center-start">
+        {/* <div className="flex-20 layout-row layout-wrap layout-align-center-start"> 
 
           <SideOptionsBox
             header={t('admin:filters')}
@@ -433,40 +447,44 @@ export class AdminTruckingView extends Component {
                   />
                 </div>
                 {loadTypeBool
-                  ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                    <CollapsingBar
-                      showArrow
-                      collapsed={!expander.truck_type}
-                      theme={theme}
-                      handleCollapser={() => this.toggleExpander('truck_type')}
-                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                      text={`${t('admin:import')} / ${t('admin:export')}`}
-                      faClass="fa fa-flag"
-                      content={truckFilter}
-                    />
-                  </div> : ''}
+                  ? (
+                    <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                      <CollapsingBar
+                        showArrow
+                        collapsed={!expander.truck_type}
+                        theme={theme}
+                        handleCollapser={() => this.toggleExpander('truck_type')}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                        text={`${t('admin:import')} / ${t('admin:export')}`}
+                        faClass="fa fa-flag"
+                        content={truckFilter}
+                      />
+                    </div>
+                  ) : ''}
                 {loadTypeBool
-                  ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                    <CollapsingBar
-                      showArrow
-                      collapsed={!expander.cargo_class}
-                      theme={theme}
-                      handleCollapser={() => this.toggleExpander('cargo_class')}
-                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                      text={t('admin:cargoClassPlain')}
-                      faClass="fa fa-flag"
-                      content={(
-                        <NamedSelect
-                          placeholder={t('admin:cargoClassPlain')}
-                          className={styles.select}
-                          name="cargo_class"
-                          value={cargoClass}
-                          options={cargoClassOptions}
-                          onChange={e => this.handleCargoClass(e)}
-                        />
-                      )}
-                    />
-                  </div> : ''}
+                  ? (
+                    <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                      <CollapsingBar
+                        showArrow
+                        collapsed={!expander.cargo_class}
+                        theme={theme}
+                        handleCollapser={() => this.toggleExpander('cargo_class')}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                        text={t('admin:cargoClassPlain')}
+                        faClass="fa fa-flag"
+                        content={(
+                          <NamedSelect
+                            placeholder={t('admin:cargoClassPlain')}
+                            className={styles.select}
+                            name="cargo_class"
+                            value={cargoClass}
+                            options={cargoClassOptions}
+                            onChange={e => this.handleCargoClass(e)}
+                          />
+                        )}
+                      />
+                    </div>
+                  ) : ''}
               </div>
             )}
           />
@@ -544,7 +562,7 @@ export class AdminTruckingView extends Component {
               </div>
             )}
           />
-        </div>
+        </div>*/}
       </div>
     )
   }

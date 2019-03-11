@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'will_paginate/array'
 
 module Trucking
   class Rate < ApplicationRecord
@@ -30,14 +31,21 @@ module Trucking
       ::Trucking::Queries::FindByFilter.new(args.merge(klass: self)).perform
     end
 
-    def self.find_by_hub_id(hub_id)
-      find_by_hub_ids([hub_id])
+    def self.find_by_hub_id(hub_id, options = {})
+      find_by_hub_ids([hub_id], options)
     end
 
-    def self.find_by_hub_ids(hub_ids)
+    def self.find_by_hub_ids(hub_ids, options = {})
       query = ::Trucking::Queries::FindByHubIds.new(hub_ids: hub_ids, klass: self)
       query.perform
-      query.deserialized_result
+      if options[:paginate]
+        raw_result = query.result.paginate(page: options[:page], per_page: 20)
+        result = query.deserialize_results(raw_result)
+      else
+        result = query.deserialized_result
+      end
+
+      result
     end
 
     # Instance Methods

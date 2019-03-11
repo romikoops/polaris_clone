@@ -10,6 +10,7 @@ import alert from './alert.reducer'
 import error from './error.reducer'
 import admin from './admin.reducer'
 import app from './app.reducer'
+import map from './map.reducer'
 import document from './document.reducer'
 import messaging from './messaging.reducer'
 import bookingSummary from './bookingSummary.reducer'
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   tenant,
   admin,
   app,
+  map,
   routing,
   remark,
   messaging,

@@ -10,7 +10,8 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def show
     hub = Hub.find(params[:id])
-    results = Trucking::Rate.find_by_hub_id(params[:id])
+    results = Trucking::Rate.find_by_hub_id(params[:id], { paginate: true, page: params[:page] || 1})
+    # coverage = Trucking::Coverage.find_by(hub_id: params[:id])&.geojson
     response_handler(hub: hub, truckingPricings: results)
   end
 

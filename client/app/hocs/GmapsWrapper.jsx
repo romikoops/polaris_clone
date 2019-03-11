@@ -11,6 +11,7 @@ export default function GmapsWrapper (props) {
     language: 'en'
   }
   const ParamComponent = props.component
+
   return (
     <ReactGoogleMapLoader
       params={params}

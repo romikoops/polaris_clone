@@ -334,3 +334,9 @@ export const countries = [
   { label: 'Zambia', value: 'ZM' },
   { label: 'Zimbabwe', value: 'ZW' }
 ]
+
+export const mapConstants = {
+  GET_MAP_DATA_REQUEST: 'GET_MAP_DATA_REQUEST',
+  GET_MAP_DATA_SUCCESS: 'GET_MAP_DATA_SUCCESS',
+  GET_MAP_DATA_FAILURE: 'GET_MAP_DATA_FAILURE'
+}

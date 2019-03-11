@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2019_03_15_082342) do
+=======
+ActiveRecord::Schema.define(version: 2019_03_11_173007) do
+>>>>>>> 312c8f72c... WIP
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -868,6 +872,14 @@ ActiveRecord::Schema.define(version: 2019_03_15_082342) do
     t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "trucking_coverages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "hub_id"
+    t.geometry "bounds", limit: {:srid=>0, :type=>"geometry"}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bounds"], name: "index_trucking_coverages_on_bounds", using: :gist
   end
 
   create_table "trucking_destinations", force: :cascade do |t|

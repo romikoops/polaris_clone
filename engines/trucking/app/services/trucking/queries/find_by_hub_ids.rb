@@ -73,7 +73,15 @@ module Trucking
       end
 
       def deserialized_result
-        @result.map do |row|
+        deserialize_results(@result)
+      end
+
+      def rate_ids
+        @result.map{ |r| r['trucking_rate_id'] }
+      end
+
+      def deserialize_results(results)
+        results.map do |row|
           next if row['ident_values'].nil?
           {
             'truckingPricing' => @klass.find(row['trucking_rate_id']).as_options_json,
