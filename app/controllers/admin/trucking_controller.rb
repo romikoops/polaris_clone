@@ -33,7 +33,7 @@ class Admin::TruckingController < Admin::AdminBaseController
         hub_id: params[:id],
         user: current_user
       }
-    
+
       resp = Trucking::Excel::Inserter.new(args).perform
       response_handler(resp)
     else

@@ -7,18 +7,18 @@ class LocationsController < ApplicationController
   def index
     input = params[:query]
 
-      country_codes = params[:countries].split(',').map(&:downcase).compact
-      raw_results = Locations::Autocomplete.search(term: input, country_codes: country_codes)
-      results = raw_results.map do |result|
-        {
-          geojson: result.geojson,
-          description: result.display_name,
-          postal_code: result.postal_code,
-          city: result.city || result.state,
-          country: result.country,
-          location: result.lat_lng
-        }
-      end
+    country_codes = params[:countries].split(',').map(&:downcase).compact
+    raw_results = Locations::Autocomplete.search(term: input, country_codes: country_codes)
+    results = raw_results.map do |result|
+      {
+        geojson: result.geojson,
+        description: result.display_name,
+        postal_code: result.postal_code,
+        city: result.city || result.state,
+        country: result.country,
+        location: result.lat_lng
+      }
+    end
 
     response_handler(
       results: results
