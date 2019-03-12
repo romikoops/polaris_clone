@@ -24,7 +24,7 @@ let middleware = [
 ]
 
 if (process.env.NODE_ENV !== 'production') {
-  middleware = [...middleware, createLogger({ diff: true })]
+  middleware = [...middleware, createLogger({ diff: false })]
 }
 
 export function configureStore () {
