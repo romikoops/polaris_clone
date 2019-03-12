@@ -32,7 +32,7 @@ export class AdminHubsIndex extends Component {
   render () {
     const { expander } = this.state
     const {
-      t, theme, viewHub, toggleNewHub, documentDispatch, user
+      t, theme, viewHub, toggleNewHub, documentDispatch, user, scope
     } = this.props
 
     const hubUrl = '/admin/hubs/process_csv'
@@ -101,7 +101,7 @@ export class AdminHubsIndex extends Component {
       flexOptions="flex"
       content={(
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-          { user.internal ? (
+          { user.internal || scope.feature_uploaders ? (
             <CollapsingBar
               showArrow
               collapsed={!expander.upload}
@@ -175,7 +175,7 @@ export class AdminHubsIndex extends Component {
               </div>
             )}
           />
-          { user.internal ? (
+          { user.internal || scope.feature_uploaders ? (
             <CollapsingBar
               showArrow
               collapsed={!expander.new}
