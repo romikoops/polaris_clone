@@ -22,9 +22,6 @@ class AddAnonymisingComments < ActiveRecord::Migration[5.2]
 
       # Versions
       change_table_comment :versions, 'IGNORE DATA'
-
-      # System Tables
-      change_table_comment :spatial_ref_sys, 'IGNORE DATA'
     end
   end
 end
