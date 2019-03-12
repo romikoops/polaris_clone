@@ -75,8 +75,12 @@ module ExcelDataServices
       end
 
       def parse_dates(row_data)
-        row_data[:effective_date] = Date.parse(row_data[:effective_date]) unless row_data[:effective_date].is_a? Date
-        row_data[:expiration_date] = Date.parse(row_data[:expiration_date]) unless row_data[:expiration_date].is_a? Date
+        unless row_data[:effective_date].is_a?(Date) || row_data[:effective_date].nil?
+          row_data[:effective_date] = Date.parse(row_data[:effective_date])
+        end
+        unless row_data[:expiration_date].is_a?(Date) || row_data[:expiration_date].nil?
+          row_data[:expiration_date] = Date.parse(row_data[:expiration_date])
+        end
 
         row_data
       end
