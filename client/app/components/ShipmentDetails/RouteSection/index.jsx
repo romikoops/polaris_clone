@@ -362,7 +362,7 @@ class RouteSection extends React.PureComponent {
 
               return (
                 <React.Fragment>
-                  <div className="flex-45 layout-row layout-wrap layout-align-start-start">
+                  <div name="originAuto" className="flex-45 layout-row layout-wrap layout-align-start-start">
                     <div className="flex-45 layout-row layout-wrap">
                       <CarriageToggle
                         carriage="pre"
@@ -395,7 +395,7 @@ class RouteSection extends React.PureComponent {
                       requiresFullAddress={requiresFullAddress}
                     />
                   </div>
-                  <div className="flex-45 layout-row layout-wrap layout-align-start-start">
+                  <div name="destinationAuto" className="flex-45 layout-row layout-wrap layout-align-start-start">
                     <div className="flex-35 layout-row layout-wrap">
                       <CarriageToggle
                         carriage="on"

@@ -3,7 +3,6 @@
 exports[`renders correctly 1`] = `
 <div
   className="auto_origin ccb_carriage flex-100 layout-row layout-wrap layout-align-center-center autocomplete_container"
-  name="TARGETAuto"
 >
   <div
     className="flex-none ccb_backdrop hidden"
