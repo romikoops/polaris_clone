@@ -41,9 +41,7 @@ class TruckingAvailabilityController < ApplicationController
       hub_ids: params[:hub_ids].split(',').map(&:to_i),
       carriage: params[:carriage]
     }
-    experiment = Experiments::Trucking::FindByFilter.new(name: 'trucking_find_by_filter')
-    experiment.use { TruckingPricing.find_by_filter(args) }
-    experiment.try { Trucking::Rate.find_by_filter(args) }
-    experiment.run
+
+    Trucking::Rate.find_by_filter(args)
   end
 end

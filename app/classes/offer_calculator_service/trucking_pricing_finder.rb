@@ -19,11 +19,8 @@ module OfferCalculatorService
         hub_ids: [hub_id],
         distance: distance.round
       }
-      experiment = Experiments::Trucking::FindByFilter.new(name: 'oc_trucking_find_by_filter')
-      experiment.use { TruckingPricing.find_by_filter(args) }
-      experiment.try { Trucking::Rate.find_by_filter(args) }
 
-      experiment.run
+      Trucking::Rate.find_by_filter(args)
     end
   end
 end

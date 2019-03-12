@@ -6,6 +6,8 @@ class GeometrySeeder
     # import_china
     # import_sweden
     import_germany
+    import_german_names
+    # update_german_names
   end
 
   def self.import_china
@@ -137,6 +139,61 @@ class GeometrySeeder
     puts 'Geometries seeded...'
   end
 
+  def self.import_german_names
+    puts 'Reading from kml...'
+    GeometrySeeder.get_s3_file('data/location_data/germany_postal.kml')
+    geometry_hash = Hash.from_xml(File.open(TMP_PATH))
+    geometries = geometry_hash['kml']['Document']['Folder']['Placemark']
+
+    puts
+    puts 'Preparing Geometries attributes...'
+    total = geometries.size
+    completion_percentage = 0
+    new_completion_percentage = 0
+    puts 'PROGRESS BAR'
+    puts '_' * 100
+
+    geometries_data = geometries.map.with_index do |geo, i|
+      # Progress bar
+
+      new_completion_percentage = i * 100 / total
+      if new_completion_percentage > completion_percentage
+        completion_percentage = new_completion_percentage
+        print '-'
+      end
+
+      # Geometry Data
+
+      names = geo['ExtendedData']['SchemaData']['SimpleData']
+      postal_code = names[1]
+      city = names[0].delete(names[1]).strip
+
+      location = Locations::Location.find_by(name: names[1], country_code: 'de')
+      next unless location&.bounds
+      attributes = {
+        point: location&.bounds&.centroid,
+        postal_code: names[1],
+        city: city,
+        display_name: names[0],
+        country_code: 'de',
+        country: 'Germany',
+        location_id: location&.id
+      }
+
+      attributes
+    end
+
+    puts
+    puts 'Writing Geometries to DB...'
+
+    Locations::Name.import(geometries_data.compact)
+    Locations::Name.reindex
+
+    File.delete(TMP_PATH) if File.exist?(TMP_PATH)
+
+    puts 'Geometries seeded...'
+  end
+
   def self.import_sweden
     puts 'Reading from kml...'
     GeometrySeeder.get_s3_file('data/location_data/sweden_postal.kml')
@@ -150,8 +207,10 @@ class GeometrySeeder
     new_completion_percentage = 0
     puts 'PROGRESS BAR'
     puts '_' * 100
+    name_attributes = []
+    locations_attributes = []
 
-    geometries_data = geometries.map.with_index do |geo, i|
+    geometries_data = geometries.each_with_index do |geo, i|
       # Progress bar
 
       new_completion_percentage = i * 100 / total
@@ -177,21 +236,45 @@ class GeometrySeeder
 
         RGeo::Cartesian.factory.polygon(line_string)
       end
-      multi_polygon = RGeo::Cartesian.factory.multi_polygon(polygons)
 
-      attributes = {
+      return nil if polygons.compact.empty?
+      return nil if polygons.nil?
+
+      begin
+        multi_polygon = RGeo::Cartesian.factory.multi_polygon(polygons)
+      rescue => e
+
+        largest_polygon = polygons.sort_by {|p| p.area }.last
+        new_polygons = [largest_polygon]
+        polygons.each do |p| 
+          unless largest_polygon.contains?(p) || largest_polygon.intersects?(p)
+            new_polygons << p
+          end
+        end
+        multi_polygon = RGeo::Cartesian.factory.multi_polygon(new_polygons)
+        # binding.pry
+        # "98016"
+        # return nil
+      end
+
+      locations_attributes << {
         bounds: multi_polygon,
         name: names[1],
         country_code: 'se'
       }
-
-      attributes
+      name_attributes << {
+        point: multi_polygon.centroid,
+        name: names[1],
+        postal_code: names[1],
+        country_code: 'se'
+      }
     end
 
     puts
     puts 'Writing Geometries to DB...'
 
-    Locations::Location.import(geometries_data)
+    Locations::Location.import(locations_attributes.compact)
+    Locations::Name.import(name_attributes.compact)
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
     puts 'Geometries seeded...'
@@ -206,5 +289,53 @@ class GeometrySeeder
     ).body.read
 
     File.open(TMP_PATH, 'wb') { |f| f.write(file) }
+  end
+
+  def self.update_german_names
+    puts 'Reading from kml...'
+    GeometrySeeder.get_s3_file('data/location_data/germany_postal.kml')
+    geometry_hash = Hash.from_xml(File.open(TMP_PATH))
+    geometries = geometry_hash['kml']['Document']['Folder']['Placemark']
+
+    puts
+    puts 'Preparing Geometries attributes...'
+    total = geometries.size
+    completion_percentage = 0
+    new_completion_percentage = 0
+    puts 'PROGRESS BAR'
+    puts '_' * 100
+
+    geometries_data = geometries.map.with_index do |geo, i|
+      # Progress bar
+
+      new_completion_percentage = i * 100 / total
+      if new_completion_percentage > completion_percentage
+        completion_percentage = new_completion_percentage
+        print '-'
+      end
+
+      # Geometry Data
+
+      names = geo['ExtendedData']['SchemaData']['SimpleData']
+      postal_code = names[1]
+      city = names[0].delete(names[1]).strip
+
+      attributes = {
+        city: city,
+        display_name: names[0],
+        country: 'Germany'
+      }
+
+      Locations::Name.find_by(postal_code: postal_code, country_code: 'de').update(attributes)
+    end
+
+    puts
+    puts 'Writing Geometries to DB...'
+
+    Locations::Name.reindex
+
+    File.delete(TMP_PATH) if File.exist?(TMP_PATH)
+
+    puts 'Geometries seeded...'
   end
 end

@@ -33,11 +33,8 @@ class Admin::TruckingController < Admin::AdminBaseController
         hub_id: params[:id],
         user: current_user
       }
-      experiment = Experiments::Trucking::Inserter.new(name: 'trucking_uploader')
-      experiment.use { ExcelTool::OverrideTruckingRateByHub.new(args).perform }
-      experiment.try { Trucking::Excel::Inserter.new(args).perform }
 
-      resp = experiment.run
+      resp = Trucking::Excel::Inserter.new(args).perform
       response_handler(resp)
     else
       response_handler(false)
