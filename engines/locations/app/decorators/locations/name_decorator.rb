@@ -10,5 +10,9 @@ module Locations
     def lat_lng
       { latitude: point.y, longitude: point.x}
     end
+
+    def combined_names
+      [postal_code, city, state, country].compact.join(', ')
+    end
   end
 end

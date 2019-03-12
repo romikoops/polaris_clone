@@ -12,11 +12,11 @@ class LocationsController < ApplicationController
     results = raw_results.map do |result|
       {
         geojson: result.geojson,
-        description: result.display_name,
+        description: result.display_name || result.combined_names,
         postal_code: result.postal_code,
         city: result.city || result.state,
         country: result.country,
-        location: result.lat_lng
+        center: result.lat_lng
       }
     end
 
