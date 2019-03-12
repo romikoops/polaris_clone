@@ -296,7 +296,11 @@ class RouteSection extends React.PureComponent {
           setTimeout(() => this.updateCollapsedAddressFields(target, true), 5000)
 
           bookingProcessDispatch.updateShipment(target, { ...address, hubIds })
-
+          errorDispatch.clearError({
+            componentName: 'RouteSection',
+            target,
+            side: target === 'origin' ? 'left' : 'right'
+          })
           setMarker(target, { lat: address.latitude, lng: address.longitude, geojson: address.geojson })
         }
       }
