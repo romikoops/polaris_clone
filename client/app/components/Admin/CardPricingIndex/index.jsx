@@ -306,7 +306,7 @@ class CardPricingIndex extends Component {
               flexOptions="flex-100"
               content={(
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  { user.internal ? (
+                  { user.internal || scope.feature_uploaders ? (
                     <CollapsingBar
                       showArrow
                       collapsed={!expander.upload}
