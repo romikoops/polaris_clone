@@ -14,7 +14,6 @@ import GetOffersSection from './GetOffersSection'
 import { shipmentActions, bookingProcessActions } from '../../actions'
 import { getTotalShipmentErrors } from './CargoSection/getErrors'
 
-
 class ShipmentDetails extends React.PureComponent {
   constructor (props) {
     super(props)
@@ -97,7 +96,7 @@ class ShipmentDetails extends React.PureComponent {
     const { BookingDetails } = this.props
     const { modals } = BookingDetails
     if (!modals) return ''
-    
+
     const [visibleModalKey] = Object.keys(modals).filter(
       key => modals[key]
     )
@@ -111,17 +110,25 @@ class ShipmentDetails extends React.PureComponent {
     const addressErrors = { origin: false, destination: false }
     if (
       scope.require_full_address &&
-      (e['origin-street'] === '' || e['origin-number'] === '')
+      ([e['origin-street'], e['origin-number']].includes(''))
     ) {
       scrollTo('originAuto')
       addressErrors.origin = true
     }
     if (
       scope.require_full_address &&
-      (e['destination-street'] === '' || e['destination-number'] === '')
+      ([e['destination-street'], e['destination-number']].includes(''))
     ) {
       scrollTo('destinationAuto')
       addressErrors.destination = true
+    }
+    if (e['destination-zipCode'] === '') {
+      scrollTo('destinationAuto')
+      addressErrors.destination = true
+    }
+    if (e['origin-zipCode'] === '') {
+      scrollTo('originAuto')
+      addressErrors.origin = true
     }
     if (e.selectedDay === '') {
       scrollTo('dayPicker')
@@ -160,9 +167,9 @@ class ShipmentDetails extends React.PureComponent {
           onInvalid={this.disableGetOffers}
           className="flex-100 layout-row layout-wrap"
         >
-          <RouteSection requiresFullAddress={scope.require_full_address} addressErrors={addressErrors}/>
+          <RouteSection requiresFullAddress={scope.require_full_address} addressErrors={addressErrors} />
           <DayPickerSection />
-          <CargoSection toggleModal={this.toggleModal} totalShipmentErrors={totalShipmentErrors}/>
+          <CargoSection toggleModal={this.toggleModal} totalShipmentErrors={totalShipmentErrors} />
           <GetOffersSection totalShipmentErrors={totalShipmentErrors} getOffersDisabled={getOffersDisabled} />
         </Formsy>
       </div>
@@ -178,7 +185,9 @@ function mapStateToProps (state) {
   const shipmentId = get(response, 'stage1.shipment.id')
   const maxAggregateDimensions = get(response, 'stage1.maxAggregateDimensions')
 
-  return { ...bookingProcess, shipmentId, maxAggregateDimensions, scope }
+  return {
+ ...bookingProcess, shipmentId, maxAggregateDimensions, scope 
+}
 }
 
 function mapDispatchToProps (dispatch) {
