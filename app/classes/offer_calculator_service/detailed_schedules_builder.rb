@@ -196,9 +196,14 @@ module OfferCalculatorService
                                             .for_dates(closing_start_date, closing_end_date)
       end
 
-      pricings_by_cargo_class_and_dates
-        .select { |pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil? }
-        .group_by { |pricing| pricing.transport_category_id.to_s }
+      pricings_by_cargo_class_and_dates_and_user = pricings_by_cargo_class_and_dates
+                                                   .select { |pricing| pricing.user_id == user_pricing_id }
+      if pricings_by_cargo_class_and_dates_and_user.empty?
+        pricings_by_cargo_class_and_dates_and_user = pricings_by_cargo_class_and_dates
+                                                     .select { |pricing| pricing.user_id.nil? }
+      end
+
+      pricings_by_cargo_class_and_dates_and_user.group_by { |pricing| pricing.transport_category_id.to_s }
     end
 
     def extract_dates_and_quote(schedules)

@@ -106,6 +106,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
       results = service.grouped_schedules(schedules: schedules,
                                           shipment: cargo_shipment,
                                           user: user)
+
       expect(results.length).to eq(2)
       expect(results.any? { |r| r.dig(:pricing_ids, 'lcl').nil? }).to eq(false)
       expect(results.map { |r| r.dig(:pricing_ids, 'lcl') }.uniq.length).to eq(2)
@@ -202,6 +203,45 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
       )
       expect(results.keys.length).to eq(1)
       expect(results.values.first.first).to eq(pricing_1)
+    end
+
+    it 'returns pricings valid for closing_dates and user if dedicated pricing available' do
+      create(:pricing,
+             itinerary: itinerary_1,
+             tenant_vehicle: tenant_vehicle_1,
+             transport_category: cargo_transport_category,
+             effective_date: Date.parse('01/01/2019'),
+             expiration_date: Date.parse('31/01/2019'))
+      pricing_target = create(:pricing,
+                              user: user,
+                              itinerary: itinerary_1,
+                              tenant_vehicle: tenant_vehicle_1,
+                              transport_category: cargo_transport_category,
+                              effective_date: Date.parse('01/01/2019'),
+                              expiration_date: Date.parse('31/01/2019'))
+      trip = create(:trip,
+                    start_date: Date.parse('02/02/2019'),
+                    end_date: Date.parse('28/02/2019'),
+                    closing_date: Date.parse('28/01/2019'),
+                    tenant_vehicle: tenant_vehicle_1,
+                    itinerary: itinerary_1)
+      schedules = [Schedule.from_trip(trip)]
+      service = described_class.new(cargo_shipment)
+      dates = {
+        start_date: schedules.first.etd,
+        end_date: schedules.first.etd,
+        closing_start_date: schedules.first.closing_date,
+        closing_end_date: schedules.first.closing_date
+      }
+
+      results = service.sort_pricings(
+        schedules: schedules,
+        user_pricing_id: user.id,
+        cargo_classes: ['lcl'],
+        dates: dates
+      )
+      expect(results.keys.length).to eq(1)
+      expect(results.values.first.first).to eq(pricing_target)
     end
   end
 
