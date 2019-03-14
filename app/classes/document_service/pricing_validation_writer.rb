@@ -83,12 +83,13 @@ module DocumentService
       @worksheet = write_to_sheet(@worksheet, @row, 0, top_row)
       @row += 1
       default_fees = column_hash.values.first[:expected][sym_key]
+      
       default_fees.keys.each do |fee_key|
         if fee_key.to_sym != :total && sym_key != :cargo
           fee_row = ["-#{fee_key}"]
           column_hash.values.each do |c_hash|
             fee_row << "#{c_hash.dig(:expected, sym_key, fee_key, :currency)} #{c_hash.dig(:expected, sym_key, fee_key, :value)}"
-            fee_row << "#{c_hash.dig(:result, :quote, sym_key, fee_key, :currency)} #{c_hash.dig(:result, :quote, sym_key, fee_key, :value)}"
+            fee_row << "#{c_hash.dig(:result, :quote, sym_key, fee_key.downcase, :currency)} #{c_hash.dig(:result, :quote, sym_key, fee_key.downcase, :value)}"
             fee_row << c_hash.dig(:diff, sym_key, fee_key)
           end
           @worksheet = write_to_sheet(@worksheet, @row, 0, fee_row)
@@ -97,7 +98,7 @@ module DocumentService
           fee_row = ["-#{fee_key}"]
           column_hash.values.each do |c_hash|
             fee_row << "#{c_hash.dig(:expected, sym_key, fee_key, :currency)} #{c_hash.dig(:expected, sym_key, fee_key, :value)}"
-            fee_row << "#{c_hash.dig(:result, :quote, sym_key, :cargo_item, fee_key, :currency)} #{c_hash.dig(:result, :quote, sym_key, :cargo_item, fee_key, :value)}"
+            fee_row << "#{c_hash.dig(:result, :quote, sym_key, :cargo_item, fee_key.downcase, :currency)} #{c_hash.dig(:result, :quote, sym_key, :cargo_item, fee_key.downcase, :value)}"
             fee_row << c_hash.dig(:diff, sym_key, fee_key)
           end
           @worksheet = write_to_sheet(@worksheet, @row, 0, fee_row)

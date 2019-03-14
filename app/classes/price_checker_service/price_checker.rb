@@ -21,9 +21,11 @@ module PriceCheckerService
       prep_faux_schedules
       @results = @schedules.map do |schedule|
         @schedule = schedule
+        @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, trip_id: @schedule.trip_id)
         @grand_total_charge = Charge.create(
           children_charge_category: ChargeCategory.grand_total,
           charge_category: ChargeCategory.base_node,
+          charge_breakdown: @charge_breakdown,
           price: Price.create(currency: @user.currency)
         )
 
@@ -75,36 +77,63 @@ module PriceCheckerService
       cargo_units = @cargo_units
       if @shipment_data[:has_pre_carriage] || @shipment_data[:export] || @origin_hub.mandatory_charge.export_charges
         local_charges_data = determine_local_charges(
-          @origin_hub,
-          @shipment_data[:load_type],
+          @schedule,
           cargo_units,
           'export',
-          @itinerary.mode_of_transport,
-          @schedule.trip.tenant_vehicle_id,
-          @destination_hub.id,
           @user
         )
+        charge_category = ChargeCategory.from_code('export', @user.tenant_id)
+        parent_charge = create_parent_charge(charge_category)
 
-        unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export', @user.tenant_id))
+        local_charges_data.each do |charge|
+          next if charge.except('total').empty?
+
+          cargo_unit_model = if charge['key'] == 'shipment'
+                               'Shipment'
+                             elsif @shipment.lcl?
+                               'CargoItem'
+                             else
+                               'Container'
+                             end
+          children_charge_category = ChargeCategory.find_or_create_by(
+            name: cargo_unit_model.humanize,
+            code: cargo_unit_model.underscore.downcase,
+            cargo_unit_id: charge['key']
+          )
+          create_charges_from_fees_data!(charge.except('key'), children_charge_category, charge_category, parent_charge)
         end
+
+        parent_charge.update_quote_price!(@shipment_data[:shipment].tenant_id)
       end
 
       if @shipment_data[:has_on_carriage] || @shipment_data[:import] || @destination_hub.mandatory_charge.import_charges
         local_charges_data = determine_local_charges(
-          @destination_hub,
-          @shipment_data[:load_type],
+          @schedule,
           cargo_units,
           'import',
-          @itinerary.mode_of_transport,
-          @schedule.trip.tenant_vehicle_id,
-          @origin_hub.id,
           @user
         )
+        charge_category = ChargeCategory.from_code('import', @user.tenant_id)
+        parent_charge = create_parent_charge(charge_category)
 
-        unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import', @user.tenant_id))
+        local_charges_data.each do |charge|
+          next if charge.except('total').empty?
+
+          cargo_unit_model = if charge['key'] == 'shipment'
+                               'Shipment'
+                             elsif @shipment.lcl?
+                               'CargoItem'
+                             else
+                               'Container'
+                             end
+          children_charge_category = ChargeCategory.find_or_create_by(
+            name: cargo_unit_model.humanize,
+            code: cargo_unit_model.underscore.downcase,
+            cargo_unit_id: charge['key']
+          )
+          create_charges_from_fees_data!(charge.except('key'), children_charge_category, charge_category, parent_charge)
         end
+        parent_charge.update_quote_price!(@shipment_data[:shipment].tenant_id)
       end
     end
 
@@ -228,9 +257,11 @@ module PriceCheckerService
         cargo[:volume] += (cargo_unit.volume * cargo_unit.quantity)
         cargo[:payload_in_kg] += (cargo_unit.payload_in_kg * cargo_unit.quantity)
         cargo[:cargo_class] = cargo_unit.cargo_class
-        cargo[:chargeable_weight] += (cargo_unit.calc_chargeable_weight(mot) * cargo_unit.quantity)
         cargo[:num_of_items] += cargo_unit.quantity
       end
+      cargo[:chargeable_weight] =
+        CargoItem.calc_chargeable_weight_from_values(cargo[:volume], cargo[:payload_in_kg], mot)
+
       [cargo]
     end
   end

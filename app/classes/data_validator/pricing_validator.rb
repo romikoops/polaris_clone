@@ -40,6 +40,7 @@ module DataValidator
           create_example_results
           calculate(sheet_name)
         rescue Exception => e # bad code.....
+          binding.pry
           raise ApplicationError::BadData
         end
       end
@@ -52,6 +53,7 @@ module DataValidator
       @examples.each do |example|
         @example = example
         @load_type = @example[:data][:load_type]
+        puts @example[:data][:pickup_address]
         price_check(@example, sheet_name)
       end
     end
@@ -172,10 +174,14 @@ module DataValidator
 
         new_cargo = {}
         key_hash.each do |key, value|
+          if key == 'quantity' && @tenant.scope.dig('consolidation', 'cargo', 'frontend')
+            new_cargo['payload_in_kg'] = new_cargo['payload_in_kg'].to_d / column[value].to_d
+          end
           new_cargo[key] = column[value]
         end
         cargos << new_cargo
       end
+      
       cargos
     end
 
@@ -218,6 +224,7 @@ module DataValidator
         carrier: Carrier.find_by_name(example[:data][:carrier]),
         mode_of_transport: @example[:data][:mode_of_transport]
       )
+
       @data_for_price_checker[:cargo_units] = example[:data][:cargo_units]
       @data_for_price_checker[:pricing] = determine_pricing(@example)
       validate_prices(sheet_name, example[:data][:itinerary], @data_for_price_checker, example[:expected], example[:result_index], example[:data])
@@ -233,7 +240,7 @@ module DataValidator
       tenant_vehicle_id = @data_for_price_checker[:service_level].id
       pricings_by_cargo_class = example[:data][:itinerary].pricings
                                                           .where(tenant_vehicle_id: tenant_vehicle_id)
-                                                          .for_cargo_class(cargo_classes)
+                                                          .for_cargo_classes(cargo_classes)
       pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date) if start_date && end_date
       pricings_by_cargo_class = pricings_by_cargo_class
                                 .select { |pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil? }
@@ -336,6 +343,7 @@ module DataValidator
 
     def diff_result_string(result, keys, expected_result)
       value = result.dig(:quote, *keys, :value)
+      # binding.pry if keys.include?(:export)
       expected_value = expected_result.dig(*keys, :value).try(:to_d)
       result_currency = result.dig(:quote, *keys, :currency)
       expected_currency = expected_result.dig(*keys, :currency)
@@ -361,9 +369,29 @@ module DataValidator
       "#{expected_currency} #{diff_val} (#{diff_percent}%)"
     end
 
+    def legacy_charge_shape(result)
+      new_quote = {}
+      quote = result[:quote]
+      quote.keys.reject{|k| %i(import export).include?(k)}.each {|k| new_quote[k] = quote[k]}
+      %i(import export).each do |k|
+        next unless quote[k]
+        new_quote[k] = {:total=>{:value=>0.0, :currency=>"USD"}}
+        quote[k].keys.reject{|uk| %i(total edited_total name).include?(uk)}.each do |k2|
+          quote[k][k2].keys.reject{ |uk| %i(total edited_total name).include?(uk) }
+                           .each { |k3| new_quote[k][k3] = quote[k][k2][k3] }
+        end
+        quote[k].keys.select{|uk| %i(total edited_total name).include?(uk)}.each do |k2|
+          new_quote[k][k2] = quote[k][k2]
+        end
+      end
+      result[:quote] = new_quote
+      result
+    end
+
     def validate_result(result, expected_result, example_index, data) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
       result.deep_symbolize_keys!
       result_for_printing = {}
+      result = legacy_charge_shape(result)
       begin
         expected_result.each do |key_1, value_1|
           if value_1 && value_1[:value]
