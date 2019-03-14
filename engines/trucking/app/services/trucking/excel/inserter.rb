@@ -42,6 +42,8 @@ module Trucking
         puts @missing_locations
         puts "Time elapsed: #{diff}"
         { results: results, stats: stats }
+      rescue => e
+        binding.pry
       end
 
       private
@@ -101,7 +103,7 @@ module Trucking
             row_data = rates_sheet.row(line)
             row_zone_name = row_data.shift
             row_min_value = row_data.shift
-            single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
+            single_ident_values_and_country = all_ident_values_and_countries[row_zone_name].compact
             next if single_ident_values_and_country.nil? || single_ident_values_and_country.first.nil?
 
             single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
@@ -615,13 +617,13 @@ module Trucking
                      )
                   end
 
-        if geometry.nil?
-          geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
-          return nil if geocoder_results.first.nil?
+        # if geometry.nil?
+        #   geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
+        #   return nil if geocoder_results.first.nil?
 
-          coordinates = geocoder_results.first.geometry['location']
-          geometry = Locations::Location.smallest_contains(lat: coordinates['lat'], lon: coordinates['lng']).first
-        end
+        #   coordinates = geocoder_results.first.geometry['location']
+        #   geometry = Locations::Location.smallest_contains(lat: coordinates['lat'], lon: coordinates['lng']).first
+        # end
 
         geometry
       end

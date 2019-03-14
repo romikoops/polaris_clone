@@ -109,6 +109,68 @@ module MultiTenantTools
     end
   end
 
+  def create_interal_users(tenant)
+    unless tenant.users.find_by(email: 'shopadmin@itsmycargo.com')
+      tenant.users.create!(
+        email:  'shopadmin@itsmycargo.com',
+        role: Role.find_by(name: 'admin'),
+        company_name: "ItsMyCargo GmbH",
+        first_name: "IMC",
+        last_name:"Admin",
+        password: 'IMC123456789',
+        guest: false,
+        currency:"EUR",
+        optin_status_id: 1,
+        internal: true
+      )
+    end
+    if tenant.quotation_tool?
+      unless tenant.users.find_by(email: 'manager@itsmycargo.com')
+        tenant.users.create!(
+          email:  'manager@itsmycargo.com',
+          role: Role.find_by(name: 'manager'),
+          company_name: "ItsMyCargo GmbH",
+          first_name: "IMC",
+          last_name:"Admin",
+          guest:false,
+          password: 'IMC123456789',
+          currency:"EUR",
+          optin_status_id: 1,
+          internal: true
+        )
+      end
+      unless tenant.users.find_by(email: 'agent@itsmycargo.com')
+        tenant.users.create!(
+          email:  'agent@itsmycargo.com',
+          role: Role.find_by(name: 'agent'),
+          company_name: "ItsMyCargo GmbH",
+          first_name: "IMC",
+          last_name: "Admin",
+          guest: false,
+          password: 'IMC123456789',
+          currency: "EUR",
+          optin_status_id: 1,
+          internal: true
+        )
+      end
+    else
+      unless tenant.users.find_by(email: 'shipper@itsmycargo.com')
+        tenant.users.create!(
+          email:  'shipper@itsmycargo.com',
+          role: Role.find_by(name: 'shipper'),
+          company_name: "ItsMyCargo GmbH",
+          first_name: "IMC",
+          last_name: "Admin",
+          guest: false,
+          password: 'IMC123456789',
+          currency: "EUR",
+          optin_status_id: 1,
+          internal: true
+        )
+      end
+    end
+  end
+
   def sync_tenant_jsons
     @json_data = JSON.parse(File.read("#{Rails.root}/db/dummydata/tenants.json"))
     @new_data = []

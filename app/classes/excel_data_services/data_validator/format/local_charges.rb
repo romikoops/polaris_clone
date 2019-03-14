@@ -70,6 +70,7 @@ module ExcelDataServices
         end
 
         def check_rate_basis(row)
+          binding.pry if row.rate_basis.nil?
           rate_basis = RateBasis.get_internal_key(row.rate_basis.upcase)
 
           unless VALID_RATE_BASISES.include?(rate_basis)

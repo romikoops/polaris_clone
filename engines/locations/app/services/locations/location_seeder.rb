@@ -43,7 +43,9 @@ module Locations
 
     def self.seeding_with_locode(locode:)
       name = Locations::Name.find_by(locode: locode)
-      return name.location if name.present? && name.location
+      return nil unless name
+      return name.location if name.location
+      
 
       Locations::Location.smallest_contains(lat: name.point.y, lon: name.point.x).first
     end

@@ -5,7 +5,9 @@ require 'csv'
 class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
   TMP_PATH = 'tmp/tmp_csv.gz'
   def self.perform
-    load_names_from_csv
+    # load_names_from_csv
+    # load_name_data('data/location_data/netherlands_osm_2.csv.gz')
+    load_locode_data('data/location_data/nl_locodes.csv.gz')
   end
 
   def self.load_names_from_csv
@@ -91,6 +93,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
         obj = {
           language: 'en'
         }
+
         # next unless %w(node relation).include?(row[keys.index(:osm_type)])
         keys.each_with_index do |k, i|
           if k == :coord
@@ -118,14 +121,14 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
     end
 
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
-
+    Locations::Name.reindex
     puts 'Location Names updated...'
   end
 
   def self.load_locode_data(url) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
-    # LocationCsvSeeder.get_s3_file(url)
-
-    Zlib::GzipReader.open(url, encoding: Encoding::ISO_8859_1) do |gz| # rubocop:disable Metrics/BlockLength
+    LocationCsvSeeder.get_s3_file(url)
+    missed = []
+    Zlib::GzipReader.open(TMP_PATH, encoding: Encoding::ISO_8859_1) do |gz| # rubocop:disable Metrics/BlockLength
       csv = CSV.new(gz, headers: false)
       puts
       puts 'Preparing Location Names (LOCODE) attributes...'
@@ -142,9 +145,18 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
 
         if row[10].blank?
           name = Locations::Name.search(row[4]).results.first
-          next if name.nil?
-
-          point = name.point
+          if name.nil?
+            geocoder_results = Geocoder.search([row[4], row[1]].join(', '))
+            if geocoder_results.first.nil?
+              missed << row[4]
+              next
+            end
+    
+            coordinates = geocoder_results.first.geometry['location']
+            point = RGeo::Geographic.spherical_factory(srid: 4326).point(coordinates['lng'], coordinates['lat'])
+          else
+            point = name.point
+          end
         else
           location = lat_lng_from_string(row[10])
           point = RGeo::Geographic.spherical_factory(srid: 4326).point(location[:longitude], location[:latitude])
@@ -159,6 +171,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
 
       Locations::Name.import(names)
     end
+    puts missed
 
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
