@@ -5,9 +5,10 @@ require 'csv'
 class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
   TMP_PATH = 'tmp/tmp_csv.gz'
   def self.perform
+    load_map_data('/Users/warwickbeamish/Downloads/drydock_europe.csv.gz')
     # load_names_from_csv
     # load_name_data('data/location_data/netherlands_osm_2.csv.gz')
-    load_locode_data('data/location_data/nl_locodes.csv.gz')
+    # load_locode_data('data/location_data/nl_locodes.csv.gz')
   end
 
   def self.load_names_from_csv
@@ -45,8 +46,8 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
           locations << {
             name: row.fetch('name'),
             bounds: row.fetch('way'),
-            # osm_id: row.fetch('abs').to_i.abs,
-            osm_id: row.fetch('osm_id').to_i.abs,
+            osm_id: row.fetch('abs').to_i.abs,
+            # osm_id: row.fetch('osm_id').to_i.abs,
             admin_level: row.fetch('admin_level'),
             country_code: ''
           }

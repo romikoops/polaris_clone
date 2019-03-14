@@ -42,8 +42,6 @@ module Trucking
         puts @missing_locations
         puts "Time elapsed: #{diff}"
         { results: results, stats: stats }
-      rescue => e
-        binding.pry
       end
 
       private
@@ -617,13 +615,13 @@ module Trucking
                      )
                   end
 
-        # if geometry.nil?
-        #   geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
-        #   return nil if geocoder_results.first.nil?
+        if geometry.nil?
+          geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
+          return nil if geocoder_results.first.nil?
 
-        #   coordinates = geocoder_results.first.geometry['location']
-        #   geometry = Locations::Location.smallest_contains(lat: coordinates['lat'], lon: coordinates['lng']).first
-        # end
+          coordinates = geocoder_results.first.geometry['location']
+          geometry = Locations::Location.smallest_contains(lat: coordinates['lat'], lon: coordinates['lng']).first
+        end
 
         geometry
       end
