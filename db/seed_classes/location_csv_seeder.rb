@@ -7,7 +7,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
   def self.perform
     # load_map_data('/Users/warwickbeamish/Downloads/drydock_europe.csv.gz')
     # load_names_from_csv
-    load_name_data('data/location_data/netherlands_osm_2.csv.gz')
+    # load_name_data('data/location_data/netherlands_osm_2.csv.gz')
     load_locode_data('data/location_data/nl_locodes.csv.gz')
   end
 
@@ -144,7 +144,8 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
           language: 'en',
           country_code: row[1].downcase,
           locode: locode_str,
-          name: row[4]
+          name: row[4],
+          location_id: nil
         }
 
         if row[10].blank?
@@ -153,6 +154,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
             geocoder_results = Geocoder.search([row[4], row[1]].join(', '), :params => {:region => row[1].downcase})
             if geocoder_results.first.nil?
               missed << row[4]
+              puts row[4]
               next
             end
     
