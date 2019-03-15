@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_07_153922) do
+ActiveRecord::Schema.define(version: 2019_03_15_082342) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -502,6 +502,7 @@ ActiveRecord::Schema.define(version: 2019_03_07_153922) do
     t.index "to_tsvector('english'::regconfig, (osm_id)::text)", name: "locations_names_to_tsvector_idx4", using: :gin
     t.index "to_tsvector('english'::regconfig, (postal_code)::text)", name: "locations_names_to_tsvector_idx9", using: :gin
     t.index ["language", "osm_id", "street", "country", "country_code", "display_name", "name", "postal_code"], name: "uniq_index_1", unique: true
+    t.index ["locode"], name: "index_locations_names_on_locode"
     t.index ["osm_id"], name: "index_locations_names_on_osm_id"
     t.index ["osm_type"], name: "index_locations_names_on_osm_type"
   end

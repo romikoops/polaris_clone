@@ -5,10 +5,10 @@ require 'csv'
 class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
   TMP_PATH = 'tmp/tmp_csv.gz'
   def self.perform
-    load_map_data('/Users/warwickbeamish/Downloads/drydock_europe.csv.gz')
+    # load_map_data('/Users/warwickbeamish/Downloads/drydock_europe.csv.gz')
     # load_names_from_csv
-    # load_name_data('data/location_data/netherlands_osm_2.csv.gz')
-    # load_locode_data('data/location_data/nl_locodes.csv.gz')
+    load_name_data('data/location_data/netherlands_osm_2.csv.gz')
+    load_locode_data('data/location_data/nl_locodes.csv.gz')
   end
 
   def self.load_names_from_csv
@@ -35,14 +35,14 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
 
   def self.load_map_data(url)
     LocationCsvSeeder.get_s3_file(url)
-
+    count = 0
     Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, headers: true)
       puts 'Preparing Geometries attributes...'
 
       locations = []
       csv.each do |row|
-        if row['admin_level']
+        if row['admin_level'] && !Locations::Locations.exists?(osm_id: row.fetch('abs').to_i.abs)
           locations << {
             name: row.fetch('name'),
             bounds: row.fetch('way'),
@@ -54,6 +54,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
         end
         if locations.length > 100
           Locations::Location.import(locations)
+          count =+ locations.length
           locations = []
         end
       end
@@ -94,7 +95,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
         obj = {
           language: 'en'
         }
-
+        next if Locations::Name.exists?(osm_id: row[3])
         # next unless %w(node relation).include?(row[keys.index(:osm_type)])
         keys.each_with_index do |k, i|
           if k == :coord
@@ -136,11 +137,13 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
       names = []
       csv.each do |row|
         next if row[2].blank? || (row[0] == '=')
+        locode_str = [row[1], row[2]].join
+        next if Locations::Name.exists?(locode: locode_str)
 
         obj = {
           language: 'en',
           country_code: row[1].downcase,
-          locode: [row[1], row[2]].join,
+          locode: locode_str,
           name: row[4]
         }
 
@@ -157,12 +160,14 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
             point = RGeo::Geographic.spherical_factory(srid: 4326).point(coordinates['lng'], coordinates['lat'])
           else
             point = name.point
+            location_id = name.location_id if name && name.location_id.present?
           end
         else
           location = lat_lng_from_string(row[10])
           point = RGeo::Geographic.spherical_factory(srid: 4326).point(location[:longitude], location[:latitude])
         end
         obj[:point] = point
+        obj[:location_id] = location_id if location_id
         names << obj
         if names.length > 100
           Locations::Name.import(names)
