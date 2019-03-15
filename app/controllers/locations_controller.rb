@@ -9,7 +9,7 @@ class LocationsController < ApplicationController
 
     country_codes = params[:countries].split(',').map(&:downcase).compact
     raw_results = Locations::Autocomplete.search(term: input, country_codes: country_codes)
-    results = raw_results.map do |result|
+    results = raw_results.slice(0,5).map do |result|
       {
         geojson: result.geojson,
         description: result.display_name || result.combined_names,
