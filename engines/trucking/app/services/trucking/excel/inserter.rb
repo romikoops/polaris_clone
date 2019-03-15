@@ -616,7 +616,7 @@ module Trucking
                   end
         puts idents_and_country if geometry.nil?
         if geometry.nil?
-          geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
+          geocoder_results = Geocoder.search(idents_and_country.values.join(' '), params: { region: idents_and_country[:country].downcase })
           return nil if geocoder_results.first.nil?
 
           coordinates = geocoder_results.first.geometry['location']

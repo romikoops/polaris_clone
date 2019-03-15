@@ -150,7 +150,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
         if row[10].blank?
           name = Locations::Name.search(row[4]).results.first
           if name.nil?
-            geocoder_results = Geocoder.search([row[4], row[1]].join(', '))
+            geocoder_results = Geocoder.search([row[4], row[1]].join(', '), :params => {:region => row[1].downcase})
             if geocoder_results.first.nil?
               missed << row[4]
               next
