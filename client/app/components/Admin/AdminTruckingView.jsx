@@ -37,10 +37,10 @@ function getTruckingPricingKey (truckingPricing) {
     return endResult
   }
   if (truckingPricing.city) {
-    const joinedArrays = truckingPricing.city.map(zArray => zArray.join(' - '))
-    const endResult = joinedArrays.join(', ')
+    // const joinedArrays = truckingPricing.city.map(zArray => zArray.join(' - '))
+    // const endResult = joinedArrays.join(', ')
 
-    return endResult
+    return truckingPricing.city
   }
   if (truckingPricing.distance) {
     const joinedArrays = truckingPricing.distance.map(zArray => zArray.join(' - '))
@@ -330,7 +330,7 @@ export class AdminTruckingView extends Component {
           </p>
         </div>
       </div>)
-    const truckView = currentTruckingPricing ? displayPanel : searchResults
+
     const truckFilter = loadTypeBool
       ? (
         <div className="flex-100 layout-row layout-align-space-between-center">
@@ -368,7 +368,7 @@ export class AdminTruckingView extends Component {
 
             <div className="flex-40 layout-row layout-align-space-around-start layout-wrap">
               <div className="flex-100 layout-row layout-align-start-stretch layout-wrap">
-                {/* {truckView} */}
+                {/* {displayPanel} */}
                 <TruckingRateTable />
               </div>
             </div>
@@ -376,11 +376,11 @@ export class AdminTruckingView extends Component {
           </div>
           {styleTagJSX}
         </div>
-        {/* <div className="flex-20 layout-row layout-wrap layout-align-center-start"> 
+        <div className="flex-100 layout-row layout-wrap layout-align-center-start"> 
 
           <SideOptionsBox
             header={t('admin:filters')}
-            flexOptions="layout-column flex-100 flex-md-30"
+            flexOptions="layout-column flex-50 flex-md-30"
             content={(
               <div>
                 <div
@@ -491,7 +491,7 @@ export class AdminTruckingView extends Component {
 
           <SideOptionsBox
             header={t('admin:dataManager')}
-            flexOptions="layout-column flex-100 flex-md-30 margin_bottom"
+            flexOptions="layout-column flex-50 flex-md-30 margin_bottom"
             content={(
               <div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
@@ -562,7 +562,7 @@ export class AdminTruckingView extends Component {
               </div>
             )}
           />
-        </div>*/}
+        </div>
       </div>
     )
   }

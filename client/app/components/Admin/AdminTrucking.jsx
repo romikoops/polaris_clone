@@ -31,7 +31,7 @@ class AdminTrucking extends Component {
 
   viewTrucking (hub) {
     const { adminDispatch } = this.props
-    adminDispatch.viewTrucking(hub.id)
+    adminDispatch.viewTrucking({hubId: hub.id, page: 1})
   }
   toggleCreator () {
     this.setState({ creatorView: !this.state.creatorView })

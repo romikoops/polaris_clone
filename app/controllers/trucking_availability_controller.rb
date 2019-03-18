@@ -10,7 +10,7 @@ class TruckingAvailabilityController < ApplicationController
     truck_type_object = Hash.new { |h, k| h[k] = [] }
     hub_ids = []
     trucking_pricings.each do |trucking_pricing|
-      hub_id = trucking_pricing.preloaded_hub_id
+      hub_id = trucking_pricing.hub_id
       hub_ids << hub_id
 
       truck_type = trucking_pricing.truck_type
@@ -42,6 +42,7 @@ class TruckingAvailabilityController < ApplicationController
       carriage: params[:carriage]
     }
 
-    Trucking::Rate.find_by_filter(args)
+    Trucking::Trucking.find_by_filter(args)
+    # Trucking::Rate.find_by_filter(args)
   end
 end

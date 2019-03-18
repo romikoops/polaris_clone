@@ -106,13 +106,21 @@ function getItinerary (id) {
 
   return fetch(`${getTenantApiUrl()}/admin/itineraries/${id}`, requestOptions).then(handleResponse)
 }
-function viewTrucking (id) {
+function viewTrucking (args) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
+  const pageString = `page=${args.page}&page_size=${args.pageSize}`
+  let filterString = ''
+  if (args.filters.length > 0) {
+    args.filters.forEach((filter) => {
+      filterString += `${filter.id}=${filter.value}`
+    })
+  }
 
-  return fetch(`${getTenantApiUrl()}/admin/trucking/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/trucking/${args.hubId}?${pageString}&${filterString}`, requestOptions)
+    .then(handleResponse)
 }
 function getLayovers (id) {
   const requestOptions = {

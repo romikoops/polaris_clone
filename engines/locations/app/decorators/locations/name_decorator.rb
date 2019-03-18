@@ -8,7 +8,7 @@ module Locations
     end
 
     def lat_lng
-      { latitude: point.y, longitude: point.x}
+      { latitude: point&.y, longitude: point&.x}
     end
 
     def combined_names

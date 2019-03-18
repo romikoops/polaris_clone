@@ -102,6 +102,7 @@ PATH
       paper_trail
       roo
       roo-xls
+      will_paginate
 
 PATH
   remote: engines/users

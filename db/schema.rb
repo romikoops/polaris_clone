@@ -10,11 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 2019_03_15_082342) do
-=======
-ActiveRecord::Schema.define(version: 2019_03_11_173007) do
->>>>>>> 312c8f72c... WIP
+
+ActiveRecord::Schema.define(version: 2019_03_15_124654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -971,7 +968,21 @@ ActiveRecord::Schema.define(version: 2019_03_11_173007) do
     t.uuid "rate_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "load_meterage"
+    t.integer "cbm_ratio"
+    t.string "modifier"
+    t.integer "tenant_id"
+    t.jsonb "rates"
+    t.jsonb "fees"
+    t.string "identifier_modifier"
+    t.string "load_type"
+    t.string "cargo_class"
+    t.string "carriage"
+    t.uuid "courier_id"
+    t.string "truck_type"
+    t.integer "user_id"
     t.index ["hub_id"], name: "index_trucking_truckings_on_hub_id"
+    t.index ["location_id"], name: "index_trucking_truckings_on_location_id"
     t.index ["rate_id", "location_id", "hub_id"], name: "trucking_foreign_keys", unique: true
   end
 

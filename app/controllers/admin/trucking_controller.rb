@@ -10,13 +10,29 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def show
     hub = Hub.find(params[:id])
-    results = Trucking::Rate.find_by_hub_id(params[:id], { paginate: true, page: params[:page] || 1})
-    # coverage = Trucking::Coverage.find_by(hub_id: params[:id])&.geojson
-    response_handler(hub: hub, truckingPricings: results)
+    filters = {
+      cargo_class: params[:cargo_class],
+      truck_type: params[:truck_type],
+    }
+    results = Trucking::Trucking.find_by_hub_id(
+      params[:id],
+      {
+        paginate: true,
+        page: params[:page] || 1,
+        filters: filters,
+        per_page: params[:page_size]
+      }
+    )
+    response_handler(
+      hub: hub,
+      truckingPricings: results.map(&:as_index_result),
+      page: params[:page],
+      pages: results.total_pages
+    )
   end
 
   def edit
-    tp = Trucking::Rate.find(params[:id])
+    tp = Trucking::Trucking.find(params[:id])
     ntp = params[:pricing].as_json
     tp.update_attributes(ntp.except('id', 'cargo_class', 'load_type', 'courier_id', 'truck_type', 'carriage'))
     response_handler(tp)

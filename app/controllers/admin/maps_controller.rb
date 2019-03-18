@@ -5,7 +5,7 @@ class Admin::MapsController < Admin::AdminBaseController # rubocop:disable # Sty
     @hub = Hub.find(params[:id])
     @truckings = @hub.truckings
     response = Rails.cache.fetch("#{@truckings.cache_key}/geojson", expires_in: 12.hours) do
-      @truckings.map{ |tl| response_hash(tl)}
+      @truckings.first(20).map{ |tl| response_hash(tl)}
     end
     response_handler(response.flatten)
   end
@@ -24,11 +24,21 @@ class Admin::MapsController < Admin::AdminBaseController # rubocop:disable # Sty
   private
 
   def response_hash(result)
-    { 
-      name: result.location&.location&.name,
-      geojson: result.location&.location&.geojson,
-      trucking_rate_id: result.rate_id
-    }
+    if result.location&.zipcode
+      { 
+        name: result.location&.zipcode,
+        geojson: nil,
+        trucking_id: result.id,
+        cargo_class: result.cargo_class
+      }
+    else
+      { 
+        name: result.location&.location&.name,
+        geojson: result.location&.location&.geojson,
+        trucking_id: result.id,
+        cargo_class: result.cargo_class
+      }
+    end
   end
 
 end

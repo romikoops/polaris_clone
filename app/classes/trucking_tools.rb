@@ -240,7 +240,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
       end
     end
 
-    target = "#{trucking_pricing.scope.carriage}_carriage"
+    target = "#{trucking_pricing.carriage || trucking_pricing.scope.carriage}_carriage"
     total_chargeable_weight =
       cargo_object.dig('stackable', 'weight') + cargo_object.dig('non_stackable', 'weight')
     cargos.first.shipment.set_trucking_chargeable_weight(target, total_chargeable_weight)

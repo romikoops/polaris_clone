@@ -37,6 +37,7 @@ module Trucking
         load_ident_values_and_countries
         load_fees_and_charges
         overwrite_zonal_trucking_rates_by_hub
+        # create_coverage
         end_time = DateTime.now
         diff = (end_time - start_time) / 86_400
         puts @missing_locations
@@ -45,6 +46,16 @@ module Trucking
       end
 
       private
+
+      def create_coverage
+        if ::Trucking::Coverage.exists?(hub_id: @hub.id)
+          c = ::Trucking::Coverage.find_by(hub_id: @hub.id)
+          c.touch
+        else
+          c = ::Trucking::Coverage.create!(hub_id: @hub.id)
+        end
+        File.open(Rails.root.join('tmp', 'foo.geojson'), 'w') { |f| f.puts c.geojson.to_json }
+      end
 
       def local_stats
         {
@@ -74,9 +85,7 @@ module Trucking
           direction = meta[:direction] == 'import' ? 'on' : 'pre'
 
           load_type = meta[:load_type] == 'container' ? 'container' : 'cargo_item'
-          cargo_class = meta[:cargo_class]
           direction = meta[:direction] == 'import' ? 'on' : 'pre'
-          courier = Courier.find_or_create_by(name: meta[:courier], tenant: tenant)
 
           trucking_type_availability = TypeAvailability.find_or_create_by(
             truck_type: row_truck_type,
@@ -101,15 +110,16 @@ module Trucking
             row_data = rates_sheet.row(line)
             row_zone_name = row_data.shift
             row_min_value = row_data.shift
+            next if all_ident_values_and_countries[row_zone_name].nil?
+
             single_ident_values_and_country = all_ident_values_and_countries[row_zone_name].compact
             next if single_ident_values_and_country.nil? || single_ident_values_and_country.first.nil?
 
-            single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
-            trucking_rate = create_trucking_rate(meta)
+            trucking = create_trucking(meta)
             stats[:trucking_rates][:number_created] += 1
 
             modifier_position_objs.each do |mod_key, mod_indexes|
-              trucking_rate.rates[mod_key] = mod_indexes.map do |m_index|
+              trucking[:rates][mod_key] = mod_indexes.map do |m_index|
                 val = row_data[m_index]
 
                 next unless val
@@ -118,15 +128,42 @@ module Trucking
               end
             end
 
-            modify_charges(trucking_rate, row_truck_type, direction)
-            tp = trucking_rate
-            td_query = build_td_query(single_ident_values, single_ident_values_and_country)
-            td_ids = ActiveRecord::Base.connection.execute(td_query).values.flatten
-            delete_previous_trucking_rates(hub, td_ids)
-            insertion_query = build_insert_query(tp, td_ids)
-            ActiveRecord::Base.connection.execute(insertion_query)
+            modify_charges(trucking, row_truck_type, direction)
+
+            insert_or_update_truckings(trucking, single_ident_values_and_country)
           end
         end
+      end
+
+      def insert_or_update_truckings(trucking_rate, single_ident_values_and_country)
+        @all_trucking_locations = []
+        locations = []
+        truckings = []
+        single_ident_values_and_country.each do |ident_and_country|
+          tl = Location.find_or_initialize_by(
+            @identifier_type.to_s => ident_and_country[:ident],
+            country_code: ident_and_country[:country]
+          )
+          tl.id ||= SecureRandom.uuid
+          if locations.include?(tl)
+            next
+          end
+          locations << tl
+          trucking_attr = trucking_rate.slice(:hub_id, :tenant_id, :identifier_modifier, :carriage, :cargo_class, :load_type, :courier_id, :truck_type, :user_id).merge(location_id: tl.id)
+          trucking = ::Trucking::Trucking.find_or_initialize_by(trucking_attr)
+          # binding.pry if trucking.rates.nil?
+          trucking.assign_attributes(trucking_rate.merge(location_id: tl.id))
+          trucking.location = tl
+          trucking.id ||= SecureRandom.uuid
+          # if trucking
+          #   trucking.update(trucking_rate)
+          # else
+          #   ::Trucking::Trucking.create!(trucking_rate.merge(location_id: tl.id))
+          # end
+
+          @all_trucking_locations << trucking
+        end
+        ::Trucking::Trucking.import(@all_trucking_locations,  on_duplicate_key_update: [:rates, :fees], recursive: true, batch_size: 1000)
       end
 
       def delete_previous_trucking_rates(hub, td_ids)
@@ -432,6 +469,30 @@ module Trucking
         )
       end
 
+      def create_trucking(meta)
+        user_id = meta[:user_email] ? User.find_by(tenant_id: @tenant.id, email: meta[:user_email])&.id : nil
+        {
+          load_meterage: {
+            ratio: meta[:load_meterage_ratio],
+            height_limit: meta[:load_meterage_height],
+            area_limit: meta[:load_meterage_area]
+          },
+          rates: {},
+          user_id: user_id,
+          fees: {},
+          cbm_ratio: meta[:cbm_ratio],
+          modifier: meta[:scale],
+          hub_id: @hub.id,
+          tenant_id: tenant.id,
+          identifier_modifier: identifier_modifier,
+          carriage: meta[:direction] == 'import' ? 'on' : 'pre',
+          cargo_class: meta[:cargo_class],
+          load_type: meta[:load_type] == 'container' ? 'container' : 'cargo_item',
+          courier_id: find_or_create_courier(meta[:courier]).id,
+          truck_type: !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type]
+        }
+      end
+
       def trucking_rates(weight_min_row, val, meta, row_min_value, _row_zone_name, m_index, mod_key) # rubocop:disable Metrics/PerceivedComplexity, Metrics/ParameterLists
         val *= 2 if identifier_type == 'distance' && identifier_modifier == 'return' && mod_key == 'km'
         w_min = weight_min_row[m_index] || 0
@@ -547,7 +608,7 @@ module Trucking
         <<-SQL
           WITH
             td_ids   AS (SELECT id from trucking_locations WHERE id IN #{string_sql_format(td_ids)}),
-            hub_ids  AS (VALUES(#{hub_id})),
+            hub_ids  AS (VALUES(#{@hub.id})),
             t_stamps AS (VALUES(current_timestamp)),
             tp_ids AS (
               INSERT INTO trucking_rates(#{tp_names.sort.join(', ')})

@@ -22,7 +22,8 @@ module OfferCalculatorService
         trucking_details: trucking_details,
         address: address,
         carriage: carriage,
-        shipment: @shipment
+        shipment: @shipment,
+        user_id: @shipment.user_id
       )
       Hub.where(id: hub_ids).each_with_object({}) do |hub, obj|
         distance = calc_distance(address, hub)
@@ -50,11 +51,14 @@ module OfferCalculatorService
 
         trucking_charge_data[key] = trucking_charges
       end
-    rescue TruckingDataBuilder::MissingTruckingData
+    rescue TruckingDataBuilder::MissingTruckingData => e
+      binding.pry
       raise ApplicationError::MissingTruckingData
-    rescue TruckingTools::LoadMeterageExceeded
+    rescue TruckingTools::LoadMeterageExceeded => e
+      binding.pry
       raise ApplicationError::LoadMeterageExceeded
-    rescue StandardError
+    rescue StandardError => e
+      binding.pry
       raise ApplicationError::MissingTruckingData
     end
 

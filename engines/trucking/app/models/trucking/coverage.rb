@@ -7,11 +7,10 @@ module Trucking
 
     before_validation :generate_bounds
 
-
     def geojson
       RGeo::GeoJSON.encode(RGeo::GeoJSON::Feature.new(bounds))
     end
-    
+
     private
 
     def generate_bounds

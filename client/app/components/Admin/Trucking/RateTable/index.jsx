@@ -10,31 +10,38 @@ import { determineSortingCaret } from '../../../../helpers/sortingCaret'
 import { capitalize } from '../../../../helpers'
 
 class TruckingRateTable extends PureComponent {
+  static determineDestinationAccessor (d) {
+    if (d.city) {
+      return d.city
+    } if (d.zipcode) {
+      return d.zipcode
+    }
+  }
+
   constructor (props) {
     super(props)
     this.state = {
       expanded: {},
       sorted: []
     }
+    this.fetchData = this.fetchData.bind(this)
   }
 
-  componentDidMount () {
-    const { pricings, adminDispatch } = this.props
-    if (!pricings || (pricings && pricings.index && pricings.index.itineraries.length === 0)) {
-      adminDispatch.getPricings(false)
-    }
+  fetchData (tableState) {
+    const { adminDispatch, hub } = this.props
+    debugger
+    adminDispatch.viewTrucking({ 
+      hubId: hub.id,
+      page: tableState.page + 1,
+      filters: tableState.filtered,
+      pageSize: tableState.pageSize
+    })
   }
 
-  determineDestinationAccessor (d) {
-    if (d.city) {
-      return d.city[0]
-    } if (d.zipcode) {
-      return d.zipcode
-    }
-  }
+  
 
   render () {
-    const { t, truckingPricings } = this.props
+    const { t, truckingPricings, pages } = this.props
     if (!truckingPricings) return ''
     const { expanded, sorted } = this.state
     const expandedIndexes = Object.keys(expanded).filter(ex => !!expanded[ex])
@@ -50,7 +57,7 @@ class TruckingRateTable extends PureComponent {
               <p className="flex-none">{t('shipment:destination')}</p>
             </div>),
             id: 'destination',
-            accessor: d => this.determineDestinationAccessor(d),
+            accessor: d => TruckingRateTable.determineDestinationAccessor(d),
             Cell: row => (
               <div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} `}>
                 <p className="flex-none">
@@ -67,19 +74,31 @@ class TruckingRateTable extends PureComponent {
         columns: [
           {
             Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('load_type', sorted)}
-              <p className="flex-none">{t('common:loadType')}</p>
+              {determineSortingCaret('cargo_class', sorted)}
+              <p className="flex-none">{t('common:cargoClass')}</p>
             </div>),
-            accessor: d => d.truckingPricing.load_type,
-            id: 'load_type',
+            accessor: d => d.truckingPricing.cargo_class,
+            id: 'cargo_class',
             Cell: row => (
               <div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} `}>
                 <p className="flex-none">
-                  {row.row.load_type}
+                  {row.row.cargo_class}
                   {' '}
                 </p>
               </div>
-            )
+            ),
+            Filter: ({ filter, onChange }) =>
+              <select
+                onChange={event => onChange(event.target.value)}
+                style={{ width: "100%" }}
+                value={filter ? filter.value : "all"}
+              >
+                <option value="all">All</option>
+                <option value="fcl_20">FTL 20'</option>
+                <option value="fcl_40">FTL 40'</option>
+                <option value="fcl_40_hq">FTL 40' HQ</option>
+                <option value="lcl">Cargo Item</option>
+              </select>
           },
           {
             Header: (<div className="flex layout-row layout-center-center">
@@ -118,7 +137,11 @@ class TruckingRateTable extends PureComponent {
             onExpandedChange={newExpanded => this.setState({ expanded: newExpanded })}
             sorted={this.state.sorted}
             onSortedChange={newSorted => this.setState({ sorted: newSorted })}
-            defaultPageSize={15}
+            defaultPageSize={10}
+            filterable
+            pages={pages}
+            manual
+            onFetchData={this.fetchData}
             SubComponent={d => (
               <div className={styles.nested_table} />)}
           />
@@ -137,14 +160,17 @@ function mapStateToProps (state) {
   const { theme } = tenant
   const { user, loggedIn } = authentication
   const { truckingDetail } = admin
-  const { truckingPricings } = truckingDetail
+  const { truckingPricings, hub, page, pages } = truckingDetail
 
   return {
     user,
     tenant,
     loggedIn,
     theme,
-    truckingPricings
+    truckingPricings,
+    hub,
+    page,
+    pages
   }
 }
 function mapDispatchToProps (dispatch) {
