@@ -313,11 +313,10 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
     end
     effective_weight = [total_load_meterage_weight, total_cbm_weight, total_payload_weight].max
     stackable_key = effective_weight == total_load_meterage_weight ? 'non_stackable' : 'stackable'
-    binding.pry
-    cargo_object[stackable_key]['weight'] += effective_weight
-    cargo_object[stackable_key]['volume'] += cargo.volume * cargo.quantity
-    cargo_object[stackable_key]['number_of_items'] += cargo.quantity
 
+    cargo_object[stackable_key]['weight'] += effective_weight
+    cargo_object[stackable_key]['volume'] += cargos_volume(cargos)
+    cargo_object[stackable_key]['number_of_items'] += cargos.map(&:quantity).sum
   end
 
   def get_container_object(containers)
@@ -398,42 +397,39 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
     cargo_object['non_stackable']['volume'] += cargo.volume
   end
 
-  def calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo) # rubocop:disable Metrics/AbcSize
+  def calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
     load_meter_weight = trucking_chargeable_weight_by_height(trucking_pricing, cargo)
     cbm_weight = trucking_cbm_weight(trucking_pricing, cargo)
     raw_payload = trucking_payload_weight(cargo)
 
     trucking_chargeable_weight = [load_meter_weight, raw_payload, cbm_weight].max
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
-    cargo_object['non_stackable']['volume'] += cargo.volume * cargo.quantity
-    cargo_object['non_stackable']['number_of_items'] += cargo.quantity
+    cargo_object['non_stackable']['volume'] += cargo.volume * cargo_quantity(cargo)
+    cargo_object['non_stackable']['number_of_items'] += cargo_quantity(cargo)
   end
 
-  def calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo) # rubocop:disable Metrics/AbcSize
+  def calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
     load_meter_weight = trucking_chargeable_weight_by_height(trucking_pricing, cargo)
-
     cbm_weight = trucking_cbm_weight(trucking_pricing, cargo)
     raw_payload = trucking_payload_weight(cargo)
     trucking_chargeable_weight = [load_meter_weight, raw_payload, cbm_weight].max
 
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
-    cargo_object['non_stackable']['volume'] += cargo.volume * cargo.quantity
-    cargo_object['non_stackable']['number_of_items'] += cargo.quantity
+    cargo_object['non_stackable']['volume'] += cargo.volume * cargo_quantity(cargo)
+    cargo_object['non_stackable']['number_of_items'] += cargo_quantity(cargo)
   end
 
   def calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
-
     cbm_weight = trucking_cbm_weight(trucking_pricing, cargo)
     raw_payload = trucking_payload_weight(cargo)
     trucking_chargeable_weight = [cbm_weight, raw_payload].max
 
     cargo_object['stackable']['weight'] += trucking_chargeable_weight
-    cargo_object['stackable']['volume'] += volume * quantity
-    cargo_object['stackable']['number_of_items'] += quantity
+    cargo_object['stackable']['volume'] += cargo_volume(cargo)
+    cargo_object['stackable']['number_of_items'] += cargo_quantity(cargo)
   end
 
   def calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
-
     cbm_weight = trucking_cbm_weight(trucking_pricing, cargo)
     raw_payload = cargo.weight
     trucking_chargeable_weight = [cbm_weight, raw_payload].max
@@ -444,35 +440,58 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
   end
 
   def trucking_chargeable_weight_by_area(trucking_pricing, cargo)
-    load_meter_var = (cargo.dimension_x * cargo.dimension_y * cargo.quantity) / LOAD_METERAGE_AREA_DIVISOR
+    load_meter_var = (cargo.dimension_x * cargo.dimension_y * cargo_quantity(cargo)) / LOAD_METERAGE_AREA_DIVISOR
     load_meter_var * trucking_pricing.load_meterage['ratio']
   end
 
   def trucking_chargeable_weight_by_height(trucking_pricing, cargo)
-    load_meterage = ((cargo.dimension_x * cargo.dimension_y) / LOAD_METERAGE_AREA_DIVISOR) * cargo.quantity
+    load_meterage = ((cargo.dimension_x * cargo.dimension_y) / LOAD_METERAGE_AREA_DIVISOR) * cargo_quantity(cargo)
     load_meterage * trucking_pricing.load_meterage['ratio']
   end
 
   def trucking_chargeable_weight_by_stacked_area(trucking_pricing, cargo)
     stack_height = TRUCKING_CONTAINER_HEIGHT / cargo.dimension_z
-    num_stacks = (cargo.quantity / stack_height).ceil
+    num_stacks = (cargo_quantity(cargo) / stack_height).ceil
     load_meter_var = (cargo.dimension_x * cargo.dimension_y * num_stacks) / LOAD_METERAGE_AREA_DIVISOR
     load_meter_var * trucking_pricing.load_meterage['ratio']
   end
 
   def trucking_cbm_weight(trucking_pricing, cargo)
     cbm_ratio = trucking_pricing['cbm_ratio'] || 0
-    quantity = cargo.try(:quantity) || 1
     volume = cargo_volume(cargo)
-    volume * cbm_ratio * quantity
+    volume * cbm_ratio
   end
 
   def cargo_volume(cargo)
     if cargo.is_a?(AggregatedCargo)
       cargo.volume
     else
-      (cargo.dimension_x * cargo.dimension_y * cargo.dimension_z) / CBM_VOLUME_DIVISOR
+      cargo_unit_volume(cargo) * cargo_quantity(cargo)
     end
+  end
+
+  def cargo_unit_volume(cargo)
+    if cargo.is_a?(AggregatedCargo)
+      cargo.volume
+    elsif cargo.is_a?(Hash)
+      cargo[:volume]
+    else
+      (cargo[:dimension_x] * cargo[:dimension_y] * cargo[:dimension_z]) / CBM_VOLUME_DIVISOR
+    end
+  end
+
+  def cargo_quantity(cargo)
+    if cargo.is_a?(AggregatedCargo)
+      1
+    elsif cargo.is_a?(Hash)
+      cargo[:quantity] || 1
+    else
+      cargo.quantity
+    end
+  end
+
+  def cargos_volume(cargos)
+    cargos.map { |cargo| cargo_volume(cargo) }.sum
   end
 
   def trucking_payload_weight(cargo)
