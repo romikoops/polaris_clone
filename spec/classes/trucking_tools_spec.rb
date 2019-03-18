@@ -182,6 +182,48 @@ RSpec.describe TruckingTools do
       end
     end
 
+    describe '.cargo_volume' do
+      it 'correctly returns the combined volume of all items in item group' do
+        volume_1 = described_class.cargo_volume(default_cargos.first)
+        volume_2 = described_class.cargo_volume(default_cargos.last)
+        expect(volume_1).to eq(1.344)
+        expect(volume_2).to eq(2.88)
+      end
+    end
+
+    describe '.cargos_volume' do
+      it 'correctly returns the combined volume of all items in item groups' do
+        volume_1 = described_class.cargos_volume(default_cargos)
+        expect(volume_1).to eq(4.224)
+      end
+    end
+
+    describe '.cargo_quantity' do
+      it 'correctly returns the quantity of an item' do
+        quantity = described_class.cargo_quantity(default_cargos.last)
+        expect(quantity).to eq(2)
+      end
+      it 'correctly returns the default quantity of1 for agg cargo' do
+        agg_cargo = create(:aggregated_cargo, volume: 1.5, weight: 1000)
+        quantity = described_class.cargo_quantity(agg_cargo)
+        expect(quantity).to eq(1)
+      end
+    end
+
+    describe '.cargo_unit_volume' do
+      it 'correctly returns the unit volume of all items in item group' do
+        volume_1 = described_class.cargo_unit_volume(default_cargos.first)
+        volume_2 = described_class.cargo_unit_volume(default_cargos.last)
+        expect(volume_1).to eq(1.344)
+        expect(volume_2).to eq(1.44)
+      end
+      it 'correctly returns the unit volume of agg cargo' do
+        agg_cargo = create(:aggregated_cargo, volume: 1.5, weight: 1000)
+        volume_1 = described_class.cargo_unit_volume(agg_cargo)
+        expect(volume_1).to eq(1.5)
+      end
+    end
+
     describe '.trucking_cbm_weight' do
       it 'correctly returns the combined cbm weight of all items in item group' do
         trucking_pricing = create(:trucking_pricing, cbm_ratio: 200)
@@ -189,6 +231,13 @@ RSpec.describe TruckingTools do
         cbm_2 = described_class.trucking_cbm_weight(trucking_pricing, default_cargos.last)
         expect(cbm_1).to eq(268.8)
         expect(cbm_2).to eq(576)
+      end
+
+      it 'correctly returns the combined cbm weight of all items in item group' do
+        trucking_pricing = create(:trucking_pricing, cbm_ratio: 200)
+        agg_cargo = create(:aggregated_cargo, volume: 1.5, weight: 1000)
+        cbm = described_class.trucking_cbm_weight(trucking_pricing, agg_cargo)
+        expect(cbm).to eq(300)
       end
     end
 
@@ -205,8 +254,8 @@ RSpec.describe TruckingTools do
     describe '.trucking_chargeable_weight_by_height' do
       it 'correctly returns the combined cbm weight of all items in item group' do
         trucking_pricing = create(:trucking_pricing, load_meterage: { ratio: 1000 })
-        tcw_1 = described_class.trucking_chargeable_weight_by_stacked_area(trucking_pricing, default_cargos.first)
-        tcw_2 = described_class.trucking_chargeable_weight_by_stacked_area(trucking_pricing, default_cargos.last)
+        tcw_1 = described_class.trucking_chargeable_weight_by_height(trucking_pricing, default_cargos.first)
+        tcw_2 = described_class.trucking_chargeable_weight_by_height(trucking_pricing, default_cargos.last)
         expect(tcw_1).to eq(400)
         expect(tcw_2).to eq(800)
       end
@@ -215,8 +264,8 @@ RSpec.describe TruckingTools do
     describe '.trucking_chargeable_weight_by_area' do
       it 'correctly returns the combined cbm weight of all items in item group' do
         trucking_pricing = create(:trucking_pricing, load_meterage: { ratio: 1000 })
-        tcw_1 = described_class.trucking_chargeable_weight_by_stacked_area(trucking_pricing, default_cargos.first)
-        tcw_2 = described_class.trucking_chargeable_weight_by_stacked_area(trucking_pricing, default_cargos.last)
+        tcw_1 = described_class.trucking_chargeable_weight_by_area(trucking_pricing, default_cargos.first)
+        tcw_2 = described_class.trucking_chargeable_weight_by_area(trucking_pricing, default_cargos.last)
         expect(tcw_1).to eq(400)
         expect(tcw_2).to eq(800)
       end

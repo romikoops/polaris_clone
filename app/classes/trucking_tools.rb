@@ -11,6 +11,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
   CBM_VOLUME_DIVISOR = 1_000_000
   DEFAULT_MAX = 1_000_000
   TRUCKING_CONTAINER_HEIGHT = 260
+  
   def calculate_trucking_price(pricing, cargo, _direction, kms, scope) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     fees = {}
     result = {}
