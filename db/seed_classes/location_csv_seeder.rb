@@ -52,11 +52,11 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
             country_code: ''
           }
         end
-        if locations.length > 100
-          Locations::Location.import(locations)
-          count =+ locations.length
-          locations = []
-        end
+        next unless locations.length > 100
+
+        Locations::Location.import(locations)
+        count += locations.length
+        locations = []
       end
       Locations::Location.import(locations) unless locations.empty?
     end
@@ -96,6 +96,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
           language: 'en'
         }
         next if Locations::Name.exists?(osm_id: row[3])
+
         # next unless %w(node relation).include?(row[keys.index(:osm_type)])
         keys.each_with_index do |k, i|
           if k == :coord
@@ -137,6 +138,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
       names = []
       csv.each do |row|
         next if row[2].blank? || (row[0] == '=')
+
         locode_str = [row[1], row[2]].join
         next if Locations::Name.exists?(locode: locode_str)
 
@@ -151,13 +153,13 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
         if row[10].blank?
           name = Locations::Name.search(row[4]).results.first
           if name.nil?
-            geocoder_results = Geocoder.search([row[4], row[1]].join(', '), :params => {:region => row[1].downcase})
+            geocoder_results = Geocoder.search([row[4], row[1]].join(', '), params: { region: row[1].downcase })
             if geocoder_results.first.nil?
               missed << row[4]
               puts row[4]
               next
             end
-    
+
             coordinates = geocoder_results.first.geometry['location']
             point = RGeo::Geographic.spherical_factory(srid: 4326).point(coordinates['lng'], coordinates['lat'])
           else
