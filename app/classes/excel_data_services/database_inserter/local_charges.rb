@@ -97,7 +97,7 @@ module ExcelDataServices
           service_level,
           params[:mot],
           tenant.id,
-          carrier.name
+          carrier&.name
         ) # returns a `TenantVehicle`!
 
         [tenant_vehicle]
