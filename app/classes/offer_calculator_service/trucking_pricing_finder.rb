@@ -20,13 +20,14 @@ module OfferCalculatorService
         hub_ids: [hub_id],
         distance: distance.round
       }
+      ## New Code
+      # results = ::Trucking::Trucking.find_by_filter(args)
+      # return [] if results.empty?
 
-      results = ::Trucking::Trucking.find_by_filter(args)
-      return [] if results.empty?
-
-      results = results.select { |r| r.user_id == @user_id || r.user_id.nil? }.sort_by { |r| r.user_id || 0 }.reverse
-      [results.first]
-      # Trucking::Rate.find_by_filter(args)
+      # results = results.select { |r| r.user_id == @user_id || r.user_id.nil? }.sort_by { |r| r.user_id || 0 }.reverse
+      # [results.first]
+      ## Legacy Code
+      Trucking::Rate.find_by_filter(args)
     end
   end
 end
