@@ -49,6 +49,15 @@ RSpec.describe TruckingTools do
              quantity: 2)
     ]
   end
+  let!(:ldm_cargo) do
+      create(:cargo_item,
+             shipment_id: shipment.id,
+             dimension_x: 120,
+             dimension_y: 80,
+             dimension_z: 140,
+             payload_in_kg: 200,
+             quantity: 5)
+  end
 
   describe '.calc_aggregated_cargo_cbm_ratio' do
     it 'calculates the correct trucking weight for aggregate cargo with vol gt weight' do
@@ -268,6 +277,28 @@ RSpec.describe TruckingTools do
         tcw_2 = described_class.trucking_chargeable_weight_by_area(trucking_pricing, default_cargos.last)
         expect(tcw_1).to eq(400)
         expect(tcw_2).to eq(800)
+      end
+    end
+
+    describe '.calc_cargo_load_meterage_height' do
+      it 'correctly returns the loadmeterage values' do
+        trucking_pricing = create(:trucking_pricing, load_meterage: { ratio: 1000, height: 130 })
+        result_object = described_class.calc_cargo_load_meterage_height(trucking_pricing, cargo_object, default_cargos.first)
+
+        expect(result_object.dig('non_stackable', 'weight')).to eq(618.24)
+        expect(result_object.dig('non_stackable', 'volume')).to eq(1.344)
+        expect(result_object.dig('non_stackable', 'number_of_items')).to eq(1)
+      end
+    end
+
+    describe '.calc_cargo_load_meterage_area' do
+      it 'correctly returns the loadmeterage values' do
+        trucking_pricing = create(:trucking_pricing, load_meterage: { ratio: 1000, area: 48000 })
+        result_object = described_class.calc_cargo_load_meterage_area(trucking_pricing, cargo_object, ldm_cargo)
+
+        expect(result_object.dig('non_stackable', 'weight')).to eq(3091.2)
+        expect(result_object.dig('non_stackable', 'volume')).to eq(33.6)
+        expect(result_object.dig('non_stackable', 'number_of_items')).to eq(5)
       end
     end
   end
