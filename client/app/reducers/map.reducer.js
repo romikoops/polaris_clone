@@ -19,6 +19,22 @@ export default function map (state = {}, action) {
 
       return err
     }
+    case mapConstants.GET_GEOJSON_REQUEST: {
+      return state
+    }
+    case mapConstants.GET_GEOJSON_SUCCESS: {
+      return {
+        ...state,
+        geojson: action.payload
+      }
+    }
+    case mapConstants.GET_GEOJSON_ERROR: {
+      const err = merge({}, state, {
+        error: action.payload
+      })
+
+      return err
+    }
     default:
       return state
   }

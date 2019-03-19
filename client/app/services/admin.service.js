@@ -111,11 +111,11 @@ function viewTrucking (args) {
     method: 'GET',
     headers: authHeader()
   }
-  const pageString = `page=${args.page}&page_size=${args.pageSize}`
+  const pageString = `page=${args.page || 1}&page_size=${args.pageSize || 10}`
   let filterString = ''
   if (args.filters.length > 0) {
     args.filters.forEach((filter) => {
-      filterString += `${filter.id}=${filter.value}`
+      filterString += `${filter.id}=${filter.value}&`
     })
   }
 

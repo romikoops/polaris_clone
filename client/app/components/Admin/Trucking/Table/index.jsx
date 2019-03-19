@@ -1,0 +1,261 @@
+import React, { PureComponent } from 'react'
+import { withNamespaces } from 'react-i18next'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { get } from 'lodash'
+import TruckingTableHeaders from './Headers'
+import { adminActions, appActions } from '../../../../actions'
+import styles from './index.scss'
+import { determineSortingCaret } from '../../../../helpers/sortingCaret'
+import { determineDestinationAccessor } from '../../../../helpers'
+
+class TruckingTable extends PureComponent {
+  constructor (props) {
+    super(props)
+    this.state = {
+      expanded: {},
+      sorted: [],
+      filters: [],
+      selectedTruckingPricing: false
+    }
+    this.fetchData = this.fetchData.bind(this)
+    this.viewPricing = this.viewPricing.bind(this)
+  }
+
+  fetchData (tableState) {
+    const { adminDispatch, hub } = this.props
+    adminDispatch.viewTrucking({
+      hubId: hub.id,
+      page: tableState.page + 1,
+      filters: tableState.filtered,
+      pageSize: tableState.pageSize
+    })
+
+    this.setState({ filters: tableState.filtered })
+  }
+
+  viewPricing (row) {
+    this.setState({ selectedTruckingPricing: row.original }, () => {
+      this.props.setTargetTruckingId(get(row, ['original', 'truckingPricing', 'id'], false))
+    })
+  }
+
+  render () {
+    const { t, truckingPricings, pages } = this.props
+    if (!truckingPricings) return ''
+    const {
+      sorted, selectedTruckingPricing, filters
+    } = this.state
+
+    const cargoClassFilter = filters.filter(x => x.id === 'cargo_class')[0]
+    let truckOptions
+    if (cargoClassFilter && cargoClassFilter.value === 'lcl') {
+      truckOptions = [
+        <option value="all">All</option>,
+        <option value="default">{t('trucking:default')}</option>
+      ]
+    } else if (!cargoClassFilter) {
+      truckOptions = [
+        <option value="all">All</option>,
+        <option value="default">{t('trucking:default')}</option>,
+        <option value="chassis">{t('trucking:chassis')}</option>,
+        <option value="side_lifter">{t('trucking:sideLifter')}</option>
+      ]
+    } else {
+      truckOptions = [
+        <option value="all">All</option>,
+        <option value="chassis">{t('trucking:chassis')}</option>,
+        <option value="side_lifter">{t('trucking:sideLifter')}</option>
+      ]
+    }
+    const columns = [
+      {
+
+        columns: [
+          {
+            Header: (<div className="flex layout-row layout-center-center">
+              {determineSortingCaret('destination', sorted)}
+              <p className="flex-none">{t('shipment:destination')}</p>
+            </div>),
+            id: 'destination',
+            accessor: d => determineDestinationAccessor(d),
+            Cell: row => (
+              <div
+                className={`flex layout-row layout-align-start-center ${styles.pricing_cell} `}
+                onClick={() => this.viewPricing(row)}
+              >
+                <p className="flex-none">
+                  {' '}
+                  {row.row.destination}
+                </p>
+              </div>
+            )
+          },
+          {
+            Header: (<div className="flex layout-row layout-center-center">
+              {determineSortingCaret('cargo_class', sorted)}
+              <p className="flex-none">{t('trucking:cargoClass')}</p>
+            </div>),
+            accessor: d => d.truckingPricing.cargo_class,
+            id: 'cargo_class',
+            Cell: row => (
+              <div
+                className={`flex layout-row layout-align-start-center ${styles.pricing_cell} `}
+                onClick={() => this.viewPricing(row)}
+              >
+                <p className="flex-none">
+                  {row.row.cargo_class}
+                  {' '}
+                </p>
+              </div>
+            ),
+            Filter: ({ filter, onChange }) => (
+              <select
+                onChange={event => onChange(event.target.value)}
+                style={{ width: '100%' }}
+                value={filter ? filter.value : 'all'}
+              >
+                <option value="all">All</option>
+                <option value="fcl_20">FTL 20'</option>
+                <option value="fcl_40">FTL 40'</option>
+                <option value="fcl_40_hq">FTL 40' HQ</option>
+                <option value="lcl">Cargo Item</option>
+              </select>
+            )
+          },
+          {
+            Header: (<div className="flex layout-row layout-center-center">
+              {determineSortingCaret('truck_type', sorted)}
+              <p className="flex-none">{t('common:truckType')}</p>
+            </div>),
+            id: 'truck_type',
+            accessor: d => d.truckingPricing.truck_type,
+            Cell: row => (
+              <div
+                className={`flex layout-row layout-align-start-center ${styles.pricing_cell} `}
+                onClick={() => this.viewPricing(row)}
+              >
+                <p className="flex-none">
+                  {' '}
+                  {row.row.truck_type}
+                </p>
+              </div>
+            ),
+            Filter: ({ filter, onChange }) => (
+              <select
+                onChange={event => onChange(event.target.value)}
+                style={{ width: '100%' }}
+                value={filter ? filter.value : 'all'}
+              >
+                {truckOptions}
+              </select>
+            )
+          },
+          {
+            Header: (<div className="flex layout-row layout-center-center">
+              {determineSortingCaret('direction', sorted)}
+              <p className="flex-none">{t('trucking:direction')}</p>
+            </div>),
+            id: 'direction',
+            accessor: d => d.truckingPricing.carriage,
+            Cell: row => (
+              <div
+                className={`flex layout-row layout-align-start-center ${styles.pricing_cell} `}
+                onClick={() => this.viewPricing(row)}
+              >
+                <p className="flex-none">
+                  {' '}
+                  {row.row.direction === 'pre' ? 'export' : 'import'}
+                </p>
+              </div>
+            ),
+            Filter: ({ filter, onChange }) => (
+              <select
+                onChange={event => onChange(event.target.value)}
+                style={{ width: '100%' }}
+                value={filter ? filter.value : 'all'}
+              >
+                <option value="all">All</option>
+                <option value="on">{t('common:import')}</option>
+                <option value="pre">{t('common:export')}</option>
+              </select>
+            )
+          }
+        ]
+      }
+    ]
+    const pricingsTable = (
+      <ReactTable
+        className="flex-100 height_100"
+        data={truckingPricings}
+        columns={columns}
+        defaultSorted={[
+          {
+            id: 'origin_name',
+            desc: true
+          }
+        ]}
+        sorted={this.state.sorted}
+        onSortedChange={newSorted => this.setState({ sorted: newSorted })}
+        defaultPageSize={10}
+        filterable
+        pages={pages}
+        manual
+        onFetchData={this.fetchData}
+      />
+    )
+    const pricingView = (
+      <TruckingTableHeaders
+        rowData={selectedTruckingPricing}
+        back={() => this.viewPricing(false)}
+      />
+    )
+
+    const truckingView = selectedTruckingPricing
+      ? pricingView
+      : pricingsTable
+
+    return (
+      <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.wrapper}`}>
+        <div className="flex-100 layout-row layout-align-start-start">
+          {truckingView}
+        </div>
+
+      </div>
+    )
+  }
+}
+
+function mapStateToProps (state) {
+  const {
+    authentication, app, admin
+  } = state
+  const { tenant } = app
+  const { theme } = tenant
+  const { user, loggedIn } = authentication
+  const { truckingDetail } = admin
+  const {
+    truckingPricings, hub, page, pages
+  } = truckingDetail
+
+  return {
+    user,
+    tenant,
+    loggedIn,
+    theme,
+    truckingPricings,
+    hub,
+    page,
+    pages
+  }
+}
+function mapDispatchToProps (dispatch) {
+  return {
+    adminDispatch: bindActionCreators(adminActions, dispatch),
+    appDispatch: bindActionCreators(appActions, dispatch)
+  }
+}
+
+export default withNamespaces(['common', 'shipment', 'trucking'])(connect(mapStateToProps, mapDispatchToProps)(TruckingTable))

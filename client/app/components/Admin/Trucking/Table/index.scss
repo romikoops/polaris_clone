@@ -1,0 +1,20 @@
+:local {
+  .wrapper {
+    height: 470px;
+  }
+  .back_btn {
+    i, p {
+      margin: 5px;
+    }
+    cursor: pointer;
+  }
+  .breadcrumb {
+    margin-left: 5px;
+    i, p {
+      margin: 5px;
+    }
+  }
+  .pricing_cell {
+    cursor: pointer;
+  }
+}

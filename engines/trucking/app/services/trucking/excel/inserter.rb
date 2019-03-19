@@ -137,33 +137,29 @@ module Trucking
 
       def insert_or_update_truckings(trucking_rate, single_ident_values_and_country)
         @all_trucking_locations = []
-        locations = []
-        truckings = []
+        @all_trucking_truckings = []
         single_ident_values_and_country.each do |ident_and_country|
           tl = Location.find_or_initialize_by(
             @identifier_type.to_s => ident_and_country[:ident],
             country_code: ident_and_country[:country]
           )
+          tl.city_name = ident_and_country[:sub_ident] if ident_and_country[:sub_ident]
+          tl.city_name = ident_and_country[:ident] if %w(zipcode distance).include?(@identifier_type)
           tl.id ||= SecureRandom.uuid
-          if locations.include?(tl)
-            next
-          end
-          locations << tl
-          trucking_attr = trucking_rate.slice(:hub_id, :tenant_id, :identifier_modifier, :carriage, :cargo_class, :load_type, :courier_id, :truck_type, :user_id).merge(location_id: tl.id)
-          trucking = ::Trucking::Trucking.find_or_initialize_by(trucking_attr)
-          # binding.pry if trucking.rates.nil?
-          trucking.assign_attributes(trucking_rate.merge(location_id: tl.id))
-          trucking.location = tl
-          trucking.id ||= SecureRandom.uuid
-          # if trucking
-          #   trucking.update(trucking_rate)
-          # else
-          #   ::Trucking::Trucking.create!(trucking_rate.merge(location_id: tl.id))
-          # end
+          unless @all_trucking_locations.include?(tl)
+            
+            @all_trucking_locations << tl
+            trucking_attr = trucking_rate.slice(:hub_id, :tenant_id, :identifier_modifier, :carriage, :cargo_class, :load_type, :courier_id, :truck_type, :user_id).merge(location_id: tl.id)
+            trucking = ::Trucking::Trucking.find_or_initialize_by(trucking_attr)
 
-          @all_trucking_locations << trucking
+            trucking.assign_attributes(trucking_rate.merge(location_id: tl.id))
+            trucking.id ||= SecureRandom.uuid
+
+            @all_trucking_truckings << trucking
+          end
         end
-        ::Trucking::Trucking.import(@all_trucking_locations,  on_duplicate_key_update: [:rates, :fees], recursive: true, batch_size: 1000)
+        ::Trucking::Trucking.import(@all_trucking_truckings,  on_duplicate_key_update: [:rates, :fees], batch_size: 1000)
+        ::Trucking::Location.import(@all_trucking_locations,  on_duplicate_key_update: [:location_id, :city_name, :zipcode], batch_size: 1000)
       end
 
       def delete_previous_trucking_rates(hub, td_ids)
@@ -251,16 +247,12 @@ module Trucking
               end
               stats[:trucking_locations][:number_created] += 1
 
-              { ident: geometry&.id, country: idents_and_country[:country] }
+              { ident: geometry&.id, country: idents_and_country[:country], sub_ident: geometry&.name }
             else
               idents_and_country
             end
           end
         end
-      end
-
-      def import_locations
-        Locations::Location.import(@locations)
       end
 
       def parse_fees_sheet
@@ -521,7 +513,11 @@ module Trucking
       end
 
       def modify_charges(trucking_rate, row_truck_type, direction)
-        direction_str = direction == 'pre' ? 'export' : 'import'
+        direction_str = if %w(import export).include?(direction)
+                          direction
+                        else
+                          direction == 'pre' ? 'export' : 'import'
+                        end
         charges.each do |_k, fee|
           tmp_fee = fee.clone
           next unless tmp_fee[:direction] == direction_str && tmp_fee[:truck_type] == row_truck_type

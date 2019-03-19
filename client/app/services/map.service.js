@@ -16,16 +16,24 @@ function handleResponse (response) {
 
 function getMapData (id) {
   const requestOptions = {
-    method: 'POST',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id })
+    method: 'GET',
+    headers: { ...authHeader() }
   }
 
-  return fetch(`${getTenantApiUrl()}/admin/maps/geojsons`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/maps/geojsons?id=${id}`, requestOptions).then(handleResponse)
+}
+function getGeoJson (id) {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader() }
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/maps/geojson?id=${id}`, requestOptions).then(handleResponse)
 }
 
 const mapService = {
-  getMapData
+  getMapData,
+  getGeoJson
 }
 
 export default mapService

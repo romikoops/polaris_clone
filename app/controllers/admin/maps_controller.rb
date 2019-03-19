@@ -5,19 +5,27 @@ class Admin::MapsController < Admin::AdminBaseController # rubocop:disable # Sty
     @hub = Hub.find(params[:id])
     @truckings = @hub.truckings
     response = Rails.cache.fetch("#{@truckings.cache_key}/geojson", expires_in: 12.hours) do
-      @truckings.first(20).map{ |tl| response_hash(tl)}
+      @truckings.first(20).map { |tl| response_hash(tl) }
     end
     response_handler(response.flatten)
   end
-    
+
+  def geojson
+    trucking = Trucking::Trucking.find(params[:id])
+    response_handler(response_hash(trucking))
+  end
+
   def coverage
     coverage = Trucking::Coverage.find_by(hub_id: params[:id])&.geojson
     response_handler(coverage)
   end
 
   def country_overlay
-    locations = Locations::Location.where(admin_level: params[:admin_level] || 6, country_code: params[:country_code].downcase)
-    results = locations.map {|l| { geojson: l.geojson, name: l.name, id: l.id }}
+    locations = Locations::Location.where(
+      admin_level: params[:admin_level] || 6,
+      country_code: params[:country_code].downcase
+    )
+    results = locations.map { |l| { geojson: l.geojson, name: l.name, id: l.id } }
     response_handler(results)
   end
 
@@ -25,14 +33,14 @@ class Admin::MapsController < Admin::AdminBaseController # rubocop:disable # Sty
 
   def response_hash(result)
     if result.location&.zipcode
-      { 
+      {
         name: result.location&.zipcode,
         geojson: nil,
         trucking_id: result.id,
         cargo_class: result.cargo_class
       }
     else
-      { 
+      {
         name: result.location&.location&.name,
         geojson: result.location&.location&.geojson,
         trucking_id: result.id,
@@ -40,5 +48,4 @@ class Admin::MapsController < Admin::AdminBaseController # rubocop:disable # Sty
       }
     end
   end
-
 end

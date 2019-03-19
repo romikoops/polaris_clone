@@ -19,17 +19,13 @@ module Trucking
     end
 
     def self.find_by_hub_id(hub_id, options = {})
-      query = where(hub_id: hub_id)
-      query = query.where(cargo_class: options[:filters][:cargo_class]) if options[:filters][:cargo_class]
-      query = query.where(truck_type: options[:filters][:truck_type]) if options[:filters][:truck_type]
-      query.paginate(page: options[:page], per_page: options[:per_page] || 20)
+      args = options.merge(hub_ids: hub_id)
+      result = ::Trucking::Queries::FindByHubIds.new(args.merge(klass: self)).perform
+      result.paginate(page: options[:page], per_page: options[:per_page] || 20)
     end
 
     def self.find_by_hub_ids(hub_ids, options = {})
-      query = where(hub_id: hub_ids)
-      query = query.where(cargo_class: options[:filters][:cargo_class]) if options[:filters][:cargo_class]
-      query = query.where(truck_type: options[:filters][:truck_type]) if options[:filters][:truck_type]
-      query.paginate(page: options[:page], per_page: options[:per_page] || 20)
+      find_by_hub_id(hub_ids, options)
     end
 
     # Instance Methods

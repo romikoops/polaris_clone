@@ -33,10 +33,7 @@ const propsBase = {
     uploadTrucking: identity
   },
   truckingDetail: {
-    hub,
-    truckingHub: {},
-    truckingPricings: [],
-    pricing: {}
+    hub
   },
   document: {},
   documentDispatch: {}
@@ -46,65 +43,3 @@ test('shallow render', () => {
   expect(shallow(<AdminTruckingView {...propsBase} />)).toMatchSnapshot()
 })
 
-test('truckingDetail is falsy', () => {
-  const props = {
-    ...propsBase,
-    truckingDetail: null
-  }
-  expect(shallow(<AdminTruckingView {...props} />)).toMatchSnapshot()
-})
-
-test('document.viewer is true', () => {
-  const props = {
-    ...propsBase,
-    document: {
-      viewer: true
-    }
-  }
-  expect(shallow(<AdminTruckingView {...props} />)).toMatchSnapshot()
-})
-
-test('idenitfierKey === distance', () => {
-  const wrapper = shallow(<AdminTruckingView {...propsBase} />)
-  wrapper.setState({
-    loadTypeBool: true,
-    filteredTruckingPricings: [
-      { distance: [], truckingPricing: {} }
-    ]
-  })
-  expect(wrapper).toMatchSnapshot()
-})
-
-test('idenitfierKey !== distance', () => {
-  const wrapper = shallow(<AdminTruckingView {...propsBase} />)
-  wrapper.setState({
-    loadTypeBool: true,
-    filteredTruckingPricings: [
-      { truckingPricing: {} }
-    ]
-  })
-  expect(wrapper).toMatchSnapshot()
-})
-
-test('filteredTruckingPricings is truthy while loadTypeBool is false ', () => {
-  const wrapper = shallow(<AdminTruckingView {...propsBase} />)
-  wrapper.setState({
-    loadTypeBool: false,
-    filteredTruckingPricings: [
-      { truckingPricing: {} }
-    ]
-  })
-  expect(wrapper).toMatchSnapshot()
-})
-
-test('state.currentTruckingPricing is true', () => {
-  const wrapper = shallow(<AdminTruckingView {...propsBase} />)
-  wrapper.setState({ currentTruckingPricing: true })
-  expect(wrapper).toMatchSnapshot()
-})
-
-test('state.loadTypeBool is false', () => {
-  const wrapper = shallow(<AdminTruckingView {...propsBase} />)
-  wrapper.setState({ loadTypeBool: false })
-  expect(wrapper).toMatchSnapshot()
-})

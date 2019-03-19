@@ -63,7 +63,8 @@ Rails.application.routes.draw do
         end
       end
 
-      post 'maps/geojsons', to: 'maps#geojsons'
+      get 'maps/geojsons', to: 'maps#geojsons'
+      get 'maps/geojson', to: 'maps#geojson'
       post 'maps/country_overlay', to: 'maps#country_overlay'
       get  'client_pricings/:id', to: 'pricings#client'
       get  'route_pricings/:id',  to: 'pricings#route'

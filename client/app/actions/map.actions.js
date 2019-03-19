@@ -5,11 +5,11 @@ import { mapService } from '../services'
 // import { push } from 'react-router-redux';
 
 function getMapData (id) {
-  function request (convoData) {
-    return { type: mapConstants.GET_MAP_DATA_REQUEST, payload: convoData }
+  function request (mapData) {
+    return { type: mapConstants.GET_MAP_DATA_REQUEST, payload: mapData }
   }
-  function success (convoData) {
-    return { type: mapConstants.GET_MAP_DATA_SUCCESS, payload: convoData.data }
+  function success (mapData) {
+    return { type: mapConstants.GET_MAP_DATA_SUCCESS, payload: mapData.data }
   }
   function failure (error) {
     return { type: mapConstants.GET_MAP_DATA_FAILURE, error }
@@ -28,8 +28,33 @@ function getMapData (id) {
     )
   }
 }
+function getGeoJson (id) {
+  function request (mapData) {
+    return { type: mapConstants.GET_GEOJSON_REQUEST, payload: mapData }
+  }
+  function success (mapData) {
+    return { type: mapConstants.GET_GEOJSON_SUCCESS, payload: mapData.data }
+  }
+  function failure (error) {
+    return { type: mapConstants.GET_GEOJSON_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    mapService.getGeoJson(id).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+      }
+    )
+  }
+}
 
 const mapActions = {
-  getMapData
+  getMapData,
+  getGeoJson
 }
 export default mapActions
