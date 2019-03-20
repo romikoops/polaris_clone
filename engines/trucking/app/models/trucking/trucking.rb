@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'will_paginate'
 
 module Trucking
@@ -19,13 +20,13 @@ module Trucking
     end
 
     def self.find_by_hub_id(hub_id, options = {})
-      args = options.merge(hub_ids: hub_id)
-      result = ::Trucking::Queries::FindByHubIds.new(args.merge(klass: self)).perform
-      result.paginate(page: options[:page], per_page: options[:per_page] || 20)
+      find_by_hub_ids([hub_id], options)
     end
 
     def self.find_by_hub_ids(hub_ids, options = {})
-      find_by_hub_id(hub_ids, options)
+      args = options.merge(hub_ids: hub_ids)
+      result = ::Trucking::Queries::FindByHubIds.new(args.merge(klass: self)).perform
+      result.paginate(page: options[:page], per_page: options[:per_page] || 20)
     end
 
     # Instance Methods
@@ -35,7 +36,7 @@ module Trucking
 
     def as_index_result
       {
-        'truckingPricing' =>  as_json,
+        'truckingPricing' => as_json,
         'countryCode' => location&.country_code
       }.merge(location_info)
     end
@@ -51,7 +52,6 @@ module Trucking
         { 'city' => location&.location&.name }
       end
     end
-
   end
 end
 

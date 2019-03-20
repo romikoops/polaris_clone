@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RATES = {
   kg: [
     {
@@ -131,6 +133,5 @@ FactoryBot.define do
     truck_type { 'default' }
     carriage { 'pre' }
     association :courier, factory: :trucking_courier
-    
   end
 end

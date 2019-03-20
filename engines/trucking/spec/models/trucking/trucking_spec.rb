@@ -149,7 +149,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
 
       context 'distance identifier' do
         let!(:km_trucking) { FactoryBot.create(:trucking_trucking, hub: hub, tenant: tenant, location: trucking_location_distance) }
-       
+
         it 'finds the correct trucking_rate with avulsed address filters', pending: 'Outdated spec' do
           trucking_rates = ::Trucking::Trucking.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
@@ -210,56 +210,36 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
           FactoryBot.create(:trucking_trucking,
                             hub: hub,
                             location: FactoryBot.create(:trucking_location, :with_location))
+
           expect(::Trucking::Trucking.find_by_hub_id(-1)).to eq([])
         end
       end
 
       context 'zipcode identifier' do
         it 'finds the correct pricing and destinations' do
-
-          trucking_location = FactoryBot.create(:trucking_location, zipcode: 30_001)
+          trucking_location = FactoryBot.create(:trucking_location, zipcode: '30001')
           target = FactoryBot.create(:trucking_trucking, hub: hub, location: trucking_location)
 
-          truckings = ::Trucking::Trucking.find_by_hub_id(hub.id)
+          truckings = ::Trucking::Trucking.find_by_hub_id(hub.id).map(&:as_index_result)
 
           expect(truckings.first['zipCode']).to eq('30001')
           expect(truckings.first['countryCode']).to eq('SE')
           expect(truckings.first['truckingPricing']).to include(target.as_json)
         end
-
-        # it 'finds the correct pricing and destinations for multiple range groups per zone' do
-        #   results = []
-        #   Timecop.freeze(Time.now) do
-        #     [15_000, 18_000].each do |start_zip|
-        #       (1..100).to_a.each do |i|
-        #         trucking_location = FactoryBot.create(:trucking_location, zipcode: start_zip + i)
-        #         results << FactoryBot.create(:trucking_trucking,
-        #                           hub: hub,
-        #                           location: trucking_location)
-        #       end
-        #     end
-
-        #     trucking_rates = ::Trucking::Trucking.find_by_hub_id(hub.id)
-
-        #     expect(trucking_rates.first['zipcode']).to eq('15001')
-        #     expect(trucking_rates.first['countryCode']).to eq('SE')
-        #     expect(trucking_rates.first['truckingPricing']).to include(results.first.as_index_result)
-        #   end
-        # end
       end
 
       context 'geometry identifier' do
-        it 'finds the correct pricing and destinations', pending: 'Outdated spec' do
+        it 'finds the correct pricing and destinations' do
           Timecop.freeze(Time.now) do
             target = FactoryBot.create(:trucking_trucking,
-                              hub: hub,
-                              location: FactoryBot.create(:trucking_location, :with_location))
+                                       hub: hub,
+                                       location: FactoryBot.create(:trucking_location, :with_location))
 
-            truckings = ::Trucking::Trucking.find_by_hub_id(hub.id)
+            truckings = ::Trucking::Trucking.find_by_hub_id(hub.id).map(&:as_index_result)
 
             expect(truckings.first['city']).to eq('Gothenburg')
             expect(truckings.first['countryCode']).to eq('SE')
-            expect(truckings.first['truckingPricing']).to include(target.first.as_json)
+            expect(truckings.first['truckingPricing']).to include(target.as_json)
           end
         end
       end

@@ -135,7 +135,7 @@ module Trucking
         end
       end
 
-      def insert_or_update_truckings(trucking_rate, single_ident_values_and_country)
+      def insert_or_update_truckings(trucking_rate, single_ident_values_and_country) # rubocop:disable Metrics/AbcSize
         @all_trucking_locations = []
         @all_trucking_truckings = []
         single_ident_values_and_country.each do |ident_and_country|
@@ -146,34 +146,37 @@ module Trucking
           tl.city_name = ident_and_country[:sub_ident] if ident_and_country[:sub_ident]
           tl.city_name = ident_and_country[:ident] if %w(zipcode distance).include?(@identifier_type)
           tl.id ||= SecureRandom.uuid
-          unless @all_trucking_locations.include?(tl)
-            
-            @all_trucking_locations << tl
-            trucking_attr = trucking_rate.slice(:hub_id, :tenant_id, :identifier_modifier, :carriage, :cargo_class, :load_type, :courier_id, :truck_type, :user_id).merge(location_id: tl.id)
-            trucking = ::Trucking::Trucking.find_or_initialize_by(trucking_attr)
+          next if @all_trucking_locations.include?(tl)
 
-            trucking.assign_attributes(trucking_rate.merge(location_id: tl.id))
-            trucking.id ||= SecureRandom.uuid
+          @all_trucking_locations << tl
+          trucking_attr = trucking_rate.slice(
+            :hub_id,
+            :tenant_id,
+            :identifier_modifier,
+            :carriage,
+            :cargo_class,
+            :load_type,
+            :courier_id,
+            :truck_type,
+            :user_id
+          ).merge(location_id: tl.id)
+          trucking = ::Trucking::Trucking.find_or_initialize_by(trucking_attr)
 
-            @all_trucking_truckings << trucking
-          end
+          trucking.assign_attributes(trucking_rate.merge(location_id: tl.id))
+          trucking.id ||= SecureRandom.uuid
+
+          @all_trucking_truckings << trucking
         end
-        ::Trucking::Trucking.import(@all_trucking_truckings,  on_duplicate_key_update: [:rates, :fees], batch_size: 1000)
-        ::Trucking::Location.import(@all_trucking_locations,  on_duplicate_key_update: [:location_id, :city_name, :zipcode], batch_size: 1000)
-      end
-
-      def delete_previous_trucking_rates(hub, td_ids)
-        old_tp_ids =
-          Rate.joins(truckings: :location)
-              .where('trucking_truckings.hub_id': hub.id)
-              .where('trucking_locations.id': td_ids)
-              .where(scope: @trucking_rate_scope)
-              .distinct.ids
-
-        return if old_tp_ids.empty?
-
-        hub.truckings.where(rate_id: old_tp_ids).delete_all
-        Rate.where(id: old_tp_ids).delete_all
+        ::Trucking::Trucking.import(
+          @all_trucking_truckings,
+          on_duplicate_key_update: %i(rates fees),
+          batch_size: 1000
+        )
+        ::Trucking::Location.import(
+          @all_trucking_locations,
+          on_duplicate_key_update: %i(location_id city_name zipcode),
+          batch_size: 1000
+        )
       end
 
       def load_zones # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
@@ -195,7 +198,11 @@ module Trucking
             range = row_data[2].delete(' ').split('-')
             @zip_char_length ||= range[0].length
             zones[zone_name] << if identifier_type == 'distance' && identifier_modifier == 'return'
-                                  { min: (range[0].to_i / 2.0).ceil, max: (range[1].to_i / 2.0).ceil, country: row_data[3].strip }
+                                  { 
+                                    min: (range[0].to_i / 2.0).ceil,
+                                    max: (range[1].to_i / 2.0).ceil,
+                                    country: row_data[3].strip
+                                  }
                                 else
                                   { min: range[0].to_i, max: range[1].to_i, country: row_data[3].strip }
                                 end
@@ -277,7 +284,7 @@ module Trucking
         )
       end
 
-      def load_fees_and_charges # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def load_fees_and_charges # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
         parse_fees_sheet.each do |row| # rubocop:disable Metrics/BlockLength
           fee_row_key = "#{row[:fee_code]}_#{row[:truck_type]}_#{row[:direction]}"
           case row[:rate_basis]
@@ -437,31 +444,7 @@ module Trucking
         modifier_position_objs
       end
 
-      def create_trucking_rate(meta)
-        @trucking_rate_scope = Scope.find_or_create_by(
-          carriage: meta[:direction] == 'import' ? 'on' : 'pre',
-          cargo_class: meta[:cargo_class],
-          load_type: meta[:load_type] == 'container' ? 'container' : 'cargo_item',
-          courier_id: find_or_create_courier(meta[:courier]).id,
-          truck_type: !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type]
-        )
-        Rate.new(
-          load_meterage: {
-            ratio: meta[:load_meterage_ratio],
-            height_limit: meta[:load_meterage_height],
-            area_limit: meta[:load_meterage_area]
-          },
-          rates: {},
-          fees: {},
-          cbm_ratio: meta[:cbm_ratio],
-          modifier: meta[:scale],
-          tenant_id: tenant.id,
-          identifier_modifier: identifier_modifier,
-          scope: @trucking_rate_scope
-        )
-      end
-
-      def create_trucking(meta)
+      def create_trucking(meta) # rubocop:disable Metrics/AbcSize
         user_id = meta[:user_email] ? User.find_by(tenant_id: @tenant.id, email: meta[:user_email])&.id : nil
         {
           load_meterage: {
@@ -485,7 +468,7 @@ module Trucking
         }
       end
 
-      def trucking_rates(weight_min_row, val, meta, row_min_value, _row_zone_name, m_index, mod_key) # rubocop:disable Metrics/PerceivedComplexity, Metrics/ParameterLists
+      def trucking_rates(weight_min_row, val, meta, row_min_value, _row_zone_name, m_index, mod_key) # rubocop:disable Metrics/PerceivedComplexity, Metrics/ParameterLists, Metrics/CyclomaticComplexity
         val *= 2 if identifier_type == 'distance' && identifier_modifier == 'return' && mod_key == 'km'
         w_min = weight_min_row[m_index] || 0
         r_min = row_min_value || 0
@@ -561,68 +544,7 @@ module Trucking
         end
       end
 
-      def build_td_query(single_ident_values, single_ident_values_and_country)
-        identifier_cast = case identifier_type
-                          when 'location_id'
-                            '::uuid'
-                          when 'distance'
-                            '::integer'
-                          else
-                            ''
-                          end
-
-        <<-SQL
-          WITH
-            existing_identifiers AS (
-              SELECT id, #{identifier_type}, country_code FROM trucking_locations
-              WHERE trucking_locations.#{identifier_type} IN ('#{single_ident_values.join("','")}')
-                AND trucking_locations.country_code::text = '#{single_ident_values_and_country.first[:country]}'
-            ),
-            inserted_td_ids AS (
-              INSERT INTO trucking_locations(#{identifier_type}, country_code, created_at, updated_at)
-                -- insert non-existent trucking_locations
-                SELECT ident_value#{identifier_cast}, country_code::text, cr_at, up_at
-                FROM (VALUES #{identity_country(single_ident_values_and_country)})
-                  AS t(ident_value, country_code, cr_at, up_at)
-                WHERE ident_value::text NOT IN (
-                  SELECT #{identifier_type}::text
-                  FROM existing_identifiers
-                  WHERE country_code::text = '#{single_ident_values_and_country.first[:country]}'
-                )
-              RETURNING id
-            )
-          SELECT id FROM inserted_td_ids
-          UNION
-          SELECT id FROM existing_identifiers
-        SQL
-      end
-
-      def build_insert_query(tp, td_ids)
-        tp_names = Rate.attribute_names.reject { |k| k == 'id' }
-        tp_insertable = tp.to_postgres_array(tp_names)
-
-        <<-SQL
-          WITH
-            td_ids   AS (SELECT id from trucking_locations WHERE id IN #{string_sql_format(td_ids)}),
-            hub_ids  AS (VALUES(#{@hub.id})),
-            t_stamps AS (VALUES(current_timestamp)),
-            tp_ids AS (
-              INSERT INTO trucking_rates(#{tp_names.sort.join(', ')})
-                VALUES #{tp_insertable.sql_format}
-              RETURNING id
-            )
-          INSERT INTO trucking_truckings(hub_id, rate_id, location_id, created_at, updated_at)
-            (
-              SELECT * FROM hub_ids
-              CROSS JOIN tp_ids
-              CROSS JOIN td_ids
-              CROSS JOIN t_stamps AS created_ats
-              CROSS JOIN t_stamps AS updated_ats
-            );
-        SQL
-      end
-
-      def determine_identifier_type_and_modifier(identifier_type) # rubocop:disable Metrics/PerceivedComplexity
+      def determine_identifier_type_and_modifier(identifier_type) # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
         if identifier_type == 'CITY'
           'location_id'
         elsif identifier_type == 'POSTAL_CODE'
@@ -650,7 +572,7 @@ module Trucking
         meta.deep_symbolize_keys!
       end
 
-      def find_geometry(idents_and_country) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def find_geometry(idents_and_country) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
         geometry = if @identifier_modifier == 'postal_code'
                      Locations::Location.find_by(
                        name: idents_and_country[:ident].upcase,
@@ -684,10 +606,6 @@ module Trucking
         end
 
         geometry
-      end
-
-      def string_sql_format(array)
-        "(#{array.map { |x| "'#{x}'" }.join(', ')})"
       end
     end
   end

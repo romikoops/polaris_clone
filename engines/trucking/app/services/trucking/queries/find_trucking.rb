@@ -2,10 +2,10 @@
 
 module Trucking
   module Queries
-    class FindTrucking
+    class FindTrucking # rubocop:disable Metrics/ClassLength
       MANDATORY_ARGS = %i(load_type tenant_id carriage).freeze
 
-      def initialize(args = {})
+      def initialize(args = {}) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         argument_errors(args)
 
         @klass = args[:klass]

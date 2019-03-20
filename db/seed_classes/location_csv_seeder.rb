@@ -33,7 +33,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def self.load_map_data(url)
+  def self.load_map_data(url) # rubocop:disable Metrics/AbcSize
     LocationCsvSeeder.get_s3_file(url)
     count = 0
     Zlib::GzipReader.open(TMP_PATH) do |gz|

@@ -43,7 +43,7 @@ class TruckingAvailabilityController < ApplicationController
     }
     ## New Code
     # Trucking::Trucking.find_by_filter(args)
-    
+
     ## Legacy Code
     Trucking::Rate.find_by_filter(args)
   end

@@ -1,12 +1,16 @@
+# frozen_string_literal: true
+
 module Trucking
   module Queries
     class FindByHubIds
       attr_reader :result
 
       def initialize(args = {})
+        argument_errors(args)
+
         @klass = args[:klass]
         @hub_ids = args[:hub_ids]
-        @filters = args[:filters]
+        @filters = args[:filters] || {}
       end
 
       def perform
@@ -15,9 +19,13 @@ module Trucking
         query = query.where(truck_type: @filters[:truck_type]) if @filters[:truck_type]
         query = query.where(carriage: @filters[:carriage]) if @filters[:carriage]
         if @filters[:destination]
-          query = query.joins(:location).where("trucking_locations.city_name ILIKE ?", "#{@filters[:destination]}%")
+          query = query.joins(:location).where('trucking_locations.city_name ILIKE ?', "#{@filters[:destination]}%")
         end
         @result = query
+      end
+
+      def argument_errors(args)
+        raise ArgumentError, 'Must provide hub_ids or hub_id' if args[:hub_ids].empty?
       end
     end
   end
