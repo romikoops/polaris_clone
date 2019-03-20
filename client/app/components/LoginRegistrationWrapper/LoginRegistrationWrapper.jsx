@@ -48,7 +48,6 @@ class LoginRegistrationWrapper extends PureComponent {
       <hr className={styles.toggle_prompt_separator} />,
       <div className={togglePromptClasses}>
         <RoundButton
-          classNames="ccb_signin"
           text={this.togglePrompt[compName].linkText}
           handleNext={() => this.toggleComp(compName)}
           theme={compProps.theme}
