@@ -12,6 +12,8 @@ module OfferCalculatorService
       raise ApplicationError::NoValidPricings if schedules_by_pricings.empty?
 
       detailed_schedules = schedules_by_pricings.map do |grouped_result|
+        next if grouped_result[:schedules].empty?
+
         grand_total_charge = ChargeCalculator.new(
           trucking_data: trucking_data,
           shipment: @shipment,
