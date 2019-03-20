@@ -62,22 +62,25 @@ class CargoSection extends React.PureComponent {
     bookingProcessDispatch.addCargoUnit(this.getNewUnit())
   }
 
-  handleChangeCollectiveWeight (index) {
+  handleChangeCollectiveWeight (index, prop, newValue) {
     const { shipment } = this.props
     const { cargoUnits } = shipment
     const { quantity, collectiveWeight } = cargoUnits[index]
-
     const { bookingProcessDispatch } = this.props
-    bookingProcessDispatch.updateCargoUnit({
-      index: Number(index),
-      prop: 'payloadInKg',
-      newValue: collectiveWeight / quantity
-    })
-    bookingProcessDispatch.updateCargoUnit({
-      index: Number(index),
-      prop: 'collectiveWeight',
-      newValue: collectiveWeight
-    })
+
+    if (prop === 'collectiveWeight') {
+      bookingProcessDispatch.updateCargoUnit({
+        index: Number(index),
+        prop: 'payloadInKg',
+        newValue: newValue / quantity
+      })
+    } else {
+      bookingProcessDispatch.updateCargoUnit({
+        index: Number(index),
+        prop: 'payloadInKg',
+        newValue: collectiveWeight / newValue
+      })
+    }
   }
 
   handleChangeCargoUnitInput (e) {
@@ -88,16 +91,15 @@ class CargoSection extends React.PureComponent {
     const [index, prop] = name.split('-')
     const newValue = Number(value)
 
+    if (['collectiveWeight', 'quantity'].includes(prop) && get(scope, ['consolidation', 'cargo', 'frontend'], false)) {
+      this.handleChangeCollectiveWeight(index, prop, newValue)
+    }
     const { bookingProcessDispatch } = this.props
     bookingProcessDispatch.updateCargoUnit({
       index: Number(index),
       prop,
       newValue
     })
-
-    if (['collectiveWeight', 'quantity'].includes(prop) && get(scope, ['consolidation', 'cargo', 'frontend'], false)) {
-      this.handleChangeCollectiveWeight(index)
-    }
   }
 
   handleChangeCargoUnitCheckbox (checked, e) {
