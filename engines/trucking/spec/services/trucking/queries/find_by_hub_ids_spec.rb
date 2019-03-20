@@ -59,7 +59,7 @@ RSpec.describe Trucking::Queries::FindByHubIds do
 
             expect(truckings.first['zipCode']).to eq('30001')
             expect(truckings.first['countryCode']).to eq('SE')
-            expect(truckings.first['truckingPricing']).to include(target.as_json)
+            expect(truckings.first['truckingPricing'].except('created_at', 'updated_at')).to include(target.as_json.except('created_at', 'updated_at'))
           end
         end
 
@@ -75,7 +75,7 @@ RSpec.describe Trucking::Queries::FindByHubIds do
 
               expect(truckings.first['city']).to eq('Gothenburg')
               expect(truckings.first['countryCode']).to eq('SE')
-              expect(truckings.first['truckingPricing']).to include(target.as_json)
+              expect(truckings.first['truckingPricing'].except('created_at', 'updated_at')).to include(target.as_json.except('created_at', 'updated_at'))
             end
           end
         end

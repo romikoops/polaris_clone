@@ -1,55 +1,23 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import Toggle from 'react-toggle'
 import GmapsWrapper from '../../hocs/GmapsWrapper'
 import '../../styles/react-toggle.scss'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 import {
-  history,
-  capitalize,
-  nameToDisplay,
-  gradientGenerator
+  history
 } from '../../helpers'
-import { TruckingDisplayPanel } from './AdminAuxilliaries'
-import { NamedSelect } from '../NamedSelect/NamedSelect'
 import DocumentsSelector from '../Documents/Selector'
-import TruckingCoverage from './Trucking/Coverage'
+import TruckingCoverage from './Trucking/Coverage/index'
 import TruckingTable from './Trucking/Table'
 import { documentActions } from '../../actions'
 import AdminUploadsSuccess from './Uploads/Success'
 import DocumentsDownloader from '../Documents/Downloader'
-import { cargoClassOptions } from '../../constants'
 import GreyBox from '../GreyBox/GreyBox'
-import SideOptionsBox from './SideOptions/SideOptionsBox'
-import CollapsingBar from '../CollapsingBar/CollapsingBar'
 
-function getTruckingPricingKey (truckingPricing) {
-  if (truckingPricing.zipcode) {
-    const joinedArrays = truckingPricing.zipcode.map(zArray => zArray.join(' - '))
-    const endResult = joinedArrays.join(', ')
-
-    return endResult
-  }
-  if (truckingPricing.city) {
-    // const joinedArrays = truckingPricing.city.map(zArray => zArray.join(' - '))
-    // const endResult = joinedArrays.join(', ')
-
-    return truckingPricing.city
-  }
-  if (truckingPricing.distance) {
-    const joinedArrays = truckingPricing.distance.map(zArray => zArray.join(' - '))
-    const endResult = joinedArrays.join(', ')
-
-    return endResult
-  }
-
-  return ''
-}
 
 export class AdminTruckingView extends Component {
   static backToIndex () {
@@ -59,8 +27,7 @@ export class AdminTruckingView extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      targetTruckingPricing: false,
-      expander: {}
+      targetTruckingPricing: false
     }
     this.setTargetTruckingId = this.setTargetTruckingId.bind(this)
   }
@@ -74,15 +41,6 @@ export class AdminTruckingView extends Component {
     this.setState({ targetTruckingPricing: id })
   }
 
-  toggleExpander (key) {
-    this.setState({
-      expander: {
-        ...this.state.expander,
-        [key]: !this.state.expander[key]
-      }
-    })
-  }
-
   handleUpload (file, dir, type) {
     const { adminDispatch, truckingDetail } = this.props
     const { hub } = truckingDetail
@@ -90,78 +48,14 @@ export class AdminTruckingView extends Component {
     adminDispatch.uploadTrucking(url, file, dir)
   }
 
-  handleLoadTypeToggle (value) {
-    this.setState({ loadTypeBool: !this.state.loadTypeBool }, () => {
-      if (this.state.loadTypeBool) {
-        this.setState({ truckBool: false })
-      }
-      this.handleSearchChange({ target: { value: '' } })
-    })
-  }
-
-  handleTruckToggle (value) {
-    this.setState({ truckBool: !this.state.truckBool }, () => {
-      this.handleSearchChange({ target: { value: '' } })
-    })
-  }
-
-  handleDirectionToggle (value) {
-    this.setState({ directionBool: !this.state.directionBool }, () => {
-      this.handleSearchChange({ target: { value: '' } })
-    })
-  }
-
-  handleCargoClass (selection) {
-    this.setState({ cargoClass: selection }, () => {
-      this.handleSearchChange({ target: { value: '' } })
-    })
-  }
-
-  backToList () {
-    this.setState({ currentTruckingPricing: false })
-  }
-
   closeSuccessDialog () {
     const { documentDispatch } = this.props
     documentDispatch.closeViewer()
   }
 
-  handleSearchChange (event) {
-    if (event.target.value === '') {
-      this.setState({
-        filteredTruckingPricings:
-        this.filterTruckingPricingsByType(this.props.truckingDetail.truckingPricings)
-      })
-
-      return
-    }
-    const search = (key) => {
-      const options = {
-        shouldSort: true,
-        tokenize: true,
-        threshold: 0.2,
-        location: 0,
-        distance: 50,
-        maxPatternLength: 32,
-        minMatchCharLength: 5,
-        keys: key
-      }
-      const fuse = new Fuse(this.props.truckingDetail.truckingPricings, options)
-
-      return fuse.search(event.target.value)
-    }
-
-    const filteredTruckingPricings = search(['zipcode', 'city', 'distance'])
-    // ;
-    this.setState({
-      filteredTruckingPricings: this.filterTruckingPricingsByType(filteredTruckingPricings),
-      searchFilter: event.target.value
-    })
-  }
-
   render () {
     const {
-      t, theme, truckingDetail, adminDispatch, document
+      t, theme, truckingDetail, document
     } = this.props
     if (!truckingDetail) {
       return ''
