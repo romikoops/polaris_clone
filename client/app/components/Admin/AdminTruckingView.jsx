@@ -1,23 +1,20 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import Fuse from 'fuse.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import GmapsWrapper from '../../hocs/GmapsWrapper'
 import '../../styles/react-toggle.scss'
-import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 import {
   history
 } from '../../helpers'
 import DocumentsSelector from '../Documents/Selector'
-import TruckingCoverage from './Trucking/Coverage/index'
+import TruckingCoverage from './Trucking/Coverage'
 import TruckingTable from './Trucking/Table'
 import { documentActions } from '../../actions'
 import AdminUploadsSuccess from './Uploads/Success'
 import DocumentsDownloader from '../Documents/Downloader'
 import GreyBox from '../GreyBox/GreyBox'
-
 
 export class AdminTruckingView extends Component {
   static backToIndex () {
@@ -163,24 +160,9 @@ export class AdminTruckingView extends Component {
           </div>
           {styleTagJSX}
         </div>
-       
       </div>
     )
   }
-}
-AdminTruckingView.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  adminDispatch: PropTypes.shape({
-    uploadTrucking: PropTypes.func
-  }).isRequired,
-  truckingDetail: PropTypes.shape({
-    truckingHub: PropTypes.object,
-    truckingPricings: PropTypes.array,
-    pricing: PropTypes.object
-  }),
-  document: PropTypes.objectOf(PropTypes.any),
-  documentDispatch: PropTypes.objectOf(PropTypes.func)
 }
 
 AdminTruckingView.defaultProps = {
