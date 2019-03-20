@@ -6,6 +6,9 @@ class Country < Legacy::Country
   Geoplace = Struct.new(:name, :code)
 
   def self.geo_find_by_name(name)
+    db_country = Country.find_by(name: name)
+    return db_country if db_country
+
     geocoder_results = Geocoder.search(country: name)
     return nil if geocoder_results.empty?
 

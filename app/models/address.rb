@@ -73,7 +73,10 @@ class Address < Legacy::Address
   end
 
   def self.create_from_raw_params!(raw_address_params)
-    create!(address_params(raw_address_params))
+    address = create!(address_params(raw_address_params))
+    address.reverse_geocode if address.country.nil?
+    address.save!
+    address
   end
 
   def primary_for?(user)
