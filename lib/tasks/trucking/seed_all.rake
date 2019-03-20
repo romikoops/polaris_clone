@@ -133,42 +133,61 @@ namespace :trucking do
       #     urls: ['data/schryver/schryver__trucking_ftl__hamburg_port.xlsx']
       #   }
       # ],
-      demo: [
+      trucking: [
         {
-          hub: 'Gothenburg Port',
+          hub: 'Hamburg Depot',
+          urls: ['data/speedtrans/speedtrans__trucking_ltl__hamburg_port.xlsx',
+            'data/greencarrier/greencarrier__trucking_ftl__gothenburg_port.xlsx',]
+        },
+        {
+          hub: 'Aschaffenburg Depot',
+          urls: ['data/speedtrans/speedtrans__trucking_ltl__hamburg_port.xlsx',
+            'data/greencarrier/greencarrier__trucking_ftl__gothenburg_port.xlsx',]
+        },
+        {
+          hub: 'Gothenburg Depot',
           urls: [
             'data/greencarrier/greencarrier__trucking_ftl__gothenburg_port.xlsx',
             'data/greencarrier/greencarrier__trucking_ltl__gothenburg_port.xlsx'
           ]
         },
-        {
-          hub: 'Shanghai Port',
-          urls: [
-            'data/greencarrier/greencarrier__trucking_ftl__shanghai_port.xlsx',
-            'data/greencarrier/greencarrier__trucking_ltl__shanghai_port.xlsx'
-          ]
-        },
-        {
-          hub: 'Ipswich Port',
-          urls: ['data/greencarrier/greencarrier__trucking_ftl__ipswich_port.xlsx']
-        },
-        {
-          hub: 'Gothenburg Airport',
-          urls: ['data/greencarrier/greencarrier__trucking_ltl__gothenburg_airport.xlsx']
-        },
-        {
-          hub: 'Stockholm Airport',
-          urls: ['data/greencarrier/greencarrier__trucking_ltl__stockholm_airport.xlsx']
-        },
-        {
-          hub: 'Malmo Airport',
-          urls: ['data/greencarrier/greencarrier__trucking_ltl__malmo_airport.xlsx']
-        },
-        {
-          hub: 'Hamburg Port',
-          urls: ['data/speedtrans/speedtrans__trucking_ltl__hamburg_port.xlsx']
-        }
       ],
+      demo: [
+        # {
+        #   hub: 'Gothenburg Port',
+        #   urls: [
+        #     'data/greencarrier/greencarrier__trucking_ftl__gothenburg_port.xlsx',
+        #     'data/greencarrier/greencarrier__trucking_ltl__gothenburg_port.xlsx'
+        #   ]
+        # },
+        # {
+        #   hub: 'Shanghai Port',
+        #   urls: [
+        #     'data/greencarrier/greencarrier__trucking_ftl__shanghai_port.xlsx',
+        #     'data/greencarrier/greencarrier__trucking_ltl__shanghai_port.xlsx'
+        #   ]
+        # },
+        # {
+        #   hub: 'Ipswich Port',
+        #   urls: ['data/greencarrier/greencarrier__trucking_ftl__ipswich_port.xlsx']
+        # },
+        # {
+        #   hub: 'Gothenburg Airport',
+        #   urls: ['data/greencarrier/greencarrier__trucking_ltl__gothenburg_airport.xlsx']
+        # },
+        # {
+        #   hub: 'Stockholm Airport',
+        #   urls: ['data/greencarrier/greencarrier__trucking_ltl__stockholm_airport.xlsx']
+        # },
+        # {
+        #   hub: 'Malmo Airport',
+        #   urls: ['data/greencarrier/greencarrier__trucking_ltl__malmo_airport.xlsx']
+        # },
+        # {
+        #   hub: 'Hamburg Port',
+        #   urls: ['data/speedtrans/speedtrans__trucking_ltl__hamburg_port.xlsx']
+        # }
+      ]
     }
 
     targets.each do |subdomain, values|

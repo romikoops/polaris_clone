@@ -151,7 +151,7 @@ class CardPricingIndex extends Component {
           return { cargoItem: 'LCL', container: 'FCL' }
         case 'rail':
           return { cargoItem: 'LCL', container: 'FCL' }
-        case 'trucking':
+        case 'truck':
           return { cargoItem: 'LTL', container: 'FTL' }
         default:
           return {}
