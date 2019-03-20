@@ -9,11 +9,11 @@ subdomains = %w(speedtrans)
 subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
-  shipper = tenant.users.shipper.where(currency: 'GBP').first
+  shipper = tenant.users.shipper.first
   DataValidator::PricingValidator.new(
     tenant: tenant.id,
     user: shipper,
-    key: 'data/speedtrans/speedtrans_pricing_test_19.xlsx',
+    key: 'data/speedtrans/speedtrans_pricing_test_19_full.xlsx',
     load_type: 'lcl'
   ).perform
 
