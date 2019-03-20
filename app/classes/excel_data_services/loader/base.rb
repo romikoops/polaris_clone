@@ -16,7 +16,7 @@ module ExcelDataServices
 
       def determine_klass_identifier(specific_klass_identifier)
         case specific_klass_identifier
-        when /(Ocean|Air).*/
+        when /(Ocean|Air|Truck).*/
           'Pricing'
         when /LocalCharges.*/
           'LocalCharges'
