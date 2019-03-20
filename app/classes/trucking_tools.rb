@@ -255,7 +255,6 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
               consolidate_cargo(cargos)
             end
     determine_load_meterage(trucking_pricing, cargo_object, cargo)
-    # calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
   end
 
   def consolidate_cargo(cargo_array) # rubocop:disable Metrics/AbcSize
@@ -270,7 +269,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
       num_of_items: 0,
       quantity: 1
     }
-    
+
     cargo_array.each do |cargo_unit|
       cargo[:id] += "-#{cargo_unit.id}"
       cargo[:dimension_x] += (cargo_unit.dimension_x * cargo_unit.quantity)
@@ -282,7 +281,6 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
       cargo[:num_of_items] += cargo_unit.quantity
       cargo[:stackable] = true
     end
-    # 
 
     cargo
   end
@@ -295,7 +293,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
       total_area =  cargos.sum { |cargo| cargo.dimension_x * cargo.dimension_y * cargo.quantity }
       non_stackable = cargos.select(&:stackable).empty?
     end
-    # 
+
     load_area_limit = trucking_pricing.load_meterage['area_limit'] || DEFAULT_MAX
     if total_area > load_area_limit || non_stackable
       cargos.each do |cargo|
@@ -424,7 +422,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
     cbm_weight = trucking_cbm_weight(trucking_pricing, cargo)
     raw_payload = trucking_payload_weight(cargo)
     trucking_chargeable_weight = [load_meter_weight, raw_payload, cbm_weight].max
-    
+
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
     cargo_object['non_stackable']['volume'] += cargo_volume(cargo) * cargo_quantity(cargo)
     cargo_object['non_stackable']['number_of_items'] += cargo_quantity(cargo)
@@ -436,7 +434,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
     cbm_weight = trucking_cbm_weight(trucking_pricing, cargo)
     raw_payload = trucking_payload_weight(cargo)
     trucking_chargeable_weight = [cbm_weight, raw_payload].max
-    
+
     cargo_object['stackable']['weight'] += trucking_chargeable_weight
     cargo_object['stackable']['volume'] += cargo_volume(cargo)
     cargo_object['stackable']['number_of_items'] += cargo_quantity(cargo)

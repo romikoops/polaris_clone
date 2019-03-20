@@ -15,7 +15,7 @@ module DocumentService
       @workbook        = create_workbook(@dir)
     end
 
-    def perform
+    def perform # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
       @data.each do |page, column_hash|
         @row = 0
         next if column_hash.values.empty?
@@ -44,9 +44,9 @@ module DocumentService
           @row += 1
         end
       end
-      begin
-        @workbook.close
-      rescue StandardError
+
+      @workbook.close
+
       end
       write_to_aws(dir, tenant, filename, 'pricings_sheet')
     end
@@ -72,7 +72,7 @@ module DocumentService
       end
     end
 
-    def write_fees(target, column_hash)
+    def write_fees(target, column_hash) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       top_row = [target.upcase]
       sym_key = target == 'freight' ? :cargo : target.to_sym
       column_hash.values.each do |c_hash|
@@ -83,7 +83,7 @@ module DocumentService
       @worksheet = write_to_sheet(@worksheet, @row, 0, top_row)
       @row += 1
       default_fees = column_hash.values.first[:expected][sym_key]
-      
+
       default_fees.keys.each do |fee_key|
         if fee_key.to_sym != :total && sym_key != :cargo
           fee_row = ["-#{fee_key}"]
