@@ -9,7 +9,6 @@ module OfferCalculatorService
                                                 shipment: @shipment,
                                                 user: user).compact
 
-      binding.pry if schedules_by_pricings.empty?
       raise ApplicationError::NoValidPricings if schedules_by_pricings.empty?
 
       detailed_schedules = schedules_by_pricings.map do |grouped_result|
