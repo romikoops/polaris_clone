@@ -42,7 +42,7 @@ import {
 } from '../../classNames'
 import CargoContainerGroup from '../Cargo/Container/Group'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
-import GreyBox from '../GreyBox/GreyBox';
+import GreyBox from '../GreyBox/GreyBox'
 
 const AFTER_CONTAINER =
   `${WRAP_ROW('NONE')} ${ALIGN_CENTER_START} content_width_booking`
@@ -72,7 +72,7 @@ const SUBTITLE_NORMAL = `${styles.sec_subtitle_text_normal} flex-none`
 const SUMM_TOP = `${styles.b_summ_top} ${ROW(100)} ${ALIGN_AROUND_STRETCH}`
 const TOTAL_ROW = `${styles.total_row} ${WRAP_ROW(100)} ${ALIGN_AROUND_CENTER}`
 
-const acceptStyle = { marginBottom: '15px' }
+const acceptStyle = { marginBottom: '15px', paddingRight: '15px' }
 
 export function calcFareTotals (feeHash) {
   if (!feeHash) return 0
@@ -514,7 +514,7 @@ export class BookingConfirmation extends Component {
             </label>
           </div>
 
-          <div className="layout-row layout-align-start-end flex-33 offset-20" style={acceptStyle}>
+          <div className="layout-row layout-align-end-end flex-100" style={acceptStyle}>
             {acceptTerms ? acceptedBtn : nonAcceptedBtn}
           </div>
         </div>

@@ -1310,10 +1310,11 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
             </label>
           </div>
           <div
-            className="layout-row layout-align-start-end flex-33 offset-20"
+            className="layout-row layout-align-end-end flex-100"
             style={
               Object {
                 "marginBottom": "15px",
+                "paddingRight": "15px",
               }
             }
           >
@@ -2680,10 +2681,11 @@ exports[`shallow render 1`] = `
             </label>
           </div>
           <div
-            className="layout-row layout-align-start-end flex-33 offset-20"
+            className="layout-row layout-align-end-end flex-100"
             style={
               Object {
                 "marginBottom": "15px",
+                "paddingRight": "15px",
               }
             }
           >
@@ -4034,10 +4036,11 @@ exports[`shipment.cargo_notes is falsy 1`] = `
             </label>
           </div>
           <div
-            className="layout-row layout-align-start-end flex-33 offset-20"
+            className="layout-row layout-align-end-end flex-100"
             style={
               Object {
                 "marginBottom": "15px",
+                "paddingRight": "15px",
               }
             }
           >
@@ -5388,10 +5391,11 @@ exports[`shipment.eori is falsy 1`] = `
             </label>
           </div>
           <div
-            className="layout-row layout-align-start-end flex-33 offset-20"
+            className="layout-row layout-align-end-end flex-100"
             style={
               Object {
                 "marginBottom": "15px",
+                "paddingRight": "15px",
               }
             }
           >
@@ -6742,10 +6746,11 @@ exports[`shipment.incoterm_text is falsy 1`] = `
             </label>
           </div>
           <div
-            className="layout-row layout-align-start-end flex-33 offset-20"
+            className="layout-row layout-align-end-end flex-100"
             style={
               Object {
                 "marginBottom": "15px",
+                "paddingRight": "15px",
               }
             }
           >
@@ -8096,10 +8101,11 @@ exports[`shipment.notes is falsy 1`] = `
             </label>
           </div>
           <div
-            className="layout-row layout-align-start-end flex-33 offset-20"
+            className="layout-row layout-align-end-end flex-100"
             style={
               Object {
                 "marginBottom": "15px",
+                "paddingRight": "15px",
               }
             }
           >
@@ -9444,10 +9450,11 @@ exports[`shipment.total_goods_value is falsy 1`] = `
             </label>
           </div>
           <div
-            className="layout-row layout-align-start-end flex-33 offset-20"
+            className="layout-row layout-align-end-end flex-100"
             style={
               Object {
                 "marginBottom": "15px",
+                "paddingRight": "15px",
               }
             }
           >
@@ -10682,10 +10689,11 @@ exports[`shipmentData.notifyees is falsy 1`] = `
             </label>
           </div>
           <div
-            className="layout-row layout-align-start-end flex-33 offset-20"
+            className="layout-row layout-align-end-end flex-100"
             style={
               Object {
                 "marginBottom": "15px",
+                "paddingRight": "15px",
               }
             }
           >
@@ -12058,10 +12066,11 @@ exports[`state.acceptTerms is true 1`] = `
             </label>
           </div>
           <div
-            className="layout-row layout-align-start-end flex-33 offset-20"
+            className="layout-row layout-align-end-end flex-100"
             style={
               Object {
                 "marginBottom": "15px",
+                "paddingRight": "15px",
               }
             }
           >
@@ -13428,10 +13437,11 @@ exports[`tenant.scope.terms.length is 0 1`] = `
             </label>
           </div>
           <div
-            className="layout-row layout-align-start-end flex-33 offset-20"
+            className="layout-row layout-align-end-end flex-100"
             style={
               Object {
                 "marginBottom": "15px",
+                "paddingRight": "15px",
               }
             }
           >
@@ -14749,10 +14759,11 @@ exports[`theme is falsy 1`] = `
             </label>
           </div>
           <div
-            className="layout-row layout-align-start-end flex-33 offset-20"
+            className="layout-row layout-align-end-end flex-100"
             style={
               Object {
                 "marginBottom": "15px",
+                "paddingRight": "15px",
               }
             }
           >

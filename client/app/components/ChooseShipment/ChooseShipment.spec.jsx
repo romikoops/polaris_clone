@@ -12,6 +12,9 @@ const propsBase = {
   theme,
   messages: ['FOO', 'BAR'],
   selectLoadType: identity,
+  bookingProcessDispatch: {
+    resetStore: x => x 
+  },
   scope: {
     modes_of_transport: []
   }

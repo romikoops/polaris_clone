@@ -33,6 +33,7 @@ class ChooseShipment extends Component {
   componentDidMount () {
     window.scrollTo(0, 0)
     this.determineAvailableOptions()
+    this.props.bookingProcessDispatch.resetStore()
   }
 
   setLoadType (loadType) {

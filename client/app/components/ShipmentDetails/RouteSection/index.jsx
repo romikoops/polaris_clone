@@ -167,7 +167,7 @@ class RouteSection extends React.PureComponent {
   handleTruckingDetailsChange (e) {
     const { shipment, bookingProcessDispatch } = this.props
     const [carriage, truckType] = e.target.id.split('-')
-    
+
     bookingProcessDispatch.updateShipment(
       'trucking',
       {
@@ -294,7 +294,7 @@ class RouteSection extends React.PureComponent {
           this.updateTruckingAvailability(target, 'animate_available')
           setTimeout(() => this.updateTruckingAvailability(target, 'available'), 1000)
           setTimeout(() => this.updateCollapsedAddressFields(target, true), 5000)
-
+          this.handleCarriageChange({ target: { name: `${prefix}Carriage`, checked: true } }, { force: true })
           bookingProcessDispatch.updateShipment(target, { ...address, hubIds })
 
           setMarker(target, { lat: address.latitude, lng: address.longitude, geojson: address.geojson })

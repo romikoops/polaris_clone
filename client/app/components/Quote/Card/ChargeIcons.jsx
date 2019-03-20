@@ -2,7 +2,6 @@ import React from 'react'
 import ReactTooltip from 'react-tooltip'
 import { v4 as uuidV4 } from 'uuid'
 import styles from './index.scss'
-import PropTypes from '../../../prop-types'
 import { gradientTextGenerator, switchIcon } from '../../../helpers'
 import { tooltips } from '../../../constants'
 
@@ -47,7 +46,7 @@ export function ChargeIcons ({
     <div className={`${styles.fee_tile} flex-none layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
         <i
-          className={`fa fa-truck clip flex-none flip_icon_horizontal ${styles.no_flip}`}
+          className="fa fa-truck clip flex-none flip_icon_horizontal"
           style={onCarriageStyle}
           data-tip={tooltips.charge_icons.on_carriage}
           data-for={tooltipId}
@@ -93,21 +92,15 @@ export function ChargeIcons ({
 
   return (
     <div className={`flex-100 layout-row layout-align-end-start ${styles.incoterm_wrapper}`}>
-      {preCarriageFeesTile} {originFeesTile}
-      {freightFeesTile} {destinationFeesTile}
+      {preCarriageFeesTile} 
+{' '}
+{originFeesTile}
+      {freightFeesTile} 
+{' '}
+{destinationFeesTile}
       {onCarriageFeesTile}
     </div>
   )
-}
-
-ChargeIcons.propTypes = {
-  theme: PropTypes.theme,
-  mot: PropTypes.string,
-  onCarriage: PropTypes.bool,
-  preCarriage: PropTypes.bool,
-  originFees: PropTypes.bool,
-  destinationFees: PropTypes.bool,
-  tenant: PropTypes.tenant
 }
 
 ChargeIcons.defaultProps = {
