@@ -295,7 +295,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
       total_area =  cargos.sum { |cargo| cargo.dimension_x * cargo.dimension_y * cargo.quantity }
       non_stackable = cargos.select(&:stackable).empty?
     end
-    # binding.pry
+    # 
     load_area_limit = trucking_pricing.load_meterage['area_limit'] || DEFAULT_MAX
     if total_area > load_area_limit || non_stackable
       cargos.each do |cargo|
@@ -424,7 +424,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
     cbm_weight = trucking_cbm_weight(trucking_pricing, cargo)
     raw_payload = trucking_payload_weight(cargo)
     trucking_chargeable_weight = [load_meter_weight, raw_payload, cbm_weight].max
-    binding.pry
+    
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
     cargo_object['non_stackable']['volume'] += cargo_volume(cargo) * cargo_quantity(cargo)
     cargo_object['non_stackable']['number_of_items'] += cargo_quantity(cargo)
@@ -436,7 +436,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
     cbm_weight = trucking_cbm_weight(trucking_pricing, cargo)
     raw_payload = trucking_payload_weight(cargo)
     trucking_chargeable_weight = [cbm_weight, raw_payload].max
-    binding.pry
+    
     cargo_object['stackable']['weight'] += trucking_chargeable_weight
     cargo_object['stackable']['volume'] += cargo_volume(cargo)
     cargo_object['stackable']['number_of_items'] += cargo_quantity(cargo)
