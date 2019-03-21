@@ -3,10 +3,11 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from '../../prop-types'
-import { AdminTruckingIndex, AdminTruckingView, AdminTruckingCreator } from "."
+import { AdminTruckingIndex, AdminTruckingCreator } from '.'
+import AdminTruckingView from './Trucking/AdminTruckingView'
 import { adminActions, appActions } from '../../actions'
 import { history } from '../../helpers'
-import GenericError from "../ErrorHandling/Generic"
+import GenericError from '../ErrorHandling/Generic'
 
 class AdminTrucking extends Component {
   static backToIndex () {
