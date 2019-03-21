@@ -19,14 +19,18 @@ module Trucking
       ::Trucking::Queries::FindTrucking.new(args.merge(klass: self)).perform
     end
 
-    def self.find_by_hub_id(hub_id, options = {})
-      find_by_hub_ids([hub_id], options)
+    def self.find_by_hub_id(hub_id:, options: {})
+      find_by_hub_ids(hub_ids: [hub_id], options: options)
     end
 
-    def self.find_by_hub_ids(hub_ids, options = {})
+    def self.find_by_hub_ids(hub_ids:, options: {})
       args = options.merge(hub_ids: hub_ids)
       result = ::Trucking::Queries::FindByHubIds.new(args.merge(klass: self)).perform
-      result.paginate(page: options[:page], per_page: options[:per_page] || 20)
+      if options[:paginate]
+        result = result.paginate(page: options[:page], per_page: options[:per_page] || 20)
+      end
+
+      result
     end
 
     # Instance Methods
@@ -49,7 +53,7 @@ module Trucking
       elsif location&.distance
         { 'distance' => location.distance }
       else
-        { 'city' => location&.location&.name }
+        { 'city' => location.city_name || location&.location&.name }
       end
     end
   end
@@ -78,4 +82,5 @@ end
 #  courier_id          :uuid
 #  truck_type          :string
 #  user_id             :integer
+#  parent_id           :uuid
 #

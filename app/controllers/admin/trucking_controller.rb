@@ -17,11 +17,13 @@ class Admin::TruckingController < Admin::AdminBaseController
       carriage: params[:direction]
     }
     results = Trucking::Trucking.find_by_hub_id(
-      params[:id],
-      paginate: true,
-      page: params[:page] || 1,
-      filters: filters,
-      per_page: params[:page_size]
+      hub_id: params[:id],
+      options: {
+        paginate: true,
+        page: params[:page] || 1,
+        filters: filters,
+        per_page: params[:page_size]
+      }
     )
     response_handler(
       hub: hub,

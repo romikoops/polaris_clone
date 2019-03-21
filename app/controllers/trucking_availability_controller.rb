@@ -42,9 +42,9 @@ class TruckingAvailabilityController < ApplicationController
       carriage: params[:carriage]
     }
     ## New Code
-    # Trucking::Trucking.find_by_filter(args)
+    Trucking::Trucking.find_by_filter(args)
 
     ## Legacy Code
-    Trucking::Rate.find_by_filter(args)
+    # Trucking::Rate.find_by_filter(args)
   end
 end

@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 2019_03_15_124654) do
+ActiveRecord::Schema.define(version: 2019_03_21_103026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -981,6 +980,7 @@ ActiveRecord::Schema.define(version: 2019_03_15_124654) do
     t.uuid "courier_id"
     t.string "truck_type"
     t.integer "user_id"
+    t.uuid "parent_id"
     t.index ["hub_id"], name: "index_trucking_truckings_on_hub_id"
     t.index ["location_id"], name: "index_trucking_truckings_on_location_id"
     t.index ["rate_id", "location_id", "hub_id"], name: "trucking_foreign_keys", unique: true

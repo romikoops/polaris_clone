@@ -211,7 +211,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
                             hub: hub,
                             location: FactoryBot.create(:trucking_location, :with_location))
 
-          expect(::Trucking::Trucking.find_by_hub_id(-1)).to eq([])
+          expect(::Trucking::Trucking.find_by_hub_id(hub_id: hub_id: -1)).to eq([])
         end
       end
 
@@ -220,7 +220,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
           trucking_location = FactoryBot.create(:trucking_location, zipcode: '30001')
           target = FactoryBot.create(:trucking_trucking, hub: hub, location: trucking_location)
 
-          truckings = ::Trucking::Trucking.find_by_hub_id(hub.id).map(&:as_index_result)
+          truckings = ::Trucking::Trucking.find_by_hub_id(hub_id: hub.id).map(&:as_index_result)
 
           expect(truckings.first['zipCode']).to eq('30001')
           expect(truckings.first['countryCode']).to eq('SE')
@@ -235,7 +235,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
                                        hub: hub,
                                        location: FactoryBot.create(:trucking_location, :with_location))
 
-            truckings = ::Trucking::Trucking.find_by_hub_id(hub.id).map(&:as_index_result)
+            truckings = ::Trucking::Trucking.find_by_hub_id(hub_id: hub.id).map(&:as_index_result)
 
             expect(truckings.first['city']).to eq('Gothenburg')
             expect(truckings.first['countryCode']).to eq('SE')

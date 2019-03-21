@@ -28,10 +28,10 @@ module OfferCalculatorService
         carriage: carriage
       }
       ## Legacy Code
-      Trucking::Rate.find_by_filter(args).pluck(:hub_id)
+      # Trucking::Rate.find_by_filter(args).pluck(:hub_id)
 
       ## New Code
-      # Trucking::Trucking.find_by_filter(args).pluck(:hub_id)
+      Trucking::Trucking.find_by_filter(args).pluck(:hub_id)
     end
   end
 end

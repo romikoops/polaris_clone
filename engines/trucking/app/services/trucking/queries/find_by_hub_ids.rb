@@ -16,6 +16,7 @@ module Trucking
       def perform
         query = @klass.where(hub_id: @hub_ids)
         query = query.where(cargo_class: @filters[:cargo_class]) if @filters[:cargo_class]
+        query = query.where(load_type: @filters[:load_type]) if @filters[:load_type]
         query = query.where(truck_type: @filters[:truck_type]) if @filters[:truck_type]
         query = query.where(carriage: @filters[:carriage]) if @filters[:carriage]
         if @filters[:destination]

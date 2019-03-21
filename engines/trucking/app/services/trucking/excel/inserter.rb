@@ -158,7 +158,8 @@ module Trucking
             :load_type,
             :courier_id,
             :truck_type,
-            :user_id
+            :user_id,
+            :parent_id
           ).merge(location_id: tl.id)
           trucking = ::Trucking::Trucking.find_or_initialize_by(trucking_attr)
 
@@ -253,8 +254,15 @@ module Trucking
                 next
               end
               stats[:trucking_locations][:number_created] += 1
-
-              { ident: geometry&.id, country: idents_and_country[:country], sub_ident: geometry&.name }
+              geo_name = geometry&.name
+              sub_ident_str = if identifier_modifier == 'locode' && geo_name
+                                [idents_and_country[:ident].upcase, geo_name].join(' - ')
+                              elsif identifier_modifier == 'locode' && !geo_name
+                                idents_and_country[:ident].upcase
+                              else
+                                geo_name
+                              end
+              { ident: geometry&.id, country: idents_and_country[:country], sub_ident: sub_ident_str }
             else
               idents_and_country
             end
@@ -453,6 +461,7 @@ module Trucking
             area_limit: meta[:load_meterage_area]
           },
           rates: {},
+          parent_id: SecureRandom.uuid,
           user_id: user_id,
           fees: {},
           cbm_ratio: meta[:cbm_ratio],
