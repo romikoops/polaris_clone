@@ -1,4 +1,4 @@
-FROM ruby:2.5 AS builder
+FROM ruby:2.6 AS builder
 LABEL maintainer="development@itsmycargo.com"
 
 ARG BUNDLE_WITHOUT="development test"
@@ -51,7 +51,7 @@ RUN echo "$RELEASE" > ./REVISION
 
 RUN RAILS_ENV=production bin/rails assets:precompile
 
-FROM ruby:2.5 AS app
+FROM ruby:2.6 AS app
 LABEL maintainer="development@itsmycargo.com"
 
 ENV MALLOC_ARENA_MAX 2
