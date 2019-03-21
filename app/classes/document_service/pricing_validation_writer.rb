@@ -46,8 +46,6 @@ module DocumentService
       end
 
       @workbook.close
-
-      end
       write_to_aws(dir, tenant, filename, 'pricings_sheet')
     end
 
