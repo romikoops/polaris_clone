@@ -254,7 +254,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
             else
               consolidate_cargo(cargos)
             end
-    calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
+    determine_load_meterage(trucking_pricing, cargo_object, cargo)
   end
 
   def consolidate_cargo(cargo_array) # rubocop:disable Metrics/AbcSize
@@ -266,8 +266,10 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
       volume: 0,
       payload_in_kg: 0,
       cargo_class: '',
-      num_of_items: 0
+      num_of_items: 0,
+      quantity: 1
     }
+
     cargo_array.each do |cargo_unit|
       cargo[:id] += "-#{cargo_unit.id}"
       cargo[:dimension_x] += (cargo_unit.dimension_x * cargo_unit.quantity)
@@ -277,6 +279,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
       cargo[:payload_in_kg] += (cargo_unit.payload_in_kg * cargo_unit.quantity)
       cargo[:cargo_class] = cargo_unit.cargo_class
       cargo[:num_of_items] += cargo_unit.quantity
+      cargo[:stackable] = true
     end
 
     cargo
@@ -368,12 +371,12 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
         calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
       else
         if (trucking_pricing.load_meterage['height_limit'] &&
-          (cargo.dimension_z > trucking_pricing.load_meterage['height_limit'])) ||
-           (!cargo.stackable && trucking_pricing.load_meterage['height_limit'])
+          (cargo[:dimension_z] > trucking_pricing.load_meterage['height_limit'])) ||
+           (!cargo[:stackable] && trucking_pricing.load_meterage['height_limit'])
           calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
         elsif (trucking_pricing.load_meterage['area_limit'] &&
-          ((cargo.dimension_x * cargo.dimension_y * cargo.quantity) >= trucking_pricing.load_meterage['area_limit'])) ||
-              (!cargo.stackable && trucking_pricing.load_meterage['area_limit'])
+          ((cargo[:dimension_x] * cargo[:dimension_y] * cargo[:quantity]) >= trucking_pricing.load_meterage['area_limit'])) ||
+              (!cargo[:stackable] && trucking_pricing.load_meterage['area_limit'])
           calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
         else
           calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)

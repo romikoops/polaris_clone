@@ -5,17 +5,17 @@
 include ExcelTools
 # include ShippingTools
 # # subdomains = %w(demo greencarrier easyshipping hartrodt)
-# subdomains = %w(normanglobal)
-# subdomains.each do |sub|
-#   tenant = Tenant.find_by_subdomain(sub)
+subdomains = %w(speedtrans)
+subdomains.each do |sub|
+  tenant = Tenant.find_by_subdomain(sub)
 
-#   shipper = tenant.users.shipper.where(currency: 'GBP').first
-#   DataValidator::PricingValidator.new(
-#     tenant: tenant.id,
-#     user: shipper,
-#     key: 'data/normanglobal/pricing_expected_20190103_normanglobal_without_FCL.xlsx',
-#     load_type: 'lcl'
-#   ).perform
+  shipper = tenant.users.shipper.first
+  DataValidator::PricingValidator.new(
+    tenant: tenant.id,
+    user: shipper,
+    key: 'data/speedtrans/speedtrans_pricing_test_19_full.xlsx',
+    load_type: 'lcl'
+  ).perform
 
 #   # tenant.itineraries.destroy_all
 #   # tenant.local_charges.destroy_all
@@ -113,4 +113,5 @@ include ExcelTools
 #   #   hub_type: 'ocean',
 #   #   direction: 'import'
 #   # ).perform
-# end
+end
+# Locations::Location.where(admin_level: nil).destroy_all

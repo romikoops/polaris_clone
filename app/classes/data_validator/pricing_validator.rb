@@ -52,6 +52,7 @@ module DataValidator
       @examples.each do |example|
         @example = example
         @load_type = @example[:data][:load_type]
+        puts @example[:data][:pickup_address]
         price_check(@example, sheet_name)
       end
     end
@@ -110,9 +111,8 @@ module DataValidator
       end
     end
 
-    def create_example_results
+    def create_example_results # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       column_index = 2
-
       all_columns = false
       until all_columns
         column = @sheet.column(column_index)
@@ -172,26 +172,28 @@ module DataValidator
 
         new_cargo = {}
         key_hash.each do |key, value|
+          if key == 'quantity' && @tenant.scope.dig('consolidation', 'cargo', 'frontend')
+            new_cargo['payload_in_kg'] = new_cargo['payload_in_kg'].to_d / column[value].to_d
+          end
           new_cargo[key] = column[value]
         end
         cargos << new_cargo
       end
+
       cargos
     end
 
     def get_top_value_currency(column, key)
       str = column[@row_keys[key]]
       to_display = string_to_currency_value(str)
-      if to_display.nil?
-        return {}
-      elsif key == 'TOTAL'
-        return to_display
-      else
-        return { total: to_display }
-      end
+      return {} if to_display.nil?
+
+      return to_display if key == 'TOTAL'
+
+      { total: to_display }
     end
 
-    def price_check(example, sheet_name)
+    def price_check(example, sheet_name) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       @destination_hub = example[:data][:itinerary].last_stop.hub
       @origin_hub = example[:data][:itinerary].first_stop.hub
       @shipment = Shipment.create!(
@@ -218,12 +220,13 @@ module DataValidator
         carrier: Carrier.find_by_name(example[:data][:carrier]),
         mode_of_transport: @example[:data][:mode_of_transport]
       )
+
       @data_for_price_checker[:cargo_units] = example[:data][:cargo_units]
       @data_for_price_checker[:pricing] = determine_pricing(@example)
       validate_prices(sheet_name, example[:data][:itinerary], @data_for_price_checker, example[:expected], example[:result_index], example[:data])
     end
 
-    def determine_pricing(example)
+    def determine_pricing(example) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       start_date = example[:data][:date]
       end_date = start_date + 7.days
       result_to_return = {}
@@ -233,7 +236,7 @@ module DataValidator
       tenant_vehicle_id = @data_for_price_checker[:service_level].id
       pricings_by_cargo_class = example[:data][:itinerary].pricings
                                                           .where(tenant_vehicle_id: tenant_vehicle_id)
-                                                          .for_cargo_class(cargo_classes)
+                                                          .for_cargo_classes(cargo_classes)
       pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date) if start_date && end_date
       pricings_by_cargo_class = pricings_by_cargo_class
                                 .select { |pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil? }
@@ -262,11 +265,14 @@ module DataValidator
     end
 
     def prep_cargo_units(example)
-      data_to_extract = example[:data][:load_type] == 'cargo_item' ?
-        example[:data][:cargo_units].map do |cu|
-          cu[:cargo_item_type_id] = CargoItemType.find_by_description('Pallet').id
-          cu
-        end : example[:data][:cargo_units]
+      data_to_extract = if example[:data][:load_type] == 'cargo_item'
+                          example[:data][:cargo_units].map do |cu|
+                            cu[:cargo_item_type_id] = CargoItemType.find_by_description('Pallet').id
+                            cu
+                          end 
+                        else
+                          example[:data][:cargo_units]
+                        end
       begin
         example[:data][:load_type].camelize.constantize.extract(data_to_extract)
       rescue Exception => e # bad code.....
@@ -309,7 +315,7 @@ module DataValidator
     def get_diff_percentage(result, keys, expected_result)
       value = result.dig(:quote, *keys, :value)
       expected_value = expected_result.dig(*keys, :value).try(:to_d)
-      return nil if (value.blank? || value == 0) || (expected_value.blank? || expected_value == 0)
+      return nil if (value.blank? || value.zero?) || (expected_value.blank? || expected_value.zero?)
 
       (((value - expected_value) / expected_value) * 100).try(:round, 3)
     end
@@ -334,7 +340,7 @@ module DataValidator
       CurrencyTools.convert(value, from_currency, to_currency, @tenant.id)
     end
 
-    def diff_result_string(result, keys, expected_result)
+    def diff_result_string(result, keys, expected_result) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       value = result.dig(:quote, *keys, :value)
       expected_value = expected_result.dig(*keys, :value).try(:to_d)
       result_currency = result.dig(:quote, *keys, :currency)
@@ -361,9 +367,30 @@ module DataValidator
       "#{expected_currency} #{diff_val} (#{diff_percent}%)"
     end
 
+    def legacy_charge_shape(result) # rubocop:disable  Metrics/AbcSize
+      new_quote = {}
+      quote = result[:quote]
+      quote.keys.reject { |k| %i(import export).include?(k) }.each { |k| new_quote[k] = quote[k] }
+      %i(import export).each do |k|
+        next unless quote[k]
+
+        new_quote[k] = { total: { value: 0.0, currency: 'USD' } }
+        quote[k].keys.reject { |uk| %i(total edited_total name).include?(uk) }.each do |k_2|
+          quote[k][k_2].keys.reject { |uk| %i(total edited_total name).include?(uk) }
+                      .each { |k_3| new_quote[k][k_3] = quote[k][k_2][k_3] }
+        end
+        quote[k].keys.select { |uk| %i(total edited_total name).include?(uk) }.each do |k_2|
+          new_quote[k][k_2] = quote[k][k_2]
+        end
+      end
+      result[:quote] = new_quote
+      result
+    end
+
     def validate_result(result, expected_result, example_index, data) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
       result.deep_symbolize_keys!
       result_for_printing = {}
+      result = legacy_charge_shape(result)
       begin
         expected_result.each do |key_1, value_1|
           if value_1 && value_1[:value]
@@ -397,7 +424,7 @@ module DataValidator
       }
     end
 
-    def validate_prices(sheet_name, itinerary, data_for_price_checker, expected_results, example_index, data)
+    def validate_prices(sheet_name, itinerary, data_for_price_checker, expected_results, example_index, data) # rubocop:disable Metrics/ParameterLists
       results = itinerary.test_pricings(data_for_price_checker, @user)
       @validation_results[sheet_name] = {} unless @validation_results[sheet_name]
       @validation_results[sheet_name][example_index] = validate_result(results.first, expected_results, example_index, data)
