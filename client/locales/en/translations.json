@@ -578,7 +578,8 @@
     "contactPhone": "Contact via phone",
     "contactEmail": "Contact via email",
     "userEmail": "User Email",
-    "checkEmailForPassword": "Please check your email for a link to reset your ItsMyCargo Account password."
+    "checkEmailForPassword": "Please check your email for a link to reset your ItsMyCargo Account password.",
+    "addresses": "Addresses"
   },
   "cargo": {
     "consolidatedCargoRate": "Consolidated Freight Rate",
@@ -844,6 +845,8 @@
     "email": "Email",
     "phone": "Phone",
     "street": "Street",
+    "vatNo": "VAT Number",
+    "fullName": "Full Name",
     "number": "Number",
     "streetNumber": "Street Number",
     "zipCode": "Zip Code",

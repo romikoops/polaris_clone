@@ -2,9 +2,21 @@ import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
+import { NamedSelect } from '../NamedSelect/NamedSelect'
 
 const EditProfileBox = ({
-  user, handleChange, onSave, close, style, theme, handlePasswordChange, passwordResetSent, passwordResetRequested, t, hide
+  user,
+  handleChange,
+  onSave,
+  close,
+  style,
+  theme,
+  currentCurrency,
+  currencyOptions,
+  handleCurrencyChange,
+  t,
+  hide,
+  scope
 }) => !hide && (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
     <div className="layout-row flex-90" />
@@ -107,22 +119,25 @@ const EditProfileBox = ({
         />
       </div>
     </div>
+    {!scope.fixed_currency ? (
+      <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+        <div className="flex-100 layout-row layout-align-start-start ">
+          <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
+            {t('common:currency')}
+          </sup>
+        </div>
+        <div className="input_box flex-100 layout-row layout-align-start-center ">
+          <NamedSelect
+            className="flex-100"
+            options={currencyOptions}
+            value={currentCurrency}
+            placeholder={t('common:selectCurrency')}
+            onChange={e => handleCurrencyChange(e)}
+          />
+        </div>
+      </div>) : '' }
   </div>
 )
-
-EditProfileBox.propTypes = {
-  user: PropTypes.user.isRequired,
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  handleChange: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  close: PropTypes.func.isRequired,
-  style: PropTypes.objectOf(PropTypes.string),
-  handlePasswordChange: PropTypes.func.isRequired,
-  passwordResetSent: PropTypes.bool.isRequired,
-  passwordResetRequested: PropTypes.bool.isRequired,
-  hide: PropTypes.bool.isRequired
-}
 
 EditProfileBox.defaultProps = {
   style: {},

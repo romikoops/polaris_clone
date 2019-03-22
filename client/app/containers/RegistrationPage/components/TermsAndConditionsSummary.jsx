@@ -30,7 +30,7 @@ export default function TermsAndConditionsSummary (props) {
     <div className={styles.terms_and_conditions_summary}>
       {bulletsJSX}
       <div
-        className={`${shakeClass.tenant} flex-90 layout-row layout-align-center-center`}
+        className={`${shakeClass.tenant} flex-100 layout-row layout-align-center-center`}
         style={{ marginBottom: '8px' }}
       >
         <div className="flex-5 layout-row layout-align-start-start">
@@ -43,7 +43,7 @@ export default function TermsAndConditionsSummary (props) {
             name="tenant-accept_terms_and_conditions"
           />
         </div>
-        <div className="flex">
+        <div className="flex layout-padding" >
           <label className="pointy" htmlFor="tenant-accept_terms_and_conditions">
             <p style={{ margin: 0, fontSize: '13px' }}>
               I hereby confirm that I have read and agree to the {capitalize(subdomain)} {' '}
@@ -70,7 +70,7 @@ export default function TermsAndConditionsSummary (props) {
             name="imc-accept_terms_and_conditions"
           />
         </div>
-        <div className="flex">
+        <div className="flex layout-padding">
           <label className="pointy" htmlFor="imc-accept_terms_and_conditions">
             <p style={{ margin: 0, fontSize: '13px' }}>
               I hereby confirm that I have read and agree to the ItsMyCargo  {' '}

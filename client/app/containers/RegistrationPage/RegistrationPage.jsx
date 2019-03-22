@@ -128,10 +128,19 @@ class RegistrationPage extends React.PureComponent {
         mapping={RegistrationPage.mapInputs}
       >
         <div className="flex-100 layout-row layout-wrap">
-          <div className="flex-45 layout-row layout-wrap">
-            <div className="flex-100">
-              <h3>Account Details</h3>
+          <div className="flex-100">
+            <h3>Account Details</h3>
+          </div>
+          <div className="flex-100 layout-row layout-align-space-between-center">
+            <div className="flex-45 layout-row layout-align-center-center">
+              <RegistrationFormGroup field="first_name" minLength="2" {...sharedProps} />
             </div>
+            <div className="flex-45 layout-row layout-align-center-center">
+              <RegistrationFormGroup field="last_name" minLength="2" {...sharedProps} />
+            </div>
+          </div>
+          <div className="flex-100">
+            
             <RegistrationFormGroup
               field="email"
               minLength="2"
@@ -154,7 +163,7 @@ class RegistrationPage extends React.PureComponent {
               required={false}
               {...sharedProps}
             />
-            <div className="flex-100">
+            {/* <div className="flex-100">
               <h3>Address Details</h3>
             </div>
             <RegistrationFormGroup field="street" minLength="2" flex="70" {...sharedProps} />
@@ -190,7 +199,7 @@ class RegistrationPage extends React.PureComponent {
             <div className={styles.pusher} />
             <RegistrationFormGroup field="first_name" minLength="2" {...sharedProps} />
             <RegistrationFormGroup field="last_name" minLength="2" {...sharedProps} />
-            <RegistrationFormGroup field="phone" minLength="8" {...sharedProps} />
+            <RegistrationFormGroup field="phone" minLength="8" {...sharedProps} /> */}
           </div>
         </div>
         <TermsAndConditionsSummary
