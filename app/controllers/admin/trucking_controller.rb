@@ -52,8 +52,11 @@ class Admin::TruckingController < Admin::AdminBaseController
         hub_id: params[:id],
         user: current_user
       }
+      ## New Code
+      # resp = Trucking::Excel::Inserter.new(args).perform
 
-      resp = Trucking::Excel::Inserter.new(args).perform
+      ## Legacy Inserter Code
+      resp = Trucking::Excel::LegacyInserter.new(args).perform
       response_handler(resp)
     else
       response_handler(false)
