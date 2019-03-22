@@ -2,7 +2,6 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Formsy from 'formsy-react'
-import PropTypes from '../../prop-types'
 import { authenticationActions } from '../../actions'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner'
@@ -12,17 +11,11 @@ import styles from './RegistrationPage.scss'
 
 class RegistrationPage extends React.PureComponent {
   static mapInputs (inputs) {
-    const addressInputs = ['street', 'number', 'zip_code', 'city', 'country']
-    const model = { address: {} }
+    const model = { }
     Object.keys(inputs).forEach((inputName) => {
-      if (inputName === 'number') {
-        model.address.street_number = inputs.number
-      } else if (addressInputs.includes(inputName)) {
-        model.address[inputName] = inputs[inputName]
-      } else {
-        model[inputName] = inputs[inputName]
-      }
+      model[inputName] = inputs[inputName]
     })
+
     return model
   }
 
@@ -64,6 +57,7 @@ class RegistrationPage extends React.PureComponent {
   handleSubmit (model) {
     if (!this.allAccepted()) {
       this.shakeInvalidCheckboxes()
+
       return
     }
     const user = Object.assign({}, model)
@@ -81,6 +75,7 @@ class RegistrationPage extends React.PureComponent {
   handleInvalidSubmit () {
     if (!this.allAccepted()) {
       this.shakeInvalidCheckboxes()
+
       return
     }
     if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
@@ -140,7 +135,7 @@ class RegistrationPage extends React.PureComponent {
             </div>
           </div>
           <div className="flex-100">
-            
+
             <RegistrationFormGroup
               field="email"
               minLength="2"
@@ -163,43 +158,6 @@ class RegistrationPage extends React.PureComponent {
               required={false}
               {...sharedProps}
             />
-            {/* <div className="flex-100">
-              <h3>Address Details</h3>
-            </div>
-            <RegistrationFormGroup field="street" minLength="2" flex="70" {...sharedProps} />
-            <RegistrationFormGroup
-              field="number"
-              minLength="1"
-              flex="25"
-              offset="5"
-              {...sharedProps}
-            />
-            <RegistrationFormGroup field="zip_code" minLength="4" flex="30" {...sharedProps} />
-            <RegistrationFormGroup
-              field="city"
-              minLength="2"
-              flex="30"
-              offset="5"
-              {...sharedProps}
-            />
-            <RegistrationFormGroup
-              field="country"
-              minLength="3"
-              flex="30"
-              offset="5"
-              {...sharedProps}
-            />
-          </div>
-          <div className="offset-10 flex-45 layout-row layout-wrap">
-            <div className="flex-100">
-              <h3>Company Details</h3>
-            </div>
-            <RegistrationFormGroup field="company_name" minLength="4" {...sharedProps} />
-            <RegistrationFormGroup field="VAT_number" minLength="5" {...sharedProps} />
-            <div className={styles.pusher} />
-            <RegistrationFormGroup field="first_name" minLength="2" {...sharedProps} />
-            <RegistrationFormGroup field="last_name" minLength="2" {...sharedProps} />
-            <RegistrationFormGroup field="phone" minLength="8" {...sharedProps} /> */}
           </div>
         </div>
         <TermsAndConditionsSummary
@@ -225,18 +183,6 @@ class RegistrationPage extends React.PureComponent {
   }
 }
 
-RegistrationPage.propTypes = {
-  tenant: PropTypes.tenant,
-  registrationAttempt: PropTypes.bool,
-  // eslint-disable-next-line react/forbid-prop-types
-  req: PropTypes.any,
-  // eslint-disable-next-line react/forbid-prop-types
-  user: PropTypes.any,
-  theme: PropTypes.theme,
-  registering: PropTypes.bool,
-  authenticationDispatch: PropTypes.objectOf(PropTypes.any).isRequired
-}
-
 RegistrationPage.defaultProps = {
   tenant: null,
   registrationAttempt: false,
@@ -248,6 +194,7 @@ RegistrationPage.defaultProps = {
 
 function mapStateToProps (state) {
   const { registering, registrationAttempt, req } = state.authentication
+
   return {
     registering,
     registrationAttempt,
