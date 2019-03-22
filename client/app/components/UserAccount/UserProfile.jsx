@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { v4 as uuidV4 } from 'uuid'
 import styles from './UserAccount.scss'
 import ProfileBox from './ProfileBox'
 import EditProfileBox from './EditProfileBox'
@@ -17,6 +18,8 @@ import GreyBox from '../GreyBox/GreyBox'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { authenticationActions } from '../../actions'
 import DeleteAccountModal from './DeleteAccountModal'
+import AdminAddressTile from '../Admin/AdminAddressTile'
+import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 
 const EditNameBox = () => (
   <div className={`${styles.set_size} layout-row flex-100`} />
@@ -140,70 +143,26 @@ class UserProfile extends Component {
       ? <DeleteAccountModal closeModal={this.closeDeleteAccountModal} tenant={tenant} user={user} theme={theme} />
       : ''
 
-    const currencySection = (
-      <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
-        <div className="flex-75 layout-row layout-align-end-center layout-wrap">
-          <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.currency_grey}`}>
-            <p className="flex-none">
-              {t('common:currency')}
-              :
-            </p>
-            <span><strong>{user.currency}</strong></span>
-          </div>
-        </div>
-        <div className="flex-75 layout-row layout-align-space-around-center layout-wrap" />
-      </div>
-    )
-
-    const toggleEditCurrency = !tenant.scope.fixed_currency ? (
-      <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
-        <div className="flex-75 layout-row layout-align-end-center layout-wrap">
-          <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-            <p className="flex-none">
-              {t('common:currency')}
-              :
-            </p>
-            <NamedSelect
-              className="flex-100"
-              options={currencyOptions}
-              value={this.state.currentCurrency}
-              placeholder={t('common:selectCurrency')}
-              onChange={e => this.handleCurrencyUpdate(e)}
-            />
-          </div>
-        </div>
-      </div>
-    ) : currencySection
-
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding">
         {deleteAccountModal}
         <div className="flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding">
-          {editBool ? (
-            <EditNameBox
-              user={editObj}
-              handleChange={this.handleChange}
-              handlePasswordChange={this.handlePasswordChange}
-              passwordResetSent={authentication.passwordEmailSent}
-            />
-          ) : (
-            <div className={`flex-100 layout-row layout-align-start-stretch ${styles.username_title}`}>
-              <div className="layout-row flex-none layout-align-center-center">
-                <i className={`fa fa-user clip ${styles.bigProfile}`} style={textStyle} />
-              </div>
-              <div className="layout-align-start-center layout-row flex">
-                <p>
-                  {t('common:greeting')}
-                    &nbsp;
-                </p>
-                <h1 className="flex-none cli">
-                  {user.first_name}
-                  {' '}
-                  {user.last_name}
-                </h1>
-              </div>
+          <div className={`flex-100 layout-row layout-align-start-stretch ${styles.username_title}`}>
+            <div className="layout-row flex-none layout-align-center-center">
+              <i className={`fa fa-user clip ${styles.bigProfile}`} style={textStyle} />
             </div>
-          )}
+            <div className="layout-align-start-center layout-row flex">
+              <p>
+                {t('common:greeting')}
+                  &nbsp;
+              </p>
+              <h1 className="flex-none cli">
+                {user.first_name}
+                {' '}
+                {user.last_name}
+              </h1>
+            </div>
+          </div>
         </div>
         <div
           className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.section} `}
@@ -219,9 +178,13 @@ class UserProfile extends Component {
                     user={editObj}
                     style={textStyle}
                     theme={theme}
+                    scope={tenant.scope}
                     handleChange={this.handleChange}
                     onSave={this.saveEdit}
                     close={this.closeEdit}
+                    currentCurrency={this.state.currentCurrency}
+                    currencyOptions={currencyOptions}
+                    handleCurrencyChange={e => this.handleCurrencyUpdate(e)}
                   />
                   <ProfileBox
                     hide={editBool}
@@ -234,11 +197,6 @@ class UserProfile extends Component {
                     passwordResetRequested={authentication.passwordEmailRequested}
                     hideEdit={isQuote(tenant)}
                   />
-                  {
-                    !isQuote(tenant) && (
-                      !editBool ? currencySection : toggleEditCurrency
-                    )
-                  }
                 </div>
               )}
             />
@@ -288,6 +246,35 @@ class UserProfile extends Component {
                           />
                         </div>
                       </div>
+                      <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center layout-wrap">
+                        <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center layout-wrap">
+                          <div className="flex-66 layout-row layout-align-start-center">
+                            <p className="flex-none">
+                              {t('user:changeMyPassword')}
+                            </p>
+                          </div>
+                          <div className="flex-33 layout-row layout-align-start">
+
+                            <RoundButton
+                              theme={theme}
+                              size="full"
+                              active
+                              text={t('user:request')}
+                              handleNext={this.handlePasswordChange}
+                            />
+                          </div>
+                          <div className={`${styles.spinner} flex-50 layout-row layout-align-start-start`}>
+                            { authentication.passwordResetRequested && <LoadingSpinner size="extra_small" /> }
+                            { authentication.passwordResetSent && (
+                              <div className="flex-100 layout-row layout-align-center-start padding_top">
+                                <p>
+                                  {t('user:checkForPassword')}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
                 />
@@ -295,12 +282,32 @@ class UserProfile extends Component {
             }
           </div>
         </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-          <div
-            className={`flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding card_padding_right ${
-              styles.section
-            } `}
-          />
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start margin_md_top">
+          {addresses ? (
+            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+              <div className="flex-100 layout-row layout-align-space-between-center">
+                <div
+                  className="flex-100 layout-align-start-center greyBg"
+                >
+                  <span><b>{t('account:addresses')}</b></span>
+                </div>
+              </div>
+              {
+                addresses.map(address => (
+                  <AdminAddressTile
+                    key={uuidV4()}
+                    address={address}
+                    theme={theme}
+                    client={user}
+                    showDelete={false}
+                    saveEdit={userDispatch.saveAddressEdit}
+                    deleteAddress={userDispatch.deleteContactAddress}
+                  />))
+              }
+            </div>
+          ) : (
+            ''
+          )}
         </div>
       </div>
     )

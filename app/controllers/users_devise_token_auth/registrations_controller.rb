@@ -11,22 +11,19 @@ module UsersDeviseTokenAuth
         # Create token even though email is not confirmed
         resource.create_token
 
-        resource.role_id = Role.find_by_name('agency_manager').id if quotation_tool?(resource)
+        if quotation_tool?(resource)
+          resource.role_id = Role.find_by_name('agency_manager').id
+          @agency = Agency.find_or_create_by!(
+            name: resource.company_name,
+            tenant_id: resource.tenant.id
+          )
 
-        @agency = Agency.find_or_create_by!(
-          name: resource.company_name,
-          tenant_id: resource.tenant.id
-        )
-
-        resource.agency_id = @agency.id
-        resource.save!
-
-        # Create Address for non-guest Users
-        unless resource.guest
-          address = Address.create_from_raw_params!(address_params)
-          address.geocode_from_address_fields!
-          resource.addresses << address unless address.nil?
+          resource.agency_id = @agency.id
+        else
+          resource.role_id = Role.find_by_name('shipper').id
         end
+
+        resource.save!
 
         @headers = resource.create_new_auth_token
       end
@@ -58,14 +55,15 @@ module UsersDeviseTokenAuth
 
     def sign_up_params
       params_h = super.to_h
-
       params_h[:password_confirmation] = params_h.delete(:confirm_password) unless params_h[:confirm_password].nil?
-
-      params_h[:vat_number] = params_h.delete(:VAT_number) unless params_h[:VAT_number].nil?
 
       unless params_h[:cookies].nil?
         params_h.delete(:cookies)
-        params_h[:optin_status_id] = OptinStatus.find_by(tenant: !params[:guest], itsmycargo: !params[:guest], cookies: true).id
+        params_h[:optin_status_id] = OptinStatus.find_by(
+          tenant: !params[:guest],
+          itsmycargo: !params[:guest],
+          cookies: true
+        ).id
       end
 
       ActionController::Parameters.new(params_h).permit(*User::PERMITTED_PARAMS)
@@ -73,12 +71,6 @@ module UsersDeviseTokenAuth
 
     def provider
       'tenant_email'
-    end
-
-    def address_params
-      params.require(:address).permit(
-        :street, :street_number, :zip_code, :city, :country
-      )
     end
   end
 end

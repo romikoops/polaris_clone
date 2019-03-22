@@ -53,9 +53,186 @@ exports[`shallow render 1`] = `
           >
             <EditProfileBox
               close={[Function]}
+              currencyOptions={
+                Array [
+                  Object {
+                    "label": "EUR",
+                    "value": "EUR",
+                  },
+                  Object {
+                    "label": "AUD",
+                    "value": "AUD",
+                  },
+                  Object {
+                    "label": "BGN",
+                    "value": "BGN",
+                  },
+                  Object {
+                    "label": "BRL",
+                    "value": "BRL",
+                  },
+                  Object {
+                    "label": "CAD",
+                    "value": "CAD",
+                  },
+                  Object {
+                    "label": "CHF",
+                    "value": "CHF",
+                  },
+                  Object {
+                    "label": "CNY",
+                    "value": "CNY",
+                  },
+                  Object {
+                    "label": "CZK",
+                    "value": "CZK",
+                  },
+                  Object {
+                    "label": "DKK",
+                    "value": "DKK",
+                  },
+                  Object {
+                    "label": "GBP",
+                    "value": "GBP",
+                  },
+                  Object {
+                    "label": "HKD",
+                    "value": "HKD",
+                  },
+                  Object {
+                    "label": "HRK",
+                    "value": "HRK",
+                  },
+                  Object {
+                    "label": "HUF",
+                    "value": "HUF",
+                  },
+                  Object {
+                    "label": "IDR",
+                    "value": "IDR",
+                  },
+                  Object {
+                    "label": "ILS",
+                    "value": "ILS",
+                  },
+                  Object {
+                    "label": "INR",
+                    "value": "INR",
+                  },
+                  Object {
+                    "label": "JPY",
+                    "value": "JPY",
+                  },
+                  Object {
+                    "label": "KRW",
+                    "value": "KRW",
+                  },
+                  Object {
+                    "label": "MXN",
+                    "value": "MXN",
+                  },
+                  Object {
+                    "label": "MYR",
+                    "value": "MYR",
+                  },
+                  Object {
+                    "label": "NOK",
+                    "value": "NOK",
+                  },
+                  Object {
+                    "label": "NZD",
+                    "value": "NZD",
+                  },
+                  Object {
+                    "label": "PHP",
+                    "value": "PHP",
+                  },
+                  Object {
+                    "label": "PLN",
+                    "value": "PLN",
+                  },
+                  Object {
+                    "label": "RON",
+                    "value": "RON",
+                  },
+                  Object {
+                    "label": "RUB",
+                    "value": "RUB",
+                  },
+                  Object {
+                    "label": "SEK",
+                    "value": "SEK",
+                  },
+                  Object {
+                    "label": "SGD",
+                    "value": "SGD",
+                  },
+                  Object {
+                    "label": "THB",
+                    "value": "THB",
+                  },
+                  Object {
+                    "label": "TRY",
+                    "value": "TRY",
+                  },
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  },
+                  Object {
+                    "label": "ZAR",
+                    "value": "ZAR",
+                  },
+                ]
+              }
+              currentCurrency={Object {}}
               handleChange={[Function]}
+              handleCurrencyChange={[Function]}
               hide={true}
               onSave={[Function]}
+              scope={
+                Object {
+                  "cargo_info_level": "text",
+                  "carriage_options": Object {
+                    "on_carriage": Object {
+                      "export": "mandatory",
+                      "import": "mandatory",
+                    },
+                    "pre_carriage": Object {
+                      "export": "optional",
+                      "import": "optional",
+                    },
+                  },
+                  "closed_quotation_tool": true,
+                  "customs_export_paper": false,
+                  "detailed_billing": true,
+                  "has_customs": true,
+                  "has_insurance": true,
+                  "hide_grand_total": true,
+                  "mandatory_form_fields": Object {
+                    "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                    "total_goods_value": 3370,
+                  },
+                  "modes_of_transport": Object {
+                    "air": Object {
+                      "AIR_LOAD_TYPE": 0,
+                    },
+                    "ocean": Object {
+                      "OCEAN_LOAD_TYPE": 2,
+                    },
+                    "rail": Object {
+                      "RAIL_LOAD_TYPE": 0,
+                    },
+                    "truck": Object {
+                      "TRUCK_LOAD_TYPE": 0,
+                    },
+                  },
+                  "terms": Array [
+                    "FOO_TERM",
+                    "BAR_TERM",
+                  ],
+                }
+              }
               style={
                 Object {
                   "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -124,11 +301,25 @@ exports[`shallow render 1`] = `
     </div>
   </div>
   <div
-    className="flex-100 layout-row layout-wrap layout-align-start-start"
+    className="flex-100 layout-row layout-wrap layout-align-start-start margin_md_top"
   >
     <div
-      className="flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding card_padding_right section "
-    />
+      className="layout-row flex-100 layout-wrap layout-align-start-center"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-100 layout-align-start-center greyBg"
+        >
+          <span>
+            <b>
+              Addresses
+            </b>
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;

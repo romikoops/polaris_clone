@@ -38,9 +38,7 @@ const propsBase = {
     resetStore: identity,
     updateShipment: identity
   },
-  shipmentDispatch: {
-    getOffers: identity
-  }
+  getOffers: identity
 }
 
 jest.mock('react-redux', () => ({
@@ -65,9 +63,7 @@ test('get offers when cargo type is cargo item', () => {
   const spy = jest.fn()
   const props = {
     ...propsBase,
-    shipmentDispatch: {
-      getOffers: spy
-    }
+    getOffers: spy
   }
   const Component = new ShipmentDetails(props)
   Component.getOffers()
@@ -89,9 +85,7 @@ test('get offers when cargo type is aggregated cargo item', () => {
   const props = {
     ...propsBase,
     shipment,
-    shipmentDispatch: {
-      getOffers: spy
-    }
+    getOffers: spy
   }
   const Component = new ShipmentDetails(props)
   Component.getOffers()
@@ -115,9 +109,7 @@ test('get offers when cargo type is container', () => {
   const props = {
     ...propsBase,
     shipment,
-    shipmentDispatch: {
-      getOffers: spy
-    }
+    getOffers: spy
   }
   const Component = new ShipmentDetails(props)
   Component.getOffers()
@@ -137,9 +129,7 @@ test('get offers when selected day is falsy', () => {
   const props = {
     ...propsBase,
     shipment,
-    shipmentDispatch: {
-      getOffers: spy
-    }
+    getOffers: spy
   }
   const Component = new ShipmentDetails(props)
   Component.getOffers()

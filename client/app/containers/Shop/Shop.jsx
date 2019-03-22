@@ -4,7 +4,6 @@ import { Route } from 'react-router'
 import { withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
 import { get } from 'lodash'
-import PropTypes from '../../prop-types'
 import ChooseShipment from '../../components/ChooseShipment/ChooseShipment'
 import Header from '../../components/Header/Header'
 import styles from './Shop.scss'
@@ -30,6 +29,7 @@ class Shop extends Component {
       props.bookingData.response.stage5.shipment.status === 'requested'
     )
   }
+
   constructor (props) {
     super(props)
 
@@ -44,6 +44,7 @@ class Shop extends Component {
     }
     this.selectLoadType = this.selectLoadType.bind(this)
     this.chooseOffer = this.chooseOffer.bind(this)
+    this.getOffers = this.getOffers.bind(this)
     this.setShipmentContacts = this.setShipmentContacts.bind(this)
     this.selectShipmentStage = this.selectShipmentStage.bind(this)
     this.selectShipmentStageAndGo = this.selectShipmentStageAndGo.bind(this)
@@ -53,6 +54,7 @@ class Shop extends Component {
 
     props.bookingSummaryDispatch.update()
   }
+
   componentWillReceiveProps (nextProps) {
     if (Shop.statusRequested(nextProps) && !Shop.statusRequested(this.props)) {
       this.setState({ fakeLoading: true })
@@ -65,7 +67,6 @@ class Shop extends Component {
 
     return loading || !(loggingIn || registering)
   }
-
 
   getShipment (loadType) {
     const { shipmentDispatch } = this.props
@@ -123,6 +124,7 @@ class Shop extends Component {
       showMessages: !this.state.showMessages
     })
   }
+
   determineForwardFunction (stage) {
     const { bookingData, shipmentDispatch } = this.props
     const { request } = bookingData
@@ -147,8 +149,9 @@ class Shop extends Component {
         break
     }
   }
+
   chooseOffer (obj) {
-    const { shipmentDispatch, bookingSummaryDispatch, bookingData } = this.props
+    const { shipmentDispatch, bookingSummaryDispatch, bookingData, user } = this.props
     const { schedule, total } = obj
     // eslint-disable-next-line camelcase
     const { id, user_id, customs_credit } = bookingData.response.stage2.shipment
@@ -160,7 +163,8 @@ class Shop extends Component {
       customs_credit
     }
 
-    if (this.props.user.guest) {
+    if (user.guest) {
+      req.action = 'chooseOffer'
       this.toggleShowRegistration(req)
 
       return
@@ -170,10 +174,22 @@ class Shop extends Component {
     shipmentDispatch.chooseOffer(req)
   }
 
+  getOffers (obj, redirect) {
+    const { shipmentDispatch, user, tenant } = this.props
+    const { scope } = tenant
+    if (user.guest && scope.closed_after_map) {
+      obj.action = 'getOffers'
+      this.toggleShowRegistration(obj)
+
+      return
+    }
+    this.hideRegistration()
+    shipmentDispatch.getOffers(obj, redirect)
+  }
+
   render () {
     const {
       bookingData,
-      userDispatch,
       match,
       loading,
       tenant,
@@ -185,7 +201,7 @@ class Shop extends Component {
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant
     const {
-      modal, request, response, error, reusedShipment, contacts, originalSelectedDay
+      request, response, error, reusedShipment, contacts, originalSelectedDay
     } = bookingData
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
     const { showRegistration } = this.state
@@ -205,7 +221,7 @@ class Shop extends Component {
             scrollable
             noRedirect
           />
-        </GenericError >
+        </GenericError>
         <GenericError theme={theme}>
 
           <ShopStageView
@@ -218,7 +234,7 @@ class Shop extends Component {
             goForward={() => this.determineForwardFunction(stageTracker.stage)}
             hasNextStage={Boolean(stageActions.hasNextStage(response, stageTracker.stage))}
           />
-        </GenericError >
+        </GenericError>
         <GenericError theme={theme}>
           <Route
             exact
@@ -236,7 +252,7 @@ class Shop extends Component {
               />
             )}
           />
-        </GenericError >
+        </GenericError>
         <GenericError theme={theme}>
           <Route
             path={`${match.url}/:shipmentId/shipment_details`}
@@ -248,7 +264,7 @@ class Shop extends Component {
                 shipmentData={shipmentData}
                 prevRequest={get(request, ['stage2'], {})}
                 req={get(request, ['stage1'], {})}
-                getOffers={data => shipmentDispatch.getOffers(data, true)}
+                getOffers={data => this.getOffers(data, true)}
                 setStage={this.selectShipmentStage}
                 messages={error ? error.stage2 : []}
                 shipmentDispatch={shipmentDispatch}
@@ -260,7 +276,7 @@ class Shop extends Component {
               />
             )}
           />
-        </GenericError >
+        </GenericError>
         <GenericError theme={theme}>
           <Route
             path={`${match.url}/:shipmentId/choose_offer`}
@@ -284,7 +300,7 @@ class Shop extends Component {
               />
             )}
           />
-        </GenericError >
+        </GenericError>
 
         {response && response.stage3 ? (
           <GenericError theme={theme}>
@@ -310,7 +326,7 @@ class Shop extends Component {
                 />
               )}
             />
-          </GenericError >
+          </GenericError>
 
         ) : (
           ''
@@ -332,7 +348,7 @@ class Shop extends Component {
               />
             )}
           />
-        </GenericError >
+        </GenericError>
         <GenericError theme={theme}>
           <Route
             path={`${match.url}/:shipmentId/thank_you`}
@@ -348,54 +364,12 @@ class Shop extends Component {
               />
             )}
           />
-        </GenericError >
+        </GenericError>
 
         <div className={styles.pusher_bottom} />
       </div>
     )
   }
-}
-
-Shop.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  tenant: PropTypes.object,
-  theme: PropTypes.theme,
-  user: PropTypes.user,
-  loading: PropTypes.bool,
-  noRedirect: PropTypes.bool,
-  bookingData: PropTypes.shape({
-    request: PropTypes.object,
-    response: PropTypes.object,
-    contacts: PropTypes.arrayOf(PropTypes.contact),
-    error: PropTypes.object
-  }).isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  nexusDispatch: PropTypes.any,
-  // eslint-disable-next-line react/forbid-prop-types
-  currencies: PropTypes.any,
-  // eslint-disable-next-line react/forbid-prop-types
-
-  history: PropTypes.history.isRequired,
-  match: PropTypes.shape({
-    url: PropTypes.string
-  }).isRequired,
-  shipmentDispatch: PropTypes.shape({
-    updateContact: PropTypes.func,
-    newShipment: PropTypes.func,
-    getOffers: PropTypes.func,
-    sendQuotes: PropTypes.func,
-    setShipmentContacts: PropTypes.func
-  }).isRequired,
-  userDispatch: PropTypes.shape({
-    goTo: PropTypes.func
-  }).isRequired,
-  bookingSummaryDispatch: PropTypes.shape({
-    update: PropTypes.func
-  }).isRequired,
-  authenticationDispatch: PropTypes.shape({
-    showLogin: PropTypes.func,
-    closeLogin: PropTypes.func
-  }).isRequired
 }
 
 Shop.defaultProps = {
