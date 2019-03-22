@@ -281,7 +281,7 @@ module DocumentService
     end
 
     def consecutive_arrays(ary)
-      ary.sort!.slice_when { |x, y| (x.to_i + 1) != y.to_i }.map do |c_ary|
+      ary.sort.slice_when { |x, y| (x.to_i + 1) != y.to_i }.map do |c_ary|
         if c_ary.length == 1
           "#{c_ary.first} - #{c_ary.first}"
         else

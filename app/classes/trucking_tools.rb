@@ -218,7 +218,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
       return { rate: trucking_pricing['rates']['unit'][0]['rate'], fees: trucking_pricing['fees'] }
     when 'kg_cbm_special'
       result = { rate_basis: 'PER_KG_CBM_SPECIAL' }
-      %w(kg	kg_base	kg_sub	cbm	cbm_base	cbm_sub).each do |sym|
+      %w(kg	kg_base	kg_sub cbm cbm_base cbm_sub).each do |sym|
         result[sym] = trucking_pricing['rates'][sym].first
       end
 

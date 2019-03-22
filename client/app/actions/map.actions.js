@@ -1,9 +1,6 @@
 import { mapConstants } from '../constants'
 import { mapService } from '../services'
 
-// import { Promise } from 'es6-promise-promise';
-// import { push } from 'react-router-redux';
-
 function getMapData (id) {
   function request (mapData) {
     return { type: mapConstants.GET_MAP_DATA_REQUEST, payload: mapData }
