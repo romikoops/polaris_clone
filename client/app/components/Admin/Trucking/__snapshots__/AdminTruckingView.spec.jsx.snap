@@ -1,0 +1,215 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-space-around-start"
+>
+  <div
+    className="component_view flex-100 layout-row layout-align-start-start"
+  >
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-start"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="flex-100 layout-row layout-align-start-center"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-100 layout-row layout-align-start-center margin_10"
+      >
+        <div
+          className="action_section flex-100 flex-gt-sm-33 layout-row layout-align-center-center layout-wrap"
+        >
+          <p
+            className="flex-90 flex-gt-sm-50  center"
+          >
+            Upload Trucking Zones Sheet
+          </p>
+          <DocumentsSelector
+            dispatchFn={[Function]}
+            options={Array []}
+            t={[Function]}
+            text="Routes .xlsx"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            tooltip=""
+            type="xlsx"
+            uploadFn={null}
+          />
+        </div>
+        <div
+          className="action_section flex-100 flex-gt-sm-33 layout-row layout-wrap layout-align-center-center"
+        >
+          <p
+            className="flex-100 flex-gt-sm-50 center"
+          >
+            Download Cargo Item Sheet
+          </p>
+          <DocumentsDownloader
+            disabled={false}
+            documentDispatch={null}
+            downloadUrls={Object {}}
+            loading={false}
+            options={
+              Object {
+                "hub_id": undefined,
+                "load_type": "cargo_item",
+              }
+            }
+            size="small"
+            square={false}
+            t={[Function]}
+            target="trucking"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            tooltip=""
+          />
+        </div>
+        <div
+          className="action_section flex-100 flex-gt-sm-33 layout-row layout-wrap layout-align-center-center"
+        >
+          <p
+            className="flex-100 flex-gt-sm-50 center"
+          >
+            Download Container Sheet
+          </p>
+          <DocumentsDownloader
+            disabled={false}
+            documentDispatch={null}
+            downloadUrls={Object {}}
+            loading={false}
+            options={
+              Object {
+                "hub_id": undefined,
+                "load_type": "container",
+              }
+            }
+            size="small"
+            square={false}
+            t={[Function]}
+            target="trucking"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            tooltip=""
+          />
+        </div>
+      </GreyBox>
+      <div
+        className="flex-40 layout-row layout-align-space-around-start layout-wrap"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            Array [
+              "",
+            ]
+          }
+          contentClassName="flex-100 layout-row layout-align-start-start layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title=""
+          titleAction={false}
+          wrapperClassName="flex layout-row layout-align-start-start layout-wrap margin_10"
+        >
+          <GmapsWrapper
+            component={[Function]}
+            location={
+              Object {
+                "address": Object {
+                  "city": "FOO_CITY",
+                  "country": "Germany",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_STREET",
+                  "streetNumber": 579,
+                  "street_number": 579,
+                  "zipCode": "22456",
+                  "zip_code": "22456",
+                },
+                "name": "FOO_HUB_NAME",
+              }
+            }
+            targetId={false}
+          />
+        </GreyBox>
+      </div>
+      <div
+        className="flex-60 layout-row layout-align-space-around-start layout-wrap"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            Array [
+              "",
+            ]
+          }
+          contentClassName="flex-100 layout-row layout-align-start-start layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title=""
+          titleAction={false}
+          wrapperClassName="flex layout-row layout-align-start-start layout-wrap margin_10"
+        >
+          <TruckingTable
+            setTargetTruckingId={[Function]}
+            t={[Function]}
+          />
+        </GreyBox>
+      </div>
+    </div>
+    <style>
+      
+      .react-toggle--checked .react-toggle-track {
+        background:
+          undefined !important;
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+      .react-toggle-track {
+        background: undefined !important;
+      }
+      .react-toggle:hover .react-toggle-track{
+        background: rgba(0, 0, 0, 0.5) !important;
+      }
+    
+    </style>
+  </div>
+</div>
+`;

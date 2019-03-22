@@ -1581,7 +1581,7 @@ function assignManager (obj) {
   }
 }
 
-function viewTrucking (truckingHub) {
+function viewTrucking (args) {
   function request (truckingData) {
     return { type: adminConstants.VIEW_TRUCKING_REQUEST, payload: truckingData }
   }
@@ -1595,10 +1595,10 @@ function viewTrucking (truckingHub) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.viewTrucking(truckingHub).then(
+    adminService.viewTrucking(args).then(
       (data) => {
         dispatch(success(data))
-        dispatch(push(`/admin/pricings/trucking/${truckingHub}`))
+        dispatch(push(`/admin/pricings/trucking/${args.hubId}`))
       },
       (error) => {
         dispatch(failure(error))

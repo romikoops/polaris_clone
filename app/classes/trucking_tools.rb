@@ -97,6 +97,19 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
              ton_value = (cargo['weight'] / 1000) * fee[:ton]
              min = fee[:min_value] || 0
              [ton_value, cbm_value, min].max
+           when 'PER_KG_CBM_SPECIAL'
+             kg_sub = fee.dig(:kg_sub, :rate, :value).to_d
+             kg_base = fee.dig(:kg_base, :rate, :value).to_d
+             kg_factor = fee.dig(:kg, :rate, :value).to_d
+             kg_min = fee.dig(:kg, :min_value).to_d
+             kg_value = ((cargo['weight'] - kg_sub) * kg_factor) + kg_base
+             cbm_sub = fee.dig(:cbm_sub, :rate, :value).to_d
+             cbm_base = fee.dig(:cbm_base, :rate, :value).to_d
+             cbm_factor = fee.dig(:cbm, :rate, :value).to_d
+             cbm_value = ((cargo['volume'] - cbm_sub) * cbm_factor) + cbm_base
+             cbm_min = fee.dig(:cbm, :min_value).to_d
+
+             [kg_value, cbm_value, cbm_min, kg_min].max
            when 'PER_CBM'
              cbm_value = cargo['volume'] * (fee[:value] || fee[:cbm])
              min = fee[:min_value] || 0
@@ -203,6 +216,14 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
       return { rate: result, fees: trucking_pricing['fees'] }
     when 'unit'
       return { rate: trucking_pricing['rates']['unit'][0]['rate'], fees: trucking_pricing['fees'] }
+    when 'kg_cbm_special'
+      result = { rate_basis: 'PER_KG_CBM_SPECIAL' }
+      %w(kg	kg_base	kg_sub cbm cbm_base cbm_sub).each do |sym|
+        result[sym] = trucking_pricing['rates'][sym].first
+      end
+
+      result['currency'] = trucking_pricing['rates']['kg'].first['rate']['currency']
+      return { rate: result, fees: trucking_pricing['fees'] }
     when 'unit_per_km'
       result = { rate_basis: 'PER_CONTAINER_KM' }
       result[:unit] = trucking_pricing['rates']['unit'][0]['rate']['value']
@@ -240,7 +261,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
       end
     end
 
-    target = "#{trucking_pricing.scope.carriage}_carriage"
+    target = "#{trucking_pricing.carriage || trucking_pricing.scope.carriage}_carriage"
     total_chargeable_weight =
       cargo_object.dig('stackable', 'weight') + cargo_object.dig('non_stackable', 'weight')
     cargos.first.shipment.set_trucking_chargeable_weight(target, total_chargeable_weight)

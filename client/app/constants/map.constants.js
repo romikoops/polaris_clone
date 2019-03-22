@@ -334,3 +334,12 @@ export const countries = [
   { label: 'Zambia', value: 'ZM' },
   { label: 'Zimbabwe', value: 'ZW' }
 ]
+
+export const mapConstants = {
+  GET_MAP_DATA_REQUEST: 'GET_MAP_DATA_REQUEST',
+  GET_MAP_DATA_SUCCESS: 'GET_MAP_DATA_SUCCESS',
+  GET_MAP_DATA_FAILURE: 'GET_MAP_DATA_FAILURE',
+  GET_GEOJSON_REQUEST: 'GET_GEOJSON_REQUEST',
+  GET_GEOJSON_SUCCESS: 'GET_GEOJSON_SUCCESS',
+  GET_GEOJSON_FAILURE: 'GET_GEOJSON_FAILURE'
+}

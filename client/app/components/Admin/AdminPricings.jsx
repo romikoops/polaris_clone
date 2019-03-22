@@ -12,7 +12,7 @@ import {
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions, documentActions } from '../../actions'
 import AdminUploadsSuccess from './Uploads/Success'
-import AdminTruckingView from './AdminTruckingView'
+import AdminTruckingView from './Trucking/AdminTruckingView'
 
 class AdminPricings extends Component {
   constructor (props) {

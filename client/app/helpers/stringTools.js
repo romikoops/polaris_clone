@@ -50,3 +50,19 @@ export function renderHubType (mot) {
       return ''
   }
 }
+
+export function determineDestinationAccessor (d) {
+  if (d.city) {
+    return d.city
+  }
+
+  if (d.zipCode) {
+    return d.zipCode
+  }
+
+  if (d.distance) {
+    return `${d.distance} km`
+  }
+
+  return ''
+}

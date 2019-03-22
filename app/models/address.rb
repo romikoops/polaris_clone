@@ -31,7 +31,6 @@ class Address < Legacy::Address
       address.geocoded_address = geo.address
       address.city             = geo.city
       address.zip_code         = geo.postal_code
-
       address.country          = Country.find_by(code: geo.country_code)
     end
 
@@ -138,7 +137,6 @@ class Address < Legacy::Address
 
   def self.address_params(raw_address_params)
     country = Country.geo_find_by_name(raw_address_params['country'])
-
     filtered_params = raw_address_params.try(:permit,
                                              :latitude, :longitude, :geocoded_address, :street,
                                              :street_number, :zip_code, :city) || raw_address_params

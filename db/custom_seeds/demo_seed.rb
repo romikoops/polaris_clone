@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# # frozen_string_literal: false
-
 include ExcelTools
 # include ShippingTools
 # # subdomains = %w(demo greencarrier easyshipping hartrodt)

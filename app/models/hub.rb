@@ -18,6 +18,7 @@ class Hub < Legacy::Hub
   has_many :trucking_hub_availabilities, class_name: 'Trucking::HubAvailability'
   has_many :truckings, class_name: 'Trucking::Trucking'
   has_many :rates, -> { distinct }, through: :truckings
+  has_many :locations, -> { distinct }, through: :truckings
   belongs_to :mandatory_charge, optional: true
 
   MOT_HUB_NAME = {

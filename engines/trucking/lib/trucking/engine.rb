@@ -5,6 +5,7 @@ require 'locations'
 require 'paper_trail'
 require 'roo'
 require 'roo-xls'
+require 'will_paginate'
 
 module Trucking
   class Engine < ::Rails::Engine

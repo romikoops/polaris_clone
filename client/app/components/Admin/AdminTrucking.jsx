@@ -3,15 +3,17 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from '../../prop-types'
-import { AdminTruckingIndex, AdminTruckingView, AdminTruckingCreator } from './'
+import { AdminTruckingIndex, AdminTruckingCreator } from '.'
+import AdminTruckingView from './Trucking/AdminTruckingView'
 import { adminActions, appActions } from '../../actions'
 import { history } from '../../helpers'
-import GenericError from '../../components/ErrorHandling/Generic'
+import GenericError from '../ErrorHandling/Generic'
 
 class AdminTrucking extends Component {
   static backToIndex () {
     history.goBack()
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -20,19 +22,22 @@ class AdminTrucking extends Component {
     this.viewTrucking = this.viewTrucking.bind(this)
     this.toggleCreator = this.toggleCreator.bind(this)
   }
+
   componentWillMount () {
     if (!this.props.trucking) {
       this.props.adminDispatch.getTrucking()
     }
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
   }
 
   viewTrucking (hub) {
     const { adminDispatch } = this.props
-    adminDispatch.viewTrucking(hub.id)
+    adminDispatch.viewTrucking({ hubId: hub.id, page: 1, filters: [{ id: 'cargo_class', value: 'lcl' }] })
   }
+
   toggleCreator () {
     this.setState({ creatorView: !this.state.creatorView })
   }

@@ -27,7 +27,7 @@ module Trucking
           context 'basic tests' do
             it 'raises an ArgumentError if no load_type is provided' do
               expect do
-                trucking_rates = described_class.new(
+                described_class.new(
                   klass: Rate, tenant_id: tenant.id, zipcode: zipcode, carriage: carriage, country_code: country_code
                 ).perform
               end.to raise_error(ArgumentError)
@@ -35,7 +35,7 @@ module Trucking
 
             it 'raises an ArgumentError if no tenant_id is provided' do
               expect do
-                trucking_rates = described_class.new(
+                described_class.new(
                   load_type: load_type, zipcode: zipcode, carriage: carriage, country_code: country_code
                 ).perform
               end.to raise_error(ArgumentError)
@@ -43,7 +43,7 @@ module Trucking
 
             it 'raises an ArgumentError if no carriage is provided' do
               expect do
-                trucking_rates = described_class.new(
+                described_class.new(
                   klass: Rate, tenant_id: tenant.id, zipcode: zipcode, load_type: load_type, country_code: country_code
                 ).perform
               end.to raise_error(ArgumentError)
@@ -51,7 +51,7 @@ module Trucking
 
             it 'raises an ArgumentError if no country_code is provided' do
               expect do
-                trucking_rates = described_class.new(
+                described_class.new(
                   klass: Rate, tenant_id: tenant.id, zipcode: zipcode, load_type: load_type, carriage: carriage
                 ).perform
               end.to raise_error(ArgumentError)
@@ -59,7 +59,7 @@ module Trucking
 
             it 'raises an ArgumentError if incorrect keys are provided' do
               expect do
-                trucking_rates = described_class.new(
+                described_class.new(
                   klass: Rate, tenant_id: tenant.id
                 ).perform
               end.to raise_error(ArgumentError)

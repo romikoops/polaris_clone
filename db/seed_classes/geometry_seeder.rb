@@ -242,19 +242,13 @@ class GeometrySeeder
 
       begin
         multi_polygon = RGeo::Cartesian.factory.multi_polygon(polygons)
-      rescue => e
-
-        largest_polygon = polygons.sort_by {|p| p.area }.last
+      rescue StandardError
+        largest_polygon = polygons.max_by(&:area)
         new_polygons = [largest_polygon]
-        polygons.each do |p| 
-          unless largest_polygon.contains?(p) || largest_polygon.intersects?(p)
-            new_polygons << p
-          end
+        polygons.each do |p|
+          new_polygons << p unless largest_polygon.contains?(p) || largest_polygon.intersects?(p)
         end
         multi_polygon = RGeo::Cartesian.factory.multi_polygon(new_polygons)
-        # binding.pry
-        # "98016"
-        # return nil
       end
 
       locations_attributes << {
