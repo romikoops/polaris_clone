@@ -135,7 +135,7 @@ module Trucking
         end
       end
 
-      def insert_or_update_truckings(trucking_rate, single_ident_values_and_country) # rubocop:disable Metrics/AbcSize
+      def insert_or_update_truckings(trucking_rate, single_ident_values_and_country) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         @all_trucking_locations = []
         @all_trucking_truckings = []
         single_ident_values_and_country.each do |ident_and_country|
@@ -199,7 +199,7 @@ module Trucking
             range = row_data[2].delete(' ').split('-')
             @zip_char_length ||= range[0].length
             zones[zone_name] << if identifier_type == 'distance' && identifier_modifier == 'return'
-                                  { 
+                                  {
                                     min: (range[0].to_i / 2.0).ceil,
                                     max: (range[1].to_i / 2.0).ceil,
                                     country: row_data[3].strip

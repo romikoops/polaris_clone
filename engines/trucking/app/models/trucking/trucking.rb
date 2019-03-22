@@ -26,9 +26,7 @@ module Trucking
     def self.find_by_hub_ids(hub_ids:, options: {})
       args = options.merge(hub_ids: hub_ids)
       result = ::Trucking::Queries::FindByHubIds.new(args.merge(klass: self)).perform
-      if options[:paginate]
-        result = result.paginate(page: options[:page], per_page: options[:per_page] || 20)
-      end
+      result = result.paginate(page: options[:page], per_page: options[:per_page] || 20) if options[:paginate]
 
       result
     end

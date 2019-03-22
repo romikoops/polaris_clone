@@ -29,7 +29,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
       context 'basic tests' do
         it 'raises an ArgumentError if no load_type is provided' do
           expect do
-            trucking_rates = ::Trucking::Trucking.find_by_filter(
+            ::Trucking::Trucking.find_by_filter(
               tenant_id: tenant.id, zipcode: zipcode, carriage: carriage, country_code: country_code
             )
           end.to raise_error(ArgumentError)
@@ -37,7 +37,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
 
         it 'raises an ArgumentError if no tenant_id is provided' do
           expect do
-            trucking_rates = ::Trucking::Trucking.find_by_filter(
+            ::Trucking::Trucking.find_by_filter(
               load_type: load_type, zipcode: zipcode, carriage: carriage, country_code: country_code
             )
           end.to raise_error(ArgumentError)
@@ -45,7 +45,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
 
         it 'raises an ArgumentError if no carriage is provided' do
           expect do
-            trucking_rates = ::Trucking::Trucking.find_by_filter(
+            ::Trucking::Trucking.find_by_filter(
               tenant_id: tenant.id, zipcode: zipcode, load_type: load_type, country_code: country_code
             )
           end.to raise_error(ArgumentError)
@@ -53,7 +53,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
 
         it 'raises an ArgumentError if no country_code is provided' do
           expect do
-            trucking_rates = ::Trucking::Trucking.find_by_filter(
+            ::Trucking::Trucking.find_by_filter(
               tenant_id: tenant.id, zipcode: zipcode, load_type: load_type, carriage: carriage
             )
           end.to raise_error(ArgumentError)

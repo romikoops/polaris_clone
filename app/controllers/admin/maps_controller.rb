@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::MapsController < Admin::AdminBaseController # rubocop:disable # Style/ClassAndModuleChildren
+class Admin::MapsController < Admin::AdminBaseController # rubocop:disable Style/ClassAndModuleChildren
   def geojsons
     @hub = Hub.find(params[:id])
     @truckings = @hub.truckings

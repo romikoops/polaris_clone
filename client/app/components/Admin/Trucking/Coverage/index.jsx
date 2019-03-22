@@ -56,7 +56,7 @@ class TruckingCoverage extends PureComponent {
           color = 'green'
         }
 
-        return /** @type {!google.maps.Data.StyleOptions} */({
+        return ({
           fillColor: color,
           strokeColor: color,
           strokeWeight: 2
@@ -82,7 +82,7 @@ class TruckingCoverage extends PureComponent {
       map.data.setStyle((feature) => {
         let color = 'gray'
 
-        return /** @type {!google.maps.Data.StyleOptions} */({
+        return ({
           fillColor: color,
           strokeColor: color,
           strokeWeight: 2
@@ -108,7 +108,7 @@ class TruckingCoverage extends PureComponent {
       map.data.setStyle((feature) => {
         let color = 'green'
 
-        return /** @type {!google.maps.Data.StyleOptions} */({
+        return ({
           fillColor: color,
           strokeColor: color,
           strokeWeight: 2

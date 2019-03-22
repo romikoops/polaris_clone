@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 module DocumentService
-  class TruckingWriter
+  class TruckingWriter # rubocop:disable Metrics/ClassLength
     include AwsConfig
     include WritingTool
     attr_reader :options, :tenant, :hub, :target_load_type, :filename, :directory, :header_values,
                 :workbook, :unfiltered_results, :carriage_reducer, :results_by_truck_type, :dir_fees,
                 :zone_sheet, :fees_sheet, :header_format, :pages, :zones, :identifier
 
-    def initialize(options)
+    def initialize(options) # rubocop:disable Metrics/MethodLength
       @options = options
       @tenant = tenant_finder(options[:tenant_id])
       @hub = Hub.find(options[:hub_id])
@@ -38,8 +38,6 @@ module DocumentService
     end
 
     def perform
-      currency = ''
-      truck_type = ''
       prep_results
       write_zone_to_sheet
       write_fees_to_sheet
@@ -50,10 +48,8 @@ module DocumentService
 
     private
 
-    def prep_results
-      results = []
-
-      page_groupings = unfiltered_results.group_by do |ufr| 
+    def prep_results # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      page_groupings = unfiltered_results.group_by do |ufr|
         [
           ufr.dig('truckingPricing', 'truck_type'),
           ufr.dig('truckingPricing', 'cargo_class'),
@@ -66,7 +62,6 @@ module DocumentService
         grouped_results.values.each do |values|
           trucking = values.first['truckingPricing']
           meta = _meta(values.first)
-          
           identifiers = values.map do |v|
             if trucking['identifier_modifier'] == 'locode'
               v[identifier].split(' - ').first
@@ -74,16 +69,14 @@ module DocumentService
               v[identifier]
             end
           end
-        
-          zone_identifiers = if ['zipCode', 'distance'].include?(identifier)
-            consecutive_arrays(identifiers)
-          else
-            identifiers
-          end
+          zone_identifiers = if %w(zipCode distance).include?(identifier)
+                               consecutive_arrays(identifiers)
+                             else
+                               identifiers
+                             end
           zone_key = zone_identifiers.first
           update_pages(meta, values.first, zone_key)
           update_dir_fees(meta, values.first)
-          # binding.pry
 
           zone_identifiers.each do |ident|
             zones[zone_key] << { idents: ident, country_code: values.first['countryCode'] }
@@ -112,7 +105,7 @@ module DocumentService
       ident
     end
 
-    def _meta(ufr)
+    def _meta(ufr) # rubocop:disable Metrics/AbcSize
       {
         city: hub.nexus.name,
         currency: ufr['truckingPricing']['rates'].first[1][0]['rate']['currency'],
@@ -137,7 +130,6 @@ module DocumentService
       zone_row = 1
       zones.values.each_with_index do |zone_array, zone|
         zone_array.each do |zone_data|
-          binding.pry if zone_data[:idents].nil?
           write_zone_data(zone_row, zone, zone_data)
           zone_row += 1
         end
@@ -152,9 +144,8 @@ module DocumentService
       end
     end
 
-    def write_zone_data(zone_row, zone, zone_data)
+    def write_zone_data(zone_row, zone, zone_data) # rubocop:disable Metrics/AbcSize
       zone_sheet.write(zone_row, 0, zone)
-      # binding.pry
       if zone_data[:idents].include?(' - ')
         start_num, end_num = zone_data[:idents].split(' - ')
         if identifier_to_write.include?('return')
@@ -175,7 +166,6 @@ module DocumentService
     end
 
     def update_pages(meta, ufr, zone)
-      binding.pry if ufr.nil?
       page_key = "#{meta[:truck_type]}_#{meta[:cargo_class]}_#{meta[:load_type]}_#{meta[:direction]}"
       unless pages[page_key]
         pages[page_key] = {
@@ -242,8 +232,8 @@ module DocumentService
       end
     end
 
-    def write_rates_to_sheet
-      pages.values.each_with_index do |page, i|
+    def write_rates_to_sheet # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      pages.values.each_with_index do |page, i| # rubocop:disable Metrics/BlockLength
         rates_sheet = workbook.add_worksheet(i.to_s)
         rates_sheet.write(3, 0, 'ZONE')
         rates_sheet.write(3, 1, 'MIN')
@@ -257,7 +247,7 @@ module DocumentService
           rates_sheet.write(1, meta_x, value)
           meta_x += 1
         end
-        # binding.pry if page.dig(:pricings, '1', 'truckingPricing', 'rates').nil?
+
         page[:pricings].values.first['truckingPricing']['rates'].each do |key, rates_array|
           rates_array.each do |rate|
             next unless rate
@@ -267,10 +257,10 @@ module DocumentService
             x += 1
           end
         end
-        page[:pricings].values.each_with_index do |result, i|
-          rates_sheet.write(row, 0, i)
+        page[:pricings].values.each_with_index do |result, pi|
+          rates_sheet.write(row, 0, pi)
           rates_sheet.write(row, 1, result['truckingPricing']['rates'].first[1][0]['min_value'])
-          minimums[i] = result['truckingPricing']['rates'].first[1][0]['min_value']
+          minimums[pi] = result['truckingPricing']['rates'].first[1][0]['min_value']
           x = 2
           result['truckingPricing']['rates'].each do |_key, rates_array|
             rates_array.each do |rate|
