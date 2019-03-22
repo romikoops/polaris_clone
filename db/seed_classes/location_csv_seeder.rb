@@ -22,7 +22,27 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
         next unless names.length > 100
 
         begin
-          Locations::Name.import(names)
+          Locations::Name.import(names, on_duplicate_key_update: %i(
+                                   location_id
+                                   uuid
+                                   osm_id
+                                   place_rank
+                                   importance
+                                   osm_type
+                                   street
+                                   city
+                                   osm_class
+                                   name_type
+                                   country
+                                   county
+                                   state
+                                   country_code
+                                   display_name
+                                   alternative_names
+                                   name
+                                   point
+                                   locode
+                                 ))
           names = []
         rescue StandardError => e
           Rails.logger e

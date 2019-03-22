@@ -211,7 +211,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
                             hub: hub,
                             location: FactoryBot.create(:trucking_location, :with_location))
 
-          expect(::Trucking::Trucking.find_by_hub_id(hub_id: hub_id: -1)).to eq([])
+          expect(::Trucking::Trucking.find_by_hub_id(hub_id: -1)).to eq([])
         end
       end
 

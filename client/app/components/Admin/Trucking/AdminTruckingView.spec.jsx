@@ -8,7 +8,7 @@ jest.mock('react-redux', () => ({
   connect: (mapStateToProps, mapDispatchToProps) => Component => Component
 }))
 
-jest.mock('../../helpers', () => ({
+jest.mock('../../../helpers', () => ({
   history: x => x,
   capitalize: x => x,
   nameToDisplay: x => x,
