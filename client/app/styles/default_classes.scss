@@ -536,6 +536,31 @@
       width: 175px;
     }
   }
+  .landing_logo_corner {
+    width: 150px;
+    position: absolute;
+    top: 0;
+    left: 0
+  }
+  .landing_logo_medium {
+    width: 225px;
+    margin-top: 100px;
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      margin-top: 100px;
+    }
+    @media (max-width: 1024px), (max-height: 850px)  {
+      margin-top: 100px;
+      width: 200px;
+    }
+    @media (max-width: 960px), (max-height: 600px) {
+      margin-top: 60px;
+      width: 150px;
+    }
+    @media (max-width: 600px), (max-height: 400px) {
+      margin-top: 40px;
+      width: 125px;
+    }
+  }
   .ngl_title {
     @include responsive-font(2vw, 20px, 4vh, 15px);
     color: white;
