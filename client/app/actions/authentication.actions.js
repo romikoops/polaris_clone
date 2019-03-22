@@ -2,7 +2,9 @@ import { push } from 'react-router-redux'
 import * as Sentry from '@sentry/browser'
 import { authenticationConstants } from '../constants'
 import { authenticationService } from '../services'
-import { alertActions, shipmentActions, adminActions, userActions, tenantActions } from './'
+import {
+ alertActions, shipmentActions, adminActions, userActions, tenantActions 
+} from "."
 import getSubdomain from '../helpers/subdomain'
 
 const { localStorage } = window
@@ -63,7 +65,13 @@ function login (data) {
         if (shipmentReq) {
           if (['shipper', 'agent'].includes(response.data.role.name)) {
             shipmentReq.user_id = response.data.id
-            dispatch(shipmentActions.chooseOffer(shipmentReq))
+            const { action } = shipmentReq
+            delete shipmentReq.action
+            if (action === 'getOffers') {
+              dispatch(shipmentActions.getOffers(shipmentReq, true))
+            } else {
+              dispatch(shipmentActions.chooseOffer(shipmentReq))
+            }
           } else {
             dispatch(adminCreateShipmentAttempt())
             dispatch(adminActions.getDashboard(true))

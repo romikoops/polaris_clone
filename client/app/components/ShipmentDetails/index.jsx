@@ -66,8 +66,8 @@ class ShipmentDetails extends React.PureComponent {
   }
 
   getOffers () {
-    const { shipment, shipmentDispatch } = this.props
-    const { getOffers } = shipmentDispatch
+    const { shipment, getOffers } = this.props
+
 
     const request = {
       shipment: {

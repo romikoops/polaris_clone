@@ -1,11 +1,9 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import styles from './UserAccount.scss'
-import { RoundButton } from '../RoundButton/RoundButton'
-
 
 const ProfileBox = ({
-  user, style, edit, t, hide, handlePasswordChange, theme, passwordResetRequested, passwordResetSent, hideEdit
+  user, style, edit, t, hide, hideEdit
 }) => !hide && (
   <div
     className={`flex-100 layout-row layout-align-start-start
@@ -30,7 +28,9 @@ const ProfileBox = ({
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.email}</p>
+        <p className="flex-none">
+          {user.email}
+        </p>
       </div>
     </div>
     <div className="flex-100 layout-row layout-align-start-start layout-wrap">
@@ -40,7 +40,9 @@ const ProfileBox = ({
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.phone}</p>
+        <p className="flex-none">
+          {user.phone}
+        </p>
       </div>
     </div>
     <div className="flex-100 layout-row layout-align-start-start layout-wrap">
@@ -50,7 +52,9 @@ const ProfileBox = ({
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.company_name}</p>
+        <p className="flex-none">
+          {user.company_name}
+        </p>
       </div>
     </div>
     <div className="flex-100 layout-row layout-align-start-start layout-wrap">
@@ -60,7 +64,9 @@ const ProfileBox = ({
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.vat_number}</p>
+        <p className="flex-none">
+          {user.vat_number}
+        </p>
       </div>
     </div>
 

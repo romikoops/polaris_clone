@@ -143,21 +143,6 @@ class UserProfile extends Component {
       ? <DeleteAccountModal closeModal={this.closeDeleteAccountModal} tenant={tenant} user={user} theme={theme} />
       : ''
 
-    const currencySection = (
-      <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
-        <div className="flex-75 layout-row layout-align-end-center layout-wrap">
-          <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.currency_grey}`}>
-            <p className="flex-none">
-              {t('common:currency')}
-              :
-            </p>
-            <span><strong>{user.currency}</strong></span>
-          </div>
-        </div>
-        <div className="flex-75 layout-row layout-align-space-around-center layout-wrap" />
-      </div>
-    )
-
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding">
         {deleteAccountModal}
