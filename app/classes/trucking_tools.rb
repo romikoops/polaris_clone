@@ -80,7 +80,9 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
              min = fee[:min_value] || 0
              [val, min].max
            when 'PER_SHIPMENT'
-             fee[:value]
+             return fee[:value] if fee[:value]
+
+             fee.except(:rate_basis, :currency).values.max
            when 'PER_BILL'
              fee[:value]
            when 'PER_ITEM'
@@ -189,26 +191,30 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
         return { rate: rate['rate'], fees: trucking_pricing['fees'] }
       end
     when 'cbm_kg'
-      result = { rate_basis: 'PER_CBM_KG' }
+      result = {}
       trucking_pricing['rates']['kg'].each do |rate|
         next unless cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
 
         result['kg'] = rate['rate']['value']
+        result['rate_basis'] = rate['rate']['rate_basis']
         result['min_value'] = rate['min_value']
         result['currency'] = rate['rate']['currency']
       end
       trucking_pricing['rates']['cbm'].each do |rate|
         next unless cargo_values['volume'] <= rate['max_cbm'].to_i && cargo_values['volume'] >= rate['min_cbm'].to_i
 
+        result['rate_basis'] = rate['rate']['rate_basis']
         result['cbm'] = rate['rate']['value']
         result['min_value'] = rate['min_value']
         result['currency'] = rate['rate']['currency']
       end
       if cargo_values['volume'] < trucking_pricing['rates']['cbm'].first['min_cbm'].to_i
+        result['rate_basis'] = trucking_pricing['rates']['cbm'].first['rate']['rate_basis']
         result['cbm'] = trucking_pricing['rates']['cbm'].first['rate']['value']
         result['min_value'] = trucking_pricing['rates']['cbm'].first['min_value']
         result['currency'] = trucking_pricing['rates']['cbm'].first['rate']['currency']
       elsif cargo_values['volume'] > trucking_pricing['rates']['cbm'].compact.last['max_cbm'].to_i
+        result['rate_basis'] = trucking_pricing['rates']['cbm'].compact.last['rate']['rate_basis']
         result['cbm'] = trucking_pricing['rates']['cbm'].compact.last['rate']['value']
         result['min_value'] = trucking_pricing['rates']['cbm'].compact.last['min_value']
         result['currency'] = trucking_pricing['rates']['cbm'].compact.last['rate']['currency']
@@ -380,7 +386,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
       total[:currency] = trucking_fee[:currency]
     end
 
-    total[:currency] = trucking_pricing.tenant.currency if total[:currency] == '' && total[:value] == 0
+    total[:currency] = trucking_pricing.tenant.currency if total[:currency] == '' && total[:value].zero?
 
     fees[:total] = total
     fees
