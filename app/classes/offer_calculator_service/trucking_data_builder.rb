@@ -43,7 +43,7 @@ module OfferCalculatorService
 
     def validate_data_for_hubs(data)
       data.each_with_object({}) do |(hub_id, trucking_data), valid_data|
-        valid_data[hub_id] = trucking_data unless trucking_data[:trucking_charge_data].value?(nil)
+        valid_data[hub_id] = trucking_data unless trucking_data[:trucking_charge_data].has_value?(nil)
       end
     end
 
@@ -71,6 +71,7 @@ module OfferCalculatorService
 
     def calc_trucking_charges(distance, trucking_pricing)
       return nil if trucking_pricing.nil?
+
       cargo_class = trucking_pricing.cargo_class
       cargo_unit_array = @shipment.cargo_units.where(cargo_class: cargo_class)
       cargo_units = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : cargo_unit_array

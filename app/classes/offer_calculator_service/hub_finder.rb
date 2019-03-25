@@ -20,13 +20,14 @@ module OfferCalculatorService
 
     def trucking_hub_ids(carriage)
       trucking_details = @shipment.trucking["#{carriage}_carriage"]
-      cargo_classes = @shipment.cargo_classes
+
       args = {
         address: Address.find(trucking_details['address_id']),
         load_type: @shipment.load_type,
         tenant_id: @shipment.tenant_id,
         truck_type: trucking_details['truck_type'],
-        carriage: carriage
+        carriage: carriage,
+        cargo_classes: @shipment.cargo_classes
       }
 
       Trucking::Trucking.find_by_filter(args).pluck(:hub_id)

@@ -20,7 +20,7 @@ module Trucking
         @load_type    = args[:load_type]
         @carriage     = args[:carriage]
         @truck_type   = args[:truck_type]
-        @cargo_classes  = args[:cargo_classes]
+        @cargo_classes = args[:cargo_classes]
         @nexus_ids    = args[:nexus_ids]
         @hub_ids      = args[:hub_ids]
         @distance     = args[:distance]
