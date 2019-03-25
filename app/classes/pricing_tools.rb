@@ -80,8 +80,10 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
       end
       filter_charge
     end
+    results = [filtered_charges.compact.uniq]
+    results << shipment_charges unless shipment_charges['fees'].empty?
 
-    [filtered_charges.compact.uniq, shipment_charges]
+    results
   end
 
   def get_cargo_weight(cargo_unit)
@@ -154,7 +156,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
       end
     end
 
-    charge_results << local_charge_calculation_block(shipment_charges, null_cargo_hash, user)
+    charge_results << local_charge_calculation_block(shipment_charges, null_cargo_hash, user) if shipment_charges
     charge_results.flatten.compact
   end
 
