@@ -27,11 +27,8 @@ module OfferCalculatorService
         truck_type: trucking_details['truck_type'],
         carriage: carriage
       }
-      ## Legacy Code
-      Trucking::Rate.find_by_filter(args).pluck(:hub_id)
 
-      ## New Code
-      # Trucking::Trucking.find_by_filter(args).pluck(:hub_id)
+      Trucking::Trucking.find_by_filter(args).pluck(:hub_id)
     end
   end
 end

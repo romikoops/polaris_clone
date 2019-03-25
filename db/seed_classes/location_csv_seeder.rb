@@ -8,13 +8,15 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
     # load_map_data('/Users/warwickbeamish/Downloads/drydock_europe.csv.gz')
     # load_names_from_csv
     # load_name_data('data/location_data/netherlands_osm_2.csv.gz')
-    load_locode_data('data/location_data/nl_locodes.csv.gz')
+    # load_locode_data('data/location_data/nl_locodes.csv.gz')
+    load_names_from_csv
   end
 
   def self.load_names_from_csv
     s3_url = 'data/location_data/locations_names_dump.csv.gz'
-    LocationCsvSeeder.get_s3_file(s3_url)
-    Zlib::GzipReader.open(TMP_PATH) do |gz|
+    # LocationCsvSeeder.get_s3_file(s3_url)
+    # Zlib::GzipReader.open(TMP_PATH) do |gz|
+    Zlib::GzipReader.open('/Users/warwickbeamish/Documents/locations_names_2.csv.gz') do |gz|
       csv = CSV.new(gz, headers: true)
       names = []
       csv.each do |row|

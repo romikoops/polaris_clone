@@ -115,7 +115,7 @@ module OfferCalculatorService
           dates: dates,
           dedicated_pricings_only: dedicated_pricings?(user)
         )
-
+        
         # Find the group with the most pricings and create the object to be passed on
         most_diverse_set = pricings_by_cargo_class.values.max_by(&:length)
         other_pricings = pricings_by_cargo_class
