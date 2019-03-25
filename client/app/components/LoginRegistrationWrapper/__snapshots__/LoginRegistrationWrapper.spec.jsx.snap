@@ -9,15 +9,21 @@ Array [
   <div
     className="toggle_prompt layout-row layout-align-space-between"
   >
-    <div>
-      New account?
-    </div>
-    <div
-      className="emulate_link"
-      onClick={[Function]}
-    >
-      Register
-    </div>
+    <RoundButton
+      active={true}
+      back={false}
+      classNames=""
+      disabled={false}
+      flexContainer="100"
+      handleDisabled={null}
+      handleNext={[Function]}
+      icon=""
+      iconClass=""
+      inverse={false}
+      size=""
+      text="Register"
+      theme={null}
+    />
   </div>,
 ]
 `;

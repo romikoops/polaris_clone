@@ -3,6 +3,7 @@ import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './LoginRegistrationWrapper.scss'
 import { LoginPage } from '../../containers/LoginPage/LoginPage'
+import { RoundButton } from '../RoundButton/RoundButton'
 import { RegistrationPage } from '../../containers/RegistrationPage/RegistrationPage'
 
 class LoginRegistrationWrapper extends PureComponent {
@@ -31,7 +32,7 @@ class LoginRegistrationWrapper extends PureComponent {
       compName: nextCompName
     })
   }
-  
+
   render () {
     const compName = this.state.compName ? this.state.compName : this.props.initialCompName
     const Comp = this.components[compName]
@@ -46,10 +47,13 @@ class LoginRegistrationWrapper extends PureComponent {
       <Comp {...compProps} />,
       <hr className={styles.toggle_prompt_separator} />,
       <div className={togglePromptClasses}>
-        <div>{this.togglePrompt[compName].promptText}</div>
-        <div className="emulate_link" onClick={() => this.toggleComp(compName)}>
-          {this.togglePrompt[compName].linkText}
-        </div>
+        <RoundButton
+          text={this.togglePrompt[compName].linkText}
+          handleNext={() => this.toggleComp(compName)}
+          theme={compProps.theme}
+          active
+        />
+
       </div>
     ]
   }
