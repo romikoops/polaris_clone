@@ -80,11 +80,7 @@ module TruckingTools # rubocop:disable Metrics/ModuleLength
              min = fee[:min_value] || 0
              [val, min].max
            when 'PER_SHIPMENT'
-             if fee[:value]
-              fee[:value]
-             else
-              fee.except(:rate_basis, :currency).values.max
-             end
+            fee[:value] || fee.except(:rate_basis, :currency).values.max
            when 'PER_BILL'
              fee[:value]
            when 'PER_ITEM'
