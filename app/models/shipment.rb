@@ -258,6 +258,14 @@ class Shipment < Legacy::Shipment
     end
   end
 
+  def cargo_classes
+    if aggregated_cargo
+      ['lcl']
+    else
+      cargo_units.pluck(:cargo_class).uniq
+    end
+  end
+
   def valid_until
     cargo_classes = cargo_units.pluck(:cargo_class)
     start_date = planned_etd || desired_start_date

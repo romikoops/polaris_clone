@@ -25,13 +25,25 @@ module OfferCalculatorService
         shipment: @shipment,
         user_id: @shipment.user_id
       )
-      Hub.where(id: hub_ids).each_with_object({}) do |hub, obj|
+      data = Hub.where(id: hub_ids).each_with_object({}) do |hub, obj|
         distance = calc_distance(address, hub)
 
         trucking_pricings = trucking_pricing_finder.perform(hub.id, distance)
 
         trucking_charge_data = data_for_trucking_charges(trucking_pricings, distance)
+        next if trucking_charge_data.empty?
+
         obj[hub.id] = { trucking_charge_data: trucking_charge_data }
+      end
+      valid_object = validate_data_for_hubs(data)
+      raise ApplicationError::MissingTruckingData if valid_object.empty?
+
+      valid_object
+    end
+
+    def validate_data_for_hubs(data)
+      data.each_with_object({}) do |(hub_id, trucking_data), valid_data|
+        valid_data[hub_id] = trucking_data unless trucking_data[:trucking_charge_data].value?(nil)
       end
     end
 
@@ -44,11 +56,9 @@ module OfferCalculatorService
     end
 
     def data_for_trucking_charges(trucking_pricings, distance)
-      trucking_pricings.each_with_object({}) do |trucking_pricing, trucking_charge_data|
-        key = trucking_pricing.cargo_class
+      trucking_pricings.each_with_object({}) do |(cargo_class, trucking_pricing), trucking_charge_data|
+        key = cargo_class
         trucking_charges = calc_trucking_charges(distance, trucking_pricing)
-        next if trucking_charges.nil?
-
         trucking_charge_data[key] = trucking_charges
       end
     rescue TruckingDataBuilder::MissingTruckingData
@@ -60,6 +70,7 @@ module OfferCalculatorService
     end
 
     def calc_trucking_charges(distance, trucking_pricing)
+      return nil if trucking_pricing.nil?
       cargo_class = trucking_pricing.cargo_class
       cargo_unit_array = @shipment.cargo_units.where(cargo_class: cargo_class)
       cargo_units = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : cargo_unit_array

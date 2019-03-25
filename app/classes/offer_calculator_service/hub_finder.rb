@@ -20,6 +20,7 @@ module OfferCalculatorService
 
     def trucking_hub_ids(carriage)
       trucking_details = @shipment.trucking["#{carriage}_carriage"]
+      cargo_classes = @shipment.cargo_classes
       args = {
         address: Address.find(trucking_details['address_id']),
         load_type: @shipment.load_type,

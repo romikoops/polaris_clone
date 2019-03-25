@@ -15,6 +15,7 @@ module OfferCalculatorService
 
     def perform
       destroy_previous_charge_breakdown
+      return nil unless trucking_valid_for_schedule
 
       @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, trip_id: @schedule.trip_id)
       @grand_total_charge = Charge.create(
@@ -26,6 +27,7 @@ module OfferCalculatorService
 
       local_charge_result = calc_local_charges
       create_trucking_charges
+
       cargo_result = calc_cargo_charges
 
       return nil if cargo_result.nil? || local_charge_result.nil?
@@ -102,10 +104,10 @@ module OfferCalculatorService
 
         hub = @schedule.hub_for_carriage(carriage)
         hub_data = data[hub.id]
+        next if hub_data.nil?
 
         hub_data[:trucking_charge_data].each do |cargo_class, trucking_charges|
           children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}", @user.tenant_id)
-
           create_charges_from_fees_data!(
             trucking_charges, children_charge_category, charge_category, parent_charge
           )
@@ -221,6 +223,15 @@ module OfferCalculatorService
         CargoItem.calc_chargeable_weight_from_values(cargo[:volume], cargo[:payload_in_kg], mot)
 
       [cargo]
+    end
+
+    def trucking_valid_for_schedule
+      results = []
+      results << !!@trucking_data.dig('pre', @schedule.origin_hub_id) if @shipment.has_pre_carriage?
+
+      results << !!@trucking_data.dig('on', @schedule.destination_hub_id) if @shipment.has_on_carriage?
+
+      results.all?(true)
     end
   end
 end

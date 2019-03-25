@@ -96,7 +96,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address, cargo_class: 'lcl'
+            address: address, cargo_classes: ['lcl']
           ).perform
 
           expect(trucking_rates).to match([trucking_trucking_zipcode])
@@ -106,7 +106,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address, cargo_class: 'some_string'
+            address: address, cargo_classes: ['some_string']
           ).perform
 
           expect(trucking_rates).to match([])
@@ -144,7 +144,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address, cargo_class: 'lcl'
+            address: address, cargo_classes: ['lcl']
           ).perform
 
           expect(trucking_rates).to match([trucking_trucking_geometry])
@@ -154,7 +154,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address, cargo_class: 'some_string'
+            address: address, cargo_classes: ['some_string']
           ).perform
 
           expect(trucking_rates).to match([])
@@ -192,7 +192,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address, cargo_class: 'lcl'
+            address: address, cargo_classes: ['lcl']
           ).perform
 
           expect(trucking_rates).to match([trucking_trucking_distance])
@@ -202,7 +202,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address, cargo_class: 'some_string'
+            address: address, cargo_classes: ['some_string']
           ).perform
 
           expect(trucking_rates).to match([])
