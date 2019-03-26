@@ -135,7 +135,8 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
         schedules: schedules,
         user_pricing_id: nil,
         cargo_classes: ['lcl'],
-        dates: dates
+        dates: dates,
+        dedicated_pricings_only: false
       )
       expect(results.keys.length).to eq(1)
       expect(results.values.first.first).to eq(pricing_1)
@@ -165,7 +166,8 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
         schedules: schedules,
         user_pricing_id: nil,
         cargo_classes: %w(fcl_20 fcl_40 fcl_40_hq),
-        dates: dates
+        dates: dates,
+        dedicated_pricings_only: false
       )
 
       expect(results.keys.length).to eq(3)
@@ -199,7 +201,8 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
         schedules: schedules,
         user_pricing_id: nil,
         cargo_classes: ['lcl'],
-        dates: dates
+        dates: dates,
+        dedicated_pricings_only: false
       )
       expect(results.keys.length).to eq(1)
       expect(results.values.first.first).to eq(pricing_1)
@@ -238,7 +241,8 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
         schedules: schedules,
         user_pricing_id: user.id,
         cargo_classes: ['lcl'],
-        dates: dates
+        dates: dates,
+        dedicated_pricings_only: true
       )
       expect(results.keys.length).to eq(1)
       expect(results.values.first.first).to eq(pricing_target)

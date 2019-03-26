@@ -91,6 +91,10 @@ module OfferCalculatorService
       }
     end
 
+    def dedicated_pricings?(user)
+      user.pricings.exists? && user.tenant.scope['dedicated_pricings_only']
+    end
+
     def grouped_schedules(schedules:, shipment:, user:)
       result_to_return = []
       cargo_classes = shipment.aggregated_cargo ? ['lcl'] : shipment.cargo_units.pluck(:cargo_class)
@@ -108,7 +112,8 @@ module OfferCalculatorService
           schedules: schedules_array,
           user_pricing_id: user_pricing_id,
           cargo_classes: cargo_classes,
-          dates: dates
+          dates: dates,
+          dedicated_pricings_only: dedicated_pricings?(user)
         )
 
         # Find the group with the most pricings and create the object to be passed on
@@ -180,7 +185,7 @@ module OfferCalculatorService
       end
     end
 
-    def sort_pricings(schedules:, user_pricing_id:, cargo_classes:, dates:)
+    def sort_pricings(schedules:, user_pricing_id:, cargo_classes:, dates:, dedicated_pricings_only:)
       tenant_vehicle_id = schedules.first.trip.tenant_vehicle_id
       start_date = dates[:start_date]
       end_date = dates[:end_date]
@@ -200,7 +205,7 @@ module OfferCalculatorService
 
       pricings_by_cargo_class_and_dates_and_user = pricings_by_cargo_class_and_dates
                                                    .select { |pricing| pricing.user_id == user_pricing_id }
-      if pricings_by_cargo_class_and_dates_and_user.empty?
+      if pricings_by_cargo_class_and_dates_and_user.empty? && !dedicated_pricings_only
         pricings_by_cargo_class_and_dates_and_user = pricings_by_cargo_class_and_dates
                                                      .select { |pricing| pricing.user_id.nil? }
       end
