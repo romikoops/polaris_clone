@@ -426,7 +426,7 @@ function getPricingsTest (req) {
     )
   }
 }
-function deletePricing (pricing) {
+function deletePricing (pricingId) {
   function request (payload) {
     return { type: adminConstants.DELETE_PRICING_REQUEST, payload }
   }
@@ -438,10 +438,10 @@ function deletePricing (pricing) {
   }
 
   return (dispatch) => {
-    dispatch(request(pricing))
-    adminService.deletePricing(pricing).then(
+    dispatch(request(pricingId))
+    adminService.deletePricing(pricingId).then(
       () => {
-        dispatch(success(pricing))
+        dispatch(success(pricingId))
       },
       (error) => {
         dispatch(failure(error))

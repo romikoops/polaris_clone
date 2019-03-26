@@ -12,6 +12,7 @@ import AdminFeeTable from './FeeTable'
 import AdminRangeFeeTable from './RangeTable'
 import { moment } from '../../../constants'
 import { determineSortingCaret } from '../../../helpers/sortingCaret'
+import AdminPromptConfirm from '../Prompt/Confirm'
 
 class AdminPricesTable extends PureComponent {
   static determineFeeTable (row) {
@@ -37,7 +38,8 @@ class AdminPricesTable extends PureComponent {
     super(props)
     this.state = {
       expanded: {},
-      sorted: []
+      sorted: [],
+      confirm: false
     }
   }
 
@@ -46,6 +48,24 @@ class AdminPricesTable extends PureComponent {
     if (!has(pricings, `show.${itineraryId}`)) {
       adminDispatch.getItineraryPricings(itineraryId)
     }
+  }
+  
+  deletePricing () {
+    const { adminDispatch } = this.props
+    const { pricingToDelete } = this.state
+    adminDispatch.deletePricing(pricingToDelete)
+    this.closeConfirm()
+  }
+
+  confirmDelete (pricing) {
+    this.setState({
+      confirm: true,
+      pricingToDelete: pricing
+    })
+  }
+
+  closeConfirm () {
+    this.setState({ confirm: false, pricingToDelete: false })
   }
 
   requestPricing (data) {
@@ -62,7 +82,7 @@ class AdminPricesTable extends PureComponent {
     const {
       t, pricings, theme, itineraryId, classNames
     } = this.props
-    const { sorted } = this.state
+    const { sorted, confirm } = this.state
 
     const data = get(pricings, ['show', itineraryId], false)
     if (!data) return ''
@@ -172,30 +192,55 @@ class AdminPricesTable extends PureComponent {
             </p>
           </div>
         )
+      },
+      {
+        maxWidth: 50,
+        Cell: rowData => (
+          <div
+            onClick={() => this.confirmDelete(rowData.original)}
+            className={`${styles.delete_cell} flex layout-row layout-align-center-center pointy`}
+          >
+            <i className="flex-none fa fa-trash"></i>
+          </div>
+        )
       }
     ]
+    const confimPrompt = confirm ? (
+      <AdminPromptConfirm
+        theme={theme}
+        heading={t('common:areYouSure')}
+        text={t('admin:confirmDeletePricingImmediately')}
+        confirm={() => this.deletePricing()}
+        deny={() => this.closeConfirm()}
+      />
+    ) : (
+      ''
+    )
 
     return (
-      <ReactTable
-        className={`${styles.no_footer} ${classNames}`}
-        data={data.pricings}
-        filterable
-        defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
-        columns={columns}
-        defaultSorted={[
-          {
-            id: 'carrier',
-            desc: true
-          }
-        ]}
-        defaultPageSize={data.pricings.length}
-        showPaginationBottom={false}
-        expanded={this.state.expanded}
-        sorted={this.state.sorted}
-        onSortedChange={newSorted => this.setState({ sorted: newSorted })}
-        onExpandedChange={newExpanded => this.setState({ expanded: newExpanded })}
-        SubComponent={subRow => AdminPricesTable.determineFeeTable(subRow)}
-      />
+      <div className="flex-100 layout-row layout-align-center-start">
+        {confimPrompt}
+        <ReactTable
+          className={`${styles.no_footer} ${classNames}`}
+          data={data.pricings}
+          filterable
+          defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
+          columns={columns}
+          defaultSorted={[
+            {
+              id: 'carrier',
+              desc: true
+            }
+          ]}
+          defaultPageSize={data.pricings.length}
+          showPaginationBottom={false}
+          expanded={this.state.expanded}
+          sorted={this.state.sorted}
+          onSortedChange={newSorted => this.setState({ sorted: newSorted })}
+          onExpandedChange={newExpanded => this.setState({ expanded: newExpanded })}
+          SubComponent={subRow => AdminPricesTable.determineFeeTable(subRow)}
+        />
+      </div>
     )
   }
 }

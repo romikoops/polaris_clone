@@ -229,4 +229,10 @@
     overflow-x: hidden;
     border-right: 1px solid rgba(128,128,128,0.7);
   }
+  .delete_cell {
+    @extend .pricing_cell;
+    i, p {
+      color: red;
+    }
+  }
 }

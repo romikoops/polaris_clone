@@ -147,7 +147,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def destroy
-    pricing_delete(params[:id])
+    Pricing.find(params[:id]).destroy
     response_handler({})
   end
 
