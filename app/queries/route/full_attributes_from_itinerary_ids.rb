@@ -52,17 +52,17 @@ module Queries
             MAX(destination_countries.code)    AS destination_country,
             STRING_AGG(
               DISTINCT CASE
-                WHEN origin_truck_type_availabilities.load_type = :load_type
-                  AND  origin_truck_type_availabilities.carriage = 'pre'
-                  THEN origin_truck_type_availabilities.truck_type
+                WHEN origin_trucking_type_availabilities.load_type = :load_type
+                  AND  origin_trucking_type_availabilities.carriage = 'pre'
+                  THEN origin_trucking_type_availabilities.truck_type
               END,
               ','
             ) AS origin_truck_types,
             STRING_AGG(
               DISTINCT CASE
-                WHEN destination_truck_type_availabilities.load_type = :load_type
-                  AND  destination_truck_type_availabilities.carriage = 'on'
-                  THEN destination_truck_type_availabilities.truck_type
+                WHEN destination_trucking_type_availabilities.load_type = :load_type
+                  AND  destination_trucking_type_availabilities.carriage = 'on'
+                  THEN destination_trucking_type_availabilities.truck_type
               END,
               ','
             ) AS destination_truck_types
@@ -87,16 +87,16 @@ module Queries
             ON origin_nexuses.id = origin_hubs.nexus_id
           JOIN nexuses AS destination_nexuses
             ON destination_nexuses.id = destination_hubs.nexus_id
-          LEFT OUTER JOIN hub_truck_type_availabilities AS origin_hub_truck_type_availabilities
-            ON origin_hubs.id = origin_hub_truck_type_availabilities.hub_id
-          LEFT OUTER JOIN hub_truck_type_availabilities AS destination_hub_truck_type_availabilities
-            ON destination_hubs.id = destination_hub_truck_type_availabilities.hub_id
-          LEFT OUTER JOIN truck_type_availabilities AS origin_truck_type_availabilities
-            ON origin_hub_truck_type_availabilities.truck_type_availability_id =
-               origin_truck_type_availabilities.id
-          LEFT OUTER JOIN truck_type_availabilities AS destination_truck_type_availabilities
-            ON destination_hub_truck_type_availabilities.truck_type_availability_id =
-               destination_truck_type_availabilities.id
+          LEFT OUTER JOIN trucking_hub_availabilities AS origin_trucking_hub_availabilities
+            ON origin_hubs.id = origin_trucking_hub_availabilities.hub_id
+          LEFT OUTER JOIN trucking_hub_availabilities AS destination_trucking_hub_availabilities
+            ON destination_hubs.id = destination_trucking_hub_availabilities.hub_id
+          LEFT OUTER JOIN trucking_type_availabilities AS origin_trucking_type_availabilities
+            ON origin_trucking_hub_availabilities.type_availability_id =
+               origin_trucking_type_availabilities.id
+          LEFT OUTER JOIN trucking_type_availabilities AS destination_trucking_type_availabilities
+            ON destination_trucking_hub_availabilities.type_availability_id =
+               destination_trucking_type_availabilities.id
           WHERE itineraries.id IN (:itinerary_ids)
           AND   origin_stops.index < destination_stops.index
           GROUP BY origin_stops.id, destination_stops.id
