@@ -135,7 +135,11 @@ class RegistrationPage extends React.PureComponent {
             </div>
           </div>
           <div className="flex-100">
-
+            <RegistrationFormGroup
+              field="company_name"
+              minLength="2"
+              {...sharedProps}
+            />
             <RegistrationFormGroup
               field="email"
               minLength="2"
