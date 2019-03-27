@@ -41,10 +41,7 @@ class TruckingAvailabilityController < ApplicationController
       hub_ids: params[:hub_ids].split(',').map(&:to_i),
       carriage: params[:carriage]
     }
-    ## New Code
-    # Trucking::Trucking.find_by_filter(args)
 
-    ## Legacy Code
-    Trucking::Rate.find_by_filter(args)
+    Trucking::Trucking.find_by_filter(args)
   end
 end

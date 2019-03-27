@@ -20,7 +20,7 @@ module Trucking
         @load_type    = args[:load_type]
         @carriage     = args[:carriage]
         @truck_type   = args[:truck_type]
-        @cargo_class  = args[:cargo_class]
+        @cargo_classes = args[:cargo_classes]
         @nexus_ids    = args[:nexus_ids]
         @hub_ids      = args[:hub_ids]
         @distance     = args[:distance]
@@ -91,7 +91,7 @@ module Trucking
       end
 
       def cargo_class_condition
-        @cargo_class ? { 'cargo_class': @cargo_class } : {}
+        @cargo_classes ? { 'cargo_class': @cargo_classes } : {}
       end
 
       def nexuses_condition

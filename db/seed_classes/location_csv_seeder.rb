@@ -8,11 +8,12 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
     # load_map_data('/Users/warwickbeamish/Downloads/drydock_europe.csv.gz')
     # load_names_from_csv
     # load_name_data('data/location_data/netherlands_osm_2.csv.gz')
-    load_locode_data('data/location_data/nl_locodes.csv.gz')
+    # load_locode_data('data/location_data/nl_locodes.csv.gz')
+    load_names_from_csv
   end
 
   def self.load_names_from_csv
-    s3_url = 'data/location_data/locations_names_dump.csv.gz'
+    s3_url = 'data/location_data/locations_names_2.csv.gz'
     LocationCsvSeeder.get_s3_file(s3_url)
     Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, headers: true)
@@ -22,27 +23,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
         next unless names.length > 100
 
         begin
-          Locations::Name.import(names, on_duplicate_key_update: %i(
-                                   location_id
-                                   uuid
-                                   osm_id
-                                   place_rank
-                                   importance
-                                   osm_type
-                                   street
-                                   city
-                                   osm_class
-                                   name_type
-                                   country
-                                   county
-                                   state
-                                   country_code
-                                   display_name
-                                   alternative_names
-                                   name
-                                   point
-                                   locode
-                                 ))
+          Locations::Name.import(names, on_duplicate_key_update: :all)
           names = []
         rescue StandardError => e
           Rails.logger e

@@ -16,18 +16,25 @@ module OfferCalculatorService
         load_type: @shipment.load_type,
         tenant_id: @shipment.tenant_id,
         truck_type: @trucking_details['truck_type'],
+        cargo_classes: @shipment.cargo_classes,
         carriage: @carriage,
         hub_ids: [hub_id],
         distance: distance.round
       }
-      ## New Code
-      # results = ::Trucking::Trucking.find_by_filter(args)
-      # return [] if results.empty?
 
-      # results = results.select { |r| r.user_id == @user_id || r.user_id.nil? }.sort_by { |r| r.user_id || 0 }.reverse
-      # [results.first]
-      ## Legacy Code
-      Trucking::Rate.find_by_filter(args)
+      results = ::Trucking::Trucking.find_by_filter(args)
+      return [] if results.empty?
+
+      truckings = @shipment.cargo_classes.each_with_object({}) { |cargo_class, h| h[cargo_class] = nil }
+      results.group_by(&:cargo_class)
+             .each do |cargo_class, truckings_by_cargo_class|
+        trucking = truckings_by_cargo_class.select { |r| r.user_id == @user_id || r.user_id.nil? }
+                                           .sort_by { |r| r.user_id || 0 }
+                                           .reverse
+                                           .first
+        truckings[cargo_class] = trucking
+      end
+      truckings
     end
   end
 end

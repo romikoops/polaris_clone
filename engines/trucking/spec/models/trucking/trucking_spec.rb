@@ -96,7 +96,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
           trucking_rates = ::Trucking::Trucking.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
-            address: address, cargo_class: 'some_string'
+            address: address, cargo_classes: ['some_string']
           )
 
           expect(trucking_rates).to match([])
@@ -130,7 +130,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
           trucking_rates = ::Trucking::Trucking.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
-            address: address, cargo_class: 'lcl'
+            address: address, cargo_classes: ['lcl']
           )
 
           expect(trucking_rates).to match([geo_trucking])
@@ -140,7 +140,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
           trucking_rates = ::Trucking::Trucking.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
-            address: address, cargo_class: 'some_string'
+            address: address, cargo_classes: ['some_string']
           )
 
           expect(trucking_rates).to match([])
