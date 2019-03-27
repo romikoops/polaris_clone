@@ -8,6 +8,7 @@ function handleResponse (response) {
   const promise = Promise
   const respJSON = response.json()
   if (!response.ok) {
+    
     return promise.reject(respJSON)
   }
 
