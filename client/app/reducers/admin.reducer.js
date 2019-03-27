@@ -223,7 +223,6 @@ export default function admin (state = {}, action) {
         loading: false
       }
     case adminConstants.GET_LOCAL_CHARGES_FAILURE: {
-
       return {
         ...state,
         error: { localCharges: action.error },
@@ -850,6 +849,7 @@ export default function admin (state = {}, action) {
     }
     case adminConstants.GET_ADMIN_ITINERARY_PRICINGS_REQUEST: {
       const pricings = state.pricings || {}
+
       return { ...state, loading: true, pricings }
     }
     case adminConstants.GET_ADMIN_ITINERARY_PRICINGS_SUCCESS: {
@@ -954,7 +954,6 @@ export default function admin (state = {}, action) {
       // eslint-disable-next-line no-underscore-dangle
       const itineraryId = action.payload.itinerary_id
       const pricings = show[itineraryId].pricings.filter(x => x.id !== action.payload.id)
-
 
       return {
         ...state,
