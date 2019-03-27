@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Shipment < Legacy::Shipment
+  include PgSearch
   extend ShippingTools
 
   STATUSES = %w(
@@ -100,6 +101,17 @@ class Shipment < Legacy::Shipment
   scope :archived, -> { where(status: 'archived') }
   scope :finished, -> { where(status: 'finished') }
   scope :quoted, -> { where(status: 'quoted') }
+
+  pg_search_scope :index_search, 
+                    against: %i(imc_reference), 
+                    associated_against: {
+                      user: %i(first_name last_name company_name email),
+                      origin_hub: %i(name),
+                      destination_hub: %i(name)
+                    },
+                    using: {
+                      tsearch: { prefix: true }
+                    }
 
   scope :user_name, lambda { |query|
     user_ids = User.where('first_name ILIKE ? OR last_name ILIKE ?', "%#{query}%", "%#{query}%").ids

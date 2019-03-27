@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 // import { v4 } from 'uuid'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from '../../../../prop-types'
 import styles from '../../Admin.scss'
-import { concatArrays, uniqueItems, filters } from '../../../../helpers'
 import ShipmentOverviewCard from '../../../ShipmentCard/ShipmentOverviewCard'
 import { LoadingSpinner } from '../../../LoadingSpinner/LoadingSpinner'
 
@@ -54,8 +52,6 @@ export class AdminShipmentsBox extends Component {
       theme,
       userView,
       page,
-      status,
-      nexuses,
       dispatches,
       nextPage,
       prevPage,
@@ -65,11 +61,6 @@ export class AdminShipmentsBox extends Component {
       confirmShipmentData,
       searchText
     } = this.props
-
-    // const countriesOriginIds = shipments.map(shipment => shipment.origin_nexus.country_id)
-    // const countriesDestinationIds = shipments.map(shipment => shipment.destination_nexus.country_id)
-    // const shipmentsCountries = countries.filter(country => (
-    //   concatArrays(countriesOriginIds, countriesDestinationIds).includes(country.id)))
 
     if (this.props.getShipmentsRequest) {
       return (
@@ -150,26 +141,6 @@ export class AdminShipmentsBox extends Component {
 
     )
   }
-}
-AdminShipmentsBox.propTypes = {
-  t: PropTypes.func.isRequired,
-  shipments: PropTypes.arrayOf(PropTypes.shipment).isRequired,
-  handleClick: PropTypes.func,
-  dispatches: PropTypes.shape({
-    getClient: PropTypes.func,
-    goTo: PropTypes.func
-  }).isRequired,
-  seeAll: PropTypes.func,
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  userView: PropTypes.bool,
-  confirmShipmentData: PropTypes.objectOf(PropTypes.any),
-  page: PropTypes.number,
-  nextPage: PropTypes.func,
-  prevPage: PropTypes.func,
-  handleSearchChange: PropTypes.func,
-  numPages: PropTypes.number,
-  searchText: PropTypes.string
 }
 
 AdminShipmentsBox.defaultProps = {
