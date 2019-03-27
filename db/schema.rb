@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_21_103026) do
+ActiveRecord::Schema.define(version: 2019_03_27_134233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -910,6 +910,7 @@ ActiveRecord::Schema.define(version: 2019_03_21_103026) do
     t.index ["city_name"], name: "index_trucking_locations_on_city_name"
     t.index ["country_code"], name: "index_trucking_locations_on_country_code"
     t.index ["distance"], name: "index_trucking_locations_on_distance"
+    t.index ["location_id"], name: "index_trucking_locations_on_location_id"
     t.index ["zipcode"], name: "index_trucking_locations_on_zipcode"
   end
 
