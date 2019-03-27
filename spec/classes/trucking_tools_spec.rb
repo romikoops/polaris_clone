@@ -59,6 +59,20 @@ RSpec.describe TruckingTools do
              quantity: 5)
   end
 
+  let!(:consolidated_cargo) do
+    {
+      id: 'ids',
+      dimension_x: 300,
+      dimension_y: 240,
+      dimension_z: 300,
+      volume: 21.6,
+      payload_in_kg: 4000,
+      cargo_class: 'lcl',
+      num_of_items: 3,
+      quantity: 1
+    }
+  end
+
   describe '.calc_aggregated_cargo_cbm_ratio' do
     it 'calculates the correct trucking weight for aggregate cargo with vol gt weight' do
       aggregated_cargo = create(:aggregated_cargo, shipment_id: shipment.id, volume: 3.0, weight: 1500)
@@ -216,6 +230,17 @@ RSpec.describe TruckingTools do
         agg_cargo = create(:aggregated_cargo, volume: 1.5, weight: 1000)
         quantity = described_class.cargo_quantity(agg_cargo)
         expect(quantity).to eq(1)
+      end
+    end
+
+    describe '.cargo_data_value' do
+      it 'correctly returns the dimension_x of an item' do
+        dimension_x = described_class.cargo_data_value(:dimension_x, default_cargos.last)
+        expect(dimension_x).to eq(120)
+      end
+      it 'correctly returns the dimension_x of an hash item' do
+        dimension_x = described_class.cargo_data_value(:dimension_x, consolidated_cargo)
+        expect(dimension_x).to eq(300)
       end
     end
 
