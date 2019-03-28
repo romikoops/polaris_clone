@@ -41,7 +41,7 @@ class TruckingAvailabilityController < ApplicationController
       hub_ids: params[:hub_ids].split(',').map(&:to_i),
       carriage: params[:carriage]
     }
-    reg_results = Trucking::Queries::Availability.new(args).perform 
+    reg_results = Trucking::Queries::Availability.new(args).perform
     distance_results = Trucking::Queries::Distance.new(args).perform
 
     reg_results | distance_results

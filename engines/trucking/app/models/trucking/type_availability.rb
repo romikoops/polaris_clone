@@ -2,7 +2,7 @@
 
 module Trucking
   class TypeAvailability < ApplicationRecord
-    enum query_method: {distance: 1, zipcode: 2, location: 3, not_set: 0}
+    enum query_method: { distance: 1, zipcode: 2, location: 3, not_set: 0 }
 
     TRUCK_TYPES = %w(default chassis side_lifter).freeze
     QUERY_METHODS = %i(distance zipcode location not_set).freeze
