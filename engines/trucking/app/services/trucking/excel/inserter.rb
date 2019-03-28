@@ -170,13 +170,15 @@ module Trucking
         end
         ::Trucking::Trucking.import(
           @all_trucking_truckings,
-          on_duplicate_key_update: %i(rates fees),
-          batch_size: 1000
+          on_duplicate_key_update: :all,
+          batch_size: 1000,
+          validate_uniqueness: true
         )
         ::Trucking::Location.import(
           @all_trucking_locations,
-          on_duplicate_key_update: %i(location_id city_name zipcode),
-          batch_size: 1000
+          on_duplicate_key_update: :all,
+          batch_size: 1000,
+          validate_uniqueness: true
         )
       end
 
