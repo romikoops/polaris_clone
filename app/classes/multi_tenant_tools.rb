@@ -203,7 +203,7 @@ module MultiTenantTools
 
   def new_site(tenant, _is_demo)
     tenant.delete(:other_data)
-    new_tenant = Tenant.create(tenant)
+    new_tenant = Tenant.create!(tenant)
     title = tenant[:name] + ' | ItsMyCargo'
     meta = tenant[:meta]
     favicon = tenant[:favicon] || 'https://assets.itsmycargo.com/assets/favicon.ico'
@@ -435,28 +435,28 @@ module MultiTenantTools
         street_number: '2',
         zip_code: '20457',
         city: 'Hamburg',
-        country: 'Germany'
+        country: Country.find_by_code('DE')
       },
       {
         street: 'Carer del Cid',
         street_number: '13',
         zip_code: '08001',
         city: 'Barcelona',
-        country: 'Spain'
+        country: Country.find_by_code('ES')
       },
       {
         street: 'College Rd',
         street_number: '1',
         zip_code: 'PO1 3LX',
         city: 'Portsmouth',
-        country: 'United Kingdom'
+        country: Country.find_by_code('GB')
       },
       {
         street: 'Tuna St',
         street_number: '64',
         zip_code: '90731',
         city: 'San Pedro',
-        country: 'USA'
+        country: Country.find_by_code('US')
       }
     ]
 
@@ -510,11 +510,6 @@ module MultiTenantTools
       shipper.contacts.create(contact)
     end
 
-    puts 'Seed vehicles'
-    VehicleSeeder.perform
-
-    puts 'Seed prcings'
-    PricingSeeder.perform
   end
 
   def quick_seed(subdomain)
