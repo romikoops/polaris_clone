@@ -203,7 +203,7 @@ module MultiTenantTools
 
   def new_site(tenant, _is_demo)
     tenant.delete(:other_data)
-    new_tenant = Tenant.create!(tenant)
+    Tenant.create!(tenant)
     title = tenant[:name] + ' | ItsMyCargo'
     meta = tenant[:meta]
     favicon = tenant[:favicon] || 'https://assets.itsmycargo.com/assets/favicon.ico'

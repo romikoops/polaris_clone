@@ -417,9 +417,9 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
     fee_value = fee['value'] || fee['rate']
     result = case rate_basis
              when 'PER_SHIPMENT', 'PER_BILL'
-               (fee_value).to_d
+               fee_value.to_d
              when 'PER_ITEM', 'PER_CONTAINER'
-               (fee_value).to_d * cargo_hash[:quantity]
+               fee_value.to_d * cargo_hash[:quantity]
              when 'PER_CBM'
                min = fee['min'] || 0
                max = fee['max'] || DEFAULT_MAX
@@ -456,8 +456,8 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
                [res, max].min
              when 'PER_WM'
                max = fee['max'] || DEFAULT_MAX
-               cbm = cargo_hash[:volume] * (fee_value)
-               ton = (cargo_hash[:weight] / 1000) * (fee_value)
+               cbm = cargo_hash[:volume] * fee_value
+               ton = (cargo_hash[:weight] / 1000) * fee_value
                min = fee['min'] || 0
                res = [cbm, ton, min].max
 
