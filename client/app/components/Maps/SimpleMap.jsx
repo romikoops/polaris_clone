@@ -20,9 +20,16 @@ export class SimpleMap extends Component {
   componentDidMount () {
     this.initMap(this.setInitialMarker)
   }
+
   componentWillReceiveProps () {
-    this.setInitialMarker()
+    const { map } = this.state
+    if (!map) {
+      this.initMap(this.setInitialMarker)
+    } else {
+      this.setInitialMarker()
+    }
   }
+
   setInitialMarker () {
     const { address } = this.props
     if (address && address.latitude && address.longitude) {
