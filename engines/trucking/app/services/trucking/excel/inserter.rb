@@ -50,11 +50,10 @@ module Trucking
       def create_coverage
         if ::Trucking::Coverage.exists?(hub_id: @hub.id)
           c = ::Trucking::Coverage.find_by(hub_id: @hub.id)
-          c.touch
+          c.save
         else
           c = ::Trucking::Coverage.create!(hub_id: @hub.id)
         end
-        File.open(Rails.root.join('tmp', 'foo.geojson'), 'w') { |f| f.puts c.geojson.to_json }
       end
 
       def local_stats
@@ -77,6 +76,29 @@ module Trucking
         }
       end
 
+      def find_availabilities(row_truck_type, direction, load_type, hub)
+        query_method = case @identifier_type
+                        when 'location_id'
+                          :location
+                        when 'zipcode'
+                          :zipcode
+                        when 'distance'
+                          :distance
+                        else
+                          :not_set
+                        end
+        trucking_type_availability = TypeAvailability.find_or_create_by(
+          truck_type: row_truck_type,
+          carriage: direction,
+          load_type: load_type,
+          query_method: query_method
+        )
+        HubAvailability.find_or_create_by(
+          hub_id: hub.id,
+          type_availability_id: trucking_type_availability.id
+        )
+      end
+
       def overwrite_zonal_trucking_rates_by_hub # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
         sheets.slice(2, sheets.length - 1).each do |sheet| # rubocop:disable Metrics/BlockLength
           rates_sheet = xlsx.sheet(sheet)
@@ -87,15 +109,7 @@ module Trucking
           load_type = meta[:load_type] == 'container' ? 'container' : 'cargo_item'
           direction = meta[:direction] == 'import' ? 'on' : 'pre'
 
-          trucking_type_availability = TypeAvailability.find_or_create_by(
-            truck_type: row_truck_type,
-            carriage: direction,
-            load_type: load_type
-          )
-          HubAvailability.find_or_create_by(
-            hub_id: hub.id,
-            type_availability_id: trucking_type_availability.id
-          )
+          find_availabilities(row_truck_type, direction, load_type, hub)
 
           modifier_position_objs = populate_modifier(rates_sheet)
           header_row = rates_sheet.row(4)
