@@ -6,6 +6,7 @@ export const ShipmentDetailsAvailableRoutes = [{
   itineraryId: 2863,
   itineraryName: 'Gothenburg - Qingdao',
   modeOfTransport: 'ocean',
+  cargoClasses: ['lcl', 'fcl_20', 'fcl_40', 'fcl_40_hq'],
   origin: {
     stopId: 4656,
     hubId: 3023,
@@ -32,6 +33,7 @@ export const ShipmentDetailsAvailableRoutes = [{
   itineraryId: 2958,
   itineraryName: 'Gothenburg - Qingdao',
   modeOfTransport: 'air',
+  cargoClasses: ['lcl'],
   origin: {
     stopId: 4846,
     hubId: 3030,
