@@ -6,14 +6,16 @@ module CurrencyTools
   def get_rates(base, tenant_id)
     tenant = Tenant.find(tenant_id)
     if tenant && tenant.scope['fixed_exchange_rates']
+      tenant_id_for_update = tenant_id
       tenant_rates = Currency.find_by(base: base, tenant_id: tenant_id)
       cached_rates = tenant_rates || Currency.find_by(base: base)
     else
+      tenant_id_for_update = nil
       cached_rates = Currency.find_by(base: base, tenant_id: nil)
     end
 
     if cached_rates.nil? || cached_rates.today.nil? || cached_rates.updated_at < Date.today - 1.day
-      cached_rates = refresh_rates(base)
+      cached_rates = refresh_rates(base, tenant_id_for_update)
     end
     cached_rates
   end
@@ -67,14 +69,15 @@ module CurrencyTools
     round_value(base_value, tenant_id)
   end
 
-  def refresh_rates(base)
-    currency_obj = Currency.find_by(base: base)
+  def refresh_rates(base, tenant_id)
+    currency_obj = Currency.find_by(base: base, tenant_id: tenant_id)
     url = URI("http://data.fixer.io/latest?access_key=#{Settings.fixer.api_key}&base=#{base}")
     response = JSON.parse(Net::HTTP.get(url))
     rates = response['rates']
+    return if rates.nil?
 
     if !currency_obj
-      currency_obj = Currency.create(today: rates, base: base)
+      currency_obj = Currency.create(today: rates, base: base, tenant_id: tenant_id)
     else
       currency_obj.update_attributes(today: rates)
     end
