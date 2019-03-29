@@ -50,6 +50,7 @@ module Queries
             MAX(destination_nexuses.longitude) AS destination_longitude,
             MAX(origin_countries.code)         AS origin_country,
             MAX(destination_countries.code)    AS destination_country,
+            STRING_AGG(transport_categories.cargo_class, ',') AS cargo_classes,
             STRING_AGG(
               DISTINCT CASE
                 WHEN origin_trucking_type_availabilities.load_type = :load_type
@@ -67,6 +68,10 @@ module Queries
               ','
             ) AS destination_truck_types
           FROM itineraries
+          JOIN pricings
+            ON itineraries.id = pricings.itinerary_id
+          JOIN transport_categories
+            ON pricings.transport_category_id = transport_categories.id
           JOIN stops AS origin_stops
             ON itineraries.id = origin_stops.itinerary_id
           JOIN stops AS destination_stops
@@ -123,7 +128,12 @@ module Queries
             origin_nexuses.longitude      AS origin_longitude,
             destination_nexuses.latitude  AS destination_latitude,
             destination_nexuses.longitude AS destination_longitude
+            STRING_AGG(transport_categories.cargo_class, ',') AS cargo_classes,
           FROM itineraries
+          JOIN pricings
+            ON itineraries.id = pricings.itinerary_id
+          JOIN transport_categories
+            ON pricings.transport_category_id = transport_categories.id
           JOIN stops AS origin_stops
             ON itineraries.id = origin_stops.itinerary_id
           JOIN stops AS destination_stops

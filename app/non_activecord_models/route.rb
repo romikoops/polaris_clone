@@ -54,6 +54,7 @@ class Route
       itinerary_id: attributes['itinerary_id'],
       itinerary_name: attributes['itinerary_name'],
       mode_of_transport: attributes['mode_of_transport'],
+      cargo_classes: attributes['cargo_classes'].split(',').uniq,
       origin: hash_from_attributes(attributes, 'origin', options),
       destination: hash_from_attributes(attributes, 'destination', options)
     }
