@@ -412,31 +412,31 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
     round_fee(result, scope['continuous_rounding'])
   end
 
-  def fee_value(fee, cargo_hash, scope)
+  def fee_value(fee, cargo_hash, scope) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     rate_basis = RateBasis.get_internal_key(fee['rate_basis'])
-
+    fee_value = fee['value'] || fee['rate']
     result = case rate_basis
              when 'PER_SHIPMENT', 'PER_BILL'
-               (fee['value'] || fee['rate']).to_d
+               fee_value.to_d
              when 'PER_ITEM', 'PER_CONTAINER'
-               (fee['value'] || fee['rate']).to_d * cargo_hash[:quantity]
+               fee_value.to_d * cargo_hash[:quantity]
              when 'PER_CBM'
                min = fee['min'] || 0
                max = fee['max'] || DEFAULT_MAX
-               val = fee['value'] || fee['rate']
+               val = fee_value
                cbm = val.to_d * cargo_hash[:volume]
                res = [cbm, min].max
                [res, max].min
              when 'PER_KG'
                max = fee['max'] || DEFAULT_MAX
-               val = fee['value'].to_d * cargo_hash[:weight]
+               val = fee_value.to_d * cargo_hash[:weight]
                min = fee['min'] || 0
                res = [val, min].max
                [res, max].min
              when 'PER_X_KG_FLAT'
                max = fee['max'] || DEFAULT_MAX
                base = fee['base'].to_d
-               val = fee['value'] * (cargo_hash[:weight].round(2) / base).ceil * base
+               val = fee_value * (cargo_hash[:weight].round(2) / base).ceil * base
                min = fee['min'] || 0
                res = [val, min].max
                [res, max].min
@@ -456,8 +456,8 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
                [res, max].min
              when 'PER_WM'
                max = fee['max'] || DEFAULT_MAX
-               cbm = cargo_hash[:volume] * (fee['value'] || fee['rate'])
-               ton = (cargo_hash[:weight] / 1000) * (fee['value'] || fee['rate'])
+               cbm = cargo_hash[:volume] * fee_value
+               ton = (cargo_hash[:weight] / 1000) * fee_value
                min = fee['min'] || 0
                res = [cbm, ton, min].max
 
