@@ -16,6 +16,12 @@ exports[`cargoUnits is empty 1`] = `
           ],
           "availableRoutes": Array [
             Object {
+              "cargoClasses": Array [
+                "lcl",
+                "fcl_20",
+                "fcl_40",
+                "fcl_40_hq",
+              ],
               "destination": Object {
                 "country": "CN",
                 "hubId": 3027,
@@ -45,6 +51,9 @@ exports[`cargoUnits is empty 1`] = `
               },
             },
             Object {
+              "cargoClasses": Array [
+                "lcl",
+              ],
               "destination": Object {
                 "country": "CN",
                 "hubId": 3034,
@@ -305,6 +314,12 @@ exports[`renders correctly 1`] = `
           ],
           "availableRoutes": Array [
             Object {
+              "cargoClasses": Array [
+                "lcl",
+                "fcl_20",
+                "fcl_40",
+                "fcl_40_hq",
+              ],
               "destination": Object {
                 "country": "CN",
                 "hubId": 3027,
@@ -334,6 +349,9 @@ exports[`renders correctly 1`] = `
               },
             },
             Object {
+              "cargoClasses": Array [
+                "lcl",
+              ],
               "destination": Object {
                 "country": "CN",
                 "hubId": 3034,
