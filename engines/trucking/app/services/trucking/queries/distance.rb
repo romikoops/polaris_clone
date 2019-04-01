@@ -8,7 +8,7 @@ module Trucking
       def initialize(args = {}) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         argument_errors(args)
 
-        @klass = args[:klass]
+        @klass = args[:klass] || ::Trucking::Trucking
 
         @latitude     = args[:latitude]     || args[:address].try(:latitude)  || 0
         @longitude    = args[:longitude]    || args[:address].try(:longitude) || 0
@@ -34,19 +34,10 @@ module Trucking
       private
 
       def find_relevant_hubs
-        @relevant_hubs = Hub.where(id: @hub_ids)
+        @relevant_hubs = Hub.where(hubs_condition)
                             .joins(trucking_hub_availabilities: :type_availability)
                             .where(trucking_type_availabilities: { query_method: 1 })
-      end
-
-      def find_distances
-        @hubs_and_distances = @relevant_hubs.each_with_object({}) do |hub, hash|
-          if @distance && @relevant_hubs.length == 1
-            hash[hub_id] = @distance
-          else
-            hash[hub.id] = hub.distance_to(Address.new(latitude: @latitude, longitude: @longitude))
-          end
-        end
+                            .uniq
       end
 
       def find_trucking_locations
@@ -59,12 +50,16 @@ module Trucking
       end
 
       def trucking_location_where_statement
-        <<-SQL
-          trucking_locations.distance = ROUND(ST_Distance(
-            ST_Point(hubs.longitude, hubs.latitude)::geography,
-            ST_Point(:longitude, :latitude)::geography
-          ) / 500)
-        SQL
+        if @distance
+          { trucking_locations: { distance: @distance } }
+        else
+          <<-SQL
+            trucking_locations.distance = ROUND(ST_Distance(
+              ST_Point(hubs.longitude, hubs.latitude)::geography,
+              ST_Point(:longitude, :latitude)::geography
+            ) / 500)
+          SQL
+        end
       end
 
       def trucking_location_conditions_binds
@@ -97,7 +92,7 @@ module Trucking
       end
 
       def hubs_condition
-        @hub_ids ? { 'hub_id': @hub_ids } : {}
+        @hub_ids ? { 'id': @hub_ids } : {}
       end
 
       # Argument Errors
