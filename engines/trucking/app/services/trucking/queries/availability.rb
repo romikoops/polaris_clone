@@ -54,9 +54,9 @@ module Trucking
                               .where(
                                 location_id: @trucking_locations.pluck(:id),
                                 load_type: @load_type,
-                                hub_id: @hub_ids,
                                 carriage: @carriage
                               )
+                              .where(hubs_condition)
                               .where(cargo_class_condition)
                               .where(truck_type_condition)
                               .where(nexuses_condition)

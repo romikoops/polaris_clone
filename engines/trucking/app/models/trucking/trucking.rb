@@ -22,6 +22,20 @@ module Trucking
       where(hub_id: hub.id).destroy_all
     end
 
+    def self.update_type_availabilities_query_method
+      joins(:location).where.not(trucking_locations: { distance: nil }).each do |trucking|
+        type_availability = ::Trucking::TypeAvailability.fin_or_create_by(
+          load_type: trucking.load_type,
+          cargo_class: trucking.cargo_class,
+          truck_type: trucking.truck_type,
+          query_method: :distance
+        )
+        ::Trucking::HubAvailability.find_or_create_by(
+          hub_id: trucking.hub_id, type_availability_id: type_availability.id
+        )
+      end
+    end
+
     def self.find_by_filter(args = {})
       ::Trucking::Queries::FindTrucking.new(args.merge(klass: self)).perform
     end
