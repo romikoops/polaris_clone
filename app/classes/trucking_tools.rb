@@ -80,7 +80,7 @@ module TruckingTools
              min = fee[:min_value] || 0
              [val, min].max
            when 'PER_SHIPMENT'
-            fee[:value] || fee.except(:rate_basis, :currency).values.max
+            fee.except(:rate_basis, :currency, :base).values.max
            when 'PER_BILL'
              fee[:value]
            when 'PER_ITEM'
