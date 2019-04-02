@@ -172,14 +172,13 @@ module Trucking
             :load_type,
             :courier_id,
             :truck_type,
-            :user_id,
-            :parent_id
+            :user_id
           ).merge(location_id: tl.id)
           trucking = ::Trucking::Trucking.find_or_initialize_by(trucking_attr)
 
           trucking.assign_attributes(trucking_rate.merge(location_id: tl.id))
           trucking.id ||= SecureRandom.uuid
-
+          trucking.parent_id ||= trucking_rate[:parent_id]
           @all_trucking_truckings << trucking
         end
         ::Trucking::Trucking.import(
