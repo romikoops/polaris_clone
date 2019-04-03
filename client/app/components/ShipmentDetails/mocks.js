@@ -254,6 +254,7 @@ export const cargoItemContainer = {
   sizeClass: 'highCube', quantity: 14, dangerousGoods: false, weight: 16
 }
 
+
 export const maxDimensionsToApply = {
   dimensionX: '590.0', dimensionY: '234.2', dimensionZ: '228.0', payloadInKg: '21770.0', chargeableWeight: '21770.0'
 }
@@ -272,6 +273,7 @@ export const cargoUnitProps = {
   id,
   loadType: 'cargo_item',
   maxDimensions,
+  maxAggregateDimensions: maxDimensions,
   onCarriage: false,
   onChangeCargoUnitCheckbox: identity,
   onChangeCargoUnitInput: identity,

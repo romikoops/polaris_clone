@@ -132,7 +132,7 @@ class CargoSection extends React.PureComponent {
 
   render () {
     const {
-      theme, scope, cargoItemTypes, maxDimensions, shipment, ShipmentDetails, toggleModal, totalShipmentErrors
+      theme, scope, cargoItemTypes, maxDimensions, maxAggregateDimensions, shipment, ShipmentDetails, toggleModal, totalShipmentErrors
     } = this.props
 
     const { loadType, aggregatedCargo } = shipment
@@ -153,6 +153,7 @@ class CargoSection extends React.PureComponent {
             cargoItemTypes={cargoItemTypes}
             toggleModal={toggleModal}
             maxDimensions={maxDimensions}
+            maxAggregateDimensions={maxAggregateDimensions}
             onChangeCargoUnitCheckbox={this.handleChangeCargoUnitCheckbox}
             onChangeCargoUnitInput={this.handleChangeCargoUnitInput}
             onChangeCargoUnitSelect={this.handleChangeCargoUnitSelect}
@@ -181,10 +182,10 @@ function mapStateToProps (state) {
   const { shipment, ShipmentDetails } = bookingProcess
   const { tenant } = app
   const { theme, scope } = tenant
-  const { cargoItemTypes, maxDimensions } = get(bookingData, 'response.stage1', {})
+  const { cargoItemTypes, maxDimensions, maxAggregateDimensions } = get(bookingData, 'response.stage1', {})
 
   return {
-    shipment, theme, scope, ShipmentDetails, maxDimensions, cargoItemTypes
+    shipment, theme, scope, ShipmentDetails, maxDimensions, maxAggregateDimensions, cargoItemTypes
   }
 }
 
