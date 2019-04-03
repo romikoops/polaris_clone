@@ -16,6 +16,7 @@ import QuoteChargeBreakdown from '../../QuoteChargeBreakdown/QuoteChargeBreakdow
 import { RoundButton } from '../../RoundButton/RoundButton'
 import CollapsingContent from '../../CollapsingBar/Content'
 import QuoteCardScheduleList from './ScheduleList'
+import RatesOverview from './Rates'
 
 class QuoteCard extends PureComponent {
   constructor (props) {
@@ -296,6 +297,7 @@ class QuoteCard extends PureComponent {
               : ''
           }
         </div>
+        { scope.show_rate_overview ? (<RatesOverview  ratesObject={result.meta.pricing_rate_data}/>) : '' }
         <CollapsingContent collapsed={!showSchedules}>
           <QuoteCardScheduleList
             schedules={schedules}

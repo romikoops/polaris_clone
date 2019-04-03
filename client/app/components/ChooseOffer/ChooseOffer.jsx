@@ -3,13 +3,11 @@ import { connect } from 'react-redux'
 import { v4 } from 'uuid'
 import { withNamespaces } from 'react-i18next'
 import { get } from 'lodash'
-import PropTypes from '../../prop-types'
 import RouteFilterBox from '../RouteFilterBox/RouteFilterBox'
 import { moment } from '../../constants'
 import styles from './ChooseOffer.scss'
 import { numberSpacing, isQuote } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
-import defs from '../../styles/default_classes.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import QuoteCard from '../Quote/Card'
 import { Modal } from '../Modal/Modal'
@@ -370,6 +368,8 @@ class ChooseOffer extends Component {
                   />
                 </div>
               </div>
+              <p style={{ fontSize: '10px', margin: '5px' }}>{t('shipment:ttNoGuarantee')}</p>
+              <p style={{ fontSize: '10px', margin: '5px' }}>{t('shipment:invoicedLocalCurrency')}</p>
             </div>
           ) : ''}
 

@@ -191,4 +191,19 @@
     padding-right: 5px;
     padding-top: 3px;
   }
+  .rate_wrapper {
+    .rates_header {
+      font-weight: bold;
+      padding: 5px;
+      font-size: 14px;
+    }
+    .rates_sub_header {
+      padding: 5px;
+      font-size: 13px;
+    }
+    .rates_value {
+      font-size: 12px;
+      padding: 5px;
+    }
+  }
 }

@@ -30,7 +30,8 @@ module OfferCalculatorService
           schedules: grouped_result[:schedules].map(&:to_detailed_hash),
           meta: meta(
             schedule: grouped_result[:schedules].first,
-            shipment: @shipment
+            shipment: @shipment,
+            pricing_ids: grouped_result[:pricing_ids]
           )
         }
       end
@@ -65,7 +66,7 @@ module OfferCalculatorService
       filtered_detailed_schedules
     end
 
-    def meta(schedule:, shipment:)
+    def meta(schedule:, shipment:, pricing_ids:)
       chargeable_weight = if shipment.lcl? && shipment.aggregated_cargo
                             shipment.aggregated_cargo.chargeable_weight
                           elsif shipment.lcl? && !shipment.aggregated_cargo
@@ -87,8 +88,29 @@ module OfferCalculatorService
         itinerary_id: schedule.trip.itinerary_id,
         destination_hub: schedule.destination_hub,
         charge_trip_id: schedule.trip_id,
-        ocean_chargeable_weight: chargeable_weight
+        ocean_chargeable_weight: chargeable_weight,
+        pricing_rate_data: grab_pricing_rates(schedule: schedule)
       }
+    end
+
+    def grab_pricing_rates(schedule:)
+      tenant_vehicle_id = schedule.trip.tenant_vehicle_id
+      itinerary = schedule.trip.itinerary
+      eta = schedule.eta || Date.today
+      etd = schedule.etd || Date.today
+      itinerary.pricings
+        .where(tenant_vehicle_id: tenant_vehicle_id)
+        .for_dates(etd, eta)
+        .each_with_object({}) do |pricing, hash|
+          pricing_hash = pricing.as_json.dig('data')
+          pricing_hash['total'] = pricing_hash.keys.reduce({ 'value' => 0, 'currency' => nil}) do |obj, key|
+             obj['value'] += pricing_hash[key]['rate']
+             obj['currency'] ||= pricing_hash[key]['currency']
+             obj
+          end
+          hash[pricing.cargo_class] = pricing_hash
+        end
+      
     end
 
     def dedicated_pricings?(user)
