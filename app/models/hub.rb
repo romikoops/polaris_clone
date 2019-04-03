@@ -39,6 +39,26 @@ class Hub < Legacy::Hub
     end
   end
 
+  def self.update_type_availabilities_query_method
+    Hub.all.each do |hub|
+      truckings = hub.truckings
+                    .joins(:location)
+                    .where.not(trucking_locations: { distance: nil })
+      next if truckings.empty?
+
+      truckings.group_by {|trucking| {load_type: trucking.load_type, carriage: trucking.carriage, truck_type: trucking.truck_type}}
+                .keys.each do |trucking_keys|
+                  trucking_keys[:query_method] = :distance
+                  type_availability = ::Trucking::TypeAvailability.find_or_create_by(
+                   trucking_keys
+                  )
+                  ::Trucking::HubAvailability.find_or_create_by(
+                    hub_id: hub.id, type_availability_id: type_availability.id
+                  )
+                end
+      end
+  end
+
   def self.group_ids_by_nexus(hub_ids)
     sanitized_query = sanitize_sql(["
       SELECT

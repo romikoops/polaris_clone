@@ -22,6 +22,7 @@ module OfferCalculatorService
         distance: distance.round
       }
       results = Trucking::Queries::Availability.new(args).perform | Trucking::Queries::Distance.new(args).perform
+      binding.pry if results.empty?
       return [] if results.empty?
 
       truckings = @shipment.cargo_classes.each_with_object({}) { |cargo_class, h| h[cargo_class] = nil }

@@ -374,6 +374,8 @@ module TruckingTools
     trucking_pricings = {}
     scope = trucking_pricing.tenant.scope
     cargo_object.each do |stackable_type, cargo_values|
+      next if trucking_pricing.rates.empty?
+      
       trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, direction)
     end
 
