@@ -24,7 +24,7 @@ module Trucking
 
     def self.update_type_availabilities_query_method
       joins(:location).where.not(trucking_locations: { distance: nil }).each do |trucking|
-        type_availability = ::Trucking::TypeAvailability.fin_or_create_by(
+        type_availability = ::Trucking::TypeAvailability.find_or_create_by(
           load_type: trucking.load_type,
           cargo_class: trucking.cargo_class,
           truck_type: trucking.truck_type,
