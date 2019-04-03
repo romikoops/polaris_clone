@@ -50,18 +50,18 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     eta = shipment.planned_eta || Date.today
     etd = shipment.planned_etd || Date.today
     @pricing_data[shipment.id] = shipment.itinerary.pricings
-                      .where(tenant_vehicle_id: shipment.trip.tenant_vehicle_id)
-                      .for_dates(etd, eta)
-                    .each_with_object({}) do |pricing, hash|
-                      pricing_hash = pricing.as_json.dig('data')
-                      pricing_hash['total'] = pricing_hash.keys.sort
-                                                .reduce({ 'value' => 0, 'currency' => nil}) do |obj, key|
-                                                    obj['value'] += pricing_hash[key]['rate']
-                                                    obj['currency'] ||= pricing_hash[key]['currency']
-                                                    obj
-                                                  end
-                                                  hash[pricing.cargo_class] = pricing_hash
-                                                end
+                                         .where(tenant_vehicle_id: shipment.trip.tenant_vehicle_id)
+                                         .for_dates(etd, eta)
+                                         .for_load_type(shipment.load_type)
+                                         .each_with_object({}) do |pricing, hash|
+      pricing_hash = pricing.as_json.dig('data')
+      pricing_hash['total'] = pricing_hash.keys.sort
+                                          .each_with_object('value' => 0, 'currency' => nil) do |key, obj|
+        obj['value'] += pricing_hash[key]['rate']
+        obj['currency'] ||= pricing_hash[key]['currency']
+      end
+      hash[pricing.cargo_class] = pricing_hash
+    end
   end
 
   def hide_grand_total?(shipment) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength

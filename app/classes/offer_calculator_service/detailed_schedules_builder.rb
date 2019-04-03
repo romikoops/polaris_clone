@@ -89,28 +89,27 @@ module OfferCalculatorService
         destination_hub: schedule.destination_hub,
         charge_trip_id: schedule.trip_id,
         ocean_chargeable_weight: chargeable_weight,
-        pricing_rate_data: grab_pricing_rates(schedule: schedule)
+        pricing_rate_data: grab_pricing_rates(schedule: schedule, load_type: shipment.load_type)
       }
     end
 
-    def grab_pricing_rates(schedule:)
+    def grab_pricing_rates(schedule:, load_type:)
       tenant_vehicle_id = schedule.trip.tenant_vehicle_id
       itinerary = schedule.trip.itinerary
       eta = schedule.eta || Date.today
       etd = schedule.etd || Date.today
       itinerary.pricings
-        .where(tenant_vehicle_id: tenant_vehicle_id)
-        .for_dates(etd, eta)
-        .each_with_object({}) do |pricing, hash|
-          pricing_hash = pricing.as_json.dig('data')
-          pricing_hash['total'] = pricing_hash.keys.reduce({ 'value' => 0, 'currency' => nil}) do |obj, key|
-             obj['value'] += pricing_hash[key]['rate']
-             obj['currency'] ||= pricing_hash[key]['currency']
-             obj
-          end
-          hash[pricing.cargo_class] = pricing_hash
+               .where(tenant_vehicle_id: tenant_vehicle_id)
+               .for_dates(etd, eta)
+               .for_load_type(load_type)
+               .each_with_object({}) do |pricing, hash|
+        pricing_hash = pricing.as_json.dig('data')
+        pricing_hash['total'] = pricing_hash.keys.each_with_object('value' => 0, 'currency' => nil) do |key, obj|
+          obj['value'] += pricing_hash[key]['rate']
+          obj['currency'] ||= pricing_hash[key]['currency']
         end
-      
+        hash[pricing.cargo_class] = pricing_hash
+      end
     end
 
     def dedicated_pricings?(user)
