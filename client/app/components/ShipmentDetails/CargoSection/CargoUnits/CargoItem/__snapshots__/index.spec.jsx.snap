@@ -442,6 +442,7 @@ exports[`renders correcly 1`] = `
           "dimensionY": "234.2",
           "dimensionZ": "228.0",
           "payloadInKg": "21770.0",
+          "volume": 31.504584,
         }
       }
       scope={

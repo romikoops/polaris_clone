@@ -890,6 +890,7 @@
     "noRoutesAvailable": "No routes available",
     "maxValue": "Value must be less than",
     "nonNegative": "Must be greater than 0",
+    "maxVolume": "Maximum volume is",
     "maxWeight": "Maximum weight is",
     "maxHeight": "Maximum height is",
     "maxLength": "Maximum length is",

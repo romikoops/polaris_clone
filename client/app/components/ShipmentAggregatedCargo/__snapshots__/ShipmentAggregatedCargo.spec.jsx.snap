@@ -19,7 +19,7 @@ exports[`airDimensions.payloadInKg is falsy 1`] = `
     </div>
     <ShipmentAggregatedCargoInput
       handleDelta={[Function]}
-      maxValue={35}
+      maxValue={0.050116}
       name="volume"
       nextStageAttempt={false}
       t={[Function]}
@@ -75,7 +75,7 @@ exports[`shallow rendering 1`] = `
     </div>
     <ShipmentAggregatedCargoInput
       handleDelta={[Function]}
-      maxValue={35}
+      maxValue={0.050116}
       name="volume"
       nextStageAttempt={false}
       t={[Function]}

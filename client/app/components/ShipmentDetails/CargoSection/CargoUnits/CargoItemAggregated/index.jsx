@@ -5,11 +5,11 @@ import CargoUnitNumberInput from '../CargoUnit/NumberInput'
 import calcMaxDimensionsToApply from '../../../../../helpers/calcMaxDimensionsToApply'
 
 function CargoItemAggregated ({
-  cargoItem, t, ShipmentDetails, maxDimensions, toggleModal, onChangeCargoUnitInput
+  cargoItem, t, ShipmentDetails, maxAggregateDimensions, toggleModal, onChangeCargoUnitInput
 }) {
   const maxDimensionsToApply = calcMaxDimensionsToApply(
     ShipmentDetails.availableMots,
-    maxDimensions
+    maxAggregateDimensions
   )
   // TODO Max dimensions
   const getMaxDimension = prop => Number(
@@ -26,6 +26,9 @@ function CargoItemAggregated ({
     value: cargoItem[prop]
   })
 
+  const maxVolume = getMaxDimension('volume')
+  const maxWeight = getMaxDimension('payloadInKg')
+
   return (
     <div>
       <div style={{ position: 'relative' }}>
@@ -39,6 +42,7 @@ function CargoItemAggregated ({
             </div>
             <CargoUnitNumberInput
               maxDimensionsErrorText={t('errors:maxVolume')}
+              maxDimension={maxVolume}
               {...getSharedProps('totalVolume')}
             />
             <div className="flex-10 layout-row layout-align-center-center">
@@ -52,6 +56,7 @@ function CargoItemAggregated ({
             </div>
             <CargoUnitNumberInput
               maxDimensionsErrorText={t('errors:maxWeight')}
+              maxDimension={maxWeight}
               {...getSharedProps('totalWeight')}
             />
             <div className="flex-10 layout-row layout-align-center-center">

@@ -48,8 +48,8 @@ exports[`renders correctly 1`] = `
           }
           i={0}
           image=""
-          maxDimension={1000}
-          maxDimensionsErrorText="NO_TRANSLATION | key \\"errors:maxVolume\\""
+          maxDimension={31.504584}
+          maxDimensionsErrorText="Maximum volume is"
           name="0-totalVolume"
           onBlur={[Function]}
           onChange={[Function]}
@@ -96,7 +96,7 @@ exports[`renders correctly 1`] = `
           }
           i={0}
           image=""
-          maxDimension={1000}
+          maxDimension={21770}
           maxDimensionsErrorText="Maximum weight is"
           name="0-totalWeight"
           onBlur={[Function]}

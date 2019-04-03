@@ -180,6 +180,24 @@ exports[`load type is cargo item 1`] = `
   direction="export"
   i={0}
   id={4606}
+  maxAggregateDimensions={
+    Object {
+      "air": Object {
+        "chargeableWeight": "1000.0",
+        "dimensionX": "120.0",
+        "dimensionY": "100.0",
+        "dimensionZ": "150.0",
+        "payloadInKg": "1000.0",
+      },
+      "general": Object {
+        "chargeableWeight": "21770.0",
+        "dimensionX": "590.0",
+        "dimensionY": "234.2",
+        "dimensionZ": "228.0",
+        "payloadInKg": "21770.0",
+      },
+    }
+  }
   maxDimensions={
     Object {
       "air": Object {
@@ -486,6 +504,24 @@ exports[`load type is cargo item aggregated 1`] = `
   }
   direction="export"
   id={4606}
+  maxAggregateDimensions={
+    Object {
+      "air": Object {
+        "chargeableWeight": "1000.0",
+        "dimensionX": "120.0",
+        "dimensionY": "100.0",
+        "dimensionZ": "150.0",
+        "payloadInKg": "1000.0",
+      },
+      "general": Object {
+        "chargeableWeight": "21770.0",
+        "dimensionX": "590.0",
+        "dimensionY": "234.2",
+        "dimensionZ": "228.0",
+        "payloadInKg": "21770.0",
+      },
+    }
+  }
   maxDimensions={
     Object {
       "air": Object {
@@ -725,6 +761,24 @@ exports[`load type is container 1`] = `
   direction="export"
   i={0}
   id={4606}
+  maxAggregateDimensions={
+    Object {
+      "air": Object {
+        "chargeableWeight": "1000.0",
+        "dimensionX": "120.0",
+        "dimensionY": "100.0",
+        "dimensionZ": "150.0",
+        "payloadInKg": "1000.0",
+      },
+      "general": Object {
+        "chargeableWeight": "21770.0",
+        "dimensionX": "590.0",
+        "dimensionY": "234.2",
+        "dimensionZ": "228.0",
+        "payloadInKg": "21770.0",
+      },
+    }
+  }
   maxDimensions={
     Object {
       "air": Object {
