@@ -23,7 +23,7 @@ module OfferCalculatorService
         address: address,
         carriage: carriage,
         shipment: @shipment,
-        user_id: @shipment.user_id
+        user_id: @shipment.user.pricing_id
       )
       data = Hub.where(id: hub_ids).each_with_object({}) do |hub, obj|
         distance = calc_distance(address, hub)
