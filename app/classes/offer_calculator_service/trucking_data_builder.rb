@@ -62,14 +62,11 @@ module OfferCalculatorService
         trucking_charges = calc_trucking_charges(distance, trucking_pricing)
         trucking_charge_data[key] = trucking_charges
       end
-    rescue TruckingDataBuilder::MissingTruckingData => e
-      binding.pry
+    rescue TruckingDataBuilder::MissingTruckingData
       raise ApplicationError::MissingTruckingData
-    rescue TruckingTools::LoadMeterageExceeded => e
-      binding.pry
+    rescue TruckingTools::LoadMeterageExceeded
       raise ApplicationError::LoadMeterageExceeded
-    rescue StandardError => e
-      binding.pry
+    rescue StandardError
       raise ApplicationError::MissingTruckingData
     end
 

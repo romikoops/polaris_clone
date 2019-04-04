@@ -41,7 +41,7 @@ module Trucking
       end
 
       def find_trucking_locations
-        @klass.where(hub_id: @relevant_hubs.pluck(:id), carriage: @carriage)
+        @klass.where(hub_id: @relevant_hubs.pluck(:id, ), carriage: @carriage, tenant_id: @tenant_id,)
               .where(cargo_class_condition)
               .where(truck_type_condition)
               .where(nexuses_condition)

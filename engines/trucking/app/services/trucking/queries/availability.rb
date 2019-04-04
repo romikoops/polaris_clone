@@ -52,6 +52,7 @@ module Trucking
       def find_trucking_truckings
         @trucking_truckings = ::Trucking::Trucking
                               .where(
+                                tenant_id: @tenant_id,
                                 location_id: @trucking_locations.pluck(:id),
                                 load_type: @load_type,
                                 carriage: @carriage
