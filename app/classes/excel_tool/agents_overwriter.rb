@@ -106,7 +106,7 @@ module ExcelTool
     def agency_manager
       @agency_manager = User.find_by(
         tenant_id: @user.tenant_id,
-        email: @agency_row[:email],
+        email: @agency_row[:email].downcase,
         role: @manager_role
       )
     end
@@ -116,7 +116,7 @@ module ExcelTool
         first_name: @agency_row[:first_name],
         last_name: @agency_row[:last_name],
         tenant_id: @user.tenant_id,
-        email: @agency_row[:email],
+        email: @agency_row[:email].downcase,
         phone: @agency_row[:phone],
         vat_number: @agency_row[:vat_number],
         external_id: @agency_row[:external_id],
@@ -130,7 +130,7 @@ module ExcelTool
         first_name: @agency_row[:first_name],
         last_name: @agency_row[:last_name],
         tenant_id: @user.tenant_id,
-        email: @agency_row[:email],
+        email: @agency_row[:email].downcase,
         phone: @agency_row[:phone],
         vat_number: @agency_row[:vat_number],
         external_id: @agency_row[:external_id],
@@ -161,7 +161,7 @@ module ExcelTool
     def agent
       @agent = User.find_by(
         tenant_id: @user.tenant_id,
-        email: @agent_row[:email],
+        email: @agent_row[:email].downcase,
         agency_id: @agent_agency.id,
         role: @agent_role
       )
@@ -172,7 +172,7 @@ module ExcelTool
         first_name: @agent_row[:first_name],
         last_name: @agent_row[:last_name],
         tenant_id: @user.tenant_id,
-        email: @agent_row[:email],
+        email: @agent_row[:email].downcase,
         phone: @agent_row[:phone],
         vat_number: @agent_row[:vat_number],
         agency_id: @agent_agency.id,
@@ -185,7 +185,7 @@ module ExcelTool
         first_name: @agent_row[:first_name],
         last_name: @agent_row[:last_name],
         tenant_id: @user.tenant_id,
-        email: @agent_row[:email],
+        email: @agent_row[:email].downcase,
         phone: @agent_row[:phone],
         vat_number: @agent_row[:vat_number],
         password: @agent_row[:password],

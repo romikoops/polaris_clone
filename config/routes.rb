@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       post 'trucking/trucking_pricings/:id', to: 'trucking#overwrite_zonal_trucking_by_hub'
       post 'trucking/trucking_city_pricings/:id', to: 'trucking#overwrite_city_trucking_by_hub'
       post 'trucking/:id/edit', to: 'trucking#edit'
+      post 'clients/agents', to: 'clients#agents'
       post 'trucking/download', to: 'trucking#download'
       post 'currencies/toggle_mode', to: 'currencies#toggle_mode'
       post 'currencies/set_rates', to: 'currencies#set_rates'

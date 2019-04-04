@@ -193,6 +193,7 @@
   "admin": {
       "savePricings": "Save Pricings",
       "editHub": "Edit Hub",
+      "uploadAgents": "Upload Agents",
       "generatorSheet": "Generator Sheet",
       "updateShopEmails": "Update Shop Emails",
       "updateQuotationPDFRemarks": "Update PDF Remarks",

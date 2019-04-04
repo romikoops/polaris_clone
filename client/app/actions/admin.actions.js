@@ -1663,6 +1663,33 @@ function uploadTrucking (url, file, direction) {
   }
 }
 
+function uploadAgents (url, file) {
+  function request (agentData) {
+    return { type: adminConstants.UPLOAD_TRUCKING_REQUEST, payload: agentData }
+  }
+  function success (agentData) {
+    return { type: adminConstants.UPLOAD_TRUCKING_SUCCESS, payload: agentData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.UPLOAD_TRUCKING_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.uploadAgents(url, file).then(
+      (data) => {
+        dispatch(documentActions.setStats(data.data))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function newHubImage (id, file) {
   function request (hubData) {
     return { type: adminConstants.UPLOAD_HUB_IMAGE_REQUEST, payload: hubData }
@@ -1819,7 +1846,8 @@ export const adminActions = {
   deltaShipmentsPage,
   deleteDocument,
   searchPricings,
-  getLocalCharges
+  getLocalCharges,
+  uploadAgents
 }
 
 export default adminActions

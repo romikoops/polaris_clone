@@ -45,6 +45,12 @@ class Admin::ClientsController < Admin::AdminBaseController
     response_handler(new_user.token_validation_response)
   end
 
+  def agents
+    req = { 'xlsx' => params[:file] }
+    resp = ExcelTool::AgentsOverwriter.new(params: req, _user: current_user).perform
+    response_handler(resp)
+  end
+
   # Destroy User account
 
   def destroy

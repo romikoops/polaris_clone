@@ -8,6 +8,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { filters, capitalize } from '../../helpers'
 import Checkbox from '../Checkbox/Checkbox'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
+import FileUploader from '../FileUploader/FileUploader'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
@@ -24,20 +25,24 @@ class AdminClientsIndex extends Component {
       page: 1
     }
   }
+
   componentWillMount () {
     if (this.props.clients && !this.state.searchResults.length) {
       this.prepFilters()
     }
     this.prepPages()
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
   }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.clients.length) {
       this.prepFilters(nextProps.clients)
     }
   }
+
   prepPages () {
     const { clients } = this.props
     const numPages = Math.ceil(clients.length / 12)
@@ -57,6 +62,7 @@ class AdminClientsIndex extends Component {
       searchResults: clients
     })
   }
+
   toggleFilterValue (target, key) {
     this.setState({
       searchFilters: {
@@ -68,6 +74,7 @@ class AdminClientsIndex extends Component {
       }
     })
   }
+
   handleSearchQuery (e) {
     const { value } = e.target
     this.setState({
@@ -77,6 +84,7 @@ class AdminClientsIndex extends Component {
       }
     })
   }
+
   applyFilters (array) {
     const { searchFilters } = this.state
     const motKeys = Object.keys(searchFilters.companies).filter(key => searchFilters.companies[key])
@@ -94,6 +102,7 @@ class AdminClientsIndex extends Component {
 
     return filter2
   }
+
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -102,6 +111,7 @@ class AdminClientsIndex extends Component {
       }
     })
   }
+
   deltaPage (val) {
     this.setState((prevState) => {
       const newPageVal = prevState.page + val
@@ -110,8 +120,11 @@ class AdminClientsIndex extends Component {
       return { page }
     })
   }
+
   render () {
-    const { t, theme, adminDispatch, tabReset } = this.props
+    const {
+      t, theme, adminDispatch, tabReset, scope, user
+    } = this.props
     const {
       expander, searchFilters, searchResults, page, numPages, numPerPage
     } = this.state
@@ -129,6 +142,7 @@ class AdminClientsIndex extends Component {
         />
       </div>
     )
+    const isQuote = scope.closed_quotation_tool || scope.closed_quotation_tool
     const results = this.applyFilters(searchResults)
     const typeFilters = Object.keys(searchFilters.companies).map(htk => (
       <div className={`${styles.action_section} flex-100 layout-row layout-align-center-center layout-wrap`}>
@@ -145,24 +159,28 @@ class AdminClientsIndex extends Component {
     ))
     const dedicatedTiles = results.filter(user => user.has_pricings)
       .slice(sliceStartIndex, sliceEndIndex)
-      .map(u => (<AdminClientTile
-        key={v4()}
-        client={u}
-        theme={theme}
-        handleClick={() => adminDispatch.getClient(u.id, true)}
-        tooltip={clientTip}
-        flexClasses="flex-30 flex-xs-100 flex-sm-50 flex-md-45 flex-gt-lg-15"
-      />))
+      .map(u => (
+        <AdminClientTile
+          key={v4()}
+          client={u}
+          theme={theme}
+          handleClick={() => adminDispatch.getClient(u.id, true)}
+          tooltip={clientTip}
+          flexClasses="flex-30 flex-xs-100 flex-sm-50 flex-md-45 flex-gt-lg-15"
+        />
+      ))
     const openTiles = results
       .slice(sliceStartIndex, sliceEndIndex)
-      .map(u => (<AdminClientTile
-        key={v4()}
-        client={u}
-        theme={theme}
-        handleClick={() => adminDispatch.getClient(u.id, true)}
-        tooltip={clientTip}
-        flexClasses="flex-30 flex-xs-100 flex-sm-50 flex-md-45 flex-gt-lg-15"
-      />))
+      .map(u => (
+        <AdminClientTile
+          key={v4()}
+          client={u}
+          theme={theme}
+          handleClick={() => adminDispatch.getClient(u.id, true)}
+          tooltip={clientTip}
+          flexClasses="flex-30 flex-xs-100 flex-sm-50 flex-md-45 flex-gt-lg-15"
+        />
+      ))
     const paginationRow = (
       <div className="flex-95 layout-row layout-align-center-center margin_bottom">
         <div
@@ -173,7 +191,10 @@ class AdminClientsIndex extends Component {
           onClick={page > 1 ? () => this.deltaPage(-1) : null}
         >
           <i className="fa fa-chevron-left" />
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
+          <p>
+&nbsp;&nbsp;&nbsp;&nbsp;
+            {t('common:basicBack')}
+          </p>
         </div>
         {}
         <p>{page}</p>
@@ -184,7 +205,10 @@ class AdminClientsIndex extends Component {
           `}
           onClick={page < numPages ? () => this.deltaPage(1) : null}
         >
-          <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <p>
+            {t('common:next')}
+&nbsp;&nbsp;&nbsp;&nbsp;
+          </p>
           <i className="fa fa-chevron-right" />
         </div>
       </div>
@@ -226,7 +250,7 @@ class AdminClientsIndex extends Component {
           <SideOptionsBox
             header={t('admin:filters')}
             flexOptions="flex-100"
-            content={
+            content={(
               <div>
 
                 <div
@@ -253,13 +277,38 @@ class AdminClientsIndex extends Component {
                   />
                 </div>
               </div>
-            }
+            )}
           />
           <SideOptionsBox
             header={t('admin:dataManager')}
             flexOptions="flex-100"
-            content={
-              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+            content={[
+              ((user.internal || scope.feature_uploaders) && isQuote ? (
+                <CollapsingBar
+                  showArrow
+                  collapsed={!expander.upload}
+                  theme={theme}
+                  styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                  handleCollapser={() => this.toggleExpander('upload')}
+                  text={t('admin:uploadData')}
+                  faClass="fa fa-cloud-upload"
+                  content={(
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-center-center"
+                    >
+                      <p className="flex-100 center">{t('admin:uploadAgents')}</p>
+                      <FileUploader
+                        theme={theme}
+                        dispatchFn={file => adminDispatch.uploadAgents(file)}
+                        type="xlsx"
+                        size="full"
+                        text={t('admin:dedicatedPricing')}
+                      />
+                    </div>
+                  )}
+                />
+              ) : '' ),
+              (<div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <CollapsingBar
                   showArrow
                   collapsed={!expander.new}
@@ -278,23 +327,13 @@ class AdminClientsIndex extends Component {
                     </div>
                   )}
                 />
-              </div>
-            }
+              </div>)
+            ]}
           />
         </div>
       </div>
     )
   }
-}
-
-AdminClientsIndex.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  clients: PropTypes.arrayOf(PropTypes.clients),
-  adminDispatch: PropTypes.shape({
-    getClient: PropTypes.func
-  }).isRequired,
-  toggleNewClient: PropTypes.func.isRequired
 }
 
 AdminClientsIndex.defaultProps = {

@@ -141,7 +141,7 @@ class AdminClients extends Component {
   render () {
     const { newClient, newClientBool, tabReset } = this.state
     const {
-      t, theme, clients, hubs, hubHash, client, adminDispatch
+      t, theme, clients, hubs, hubHash, client, adminDispatch, scope, user
     } = this.props
     const textStyle = {
       background:
@@ -458,9 +458,11 @@ class AdminClients extends Component {
                   handleClientAction={this.handleClientAction}
                   clients={clients}
                   hubs={hubs}
+                  user={user}
                   adminDispatch={adminDispatch}
                   viewClient={this.viewClient}
                   tabReset={tabReset}
+                  scope={scope}
                   toggleNewClient={() => this.toggleNewClient()}
                   {...props}
                 />
@@ -486,20 +488,7 @@ class AdminClients extends Component {
     )
   }
 }
-AdminClients.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  hubs: PropTypes.arrayOf(PropTypes.hubs),
-  hubHash: PropTypes.objectOf(PropTypes.hubs),
-  clients: PropTypes.arrayOf(PropTypes.client),
-  client: PropTypes.client.isRequired,
-  adminDispatch: PropTypes.shape({
-    getClient: PropTypes.func
-  }).isRequired,
-  dispatch: PropTypes.func.isRequired,
-  setCurrentUrl: PropTypes.func.isRequired,
-  history: PropTypes.history.isRequired
-}
+
 AdminClients.defaultProps = {
   theme: null,
   clients: [],
@@ -510,6 +499,7 @@ function mapStateToProps (state) {
   const { authentication, app, admin } = state
   const { tenant } = app
   const { user, loggedIn } = authentication
+  const { scope } = tenant
   const {
     clients, shipment, shipments, hubs, client
   } = admin
@@ -522,7 +512,8 @@ function mapStateToProps (state) {
     shipments,
     shipment,
     hubs,
-    client
+    client,
+    scope
   }
 }
 function mapDispatchToProps (dispatch) {
