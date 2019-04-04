@@ -51,7 +51,7 @@ const FindRates = withNamespaces(['landing'])(({
 }) => (
   (!user || ['shipper', 'agent', 'agency_manager'].includes(user.role.name)) && (
     <div className="layout-row flex-100 flex-gt-sm-50 margin_bottom">
-      <SquareButton text={t('landing:callToAction')} theme={theme} handleNext={bookNow} size="small" active />
+      <SquareButton text={t('landing:callToAction')} classNames="ccb_find_rates" theme={theme} handleNext={bookNow} size="small" active />
     </div>
   )
 ))
