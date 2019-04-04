@@ -15,10 +15,8 @@ jira.check(
 # Support multiple JIRA projects
 jira_keys_regexp = Regexp.new(/((?:#{jira_keys})-[0-9]+)/)
 
-jira_issues = []
-
 # Search Commits
-jira_issues += git.commits.flat_map { |commit| commit.message.scan(jira_keys_regexp) }.compact.uniq
+jira_issues = git.commits.map { |commit| commit.message.scan(jira_keys_regexp) }.flatten.compact.uniq
 fix_chore_commits = git.commits.any? { |commit| !commit.message.scan(/\A(chore|fix|hotfix):/i).empty? }
 
 # MR Tickets
