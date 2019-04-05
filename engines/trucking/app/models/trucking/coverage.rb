@@ -34,7 +34,6 @@ end
 #
 #  id         :uuid             not null, primary key
 #  hub_id     :integer
-#  bounds     :geometry({:srid= geometry, 0
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

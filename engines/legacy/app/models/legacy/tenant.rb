@@ -5,6 +5,7 @@ module Legacy
     self.table_name = 'tenants'
 
     has_many :users
+    has_many :shipments
 
     has_paper_trail
   end

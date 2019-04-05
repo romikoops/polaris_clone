@@ -6,9 +6,16 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <%= link_to 'Tenants', admiralty_tenants.tenants_path, class: 'nav-link' %>
-      </li>
+      <% if defined?(admiralty_tenants) %>
+        <li class="nav-item">
+          <%= link_to 'Tenants', admiralty_tenants.tenants_path, class: 'nav-link' %>
+        </li>
+      <% end %>
+      <% if defined?(admiralty_reports) %>
+        <li>
+          <%= link_to 'Reports', admiralty_reports.reports_path, class: 'nav-link' %>
+        </li>
+      <% end %>
     </ul>
   </div>
 </nav>

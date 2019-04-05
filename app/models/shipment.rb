@@ -44,7 +44,6 @@ class Shipment < Legacy::Shipment
   has_paper_trail
 
   # ActiveRecord associations
-  belongs_to :user
   belongs_to :quotation, optional: true
   belongs_to :tenant
   has_many :documents

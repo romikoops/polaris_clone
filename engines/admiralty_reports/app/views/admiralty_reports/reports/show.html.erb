@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="row">
+    <h2><%= @tenant.name %></h2>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col">
+      <div class="table-responsive">
+        <h3>Per agent and date</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col"># Individual Agents</th>
+              <th scope="col"># Quotations</th>
+              <th scope="col">&oslash; Time for Booking Process</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @stats.each do |stat| %>
+              <% stat.each do |key, value| %>
+                <% value.values_at(:combined_data).flatten.each do |data| %>
+                  <tr>
+                    <td><%= key %></td>
+                    <td><%= data[:n_individual_agents] %></td>
+                    <td><%= data[:n_quotations] %></td>
+                    <td><%= data[:avg_time_for_booking_process] %></td>
+                  </tr>
+                <% end %>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col">
+      <div class="table-responsive">
+        <h3>Per date</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Email</th>
+              <th scope="col"># Quotations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @stats.each do |stat| %>
+              <% stat.each do |key, value| %>
+                <% value.values_at(:data_per_agent).flatten.each do |data| %>
+                  <tr>
+                    <td><%= key %></td>
+                    <td><%= data[:email] %></td>
+                    <td><%= data[:count] %></td>
+                  </tr>
+                <% end %>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

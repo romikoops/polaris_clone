@@ -141,5 +141,4 @@ end
 #  province      :string
 #  country       :string
 #  admin_level   :string
-#  bounds        :geometry({:srid= geometry, 0
 #
