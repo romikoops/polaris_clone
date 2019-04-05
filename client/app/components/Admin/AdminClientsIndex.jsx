@@ -142,7 +142,7 @@ class AdminClientsIndex extends Component {
         />
       </div>
     )
-    const isQuote = scope.closed_quotation_tool || scope.closed_quotation_tool
+    const isQuote = scope.closed_quotation_tool || scope.open_quotation_tool
     const results = this.applyFilters(searchResults)
     const typeFilters = Object.keys(searchFilters.companies).map(htk => (
       <div className={`${styles.action_section} flex-100 layout-row layout-align-center-center layout-wrap`}>
