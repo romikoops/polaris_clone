@@ -40,6 +40,18 @@ class Hub < Legacy::Hub
   end
 
   def self.update_type_availabilities_query_method
+    truckings = ::Trucking::Trucking.joins(:location).where.not(hub_id: nil, trucking_locations: { distance: nil })
+
+    uniq_truckings_attrs = truckings.distinct.select(:hub_id, :load_type, :carriage, :truck_type).as_json(except: :id)
+    uniq_truckings_attrs.each do |trucking_attr_hsh|
+      trucking_attr_hsh.symbolize_keys!
+      hub_id = trucking_attr_hsh.delete(:hub_id)
+      trucking_attr_hsh[:query_method] = :distance
+
+      type_availability_id = ::Trucking::TypeAvailability.find_or_create_by(trucking_attr_hsh).id
+      ::Trucking::HubAvailability.find_or_create_by(hub_id: hub_id, type_availability_id: type_availability_id)
+    end
+  end
     Hub.all.each do |hub|
       truckings = hub.truckings
                     .joins(:location)
