@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-raise('Fix for duplicate headers not needed') if Gem::Version.new(Mailgun::VERSION) >= Gem::Version.new('1.2.0')
+raise('Fix for duplicate headers not needed') if Railgun::Mailer::IGNORED_HEADERS.include?('reply_to')
 
 module Railgun
   class Mailer
-    IGNORED_HEADERS = %w(to from subject reply_to).freeze
+    silence_warnings { IGNORED_HEADERS = %w(to from subject reply_to).freeze }
   end
 end
 
