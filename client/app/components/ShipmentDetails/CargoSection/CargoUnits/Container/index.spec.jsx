@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import Container from '.'
-import { cargoItemContainer, cargoUnitProps } from '../../../mocks'
+import { cargoItemContainer, cargoUnitProps, ShipmentDetails } from '../../../mocks'
 
 test('with empty props', () => {
   expect(() => shallow(<Container />)).toThrow()
@@ -10,7 +10,8 @@ test('with empty props', () => {
 test('renders correctly', () => {
   const props = {
     ...cargoUnitProps,
-    container: cargoItemContainer
+    container: cargoItemContainer,
+    ShipmentDetails
   }
   expect(shallow(<Container {...props} />)).toMatchSnapshot()
 })

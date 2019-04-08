@@ -10,11 +10,17 @@ import { getTareWeight, getSizeClassOptions } from '../../../../../helpers'
 
 function Container ({
   container, i, onChangeCargoUnitSelect, onDeleteUnit, theme, scope, t,
-  onChangeCargoUnitCheckbox, onChangeCargoUnitInput, toggleModal
+  onChangeCargoUnitCheckbox, onChangeCargoUnitInput, toggleModal, ShipmentDetails
 }) {
   // TODO: implement dynamic maxPayloadInKg for each Tenant
   const tareWeight = getTareWeight(container) || 2370
   const maxPayloadInKg = 35000 - tareWeight
+  const cargoClasses = []
+  get(ShipmentDetails, ['availableRoutes'], []).forEach((route) => {
+    route.cargoClasses.forEach((cc) => {
+      if (!cargoClasses.includes(cc)) cargoClasses.push(cc)
+    })
+  })
 
   return (
     <CargoUnitBox
@@ -54,7 +60,7 @@ function Container ({
                 className={styles.select_100}
                 inputProps={{ name: `${i}-sizeClass` }}
                 name={`${i}-sizeClass`}
-                options={getSizeClassOptions()}
+                options={getSizeClassOptions(cargoClasses)}
                 placeholder={t('common:containerSize')}
                 value={container.sizeClass}
                 onChange={(option) => { onChangeCargoUnitSelect(i, 'sizeClass', get(option, 'value')) }}
