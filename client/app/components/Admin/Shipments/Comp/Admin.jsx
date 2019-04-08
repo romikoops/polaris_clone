@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { adminDashboard as adminTip } from '../../../../constants'
-import { filters, capitalize, loadOriginNexus, loadDestinationNexus, loadClients, loadMot } from '../../../../helpers'
+import {
+  filters, capitalize, loadOriginNexus, loadDestinationNexus, loadClients, loadMot
+} from '../../../../helpers'
 import Tabs from '../../../Tabs/Tabs'
 import Tab from '../../../Tabs/Tab'
 import { adminActions, appActions } from '../../../../actions'
@@ -22,6 +23,7 @@ export class ShipmentsCompAdmin extends Component {
 
     return shipment
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -35,34 +37,40 @@ export class ShipmentsCompAdmin extends Component {
       searchFilters: {
         countries: []
       },
-      page: 1,
+      page: 1
     }
     this.viewShipment = this.viewShipment.bind(this)
     this.determinePerPage = this.determinePerPage.bind(this)
     this.handleInput = this.handleInput.bind(this)
     this.handleFilters = this.handleFilters.bind(this)
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
     this.determinePerPage()
     window.addEventListener('resize', this.determinePerPage)
   }
+
   componentWillUnmount () {
     window.removeEventListener('resize', this.determinePerPage)
   }
+
   getShipmentsFromPage (pages, params) {
     const { adminDispatch } = this.props
     const { perPage } = this.state
     adminDispatch.getShipments(pages, perPage, params, false)
   }
+
   getTargetShipmentsFromPage (target, page, params) {
     const { adminDispatch } = this.props
     const { perPage } = this.state
     adminDispatch.deltaShipmentsPage(target, page, perPage, params)
   }
+
   viewShipment (shipment) {
     this.props.viewShipment(shipment)
   }
+
   determinePerPage () {
     const { perPage } = this.state
     const { adminDispatch, shipments } = this.props
@@ -91,9 +99,11 @@ export class ShipmentsCompAdmin extends Component {
   nextPage (target) {
     this.handlePage(target, 1)
   }
+
   prevPage (target) {
     this.handlePage(target, -1)
   }
+
   doNothing () {
     console.log(this.state.page)
   }
@@ -119,6 +129,7 @@ export class ShipmentsCompAdmin extends Component {
       }
     }), () => this.handleFilters())
   }
+
   handleFilters (target, realPage) {
     const { searchFilters } = this.state
     const { pages } = this.props.shipments
@@ -196,88 +207,90 @@ export class ShipmentsCompAdmin extends Component {
     const keysToRender = statusKeys.includes('quoted')
       ? statusKeys : ['requested', 'open', 'finished', 'rejected', 'archived']
 
-
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <Tabs>
-          {keysToRender.map(status => (<Tab
-            tabTitle={capitalize(status)}
-            theme={theme}
-            paddingFixes
-          >
-            <div>
-              <div className="flex-100 layout-row padding_top">
-                <div className="flex-15 layout-row">
-                  <NamedSelect
-                    className="flex-100 selectors"
-                    multi
-                    name="originNexus"
-                    placeholder="Origin"
-                    value={this.state.searchFilters.originNexus}
-                    autoload={false}
-                    options={filters.sortByAlphabet(loadOriginNexus(shipments.nexuses[status]), 'label')}
-                    onChange={e => this.handleInput(e)}
-                  />
+          {keysToRender.map(status => (
+            <Tab
+              tabTitle={capitalize(status)}
+              theme={theme}
+              paddingFixes
+            >
+              <div>
+                <div className="flex-100 layout-row padding_top">
+                  <div className="flex-15 layout-row">
+                    <NamedSelect
+                      className="flex-100 selectors"
+                      multi
+                      name="originNexus"
+                      placeholder="Origin"
+                      value={this.state.searchFilters.originNexus}
+                      autoload={false}
+                      options={filters.sortByAlphabet(loadOriginNexus(shipments.nexuses[status]), 'label')}
+                      onChange={e => this.handleInput(e)}
+                    />
+                  </div>
+                  <div className="flex-15 layout-row">
+                    <NamedSelect
+                      className="flex-100 selectors"
+                      multi
+                      name="destinationNexus"
+                      placeholder="Destination"
+                      value={this.state.searchFilters.destinationNexus}
+                      autoload={false}
+                      options={filters.sortByAlphabet(loadDestinationNexus(shipments.nexuses[status]), 'label')}
+                      onChange={e => this.handleInput(e)}
+                    />
+                  </div>
+                  <div className="flex-15 layout-row">
+                    <NamedSelect
+                      className="flex-100 selectors"
+                      multi
+                      name="hubType"
+                      placeholder="Mode of Transport"
+                      value={this.state.searchFilters.hubType}
+                      autoload={false}
+                      options={loadMot()}
+                      onChange={e => this.handleInput(e)}
+                    />
+                  </div>
+                  <div className="flex-15 layout-row">
+                    <NamedSelect
+                      className="flex-100 selectors"
+                      multi
+                      name="clients"
+                      placeholder="Clients"
+                      value={this.state.searchFilters.clients}
+                      autoload={false}
+                      options={filters.sortByAlphabet(loadClients(clients), 'label')}
+                      onChange={e => this.handleInput(e)}
+                    />
+                  </div>
                 </div>
-                <div className="flex-15 layout-row">
-                  <NamedSelect
-                    className="flex-100 selectors"
-                    multi
-                    name="destinationNexus"
-                    placeholder="Destination"
-                    value={this.state.searchFilters.destinationNexus}
-                    autoload={false}
-                    options={filters.sortByAlphabet(loadDestinationNexus(shipments.nexuses[status]), 'label')}
-                    onChange={e => this.handleInput(e)}
-                  />
-                </div>
-                <div className="flex-15 layout-row">
-                  <NamedSelect
-                    className="flex-100 selectors"
-                    multi
-                    name="hubType"
-                    placeholder="Mode of Transport"
-                    value={this.state.searchFilters.hubType}
-                    autoload={false}
-                    options={loadMot()}
-                    onChange={e => this.handleInput(e)}
-                  />
-                </div>
-                <div className="flex-15 layout-row">
-                  <NamedSelect
-                    className="flex-100 selectors"
-                    multi
-                    name="clients"
-                    placeholder="Clients"
-                    value={this.state.searchFilters.clients}
-                    autoload={false}
-                    options={filters.sortByAlphabet(loadClients(clients), 'label')}
-                    onChange={e => this.handleInput(e)}
-                  />
-                </div>
+                <AdminShipmentsBox
+                  handleClick={this.viewShipment}
+                  dispatches={adminDispatch}
+                  shipments={mergedShipments[status]}
+                  theme={theme}
+                  nexuses={shipments.nexuses[status]}
+                  countries={shipments.countries}
+                  countriesIds={shipments[status]}
+                  status={status}
+                  confirmShipmentData={confirmShipmentData}
+                  tooltip={adminTip[status]}
+                  searchFilters={this.state.searchFilters}
+                  page={pages[status]}
+                  searchText={search[status]}
+                  numPages={numShipmentsPages[status]}
+                  prevPage={() => this.prevPage(status)}
+                  nextPage={() => this.nextPage(status)}
+                  handleSearchChange={e => this.handleSearchQuery(e, status)}
+                  handleInput={e => this.handleInput(e)}
+                  getShipmentsRequest={this.props.getShipmentsRequest}
+                />
               </div>
-              <AdminShipmentsBox
-                handleClick={this.viewShipment}
-                dispatches={adminDispatch}
-                shipments={mergedShipments[status]}
-                theme={theme}
-                nexuses={shipments.nexuses[status]}
-                countries={shipments.countries}
-                countriesIds={shipments[status]}
-                status={status}
-                confirmShipmentData={confirmShipmentData}
-                tooltip={adminTip[status]}
-                searchFilters={this.state.searchFilters}
-                page={pages[status]}
-                numPages={numShipmentsPages[status]}
-                prevPage={() => this.prevPage(status)}
-                nextPage={() => this.nextPage(status)}
-                handleSearchChange={e => this.handleSearchQuery(e, status)}
-                handleInput={e => this.handleInput(e)}
-                getShipmentsRequest={this.props.getShipmentsRequest}
-              />
-            </div>
-          </Tab>))}
+            </Tab>
+          ))}
         </Tabs>
       </div>
     )
@@ -291,17 +304,6 @@ export class ShipmentsCompAdmin extends Component {
       </div>
     )
   }
-}
-ShipmentsCompAdmin.propTypes = {
-  theme: PropTypes.theme,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
-  shipments: PropTypes.objectOf(PropTypes.array),
-  confirmShipmentData: PropTypes.objectOf(PropTypes.any),
-  clients: PropTypes.arrayOf(PropTypes.clients),
-  numShipmentsPages: PropTypes.number,
-  viewShipment: PropTypes.func.isRequired,
-  hubHash: PropTypes.objectOf(PropTypes.hub),
-  adminDispatch: PropTypes.objectOf(PropTypes.func)
 }
 
 ShipmentsCompAdmin.defaultProps = {

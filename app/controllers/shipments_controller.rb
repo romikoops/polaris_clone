@@ -49,12 +49,6 @@ class ShipmentsController < ApplicationController
   end
 
   def search_shipments
-    filterific_params = {
-      user_search: params[:query]
-    }
-    filters = [
-      :user_search
-    ]
     case params[:target]
     when 'requested'
       shipment_association = requested_shipments.order(booking_placed_at: :desc)
@@ -71,13 +65,9 @@ class ShipmentsController < ApplicationController
     end
     per_page = params.fetch(:per_page, 4).to_f
 
-    (filterrific = initialize_filterrific(
-      shipment_association,
-      filterific_params,
-      available_filters: filters,
-      sanitize_params: true
-    )) || return
-    shipments = filterrific.find.paginate(page: params[:page], per_page: per_page)
+    results = shipment_association.index_search(params[:query])
+    per_page = params.fetch(:per_page, 4).to_f
+    shipments = results.order(:updated_at).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
       shipments: shipments.map(&:with_address_index_json),

@@ -56,9 +56,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def search_shipments
-    filterific_params = {
-      user_search: params[:query]
-    }
     case params[:target]
     when 'requested'
       shipment_association = requested_shipments
@@ -73,16 +70,9 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     when 'archived'
       shipment_association = archived_shipments
     end
-    (filterrific = initialize_filterrific(
-      shipment_association,
-      filterific_params,
-      available_filters: [
-        :user_search
-      ],
-      sanitize_params: true
-    )) || return
+    results = shipment_association.index_search(params[:query])
     per_page = params.fetch(:per_page, 4).to_f
-    shipments = filterrific.find.paginate(page: params[:page], per_page: per_page)
+    shipments = results.order(:updated_at).paginate(page: params[:page], per_page: per_page)
     response_handler(
       shipments: shipments.map(&:with_address_index_json),
       num_shipment_pages: shipments.total_pages,
