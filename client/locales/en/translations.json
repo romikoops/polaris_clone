@@ -188,7 +188,10 @@
     "serviceLevel": "Service Level",
     "carrier": "Carrier",
     "truckType": "Truck Type",
-    "loadType": "Load Type"
+    "loadType": "Load Type",
+    "rates": "Rates",
+    "freightCharges": "Freight Charges",
+    "perUnitLumpsum": "Per Unit Lumpsum"
   },
   "admin": {
       "savePricings": "Save Pricings",

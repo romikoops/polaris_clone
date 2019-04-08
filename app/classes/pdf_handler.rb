@@ -26,6 +26,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @hide_grand_total = {}
     @has_legacy_charges = {}
     @scope = @shipment.tenant.scope
+    @pricing_data = {}
 
     @cargo_data = {
       vol: {},
@@ -37,12 +38,30 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @shipments << @shipment if @shipments.empty?
     @shipments.each do |s|
       calculate_cargo_data(s)
+      calculate_pricing_data(s)
       @hide_grand_total[s.id] = hide_grand_total?(s)
     end
-
     @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
+  end
+
+  def calculate_pricing_data(shipment)
+    eta = shipment.planned_eta || Date.today
+    etd = shipment.planned_etd || Date.today
+    @pricing_data[shipment.id] = shipment.itinerary.pricings
+                                         .where(tenant_vehicle_id: shipment.trip.tenant_vehicle_id)
+                                         .for_dates(etd, eta)
+                                         .for_load_type(shipment.load_type)
+                                         .each_with_object({}) do |pricing, hash|
+      pricing_hash = pricing.as_json.dig('data')
+      pricing_hash['total'] = pricing_hash.keys.sort
+                                          .each_with_object('value' => 0, 'currency' => nil) do |key, obj|
+        obj['value'] += pricing_hash[key]['rate']
+        obj['currency'] ||= pricing_hash[key]['currency']
+      end
+      hash[pricing.cargo_class] = pricing_hash
+    end
   end
 
   def hide_grand_total?(shipment) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -223,7 +242,8 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         hide_cargo_sub_totals: @hide_cargo_sub_totals,
         content: @content,
         hide_grand_total: @hide_grand_total,
-        has_legacy_charges: @has_legacy_charges
+        has_legacy_charges: @has_legacy_charges,
+        pricing_data: @pricing_data
       }
     )
     response = BreezyPDFLite::RenderRequest.new(

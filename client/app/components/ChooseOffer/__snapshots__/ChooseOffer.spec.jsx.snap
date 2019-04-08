@@ -874,6 +874,26 @@ exports[`selectedOffers is truthy 1`] = `
           />
         </div>
       </div>
+      <p
+        style={
+          Object {
+            "fontSize": "10px",
+            "margin": "5px",
+          }
+        }
+      >
+        * Transit time (T/T) not guaranteed
+      </p>
+      <p
+        style={
+          Object {
+            "fontSize": "10px",
+            "margin": "5px",
+          }
+        }
+      >
+        ** You will be invoiced in local currency based on the exchange rate valid at the time
+      </p>
     </div>
   </div>
   <div
@@ -1744,6 +1764,26 @@ exports[`shallow render 1`] = `
           />
         </div>
       </div>
+      <p
+        style={
+          Object {
+            "fontSize": "10px",
+            "margin": "5px",
+          }
+        }
+      >
+        * Transit time (T/T) not guaranteed
+      </p>
+      <p
+        style={
+          Object {
+            "fontSize": "10px",
+            "margin": "5px",
+          }
+        }
+      >
+        ** You will be invoiced in local currency based on the exchange rate valid at the time
+      </p>
     </div>
   </div>
   <div
@@ -2616,6 +2656,26 @@ exports[`shipmentData.schedules is falsy 1`] = `
           />
         </div>
       </div>
+      <p
+        style={
+          Object {
+            "fontSize": "10px",
+            "margin": "5px",
+          }
+        }
+      >
+        * Transit time (T/T) not guaranteed
+      </p>
+      <p
+        style={
+          Object {
+            "fontSize": "10px",
+            "margin": "5px",
+          }
+        }
+      >
+        ** You will be invoiced in local currency based on the exchange rate valid at the time
+      </p>
     </div>
   </div>
   <div
@@ -3597,6 +3657,26 @@ exports[`state.showModal is true 1`] = `
           />
         </div>
       </div>
+      <p
+        style={
+          Object {
+            "fontSize": "10px",
+            "margin": "5px",
+          }
+        }
+      >
+        * Transit time (T/T) not guaranteed
+      </p>
+      <p
+        style={
+          Object {
+            "fontSize": "10px",
+            "margin": "5px",
+          }
+        }
+      >
+        ** You will be invoiced in local currency based on the exchange rate valid at the time
+      </p>
     </div>
   </div>
   <div
@@ -4506,6 +4586,26 @@ exports[`tenant.scope.hide_grand_total is false 1`] = `
           />
         </div>
       </div>
+      <p
+        style={
+          Object {
+            "fontSize": "10px",
+            "margin": "5px",
+          }
+        }
+      >
+        * Transit time (T/T) not guaranteed
+      </p>
+      <p
+        style={
+          Object {
+            "fontSize": "10px",
+            "margin": "5px",
+          }
+        }
+      >
+        ** You will be invoiced in local currency based on the exchange rate valid at the time
+      </p>
     </div>
   </div>
   <div
