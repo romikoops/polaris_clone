@@ -4,7 +4,7 @@ require 'bundler/setup'
 
 require 'simplecov'
 SimpleCov.start do
-  minimum_coverage 98
+  minimum_coverage 98 unless ENV['SKIP_COVERAGE']
 
   if ENV['COVERAGE_DIR']
     command_name 'lib/charge_calculator'

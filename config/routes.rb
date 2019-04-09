@@ -3,6 +3,10 @@
 Rails.application.routes.draw do
   mount Easymon::Engine, at: '/up'
 
+  mount ApiAuth::Engine, at: '/'
+  mount Api::Engine, at: '/'
+  mount ApiDocs::Engine, at: '/'
+
   mount Admiralty::Engine, at: '/admiralty'
 
   get '/health_check', to: 'server_checks#health_check'

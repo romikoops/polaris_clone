@@ -10,6 +10,8 @@ class ApplicationController < ActionController::API
   before_action :require_non_guest_authentication!
   before_action :set_paper_trail_whodunnit
 
+  skip_after_action :register_last_activity_time_to_db
+
   rescue_from ApplicationError do |error|
     response_handler(error)
   end
