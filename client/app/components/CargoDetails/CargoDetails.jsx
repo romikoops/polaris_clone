@@ -866,41 +866,6 @@ class CargoDetails extends Component {
   }
 }
 
-CargoDetails.propTypes = {
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  tenant: PropTypes.objectOf(PropTypes.any),
-  shipmentData: PropTypes.shipmentData.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  handleInsurance: PropTypes.func.isRequired,
-  cargoNotes: PropTypes.string.isRequired,
-  totalGoodsValue: PropTypes.number.isRequired,
-  insurance: PropTypes.shape({
-    val: PropTypes.any,
-    bool: PropTypes.bool
-  }).isRequired,
-  customsData: PropTypes.shape({
-    val: PropTypes.any
-  }).isRequired,
-  setCustomsFee: PropTypes.func.isRequired,
-  shipmentDispatch: PropTypes.shape({
-    deleteDocument: PropTypes.func,
-    uploadDocument: PropTypes.func
-  }).isRequired,
-  currencies: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string,
-    rate: PropTypes.number
-  })).isRequired,
-  hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  finishBookingAttempted: PropTypes.bool,
-  hsTexts: PropTypes.objectOf(PropTypes.string),
-  toggleCustomAddon: PropTypes.func,
-  handleTotalGoodsCurrency: PropTypes.func.isRequired,
-  eori: PropTypes.string,
-  notes: PropTypes.string,
-  incotermText: PropTypes.string
-}
-
 CargoDetails.defaultProps = {
   theme: null,
   tenant: null,

@@ -12,9 +12,11 @@ class CustomsExportPaper extends PureComponent {
       addonView: false
     }
   }
+
   toggleAddon (bool) {
     this.setState({ addonView: bool }, () => this.props.toggleCustomAddon('customs_export_paper'))
   }
+
   render () {
     const {
       tenant, t, documents, fileFn, deleteDoc
@@ -55,7 +57,7 @@ class CustomsExportPaper extends PureComponent {
                   </p>
                 </label>
               </div>
-             
+
             </div>
             <div className={`flex-100 layout-row layout-align-end-center ${styles.checkbox_row}`}>
               <div className="flex-10 layout-row layout-align-start-center">
@@ -75,7 +77,7 @@ class CustomsExportPaper extends PureComponent {
                   </p>
                 </label>
               </div>
-              
+
             </div>
             <div className={`flex-100 layout-row layout-wrap ${styles.export_upload}`} name="export_customs_paper">
               <div className="flex-100 flex-gt-sm-50 layout-row">
