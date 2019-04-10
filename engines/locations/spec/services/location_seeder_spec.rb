@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Locations::LocationSeeder do
   context 'searching for location names' do
     describe '.seeding' do
-      let!(:location_1) { FactoryBot.create(:swedish_location, osm_id: 1) }
+      let!(:location_1) { FactoryBot.create(:swedish_location, osm_id: 1, admin_level: 7) }
       let!(:location_2) { FactoryBot.create(:xl_swedish_location, admin_level: 6) }
       let!(:location_names) do
         [
