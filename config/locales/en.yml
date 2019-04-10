@@ -102,6 +102,10 @@ en:
       http_code: 400
       code: 1015
       message: "Your shipment has exceeded the load meterage limits for online booking."
+    internal_error:
+      http_code: 400
+      code: 1016
+      message: "Something has gone wrong!"
     
 
     # Authentication Errors

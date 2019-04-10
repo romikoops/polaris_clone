@@ -15,6 +15,9 @@ const propsBase = {
   bookingProcessDispatch: {
     resetStore: x => x 
   },
+  shipmentDispatch: {
+    clearLoading: x => x 
+  },
   scope: {
     modes_of_transport: []
   }

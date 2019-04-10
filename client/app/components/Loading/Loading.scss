@@ -137,77 +137,14 @@
     bottom: 0;
     z-index: 500;
   }
-  // .loader {
-  //   position: fixed;
-  //   height: 100%;
-  //   width:100%;
-  //   top:0;
-  //   right:0;
-  //   left:0;
-  //   bottom: 0;
-  //   background: whitesmoke;
-  // }
-  // .loader_anim-enter {
-  //   opacity: 0.01;
-  // }
-
-  // .loader_anim-enter.loader_anim-enter-active {
-  //   opacity: 1;
-  //   transition: opacity 500ms ease-in;
-  // }
-
-  // .loader_anim-leave {
-  //   opacity: 1;
-  // }
-
-  // .loader_anim-leave.loader_anim-leave-active {
-  //   opacity: 0.01;
-  //   transition: opacity 300ms ease-in;
-  // }
-  //  @keyframes dot_bulge {
-  //   0%, 100% {
-  //     height: 10px;
-  //     width: 10px;
-  //   }
-  //   50% {
-  //     height: 20px;
-  //     width: 20px;
-  //   }
-  // }
-  // @keyframes infinite-spinning {
-  //   from {
-  //     transform: rotate(0deg);
-  //   }
-  //   to {
-  //     transform: rotate(360deg);
-  //   }
-  // }
-  // .dot {
-  //   border-radius: 50%;
-  //   height: 15px;
-  //   width: 15px;
-  // }
-  // .dot1{
-  //   @extend .dot;
-  //   // animation: dot_bulge 3s infinite;
-  //   // animation-delay: 1s;
-  // }
-  // .dot2{
-  //   @extend .dot;
-  //   // animation: dot_bulge 3s infinite;
-  //   // animation-delay: 2s;
-  // }
-  // .dot3{
-  //   @extend .dot;
-  //   // animation: dot_bulge 3s infinite;
-  //   // animation-delay: 3s;
-  // }
-  // .logo {
-  //   // animation: infinite-spinning 3s infinite;
-  // }
-  // .dot_row {
-  //   width:200px;
-  //   height: 50px;
-  // }
-
+  .close {
+    position: absolute;
+    top: 100px;
+    right: 15px;
+    i {
+      margin: 10px;
+      color: darkgrey;
+      font-size: 15px;
+    }
+  }
 }

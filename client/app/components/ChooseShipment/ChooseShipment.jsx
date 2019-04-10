@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { bookingProcessActions } from '../../actions'
+import { bookingProcessActions, shipmentActions } from '../../actions'
 import styles from './ChooseShipment.scss'
 import defs from '../../styles/default_classes.scss'
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow'
@@ -31,7 +31,9 @@ class ChooseShipment extends Component {
   }
 
   componentDidMount () {
-    this.props.bookingProcessDispatch.resetStore()
+    const { bookingProcessDispatch, shipmentDispatch } = this.props
+    bookingProcessDispatch.resetStore()
+    shipmentDispatch.clearLoading()
     window.scrollTo(0, 0)
     this.determineAvailableOptions()
   }
@@ -261,7 +263,8 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    bookingProcessDispatch: bindActionCreators(bookingProcessActions, dispatch)
+    bookingProcessDispatch: bindActionCreators(bookingProcessActions, dispatch),
+    shipmentDispatch: bindActionCreators(shipmentActions, dispatch)
   }
 }
 

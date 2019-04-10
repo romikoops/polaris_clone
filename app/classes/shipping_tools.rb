@@ -8,6 +8,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   include NotificationTools
   extend PricingTools
   extend NotificationTools
+  InternalError = Class.new(StandardError)
 
   def self.create_shipments_from_quotation(shipment, results)
     main_quote = ShippingTools.handle_existing_quote(shipment, results)
@@ -83,7 +84,6 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     offer_calculator = OfferCalculator.new(shipment, params, current_user)
 
     offer_calculator.perform
-
     offer_calculator.shipment.save!
     cargo_units = if offer_calculator.shipment.lcl? && !offer_calculator.shipment.aggregated_cargo
                     offer_calculator.shipment.cargo_units.map(&:with_cargo_type)
@@ -94,9 +94,13 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
                   end
 
     if current_user.tenant.quotation_tool? && current_user.tenant.scope['email_all_quotes']
-      quote = ShippingTools.create_shipments_from_quotation(offer_calculator.shipment, offer_calculator.detailed_schedules.map(&:deep_stringify_keys!))
+      quote = ShippingTools.create_shipments_from_quotation(
+        offer_calculator.shipment,
+        offer_calculator.detailed_schedules.map(&:deep_stringify_keys!)
+      )
       QuoteMailer.quotation_admin_email(quote).deliver_later
     end
+
     {
       shipment: offer_calculator.shipment,
       results: offer_calculator.detailed_schedules,
@@ -105,6 +109,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       cargoUnits: cargo_units,
       aggregatedCargo: offer_calculator.shipment.aggregated_cargo
     }
+  rescue ArgumentError
+    raise ApplicationError::InternalError
   end
 
   def self.generate_shipment_pdf(shipment:)
