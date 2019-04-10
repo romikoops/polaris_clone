@@ -80,7 +80,7 @@ module TruckingTools
              min = fee[:min_value] || 0
              [val, min].max
            when 'PER_SHIPMENT'
-            fee.except(:rate_basis, :currency, :base).values.max
+             fee.except(:rate_basis, :currency, :base).values.max
            when 'PER_BILL'
              fee[:value]
            when 'PER_ITEM'
@@ -336,7 +336,12 @@ module TruckingTools
     total_cbm_weight = 0.0
     total_payload_weight = 0.0
     cargos.each do |cargo|
-      total_load_meterage_weight += trucking_chargeable_weight_by_stacked_area(trucking_pricing, cargo)
+      trucking_weight = if cargo.stackable
+                          trucking_chargeable_weight_by_stacked_area(trucking_pricing, cargo)
+                        else
+                          trucking_chargeable_weight_by_area(trucking_pricing, cargo)
+                        end
+      total_load_meterage_weight += trucking_weight
       total_cbm_weight += trucking_cbm_weight(trucking_pricing, cargo)
       total_payload_weight += trucking_payload_weight(cargo)
     end
