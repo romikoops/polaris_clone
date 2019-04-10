@@ -5,7 +5,7 @@ module Locations
     MultipleResultsFound = Class.new(StandardError)
 
     def self.seeding(*terms)
-      Locations::Name
+      results = Locations::Name
         .search(
           terms,
           fields: %i(name display_name alternative_names city postal_code),
@@ -14,7 +14,11 @@ module Locations
           operator: 'or'
         )
         .results
-        .first
+
+        result_with_location = results.select{ |r| r.location_id }.first
+        return result_with_location if result_with_location
+
+        return results.first
     end
 
     def self.find_in_postal_code(postal_bounds:, terms:)

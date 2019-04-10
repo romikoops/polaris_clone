@@ -16,7 +16,7 @@ module Locations
 
       return name.location if name.location
 
-      Locations::Location.smallest_contains(lat: name.point.y, lon: name.point.x).first
+      Locations::LocationSeeder.find_location_for_point(lat: name.point.y, lon: name.point.x)
     end
 
     def self.seeding_with_postal_code(postal_code:, country_code:, terms:)
@@ -39,6 +39,13 @@ module Locations
         country_code: country_code,
         point: postal_location.bounds.point
       )
+    end
+
+    def self.find_location_for_point(lat:, lon:)
+      city = Locations::Location.contains(lat: lat, lon: lon).where('admin_level > 3').where('admin_level < 8').order(admin_level: :desc).first
+      return city if city
+
+      Locations::Location.smallest_contains(lat: lat, lon: lon).first
     end
 
     def self.seeding_with_locode(locode:)
