@@ -623,6 +623,7 @@ function deleteTrip (id) {
 
   return fetch(`${getTenantApiUrl()}/admin/schedules/${id}`, requestOptions).then(handleResponse)
 }
+
 function uploadTrucking (url, file, direction) {
   const formData = new FormData()
   formData.append('file', file)
@@ -635,6 +636,19 @@ function uploadTrucking (url, file, direction) {
 
   return fetch(`${getTenantApiUrl()}${url}`, requestOptions).then(handleResponse)
 }
+
+function uploadAgents (file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/clients/agents`, requestOptions).then(handleResponse)
+}
+
 function newHubImage (id, file) {
   const formData = new FormData()
   formData.append('file', file)
@@ -770,7 +784,8 @@ export const adminService = {
   searchPricings,
   uploadDocument,
   updateEmails,
-  getLocalCharges
+  getLocalCharges,
+  uploadAgents
 }
 
 export default adminService

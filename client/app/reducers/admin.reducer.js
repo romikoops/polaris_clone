@@ -1564,6 +1564,20 @@ export default function admin (state = {}, action) {
         error: { hub: action.error },
         loading: false
       }
+    case adminConstants.UPLOAD_AGENTS_REQUEST:
+      return state
+    case adminConstants.UPLOAD_AGENTS_SUCCESS:
+      return {
+        ...state,
+        clients: action.payload,
+        loading: false
+      }
+    case adminConstants.UPLOAD_AGENTS_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
     case adminConstants.UPLOAD_HUB_IMAGE_REQUEST:
       return state
     // eslint-disable-next-line no-case-declarations
