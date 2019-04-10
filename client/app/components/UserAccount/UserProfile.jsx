@@ -200,86 +200,82 @@ class UserProfile extends Component {
                 </div>
               )}
             />
-            {
-              !isQuote(tenant) && (
-                <GreyBox
-                  title={t('user:yourData')}
-                  wrapperClassName="flex-gt-md-35 offset-gt-md-5 flex-100 layout-row layout-align-stretch"
-                  contentClassName="layout-row layout-wrap flex layout-align-start-start"
-                  content={(
-                    <div className={`flex-100 layout-row layout-wrap ${styles.conditions_box}`}>
-                      <div className="flex-100">
-                        <p
-                          className="emulate_link blue_link"
-                          onClick={() => window.open('https://gdpr-info.eu/', '_blank')}
-                        >
-                          {t('common:moreInfo')}
+            <GreyBox
+              title={t('user:yourData')}
+              wrapperClassName="flex-gt-md-35 offset-gt-md-5 flex-100 layout-row layout-align-stretch"
+              contentClassName="layout-row layout-wrap flex layout-align-start-start"
+              content={(
+                <div className={`flex-100 layout-row layout-wrap ${styles.conditions_box}`}>
+                  <div className="flex-100">
+                    <p
+                      className="emulate_link blue_link"
+                      onClick={() => window.open('https://gdpr-info.eu/', '_blank')}
+                    >
+                      {t('common:moreInfo')}
+                    </p>
+                  </div>
+                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
+                    <div className="flex-66 layout-row layout-align-start-center">
+                      <p className="flex-none">
+                        {t('common:downloadAllData')}
+                      </p>
+                    </div>
+                    <div className="flex-33 layout-row layout-align-start">
+                      <DocumentsDownloader
+                        theme={theme}
+                        target="gdpr"
+                        size="full"
+                        options={{ userId: user.id }}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
+                    <div className="flex-66 layout-row layout-align-start-center">
+                      <p className="flex-none">
+                        {t('account:deleteAccountRequest')}
+                      </p>
+                    </div>
+                    <div className="flex-33 layout-row layout-align-start">
+                      <RoundButton
+                        theme={theme}
+                        size="full"
+                        text={t('account:request')}
+                        handleNext={this.showDeleteAccountModal}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center layout-wrap">
+                    <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center layout-wrap">
+                      <div className="flex-66 layout-row layout-align-start-center">
+                        <p className="flex-none">
+                          {t('user:changeMyPassword')}
                         </p>
                       </div>
-                      <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
-                        <div className="flex-66 layout-row layout-align-start-center">
-                          <p className="flex-none">
-                            {t('common:downloadAllData')}
-                          </p>
-                        </div>
-                        <div className="flex-33 layout-row layout-align-start">
-                          <DocumentsDownloader
-                            theme={theme}
-                            target="gdpr"
-                            size="full"
-                            options={{ userId: user.id }}
-                          />
-                        </div>
+                      <div className="flex-33 layout-row layout-align-start">
+
+                        <RoundButton
+                          theme={theme}
+                          size="full"
+                          active
+                          text={t('user:request')}
+                          handleNext={this.handlePasswordChange}
+                        />
                       </div>
-                      <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
-                        <div className="flex-66 layout-row layout-align-start-center">
-                          <p className="flex-none">
-                            {t('account:deleteAccountRequest')}
-                          </p>
-                        </div>
-                        <div className="flex-33 layout-row layout-align-start">
-                          <RoundButton
-                            theme={theme}
-                            size="full"
-                            text={t('account:request')}
-                            handleNext={this.showDeleteAccountModal}
-                          />
-                        </div>
-                      </div>
-                      <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center layout-wrap">
-                        <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center layout-wrap">
-                          <div className="flex-66 layout-row layout-align-start-center">
-                            <p className="flex-none">
-                              {t('user:changeMyPassword')}
+                      <div className={`${styles.spinner} flex-50 layout-row layout-align-start-start`}>
+                        { authentication.passwordResetRequested && <LoadingSpinner size="extra_small" /> }
+                        { authentication.passwordResetSent && (
+                          <div className="flex-100 layout-row layout-align-center-start padding_top">
+                            <p>
+                              {t('user:checkForPassword')}
                             </p>
                           </div>
-                          <div className="flex-33 layout-row layout-align-start">
-
-                            <RoundButton
-                              theme={theme}
-                              size="full"
-                              active
-                              text={t('user:request')}
-                              handleNext={this.handlePasswordChange}
-                            />
-                          </div>
-                          <div className={`${styles.spinner} flex-50 layout-row layout-align-start-start`}>
-                            { authentication.passwordResetRequested && <LoadingSpinner size="extra_small" /> }
-                            { authentication.passwordResetSent && (
-                              <div className="flex-100 layout-row layout-align-center-start padding_top">
-                                <p>
-                                  {t('user:checkForPassword')}
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
+                        )}
                       </div>
                     </div>
-                  )}
-                />
-              )
-            }
+                  </div>
+                </div>
+              )}
+            />
           </div>
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start margin_md_top">

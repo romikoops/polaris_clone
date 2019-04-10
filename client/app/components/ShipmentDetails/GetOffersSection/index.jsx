@@ -3,7 +3,6 @@ import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { bookingProcessActions } from '../../../actions'
-import RoundButton from '../../RoundButton/RoundButton'
 import Checkboxes from './Checkboxes'
 import ButtonWrapper from './ButtonWrapper'
 import { isQuote } from '../../../helpers'
@@ -68,7 +67,8 @@ class GetOffersSection extends React.PureComponent {
     this.setState({ shakeClass: this.initialShakeClass })
   }
 
-  handleGetOffersDisabled () {
+  handleGetOffersDisabled (e) {
+    e.preventDefault()
     this.setState(prevState => ({
       shakeClass: {
         noDangerousGoodsConfirmed: this.noDangerousGoodsCondition() ? '' : 'apply_shake',

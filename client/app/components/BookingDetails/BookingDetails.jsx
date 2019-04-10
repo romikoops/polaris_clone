@@ -213,8 +213,8 @@ export class BookingDetails extends Component {
     const charge = addons[target].fees.total
 
     this.setState((prevState) => {
-      const newTarget = !prevState[target] ? charge : false
-
+      const newTarget = !prevState.addons[target] ? charge : false
+      
       return ({
         addons: {
           ...prevState.addons,
