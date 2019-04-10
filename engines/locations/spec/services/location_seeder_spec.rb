@@ -41,6 +41,21 @@ RSpec.describe Locations::LocationSeeder do
       end
     end
 
+    describe 'find_location_for_point' do
+      let!(:location_1) { FactoryBot.create(:swedish_location, osm_id: 1) }
+      let!(:location_2) { FactoryBot.create(:xl_swedish_location) }
+      it 'finds the correct location for the point' do
+        point = location_1.bounds.centroid
+        result = Locations::LocationSeeder.find_location_for_point(lat: point.x, lon: point.y)
+        expect(result).to eq(location_1)
+      end
+      it 'finds the the smallest containing point if no adminlevel 3-8 areas are available' do
+        point = location_1.bounds.centroid
+        result = Locations::LocationSeeder.find_location_for_point(lat: point.x, lon: point.y)
+        expect(result).to eq(location_1)
+      end
+    end
+
     describe '.seeding_with_postal_code' do
       let!(:location_3) { FactoryBot.create(:german_postal_location) }
 

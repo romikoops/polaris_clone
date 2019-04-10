@@ -42,7 +42,12 @@ module Locations
     end
 
     def self.find_location_for_point(lat:, lon:)
-      city = Locations::Location.contains(lat: lat, lon: lon).where('admin_level > 3').where('admin_level < 8').order(admin_level: :desc).first
+      city = Locations::Location
+                        .contains(lat: lat, lon: lon)
+                        .where('admin_level > 3')
+                        .where('admin_level < 8')
+                        .order(admin_level: :desc)
+                        .first
       return city if city
 
       Locations::Location.smallest_contains(lat: lat, lon: lon).first
