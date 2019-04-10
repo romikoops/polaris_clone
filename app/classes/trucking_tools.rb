@@ -116,7 +116,8 @@ module TruckingTools
              [cbm_value, min].max
 
            when 'PER_WM'
-             value = (cargo['weight'] / 1000) * fee[:value]
+             wm = [cargo['weight'] / 1000, cargo['volume']].max
+             value = wm * fee[:value]
              min = fee[:min_value] || 0
              [value, min].max
 
