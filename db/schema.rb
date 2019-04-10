@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_27_134233) do
+ActiveRecord::Schema.define(version: 2019_03_29_113007) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -466,6 +466,7 @@ ActiveRecord::Schema.define(version: 2019_03_27_134233) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bounds"], name: "index_locations_locations_on_bounds", using: :gist
+    t.index ["name"], name: "index_locations_locations_on_name"
     t.index ["osm_id"], name: "index_locations_locations_on_osm_id"
   end
 
@@ -893,7 +894,7 @@ ActiveRecord::Schema.define(version: 2019_03_27_134233) do
     t.string "reset_password_token"
     t.datetime "reset_password_token_expires_at"
     t.datetime "reset_password_email_sent_at"
-    t.integer "access_count_to_reset_password_page"
+    t.integer "access_count_to_reset_password_page", default: 0
     t.datetime "last_login_at"
     t.datetime "last_logout_at"
     t.datetime "last_activity_at"
@@ -1074,6 +1075,7 @@ ActiveRecord::Schema.define(version: 2019_03_27_134233) do
     t.string "truck_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "query_method"
   end
 
   create_table "user_addresses", force: :cascade do |t|
