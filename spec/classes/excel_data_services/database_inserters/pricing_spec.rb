@@ -51,7 +51,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
     context 'with overlap case: no_old_record' do
       let!(:expected_stats) do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 7, number_deleted: 1, number_updated: 0 },
+          pricing_details: { number_created: 6, number_deleted: 1, number_updated: 0 },
           pricings: { number_created: 5, number_deleted: 1, number_updated: 0 },
           stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
       end
@@ -92,7 +92,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 8, number_deleted: 1, number_updated: 0 },
+          pricing_details: { number_created: 6, number_deleted: 1, number_updated: 0 },
           pricings: { number_created: 5, number_deleted: 1, number_updated: 1 },
           stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
       end
@@ -136,7 +136,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 7, number_deleted: 1, number_updated: 0 },
+          pricing_details: { number_created: 6, number_deleted: 1, number_updated: 0 },
           pricings: { number_created: 5, number_deleted: 1, number_updated: 0 },
           stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
       end
@@ -182,7 +182,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 12, number_deleted: 1, number_updated: 0 },
+          pricing_details: { number_created: 6, number_deleted: 1, number_updated: 0 },
           pricings: { number_created: 6, number_deleted: 1, number_updated: 2 },
           stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
       end
@@ -230,7 +230,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 8, number_deleted: 1, number_updated: 0 },
+          pricing_details: { number_created: 6, number_deleted: 1, number_updated: 0 },
           pricings: { number_created: 5, number_deleted: 1, number_updated: 1 },
           stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
       end

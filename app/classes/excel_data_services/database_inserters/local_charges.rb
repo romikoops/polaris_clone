@@ -122,14 +122,14 @@ module ExcelDataServices
       end
 
       def act_on_overlapping_local_charges(local_charges_with_actions)
-        local_charges_with_actions.slice(:should_destroy).values.each do |local_charges|
+        local_charges_with_actions.slice(:destroy).values.each do |local_charges|
           local_charges.each do |local_charge|
             local_charge.destroy
             add_stats(local_charge)
           end
         end
 
-        local_charges_with_actions.slice(:should_save).values.flat_map do |local_charges|
+        local_charges_with_actions.slice(:save).values.flat_map do |local_charges|
           local_charges.map do |local_charge|
             add_stats(local_charge)
             local_charge.save!

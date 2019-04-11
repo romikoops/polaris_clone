@@ -65,7 +65,7 @@ module ExcelDataServices
         ) # returns a `TenantVehicle`!
       end
 
-      def create_pricing_with_pricing_details(group_of_row_data, row, tenant_vehicle, itinerary) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def create_pricing_with_pricing_details(group_of_row_data, row, tenant_vehicle, itinerary) # rubocop:disable Metrics/AbcSize
         pricing_params =
           { transport_category: find_transport_category(tenant_vehicle, row.load_type),
             tenant_vehicle: tenant_vehicle,
@@ -82,18 +82,12 @@ module ExcelDataServices
         overlap_handler = ExcelDataServices::DatabaseInserters::DateOverlapHandler.new(old_pricings, new_pricing)
         pricings_with_actions = overlap_handler.perform
 
-        saved_pricings, old_pricing_detail_params_arr = act_on_overlapping_pricings(pricings_with_actions)
+        pricings_for_new_pricing_details = act_on_overlapping_pricings(pricings_with_actions)
 
-        final_pricing_details_params_arr =
-          (old_pricing_detail_params_arr + new_pricing_detail_params_arr).uniq do |pricing_detail_params|
-            # The objects coming from the database have a default value of '[]' for range, which needs to be ignored
-            pricing_detail_params.except(:range) if pricing_detail_params[:range].blank?
-          end
-
-        final_pricing_details_params_arr.each do |pricing_detail_params|
+        new_pricing_detail_params_arr.each do |pricing_detail_params|
           range_data = pricing_detail_params.delete(:range) if pricing_detail_params[:range]
 
-          saved_pricings.each do |pricing|
+          pricings_for_new_pricing_details.each do |pricing|
             new_pricing_detail = pricing.pricing_details.new(pricing_detail_params)
             new_pricing_detail.range = range_data if range_data
 
@@ -111,25 +105,9 @@ module ExcelDataServices
         )
       end
 
-      def act_on_overlapping_pricings(pricings_with_actions) # rubocop:disable Metrics/MethodLength
-        old_pricing_detail_params_arr = []
-        pricings_with_actions.slice(:should_destroy).values.each do |pricings|
+      def act_on_overlapping_pricings(pricings_with_actions)
+        pricings_with_actions.slice(:destroy).values.each do |pricings|
           pricings.each do |pricing|
-            old_pricing_detail_params_arr += pricing.pricing_details.map do |pricing_detail|
-              pricing_detail.slice(
-                :rate,
-                :rate_basis,
-                :min,
-                :hw_threshold,
-                :hw_rate_basis,
-                :shipping_type,
-                :range,
-                :currency_name,
-                :currency_id,
-                :tenant_id
-              ).symbolize_keys
-            end
-
             pricing.pricing_details.each do |pricing_detail|
               pricing_detail.destroy
               add_stats(pricing_detail)
@@ -139,16 +117,16 @@ module ExcelDataServices
           end
         end
 
-        saved_pricings = []
-        pricings_with_actions.slice(:should_save).values.flat_map do |pricings|
+        new_pricings = []
+        pricings_with_actions.slice(:save).values.each do |pricings|
           pricings.map do |pricing|
+            new_pricings << pricing if pricing.new_record? && !pricing.transient_marked_as_old
             add_stats(pricing)
             pricing.save!
-            saved_pricings << pricing
           end
         end
 
-        [saved_pricings, old_pricing_detail_params_arr]
+        new_pricings
       end
 
       def build_pricing_detail_params_for_pricing(group_of_row_data) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
