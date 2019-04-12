@@ -10,7 +10,8 @@ end
 Capybara.register_driver :headless_chrome do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     takesScreenshot: true,
-    chromeOptions: { args: %w(headless) }
+    loggingPrefs: { browser: 'ALL' },
+    chromeOptions: { args: %w(headless enable-logging log-level=0) }
   )
 
   Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
@@ -25,7 +26,8 @@ Capybara.register_driver :remote do |app|
     javascript_enabled: true,
     takes_screenshot: true,
     css_selectors_enabled: true,
-    accept_untrusted_certs: true
+    accept_untrusted_certs: true,
+    chrome_options: { args: %w(enable-logging log-level=0) }
   )
 
   Capybara::Selenium::Driver.new(app,

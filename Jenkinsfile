@@ -150,7 +150,7 @@ wrap.pipeline(timeout: 120) {
   }
 
   if (env.CHANGE_ID) {
-    wrap.stage('Prepare Deploy') {
+    stage('Prepare Deploy') {
       lock(label: "${env.GIT_BRANCH}", inversePrecedence: true) {
         inPod { label ->
           wrap.node(label) {
@@ -176,9 +176,7 @@ wrap.pipeline(timeout: 120) {
                   request: file('cloudbuild.yaml'),
                   source: local('.'),
                   substitutions: [
-                    BRANCH_NAME: env.BRANCH_NAME,
                     COMMIT_SHA: env.GIT_COMMIT,
-                    _PREVIOUS_COMMIT_SHA: env.GIT_PREVIOUS_SUCCESSFUL_COMMIT,
                     _SENTRY_AUTH_TOKEN: '099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95'
                   ]
                 )
@@ -188,7 +186,7 @@ wrap.pipeline(timeout: 120) {
         }
       }
 
-      wrap.stage('Review') {
+      stage('Review') {
         milestone()
 
         env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG
@@ -201,10 +199,20 @@ wrap.pipeline(timeout: 120) {
       stage('QA') {
         milestone()
 
-        parallel(knapsack(2, 'Cucumber') { cucumberTests() })
+        build(
+          job: 'Voyage/imc-react-api',
+          parameters: [
+            string(name: 'APP_NAME', value: 'imc-app'),
+            string(name: 'RELEASE', value: env.REVIEW_NAME),
+            string(name: 'NAMESPACE', value: 'review'),
+            string(name: 'REPOSITORY', value: (scm.userRemoteConfigs.first().url =~ '^https://github.com/(.+).git$')[0][1]),
+            string(name: 'COMMIT_SHA', value: env.GIT_COMMIT),
+            string(name: 'ENVIRONMENT', value: 'review'),
+            string(name: 'IMAGE', value: "eu.gcr.io/itsmycargo-main/qa/api:${env.GIT_COMMIT}"),
+            string(name: 'TARGET_URL', value: "https://${env.REVIEW_NAME}.itsmycargo.tech"),
+          ],
+          wait: false)
       }
-
-      milestone()
     }
   }
 }
@@ -256,85 +264,6 @@ void deployReview(String reviewName) {
         """
 
 
-      }
-    }
-  }
-}
-
-def knapsack(Integer ciNodeTotal, String label = 'slice', Closure body) {
-  def slices = [:]
-
-  for(int i = 0; i < ciNodeTotal; i++) {
-    def index = i;
-    slices["${label} ${index + 1}/${ciNodeTotal}"] = {
-      withEnv(["CI_NODE_INDEX=$index", "CI_NODE_TOTAL=$ciNodeTotal"]) {
-        body()
-      }
-    }
-  }
-
-  return slices
-}
-
-void cucumberTests() {
-  inPod(
-    containers: [
-      containerTemplate(name: 'cucumber', image: "ruby:2.5.1-alpine", ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '250m', resourceLimitCpu: '400m',
-        resourceRequestMemory: '600Mi', resourceLimitMemory: '700Mi'
-      ),
-      containerTemplate(name: 'selenium-hub', image: 'selenium/hub:3'),
-      containerTemplate(name: 'selenium-chrome', image: 'selenium/node-chrome:3',
-        resourceRequestCpu: '250m', resourceLimitCpu: '500m',
-        resourceRequestMemory: '2000Mi', resourceLimitMemory: '2500Mi',
-        envVars: [
-          envVar(key: 'HUB_HOST', value: 'localhost'),
-          envVar(key: 'SE_OPTS', value: '-port 5555')
-        ]
-      )
-    ],
-    volumes: [hostPathVolume(hostPath: '/dev/shm', mountPath: '/dev/shm')]
-  ) { label ->
-    retryOrAbort(2) {
-      wrap.node(label) {
-        checkoutScm()
-
-        try {
-          container('cucumber') {
-            withEnv([
-              'BROWSERNAME=chrome',
-              'DRIVER=remote',
-              "TARGET_URL=https://${env.REVIEW_NAME}.itsmycargo.tech"
-            ]) {
-              dir('qa/') {
-                // Prepare
-                sh "apk add --no-cache --update build-base"
-                sh "bundle install -j\$(nproc) --retry 3"
-
-                timeout(90) {
-                  try {
-                    sh "bundle exec knapsack cucumber \"--tags 'not @wip' --format junit --out . --format rerun --out rerun.txt --format pretty\""
-                  } catch (hudson.AbortException e) {
-                    if (e.getMessage().contains('script returned exit code 1') && findFiles(glob: 'rerun.txt').size() > 0) {
-                      sh "bundle exec cucumber --format junit --out . --format pretty \$(cat rerun.txt)"
-                    } else {
-                      throw e
-                    }
-                  }
-                }
-              }
-            }
-          }
-        } catch (err) {
-          // Fetch Pod Logs
-          podLog(namespace: 'review', selector: "app=imc-app,release=${env.REVIEW_NAME}", container: 'backend')
-          podLog(namespace: 'review', selector: "app=imc-app,release=${env.REVIEW_NAME}", container: 'frontend')
-
-          throw err
-        } finally {
-          junit allowEmptyResults: true, testResults: '**/*.xml'
-          archiveArtifacts allowEmptyArchive: true, artifacts: '**/report/**/*'
-        }
       }
     }
   }
