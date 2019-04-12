@@ -67,6 +67,10 @@ module ExcelDataServices
           after_new_obj.pricing_details << old_obj.pricing_details.map(&:dup)
           after_new_obj.pricing_details << old_obj.pricing_exceptions.map(&:dup)
           after_new_obj.pricing_details << old_obj.pricing_requests.map(&:dup)
+
+          # Although after_new_obj is a new object, its data reflects the old object.
+          # It should therefore be marked, such that no new pricing_details will be added
+          # to it in the further insertion process.
           after_new_obj.transient_marked_as_old = true
         end
 

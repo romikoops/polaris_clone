@@ -15,6 +15,7 @@ module ExcelDataServices
         data_restructurer_name = data[:data_restructurer_name]
         restructured_data = replace_nil_equivalents_with_nil(data[:rows_data])
         restructured_data = downcase_load_types(restructured_data)
+        restructured_data.reject! { |row_data| row_data[:fee].blank? }
 
         restructured_data = restructured_data.map do |row_data|
           { sheet_name: sheet_name,
