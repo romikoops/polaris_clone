@@ -2,77 +2,211 @@
 
 FactoryBot.define do
   factory :excel_data_parsed, class: 'Hash' do
-    data_extraction_method { '' }
+    data_restructurer_name { '' }
     rows_data { [] }
 
     initialize_with do
-      { 'Sheet1' => attributes.deep_dup }
+      attributes[:all_sheets_data].map { |per_sheet_data| per_sheet_data.merge(attributes[:data_restructurer_name]) }.deep_dup
     end
 
-    trait :one_col_fee_and_ranges do
-      data_extraction_method { 'one_col_fee_and_ranges' }
+    trait :pricing_one_col_fee_and_ranges do
+      data_restructurer_name { { data_restructurer_name: 'pricing_one_col_fee_and_ranges' } }
     end
 
-    trait :dynamic_fee_cols_no_ranges do
-      data_extraction_method { 'dynamic_fee_cols_no_ranges' }
+    trait :pricing_dynamic_fee_cols_no_ranges do
+      data_restructurer_name { { data_restructurer_name: 'pricing_dynamic_fee_cols_no_ranges' } }
     end
 
-    trait :correct_pricings do
-      rows_data do
-        [{ uuid: '575cc33f-41f6-45bb-9a71-46dbc777f146',
-           effective_date: Date.parse('Thu, 15 Mar 2018'),
-           expiration_date: Date.parse('Sun, 17 Mar 2019'),
-           customer_email: nil,
-           origin: 'Gothenburg',
-           country_origin: 'Sweden',
-           destination: 'Shanghai',
-           country_destination: 'China',
-           mot: 'ocean',
-           carrier: nil,
-           service_level: 'standard',
-           load_type: 'LCL',
-           rate_basis: 'PER_WM',
-           range_min: nil,
-           range_max: nil,
-           fee_code: 'BAS',
-           fee_name: 'Bas',
-           currency: 'USD',
-           fee_min: 17,
-           fee: 17,
-           row_nr: 2 }]
+    trait :local_charges do
+      data_restructurer_name { { data_restructurer_name: 'local_charges' } }
+    end
+
+    trait :saco_shipping do
+      data_restructurer_name { { data_restructurer_name: 'saco_shipping' } }
+    end
+
+    trait :correct_pricings_one_col_fee_and_ranges do
+      all_sheets_data do
+        [{ sheet_name: 'Sheet1',
+           rows_data:
+            [{ effective_date: Date.parse('Thu, 15 Mar 2018'),
+               expiration_date: Date.parse('Sun, 17 Mar 2019'),
+               customer_email: nil,
+               origin: 'Gothenburg',
+               country_origin: 'Sweden',
+               destination: 'Shanghai',
+               country_destination: 'China',
+               mot: 'ocean',
+               carrier: nil,
+               service_level: 'standard',
+               load_type: 'lcl',
+               rate_basis: 'PER_WM',
+               range_min: nil,
+               range_max: nil,
+               fee_code: 'BAS',
+               fee_name: 'Bas',
+               currency: 'USD',
+               fee_min: 17,
+               fee: 17,
+               row_nr: 2 },
+             { effective_date: Date.parse('Thu, 11 Mar 2018'),
+               expiration_date: Date.parse('Sun, 17 Mar 2019'),
+               customer_email: nil,
+               origin: 'Gothenburg',
+               country_origin: 'Sweden',
+               destination: 'Shanghai',
+               country_destination: 'China',
+               mot: 'ocean',
+               carrier: nil,
+               service_level: 'standard',
+               load_type: 'lcl',
+               rate_basis: 'PER_WM',
+               range_min: nil,
+               range_max: nil,
+               fee_code: 'BAS',
+               fee_name: 'Bas',
+               currency: 'USD',
+               fee_min: 17,
+               fee: 17,
+               row_nr: 2 },
+             { effective_date: Date.parse('Thu, 11 Mar 2018'),
+               expiration_date: Date.parse('Sun, 17 Mar 2019'),
+               customer_email: nil,
+               origin: 'Gothenburg',
+               country_origin: 'Sweden',
+               destination: 'Shanghai',
+               country_destination: 'China',
+               mot: 'ocean',
+               carrier: nil,
+               service_level: 'standard',
+               load_type: 'lcl',
+               rate_basis: 'PER_WM',
+               range_min: 0,
+               range_max: 100,
+               fee_code: 'HAS',
+               fee_name: 'Has',
+               currency: 'USD',
+               fee_min: 20,
+               fee: 20,
+               row_nr: 3 },
+             { effective_date: Date.parse('Thu, 11 Mar 2018'),
+               expiration_date: Date.parse('Sun, 17 Mar 2019'),
+               customer_email: nil,
+               origin: 'Gothenburg',
+               country_origin: 'Sweden',
+               destination: 'Shanghai',
+               country_destination: 'China',
+               mot: 'ocean',
+               carrier: nil,
+               service_level: 'standard',
+               load_type: 'lcl',
+               rate_basis: 'PER_WM',
+               range_min: 101,
+               range_max: 500,
+               fee_code: 'HAS',
+               fee_name: 'Has',
+               currency: 'USD',
+               fee_min: 25,
+               fee: 25,
+               row_nr: 4 },
+             { effective_date: Date.parse('Thu, 15 Mar 2018'),
+               expiration_date: Date.parse('Sun, 17 Mar 2019'),
+               customer_email: nil,
+               origin: 'Gothenburg',
+               country_origin: 'Sweden',
+               destination: 'Shanghai',
+               country_destination: 'China',
+               mot: 'ocean',
+               carrier: nil,
+               service_level: 'standard',
+               load_type: 'fcl',
+               rate_basis: 'PER_CONTAINER',
+               range_min: nil,
+               range_max: nil,
+               fee_code: 'BAS',
+               fee_name: 'Bas',
+               currency: 'USD',
+               fee_min: 1234,
+               fee: 1234,
+               row_nr: 5 }] }]
       end
     end
 
-    trait :faulty_pricings do
-      rows_data do
-        [{ uuid: '575cc33f-41f6-45bb-9a71-46dbc777f146',
-           effective_date: Date.parse('Thu, 15 Mar 2018'),
-           expiration_date: Date.parse('Sun, 17 Mar 2019'),
-           customer_email: nil,
-           origin: 'Gothenburg',
-           country_origin: 'Sweden',
-           destination: 'Shanghai',
-           country_destination: 'China',
-           mot: 'ocean',
-           carrier: nil,
-           service_level: 'standard',
-           wrooong: 'LCL',
-           rate_basis: 'PER_WM',
-           range_min: nil,
-           range_max: nil,
-           fee_code: 'BAS',
-           fee_name: 'Bas',
-           currency: 'USD',
-           fee_min: 17,
-           fee: 17,
-           row_nr: 2 }]
+    trait :faulty_pricings_one_col_fee_and_ranges do
+      all_sheets_data do
+        [{ sheet_name: 'Sheet1',
+           rows_data:
+            [{ effective_date: Date.parse('Thu, 15 Mar 2018'),
+               expiration_date: Date.parse('Sun, 17 Mar 2019'),
+               customer_email: nil,
+               origin: 'Gothenburg',
+               country_origin: 'Sweden',
+               destination: 'Shanghai',
+               country_destination: 'China',
+               mot: 'ocean',
+               carrier: nil,
+               service_level: 'standard',
+               load_type: 'LCL',
+               rate_basis: 'PER_WM',
+               range_min: nil,
+               range_max: nil,
+               fee_code: 'BAS',
+               fee_name: 'Bas',
+               currency: 'USD',
+               fee_min: 17,
+               fee: 17,
+               row_nr: 2 }] }]
+      end
+    end
+
+    trait :correct_pricings_dynamic_fee_cols_no_rangs do
+      all_sheets_data do
+        [{ sheet_name: 'Sheet1',
+           rows_data:
+            [{ effective_date: Date.parse('Fri, 01 Feb 2019'),
+               expiration_date: Date.parse('Sun, 31 Mar 2019'),
+               customer_email: nil,
+               origin: 'Dalian',
+               country_origin: 'China',
+               destination: 'Gothenburg',
+               country_destination: 'Sweden',
+               mot: 'ocean',
+               carrier: 'APL',
+               service_level: 'standard',
+               load_type: 'FCL_40',
+               rate_basis: 'PER_CONTAINER',
+               transit_time: 42,
+               currency: 'USD',
+               bas: nil,
+               lss: 60,
+               rate: 1550,
+               row_nr: 2 },
+             { effective_date: Date.parse('Tue, 01 Jan 2019'),
+               expiration_date: Date.parse('Sun, 31 Mar 2019'),
+               customer_email: nil,
+               origin: 'Hong Kong',
+               country_origin: 'Hong Kong',
+               destination: 'Southampton',
+               country_destination: 'United Kingdom of Great Britain and Northern Ireland',
+               mot: 'ocean',
+               carrier: 'YML',
+               service_level: 'standard',
+               load_type: 'FCL_40_HQ',
+               rate_basis: 'PER_CONTAINER',
+               transit_time: 27,
+               currency: 'USD',
+               bas: nil,
+               lss: 60,
+               rate: 2550,
+               row_nr: 3 }] }]
       end
     end
 
     trait :correct_local_charges do
-      rows_data do
-        [{ uuid: '1e51dc52-56f4-4abe-9c68-e40839167516',
-           hub: 'Bremerhaven',
+      all_sheets_data do
+        [{ sheet_name: 'Sheet1',
+           rows_data:
+        [{ hub: 'Bremerhaven',
            country: 'Germany',
            effective_date: Date.parse('2019-01-24'),
            expiration_date: Date.parse('2020-01-24'),
@@ -101,14 +235,75 @@ FactoryBot.define do
            range_min: nil,
            range_max: nil,
            dangerous: nil,
-           row_nr: 2 }]
+           row_nr: 2 },
+         { hub: 'Antwerp',
+           country: 'Belgium',
+           effective_date: Date.parse('2019-01-24'),
+           expiration_date: Date.parse('2020-01-24'),
+           counterpart_hub: 'all',
+           counterpart_country: nil,
+           service_level: 'all',
+           carrier: 'SACO Shipping',
+           fee_code: 'DOC',
+           fee: 'Documentation',
+           mot: 'ocean',
+           load_type: 'lcl',
+           direction: 'export',
+           currency: 'EUR',
+           rate_basis: 'PER_BILL',
+           minimum: nil,
+           maximum: nil,
+           base: nil,
+           ton: nil,
+           cbm: nil,
+           kg: nil,
+           item: nil,
+           shipment: nil,
+           bill: 20,
+           container: nil,
+           wm: nil,
+           range_min: 0,
+           range_max: 100,
+           dangerous: nil,
+           row_nr: 3 },
+         { hub: 'Le Havre',
+           country: 'France',
+           effective_date: Date.parse('2019-01-24'),
+           expiration_date: Date.parse('2020-01-24'),
+           counterpart_hub: 'Antwerp',
+           counterpart_country: 'Belgium',
+           service_level: 'standard',
+           carrier: 'all',
+           fee_code: 'DOC',
+           fee: 'Documentation',
+           mot: 'ocean',
+           load_type: 'lcl',
+           direction: 'export',
+           currency: 'EUR',
+           rate_basis: 'PER_BILL',
+           minimum: nil,
+           maximum: nil,
+           base: nil,
+           ton: nil,
+           cbm: nil,
+           kg: nil,
+           item: nil,
+           shipment: nil,
+           bill: 20,
+           container: nil,
+           wm: nil,
+           range_min: nil,
+           range_max: nil,
+           dangerous: nil,
+           row_nr: 4 }] }]
       end
     end
 
     trait :faulty_local_charges do
-      rows_data do
-        [{ uuid: '1e51dc52-56f4-4abe-9c68-e40839167516',
-           hubbbbbbbbbbbb: 'Bremerhaven',
+      all_sheets_data do
+        [{ sheet_name: 'Sheet1',
+           rows_data:
+        [{ hubbbbbbbbbbbb: 'Bremerhaven',
            country: 'Germany',
            effective_date: Date.parse('2019-01-24'),
            expiration_date: Date.parse('2020-01-24'),
@@ -137,13 +332,119 @@ FactoryBot.define do
            range_min: nil,
            range_max: nil,
            dangerous: nil,
-           row_nr: 2 }]
+           row_nr: 2 }] }]
       end
     end
 
-    factory :excel_data_parsed_correct_pricings, traits: %i(one_col_fee_and_ranges correct_pricings)
-    factory :excel_data_parsed_faulty_pricings, traits: %i(one_col_fee_and_ranges faulty_pricings)
-    factory :excel_data_parsed_correct_local_charges, traits: %i(one_col_fee_and_ranges correct_local_charges)
-    factory :excel_data_parsed_faulty_local_charges, traits: %i(one_col_fee_and_ranges faulty_local_charges)
+    trait :correct_saco_shipping do
+      all_sheets_data do
+        [{ sheet_name: 'Sheet1',
+           data_restructurer_name: 'saco_shipping',
+           rows_data:
+            [{ destination_country: 'Angola',
+               destination_hub: 'Cabinda',
+               origin_hub: 'BE ANR',
+               transshipment_via: nil,
+               effective_date: Date.parse('Thu, 01 Nov 2018'),
+               expiration_date: Date.parse('Mon, 31 Dec 2018'),
+               "int/ref_nr": 'QHOF098143',
+               carrier: 'CMA CGM',
+               "20dc": '2,550 EUR',
+               "40dc": '4,100 EUR',
+               "40hq": '4,100 EUR',
+               "20/lsf": 'incl',
+               "40/lsf": 'incl',
+               "curr_month/20/baf": '-',
+               "curr/20/baf": 'incl',
+               "next_month/20/baf": '-',
+               "next/20/baf": 'incl',
+               "curr_month/40/baf": '-',
+               "curr/40/baf": 'incl',
+               "next_month/40/baf": '-',
+               "next/40/baf": 'incl',
+               "exp/20/thc": '192 EUR',
+               "exp/40/thc": '192 EUR',
+               "imp/20/thc": '111 EUR',
+               "imp/40/thc": '-',
+               "curr_month/20/caf": 'incl',
+               "curr/20/caf": 'incl',
+               "next_month/20/caf": 'incl',
+               "next/20/caf": 'incl',
+               "curr_month/40/caf": 'incl',
+               "curr/40/caf": 'incl',
+               "next_month/40/caf": 'incl',
+               "next/40/caf": 'incl',
+               "20/ebs": '45 EUR',
+               "40/ebs": '90 EUR',
+               isps: '27 EUR',
+               "20/port_add": '-',
+               "40/port_add": '-',
+               "20/piracy_risk": '-',
+               "40/piracy_risk": '-',
+               export_decl_sc: '-',
+               "20/peak_season_sc": '-',
+               "40/peak_season_sc": '-',
+               filing_bl: '-',
+               remarks: 'remarkA/abc // remarkB',
+               "int/20/imo": '-',
+               "int/40/imo": '-',
+               row_nr: 2 },
+             { destination_country: 'Angola',
+               destination_hub: 'Cabinda',
+               origin_hub: 'DE HAM',
+               transshipment_via: nil,
+               effective_date: Date.parse('Thu, 01 Nov 2018'),
+               expiration_date: Date.parse('Mon, 31 Dec 2018'),
+               "int/ref_nr": 'QHOF098142',
+               carrier: 'CMA CGM',
+               "20dc": '2,700 EUR',
+               "40dc": '4,400 EUR',
+               "40hq": '4,400 EUR',
+               "20/lsf": 'incl',
+               "40/lsf": 'incl',
+               "curr_month/20/baf": 'November',
+               "curr/20/baf": 'incl',
+               "next_month/20/baf": 'Dec',
+               "next/20/baf": 'incl',
+               "curr_month/40/baf": '-',
+               "curr/40/baf": 'incl',
+               "next_month/40/baf": '-',
+               "next/40/baf": 'incl',
+               "exp/20/thc": '230 EUR',
+               "exp/40/thc": '230 EUR',
+               "imp/20/thc": '-',
+               "imp/40/thc": '-',
+               "curr_month/20/caf": 'incl',
+               "curr/20/caf": 'incl',
+               "next_month/20/caf": 'incl',
+               "next/20/caf": 'incl',
+               "curr_month/40/caf": 'incl',
+               "curr/40/caf": 'incl',
+               "next_month/40/caf": 'incl',
+               "next/40/caf": 'incl',
+               "20/ebs": '45 EUR',
+               "40/ebs": '90 EUR',
+               isps: '27 EUR',
+               "20/port_add": '-',
+               "40/port_add": '-',
+               "20/piracy_risk": '-',
+               "40/piracy_risk": '-',
+               export_decl_sc: '-',
+               "20/peak_season_sc": '-',
+               "40/peak_season_sc": '-',
+               filing_bl: '-',
+               remarks: nil,
+               "int/20/imo": '-',
+               "int/40/imo": '-',
+               row_nr: 3 }] }]
+      end
+    end
+
+    factory :excel_data_parsed_correct_pricings_one_col_fee_and_ranges, traits: %i(pricing_one_col_fee_and_ranges correct_pricings_one_col_fee_and_ranges)
+    factory :excel_data_parsed_faulty_pricings_one_col_fee_and_ranges, traits: %i(pricing_one_col_fee_and_ranges faulty_pricings_one_col_fee_and_ranges)
+    factory :excel_data_parsed_correct_pricings_dynamic_fee_cols_no_rangs, traits: %i(pricing_dynamic_fee_cols_no_ranges correct_pricings_dynamic_fee_cols_no_rangs)
+    factory :excel_data_parsed_correct_local_charges, traits: %i(local_charges correct_local_charges)
+    factory :excel_data_parsed_faulty_local_charges, traits: %i(local_charges faulty_local_charges)
+    factory :excel_data_parsed_correct_saco_shipping, traits: %i(saco_shipping correct_saco_shipping)
   end
 end

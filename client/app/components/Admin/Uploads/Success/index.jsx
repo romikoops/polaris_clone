@@ -6,7 +6,7 @@ import { documentGlossary } from '../../../../constants'
 import { history } from '../../../../helpers'
 import TextHeading from '../../../TextHeading/TextHeading'
 import { RoundButton } from '../../../RoundButton/RoundButton'
-import GreyBox from '../../../GreyBox/GreyBox';
+import GreyBox from '../../../GreyBox/GreyBox'
 
 export class AdminUploadsSuccess extends Component {
   static goBack () {
@@ -36,16 +36,19 @@ export class AdminUploadsSuccess extends Component {
     const statView = stats ? Object.keys(stats).filter(k => !['has_errors', 'errors'].includes(k))
       .map(statKey => (
         <div className={`${styles.stat_row} flex-100 layout-row layout-align-space-between-center`}>
-          <div className="flex-33 layout-row layout-align-start-center">
+          <div className="flex-25 layout-row layout-align-start-center">
             <p className="flex-none">
               <strong>{documentGlossary[statKey]}</strong>
             </p>
           </div>
-          <div className="flex-33 layout-row layout-align-start-center">
+          <div className="flex-25 layout-row layout-align-start-center">
             <p className="flex-none">{`${t('admin:numberCreated')} ${stats[statKey].number_created}`}</p>
           </div>
-          <div className="flex-33 layout-row layout-align-start-center">
+          <div className="flex-25 layout-row layout-align-start-center">
             <p className="flex-none">{`${t('admin:numberUpdated')} ${stats[statKey].number_updated}`}</p>
+          </div>
+          <div className="flex-25 layout-row layout-align-start-center">
+            <p className="flex-none">{`${t('admin:numberDeleted')} ${stats[statKey].number_deleted}`}</p>
           </div>
         </div>
       )) : ''
@@ -79,9 +82,9 @@ export class AdminUploadsSuccess extends Component {
         >
           <GreyBox wrapperClassName="padd_20">
             <div className="flex-100 layout-row layout-align-start-center">
-              { stats.has_errors
+              {stats.has_errors
                 ? <TextHeading theme={theme} text={t('admin:uploadFailed')} size={3} />
-                : <TextHeading theme={theme} text={t('admin:uploadSuccessful')} size={3} /> }
+                : <TextHeading theme={theme} text={t('admin:uploadSuccessful')} size={3} />}
             </div>
             <div className="flex-100 layout-row layout-align-start-center layout-wrap">
               {statView}
@@ -100,7 +103,7 @@ export class AdminUploadsSuccess extends Component {
                   </tbody>
                 </table>
               </div>
-            ) : '' }
+            ) : ''}
             <div className="flex-100 layout-row layout-align-center-center layout-wrap layout-padding">
               {stats.has_errors ? <p className="flex">{t('admin:errorTip')}</p> : ''}
             </div>

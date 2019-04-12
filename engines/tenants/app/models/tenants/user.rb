@@ -30,7 +30,7 @@ end
 #  reset_password_token                :string
 #  reset_password_token_expires_at     :datetime
 #  reset_password_email_sent_at        :datetime
-#  access_count_to_reset_password_page :integer
+#  access_count_to_reset_password_page :integer          default(0)
 #  last_login_at                       :datetime
 #  last_logout_at                      :datetime
 #  last_activity_at                    :datetime

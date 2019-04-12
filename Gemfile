@@ -140,6 +140,12 @@ gem 'holidays'
 # Translated customer content
 gem 'mobility', '~> 0.8.6'
 
+# Use money gem
+gem 'money'
+
+# Use monetize gem to parse strings into Money objects
+gem 'monetize'
+
 group :development, :test do
   gem 'annotate'
   gem 'dotenv-rails', require: 'dotenv/rails-now'

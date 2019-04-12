@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Pricing < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  attr_accessor :transient_marked_as_old
+
   has_paper_trail
   belongs_to :itinerary
   belongs_to :tenant

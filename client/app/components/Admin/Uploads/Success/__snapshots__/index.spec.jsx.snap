@@ -53,7 +53,7 @@ exports[`shallow render 1`] = `
           className="stat_row flex-100 layout-row layout-align-space-between-center"
         >
           <div
-            className="flex-33 layout-row layout-align-start-center"
+            className="flex-25 layout-row layout-align-start-center"
           >
             <p
               className="flex-none"
@@ -62,7 +62,7 @@ exports[`shallow render 1`] = `
             </p>
           </div>
           <div
-            className="flex-33 layout-row layout-align-start-center"
+            className="flex-25 layout-row layout-align-start-center"
           >
             <p
               className="flex-none"
@@ -71,12 +71,21 @@ exports[`shallow render 1`] = `
             </p>
           </div>
           <div
-            className="flex-33 layout-row layout-align-start-center"
+            className="flex-25 layout-row layout-align-start-center"
           >
             <p
               className="flex-none"
             >
               No. updated: undefined
+            </p>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none"
+            >
+              No. deleted: undefined
             </p>
           </div>
         </div>
@@ -84,7 +93,7 @@ exports[`shallow render 1`] = `
           className="stat_row flex-100 layout-row layout-align-space-between-center"
         >
           <div
-            className="flex-33 layout-row layout-align-start-center"
+            className="flex-25 layout-row layout-align-start-center"
           >
             <p
               className="flex-none"
@@ -93,7 +102,7 @@ exports[`shallow render 1`] = `
             </p>
           </div>
           <div
-            className="flex-33 layout-row layout-align-start-center"
+            className="flex-25 layout-row layout-align-start-center"
           >
             <p
               className="flex-none"
@@ -102,12 +111,21 @@ exports[`shallow render 1`] = `
             </p>
           </div>
           <div
-            className="flex-33 layout-row layout-align-start-center"
+            className="flex-25 layout-row layout-align-start-center"
           >
             <p
               className="flex-none"
             >
               No. updated: undefined
+            </p>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none"
+            >
+              No. deleted: undefined
             </p>
           </div>
         </div>

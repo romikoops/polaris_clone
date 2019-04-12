@@ -33,10 +33,11 @@ end
 #
 # Table name: trucking_type_availabilities
 #
-#  id         :uuid             not null, primary key
-#  load_type  :string
-#  carriage   :string
-#  truck_type :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id           :uuid             not null, primary key
+#  load_type    :string
+#  carriage     :string
+#  truck_type   :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  query_method :integer
 #

@@ -10,8 +10,14 @@ FactoryBot.define do
     association :itinerary
     association :tenant_vehicle
 
-    after :create do |pricing|
-      create_list :pricing_detail, 1, priceable: pricing, tenant: pricing.tenant
+    transient do
+      pricing_detail_attrs { {} }
+    end
+
+    after :create do |pricing, evaluator|
+      pricing_detail_options = { priceable: pricing, tenant: pricing.tenant }
+      pricing_detail_options.merge!(evaluator.pricing_detail_attrs)
+      create_list :pricing_detail, 1, **pricing_detail_options
     end
   end
 end
