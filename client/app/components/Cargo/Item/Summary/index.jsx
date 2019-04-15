@@ -3,8 +3,9 @@ import { withNamespaces } from 'react-i18next'
 import styles from '../Group/CargoItemGroup.scss'
 import { numberSpacing, singleItemChargeableObject } from '../../../../helpers'
 
-function CargoItemSummary ({ items, t, mot, scope }) {
-
+function CargoItemSummary ({
+  items, t, mot, scope
+}) {
   const volume = items.reduce((product, item) => (
     product + (parseFloat(item.dimension_y) *
     parseFloat(item.dimension_x) *
@@ -14,7 +15,7 @@ function CargoItemSummary ({ items, t, mot, scope }) {
   ), 0)
 
   const weight = items.reduce((product, item) => (
-    product + (parseFloat(item.payload_in_kg) *  parseInt(item.quantity, 10))
+    product + (parseFloat(item.payload_in_kg) * parseInt(item.quantity, 10))
   ), 0)
 
   const chargeableWeight = items.reduce((product, item) => (
@@ -73,15 +74,19 @@ function CargoItemSummary ({ items, t, mot, scope }) {
             <p className="flex-none layout-row layout-align-center-center">{t('cargo:totalVolume')}</p>
           </div>
         </div>
-        <div className="flex layout-row layout-align-space-around">
-          <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={{ __html: chargeableData.total_value }}
-            >
-            </p>
-            <p className="flex-none layout-row layout-align-center-center">{chargeableData.total_title}</p>
-          </div>
-        </div>
+        { scope.hide_chargeable_weight_values ? ''
+          : (
+            <div className="flex layout-row layout-align-space-around">
+              <div className="layout-column">
+                <p
+                  className="flex-none layout-row layout-align-center-center"
+                  dangerouslySetInnerHTML={{ __html: chargeableData.total_value }}
+                />
+                <p className="flex-none layout-row layout-align-center-center">{chargeableData.total_title}</p>
+              </div>
+            </div>
+          )
+        }
       </div>
     </div>
   )

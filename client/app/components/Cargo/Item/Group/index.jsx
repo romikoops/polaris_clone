@@ -117,7 +117,8 @@ class CargoItemGroup extends Component {
           </p>
         </td>
       </tr>),
-       (<tr className={styles.data_table_row}>
+        scope.hide_chargeable_weight_values ? '' : 
+        (<tr className={styles.data_table_row}>
         <td className={styles.table_title}>
           <p className="flex layout-row layout-align-start-center">{chargeableData.total_title}</p>
         </td>
@@ -127,7 +128,7 @@ class CargoItemGroup extends Component {
             dangerouslySetInnerHTML={{ __html: chargeableData.total_value }}
           />
         </td>
-      </tr>),
+      </tr>) ,
     ]
 
     const imgLCL = { backgroundImage: `url(${LOAD_TYPES[0].img})` }

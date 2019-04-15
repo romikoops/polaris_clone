@@ -195,7 +195,8 @@ class CargoDetails extends Component {
       t,
       tenant,
       theme,
-      totalGoodsValue
+      totalGoodsValue,
+      setAddons
     } = this.props
 
     const { scope } = tenant
@@ -458,6 +459,7 @@ class CargoDetails extends Component {
                 <CustomsExportPaper
                   addon={addons.customs_export_paper}
                   tenant={tenant}
+                  isSet={setAddons.customs_export_paper}
                   documents={documents}
                   fileFn={this.fileFn}
                   deleteDoc={this.deleteDoc}

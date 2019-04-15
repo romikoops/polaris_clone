@@ -184,6 +184,9 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     existing_insurance_charge&.destroy
     existing_customs_charge = charge_breakdown.charge('customs')
     existing_customs_charge&.destroy
+    existing_addons_charge = charge_breakdown.charge('addons')
+    existing_addons_charge&.destroy
+
     # TBD - Adjust for itinerary logic
     if shipment_data[:insurance][:bool]
       @insurance_charge = Charge.create(
