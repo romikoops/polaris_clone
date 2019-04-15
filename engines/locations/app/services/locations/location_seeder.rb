@@ -6,11 +6,7 @@ module Locations
 
     def self.seeding(*terms)
       name = Locations::NameFinder.seeding(
-        terms,
-        fields: %i(name display_name postal_code),
-        limit: 1,
-        match: :word_middle,
-        operator: 'or'
+        terms
       )
       return nil unless name
 
@@ -43,11 +39,12 @@ module Locations
 
     def self.find_location_for_point(lat:, lon:)
       city = Locations::Location
-                        .contains(lat: lat, lon: lon)
-                        .where('admin_level > 3')
-                        .where('admin_level < 8')
-                        .order(admin_level: :desc)
-                        .first
+             .contains(lat: lat, lon: lon)
+             .where('admin_level > 3')
+             .where('admin_level < 8')
+             .order(admin_level: :desc)
+             .first
+
       return city if city
 
       Locations::Location.smallest_contains(lat: lat, lon: lon).first

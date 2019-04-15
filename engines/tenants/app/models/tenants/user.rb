@@ -40,5 +40,4 @@ end
 #  unlock_token                        :string
 #  legacy_id                           :integer
 #  tenant_id                           :uuid
-#  company_id                          :uuid
 #

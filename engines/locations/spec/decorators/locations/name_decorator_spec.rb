@@ -35,6 +35,9 @@ module Locations
       it 'returns the lat lon coordinates' do
         expect(NameDecorator.new(location_names.first).lat_lng).to eq(latitude: 31.2699895, longitude: 121.9318879)
       end
+      it 'returns the combined names' do
+        expect(NameDecorator.new(location_names.first).combined_names).to eq('220011, Baoshun')
+      end
     end
   end
 end

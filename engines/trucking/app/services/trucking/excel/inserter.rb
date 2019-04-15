@@ -37,7 +37,7 @@ module Trucking
         load_ident_values_and_countries
         load_fees_and_charges
         overwrite_zonal_trucking_rates_by_hub
-        # create_coverage
+        create_coverage
         end_time = DateTime.now
         diff = (end_time - start_time) / 86_400
         puts @missing_locations
@@ -78,14 +78,14 @@ module Trucking
 
       def find_availabilities(row_truck_type, direction, load_type, hub)
         query_method = case @identifier_type
-                        when 'location_id'
-                          :location
-                        when 'zipcode'
-                          :zipcode
-                        when 'distance'
-                          :distance
-                        else
-                          :not_set
+                       when 'location_id'
+                         :location
+                       when 'zipcode'
+                         :zipcode
+                       when 'distance'
+                         :distance
+                       else
+                         :not_set
                         end
         trucking_type_availability = TypeAvailability.find_or_create_by(
           truck_type: row_truck_type,

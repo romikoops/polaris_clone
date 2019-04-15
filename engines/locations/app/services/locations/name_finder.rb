@@ -6,19 +6,18 @@ module Locations
 
     def self.seeding(*terms)
       results = Locations::Name
-        .search(
-          terms,
-          fields: %i(name display_name alternative_names city postal_code),
-          limit: 1,
-          match: :word_middle,
-          operator: 'or'
-        )
-        .results
+                .search(
+                  terms,
+                  fields: %i(name display_name alternative_names city postal_code),
+                  limit: 1,
+                  match: :word_middle,
+                  operator: 'or'
+                )
+                .results
+      result_with_location = results.select(&:location_id).first
+      return result_with_location if result_with_location
 
-        result_with_location = results.select{ |r| r.location_id }.first
-        return result_with_location if result_with_location
-
-        return results.first
+      results.first
     end
 
     def self.find_in_postal_code(postal_bounds:, terms:)
@@ -31,10 +30,12 @@ module Locations
                       end
 
       postal_coords.each do |coords|
-        result = Locations::Name.search(terms, where: { location: { geo_polygon: { points: coords } } }, limit: 1)
-                                .results
-                                .first
-        return result if result
+        results = Locations::Name.search(terms, where: { location: { geo_polygon: { points: coords } } }, limit: 1)
+                                 .results
+        result_with_location = results.select(&:location_id).first
+        return result_with_location if result_with_location
+
+        return results.first unless results.empty?
       end
 
       nil
