@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
+import { get } from 'lodash'
 import styles from '../CargoDetails/CargoDetails.scss'
 import TextHeading from '../TextHeading/TextHeading'
 import Checkbox from '../Checkbox/Checkbox'
@@ -9,7 +10,7 @@ class CustomsExportPaper extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
-      addonView: false
+      addonView: get(props, ['isSet'], false)
     }
   }
 

@@ -20,7 +20,8 @@ class SideNav extends Component {
       linkVisibility: [],
       activeIndex: -1
     }
-    const { t } = this.props
+    const { t, tenant } = this.props
+    const { scope } = tenant
     this.userLinks = [
       {
         key: v4(),
@@ -36,7 +37,7 @@ class SideNav extends Component {
         url: '/account/shipments',
         target: 'shipments'
       },
-      {
+      scope.hide_user_pricing_requests ? null : {
         key: v4(),
         icon: 'fa-money',
         text: t('account:pricings'),
@@ -57,7 +58,7 @@ class SideNav extends Component {
         url: '/account/contacts',
         target: 'contacts'
       }
-    ]
+    ].filter(item => item)
     this.agentLinks = [
       {
         key: v4(),

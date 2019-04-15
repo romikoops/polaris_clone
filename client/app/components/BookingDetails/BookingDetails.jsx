@@ -178,6 +178,7 @@ export class BookingDetails extends Component {
     this.setState({
       cargoNotes: obj.cargoNotes,
       consignee: obj.consignee,
+      addons: obj.addons,
       customsCredit: obj.customsCredit,
       eori: obj.eori,
       hsCodes: obj.hsCodes,
@@ -427,6 +428,7 @@ export class BookingDetails extends Component {
         shipmentDispatch={shipmentDispatch}
         tenant={tenant}
         theme={theme}
+        setAddons={this.state.addons}
         toggleCustomAddon={this.toggleCustomAddon}
         toggleCustomsCredit={this.toggleCustomsCredit}
         totalGoodsValue={this.state.totalGoodsValue}
