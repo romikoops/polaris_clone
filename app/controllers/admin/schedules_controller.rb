@@ -37,7 +37,6 @@ class Admin::SchedulesController < Admin::AdminBaseController
     file = upload_params[:file].tempfile
 
     options = { tenant: current_tenant,
-                specific_identifier: 'ScheduleGenerator',
                 file_or_path: file }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
