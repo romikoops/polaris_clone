@@ -17,16 +17,14 @@
             </tr>
           </thead>
           <tbody>
-            <% @stats.each do |stat| %>
-              <% stat.each do |key, value| %>
-                <% value.values_at(:combined_data).flatten.each do |data| %>
-                  <tr>
-                    <td><%= key %></td>
-                    <td><%= data[:n_individual_agents] %></td>
-                    <td><%= data[:n_quotations] %></td>
-                    <td><%= data[:avg_time_for_booking_process] %></td>
-                  </tr>
-                <% end %>
+            <% @stats.each do |key, value| %>
+              <% value.values_at(:combined_data).flatten.each do |data| %>
+                <tr>
+                  <td><%= key %></td>
+                  <td><%= data[:n_individual_agents] %></td>
+                  <td><%= data[:n_quotations] %></td>
+                  <td><%= data[:avg_time_for_booking_process] %></td>
+                </tr>
               <% end %>
             <% end %>
           </tbody>
@@ -45,15 +43,13 @@
             </tr>
           </thead>
           <tbody>
-            <% @stats.each do |stat| %>
-              <% stat.each do |key, value| %>
-                <% value.values_at(:data_per_agent).flatten.each do |data| %>
-                  <tr>
-                    <td><%= key %></td>
-                    <td><%= data[:email] %></td>
-                    <td><%= data[:count] %></td>
-                  </tr>
-                <% end %>
+            <% @stats.each do |key, value| %>
+              <% value.values_at(:data_per_agent).flatten.each do |data| %>
+                <tr>
+                  <td><%= key %></td>
+                  <td><%= data[:email] %></td>
+                  <td><%= data[:count] %></td>
+                </tr>
               <% end %>
             <% end %>
           </tbody>

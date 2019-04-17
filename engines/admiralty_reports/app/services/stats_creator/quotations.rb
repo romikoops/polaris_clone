@@ -18,13 +18,11 @@ module StatsCreator
       quot_ship_bundle = quotations.zip(shipments)
       quot_ship_bundle_groups = group_by_date(quot_ship_bundle)
 
-      quot_ship_bundle_groups.each_with_object([]) do |(k_date, v_bundle), result_arr|
+      quot_ship_bundle_groups.each_with_object({}) do |(k_date, v_bundle), result_hsh|
         agent_email_counts = quotations_per_agent_email(v_bundle)
 
-        result_arr << {
-          k_date => { data_per_agent: transform_agent_email_counts(agent_email_counts),
-                      combined_data: summarize_data(agent_email_counts, v_bundle) }
-        }
+        result_hsh[k_date] = { data_per_agent: transform_agent_email_counts(agent_email_counts),
+                               combined_data: summarize_data(agent_email_counts, v_bundle) }
       end
     end
 
