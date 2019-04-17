@@ -161,7 +161,7 @@ module ExcelDataServices
       end
 
       def add_row_numbers(row_numbers, data_per_ranges)
-        (row_numbers == '' ? row_numbers + ', ' : '') +
+        (row_numbers.present? ? row_numbers + ', ' : '') +
           data_per_ranges.map { |single_data| single_data[:row_nr] }.join(', ')
       end
 

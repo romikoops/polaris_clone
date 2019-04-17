@@ -181,6 +181,7 @@ group :development, :test do
   gem 'rubocop'
   gem 'rubocop-checkstyle_formatter'
   gem 'rubocop-rspec'
+  gem 'rubocop-performance'
 end
 
 group :test do

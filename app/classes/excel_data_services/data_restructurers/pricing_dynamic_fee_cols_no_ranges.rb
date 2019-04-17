@@ -36,7 +36,9 @@ module ExcelDataServices
       private
 
       def expand_dynamic_fees_to_individual_fees(standard_part, fee_part, row_nr)
-        fee_part.map do |fee_key, fee_value|
+        result = fee_part.map do |fee_key, fee_value|
+          next unless fee_value.present?
+
           standard_part.merge(
             fee_code: fee_key.to_s.upcase,
             fee_name: fee_key.to_s.capitalize,
@@ -44,6 +46,8 @@ module ExcelDataServices
             fee_min: fee_value
           ).merge(row_nr: row_nr)
         end
+
+        result.compact
       end
     end
   end

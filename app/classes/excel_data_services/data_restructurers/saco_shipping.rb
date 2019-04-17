@@ -170,7 +170,7 @@ module ExcelDataServices
       end
 
       def expand_based_on_type_of_fee(multiple_objs) # rubocop:disable MethodLength
-        multiple_objs.map do |row_data|
+        multiple_objs = multiple_objs.map do |row_data| # rubocop:disable Metrics/BlockLength
           additional_keys_same_for_all = %i(
             row_nr
             effective_date
@@ -191,6 +191,8 @@ module ExcelDataServices
           )
           currency, fee = determine_fee_value_components(fee_is_included, fee_column_value)
 
+          next unless fee.present?
+
           same_for_all_fees.merge(
             preliminary_load_type: preliminary_load_type,
             fee_code: fee_code,
@@ -200,6 +202,8 @@ module ExcelDataServices
             fee_min: fee
           )
         end
+
+        multiple_objs.compact
       end
 
       def determine_preliminary_load_type(key)

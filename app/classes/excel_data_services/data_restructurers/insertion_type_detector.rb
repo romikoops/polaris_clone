@@ -5,6 +5,7 @@ module ExcelDataServices
     class InsertionTypeDetector
       SACO_SHIPPING_LOCAL_CHARGE_FEE_CODES = %w(
         thc
+        isps
       ).freeze
 
       def self.detect(single_data, data_restructurer_name)

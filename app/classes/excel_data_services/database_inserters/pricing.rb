@@ -10,11 +10,12 @@ module ExcelDataServices
           )
 
           itinerary = find_or_initialize_itinerary(row)
-          add_stats(itinerary)
 
           hub_names = [row.origin_name, row.destination_name]
           stops = find_or_initialize_stops(hub_names, itinerary)
           itinerary.stops << stops
+
+          add_stats(itinerary)
           itinerary.save!
 
           tenant_vehicle = find_or_create_tenant_vehicle(row)
