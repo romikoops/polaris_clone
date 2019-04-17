@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Legacy
   class Quotation < ApplicationRecord
     self.table_name = 'quotations'

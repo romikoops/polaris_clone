@@ -19,11 +19,13 @@ module AdmiraltyReports
     end
 
     describe 'GET #index' do
+      let(:tenant) { tenants.first }
+
       it 'renders page' do
         get :index
 
         expect(response).to be_successful
-        expect(response.body).to match(/<td>#{Regexp.quote(tenants.sample.subdomain)}/im)
+        expect(response.body).to match(/<td>#{Regexp.quote(tenant.subdomain)}/im)
       end
     end
 

@@ -1,0 +1,8 @@
+<% per_date_quotation_stats.second.values_at(:combined_data).flatten.each do |data| %>
+  <tr>
+    <td><%= per_date_quotation_stats.first %></td>
+    <td><%= data[:n_individual_agents] %></td>
+    <td><%= data[:n_quotations] %></td>
+    <td><%= data[:avg_time_for_booking_process] %></td>
+  </tr>
+<% end %>
