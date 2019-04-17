@@ -29,8 +29,8 @@ module OfferCalculatorService
         carriage: carriage,
         cargo_classes: @shipment.cargo_classes
       }
-
-      Trucking::Trucking.find_by_filter(args).pluck(:hub_id)
+      results = Trucking::Queries::Availability.new(args).perform | Trucking::Queries::Distance.new(args).perform
+      results.map(&:hub_id)
     end
   end
 end

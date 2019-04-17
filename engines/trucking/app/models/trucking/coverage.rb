@@ -11,6 +11,10 @@ module Trucking
       RGeo::GeoJSON.encode(RGeo::GeoJSON::Feature.new(bounds))
     end
 
+    def write_bounds_to_disk
+      File.open(Rails.root.join('tmp', "#{hub.name}_coverage.geojson"), 'w') { |f| f.puts geojson.to_json }
+    end
+
     private
 
     def generate_bounds
@@ -20,6 +24,7 @@ module Trucking
                     )
                     .pluck('ST_Collect(bounds)').first
     end
+
   end
 end
 

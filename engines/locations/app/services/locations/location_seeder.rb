@@ -6,17 +6,13 @@ module Locations
 
     def self.seeding(*terms)
       name = Locations::NameFinder.seeding(
-        terms,
-        fields: %i(name display_name postal_code),
-        limit: 1,
-        match: :word_middle,
-        operator: 'or'
+        terms
       )
       return nil unless name
 
       return name.location if name.location
 
-      Locations::Location.smallest_contains(lat: name.point.y, lon: name.point.x).first
+      Locations::LocationSeeder.find_location_for_point(lat: name.point.y, lon: name.point.x)
     end
 
     def self.seeding_with_postal_code(postal_code:, country_code:, terms:)
@@ -39,6 +35,19 @@ module Locations
         country_code: country_code,
         point: postal_location.bounds.point
       )
+    end
+
+    def self.find_location_for_point(lat:, lon:)
+      city = Locations::Location
+             .contains(lat: lat, lon: lon)
+             .where('admin_level > 3')
+             .where('admin_level < 8')
+             .order(admin_level: :desc)
+             .first
+
+      return city if city
+
+      Locations::Location.smallest_contains(lat: lat, lon: lon).first
     end
 
     def self.seeding_with_locode(locode:)

@@ -122,12 +122,13 @@ RSpec.describe Locations::NameFinder do
     end
 
     describe '.seeding_with_postal_code' do
-      let!(:location_1) { FactoryBot.create(:german_postal_location) }
+      let!(:postal_location) { FactoryBot.create(:german_postal_location) }
 
       it 'finds the correct name for the postal code' do
-        location_name_1 = FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt', point: location_1.bounds.centroid, place_rank: 40)
+        location_name_1 = FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt', point: postal_location.bounds.centroid, place_rank: 40)
         location_name_2 = FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt', place_rank: 40)
-        result = Locations::NameFinder.find_in_postal_code(postal_bounds: location_1.bounds, terms: 'Innere Altstadt')
+        Locations::Name.reindex
+        result = Locations::NameFinder.find_in_postal_code(postal_bounds: postal_location.bounds, terms: 'Innere Altstadt')
         expect(result).to eq(location_name_1)
       end
     end

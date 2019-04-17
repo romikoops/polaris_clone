@@ -3,5 +3,6 @@ FactoryBot.define do
     load_type  { 'cargo_item' }
     carriage   { 'pre' }
     truck_type { 'default' }
+    query_method { :not_set }
   end
 end

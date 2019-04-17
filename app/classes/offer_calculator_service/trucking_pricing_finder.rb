@@ -21,8 +21,7 @@ module OfferCalculatorService
         hub_ids: [hub_id],
         distance: distance.round
       }
-
-      results = ::Trucking::Trucking.find_by_filter(args)
+      results = Trucking::Queries::Availability.new(args).perform | Trucking::Queries::Distance.new(args).perform
       return [] if results.empty?
 
       truckings = @shipment.cargo_classes.each_with_object({}) { |cargo_class, h| h[cargo_class] = nil }
@@ -34,6 +33,7 @@ module OfferCalculatorService
                                            .first
         truckings[cargo_class] = trucking
       end
+
       truckings
     end
   end

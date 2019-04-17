@@ -10,6 +10,13 @@ module Trucking
     belongs_to :location, class_name: 'Trucking::Location'
     belongs_to :courier, class_name: 'Trucking::Courier'
     validates :hub_id, :location_id, presence: true
+    validates :hub_id,
+              uniqueness: {
+                scope: %i(carriage load_type cargo_class location_id courier_id user_id modifier tenant_id truck_type),
+                message: lambda { |obj, _msg|
+                  "#{obj.truck_type} taken for '#{obj.carriage}-carriage', #{obj.load_type}"
+                }
+              }
 
     def self.delete_existing_truckings(hub)
       where(hub_id: hub.id).destroy_all

@@ -39,9 +39,12 @@ class TruckingAvailabilityController < ApplicationController
       load_type: params[:load_type],
       address: Address.new(latitude: params[:lat], longitude: params[:lng]).reverse_geocode,
       hub_ids: params[:hub_ids].split(',').map(&:to_i),
-      carriage: params[:carriage]
+      carriage: params[:carriage],
+      klass: Trucking::Trucking
     }
+    reg_results = Trucking::Queries::Availability.new(args).perform
+    distance_results = Trucking::Queries::Distance.new(args).perform
 
-    Trucking::Trucking.find_by_filter(args)
+    reg_results | distance_results
   end
 end
