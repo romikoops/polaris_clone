@@ -39,6 +39,7 @@ end
 #  name_2     :string
 #  name_3     :string
 #  name_4     :string
+#  data       :geometry({:srid= geometry, 0
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
