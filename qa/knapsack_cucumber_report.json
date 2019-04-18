@@ -1,8 +1,8 @@
 {
-  "features/agent/download_quote.feature": 31.688702821731567,
-  "features/shipper/create_contacts.feature": 6.978410005569458,
-  "features/shipper/fcl_export_booking_process.feature": 315.4916272163391,
-  "features/shipper/lcl_export_booking_process.feature": 248.76760149002075,
-  "features/shipper/request_rates.feature": 101.87116694450378,
-  "features/visitors/login.feature": 6.1255388259887695
+  "features/agent/download_quote.feature": 130.45537519454956,
+  "features/shipper/create_contacts.feature": 12.311704158782959,
+  "features/shipper/fcl_export_booking_process.feature": 391.44763803482056,
+  "features/shipper/lcl_export_booking_process.feature": 341.91290855407715,
+  "features/shipper/request_rates.feature": 42.28028607368469,
+  "features/visitors/login.feature": 9.983465909957886
 }

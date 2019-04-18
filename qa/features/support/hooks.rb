@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# Ensure maximised window
+Before do |_scenario|
+  page.driver.maximize_window(page.driver.window_handles.first)
+end
+
 Before do |scenario|
   @suite_passed ||= true
   @scenario = scenario

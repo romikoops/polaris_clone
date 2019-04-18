@@ -25,7 +25,7 @@ steps:
     name: gcr.io/cloud-builders/docker
     args:
       - build
-      - --tag=eu.gcr.io/itsmycargo-main/qa/api:$COMMIT_SHA
+      - --tag=eu.gcr.io/itsmycargo-main/qa/imc-app:$COMMIT_SHA
       - /workspace/qa/
     waitFor:
     - "-"
@@ -34,4 +34,4 @@ timeout: 1800s
 images:
   - eu.gcr.io/itsmycargo-main/apps/api:$COMMIT_SHA
   - eu.gcr.io/itsmycargo-main/apps/client:$COMMIT_SHA
-  - eu.gcr.io/itsmycargo-main/qa/api:$COMMIT_SHA
+  - eu.gcr.io/itsmycargo-main/qa/imc-app:$COMMIT_SHA

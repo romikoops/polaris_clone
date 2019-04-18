@@ -203,13 +203,11 @@ wrap.pipeline(timeout: 120) {
           job: 'Voyage/imc-react-api',
           parameters: [
             string(name: 'APP_NAME', value: 'imc-app'),
-            string(name: 'RELEASE', value: env.REVIEW_NAME),
-            string(name: 'NAMESPACE', value: 'review'),
-            string(name: 'REPOSITORY', value: (scm.userRemoteConfigs.first().url =~ '^https://github.com/(.+).git$')[0][1]),
-            string(name: 'COMMIT_SHA', value: env.GIT_COMMIT),
             string(name: 'ENVIRONMENT', value: 'review'),
-            string(name: 'IMAGE', value: "eu.gcr.io/itsmycargo-main/qa/api:${env.GIT_COMMIT}"),
-            string(name: 'TARGET_URL', value: "https://${env.REVIEW_NAME}.itsmycargo.tech"),
+            string(name: 'NAMESPACE', value: 'review'),
+            string(name: 'RELEASE', value: env.REVIEW_NAME),
+            string(name: 'REPOSITORY', value: (scm.userRemoteConfigs.first().url =~ '^https://github.com/(.+).git$')[0][1]),
+            string(name: 'REVISION', value: env.GIT_COMMIT),
           ],
           wait: false)
       }

@@ -7,10 +7,10 @@ emails:
   domain: itsmycargo.tech
 
 fixer:
-  api_key: <%= ENV['FIXER_API_KEY'] %>
+  api_key: <%= ENV.fetch('FIXER_API_KEY') { Rails.application.credentials.dig(:development, :fixer, :api_key) } %>
 
 google:
-  api_key: <%= ENV['GOOGLE_MAPS_SERVER_API_KEY'] %>
+  api_key: <%= ENV.fetch('GOOGLE_MAPS_SERVER_API_KEY') { Rails.application.credentials.dig(:development, :google, :api_key) } %>
 
 google_sign_in:
   client_id: 924497825642-9tirmrp45vvjd82r45sjd4q8njj6laa2.apps.googleusercontent.com
