@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_29_113007) do
+ActiveRecord::Schema.define(version: 2019_04_18_144908) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -875,6 +875,42 @@ ActiveRecord::Schema.define(version: 2019_03_29_113007) do
     t.jsonb "email_links"
   end
 
+  create_table "tenants_companies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.integer "address_id"
+    t.string "vat_number"
+    t.string "email"
+    t.uuid "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tenants_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tenants_memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "member_type"
+    t.uuid "member_id"
+    t.uuid "group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "priority", default: 0
+    t.index ["member_type", "member_id"], name: "index_tenants_memberships_on_member_type_and_member_id"
+  end
+
+  create_table "tenants_scopes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "target_type"
+    t.uuid "target_id"
+    t.jsonb "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["target_type", "target_id"], name: "index_tenants_scopes_on_target_type_and_target_id"
+  end
+
   create_table "tenants_tenants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "subdomain"
     t.integer "legacy_id"
@@ -904,6 +940,7 @@ ActiveRecord::Schema.define(version: 2019_03_29_113007) do
     t.string "unlock_token"
     t.integer "legacy_id"
     t.uuid "tenant_id"
+    t.uuid "company_id"
     t.index ["activation_token"], name: "index_tenants_users_on_activation_token"
     t.index ["email", "tenant_id"], name: "index_tenants_users_on_email_and_tenant_id", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_tenants_users_on_last_logout_at_and_last_activity_at"
