@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 module Tenants
   class Membership < ApplicationRecord
     belongs_to :member, polymorphic: true
     belongs_to :group
-    
+
+    default_scope { order(:priority) }
 
     def member_name
       case member.class.to_s
@@ -12,7 +15,7 @@ module Tenants
         member&.name
       end
     end
-  
+
     def member_type
       case member.class.to_s
       when 'Tenants::User'
@@ -48,7 +51,6 @@ module Tenants
       )
       as_json(new_options)
     end
-
   end
 end
 
@@ -62,4 +64,5 @@ end
 #  group_id    :uuid
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  priority    :integer
 #

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tenants
   class GroupManager
     def initialize(group_id:, actions:)
