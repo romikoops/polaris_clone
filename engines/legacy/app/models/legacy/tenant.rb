@@ -8,6 +8,10 @@ module Legacy
     has_many :shipments
 
     has_paper_trail
+
+    def scope_for(user:)
+      ::Tenants::ScopeService.new(tenant: self, user: user).perform
+    end
   end
 end
 

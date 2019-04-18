@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tenants
   class Group < ApplicationRecord
     belongs_to :tenant, class_name: 'Tenants::Tenant'
@@ -8,11 +10,11 @@ module Tenants
     pg_search_scope :search, against: %i(name), using: {
       tsearch: { prefix: true }
     }
-  
+
     def members
       memberships.map do |m|
         member = m.member
-        member = member&.legacy if member.is_a?(Tenants::User)
+        member&.legacy if member.is_a?(Tenants::User)
       end
     end
 

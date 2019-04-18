@@ -22,16 +22,16 @@ module Tenants
 
     def verify_company
       return if company_id
-      
+
       company_id = ::Tenants::Company.find_by(
         name: legacy&.company_name,
-        tenant_id: self.tenant_id
-        )&.id
+        tenant_id: tenant_id
+      )&.id
       company_id ||= ::Tenants::Company.find_or_create_by(
         name: legacy&.company_name,
         vat_number: legacy&.vat_number,
-        tenant_id: self.tenant_id
-        )&.id
+        tenant_id: tenant_id
+      )&.id
       update(company_id: company_id)
     end
   end
