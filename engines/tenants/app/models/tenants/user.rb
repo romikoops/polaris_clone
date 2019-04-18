@@ -4,13 +4,36 @@ module Tenants
   class User < ApplicationRecord
     include ::Tenants::Legacy
 
-    belongs_to :legacy, class_name: '::User', optional: true
+    belongs_to :legacy, class_name: 'Legacy::User', optional: true
     belongs_to :tenant, optional: true
-
+    belongs_to :company, optional: true
+    has_many :memberships, as: :member
+    has_many :groups, through: :memberships
+    has_many :margins, as: :applicable
+    after_create :verify_company
     validates :email, presence: true, uniqueness: { scope: :tenant_id }
     authenticates_with_sorcery!
 
     has_paper_trail
+
+    def groups
+      ::Tenants::Group.where(id: memberships.pluck(:group_id))
+    end
+
+    def verify_company
+      return if company_id
+      
+      company_id = ::Tenants::Company.find_by(
+        name: legacy&.company_name,
+        tenant_id: self.tenant_id
+        )&.id
+      company_id ||= ::Tenants::Company.find_or_create_by(
+        name: legacy&.company_name,
+        vat_number: legacy&.vat_number,
+        tenant_id: self.tenant_id
+        )&.id
+      update(company_id: company_id)
+    end
   end
 end
 
@@ -40,4 +63,5 @@ end
 #  unlock_token                        :string
 #  legacy_id                           :integer
 #  tenant_id                           :uuid
+#  company_id                          :uuid
 #

@@ -4,6 +4,7 @@ require 'core'
 require 'legacy'
 require 'mailers'
 
+require 'pg_search'
 require 'sorcery'
 
 module Tenants

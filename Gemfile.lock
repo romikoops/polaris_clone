@@ -138,6 +138,7 @@ PATH
       core
       legacy
       mailers
+      pg_search
       sorcery (~> 0.13.0)
 
 PATH
