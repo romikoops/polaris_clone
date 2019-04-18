@@ -6,7 +6,6 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:d
     identifier = 'ChargeCategories'
 
     options = { tenant: current_tenant,
-                specific_identifier: identifier,
                 file_or_path: file }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
