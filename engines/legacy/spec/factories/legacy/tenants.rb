@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :legacy_tenant, class: 'Legacy::Tenant' do
-    subdomain { 'test' }
+    sequence(:name) { |n| "Test #{n}" }
+    sequence(:subdomain) { |n| "test#{n}" }
   end
 end

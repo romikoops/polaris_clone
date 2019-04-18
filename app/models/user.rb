@@ -23,18 +23,16 @@ class User < Legacy::User
   belongs_to :tenant
   belongs_to :role
   belongs_to :optin_status
+  has_many :shipments
+  has_many :documents
   has_many :conversations
   has_many :user_addresses, dependent: :destroy
   has_many :addresses, through: :user_addresses
-  has_many :documents
-  has_many :shipments
-  has_many :receivable_shipments, foreign_key: 'consignee_id'
 
-  # belongs_to :notifying_shipment, class_name: "Shipment"
+  has_many :receivable_shipments, foreign_key: 'consignee_id'
 
   has_many :user_route_discounts
   has_many :routes, foreign_key: :customer_id
-  has_many :pricings, foreign_key: :customer_id
 
   has_many :contacts
   has_many :consignees, through: :contacts
@@ -177,10 +175,6 @@ class User < Legacy::User
     )
   end
 
-  def pricing_id
-    role.name == 'agent' ? agency_pricing_id : id
-  end
-
   # Override devise method to include additional info as opts hash
   def send_confirmation_instructions(opts = {})
     return if guest
@@ -202,6 +196,10 @@ class User < Legacy::User
 
   def has_pricings
     !pricings.empty?
+  end
+
+  def pricing_id
+    role.name == 'agent' ? agency_pricing_id : id
   end
 
   def agency_pricing_id

@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'admiralty_assets'
   s.add_dependency 'admiralty_auth'
+  s.add_dependency 'admiralty_reports'
   s.add_dependency 'admiralty_tenants'
   s.add_dependency 'core'
 

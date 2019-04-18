@@ -45,6 +45,14 @@ PATH
       users
 
 PATH
+  remote: engines/admiralty_reports
+  specs:
+    admiralty_reports (9999.1.0.0)
+      admiralty_assets
+      admiralty_auth
+      core
+
+PATH
   remote: engines/admiralty_tenants
   specs:
     admiralty_tenants (9999.1.0.0)
@@ -60,6 +68,7 @@ PATH
     admiralty (9999.1.0.0)
       admiralty_assets
       admiralty_auth
+      admiralty_reports
       admiralty_tenants
       core
 
@@ -817,6 +826,7 @@ DEPENDENCIES
   admiralty!
   admiralty_assets!
   admiralty_auth!
+  admiralty_reports!
   admiralty_tenants!
   annotate
   api!

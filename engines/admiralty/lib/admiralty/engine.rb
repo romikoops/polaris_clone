@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'admiralty_auth'
+require 'admiralty_reports'
 require 'admiralty_tenants'
 
 module Admiralty
