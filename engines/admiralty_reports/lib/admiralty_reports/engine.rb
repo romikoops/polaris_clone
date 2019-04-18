@@ -3,7 +3,6 @@
 require 'admiralty_assets'
 require 'admiralty_auth'
 require 'core'
-require 'legacy'
 
 module AdmiraltyReports
   class Engine < ::Rails::Engine

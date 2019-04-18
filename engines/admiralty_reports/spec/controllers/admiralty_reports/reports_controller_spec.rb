@@ -11,15 +11,15 @@ module AdmiraltyReports
       allow_any_instance_of(AdmiraltyAuth::AuthorizedController).to receive(:authenticate_user!).and_return(true)
     end
 
-    let!(:tenants) do
+    let(:tenants) do
       [
-        FactoryBot.create(:legacy_tenant, scope: { 'open_quotation_tool' => true }),
-        FactoryBot.create(:legacy_tenant, scope: { 'open_quotation_tool' => false })
+        Tenant.create(name: 'Demo1', subdomain: 'demo1', scope: { 'open_quotation_tool' => true }),
+        Tenant.create(name: 'Demo2', subdomain: 'demo2', scope: { 'open_quotation_tool' => false })
       ]
     end
 
     describe 'GET #index' do
-      let(:tenant) { tenants.first }
+      let!(:tenant) { tenants.first }
 
       it 'renders page' do
         get :index
@@ -31,7 +31,7 @@ module AdmiraltyReports
 
     describe 'GET #show' do
       context 'quotation tool' do
-        let(:tenant) { tenants.first }
+        let!(:tenant) { tenants.first }
 
         it 'renders page' do
           get :show, params: { id: tenant.id }
@@ -42,7 +42,7 @@ module AdmiraltyReports
       end
 
       context 'booking tool' do
-        let(:tenant) { tenants.second }
+        let!(:tenant) { tenants.second }
 
         it 'renders page' do
           get :show, params: { id: tenant.id }

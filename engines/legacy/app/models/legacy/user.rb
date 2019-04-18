@@ -4,9 +4,9 @@ module Legacy
   class User < ApplicationRecord
     self.table_name = 'users'
 
-    belongs_to :tenant
-
     has_paper_trail
+
+    belongs_to :tenant
   end
 end
 

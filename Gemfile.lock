@@ -51,7 +51,6 @@ PATH
       admiralty_assets
       admiralty_auth
       core
-      legacy
 
 PATH
   remote: engines/admiralty_tenants

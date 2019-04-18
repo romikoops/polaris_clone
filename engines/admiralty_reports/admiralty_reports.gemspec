@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'admiralty_assets'
   s.add_dependency 'admiralty_auth'
   s.add_dependency 'core'
-  s.add_dependency 'legacy'
 
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'ffaker'
@@ -30,5 +29,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'simplecov-cobertura'
   s.add_development_dependency 'simplecov-lcov'
-  s.add_development_dependency 'timecop'
 end
