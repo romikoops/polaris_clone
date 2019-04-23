@@ -27,7 +27,7 @@ module ExcelDataServices
       end
 
       def errors_obj
-        { has_errors: true, errors: errors }
+        { has_errors: !valid?, errors: errors.select { |error| error[:type] == :error } }
       end
 
       private
