@@ -25,7 +25,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @content               = {}
     @hide_grand_total = {}
     @has_legacy_charges = {}
-    @scope = @shipment.tenant.scope
+    @scope         = ::Tenants::ScopeService.new(user: @shipment.user).fetch
     @pricing_data = {}
 
     @cargo_data = {
@@ -243,7 +243,8 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         content: @content,
         hide_grand_total: @hide_grand_total,
         has_legacy_charges: @has_legacy_charges,
-        pricing_data: @pricing_data
+        pricing_data: @pricing_data,
+        scope: @scope
       }
     )
     response = BreezyPDFLite::RenderRequest.new(

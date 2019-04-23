@@ -130,6 +130,36 @@ function getTenant () {
   }
 }
 
+function getScope () {
+  function request () {
+    return { type: appConstants.FETCH_SCOPE_REQUEST }
+  }
+
+  function success (payload) {
+    return { type: appConstants.FETCH_SCOPE_SUCCESS, payload }
+  }
+
+  function failure (error) {
+    return { type: appConstants.FETCH_SCOPE_ERROR, error }
+  }
+
+  return (dispatch) => {
+  
+    dispatch(request)
+
+    appService.getScope().then(
+      (resp) => {
+        dispatch(success(resp.data))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+
 function fetchCurrencies (type) {
   function request (currencyReq) {
     return { type: appConstants.FETCH_CURRENCIES_REQUEST, payload: currencyReq }
@@ -377,7 +407,8 @@ export const appActions = {
   setTenantCurrencyRates,
   setTenants,
   setTheme,
-  toggleTenantCurrencyMode
+  toggleTenantCurrencyMode,
+  getScope
 }
 
 export default appActions

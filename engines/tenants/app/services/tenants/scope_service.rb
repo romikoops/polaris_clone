@@ -93,7 +93,8 @@ module Tenants
     }.freeze
 
     def initialize(user:)
-      @hierarchy = HierarchyService.new(user: user).fetch
+      tenants_user = ::Tenants::User.find_by(legacy_id: user&.id)
+      @hierarchy = HierarchyService.new(user: tenants_user).fetch
     end
 
     def fetch(key = nil)
@@ -104,7 +105,9 @@ module Tenants
 
       final_scope = DEFAULT_SCOPE.merge(hierarchy_result_scope)
 
-      key ? final_scope.fetch(key.to_sym, nil) : final_scope
+      result = key ? final_scope.fetch(key.to_sym, nil) : final_scope
+
+      result.is_a?(Hash) ? result.with_indifferent_access : result
     end
 
     private

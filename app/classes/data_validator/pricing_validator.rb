@@ -20,6 +20,7 @@ module DataValidator
       @fee_keys = {}
       @examples = []
       @sheet_rows = []
+      @scope = ::Tenants::ScopeService.new(user: @user).fetch
     end
 
     def perform
@@ -172,7 +173,7 @@ module DataValidator
 
         new_cargo = {}
         key_hash.each do |key, value|
-          if key == 'quantity' && @tenant.scope.dig('consolidation', 'cargo', 'frontend')
+          if key == 'quantity' && @scope.dig('consolidation', 'cargo', 'frontend')
             new_cargo['payload_in_kg'] = new_cargo['payload_in_kg'].to_d / column[value].to_d
           end
           new_cargo[key] = column[value]

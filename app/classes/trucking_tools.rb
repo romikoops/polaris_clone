@@ -156,8 +156,7 @@ module TruckingTools
     result
   end
 
-  def filter_trucking_pricings(trucking_pricing, cargo_values, _direction)
-    scope = trucking_pricing.tenant.scope
+  def filter_trucking_pricings(trucking_pricing, cargo_values, scope)
     return {} if cargo_values['weight'].to_i.zero?
 
     case trucking_pricing.modifier
@@ -253,12 +252,13 @@ module TruckingTools
         'number_of_items' => 0
       }
     }
+    consolidation = ::Tenants::ScopeService.new(user: cargos.first.shipment.user).fetch(:consolidation)
 
-    if trucking_pricing.tenant.scope.dig('consolidation', 'trucking', 'load_meterage_only')
+    if consolidation.dig('trucking', 'load_meterage_only')
       consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
-    elsif trucking_pricing.tenant.scope.dig('consolidation', 'trucking', 'comparative')
+    elsif consolidation.dig('trucking', 'comparative')
       comparative_load_meterage(trucking_pricing, cargo_object, cargos)
-    elsif trucking_pricing.tenant.scope.dig('consolidation', 'trucking', 'calculation')
+    elsif consolidation.dig('trucking', 'calculation')
       consolidated_trucking_cargo(trucking_pricing, cargo_object, cargos)
     else
       cargos.each do |cargo|
@@ -363,7 +363,7 @@ module TruckingTools
     end
   end
 
-  def calc_trucking_price(trucking_pricing, cargos, kms, carriage)
+  def calc_trucking_price(trucking_pricing, cargos, kms, carriage, user)
     direction = carriage == 'pre' ? 'export' : 'import'
     cargo_object = if trucking_pricing.load_type == 'container'
                      get_container_object(cargos)
@@ -372,11 +372,11 @@ module TruckingTools
                    end
 
     trucking_pricings = {}
-    scope = trucking_pricing.tenant.scope
+    scope = ::Tenants::ScopeService.new(user: user).fetch
     return {} if trucking_pricing.rates.empty?
 
     cargo_object.each do |stackable_type, cargo_values|
-      trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, direction)
+      trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, scope)
     end
 
     fees = {}

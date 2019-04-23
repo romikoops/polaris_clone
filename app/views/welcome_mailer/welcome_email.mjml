@@ -22,11 +22,11 @@
   </mj-column>
   <mj-column>
     <mj-navbar base-url="" hamburger="hamburger" ico-color="white">
-      <% unless @user.tenant.scope.dig('links', 'about').blank? %>
-        <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+      <% unless @scope.dig('links', 'about').blank? %>
+        <mj-navbar-link href="<%= @scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
       <% end %>
-      <% unless @user.tenant.scope.dig('links', 'support').blank? %>
-        <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'support')%>" color="white">help</mj-navbar-link>
+      <% unless @scope.dig('links', 'support').blank? %>
+        <mj-navbar-link href="<%= @scope.dig('links', 'support')%>" color="white">help</mj-navbar-link>
       <% end %>
     </mj-navbar>
   </mj-column>
@@ -51,8 +51,8 @@
         <% end %>
         <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" />
       <% end %>
-      <% if @tenant.scope.dig('links', 'shop') %>
-        <mj-button font-family="Helvetica" background-color="<%= secondary_color%>" color="white" href="<%=@tenant.scope.dig('links','shop')%>">
+      <% if @scope.dig('links', 'shop') %>
+        <mj-button font-family="Helvetica" background-color="<%= secondary_color%>" color="white" href="<%=@scope.dig('links','shop')%>">
             Visit the <%= @tenant.name %> Online Shop
         </mj-button>
       <% end %>
@@ -68,11 +68,11 @@
     </mj-column>
   </mj-section>
 </mj-wrapper>
-<% if @tenant.scope.dig('links', 'home') %>
+<% if @scope.dig('links', 'home') %>
   <mj-wrapper full-width="full-width" padding="0px">
     <mj-section full-width="full-width">
       <mj-column width="100%" padding="0 2.5%">
-         <mj-button font-family="Helvetica" background-color="<%= primary_color%>" color="white" href="<%=@tenant.scope.dig('links','home')%>">
+         <mj-button font-family="Helvetica" background-color="<%= primary_color%>" color="white" href="<%=@scope.dig('links','home')%>">
           Visit the <%= @tenant.name %> homepage
          </mj-button>
       </mj-column>

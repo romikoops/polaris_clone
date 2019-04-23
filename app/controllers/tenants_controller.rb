@@ -24,10 +24,18 @@ class TenantsController < ApplicationController
     end
   end
 
+
+  def fetch_scope
+    scope = ::Tenants::ScopeService.new(user: current_user).fetch
+    response_handler(scope)
+  end
+
   def show
     tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : params[:id])
-
-    response_handler(tenant: tenant)
+    scope = ::Tenants::ScopeService.new(user: current_user).fetch
+    tenant_json = tenant.as_json
+    tenant_json['scope'] = scope
+    response_handler(tenant: tenant_json)
   end
 
   def current

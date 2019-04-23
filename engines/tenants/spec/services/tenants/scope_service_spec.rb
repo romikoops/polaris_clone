@@ -4,7 +4,9 @@ require 'rails_helper'
 
 RSpec.describe Tenants::ScopeService do
   describe '#fetch' do
-    let(:user) { FactoryBot.create(:tenants_user) }
+    let(:legacy_user) { FactoryBot.create(:legacy_user) }
+    let(:tenants_user) { ::Tenants::User.find_by(legacy_id: legacy_user.id) }
+    let!(:scope) { FactoryBot.create(:tenants_scope, target: tenants_user) }
 
     context 'no key given' do
       let(:expected_scope) do
@@ -61,7 +63,7 @@ RSpec.describe Tenants::ScopeService do
       end
 
       it 'returns the entire correct scope' do
-        expect(described_class.new(user: user).fetch).to eq(expected_scope)
+        expect(described_class.new(user: legacy_user).fetch).to eq(expected_scope.with_indifferent_access)
       end
     end
 
@@ -69,7 +71,7 @@ RSpec.describe Tenants::ScopeService do
       let(:key) { :quote_notes }
 
       it 'returns correct value of the correct scope' do
-        expect(described_class.new(user: user).fetch(key)).to eq(
+        expect(described_class.new(user: legacy_user).fetch(key)).to eq(
           'Quote Notes from the FactoryBot Factory'
         )
       end

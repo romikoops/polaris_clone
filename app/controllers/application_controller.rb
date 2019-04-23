@@ -26,8 +26,8 @@ class ApplicationController < ActionController::API
 
   def require_authentication!
     raise ApplicationError::NotAuthenticated unless user_signed_in?
-
-    require_non_guest_authentication! if current_tenant.scope['closed_shop']
+    scope = ::Tenants::ScopeService.new(user: current_user).fetch
+    require_non_guest_authentication! if scope['closed_shop']
   end
 
   def require_non_guest_authentication!
@@ -46,6 +46,7 @@ class ApplicationController < ActionController::API
   end
 
   def set_raven_context
+    scope = ::Tenants::ScopeService.new(user: current_user).fetch
     Raven.user_context(
       email: current_user&.email,
       id: current_user&.id,
@@ -60,7 +61,7 @@ class ApplicationController < ActionController::API
       agency: current_user&.agency&.slice(%i(id name)),
       params: params.to_unsafe_h,
       url: request.url,
-      scope: current_tenant&.scope
+      scope: scope
     )
   end
 

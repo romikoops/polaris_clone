@@ -15,6 +15,7 @@ module PriceCheckerService
       @trucking_data = shipment_data[:trucking] || {}
       @service_level = shipment_data[:service_level]
       @cargo_units = cargo_unit_const.extract(@shipment_data[:cargo_units])
+      @scope         = ::Tenants::ScopeService.new(user: @user).fetch
     end
 
     def perform
@@ -170,7 +171,7 @@ module PriceCheckerService
       is_agg_cargo = !@shipment.aggregated_cargo.nil?
       cargo_unit_array = is_agg_cargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
 
-      if @user.tenant.scope.dig('consolidation', 'cargo') && cargo_unit_array.first.is_a?(CargoItem)
+      if @scope.dig('consolidation', 'cargo') && cargo_unit_array.first.is_a?(CargoItem)
         cargo_unit_array = consolidate_cargo(cargo_unit_array, @itinerary.mode_of_transport)
       end
       cargo_unit_array.each do |cargo_unit|

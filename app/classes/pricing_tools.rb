@@ -96,8 +96,8 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def cargo_hash_for_local_charges(cargos, tenant) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    if tenant.scope.dig('consolidation', 'cargo', 'backend')
+  def cargo_hash_for_local_charges(cargos, consolidation) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    if consolidation.dig('cargo', 'backend')
       cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
         weight = get_cargo_weight(cargo_unit)
 
@@ -128,7 +128,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
     charge_object.dig('fees')&.each do |k, fee|
       totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[k]['currency'] ||= fee['currency']
-      totals[k]['value'] += fee_value(fee, cargo_hash, user.tenant.scope)
+      totals[k]['value'] += fee_value(fee, cargo_hash, ::Tenants::ScopeService.new(user: @user).fetch(:continuous_rounding))
     end
 
     converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
@@ -151,7 +151,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
                         else
                           cargos.select { |c| c.size_class == charge_object['load_type'] }
                         end
-      cargo_hash_for_local_charges(relevant_cargos, user.tenant).map do |cargo_hash|
+      cargo_hash_for_local_charges(relevant_cargos, ::Tenants::ScopeService.new(user: @user).fetch(:consolidation)).map do |cargo_hash|
         local_charge_calculation_block(charge_object, cargo_hash, user)
       end
     end
@@ -179,7 +179,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
       totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[k]['currency'] ||= fee['currency']
 
-      totals[k]['value'] += fee_value(fee, cargo_hash, user.tenant.scope)
+      totals[k]['value'] += fee_value(fee, cargo_hash, ::Tenants::ScopeService.new(user: @user).fetch(:continous_rounding))
     end
 
     converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
@@ -207,7 +207,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
       if !fee['unknown']
         totals[k]['currency'] ||= fee['currency']
 
-        totals[k]['value'] += fee_value(fee, cargo_hash, user.tenant.scope)
+        totals[k]['value'] += fee_value(fee, cargo_hash, ::Tenants::ScopeService.new(user: @user).fetch(:continous_rounding))
       else
         totals[k]['value'] += 0
       end
@@ -235,9 +235,9 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
 
       totals[k]['value'] +=
         if fee['hw_rate_basis']
-          heavy_weight_fee_value(fee, cargo, user.tenant.scope)
+          heavy_weight_fee_value(fee, cargo, ::Tenants::ScopeService.new(user: @user).fetch(:continous_rounding))
         else
-          fee_value(fee, get_cargo_hash(cargo, mot), user.tenant.scope)
+          fee_value(fee, get_cargo_hash(cargo, mot), ::Tenants::ScopeService.new(user: @user).fetch(:continous_rounding))
         end
     end
 
@@ -261,7 +261,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
       totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[k]['currency'] ||= fee['currency']
 
-      totals[k]['value'] += fee_value(fee, get_cargo_hash(container, mot), user.tenant.scope)
+      totals[k]['value'] += fee_value(fee, get_cargo_hash(container, mot), ::Tenants::ScopeService.new(user: @user).fetch(:continous_rounding))
     end
 
     cargo_rate_value = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
@@ -386,7 +386,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def heavy_weight_fee_value(fee, cargo, scope)
+  def heavy_weight_fee_value(fee, cargo, continuous_rounding)
     weight_kg = cargo.try(:weight) || cargo.try(:payload_in_kg)
     quantity  = cargo.try(:quantity) || 1
     cbm = cargo.volume
@@ -409,10 +409,10 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
                fee_range.nil? ? 0 : fee_range['rate'] * quantity
              end
 
-    round_fee(result, scope['continuous_rounding'])
+    round_fee(result, continuous_rounding)
   end
 
-  def fee_value(fee, cargo_hash, scope) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def fee_value(fee, cargo_hash, continuous_rounding) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     rate_basis = RateBasis.get_internal_key(fee['rate_basis'])
     fee_value = fee['value'] || fee['rate']
     result = case rate_basis
@@ -466,7 +466,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
                handle_range_fee(fee, cargo_hash)
              end
 
-    round_fee(result, scope['continuous_rounding'])
+    round_fee(result, continuous_rounding)
   end
 
   def get_cargo_hash(cargo, mot)

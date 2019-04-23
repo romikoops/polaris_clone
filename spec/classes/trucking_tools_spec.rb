@@ -8,6 +8,7 @@ RSpec.describe TruckingTools do
   let(:tenant) { create(:tenant) }
   let(:trip) { create(:trip) }
   let(:user) { create(:user, tenant: tenant) }
+  let(:tenants_user) { ::Tenants::User.find_by(legacy_id: user.id) }
   let(:shipment) { create(:shipment, load_type: load_type, direction: direction, user: user, tenant: tenant, origin_nexus: origin_nexus, destination_nexus: destination_nexus, trip: itinerary.trips.first, itinerary: itinerary) }
   let(:origin_nexus) { create(:nexus, hubs: [origin_hub]) }
   let(:destination_nexus) { create(:nexus, hubs: [destination_hub]) }
@@ -106,11 +107,7 @@ RSpec.describe TruckingTools do
                        dimension_z: 150,
                        payload_in_kg: 400,
                        quantity: 2)
-      tenant.scope['consolidation'] = {
-        'trucking' => {
-          'calculation' => true
-        }
-      }
+      create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'calculation': true } } })
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 250, load_meterage: {}, tenant: tenant)
       cargo_object = described_class.get_cargo_item_object(trucking_pricing, [cargo_1, cargo_2])
       expect(cargo_object['stackable']['weight']).to eq(1056)
@@ -140,11 +137,7 @@ RSpec.describe TruckingTools do
                payload_in_kg: 168.0 / 32.0,
                quantity: 32)
       ]
-      tenant.scope['consolidation'] = {
-        'trucking' => {
-          'comparative' => true
-        }
-      }
+      create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'comparative': true } } })
       trucking_pricing = create(:trucking_pricing,
                                 cbm_ratio: 200,
                                 load_meterage: {
@@ -159,11 +152,7 @@ RSpec.describe TruckingTools do
     it 'correctly consolidates the cargo values for scope consolidation.trucking.calculation with agg cargo' do
       aggregated_cargo = create(:aggregated_cargo, shipment_id: shipment.id, volume: 1.5, weight: 3000)
 
-      tenant.scope['consolidation'] = {
-        'trucking' => {
-          'calculation' => true
-        }
-      }
+      create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'calculation': true } } })
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 250, load_meterage: {}, tenant: tenant)
       cargo_object = described_class.get_cargo_item_object(trucking_pricing, [aggregated_cargo])
       expect(cargo_object['stackable']['weight']).to eq(3000)
@@ -184,11 +173,8 @@ RSpec.describe TruckingTools do
                        dimension_z: 150,
                        payload_in_kg: 400,
                        quantity: 2)
-      tenant.scope['consolidation'] = {
-        'trucking' => {
-          'load_meterage_only' => true
-        }
-      }
+
+      create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'load_meterage_only': true } } })
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 250, load_meterage: {}, tenant: tenant)
       cargo_object = described_class.get_cargo_item_object(trucking_pricing, [cargo_1, cargo_2])
       expect(cargo_object['stackable']['weight']).to eq(1136)

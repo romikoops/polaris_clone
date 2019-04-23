@@ -10,8 +10,6 @@ FactoryBot.define do
 
     after(:create) do |user, evaluator|
       user.activate! if evaluator.activate
-
-      FactoryBot.create(:tenants_scope, target: user)
     end
   end
 end

@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/browser'
 import { authenticationConstants } from '../constants'
 import { authenticationService } from '../services'
 import {
- alertActions, shipmentActions, adminActions, userActions, tenantActions 
+ alertActions, shipmentActions, adminActions, userActions, tenantActions, appActions
 } from "."
 import getSubdomain from '../helpers/subdomain'
 
@@ -61,6 +61,7 @@ function login (data) {
       (response) => {
         const shipmentReq = data.req
         dispatch(success(response.data))
+        dispatch(appActions.getScope())
 
         if (shipmentReq) {
           if (['shipper', 'agent'].includes(response.data.role.name)) {
