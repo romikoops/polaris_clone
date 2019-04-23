@@ -16,17 +16,6 @@ module Tenants
       end
     end
 
-    def member_type
-      case member.class.to_s
-      when 'Tenants::User'
-        'client'
-      when 'Tenants::Group'
-        'group'
-      when 'Tenants::Company'
-        'company'
-      end
-    end
-
     def member_email
       case member.class.to_s
       when 'Tenants::User'

@@ -1,6 +1,8 @@
 module Tenants
   class Company < ApplicationRecord
     include PgSearch
+
+    has_one :scope, as: :target, class_name: 'Tenants::Scope'
     has_many :memberships, as: :member
     has_many :groups, through: :memberships
     belongs_to :address, class_name: 'Legacy::Address', optional: true

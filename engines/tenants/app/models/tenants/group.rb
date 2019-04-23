@@ -2,10 +2,11 @@
 
 module Tenants
   class Group < ApplicationRecord
+    include PgSearch
+
+    has_one :scope, as: :target, class_name: 'Tenants::Scope'
     belongs_to :tenant, class_name: 'Tenants::Tenant'
     has_many :memberships, class_name: 'Tenants::Membership'
-    has_many :groups, through: :memberships
-    include PgSearch
 
     pg_search_scope :search, against: %i(name), using: {
       tsearch: { prefix: true }
@@ -14,12 +15,8 @@ module Tenants
     def members
       memberships.map do |m|
         member = m.member
-        member&.legacy if member.is_a?(Tenants::User)
+        member.responds_to?(:legacy) ? member.legacy : member
       end
-    end
-
-    def groups
-      ::Tenants::Group.where(id: memberships.pluck(:group_id))
     end
 
     def member_list

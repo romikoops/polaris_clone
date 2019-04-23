@@ -6,13 +6,17 @@ module Tenants
       @user = user
     end
 
-    def perform
-      [user.groups,
-       user.tenant.groups,
-       user.tenant,
-       user.company.groups,
-       user.company,
-       user].flatten
+    def fetch
+      return [] if user.nil?
+
+      [
+        user.tenant&.groups,
+        user.tenant,
+        user.company&.groups,
+        user.company,
+        user.groups,
+        user
+      ].flatten.compact
     end
 
     private

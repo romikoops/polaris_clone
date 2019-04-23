@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Tenants
-  class ScopeService
+  class ScopeService # rubocop:disable Metrics/ClassLength
     DEFAULT_SCOPE = {
       links: {
         about: '',
@@ -93,15 +93,18 @@ module Tenants
     }.freeze
 
     def initialize(user:)
-      @hierarchy = HierarchyService.new(user: user).perform
+      @hierarchy = HierarchyService.new(user: user).fetch
     end
 
-    def perform
+    def fetch(key = nil)
       hierarchy_result_scope = hierarchy.each_with_object({}) do |obj, result_scope|
-        result_scope.merge!(obj.scope)
+        scope_hsh = obj.scope&.content&.symbolize_keys!
+        result_scope.merge!(scope_hsh) if scope_hsh
       end
 
-      DEFAULT_SCOPE.merge(hierarchy_result_scope)
+      final_scope = DEFAULT_SCOPE.merge(hierarchy_result_scope)
+
+      key ? final_scope.fetch(key.to_sym, nil) : final_scope
     end
 
     private
