@@ -6,12 +6,12 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import reactTriggerChange from 'react-trigger-change'
-import { AdminClientsIndex, AdminClientView } from './'
+import { AdminClientsIndex, AdminClientView } from "."
 import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
 import FormsyInput from '../FormsyInput/FormsyInput'
-import GenericError from '../../components/ErrorHandling/Generic'
+import GenericError from "../ErrorHandling/Generic"
 
 class AdminClients extends Component {
   static errorsExist (errorsObjects) {
@@ -54,9 +54,11 @@ class AdminClients extends Component {
     this.handleClientAction = this.handleClientAction.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
   }
+
   componentDidMount () {
     this.props.setCurrentUrl(this.props.match.url)
   }
+
   viewClient (client) {
     const { adminDispatch } = this.props
     adminDispatch.getClient(client.id, true)
@@ -66,15 +68,18 @@ class AdminClients extends Component {
     const { dispatch, history } = this.props
     dispatch(history.push('/admin/clients'))
   }
+
   handleClientAction (id, action) {
     const { adminDispatch } = this.props
     adminDispatch.confirmShipment(id, action)
   }
+
   resetTabIndex () {
-    this.setState ({
+    this.setState({
       tabReset: true
     })
   }
+
   toggleNewClient () {
     this.setState({
       newClientBool: !this.state.newClientBool,
@@ -82,6 +87,7 @@ class AdminClients extends Component {
       tabReset: false
     })
   }
+
   handleFormChange (event, hasError) {
     const { name, value } = event.target
     const { errors } = this.state
@@ -179,8 +185,8 @@ class AdminClients extends Component {
           }}
           required
         />
-        {suggestion &&
-            <div style={errorStyle}>
+        {suggestion && (
+<div style={errorStyle}>
               Did you mean&nbsp;
               <span
                 className="emulate_link blue_link"
@@ -191,7 +197,7 @@ class AdminClients extends Component {
                 {suggestion.full}
               </span>?
             </div>
-        }
+)}
       </div>
     )
 
@@ -418,8 +424,7 @@ class AdminClients extends Component {
                 onChange={this.handleFormChange}
                 submitAttempted={this.state.newClientAttempt}
                 validations={{
-                  matchesPassword: (values, value) =>
-                    (this.tmpNewClient || newClient).password === value
+                  matchesPassword: (values, value) => (this.tmpNewClient || newClient).password === value
                 }}
                 validationErrors={{
                   matchesPassword: t('errors:mustMatchPassword'),
