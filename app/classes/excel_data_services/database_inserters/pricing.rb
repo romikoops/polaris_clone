@@ -13,7 +13,7 @@ module ExcelDataServices
 
           hub_names = [row.origin_name, row.destination_name]
           stops = find_or_initialize_stops(hub_names, itinerary)
-          itinerary.stops << stops
+          itinerary.stops << stops - itinerary.stops
 
           add_stats(itinerary)
           itinerary.save!
