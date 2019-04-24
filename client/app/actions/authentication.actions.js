@@ -62,7 +62,6 @@ function login (data) {
       (response) => {
         const shipmentReq = data.req
         dispatch(success(response.data))
-        dispatch(appActions.getScope())
 
         if (shipmentReq) {
           if (['shipper', 'agent'].includes(response.data.role.name)) {
@@ -87,6 +86,7 @@ function login (data) {
         } else {
           dispatch(closeLogin())
         }
+        dispatch(appActions.getScope())
       },
       (error) => {
         error.then((errorData) => {

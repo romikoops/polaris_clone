@@ -153,6 +153,16 @@ export default function app (state = {}, action) {
       }
     }
 
+    case appConstants.FETCH_SCOPE_SUCCESS: {
+      return {
+        ...state,
+        tenant: {
+          ...state.tenant,
+          scope: action.payload
+        }
+      }
+    }
+
     case appConstants.SET_CURRENCY_SUCCESS: {
       return {
         ...state,
