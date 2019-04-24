@@ -5,6 +5,8 @@ class Stop < ApplicationRecord
   belongs_to :hub
   has_many :layovers, dependent: :destroy
 
+  validates_uniqueness_of :index, scope: %i(itinerary_id hub_id)
+
   def as_options_json(options = {})
     new_options = options.reverse_merge(
       include: {
