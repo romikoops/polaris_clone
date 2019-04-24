@@ -5,6 +5,8 @@ module Legacy
     self.table_name = 'users'
 
     has_paper_trail
+
+    belongs_to :tenant
     
     def full_name
       "#{first_name} #{last_name}"
