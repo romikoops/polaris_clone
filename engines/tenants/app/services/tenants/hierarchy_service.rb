@@ -2,12 +2,14 @@
 
 module Tenants
   class HierarchyService
-    def initialize(user:)
+    def initialize(user: nil, tenant: nil)
       @user = user
+      @tenant = tenant
     end
 
     def fetch
-      return [] if user.nil?
+      return [] if tenant.nil? && user.nil?
+      return [tenant] if tenant.present? && user.nil?
 
       [
         user.tenant&.groups,
@@ -21,6 +23,6 @@ module Tenants
 
     private
 
-    attr_reader :user
+    attr_reader :user, :tenant
   end
 end
