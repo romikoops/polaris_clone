@@ -38,6 +38,7 @@ class ApplicationController < ActionController::API
 
   def current_tenant
     @current_tenant ||= Tenant.find_by(id: params[:tenant_id])
+    @current_tenant ||= Tenant.find_by(id: params[:id])
   end
 
   def append_info_to_payload(payload)
@@ -46,8 +47,10 @@ class ApplicationController < ActionController::API
   end
 
   def set_raven_context
-    tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant&.id)
-    scope = ::Tenants::ScopeService.new(user: current_user, tenant: tenants_tenant).fetch
+    scope = ::Tenants::ScopeService.new(
+      user: current_user,
+      tenant: ::Tenants::Tenant.find_by(legacy_id: current_tenant&.id)
+    ).fetch
     Raven.user_context(
       email: current_user&.email,
       id: current_user&.id,

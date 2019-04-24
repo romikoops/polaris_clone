@@ -98,13 +98,10 @@ module Tenants
     end
 
     def fetch(key = nil)
-     
-      hierarchy_result_scope = hierarchy.each_with_object({}) do |obj, result_scope|
-        scope_hsh = obj.scope&.content&.symbolize_keys!
+      final_scope = hierarchy.each_with_object(DEFAULT_SCOPE.dup) do |obj, result_scope|
+        scope_hsh = obj.scope&.content&.deep_symbolize_keys!
         result_scope.deep_merge!(scope_hsh) if scope_hsh
       end
-
-      final_scope = DEFAULT_SCOPE.deep_merge(hierarchy_result_scope)
 
       result = key ? final_scope.fetch(key.to_sym, nil) : final_scope
 

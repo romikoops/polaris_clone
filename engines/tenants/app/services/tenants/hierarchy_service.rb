@@ -8,8 +8,8 @@ module Tenants
     end
 
     def fetch
-      return [tenant] if tenant.present? && user.nil?
       return [] if tenant.nil? && user.nil?
+      return [tenant] if tenant.present? && user.nil?
 
       [
         user.tenant&.groups,
