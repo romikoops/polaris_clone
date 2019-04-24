@@ -25,7 +25,8 @@ class RouteSection extends React.PureComponent {
       truckingAvailability: {
         origin: null,
         destination: null
-      }
+      },
+      carriageOptions: props.scope.carriage_options
     }
 
     this.handleCarriageChange = this.handleCarriageChange.bind(this)
@@ -53,7 +54,6 @@ class RouteSection extends React.PureComponent {
     }
 
     const { scope, shipment } = props
-
     Object.entries(scope.carriage_options).forEach(([carriage, option]) => {
       if (option[shipment.direction] !== 'mandatory') return
 
@@ -65,7 +65,7 @@ class RouteSection extends React.PureComponent {
 
   static getDerivedStateFromProps (nextProps, prevState) {
     const {
-      lookupTablesForRoutes, routes, shipment, tenant, bookingProcessDispatch, shipmentDispatch, addressErrors
+      lookupTablesForRoutes, routes, shipment, tenant, bookingProcessDispatch, shipmentDispatch, addressErrors, scope
     } = nextProps
     const { collapsedAddressFields } = prevState
     const {
@@ -160,8 +160,21 @@ class RouteSection extends React.PureComponent {
     if (addressErrors.destination) {
       nextState.collapsedAddressFields.destination = false
     }
+    nextState.carriageOptions = scope.carriage_options
 
     return nextState
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    const { carriageOptions } = this.state
+    const { scope, shipment } = this.props
+    if (carriageOptions === prevState.carriageOptions) return
+  
+    Object.entries(scope.carriage_options).forEach(([carriage, option]) => {
+      if (option[shipment.direction] !== 'mandatory') return
+
+      this.handleCarriageChange({ target: { name: camelize(carriage), checked: true } }, { force: true })
+    })
   }
 
   handleTruckingDetailsChange (e) {
