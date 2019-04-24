@@ -30,6 +30,7 @@ function logout (closeWindow) {
     dispatch(tenantActions.logOut())
     authenticationService.logout()
     dispatch(lo())
+    dispatch(appActions.getScope())
   }
 }
 

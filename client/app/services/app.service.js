@@ -38,7 +38,7 @@ function getScope () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/tenants/id/scope`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/tenants/scope/refresh`, requestOptions).then(handleResponse)
 }
 
 function setTenants () {
