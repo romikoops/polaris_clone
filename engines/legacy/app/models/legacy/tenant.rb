@@ -12,7 +12,6 @@ module Legacy
     def scope_for(user:)
       ::Tenants::ScopeService.new(target: user).fetch
     end
-
   end
 end
 

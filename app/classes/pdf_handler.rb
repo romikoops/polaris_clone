@@ -25,7 +25,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @content               = {}
     @hide_grand_total = {}
     @has_legacy_charges = {}
-    @scope         = ::Tenants::ScopeService.new(user: @shipment.user).fetch
+    @scope = ::Tenants::ScopeService.new(user: @shipment.user).fetch
     @pricing_data = {}
 
     @cargo_data = {

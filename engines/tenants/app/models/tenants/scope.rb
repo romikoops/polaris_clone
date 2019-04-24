@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tenants
   class Scope < ApplicationRecord
     belongs_to :target, polymorphic: true

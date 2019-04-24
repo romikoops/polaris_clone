@@ -144,7 +144,6 @@ function getScope () {
   }
 
   return (dispatch) => {
-  
     dispatch(request)
 
     appService.getScope().then(

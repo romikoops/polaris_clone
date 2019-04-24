@@ -13,4 +13,3 @@ end
 Rake::Task['db:migrate'].enhance do
   Rake::Task['tenants:scopes'].invoke
 end
-

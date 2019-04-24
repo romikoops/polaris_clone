@@ -161,26 +161,24 @@ RSpec.describe PricingTools do
 
   describe '.cargo_hash_for_local_charges' do
     context 'with backend consolidation' do
-
       it 'returns the correct number of objects for consolidation scope' do
         fcl_20 = create(:container, shipment_id: shipment.id, size_class: 'fcl_20', cargo_class: 'fcl_20')
         fcl_40 = create(:container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
         fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
         cargos = [fcl_20, fcl_40, fcl_40_hq]
-        scope = {cargo: { backend: true }}.with_indifferent_access
+        scope = { cargo: { backend: true } }.with_indifferent_access
         cargo_objects = described_class.cargo_hash_for_local_charges(cargos, scope)
         expect(cargo_objects.length).to eq(1)
       end
     end
 
     context 'without backend consolidation' do
-
       it 'returns the correct number of objects for consolidation scope = false' do
         fcl_20 = create(:container, shipment_id: shipment.id, size_class: 'fcl_20', cargo_class: 'fcl_20')
         fcl_40 = create(:container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
         fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
         cargos = [fcl_20, fcl_40, fcl_40_hq]
-        scope = {cargo: { backend: false }}.with_indifferent_access
+        scope = { cargo: { backend: false } }.with_indifferent_access
         cargo_objects = described_class.cargo_hash_for_local_charges(cargos, scope)
         expect(cargo_objects.length).to eq(3)
       end

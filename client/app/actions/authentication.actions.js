@@ -3,8 +3,8 @@ import * as Sentry from '@sentry/browser'
 import { authenticationConstants } from '../constants'
 import { authenticationService } from '../services'
 import {
- alertActions, shipmentActions, adminActions, userActions, tenantActions, appActions
-} from "."
+  alertActions, shipmentActions, adminActions, userActions, tenantActions, appActions
+} from '.'
 import getSubdomain from '../helpers/subdomain'
 
 const { localStorage } = window

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tenants
   class Company < ApplicationRecord
     include PgSearch
@@ -12,15 +14,15 @@ module Tenants
       tsearch: { prefix: true }
     }
     pg_search_scope :country_search,
-    against: %i(name),
-    associated_against: {
-      address: {
-        country: %i(name code)
-      }
-    },
-    using: {
-      tsearch: { prefix: true }
-    }
+                    against: %i(name),
+                    associated_against: {
+                      address: {
+                        country: %i(name code)
+                      }
+                    },
+                    using: {
+                      tsearch: { prefix: true }
+                    }
 
     def groups
       ::Tenants::Group.where(id: memberships.pluck(:group_id))

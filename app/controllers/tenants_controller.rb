@@ -24,7 +24,6 @@ class TenantsController < ApplicationController
     end
   end
 
-
   def fetch_scope
     scope = ::Tenants::ScopeService.new(user: current_user).fetch
     response_handler(scope)
