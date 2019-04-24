@@ -24,11 +24,11 @@
     </mj-column>
     <mj-column>
       <mj-navbar base-url="" hamburger="hamburger" ico-color="white">
-        <% unless @user.tenant.scope.dig('links', 'about').blank? %>
-          <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+        <% unless @scope.dig('links', 'about').blank? %>
+          <mj-navbar-link href="<%= @scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
         <% end %>
-        <% unless @user.tenant.scope.dig('links', 'support').blank? %>
-          <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'support')%>" color="white">help</mj-navbar-link>
+        <% unless @scope.dig('links', 'support').blank? %>
+          <mj-navbar-link href="<%= @scope.dig('links', 'support')%>" color="white">help</mj-navbar-link>
         <% end %>
       </mj-navbar>
     </mj-column>

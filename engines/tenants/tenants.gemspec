@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'legacy'
   s.add_dependency 'mailers'
 
+  s.add_dependency 'pg_search'
   s.add_dependency 'sorcery', '~> 0.13.0'
 
   s.add_development_dependency 'factory_bot_rails'

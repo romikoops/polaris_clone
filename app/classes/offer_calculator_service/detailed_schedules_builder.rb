@@ -113,7 +113,7 @@ module OfferCalculatorService
     end
 
     def dedicated_pricings?(user)
-      user.pricings.exists? && user.tenant.scope['dedicated_pricings_only']
+      user.pricings.exists? && @scope['dedicated_pricings_only']
     end
 
     def grouped_schedules(schedules:, shipment:, user:)

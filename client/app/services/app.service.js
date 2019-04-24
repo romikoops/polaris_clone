@@ -32,6 +32,15 @@ function getTenantId () {
   return fetch(`${getApiHost()}/tenants/current`, requestOptions).then(handleResponse)
 }
 
+function getScope () {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${getTenantApiUrl()}/tenants/scope/refresh`, requestOptions).then(handleResponse)
+}
+
 function setTenants () {
   const requestOptions = {
     method: 'GET',
@@ -120,7 +129,8 @@ const appService = {
   setCurrency,
   setTenantCurrencyRates,
   setTenants,
-  toggleTenantCurrencyMode
+  toggleTenantCurrencyMode,
+  getScope
 }
 
 export default appService

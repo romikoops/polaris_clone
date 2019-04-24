@@ -3,8 +3,8 @@ import * as Sentry from '@sentry/browser'
 import { authenticationConstants } from '../constants'
 import { authenticationService } from '../services'
 import {
- alertActions, shipmentActions, adminActions, userActions, tenantActions 
-} from "."
+  alertActions, shipmentActions, adminActions, userActions, tenantActions, appActions
+} from '.'
 import getSubdomain from '../helpers/subdomain'
 
 const { localStorage } = window
@@ -30,6 +30,7 @@ function logout (closeWindow) {
     dispatch(tenantActions.logOut())
     authenticationService.logout()
     dispatch(lo())
+    dispatch(appActions.getScope())
   }
 }
 
@@ -85,6 +86,7 @@ function login (data) {
         } else {
           dispatch(closeLogin())
         }
+        dispatch(appActions.getScope())
       },
       (error) => {
         error.then((errorData) => {

@@ -4,7 +4,7 @@ require 'factory_bot_rails'
 require 'simplecov'
 
 SimpleCov.start 'rails' do
-  minimum_coverage 92 unless ENV['SKIP_COVERAGE']
+  minimum_coverage 68 unless ENV['SKIP_COVERAGE']
 
   if ENV['COVERAGE_DIR']
     command_name 'engines/tenants'

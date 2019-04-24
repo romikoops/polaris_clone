@@ -4,9 +4,13 @@ module Tenants
   class User < ApplicationRecord
     include ::Tenants::Legacy
 
-    belongs_to :legacy, class_name: '::User', optional: true
+    belongs_to :legacy, class_name: 'Legacy::User', optional: true
+    has_one :scope, as: :target, class_name: 'Tenants::Scope'
     belongs_to :tenant, optional: true
-
+    belongs_to :company, optional: true
+    has_many :memberships, as: :member
+    has_many :groups, through: :memberships, as: :member
+    has_many :margins, as: :applicable
     validates :email, presence: true, uniqueness: { scope: :tenant_id }
     authenticates_with_sorcery!
 
@@ -40,4 +44,5 @@ end
 #  unlock_token                        :string
 #  legacy_id                           :integer
 #  tenant_id                           :uuid
+#  company_id                          :uuid
 #

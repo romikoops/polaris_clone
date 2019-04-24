@@ -3,7 +3,6 @@
   <% neutral_color = '#C4C4C4' %>
   <% tenant_logo_asset = "logoLarge_" + tenant["subdomain"] + ".png" %>
   <% tenant_logo_url = tenant.theme["logoLarge"] %>
-  <% scope = tenant.scope %>
   <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
   <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
 
@@ -404,7 +403,7 @@
       <% if scope["quote_notes"] %>
         <div class="tenant-notes-row">
           <p class="">
-            <%= tenant.scope["quote_notes"] || "" %>
+            <%= scope["quote_notes"] || "" %>
           </p>
         </div>
       <% end %>

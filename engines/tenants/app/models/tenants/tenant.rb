@@ -4,8 +4,12 @@ module Tenants
   class Tenant < ApplicationRecord
     include ::Tenants::Legacy
 
-    belongs_to :legacy, class_name: '::Tenant', optional: true
+    belongs_to :legacy, class_name: 'Legacy::Tenant', optional: true
+    has_one :scope, as: :target, class_name: 'Tenants::Scope'
     has_many :users
+    has_many :margins, as: :applicable
+    has_many :memberships, as: :member
+    has_many :groups, through: :memberships, as: :member
 
     validates :subdomain, presence: true, uniqueness: true
 

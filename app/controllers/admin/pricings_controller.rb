@@ -10,10 +10,10 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     @itineraries = tenant.itineraries
     response = Rails.cache.fetch("#{@itineraries.cache_key}/pricings_index", expires_in: 12.hours) do
       @transports = TransportCategory.all.uniq
-
-      mots = tenant.scope['modes_of_transport'].keys.reject do |key|
-        !tenant.scope['modes_of_transport'][key]['container'] &&
-          !tenant.scope['modes_of_transport'][key]['cargo_item']
+      @scope = ::Tenants::ScopeService.new(user: current_user).fetch
+      mots = @scope['modes_of_transport'].keys.reject do |key|
+        !@scope['modes_of_transport'][key]['container'] &&
+          !@scope['modes_of_transport'][key]['cargo_item']
       end
       detailed_itineraries = {}
       mot_page_counts = {}
