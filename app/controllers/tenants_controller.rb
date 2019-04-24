@@ -31,7 +31,8 @@ class TenantsController < ApplicationController
 
   def show
     tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : params[:id])
-    scope = ::Tenants::ScopeService.new(user: current_user).fetch
+    tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
+    scope = ::Tenants::ScopeService.new(user: current_user, tenant: tenants_tenant).fetch
     tenant_json = tenant.as_json
     tenant_json['scope'] = scope
     response_handler(tenant: tenant_json)

@@ -92,18 +92,19 @@ module Tenants
       dedicated_pricings_only: false
     }.freeze
 
-    def initialize(user:)
+    def initialize(user: nil, tenant: nil)
       tenants_user = ::Tenants::User.find_by(legacy_id: user&.id)
-      @hierarchy = HierarchyService.new(user: tenants_user).fetch
+      @hierarchy = HierarchyService.new(user: tenants_user, tenant: tenant).fetch
     end
 
     def fetch(key = nil)
+     
       hierarchy_result_scope = hierarchy.each_with_object({}) do |obj, result_scope|
         scope_hsh = obj.scope&.content&.symbolize_keys!
-        result_scope.merge!(scope_hsh) if scope_hsh
+        result_scope.deep_merge!(scope_hsh) if scope_hsh
       end
 
-      final_scope = DEFAULT_SCOPE.merge(hierarchy_result_scope)
+      final_scope = DEFAULT_SCOPE.deep_merge(hierarchy_result_scope)
 
       result = key ? final_scope.fetch(key.to_sym, nil) : final_scope
 

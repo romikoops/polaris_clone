@@ -46,7 +46,8 @@ class ApplicationController < ActionController::API
   end
 
   def set_raven_context
-    scope = ::Tenants::ScopeService.new(user: current_user).fetch
+    tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant&.id)
+    scope = ::Tenants::ScopeService.new(user: current_user, tenant: tenants_tenant).fetch
     Raven.user_context(
       email: current_user&.email,
       id: current_user&.id,
