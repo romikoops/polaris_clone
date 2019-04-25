@@ -13,6 +13,7 @@ exports[`checked is true 1`] = `
   <label>
     <input
       checked={true}
+      className=""
       disabled={false}
       id={null}
       name="FOO_NAME"
@@ -54,6 +55,7 @@ exports[`disabled is true 1`] = `
   <label>
     <input
       checked={false}
+      className=""
       disabled={true}
       id={null}
       name="FOO_NAME"
@@ -95,6 +97,7 @@ exports[`shallow render 1`] = `
   <label>
     <input
       checked={false}
+      className=""
       disabled={false}
       id={null}
       name="FOO_NAME"
@@ -136,6 +139,7 @@ exports[`size is undefined 1`] = `
   <label>
     <input
       checked={false}
+      className=""
       disabled={false}
       id={null}
       name="FOO_NAME"
@@ -172,6 +176,7 @@ exports[`theme is falsy 1`] = `
   <label>
     <input
       checked={false}
+      className=""
       disabled={false}
       id={null}
       name="FOO_NAME"

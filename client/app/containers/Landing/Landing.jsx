@@ -29,7 +29,6 @@ class Landing extends Component {
     const {
       tenant, loggedIn, authDispatch, userDispatch, user
     } = this.props
-
     if (tenant.scope.closed_shop && (!user || user.guest || !loggedIn)) {
       authDispatch.showLogin()
     } else if (loggedIn) {

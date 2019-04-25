@@ -68,7 +68,6 @@ class GetOffersSection extends React.PureComponent {
   }
 
   handleGetOffersDisabled (e) {
-    e.preventDefault()
     this.setState(prevState => ({
       shakeClass: {
         noDangerousGoodsConfirmed: this.noDangerousGoodsCondition() ? '' : 'apply_shake',

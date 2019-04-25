@@ -16,6 +16,7 @@ exports[`renders correctly 1`] = `
       name="NAME"
       onChange={null}
       onClick={null}
+      required={true}
       size={null}
       theme={
         Object {
