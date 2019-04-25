@@ -127,7 +127,7 @@ class UserProfile extends Component {
 
   render () {
     const {
-      user, addresses, theme, userDispatch, tenant, t, authentication
+      user, addresses, theme, userDispatch, tenant, t, authentication, scope
     } = this.props
     if (!user) {
       return ''
@@ -178,7 +178,7 @@ class UserProfile extends Component {
                     user={editObj}
                     style={textStyle}
                     theme={theme}
-                    scope={tenant.scope}
+                    scope={scope}
                     handleChange={this.handleChange}
                     onSave={this.saveEdit}
                     close={this.closeEdit}
@@ -195,7 +195,7 @@ class UserProfile extends Component {
                     handlePasswordChange={this.handlePasswordChange}
                     passwordResetSent={authentication.passwordEmailSent}
                     passwordResetRequested={authentication.passwordEmailRequested}
-                    hideEdit={isQuote(tenant)}
+                    hideEdit={scope.disable_profile_edit}
                   />
                 </div>
               )}
@@ -317,9 +317,10 @@ UserProfile.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { authentication } = state
+  const { authentication, app } = state
+  const { scope } = app.tenant
 
-  return { authentication }
+  return { authentication, scope }
 }
 
 function mapDispatchToProps (dispatch) {

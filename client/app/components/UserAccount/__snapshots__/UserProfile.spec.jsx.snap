@@ -192,45 +192,63 @@ exports[`shallow render 1`] = `
               onSave={[Function]}
               scope={
                 Object {
-                  "cargo_info_level": "text",
+                  "cargo_info_level": "hs_codes",
                   "carriage_options": Object {
                     "on_carriage": Object {
-                      "export": "mandatory",
-                      "import": "mandatory",
+                      "export": "optional",
+                      "import": "optional",
                     },
                     "pre_carriage": Object {
                       "export": "optional",
                       "import": "optional",
                     },
                   },
-                  "closed_quotation_tool": true,
+                  "closed_quotation_tool": false,
+                  "closed_registration": false,
+                  "closed_shop": false,
+                  "consolidate_cargo": false,
+                  "continuous_rounding": false,
                   "customs_export_paper": false,
-                  "detailed_billing": true,
+                  "dangerous_goods": false,
+                  "detailed_billing": false,
+                  "fee_detail": "key_and_name",
+                  "fixed_currency": false,
+                  "fixed_exchange_rates": false,
                   "has_customs": true,
                   "has_insurance": true,
-                  "hide_grand_total": true,
-                  "mandatory_form_fields": Object {
-                    "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
-                    "total_goods_value": 3370,
+                  "incoterm_info_level": "text",
+                  "links": Object {
+                    "about": "",
+                    "legal": "",
                   },
                   "modes_of_transport": Object {
                     "air": Object {
-                      "AIR_LOAD_TYPE": 0,
+                      "cargo_item": true,
+                      "container": true,
                     },
                     "ocean": Object {
-                      "OCEAN_LOAD_TYPE": 2,
+                      "cargo_item": true,
+                      "container": true,
                     },
                     "rail": Object {
-                      "RAIL_LOAD_TYPE": 0,
+                      "cargo_item": true,
+                      "container": true,
                     },
                     "truck": Object {
-                      "TRUCK_LOAD_TYPE": 0,
+                      "cargo_item": false,
+                      "container": false,
                     },
                   },
+                  "non_stackable_goods": true,
+                  "open_quotation_tool": false,
+                  "require_full_address": true,
+                  "show_beta_features": true,
                   "terms": Array [
-                    "FOO_TERM",
-                    "BAR_TERM",
+                    "You verify that all the information provided above is true",
+                    "You agree to the presented terms and conditions.",
+                    "Demo is to discuss the validity of the presented prices with the product owners.",
                   ],
+                  "total_dimensions": true,
                 }
               }
               style={
@@ -253,7 +271,6 @@ exports[`shallow render 1`] = `
               edit={[Function]}
               handlePasswordChange={[Function]}
               hide={false}
-              hideEdit={true}
               passwordResetSent={false}
               style={
                 Object {
