@@ -39,6 +39,7 @@ RSpec.describe ExcelDataServices::DataValidators::Base do
   describe '#errors_obj' do
     it 'return the correct object' do
       expect(base_validator).to receive(:errors).and_return([{ message: '123', type: :error }])
+      expect(base_validator).to receive(:valid?).and_return(false)
       expect(base_validator.errors_obj).to eq(has_errors: true, errors: [{ message: '123', type: :error }])
     end
   end
