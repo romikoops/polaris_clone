@@ -318,7 +318,7 @@ UserProfile.defaultProps = {
 
 function mapStateToProps (state) {
   const { authentication, app } = state
-  const   { scope } = app.tenant
+  const { scope } = app.tenant
 
   return { authentication, scope }
 }
