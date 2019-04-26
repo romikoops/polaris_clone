@@ -30,6 +30,7 @@ function CheckboxWrapper ({
           onChange={onChange}
           size={size}
           name={name}
+          required
           checked={checked}
           disabled={disabled}
         />

@@ -10,6 +10,7 @@ class Checkbox extends PureComponent {
       checked: props.checked
     }
   }
+
   componentWillReceiveProps (nextProps) {
     this.setState({ checked: nextProps.checked })
   }
@@ -23,9 +24,10 @@ class Checkbox extends PureComponent {
   handleChange (e) {
     this.props.onChange(!this.state.checked, e)
   }
+
   render () {
     const {
-      disabled, theme, name, id
+      disabled, theme, name, id, required
     } = this.props
     const { checked } = this.state
     const checkGradient = theme
@@ -47,10 +49,12 @@ class Checkbox extends PureComponent {
         <label>
           <input
             id={id}
+            className={required ? 'required' : ''}
             type="checkbox"
             checked={checked}
             disabled={disabled}
             name={name}
+            required={required}
             onChange={e => this.handleChange(e)}
           />
           <span style={sizeStyles}>

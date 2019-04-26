@@ -19,7 +19,7 @@ class ShipmentDetails extends React.PureComponent {
     super(props)
     this.state = {
       totalShipmentErrors: {},
-      getOffersDisabled: false,
+      getOffersDisabled: true,
       addressErrors: { origin: false, destination: false }
     }
 
