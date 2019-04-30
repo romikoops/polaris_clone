@@ -75,19 +75,18 @@ exports[`shallow rendering 1`] = `
         className="flex-100 layout-row layout-align-center-start layout-wrap address_padding"
       >
         <div
-          className="flex-50 layout-row layout-align-start-center"
+          className="flex layout-row layout-align-start-center"
         >
           <p
             className="flex-none"
           >
             <b>
-              Expected Time of Departure from Terminal
-              :
+              Expected Time of Departure from Terminal:
             </b>
           </p>
         </div>
         <div
-          className="flex-50 layout-row layout-align-end-center"
+          className="flex-none layout-row layout-align-end-center"
         >
           <p
             className="flex-none"
@@ -98,7 +97,7 @@ exports[`shallow rendering 1`] = `
       </div>
     </div>
     <div
-      className="connection_graphics flex-33 layout-row layout-align-center-center layout-wrap"
+      className="connection_graphics flex-40 layout-row layout-align-center-center layout-wrap"
     >
       <div
         className="flex-100 layout-row layout-align-center-center"
@@ -154,33 +153,31 @@ exports[`shallow rendering 1`] = `
             }
           />
           <br />
-          <div
-            className="flex-100 layout-row layout-align-space-between-stretch layout-wrap"
-          >
-            <p
-              className="no_m center flex-none"
-            >
-               
-              <b>
-                Estimated Transit Time
-                :
-              </b>
-            </p>
-            <p
-              className="flex-none no_m center"
-            >
-               
-              19
-               
-              days
-               
-            </p>
-          </div>
         </div>
       </div>
       <div
         className="flex-85 layout-row layout-wrap "
-      />
+      >
+        <table
+          className="flex-100"
+        >
+          <tr>
+            <td
+              className="flex-none"
+            >
+              <b>
+                Estimated Transit Time: 
+              </b>
+            </td>
+            <td
+              className="flex-none end"
+            >
+               19 
+                        days
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
     <div
       className="flex layout-row layout-wrap layout-align-center-start"
@@ -250,19 +247,18 @@ exports[`shallow rendering 1`] = `
         className="flex-100 layout-row layout-align-center-start layout-wrap address_padding"
       >
         <div
-          className="flex-50 layout-row layout-align-start-center"
+          className="flex layout-row layout-align-start-center"
         >
           <p
             className="flex-none"
           >
             <b>
-              Expected Time of Arrival at Terminal
-              :
+              Expected Time of Arrival at Terminal:
             </b>
           </p>
         </div>
         <div
-          className="flex-50 layout-row layout-align-end-center"
+          className="flex-none layout-row layout-align-end-center"
         >
           <p
             className="flex-none"

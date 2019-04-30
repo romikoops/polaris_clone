@@ -128,15 +128,14 @@ class RouteHubBox extends Component {
     const dateOfArrival = (
 
       <div className={`flex-100 layout-row layout-align-center-start layout-wrap ${styles.address_padding}`}>
-        <div className="flex-50 layout-row layout-align-start-center">
+        <div className="flex layout-row layout-align-start-center">
           <p className="flex-none">
             <b>
-              {t('bookconf:expectedArrivalTerminal')}
-:
+              {`${t('bookconf:expectedArrivalTerminal')}:`}
             </b>
           </p>
         </div>
-        <div className="flex-50 layout-row layout-align-end-center">
+        <div className="flex-none layout-row layout-align-end-center">
           <p className="flex-none">{formatDate(shipment.planned_eta)}</p>
         </div>
 
@@ -145,43 +144,19 @@ class RouteHubBox extends Component {
     const dateOfDeparture = (
 
       <div className={`flex-100 layout-row layout-align-center-start layout-wrap ${styles.address_padding}`}>
-        <div className="flex-50 layout-row layout-align-start-center">
+        <div className="flex layout-row layout-align-start-center">
           <p className="flex-none">
             <b>
-              {t('bookconf:expectedDepartureTerminal')}
-:
+              {`${t('bookconf:expectedDepartureTerminal')}:`}
             </b>
           </p>
         </div>
-        <div className="flex-50 layout-row layout-align-end-center">
+        <div className="flex-none layout-row layout-align-end-center">
           <p className="flex-none">{formatDate(shipment.planned_etd)}</p>
         </div>
 
       </div>
     )
-    const timeDiff =
-      shipment.planned_eta ? (
-        <div
-          className="flex-100 layout-row layout-align-space-between-stretch layout-wrap"
-        >
-          <p className="no_m center flex-none">
-            {' '}
-            <b>
-              {t('shipment:estimatedTransitTime')}
-:
-            </b>
-          </p>
-          <p className="flex-none no_m center">
-            {' '}
-            {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), t('common:days'))}
-            {' '}
-              days
-            {' '}
-          </p>
-        </div>
-      ) : (
-        ''
-      )
 
     return (
       <div className={` ${styles.outer_box} flex-100 layout-row layout-align-center-center`}>
@@ -207,7 +182,7 @@ class RouteHubBox extends Component {
             {dateOfDeparture}
           </div>
           <div
-            className={`${styles.connection_graphics} flex-33 layout-row layout-align-center-center layout-wrap`}
+            className={`${styles.connection_graphics} flex-40 layout-row layout-align-center-center layout-wrap`}
           >
             <div className="flex-100 layout-row layout-align-center-center">
               <div
@@ -222,65 +197,79 @@ class RouteHubBox extends Component {
                 </div>
                 <div className="flex" style={dashedLineStyles} />
                 <br />
-                {timeDiff}
               </div>
             </div>
             <div className="flex-85 layout-row layout-wrap ">
-              {voyageInfo.service_level && shipment.service_level
-                ? (
-                  <div className=" flex-100 layout-row layout-align-space-between-stretch layout-wrap">
-                    <p className="flex-none">
-                      <b>
-                        {`${t('shipment:serviceLevel')}: `}
-                      </b>
-                    </p>
-                    <p className="flex-none">{` ${capitalize(shipment.service_level)}`}</p>
-                  </div>) : '' }
-              {voyageInfo.carrier && shipment.carrier
-                ? (
-                  <div className="flex-100 layout-row layout-align-space-between-stretch layout-wrap">
+              <table className="flex-100">
+                {shipment.planned_eta
+                  ? (
+                    <tr>
+                      <td className="flex-none">
+                        <b>
+                          {`${t('shipment:estimatedTransitTime')}: `}
+                        </b>
+                      </td>
+                      <td className="flex-none end">
+                        {` ${moment(shipment.planned_eta).diff(moment(shipment.planned_etd), 'days')} 
+                        ${t('common:days')}`}
+                      </td>
+                    </tr>) : ''}
+                {voyageInfo.service_level && shipment.service_level
+                  ? (
+                    <tr>
+                      <td className="flex-none">
+                        <b>
+                          {`${t('shipment:serviceLevel')}: `}
+                        </b>
+                      </td>
+                      <td className="flex-none end">{` ${capitalize(shipment.service_level)}`}</td>
+                    </tr>) : ''}
+                {voyageInfo.carrier && shipment.carrier
+                  ? (
+                    <tr>
 
-                    <p className="flex-none">
-                      <b>
-                        {`${capitalize(t('shipment:carrier'))}: `}
-                      </b>
-                      {' '}
-                    </p>
-                    <p className="flex-none">{capitalize(shipment.carrier)}</p>
+                      <td className="flex-none">
+                        <b>
+                          {`${capitalize(t('shipment:carrier'))}: `}
+                        </b>
+                        {' '}
+                      </td>
+                      <td className="flex-none end">{capitalize(shipment.carrier)}</td>
 
-                  </div>
-                )
-                : '' }
-              {voyageInfo.vessel && shipment.vessel_name
-                ? (
-                  <div className={`flex-100 layout-row layout-align-space-between-stretch  ${styles.time_diff}`}>
+                    </tr>
+                  )
+                  : '' }
+                {voyageInfo.vessel && shipment.vessel_name
+                  ? (
+                    <tr>
 
-                    <p className="flex-none">
-                      <b>
-                        {`${t('shipment:vesselName')}: `}
-                      </b>
-                      {' '}
-                    </p>
-                    <p className="flex-none">{capitalize(shipment.vessel_name)}</p>
+                      <td className="flex-none">
+                        <b>
+                          {`${t('shipment:vesselName')}: `}
+                        </b>
+                        {' '}
+                      </td>
+                      <td className="flex-none end">{capitalize(shipment.vessel_name)}</td>
 
-                  </div>
-                )
-                : '' }
-              {voyageInfo.voyage_code && shipment.voyage_code
-                ? (
-                  <div className={`flex-100 layout-row layout-align-space-between-stretch  ${styles.time_diff}`}>
+                    </tr>
+                  )
+                  : '' }
+                {voyageInfo.voyage_code && shipment.voyage_code
+                  ? (
+                    <tr>
 
-                    <p className="flex-none">
-                      <b>
-                        {`${t('shipment:vesselName')}: `}
-                      </b>
-                      {' '}
-                    </p>
-                    <p className="flex-none">{capitalize(shipment.voyage_code)}</p>
+                      <td className="flex-none">
+                        <b>
+                          {`${t('shipment:vesselName')}: `}
+                        </b>
+                        {' '}
+                      </td>
+                      <td className="flex-none end">{capitalize(shipment.voyage_code)}</td>
 
-                  </div>
-                )
-                : '' }
+                    </tr>
+                  )
+                  : '' }
+              </table>
             </div>
           </div>
 
