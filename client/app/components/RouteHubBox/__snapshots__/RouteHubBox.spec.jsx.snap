@@ -180,25 +180,7 @@ exports[`shallow rendering 1`] = `
       </div>
       <div
         className="flex-85 layout-row layout-wrap "
-      >
-        <div
-          className=" flex-100 layout-row layout-align-space-between-stretch layout-wrap"
-        >
-          <p
-            className="flex-none"
-          >
-            <b>
-              Service Level
-              :
-            </b>
-          </p>
-          <p
-            className="flex-none"
-          >
-             Standard
-          </p>
-        </div>
-      </div>
+      />
     </div>
     <div
       className="flex layout-row layout-wrap layout-align-center-start"

@@ -383,9 +383,9 @@ export class BookingDetails extends Component {
       notifyees,
       shipper
     } = this.state
-
+    const { scope } = tenant
     const maybeRouteHubBox = shipment && theme && hubs
-      ? <RouteHubBox shipment={shipment} theme={theme} addresses={addresses} />
+      ? <RouteHubBox shipment={shipment} theme={theme} addresses={addresses} scope={scope}/>
       : ''
 
     const ContactSetterComponent = (

@@ -106,6 +106,49 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
+            scope={
+              Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              }
+            }
             shipment={
               Object {
                 "booking_placed_at": "2018-11-01T11:14:33z",
@@ -1492,6 +1535,49 @@ exports[`shallow render 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
+            scope={
+              Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              }
+            }
             shipment={
               Object {
                 "booking_placed_at": "2018-11-01T11:14:33z",
@@ -2864,6 +2950,49 @@ exports[`shipment.cargo_notes is falsy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
+            scope={
+              Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              }
+            }
             shipment={
               Object {
                 "booking_placed_at": "2018-11-01T11:14:33z",
@@ -4220,6 +4349,49 @@ exports[`shipment.eori is falsy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
+            scope={
+              Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              }
+            }
             shipment={
               Object {
                 "booking_placed_at": "2018-11-01T11:14:33z",
@@ -5576,6 +5748,49 @@ exports[`shipment.incoterm_text is falsy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
+            scope={
+              Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              }
+            }
             shipment={
               Object {
                 "booking_placed_at": "2018-11-01T11:14:33z",
@@ -6932,6 +7147,49 @@ exports[`shipment.notes is falsy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
+            scope={
+              Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              }
+            }
             shipment={
               Object {
                 "booking_placed_at": "2018-11-01T11:14:33z",
@@ -8288,6 +8546,49 @@ exports[`shipment.total_goods_value is falsy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
+            scope={
+              Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              }
+            }
             shipment={
               Object {
                 "booking_placed_at": "2018-11-01T11:14:33z",
@@ -9644,6 +9945,49 @@ exports[`shipmentData.notifyees is falsy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
+            scope={
+              Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              }
+            }
             shipment={
               Object {
                 "booking_placed_at": "2018-11-01T11:14:33z",
@@ -10884,6 +11228,49 @@ exports[`state.acceptTerms is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
+            scope={
+              Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              }
+            }
             shipment={
               Object {
                 "booking_placed_at": "2018-11-01T11:14:33z",
@@ -12256,6 +12643,46 @@ exports[`tenant.scope.terms.length is 0 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
+            scope={
+              Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [],
+              }
+            }
             shipment={
               Object {
                 "booking_placed_at": "2018-11-01T11:14:33z",
@@ -13628,6 +14055,49 @@ exports[`theme is falsy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
+            scope={
+              Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              }
+            }
             shipment={
               Object {
                 "booking_placed_at": "2018-11-01T11:14:33z",

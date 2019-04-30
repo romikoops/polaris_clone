@@ -49,10 +49,11 @@ class RouteHubBox extends Component {
 
   render () {
     const {
-      theme, shipment, t
+      theme, shipment, t, scope
     } = this.props
     const startHub = shipment.origin_hub
     const endHub = shipment.destination_hub
+    const voyageInfo = get(scope, ['voyage_info'], {})
     const gradientStyle = {
       background:
         theme && theme.colors
@@ -225,23 +226,23 @@ class RouteHubBox extends Component {
               </div>
             </div>
             <div className="flex-85 layout-row layout-wrap ">
-              <div className=" flex-100 layout-row layout-align-space-between-stretch layout-wrap">
-                <p className="flex-none">
-                  <b>
-                    {t('shipment:serviceLevel')}
-:
-                  </b>
-                </p>
-                <p className="flex-none">{` ${capitalize(shipment.service_level)}`}</p>
-              </div>
-              {shipment.carrier
+              {voyageInfo.service_level && shipment.service_level
+                ? (
+                  <div className=" flex-100 layout-row layout-align-space-between-stretch layout-wrap">
+                    <p className="flex-none">
+                      <b>
+                        {`${t('shipment:serviceLevel')}: `}
+                      </b>
+                    </p>
+                    <p className="flex-none">{` ${capitalize(shipment.service_level)}`}</p>
+                  </div>) : '' }
+              {voyageInfo.carrier && shipment.carrier
                 ? (
                   <div className="flex-100 layout-row layout-align-space-between-stretch layout-wrap">
 
                     <p className="flex-none">
                       <b>
-                        {capitalize(t('shipment:carrier'))}
-:
+                        {`${capitalize(t('shipment:carrier'))}: `}
                       </b>
                       {' '}
                     </p>
@@ -250,18 +251,32 @@ class RouteHubBox extends Component {
                   </div>
                 )
                 : '' }
-              {shipment.vessel_name
+              {voyageInfo.vessel && shipment.vessel_name
                 ? (
                   <div className={`flex-100 layout-row layout-align-space-between-stretch  ${styles.time_diff}`}>
 
                     <p className="flex-none">
                       <b>
-                        {t('shipment:vesselName')}
-:
+                        {`${t('shipment:vesselName')}: `}
                       </b>
                       {' '}
                     </p>
                     <p className="flex-none">{capitalize(shipment.vessel_name)}</p>
+
+                  </div>
+                )
+                : '' }
+              {voyageInfo.voyage_code && shipment.voyage_code
+                ? (
+                  <div className={`flex-100 layout-row layout-align-space-between-stretch  ${styles.time_diff}`}>
+
+                    <p className="flex-none">
+                      <b>
+                        {`${t('shipment:vesselName')}: `}
+                      </b>
+                      {' '}
+                    </p>
+                    <p className="flex-none">{capitalize(shipment.voyage_code)}</p>
 
                   </div>
                 )
