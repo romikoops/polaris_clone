@@ -25,7 +25,9 @@ class TenantsController < ApplicationController
   end
 
   def fetch_scope
-    scope = ::Tenants::ScopeService.new(user: current_user).fetch
+    tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : params[:id])
+    tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
+    scope = ::Tenants::ScopeService.new(user: current_user, tenant: tenants_tenant).fetch
     response_handler(scope)
   end
 

@@ -86,14 +86,18 @@ class Tenant < Legacy::Tenant
     end
   end
 
+  def tenants_scope
+    @tenants_scope ||= Tenants::ScopeService.new(tenant: Tenants::Tenant.find_by(legacy_id: id)).fetch
+  end
+
   def quotation_tool?
-    scope['open_quotation_tool'] || scope['closed_quotation_tool']
+    tenants_scope['open_quotation_tool'] || tenants_scope['closed_quotation_tool']
   end
 
   def mode_of_transport_in_scope?(mode_of_transport, load_type = nil)
-    return scope.dig('modes_of_transport', mode_of_transport.to_s).values.any? if load_type.nil?
+    return tenants_scope.dig('modes_of_transport', mode_of_transport.to_s).values.any? if load_type.nil?
 
-    scope.dig('modes_of_transport', mode_of_transport.to_s, load_type.to_s)
+    tenants_scope.dig('modes_of_transport', mode_of_transport.to_s, load_type.to_s)
   end
 
   def max_dimensions
