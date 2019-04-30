@@ -93,7 +93,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
                     offer_calculator.shipment.cargo_units
                   end
 
-    if current_user.tenant.quotation_tool? && ::Tenants::ScopeService.new(user: @user).fetch(:email_all_quotes)
+    if current_user.tenant.quotation_tool? && ::Tenants::ScopeService.new(user: current_user).fetch(:email_all_quotes)
       quote = ShippingTools.create_shipments_from_quotation(
         offer_calculator.shipment,
         offer_calculator.detailed_schedules.map(&:deep_stringify_keys!)
