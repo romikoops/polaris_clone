@@ -109,7 +109,9 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       cargoUnits: cargo_units,
       aggregatedCargo: offer_calculator.shipment.aggregated_cargo
     }
-  rescue ArgumentError
+  rescue ArgumentError => e
+    require 'pry';
+    binding.pry
     raise ApplicationError::InternalError
   end
 

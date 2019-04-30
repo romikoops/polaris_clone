@@ -294,11 +294,7 @@ class RouteHubBox extends Component {
     )
   }
 }
-RouteHubBox.propTypes = {
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  shipment: PropTypes.shipment.isRequired
-}
+
 RouteHubBox.defaultProps = {
   theme: null
 }
