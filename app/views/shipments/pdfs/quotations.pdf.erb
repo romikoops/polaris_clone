@@ -283,7 +283,7 @@
             <% end %>
           </div>
           <div class="subtotal-price-group">
-            <% if charge != "Grand Total" %>
+            <% if charge != "Grand Total" && scope.dig('quote_card', 'sections', charge_key) %>
               <%
                 sorted_charges_by_unit = if (charge_key == 'cargo' && !scope['fine_fee_detail'])
                    charge

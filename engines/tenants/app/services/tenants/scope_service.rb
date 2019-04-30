@@ -89,7 +89,23 @@ module Tenants
       closed_after_map: false,
       feature_uploaders: false,
       email_on_registration: true,
-      dedicated_pricings_only: false
+      dedicated_pricings_only: false,
+      quote_card: {
+        sub_totals: {
+          import: true,
+          export: true,
+          cargo: true,
+          trucking_pre: true,
+          trucking_on: true
+        },
+        sections: {
+          import: true,
+          export: true,
+          cargo: true,
+          trucking_pre: true,
+          trucking_on: true
+        }
+      }
     }.freeze
 
     def initialize(user: nil, tenant: nil)
