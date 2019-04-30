@@ -12,7 +12,7 @@ class LocationsController < ApplicationController
     results = raw_results.slice(0,5).map do |result|
       {
         geojson: result.geojson,
-        description: result.display_name || result.combined_names,
+        description: result.display_name || result.name || result.combined_names,
         postal_code: result.postal_code,
         city: result.city || result.state,
         country: result.country,

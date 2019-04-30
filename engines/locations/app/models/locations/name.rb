@@ -2,7 +2,7 @@
 
 module Locations
   class Name < ApplicationRecord
-    searchkick word_middle: %i(name display_name alternative_names city postal_code), locations: [:location], settings: {blocks: {read_only: false}}
+    searchkick word_middle: %i(name display_name alternative_names city postal_code country_code), locations: [:location], settings: {blocks: {read_only: false}}
     belongs_to :location, optional: true
 
     def search_data
@@ -12,7 +12,8 @@ module Locations
         city: city,
         postal_code: postal_code,
         alternative_names: alternative_names,
-        location: {lat: point&.y, lon: point&.x}
+        location: {lat: point&.y, lon: point&.x},
+        country_code: country_code
       }
     end
 
