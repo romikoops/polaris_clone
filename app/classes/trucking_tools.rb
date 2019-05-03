@@ -253,7 +253,6 @@ module TruckingTools
       }
     }
     consolidation = ::Tenants::ScopeService.new(user: cargos.first.shipment.user).fetch(:consolidation)
-
     if consolidation.dig('trucking', 'load_meterage_only')
       consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
     elsif consolidation.dig('trucking', 'comparative')
@@ -336,6 +335,7 @@ module TruckingTools
     total_load_meterage_weight = 0.0
     total_cbm_weight = 0.0
     total_payload_weight = 0.0
+    total_area = 0.0
     cargos.each do |cargo|
       trucking_weight = if cargo.stackable
                           trucking_chargeable_weight_by_stacked_area(trucking_pricing, cargo)
@@ -345,9 +345,16 @@ module TruckingTools
       total_load_meterage_weight += trucking_weight
       total_cbm_weight += trucking_cbm_weight(trucking_pricing, cargo)
       total_payload_weight += trucking_payload_weight(cargo)
+      total_area += trucking_payload_area(cargo)
+
     end
-    effective_weight = [total_load_meterage_weight, total_cbm_weight, total_payload_weight].max
-    stackable_key = effective_weight == total_load_meterage_weight ? 'non_stackable' : 'stackable'
+    if total_area > trucking_pricing.load_meterage['area_limit']
+      effective_weight = [total_load_meterage_weight, total_cbm_weight, total_payload_weight].max
+      stackable_key = effective_weight == total_load_meterage_weight ? 'non_stackable' : 'stackable'
+    else
+      effective_weight = [total_cbm_weight, total_payload_weight].max
+      stackable_key = 'stackable'
+    end
 
     cargo_object[stackable_key]['weight'] += effective_weight
     cargo_object[stackable_key]['volume'] += cargos_volume(cargos)
@@ -553,6 +560,11 @@ module TruckingTools
   def trucking_payload_weight(cargo)
     quantity = cargo.try(:quantity) || 1
     (cargo.try(:payload_in_kg) || cargo[:payload_in_kg] || cargo.weight) * quantity
+  end
+
+  def trucking_payload_area(cargo)
+    quantity = cargo.try(:quantity) || 1
+    (cargo.try(:dimension_x) || cargo[:dimension_x]) * (cargo.try(:dimension_y) || cargo[:dimension_y]) * quantity
   end
 
   def round_fare(result, rounding_scope)
