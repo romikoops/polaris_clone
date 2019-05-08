@@ -90,7 +90,6 @@ class CargoSection extends React.PureComponent {
 
     const [index, prop] = name.split('-')
     const newValue = Number(value)
-
     if (['collectiveWeight', 'quantity'].includes(prop) && get(scope, ['consolidation', 'cargo', 'frontend'], false)) {
       this.handleChangeCollectiveWeight(index, prop, newValue)
     }
