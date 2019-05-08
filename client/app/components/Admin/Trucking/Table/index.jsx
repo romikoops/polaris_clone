@@ -100,6 +100,7 @@ class TruckingTable extends PureComponent {
             </div>),
             accessor: d => d.truckingPricing.cargo_class,
             id: 'cargo_class',
+            maxWidth: 120,
             Cell: row => (
               <div
                 className={`flex layout-row layout-align-start-center ${styles.pricing_cell} `}
@@ -131,6 +132,7 @@ class TruckingTable extends PureComponent {
               <p className="flex-none">{t('common:truckType')}</p>
             </div>),
             id: 'truck_type',
+            maxWidth: 120,
             accessor: d => d.truckingPricing.truck_type,
             Cell: row => (
               <div
@@ -159,6 +161,7 @@ class TruckingTable extends PureComponent {
               <p className="flex-none">{t('trucking:direction')}</p>
             </div>),
             id: 'direction',
+            maxWidth: 120,
             accessor: d => d.truckingPricing.carriage,
             Cell: row => (
               <div

@@ -9,6 +9,8 @@ module Trucking
                   :fees_sheet, :num_rows, :zip_char_length, :identifier_type, :identifier_modifier, :zones,
                   :all_ident_values_and_countries, :charges, :locations
 
+      MissingModifierKeys = Class.new(StandardError)
+
       def initialize(_args)
         super
 
@@ -112,6 +114,8 @@ module Trucking
           find_availabilities(row_truck_type, direction, load_type, hub)
 
           modifier_position_objs = populate_modifier(rates_sheet)
+          raise MissingModifierKeys if modifier_position_objs.empty?
+
           header_row = rates_sheet.row(4)
           header_row.shift
           header_row.shift
@@ -160,7 +164,7 @@ module Trucking
 
           tl.city_name = ident_and_country[:sub_ident] if ident_and_country[:sub_ident]
           tl.city_name = ident_and_country[:ident] if %w(zipcode distance).include?(@identifier_type)
-       
+
           tl.id ||= SecureRandom.uuid
           next if @all_trucking_locations.include?(tl)
 
