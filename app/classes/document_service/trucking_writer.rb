@@ -61,6 +61,7 @@ module DocumentService
         grouped_results = page_values.group_by { |ufr| ufr['truckingPricing']['parent_id'] }
         grouped_results.values.each do |values|
           trucking = values.first['truckingPricing']
+          next if trucking['rates'].empty?
           meta = _meta(values.first)
           identifiers = values.map do |v|
             if trucking['identifier_modifier'] == 'locode'
