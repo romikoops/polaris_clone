@@ -99,6 +99,7 @@ module Tenants
           trucking_on: true
         },
         sections: {
+          charge_icons: true,
           import: true,
           export: true,
           cargo: true,

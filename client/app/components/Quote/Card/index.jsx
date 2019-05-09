@@ -197,12 +197,12 @@ class QuoteCard extends PureComponent {
     const calcVolume = aggregatedCargo && aggregatedCargo.id
       ? aggregatedCargo.volume
       : cargo.reduce((sum, cargoUnit) => (
-        sum + 
+        sum +
         (+cargoUnit.dimension_x *
         +cargoUnit.dimension_y *
         +cargoUnit.dimension_z /
-        1000000)
-        * +cargoUnit.quantity), 0)
+        1000000) *
+        +cargoUnit.quantity), 0)
 
     const responsiveFlex = isQuote(tenant) ? 'flex-lg-80 offset-lg-20' : ''
     const hideGrandTotal = this.shouldHideGrandTotal()
@@ -225,50 +225,56 @@ class QuoteCard extends PureComponent {
           <div className={`flex-55 layout-row layout-align-start-center ${styles.origin_destination}`}>
             <div className="layout-column layout-align-center-start flex-100">
               <p>
-                {`${t('common:from')}: `}<span>{originHub.name}</span>
-                
+                {`${t('common:from')}: `}
+                <span>{originHub.name}</span>
+
               </p>
               <p>
-                {`${t('common:to')}: `}<span>{destinationHub.name}</span>
+                {`${t('common:to')}: `}
+                <span>{destinationHub.name}</span>
               </p>
             </div>
           </div>
           <div className="flex layout-row layout-wrap layout-align-end-center">
-            <div className={`flex-100 layout-row layout-wrap layout-align-end-center ${styles.charge_icons}`}>
-              <ChargeIcons
-                theme={theme}
-                tenant={tenant}
-                mot={result.meta.mode_of_transport}
-                onCarriage={quote.trucking_on}
-                preCarriage={quote.trucking_pre}
-                originFees={quote.export}
-                destinationFees={quote.import}
-              />
-            </div>
+            { get(scope, ['quote_card', 'sections', 'charge_icons'], false) ? (
+              <div className={`flex-100 layout-row layout-wrap layout-align-end-center ${styles.charge_icons}`}>
+                <ChargeIcons
+                  theme={theme}
+                  tenant={tenant}
+                  mot={result.meta.mode_of_transport}
+                  onCarriage={quote.trucking_on}
+                  preCarriage={quote.trucking_pre}
+                  originFees={quote.export}
+                  destinationFees={quote.import}
+                />
+              </div>
+            ) : '' }
             <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.unit_info}`}>
               <div className={`flex-100 layout-row layout-align-start-center ${styles.unit_info}`}>
                 <p className="flex-100 layout-row layout-align-start">
                   {`${capitalize(t('cargo:totalWeight'))}: `}
                   <span className="flex layout-row layout-align-end">
-                  { ` ${numberSpacing(calcPayload, 2)} kg` }
-                </span>
+                    { ` ${numberSpacing(calcPayload, 2)} kg` }
+                  </span>
                 </p>
-               
+
               </div>
-              { result.meta.load_type === 'cargo_item' ? 
-              (<div className={`flex-100 layout-row layout-align-start-center ${styles.unit_info}`}>
-                <p className="flex-100 layout-row layout-align-start">
-                  {`${capitalize(t('cargo:totalVolume'))}: `}
-                  <span className="flex layout-row layout-align-end">
-                  { ` ${numberSpacing(calcVolume, 3)} m` }
-                  <sup>3</sup>
-                </span>
-                
-                </p>
-                
-              </div>) : '' }
+              { result.meta.load_type === 'cargo_item'
+                ? (
+                  <div className={`flex-100 layout-row layout-align-start-center ${styles.unit_info}`}>
+                    <p className="flex-100 layout-row layout-align-start">
+                      {`${capitalize(t('cargo:totalVolume'))}: `}
+                      <span className="flex layout-row layout-align-end">
+                        { ` ${numberSpacing(calcVolume, 3)} m` }
+                        <sup>3</sup>
+                      </span>
+
+                    </p>
+
+                  </div>
+                ) : '' }
             </div>
-            
+
           </div>
         </div>
         <div className="flex-100 layout-row layout-align-start-center" style={{ paddingBottom: '18px' }}>
@@ -297,7 +303,7 @@ class QuoteCard extends PureComponent {
               : ''
           }
         </div>
-        { scope.show_rate_overview ? (<RatesOverview  ratesObject={result.meta.pricing_rate_data}/>) : '' }
+        { scope.show_rate_overview ? (<RatesOverview ratesObject={result.meta.pricing_rate_data} />) : '' }
         <CollapsingContent collapsed={!showSchedules}>
           <QuoteCardScheduleList
             schedules={schedules}
