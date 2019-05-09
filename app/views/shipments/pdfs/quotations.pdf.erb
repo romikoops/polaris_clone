@@ -5,6 +5,7 @@
   <% tenant_logo_url = tenant.theme["logoLarge"] %>
   <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
   <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
+  <% weight_units = scope['values']['weight'] %>
 
   <div class="title display-flex">
     <div>
@@ -59,7 +60,8 @@
             </div>
             <p>
               <strong>Weight:</strong>
-              <%= '%.2f' % cargo_data[:kg][s.id] %>&nbsp;kg
+              <% w_value = weight_units['unit'] == 'kg' ? cargo_data[:kg][s.id] : cargo_data[:kg][s.id] / 1000 %>
+              <%="#{"%.#{weight_units['decimals']}f" % w_value} #{weight_units['unit']}" %>&nbsp;
             </p>
             <% if s.load_type != 'container'%>
               <p>
@@ -127,7 +129,10 @@
                 <% unless scope['cargo_overview_only'] %>
                   <tr>
                     <td class="table-title"><p>Gross&nbsp;Weight&nbsp;per&nbsp;Item</p></td>
-                    <td class="table-value"><span><%= '%.2f' % (cargo.payload_in_kg) %>&nbsp;kg</span> </td>
+                    <td class="table-value">
+                      <% gw_value = weight_units['unit'] == 'kg' ? cargo.payload_in_kg : (cargo.payload_in_kg / 1000) %>
+                      <span><%="#{"%.#{weight_units['decimals']}f" % gw_value} #{weight_units['unit']}" %></span>  
+                    </td>
                   </tr>
                 <% end %>
                 <tr>
@@ -141,7 +146,8 @@
                 <tr>
                   <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
                   <td class="table-value">
-                    <span><%= '%.2f' % (cargo.payload_in_kg * cargo.quantity) %>&nbsp;kg</span>
+                    <% tgw_value = weight_units['unit'] == 'kg' ? cargo.payload_in_kg * cargo.quantity : (cargo.payload_in_kg * cargo.quantity / 1000) %>
+                    <span><%="#{"%.#{weight_units['decimals']}f" % tgw_value} #{weight_units['unit']}" %></span>
                   </td>
                 </tr>
                 <tr>
@@ -170,13 +176,19 @@
                 <% unless scope['cargo_overview_only'] %>
                   <tr>
                     <td class="table-title"><p>Gross&nbsp;Weight&nbsp;per&nbsp;Container</p></td>
-                    <td class="table-value"><span><%= '%.2f' % (container.gross_weight) %>&nbsp;kg</span> </td>
+                    <td class="table-value">
+                      <% gw_value = weight_units['unit'] == 'kg' ? container.gross_weight : (container.gross_weight / 1000) %>
+                      <span>
+                        <%="#{"%.#{weight_units['decimals']}f" % gw_value} #{weight_units['unit']}" %>
+                      </span>
+                    </td>
                   </tr>
                 <% end %>
                 <tr>
                   <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
                   <td class="table-value">
-                    <span><%= '%.2f' % (container.gross_weight * container.quantity) %>&nbsp;kg</span>
+                    <% tgw_value = weight_units['unit'] == 'kg' ? container.gross_weight * container.quantity : (container.gross_weight * container.quantity / 1000) %>
+                    <span><%="#{"%.#{weight_units['decimals']}f" % tgw_value} #{weight_units['unit']}" %></span>
                   </td>
                 </tr>
               </table>
@@ -192,7 +204,8 @@
                 <tr>
                   <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
                   <td class="table-value">
-                    <span><%= '%.2f' % (s.aggregated_cargo.weight) %>&nbsp;kg</span>
+                     <% agc_value = weight_units['unit'] == 'kg' ? s.aggregated_cargo.weight : s.aggregated_cargo.weight / 1000 %>
+                    <span><%="#{"%.#{weight_units['decimals']}f" % agc_value} #{weight_units['unit']}" %></span>
                   </td>
                 </tr>
                  <tr>

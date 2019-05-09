@@ -106,6 +106,12 @@ module Tenants
           trucking_pre: true,
           trucking_on: true
         }
+      },
+      values: {
+        weight: {
+          unit: 't',
+          decimals: 3
+        }
       }
     }.freeze
 

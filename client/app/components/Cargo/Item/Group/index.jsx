@@ -4,6 +4,7 @@ import { get } from 'lodash'
 import '../../../../styles/react-toggle.scss'
 import styles from './CargoItemGroup.scss'
 import { LOAD_TYPES } from '../../../../constants'
+import UnitsWeight from '../../../Units/Weight'
 import { numberSpacing, singleItemChargeableObject } from '../../../../helpers'
 
 class CargoItemGroup extends Component {
@@ -58,7 +59,7 @@ class CargoItemGroup extends Component {
         <td className={styles.table_value}>
           <p className="flex layout-row layout-align-end-center">
             <span>{ numberSpacing(group.volume / group.quantity, 3) }</span>
-            &nbsp;m 
+            &nbsp;m
             <sup>3</sup>
           </p>
         </td>
@@ -74,26 +75,24 @@ class CargoItemGroup extends Component {
           </p>
         </td>
       </tr>),
-      ( 
-        scope.cargo_overview_only ? '' :
-        (
-          <tr className={styles.data_table_row}>
-            <td className={styles.table_title}>
-              <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>
-                {t('common:grossWeightPerItem')}
-              </p>
-            </td>
-            <td className={styles.table_value}>
-              <p className="flex layout-row layout-align-end-center">
-                <span>{ numberSpacing(group.items[0].payload_in_kg, 2) }</span>
-                {' '}
-                kg
-              </p>
-            </td>
-          </tr>
-        )
+      (
+        scope.cargo_overview_only ? ''
+          : (
+            <tr className={styles.data_table_row}>
+              <td className={styles.table_title}>
+                <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>
+                  {t('common:grossWeightPerItem')}
+                </p>
+              </td>
+              <td className={styles.table_value}>
+                <p className="flex layout-row layout-align-end-center">
+                  <UnitsWeight value={group.items[0].payload_in_kg} />
+                </p>
+              </td>
+            </tr>
+          )
       ),
-       (<tr className={styles.data_table_row}>
+      (<tr className={styles.data_table_row}>
         <td className={styles.table_title}>
           <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>{t('cargo:totalVolume')}</p>
         </td>
@@ -105,30 +104,30 @@ class CargoItemGroup extends Component {
           </p>
         </td>
       </tr>),
-       (<tr className={styles.data_table_row}>
+      (<tr className={styles.data_table_row}>
         <td className={styles.table_title}>
           <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>{t('cargo:totalGrossWeight')}</p>
         </td>
         <td className={styles.table_value}>
           <p className="flex layout-row layout-align-end-center">
-            <span>{ numberSpacing(group.payload_in_kg, 2) }</span>
-            &nbsp;m
-            <sup>3</sup>
+            <UnitsWeight value={group.payload_in_kg} />
           </p>
         </td>
       </tr>),
-        scope.hide_chargeable_weight_values ? '' : 
-        (<tr className={styles.data_table_row}>
-        <td className={styles.table_title}>
-          <p className="flex layout-row layout-align-start-center">{chargeableData.total_title}</p>
-        </td>
-        <td className={styles.table_value}>
-          <p
-            className="flex layout-row layout-align-end-center"
-            dangerouslySetInnerHTML={{ __html: chargeableData.total_value }}
-          />
-        </td>
-      </tr>) ,
+      scope.hide_chargeable_weight_values ? ''
+        : (
+          <tr className={styles.data_table_row}>
+            <td className={styles.table_title}>
+              <p className="flex layout-row layout-align-start-center">{chargeableData.total_title}</p>
+            </td>
+            <td className={styles.table_value}>
+              <p
+                className="flex layout-row layout-align-end-center"
+                dangerouslySetInnerHTML={{ __html: chargeableData.total_value }}
+              />
+            </td>
+          </tr>
+        )
     ]
 
     const imgLCL = { backgroundImage: `url(${LOAD_TYPES[0].img})` }
@@ -150,7 +149,7 @@ class CargoItemGroup extends Component {
               {unitArr}
             </tbody>
           </table>
-          
+
         </div>
       </div>
     )

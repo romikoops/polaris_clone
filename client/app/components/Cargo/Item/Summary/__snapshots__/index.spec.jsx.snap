@@ -47,14 +47,9 @@ exports[`shallow render 1`] = `
         <p
           className="flex-none layout-row layout-align-center-center"
         >
-          <span
-            className="cargo_type"
-          >
-            1,000.00
-          </span>
-           
-           kg
-           
+          <Connect(UnitsWeight)
+            value={1000}
+          />
         </p>
         <p
           className="flex-none layout-row layout-align-center-center"

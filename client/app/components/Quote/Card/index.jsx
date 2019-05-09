@@ -17,6 +17,7 @@ import { RoundButton } from '../../RoundButton/RoundButton'
 import CollapsingContent from '../../CollapsingBar/Content'
 import QuoteCardScheduleList from './ScheduleList'
 import RatesOverview from './Rates'
+import UnitsWeight from '../../Units/Weight'
 
 class QuoteCard extends PureComponent {
   constructor (props) {
@@ -253,9 +254,6 @@ class QuoteCard extends PureComponent {
               <div className={`flex-100 layout-row layout-align-start-center ${styles.unit_info}`}>
                 <p className="flex-100 layout-row layout-align-start">
                   {`${capitalize(t('cargo:totalWeight'))}: `}
-                  <span className="flex layout-row layout-align-end">
-                    { ` ${numberSpacing(calcPayload, 2)} kg` }
-                  </span>
                 </p>
 
               </div>
