@@ -6,7 +6,7 @@ class Schedule
   attr_accessor :id, :origin_hub_id, :destination_hub_id,
                 :origin_hub_name, :destination_hub_name, :mode_of_transport,
                 :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,
-                :quote, :carrier_name, :load_type
+                :quote, :carrier_name, :load_type, :voyage_code, :vessel
 
   def origin_hub
     Hub.find origin_hub_id
@@ -39,6 +39,8 @@ class Schedule
       closing_date: closing_date,
       vehicle_name: vehicle_name,
       carrier_name: carrier_name,
+      voyage_code: voyage_code,
+      vessel: vessel,
       trip_id: trip_id
     }
   end
@@ -58,7 +60,9 @@ class Schedule
         origin_layovers.closing_date  AS closing_date,
         tenant_vehicles.name          AS vehicle_name,
         carriers.name                 AS carrier_name,
-        trips.id                      AS trip_id
+        trips.id                      AS trip_id,
+        trips.vessel                  AS vessel,
+        trips.voyage_code             AS voyage_code
       FROM itineraries
       JOIN stops    AS origin_stops         ON itineraries.id       = origin_stops.itinerary_id
       JOIN stops    AS destination_stops    ON itineraries.id       = destination_stops.itinerary_id

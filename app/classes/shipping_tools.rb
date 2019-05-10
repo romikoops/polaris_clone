@@ -322,7 +322,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
     options = {
-      methods: %i(selected_offer mode_of_transport service_level vessel_name carrier),
+      methods: %i(selected_offer mode_of_transport service_level vessel_name carrier voyage_code),
       include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
     }
     shipment_as_json = shipment.as_json(options).merge(
@@ -523,7 +523,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       endHub: { data: @destination_hub, address: @destination_hub.nexus }
     }
     options = {
-      methods: %i(selected_offer mode_of_transport service_level vessel_name carrier),
+      methods: %i(selected_offer mode_of_transport service_level vessel_name carrier voyage_code),
       include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
     }
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus

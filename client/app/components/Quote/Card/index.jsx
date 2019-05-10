@@ -207,6 +207,7 @@ class QuoteCard extends PureComponent {
 
     const responsiveFlex = isQuote(tenant) ? 'flex-lg-80 offset-lg-20' : ''
     const hideGrandTotal = this.shouldHideGrandTotal()
+    const voyageInfo = get(scope, ['voyage_info'], {})
 
     return (
       <div className={`
@@ -254,6 +255,7 @@ class QuoteCard extends PureComponent {
               <div className={`flex-100 layout-row layout-align-start-center ${styles.unit_info}`}>
                 <p className="flex-100 layout-row layout-align-start">
                   {`${capitalize(t('cargo:totalWeight'))}: `}
+                  <UnitsWeight value={calcPayload} />
                 </p>
 
               </div>
@@ -277,7 +279,7 @@ class QuoteCard extends PureComponent {
         </div>
         <div className="flex-100 layout-row layout-align-start-center" style={{ paddingBottom: '18px' }}>
 
-          { result.meta.carrier_name ? (
+          { voyageInfo.carrier && result.meta.carrier_name ? (
             <div className="flex-50 layout-row layout-align-center-center">
               {switchIcon(result.meta.mode_of_transport)}
               <p
@@ -289,7 +291,7 @@ class QuoteCard extends PureComponent {
             </div>
           ) : '' }
           {
-            result.meta.service_level_count > 1
+            voyageInfo.service_level && result.meta.service_level
               ? (
                 <div className="flex-50 layout-row layout-align-center-center">
                   <i className="flex-none fa fa-bell-o" style={{ paddingRight: '7px' }} />

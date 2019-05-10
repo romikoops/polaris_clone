@@ -512,6 +512,10 @@ class Shipment < Legacy::Shipment
     trip&.vessel
   end
 
+  def voyage_code
+    trip&.voyage_code
+  end
+
   private
 
   def update_carriage_properties!

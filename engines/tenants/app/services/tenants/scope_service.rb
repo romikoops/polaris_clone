@@ -112,6 +112,12 @@ module Tenants
           unit: 't',
           decimals: 3
         }
+      },
+      voyage_info: {
+        carrier: true,
+        voyage_code: true,
+        vessel: true,
+        service_level: true
       }
     }.freeze
 

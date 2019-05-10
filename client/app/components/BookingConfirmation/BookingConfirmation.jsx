@@ -177,6 +177,7 @@ export class BookingConfirmation extends Component {
       tenant,
       remark
     } = this.props
+    const { scope } = tenant
 
     if (!shipmentData) return <h1>{t('bookconf:loading')}</h1>
     const {
@@ -297,7 +298,7 @@ export class BookingConfirmation extends Component {
         title={t('common:itinerary')}
       >
         <div className={INNER_WRAPPER}>
-          <RouteHubBox shipment={shipment} theme={theme} />
+          <RouteHubBox shipment={shipment} theme={theme} scope={scope}/>
         </div>
       </GreyBox>
     )
