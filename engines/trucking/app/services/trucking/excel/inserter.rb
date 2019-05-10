@@ -473,7 +473,8 @@ module Trucking
           load_meterage: {
             ratio: meta[:load_meterage_ratio],
             height_limit: meta[:load_meterage_height],
-            area_limit: meta[:load_meterage_area]
+            area_limit: meta[:load_meterage_area],
+            ldm_limit: meta[:load_meterage_ldm]
           },
           rates: {},
           parent_id: SecureRandom.uuid,

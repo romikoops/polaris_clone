@@ -211,7 +211,8 @@ module DataValidator
       @hubs = { origin: [@origin_hub], destination: [@destination_hub] }
       @trucking_data_builder = OfferCalculatorService::TruckingDataBuilder.new(@shipment)
       @trucking_data = @trucking_data_builder.perform(@hubs)
-      @data_for_price_checker = @example[:data]
+
+      @data_for_price_checker = example[:data]
       @data_for_price_checker[:trucking] = @trucking_data
       @data_for_price_checker[:shipment] = @shipment
       @data_for_price_checker[:has_on_carriage] = example[:data][:delivery_address]
@@ -219,7 +220,7 @@ module DataValidator
       @data_for_price_checker[:service_level] = @tenant.tenant_vehicles.find_by(
         name: example[:data][:service_level],
         carrier: Carrier.find_by_name(example[:data][:carrier]),
-        mode_of_transport: @example[:data][:mode_of_transport]
+        mode_of_transport: example[:data][:mode_of_transport]
       )
 
       @data_for_price_checker[:cargo_units] = example[:data][:cargo_units]
