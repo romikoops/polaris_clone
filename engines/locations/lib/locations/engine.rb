@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'elasticsearch'
 require 'searchkick'
 require 'rgeo'
 require 'rgeo-geojson'
