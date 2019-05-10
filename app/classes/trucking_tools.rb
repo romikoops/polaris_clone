@@ -349,7 +349,7 @@ module TruckingTools
 
     end
     total_load_meters = total_load_meterage_weight / trucking_pricing.load_meterage['ratio']
-    if total_load_meters >= trucking_pricing.load_meterage['ldm_limit']
+    if total_load_meters >= (trucking_pricing.load_meterage['ldm_limit'] || DEFAULT_MAX)
       effective_weight = [total_load_meterage_weight, total_cbm_weight, total_payload_weight].max
       stackable_key = effective_weight == total_load_meterage_weight ? 'non_stackable' : 'stackable'
     else
