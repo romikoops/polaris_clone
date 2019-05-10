@@ -9,15 +9,31 @@ module Locations
                 .search(
                   terms,
                   fields: %i(name display_name alternative_names city postal_code),
-                  limit: 1,
                   match: :word_middle,
+                  limit: 30,
                   operator: 'or'
                 )
                 .results
+      
       result_with_location = results.select(&:location_id).first
+
       return result_with_location if result_with_location
 
       results.first
+    end
+
+    def self.location_seeding(*terms)
+      results = Locations::Name
+                .search(
+                  terms,
+                  fields: %i(name display_name alternative_names city postal_code),
+                  match: :word_middle,
+                  limit: 30,
+                  operator: 'or'
+                )
+                .results
+      
+      results.select(&:location_id).first
     end
 
     def self.find_in_postal_code(postal_bounds:, terms:)

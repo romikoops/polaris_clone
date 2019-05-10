@@ -24,7 +24,7 @@ module DocumentService
           },
           paginate: false
         }
-      ).map(&:as_index_result)
+      ).uniq.map(&:as_index_result)
       @carriage_reducer = {}
       @results_by_truck_type = {}
       @dir_fees = {}
@@ -57,14 +57,18 @@ module DocumentService
           ufr.dig('truckingPricing', 'direction')
         ].join('_')
       end
+
       page_groupings.values.each do |page_values|
         grouped_results = page_values.group_by { |ufr| ufr['truckingPricing']['parent_id'] }
         grouped_results.values.each do |values|
           trucking = values.first['truckingPricing']
+          next if trucking['rates'].empty?
           meta = _meta(values.first)
           identifiers = values.map do |v|
             if trucking['identifier_modifier'] == 'locode'
               v[identifier].split(' - ').first
+            elsif identifier == 'city' && v[identifier].include?(' - ') && trucking['identifier_modifier'] != 'locode'
+              v[identifier].split(' - ')
             else
               v[identifier]
             end
@@ -79,7 +83,12 @@ module DocumentService
           update_dir_fees(meta, values.first)
 
           zone_identifiers.each do |ident|
-            zones[zone_key] << { idents: ident, country_code: values.first['countryCode'] }
+            zone_obj = if ident.is_a?(Array)
+              { idents: ident.first, sub_ident: ident.last, country_code: values.first['countryCode'] }
+            else
+              { idents: ident, country_code: values.first['countryCode'] }
+            end
+            zones[zone_key] << zone_obj
           end
         end
       end

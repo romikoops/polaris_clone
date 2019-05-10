@@ -9,6 +9,8 @@ module Trucking
                   :fees_sheet, :num_rows, :zip_char_length, :identifier_type, :identifier_modifier, :zones,
                   :all_ident_values_and_countries, :charges, :locations
 
+      MissingModifierKeys = Class.new(StandardError)
+
       def initialize(_args)
         super
 
@@ -112,6 +114,8 @@ module Trucking
           find_availabilities(row_truck_type, direction, load_type, hub)
 
           modifier_position_objs = populate_modifier(rates_sheet)
+          raise MissingModifierKeys if modifier_position_objs.empty?
+
           header_row = rates_sheet.row(4)
           header_row.shift
           header_row.shift
@@ -157,8 +161,10 @@ module Trucking
             @identifier_type.to_s => ident_and_country[:ident],
             country_code: ident_and_country[:country]
           )
+
           tl.city_name = ident_and_country[:sub_ident] if ident_and_country[:sub_ident]
           tl.city_name = ident_and_country[:ident] if %w(zipcode distance).include?(@identifier_type)
+
           tl.id ||= SecureRandom.uuid
           next if @all_trucking_locations.include?(tl)
 
@@ -175,7 +181,6 @@ module Trucking
             :user_id
           ).merge(location_id: tl.id)
           trucking = ::Trucking::Trucking.find_or_initialize_by(trucking_attr)
-
           trucking.assign_attributes(trucking_rate.merge(location_id: tl.id))
           trucking.id ||= SecureRandom.uuid
           trucking.parent_id ||= trucking_rate[:parent_id]
@@ -274,6 +279,8 @@ module Trucking
                                 [idents_and_country[:ident].upcase, geo_name].join(' - ')
                               elsif identifier_modifier == 'locode' && !geo_name
                                 idents_and_country[:ident].upcase
+                              elsif identifier_type == 'location_id' && identifier_modifier.nil?
+                                "#{geo_name} - #{idents_and_country[:sub_ident].capitalize}"
                               else
                                 geo_name
                               end
@@ -614,8 +621,8 @@ module Trucking
                      )
                    else
                      Locations::LocationSeeder.seeding(
-                       idents_and_country[:sub_ident],
-                       idents_and_country[:ident]
+                       idents_and_country[:ident],
+                       idents_and_country[:sub_ident]
                      )
                   end
         puts idents_and_country if geometry.nil?

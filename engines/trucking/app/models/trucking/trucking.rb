@@ -52,7 +52,7 @@ module Trucking
 
     def location_info
       return {} if location.nil?
-
+      
       if location&.zipcode
         { 'zipCode' => location.zipcode }
       elsif location&.distance
