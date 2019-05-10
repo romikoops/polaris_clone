@@ -117,6 +117,7 @@ exports[`renders correctly 1`] = `
       minHeight=""
       parentClass=""
       showArrow={false}
+      showArrowSpacer={false}
       startCollapsed={false}
       text=""
       theme={null}

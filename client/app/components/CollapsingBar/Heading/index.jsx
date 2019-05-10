@@ -11,7 +11,8 @@ export default function CollapsingHeading ({
   mainWrapperStyle,
   showArrow,
   headerWrapClasses,
-  hideIcon
+  hideIcon,
+  showArrowSpacer
 }) {
   return (
     <div
@@ -42,22 +43,14 @@ export default function CollapsingHeading ({
           <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down pointy`} />
         </div>
       ) : '' }
+      {showArrowSpacer ? (
+        <div
+          className={`flex-10 layout-row layout-align-center-center ${styles.arrow_index}`}
+         />
+      ) : '' }
 
     </div>
   )
-}
-
-CollapsingHeading.propTypes = {
-  text: Proptypes.string,
-  collapsed: Proptypes.bool,
-  mainWrapperStyle: Proptypes.objectOf(Proptypes.any),
-  theme: Proptypes.theme,
-  handleCollapser: Proptypes.func,
-  faClass: Proptypes.string,
-  contentHeader: Proptypes.node.isRequired,
-  showArrow: Proptypes.bool,
-  hideIcon: Proptypes.bool,
-  headerWrapClasses: Proptypes.string
 }
 
 CollapsingHeading.defaultProps = {
@@ -69,5 +62,6 @@ CollapsingHeading.defaultProps = {
   faClass: '',
   headerWrapClasses: '',
   mainWrapperStyle: {},
-  showArrow: false
+  showArrow: false,
+  showArrowSpacer: false
 }

@@ -89,7 +89,30 @@ module Tenants
       closed_after_map: false,
       feature_uploaders: false,
       email_on_registration: true,
-      dedicated_pricings_only: false
+      dedicated_pricings_only: false,
+      quote_card: {
+        sub_totals: {
+          import: true,
+          export: true,
+          cargo: true,
+          trucking_pre: true,
+          trucking_on: true
+        },
+        sections: {
+          charge_icons: true,
+          import: true,
+          export: true,
+          cargo: true,
+          trucking_pre: true,
+          trucking_on: true
+        }
+      },
+      values: {
+        weight: {
+          unit: 't',
+          decimals: 3
+        }
+      }
     }.freeze
 
     def initialize(user: nil, tenant: nil)

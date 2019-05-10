@@ -214,6 +214,7 @@ exports[`shallow render 1`] = `
               minHeight=""
               parentClass=""
               showArrow={true}
+              showArrowSpacer={false}
               startCollapsed={false}
               styleHeader={
                 Object {
@@ -347,6 +348,7 @@ exports[`shallow render 1`] = `
               minHeight=""
               parentClass=""
               showArrow={true}
+              showArrowSpacer={false}
               startCollapsed={false}
               styleHeader={
                 Object {
@@ -408,6 +410,7 @@ exports[`shallow render 1`] = `
               minHeight=""
               parentClass=""
               showArrow={true}
+              showArrowSpacer={false}
               startCollapsed={false}
               styleHeader={
                 Object {
@@ -653,6 +656,7 @@ exports[`state.page > 1 1`] = `
               minHeight=""
               parentClass=""
               showArrow={true}
+              showArrowSpacer={false}
               startCollapsed={false}
               styleHeader={
                 Object {
@@ -786,6 +790,7 @@ exports[`state.page > 1 1`] = `
               minHeight=""
               parentClass=""
               showArrow={true}
+              showArrowSpacer={false}
               startCollapsed={false}
               styleHeader={
                 Object {
@@ -847,6 +852,7 @@ exports[`state.page > 1 1`] = `
               minHeight=""
               parentClass=""
               showArrow={true}
+              showArrowSpacer={false}
               startCollapsed={false}
               styleHeader={
                 Object {
@@ -1092,6 +1098,7 @@ exports[`user is internal 1`] = `
               minHeight=""
               parentClass=""
               showArrow={true}
+              showArrowSpacer={false}
               startCollapsed={false}
               styleHeader={
                 Object {
@@ -1225,6 +1232,7 @@ exports[`user is internal 1`] = `
               minHeight=""
               parentClass=""
               showArrow={true}
+              showArrowSpacer={false}
               startCollapsed={false}
               styleHeader={
                 Object {
@@ -1286,6 +1294,7 @@ exports[`user is internal 1`] = `
               minHeight=""
               parentClass=""
               showArrow={true}
+              showArrowSpacer={false}
               startCollapsed={false}
               styleHeader={
                 Object {

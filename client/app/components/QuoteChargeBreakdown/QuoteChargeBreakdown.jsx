@@ -29,12 +29,15 @@ class QuoteChargeBreakdown extends Component {
   }
 
   toggleExpander (key) {
-    this.setState({
-      expander: {
-        ...this.state.expander,
-        [key]: !this.state.expander[key]
-      }
-    })
+    const { scope } = this.props
+    if (get(scope, ['quote_card', 'sections', key], false)) {
+      this.setState({
+        expander: {
+          ...this.state.expander,
+          [key]: !this.state.expander[key]
+        }
+      })
+    }
   }
 
   determineSubKey (charge) {
@@ -137,7 +140,7 @@ class QuoteChargeBreakdown extends Component {
 
       return `${formattedPriceValue(value)} ${currency}`
     }
-    if (scope.hide_sub_totals) {
+    if (scope.hide_sub_totals || !get(scope, ['quote_card', 'sub_totals', key], true)) {
       return ''
     }
 
@@ -183,7 +186,7 @@ class QuoteChargeBreakdown extends Component {
     return Object.entries(currencySections).map(currencyFees => (
       <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
 
-        {scope.detailed_billing ? currencyFees[1].map((price, i) => {
+        {scope.detailed_billing && get(scope, ['quote_card', 'sections', key], false) ? currencyFees[1].map((price, i) => {
           const subPrices = (
             <div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
@@ -284,7 +287,7 @@ class QuoteChargeBreakdown extends Component {
       const sections = Object.entries(currencySections).map(currencyFees => (
         <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
 
-          {scope.detailed_billing ? currencyFees[1].map((price, i) => {
+          {scope.detailed_billing && get(scope, ['quote_card', 'sections', key], false) ? currencyFees[1].map((price, i) => {
             const subPrices = (
               <div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
                 <div className="flex-70 layout-row layout-align-start-center">
@@ -399,7 +402,8 @@ class QuoteChargeBreakdown extends Component {
     return this.quoteKeys()
       .map(key => (
         <CollapsingBar
-          showArrow
+          showArrow={get(scope, ['quote_card', 'sections', key], false)}
+          showArrowSpacer={!get(scope, ['quote_card', 'sections', key], false)}
           collapsed={showBreakdowns ? this.state.expander[`${key}`] : !this.state.expander[`${key}`]}
           theme={theme}
           contentStyle={styles.sub_price_row_wrapper}

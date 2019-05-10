@@ -102,11 +102,9 @@ exports[`group.cargoType is falsy 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -156,13 +154,9 @@ exports[`group.cargoType is falsy 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -299,11 +293,9 @@ exports[`group.size_class is falsy 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -353,13 +345,9 @@ exports[`group.size_class is falsy 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -496,11 +484,9 @@ exports[`shallow render 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -550,13 +536,9 @@ exports[`shallow render 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -693,11 +675,9 @@ exports[`shallow rendering both chargeable value 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -747,13 +727,9 @@ exports[`shallow rendering both chargeable value 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -890,11 +866,9 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -944,13 +918,9 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -1087,11 +1057,9 @@ exports[`shallow rendering volume chargeable value 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -1141,13 +1109,9 @@ exports[`shallow rendering volume chargeable value 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -1284,11 +1248,9 @@ exports[`shallow rendering weight chargeable value 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -1338,13 +1300,9 @@ exports[`shallow rendering weight chargeable value 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -1481,11 +1439,9 @@ exports[`shipment.load_type is cargo_item 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -1535,13 +1491,9 @@ exports[`shipment.load_type is cargo_item 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -1678,11 +1630,9 @@ exports[`state.collapsed is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -1732,13 +1682,9 @@ exports[`state.collapsed is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -1875,11 +1821,9 @@ exports[`state.unitView is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -1929,13 +1873,9 @@ exports[`state.unitView is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -2072,11 +2012,9 @@ exports[`state.viewer is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -2126,13 +2064,9 @@ exports[`state.viewer is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -2269,11 +2203,9 @@ exports[`theme is falsy 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -2323,13 +2255,9 @@ exports[`theme is falsy 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>
@@ -2466,11 +2394,9 @@ exports[`viewHSCodes is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                200.00
-              </span>
-               
-              kg
+              <Connect(UnitsWeight)
+                value={200}
+              />
             </p>
           </td>
         </tr>
@@ -2520,13 +2446,9 @@ exports[`viewHSCodes is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span>
-                1,000.00
-              </span>
-               m
-              <sup>
-                3
-              </sup>
+              <Connect(UnitsWeight)
+                value={1000}
+              />
             </p>
           </td>
         </tr>

@@ -74,8 +74,7 @@ exports[`props.viewHSCodes is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>
@@ -97,8 +96,7 @@ exports[`props.viewHSCodes is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>
@@ -120,8 +118,7 @@ exports[`props.viewHSCodes is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>
@@ -205,8 +202,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>
@@ -228,8 +224,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>
@@ -251,8 +246,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>
@@ -336,8 +330,7 @@ exports[`state.unitView is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>
@@ -359,8 +352,7 @@ exports[`state.unitView is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>
@@ -382,8 +374,7 @@ exports[`state.unitView is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>
@@ -467,8 +458,7 @@ exports[`state.viewer is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>
@@ -490,8 +480,7 @@ exports[`state.viewer is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>
@@ -513,8 +502,7 @@ exports[`state.viewer is true 1`] = `
             <p
               className="flex layout-row layout-align-end-center"
             >
-              <span />
-               kg
+              <Connect(UnitsWeight) />
             </p>
           </td>
         </tr>

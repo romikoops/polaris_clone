@@ -3,6 +3,7 @@ import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import '../../../../styles/react-toggle.scss'
 import styles from '../../Item/Group/CargoItemGroup.scss'
+import UnitsWeight from '../../../Units/Weight'
 import { LOAD_TYPES, cargoGlossary } from '../../../../constants'
 import { gradientTextGenerator, numberSpacing } from '../../../../helpers'
 
@@ -54,45 +55,42 @@ class CargoContainerGroup extends Component {
           </p>
         </td>
       </tr>),
-       
-       (<tr className={styles.data_table_row}>
+
+      (<tr className={styles.data_table_row}>
         <td className={styles.table_title}>
           <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>{t('cargo:totalPayloadWeight')}</p>
         </td>
         <td className={styles.table_value}>
           <p className="flex layout-row layout-align-end-center">
-            <span>{ numberSpacing(group.payload_in_kg, 2) }</span>
-            &nbsp;kg
+            <UnitsWeight value={group.payload_in_kg} />
           </p>
         </td>
       </tr>),
-       (<tr className={styles.data_table_row}>
+      (<tr className={styles.data_table_row}>
         <td className={styles.table_title}>
           <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>{t('cargo:totalTareWeight')}</p>
         </td>
         <td className={styles.table_value}>
           <p className="flex layout-row layout-align-end-center">
-            <span>{ numberSpacing(group.tare_weight, 2) }</span>
-            &nbsp;kg
+            <UnitsWeight value={group.tare_weight} />
           </p>
         </td>
       </tr>),
-       (<tr className={styles.data_table_row}>
+      (<tr className={styles.data_table_row}>
         <td className={styles.table_title}>
           <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>{t('cargo:totalGrossWeight')}</p>
         </td>
         <td className={styles.table_value}>
           <p className="flex layout-row layout-align-end-center">
-            <span>{ numberSpacing(group.gross_weight, 2) }</span>
-            &nbsp;kg
+            <UnitsWeight value={group.gross_weight} />
           </p>
         </td>
-      </tr>),
-      
+      </tr>)
+
     ]
 
     const imgFCL = { backgroundImage: `url(${LOAD_TYPES[1].img})` }
-  
+
     const cargoCategory = group.cargoType ? group.cargoType.category : cargoGlossary[group.size_class]
 
     return (
@@ -112,7 +110,7 @@ class CargoContainerGroup extends Component {
               {unitArr}
             </tbody>
           </table>
-          
+
         </div>
       </div>
     )

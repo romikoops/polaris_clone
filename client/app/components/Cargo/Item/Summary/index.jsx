@@ -2,6 +2,7 @@ import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import styles from '../Group/CargoItemGroup.scss'
 import { numberSpacing, singleItemChargeableObject } from '../../../../helpers'
+import UnitsWeight from '../../../Units/Weight'
 
 function CargoItemSummary ({
   items, t, mot, scope
@@ -52,10 +53,7 @@ function CargoItemSummary ({
         <div className="flex layout-row layout-align-space-around">
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
-              <span className={styles.cargo_type}>{numberSpacing(weight, 2)}</span>
-              {' '}
-              &nbsp;kg
-              {' '}
+              <UnitsWeight value={weight} />
             </p>
             <p className="flex-none layout-row layout-align-center-center">{t('cargo:totalGrossWeight')}</p>
           </div>
