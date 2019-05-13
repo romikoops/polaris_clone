@@ -8,7 +8,6 @@ module Locations
       name = Locations::NameFinder.location_seeding(
         terms
       )
-
       unless name
         upper_term = terms.is_a?(Array) ? terms.last : terms.split(' ').last
         name = Locations::NameFinder.location_seeding(upper_term)

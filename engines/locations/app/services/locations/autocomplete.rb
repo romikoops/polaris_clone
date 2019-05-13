@@ -14,7 +14,7 @@ module Locations
               else
                 query.search(
                   term,
-                  where: { country_code: 'de' },
+                  where: { country_code: country_codes },
                   fields: %i(name display_name postal_code),
                   match: :word_middle,
                   operator: 'or'

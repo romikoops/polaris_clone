@@ -35,11 +35,6 @@ RSpec.describe Locations::LocationSeeder do
         result = Locations::LocationSeeder.seeding('Vastra Volunda', 'Gothenburg')
         expect(result).to eq(location_2)
       end
-
-      it 'finds the Name and returns the smallest area containing the point' do
-        result = Locations::LocationSeeder.seeding('Port 4', 'Gothenburg')
-        expect(result).to eq(location_1)
-      end
     end
 
     # describe 'find_location_for_point' do

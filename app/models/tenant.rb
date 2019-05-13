@@ -47,6 +47,10 @@ class Tenant < Legacy::Tenant
     users.joins(:role).where('roles.name': 'admin').first
   end
 
+  def tenants_scope
+    Tenants::Scope.where(target: Tenants::Tenant.find_by(legacy_id: id))&.content || {}
+  end
+
   def email_for(branch_raw, mode_of_transport = nil)
     return nil unless branch_raw.is_a?(String) || branch_raw.is_a?(Symbol)
 

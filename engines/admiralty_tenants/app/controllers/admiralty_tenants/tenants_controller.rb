@@ -19,9 +19,10 @@ module AdmiraltyTenants
     def update
       @tenant.update(
         name: tenant_params[:name],
-        subdomain: tenant_params[:subdomain],
-        scope: JSON.parse(tenant_params[:scope])
+        subdomain: tenant_params[:subdomain]
       )
+
+      @scope.update(content: JSON.parse(tenant_params[:scope]))
 
       redirect_to tenant_path(@tenant)
     end
@@ -30,6 +31,7 @@ module AdmiraltyTenants
 
     def set_tenant
       @tenant = ::Tenant.find(params[:id])
+      @scope = ::Tenants::Scope.find_by(target: ::Tenants::Tenant.find_by(legacy_id: params[:id]))
     end
 
     def tenant_params
