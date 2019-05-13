@@ -55,6 +55,9 @@ exports[`aggregatedCargo is empty object 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
+            <Connect(UnitsWeight)
+              value={0}
+            />
           </p>
         </div>
       </div>
@@ -445,6 +448,9 @@ exports[`detailed billing working properly 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
+            <Connect(UnitsWeight)
+              value={220}
+            />
           </p>
         </div>
       </div>
@@ -810,6 +816,9 @@ exports[`shallow rendering 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
+            <Connect(UnitsWeight)
+              value={220}
+            />
           </p>
         </div>
       </div>
@@ -1200,6 +1209,9 @@ exports[`show schedule options working 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
+            <Connect(UnitsWeight)
+              value={220}
+            />
           </p>
         </div>
       </div>
@@ -1565,6 +1577,9 @@ exports[`single result rendering removes add button 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
+            <Connect(UnitsWeight)
+              value={220}
+            />
           </p>
         </div>
       </div>
@@ -1929,6 +1944,9 @@ exports[`tenant.scope is empty object 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
+            <Connect(UnitsWeight)
+              value={220}
+            />
           </p>
         </div>
       </div>

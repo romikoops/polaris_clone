@@ -51,6 +51,23 @@ RSpec.describe Tenants::ScopeService do
           non_stackable_goods: true,
           offer_disclaimers: false,
           open_quotation_tool: false,
+          quote_card: {
+            sub_totals: {
+              import: true,
+              export: true,
+              cargo: true,
+              trucking_pre: true,
+              trucking_on: true
+            },
+            sections: {
+              charge_icons: true,
+              import: true,
+              export: true,
+              cargo: true,
+              trucking_pre: true,
+              trucking_on: true
+            }
+          },
           quote_notes: 'Quote Notes from the FactoryBot Factory',
           require_full_address: true,
           send_email_on_quote_download: false,
@@ -58,7 +75,19 @@ RSpec.describe Tenants::ScopeService do
           show_chargeable_weight: false,
           terms: ['You verify that all the information provided above is true', 'You agree to the presented terms and conditions.', 'The Shop Operator is to discuss the validity of the presented prices with the product owners.'],
           total_dimensions: true,
-          translation_overrides: false
+          translation_overrides: false,
+          values: {
+            weight: {
+              unit: 't',
+              decimals: 3
+            }
+          },
+          voyage_info: {
+            carrier: true,
+            voyage_code: true,
+            vessel: true,
+            service_level: true
+          }
         }
       end
 

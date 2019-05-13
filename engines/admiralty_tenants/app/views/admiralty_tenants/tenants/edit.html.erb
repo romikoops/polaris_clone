@@ -26,7 +26,7 @@
 
     <div class="col-sm-6">
       <div id="jsoneditor"></div>
-      <%= f.hidden_field :scope, value: @tenant.scope.to_json %>
+      <%= f.hidden_field :scope, value: @scope.content.to_json %>
     </div>
   </div>
 <% end %>

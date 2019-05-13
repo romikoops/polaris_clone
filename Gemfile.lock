@@ -61,6 +61,7 @@ PATH
       core
       jsoneditor-rails
       rails (~> 5.2.1)
+      tenants
 
 PATH
   remote: engines/admiralty
