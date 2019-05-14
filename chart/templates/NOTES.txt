@@ -1,7 +1,30 @@
+_____ _       ___  ___      _____
+|_   _| |      |  \/  |     /  __ \
+ | | | |_ ___ | .  . |_   _| /  \/ __ _ _ __ __ _  ___
+ | | | __/ __|| |\/| | | | | |    / _` | '__/ _` |/ _ \
+_| |_| |_\__ \| |  | | |_| | \__/\ (_| | | | (_| | (_) |
+\___/ \__|___/\_|  |_/\__, |\____/\__,_|_|  \__, |\___/
+                       __/ |                 __/ |
+                      |___/                 |___/
 
-Tail the logs of the application to see whether all runs well:
+APP: {{ include "app.app_url" . }}
+API: {{ include "app.api_url" . }}
 
-kubectl logs -f -l app={{ template "app.fullname" . }} -n {{ .Release.Namespace }}
+To access Rails Console:
 
-  name: {{ template "app.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  kubectl -n {{ .Release.Namespace }} exec \
+    $(kubectl -n {{ .Release.Namespace }} get pods \
+      -l app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=backend \
+      -o jsonpath='{.items[].metadata.name}' \
+    ) \
+    vaultenv bin/rails c
+
+To view logs:
+
+Backend:
+
+  kubectl -n {{ .Release.Namespace }} logs -l app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=backend
+
+Frontend:
+
+  kubectl -n {{ .Release.Namespace }} logs -l app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=frontend

@@ -36,8 +36,7 @@ RUN npm install -g 'mjml@4.3.1'
 
 WORKDIR /app
 
-COPY .build/ ./
-COPY Gemfile Gemfile.lock ./
+COPY . ./
 RUN bundle config --global frozen 1 \
     && bundle install -j4 --retry 3 \
     # Remove unneeded files (cached *.gem, *.o, *.c)
@@ -45,7 +44,6 @@ RUN bundle config --global frozen 1 \
     && find /usr/local/bundle/gems/ -name "*.c" -delete \
     && find /usr/local/bundle/gems/ -name "*.o" -delete
 
-COPY . ./
 ARG RELEASE=""
 RUN echo "$RELEASE" > ./REVISION
 
@@ -56,14 +54,26 @@ USER app
 
 RUN RAILS_ENV=production bin/rails assets:precompile
 
-FROM ruby:2.6 AS app
+#
+#
+# PRODUCTION TARGET
+#
+#
+#
+FROM ruby:2.6-slim AS app
 LABEL maintainer="development@itsmycargo.com"
+
+# Add Tini
+ENV TINI_VERSION v0.18.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
 
 ENV MALLOC_ARENA_MAX 2
 
 # Minimal requirements to run a Rails app
 RUN apt-get update && apt-get install -y \
   apt-transport-https \
+  gnupg \
   libgeos-c1v5 \
   libpq5 \
   locales \
@@ -71,36 +81,42 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 
 ARG NODE_VERSION=node_10.x
-RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+ADD https://deb.nodesource.com/gpgkey/nodesource.gpg.key /root
+RUN apt-key add /root/nodesource.gpg.key \
   && echo "deb https://deb.nodesource.com/$NODE_VERSION stretch main" | tee /etc/apt/sources.list.d/nodesource.list \
   && apt-get update && apt-get install -y \
     nodejs \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* /root/nodesource.gpg.key
 
 RUN npm install -g 'mjml@4.3.1'
 
-ARG DOCKERIZE_VERSION=v0.6.1
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+ARG ENVCONSUL_VERSION=0.7.3
+ADD https://releases.hashicorp.com/envconsul/${ENVCONSUL_VERSION}/envconsul_${ENVCONSUL_VERSION}_linux_amd64.tgz /tmp
+RUN tar -C /bin -xzvf /tmp/envconsul_${ENVCONSUL_VERSION}_linux_amd64.tgz \
+    && rm /tmp/envconsul_${ENVCONSUL_VERSION}_linux_amd64.tgz
 
 # Add user
-RUN groupadd -r app && useradd -r -d /app/tmp -s /sbin/nologin -g app app
+RUN groupadd -r -g 1000 app && useradd -r -d /app/tmp -s /sbin/nologin -g app -u 1000 app
+
+COPY scripts/vaultenv.sh /bin/vaultenv
 
 # Copy app with gems from former build stage
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 COPY --from=builder --chown=app:app /app /app
-
 RUN chown -R app:app /app/
+
 USER app
 
 # Set Rails env
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
 ENV RAILS_ENV review
+ENV PORT 3000
 
 WORKDIR /app
 
-EXPOSE 3000
+EXPOSE $PORT
 
-CMD ["bin/rails", "server", "puma", "-b", "0.0.0.0", "-p", "3000"]
+ENTRYPOINT ["/tini", "--", "/bin/vaultenv"]
+
+CMD ["bin/rails", "server", "puma", "-b", "0.0.0.0", "-p", "$PORT"]

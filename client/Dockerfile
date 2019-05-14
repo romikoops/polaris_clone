@@ -1,19 +1,16 @@
 # Builder Image
-FROM node:10-alpine AS builder
+FROM node:lts-slim AS builder
 LABEL maintainer="development@itsmycargo.com"
 
-RUN apk add --update --no-cache \
-  autoconf \
-  automake \
-  bash \
-  build-base \
+RUN apt-get update && apt-get install -y \
+  build-essential \
   gifsicle \
-  lcms2-dev \
-  libjpeg-turbo-utils \
+  libgl1-mesa-glx \
+  libjpeg62-turbo-dev \
+  liblcms2-dev \
   libpng-dev \
-  libtool \
-  libwebp-tools \
-  nasm \
+  libwebp-dev \
+  libxi6 \
   optipng \
   pngquant
 
@@ -35,6 +32,7 @@ RUN \
     SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN \
     RELEASE=$RELEASE \
     npm run build
+
 # Clear out source-maps
 RUN rm -v /dist/*.map*
 

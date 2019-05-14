@@ -26,8 +26,8 @@ class ApplicationController < ActionController::API
 
   def require_authentication!
     raise ApplicationError::NotAuthenticated unless user_signed_in?
-    scope = ::Tenants::ScopeService.new(user: current_user).fetch
-    require_non_guest_authentication! if scope['closed_shop']
+
+    require_non_guest_authentication! if current_scope['closed_shop']
   end
 
   def require_non_guest_authentication!
@@ -37,8 +37,14 @@ class ApplicationController < ActionController::API
   private
 
   def current_tenant
-    @current_tenant ||= Tenant.find_by(id: params[:tenant_id])
-    @current_tenant ||= Tenant.find_by(id: params[:id])
+    @current_tenant ||= Tenant.find_by(id: params[:tenant_id] || params[:id])
+  end
+
+  def current_scope
+    @current_scope ||= ::Tenants::ScopeService.new(
+      user: current_user,
+      tenant: ::Tenants::Tenant.find_by(legacy_id: current_tenant&.id)
+    ).fetch
   end
 
   def append_info_to_payload(payload)
@@ -47,10 +53,6 @@ class ApplicationController < ActionController::API
   end
 
   def set_raven_context
-    scope = ::Tenants::ScopeService.new(
-      user: current_user,
-      tenant: ::Tenants::Tenant.find_by(legacy_id: current_tenant&.id)
-    ).fetch
     Raven.user_context(
       email: current_user&.email,
       id: current_user&.id,
@@ -65,7 +67,7 @@ class ApplicationController < ActionController::API
       agency: current_user&.agency&.slice(%i(id name)),
       params: params.to_unsafe_h,
       url: request.url,
-      scope: scope
+      scope: current_scope
     )
   end
 

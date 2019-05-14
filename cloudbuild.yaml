@@ -1,22 +1,22 @@
 ---
 steps:
-  - id: api
+  - id: backend
     name: gcr.io/cloud-builders/docker
     args:
       - build
       - --build-arg=RELEASE=$COMMIT_SHA
-      - --tag=eu.gcr.io/itsmycargo-main/apps/api:$COMMIT_SHA
+      - --tag=eu.gcr.io/itsmycargo-main/$_REPOSITORY/backend:$COMMIT_SHA
       - /workspace/
     waitFor:
       - "-"
 
-  - id: client
+  - id: frontend
     name: gcr.io/cloud-builders/docker
     args:
       - build
       - --build-arg=RELEASE=$COMMIT_SHA
       - --build-arg=SENTRY_AUTH_TOKEN=$_SENTRY_AUTH_TOKEN
-      - --tag=eu.gcr.io/itsmycargo-main/apps/client:$COMMIT_SHA
+      - --tag=eu.gcr.io/itsmycargo-main/$_REPOSITORY/frontend:$COMMIT_SHA
       - /workspace/client/
     waitFor:
     - "-"
@@ -25,13 +25,13 @@ steps:
     name: gcr.io/cloud-builders/docker
     args:
       - build
-      - --tag=eu.gcr.io/itsmycargo-main/qa/imc-app:$COMMIT_SHA
+      - --tag=eu.gcr.io/itsmycargo-main/$_REPOSITORY/qa:$COMMIT_SHA
       - /workspace/qa/
     waitFor:
     - "-"
 
 timeout: 1800s
 images:
-  - eu.gcr.io/itsmycargo-main/apps/api:$COMMIT_SHA
-  - eu.gcr.io/itsmycargo-main/apps/client:$COMMIT_SHA
-  - eu.gcr.io/itsmycargo-main/qa/imc-app:$COMMIT_SHA
+  - eu.gcr.io/itsmycargo-main/$_REPOSITORY/backend:$COMMIT_SHA
+  - eu.gcr.io/itsmycargo-main/$_REPOSITORY/frontend:$COMMIT_SHA
+  - eu.gcr.io/itsmycargo-main/$_REPOSITORY/qa:$COMMIT_SHA

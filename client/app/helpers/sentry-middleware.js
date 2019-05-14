@@ -29,7 +29,7 @@ export default function createSentryMiddleware (Sentry, options = {}) {
         scope.setUser({ id: get(user, 'id'), email: get(user, 'email'), role: get(user, 'role.name') })
         scope.setTag('tenant', get(state, 'app.tenant.subdomain'))
         scope.setTag('agency', !!get(user, 'agency_id'))
-        scope.setTag('reviewApp', window.keel.reviewApp)
+        scope.setTag('appName', window.keel.appName)
       })
 
       // Log the action taken to Sentry so that we have narrative context in our
