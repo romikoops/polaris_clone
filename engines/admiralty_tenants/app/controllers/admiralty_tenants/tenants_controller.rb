@@ -7,7 +7,7 @@ module AdmiraltyTenants
     before_action :set_tenant, except: :index
 
     def index
-      @tenants = ::Tenant.order(:subdomain).all
+      @tenants = ::Legacy::Tenant.order(:subdomain).all
     end
 
     def show
@@ -30,7 +30,7 @@ module AdmiraltyTenants
     private
 
     def set_tenant
-      @tenant = ::Tenant.find(params[:id])
+      @tenant = ::Legacy::Tenant.find(params[:id])
       @scope = ::Tenants::Scope.find_by(target: ::Tenants::Tenant.find_by(legacy_id: params[:id]))
     end
 

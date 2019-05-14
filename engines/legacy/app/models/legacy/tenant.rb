@@ -12,6 +12,10 @@ module Legacy
     def scope_for(user:)
       ::Tenants::ScopeService.new(target: user).fetch
     end
+
+    def tenants_scope
+      Tenants::Scope.find_by(target: Tenants::Tenant.find_by(legacy_id: id))&.content || {}
+    end
   end
 end
 

@@ -45,8 +45,16 @@ module Locations
     let(:chinese_string) { '宝山城市工业园区, 中国' }
 
     context '.search' do
-      it 'returns results including the desired object (en)' do
+      it 'returns results including the desired object (en) with country codes' do
         results = Autocomplete.search(term: 'Baoshun', country_codes: ['cn'], lang: 'en')
+        expect(results.first.name).to eq('Baoshun')
+        expect(results.first.city).to eq('Shanghai')
+        expect(results.first.geojson).to eq(example_bounds)
+        expect(results.first.lat_lng).to eq({latitude: 31.2699895, longitude: 121.9318879})
+        expect(results.first.class).to eq(Locations::NameDecorator)
+      end
+      it 'returns results including the desired object (en) without country codes' do
+        results = Autocomplete.search(term: 'Baoshun', lang: 'en')
         expect(results.first.name).to eq('Baoshun')
         expect(results.first.city).to eq('Shanghai')
         expect(results.first.geojson).to eq(example_bounds)

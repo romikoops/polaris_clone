@@ -12,7 +12,17 @@ module AdmiraltyTenants
     end
 
     let!(:tenants) do
-      Array.new(5) { |i| Tenant.create(subdomain: "demo#{i}", scope: { closed_shop: false }) }
+      Array.new(5) do |i|
+        tenant = ::Legacy::Tenant.create(subdomain: "demo#{i}", scope: { closed_shop: false })
+        ::Tenants::Scope.create(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id), content: { closed_shop: false })
+        
+        tenant
+      end
+    end
+    let!(:scopes) do
+      tenants.each do |tenant|
+        ::Tenants::Scope.create(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id), content: { closed_shop: false })
+      end
     end
 
     let(:tenant) { tenants.sample }
@@ -51,7 +61,7 @@ module AdmiraltyTenants
         patch :update, params: { id: tenant.id, tenant: tenant_params }
 
         expect(response).to redirect_to("/tenants/#{tenant.id}")
-        expect(Tenant.find(tenant.id).scope).to eq('foo' => true)
+        expect(::Legacy::Tenant.find(tenant.id).tenants_scope).to eq('foo' => true)
       end
     end
   end

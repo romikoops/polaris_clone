@@ -60,6 +60,7 @@ PATH
       admiralty_auth
       core
       jsoneditor-rails
+      legacy
       rails (~> 5.2.1)
       tenants
 

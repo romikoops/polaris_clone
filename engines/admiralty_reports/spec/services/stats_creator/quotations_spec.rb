@@ -30,7 +30,6 @@ module AdmiraltyReports
         end
 
         it 'returns the correct stats' do
-          # require 'pry';binding.pry
           expect(described_class.new(tenant).perform).to eq(
             '04/01/2019' => {
               combined_data: { avg_time_for_booking_process: '5 minutes', n_individual_agents: 1, n_quotations: 1 },

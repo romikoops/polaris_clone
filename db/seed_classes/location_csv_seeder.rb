@@ -204,11 +204,7 @@ class LocationCsvSeeder # rubocop:disable Metrics/ClassLength
           province: row['landkreis']
         }
         location = Locations::Location.find_by(country_code: 'de', name: row['plz'])
-        if !location
-          # binding.pry
-        else
-          location.update(data)
-        end
+        location&.update(data)
       end
     end
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)

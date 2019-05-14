@@ -13,9 +13,9 @@ module Locations
         name = Locations::NameFinder.location_seeding(upper_term)
       end
 
-      unless name
-        name = Locations::NameFinder.seeding(terms)
-      end
+      name ||= Locations::NameFinder.seeding(terms)
+
+      return nil unless name.present?
 
       return name.location if name.location
 

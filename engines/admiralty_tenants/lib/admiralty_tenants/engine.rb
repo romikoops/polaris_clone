@@ -5,6 +5,7 @@ require 'jsoneditor-rails'
 require 'admiralty_assets'
 require 'admiralty_auth'
 require 'core'
+require 'legacy'
 require 'tenants'
 
 module AdmiraltyTenants

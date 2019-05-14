@@ -29,30 +29,32 @@ RSpec.describe Locations::LocationSeeder do
         ]
       end
 
-     
-
       it 'finds the Name and returns the attached location' do
         result = Locations::LocationSeeder.seeding('Vastra Volunda', 'Gothenburg')
         expect(result).to eq(location_2)
       end
+      it 'returns nil when nothing is found' do
+        result = Locations::LocationSeeder.seeding('Jonkoping')
+        expect(result).to eq(nil)
+      end
     end
 
-    # describe 'find_location_for_point' do
-    #   let!(:location_admin_1) { FactoryBot.create(:swedish_location, osm_id: 4, admin_level: 7) }
-    #   let!(:location_non_admin_1) { FactoryBot.create(:swedish_location, osm_id: 56) }
-    #   let!(:location_admin_2) { FactoryBot.create(:xl_swedish_location, admin_level: 8, osm_id: 41) }
-    #   let!(:location_non_admin_2) { FactoryBot.create(:xl_swedish_location, osm_id: 46) }
-    #   it 'finds the correct location for the point' do
-    #     point = location_admin_1.bounds.centroid
-    #     result = Locations::LocationSeeder.find_location_for_point(lat: point.x, lon: point.y)
-    #     expect(result).to eq(location_admin_1)
-    #   end
-    #   it 'finds the the smallest containing point if no adminlevel 3-8 areas are available' do
-    #     point = location_non_admin_1.bounds.centroid
-    #     result = Locations::LocationSeeder.find_location_for_point(lat: point.x, lon: point.y)
-    #     expect(result).to eq(location_non_admin_1)
-    #   end
-    # end
+    describe 'find_location_for_point' do
+      it 'finds the correct location for the point' do
+        location_admin_1 = FactoryBot.create(:swedish_location, osm_id: 4, admin_level: 7)
+        location_admin_2 = FactoryBot.create(:xl_swedish_location, admin_level: 8, osm_id: 41)
+        point = location_admin_1.bounds.centroid
+        result = Locations::LocationSeeder.find_location_for_point(lat: point.y, lon: point.x)
+        expect(result).to eq(location_admin_1)
+      end
+      it 'finds the the smallest containing point if no adminlevel 3-8 areas are available' do
+        location_non_admin_1 = FactoryBot.create(:swedish_location, osm_id: 56, admin_level: nil)
+        location_non_admin_2 = FactoryBot.create(:xl_swedish_location, osm_id: 46, admin_level: nil)
+        point = location_non_admin_1.bounds.centroid
+        result = Locations::LocationSeeder.find_location_for_point(lat: point.y, lon: point.x)
+        expect(result).to eq(location_non_admin_1)
+      end
+    end
 
     describe '.seeding_with_postal_code' do
       let!(:location_3) { FactoryBot.create(:german_postal_location) }
