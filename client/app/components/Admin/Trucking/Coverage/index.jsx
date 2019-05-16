@@ -149,7 +149,7 @@ class TruckingCoverage extends PureComponent {
   render () {
     return (
       <div className={`flex-100 layout-row layout-wrap ${styles.map_box}`}>
-        <div id="map" className={`flex-100 layout-row ${styles.place_map}`} style={mapStyling} />
+        <div id="map" className={`flex-100 layout-row ${styles.place_map}`} />
       </div>
     )
   }
