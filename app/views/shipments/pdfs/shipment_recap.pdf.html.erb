@@ -392,7 +392,7 @@
                 <tr>
                   <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
                   <td class="table-value">
-                     <% agc_value = weight_units['unit'] == 'kg' ? s.aggregated_cargo.weight : s.aggregated_cargo.weight / 1000 %>
+                     <% agc_value = weight_units['unit'] == 'kg' ? shipment.aggregated_cargo.weight : shipment.aggregated_cargo.weight / 1000 %>
                     <span><%="#{"%.#{weight_units['decimals']}f" % agc_value} #{weight_units['unit']}" %></span>
                   </td>
                 </tr>
