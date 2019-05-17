@@ -1,7 +1,9 @@
 export default function addressFromLocation (location) {
+  const zipCode = location.country === 'Hong Kong' ? '000000' : location.zipCode
+
   return {
     ...location.center,
-    zipCode: location.postal_code,
+    zipCode,
     city: location.city,
     country: location.country,
     fullAddress: location.description,

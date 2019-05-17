@@ -29,6 +29,9 @@ export default function addressFromPlace (place, gMaps, map, callback) {
     if (ac.types.includes('country')) {
       tmpAddress.country = ac.long_name
     }
+    if (ac.types.includes('country') && ac.long_name === 'Hong Kong') {
+      tmpAddress.zipCode = '000000'
+    }
   })
   tmpAddress.latitude = place.geometry.location.lat()
   tmpAddress.longitude = place.geometry.location.lng()
