@@ -15,7 +15,7 @@ module DocumentService
       @workbook        = create_workbook(@dir)
     end
 
-    def perform # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+    def perform # rubocop:disable Metrics/MethodLength
       @data.each do |page, column_hash|
         @row = 0
         next if column_hash.values.empty?
@@ -207,20 +207,18 @@ module DocumentService
             row << diff.dig(:trucking_on, :total)
           end
         when 'PRECARRIAGE_TRIGGER'
-          if expected[:trucking_pre] &&  data[:shipment].meta['trucking_pre']   
+          if expected[:trucking_pre] && data[:shipment].meta['trucking_pre']
             data[:shipment].meta['trucking_pre'].each do |hub_id, value|
-              td = data[:shipment].meta['trucking_pre'][hub_id]
               3.times do
-                row << "#{td[:trigger]} @ #{td[:value]} kg"
+                row << "#{value[:trigger]} @ #{value[:value]} kg"
               end
             end
           end
         when 'ONCARRIAGE_TRIGGER'
-          if expected[:trucking_on] &&  data[:shipment].meta['trucking_on']   
+          if expected[:trucking_on] && data[:shipment].meta['trucking_on']
             data[:shipment].meta['trucking_on'].each do |hub_id, value|
-              td = data[:shipment].meta['trucking_on'][hub_id]
               3.times do
-                row << "#{td[:trigger]} @ #{td[:value]} kg"
+                row << "#{value[:trigger]} @ #{value[:value]} kg"
               end
             end
           end

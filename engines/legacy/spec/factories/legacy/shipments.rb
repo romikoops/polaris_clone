@@ -3,8 +3,8 @@
 FactoryBot.define do
   factory :legacy_shipment, class: 'Legacy::Shipment' do
     association :user, factory: :legacy_user
-    association :origin_hub, factory: :hub, factory: :legacy_hub
-    association :destination_hub, factory: :hub, factory: :legacy_hub
+    association :origin_hub, factory: :legacy_hub
+    association :destination_hub, factory: :legacy_hub
     association :trip, factory: :legacy_trip
     load_type { :container }
     booking_placed_at { Date.today }

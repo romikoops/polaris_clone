@@ -110,9 +110,6 @@ module DataValidator
           all_keys = true
         end
       end
-    rescue => e
-      require 'pry';
-      binding.pry
     end
 
     def create_example_results # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -195,9 +192,6 @@ module DataValidator
       return to_display if key == 'TOTAL'
 
       { total: to_display }
-    rescue => e
-      require 'pry';
-      binding.pry
     end
 
     def price_check(example, sheet_name) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -422,8 +416,7 @@ module DataValidator
       rescue StandardError => e
         Rails.logger.error e.message
       end
-      # require 'pry';
-      # binding.pry
+
       {
         result: result,
         expected: expected_result,
