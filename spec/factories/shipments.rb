@@ -11,7 +11,7 @@ FactoryBot.define do
     planned_etd { Date.tomorrow + 7.days + 2.hours }
     planned_eta { Date.tomorrow + 11.days }
     closing_date { Date.tomorrow + 4.days + 5.hours }
-
+    meta { {} }
     total_goods_value do
       {
         value: 100,
