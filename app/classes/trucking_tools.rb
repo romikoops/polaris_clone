@@ -336,6 +336,7 @@ module TruckingTools
     total_cbm_weight = 0.0
     total_payload_weight = 0.0
     total_area = 0.0
+    shipment = cargos.first.shipment
     cargos.each do |cargo|
       trucking_weight = if cargo.stackable
                           trucking_chargeable_weight_by_stacked_area(trucking_pricing, cargo)
@@ -352,11 +353,21 @@ module TruckingTools
     if total_load_meters >= (trucking_pricing.load_meterage['ldm_limit'] || DEFAULT_MAX)
       effective_weight = [total_load_meterage_weight, total_cbm_weight, total_payload_weight].max
       stackable_key = effective_weight == total_load_meterage_weight ? 'non_stackable' : 'stackable'
+      
     else
       effective_weight = [total_cbm_weight, total_payload_weight].max
       stackable_key = 'stackable'
     end
-
+    key = case effective_weight
+    when total_load_meterage_weight
+      'ldm'
+    when total_cbm_weight
+      'cbm'
+    when total_payload_weight
+      'kg'
+    end
+    shipment.meta["trucking_#{trucking_pricing.carriage}"] ||= {}
+    shipment.meta["trucking_#{trucking_pricing.carriage}"][trucking_pricing.hub_id] = { trigger: key, value: effective_weight}
     cargo_object[stackable_key]['weight'] += effective_weight
     cargo_object[stackable_key]['volume'] += cargos_volume(cargos)
     cargo_object[stackable_key]['number_of_items'] += cargos.map(&:quantity).sum
@@ -371,7 +382,8 @@ module TruckingTools
     end
   end
 
-  def calc_trucking_price(trucking_pricing, cargos, kms, carriage, user)
+  def calc_trucking_price(trucking_pricing, cargos, kms, carriage, shipment)
+    user = shipment.user
     direction = carriage == 'pre' ? 'export' : 'import'
     cargo_object = if trucking_pricing.load_type == 'container'
                      get_container_object(cargos)

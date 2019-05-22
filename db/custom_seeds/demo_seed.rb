@@ -11,7 +11,7 @@ subdomains.each do |sub|
   DataValidator::PricingValidator.new(
     tenant: tenant.id,
     user: shipper,
-    key: 'data/speedtrans/speedtrans_pricing_test_19_full.xlsx',
+    key: 'data/speedtrans/speedtrans_pricing_test_full.xlsx',
     load_type: 'lcl'
   ).perform
 

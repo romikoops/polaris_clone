@@ -206,6 +206,24 @@ module DocumentService
             row << "#{result.dig(:trucking_on, :total, :currency)} #{result_total}"
             row << diff.dig(:trucking_on, :total)
           end
+        when 'PRECARRIAGE_TRIGGER'
+          if expected[:trucking_pre] &&  data[:shipment].meta['trucking_pre']   
+            data[:shipment].meta['trucking_pre'].each do |hub_id, value|
+              td = data[:shipment].meta['trucking_pre'][hub_id]
+              3.times do
+                row << "#{td[:trigger]} @ #{td[:value]} kg"
+              end
+            end
+          end
+        when 'ONCARRIAGE_TRIGGER'
+          if expected[:trucking_on] &&  data[:shipment].meta['trucking_on']   
+            data[:shipment].meta['trucking_on'].each do |hub_id, value|
+              td = data[:shipment].meta['trucking_on'][hub_id]
+              3.times do
+                row << "#{td[:trigger]} @ #{td[:value]} kg"
+              end
+            end
+          end
         end
       end
       row
@@ -215,7 +233,7 @@ module DocumentService
       %w(
         ITINERARY MOT LOAD_TYPE ORIGIN_TRUCK_TYPE DESTINATION_TRUCK_TYPE
         UNITS PICKUP_ADDRESS DELIVERY_ADDRESS CARRIER SERVICE_LEVEL FREIGHT
-        PRECARRIAGE ONCARRIAGE IMPORT EXPORT TOTAL
+        PRECARRIAGE PRECARRIAGE_TRIGGER ONCARRIAGE ONCARRIAGE_TRIGGER IMPORT EXPORT TOTAL
       )
     end
 

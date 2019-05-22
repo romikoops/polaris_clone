@@ -83,7 +83,7 @@ module OfferCalculatorService
         cargo_units,
         distance,
         trucking_pricing.carriage,
-        @shipment.user
+        @shipment
       )
     end
   end
