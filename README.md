@@ -1,14 +1,21 @@
-# ItsMyCargo
+    _____ _       ___  ___      _____
+    |_   _| |      |  \/  |     /  __ \
+     | | | |_ ___ | .  . |_   _| /  \/ __ _ _ __ __ _  ___
+     | | | __/ __|| |\/| | | | | |    / _` | '__/ _` |/ _ \
+    _| |_| |_\__ \| |  | | |_| | \__/\ (_| | | | (_| | (_) |
+    \___/ \__|___/\_|  |_/\__, |\____/\__,_|_|  \__, |\___/
+                           __/ |                 __/ |
+                          |___/                 |___/
 
-## :ship: Deployments
+### :ship: Deployments
 
 We currently deploy API layer via AWS Elastic Beanstalk.
 Frontend code is deployed by manually via `npm deploy` script in `client/` directory.
 
-## Development Setup
+### Development Setup
 
 
-### Initial Database
+#### Initial Database
 
 To seed initial development database, we have nightly database dump of production system that is anonymised and cleaned
 for development usage. To download and seed local database with this seed file, please ask from the colleague the
@@ -20,7 +27,7 @@ After this, simply run rake task:
 
     $ bin/rake db:drop db:import
 
-### Overcommit
+#### Overcommit
 
 We use [overcommit](https://github.com/brigade/overcommit) to maintain our git hooks. Currently only commit message format
 is enforced with pre-commit hooks, but other mandatory checks can be added if required.
@@ -33,7 +40,7 @@ variable `OVERCOMMIT_DISABLE=1`, e.g. to rebase:
 
     OVERCOMMIT_DISABLE=1 git rebase -i origin/master
 
-#### Commit Message
+##### Commit Message
 
 Please keep your commit message sensible and descriptive. For example of what is considered good git commit message,
 please see [Linus' instructions](https://github.com/torvalds/subsurface-for-dirk/blob/master/README#L92). Each commit
