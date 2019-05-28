@@ -1,15 +1,17 @@
-# Default values for app.
+# Default values for imc-app.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 meta:
-  pullRequestId:
+  changeId:
+  changeRepo:
 
 backend:
+  enabled: true
   image:
-    repository: eu.gcr.io/itsmycargo-main/apps/api
+    repository: eu.gcr.io/itsmycargo-main/imc-react-api/backend
     tag: latest
     pullPolicy: Always
   resources:
@@ -17,36 +19,53 @@ backend:
       memory: 1000Mi
       cpu: 1000m
     limits:
-      cpu: 1500m
-      memory: 1200Mi
+      cpu: 1000m
+      memory: 1000Mi
+  # Enable pod security context (must be `true` if runAsUser or fsGroup are set)
+  usePodSecurityContext: false
+  # Set runAsUser to 1000 to let app run as non-root user 'app' which exists in 'app/app' docker image.
+  # When setting runAsUser to a different value than 0 also set fsGroup to the same value:
+  runAsUser: 1000
+  fsGroup: 1000
+  service:
+    type: ClusterIP
+    port: 3000
 
 frontend:
+  enabled: true
   image:
-    repository: eu.gcr.io/itsmycargo-main/apps/client
+    repository: eu.gcr.io/itsmycargo-main/imc-react-api/frontend
     tag: latest
     pullPolicy: Always
   resources:
     requests:
       memory: 24Mi
       cpu: 100m
+    limits:
+      memory: 24Mi
+      cpu: 100m
+  service:
+    type: ClusterIP
+    port: 80
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
 
 ingress:
+  enabled: true
   domain:
+  annotations:
+    kubernetes.io/ingress.class: traefik
 
-masterKey: ""
-reviewName:
-postgres:
-  host:
-  user:
-  password:
-  database:
+vault:
+  endpoint:
+  roleName:
+  tokenPath: /home/vault/.token
 
-nodeSelector: {}
+nodeSelector:
+  cloud.google.com/gke-preemptible: "true"
+
 tolerations: []
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: cloud.google.com/gke-preemptible
-          operator: Exists
+
+affinity: {}

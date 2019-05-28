@@ -1,31 +1,31 @@
 #!groovy
 
-wrap.pipeline(timeout: 120) {
+withPipeline(timeout: 120) {
   inPod(
     containers: [
       containerTemplate(name: 'api', image: 'ruby:2.5', ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '1000m', resourceLimitCpu: '1500m',
-        resourceRequestMemory: '1000Mi', resourceLimitMemory: '1500Mi',
+        resourceRequestCpu: '1000m', resourceLimitCpu: '1000m',
+        resourceRequestMemory: '1000Mi', resourceLimitMemory: '1000Mi',
         envVars: [
           envVar(key: 'POSTGRES_DB', value: 'imcr_test'),
           envVar(key: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test')
         ]
       ),
       containerTemplate(name: 'client', image: 'node:10-alpine', ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '1000m', resourceLimitCpu: '1200m',
-        resourceRequestMemory: '1000Mi', resourceLimitMemory: '1200Mi',
+        resourceRequestCpu: '1000m', resourceLimitCpu: '1000m',
+        resourceRequestMemory: '1000Mi', resourceLimitMemory: '1000Mi',
       ),
       containerTemplate(name: 'postgis', image: 'mdillon/postgis',
-        resourceRequestCpu: '250m', resourceLimitCpu: '500m',
-        resourceRequestMemory: '400Mi', resourceLimitMemory: '500Mi',
+        resourceRequestCpu: '250m', resourceLimitCpu: '250m',
+        resourceRequestMemory: '500Mi', resourceLimitMemory: '500Mi',
       ),
-      containerTemplate(name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:6.6.1',
-        resourceRequestCpu: '250m', resourceLimitCpu: '500m',
-        resourceRequestMemory: '1000Mi', resourceLimitMemory: '1500Mi',
+      containerTemplate(name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:6.7.2',
+        resourceRequestCpu: '250m', resourceLimitCpu: '250m',
+        resourceRequestMemory: '1500Mi', resourceLimitMemory: '1500Mi',
       )
     ]
   ) { label ->
-    wrap.node(label) {
+    withNode(label) {
       stage('Checkout') { checkoutScm() }
 
       stage('Prepare') {
@@ -153,7 +153,7 @@ wrap.pipeline(timeout: 120) {
     stage('Prepare Deploy') {
       lock(label: "${env.GIT_BRANCH}", inversePrecedence: true) {
         inPod { label ->
-          wrap.node(label) {
+          withNode(label) {
             milestone()
 
             checkoutScm()
@@ -161,22 +161,15 @@ wrap.pipeline(timeout: 120) {
             parallel(
               'database': {
                 build(
-                  job: 'Tasks/Production/review/dbreset',
+                  job: 'Tasks/Development/chore_vault/imc-react-api/dbreset',
                   parameters: [string(name: 'database', value: env.CI_COMMIT_REF_SLUG)]
                 )
                 },
               'images': {
-                sh """
-                  rm -rf .build
-                  mkdir -p .build
-                  find . -depth -type f -name '*.gemspec' | cpio -d -v -p .build/
-                """
                 googleCloudBuild(
-                  credentialsId: 'itsmycargo-main',
-                  request: file('cloudbuild.yaml'),
-                  source: local('.'),
                   substitutions: [
                     COMMIT_SHA: env.GIT_COMMIT,
+                    _REPOSITORY: jobName(),
                     _SENTRY_AUTH_TOKEN: '099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95'
                   ]
                 )
@@ -191,8 +184,12 @@ wrap.pipeline(timeout: 120) {
 
         env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG
 
-        githubDeploy(environment: env.REVIEW_NAME, url: "https://${env.REVIEW_NAME}.itsmycargo.tech") {
-          deployReview(env.REVIEW_NAME)
+        inPod { label ->
+          withNode(label) {
+            githubDeploy(environment: env.REVIEW_NAME, url: "https://${env.REVIEW_NAME}.itsmycargo.tech") {
+              deployReview(env.REVIEW_NAME)
+            }
+          }
         }
       }
 
@@ -206,7 +203,7 @@ wrap.pipeline(timeout: 120) {
             string(name: 'ENVIRONMENT', value: 'review'),
             string(name: 'NAMESPACE', value: 'review'),
             string(name: 'RELEASE', value: env.REVIEW_NAME),
-            string(name: 'REPOSITORY', value: (scm.userRemoteConfigs.first().url =~ '^https://github.com/(.+).git$')[0][1]),
+            string(name: 'REPOSITORY', value: jobBaseName()),
             string(name: 'REVISION', value: env.GIT_COMMIT),
           ],
           wait: false)
@@ -219,20 +216,12 @@ void deployReview(String reviewName) {
   inPod(
     containers: [
       containerTemplate(name: 'deploy', image: 'eu.gcr.io/itsmycargo-main/deploy:latest', ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '100m',
-        resourceLimitCpu: '120m',
-        resourceRequestMemory: '200Mi',
-        resourceLimitMemory: '300Mi',
-        envVars: [
-          secretEnvVar(key: 'REVIEW_MASTER_KEY', secretName: 'jenkins-worker', secretKey: 'app_review_master_key'),
-          secretEnvVar(key: 'DATABASE_HOST', secretName: 'jenkins-worker', secretKey: 'app_review_db_host'),
-          secretEnvVar(key: 'DATABASE_USER', secretName: 'jenkins-worker', secretKey: 'app_review_db_username'),
-          secretEnvVar(key: 'DATABASE_PASSWORD', secretName: 'jenkins-worker', secretKey: 'app_review_db_password'),
-        ]
+        resourceRequestCpu: '100m', resourceLimitCpu: '100m',
+        resourceRequestMemory: '100Mi', resourceLimitMemory: '100Mi'
       )
     ]
   ) { label ->
-    wrap.node("${label}") {
+    withNode("${label}") {
       checkoutScm()
 
       container('deploy') {
@@ -251,11 +240,9 @@ void deployReview(String reviewName) {
             --set backend.image.tag="${env.GIT_COMMIT}" \
             --set frontend.image.tag="${env.GIT_COMMIT}" \
             --set ingress.domain="itsmycargo.tech" \
-            --set masterKey=\$REVIEW_MASTER_KEY \
-            --set postgres.host=\$DATABASE_HOST \
-            --set postgres.user=\$DATABASE_USER \
-            --set postgres.password=\$DATABASE_PASSWORD \
             --set postgres.database=${reviewName} \
+            --set vault.endpoint="${env.VAULT_ADDR}" \
+            --set vault.roleName="${jobName()}" \
             --namespace=review \
             "${reviewName}" \
             chart/
