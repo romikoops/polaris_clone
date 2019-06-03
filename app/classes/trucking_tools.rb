@@ -336,6 +336,7 @@ module TruckingTools
     total_cbm_weight = 0.0
     total_payload_weight = 0.0
     total_area = 0.0
+    shipment = cargos.first.shipment
     cargos.each do |cargo|
       trucking_weight = if cargo.stackable
                           trucking_chargeable_weight_by_stacked_area(trucking_pricing, cargo)
@@ -346,17 +347,27 @@ module TruckingTools
       total_cbm_weight += trucking_cbm_weight(trucking_pricing, cargo)
       total_payload_weight += trucking_payload_weight(cargo)
       total_area += trucking_payload_area(cargo)
-
     end
+
     total_load_meters = total_load_meterage_weight / trucking_pricing.load_meterage['ratio']
     if total_load_meters >= (trucking_pricing.load_meterage['ldm_limit'] || DEFAULT_MAX)
       effective_weight = [total_load_meterage_weight, total_cbm_weight, total_payload_weight].max
       stackable_key = effective_weight == total_load_meterage_weight ? 'non_stackable' : 'stackable'
+
     else
       effective_weight = [total_cbm_weight, total_payload_weight].max
       stackable_key = 'stackable'
     end
-
+    key = case effective_weight
+          when total_load_meterage_weight
+            'ldm'
+          when total_cbm_weight
+            'cbm'
+          when total_payload_weight
+            'kg'
+          end
+    shipment.meta["trucking_#{trucking_pricing.carriage}"] ||= {}
+    shipment.meta["trucking_#{trucking_pricing.carriage}"][trucking_pricing.hub_id] = { trigger: key, value: effective_weight }
     cargo_object[stackable_key]['weight'] += effective_weight
     cargo_object[stackable_key]['volume'] += cargos_volume(cargos)
     cargo_object[stackable_key]['number_of_items'] += cargos.map(&:quantity).sum
@@ -371,7 +382,8 @@ module TruckingTools
     end
   end
 
-  def calc_trucking_price(trucking_pricing, cargos, kms, carriage, user)
+  def calc_trucking_price(trucking_pricing, cargos, kms, carriage, shipment)
+    user = shipment.user
     direction = carriage == 'pre' ? 'export' : 'import'
     cargo_object = if trucking_pricing.load_type == 'container'
                      get_container_object(cargos)
@@ -513,8 +525,8 @@ module TruckingTools
   end
 
   def trucking_chargeable_weight_by_stacked_area(trucking_pricing, cargo)
-    stack_height = TRUCKING_CONTAINER_HEIGHT / cargo_data_value(:dimension_z, cargo)
-    num_stacks = (cargo_quantity(cargo) / stack_height).ceil
+    stack_height = (TRUCKING_CONTAINER_HEIGHT / cargo_data_value(:dimension_z, cargo)).floor
+    num_stacks = (cargo_quantity(cargo) / stack_height.to_d).ceil
     stacked_area = cargo_data_value(:dimension_x, cargo) * cargo_data_value(:dimension_y, cargo) * num_stacks
     load_meter_var = stacked_area / LOAD_METERAGE_AREA_DIVISOR
     load_meter_var * trucking_pricing.load_meterage['ratio']
