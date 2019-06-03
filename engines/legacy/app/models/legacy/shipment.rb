@@ -48,5 +48,4 @@ end
 #  planned_delivery_date               :datetime
 #  planned_destination_collection_date :datetime
 #  desired_start_date                  :datetime
-#  meta                                :jsonb
 #

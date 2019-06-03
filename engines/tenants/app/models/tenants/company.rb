@@ -46,14 +46,12 @@ end
 #
 # Table name: tenants_companies
 #
-#  id          :uuid             not null, primary key
-#  name        :string
-#  address_id  :integer
-#  vat_number  :string
-#  email       :string
-#  phone       :string
-#  external_id :string
-#  tenant_id   :uuid
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id         :uuid             not null, primary key
+#  name       :string
+#  address_id :integer
+#  vat_number :string
+#  email      :string
+#  tenant_id  :uuid
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
