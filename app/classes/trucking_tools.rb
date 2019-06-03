@@ -513,8 +513,8 @@ module TruckingTools
   end
 
   def trucking_chargeable_weight_by_stacked_area(trucking_pricing, cargo)
-    stack_height = TRUCKING_CONTAINER_HEIGHT / cargo_data_value(:dimension_z, cargo)
-    num_stacks = (cargo_quantity(cargo) / stack_height).ceil
+    items_per_stack = (TRUCKING_CONTAINER_HEIGHT / cargo_data_value(:dimension_z, cargo)).floor
+    num_stacks = (cargo_quantity(cargo) / items_per_stack.to_d).ceil
     stacked_area = cargo_data_value(:dimension_x, cargo) * cargo_data_value(:dimension_y, cargo) * num_stacks
     load_meter_var = stacked_area / LOAD_METERAGE_AREA_DIVISOR
     load_meter_var * trucking_pricing.load_meterage['ratio']
