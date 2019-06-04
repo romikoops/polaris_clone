@@ -1,19 +1,48 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'bundler'
+require 'bundler/inline'
 require 'fileutils'
+require 'optparse'
 require 'pathname'
+
+gemfile do
+  source 'https://rubygems.org'
+  gem 'highline'
+  gem 'simplecov'
+  gem 'pry'
+end
+
+CONFIG = {
+  test: true,
+  prepare: !!ENV['CI']
+}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{File.basename($PROGRAM_NAME)} -t -p"
+
+  opts.on('-t', '--[no-]test', 'Run test suite') do |v|
+    CONFIG[:test] = v
+  end
+
+  opts.on('-p', '--[no-]prepare', 'Run preparation (bundle)') do |v|
+    CONFIG[:prepare] = v
+  end
+end.parse!
 
 # path to your application root.
 APP_ROOT = Pathname.new(File.expand_path('..', __dir__))
 
 # Set up environment
-ENV['RAILS_ENV'] ||= 'test'
-ENV['COVERAGE'] ||= 'true'
+ENV['SEED'] ||= rand(0xFFFF).to_s
+
 ENV['CI'] ||= nil
-ENV['SPEC_OPTS'] ||= "--format Fuubar --color #{(ENV['CI'] ? '--format RspecJunitFormatter --out rspec.xml' : '')}"
+ENV['DISABLE_PROFILE'] ||= ENV['CI']
+ENV['COVERAGE'] ||= 'true'
 ENV['COVERAGE_DIR'] ||= APP_ROOT.join('coverage').to_s
+ENV['DISABLE_PROFILE'] ||= '1'
+ENV['RAILS_ENV'] ||= 'test'
+ENV['SPEC_OPTS'] ||= "--order rand:#{ENV['SEED']} --format progress --color #{(ENV['CI'] ? '--format RspecJunitFormatter --out rspec.xml' : '')}"
 
 # Set up coloring
 def red(msg)
@@ -29,18 +58,18 @@ def yellow(msg)
 end
 
 def bundle!
-  opts = ENV['CI'] ? '-j$(nproc)' : ''
-  system('bundle check') || system!("bundle install #{opts}")
+  opts = ENV['CI'] ? "--path #{APP_ROOT.join('vendor')}" : ''
+  system!("bundle install --retry=2 #{opts}")
 end
 
 def runner(dir:, name:)
-  FileUtils.chdir dir do
-    puts yellow("--- Preparing test for #{name} ---")
-    bundle!
+  FileUtils.chdir(dir) do
     code = true
     if File.directory?('spec')
       puts yellow("--- Running specs for #{name} ---")
-      code &= system('bin/rspec')
+      Bundler.with_clean_env do
+        code &= system('bin/rspec')
+      end
     end
 
     puts red("--- FAILED for #{name} ---") unless code
@@ -56,7 +85,9 @@ def runner(dir:, name:)
 end
 
 def system!(*args)
-  system(*args) || abort("\n== Command #{args} failed ==")
+  Bundler.with_clean_env do
+    system(*args) || abort("\n== Command #{args} failed ==")
+  end
 end
 
 def run(*args, message:)
@@ -65,8 +96,11 @@ def run(*args, message:)
 end
 
 COMPONENTS = Dir
-             .glob(APP_ROOT.join('{engines,lib}', '*', '*.gemspec'))
+             .glob(APP_ROOT.join('{engines}', '*', '*.gemspec'))
+             .sort
              .collect { |d| Pathname.new(d).relative_path_from(APP_ROOT).dirname.to_s }
+             .collect { |c| [c, APP_ROOT.join(c)] }.to_h
+COMPONENTS['app'] = APP_ROOT
 
 # Set up test suite
 @results = {}
@@ -77,56 +111,66 @@ puts " Environment: #{ENV['RAILS_ENV']}"
 puts "    Coverage: #{ENV['COVERAGE']}"
 puts "          CI: #{ENV['CI']}"
 puts "Spec Options: #{ENV['SPEC_OPTS']}"
+puts "        Seed: #{ENV['SEED']}"
 puts "Coverage Dir: #{ENV['COVERAGE_DIR']}"
 
-puts yellow('*** Preparing test environment ***')
-bundle!
-
-# Always ensure we have clean database
-tasks = {
-  'test database' => 'RAILS_ENV=development bin/rails db:test:prepare'
-}
-
-tasks.each do |label, cmd|
-  system(cmd) || raise(red(label))
+# Prepare
+if CONFIG[:prepare]
+  COMPONENTS.each do |component, path|
+    FileUtils.chdir(path) do
+      puts yellow("--- Preparing test for #{component} ---")
+      bundle!
+    end
+  end
 end
 
-puts yellow('*** Running Engine tests ***')
+if CONFIG[:test]
+  puts yellow('*** Preparing test environment ***')
 
-# Run tests for each engine, in random order
-COMPONENTS.shuffle.each do |component|
-  runner(dir: APP_ROOT.join(component), name: component)
+  # Always ensure we have clean database
+  tasks = {
+    'test database' => 'RAILS_ENV=development bin/rails db:test:prepare'
+  }
+
+  tasks.each do |label, cmd|
+    Bundler.with_clean_env do
+      system(cmd) || raise(red(label))
+    end
+  end
+
+  puts yellow('*** Running Engine tests ***')
+
+  # Run tests for each engine, in random order
+  COMPONENTS.each do |component, path|
+    runner(dir: path, name: component)
+  end
+
+  # Load Simplecov
+  @simplecov = begin
+                 require 'simplecov'
+                 SimpleCov.configure { merge_timeout 3600 }
+                 SimpleCov::ResultMerger.results.map { |r| [r.command_name, r.covered_percent] }.to_h
+               rescue LoadError
+                 {}
+               end
+
+  table = %w(Component Result Coverage)
+  @results.each do |name, result|
+    coverage = @simplecov.fetch(name, 0.0).round(1)
+
+    table << name
+    table << (result ? green('SUCCESS') : red('FAILED'))
+    table << format('%<coverage>5.1f %%', coverage: coverage)
+  end
+  puts HighLine.new.list(table, :columns_across, 3)
+
+  if @results.values.reduce(:&)
+    puts green('*** TEST PASSED ***')
+    exit(0)
+  else
+    puts red('*** TEST FAILED ***')
+    exit(1)
+  end
 end
-runner(dir: APP_ROOT, name: 'app')
 
-# Load Simplecov
-@simplecov = begin
-               require 'simplecov'
-               SimpleCov.configure { merge_timeout 3600 }
-               SimpleCov::ResultMerger.results.map { |r| [r.command_name, r.covered_percent] }.to_h
-             rescue LoadError
-               {}
-             end
-
-field_length = (COMPONENTS + %w(api)).map(&:length).max
-
-puts '=' * (field_length + 45)
-@results.each do |name, result|
-  coverage = @simplecov.fetch(name, 0.0).round(1)
-
-  puts format(
-    "%<name>#{field_length}s: %<result>7s (Coverage %<percent>5s %%)",
-    name: name,
-    result: (result ? green('SUCCESS') : red('FAILED')),
-    percent: coverage
-  )
-end
-puts '=' * (field_length + 45)
-
-if @results.values.reduce(:&)
-  puts green('*** TEST PASSED ***')
-  exit(0)
-else
-  puts red('*** TEST FAILED ***')
-  exit(1)
-end
+exit(0)
