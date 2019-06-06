@@ -26,7 +26,7 @@ data:
     sanitize = true
 
     secret {
-      path      = "secret/review/{{ .Values.vault.roleName }}"
+      path      = "secret/data/review/{{ .Values.vault.roleName }}"
       no_prefix = true
     }
 

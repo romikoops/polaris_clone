@@ -5,15 +5,15 @@ withPipeline(timeout: 120) {
     containers: [
       containerTemplate(name: 'api', image: 'ruby:2.5', ttyEnabled: true, command: 'cat',
         resourceRequestCpu: '1000m', resourceLimitCpu: '1000m',
-        resourceRequestMemory: '1000Mi', resourceLimitMemory: '1000Mi',
+        resourceRequestMemory: '1500Mi', resourceLimitMemory: '1500Mi',
         envVars: [
           envVar(key: 'POSTGRES_DB', value: 'imcr_test'),
           envVar(key: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test')
         ]
       ),
-      containerTemplate(name: 'client', image: 'node:10-alpine', ttyEnabled: true, command: 'cat',
+      containerTemplate(name: 'client', image: 'node:lts-slim', ttyEnabled: true, command: 'cat',
         resourceRequestCpu: '1000m', resourceLimitCpu: '1000m',
-        resourceRequestMemory: '1000Mi', resourceLimitMemory: '1000Mi',
+        resourceRequestMemory: '1500Mi', resourceLimitMemory: '1500Mi',
       ),
       containerTemplate(name: 'postgis', image: 'mdillon/postgis',
         resourceRequestCpu: '250m', resourceLimitCpu: '250m',
@@ -35,9 +35,9 @@ withPipeline(timeout: 120) {
 
         jobs['api'] = {
           container('api') {
-            timeout(10) {
-              withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}", "LC_ALL=C.UTF-8"]) {
-                sh """
+            timeout(15) {
+              withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}", "LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor"]) {
+                sh(label: 'Install Dependencies', script: """
                   apt-get update && apt-get install -y \
                     apt-transport-https \
                     automake \
@@ -59,9 +59,11 @@ withPipeline(timeout: 120) {
                       nodejs
 
                   npm install -g 'mjml@4.3.1'
-                """
+                """)
 
-                sh 'scripts/prepare'
+                withCache(['vendor/ruby=Gemfile.lock']) {
+                  sh(label: 'Install Gems', script: 'scripts/test --prepare --no-test')
+                }
               }
             }
           }
@@ -69,15 +71,25 @@ withPipeline(timeout: 120) {
 
         jobs['client'] = {
           container('client') {
-            timeout(10) {
-              sh """
-                apk add --no-cache --update \
-                  autoconf automake bash build-base gifsicle lcms2-dev libjpeg-turbo-utils libpng-dev libtool \
-                  libwebp-tools nasm optipng pngquant
-              """
+            timeout(15) {
+              sh(label: 'Install Dependencies', script: """
+                apt-get update && apt-get install -y \
+                  build-essential \
+                  gifsicle \
+                  libgl1-mesa-glx \
+                  libjpeg62-turbo-dev \
+                  liblcms2-dev \
+                  libpng-dev \
+                  libwebp-dev \
+                  libxi6 \
+                  optipng \
+                  pngquant
+              """)
 
-              dir('client') {
-                sh "npm install --no-progress"
+              withCache(['client/node_modules=client/package-lock.json']) {
+                dir('client') {
+                  sh(label: 'NPM Install', script: "npm install --no-progress")
+                }
               }
             }
           }
@@ -94,10 +106,10 @@ withPipeline(timeout: 120) {
           parallel(
             api: {
               container('api') {
-                timeout(10) {
+                retry(2) {
                   withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}"]) {
                     try {
-                      sh "scripts/test"
+                      sh(label: 'Test', script: "scripts/test --no-prepare --test")
                     } catch (err) {
                       throw err
                     } finally {
@@ -111,9 +123,9 @@ withPipeline(timeout: 120) {
 
             client: {
               container('client') {
-                timeout(10) {
+                retry(2) {
                   try {
-                    dir('client') { sh 'npm run test:ci' }
+                    dir('client') { sh(label: 'Run Tests', script: 'npm run test:ci') }
                   } catch (err) {
                     throw err
                   } finally {
@@ -133,11 +145,11 @@ withPipeline(timeout: 120) {
         if (env.CHANGE_ID) {
           try {
             parallel(
-              danger: { container('api') { withEnv(["LC_ALL=C.UTF-8"]) { codestyle.danger() } } },
-              pronto: { container('api') { withEnv(["LC_ALL=C.UTF-8"]) { codestyle.pronto() } } }
+              danger: { container('api') { withEnv(["LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor"]) { codestyle.danger() } } },
+              pronto: { container('api') { withEnv(["LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor"]) { codestyle.pronto() } } }
             )
           } catch (err) {
-            error = err
+            // error = err
           }
         }
       }
@@ -161,7 +173,7 @@ withPipeline(timeout: 120) {
             parallel(
               'database': {
                 build(
-                  job: 'Tasks/Development/chore_vault/imc-react-api/dbreset',
+                  job: "Tasks/Production/${jobName()}/dbreset",
                   parameters: [string(name: 'database', value: env.CI_COMMIT_REF_SLUG)]
                 )
                 },
@@ -225,30 +237,32 @@ void deployReview(String reviewName) {
       checkoutScm()
 
       container('deploy') {
-        sh """
-          if [[ -n "\$(helm ls --failed -q "^${reviewName}\$")" ]]; then
-            helm delete --purge "${reviewName}" || true
-          fi
-        """
+        sh(label: 'Destory failed deployment',
+          script: """
+            if [[ -n "\$(helm ls --failed -q "^${reviewName}\$")" ]]; then
+              helm delete --purge "${reviewName}" || true
+            fi
+          """
+        )
 
-        sh """
-          helm upgrade --install \
-            --wait \
-            --timeout 600 \
-            --set meta.changeId="${env.CHANGE_ID}" \
-            --set meta.changeRepo="${jobName()}" \
-            --set backend.image.tag="${env.GIT_COMMIT}" \
-            --set frontend.image.tag="${env.GIT_COMMIT}" \
-            --set ingress.domain="itsmycargo.tech" \
-            --set postgres.database=${reviewName} \
-            --set vault.endpoint="${env.VAULT_ADDR}" \
-            --set vault.roleName="${jobName()}" \
-            --namespace=review \
-            "${reviewName}" \
-            chart/
-        """
-
-
+        sh(label: 'Helm Deploy',
+          script: """
+            helm upgrade --install \
+              --wait \
+              --timeout 600 \
+              --set meta.changeId="${env.CHANGE_ID}" \
+              --set meta.changeRepo="${jobName()}" \
+              --set backend.image.tag="${env.GIT_COMMIT}" \
+              --set frontend.image.tag="${env.GIT_COMMIT}" \
+              --set ingress.domain="itsmycargo.tech" \
+              --set postgres.database=${reviewName} \
+              --set vault.endpoint="${env.VAULT_ADDR}" \
+              --set vault.roleName="${jobName()}" \
+              --namespace=review \
+              "${reviewName}" \
+              chart/
+          """
+        )
       }
     }
   }
