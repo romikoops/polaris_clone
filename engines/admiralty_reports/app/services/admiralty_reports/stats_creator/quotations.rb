@@ -20,10 +20,10 @@ module AdmiraltyReports
         quot_ship_bundle_groups = group_by_date(quot_ship_bundle)
 
         quot_ship_bundle_groups.each_with_object({}) do |(k_date, v_bundle), result_hsh|
-          agent_email_counts = quotations_per_agent_email(v_bundle)
+          agent_counts = quotations_per_agent(v_bundle)
 
-          result_hsh[k_date] = { data_per_agent: transform_agent_email_counts(agent_email_counts),
-                                 combined_data: summarize_data(agent_email_counts, v_bundle) }
+          result_hsh[k_date] = { data_per_agent: transform_agent_counts(agent_counts),
+                                 combined_data: summarize_data(agent_counts, v_bundle) }
         end
       end
 
@@ -66,18 +66,21 @@ module AdmiraltyReports
         end
       end
 
-      def quotations_per_agent_email(bundle)
-        bundle.tally_by { |quotation, _shipment| User.find(quotation.user_id).email }
-      end
-
-      def transform_agent_email_counts(agent_email_counts)
-        agent_email_counts.each_with_object([]) do |(email, count), arr|
-          arr << { email: email, count: count }
+      def quotations_per_agent(bundle)
+        bundle.tally_by do |quotation, _shipment|
+          user = User.find(quotation.user_id)
+          [user.email, user.agency.name]
         end
       end
 
-      def summarize_data(agent_email_counts, bundle)
-        { n_individual_agents: agent_email_counts.keys.count,
+      def transform_agent_counts(agent_counts)
+        agent_counts.each_with_object([]) do |((email, agency_name), count), arr|
+          arr << { email: email, agency_name: agency_name, count: count }
+        end
+      end
+
+      def summarize_data(agent_counts, bundle)
+        { n_individual_agents: agent_counts.keys.count,
           n_quotations: bundle.count,
           avg_time_for_booking_process: avg_time_for_booking_process(bundle) }
       end
