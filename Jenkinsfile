@@ -26,7 +26,14 @@ withPipeline(timeout: 120) {
     ]
   ) { label ->
     withNode(label) {
-      stage('Checkout') { checkoutScm() }
+      stage('Checkout') {
+        checkoutScm()
+
+        // Stash for docker
+        stash(name: 'backend', excludes: 'client/**/*,qa/**/*')
+        stash(name: 'frontend', includes: 'client/**/*')
+        stash(name: 'qa', includes: 'qa/**/*')
+      }
 
       stage('Prepare') {
         milestone()
@@ -161,41 +168,52 @@ withPipeline(timeout: 120) {
     }
   }
 
+  def prepareJobs = [:]
+
+  // Always build images
+  prepareJobs['images/qa'] = { dockerBuild(dir: 'qa/', image: "${jobName()}/qa", memory: 1500, stash: 'qa') }
+  prepareJobs['images/backend'] = { dockerBuild(dir: '.', image: "${jobName()}/backend", memory: 1500, stash: 'backend') }
+  prepareJobs['images/frontend'] = {
+    dockerBuild(
+      dir: 'client/',
+      image: "${jobName()}/frontend",
+      memory: 2000,
+      args: [
+        RELEASE: env.COMMIT_SHA,
+        SENTRY_AUTH_TOKEN: '099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95'
+      ],
+      stash: 'frontend'
+    )
+  }
+
   if (env.CHANGE_ID) {
-    stage('Prepare Deploy') {
-      lock(label: "${env.GIT_BRANCH}", inversePrecedence: true) {
-        inPod { label ->
-          withNode(label) {
-            milestone()
+    prepareJobs['database'] = {
+      build(
+        job: "Tasks/Production/${jobName()}/dbreset",
+        parameters: [string(name: 'database', value: env.CI_COMMIT_REF_SLUG)]
+      )
+    }
+  }
 
-            checkoutScm()
-
-            parallel(
-              'database': {
-                build(
-                  job: "Tasks/Production/${jobName()}/dbreset",
-                  parameters: [string(name: 'database', value: env.CI_COMMIT_REF_SLUG)]
-                )
-                },
-              'images': {
-                googleCloudBuild(
-                  substitutions: [
-                    COMMIT_SHA: env.GIT_COMMIT,
-                    _REPOSITORY: jobName(),
-                    _SENTRY_AUTH_TOKEN: '099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95'
-                  ]
-                )
-              }
-            )
-          }
+  stage('Prepare Deploy') {
+    lock(label: "${env.GIT_BRANCH}-build", inversePrecedence: true) {
+      inPod { label ->
+        withNode(label) {
+          parallel(prepareJobs)
         }
       }
 
-      stage('Review') {
-        milestone()
+      milestone()
+    }
+  }
 
-        env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG
+  if (env.CHANGE_ID) {
+    stage('Review') {
+      milestone()
 
+      env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG
+
+      lock(label: "${env.GIT_BRANCH}-deploy", inversePrecedence: true) {
         inPod { label ->
           withNode(label) {
             githubDeploy(environment: env.REVIEW_NAME, url: "https://${env.REVIEW_NAME}.itsmycargo.tech") {
@@ -203,23 +221,26 @@ withPipeline(timeout: 120) {
             }
           }
         }
-      }
 
-      stage('QA') {
         milestone()
-
-        build(
-          job: 'Voyage/imc-react-api',
-          parameters: [
-            string(name: 'APP_NAME', value: 'imc-app'),
-            string(name: 'ENVIRONMENT', value: 'review'),
-            string(name: 'NAMESPACE', value: 'review'),
-            string(name: 'RELEASE', value: env.REVIEW_NAME),
-            string(name: 'REPOSITORY', value: jobBaseName()),
-            string(name: 'REVISION', value: env.GIT_COMMIT),
-          ],
-          wait: false)
       }
+    }
+
+    stage('QA') {
+      milestone()
+
+      build(
+        job: 'Voyage/imc-react-api',
+        parameters: [
+          string(name: 'APP_NAME', value: 'imc-app'),
+          string(name: 'ENVIRONMENT', value: 'review'),
+          string(name: 'NAMESPACE', value: 'review'),
+          string(name: 'RELEASE', value: env.REVIEW_NAME),
+          string(name: 'REPOSITORY', value: jobBaseName()),
+          string(name: 'REVISION', value: env.GIT_COMMIT),
+        ],
+        wait: false
+      )
     }
   }
 }
@@ -252,8 +273,7 @@ void deployReview(String reviewName) {
               --timeout 600 \
               --set meta.changeId="${env.CHANGE_ID}" \
               --set meta.changeRepo="${jobName()}" \
-              --set backend.image.tag="${env.GIT_COMMIT}" \
-              --set frontend.image.tag="${env.GIT_COMMIT}" \
+              --set image.tag="${env.GIT_COMMIT}" \
               --set ingress.domain="itsmycargo.tech" \
               --set postgres.database=${reviewName} \
               --set vault.endpoint="${env.VAULT_ADDR}" \

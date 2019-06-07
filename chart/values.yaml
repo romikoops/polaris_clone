@@ -8,12 +8,13 @@ meta:
   changeId:
   changeRepo:
 
+image:
+  repository: eu.gcr.io/itsmycargo-main/imc-react-api
+  tag: latest
+  pullPolicy: Always
+
 backend:
   enabled: true
-  image:
-    repository: eu.gcr.io/itsmycargo-main/imc-react-api/backend
-    tag: latest
-    pullPolicy: Always
   resources:
     requests:
       memory: 1000Mi
@@ -33,10 +34,6 @@ backend:
 
 frontend:
   enabled: true
-  image:
-    repository: eu.gcr.io/itsmycargo-main/imc-react-api/frontend
-    tag: latest
-    pullPolicy: Always
   resources:
     requests:
       memory: 24Mi
