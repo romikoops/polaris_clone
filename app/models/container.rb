@@ -3,12 +3,6 @@
 require 'bigdecimal'
 
 class Container < ApplicationRecord
-  # The following Constants are currently being stored directly
-  # in the Front End, but may be needed in future refactoring.
-  #
-  # DESCRIPTIONS         = ContainerLookups.get_descriptions
-  # WEIGHTS              = ContainerLookups.get_weights
-
   TARE_WEIGHTS = {
     fcl_20: 2370,
     fcl_40: 3750,

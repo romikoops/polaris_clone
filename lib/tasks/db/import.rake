@@ -2,22 +2,36 @@
 
 namespace :db do
   APP_ROOT = Pathname.new(File.expand_path('../../../', __dir__))
+  BUCKET = 'itsmycargo-main-engineering-resources'
   SEED_FILE = APP_ROOT.join('tmp/full_anon.sqlc')
-  KEYFILE = File.join(ENV.fetch('HOME', ''), '.gcloud_developer.json')
+  SEED_FILE_NAME = 'db/full_anon.sql.gz'
+
+  desc 'Reloads database (truncate and pull latest dump)'
+  task :reload do
+    Rake::Task['db:import:fetch'].invoke
+
+    Rake::Task['db:drop'].invoke
+    Rake::Task['db:create'].invoke
+
+    Rake::Task['db:import:restore'].invoke
+
+    Rake::Task['db:import:clean'].invoke
+
+    Rake::Task['db:migrate'].invoke unless ENV['SKIP_MIGRATE']
+  end
 
   desc 'Import latest Development Seed database'
-  task import: %w(db:import:fetch db:import:restore) do
-    puts 'Cleaning Seed File...'
-    SEED_FILE.unlink
+  task :import do
+    Rake::Task['db:import:fetch'].invoke
+    Rake::Task['db:import:restore'].invoke
+    Rake::Task['db:import:clean'].invoke
   end
 
   namespace :import do
-    task fetch: :environment do
+    task :fetch do
       DateHelper = Class.new { include ActionView::Helpers::DateHelper }.new
 
       puts 'Downloading latest Database Seed file...'
-
-      ENV['GOOGLE_CLOUD_KEYFILE'] = KEYFILE if File.exist?(KEYFILE)
 
       begin
         require 'google/cloud/storage'
@@ -25,8 +39,8 @@ namespace :db do
         # Instantiates a client
         storage = Google::Cloud::Storage.new(project: 'itsmycargo-main')
 
-        bucket = storage.bucket('itsmycargo-main-engineering-resources')
-        file = bucket.file('db/full_anon.sql.gz')
+        bucket = storage.bucket(BUCKET)
+        file = bucket.file(SEED_FILE_NAME)
 
         # Warn if seed file is out-of-date
         puts ''
@@ -39,20 +53,25 @@ namespace :db do
           puts '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
         end
 
-        file.download(SEED_FILE.to_s)
-        puts '  Done.'
-      rescue Google::Cloud::PermissionDeniedError
-        unless File.exist?(ENV['GOOGLE_CLOUD_KEYFILE'])
-          puts ''
-          puts 'GOOGLE_CLOUD_KEYFILE is not defined.'
-          puts ''
-          puts 'Please point environment vaeriable GOOGLE_CLOUD_KEYFILE to Developer Service Credentials File'
-          puts 'e.g. GOOGLE_CLOUD_KEYFILE=$HOME/.gcloud_credentials.json bin/rake db:import'
-          puts ''
-          exit 1
+        # Speed up download if possible
+        if (gsutil = `which gsutil`.strip)
+          system(gsutil, 'cp', "gs://#{BUCKET}/#{SEED_FILE_NAME}", SEED_FILE.to_s)
+        else
+          puts ' *** For faster download, please install gsutil ***'
+          file.download(SEED_FILE.to_s)
         end
 
-        raise
+        puts '  Done.'
+      rescue Google::Cloud::PermissionDeniedError
+        puts ''
+        puts 'Cannot access GCS Bucket `itsmycargo-main-engineering-resources`'
+        puts ''
+        puts 'Please run following command:'
+        puts ''
+        puts '    $ gcloud auth application-default login'
+        puts ''
+
+        exit 1
       end
     end
 
@@ -68,6 +87,11 @@ namespace :db do
       psql_cmd = "psql -q -v ON_ERROR_STOP=1 #{ENV.fetch('DATABASE_NAME', 'imcr_development')}"
 
       system("#{gzip_cmd} | #{psql_cmd}") || exit(1)
+    end
+
+    task :clean do
+      puts 'Cleaning Seed File...'
+      SEED_FILE.unlink
     end
   end
 end

@@ -2,9 +2,6 @@
 
 module MultiTenantTools
   include ExcelTools
-  require_relative '../../db/seed_classes/vehicle_seeder.rb'
-  require_relative '../../db/seed_classes/pricing_seeder.rb'
-  require_relative '../../db/seed_classes/tenant_seeder.rb'
 
   API_URL = 'https://api2.itsmycargo.com'
   DEV_API_URL = 'https://gamma.itsmycargo.com'
@@ -98,17 +95,6 @@ module MultiTenantTools
     end
   end
 
-  def update_tenant_jsons
-    @json_data = JSON.parse(File.read("#{Rails.root}/db/dummydata/tenants.json"))
-    @json_data.each do |tenant|
-      subdomain = tenant['subdomain']
-      File.open("#{Rails.root}/db/dummydata/#{subdomain}/#{subdomain}.json", 'w') { |file| file.write(tenant.to_json) }
-      objKey = "data/#{subdomain}/#{subdomain}.json"
-      upFile = File.open("#{Rails.root}/db/dummydata/#{subdomain}/#{subdomain}.json")
-      asset_bucket.put_object(bucket: 'assets.itsmycargo.com', key: objKey, body: upFile, content_type: 'application/json', acl: 'private')
-    end
-  end
-
   def create_internal_users(tenant)
     unless tenant.users.exists?(email: 'shopadmin@itsmycargo.com')
       tenant.users.create!(
@@ -169,27 +155,6 @@ module MultiTenantTools
         )
       end
     end
-  end
-
-  def sync_tenant_jsons
-    @json_data = JSON.parse(File.read("#{Rails.root}/db/dummydata/tenants.json"))
-    @new_data = []
-    @json_data.each do |tenant|
-      subdomain = tenant['subdomain']
-      tenant_data = JSON.parse(
-        asset_bucket.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
-      )
-      @new_data << tenant_data
-    end
-    File.open("#{Rails.root}/db/dummydata/tenants.json", 'w') { |file| file.write(@new_data.to_json) }
-  end
-
-  def update_tenant_from_json(subdomain)
-    json_data = JSON.parse(
-      asset_bucket.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
-    ).deep_symbolize_keys
-
-    TenantSeeder.update_tenant(json_data)
   end
 
   def create_new_tenant_site(subdomains)
@@ -515,24 +480,6 @@ module MultiTenantTools
   def quick_seed(subdomain)
     puts 'Seed prcings'
     PricingSeeder.perform(subdomain: subdomain)
-  end
-
-  def do_customs(subdomain)
-    t = Tenant.find_by_subdomain(subdomain)
-    shipper = t.users.shipper.first
-    puts '# Overwrite Local Charges From Sheet'
-    local_charges = File.open("#{Rails.root}/db/dummydata/fake_local_charges.xlsx")
-    req = { 'xlsx' => local_charges }
-    ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
-  end
-
-  def quick_fix(subdomain)
-    t = Tenant.find_by_subdomain(subdomain)
-    shipper = t.users.shipper.first
-    public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
-    req = { 'xlsx' => public_pricings }
-    overwrite_mongo_lcl_pricings(req, false, shipper)
-    overwrite_mongo_lcl_pricings(req, true, shipper)
   end
 
   def invalidate(cloudfront_id, subdomain)
