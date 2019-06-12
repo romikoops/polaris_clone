@@ -52,8 +52,8 @@ spec:
               mountPath: /var/run/secrets/vault
       containers:
         - name: backend
-          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
-          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          image: "{{ .Values.image.repository }}/backend:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: CONSUL_HTTP_ADDR
               value: http://consul.consul-system:8500
