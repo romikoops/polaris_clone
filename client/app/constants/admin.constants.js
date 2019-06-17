@@ -313,7 +313,7 @@ export const cargoClassOptions = [
   { value: 'lcl', label: 'LCL' },
   { value: 'fcl_20', label: 'FCL 20ft' },
   { value: 'fcl_40', label: 'FCL 40ft' },
-  { value: 'fcl_40hq', label: 'FCL 40ft HQ' }
+  { value: 'fcl_40_hq', label: 'FCL 40ft HQ' }
 ]
 
 export const moTOptions = [
