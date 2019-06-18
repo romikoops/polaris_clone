@@ -71,7 +71,7 @@ module DocumentService
     end
 
     def header_values
-      %w(FROM TO CLOSING_DATE ETD ETA TRANSIT_TIME SERVICE_LEVEL CARRIER MODE_OF_TRANSPORT VESSEL VOYAGE_CODE)
+      %w(FROM TO CLOSING_DATE ETD ETA TRANSIT_TIME SERVICE_LEVEL CARRIER MODE_OF_TRANSPORT VESSEL VOYAGE_CODE LOAD_TYPE)
     end
 
     def write_schedule_data(row, layovers, trip)
@@ -87,6 +87,7 @@ module DocumentService
       worksheet.write(row, 8, trip.itinerary.mode_of_transport)
       worksheet.write(row, 9, trip.vessel)
       worksheet.write(row, 10, trip.voyage_code)
+      worksheet.write(row, 11, trip.load_type)
     end
 
     def write_schedule_to_sheet
