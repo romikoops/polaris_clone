@@ -8,7 +8,6 @@ export default function addressFromPlace (place, gMaps, map, callback) {
     country: '',
     fullAddress: ''
   }
-
   place.address_components.forEach((ac) => {
     if (ac.types.includes('street_number')) {
       tmpAddress.number = ac.long_name
@@ -28,6 +27,9 @@ export default function addressFromPlace (place, gMaps, map, callback) {
 
     if (ac.types.includes('country')) {
       tmpAddress.country = ac.long_name
+    }
+    if (ac.types.includes('country') && ac.long_name === 'Hong Kong') {
+      tmpAddress.zipCode = '000000'
     }
   })
   tmpAddress.latitude = place.geometry.location.lat()
@@ -54,6 +56,10 @@ export default function addressFromPlace (place, gMaps, map, callback) {
       callback(tmpAddress)
     })
   } else {
-    callback(tmpAddress)
+    if (callback) {
+      callback(tmpAddress)
+    } else {
+      return tmpAddress
+    } 
   }
 }
