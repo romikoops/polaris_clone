@@ -88,7 +88,7 @@ exports[`shallow render 1`] = `
                       },
                       Object {
                         "label": "FCL 40ft HQ",
-                        "value": "fcl_40hq",
+                        "value": "fcl_40_hq",
                       },
                     ]
                   }
@@ -5043,7 +5043,7 @@ exports[`steps.hubRoute is true 1`] = `
                       },
                       Object {
                         "label": "FCL 40ft HQ",
-                        "value": "fcl_40hq",
+                        "value": "fcl_40_hq",
                       },
                     ]
                   }
@@ -5521,7 +5521,7 @@ exports[`steps.route is true 1`] = `
                       },
                       Object {
                         "label": "FCL 40ft HQ",
-                        "value": "fcl_40hq",
+                        "value": "fcl_40_hq",
                       },
                     ]
                   }
@@ -5992,7 +5992,7 @@ exports[`steps.transportCategory is true 1`] = `
                       },
                       Object {
                         "label": "FCL 40ft HQ",
-                        "value": "fcl_40hq",
+                        "value": "fcl_40_hq",
                       },
                     ]
                   }
@@ -6463,7 +6463,7 @@ exports[`theme is falsy 1`] = `
                       },
                       Object {
                         "label": "FCL 40ft HQ",
-                        "value": "fcl_40hq",
+                        "value": "fcl_40_hq",
                       },
                     ]
                   }
