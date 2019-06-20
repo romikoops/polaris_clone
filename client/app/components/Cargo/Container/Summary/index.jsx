@@ -51,17 +51,6 @@ function CargoContainerSummary ({ items, t }) {
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span className={styles.cargo_type}>
-                { numberSpacing(tareWeight, 2) }
-              </span>
-            &nbsp;kg
-            </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('cargo:totalTareWeight')}</p>
-          </div>
-        </div>
-        <div className="flex layout-row layout-align-space-around">
-          <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center">
-              <span className={styles.cargo_type}>
                 { numberSpacing(tareWeight + weight, 2) }
               </span>
             &nbsp;kg

@@ -311,9 +311,21 @@ export const pricingNames = {
 }
 export const cargoClassOptions = [
   { value: 'lcl', label: 'LCL' },
+  { value: 'fcl_10', label: 'FCL 10' },
   { value: 'fcl_20', label: 'FCL 20ft' },
+  { value: 'fcl_20_ot', label: 'FCL 20 Open Top' },
+  { value: 'fcl_20_rf', label: 'FCL 20 Reefer' },
+  { value: 'fcl_20_frs', label: 'FCL 20 Flat Rack (Sides)' },
+  { value: 'fcl_20_frw', label: 'FCL 20 Flat Rack' },
   { value: 'fcl_40', label: 'FCL 40ft' },
-  { value: 'fcl_40_hq', label: 'FCL 40ft HQ' }
+  { value: 'fcl_40_ot', label: 'FCL 40 Open Top' },
+  { value: 'fcl_40_rf', label: 'FCL 40 Reefer' },
+  { value: 'fcl_40_frs', label: 'FCL 40 Flat Rack (Sides)' },
+  { value: 'fcl_40_frw', label: 'FCL 40 Flat Rack' },
+  { value: 'fcl_40_hq', label: 'FCL 40ft HQ' },
+  { value: 'fcl_45', label: 'FCL 45' },
+  { value: 'fcl_45_hq', label: 'FCL 45 HQ' },
+  { value: 'fcl_45_rf', label: 'FCL 45 Reefer' }
 ]
 
 export const moTOptions = [

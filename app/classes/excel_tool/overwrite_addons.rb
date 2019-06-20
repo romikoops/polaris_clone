@@ -171,7 +171,7 @@ module ExcelTool
 
     def populate_addons_for_cargo_class(addons, row, tv_id, hub, counter_id)
       cargo_classes = if row[:cargo_class].casecmp('fcl').zero?
-                        %w(fcl_20 fcl_40 fcl_40_hq)
+                        Container::CARGO_CLASSES
                       else
                         [row[:cargo_class].downcase]
                       end
@@ -480,7 +480,7 @@ module ExcelTool
     def set_general_addon(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id, type)
       if charge[:rate_basis].include? 'RANGE'
         if load_type == 'fcl'
-          %w(fcl_20 fcl_40 fcl_40_hq).each do |lt|
+          Container::CARGO_CLASSES.each do |lt|
             set_range_fee(all_charges, charge, lt, direction, tenant_vehicle_id, mot, counterpart_hub_id, type)
           end
         else
@@ -493,7 +493,7 @@ module ExcelTool
 
     def set_regular_addon(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id, type)
       if load_type == 'fcl'
-        %w(fcl_20 fcl_40 fcl_40_hq).each do |lt|
+        Container::CARGO_CLASSES.each do |lt|
           all_charges[counterpart_hub_id][tenant_vehicle_id][direction][lt][type]['fees'][charge[:key]] = charge
         end
       else

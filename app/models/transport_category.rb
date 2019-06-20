@@ -2,11 +2,7 @@
 
 class TransportCategory < ApplicationRecord
   LOAD_TYPE_CARGO_CLASSES = {
-    'container' => %w(
-      fcl_20
-      fcl_40
-      fcl_40_hq
-    ),
+    'container' => Container::CARGO_CLASSES,
     'cargo_item' => %w(
       lcl
     )

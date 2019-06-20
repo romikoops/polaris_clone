@@ -85,7 +85,117 @@ exports[`shallow render 1`] = `
           <p
             className="flex-none"
           >
+            FCL 10
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
             FCL 20ft
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 20 Open Top
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 20 Reefer
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 20 Flat Rack (Sides)
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 20 Flat Rack
           </p>
         </div>
         <div
@@ -129,7 +239,161 @@ exports[`shallow render 1`] = `
           <p
             className="flex-none"
           >
+            FCL 40 Open Top
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 40 Reefer
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 40 Flat Rack (Sides)
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 40 Flat Rack
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
             FCL 40ft HQ
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 45
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 45 HQ
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 45 Reefer
           </p>
         </div>
       </div>
@@ -287,7 +551,117 @@ exports[`title is falsy 1`] = `
           <p
             className="flex-none"
           >
+            FCL 10
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
             FCL 20ft
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 20 Open Top
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 20 Reefer
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 20 Flat Rack (Sides)
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 20 Flat Rack
           </p>
         </div>
         <div
@@ -331,7 +705,161 @@ exports[`title is falsy 1`] = `
           <p
             className="flex-none"
           >
+            FCL 40 Open Top
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 40 Reefer
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 40 Flat Rack (Sides)
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 40 Flat Rack
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
             FCL 40ft HQ
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 45
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 45 HQ
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 45 Reefer
           </p>
         </div>
       </div>

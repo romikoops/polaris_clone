@@ -14,7 +14,7 @@ class Vehicle < ApplicationRecord
 
   VEHICLE_NAMES = %w(ocean_default rail_default air_default truck_default).freeze
   TRANSPORT_CATEGORY_NAMES = %w(dry_goods liquid_bulk gas_bulk any).freeze
-  CARGO_CLASSES = %w(fcl_20 fcl_40 fcl_40_hq lcl).freeze
+  CARGO_CLASSES = (%w(lcl) + Container::CARGO_CLASSES).freeze
 
   def self.create_from_name(name, mot, tenant_id, carrier_name)
     vehicle = Vehicle.find_or_create_by!(name: name, mode_of_transport: mot)

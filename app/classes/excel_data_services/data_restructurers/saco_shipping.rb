@@ -281,7 +281,7 @@ module ExcelDataServices
         if preliminary_load_type
           [preliminary_load_type]
         else
-          FCL_SIZE_CLASSES.map(&:downcase)
+          Container::CARGO_CLASSES.map(&:downcase)
         end
       end
 

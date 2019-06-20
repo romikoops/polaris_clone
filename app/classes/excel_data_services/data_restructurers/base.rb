@@ -3,11 +3,6 @@
 module ExcelDataServices
   module DataRestructurers
     class Base
-      FCL_SIZE_CLASSES = %w(
-        fcl_20
-        fcl_40
-        fcl_40_hq
-      ).freeze
 
       MOT_HUB_NAME_LOOKUP =
         { 'ocean' => 'Port',
@@ -48,6 +43,7 @@ module ExcelDataServices
 
       def initialize(tenant:, data:)
         @tenant = tenant
+        @scope = Tenants::Tenant.find_by(legacy_id: @tenant.id)&.scope&.content || {}
         @data = data
       end
 
@@ -77,7 +73,7 @@ module ExcelDataServices
 
       def expand_fcl_to_all_sizes(rows_data)
         plain_fcl_local_charges_params = rows_data.select { |row_data| row_data[:load_type] == 'fcl' }
-        expanded_local_charges_params = FCL_SIZE_CLASSES.reduce([]) do |memo, fcl_size|
+        expanded_local_charges_params = (@scope['active_cargo_classes'] || Container::CARGO_CLASSES).reduce([]) do |memo, fcl_size|
           memo + plain_fcl_local_charges_params.map do |params|
             params.dup.tap do |pms|
               pms[:load_type] = fcl_size

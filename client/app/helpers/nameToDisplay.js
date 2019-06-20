@@ -1,20 +1,21 @@
 import { capitalize } from './stringTools'
+import { cargoClassOptions } from '../constants'
 
 export default function nameToDisplay (str) {
-  const converstionTable = {
+  const conversionTable = {
     consignee: 'receiver',
     shipper: 'sender',
-    fcl_20: '20ft Container',
-    fcl_40: '40ft Container',
-    fcl_40_hq: '40ft HQ Container',
     lcl: 'Cargo Item',
     chassis: 'Chassis',
     side_lifter: 'Side Lifter'
   }
+  cargoClassOptions.forEach((cc) => {
+    conversionTable[cc.value] = cc.label
+  })
   const inputIsCapitalized = capitalize(str) === str
   const convertedStr = inputIsCapitalized
-    ? capitalize(converstionTable[str.toLowerCase()] || str)
-    : converstionTable[str] || str
+    ? capitalize(conversionTable[str.toLowerCase()] || str)
+    : conversionTable[str] || str
 
   return convertedStr
 }

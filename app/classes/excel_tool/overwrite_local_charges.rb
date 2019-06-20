@@ -187,7 +187,7 @@ module ExcelTool
       @dangerous[counterpart_id] = {} unless @dangerous[counterpart_id]
       @dangerous[counterpart_id][tenant_vehicle_id] = {} unless @dangerous[counterpart_id][tenant_vehicle_id]
       load_types = if row[:load_type].casecmp('fcl').zero?
-                     %w(fcl_20 fcl_40 fcl_40_hq)
+                     Container::CARGO_CLASSES
                    else
                      [row[:load_type].downcase]
                    end
@@ -241,7 +241,7 @@ module ExcelTool
           %w(export import).each do |direction|
             hub_fees[hub_key][tv_id][direction] = {} unless hub_fees[hub_key][tv_id][direction]
             customs[hub_key][tv_id][direction] = {} unless customs[hub_key][tv_id][direction]
-            %w(lcl fcl_20 fcl_40 fcl_40_hq).each do |lt|
+            (%w(lcl) + Container::CARGO_CLASSES).each do |lt|
               hub_fees[hub_key][tv_id][direction][lt] = hub_fees_and_customs_builder(direction,
                                                                                      rows[0][:mot].downcase, hub, lt, tv_id, hub_key)
               customs[hub_key][tv_id][direction][lt] = hub_fees_and_customs_builder(direction,

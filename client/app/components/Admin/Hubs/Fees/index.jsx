@@ -445,13 +445,13 @@ export class AdminHubFees extends Component {
     return cargoClassOptions.map((cargoClass, i) => {
       const hasCargoClass = charges
         .filter(charge => charge.load_type === cargoClass.value).length > 0
-      const buttonStyle = selectedCargoClass === cargoClass.value ? bgStyle : { background: '#F5f5f5' }
+      const buttonStyle = selectedCargoClass === cargoClass.value ? bgStyle : { background: '#F5f5f5', minWidth: '20%' }
       const innerStyle = selectedCargoClass === cargoClass.value ? styles2.cargo_class_button_selected : ''
       const inactiveStyle = hasCargoClass ? '' : styles2.cargo_class_button_inactive
 
       return (
         <div
-          className={`flex-25 layout-row layout-align-start-center pointy ${inactiveStyle} ${styles2.cargo_class_button}`}
+          className={`flex layout-row layout-align-start-center pointy ${inactiveStyle} ${styles2.cargo_class_button}`}
           style={buttonStyle}
           onClick={hasCargoClass && !isEditing ? () => this.setCargoClass(cargoClass.value) : null}
         >
@@ -475,6 +475,7 @@ export class AdminHubFees extends Component {
       selectOptions,
       selectedServiceLevel,
       selectedCounterpartHub,
+      selectedCargoClass,
       direction,
       directionBool,
       charges,
@@ -581,18 +582,21 @@ export class AdminHubFees extends Component {
           options={serviceLevels}
           onChange={this.handleServiceLevelChange}
           value={selectedServiceLevel}
-          className="flex-50"
+          className="flex-33"
         />
         <NamedSelect
           options={counterpartHubs}
           onChange={this.handleCounterpartHubChange}
           value={selectedCounterpartHub}
-          className="flex-50"
+          className="flex-33"
+        />
+        <NamedSelect
+          options={cargoClassOptions}
+          onChange={e => this.setCargoClass(e.value)}
+          value={selectedCargoClass}
+          className="flex-33"
         />
         <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-          <div className={`flex-100 layout-row ${styles.cargo_class_row}`}>
-            {this.renderCargoClassButtons()}
-          </div>
           <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.fee_row_container}`}>
             {feeRows}
           </div>

@@ -165,7 +165,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
       results = service.sort_pricings(
         schedules: schedules,
         user_pricing_id: nil,
-        cargo_classes: %w(fcl_20 fcl_40 fcl_40_hq),
+        cargo_classes: Container::CARGO_CLASSES,
         dates: dates,
         dedicated_pricings_only: false
       )

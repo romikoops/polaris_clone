@@ -79,16 +79,64 @@ exports[`shallow render 1`] = `
                         "value": "lcl",
                       },
                       Object {
+                        "label": "FCL 10",
+                        "value": "fcl_10",
+                      },
+                      Object {
                         "label": "FCL 20ft",
                         "value": "fcl_20",
+                      },
+                      Object {
+                        "label": "FCL 20 Open Top",
+                        "value": "fcl_20_ot",
+                      },
+                      Object {
+                        "label": "FCL 20 Reefer",
+                        "value": "fcl_20_rf",
+                      },
+                      Object {
+                        "label": "FCL 20 Flat Rack (Sides)",
+                        "value": "fcl_20_frs",
+                      },
+                      Object {
+                        "label": "FCL 20 Flat Rack",
+                        "value": "fcl_20_frw",
                       },
                       Object {
                         "label": "FCL 40ft",
                         "value": "fcl_40",
                       },
                       Object {
+                        "label": "FCL 40 Open Top",
+                        "value": "fcl_40_ot",
+                      },
+                      Object {
+                        "label": "FCL 40 Reefer",
+                        "value": "fcl_40_rf",
+                      },
+                      Object {
+                        "label": "FCL 40 Flat Rack (Sides)",
+                        "value": "fcl_40_frs",
+                      },
+                      Object {
+                        "label": "FCL 40 Flat Rack",
+                        "value": "fcl_40_frw",
+                      },
+                      Object {
                         "label": "FCL 40ft HQ",
                         "value": "fcl_40_hq",
+                      },
+                      Object {
+                        "label": "FCL 45",
+                        "value": "fcl_45",
+                      },
+                      Object {
+                        "label": "FCL 45 HQ",
+                        "value": "fcl_45_hq",
+                      },
+                      Object {
+                        "label": "FCL 45 Reefer",
+                        "value": "fcl_45_rf",
                       },
                     ]
                   }
@@ -5034,16 +5082,64 @@ exports[`steps.hubRoute is true 1`] = `
                         "value": "lcl",
                       },
                       Object {
+                        "label": "FCL 10",
+                        "value": "fcl_10",
+                      },
+                      Object {
                         "label": "FCL 20ft",
                         "value": "fcl_20",
+                      },
+                      Object {
+                        "label": "FCL 20 Open Top",
+                        "value": "fcl_20_ot",
+                      },
+                      Object {
+                        "label": "FCL 20 Reefer",
+                        "value": "fcl_20_rf",
+                      },
+                      Object {
+                        "label": "FCL 20 Flat Rack (Sides)",
+                        "value": "fcl_20_frs",
+                      },
+                      Object {
+                        "label": "FCL 20 Flat Rack",
+                        "value": "fcl_20_frw",
                       },
                       Object {
                         "label": "FCL 40ft",
                         "value": "fcl_40",
                       },
                       Object {
+                        "label": "FCL 40 Open Top",
+                        "value": "fcl_40_ot",
+                      },
+                      Object {
+                        "label": "FCL 40 Reefer",
+                        "value": "fcl_40_rf",
+                      },
+                      Object {
+                        "label": "FCL 40 Flat Rack (Sides)",
+                        "value": "fcl_40_frs",
+                      },
+                      Object {
+                        "label": "FCL 40 Flat Rack",
+                        "value": "fcl_40_frw",
+                      },
+                      Object {
                         "label": "FCL 40ft HQ",
                         "value": "fcl_40_hq",
+                      },
+                      Object {
+                        "label": "FCL 45",
+                        "value": "fcl_45",
+                      },
+                      Object {
+                        "label": "FCL 45 HQ",
+                        "value": "fcl_45_hq",
+                      },
+                      Object {
+                        "label": "FCL 45 Reefer",
+                        "value": "fcl_45_rf",
                       },
                     ]
                   }
@@ -5512,16 +5608,64 @@ exports[`steps.route is true 1`] = `
                         "value": "lcl",
                       },
                       Object {
+                        "label": "FCL 10",
+                        "value": "fcl_10",
+                      },
+                      Object {
                         "label": "FCL 20ft",
                         "value": "fcl_20",
+                      },
+                      Object {
+                        "label": "FCL 20 Open Top",
+                        "value": "fcl_20_ot",
+                      },
+                      Object {
+                        "label": "FCL 20 Reefer",
+                        "value": "fcl_20_rf",
+                      },
+                      Object {
+                        "label": "FCL 20 Flat Rack (Sides)",
+                        "value": "fcl_20_frs",
+                      },
+                      Object {
+                        "label": "FCL 20 Flat Rack",
+                        "value": "fcl_20_frw",
                       },
                       Object {
                         "label": "FCL 40ft",
                         "value": "fcl_40",
                       },
                       Object {
+                        "label": "FCL 40 Open Top",
+                        "value": "fcl_40_ot",
+                      },
+                      Object {
+                        "label": "FCL 40 Reefer",
+                        "value": "fcl_40_rf",
+                      },
+                      Object {
+                        "label": "FCL 40 Flat Rack (Sides)",
+                        "value": "fcl_40_frs",
+                      },
+                      Object {
+                        "label": "FCL 40 Flat Rack",
+                        "value": "fcl_40_frw",
+                      },
+                      Object {
                         "label": "FCL 40ft HQ",
                         "value": "fcl_40_hq",
+                      },
+                      Object {
+                        "label": "FCL 45",
+                        "value": "fcl_45",
+                      },
+                      Object {
+                        "label": "FCL 45 HQ",
+                        "value": "fcl_45_hq",
+                      },
+                      Object {
+                        "label": "FCL 45 Reefer",
+                        "value": "fcl_45_rf",
                       },
                     ]
                   }
@@ -5983,16 +6127,64 @@ exports[`steps.transportCategory is true 1`] = `
                         "value": "lcl",
                       },
                       Object {
+                        "label": "FCL 10",
+                        "value": "fcl_10",
+                      },
+                      Object {
                         "label": "FCL 20ft",
                         "value": "fcl_20",
+                      },
+                      Object {
+                        "label": "FCL 20 Open Top",
+                        "value": "fcl_20_ot",
+                      },
+                      Object {
+                        "label": "FCL 20 Reefer",
+                        "value": "fcl_20_rf",
+                      },
+                      Object {
+                        "label": "FCL 20 Flat Rack (Sides)",
+                        "value": "fcl_20_frs",
+                      },
+                      Object {
+                        "label": "FCL 20 Flat Rack",
+                        "value": "fcl_20_frw",
                       },
                       Object {
                         "label": "FCL 40ft",
                         "value": "fcl_40",
                       },
                       Object {
+                        "label": "FCL 40 Open Top",
+                        "value": "fcl_40_ot",
+                      },
+                      Object {
+                        "label": "FCL 40 Reefer",
+                        "value": "fcl_40_rf",
+                      },
+                      Object {
+                        "label": "FCL 40 Flat Rack (Sides)",
+                        "value": "fcl_40_frs",
+                      },
+                      Object {
+                        "label": "FCL 40 Flat Rack",
+                        "value": "fcl_40_frw",
+                      },
+                      Object {
                         "label": "FCL 40ft HQ",
                         "value": "fcl_40_hq",
+                      },
+                      Object {
+                        "label": "FCL 45",
+                        "value": "fcl_45",
+                      },
+                      Object {
+                        "label": "FCL 45 HQ",
+                        "value": "fcl_45_hq",
+                      },
+                      Object {
+                        "label": "FCL 45 Reefer",
+                        "value": "fcl_45_rf",
                       },
                     ]
                   }
@@ -6454,16 +6646,64 @@ exports[`theme is falsy 1`] = `
                         "value": "lcl",
                       },
                       Object {
+                        "label": "FCL 10",
+                        "value": "fcl_10",
+                      },
+                      Object {
                         "label": "FCL 20ft",
                         "value": "fcl_20",
+                      },
+                      Object {
+                        "label": "FCL 20 Open Top",
+                        "value": "fcl_20_ot",
+                      },
+                      Object {
+                        "label": "FCL 20 Reefer",
+                        "value": "fcl_20_rf",
+                      },
+                      Object {
+                        "label": "FCL 20 Flat Rack (Sides)",
+                        "value": "fcl_20_frs",
+                      },
+                      Object {
+                        "label": "FCL 20 Flat Rack",
+                        "value": "fcl_20_frw",
                       },
                       Object {
                         "label": "FCL 40ft",
                         "value": "fcl_40",
                       },
                       Object {
+                        "label": "FCL 40 Open Top",
+                        "value": "fcl_40_ot",
+                      },
+                      Object {
+                        "label": "FCL 40 Reefer",
+                        "value": "fcl_40_rf",
+                      },
+                      Object {
+                        "label": "FCL 40 Flat Rack (Sides)",
+                        "value": "fcl_40_frs",
+                      },
+                      Object {
+                        "label": "FCL 40 Flat Rack",
+                        "value": "fcl_40_frw",
+                      },
+                      Object {
                         "label": "FCL 40ft HQ",
                         "value": "fcl_40_hq",
+                      },
+                      Object {
+                        "label": "FCL 45",
+                        "value": "fcl_45",
+                      },
+                      Object {
+                        "label": "FCL 45 HQ",
+                        "value": "fcl_45_hq",
+                      },
+                      Object {
+                        "label": "FCL 45 Reefer",
+                        "value": "fcl_45_rf",
                       },
                     ]
                   }

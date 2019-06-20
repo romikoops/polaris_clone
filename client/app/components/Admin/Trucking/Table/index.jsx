@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { get } from 'lodash'
 import TruckingTableHeaders from './Headers'
 import { adminActions, appActions } from '../../../../actions'
+import { cargoClassOptions } from '../../../../constants'
 import styles from './index.scss'
 import { determineSortingCaret } from '../../../../helpers/sortingCaret'
 import { determineDestinationAccessor } from '../../../../helpers'
@@ -119,10 +120,8 @@ class TruckingTable extends PureComponent {
                 value={filter ? filter.value : 'all'}
               >
                 <option value="all">All</option>
-                <option value="fcl_20">FTL 20'</option>
-                <option value="fcl_40">FTL 40'</option>
-                <option value="fcl_40_hq">FTL 40' HQ</option>
-                <option value="lcl">Cargo Item</option>
+                {cargoClassOptions.map(cc => <option value={cc.value}>{cc.label}</option>)}
+
               </select>
             )
           },

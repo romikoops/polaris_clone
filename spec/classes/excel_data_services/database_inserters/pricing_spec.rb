@@ -35,33 +35,28 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
     [create(:itinerary, tenant: tenant)]
   end
   let!(:transport_categories) do
-    [create(:transport_category, load_type: 'cargo_item', cargo_class: 'lcl'),
-     create(:transport_category, load_type: 'container', cargo_class: 'fcl_20'),
-     create(:transport_category, load_type: 'container', cargo_class: 'fcl_40'),
-     create(:transport_category, load_type: 'container', cargo_class: 'fcl_40_hq')]
+    [create(:transport_category, load_type: 'cargo_item', cargo_class: 'lcl')] + 
+      Container::CARGO_CLASSES.map {|cc| create(:transport_category, load_type: 'container', cargo_class: cc)}
   end
   let(:tenant_vehicle) do
     create(:tenant_vehicle, tenant: tenant)
   end
   let(:options) { { tenant: tenant, data: input_data, options: {} } }
-
+  let!(:static_expected_dates) { [[Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]] * 15 }
   describe '.insert' do
     let(:input_data) { build(:excel_data_restructured_correct_pricings_one_fee_col_and_ranges) }
 
     context 'with overlap case: no_old_record' do
       let!(:expected_stats) do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 6, number_deleted: 1, number_updated: 0 },
-          pricings: { number_created: 5, number_deleted: 1, number_updated: 0 },
+          pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
+          pricings: { number_created: 17, number_deleted: 1, number_updated: 0 },
           stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
-          [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]
-        ]
+          [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]
+        ] + static_expected_dates
       end
       let!(:expected_pricing_details_values) do
         [
@@ -92,18 +87,15 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 6, number_deleted: 1, number_updated: 0 },
-          pricings: { number_created: 5, number_deleted: 1, number_updated: 1 },
+          pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
+          pricings: { number_created: 17, number_deleted: 1, number_updated: 1 },
           stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
           [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-01').beginning_of_day, Time.zone.parse('2018-03-14').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]
-        ]
+          [Time.zone.parse('2018-03-01').beginning_of_day, Time.zone.parse('2018-03-14').end_of_day.change(usec: 0)]
+        ] + static_expected_dates
       end
       let!(:expected_pricing_details_values) do
         [
@@ -136,18 +128,15 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 6, number_deleted: 1, number_updated: 0 },
-          pricings: { number_created: 5, number_deleted: 1, number_updated: 0 },
+          pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
+          pricings: { number_created: 17, number_deleted: 1, number_updated: 0 },
           stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
           [Time.zone.parse('2019-06-20').beginning_of_day, Time.zone.parse('2019-07-20').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]
-        ]
+          [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]
+        ] + static_expected_dates
       end
       let!(:expected_pricing_details_values) do
         [
@@ -182,19 +171,16 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 6, number_deleted: 1, number_updated: 0 },
-          pricings: { number_created: 6, number_deleted: 1, number_updated: 2 },
+          pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
+          pricings: { number_created: 18, number_deleted: 1, number_updated: 2 },
           stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
           [Time.zone.parse('2019-03-18').beginning_of_day, Time.zone.parse('2019-07-20').end_of_day.change(usec: 0)],
           [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2017-06-01').beginning_of_day, Time.zone.parse('2018-03-10').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]
-        ]
+          [Time.zone.parse('2017-06-01').beginning_of_day, Time.zone.parse('2018-03-10').end_of_day.change(usec: 0)]
+        ] + static_expected_dates
       end
       let!(:expected_pricing_details_values) do
         [
@@ -230,18 +216,15 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 6, number_deleted: 1, number_updated: 0 },
-          pricings: { number_created: 5, number_deleted: 1, number_updated: 1 },
+          pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
+          pricings: { number_created: 17, number_deleted: 1, number_updated: 1 },
           stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
           [Time.zone.parse('2019-03-18').beginning_of_day, Time.zone.parse('2019-03-20').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]
-        ]
+          [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]
+        ] + static_expected_dates
       end
       let!(:expected_pricing_details_values) do
         [

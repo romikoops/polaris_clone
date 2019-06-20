@@ -62,7 +62,7 @@ module Trucking
       def set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id) # rubocop:disable Metrics/ParameterLists
         if charge[:rate_basis].include? 'RANGE'
           if load_type == 'fcl'
-            %w(fcl_20 fcl_40 fcl_40_hq).each do |lt|
+            Container::CARGO_CLASSES.each do |lt|
               set_range_fee(all_charges, charge, lt, direction, tenant_vehicle_id, mot, counterpart_hub_id)
             end
           else
@@ -75,7 +75,7 @@ module Trucking
 
       def set_regular_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id) # rubocop:disable Metrics/ParameterLists
         if load_type == 'fcl'
-          %w(fcl_20 fcl_40 fcl_40_hq).each do |lt|
+          Container::CARGO_CLASSES.each do |lt|
             all_charges[counterpart_hub_id][tenant_vehicle_id][direction][lt]['fees'][charge[:key]] = charge
           end
         else
