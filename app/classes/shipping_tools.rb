@@ -736,8 +736,12 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       },
       load_type: original_shipment.load_type,
       itinerary_id: trip.itinerary_id,
-      desired_start_date: original_shipment.desired_start_date
+      desired_start_date: original_shipment.desired_start_date,
+      meta: { 
+        pricing_ids: result.dig('meta', 'pricing_ids')
+      }
     )
+
     charge_category_map = {}
     original_shipment.cargo_units.each do |unit|
       new_unit = unit.dup
