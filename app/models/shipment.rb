@@ -280,17 +280,19 @@ class Shipment < Legacy::Shipment
 
   def valid_until
     cargo_classes = cargo_units.pluck(:cargo_class)
-    if meta['pricing_ids']
-      Pricing.where(id: cargo_classes.map{ |cc| meta['pricing_ids'][cc]}.compact)
-              .order(expiration_date: :asc).first&.expiration_date 
+    start_date = planned_etd || desired_start_date
+    end_date = planned_eta || desired_start_date
+    query = self&.itinerary&.pricings
+                .for_cargo_classes(cargo_classes)
+                .for_dates(start_date, end_date)
+                .where(
+                  tenant_vehicle_id: trip.tenant_vehicle_id
+                )
+    dedicated = query.where(user_id: user.pricing_id)
+    if dedicated.present?
+      dedicated.order(expiration_date: :asc).first&.expiration_date
     else
-      start_date = planned_etd || desired_start_date
-      end_date = planned_eta || desired_start_date
-      self&.itinerary&.pricings
-          .for_cargo_classes(cargo_classes)
-          .for_dates(start_date, end_date)
-          .where(tenant_vehicle_id: trip.tenant_vehicle_id)
-          .order(expiration_date: :asc).first&.expiration_date
+      query.order(expiration_date: :asc).first&.expiration_date
     end
   end
 
