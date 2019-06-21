@@ -373,7 +373,7 @@ module Trucking
               direction: row[:direction],
               truck_type: row[:truck_type],
               currency: row[:currency],
-              value: row[:cbm],
+              value: row[:kg],
               rate_basis: row[:rate_basis],
               key: row[:fee_code],
               name: row[:fee]
