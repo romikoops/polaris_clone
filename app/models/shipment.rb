@@ -292,7 +292,7 @@ class Shipment < Legacy::Shipment
     if dedicated.present?
       dedicated.order(expiration_date: :asc).first&.expiration_date
     else
-      query.order(expiration_date: :asc).first&.expiration_date
+      query.where(user_id: nil).order(expiration_date: :asc).first&.expiration_date
     end
   end
 
