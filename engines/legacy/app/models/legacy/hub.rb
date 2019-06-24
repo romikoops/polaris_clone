@@ -21,6 +21,7 @@ module Legacy
     has_many :trucking_hub_availabilities, class_name: 'Trucking::HubAvailability'
     has_many :truckings, class_name: 'Trucking::Trucking'
     has_many :rates, -> { distinct }, through: :truckings
+    belongs_to :mandatory_charge, optional: true
   end
 end
 

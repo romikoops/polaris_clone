@@ -23,105 +23,44 @@ exports[`shallow render 1`] = `
         flexMd={0}
         fullWidth={false}
         isBox={false}
+        onClick={null}
         padding={false}
+        style={Object {}}
         title=""
         titleAction={false}
         wrapperClassName="flex-100 layout-row layout-align-start-center margin_10"
       >
-        <div
-          className="action_section flex-100 flex-gt-sm-33 layout-row layout-align-center-center layout-wrap"
-        >
-          <p
-            className="flex-90 flex-gt-sm-50  center"
-          >
-            Upload Trucking Zones Sheet
-          </p>
-          <DocumentsSelector
-            dispatchFn={[Function]}
-            options={Array []}
-            t={[Function]}
-            text="Routes .xlsx"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
+        <LegacyFileHandlers
+          handleUpload={[Function]}
+          heading=""
+          hub={
+            Object {
+              "address": Object {
+                "city": "FOO_CITY",
+                "country": "Germany",
+                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                "id": 246,
+                "primary": true,
+                "street": "FOO_STREET",
+                "streetNumber": 579,
+                "street_number": 579,
+                "zipCode": "22456",
+                "zip_code": "22456",
+              },
+              "name": "FOO_HUB_NAME",
             }
-            tooltip=""
-            type="xlsx"
-            uploadFn={null}
-          />
-        </div>
-        <div
-          className="action_section flex-100 flex-gt-sm-33 layout-row layout-wrap layout-align-center-center"
-        >
-          <p
-            className="flex-100 flex-gt-sm-50 center"
-          >
-            Download Cargo Item Sheet
-          </p>
-          <DocumentsDownloader
-            disabled={false}
-            documentDispatch={null}
-            downloadUrls={Object {}}
-            loading={false}
-            options={
-              Object {
-                "hub_id": undefined,
-                "load_type": "cargo_item",
-              }
+          }
+          t={[Function]}
+          text=""
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
             }
-            size="small"
-            square={false}
-            t={[Function]}
-            target="trucking"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-            tooltip=""
-          />
-        </div>
-        <div
-          className="action_section flex-100 flex-gt-sm-33 layout-row layout-wrap layout-align-center-center"
-        >
-          <p
-            className="flex-100 flex-gt-sm-50 center"
-          >
-            Download Container Sheet
-          </p>
-          <DocumentsDownloader
-            disabled={false}
-            documentDispatch={null}
-            downloadUrls={Object {}}
-            loading={false}
-            options={
-              Object {
-                "hub_id": undefined,
-                "load_type": "container",
-              }
-            }
-            size="small"
-            square={false}
-            t={[Function]}
-            target="trucking"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-            tooltip=""
-          />
-        </div>
+          }
+        />
       </GreyBox>
       <div
         className="flex-40 layout-row layout-align-space-around-start layout-wrap"
@@ -139,7 +78,9 @@ exports[`shallow render 1`] = `
           flexMd={0}
           fullWidth={false}
           isBox={false}
+          onClick={null}
           padding={false}
+          style={Object {}}
           title=""
           titleAction={false}
           wrapperClassName="flex layout-row layout-align-start-start layout-wrap margin_10"
@@ -183,12 +124,15 @@ exports[`shallow render 1`] = `
           flexMd={0}
           fullWidth={false}
           isBox={false}
+          onClick={null}
           padding={false}
+          style={Object {}}
           title=""
           titleAction={false}
           wrapperClassName="flex layout-row layout-align-start-start layout-wrap margin_10"
         >
           <TruckingTable
+            groups={Array []}
             setTargetTruckingId={[Function]}
             t={[Function]}
           />

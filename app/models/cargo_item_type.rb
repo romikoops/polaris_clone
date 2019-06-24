@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CargoItemType < ApplicationRecord
+class CargoItemType < Legacy::CargoItemType
   has_many :cargo_items
 
   before_save :set_description

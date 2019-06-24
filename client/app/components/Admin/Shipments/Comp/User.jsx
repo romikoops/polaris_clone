@@ -3,13 +3,14 @@ import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { adminDashboard as adminTip } from '../../../../constants'
-import { filters, capitalize, loadOriginNexus, loadDestinationNexus, loadClients, loadMot } from '../../../../helpers'
+import {
+ filters, capitalize, loadOriginNexus, loadDestinationNexus, loadClients, loadMot 
+} from '../../../../helpers'
 import Tabs from '../../../Tabs/Tabs'
 import Tab from '../../../Tabs/Tab'
 import { userActions, appActions } from '../../../../actions'
 import AdminShipmentsBox from './box' // eslint-disable-line
 import NamedSelect from '../../../NamedSelect/NamedSelect'
-
 
 export class ShipmentsCompUser extends Component {
   static prepShipment (baseShipment, user) {
@@ -23,6 +24,7 @@ export class ShipmentsCompUser extends Component {
 
     return shipment
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -33,11 +35,21 @@ export class ShipmentsCompUser extends Component {
     this.viewShipment = this.viewShipment.bind(this)
     this.determinePerPage = this.determinePerPage.bind(this)
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
+    const pageReset = {
+      open: '1',
+      requested: '1',
+      finished: '1',
+      archived: '1',
+      rejected: '1'
+    }
+    this.getShipmentsFromPage(pageReset, {})
     this.determinePerPage()
     window.addEventListener('resize', this.determinePerPage)
   }
+
   componentWillUnmount () {
     window.removeEventListener('resize', this.determinePerPage)
   }
@@ -47,11 +59,13 @@ export class ShipmentsCompUser extends Component {
     const { perPage } = this.state
     userDispatch.getShipments(pages, perPage, params, false)
   }
+
   getTargetShipmentsFromPage (target, page, params) {
     const { userDispatch } = this.props
     const { perPage } = this.state
     userDispatch.deltaShipmentsPage(target, page, perPage, params)
   }
+
   determinePerPage () {
     const { perPage } = this.state
     const { userDispatch, shipments } = this.props
@@ -64,6 +78,7 @@ export class ShipmentsCompUser extends Component {
     }
     this.setState({ perPage: newPerPage })
   }
+
   viewShipment (shipment) {
     this.props.viewShipment(shipment)
   }
@@ -82,6 +97,7 @@ export class ShipmentsCompUser extends Component {
       }
     })
   }
+
   toggleFilterValue (target, key) {
     this.setState({
       searchFilters: {
@@ -93,6 +109,7 @@ export class ShipmentsCompUser extends Component {
       }
     }, () => this.handleFilters())
   }
+
   handleInput (selection) {
     const { name, ...others } = selection
 
@@ -103,6 +120,7 @@ export class ShipmentsCompUser extends Component {
       }
     }), () => this.handleFilters())
   }
+
   handleFilters (target, realPage) {
     const { searchFilters } = this.state
     const { pages } = this.props.shipments
@@ -159,9 +177,11 @@ export class ShipmentsCompUser extends Component {
   nextPage (target) {
     this.handlePage(target, 1)
   }
+
   prevPage (target) {
     this.handlePage(target, -1)
   }
+
   doNothing () {
     console.log(this.state.page)
   }
@@ -210,7 +230,8 @@ export class ShipmentsCompUser extends Component {
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <Tabs>
-          {keysToRender.map(status => (keysToRender.length > 1 ? (<Tab
+          {keysToRender.map(status => (keysToRender.length > 1 ? (
+<Tab
             tabTitle={capitalize(status)}
             theme={theme}
           >
@@ -268,7 +289,9 @@ export class ShipmentsCompUser extends Component {
               handleSearchChange={e => this.handleSearchQuery(e, status)}
               getShipmentsRequest={this.props.getShipmentsRequest}
             />
-          </Tab>) : (<Tab isUniq>
+          </Tab>
+) : (
+<Tab isUniq>
             <AdminShipmentsBox
               handleClick={this.viewShipment}
               dispatches={userDispatch}
@@ -284,7 +307,8 @@ export class ShipmentsCompUser extends Component {
               nextPage={() => this.nextPage(status)}
               handleSearchChange={e => this.handleSearchQuery(e, status)}
             />
-          </Tab>)))}
+          </Tab>
+)))}
 
         </Tabs>
       </div>

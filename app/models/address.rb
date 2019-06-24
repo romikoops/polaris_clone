@@ -59,14 +59,6 @@ class Address < Legacy::Address
     address
   end
 
-  def self.geocoded_address(user_input)
-    address = Address.new(geocoded_address: user_input)
-    address.geocode
-    address.reverse_geocode
-    address.save!
-    address
-  end
-
   def self.new_from_raw_params(raw_address_params)
     new(address_params(raw_address_params))
   end

@@ -23,7 +23,7 @@ module OfferCalculatorService
         address: address,
         carriage: carriage,
         shipment: @shipment,
-        user_id: @shipment.user.pricing_id
+        user_id: @scope['base_pricing'] ? @shipment.user_id : @shipment.user.pricing_id
       )
 
       data = Hub.where(id: hub_ids).each_with_object({}) do |hub, obj|
@@ -62,11 +62,11 @@ module OfferCalculatorService
         trucking_charges = calc_trucking_charges(distance, trucking_pricing)
         trucking_charge_data[key] = trucking_charges
       end
-    rescue TruckingDataBuilder::MissingTruckingData
+    rescue TruckingDataBuilder::MissingTruckingData => e
       raise ApplicationError::MissingTruckingData
-    rescue TruckingTools::LoadMeterageExceeded
+    rescue TruckingTools::LoadMeterageExceeded => e
       raise ApplicationError::LoadMeterageExceeded
-    rescue StandardError
+    rescue StandardError => e
       raise ApplicationError::MissingTruckingData
     end
 
@@ -78,13 +78,31 @@ module OfferCalculatorService
       cargo_units = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : cargo_unit_array
       return nil if cargo_units.empty?
 
-      TruckingTools.calc_trucking_price(
-        trucking_pricing,
+      manipulated_trucking_pricing = get_manipulated_trucking_pricing(trucking_pricing)
+
+      return nil if manipulated_trucking_pricing.nil?
+
+      TruckingTools.new(
+        manipulated_trucking_pricing,
         cargo_units,
         distance,
         trucking_pricing.carriage,
         @shipment.user
-      )
+      ).perform
+    end
+
+    def get_manipulated_trucking_pricing(trucking_pricing)
+      results = Pricings::Manipulator.new(
+        type: "trucking_#{trucking_pricing.carriage}_margin".to_sym,
+        user: ::Tenants::User.find_by(legacy_id: @shipment.user_id),
+        args: {
+          cargo_class: trucking_pricing.cargo_class,
+          date: @shipment.desired_start_date,
+          shipment: @shipment,
+          trucking_pricing: trucking_pricing
+        }
+      ).perform
+      results.first
     end
   end
 end

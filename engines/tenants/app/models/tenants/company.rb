@@ -6,6 +6,7 @@ module Tenants
 
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
     has_many :memberships, as: :member
+    has_many :users, class_name: 'Tenants::User'
     has_many :groups, through: :memberships
     belongs_to :address, class_name: 'Legacy::Address', optional: true
     belongs_to :tenant
@@ -28,6 +29,10 @@ module Tenants
       ::Tenants::Group.where(id: memberships.pluck(:group_id))
     end
 
+    def employees
+      ::Tenants::User.where(company_id: id)
+    end
+
     def for_table_json(options = {})
       as_json(options).reverse_merge(
         address: address&.geocoded_address,
@@ -37,7 +42,7 @@ module Tenants
     end
 
     def employee_count
-      ::Tenants::User.where(company_id: id).count
+      employees.count
     end
   end
 end
@@ -46,12 +51,14 @@ end
 #
 # Table name: tenants_companies
 #
-#  id         :uuid             not null, primary key
-#  name       :string
-#  address_id :integer
-#  vat_number :string
-#  email      :string
-#  tenant_id  :uuid
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id          :uuid             not null, primary key
+#  name        :string
+#  address_id  :integer
+#  vat_number  :string
+#  email       :string
+#  tenant_id   :uuid
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  external_id :string
+#  phone       :string
 #

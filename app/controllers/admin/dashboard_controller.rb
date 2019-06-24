@@ -51,11 +51,11 @@ class Admin::DashboardController < Admin::AdminBaseController
   end
 
   def open_shipments
-    @shipments.open.order_booking_desc.map(&:with_address_options_json)
+    @shipments.open.order_booking_desc.limit(DASH_SHIPMENTS).map(&:with_address_options_json)
   end
 
   def quoted_shipments
-    @shipments.quoted.order_booking_desc.map(&:with_address_index_json)
+    @shipments.quoted.order_booking_desc.limit(DASH_SHIPMENTS).map(&:with_address_index_json)
   end
 
   def detailed_itin_json

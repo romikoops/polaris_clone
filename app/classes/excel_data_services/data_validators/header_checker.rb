@@ -5,7 +5,7 @@ module ExcelDataServices
     class HeaderChecker < Base
       HEADER_DIFF_THRESHOLD = 0.14
 
-      module StaticHeadersForDataRestructurers
+      module StaticHeadersForDataRestructurers # rubocop:disable
         # The names of the constants here must exactly match the names of the data restructurers (upcased).
 
         LOCAL_CHARGES = %i(
@@ -90,6 +90,22 @@ module ExcelDataServices
           carrier
         ).freeze
 
+        MARGINS = %i(
+          effective_date
+          expiration_date
+          origin
+          country_origin
+          destination
+          country_destination
+          mot
+          carrier
+          service_level
+          load_type
+          fee_code
+          operator
+          margin
+        ).freeze
+
         SCHEDULE_GENERATOR = %i(
           origin
           destination
@@ -104,6 +120,27 @@ module ExcelDataServices
           internal_code
           fee_code
           fee_name
+        ).freeze
+
+        COMPANIES = %i(
+          name
+          email
+          phone
+          vat_number
+          external_id
+          address
+        ).freeze
+
+        EMPLOYEES = %i(
+          company_name
+          first_name
+          last_name
+          email
+          password
+          phone
+          vat_number
+          external_id
+          address
         ).freeze
       end
 

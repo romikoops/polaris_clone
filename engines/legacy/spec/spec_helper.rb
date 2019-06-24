@@ -4,7 +4,7 @@ require 'factory_bot_rails'
 require 'simplecov'
 
 SimpleCov.start 'rails' do
-  minimum_coverage 60
+  minimum_coverage 43
 
   if ENV['COVERAGE_DIR']
     command_name 'engines/legacy'

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Currency < ApplicationRecord
+class Currency < Legacy::Currency
 end
 
 # == Schema Information

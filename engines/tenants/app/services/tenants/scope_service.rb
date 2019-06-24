@@ -60,6 +60,7 @@ module Tenants
       open_quotation_tool: false,
       customs_export_paper: false,
       fixed_exchange_rates: true,
+      base_pricing: false,
       require_full_address: true,
       closed_quotation_tool: false,
       quote_notes: "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        " \
@@ -118,12 +119,18 @@ module Tenants
         voyage_code: true,
         vessel: true,
         service_level: true
+      },
+      side_nav: {
+        agent: %w(dashboard shipments profile),
+        admin: %w(dashboard shipments hubs pricing schedules clients routes currencies settings),
+        shipper: %w(dashboard shipments pricings profile contacts)
       }
     }.freeze
 
-    def initialize(user: nil, tenant: nil)
-      tenants_user = ::Tenants::User.find_by(legacy_id: user&.id)
-      @hierarchy = HierarchyService.new(user: tenants_user, tenant: tenant).fetch
+    def initialize(target: nil, tenant: nil)
+      adjusted_target = determine_target(target)
+      tenant = adjusted_target&.tenant if tenant.nil?
+      @hierarchy = HierarchyService.new(target: adjusted_target, tenant: tenant).fetch
     end
 
     def fetch(key = nil)
@@ -139,6 +146,11 @@ module Tenants
 
     private
 
+    def determine_target(target)
+      return ::Tenants::User.find_by(legacy_id: target.id) if %w(Legacy::User User).include?(target.class.to_s)
+
+      target
+    end
     attr_reader :hierarchy
   end
 end

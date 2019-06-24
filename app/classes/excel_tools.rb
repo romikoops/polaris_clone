@@ -4,7 +4,6 @@ DEBUG = false
 
 module ExcelTools
   include ImageTools
-  include PricingTools
 
   def load_hub_images(params)
     xlsx = Roo::Spreadsheet.open(params['xlsx'])

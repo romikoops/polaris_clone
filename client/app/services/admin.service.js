@@ -624,10 +624,10 @@ function deleteTrip (id) {
   return fetch(`${getTenantApiUrl()}/admin/schedules/${id}`, requestOptions).then(handleResponse)
 }
 
-function uploadTrucking (url, file, direction) {
+function uploadTrucking (url, file, group) {
   const formData = new FormData()
   formData.append('file', file)
-  formData.append('direction', direction)
+  formData.append('group', group)
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader() },
@@ -710,6 +710,16 @@ function updateHubMandatoryCharges (id, charges) {
   return fetch(`${getTenantApiUrl()}/admin/hubs/${id}/update_mandatory_charges`, requestOptions)
     .then(handleResponse)
 }
+function disablePricing (args) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...args })
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/pricings/${args.pricing_id}/disable`, requestOptions)
+    .then(handleResponse)
+}
 function updateEmails (emails, tenant) {
   const requestOptions = {
     method: 'PATCH',
@@ -724,6 +734,7 @@ function updateEmails (emails, tenant) {
 export const adminService = {
   getHubs,
   getHub,
+  disablePricing,
   deleteTrip,
   getItineraries,
   deleteDocument,

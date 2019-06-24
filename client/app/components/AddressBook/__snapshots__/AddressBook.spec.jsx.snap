@@ -1,63 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`shallow render 1`] = `
-<div
-  className="
-        contact_scroll flex-100 layout-row layout-wrap layout-align-start ccb_contacts
-      "
->
+<div>
   <div
-    className="flex-50 layout-row layout-align-start-stretch"
-    style={
-      Object {
-        "padding": "15px",
-      }
-    }
+    className="
+            contact_scroll flex-100 layout-row layout-wrap layout-align-start ccb_contacts
+          "
   >
-    <AddressBookAddContactButton
-      t={[Function]}
-    />
-  </div>
-  <div
-    className="flex-50 layout-row layout-align-start-stretch ccb_contact"
-    key="UUID_MOCK_KEY_0"
-    style={
-      Object {
-        "padding": "15px",
-      }
-    }
-  >
-    <ContactCard
-      contactData={
-        Object {
-          "address": Object {
-            "city": "CONTACT_ADDRESS_CITY",
-            "country": "CONTACT_ADDRESS_COUNTRY",
-            "street_number": "CONTACT_ADDRESS_STREET_NUMBER",
-            "zip_code": "CONTACT_ADDRESS_ZIP_CODE",
+    <Pagination
+      handleChange={[Function]}
+      items={
+        Array [
+          Object {
+            "address": Object {
+              "city": "CONTACT_ADDRESS_CITY",
+              "country": "CONTACT_ADDRESS_COUNTRY",
+              "street_number": "CONTACT_ADDRESS_STREET_NUMBER",
+              "zip_code": "CONTACT_ADDRESS_ZIP_CODE",
+            },
+            "companyName": "CONTACT_COMPANY_NAME",
+            "data": Object {
+              "company_name": "CONTACT_DATA_COMPANY_NAME",
+              "email": "CONTACT_DATA_COMPANY_EMAIL",
+              "phone": "CONTACT_DATA_COMPANY_PHONE",
+            },
+            "email": "foo@bar.baz",
+            "firstName": "John",
+            "lastName": "Doe",
+            "phone": "0761452887",
           },
-          "companyName": "CONTACT_COMPANY_NAME",
-          "data": Object {
-            "company_name": "CONTACT_DATA_COMPANY_NAME",
-            "email": "CONTACT_DATA_COMPANY_EMAIL",
-            "phone": "CONTACT_DATA_COMPANY_PHONE",
-          },
-          "email": "foo@bar.baz",
-          "firstName": "John",
-          "lastName": "Doe",
-          "phone": "0761452887",
-        }
+        ]
       }
-      contactType=""
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
-      }
-    />
+      numPages={2}
+      pageNavigation={true}
+      perPage={3}
+      remote={true}
+      searchable={true}
+    >
+      <Component />
+    </Pagination>
   </div>
 </div>
 `;

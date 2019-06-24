@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::ItinerariesController < Admin::AdminBaseController
-  include PricingTools
   include ItineraryTools
 
   def index

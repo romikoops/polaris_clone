@@ -6,12 +6,25 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import reactTriggerChange from 'react-trigger-change'
-import { AdminClientsIndex, AdminClientView } from "."
+import { AdminClientsIndex } from "."
 import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { adminActions } from '../../actions'
+import { adminActions, documentActions } from '../../actions'
 import FormsyInput from '../FormsyInput/FormsyInput'
-import GenericError from "../ErrorHandling/Generic"
+import GenericError from '../ErrorHandling/Generic'
+import AdminScopesEditor from './Scopes/Editor'
+import {
+  AdminClientGroupCreator,
+  AdminClientGroup,
+  AdminClientGroups,
+  AdminClientCompany,
+  AdminClientMargins,
+  AdminClientMarginCreator,
+  AdminClientCompanyCreator,
+  AdminClientView,
+  AdminClientCompanies
+} from './Clients/index'
+import AdminUploadsSuccess from './Uploads/Success'
 
 class AdminClients extends Component {
   static errorsExist (errorsObjects) {
@@ -51,6 +64,7 @@ class AdminClients extends Component {
     this.saveNewClient = this.saveNewClient.bind(this)
     this.viewClient = this.viewClient.bind(this)
     this.backToIndex = this.backToIndex.bind(this)
+    this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
     this.handleClientAction = this.handleClientAction.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
   }
@@ -72,6 +86,11 @@ class AdminClients extends Component {
   handleClientAction (id, action) {
     const { adminDispatch } = this.props
     adminDispatch.confirmShipment(id, action)
+  }
+
+  closeSuccessDialog () {
+    const { documentDispatch } = this.props
+    documentDispatch.closeViewer()
   }
 
   resetTabIndex () {
@@ -146,7 +165,7 @@ class AdminClients extends Component {
   render () {
     const { newClient, newClientBool, tabReset } = this.state
     const {
-      t, theme, clients, hubs, hubHash, client, adminDispatch, scope, user
+      t, theme, clients, hubs, hubHash, client, adminDispatch, scope, user, document
     } = this.props
     const textStyle = {
       background:
@@ -186,18 +205,19 @@ class AdminClients extends Component {
           required
         />
         {suggestion && (
-<div style={errorStyle}>
-              Did you mean&nbsp;
-              <span
-                className="emulate_link blue_link"
-                onClick={(e) => {
-                  this.setState({ email: suggestion.full })
-                }}
-              >
-                {suggestion.full}
-              </span>?
-            </div>
-)}
+          <div style={errorStyle}>
+            Did you mean&nbsp;
+            <span
+              className="emulate_link blue_link"
+              onClick={(e) => {
+                this.setState({ email: suggestion.full })
+              }}
+            >
+              {suggestion.full}
+            </span>
+?
+          </div>
+        )}
       </div>
     )
 
@@ -447,11 +467,21 @@ class AdminClients extends Component {
         </div>
       </Formsy>
     )
+    const uploadStatus = document.viewer ? (
+      <AdminUploadsSuccess
+        theme={theme}
+        data={document.results}
+        closeDialog={this.closeSuccessDialog}
+      />
+    ) : (
+      ''
+    )
 
     return (
       <GenericError theme={theme}>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
           {newClientBool ? newClientBox : ''}
+          {uploadStatus}
           <Switch className="flex">
             <Route
               exact
@@ -474,16 +504,78 @@ class AdminClients extends Component {
             />
             <Route
               exact
-              path="/admin/clients/:id"
+              path="/admin/clients/client/:id"
               render={props => (
                 <AdminClientView
                   theme={theme}
                   hubHash={hubHash}
                   handleClientAction={this.handleClientAction}
-                  clientData={client}
                   adminDispatch={adminDispatch}
                   {...props}
                 />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/clients/groupcreator"
+              render={props => (
+                <AdminClientGroupCreator {...props} />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/clients/scopeeditor/:targetType/:targetId"
+              render={props => (
+                <AdminScopesEditor {...props} />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/clients/margincreator"
+              render={props => (
+                <AdminClientMarginCreator {...props} />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/clients/companycreator"
+              render={props => (
+                <AdminClientCompanyCreator {...props} />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/clients/groups/:id"
+              render={props => (
+                <AdminClientGroup {...props} />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/clients/groups"
+              render={props => (
+                <AdminClientGroups isPage {...props} />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/clients/companies/:id"
+              render={props => (
+                <AdminClientCompany {...props} />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/clients/companies"
+              render={props => (
+                <AdminClientCompanies isPage {...props} />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/clients/margins"
+              render={props => (
+                <AdminClientMargins {...props} />
               )}
             />
           </Switch>
@@ -500,7 +592,9 @@ AdminClients.defaultProps = {
   hubHash: {}
 }
 function mapStateToProps (state) {
-  const { authentication, app, admin } = state
+  const {
+    authentication, app, admin, document
+  } = state
   const { tenant } = app
   const { user, loggedIn } = authentication
   const { scope } = tenant
@@ -517,11 +611,13 @@ function mapStateToProps (state) {
     shipment,
     hubs,
     client,
-    scope
+    scope,
+    document
   }
 }
 function mapDispatchToProps (dispatch) {
   return {
+    documentDispatch: bindActionCreators(documentActions, dispatch),
     adminDispatch: bindActionCreators(adminActions, dispatch)
   }
 }

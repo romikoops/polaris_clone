@@ -16,7 +16,9 @@ function GreyBox ({
   padding,
   fullWidth,
   borderStyle,
-  children
+  children,
+  style,
+  onClick
 }) {
   return (
     <div className={`${borderStyle || adminStyles.border_box} ${wrapperClassName} 
@@ -26,6 +28,8 @@ function GreyBox ({
       ${padding ? styles.boxpadding : ''}
       ${isBox ? 'layout-row flex-sm-100 flex-xs-100 layout-align-center-center' : ''} 
       ${fullWidth ? styles.fullWidth : ''}`}
+      style={style}
+      onClick={onClick}
     >
       <div className={contentClassName}>
         {title || titleAction ? (
@@ -44,21 +48,6 @@ function GreyBox ({
   )
 }
 
-GreyBox.propTypes = {
-  flex: PropTypes.number,
-  flexGtLg: PropTypes.number,
-  flexMd: PropTypes.number,
-  fullWidth: PropTypes.bool,
-  isBox: PropTypes.bool,
-  padding: PropTypes.bool,
-  title: PropTypes.string,
-  borderStyle: PropTypes.string,
-  content: PropTypes.node,
-  titleAction: PropTypes.node,
-  wrapperClassName: PropTypes.string,
-  contentClassName: PropTypes.string
-}
-
 GreyBox.defaultProps = {
   flex: 0,
   flexGtLg: 0,
@@ -71,7 +60,9 @@ GreyBox.defaultProps = {
   borderStyle: '',
   contentClassName: '',
   content: [''],
-  titleAction: false
+  titleAction: false,
+  style: {},
+  onClick: null
 }
 
 export default GreyBox

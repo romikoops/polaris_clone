@@ -13,6 +13,7 @@ import AdminRangeFeeTable from './RangeTable'
 import { moment } from '../../../constants'
 import { determineSortingCaret } from '../../../helpers/sortingCaret'
 import AdminPromptConfirm from '../Prompt/Confirm'
+import Checkbox from '../../Checkbox/Checkbox';
 
 class AdminPricesTable extends PureComponent {
   static determineFeeTable (row) {
@@ -39,7 +40,8 @@ class AdminPricesTable extends PureComponent {
     this.state = {
       expanded: {},
       sorted: [],
-      confirm: false
+      confirm: false,
+      confirmAction: false
     }
   }
 
@@ -49,7 +51,7 @@ class AdminPricesTable extends PureComponent {
       adminDispatch.getItineraryPricings(itineraryId)
     }
   }
-  
+
   deletePricing () {
     const { adminDispatch } = this.props
     const { pricingToDelete } = this.state
@@ -57,15 +59,31 @@ class AdminPricesTable extends PureComponent {
     this.closeConfirm()
   }
 
-  confirmDelete (pricing) {
+  onConfirm () {
+    const { confirmAction } = this.state
+    switch (confirmAction) {
+      case 'delete':
+        return this.deletePricing()
+      case 'disable':
+        return this.toggleDisabled(confirmAction)
+      case 'enable':
+        return this.toggleDisabled(confirmAction)
+
+      default:
+        break
+    }
+  }
+
+  confirmDialog (action, pricing) {
     this.setState({
       confirm: true,
+      confirmAction: action,
       pricingToDelete: pricing
     })
   }
 
   closeConfirm () {
-    this.setState({ confirm: false, pricingToDelete: false })
+    this.setState({ confirm: false, pricingToDelete: false, confirmAction: false })
   }
 
   requestPricing (data) {
@@ -78,39 +96,34 @@ class AdminPricesTable extends PureComponent {
     adminDispatch.requestPricing(req)
   }
 
+  toggleDisabled (action) {
+    const { adminDispatch } = this.props
+    const { pricingToDelete } = this.state
+    const req = {
+      pricing_id: pricingToDelete.id,
+      tenant_id: pricingToDelete.tenant_id,
+      action
+    }
+    adminDispatch.disablePricing(req)
+    this.closeConfirm()
+  }
+
   render () {
     const {
-      t, pricings, theme, itineraryId, classNames
+      t, pricings, theme, itineraryId, classNames, scope
     } = this.props
-    const { sorted, confirm } = this.state
+    const { sorted, confirm, confirmAction } = this.state
 
     const data = get(pricings, ['show', itineraryId], false)
     if (!data) return ''
     const columns = [
       {
         Header: (<div className="flex layout-row layout-center-center">
-          {determineSortingCaret('userEmail', sorted)}
-          <p className="flex-none">{t('account:userEmail')}</p>
-        </div>),
-        id: 'userEmail',
-        accessor: d => d.user_email,
-        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["userEmail"] }),
-        filterAll: true,
-        Cell: rowData => (
-          <div className={`${styles.pricing_cell} flex-100 layout-row layout-align-start-center`}>
-            <p className="flex-100">
-              {rowData.row.userEmail || '-'}
-            </p>
-          </div>
-        )
-      },
-      {
-        Header: (<div className="flex layout-row layout-center-center">
           {determineSortingCaret('effectiveDate', sorted)}
           <p className="flex-none">{t('account:effectiveDate')}</p>
         </div>),
         id: 'effectiveDate',
-        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["effectiveDate"] }),
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['effectiveDate'] }),
         filterAll: true,
         accessor: d => moment(d.effective_date).format('ll'),
         Cell: rowData => (
@@ -128,7 +141,7 @@ class AdminPricesTable extends PureComponent {
           <p className="flex-none">{t('account:expirationDate')}</p>
         </div>),
         id: 'expirationDate',
-        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["expirationDate"] }),
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['expirationDate'] }),
         filterAll: true,
         accessor: d => moment(d.expiration_date).format('ll'),
         Cell: rowData => (
@@ -146,7 +159,7 @@ class AdminPricesTable extends PureComponent {
           <p className="flex-none">{t('account:carrier')}</p>
         </div>),
         id: 'carrier',
-        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["carrier"] }),
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['carrier'] }),
         filterAll: true,
         accessor: d => d.carrier,
         Cell: rowData => (
@@ -164,7 +177,7 @@ class AdminPricesTable extends PureComponent {
           <p className="flex-none">{t('shipment:serviceLevel')}</p>
         </div>),
         id: 'service_level',
-        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["service_level"] }),
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['service_level'] }),
         filterAll: true,
         accessor: d => d.service_level,
         Cell: rowData => (
@@ -181,7 +194,7 @@ class AdminPricesTable extends PureComponent {
           {determineSortingCaret('cargo_class', sorted)}
           <p className="flex-none">{t('account:loadType')}</p>
         </div>),
-        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["cargo_class"] }),
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['cargo_class'] }),
         filterAll: true,
         accessor: 'cargo_class',
         Cell: rowData => (
@@ -193,24 +206,64 @@ class AdminPricesTable extends PureComponent {
           </div>
         )
       },
+      scope.base_pricing ? {
+        maxWidth: 75,
+        Header: (<div className="flex layout-row layout-center-center">
+          <p className="flex-none">{t('common:enabled')}</p>
+        </div>),
+        accessor: 'disabled',
+        Cell: (rowData) => {
+          const action = rowData.row.disabled ? 'enable' : 'disable'
+
+          return (
+            <div
+              className={`${styles.pricing_cell} flex layout-row layout-align-center-center pointy`}
+            >
+              <Checkbox
+                checked={!rowData.row.disabled}
+                theme={theme}
+                onChange={() => this.confirmDialog(action, rowData.original)}
+              />
+            </div>
+          )
+ }
+      } : false,
       {
-        maxWidth: 50,
+        maxWidth: 75,
+        Header: (<div className="flex layout-row layout-center-center">
+          <p className="flex-none">{t('common:delete')}</p>
+        </div>),
         Cell: rowData => (
           <div
-            onClick={() => this.confirmDelete(rowData.original)}
+            onClick={() => this.confirmDialog('delete', rowData.original)}
             className={`${styles.delete_cell} flex layout-row layout-align-center-center pointy`}
           >
-            <i className="flex-none fa fa-trash"></i>
+            <i className="flex-none fa fa-trash" />
           </div>
         )
       }
-    ]
-    const confimPrompt = confirm ? (
+    ].filter(x => !!x)
+    let confirmText
+    switch (confirmAction) {
+      case 'delete':
+        confirmText = t('admin:confirmDeletePricingImmediately')
+        break
+      case 'disable':
+        confirmText = t('admin:confirmDisablePricingImmediately')
+        break
+      case 'enable':
+        confirmText = t('admin:confirmEnablePricingImmediately')
+        break
+    
+      default:
+        break
+    }
+    const confirmDeletePrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
         heading={t('common:areYouSure')}
-        text={t('admin:confirmDeletePricingImmediately')}
-        confirm={() => this.deletePricing()}
+        text={confirmText}
+        confirm={() => this.onConfirm()}
         deny={() => this.closeConfirm()}
       />
     ) : (
@@ -219,7 +272,7 @@ class AdminPricesTable extends PureComponent {
 
     return (
       <div className="flex-100 layout-row layout-align-center-start">
-        {confimPrompt}
+        {confirmDeletePrompt}
         <ReactTable
           className={`${styles.no_footer} ${classNames}`}
           data={data.pricings}
@@ -250,7 +303,7 @@ function mapStateToProps (state) {
     authentication, app, admin
   } = state
   const { tenant } = app
-  const { theme } = tenant
+  const { theme, scope } = tenant
   const { user, loggedIn } = authentication
   const {
     pricings
@@ -261,6 +314,7 @@ function mapStateToProps (state) {
     tenant,
     loggedIn,
     theme,
+    scope,
     pricings
   }
 }

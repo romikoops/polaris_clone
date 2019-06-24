@@ -25,7 +25,8 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @content               = {}
     @hide_grand_total = {}
     @has_legacy_charges = {}
-    @scope = ::Tenants::ScopeService.new(user: @shipment.user).fetch
+    tenants_tenant = Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
+    @scope = ::Tenants::ScopeService.new(target: @shipment.user, tenant: tenants_tenant).fetch
     @pricing_data = {}
 
     @cargo_data = {
@@ -47,21 +48,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
   end
 
   def calculate_pricing_data(shipment)
-    eta = shipment.planned_eta || Date.today
-    etd = shipment.planned_etd || Date.today
-    @pricing_data[shipment.id] = shipment.itinerary.pricings
-                                         .where(tenant_vehicle_id: shipment.trip.tenant_vehicle_id)
-                                         .for_dates(etd, eta)
-                                         .for_load_type(shipment.load_type)
-                                         .each_with_object({}) do |pricing, hash|
-      pricing_hash = pricing.as_json.dig('data')
-      pricing_hash['total'] = pricing_hash.keys.sort
-                                          .each_with_object('value' => 0, 'currency' => nil) do |key, obj|
-        obj['value'] += pricing_hash[key]['rate']
-        obj['currency'] ||= pricing_hash[key]['currency']
-      end
-      hash[pricing.cargo_class] = pricing_hash
-    end
+    @pricing_data[shipment.id] = shipment.meta['pricing_rate_data']
   end
 
   def hide_grand_total?(shipment) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength

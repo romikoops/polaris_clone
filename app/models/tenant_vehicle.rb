@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TenantVehicle < ApplicationRecord
+class TenantVehicle < Legacy::TenantVehicle
   belongs_to :tenant
   belongs_to :vehicle
   belongs_to :carrier, optional: true
@@ -20,6 +20,10 @@ class TenantVehicle < ApplicationRecord
 
   def with_carrier
     as_json(include: { carrier: { only: %i(id name) } })
+  end
+
+  def full_name
+    carrier_id ? "#{carrier&.name} - #{name}" : name
   end
 end
 

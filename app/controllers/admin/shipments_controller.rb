@@ -484,27 +484,51 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def requested_shipments
-    @requested_shipments ||= filtered_tenant_shipments.requested
+    @requested_shipments ||= if params[:target_user_id]
+                               filtered_tenant_shipments.requested.where(user_id: params[:target_user_id])
+                             else
+                               filtered_tenant_shipments.requested
+                             end
   end
 
   def open_shipments
-    @open_shipments ||= filtered_tenant_shipments.open
+    @open_shipments ||= if params[:target_user_id]
+                          filtered_tenant_shipments.open.where(user_id: params[:target_user_id])
+                        else
+                          filtered_tenant_shipments.open
+                        end
   end
 
   def quoted_shipments
-    @quoted_shipments ||= filtered_tenant_shipments.quoted
+    @quoted_shipments ||= if params[:target_user_id]
+                            filtered_tenant_shipments.quoted.where(user_id: params[:target_user_id])
+                          else
+                            filtered_tenant_shipments.quoted
+                          end
   end
 
   def finished_shipments
-    @finished_shipments ||= filtered_tenant_shipments.finished
+    @finished_shipments ||= if params[:target_user_id]
+                              filtered_tenant_shipments.finished.where(user_id: params[:target_user_id])
+                            else
+                              filtered_tenant_shipments.finished
+                            end
   end
 
   def rejected_shipments
-    @rejected_shipments ||= filtered_tenant_shipments.rejected
+    @rejected_shipments ||= if params[:target_user_id]
+                              filtered_tenant_shipments.rejected.where(user_id: params[:target_user_id])
+                            else
+                              filtered_tenant_shipments.rejected
+                            end
   end
 
   def archived_shipments
-    @archived_shipments ||= filtered_tenant_shipments.archived
+    @archived_shipments ||= if params[:target_user_id]
+                              filtered_tenant_shipments.archived.where(user_id: params[:target_user_id])
+                            else
+                              filtered_tenant_shipments.archived
+                            end
   end
 
   def documents

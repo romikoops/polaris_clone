@@ -10,7 +10,7 @@ import {
   AdminPricingRouteView
 } from '.'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { adminActions, documentActions } from '../../actions'
+import { adminActions, documentActions, clientsActions } from '../../actions'
 import AdminUploadsSuccess from './Uploads/Success'
 import AdminTruckingView from './Trucking/AdminTruckingView'
 
@@ -62,7 +62,6 @@ class AdminPricings extends Component {
       itineraries,
       hubHash,
       adminDispatch,
-      clients,
       clientPricings,
       pricings,
       documentDispatch,
@@ -71,9 +70,9 @@ class AdminPricings extends Component {
       loading,
       trucking,
       truckingDetail,
-      user
+      user,
+      clientsDispatch
     } = this.props
-    const filteredClients = clients.filter(x => !x.guest)
     const backButton = (
       <div className="flex-none layout-row">
         <RoundButton
@@ -113,7 +112,7 @@ class AdminPricings extends Component {
                   hubs={hubs}
                   user={user}
                   hubHash={hubHash}
-                  clients={filteredClients}
+                  
                   pricingData={pricingData}
                   itineraries={itineraries}
                   {...props}
@@ -122,18 +121,7 @@ class AdminPricings extends Component {
                 />
               )}
             />
-            <Route
-              exact
-              path="/admin/pricings/clients"
-              render={props => (
-                <AdminPricingsClientIndex
-                  theme={theme}
-                  clients={filteredClients}
-                  adminTools={adminDispatch}
-                  {...props}
-                />
-              )}
-            />
+          
             <Route
               exact
               path="/admin/pricings/clients/:id"
@@ -174,9 +162,9 @@ class AdminPricings extends Component {
                   scope={tenant.scope}
                   hubHash={hubHash}
                   pricingData={pricingData}
-                  clients={filteredClients}
                   pricings={pricings.show}
                   adminActions={adminDispatch}
+                  clientsDispatch={clientsDispatch}
                   {...props}
                 />
               )}
@@ -227,6 +215,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     adminDispatch: bindActionCreators(adminActions, dispatch),
+    clientsDispatch: bindActionCreators(clientsActions, dispatch),
     documentDispatch: bindActionCreators(documentActions, dispatch)
   }
 }

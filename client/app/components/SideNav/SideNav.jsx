@@ -37,7 +37,7 @@ class SideNav extends Component {
         url: '/account/shipments',
         target: 'shipments'
       },
-      scope.hide_user_pricing_requests ? null : {
+      {
         key: v4(),
         icon: 'fa-money',
         text: t('account:pricings'),
@@ -58,7 +58,7 @@ class SideNav extends Component {
         url: '/account/contacts',
         target: 'contacts'
       }
-    ].filter(item => item)
+    ].filter(item => scope.side_nav.shipper.includes(item.target))
     this.agentLinks = [
       {
         key: v4(),
@@ -81,7 +81,7 @@ class SideNav extends Component {
         url: '/account/profile',
         target: 'profile'
       }
-    ]
+    ].filter(item => scope.side_nav.agent.includes(item.target))
     this.adminLinks = [
       {
         key: v4(),
@@ -154,7 +154,7 @@ class SideNav extends Component {
         url: '/admin/settings',
         target: 'settings'
       }
-    ]
+    ].filter(item => scope.side_nav.admin.includes(item.target))
     const width = window.innerWidth
     this.perPage = width >= 1920 ? 6 : 4
     const { user } = props

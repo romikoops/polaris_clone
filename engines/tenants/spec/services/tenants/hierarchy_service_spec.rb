@@ -8,7 +8,7 @@ RSpec.describe Tenants::HierarchyService do
       let(:user) { nil }
 
       it 'returns an empty array' do
-        expect(described_class.new(user: user).fetch).to eq([])
+        expect(described_class.new(target: user).fetch).to eq([])
       end
     end
 
@@ -17,7 +17,7 @@ RSpec.describe Tenants::HierarchyService do
       let(:user) { FactoryBot.create(:tenants_user, tenant: tenant) }
 
       it 'returns the correct hierarchy' do
-        expect(described_class.new(user: user).fetch).to eq([tenant, user])
+        expect(described_class.new(target: user).fetch).to eq([tenant, user])
       end
     end
   end

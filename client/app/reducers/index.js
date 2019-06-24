@@ -9,6 +9,7 @@ import shipment from './shipment.reducer'
 import alert from './alert.reducer'
 import error from './error.reducer'
 import admin from './admin.reducer'
+import clients from './clients.reducer'
 import app from './app.reducer'
 import map from './map.reducer'
 import document from './document.reducer'
@@ -49,7 +50,8 @@ const rootReducer = combineReducers({
   document,
   cookie,
   content,
-  bookingProcess
+  bookingProcess,
+  clients
 })
 
 export default rootReducer

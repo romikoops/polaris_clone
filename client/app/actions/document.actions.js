@@ -81,6 +81,31 @@ function uploadHubs (file) {
     )
   }
 }
+function uploadMargins (args) {
+  function request (uploadData) {
+    return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
+  }
+  function success (uploadData) {
+    return { type: documentConstants.UPLOAD_SUCCESS, payload: uploadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.UPLOAD_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.uploadMargins(args).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function uploadChargeCategories (file) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
@@ -438,7 +463,8 @@ export const documentActions = {
   downloadQuotations,
   downloadChargeCategories,
   uploadChargeCategories,
-  uploadGeneratorSheet
+  uploadGeneratorSheet,
+  uploadMargins
 }
 
 export default documentActions

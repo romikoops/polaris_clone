@@ -1,4 +1,4 @@
-import merge from 'lodash/merge'
+import { merge, get } from 'lodash'
 import { adminConstants } from '../constants'
 
 export default function admin (state = {}, action) {
@@ -237,7 +237,7 @@ export default function admin (state = {}, action) {
       return reqHub
     }
     // eslint-disable-next-line no-case-declarations
-    case adminConstants.DELETE_HUB_SUCCESS:
+    case adminConstants.DELETE_HUB_SUCCESS: {
       const hubs = state.hubs.filter(x => x.id !== parseInt(action.payload.id, 10))
       const hub = state.hub.hub.id === parseInt(action.payload.id, 10) ? {} : state.hub
 
@@ -247,6 +247,7 @@ export default function admin (state = {}, action) {
         hubs,
         loading: false
       }
+    }
     case adminConstants.DELETE_HUB_FAILURE: {
       const errHub = merge({}, state, {
         error: { hub: action.error },
@@ -866,6 +867,38 @@ export default function admin (state = {}, action) {
       }
     }
     case adminConstants.GET_ADMIN_ITINERARY_PRICINGS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: { pricings: action.error }
+      }
+    case adminConstants.DISABLE_PRICING_REQUEST: {
+      const pricings = state.pricings || {}
+
+      return { ...state, loading: true, pricings }
+    }
+    case adminConstants.DISABLE_PRICING_SUCCESS: {
+      const pricings = get(state, ['pricings', 'show', action.payload.itinerary_id, 'pricings'], false)
+      if (!pricings) { return state }
+      const index = pricings.indexOf(p => p.id !== action.payload.id)
+      pricings[index] = action.payload
+      
+      return {
+        ...state,
+        pricings: {
+          ...state.pricings,
+          show: {
+            ...state.pricings.show,
+            [action.payload.itinerary_id]: {
+              ...state.pricings.show[action.payload.itinerary_id],
+              pricings
+            }
+          }
+        },
+        loading: false
+      }
+    }
+    case adminConstants.DISABLE_PRICING_FAILURE:
       return {
         ...state,
         loading: false,

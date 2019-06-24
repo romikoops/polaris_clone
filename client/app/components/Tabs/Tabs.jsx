@@ -6,9 +6,10 @@ export default class Tabs extends PureComponent {
     if (props.tabReset && !state.tabWasReset) {
       return {
         tabWasReset: true,
-        activeTabIndex: 0 
+        activeTabIndex: 0
       }
     }
+
     return {
       tabWasReset: false
     }
@@ -45,6 +46,7 @@ export default class Tabs extends PureComponent {
     if (children[activeTabIndex]) {
       return children[activeTabIndex].props.children
     }
+
     return ''
   }
 
@@ -64,13 +66,6 @@ export default class Tabs extends PureComponent {
       </div>
     )
   }
-}
-
-Tabs.propTypes = {
-  defaultActiveTabIndex: PropTypes.number,
-  children: PropTypes.node,
-  wrapperTabs: PropTypes.string,
-  paddingFixes: PropTypes.string
 }
 
 Tabs.defaultProps = {

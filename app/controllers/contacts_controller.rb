@@ -2,6 +2,7 @@
 
 class ContactsController < ApplicationController
   include Response
+  include ActionController::Helpers
 
   def index
     paginated_contacts = contacts.paginate(pagination_options)
@@ -73,6 +74,27 @@ class ContactsController < ApplicationController
     response_handler(
       pagination_options.merge(
         contacts: paginated_contacts.map(&:as_options_json),
+        numContactPages: paginated_contacts.total_pages
+      )
+    )
+  end
+
+  def booking_process
+    if params[:query] && params[:query] != ''
+      search_results = Contact.contact_search(params[:query])
+      paginated_contacts = search_results.paginate(pagination_options)
+    else
+      paginated_contacts = contacts.paginate(pagination_options)
+    end
+    response_contacts = paginated_contacts.map do |contact|
+      {
+        address: contact.address.try(:to_custom_hash) || {},
+        contact: contact.attributes
+      }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+    end
+    response_handler(
+      pagination_options.merge(
+        contacts: response_contacts,
         numContactPages: paginated_contacts.total_pages
       )
     )

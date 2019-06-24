@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
-class Admin::HubsController < Admin::AdminBaseController
+class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metrics/ClassLength
   include ExcelTools
   include ItineraryTools
   include Response
-  include PricingTools
   include AwsConfig
 
   before_action :for_create, only: :create
   before_action :permitted_params, only: :index
 
-  def index
+  def index # rubocop:disable Metrics/AbcSize
     query = {
       tenant_id: current_user.tenant_id
     }
@@ -46,18 +45,9 @@ class Admin::HubsController < Admin::AdminBaseController
     )
   end
 
-  def show
+  def show # rubocop:disable Metrics/AbcSize
     hub = Hub.find(params[:id])
     charges = hub.local_charges
-    service_levels = charges.map(&:tenant_vehicle).uniq.map(&:with_carrier).map do |tenant_vehicle|
-      carrier_name = tenant_vehicle['carrier'] ?
-      "#{tenant_vehicle['carrier']['name']} - #{tenant_vehicle['name']}" :
-      tenant_vehicle['name']
-      { label: carrier_name.capitalize.to_s, value: tenant_vehicle['id'] }
-    end
-    counter_part_hubs = charges.map(&:counterpart_hub).uniq.compact.map do |hub|
-      { label: hub.name, value: hub }
-    end
     resp = {
       hub: hub.as_options_json,
       routes: hub_route_map(hub),
@@ -72,6 +62,13 @@ class Admin::HubsController < Admin::AdminBaseController
   def download_hubs
     url = DocumentService::HubsWriter.new(tenant_id: current_user.tenant_id).perform
     response_handler(url: url, key: 'hubs')
+  end
+
+  def options_search
+    list_options = current_tenant.hubs.list_search(params[:query]).limit(30).map do |it|
+      { label: it.name, value: it.as_options_json }
+    end
+    response_handler(list_options)
   end
 
   def set_status
@@ -116,7 +113,7 @@ class Admin::HubsController < Admin::AdminBaseController
     end
   end
 
-  def search
+  def search # rubocop:disable Metrics/AbcSize
     query = {
       tenant_id: current_user.tenant_id
     }
@@ -126,7 +123,10 @@ class Admin::HubsController < Admin::AdminBaseController
 
     query[:hub_status] = params[:hub_status].split(',') if params[:hub_status]
     if params[:country_ids]
-      hubs = Hub.where(query).joins(:address).where('addresses.country_id IN (?)', params[:country_ids].split(',').map(&:to_i))
+      hubs = Hub.where(query)
+                .joins(:address)
+                .where('addresses.country_id IN (?)', params[:country_ids].split(',')
+                .map(&:to_i))
     else
       hubs = Hub.where(query).order('name ASC')
     end

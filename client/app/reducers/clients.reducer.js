@@ -1,0 +1,124 @@
+import { get } from 'lodash'
+export default function clients (state = {}, action) {
+  switch (action.type) {
+    case 'CLIENT_LOG_OUT': {
+      return {}
+    }
+    case 'GET_CLIENTS_LIST_SUCCESS': {
+      return {
+        ...state,
+        users: action.payload
+      }
+    }
+    case 'GET_COMPANIES_LIST_SUCCESS': {
+      return {
+        ...state,
+        companies: action.payload
+      }
+    }
+    case 'GET_MARGINS_LIST_SUCCESS': {
+      return {
+        ...state,
+        margins: action.payload
+      }
+    }
+    case 'GET_GROUPS_LIST_SUCCESS': {
+      return {
+        ...state,
+        groups: action.payload
+      }
+    }
+    case 'VIEW_GROUP_SUCCESS': {
+      return {
+        ...state,
+        group: action.payload
+      }
+    }
+    case 'VIEW_CLIENT_SUCCESS': {
+      return {
+        ...state,
+        client: action.payload
+      }
+    }
+    case 'VIEW_COMPANY_SUCCESS': {
+      return {
+        ...state,
+        company: action.payload
+      }
+    }
+    case 'EDIT_GROUP_MEMBERSHIP_SUCCESS': {
+      return {
+        ...state,
+        group: action.payload
+      }
+    }
+    // case 'EDIT_MEMBERSHIP_SUCCESS': {
+
+    //   return {
+    //     ...state,
+    //     group: action.payload
+    //   }
+    // }
+    case 'GET_MARGIN_FORM_DATA_SUCCESS': {
+      return {
+        ...state,
+        marginFormData: action.payload
+      }
+    }
+    case 'GET_MARGIN_FEE_DATA_REQUEST': {
+      return {
+        ...state,
+        marginFormData: {
+          targetGroupId: get(state, ['marginFormData', 'targetGroupId'], false)
+        }
+      }
+    }
+    case 'GET_MARGIN_FEE_DATA_SUCCESS': {
+      return {
+        ...state,
+        marginFormData: {
+          ...state.marginFormData,
+          fineFeeData: action.payload
+        }
+      }
+    }
+    case 'GET_GROUPS_AND_MARGINS_SUCCESS': {
+      return {
+        ...state,
+        groupsAndMargins: action.payload
+      }
+    }
+    case 'NEW_MARGIN_FROM_GROUP': {
+      return {
+        ...state,
+        marginFormData: {
+          ...state.marginFormData,
+          targetGroupId: action.payload
+        }
+      }
+    }
+    case 'MEMBERSHIP_DATA_SUCCESS': {
+      return {
+        ...state,
+        groups: {
+          ...state.groups,
+          memberships: action.payload
+        }
+      }
+    }
+    case 'TEST_MARGINS_SUCCESS': {
+      return {
+        ...state,
+        marginPreview: action.payload
+      }
+    }
+    case 'FETCH_SCOPE_SUCCESS': {
+      return {
+        ...state,
+        scopes: action.payload
+      }
+    }
+    default:
+      return state
+  }
+}

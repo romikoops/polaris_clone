@@ -2,27 +2,44 @@
 
 module Tenants
   class HierarchyService
-    def initialize(user: nil, tenant: nil)
-      @user = user
+    def initialize(target: nil, tenant: nil)
+      @target = target
       @tenant = tenant
     end
 
     def fetch
-      return [] if tenant.nil? && user.nil?
-      return [tenant] if tenant.present? && user.nil?
+      return [] if tenant.nil? && target.nil?
+      return [tenant] if tenant.present? && target.nil?
 
-      [
-        user.tenant&.groups,
-        user.tenant,
-        user.company&.groups,
-        user.company,
-        user.groups,
-        user
-      ].flatten.compact
+      case target.class.to_s
+      when 'Tenants::Group'
+        [
+          target.tenant&.groups,
+          target.tenant,
+          target.groups,
+          target
+        ].flatten.compact
+      when 'Tenants::Company'
+        [
+          target.tenant&.groups,
+          target.tenant,
+          target.groups,
+          target
+        ].flatten.compact
+      else 'Tenants::User'
+        [
+          target.tenant&.groups,
+          target.tenant,
+          target.company&.groups,
+          target.company,
+          target.groups,
+          target
+        ].flatten.compact
+      end
     end
 
     private
 
-    attr_reader :user, :tenant
+    attr_reader :target, :tenant
   end
 end

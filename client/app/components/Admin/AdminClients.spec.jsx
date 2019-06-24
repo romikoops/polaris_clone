@@ -25,7 +25,8 @@ const propsBase = {
   },
   dispatch: identity,
   setCurrentUrl: identity,
-  history: {}
+  history: {},
+  document: {}
 }
 
 test('shallow render', () => {

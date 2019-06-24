@@ -119,6 +119,30 @@ exports[`shallow render 1`] = `
         className=" sec_header_text flex-none"
       >
          
+        Margins
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(AdminClientMargins)
+        editable={false}
+        targetType="itinerary"
+        toggleEdit={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
         Schedules
          
       </p>
@@ -463,6 +487,30 @@ exports[`state.confirm is true 1`] = `
         className=" sec_header_text flex-none"
       >
          
+        Margins
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(AdminClientMargins)
+        editable={false}
+        targetType="itinerary"
+        toggleEdit={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
         Schedules
          
       </p>
@@ -779,6 +827,30 @@ exports[`state.editNotes is true 1`] = `
           }
         }
         tooltip=""
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
+        Margins
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(AdminClientMargins)
+        editable={false}
+        targetType="itinerary"
+        toggleEdit={[Function]}
       />
     </div>
   </div>

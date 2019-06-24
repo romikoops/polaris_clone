@@ -4,7 +4,7 @@ module OfferCalculatorService
   class ScheduleFinder < Base
     def perform(routes, raw_delay_in_days, hubs)
       delay_in_days = sanitized_delay_in_days(raw_delay_in_days)
-      Schedule.from_routes(routes, current_etd_in_search(hubs), delay_in_days, @shipment.load_type)
+      Legacy::Schedule.from_routes(routes, current_etd_in_search(hubs), delay_in_days, @shipment.load_type)
     end
 
     private

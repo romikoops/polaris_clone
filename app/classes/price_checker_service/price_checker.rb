@@ -1,25 +1,26 @@
 # frozen_string_literal: true
 
 module PriceCheckerService
-  class PriceChecker
-    include CurrencyTools
-    include PricingTools
-
+  class PriceChecker # rubocop:disable Metrics/ClassLength
     def initialize(itinerary, shipment_data, user)
       @itinerary     = Itinerary.find(itinerary)
       @origin_hub    = @itinerary.first_stop.hub
       @destination_hub = @itinerary.last_stop.hub
       @shipment_data = shipment_data
       @user          = user
+      @data = shipment_data[:pricing].first
       @shipment = @shipment_data[:shipment]
       @trucking_data = shipment_data[:trucking] || {}
       @service_level = shipment_data[:service_level]
+      @schedules = shipment_data[:schedules]
       @cargo_units = cargo_unit_const.extract(@shipment_data[:cargo_units])
-      @scope         = ::Tenants::ScopeService.new(user: @user).fetch
+      tenants_tenant = Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
+      @scope         = ::Tenants::ScopeService.new(target: @user, tenant: tenants_tenant).fetch
+      @pricing_tools = PricingTools.new(shipment: @shipment, user: @user)
     end
 
     def perform
-      prep_faux_schedules
+      # prep_faux_schedules
       @results = @schedules.map do |schedule|
         @schedule = schedule
         @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, trip_id: @schedule.trip_id)
@@ -41,7 +42,7 @@ module PriceCheckerService
 
     private
 
-    def prep_faux_schedules
+    def prep_faux_schedules # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       if !@service_level
         tv_ids = {}
         unique_trips = @itinerary.trips.select do |trip|
@@ -66,7 +67,7 @@ module PriceCheckerService
           vehicle_name: trip.tenant_vehicle.name,
           trip_id: trip.id
         }
-        Schedule.new(attributes.merge(id: SecureRandom.uuid))
+        Legacy::Schedule.new(attributes.merge(id: SecureRandom.uuid))
       end
     end
 
@@ -74,16 +75,16 @@ module PriceCheckerService
       @shipment_data[:load_type].camelize.constantize
     end
 
-    def calc_local_charges
+    def calc_local_charges # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
       cargo_units = @cargo_units
       if @shipment_data[:has_pre_carriage] || @shipment_data[:export] || @origin_hub.mandatory_charge.export_charges
-        local_charges_data = determine_local_charges(
+        local_charges_data = @pricing_tools.determine_local_charges(
           @schedule,
           cargo_units,
           'export',
           @user
         )
-        charge_category = ChargeCategory.from_code('export', @user.tenant_id)
+        charge_category = ChargeCategory.from_code(code: 'export', tenant_id: @user.tenant_id)
         parent_charge = create_parent_charge(charge_category)
 
         local_charges_data.each do |charge|
@@ -108,13 +109,13 @@ module PriceCheckerService
       end
 
       if @shipment_data[:has_on_carriage] || @shipment_data[:import] || @destination_hub.mandatory_charge.import_charges
-        local_charges_data = determine_local_charges(
+        local_charges_data = @pricing_tools.determine_local_charges(
           @schedule,
           cargo_units,
           'import',
           @user
         )
-        charge_category = ChargeCategory.from_code('import', @user.tenant_id)
+        charge_category = ChargeCategory.from_code(code: 'import', tenant_id: @user.tenant_id)
         parent_charge = create_parent_charge(charge_category)
 
         local_charges_data.each do |charge|
@@ -140,8 +141,10 @@ module PriceCheckerService
 
     def create_trucking_charges
       @trucking_data.each do |carriage, data|
-        charge_category = ChargeCategory.find_or_create_by(
-          name: "Trucking #{carriage.capitalize}-Carriage", code: "trucking_#{carriage}".downcase
+        charge_category = ChargeCategory.from_code(
+          name: "Trucking #{carriage.capitalize}-Carriage",
+          code: "trucking_#{carriage}".downcase,
+          tenant_id: @user.tenant_id
         )
 
         parent_charge = create_parent_charge(charge_category)
@@ -150,7 +153,7 @@ module PriceCheckerService
         hub_data = data[hub.id]
 
         hub_data[:trucking_charge_data].each do |cargo_class, trucking_charges|
-          children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}", @user.tenant_id)
+          children_charge_category = ChargeCategory.from_code(code: "trucking_#{cargo_class}", tenant_id: @user.tenant_id)
 
           create_charges_from_fees_data!(
             trucking_charges, children_charge_category, charge_category, parent_charge
@@ -160,12 +163,12 @@ module PriceCheckerService
       end
     end
 
-    def calc_cargo_charges
+    def calc_cargo_charges # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
       total_units = @cargo_units.reduce(0) do |sum, cargo_unit|
         sum + cargo_unit.try(:quantity).to_i
       end
 
-      charge_category = ChargeCategory.from_code('cargo', @user.tenant_id)
+      charge_category = ChargeCategory.from_code(code: 'cargo', tenant_id: @user.tenant_id)
       parent_charge = create_parent_charge(charge_category)
 
       is_agg_cargo = !@shipment.aggregated_cargo.nil?
@@ -174,16 +177,25 @@ module PriceCheckerService
       if @scope.dig('consolidation', 'cargo') && cargo_unit_array.first.is_a?(CargoItem)
         cargo_unit_array = consolidate_cargo(cargo_unit_array, @itinerary.mode_of_transport)
       end
-      cargo_unit_array.each do |cargo_unit|
+      cargo_unit_array.each do |cargo_unit| # rubocop:disable Metrics/BlockLength
         cargo_class = is_agg_cargo ? 'lcl' : cargo_unit[:cargo_class]
-        charge_result = send("determine_#{@shipment.load_type}_price",
-                             cargo_unit,
-                             @shipment_data[:pricing][:pricing_ids][cargo_class],
-                             @user,
-                             total_units,
-                             @shipment.planned_pickup_date,
-                             @schedule.mode_of_transport)
-
+        charge_result = if @scope['base_pricing']
+                          ::Pricings::Calculator.new(
+                            cargo: cargo_unit,
+                            pricing: @data[:pricing_ids][cargo_class],
+                            user: @user,
+                            mode_of_transport: @schedule.mode_of_transport,
+                            date: @shipment.planned_pickup_date
+                          ).perform
+                        else
+                          @pricing_tools.send("determine_#{@shipment.load_type}_price",
+                                              cargo_unit,
+                                              @data[:pricing_ids][cargo_class],
+                                              @user,
+                                              total_units,
+                                              @shipment.planned_pickup_date,
+                                              @schedule.mode_of_transport)
+                        end
         next if charge_result.nil?
 
         cargo_unit_model = cargo_unit.class.to_s == 'Hash' ? 'CargoItem' : cargo_unit.class.to_s
@@ -226,7 +238,7 @@ module PriceCheckerService
         next if code.to_s == 'total' || charge.empty?
 
         Charge.create(
-          children_charge_category: ChargeCategory.from_code(code, @user.tenant_id),
+          children_charge_category: ChargeCategory.from_code(code: code, tenant_id: @user.tenant_id),
           charge_category: children_charge_category,
           parent: parent_charge,
           price: Price.create(charge)
@@ -238,7 +250,7 @@ module PriceCheckerService
       ChargeBreakdown.find_by(shipment: @shipment_data, trip_id: @schedule.trip_id)&.destroy
     end
 
-    def consolidate_cargo(cargo_array, mot)
+    def consolidate_cargo(cargo_array, mot) # rubocop:disable Metrics/AbcSize
       cargo = {
         id: 'ids',
         dimension_x: 0,

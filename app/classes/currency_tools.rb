@@ -2,7 +2,7 @@
 
 require 'net/http'
 
-module CurrencyTools
+class CurrencyTools
   def get_rates(base, tenant_id)
     tenant = Tenant.find(tenant_id)
     if tenant && tenant.scope['fixed_exchange_rates']

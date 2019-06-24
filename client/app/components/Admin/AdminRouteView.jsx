@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import PropTypes from '../../prop-types'
-import { AdminHubTile } from './'
+import { AdminHubTile } from '.'
 import styles from './Admin.scss'
 import { gradientTextGenerator } from '../../helpers'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -13,6 +13,7 @@ import AdminPromptConfirm from './Prompt/Confirm'
 import NotesWriter from '../../containers/Notes/Writer'
 import NotesRow from '../Notes/Row'
 import { moment } from '../../constants'
+import { AdminClientMargins } from './Clients';
 
 export class AdminRouteView extends Component {
   constructor (props) {
@@ -21,13 +22,17 @@ export class AdminRouteView extends Component {
       scheduleLimit: 20,
       panelViewer: {},
       confirm: false,
-      editNotes: false
+      editNotes: false,
+      editMargins: false
     }
     this.toggleShowPanel = this.toggleShowPanel.bind(this)
+    this.toggleMarginEdit = this.toggleMarginEdit.bind(this)
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
   }
+
   toggleShowPanel (id) {
     if (!this.state.panelViewer[id]) {
       this.props.adminDispatch.getLayovers(id, 'itinerary')
@@ -39,6 +44,7 @@ export class AdminRouteView extends Component {
       }
     })
   }
+
   handleNavChange (e) {
     const { adminDispatch, itineraryData } = this.props
     const { itinerary } = itineraryData
@@ -54,25 +60,42 @@ export class AdminRouteView extends Component {
         break
     }
   }
+
   deleteItinerary (id) {
     const { adminDispatch } = this.props
     adminDispatch.deleteItinerary(id)
     this.closeConfirm()
   }
+
   confirmDelete () {
     this.setState({
       confirm: true
     })
   }
+
   closeConfirm () {
     this.setState({ confirm: false })
   }
+
   doNothing () {
     console.log(this.props)
   }
+
   toggleNotesEdit () {
     this.setState({ editNotes: !this.state.editNotes })
   }
+
+  toggleMarginEdit () {
+    const { clientsDispatch, id } = this.props
+    this.setState((prevState) => {
+      if (prevState.editMargins) {
+        clientsDispatch.viewGroup(id)
+      }
+
+      return { editMargins: !prevState.editMargins }
+    })
+  }
+
   render () {
     const {
       theme, itineraryData, hubHash, adminDispatch, t
@@ -81,7 +104,7 @@ export class AdminRouteView extends Component {
     if (!itineraryData) {
       return ''
     }
-    const { confirm, editNotes } = this.state
+    const { confirm, editNotes, editMargins } = this.state
     const {
       itinerary, hubs, schedules, notes
     } = itineraryData
@@ -183,7 +206,10 @@ export class AdminRouteView extends Component {
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
-            <p className={` ${styles.sec_header_text} flex-none`}> {t('admin:routeStops')}</p>
+            <p className={` ${styles.sec_header_text} flex-none`}>
+              {' '}
+              {t('admin:routeStops')}
+            </p>
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-start">{hubArr}</div>
         </div>
@@ -191,7 +217,30 @@ export class AdminRouteView extends Component {
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
-            <p className={` ${styles.sec_header_text} flex-none`}> {t('admin:schedules')} </p>
+            <p className={` ${styles.sec_header_text} flex-none`}>
+              {' '}
+              {t('admin:margins')}
+              {' '}
+            </p>
+          </div>
+          <div className="layout-row flex-95 layout-wrap layout-align-start-center">
+            <AdminClientMargins
+              targetId={itinerary.id}
+              targetType="itinerary"
+              editable={editMargins}
+              toggleEdit={this.toggleMarginEdit}
+            />
+          </div>
+        </div>
+        <div className="layout-row flex-95 layout-wrap layout-align-start-center">
+          <div
+            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+          >
+            <p className={` ${styles.sec_header_text} flex-none`}>
+              {' '}
+              {t('admin:schedules')}
+              {' '}
+            </p>
           </div>
           <div className="layout-row flex-95 layout-wrap layout-align-start-center">
             <ReactTable

@@ -11,7 +11,7 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     tenant = user.tenant
     @shipment = shipment
-    @scope = ::Tenants::ScopeService.new(user: user).fetch
+    @scope = ::Tenants::ScopeService.new(target: user).fetch
     base_url = base_url(tenant)
 
     @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
@@ -41,7 +41,7 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     tenant = user.tenant
     @shipment = shipment
-    @scope = ::Tenants::ScopeService.new(user: user).fetch
+    @scope = ::Tenants::ScopeService.new(target: user).fetch
 
     @shipment_page = "#{base_url(tenant)}account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
@@ -68,7 +68,7 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     @shipment = shipment
     tenant = shipment.tenant
-    @scope = ::Tenants::ScopeService.new(user: user).fetch
+    @scope = ::Tenants::ScopeService.new(target: user).fetch
     @shipment_page = "#{base_url(tenant)}account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"

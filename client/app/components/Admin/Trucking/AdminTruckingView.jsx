@@ -8,13 +8,13 @@ import styles from '../Admin.scss'
 import {
   history
 } from '../../../helpers'
-import DocumentsSelector from '../../Documents/Selector'
 import TruckingCoverage from './Coverage'
 import TruckingTable from './Table'
 import { documentActions } from '../../../actions'
 import AdminUploadsSuccess from '../Uploads/Success'
-import DocumentsDownloader from '../../Documents/Downloader'
 import GreyBox from '../../GreyBox/GreyBox'
+import LegacyFileHandlers from './LegacyFileHandlers'
+import GroupFileHandlers from './GroupFileHandlers'
 
 export class AdminTruckingView extends Component {
   static backToIndex () {
@@ -27,22 +27,22 @@ export class AdminTruckingView extends Component {
       targetTruckingPricing: false
     }
     this.setTargetTruckingId = this.setTargetTruckingId.bind(this)
+    this.handleUpload = this.handleUpload.bind(this)
   }
 
   componentDidMount () {
     window.scrollTo(0, 0)
-  
   }
 
   setTargetTruckingId (id) {
     this.setState({ targetTruckingPricing: id })
   }
 
-  handleUpload (file, dir, type) {
+  handleUpload (file, group) {
     const { adminDispatch, truckingDetail } = this.props
     const { hub } = truckingDetail
     const url = `/admin/trucking/trucking_pricings/${hub.id}`
-    adminDispatch.uploadTrucking(url, file, dir)
+    adminDispatch.uploadTrucking(url, file, group)
   }
 
   closeSuccessDialog () {
@@ -52,7 +52,7 @@ export class AdminTruckingView extends Component {
 
   render () {
     const {
-      t, theme, truckingDetail, document
+      t, theme, truckingDetail, document, scope
     } = this.props
     if (!truckingDetail) {
       return ''
@@ -71,7 +71,7 @@ export class AdminTruckingView extends Component {
     ) : (
       ''
     )
-    const { hub } = truckingDetail
+    const { hub, groups } = truckingDetail
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
         background:
@@ -86,56 +86,30 @@ export class AdminTruckingView extends Component {
       }
     `
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
+    const groupOptions = [{ label: 'All', value: 'all' }]
+    if (groups.length) {
+      groups.forEach((g) => {
+        groupOptions.push({ label: g.name, value: g.id })
+      })
+    }
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
         {uploadStatus}
         <div className={`${styles.component_view} flex-100 layout-row layout-align-start-start`}>
           <div className="layout-row flex-100 layout-wrap layout-align-start-start">
-            <GreyBox 
+            <GreyBox
               wrapperClassName="flex-100 layout-row layout-align-start-center margin_10"
               contentClassName="flex-100 layout-row layout-align-start-center"
             >
-              <div
-                className={`${
-                  styles.action_section
-                } flex-100 flex-gt-sm-33 layout-row layout-align-center-center layout-wrap`}
-              >
-                <p className="flex-90 flex-gt-sm-50  center">{t('admin:uploadTruckingZonesSheet')}</p>
-                <DocumentsSelector
-                  theme={theme}
-                  dispatchFn={(file, dir) => this.handleUpload(file, dir)}
-                  type="xlsx"
-                  text={t('admin:routesExcel')}
-                />
-              </div>
-              <div
-                className={`${
-                  styles.action_section
-                } flex-100 flex-gt-sm-33 layout-row layout-wrap layout-align-center-center`}
-              >
-                <p className="flex-100 flex-gt-sm-50 center">{t('admin:downloadCargoItemSheet')}</p>
-                <DocumentsDownloader
-                  theme={theme}
-                  target="trucking"
-                  options={{ hub_id: hub.id, load_type: 'cargo_item' }}
-                />
-              </div>
-              <div
-                className={`${
-                  styles.action_section
-                } flex-100 flex-gt-sm-33 layout-row layout-wrap layout-align-center-center`}
-              >
-                <p className="flex-100 flex-gt-sm-50 center">{t('admin:downloadContainerSheet')}</p>
-                <DocumentsDownloader
-                  theme={theme}
-                  target="trucking"
-                  options={{ hub_id: hub.id, load_type: 'container' }}
-                />
-              </div>
+              { scope.base_pricing ? (
+                <GroupFileHandlers handleUpload={this.handleUpload} hub={hub} theme={theme} groupOptions={groupOptions} />
+              ) : (   
+                <LegacyFileHandlers handleUpload={this.handleUpload} hub={hub} theme={theme} />)
+              }
             </GreyBox>
             <div className="flex-40 layout-row layout-align-space-around-start layout-wrap">
-              <GreyBox 
+              <GreyBox
                 wrapperClassName="flex layout-row layout-align-start-start layout-wrap margin_10"
                 contentClassName="flex-100 layout-row layout-align-start-start layout-wrap"
               >
@@ -149,11 +123,11 @@ export class AdminTruckingView extends Component {
             </div>
 
             <div className="flex-60 layout-row layout-align-space-around-start layout-wrap">
-              <GreyBox 
+              <GreyBox
                 wrapperClassName="flex layout-row layout-align-start-start layout-wrap margin_10"
                 contentClassName="flex-100 layout-row layout-align-start-start layout-wrap"
               >
-                <TruckingTable setTargetTruckingId={this.setTargetTruckingId}/>
+                <TruckingTable setTargetTruckingId={this.setTargetTruckingId} />
               </GreyBox>
             </div>
 
@@ -172,10 +146,12 @@ AdminTruckingView.defaultProps = {
   documentDispatch: {}
 }
 function mapStateToProps (state) {
-  const { document } = state
+  const { document, app } = state
+  const { scope } = app.tenant
 
   return {
-    document
+    document,
+    scope
   }
 }
 function mapDispatchToProps (dispatch) {

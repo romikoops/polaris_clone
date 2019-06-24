@@ -21,6 +21,7 @@ class Tenant < Legacy::Tenant
   has_many :trucking_destinations, through: :hub_truckings, dependent: :destroy
   has_many :documents, dependent: :destroy
   has_many :pricings, dependent: :destroy
+  has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
   has_many :pricing_exceptions, dependent: :destroy
   has_many :pricing_details, dependent: :destroy
   has_many :local_charges, dependent: :destroy
@@ -40,7 +41,7 @@ class Tenant < Legacy::Tenant
   has_many :pricing_requests, dependent: :destroy
   has_many :charge_categories
 
-  validates :scope, presence: true, scope: true
+  # validates :scope, presence: true, scope: true
   validates :emails, presence: true, emails: true
 
   def get_admin

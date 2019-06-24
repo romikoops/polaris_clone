@@ -41,10 +41,31 @@ module Legacy
       zip_code
     end
 
+    def self.geocoded_address(user_input)
+      address = Address.new(geocoded_address: user_input)
+      address.geocode
+      address.reverse_geocode
+      address.save!
+      address
+    end
+
     def sanitize_zip_code!
       return if zip_code.nil?
 
       self.zip_code = zip_code.gsub(/[^a-zA-z\d]/, '')
+    end
+
+    def to_custom_hash
+      custom_hash = { country: country.try(:name) }
+      %i(
+        id city street street_number zip_code
+        geocoded_address latitude longitude
+        address_type name
+      ).each do |attribute|
+        custom_hash[attribute] = self[attribute]
+      end
+
+      custom_hash
     end
   end
 end

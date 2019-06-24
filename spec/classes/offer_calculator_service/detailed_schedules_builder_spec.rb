@@ -80,8 +80,8 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
   let(:cargo_item) { create(:cargo_item) }
   let(:schedules) do
     [
-      Schedule.from_trip(trip_1),
-      Schedule.from_trip(trip_2)
+      Legacy::Schedule.from_trip(trip_1),
+      Legacy::Schedule.from_trip(trip_2)
     ]
   end
   let(:containers) do
@@ -175,6 +175,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
       expect(results[fcl_40_transport_category.id.to_s].first).to eq(pricing_2)
       expect(results[fcl_20_transport_category.id.to_s].first).to eq(pricing_1)
     end
+
     it 'returns pricings valid for closing_dates if departure dates return nil' do
       pricing_1 = create(:pricing,
                          itinerary: itinerary_1,
@@ -188,7 +189,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
                     closing_date: Date.parse('28/01/2019'),
                     tenant_vehicle: tenant_vehicle_1,
                     itinerary: itinerary_1)
-      schedules = [Schedule.from_trip(trip)]
+      schedules = [Legacy::Schedule.from_trip(trip)]
       service = described_class.new(cargo_shipment)
       dates = {
         start_date: schedules.first.etd,
@@ -228,7 +229,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
                     closing_date: Date.parse('28/01/2019'),
                     tenant_vehicle: tenant_vehicle_1,
                     itinerary: itinerary_1)
-      schedules = [Schedule.from_trip(trip)]
+      schedules = [Legacy::Schedule.from_trip(trip)]
       service = described_class.new(cargo_shipment)
       dates = {
         start_date: schedules.first.etd,

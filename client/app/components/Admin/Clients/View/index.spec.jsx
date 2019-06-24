@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
-  change, theme, identity, client, hub, location
-} from '../../mock'
+  change, theme, identity, client, hub, location, user
+} from '../../../../mock'
 
-import AdminClientView from './AdminClientView'
+import AdminClientView from './'
 
 jest.mock('uuid', () => {
   let counter = -1
@@ -28,6 +28,10 @@ const managers = [
 
 const propsBase = {
   theme,
+  store: {
+    getState: () => ({authentication: { user }, clients: {}, app: { tenant: { theme: {}}}}),
+    subscribe: () => {}
+  },
   hubs: [hub],
   adminDispatch: identity,
   managers,

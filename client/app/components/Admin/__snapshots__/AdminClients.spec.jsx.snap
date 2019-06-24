@@ -25,7 +25,52 @@ exports[`shallow render 1`] = `
       />
       <Route
         exact={true}
-        path="/admin/clients/:id"
+        path="/admin/clients/client/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groupcreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/scopeeditor/:targetType/:targetId"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/margincreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companycreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groups/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groups"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companies/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companies"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/margins"
         render={[Function]}
       />
     </Switch>
@@ -487,7 +532,52 @@ exports[`state.newClient is true 1`] = `
       />
       <Route
         exact={true}
-        path="/admin/clients/:id"
+        path="/admin/clients/client/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groupcreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/scopeeditor/:targetType/:targetId"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/margincreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companycreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groups/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groups"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companies/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companies"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/margins"
         render={[Function]}
       />
     </Switch>
@@ -938,7 +1028,52 @@ exports[`state.newClientBool is true 1`] = `
       />
       <Route
         exact={true}
-        path="/admin/clients/:id"
+        path="/admin/clients/client/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groupcreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/scopeeditor/:targetType/:targetId"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/margincreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companycreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groups/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groups"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companies/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companies"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/margins"
         render={[Function]}
       />
     </Switch>
@@ -964,7 +1099,52 @@ exports[`theme is falsy 1`] = `
       />
       <Route
         exact={true}
-        path="/admin/clients/:id"
+        path="/admin/clients/client/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groupcreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/scopeeditor/:targetType/:targetId"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/margincreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companycreator"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groups/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/groups"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companies/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/companies"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/clients/margins"
         render={[Function]}
       />
     </Switch>

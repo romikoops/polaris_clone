@@ -4,17 +4,16 @@ class Admin::ClientsController < Admin::AdminBaseController
   # Return all clients and managers for dashboard
 
   def index
-    shipper_role = Role.find_by_name('shipper')
-    manager_role = Role.find_by_name('sub_admin')
-
-    clients = User.where(tenant_id: current_user.tenant_id, role_id: shipper_role.id, guest: false).map(&:for_admin_json)
-    managers = User.where(tenant_id: current_user.tenant_id, role_id: manager_role.id)
-
-    unless current_user.internal
-      clients = clients.reject { |client| client['internal'] }
-      managers = managers.reject { |manager| manager['internal'] }
+    paginated_clients = handle_search(params).paginate(pagination_options)
+    response_clients = paginated_clients.map do |contact|
+      contact.for_admin_json.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
-    response_handler(clients: clients, managers: managers)
+    response_handler(
+      pagination_options.merge(
+        clientData: response_clients,
+        numPages: paginated_clients.total_pages
+      )
+    )
   end
 
   # Return selected User, assigned managers, shipments made and user addresses
@@ -22,9 +21,9 @@ class Admin::ClientsController < Admin::AdminBaseController
   def show
     client = User.find(params[:id])
     addresses = client.addresses
-    shipments = client.shipments.where(status: %w(requested requested_by_unconfirmed_account)).map(&:with_address_options_json)
+    groups = client.groups.map { |g| group_index_json(g) }
     manager_assignments = UserManager.where(user_id: client)
-    resp = { client: client, addresses: addresses, shipments: shipments, managerAssignments: manager_assignments }
+    resp = { clientData: client, addresses: addresses, managerAssignments: manager_assignments, groups: groups }
     response_handler(resp)
   end
 
@@ -46,9 +45,14 @@ class Admin::ClientsController < Admin::AdminBaseController
   end
 
   def agents
-    req = { 'xlsx' => params[:file] }
-    resp = ExcelTool::AgentsOverwriter.new(params: req, _user: current_user).perform
-    response_handler(resp)
+    file = upload_params[:file].tempfile
+
+    options = { tenant: current_tenant,
+                file_or_path: file }
+    uploader = ExcelDataServices::Loaders::Uploader.new(options)
+
+    insertion_stats_or_errors = uploader.perform
+    response_handler(insertion_stats_or_errors)
   end
 
   # Destroy User account
@@ -56,5 +60,58 @@ class Admin::ClientsController < Admin::AdminBaseController
   def destroy
     User.find(params[:id]).destroy
     response_handler(params[:id])
+  end
+
+  private
+
+  def clients
+    blocked_roles = Role.where(name: %w(admin super_admin))
+    @clients ||= current_tenant.users.where(guest: false).where.not(role: blocked_roles).order(updated_at: :desc)
+  end
+
+  def pagination_options
+    {
+      page: current_page,
+      per_page: (params[:page_size] || params[:per_page])&.to_f
+    }.compact
+  end
+
+  def current_page
+    params[:page]&.to_i || 1
+  end
+
+  def handle_search(params) # rubocop:disable Metrics/AbcSize
+    query = clients
+    query = query.search(params[:query]) if params[:query]
+    query = query.first_name_search(params[:first_name]) if params[:first_name]
+    query = query.last_name_search(params[:last_name]) if params[:last_name]
+    query = query.email_search(params[:email]) if params[:email]
+    if params[:company_name]
+      user_ids =
+        Tenants::User.where(
+          company_id: ::Tenants::Company
+                        .where(tenant_id: current_tenant.tenants_tenant.id)
+                        .name_search(params[:company_name])
+                        .ids
+        ).pluck(:legacy_id)
+
+      query = query.where(id: user_ids)
+    end
+    query
+  end
+
+  def upload_params
+    params.permit(:file)
+  end
+
+  def download_params
+    params.require(:options).permit(:mot)
+  end
+
+  def group_index_json(group, options = {})
+    new_options = options.reverse_merge(
+      methods: %i(member_count margin_count)
+    )
+    group.as_json(new_options)
   end
 end

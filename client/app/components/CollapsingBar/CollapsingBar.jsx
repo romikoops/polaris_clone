@@ -33,7 +33,8 @@ export default class CollapsingBar extends React.PureComponent {
       children,
       hideIcon,
       parentClass,
-      showArrowSpacer
+      showArrowSpacer,
+      overflow
     } = this.props
 
     return (
@@ -54,6 +55,7 @@ export default class CollapsingBar extends React.PureComponent {
         <CollapsingContent
           collapsed={collapsed != null ? collapsed : this.state.collapsed}
           content={content || children}
+          overflow={overflow}
           wrapperContentClasses={wrapperContentClasses}
           minHeight={minHeight}
         />
@@ -79,5 +81,6 @@ CollapsingBar.defaultProps = {
   hideIcon: false,
   children: null,
   startCollapsed: false,
-  showArrowSpacer: false
+  showArrowSpacer: false,
+  overflow: false
 }

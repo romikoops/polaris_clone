@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Vehicle < ApplicationRecord
+class Vehicle < Legacy::Vehicle
   has_many :transport_categories
   has_many :itineraries
   has_many :tenant_vehicles

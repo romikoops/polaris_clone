@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import PropTypes from '../../prop-types'
 import styles from './Checkbox.scss'
 import { gradientTextGenerator } from '../../helpers'
 
@@ -65,17 +64,7 @@ class Checkbox extends PureComponent {
     )
   }
 }
-Checkbox.propTypes = {
-  checked: PropTypes.bool,
-  disabled: PropTypes.bool,
-  name: PropTypes.string.isRequired,
-  theme: PropTypes.theme,
-  size: PropTypes.string,
-  onChange: PropTypes.func,
-  onClick: PropTypes.func,
-  className: PropTypes.string,
-  id: PropTypes.string
-}
+
 Checkbox.defaultProps = {
   theme: null,
   checked: false,

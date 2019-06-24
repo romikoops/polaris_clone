@@ -38,11 +38,6 @@ exports[`{itineraries || pricingData.itineraries 1`] = `
       />
       <Route
         exact={true}
-        path="/admin/pricings/clients"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
         path="/admin/pricings/clients/:id"
         render={[Function]}
       />
@@ -82,11 +77,6 @@ exports[`document.viewer is falsy 1`] = `
       <Route
         exact={true}
         path="/admin/pricings"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
-        path="/admin/pricings/clients"
         render={[Function]}
       />
       <Route
@@ -143,11 +133,6 @@ exports[`shallow render 1`] = `
       <Route
         exact={true}
         path="/admin/pricings"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
-        path="/admin/pricings/clients"
         render={[Function]}
       />
       <Route
@@ -230,11 +215,6 @@ exports[`state.selectedPricing is true 1`] = `
       <Route
         exact={true}
         path="/admin/pricings"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
-        path="/admin/pricings/clients"
         render={[Function]}
       />
       <Route

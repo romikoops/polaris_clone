@@ -105,17 +105,17 @@ class CardPricingIndex extends Component {
   }
 
   deltaPage (val) {
-    const { adminDispatch, mot, allNumPages } = this.props
-    const numPages = allNumPages[mot] || 1
+    const { adminDispatch, mot, numPages } = this.props
+    const motNumPages = numPages[mot] || 1
     this.setState(
       (prevState) => {
         const newPageVal = prevState.page + val
-        const page = (newPageVal < 1 && newPageVal > numPages) ? 1 : newPageVal
+        const page = (newPageVal < 1 && newPageVal > motNumPages) ? 1 : newPageVal
 
         return { page }
       },
       () => {
-        const newPagesNumbers = { ...allNumPages, [mot]: this.state.page }
+        const newPagesNumbers = { ...numPages, [mot]: this.state.page }
         adminDispatch.getPricings(false, newPagesNumbers)
       }
     )
@@ -124,7 +124,7 @@ class CardPricingIndex extends Component {
   render () {
     const { searchText, page, expander } = this.state
     const {
-      theme, scope, toggleCreator, mot, allNumPages, t, user, documentDispatch
+      theme, scope, toggleCreator, mot, numPages, t, user, documentDispatch
     } = this.props
 
     const newButton = (
@@ -141,7 +141,7 @@ class CardPricingIndex extends Component {
     )
 
     if (!scope) return ''
-    const numPages = allNumPages[mot] || 1
+    const motNumPages = numPages[mot] || 1
 
     const loadTypeOptions = (() => {
       switch (mot) {
@@ -279,9 +279,9 @@ class CardPricingIndex extends Component {
               <div
                 className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${page < numPages ? '' : adminStyles.disabled}
+                      ${styles.navigation_button} ${page < motNumPages ? '' : adminStyles.disabled}
                     `}
-                onClick={page < numPages ? () => this.deltaPage(1) : null}
+                onClick={page < motNumPages ? () => this.deltaPage(1) : null}
               >
                 <p>
                   {t('common:next')}
@@ -364,7 +364,7 @@ CardPricingIndex.defaultProps = {
   mot: '',
   hubs: [],
   itineraries: [],
-  allNumPages: {},
+  numPages: {},
   scope: null,
   toggleCreator: null
 }

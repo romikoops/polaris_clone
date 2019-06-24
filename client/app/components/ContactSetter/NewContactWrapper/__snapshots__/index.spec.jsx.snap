@@ -15,14 +15,6 @@ exports[`compName !== AddressBook 1`] = `
     Back to Address Book
   </div>
   <div
-    className="title_sec layout-row layout-align-center"
-  >
-    <ContactSetterNewContactWrapperTitle
-      contactType="FOO"
-      t={[Function]}
-    />
-  </div>
-  <div
     className="body"
   >
     <ShipmentContactForm
@@ -52,14 +44,6 @@ exports[`contactType === notifyee && compName === ShipmentContactForm 1`] = `
     Back to Address Book
   </div>
   <div
-    className="title_sec layout-row layout-align-center"
-  >
-    <ContactSetterNewContactWrapperTitle
-      contactType="notifyee"
-      t={[Function]}
-    />
-  </div>
-  <div
     className="body"
   >
     <ShipmentContactForm
@@ -79,20 +63,11 @@ exports[`shallow render 1`] = `
   className="new_contact_wrapper  "
 >
   <div
-    className="title_sec layout-row layout-align-center"
-  >
-    <ContactSetterNewContactWrapperTitle
-      contactType="FOO"
-      t={[Function]}
-    />
-  </div>
-  <div
     className="body"
   >
-    <AddressBook
+    <Connect(AddressBook)
       addContact={[Function]}
-      contacts={Array []}
-      theme={null}
+      t={[Function]}
     />
   </div>
 </div>

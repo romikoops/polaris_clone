@@ -2,10 +2,14 @@
 
 require 'bigdecimal'
 
-module PricingTools # rubocop:disable Metrics/ModuleLength
-  module_function
+class PricingTools # rubocop:disable Metrics/ClassLength
+  attr_accessor :scope, :user, :shipment
+  def initialize(user:, shipment: nil)
+    @user = user
+    @shipment = shipment
+    @scope = @user.tenant_scope
+  end
 
-  include CurrencyTools
   DEFAULT_MAX = Float::INFINITY
   def get_user_price(pricing_id, shipment_date)
     pricing = Pricing.find(pricing_id)
@@ -35,19 +39,22 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
     )
   end
 
-  def find_local_charge(schedule, cargos, direction, user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    hub = direction == 'export' ? schedule.origin_hub : schedule.destination_hub
-    date = direction == 'export' ? schedule.etd : schedule.eta
-    date = Date.today if date.nil?
-    counterpart_hub_id = direction == 'export' ? schedule.destination_hub.id : schedule.origin_hub.id
+  def find_local_charge(schedules, cargos, direction, user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    hub = direction == 'export' ? schedules.first.origin_hub : schedules.last.destination_hub
+    start_date = direction == 'export' ? schedules.first.etd : schedules.first.eta
+    end_date = direction == 'export' ? schedules.last.etd : schedules.last.eta
+    start_date = Date.today + 5.days if start_date.nil?
+    end_date = Date.today + 25.days if end_date.nil?
+    counterpart_hub_id = direction == 'export' ? schedules.last.destination_hub.id : schedules.first.origin_hub.id
     effective_local_charges = hub
                               .local_charges
+                              .for_dates(start_date, end_date)
                               .where(
                                 direction: direction,
-                                mode_of_transport: schedule.mode_of_transport,
-                                tenant_vehicle_id: schedule.trip.tenant_vehicle_id
+                                mode_of_transport: schedules.first.mode_of_transport,
+                                tenant_vehicle_id: schedules.first.trip.tenant_vehicle_id
                               )
-                              .for_dates(date, date)
+
     charges_for_filtering = []
     cargos.each do |cargo|
       load_type = cargo.is_a?(Container) ? cargo.size_class : 'lcl'
@@ -62,28 +69,37 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
           load_type: load_type,
           counterpart_hub_id: nil
         )
-        charges_for_filtering << charge.as_json
-      end
-    end
 
-    shipment_charges = {
-      'load_type' => 'shipment',
-      'fees' => {}
-    }
-    filtered_charges = charges_for_filtering.compact.map do |filter_charge|
-      next if filter_charge['fees'].empty?
-
-      filter_charge['fees'].each do |fk, fee|
-        if %w(PER_SHIPMENT PER_BILL).include?(RateBasis.get_internal_key(fee['rate_basis']))
-          shipment_charges['fees'][fk] = filter_charge['fees'].delete(fk)
+        if @scope['base_pricing']
+          charges = get_manipulated_local_charge(charge, cargos.first.shipment, schedules)
+          charges.each { |c| charges_for_filtering << c } if charges.present?
+        else
+          charges_for_filtering << charge&.as_json&.with_indifferent_access
         end
       end
-      filter_charge
     end
-    results = [filtered_charges.compact.uniq]
-    results << shipment_charges unless shipment_charges['fees'].empty?
 
-    results
+    grouped_charges = charges_for_filtering.compact.group_by { |lc| lc.slice(:effective_date, :expiration_date) }
+
+    grouped_charges.each_with_object({}) do |(dates, values), hash|
+      shipment_charges = {
+        'load_type' => 'shipment',
+        'fees' => {}
+      }
+      filtered_charges = values.compact.map do |filter_charge|
+        next if filter_charge['fees'].empty?
+
+        filter_charge['fees'].each do |fk, fee|
+          if %w(PER_SHIPMENT PER_BILL).include?(RateBasis.get_internal_key(fee['rate_basis']))
+            shipment_charges['fees'][fk] = filter_charge['fees'].delete(fk)
+          end
+        end
+        filter_charge
+      end
+      results = [filtered_charges.compact.uniq]
+      results << shipment_charges unless shipment_charges['fees'].empty?
+      hash[dates] = results
+    end
   end
 
   def get_cargo_weight(cargo_unit)
@@ -128,38 +144,43 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
     charge_object.dig('fees')&.each do |k, fee|
       totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[k]['currency'] ||= fee['currency']
-      totals[k]['value'] += 
-        fee_value(fee, cargo_hash, ::Tenants::ScopeService.new(user: @user).fetch(:continuous_rounding))
+      totals[k]['value'] +=
+        fee_value(fee, cargo_hash, @scope.fetch(:continuous_rounding))
     end
 
-    converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
+    converted = CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     totals['total'] = { value: converted, currency: user.currency }
     totals['key'] = cargo_hash[:id] || charge_object['load_type']
 
     totals
   end
 
-  def determine_local_charges(schedule, cargos, direction, user)
-    unit_charges_array, shipment_charges = find_local_charge(schedule, cargos, direction, user)
-    return {} if unit_charges_array.empty?
+  def determine_local_charges(schedules, cargos, direction, user) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    charges_by_dates = find_local_charge(schedules, cargos, direction, user)
+    return {} if charges_by_dates.empty?
 
-    null_cargo_hash = { weight: 0, volume: 0, quantity: 0 }
-    charge_results = unit_charges_array.map do |charge_object|
-      next if charge_object['fees'].empty?
+    charges_by_dates.each_with_object({}) do |(dates, values), hash|
+      unit_charges_array, shipment_charges = values
+      hash[dates] = {} if unit_charges_array.empty?
+      next if unit_charges_array.empty?
 
-      relevant_cargos = if %w(lcl shipment).include?(charge_object['load_type'])
-                          cargos
-                        else
-                          cargos.select { |c| c.size_class == charge_object['load_type'] }
-                        end
-      cargo_hash_for_local_charges(relevant_cargos, ::Tenants::ScopeService.new(user: @user).fetch(:consolidation))
-        .map do |cargo_hash|
-        local_charge_calculation_block(charge_object, cargo_hash, user)
+      null_cargo_hash = { weight: 0, volume: 0, quantity: 0 }
+      charge_results = unit_charges_array.map do |charge_object|
+        next if charge_object['fees'].empty?
+
+        relevant_cargos = if %w(lcl shipment).include?(charge_object['load_type'])
+                            cargos
+                          else
+                            cargos.select { |c| c.size_class == charge_object['load_type'] }
+                          end
+        cargo_hash_for_local_charges(relevant_cargos, @scope.fetch(:consolidation))
+          .map do |cargo_hash|
+          local_charge_calculation_block(charge_object, cargo_hash, user)
+        end
       end
+      charge_results << local_charge_calculation_block(shipment_charges, null_cargo_hash, user) if shipment_charges
+      hash[dates] = charge_results.flatten.compact
     end
-
-    charge_results << local_charge_calculation_block(shipment_charges, null_cargo_hash, user) if shipment_charges
-    charge_results.flatten.compact
   end
 
   def calc_customs_fees(charge, cargos, _load_type, user, mot) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -181,11 +202,11 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
       totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[k]['currency'] ||= fee['currency']
 
-      totals[k]['value'] += 
-        fee_value(fee, cargo_hash, ::Tenants::ScopeService.new(user: @user).fetch(:continous_rounding))
+      totals[k]['value'] +=
+        fee_value(fee, cargo_hash, @scope.fetch(:continuous_rounding))
     end
 
-    converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
+    converted = CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     totals['total'] = { value: converted, currency: user.currency }
     totals
   end
@@ -210,14 +231,14 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
       if !fee['unknown']
         totals[k]['currency'] ||= fee['currency']
 
-        totals[k]['value'] += 
-          fee_value(fee, cargo_hash, ::Tenants::ScopeService.new(user: @user).fetch(:continous_rounding))
+        totals[k]['value'] +=
+          fee_value(fee, cargo_hash, @scope.fetch(:continuous_rounding))
       else
         totals[k]['value'] += 0
       end
     end
 
-    converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
+    converted = CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     totals['total'] = { value: converted, currency: user.currency }
     totals
   end
@@ -239,13 +260,13 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
 
       totals[k]['value'] +=
         if fee['hw_rate_basis']
-          heavy_weight_fee_value(fee, cargo, ::Tenants::ScopeService.new(user: @user).fetch(:continous_rounding))
+          heavy_weight_fee_value(fee, cargo, @scope.fetch(:continuous_rounding))
         else
-          fee_value(fee, get_cargo_hash(cargo, mot), ::Tenants::ScopeService.new(user: @user).fetch(:continous_rounding))
+          fee_value(fee, get_cargo_hash(cargo, mot), @scope.fetch(:continuous_rounding))
         end
     end
 
-    converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
+    converted = CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     cargo.try(:unit_price=, value: converted, currency: user.currency)
     totals['total'] = { value: converted, currency: user.currency }
 
@@ -261,15 +282,15 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
 
     totals = { 'total' => {} }
     cargo_hash = get_cargo_hash(container, mot)
-    continuous_rounding = ::Tenants::ScopeService.new(user: @user).fetch(:continous_rounding)
+    continuous_rounding = @scope.fetch(:continuous_rounding)
     pricing.each do |k, fee|
       totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[k]['currency'] ||= fee['currency']
-     
+
       totals[k]['value'] += fee_value(fee, cargo_hash, continuous_rounding)
     end
 
-    cargo_rate_value = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
+    cargo_rate_value = CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     return if cargo_rate_value.nil? || cargo_rate_value.zero?
 
     container.unit_price = { value: cargo_rate_value, currency: user.currency }
@@ -497,5 +518,20 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
         quantity: cargo.try(:quantity) || 1
       }
     end
+  end
+
+  def get_manipulated_local_charge(local_charge, shipment, schedules)
+    return nil if local_charge.nil?
+
+    Pricings::Manipulator.new(
+      type: "#{local_charge.direction}_margin".to_sym,
+      user: ::Tenants::User.find_by(legacy_id: shipment.user_id),
+      args: {
+        cargo_class: local_charge.load_type,
+        schedules: schedules,
+        shipment: shipment,
+        local_charge: local_charge
+      }
+    ).perform
   end
 end

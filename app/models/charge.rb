@@ -3,7 +3,6 @@
 require 'bigdecimal'
 
 class Charge < ApplicationRecord
-  include CurrencyTools
   has_paper_trail
   belongs_to :price
   belongs_to :edited_price, class_name: 'Price', optional: true
@@ -43,7 +42,11 @@ class Charge < ApplicationRecord
     schedule_charge.each do |key, charge_h|
       next if %w(total value currency).include? key
 
-      children_charge_category = ChargeCategory.find_or_create_by(name: key, code: key.downcase)
+      children_charge_category = ChargeCategory.from_code(
+        name: key,
+        code: key.downcase,
+        tenant_id: charge_breakdown.trip.itinerary.tenant_id
+      )
       price_h = charge_h['value'].nil? ? charge_h['total'] : charge_h
       price_h ||= {
         'value' => 0,
@@ -67,7 +70,7 @@ class Charge < ApplicationRecord
   end
 
   def update_price!
-    rates = get_rates(price.currency, tenant_id).today.merge(price.currency => 1.0)
+    rates = CurrencyTools.new.get_rates(price.currency, tenant_id).today.merge(price.currency => 1.0)
     price.value = children.reduce(0) do |sum, charge|
       price = charge.price
       delta = price.value.nil? ? 0 : price.value / rates[price.currency].to_d
@@ -78,7 +81,7 @@ class Charge < ApplicationRecord
   end
 
   def update_quote_price!(tenant_id)
-    rates = get_rates(price.currency, tenant_id).today.merge(price.currency => 1.0)
+    rates = CurrencyTools.new.get_rates(price.currency, tenant_id).today.merge(price.currency => 1.0)
     price.value = children.reduce(0) do |sum, charge|
       price = charge.price
       delta = price.value.nil? ? 0 : price.value / rates[price.currency].to_d
@@ -90,7 +93,7 @@ class Charge < ApplicationRecord
 
   def update_edited_price!
     self.edited_price = Price.new(currency: price.currency) if edited_price.nil?
-    rates = get_rates(edited_price.currency, tenant_id).today.merge(edited_price.currency => 1.0)
+    rates = CurrencyTools.new.get_rates(edited_price.currency, tenant_id).today.merge(edited_price.currency => 1.0)
     edited_price.value = children.reduce(0) do |sum, charge|
       price = charge.edited_price || charge.price
       delta = price.value.nil? ? 0 : price.value / rates[price.currency].to_d

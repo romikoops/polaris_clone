@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
@@ -6,13 +6,13 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { get } from 'lodash'
 import TruckingTableHeaders from './Headers'
-import { adminActions, appActions } from '../../../../actions'
+import { adminActions, appActions, clientsActions } from '../../../../actions'
 import { cargoClassOptions } from '../../../../constants'
 import styles from './index.scss'
 import { determineSortingCaret } from '../../../../helpers/sortingCaret'
 import { determineDestinationAccessor } from '../../../../helpers'
 
-class TruckingTable extends PureComponent {
+class TruckingTable extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -23,6 +23,13 @@ class TruckingTable extends PureComponent {
     }
     this.fetchData = this.fetchData.bind(this)
     this.viewPricing = this.viewPricing.bind(this)
+  }
+
+  componentDidMount () {
+    const { clientsDispatch } = this.props
+    clientsDispatch.getGroupsForList({
+      page: 1, pageSize: 30, targetId: null, targetType: null
+    })
   }
 
   fetchData (tableState) {
@@ -44,13 +51,22 @@ class TruckingTable extends PureComponent {
   }
 
   render () {
-    const { t, truckingPricings, pages } = this.props
+    const {
+      t, truckingPricings, pages, groups, scope
+    } = this.props
     if (!truckingPricings) return ''
     const {
       sorted, selectedTruckingPricing, filters
     } = this.state
 
     const cargoClassFilter = filters.filter(x => x.id === 'cargo_class')[0]
+    const groupOptions = [
+      <option value="all">All</option>
+    ]
+
+    groups.forEach((g) => {
+      groupOptions.push(<option value={g.id}>{g.name}</option>)
+    })
     let truckOptions
     if (cargoClassFilter && cargoClassFilter.value === 'lcl') {
       truckOptions = [
@@ -125,6 +141,35 @@ class TruckingTable extends PureComponent {
               </select>
             )
           },
+          scope.base_pricing ? {
+            Header: (<div className="flex layout-row layout-center-center">
+              {determineSortingCaret('group', sorted)}
+              <p className="flex-none">{t('common:group')}</p>
+            </div>),
+            id: 'group',
+            maxWidth: 120,
+            accessor: d => d.truckingPricing.group_id,
+            Cell: row => (
+              <div
+                className={`flex layout-row layout-align-start-center ${styles.pricing_cell} `}
+                onClick={() => this.viewPricing(row)}
+              >
+                <p className="flex-none">
+                  {' '}
+                  {get(groups.filter(g => g.id === row.row.group)[0], ['name'], '')}
+                </p>
+              </div>
+            ),
+            Filter: ({ filter, onChange }) => (
+              <select
+                onChange={event => onChange(event.target.value)}
+                style={{ width: '100%' }}
+                value={filter ? filter.value : 'all'}
+              >
+                {groupOptions}
+              </select>
+            )
+          } : false,
           {
             Header: (<div className="flex layout-row layout-center-center">
               {determineSortingCaret('truck_type', sorted)}
@@ -185,7 +230,7 @@ class TruckingTable extends PureComponent {
               </select>
             )
           }
-        ]
+        ].filter(x => x)
       }
     ]
     const pricingsTable = (
@@ -232,29 +277,39 @@ class TruckingTable extends PureComponent {
 
 function mapStateToProps (state) {
   const {
-    authentication, app, admin
+    authentication, app, admin, clients
   } = state
   const { tenant } = app
-  const { theme } = tenant
+  const { theme, scope } = tenant
   const { user, loggedIn } = authentication
   const { truckingDetail } = admin
   const {
     truckingPricings, hub, page, pages
   } = truckingDetail
+  const { groups } = clients
+  const { groupData } = groups || {}
 
   return {
     user,
     tenant,
+    scope,
     loggedIn,
     theme,
     truckingPricings,
     hub,
     page,
-    pages
+    pages,
+    groups: groupData
   }
 }
+
+TruckingTable.defaultProps = {
+  groups: []
+}
+
 function mapDispatchToProps (dispatch) {
   return {
+    clientsDispatch: bindActionCreators(clientsActions, dispatch),
     adminDispatch: bindActionCreators(adminActions, dispatch),
     appDispatch: bindActionCreators(appActions, dispatch)
   }

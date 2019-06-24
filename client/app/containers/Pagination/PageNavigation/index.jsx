@@ -19,7 +19,7 @@ function PageNavigation ({
           {t('common:basicBack')}
         </p>
       </div>
-      <p>{page} / {numPages} </p>
+      <p>{`${page} / ${numPages} `}</p>
       <div
         className={`
           layout-row layout-align-center-center

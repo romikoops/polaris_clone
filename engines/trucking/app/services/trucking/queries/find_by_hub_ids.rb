@@ -10,11 +10,12 @@ module Trucking
 
         @klass = args[:klass]
         @hub_ids = args[:hub_ids]
+        @group_id = args[:group_id]
         @filters = args[:filters] || {}
       end
 
       def perform
-        query = @klass.where(hub_id: @hub_ids)
+        query = @klass.where(hub_id: @hub_ids, group_id: @group_id)
         query = query.where(cargo_class: @filters[:cargo_class]) if @filters[:cargo_class]
         query = query.where(load_type: @filters[:load_type]) if @filters[:load_type]
         query = query.where(truck_type: @filters[:truck_type]) if @filters[:truck_type]
@@ -22,6 +23,7 @@ module Trucking
         if @filters[:destination]
           query = query.joins(:location).where('trucking_locations.city_name ILIKE ?', "#{@filters[:destination]}%")
         end
+
         @result = query
       end
 

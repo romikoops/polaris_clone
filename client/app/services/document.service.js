@@ -41,6 +41,19 @@ function uploadHubs (file) {
 
   return fetch(`${getTenantApiUrl()}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
 }
+function uploadMargins (args) {
+  const formData = new FormData()
+  formData.append('file', args.file)
+  formData.append('target_type', args.targetType)
+  formData.append('target_id', args.targetId)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/margins/upload`, requestOptions).then(handleResponse)
+}
 
 function downloadPricings (options) {
   const requestOptions = {
@@ -204,7 +217,8 @@ export const documentService = {
   downloadQuotations,
   downloadChargeCategories,
   uploadChargeCategories,
-  uploadGeneratorSheet
+  uploadGeneratorSheet,
+  uploadMargins
 }
 
 export default documentService

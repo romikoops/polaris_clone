@@ -274,8 +274,7 @@ export class AdminPriceCreator extends Component {
       gloss = fclChargeGloss
     }
     const routeOpts = AdminPriceCreator.prepForSelect(itineraries, 'name', false, false)
-    const clientOpts = clients.map(a => ({ value: a, label: `${a.first_name} ${a.last_name}` }))
-    clientOpts.push({ value: 'OPEN', label: t('common:open') })
+
     const hubRouteOpts = route
       ? detailedItineraries
         .filter(di => di.id === route.value.id)
@@ -421,23 +420,7 @@ export class AdminPriceCreator extends Component {
         </div>
       </div>
     )
-    const selectClient = (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className="flex-100 layout-row layout-align-start-center">
-          <h4 className="flex-100 letter_3">{t('admin:selectUsers')}</h4>
-          <div className="flex-75 layout-row">
-            <NamedSelect
-              name="client"
-              classes={`${styles.select}`}
-              value={client}
-              options={clientOpts}
-              className="flex-100"
-              onChange={this.handleTopLevelSelect}
-            />
-          </div>
-        </div>
-      </div>
-    )
+
     const selectTransportCategory = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center">
@@ -479,12 +462,7 @@ export class AdminPriceCreator extends Component {
         <h4 className="flex-none letter_3">{transportCategory.label}</h4>
       </div>
     )
-    const clientResult = (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-        <h4 className="flex-none letter_3">{t('admin:client')}</h4>
-        <h4 className="flex-none letter_3">{client.label}</h4>
-      </div>
-    )
+
     const contextPanel = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
@@ -494,7 +472,6 @@ export class AdminPriceCreator extends Component {
             : transportCategoryResult}
           {steps.transportCategory === true && steps.route === false ? selectRoute : routeResult}
           {steps.route === true && steps.hubRoute === false ? selectHubRoute : hubRouteResult}
-          {steps.hubRoute === true && steps.client === false ? selectClient : clientResult}
         </div>
       </div>
     )
@@ -599,23 +576,13 @@ export class AdminPriceCreator extends Component {
     )
   }
 }
-AdminPriceCreator.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  closeForm: PropTypes.func,
-  adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  itineraries: PropTypes.arrayOf(PropTypes.any),
-  transportCategories: PropTypes.arrayOf(PropTypes.any),
-  detailedItineraries: PropTypes.arrayOf(PropTypes.any),
-  clients: PropTypes.arrayOf(PropTypes.any)
-}
+
 AdminPriceCreator.defaultProps = {
   theme: {},
   closeForm: null,
   itineraries: [],
   detailedItineraries: [],
-  transportCategories: [],
-  clients: []
+  transportCategories: []
 }
 
 export default withNamespaces('admin')(AdminPriceCreator)

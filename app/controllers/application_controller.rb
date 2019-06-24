@@ -26,8 +26,8 @@ class ApplicationController < ActionController::API
 
   def require_authentication!
     raise ApplicationError::NotAuthenticated unless user_signed_in?
-
-    require_non_guest_authentication! if current_scope['closed_shop']
+    scope = ::Tenants::ScopeService.new(target: current_user).fetch
+    require_non_guest_authentication! if scope['closed_shop']
   end
 
   def require_non_guest_authentication!
@@ -42,7 +42,7 @@ class ApplicationController < ActionController::API
 
   def current_scope
     @current_scope ||= ::Tenants::ScopeService.new(
-      user: current_user,
+      target: current_user,
       tenant: ::Tenants::Tenant.find_by(legacy_id: current_tenant&.id)
     ).fetch
   end

@@ -14,6 +14,9 @@ module Trucking
           @hub_id = args[:hub_id]
           @hub = Hub.find(@hub_id)
         end
+        if args[:group]
+          @group_id = args[:group]
+        end
 
         if params['xlsx']
           @xlsx = open_file(params['xlsx'])

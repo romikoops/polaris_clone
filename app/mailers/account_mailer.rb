@@ -18,7 +18,7 @@ class AccountMailer < Devise::Mailer
     @confirmation_url = "#{base_url(tenant)}account/confirmation/#{token}"
 
     @links = tenant.email_links ? tenant.email_links['confirmation_instructions'] : []
-    @scope = ::Tenants::ScopeService.new(user: record).fetch
+    @scope = ::Tenants::ScopeService.new(target: record).fetch
     WelcomeMailer.welcome_email(record).deliver_later
     NewUserMailer.new_user_email(user_id: record.id).deliver_later if @scope[:email_on_registration]
     super
@@ -31,7 +31,7 @@ class AccountMailer < Devise::Mailer
     opts[:from] = Mail::Address.new("no-reply@#{tenant.subdomain}.#{Settings.emails.domain}")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
-    @scope = ::Tenants::ScopeService.new(user: record).fetch
+    @scope = ::Tenants::ScopeService.new(target: record).fetch
     opts[:subject] = "#{tenant.name} Account Password Reset"
     redirect_url = base_url(tenant) + 'password_reset'
     @reset_url = "#{base_server_url}tenants/#{tenant.id}/auth/password/edit?" \

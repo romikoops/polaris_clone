@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Itinerary < ApplicationRecord
+class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
   extend ItineraryTools
   include ItineraryTools
   include PriceCheckerService
@@ -12,18 +12,15 @@ class Itinerary < ApplicationRecord
   has_many :trips,     dependent: :destroy
   has_many :notes,     dependent: :destroy
   has_many :pricings,  dependent: :destroy
+  has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
   has_many :hubs,      through: :stops
   has_many :map_data,  dependent: :destroy
-
-  scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
-  scope :for_tenant, ->(tenant_id) { where(tenant_id: tenant_id) }
-  # scope :for_hub, ->(hub_ids) { where(hub_id: hub_ids) } # TODO: join stops
 
   validate :must_have_stops
 
   self.per_page = 12
 
-  def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code, load_type)
+  def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code, load_type) # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
     results = {
       layovers: [],
       trips: []
@@ -76,13 +73,16 @@ class Itinerary < ApplicationRecord
 
   def default_generate_schedules(end_date)
     finish_date = end_date || DateTime.now + 21.days
-    tenant_vehicle_ids = pricings.pluck(:tenant_vehicle_id).uniq
+    tenant_vehicle_ids = pricings.pluck(:tenant_vehicle_id).uniq + rates.pluck(:tenant_vehicle_id).uniq
     stops_in_order = stops.order(:index)
     tenant_vehicle_ids.each do |tv_id|
       %w(container cargo_item).each do |load_type|
         existing_trip = trips.where(tenant_vehicle_id: tv_id, load_type: load_type).first
-        steps_in_order = existing_trip ?
-          (existing_trip.end_date - existing_trip.start_date) / 86_400 : rand(20..50)
+        steps_in_order = if existing_trip
+                           (existing_trip.end_date - existing_trip.start_date) / 86_400
+                         else
+                           rand(20..50)
+                         end
         generate_weekly_schedules(
           stops_in_order,
           [steps_in_order],
@@ -97,7 +97,14 @@ class Itinerary < ApplicationRecord
     end
   end
 
-  def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, tenant_vehicle_id, closing_date_buffer = 4, load_type)
+  def generate_weekly_schedules(stops_in_order, # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/ParameterLists, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+                                steps_in_order,
+                                start_date,
+                                end_date,
+                                ordinal_array,
+                                tenant_vehicle_id,
+                                closing_date_buffer = 4,
+                                load_type)
     results = {
       layovers: [],
       trips: []
@@ -164,7 +171,7 @@ class Itinerary < ApplicationRecord
     results[:trips]
   end
 
-  def prep_schedules(limit)
+  def prep_schedules(limit) # rubocop:disable Metrics/AbcSize
     schedules = []
     trip_layovers = trips.order(:start_date).map(&:layovers)
     trip_layovers = trip_layovers[0...limit] if limit
@@ -291,7 +298,7 @@ class Itinerary < ApplicationRecord
     }
   end
 
-  def routes
+  def routes # rubocop:disable Metrics/AbcSize
     stops.order(:index).to_a.combination(2).map do |stop_array|
       if !stop_array[0].hub || !stop_array[1].hub
         stop_array[0].itinerary.destroy
@@ -309,7 +316,7 @@ class Itinerary < ApplicationRecord
     end
   end
 
-  def detailed_hash(stop_array, options = {})
+  def detailed_hash(stop_array, options = {}) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     origin = stop_array[0]
     destination = stop_array[1]
     return_h = attributes
@@ -390,7 +397,7 @@ class Itinerary < ApplicationRecord
     ", origin_hub_ids, destination_hub_ids)
   end
 
-  def self.for_addresses(shipment, trucking_data)
+  def self.for_addresses(shipment, trucking_data) # rubocop:disable Metrics/AbcSize
     if trucking_data && trucking_data['pre_carriage']
       start_hub_ids = trucking_data['pre_carriage'].keys
       start_hubs = Hub.where(id: start_hub_ids)

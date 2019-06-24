@@ -1,3 +1,5 @@
+import { bookingProcessService } from '../services'
+
 function resetStore () {
   return { type: 'RESET_BP_STORE' }
 }
@@ -26,6 +28,31 @@ function updateCargoUnit (index) {
   return { type: 'UPDATE_CARGO_UNIT', payload: index }
 }
 
+function getContacts (args) {
+  function request (contact) {
+    return { type: 'GET_BOOKING_CONTACTS_REQUEST', payload: contact }
+  }
+  function success (contact) {
+    return { type: 'GET_BOOKING_CONTACTS_SUCCESS', payload: contact }
+  }
+  function failure (error) {
+    return { type: 'GET_BOOKING_CONTACTS_CLEAR', error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    bookingProcessService.getContacts(args).then(
+      (response) => {
+        dispatch(success(response.data))
+      },
+      (error) => {
+        dispatch(failure(error))
+      }
+    )
+  }
+}
+
 export const shipmentDetailsActions = {
   resetStore,
   updateShipment,
@@ -33,7 +60,8 @@ export const shipmentDetailsActions = {
   updatePageData,
   updateModals,
   updateCargoUnit,
-  deleteCargoUnit
+  deleteCargoUnit,
+  getContacts
 }
 
 export default shipmentDetailsActions

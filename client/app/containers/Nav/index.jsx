@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withNamespaces } from 'react-i18next'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
-import PropTypes from '../../prop-types'
-// import { moment } from '../../constants'
+import { get } from 'lodash'
 import styles from './index.scss'
-// import Loading from '../../components/Loading/Loading'
 import { appActions } from '../../actions'
 import { capitalize, gradientTextGenerator, history } from '../../helpers'
 
@@ -35,15 +34,35 @@ class NavBar extends Component {
     }
   }
 
+  extractClientsData (crumbs) {
+    const { clients, t } = this.props
+    if (crumbs.length < 4) {
+      if (['groupcreator', 'margincreator', 'companycreator'].includes(crumbs[crumbs.length - 1])) {
+        return t(`admin:${crumbs[crumbs.length - 1]}`)
+      }
+
+      return capitalize(crumbs[crumbs.length - 1])
+    }
+
+    switch (crumbs[2]) {
+      case 'groups':
+        return get(clients, ['group', 'name'], '')
+      case 'companies':
+        return get(clients, ['company', 'data', 'name'], '')
+      case 'client':
+        return `${get(clients, ['client', 'clientData', 'first_name'], '')} 
+        ${get(clients, ['client', 'clientData', 'last_name'], '')}`
+
+      default:
+        return ''
+    }
+  }
+
   cellSwitchAdmin (categories) {
     const { admin } = this.props
     switch (categories[1]) {
-      // eslint-disable-next-line no-case-declarations
-      case 'clients':
-        const clientName1 =
-          admin.client && admin.client.client
-            ? `${capitalize(admin.client.client.first_name)}  ${capitalize(admin.client.client.last_name)}`
-            : categories[categories.length - 1]
+      case 'clients': {
+        const clientName1 = this.extractClientsData(categories)
 
         return (
           <div
@@ -53,8 +72,8 @@ class NavBar extends Component {
             {`${clientName1}`}
           </div>
         )
-      // eslint-disable-next-line no-case-declarations
-      case 'shipments':
+      }
+      case 'shipments': {
         const name =
           admin.shipment && admin.shipment.shipment && admin.shipment.shipment.imc_reference
             ? admin.shipment.shipment.imc_reference
@@ -68,6 +87,7 @@ class NavBar extends Component {
             {`${capitalize(name)}`}
           </div>
         )
+      }
       case 'schedules': {
         const scheduleName =
           admin.itinerarySchedules &&
@@ -91,7 +111,8 @@ class NavBar extends Component {
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
           >
             {' '}
-            {`${admin.hub.hub.name}`}
+            {`${capitalize(categories[categories.length - 1] === 'hubs'
+              ? categories[categories.length - 1] : get(admin, ['hub', 'hub', 'name'], ''))}`}
           </div>
         )
       case 'trucking':
@@ -100,7 +121,8 @@ class NavBar extends Component {
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
           >
             {' '}
-            {`${admin.truckingDetail.hub ? admin.truckingDetail.hub.name : ''}`}
+            {`${capitalize(categories[categories.length - 1] === 'trucking'
+              ? categories[categories.length - 1] : get(admin, ['truckingDetail', 'hub', 'name'], ''))}`}
           </div>
         )
       case 'routes':
@@ -109,16 +131,13 @@ class NavBar extends Component {
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
           >
             {' '}
-            {`${capitalize(admin.itinerary.itinerary.name)}`}
+            {`${capitalize(get(admin, ['itinerary', 'itinerary', 'name'], categories[categories.length - 1]))}`}
           </div>
         )
-      // eslint-disable-next-line no-case-declarations
-      case 'pricings':
+      case 'pricings': {
         if (categories[2] === 'routes') {
-          const routeName =
-            admin.itineraryPricings && admin.itineraryPricings.itinerary
-              ? admin.itineraryPricings.itinerary.name
-              : categories[categories.length - 1]
+          const id = categories[categories.length - 1]
+          const routeName = get(admin, ['pricings', 'show', id, 'itinerary', 'name'], id)
 
           return (
             <div
@@ -154,6 +173,7 @@ class NavBar extends Component {
             {clientName}
           </div>
         )
+      }
       default:
         return ''
     }
@@ -171,8 +191,7 @@ class NavBar extends Component {
             {`${capitalize(users.client.client.first_name)}  ${capitalize(users.client.client.last_name)}`}
           </div>
         )
-      // eslint-disable-next-line no-case-declarations
-      case 'shipments':
+      case 'shipments': {
         const name =
           users.shipment && users.shipment.shipment
             ? users.shipment.shipment.imc_reference
@@ -186,6 +205,7 @@ class NavBar extends Component {
             {`${capitalize(name)}`}
           </div>
         )
+      }
       case 'hubs':
         return (
           <div
@@ -262,8 +282,7 @@ class NavBar extends Component {
         : { background: 'black' }
     const pathPieces = location.pathname.split('/')
     pathPieces.splice(0, 1)
-    const lastIndex =
-      pathPieces.indexOf('pricings') > 0 || pathPieces.indexOf('shipments') > 0 ? 3 : 2
+    const lastIndex = pathPieces.length - 1
     const breadcrumbs = []
     breadcrumbs.push(<div
       className={`${styles.home_btn} flex-none layout-row layout-align-center-center pointy`}
@@ -273,6 +292,7 @@ class NavBar extends Component {
       <i className="fa fa-home clip" style={iconStyle} />
       {' '}
     </div>)
+
     pathPieces.forEach((br, i) => {
       if (br !== 'view' && i > 0) {
         breadcrumbs.push(<div className="flex-none layout-row layout-align-center-center pointy">
@@ -322,16 +342,6 @@ class NavBar extends Component {
   }
 }
 
-NavBar.propTypes = {
-  theme: PropTypes.theme,
-  location: PropTypes.objectOf(PropTypes.any),
-  users: PropTypes.objectOf(PropTypes.any),
-  admin: PropTypes.objectOf(PropTypes.any),
-  appDispatch: PropTypes.shape({
-    getDashboard: PropTypes.func
-  }).isRequired
-}
-
 NavBar.defaultProps = {
   theme: null,
   location: {},
@@ -345,7 +355,9 @@ function mapDispatchToProps (dispatch) {
   }
 }
 function mapStateToProps (state) {
-  const { users, admin, app } = state
+  const {
+    users, admin, app, clients
+  } = state
   const { tenant } = app
   const { theme } = tenant
 
@@ -353,8 +365,9 @@ function mapStateToProps (state) {
     users,
     tenant,
     admin,
-    theme
+    theme,
+    clients
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavBar))
+export default withNamespaces('admin')(withRouter(connect(mapStateToProps, mapDispatchToProps)(NavBar)))

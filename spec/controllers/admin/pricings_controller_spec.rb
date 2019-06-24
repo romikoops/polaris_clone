@@ -18,7 +18,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
         expect_any_instance_of(described_class).to receive(:require_non_guest_authentication!).and_return(true)
         expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
         expect_any_instance_of(described_class).to receive(:current_tenant).at_least(:once).and_return(double('Tenant', scope: {}, subdomain: 'test', id: 1))
-        expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(double('User', guest: false, email: 'test@test.com', id: 1, agency_id: nil, agency: nil))
+        expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(double('User', guest: false, email: 'test@test.com', id: 1, agency_id: nil, agency: nil, tenant: nil, groups: nil, company: nil, scope: nil))
         expect_any_instance_of(ExcelDataServices::Loaders::Uploader).to receive(:perform).and_return(error)
       end
 

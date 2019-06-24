@@ -16,7 +16,7 @@ export class NamedAsync extends Component {
 
   render () {
     const {
-      value, classes, ref, name, autoload, multi, loadOptions
+      value, classes, ref, name, autoload, multi, loadOptions, placeholder
     } = this.props
     const StyledSelect = styled(Async)`
       .Select-control {
@@ -47,6 +47,7 @@ export class NamedAsync extends Component {
         multi={multi}
         className={classes}
         value={value}
+        placeholder={placeholder}
         ref={ref}
         autoload={autoload}
         loadOptions={loadOptions}
@@ -54,17 +55,6 @@ export class NamedAsync extends Component {
       />
     )
   }
-}
-
-NamedAsync.propTypes = {
-  name: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-  classes: PropTypes.string.isRequired,
-  ref: PropTypes.string.isRequired,
-  autoload: PropTypes.bool.isRequired,
-  multi: PropTypes.bool.isRequired,
-  loadOptions: Async.propTypes.loadOptions.isRequired
 }
 
 NamedAsync.defaultProps = {}

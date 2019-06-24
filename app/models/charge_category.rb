@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
-class ChargeCategory < ApplicationRecord
+class ChargeCategory < Legacy::ChargeCategory
   has_many :charges
   belongs_to :tenant, optional: true
 
   validates :name, :code, presence: true
   validates :code, is_model: true, unless: ->(obj) { obj.cargo_unit_id.nil? }
+  validates_uniqueness_of :name, scope: %i(code tenant_id cargo_unit_id)
 
   def self.grand_total
     find_or_create_by(code: 'grand_total', name: 'Grand Total')
@@ -39,7 +40,7 @@ class ChargeCategory < ApplicationRecord
     end
   end
 
-  def self.from_code(code, tenant_id = nil, name = nil)
+  def self.from_code(code:, tenant_id: nil, name: nil)
     name ||= code
     code = code.to_s.downcase
     tenant_charge_category = find_by(code: code, tenant_id: tenant_id)

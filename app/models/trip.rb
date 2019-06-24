@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Trip < ApplicationRecord
+class Trip < Legacy::Trip
   has_paper_trail
   has_many :layovers, dependent: :destroy
   belongs_to :tenant_vehicle
@@ -11,6 +11,7 @@ class Trip < ApplicationRecord
   }
 
   scope :lastday_today, -> { where('closing_date > ?', Date.today) }
+ 
   def self.update_times
     trips = Trip.all
     trips.each do |t|

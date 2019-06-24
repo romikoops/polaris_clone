@@ -9,9 +9,9 @@ import { RoundButton } from '../../RoundButton/RoundButton'
 import SquareButton from '../../SquareButton'
 import { LoadingSpinner } from '../../LoadingSpinner/LoadingSpinner'
 import styles from './index.scss'
+import NamedSelect from '../../NamedSelect/NamedSelect'
 
 class DocumentsDownloader extends React.Component {
-
   constructor (props) {
     super(props)
     this.state = {
@@ -19,7 +19,7 @@ class DocumentsDownloader extends React.Component {
     }
   }
 
-  requestDocument () {
+  requestDocument (arg) {
     const { target, documentDispatch, options } = this.props
 
     switch (target) {
@@ -32,9 +32,13 @@ class DocumentsDownloader extends React.Component {
       case 'hubs':
         documentDispatch.downloadHubs()
         break
-      case 'trucking':
+      case 'trucking': {
+        if (arg) {
+          options.target = arg.value
+        }
         documentDispatch.downloadTrucking(options)
         break
+      }
       case 'local_charges':
         documentDispatch.downloadLocalCharges(options)
         break
@@ -72,9 +76,9 @@ class DocumentsDownloader extends React.Component {
 
   render () {
     const {
-      theme, loading, tooltip, square, size, t, disabled
+      theme, loading, tooltip, square, size, t, disabled, targetOptions
     } = this.props
-    const { requested } = this.state
+    const { requested, selected } = this.state
     const tooltipId = v4()
     const start = square ? (
       <SquareButton
@@ -97,6 +101,18 @@ class DocumentsDownloader extends React.Component {
         handleNext={() => this.requestDocument()}
         active={!disabled}
       />
+    )
+    const selectBox = (
+      <div className="flex-100 layout-row layout-align-center-center">
+        <NamedSelect
+          theme={theme}
+          options={targetOptions}
+          value={selected}
+          className="flex-100"
+          clearable={false}
+          onChange={e => this.requestDocument(e)}
+        />
+      </div>
     )
     const loadingBox = (
       <LoadingSpinner size="small" />
@@ -125,7 +141,7 @@ class DocumentsDownloader extends React.Component {
     )
     let button
     if (!loading && !requested) {
-      button = start
+      button = targetOptions.length > 0 ? selectBox : start
     } else if (loading && requested) {
       button = loadingBox
     } else if (!loading && requested) {
@@ -145,20 +161,6 @@ class DocumentsDownloader extends React.Component {
   }
 }
 
-DocumentsDownloader.propTypes = {
-  theme: PropTypes.theme,
-  documentDispatch: PropTypes.func,
-  t: PropTypes.func.isRequired,
-  downloadUrls: PropTypes.objectOf(PropTypes.any),
-  tooltip: PropTypes.string,
-  square: PropTypes.bool,
-  target: PropTypes.string,
-  loading: PropTypes.bool,
-  options: PropTypes.objectOf(PropTypes.any),
-  size: PropTypes.string,
-  disabled: PropTypes.bool
-}
-
 DocumentsDownloader.defaultProps = {
   square: false,
   downloadUrls: {},
@@ -169,7 +171,8 @@ DocumentsDownloader.defaultProps = {
   loading: false,
   options: {},
   size: 'small',
-  disabled: false
+  disabled: false,
+  targetOptions: []
 }
 
 function mapStateToProps (state) {

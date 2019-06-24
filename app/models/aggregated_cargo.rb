@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AggregatedCargo < ApplicationRecord
+class AggregatedCargo < Legacy::AggregatedCargo
   belongs_to :shipment
   before_validation :set_chargeable_weight!
 

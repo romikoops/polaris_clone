@@ -490,6 +490,7 @@ module Trucking
           cbm_ratio: meta[:cbm_ratio],
           modifier: meta[:scale],
           hub_id: @hub.id,
+          group_id: @group_id,
           tenant_id: tenant.id,
           identifier_modifier: identifier_modifier,
           carriage: meta[:direction] == 'import' ? 'on' : 'pre',

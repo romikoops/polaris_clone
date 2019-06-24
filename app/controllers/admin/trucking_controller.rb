@@ -2,7 +2,6 @@
 
 class Admin::TruckingController < Admin::AdminBaseController
   include ExcelTools
-  include TruckingTools
 
   def index
     response_handler({})
@@ -22,14 +21,17 @@ class Admin::TruckingController < Admin::AdminBaseController
         paginate: true,
         page: params[:page] || 1,
         filters: filters,
-        per_page: params[:page_size]
+        per_page: params[:page_size],
+        group_id: params[:group] == 'all' ? nil : params[:group]
       }
     )
+    groups = Tenants::Group.where(tenant_id: Tenants::Tenant.find_by(legacy_id: current_tenant&.id)&.id)
     response_handler(
       hub: hub,
       truckingPricings: results.map(&:as_index_result),
       page: params[:page],
-      pages: results.total_pages
+      pages: results.total_pages,
+      groups: groups
     )
   end
 
@@ -50,8 +52,10 @@ class Admin::TruckingController < Admin::AdminBaseController
       args = {
         params: { 'xlsx' => params[:file] },
         hub_id: params[:id],
-        user: current_user
+        user: current_user,
+        group: params[:group] == 'all' ? nil : params[:group]
       }
+
       resp = Trucking::Excel::Inserter.new(args).perform
 
       response_handler(resp)
@@ -63,6 +67,7 @@ class Admin::TruckingController < Admin::AdminBaseController
   def download
     options = params[:options].as_json.symbolize_keys
     options[:tenant_id] = current_user.tenant_id
+    options[:group_id] = options[:target] == 'all' ? nil : options[:target]
     url = DocumentService::TruckingWriter.new(options).perform
     response_handler(url: url, key: 'trucking')
   end

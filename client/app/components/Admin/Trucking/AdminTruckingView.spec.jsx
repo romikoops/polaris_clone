@@ -33,10 +33,12 @@ const propsBase = {
     uploadTrucking: identity
   },
   truckingDetail: {
-    hub
+    hub,
+    groups: []
   },
   document: {},
-  documentDispatch: {}
+  documentDispatch: {},
+  scope: {}
 }
 
 test('shallow render', () => {

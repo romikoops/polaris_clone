@@ -2,7 +2,6 @@
 
 class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable Metrics/ClassLength, Style/ClassAndModuleChildren
   include ExcelTools
-  include PricingTools
   include ItineraryTools
 
   def index # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -10,7 +9,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     @itineraries = tenant.itineraries
     response = Rails.cache.fetch("#{@itineraries.cache_key}/pricings_index", expires_in: 12.hours) do
       @transports = TransportCategory.all.uniq
-      @scope = ::Tenants::ScopeService.new(user: current_user).fetch
+      @scope = ::Tenants::ScopeService.new(target: current_user).fetch
       mots = @scope['modes_of_transport'].keys.reject do |key|
         !@scope['modes_of_transport'][key]['container'] &&
           !@scope['modes_of_transport'][key]['cargo_item']
@@ -36,8 +35,8 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def client
-    @pricings = get_user_pricings(params[:id])
     @client = User.find(params[:id])
+    @pricings = PricingTools.new(user: @client).get_user_pricings(params[:id])
 
     response_handler(userPricings: @pricings, client: @client)
   end
@@ -62,10 +61,21 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     )
   end
 
+  def disable
+    pricing = Pricings::Pricing.find_by(id: params[:pricing_id], tenant_id: params[:tenant_id])
+    pricing.update(disabled: params[:action] == 'disable')
+    response_handler(pricing.for_table_json)
+  end
+
   def route
     itinerary = Itinerary.find(params[:id])
-    pricings = itinerary.pricings
-    pricings = pricings.reject { |pricing| pricing&.user&.internal } unless current_user.internal
+    scope = current_user.tenant_scope
+    if scope['base_pricing']
+      pricings = itinerary.rates
+    else
+      pricings = itinerary.pricings
+      pricings = pricings.reject { |pricing| pricing&.user&.internal } unless current_user.internal
+    end
     response_handler(
       pricings: pricings.map(&:for_table_json),
       itinerary: itinerary,

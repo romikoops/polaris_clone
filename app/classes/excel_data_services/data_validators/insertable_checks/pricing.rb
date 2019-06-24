@@ -46,9 +46,9 @@ module ExcelDataServices
         end
 
         def check_customer_email(row, user)
-          unknown_customer = row.customer_email.present? && user.nil?
+          customer_unknown = row.customer_email.present? && user.nil?
 
-          if unknown_customer # rubocop:disable Style/GuardClause
+          if customer_unknown # rubocop:disable Style/GuardClause
             add_to_errors(
               type: :error,
               row_nr: row.nr,

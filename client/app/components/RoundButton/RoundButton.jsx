@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from '../../prop-types'
 import styles from './RoundButton.scss'
 import GradientBorder from '../GradientBorder'
 import {
@@ -79,7 +78,7 @@ export function RoundButton ({
         <GradientBorder
           wrapperClassName="flex pointy"
           gradient={gradientBorderStyle}
-          className="layout-row flex-100"
+          className="layout-row layout-align-center-center flex-100"
           content={(
             <button
               className={`${styles.round_btn_inverse} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}
@@ -98,22 +97,6 @@ export function RoundButton ({
 
     </div>
   )
-}
-
-RoundButton.propTypes = {
-  text: PropTypes.string.isRequired,
-  handleNext: PropTypes.func,
-  handleDisabled: PropTypes.func,
-  active: PropTypes.bool,
-  back: PropTypes.bool,
-  theme: PropTypes.theme,
-  icon: PropTypes.string,
-  iconClass: PropTypes.string,
-  classNames: PropTypes.string,
-  size: PropTypes.string,
-  flexContainer: PropTypes.string,
-  disabled: PropTypes.bool,
-  inverse: PropTypes.bool
 }
 
 RoundButton.defaultProps = {

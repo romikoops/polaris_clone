@@ -78,7 +78,7 @@ export class AdminPricingsIndex extends Component {
 
   render () {
     const {
-      t, theme, pricingData, clients, adminDispatch, scope, hubHash, user
+      t, theme, pricingData, adminDispatch, scope, hubHash, user
     } = this.props
     const { newPricing } = this.state
     if (!pricingData) {
@@ -120,7 +120,6 @@ export class AdminPricingsIndex extends Component {
           <AdminPriceCreator
             theme={theme}
             itineraries={itineraries}
-            clients={clients}
             adminDispatch={adminDispatch}
             detailedItineraries={detailedItineraries}
             transportCategories={transportCategories}

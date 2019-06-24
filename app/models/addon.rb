@@ -3,9 +3,6 @@
 class Addon < ApplicationRecord
   belongs_to :hub
 
-  include PricingTools
-  extend PricingTools
-
   def self.prepare_addons(origin_hub, destination_hub, cargo_class, tenant_vehicle_id, mot, cargos, user)
     addons = determine_addons(origin_hub, destination_hub, cargo_class, tenant_vehicle_id, mot, user)
     condensed_addons = condense_addons(addons, cargos, user, mot)
@@ -70,20 +67,21 @@ class Addon < ApplicationRecord
 
   def self.condense_addons(addons, cargos, user, mot)
     condensed_addons = []
+    pricing_tools = PricingTools.new(shipment: cargos.first.shipment, user: user)
     addons[:origin].each do |oao|
       matching_ao = addons[:destination].select { |dao| dao.addon_type === oao.addon_type }
 
       new_ao = oao.dup.as_json
       if !matching_ao.empty?
         new_ao.delete(:fees)
-        new_ao[:export] = calc_addon_charges(oao[:fees], cargos, user, mot)
-        new_ao[:import] = calc_addon_charges(matching_ao.first[:fees], cargos, user, mot)
+        new_ao[:export] = pricing_tools.calc_addon_charges(oao[:fees], cargos, user, mot)
+        new_ao[:import] = pricing_tools.calc_addon_charges(matching_ao.first[:fees], cargos, user, mot)
 
         new_ao[:flag] = 'ambidirectional'
         condensed_addons << new_ao
       else
         new_ao[:flag] = 'unidirectional'
-        new_ao[:fees] = calc_addon_charges(oao.fees, cargos, user, mot)
+        new_ao[:fees] = pricing_tools.calc_addon_charges(oao.fees, cargos, user, mot)
         condensed_addons << new_ao
       end
     end

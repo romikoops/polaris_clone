@@ -19,6 +19,7 @@ module DocumentService
       @unfiltered_results = Trucking::Trucking.find_by_hub_id(
         hub_id: options[:hub_id],
         options: {
+          group_id: options[:group_id],
           filters: {
             load_type: options[:load_type]
           },
@@ -34,16 +35,18 @@ module DocumentService
       @fees_sheet = add_sheet('Fees')
       @pages = {}
       @zones = Hash.new { |h, k| h[k] = [] }
-      @identifier = _identifier
+      @identifier = @unfiltered_results.first.except('truckingPricing', 'countryCode').keys.first
     end
 
     def perform
-      prep_results
-      write_zone_to_sheet
-      write_fees_to_sheet
-      write_rates_to_sheet
+      if unfiltered_results.present?
+        prep_results
+        write_zone_to_sheet
+        write_fees_to_sheet
+        write_rates_to_sheet
+      end
       workbook.close
-      write_to_aws(directory, tenant, filename, 'schedules_sheet')
+      write_to_aws(directory, tenant, filename, 'schedules_sheet') if unfiltered_results.present?
     end
 
     private
@@ -81,8 +84,8 @@ module DocumentService
           zone_key = zone_identifiers.first
           update_pages(meta, values.first, zone_key)
           update_dir_fees(meta, values.first)
-
           zone_identifiers.each do |ident|
+          
             zone_obj = if ident.is_a?(Array)
               { idents: ident.first, sub_ident: ident.last, country_code: values.first['countryCode'] }
             else
@@ -104,11 +107,11 @@ module DocumentService
 
     def _identifier
       ident = ''
-      if unfiltered_results.first['distance']
+      if unfiltered_results.first&.dig(['distance'])
         ident = 'distance'
-      elsif unfiltered_results.first['zipCode']
+      elsif unfiltered_results.first&.dig(['zipCode'])
         ident = 'zipCode'
-      elsif unfiltered_results.first['city']
+      elsif unfiltered_results.first&.dig(['city'])
         ident = 'city'
       end
       ident

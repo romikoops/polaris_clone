@@ -9,7 +9,7 @@ class NewUserMailer < ApplicationMailer
     @user = User.find(user_id)
     @tenant = Tenant.find(@user.tenant_id)
     @theme = @tenant.theme
-    @scope = ::Tenants::ScopeService.new(user: @user).fetch
+    @scope = ::Tenants::ScopeService.new(target: @user).fetch
 
     @mot_icon = URI.open(
       'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png'

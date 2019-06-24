@@ -8,7 +8,7 @@ class SearchController < ApplicationController
     text = params[:query] != '' ? params[:query] : 'plastics'
     resp = text_search_fn(false, 'hsCodes', text)
     results = []
-    dangerous_goods = ::Tenants::ScopeService.new(user: @user).fetch(:dangerous_goods)
+    dangerous_goods = ::Tenants::ScopeService.new(target: @user).fetch(:dangerous_goods)
     resp.each do |r|
       if !dangerous_goods && !r['dangerous']
         tmp = {}

@@ -60,13 +60,19 @@ module ExcelDataServices
 
       def special_deep_dup(old_obj)
         after_new_obj = old_obj.dup
-        after_new_obj.uuid = nil
 
         case old_obj.class.name
         when 'Pricing'
           after_new_obj.pricing_details << old_obj.pricing_details.map(&:dup)
           after_new_obj.pricing_details << old_obj.pricing_exceptions.map(&:dup)
           after_new_obj.pricing_details << old_obj.pricing_requests.map(&:dup)
+          after_new_obj.uuid = SecureRandom.uuid
+          # Although after_new_obj is a new object, its data reflects the old object.
+          # It should therefore be marked, such that no new pricing_details will be added
+          # to it in the further insertion process.
+          after_new_obj.transient_marked_as_old = true
+        when 'Pricings::Pricing'
+          after_new_obj.fees << old_obj.fees.map(&:dup)
 
           # Although after_new_obj is a new object, its data reflects the old object.
           # It should therefore be marked, such that no new pricing_details will be added

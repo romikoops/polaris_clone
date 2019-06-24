@@ -12,7 +12,10 @@ FactoryBot.define do
           :charge,
           charge_breakdown: charge_breakdown,
           charge_category: ChargeCategory.grand_total,
-          children_charge_category: build(:charge_category, name: :cargo),
+          children_charge_category: build(:charge_category,
+                                          name: 'cargo',
+                                          code: 'cargo',
+                                          tenant_id: charge_breakdown.shipment.tenant_id),
           parent: build(
             :charge,
             charge_breakdown: charge_breakdown,

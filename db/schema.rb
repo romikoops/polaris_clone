@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_18_121846) do
+ActiveRecord::Schema.define(version: 2019_06_17_134641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -386,6 +386,9 @@ ActiveRecord::Schema.define(version: 2019_04_18_121846) do
     t.string "name"
     t.string "mode_of_transport"
     t.integer "tenant_id"
+    t.index ["mode_of_transport"], name: "index_itineraries_on_mode_of_transport"
+    t.index ["name"], name: "index_itineraries_on_name"
+    t.index ["tenant_id"], name: "index_itineraries_on_tenant_id"
   end
 
   create_table "layovers", force: :cascade do |t|
@@ -406,7 +409,37 @@ ActiveRecord::Schema.define(version: 2019_04_18_121846) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "legacy_aggregated_cargos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_cargo_item_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_cargo_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_charge_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_containers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "legacy_countries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_currencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -416,7 +449,47 @@ ActiveRecord::Schema.define(version: 2019_04_18_121846) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "legacy_itineraries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_layovers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_local_charges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "legacy_shipments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_stops", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_tenant_vehicles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_trips", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_vehicles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -721,6 +794,99 @@ ActiveRecord::Schema.define(version: 2019_04_18_121846) do
     t.index ["uuid"], name: "index_pricings_on_uuid", unique: true
   end
 
+  create_table "pricings_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "tenant_id"
+    t.uuid "margin_id"
+    t.decimal "value"
+    t.string "operator"
+    t.integer "charge_category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["margin_id"], name: "index_pricings_details_on_margin_id"
+    t.index ["tenant_id"], name: "index_pricings_details_on_tenant_id"
+  end
+
+  create_table "pricings_fees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.decimal "rate"
+    t.decimal "base"
+    t.uuid "rate_basis_id"
+    t.decimal "min"
+    t.decimal "hw_threshold"
+    t.uuid "hw_rate_basis_id"
+    t.integer "charge_category_id"
+    t.jsonb "range", default: []
+    t.string "currency_name"
+    t.bigint "currency_id"
+    t.uuid "pricing_id"
+    t.bigint "tenant_id"
+    t.integer "legacy_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pricings_margins", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "tenant_id"
+    t.uuid "pricing_id"
+    t.string "default_for"
+    t.string "operator"
+    t.decimal "value"
+    t.datetime "effective_date"
+    t.datetime "expiration_date"
+    t.string "applicable_type"
+    t.uuid "applicable_id"
+    t.integer "tenant_vehicle_id"
+    t.string "cargo_class"
+    t.integer "itinerary_id"
+    t.integer "origin_hub_id"
+    t.integer "destination_hub_id"
+    t.integer "application_order", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "margin_type"
+    t.index ["applicable_type", "applicable_id"], name: "index_pricings_margins_on_applicable_type_and_applicable_id"
+    t.index ["application_order"], name: "index_pricings_margins_on_application_order"
+    t.index ["cargo_class"], name: "index_pricings_margins_on_cargo_class"
+    t.index ["destination_hub_id"], name: "index_pricings_margins_on_destination_hub_id"
+    t.index ["effective_date"], name: "index_pricings_margins_on_effective_date"
+    t.index ["expiration_date"], name: "index_pricings_margins_on_expiration_date"
+    t.index ["itinerary_id"], name: "index_pricings_margins_on_itinerary_id"
+    t.index ["origin_hub_id"], name: "index_pricings_margins_on_origin_hub_id"
+    t.index ["pricing_id"], name: "index_pricings_margins_on_pricing_id"
+    t.index ["tenant_id"], name: "index_pricings_margins_on_tenant_id"
+    t.index ["tenant_vehicle_id"], name: "index_pricings_margins_on_tenant_vehicle_id"
+  end
+
+  create_table "pricings_pricings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.decimal "wm_rate"
+    t.datetime "effective_date"
+    t.datetime "expiration_date"
+    t.bigint "tenant_id"
+    t.string "cargo_class"
+    t.string "load_type"
+    t.bigint "user_id"
+    t.bigint "itinerary_id"
+    t.integer "tenant_vehicle_id"
+    t.integer "legacy_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "disabled", default: false
+    t.index ["cargo_class"], name: "index_pricings_pricings_on_cargo_class"
+    t.index ["itinerary_id"], name: "index_pricings_pricings_on_itinerary_id"
+    t.index ["load_type"], name: "index_pricings_pricings_on_load_type"
+    t.index ["tenant_id"], name: "index_pricings_pricings_on_tenant_id"
+    t.index ["tenant_vehicle_id"], name: "index_pricings_pricings_on_tenant_vehicle_id"
+    t.index ["user_id"], name: "index_pricings_pricings_on_user_id"
+  end
+
+  create_table "pricings_rate_bases", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "external_code"
+    t.string "internal_code"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_code"], name: "index_pricings_rate_bases_on_external_code"
+  end
+
   create_table "quotations", force: :cascade do |t|
     t.string "target_email"
     t.integer "user_id"
@@ -813,6 +979,7 @@ ActiveRecord::Schema.define(version: 2019_04_18_121846) do
     t.datetime "planned_delivery_date"
     t.datetime "planned_destination_collection_date"
     t.datetime "desired_start_date"
+    t.jsonb "meta", default: {}
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
@@ -883,6 +1050,8 @@ ActiveRecord::Schema.define(version: 2019_04_18_121846) do
     t.uuid "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "external_id"
+    t.string "phone"
   end
 
   create_table "tenants_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1101,6 +1270,7 @@ ActiveRecord::Schema.define(version: 2019_04_18_121846) do
     t.string "truck_type"
     t.integer "user_id"
     t.uuid "parent_id"
+    t.uuid "group_id"
     t.index ["hub_id"], name: "index_trucking_truckings_on_hub_id"
     t.index ["location_id"], name: "index_trucking_truckings_on_location_id"
     t.index ["rate_id", "location_id", "hub_id"], name: "trucking_foreign_keys", unique: true

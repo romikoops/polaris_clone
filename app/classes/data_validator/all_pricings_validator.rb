@@ -5,7 +5,6 @@ module DataValidator
     attr_reader :path, :user, :port_object
     include OfferCalculatorService
     include AwsConfig
-    include CurrencyTools
     include DocumentService
 
     def post_initialize(args)
@@ -407,7 +406,7 @@ module DataValidator
     end
 
     def convert_value(value, from_currency, to_currency)
-      CurrencyTools.convert(value, from_currency, to_currency, @tenant.id)
+      CurrencyTools.new.convert(value, from_currency, to_currency, @tenant.id)
     end
 
     def diff_result_string(result, keys, expected_result)

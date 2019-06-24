@@ -11,8 +11,10 @@ module ExcelDataServices
         new(options).perform
       end
 
-      def initialize(tenant:, data:, options: {})
+      def initialize(tenant:, data:, options:)
         @tenant = tenant
+        @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant&.id)
+        @scope = ::Tenants::ScopeService.new(tenant: tenants_tenant).fetch
         @data = data
         @klass_identifier = self.class.name.split('::').last
         @options = options
@@ -25,7 +27,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :tenant, :data, :klass_identifier, :options, :stats
+      attr_reader :tenant, :data, :klass_identifier, :options, :stats, :scope, :tenants_tenant
 
       def add_stats(data_record, force_new_record = false)
         descriptor = data_record.class.name.underscore.pluralize.to_sym

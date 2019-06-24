@@ -1,0 +1,178 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+module Pricings
+  RSpec.describe Margin, type: :model do
+    let!(:tenant) { FactoryBot.create(:legacy_tenant) }
+    let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+    let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle_1]) }
+    let(:hub) { FactoryBot.create(:legacy_hub, tenant: tenant, name: 'Gothenburg Port') }
+    let(:pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant) }
+    let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
+    context 'instance methods' do
+      let!(:no_pricing_margin) do
+        FactoryBot.create(:pricings_margin,
+                          tenant_vehicle: tenant_vehicle_1,
+                          cargo_class: 'lcl',
+                          itinerary: pricing.itinerary,
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+      let!(:pricing_margin) do
+        FactoryBot.create(:pricings_margin,
+                          pricing: pricing,
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+      let!(:dates_margin) do
+        FactoryBot.create(:pricings_margin,
+                          pricing: pricing,
+                          effective_date: Date.parse('2019/01/01'),
+                          expiration_date: Date.parse('2019/01/31'),
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+      let!(:margin) do
+        FactoryBot.create(:pricings_margin,
+                          pricing: pricing,
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+      let!(:origin_hub_margin) do
+        FactoryBot.create(:pricings_margin,
+                          origin_hub: hub,
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+      let!(:destination_hub_margin) do
+        FactoryBot.create(:pricings_margin,
+                          destination_hub: hub,
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+      let!(:all_hub_margin) do
+        FactoryBot.create(:pricings_margin,
+                          destination_hub: hub,
+                          origin_hub: hub,
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+      let!(:all_margin) do
+        FactoryBot.create(:pricings_margin,
+                          itinerary: nil,
+                          cargo_class: nil,
+                          tenant_vehicle: nil,
+                          destination_hub: nil,
+                          origin_hub: nil,
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+
+      let!(:margin_detail) { FactoryBot.create(:bas_margin_detail, margin: margin) }
+
+      describe '.get_pricing' do
+        it 'finds the pricing with pricing attached' do
+          expect(pricing_margin.get_pricing).to eq(pricing)
+        end
+        it 'finds the pricing with no pricing attached' do
+          expect(no_pricing_margin.get_pricing).to eq(pricing)
+        end
+      end
+
+      describe '.fee_code' do
+        it 'renders the fee_code with pricing attached' do
+          expect(pricing_margin.fee_code).to eq('N/A')
+        end
+        it 'renders the fee_code with no pricing attached' do
+          expect(no_pricing_margin.fee_code).to eq('N/A')
+        end
+      end
+
+      describe '.service_level' do
+        it 'renders the service level with pricing attached' do
+          expect(pricing_margin.service_level).to eq('slowly')
+        end
+        it 'renders the service level with no pricing attached' do
+          expect(no_pricing_margin.service_level).to eq('slowly')
+        end
+      end
+
+      describe '.cargo_class' do
+        it 'renders the cargo_class with pricing attached' do
+          expect(pricing_margin.cargo_class).to eq('lcl')
+        end
+        it 'renders the cargo_class with no pricing attached' do
+          expect(no_pricing_margin.cargo_class).to eq('lcl')
+        end
+      end
+
+      describe '.itinerary_name' do
+        it 'renders the itinerary_name with pricing attached' do
+          expect(pricing_margin.itinerary_name).to eq('Gothenburg - Shanghai')
+        end
+        it 'renders the itinerary_name with no pricing attached' do
+          expect(no_pricing_margin.itinerary_name).to eq('Gothenburg - Shanghai')
+        end
+        it 'renders the itinerary_name with origin hub attached' do
+          expect(origin_hub_margin.itinerary_name).to eq('Departing Gothenburg Port')
+        end
+        it 'renders the itinerary_name with destination hub attached' do
+          expect(destination_hub_margin.itinerary_name).to eq('Entering Gothenburg Port')
+        end
+        it 'renders the itinerary_name with destination hub attached' do
+          expect(all_hub_margin.itinerary_name).to eq('Gothenburg Port')
+        end
+        it 'renders the itinerary_name with destination hub attached' do
+          expect(all_margin.itinerary_name).to eq('All')
+        end
+      end
+
+      describe '.mode_of_transport' do
+        it 'renders the mode_of_transport with pricing attached' do
+          expect(pricing_margin.mode_of_transport).to eq('ocean')
+        end
+        it 'renders the mode_of_transport with no pricing attached' do
+          expect(no_pricing_margin.mode_of_transport).to eq('ocean')
+        end
+      end
+    end
+
+    context 'class methods' do
+      let!(:lcl_margin) do
+        FactoryBot.create(:pricings_margin,
+                          cargo_class: 'lcl',
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+      let!(:fcl_20_margin) do
+        FactoryBot.create(:pricings_margin,
+                          cargo_class: 'fcl_20',
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+      let!(:fcl_40_margin) do
+        FactoryBot.create(:pricings_margin,
+                          cargo_class: 'fcl_40',
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+      let!(:fcl_40_hq_margin) do
+        FactoryBot.create(:pricings_margin,
+                          cargo_class: 'fcl_40_hq',
+                          tenant: tenants_tenant,
+                          applicable: tenants_tenant)
+      end
+      describe '.for_cargo_classes' do
+        it 'finds margins for lcl cargo class' do
+          margins = ::Pricings::Margin.for_cargo_classes(['lcl'])
+          expect(margins).to eq([lcl_margin])
+        end
+        it 'finds no margins for two of three fcl classes' do
+          margins = ::Pricings::Margin.for_cargo_classes(%w(fcl_20 fcl_40_hq))
+          expect(margins).to eq([fcl_20_margin, fcl_40_hq_margin])
+        end
+      end
+    end
+  end
+end

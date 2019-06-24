@@ -1,18 +1,15 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import { v4 } from 'uuid'
-import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
-import { adminClientsTooltips as clientTip } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { filters, capitalize } from '../../helpers'
-import Checkbox from '../Checkbox/Checkbox'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
 import FileUploader from '../FileUploader/FileUploader'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
-import AdminClientTile from './AdminClientTile'
+import AdminClientGroups from './Clients/Groups'
+import AdminClientList from './Clients/List'
+import AdminClientCompanies from './Clients/Companies'
 
 class AdminClientsIndex extends Component {
   constructor (props) {
@@ -26,310 +23,159 @@ class AdminClientsIndex extends Component {
     }
   }
 
-  componentWillMount () {
-    if (this.props.clients && !this.state.searchResults.length) {
-      this.prepFilters()
-    }
-    this.prepPages()
-  }
-
   componentDidMount () {
     window.scrollTo(0, 0)
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.clients.length) {
-      this.prepFilters(nextProps.clients)
-    }
-  }
-
-  prepPages () {
-    const { clients } = this.props
-    const numPages = Math.ceil(clients.length / 12)
-    this.setState({ numPages })
-  }
-
-  prepFilters () {
-    const { clients } = this.props
-    const tmpFilters = {
-      companies: {}
-    }
-    clients.forEach((user) => {
-      tmpFilters.companies[user.company_name] = true
-    })
-    this.setState({
-      searchFilters: tmpFilters,
-      searchResults: clients
-    })
-  }
-
-  toggleFilterValue (target, key) {
-    this.setState({
-      searchFilters: {
-        ...this.state.searchFilters,
-        [target]: {
-          ...this.state.searchFilters[target],
-          [key]: !this.state.searchFilters[target][key]
-        }
-      }
-    })
-  }
-
-  handleSearchQuery (e) {
-    const { value } = e.target
-    this.setState({
-      searchFilters: {
-        ...this.state.searchFilters,
-        query: value
-      }
-    })
-  }
-
-  applyFilters (array) {
-    const { searchFilters } = this.state
-    const motKeys = Object.keys(searchFilters.companies).filter(key => searchFilters.companies[key])
-    const filter1 = array.filter(a => motKeys.includes(a.company_name))
-    let filter2
-    if (searchFilters.query && searchFilters.query !== '') {
-      filter2 = filters.handleSearchChange(
-        searchFilters.query,
-        ['first_name', 'last_name', 'company_name', 'phone', 'email'],
-        filter1
-      )
-    } else {
-      filter2 = filter1
-    }
-
-    return filter2
-  }
-
-  toggleExpander (key) {
-    this.setState({
-      expander: {
-        ...this.state.expander,
-        [key]: !this.state.expander[key]
-      }
-    })
-  }
-
-  deltaPage (val) {
-    this.setState((prevState) => {
-      const newPageVal = prevState.page + val
-      const page = (newPageVal < 1 && newPageVal > prevState.numPages) ? 1 : newPageVal
-
-      return { page }
-    })
+  toggleExpander (target) {
+    this.setState(prevState => ({ expander: { ...prevState.expander, [target]: !prevState.expander[target] } }))
   }
 
   render () {
     const {
       t, theme, adminDispatch, tabReset, scope, user
     } = this.props
-    const {
-      expander, searchFilters, searchResults, page, numPages, numPerPage
-    } = this.state
-    const sliceStartIndex = (page - 1) * numPerPage
-    const sliceEndIndex = (page * numPerPage)
-    const newButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text={t('admin:new')}
-          active
-          handleNext={this.props.toggleNewClient}
-          iconClass="fa-plus"
-        />
-      </div>
-    )
-    const isQuote = scope.closed_quotation_tool || scope.open_quotation_tool
-    const results = this.applyFilters(searchResults)
-    const typeFilters = Object.keys(searchFilters.companies).map(htk => (
-      <div className={`${styles.action_section} flex-100 layout-row layout-align-center-center layout-wrap`}>
-        <label htmlFor="companies_filter" className="flex-70">
-          <p>{capitalize(htk)}</p>
-        </label>
-        <Checkbox
-          id="companies_filter"
-          onChange={() => this.toggleFilterValue('companies', htk)}
-          checked={searchFilters.companies[htk]}
-          theme={theme}
-        />
-      </div>
-    ))
-    const dedicatedTiles = results.filter(user => user.has_pricings)
-      .slice(sliceStartIndex, sliceEndIndex)
-      .map(u => (
-        <AdminClientTile
-          key={v4()}
-          client={u}
-          theme={theme}
-          handleClick={() => adminDispatch.getClient(u.id, true)}
-          tooltip={clientTip}
-          flexClasses="flex-30 flex-xs-100 flex-sm-50 flex-md-45 flex-gt-lg-15"
-        />
-      ))
-    const openTiles = results
-      .slice(sliceStartIndex, sliceEndIndex)
-      .map(u => (
-        <AdminClientTile
-          key={v4()}
-          client={u}
-          theme={theme}
-          handleClick={() => adminDispatch.getClient(u.id, true)}
-          tooltip={clientTip}
-          flexClasses="flex-30 flex-xs-100 flex-sm-50 flex-md-45 flex-gt-lg-15"
-        />
-      ))
-    const paginationRow = (
-      <div className="flex-95 layout-row layout-align-center-center margin_bottom">
-        <div
-          className={`
-            flex-15 layout-row layout-align-center-center pointy
-            ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
-          `}
-          onClick={page > 1 ? () => this.deltaPage(-1) : null}
-        >
-          <i className="fa fa-chevron-left" />
-          <p>
-&nbsp;&nbsp;&nbsp;&nbsp;
-            {t('common:basicBack')}
-          </p>
+    const { expander } = this.state
+    const legacyTabs = (
+      <Tab
+        tabTitle={t('admin:clients')}
+        theme={theme}
+      >
+        <div className="flex-100 layout-row layout-align-start-start layout-wrap margin_top tab_size padd_10">
+          <AdminClientList />
         </div>
-        {}
-        <p>{page}</p>
-        <div
-          className={`
-            flex-15 layout-row layout-align-center-center pointy
-            ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
-          `}
-          onClick={page < numPages ? () => this.deltaPage(1) : null}
-        >
-          <p>
-            {t('common:next')}
-&nbsp;&nbsp;&nbsp;&nbsp;
-          </p>
-          <i className="fa fa-chevron-right" />
-        </div>
-      </div>
+      </Tab>
     )
+    const marginTabs = [legacyTabs, (<Tab
+      tabTitle={t('admin:companies')}
+      theme={theme}
+    >
+      <div className="flex-100 layout-row layout-align-start-start layout-wrap margin_top tab_size padd_10">
+        <AdminClientCompanies />
+      </div>
+    </Tab>),
+    (<Tab
+      tabTitle={t('admin:groups')}
+      theme={theme}
+    >
+      <div className="flex-100 layout-row layout-align-start-start layout-wrap margin_top tab_size padd_10">
+        <AdminClientGroups />
+      </div>
+    </Tab>)]
 
     return (
       <div
         className="flex-100 layout-row layout-wrap layout-align-space-between-start
         extra_padding_left"
       >
-        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
-          <Tabs
-            wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
-            paddingFixes
-            tabReset={tabReset}
-          >
-            <Tab
-              tabTitle={t('common:open')}
-              theme={theme}
-            >
-              <div className="flex-100 layout-row layout-align-start-start layout-wrap header_buffer tab_size" style={{ minHeight: '560px' }}>
-                {openTiles}
-                {paginationRow}
-              </div>
-            </Tab>
-            <Tab
-              tabTitle={t('admin:dedicated')}
-              theme={theme}
-            >
-              <div className="flex-100 layout-row layout-align-start-start layout-wrap header_buffer tab_size">
-                {dedicatedTiles}
-                {paginationRow}
-              </div>
-            </Tab>
-
-          </Tabs>
+        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.header_with_text}`}>
+          <h2 className="flex-none">{t('admin:clientsCenter')}</h2>
+          <p className="flex-40">{t('admin:clientsCenterText')}</p>
         </div>
-        <div className="flex-20 layout-wrap layout-row layout-align-end-end">
-          <SideOptionsBox
-            header={t('admin:filters')}
-            flexOptions="flex-100"
-            content={(
-              <div>
+        <div className="flex-100 layout-row layout-align-start-start ">
+          <div className={`${styles.component_view} flex layout-row layout-align-start-start`}>
+            <Tabs
+              wrapperTabs="layout-row flex-50 flex-sm-40 flex-xs-80"
+              paddingFixes
+              tabReset={tabReset}
+            >
 
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-                >
-                  <input
-                    type="text"
-                    className="flex-100"
-                    value={searchFilters.query}
-                    placeholder={t('admin:search')}
-                    onChange={e => this.handleSearchQuery(e)}
-                  />
-                </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              { scope.base_pricing ? marginTabs : legacyTabs }
+
+            </Tabs>
+          </div>
+          <div className="flex-20 layout-wrap layout-row layout-align-end-end">
+            <SideOptionsBox
+              header={t('admin:dataManager')}
+              flexOptions="flex-100"
+              content={[
+                ((user.internal || scope.feature_uploaders) ? (
                   <CollapsingBar
                     showArrow
-                    collapsed={!expander.companies}
+                    collapsed={!expander.upload}
                     theme={theme}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    handleCollapser={() => this.toggleExpander('companies')}
-                    text={t('user:company')}
-                    faClass="fa fa-building"
-                    content={typeFilters}
+                    handleCollapser={() => this.toggleExpander('upload')}
+                    text={t('admin:uploadData')}
+                    faClass="fa fa-cloud-upload"
+                    content={(
+                      <div
+                        className="flex-100 layout-row layout-wrap layout-align-center-center"
+                      >
+                        <p className="flex-100 center">{t('admin:uploadCompanies')}</p>
+                        <FileUploader
+                          theme={theme}
+                          dispatchFn={file => adminDispatch.uploadAgents(file)}
+                          type="xlsx"
+                          size="full"
+                          text={t('admin:companiesEmployees')}
+                        />
+                      </div>
+                    )}
                   />
-                </div>
-              </div>
-            )}
-          />
-          <SideOptionsBox
-            header={t('admin:dataManager')}
-            flexOptions="flex-100"
-            content={[
-              ((user.internal || scope.feature_uploaders) && isQuote ? (
-                <CollapsingBar
-                  showArrow
-                  collapsed={!expander.upload}
-                  theme={theme}
-                  styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                  handleCollapser={() => this.toggleExpander('upload')}
-                  text={t('admin:uploadData')}
-                  faClass="fa fa-cloud-upload"
-                  content={(
-                    <div
-                      className="flex-100 layout-row layout-wrap layout-align-center-center"
-                    >
-                      <p className="flex-100 center">{t('admin:uploadAgents')}</p>
-                      <FileUploader
-                        theme={theme}
-                        dispatchFn={file => adminDispatch.uploadAgents(file)}
-                        type="xlsx"
-                        size="full"
-                        text={t('admin:dedicatedPricing')}
-                      />
-                    </div>
-                  )}
-                />
-              ) : '' ),
-              (<div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <CollapsingBar
-                  showArrow
-                  collapsed={!expander.new}
-                  theme={theme}
-                  styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                  handleCollapser={() => this.toggleExpander('new')}
-                  text={t('admin:createNewClient')}
-                  faClass="fa fa-plus-circle"
-                  content={(
-                    <div
-                      className={`${
-                        styles.action_section
-                      } flex-100 layout-row layout-align-center-center layout-wrap`}
-                    >
-                      {newButton}
-                    </div>
-                  )}
-                />
-              </div>)
-            ]}
-          />
+                ) : ''),
+                (<div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <CollapsingBar
+                    showArrow
+                    collapsed={!expander.new}
+                    theme={theme}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    handleCollapser={() => this.toggleExpander('new')}
+                    text={t('admin:createNew')}
+                    faClass="fa fa-plus-circle"
+                    content={(
+                      <div
+                        className={`${
+                          styles.action_section
+                        } flex-100 layout-row layout-align-center-center layout-wrap`}
+                      >
+                        <div className="flex-none layout-row five_m">
+                          <RoundButton
+                            theme={theme}
+                            size="small"
+                            text={t('admin:newClient')}
+                            active
+                            handleNext={this.props.toggleNewClient}
+                            iconClass="fa-plus"
+                          />
+                        </div>
+                        <div className="flex-none layout-row five_m">
+                          <RoundButton
+                            theme={theme}
+                            size="small"
+                            text={t('admin:newGroup')}
+                            active
+                            handleNext={() => adminDispatch.goTo('/admin/clients/groupcreator')}
+                            iconClass="fa-plus"
+                          />
+                        </div>
+                        <div className="flex-none layout-row five_m">
+                          <RoundButton
+                            theme={theme}
+                            size="small"
+                            text={t('admin:newMargin')}
+                            active
+                            handleNext={() => adminDispatch.goTo('/admin/clients/margincreator')}
+                            iconClass="fa-plus"
+                          />
+                        </div>
+                        <div className="flex-none layout-row five_m">
+                          <RoundButton
+                            theme={theme}
+                            size="small"
+                            text={t('admin:newCompany')}
+                            active
+                            handleNext={() => adminDispatch.goTo('/admin/clients/companycreator')}
+                            iconClass="fa-plus"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  />
+                </div>)
+              ]}
+            />
+          </div>
         </div>
       </div>
     )

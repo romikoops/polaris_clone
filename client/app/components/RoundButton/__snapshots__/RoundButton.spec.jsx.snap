@@ -5,7 +5,7 @@ exports[`inverse and disabled are true 1`] = `
   className="flex-100 "
 >
   <GradientBorder
-    className="layout-row flex-100"
+    className="layout-row layout-align-center-center flex-100"
     content={
       <button
         className="round_btn_inverse neutral small false"
@@ -46,7 +46,7 @@ exports[`inverse is true 1`] = `
   className="flex-100 "
 >
   <GradientBorder
-    className="layout-row flex-100"
+    className="layout-row layout-align-center-center flex-100"
     content={
       <button
         className="round_btn_inverse neutral small clickable"

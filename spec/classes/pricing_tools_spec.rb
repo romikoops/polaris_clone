@@ -131,12 +131,12 @@ RSpec.describe PricingTools do
   end
   let(:fcl_schedules) do
     fcl_trips.map do |trip|
-      Schedule.from_trip(trip)
+      Legacy::Schedule.from_trip(trip)
     end
   end
   let(:lcl_schedules) do
     lcl_trips.map do |trip|
-      Schedule.from_trip(trip)
+      Legacy::Schedule.from_trip(trip)
     end
   end
 
@@ -146,16 +146,16 @@ RSpec.describe PricingTools do
       fcl_40 = create(:container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
       fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
       cargos = [fcl_20, fcl_40, fcl_40_hq]
-      local_charges_data = described_class.find_local_charge(fcl_schedules.first, cargos, 'export', user)
-      expect(local_charges_data.length).to eq(2)
-      expect(local_charges_data.first.length).to eq(3)
+      local_charges_data = described_class.new(user: user, shipment: shipment).find_local_charge(fcl_schedules, cargos, 'export', user)
+      expect(local_charges_data.values.first.length).to eq(2)
+      expect(local_charges_data.values.first.first.length).to eq(3)
     end
 
     it 'returns the correct number of charges for single cargo classes (LCL)' do
       lcl = create(:cargo_item, shipment_id: shipment.id)
-      local_charges_data = described_class.find_local_charge(lcl_schedules.first, [lcl], 'export', user)
-      expect(local_charges_data.length).to eq(2)
-      expect(local_charges_data.first.length).to eq(1)
+      local_charges_data = described_class.new(user: user, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user)
+      expect(local_charges_data.values.first.length).to eq(2)
+      expect(local_charges_data.values.length).to eq(1)
     end
   end
 
@@ -167,7 +167,7 @@ RSpec.describe PricingTools do
         fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
         cargos = [fcl_20, fcl_40, fcl_40_hq]
         scope = { cargo: { backend: true } }.with_indifferent_access
-        cargo_objects = described_class.cargo_hash_for_local_charges(cargos, scope)
+        cargo_objects = described_class.new(user: user, shipment: shipment).cargo_hash_for_local_charges(cargos, scope)
         expect(cargo_objects.length).to eq(1)
       end
     end
@@ -179,7 +179,7 @@ RSpec.describe PricingTools do
         fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
         cargos = [fcl_20, fcl_40, fcl_40_hq]
         scope = { cargo: { backend: false } }.with_indifferent_access
-        cargo_objects = described_class.cargo_hash_for_local_charges(cargos, scope)
+        cargo_objects = described_class.new(user: user, shipment: shipment).cargo_hash_for_local_charges(cargos, scope)
         expect(cargo_objects.length).to eq(3)
       end
     end

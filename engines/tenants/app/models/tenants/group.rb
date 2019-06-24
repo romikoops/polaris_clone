@@ -7,6 +7,8 @@ module Tenants
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
     belongs_to :tenant, class_name: 'Tenants::Tenant'
     has_many :memberships, class_name: 'Tenants::Membership'
+    has_many :group_memberships, class_name: 'Tenants::Membership', as: :member
+    has_many :groups, through: :group_memberships, as: :member
 
     pg_search_scope :search, against: %i(name), using: {
       tsearch: { prefix: true }
@@ -15,12 +17,8 @@ module Tenants
     def members
       memberships.map do |m|
         member = m.member
-        member.responds_to?(:legacy) ? member.legacy : member
+        member.respond_to?(:legacy) ? member.legacy : member
       end
-    end
-
-    def member_list
-      memberships.map(&:for_list_json)
     end
 
     def member_count
@@ -28,29 +26,11 @@ module Tenants
     end
 
     def margins
-      Margins::Margin.where(applicable: self)
-    end
-
-    def margins_list
-      margins.map(&:for_list_json)
+      Pricings::Margin.where(applicable: self)
     end
 
     def margin_count
       margins.size
-    end
-
-    def for_index_json(options = {})
-      new_options = options.reverse_merge(
-        methods: %i(member_count margin_count)
-      )
-      as_json(new_options)
-    end
-
-    def for_show_json(options = {})
-      new_options = options.reverse_merge(
-        methods: %i(member_list margins_list)
-      )
-      as_json(new_options)
     end
   end
 end

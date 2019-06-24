@@ -111,6 +111,19 @@ export default function bookingProcess (state = initialState, action) {
         ...state,
         availableMots: action.payload
       }
+    case 'GET_BOOKING_CONTACTS_REQUEST':
+      return state
+    case 'GET_BOOKING_CONTACTS_SUCCESS':
+      return {
+        ...state,
+        BookingDetails: {
+          ...state.BookingDetails,
+          contactsData: action.payload
+        }
+      }
+
+    case 'GET_BOOKING_CONTACTS_CLEAR':
+      return state
     default:
       return state
   }

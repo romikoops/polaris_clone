@@ -186,18 +186,6 @@ exports[`shallow render 1`] = `
               className="flex-none letter_3"
             />
           </div>
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
-          >
-            <h4
-              className="flex-none letter_3"
-            >
-              Client: 
-            </h4>
-            <h4
-              className="flex-none letter_3"
-            />
-          </div>
         </div>
       </div>
       <div
@@ -4683,18 +4671,6 @@ exports[`steps.cargoClass is true 1`] = `
               className="flex-none letter_3"
             />
           </div>
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
-          >
-            <h4
-              className="flex-none letter_3"
-            >
-              Client: 
-            </h4>
-            <h4
-              className="flex-none letter_3"
-            />
-          </div>
         </div>
       </div>
       <div
@@ -5188,38 +5164,6 @@ exports[`steps.hubRoute is true 1`] = `
             <h4
               className="flex-none letter_3"
             />
-          </div>
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-start"
-          >
-            <div
-              className="flex-100 layout-row layout-align-start-center"
-            >
-              <h4
-                className="flex-100 letter_3"
-              >
-                Select users this pricing applies to
-              </h4>
-              <div
-                className="flex-75 layout-row"
-              >
-                <NamedSelect
-                  className="flex-100"
-                  classes="select"
-                  name="client"
-                  onChange={[Function]}
-                  options={
-                    Array [
-                      Object {
-                        "label": "Open",
-                        "value": "OPEN",
-                      },
-                    ]
-                  }
-                  value={false}
-                />
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -5728,18 +5672,6 @@ exports[`steps.route is true 1`] = `
               </div>
             </div>
           </div>
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
-          >
-            <h4
-              className="flex-none letter_3"
-            >
-              Client: 
-            </h4>
-            <h4
-              className="flex-none letter_3"
-            />
-          </div>
         </div>
       </div>
       <div
@@ -6247,18 +6179,6 @@ exports[`steps.transportCategory is true 1`] = `
               className="flex-none letter_3"
             />
           </div>
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
-          >
-            <h4
-              className="flex-none letter_3"
-            >
-              Client: 
-            </h4>
-            <h4
-              className="flex-none letter_3"
-            />
-          </div>
         </div>
       </div>
       <div
@@ -6748,18 +6668,6 @@ exports[`theme is falsy 1`] = `
               className="flex-none letter_3"
             >
               Sub Route: 
-            </h4>
-            <h4
-              className="flex-none letter_3"
-            />
-          </div>
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
-          >
-            <h4
-              className="flex-none letter_3"
-            >
-              Client: 
             </h4>
             <h4
               className="flex-none letter_3"

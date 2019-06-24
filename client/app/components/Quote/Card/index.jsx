@@ -114,7 +114,7 @@ class QuoteCard extends PureComponent {
       charge_trip_id: result.meta.charge_trip_id
     }
 
-    selectResult({ schedule: ammendedSchedule, total: result.quote.total })
+    selectResult({ schedule: ammendedSchedule, total: result.quote.total, meta: result.meta })
   }
 
   handleSchedulesRequest (delta) {
@@ -126,28 +126,32 @@ class QuoteCard extends PureComponent {
 
   buttonToDisplay () {
     const { tenant, result, t } = this.props
-    const { scope } = tenant
+    const { scope, theme } = tenant
     const { showSchedules } = this.state
     const showPriceBreakdownBtn = (
-      <div
-        className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
-        onClick={() => this.toggleShowSchedules('prices')}
-      >
-        <p className="flex-none">{t('quote:viewPriceBreakdown')}</p>
-      </div>
+      <RoundButton
+        active
+        size="full"
+        classNames={`pointy layout-row layout-align-center-center ${styles.add_button}`}
+        handleNext={() => this.toggleShowSchedules('prices')}
+        theme={theme}
+        text={t('quote:viewPriceBreakdown')}
+      />
     )
     const showSchedulesBtn = (
-      <div
-        className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
-        onClick={() => this.toggleShowSchedules('schedules')}
-      >
-        <p className="flex-none">{t('quote:viewSchedules')}</p>
-      </div>
+      <RoundButton
+        active
+        size="full"
+        classNames={`pointy layout-row layout-align-center-center ${styles.add_button}`}
+        handleNext={() => this.toggleShowSchedules('schedules')}
+        theme={theme}
+        text={t('quote:viewSchedules')}
+      />
     )
 
     if (scope.detailed_billing && result.schedules.length > 0 && result.schedules[0].eta !== null) {
       return (
-        <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
+        <div className="flex-33 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
           {showSchedules ? showPriceBreakdownBtn : showSchedulesBtn}
         </div>
       )
@@ -155,13 +159,13 @@ class QuoteCard extends PureComponent {
 
     if (!scope.detailed_billing && result.schedules.length > 1) {
       return (
-        <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
+        <div className="flex layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
       )
     }
 
     if (!scope.detailed_billing && (!result.schedules || result.schedules.length < 1)) {
       return (
-        <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
+        <div className="flex layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
       )
     }
 
@@ -327,33 +331,39 @@ class QuoteCard extends PureComponent {
         </CollapsingContent>
         <div className="flex-100 layout-wrap layout-align-start-stretch">
           <div className={`flex-100 layout-row layout-align-space-between-stretch layout-wrap ${styles.total_row}`}>
+            { isQuote(tenant)
+              ? '' : (
+                <div className="flex-40 layout-row layout-align-start-center" >
+                  {this.buttonToDisplay()}
+                </div>
+              ) }
 
-            <div className={`${isQuote(tenant) ? 'flex' : 'flex-40'} layout-row layout-align-start-center`}>
-              <span style={{ textAlign: 'right' }}>{hideGrandTotal ? '' : t('common:total')}</span>
-            </div>
-            <div className={`${isQuote(tenant) ? 'flex-75' : 'flex'}  layout-row layout-align-end-center`}>
-              <p style={!isQuote(tenant) ? { paddingRight: '18px' } : {}}>
+            <div className={`${isQuote(tenant) ? 'flex-100' : 'flex'}  layout-row layout-align-end-center`}>
+              {isQuote(tenant) && onClickAdd ? (
+                <div className=" flex-33 layout-row layout-align-end-center">
+                  <RoundButton
+                    active={!this.state.isChecked}
+                    flexContainer="100"
+                    classNames={`ccb_select_quote pointy layout-row layout-align-center-center ${styles.add_button}`}
+                    size="full"
+                    handleNext={() => this.handleClickChecked()}
+                    theme={theme}
+                    text={!this.state.isChecked ? t('common:select') : t('common:remove')}
+                  />
+                </div>
+              ) : ''}
+              <p className="flex" style={{ textAlign: 'right' }}>{hideGrandTotal ? '' : t('common:total')}</p>
+              <p
+                style={{ paddingRight: '18px' }}
+                className="flex"
+              >
                 {hideGrandTotal
                   ? ''
                   : `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`}
               </p>
-              {isQuote(tenant) && onClickAdd ? (
-                <div className="flex-gt-md-25 flex-33 layout-row layout-align-end-center">
-                  <RoundButton
-                    active={!this.state.isChecked}
-                    flexContainer="100"
-                    classNames={`ccb_select_quote pointy layout-row layout-align-center-center ${styles.add_button} ${!this.state.isChecked ? styles.shorter : styles.longer}`}
-                    size="small"
-                    handleNext={() => this.handleClickChecked()}
-                    theme={theme}
-                    text={!this.state.isChecked ? t('common:add') : t('common:remove')}
-                  />
-                </div>
-              ) : ''}
-
             </div>
             <div className="flex-100 layout-row layout-align-end-center">
-              {this.buttonToDisplay()}
+
               <div className="flex-60 layout-row layout-align-end-center layout-wrap">
                 { scope.offer_disclaimers && scope.offer_disclaimers.length
                   ? scope.offer_disclaimers.map(disclaimer => <p className={`flex-100 ${styles.disclaimers}`}>{t(`disclaimers:${disclaimer}`, { carrier: result.meta.carrier_name })}</p>)

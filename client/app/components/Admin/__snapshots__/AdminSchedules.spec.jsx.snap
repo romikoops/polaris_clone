@@ -103,6 +103,7 @@ exports[`document.viewer is truthy 1`] = `
                                   square={false}
                                   t={[Function]}
                                   target="schedules"
+                                  targetOptions={Array []}
                                   theme={
                                     Object {
                                       "colors": Object {
@@ -123,6 +124,7 @@ exports[`document.viewer is truthy 1`] = `
                           hideIcon={false}
                           mainWrapperStyle={Object {}}
                           minHeight=""
+                          overflow={false}
                           parentClass=""
                           showArrow={true}
                           showArrowSpacer={false}
@@ -272,6 +274,7 @@ exports[`shallow render 1`] = `
                                   square={false}
                                   t={[Function]}
                                   target="schedules"
+                                  targetOptions={Array []}
                                   theme={
                                     Object {
                                       "colors": Object {
@@ -292,6 +295,7 @@ exports[`shallow render 1`] = `
                           hideIcon={false}
                           mainWrapperStyle={Object {}}
                           minHeight=""
+                          overflow={false}
                           parentClass=""
                           showArrow={true}
                           showArrowSpacer={false}
@@ -618,6 +622,7 @@ exports[`user.internal is truthy 1`] = `
                           hideIcon={false}
                           mainWrapperStyle={Object {}}
                           minHeight=""
+                          overflow={false}
                           parentClass=""
                           showArrow={true}
                           showArrowSpacer={false}
@@ -655,6 +660,7 @@ exports[`user.internal is truthy 1`] = `
                                   square={false}
                                   t={[Function]}
                                   target="schedules"
+                                  targetOptions={Array []}
                                   theme={
                                     Object {
                                       "colors": Object {
@@ -675,6 +681,7 @@ exports[`user.internal is truthy 1`] = `
                           hideIcon={false}
                           mainWrapperStyle={Object {}}
                           minHeight=""
+                          overflow={false}
                           parentClass=""
                           showArrow={true}
                           showArrowSpacer={false}
@@ -731,6 +738,7 @@ exports[`user.internal is truthy 1`] = `
                           hideIcon={false}
                           mainWrapperStyle={Object {}}
                           minHeight=""
+                          overflow={false}
                           parentClass=""
                           showArrow={true}
                           showArrowSpacer={false}

@@ -38,12 +38,13 @@ export class NamedSelect extends Component {
       color: 'rgba(211, 104, 80, 1)'
     }
   }
-  onChangeFunc (optionSelected) {
-    const modifiedOptionSelected = Object.assign({}, optionSelected)
-    modifiedOptionSelected.name = this.props.name
 
+  onChangeFunc (optionSelected) {
+    const modifiedOptionSelected = optionSelected
+    modifiedOptionSelected.name = this.props.name
     this.props.onChange(modifiedOptionSelected)
   }
+
   render () {
     const props = Object.assign({}, this.props)
     delete props.onChange
@@ -56,12 +57,6 @@ export class NamedSelect extends Component {
       />
     )
   }
-}
-
-NamedSelect.propTypes = {
-  name: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  ...Select.propTypes
 }
 
 export default NamedSelect

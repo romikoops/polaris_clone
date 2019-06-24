@@ -19,6 +19,7 @@ RSpec.describe TruckingTools do
   let(:destination_stop) { create(:stop, index: 1, hub_id: destination_hub.id, layovers: [destination_layover]) }
   let(:origin_layover) { create(:layover, stop_index: 0, trip: trip) }
   let(:destination_layover) { create(:layover, stop_index: 1, trip: trip) }
+  let(:default_trucking_pricing) { create(:trucking_pricing, cbm_ratio: 250, load_meterage: {}, tenant: tenant) }
   let(:cargo_object) do
     {
       'stackable' => {
@@ -79,19 +80,19 @@ RSpec.describe TruckingTools do
       aggregated_cargo = create(:aggregated_cargo, shipment_id: shipment.id, volume: 3.0, weight: 1500)
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 1000)
 
-      described_class.calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, aggregated_cargo)
+      described_class.new(trucking_pricing, [aggregated_cargo], 0, 'pre', user).calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, aggregated_cargo)
       expect(cargo_object['stackable']['weight']).to eq(3000)
     end
     it 'calculates the correct trucking weight for aggregate cargo with weight gt vol' do
       aggregated_cargo = create(:aggregated_cargo, shipment_id: shipment.id, volume: 1.5, weight: 3000)
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 1000)
 
-      described_class.calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, aggregated_cargo)
+      described_class.new(trucking_pricing, [aggregated_cargo], 0, 'pre', user).calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, aggregated_cargo)
       expect(cargo_object['stackable']['weight']).to eq(3000)
     end
   end
 
-  describe '.get_cargo_item_object' do
+  describe '.cargo_item_object' do
     it 'correctly consolidates the cargo values for scope consolidation.trucking.calculation' do
       cargo_1 = create(:cargo_item,
                        shipment_id: shipment.id,
@@ -109,7 +110,7 @@ RSpec.describe TruckingTools do
                        quantity: 2)
       create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'calculation': true } } })
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 250, load_meterage: {}, tenant: tenant)
-      cargo_object = described_class.get_cargo_item_object(trucking_pricing, [cargo_1, cargo_2])
+      cargo_object = described_class.new(trucking_pricing, [cargo_1, cargo_2], 0, 'pre', user).cargo_item_object
       expect(cargo_object['stackable']['weight']).to eq(1056)
     end
 
@@ -145,7 +146,7 @@ RSpec.describe TruckingTools do
                                   area: 48_000
                                 },
                                 tenant: tenant)
-      cargo_object = described_class.get_cargo_item_object(trucking_pricing, cargos)
+      cargo_object = described_class.new(trucking_pricing, cargos, 0, 'pre', user).cargo_item_object
       expect(cargo_object['stackable']['weight'].to_i).to eq(234)
     end
 
@@ -154,7 +155,7 @@ RSpec.describe TruckingTools do
 
       create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'calculation': true } } })
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 250, load_meterage: {}, tenant: tenant)
-      cargo_object = described_class.get_cargo_item_object(trucking_pricing, [aggregated_cargo])
+      cargo_object = described_class.new(trucking_pricing, [aggregated_cargo], 0, 'pre', user).cargo_item_object
       expect(cargo_object['stackable']['weight']).to eq(3000)
     end
 
@@ -176,7 +177,7 @@ RSpec.describe TruckingTools do
 
       create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'load_meterage_only': true } } })
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 250, load_meterage: {}, tenant: tenant)
-      cargo_object = described_class.get_cargo_item_object(trucking_pricing, [cargo_1, cargo_2])
+      cargo_object = described_class.new(trucking_pricing, [cargo_1, cargo_2], 0, 'pre', user).cargo_item_object
       expect(cargo_object['stackable']['weight']).to eq(1136)
     end
   end
@@ -184,8 +185,8 @@ RSpec.describe TruckingTools do
   context 'value extractors' do
     describe '.trucking_payload_weight' do
       it 'correctly returns the combined payload weight of all items in item group' do
-        payload_1 = described_class.trucking_payload_weight(default_cargos.first)
-        payload_2 = described_class.trucking_payload_weight(default_cargos.last)
+        payload_1 = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).trucking_payload_weight(default_cargos.first)
+        payload_2 = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).trucking_payload_weight(default_cargos.last)
         expect(payload_1).to eq(200)
         expect(payload_2).to eq(800)
       end
@@ -193,8 +194,8 @@ RSpec.describe TruckingTools do
 
     describe '.cargo_volume' do
       it 'correctly returns the combined volume of all items in item group' do
-        volume_1 = described_class.cargo_volume(default_cargos.first)
-        volume_2 = described_class.cargo_volume(default_cargos.last)
+        volume_1 = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_volume(default_cargos.first)
+        volume_2 = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_volume(default_cargos.last)
         expect(volume_1).to eq(1.344)
         expect(volume_2).to eq(2.88)
       end
@@ -202,44 +203,44 @@ RSpec.describe TruckingTools do
 
     describe '.cargos_volume' do
       it 'correctly returns the combined volume of all items in item groups' do
-        volume_1 = described_class.cargos_volume(default_cargos)
+        volume_1 = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargos_volume(default_cargos)
         expect(volume_1).to eq(4.224)
       end
     end
 
     describe '.cargo_quantity' do
       it 'correctly returns the quantity of an item' do
-        quantity = described_class.cargo_quantity(default_cargos.last)
+        quantity = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_quantity(default_cargos.last)
         expect(quantity).to eq(2)
       end
       it 'correctly returns the default quantity of1 for agg cargo' do
         agg_cargo = create(:aggregated_cargo, volume: 1.5, weight: 1000)
-        quantity = described_class.cargo_quantity(agg_cargo)
+        quantity = described_class.new(default_trucking_pricing, [agg_cargo], 0, 'pre', user).cargo_quantity(agg_cargo)
         expect(quantity).to eq(1)
       end
     end
 
     describe '.cargo_data_value' do
       it 'correctly returns the dimension_x of an item' do
-        dimension_x = described_class.cargo_data_value(:dimension_x, default_cargos.last)
+        dimension_x = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_data_value(:dimension_x, default_cargos.last)
         expect(dimension_x).to eq(120)
       end
       it 'correctly returns the dimension_x of an hash item' do
-        dimension_x = described_class.cargo_data_value(:dimension_x, consolidated_cargo)
+        dimension_x = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_data_value(:dimension_x, consolidated_cargo)
         expect(dimension_x).to eq(300)
       end
     end
 
     describe '.cargo_unit_volume' do
       it 'correctly returns the unit volume of all items in item group' do
-        volume_1 = described_class.cargo_unit_volume(default_cargos.first)
-        volume_2 = described_class.cargo_unit_volume(default_cargos.last)
+        volume_1 = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_unit_volume(default_cargos.first)
+        volume_2 = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_unit_volume(default_cargos.last)
         expect(volume_1).to eq(1.344)
         expect(volume_2).to eq(1.44)
       end
       it 'correctly returns the unit volume of agg cargo' do
         agg_cargo = create(:aggregated_cargo, volume: 1.5, weight: 1000)
-        volume_1 = described_class.cargo_unit_volume(agg_cargo)
+        volume_1 = described_class.new(default_trucking_pricing, [agg_cargo], 0, 'pre', user).cargo_unit_volume(agg_cargo)
         expect(volume_1).to eq(1.5)
       end
     end
@@ -247,8 +248,8 @@ RSpec.describe TruckingTools do
     describe '.trucking_cbm_weight' do
       it 'correctly returns the combined cbm weight of all items in item group' do
         trucking_pricing = create(:trucking_pricing, cbm_ratio: 200)
-        cbm_1 = described_class.trucking_cbm_weight(trucking_pricing, default_cargos.first)
-        cbm_2 = described_class.trucking_cbm_weight(trucking_pricing, default_cargos.last)
+        cbm_1 = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).trucking_cbm_weight(trucking_pricing, default_cargos.first)
+        cbm_2 = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).trucking_cbm_weight(trucking_pricing, default_cargos.last)
         expect(cbm_1).to eq(268.8)
         expect(cbm_2).to eq(576)
       end
@@ -256,7 +257,7 @@ RSpec.describe TruckingTools do
       it 'correctly returns the combined cbm weight of all items in item group' do
         trucking_pricing = create(:trucking_pricing, cbm_ratio: 200)
         agg_cargo = create(:aggregated_cargo, volume: 1.5, weight: 1000)
-        cbm = described_class.trucking_cbm_weight(trucking_pricing, agg_cargo)
+        cbm = described_class.new(trucking_pricing, [agg_cargo], 0, 'pre', user).trucking_cbm_weight(trucking_pricing, agg_cargo)
         expect(cbm).to eq(300)
       end
     end
@@ -264,8 +265,8 @@ RSpec.describe TruckingTools do
     describe '.trucking_chargeable_weight_by_stacked_area' do
       it 'correctly returns the combined cbm weight of all items in item group' do
         trucking_pricing = create(:trucking_pricing, load_meterage: { ratio: 1000 })
-        tcw_1 = described_class.trucking_chargeable_weight_by_stacked_area(trucking_pricing, default_cargos.first)
-        tcw_2 = described_class.trucking_chargeable_weight_by_stacked_area(trucking_pricing, default_cargos.last)
+        tcw_1 = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).trucking_chargeable_weight_by_stacked_area(trucking_pricing, default_cargos.first)
+        tcw_2 = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).trucking_chargeable_weight_by_stacked_area(trucking_pricing, default_cargos.last)
         expect(tcw_1).to eq(400)
         expect(tcw_2).to eq(800)
       end
@@ -274,8 +275,8 @@ RSpec.describe TruckingTools do
     describe '.trucking_chargeable_weight_by_height' do
       it 'correctly returns the combined cbm weight of all items in item group' do
         trucking_pricing = create(:trucking_pricing, load_meterage: { ratio: 1000 })
-        tcw_1 = described_class.trucking_chargeable_weight_by_height(trucking_pricing, default_cargos.first)
-        tcw_2 = described_class.trucking_chargeable_weight_by_height(trucking_pricing, default_cargos.last)
+        tcw_1 = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).trucking_chargeable_weight_by_height(trucking_pricing, default_cargos.first)
+        tcw_2 = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).trucking_chargeable_weight_by_height(trucking_pricing, default_cargos.last)
         expect(tcw_1).to eq(400)
         expect(tcw_2).to eq(800)
       end
@@ -284,8 +285,8 @@ RSpec.describe TruckingTools do
     describe '.trucking_chargeable_weight_by_area' do
       it 'correctly returns the combined cbm weight of all items in item group' do
         trucking_pricing = create(:trucking_pricing, load_meterage: { ratio: 1000 })
-        tcw_1 = described_class.trucking_chargeable_weight_by_area(trucking_pricing, default_cargos.first)
-        tcw_2 = described_class.trucking_chargeable_weight_by_area(trucking_pricing, default_cargos.last)
+        tcw_1 = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).trucking_chargeable_weight_by_area(trucking_pricing, default_cargos.first)
+        tcw_2 = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).trucking_chargeable_weight_by_area(trucking_pricing, default_cargos.last)
         expect(tcw_1).to eq(400)
         expect(tcw_2).to eq(800)
       end
@@ -294,7 +295,7 @@ RSpec.describe TruckingTools do
     describe '.calc_cargo_load_meterage_height' do
       it 'correctly returns the loadmeterage values' do
         trucking_pricing = create(:trucking_pricing, load_meterage: { ratio: 1000, height: 130 })
-        result_object = described_class.calc_cargo_load_meterage_height(trucking_pricing, cargo_object, default_cargos.first)
+        result_object = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).calc_cargo_load_meterage_height(trucking_pricing, cargo_object, default_cargos.first)
 
         expect(result_object.dig('non_stackable', 'weight')).to eq(618.24)
         expect(result_object.dig('non_stackable', 'volume')).to eq(1.344)
@@ -305,7 +306,7 @@ RSpec.describe TruckingTools do
     describe '.calc_cargo_load_meterage_area' do
       it 'correctly returns the loadmeterage values' do
         trucking_pricing = create(:trucking_pricing, load_meterage: { ratio: 1000, area: 48000 })
-        result_object = described_class.calc_cargo_load_meterage_area(trucking_pricing, cargo_object, ldm_cargo)
+        result_object = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).calc_cargo_load_meterage_area(trucking_pricing, cargo_object, ldm_cargo)
 
         expect(result_object.dig('non_stackable', 'weight')).to eq(3091.2)
         expect(result_object.dig('non_stackable', 'volume')).to eq(33.6)

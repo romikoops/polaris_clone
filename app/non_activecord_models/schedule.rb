@@ -95,7 +95,7 @@ class Schedule
       ]
     )
     ActiveRecord::Base.connection.exec_query(sanitized_query).map do |attributes|
-      Schedule.new(attributes.merge(id: SecureRandom.uuid))
+      Legacy::Schedule.new(attributes.merge(id: SecureRandom.uuid))
     end
   end
 

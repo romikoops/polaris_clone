@@ -30,25 +30,25 @@ RSpec.describe ExcelDataServices::DatabaseInserters::ChargeCategories do
     end
 
     it 'finds and replaces all other Charge Categories for that tenant' do
-      charges = (1..2).map do |i|
+      charges = [
         create(
           :charge,
           charge_category: create(:charge_category,
                                   code: 'ams',
-                                  name: "#{i}_test",
+                                  name: 'test',
                                   tenant_id: tenant.id),
           children_charge_category: create(:charge_category,
                                            code: 'thc',
-                                           name: "#{i}_test",
+                                           name: 'test',
                                            tenant_id: tenant.id)
         )
-      end
+      ]
 
       stats = described_class.insert(tenant: tenant, data: data, options: {})
       new_ams_charge = ChargeCategory.find_by(code: 'ams', tenant_id: tenant.id)
       new_thc_charge = ChargeCategory.find_by(code: 'thc', tenant_id: tenant.id)
       charge_ids = charges.map(&:id)
-      expect(stats.dig(:charge_categories, :number_created)).to be(14)
+      expect(stats.dig(:charge_categories, :number_created)).to be(12)
       expect(ChargeCategory.where(code: 'ams', tenant_id: tenant.id).count).to eq(1)
       expect(ChargeCategory.where(code: 'thc', tenant_id: tenant.id).count).to eq(1)
       charges = Charge.where(id: charge_ids)

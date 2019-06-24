@@ -14,7 +14,8 @@ const propsBase = {
   target: 'FOO_TARGET',
   loading: false,
   square: false,
-  options: {}
+  options: {},
+  targetOptions: []
 }
 
 test('shallow render', () => {

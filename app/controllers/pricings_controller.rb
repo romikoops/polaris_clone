@@ -5,7 +5,7 @@ class PricingsController < ApplicationController
 
   def index
     tenant = current_user.tenant
-    closed_quotation_tool = ::Tenants::ScopeService.new(user: current_user).fetch(:closed_quotation_tool)
+    closed_quotation_tool = ::Tenants::ScopeService.new(target: current_user).fetch(:closed_quotation_tool)
     if closed_quotation_tool
       user_pricing_id = current_user.agency.agency_manager_id
       @pricings = tenant.pricings.where(user_id: user_pricing_id)

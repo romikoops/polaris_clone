@@ -55,6 +55,7 @@ Rails.application.routes.draw do
       post 'hubs/:hub_id/image', to: 'hubs#update_image'
       post 'hubs/process_csv', to: 'hubs#overwrite', as: :hubs_overwrite
       get  'hubs/sheet/download',  to: 'hubs#download_hubs'
+      get 'hubs/search/options', to: 'hubs#options_search'
       post 'user_managers/assign', to: 'user_managers#assign'
       resources :itineraries, only: %i(index show create destroy) do
         resources :notes, only: :delete
@@ -68,6 +69,21 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :scopes, only: %i(index show create destroy)
+      resources :margins, only: %i(index show create destroy) do
+        collection do
+          post :upload
+          post :download
+        end
+      end
+      post 'companies/:id/edit_employees', to: 'companies#edit_employees'
+      get 'margins/form/data', to: 'margins#form_data'
+      get 'margins/test/data', to: 'margins#test'
+      get 'margins/form/itineraries', to: 'margins#itinerary_list'
+      get 'margins/form/fee_data', to: 'margins#fee_data'
+      post 'margins/update/multiple', to: 'margins#update_multiple'
+      get 'memberships/membership_data', to: 'memberships#membership_data'
+      post 'memberships/bulk_edit', to: 'memberships#bulk_edit'
       get 'maps/geojsons', to: 'maps#geojsons'
       get 'maps/geojson', to: 'maps#geojson'
       post 'maps/country_overlay', to: 'maps#country_overlay'
@@ -78,14 +94,17 @@ Rails.application.routes.draw do
       post 'pricings/train_and_ocean_pricings/process_csv',
            to: 'pricings#overwrite_main_carriage', as: :main_carriage_pricings_overwrite
       post 'pricings/update/:id', to: 'pricings#update_price'
+      post 'pricings/:id/disable', to: 'pricings#disable'
       post 'pricings/assign_dedicated', to: 'pricings#assign_dedicated'
-
       post 'itineraries/process_csv', to: 'itineraries#overwrite', as: :itineraries_overwrite
       get 'itineraries/:id/layovers', to: 'schedules#layovers'
       get 'itineraries/:id/stops', to: 'itineraries#stops'
       resources :vehicle_types, only: [:index]
       resources :clients, only: %i(index show create destroy)
-
+      resources :companies, only: %i(index show create destroy)
+      resources :groups, only: %i(index show create destroy)
+      post 'groups/:id/edit_members', to: 'groups#edit_members'
+      get 'groups/with_margins', to: 'groups#with_margins'
       resources :open_pricings, only: [:index]
       post 'open_pricings/ocean_lcl_pricings/process_csv', to: 'open_pricings#overwrite_main_lcl_carriage', as: :open_main_lcl_carriage_pricings_overwrite
       # post "open_pricings/train_and_ocean_pricings/process_csv",
@@ -212,5 +231,6 @@ Rails.application.routes.draw do
     post 'messaging/mark' => 'notifications#mark_as_read'
     post 'clear_shoryuken' => 'application#clear_shoryuken'
     get 'content/component/:component' => 'contents#component'
+    get 'booking_process/contacts', to: 'contacts#booking_process'
   end
 end

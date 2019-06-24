@@ -47,9 +47,9 @@ class ContactSetterNewContactWrapper extends PureComponent {
     return (
       <div className={`${styles.new_contact_wrapper} ${thinClass} `} >
         { backArrow }
-        <div className={`${styles.title_sec} layout-row layout-align-center`}>
+        {/* <div className={`${styles.title_sec} layout-row layout-align-center`}>
           <ContactSetterNewContactWrapperTitle contactType={contactType} />
-        </div>
+        </div> */}
         <div className={styles.body}>
           <Comp {...compProps} />
         </div>

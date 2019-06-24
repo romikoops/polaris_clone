@@ -365,6 +365,8 @@
                               "Consolidated Freight Rate"
                             elsif 'cargo' == charge_key && scope['fine_fee_detail'] && sub_charge['key'].include?('unknown')
                               "#{s.mode_of_transport.capitalize} Freight: #{sub_charge['name']}"
+                            elsif 'cargo' == charge_key && scope['fine_fee_detail'] && sub_charge['key'].include?('included')
+                              "#{sub_charge['key'].delete('included_')}: #{sub_charge['name']}"
                             elsif 'cargo' == charge_key && !scope['fine_fee_detail']
                               "#{s.mode_of_transport.capitalize} Freight Rate #{i + 1}"
                             elsif ['trucking_on', 'trucking_pre'].include?(charge_key)

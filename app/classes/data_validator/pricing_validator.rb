@@ -5,7 +5,6 @@ module DataValidator
     attr_reader :path, :user, :port_object
     include OfferCalculatorService
     include AwsConfig
-    include CurrencyTools
     include DocumentService
 
     def post_initialize(args)
@@ -20,7 +19,8 @@ module DataValidator
       @fee_keys = {}
       @examples = []
       @sheet_rows = []
-      @scope = ::Tenants::ScopeService.new(user: @user).fetch
+      tenants_tenant = Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
+      @scope         = ::Tenants::ScopeService.new(target: @user, tenant: tenants_tenant).fetch
     end
 
     def perform
@@ -215,6 +215,7 @@ module DataValidator
       @data_for_price_checker = example[:data]
       @data_for_price_checker[:trucking] = @trucking_data
       @data_for_price_checker[:shipment] = @shipment
+      @data_for_price_checker[:itinerary] = example[:data][:itinerary]
       @data_for_price_checker[:has_on_carriage] = example[:data][:delivery_address]
       @data_for_price_checker[:has_pre_carriage] = example[:data][:pickup_address]
       @data_for_price_checker[:service_level] = @tenant.tenant_vehicles.find_by(
@@ -222,6 +223,7 @@ module DataValidator
         carrier: Carrier.find_by_name(example[:data][:carrier]),
         mode_of_transport: example[:data][:mode_of_transport]
       )
+      @data_for_price_checker[:schedules] = prep_faux_schedules(example)
 
       @data_for_price_checker[:cargo_units] = example[:data][:cargo_units]
       @data_for_price_checker[:pricing] = determine_pricing(@example)
@@ -229,39 +231,128 @@ module DataValidator
     end
 
     def determine_pricing(example) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-      start_date = example[:data][:date]
-      end_date = start_date + 7.days
-      result_to_return = {}
+      base_date = example[:data][:date]
+      schedules = example[:data][:schedules]
+      result_to_return = []
       cargo_classes = @shipment.aggregated_cargo ? ['lcl'] : @shipment.cargo_units.pluck(:cargo_class)
-      user_pricing_id = @user.role.name == 'agent' ? @user.agency_pricing_id : @user.id
+      schedules.sort_by!(&:eta)
+
+      dates = extract_dates_and_quote(schedules)
+      user_pricing_id = @scope['base_pricing'] ? user.id : user.pricing_id
+
       # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
-      tenant_vehicle_id = @data_for_price_checker[:service_level].id
-      pricings_by_cargo_class = example[:data][:itinerary].pricings
-                                                          .where(tenant_vehicle_id: tenant_vehicle_id)
-                                                          .for_cargo_classes(cargo_classes)
-      pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date) if start_date && end_date
-      pricings_by_cargo_class = pricings_by_cargo_class
-                                .select { |pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil? }
-                                .group_by { |pricing| pricing.transport_category_id.to_s }
-      # Find the group with the most pricings and create the object to be passed on
+
+      pricings_by_cargo_class = sort_pricings(
+        schedules: schedules,
+        user_pricing_id: user_pricing_id,
+        cargo_classes: cargo_classes,
+        dates: dates,
+        dedicated_pricings_only: dedicated_pricings?(user)
+      )
       most_diverse_set = pricings_by_cargo_class.values.max_by(&:length)
-      other_pricings = pricings_by_cargo_class.values.reject { |pricing_group| pricing_group == most_diverse_set }.flatten
-      if most_diverse_set.nil?
-        result_to_return = nil
-      else
-        most_diverse_set.each do |pricing|
-          obj = {
-            pricing_ids: {
-              pricing.transport_category.cargo_class.to_s => pricing.id
-            }
-          }
-          other_pricings.each do |other_pricing|
-            if other_pricing.effective_date < obj[:schedules].first.etd && other_pricing.expiration_date > obj[:schedules].last.eta
-              obj[:pricing_ids][other_pricing.transport_category.cargo_class] = other_pricing.id
+      other_pricings = pricings_by_cargo_class
+                      .values
+                      .reject { |pricing_group| pricing_group == most_diverse_set }
+                      .flatten
+      if @scope['base_pricing']
+          # Find the group with the most pricings and create the object to be passed on
+         
+          if most_diverse_set.nil?
+            result_to_return << nil
+          else
+            most_diverse_set.each do |pricing|
+              schedules_for_obj = schedules.dup
+              unless dates[:is_quote]
+                schedules_for_obj.select! do |sched|
+                  sched.etd < pricing[:expiration_date] && sched.etd > pricing[:effective_date]
+                end
+                if schedules_for_obj.empty?
+                  schedules_for_obj = schedules.select do |sched|
+                    sched.closing_date < pricing[:expiration_date] &&
+                      sched.closing_date > pricing[:effective_date]
+                  end
+                end
+              end
+              cargo_class_key = pricing[:cargo_class]
+              obj = {
+                pricing_ids: {
+                  cargo_class_key => pricing
+                },
+                schedules: schedules_for_obj
+              }
+
+              other_pricings.each do |other_pricing|
+                other_cargo_class_key = other_pricing[:cargo_class]
+                if other_pricing[:effective_date] < dates[:start_date] &&
+                  other_pricing[:expiration_date] > dates[:end_date]
+                  obj[:pricing_ids][other_cargo_class_key] =
+                    other_pricing
+                end
+                if dates[:start_date] && dates[:end_date] &&
+                  obj[:pricing_ids][other_cargo_class_key].nil? &&
+                  other_pricing[:effective_date] < dates[:start_date] &&
+                  other_pricing[:expiration_date] > dates[:end_date]
+                  obj[:pricing_ids][other_cargo_class_key] =
+                    other_pricing
+                end
+                next unless obj[:pricing_ids][other_cargo_class_key].nil? &&
+                            other_pricing[:effective_date] < obj[:schedules].first.closing_date &&
+                            other_pricing[:expiration_date] > obj[:schedules].last.closing_date
+
+                obj[:pricing_ids][other_cargo_class_key] = other_pricing
+              end
+              result_to_return << obj
             end
           end
-          result_to_return = obj
+      else
+        if most_diverse_set.nil?
+          result_to_return << nil
+        else
+          most_diverse_set.each do |pricing|  # rubocop:disable Metrics/BlockLength
+            schedules_for_obj = schedules.dup
+            unless dates[:is_quote]
+              schedules_for_obj.select! do |sched|
+                sched.etd < pricing.expiration_date && sched.etd > pricing.effective_date
+              end
+              if schedules_for_obj.empty?
+                schedules_for_obj = schedules.select do |sched|
+                  sched.closing_date < pricing.expiration_date &&
+                    sched.closing_date > pricing.effective_date
+                end
+              end
+            end
+            cargo_class_key = pricing.try(:cargo_class) || pricing.transport_category.cargo_class.to_s
+            obj = {
+              pricing_ids: {
+                cargo_class_key => pricing.id
+              },
+              schedules: schedules_for_obj
+            }
+
+            other_pricings.each do |other_pricing|
+              other_cargo_class_key = other_pricing.try(:cargo_class) || other_pricing.transport_category.cargo_class.to_s
+              if other_pricing.effective_date < dates[:start_date] &&
+                other_pricing.expiration_date > dates[:end_date]
+                obj[:pricing_ids][other_cargo_class_key] =
+                  other_pricing.id
+              end
+              if dates[:start_date] && dates[:end_date] &&
+                obj[:pricing_ids][other_cargo_class_key].nil? &&
+                other_pricing.effective_date < dates[:start_date] &&
+                other_pricing.expiration_date > dates[:end_date]
+                obj[:pricing_ids][other_cargo_class_key] =
+                  other_pricing.id
+              end
+              next unless obj[:pricing_ids][other_cargo_class_key].nil? &&
+                          other_pricing.effective_date < obj[:schedules].first.closing_date &&
+                          other_pricing.expiration_date > obj[:schedules].last.closing_date
+
+              obj[:pricing_ids][other_cargo_class_key] = other_pricing.id
+            end
+            result_to_return << obj
+          end
         end
+
       end
       result_to_return
     end
@@ -279,6 +370,39 @@ module DataValidator
         example[:data][:load_type].camelize.constantize.extract(data_to_extract)
       rescue Exception => e # bad code.....
         raise ApplicationError::BadData
+      end
+    end
+
+    def prep_faux_schedules(example)
+      if !@data_for_price_checker[:service_level]
+        tv_ids = {}
+        unique_trips = example[:data][:itinerary].trips.select do |trip|
+          unless tv_ids[trip.tenant_vehicle_id]
+            tv_ids[trip.tenant_vehicle_id] = true
+            trip
+          end
+        end
+      else
+        unique_trips = [
+          example[:data][:itinerary]
+          .trips
+          .find_by(tenant_vehicle_id: @data_for_price_checker[:service_level].id)
+        ].compact
+      end
+      unique_trips.map do |trip|
+        attributes = {
+          origin_hub_id: @origin_hub.id,
+          destination_hub_id: @destination_hub.id,
+          origin_hub_name: @origin_hub.name,
+          destination_hub_name: @destination_hub.name,
+          mode_of_transport: example[:data][:itinerary].mode_of_transport,
+          eta: DateTime.now + 20.days,
+          etd: DateTime.now + 10.days,
+          closing_date: DateTime.now + 5.days,
+          vehicle_name: trip.tenant_vehicle.name,
+          trip_id: trip.id
+        }
+        Legacy::Schedule.new(attributes.merge(id: SecureRandom.uuid))
       end
     end
 
@@ -339,7 +463,7 @@ module DataValidator
     end
 
     def convert_value(value, from_currency, to_currency)
-      CurrencyTools.convert(value, from_currency, to_currency, @tenant.id)
+      CurrencyTools.new.convert(value, from_currency, to_currency, @tenant.id)
     end
 
     def diff_result_string(result, keys, expected_result) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -431,5 +555,74 @@ module DataValidator
       @validation_results[sheet_name] = {} unless @validation_results[sheet_name]
       @validation_results[sheet_name][example_index] = validate_result(results.first, expected_results, example_index, data)
     end
+
+    def sort_pricings(schedules:, user_pricing_id:, cargo_classes:, dates:, dedicated_pricings_only:)  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      if @scope['base_pricing']
+        return ::Pricings::Finder.new(
+          schedules: schedules,
+          user_pricing_id: user_pricing_id,
+          cargo_classes: cargo_classes,
+          dates: dates,
+          dedicated_pricings_only: dedicated_pricings_only,
+          shipment: @shipment
+          ).perform
+      end
+      tenant_vehicle_id = schedules.first.trip.tenant_vehicle_id
+      start_date = dates[:start_date]
+      end_date = dates[:end_date]
+      closing_start_date = dates[:closing_start_date]
+      closing_end_date = dates[:closing_end_date]
+      pricings_by_cargo_class = schedules.first.trip.itinerary.pricings
+                                         .where(tenant_vehicle_id: tenant_vehicle_id)
+                                         .for_cargo_classes(cargo_classes)
+      if start_date && end_date
+        pricings_by_cargo_class_and_dates = pricings_by_cargo_class.for_dates(start_date, end_date)
+      end
+      ## If etd filter results in no pricings, check using closing_date
+      if start_date && end_date && pricings_by_cargo_class_and_dates.empty?
+        pricings_by_cargo_class_and_dates = pricings_by_cargo_class
+                                            .for_dates(closing_start_date, closing_end_date)
+      end
+
+      pricings_by_cargo_class_and_dates_and_user = pricings_by_cargo_class_and_dates
+                                                   .select { |pricing| pricing.user_id == user_pricing_id }
+      if pricings_by_cargo_class_and_dates_and_user.empty? && !dedicated_pricings_only
+        pricings_by_cargo_class_and_dates_and_user = pricings_by_cargo_class_and_dates
+                                                     .select { |pricing| pricing.user_id.nil? }
+      end
+      pricings_by_cargo_class_and_dates_and_user.group_by { |pricing| pricing.transport_category_id.to_s }
+    end
+
+    def dedicated_pricings?(user)
+      if @scope['base_pricing']
+        @scope['dedicated_pricings_only']
+      else
+        user.pricings.exists? && @scope['dedicated_pricings_only']
+      end
+    end
+
+    def extract_dates_and_quote(schedules)
+      if schedules&.any? { |s| s.etd.nil? || s.eta.nil? }
+        is_quote = true
+        start_date = Date.today
+        end_date = start_date + 1.month
+        closing_start_date = start_date - 5.days
+        closing_end_date = end_date - 5.days
+      else
+        start_date = schedules.first.etd
+        end_date = schedules.last.etd
+        closing_start_date = schedules.first.closing_date
+        closing_end_date = schedules.last.closing_date
+        is_quote = false
+      end
+      {
+        start_date: start_date,
+        end_date: end_date,
+        is_quote: is_quote,
+        closing_start_date: closing_start_date,
+        closing_end_date: closing_end_date
+      }
+    end
+
   end
 end

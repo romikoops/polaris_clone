@@ -21,7 +21,9 @@ const propsBase = {
   shipments: { pages: {}, nexuses: {} },
   clients: [{}],
   user: {},
-  userDispatch: {},
+  userDispatch: {
+    getShipments: () => []
+  },
   numShipmentsPages: 1
 }
 

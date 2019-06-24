@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Layover < ApplicationRecord
+class Layover < Legacy::Layover
   belongs_to :stop
   belongs_to :itinerary
   belongs_to :trip

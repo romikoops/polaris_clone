@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/browser'
 import { authenticationConstants } from '../constants'
 import { authenticationService } from '../services'
 import {
-  alertActions, shipmentActions, adminActions, userActions, tenantActions, appActions
+  alertActions, shipmentActions, adminActions, userActions, tenantActions, clientsActions, appActions
 } from '.'
 import getSubdomain from '../helpers/subdomain'
 
@@ -28,6 +28,7 @@ function logout (closeWindow) {
     dispatch(userActions.logOut())
     dispatch(shipmentActions.logOut())
     dispatch(tenantActions.logOut())
+    dispatch(clientsActions.logOut())
     authenticationService.logout()
     dispatch(lo())
     dispatch(appActions.getScope())

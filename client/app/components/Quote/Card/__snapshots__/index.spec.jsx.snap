@@ -75,6 +75,7 @@ exports[`aggregatedCargo is empty object 1`] = `
     collapsed={true}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteCardScheduleList
@@ -113,6 +114,7 @@ exports[`aggregatedCargo is empty object 1`] = `
     collapsed={false}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteChargeBreakdown
@@ -319,29 +321,15 @@ exports[`aggregatedCargo is empty object 1`] = `
       className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
     >
       <div
-        className="flex layout-row layout-align-start-center"
+        className="flex-100  layout-row layout-align-end-center"
       >
-        <span
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
-        />
-      </div>
-      <div
-        className="flex-75  layout-row layout-align-end-center"
-      >
-        <p
-          style={Object {}}
-        />
         <div
-          className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
+          className=" flex-33 layout-row layout-align-end-center"
         >
           <RoundButton
             active={true}
             back={false}
-            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}
@@ -349,8 +337,8 @@ exports[`aggregatedCargo is empty object 1`] = `
             icon=""
             iconClass=""
             inverse={false}
-            size="small"
-            text="Add"
+            size="full"
+            text="Select"
             theme={
               Object {
                 "colors": Object {
@@ -361,29 +349,26 @@ exports[`aggregatedCargo is empty object 1`] = `
             }
           />
         </div>
+        <p
+          className="flex"
+          style={
+            Object {
+              "textAlign": "right",
+            }
+          }
+        />
+        <p
+          className="flex"
+          style={
+            Object {
+              "paddingRight": "18px",
+            }
+          }
+        />
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
       >
-        <div
-          className="flex-40 layout-row layout-align-start-center"
-          style={
-            Object {
-              "textAlign": "left",
-            }
-          }
-        >
-          <div
-            className="flex layout-row layout-align-start-center pointy view_switch"
-            onClick={[Function]}
-          >
-            <p
-              className="flex-none"
-            >
-              View Schedules
-            </p>
-          </div>
-        </div>
         <div
           className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
@@ -468,6 +453,7 @@ exports[`detailed billing working properly 1`] = `
     collapsed={true}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteCardScheduleList
@@ -506,6 +492,7 @@ exports[`detailed billing working properly 1`] = `
     collapsed={false}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteChargeBreakdown
@@ -683,33 +670,15 @@ exports[`detailed billing working properly 1`] = `
       className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
     >
       <div
-        className="flex layout-row layout-align-start-center"
+        className="flex-100  layout-row layout-align-end-center"
       >
-        <span
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
-        >
-          Total
-        </span>
-      </div>
-      <div
-        className="flex-75  layout-row layout-align-end-center"
-      >
-        <p
-          style={Object {}}
-        >
-          440.78 GBP
-        </p>
         <div
-          className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
+          className=" flex-33 layout-row layout-align-end-center"
         >
           <RoundButton
             active={true}
             back={false}
-            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}
@@ -717,8 +686,8 @@ exports[`detailed billing working properly 1`] = `
             icon=""
             iconClass=""
             inverse={false}
-            size="small"
-            text="Add"
+            size="full"
+            text="Select"
             theme={
               Object {
                 "colors": Object {
@@ -729,29 +698,30 @@ exports[`detailed billing working properly 1`] = `
             }
           />
         </div>
+        <p
+          className="flex"
+          style={
+            Object {
+              "textAlign": "right",
+            }
+          }
+        >
+          Total
+        </p>
+        <p
+          className="flex"
+          style={
+            Object {
+              "paddingRight": "18px",
+            }
+          }
+        >
+          440.78 GBP
+        </p>
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
       >
-        <div
-          className="flex-40 layout-row layout-align-start-center"
-          style={
-            Object {
-              "textAlign": "left",
-            }
-          }
-        >
-          <div
-            className="flex layout-row layout-align-start-center pointy view_switch"
-            onClick={[Function]}
-          >
-            <p
-              className="flex-none"
-            >
-              View Schedules
-            </p>
-          </div>
-        </div>
         <div
           className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
@@ -836,6 +806,7 @@ exports[`shallow rendering 1`] = `
     collapsed={true}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteCardScheduleList
@@ -874,6 +845,7 @@ exports[`shallow rendering 1`] = `
     collapsed={false}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteChargeBreakdown
@@ -1080,29 +1052,15 @@ exports[`shallow rendering 1`] = `
       className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
     >
       <div
-        className="flex layout-row layout-align-start-center"
+        className="flex-100  layout-row layout-align-end-center"
       >
-        <span
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
-        />
-      </div>
-      <div
-        className="flex-75  layout-row layout-align-end-center"
-      >
-        <p
-          style={Object {}}
-        />
         <div
-          className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
+          className=" flex-33 layout-row layout-align-end-center"
         >
           <RoundButton
             active={true}
             back={false}
-            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}
@@ -1110,8 +1068,8 @@ exports[`shallow rendering 1`] = `
             icon=""
             iconClass=""
             inverse={false}
-            size="small"
-            text="Add"
+            size="full"
+            text="Select"
             theme={
               Object {
                 "colors": Object {
@@ -1122,29 +1080,26 @@ exports[`shallow rendering 1`] = `
             }
           />
         </div>
+        <p
+          className="flex"
+          style={
+            Object {
+              "textAlign": "right",
+            }
+          }
+        />
+        <p
+          className="flex"
+          style={
+            Object {
+              "paddingRight": "18px",
+            }
+          }
+        />
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
       >
-        <div
-          className="flex-40 layout-row layout-align-start-center"
-          style={
-            Object {
-              "textAlign": "left",
-            }
-          }
-        >
-          <div
-            className="flex layout-row layout-align-start-center pointy view_switch"
-            onClick={[Function]}
-          >
-            <p
-              className="flex-none"
-            >
-              View Schedules
-            </p>
-          </div>
-        </div>
         <div
           className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
@@ -1229,6 +1184,7 @@ exports[`show schedule options working 1`] = `
     collapsed={false}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteCardScheduleList
@@ -1267,6 +1223,7 @@ exports[`show schedule options working 1`] = `
     collapsed={true}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteChargeBreakdown
@@ -1444,33 +1401,15 @@ exports[`show schedule options working 1`] = `
       className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
     >
       <div
-        className="flex layout-row layout-align-start-center"
+        className="flex-100  layout-row layout-align-end-center"
       >
-        <span
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
-        >
-          Total
-        </span>
-      </div>
-      <div
-        className="flex-75  layout-row layout-align-end-center"
-      >
-        <p
-          style={Object {}}
-        >
-          440.78 GBP
-        </p>
         <div
-          className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
+          className=" flex-33 layout-row layout-align-end-center"
         >
           <RoundButton
             active={true}
             back={false}
-            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}
@@ -1478,8 +1417,8 @@ exports[`show schedule options working 1`] = `
             icon=""
             iconClass=""
             inverse={false}
-            size="small"
-            text="Add"
+            size="full"
+            text="Select"
             theme={
               Object {
                 "colors": Object {
@@ -1490,29 +1429,30 @@ exports[`show schedule options working 1`] = `
             }
           />
         </div>
+        <p
+          className="flex"
+          style={
+            Object {
+              "textAlign": "right",
+            }
+          }
+        >
+          Total
+        </p>
+        <p
+          className="flex"
+          style={
+            Object {
+              "paddingRight": "18px",
+            }
+          }
+        >
+          440.78 GBP
+        </p>
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
       >
-        <div
-          className="flex-40 layout-row layout-align-start-center"
-          style={
-            Object {
-              "textAlign": "left",
-            }
-          }
-        >
-          <div
-            className="flex layout-row layout-align-start-center pointy view_switch"
-            onClick={[Function]}
-          >
-            <p
-              className="flex-none"
-            >
-              View Price Breakdown
-            </p>
-          </div>
-        </div>
         <div
           className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
@@ -1597,6 +1537,7 @@ exports[`single result rendering removes add button 1`] = `
     collapsed={true}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteCardScheduleList
@@ -1635,6 +1576,7 @@ exports[`single result rendering removes add button 1`] = `
     collapsed={false}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteChargeBreakdown
@@ -1841,45 +1783,28 @@ exports[`single result rendering removes add button 1`] = `
       className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
     >
       <div
-        className="flex layout-row layout-align-start-center"
+        className="flex-100  layout-row layout-align-end-center"
       >
-        <span
+        <p
+          className="flex"
           style={
             Object {
               "textAlign": "right",
             }
           }
         />
-      </div>
-      <div
-        className="flex-75  layout-row layout-align-end-center"
-      >
         <p
-          style={Object {}}
+          className="flex"
+          style={
+            Object {
+              "paddingRight": "18px",
+            }
+          }
         />
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
       >
-        <div
-          className="flex-40 layout-row layout-align-start-center"
-          style={
-            Object {
-              "textAlign": "left",
-            }
-          }
-        >
-          <div
-            className="flex layout-row layout-align-start-center pointy view_switch"
-            onClick={[Function]}
-          >
-            <p
-              className="flex-none"
-            >
-              View Schedules
-            </p>
-          </div>
-        </div>
         <div
           className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
@@ -1964,6 +1889,7 @@ exports[`tenant.scope is empty object 1`] = `
     collapsed={false}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteCardScheduleList
@@ -2002,6 +1928,7 @@ exports[`tenant.scope is empty object 1`] = `
     collapsed={true}
     content=""
     minHeight=""
+    overflow={false}
     wrapperContentClasses=""
   >
     <QuoteChargeBreakdown
@@ -2167,8 +2094,12 @@ exports[`tenant.scope is empty object 1`] = `
     >
       <div
         className="flex-40 layout-row layout-align-start-center"
+      />
+      <div
+        className="flex  layout-row layout-align-end-center"
       >
-        <span
+        <p
+          className="flex"
           style={
             Object {
               "textAlign": "right",
@@ -2176,12 +2107,9 @@ exports[`tenant.scope is empty object 1`] = `
           }
         >
           Total
-        </span>
-      </div>
-      <div
-        className="flex  layout-row layout-align-end-center"
-      >
+        </p>
         <p
+          className="flex"
           style={
             Object {
               "paddingRight": "18px",

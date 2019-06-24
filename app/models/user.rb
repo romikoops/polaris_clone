@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-class User < Legacy::User
+class User < Legacy::User # rubocop:disable Metrics/ClassLength
   # Include default devise modules.
+  include PgSearch
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable # , :omniauthable
@@ -15,6 +16,18 @@ class User < Legacy::User
   validates :email, presence: true, uniqueness: {
     scope: :tenant_id,
     message: ->(obj, _) { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" }
+  }
+  pg_search_scope :search, against: %i(first_name last_name company_name email phone), using: {
+    tsearch: { prefix: true }
+  }
+  pg_search_scope :email_search, against: %i(email), using: {
+    tsearch: { prefix: true }
+  }
+  pg_search_scope :first_name_search, against: %i(first_name), using: {
+    tsearch: { prefix: true }
+  }
+  pg_search_scope :last_name_search, against: %i(last_name), using: {
+    tsearch: { prefix: true }
   }
 
   acts_as_paranoid
@@ -40,6 +53,8 @@ class User < Legacy::User
 
   has_many :user_managers
   has_many :pricings
+  has_many :rates, class_name: 'Pricing:Pricing'
+  has_one :tenants_user, class_name: 'Tenants::User', foreign_key: 'legacy_id'
 
   belongs_to :agency, optional: true
 
@@ -213,9 +228,29 @@ class User < Legacy::User
         optin_status: { except: %i(created_at updated_at) },
         role: { except: %i(created_at updated_at) }
       },
-      methods: :has_pricings
+      methods: %i(has_pricings group_count user_margin_count company_title)
     )
     as_json(new_options)
+  end
+
+  def groups
+    ::Tenants::User.find_by(legacy_id: id).groups
+  end
+
+  def company_title
+    tenants_user.company&.name
+  end
+
+  def group_count
+    groups.count
+  end
+
+  def user_margins
+    ::Pricings::Margin.where(applicable: ::Tenants::User.find_by(legacy_id: id))
+  end
+
+  def user_margin_count
+    user_margins.count
   end
 
   def confirm

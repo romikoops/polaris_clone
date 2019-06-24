@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CargoItem < ApplicationRecord
+class CargoItem < Legacy::CargoItem
   EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
     air: '0.167',
     rail: '0.550',

@@ -7,9 +7,10 @@ module ExcelDataServices
                             'Insertable Checks',
                             'Smart Assumptions'].freeze
 
-      def initialize(tenant:, file_or_path:)
+      def initialize(tenant:, file_or_path:, options: {})
         super(tenant: tenant)
         @file_or_path = file_or_path
+        @options = options
       end
 
       def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -18,7 +19,6 @@ module ExcelDataServices
         headers_for_all_sheets = {}
 
         xlsx = open_spreadsheet_file(file_or_path)
-
         # Header validation and data restructurer names
         xlsx.each_with_pagename do |sheet_name, sheet_data|
           first_row = sheet_data.first_row
@@ -27,7 +27,6 @@ module ExcelDataServices
           headers = parse_headers(sheet_data.row(first_row))
           header_validator = ExcelDataServices::DataValidators::HeaderChecker.new(sheet_name, headers)
           header_validator.perform
-
           return header_validator.errors_obj unless header_validator.valid?
 
           headers_for_all_sheets[sheet_name] = headers
@@ -40,7 +39,6 @@ module ExcelDataServices
         all_sheets_raw_data.each do |per_sheet_raw_data|
           # Restructure individual sheet data
           data_by_insertion_type = restructure_data(per_sheet_raw_data)
-
           data_by_insertion_type.each do |insertion_type, data_part|
             # Per sheet there might be different insertion types (e.g. 'Pricing' and 'LocalCharges')
             insertion_type = insertion_type.to_s
@@ -64,7 +62,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :file_or_path
+      attr_reader :file_or_path, :options
 
       def open_spreadsheet_file(file_or_path)
         file_or_path = Pathname(file_or_path).to_s
@@ -96,7 +94,7 @@ module ExcelDataServices
 
       def insert_into_database(insertion_type, data)
         inserter = ExcelDataServices::DatabaseInserters::Base.get(insertion_type)
-        inserter.insert(tenant: tenant, data: data)
+        inserter.insert(tenant: tenant, data: data, options: options)
       end
 
       def combine_stats(hsh_1, hsh_2)

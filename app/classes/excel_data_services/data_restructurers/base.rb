@@ -31,6 +31,8 @@ module ExcelDataServices
         rate_basis
       ).freeze
 
+      ROWS_BY_MARGIN_PARAMS_GROUPING_KEYS = ROWS_BY_PRICING_PARAMS_GROUPING_KEYS.without(:customer_email).freeze
+
       def self.get(klass_identifier)
         "#{parent}::#{klass_identifier.titleize.delete(' ')}".constantize
       end
@@ -58,7 +60,7 @@ module ExcelDataServices
       def replace_nil_equivalents_with_nil(rows_data)
         rows_data.map do |row_data|
           row_data.each do |k, v|
-            row_data[k] = nil if v.to_s =~ %r{^n/a$|^-$|^$}i # 'n/a', '-', ''
+            row_data[k] = nil if v.to_s.strip =~ %r{^n/a$|^-$|^$}i # 'n/a', '-', ''
           end
 
           row_data
@@ -89,8 +91,8 @@ module ExcelDataServices
         LOCODE_TO_NAME_LOOKUP[locode.delete(' ')]
       end
 
-      def group_by_pricing_params(rows_data)
-        rows_data.group_by { |row| row.slice(*ROWS_BY_PRICING_PARAMS_GROUPING_KEYS) }.values
+      def group_by_params(rows_data, params)
+        rows_data.group_by { |row| row.slice(*params) }.values
       end
 
       def append_hub_suffix(name, mot)

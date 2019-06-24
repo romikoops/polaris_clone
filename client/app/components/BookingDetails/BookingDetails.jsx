@@ -391,7 +391,7 @@ export class BookingDetails extends Component {
     const ContactSetterComponent = (
       <ContactSetter
         consignee={consignee}
-        contacts={contacts}
+        // contacts={contacts}
         direction={shipment.direction}
         finishBookingAttempted={this.state.finishBookingAttempted}
         notifyees={notifyees}

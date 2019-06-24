@@ -15,6 +15,7 @@ export * from './tenant'
 export { default as mapActions } from './map.actions'
 export { default as tenantActions } from './tenant.actions'
 export { default as cookieActions } from './cookie.actions'
+export { default as clientsActions } from './clients.actions'
 export { default as remarkActions } from './remark.actions'
 export { default as bookingProcessActions } from './bookingProcess.actions'
 

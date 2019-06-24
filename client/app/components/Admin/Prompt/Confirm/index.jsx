@@ -1,6 +1,5 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from 'prop-types'
 import styles from './index.scss'
 import TextHeading from '../../../TextHeading/TextHeading'
 import { RoundButton } from '../../../RoundButton/RoundButton'
@@ -49,14 +48,6 @@ function AdminPromptConfirm ({
       </div>
     </div>
   )
-}
-AdminPromptConfirm.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme.isRequired,
-  heading: PropTypes.string,
-  text: PropTypes.string,
-  confirm: PropTypes.func.isRequired,
-  deny: PropTypes.func.isRequired
 }
 
 AdminPromptConfirm.defaultProps = {

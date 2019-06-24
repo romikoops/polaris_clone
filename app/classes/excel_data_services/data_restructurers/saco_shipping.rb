@@ -62,7 +62,7 @@ module ExcelDataServices
         restructured_data_pricings = add_hub_names(restructured_data_pricings)
 
         # Necessary until we get rid of structure "one pricing<->many pricing_details"
-        restructured_data_pricings = group_by_pricing_params(restructured_data_pricings)
+        restructured_data_pricings = group_by_params(restructured_data_pricings, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS)
 
         restructured_data_local_charges = pricings_format_to_local_charges_format(restructured_data_local_charges)
 
@@ -231,7 +231,7 @@ module ExcelDataServices
         end
 
         if fee_is_included
-          fee_code = "UNKNOWN_#{fee_code}"
+          fee_code = "INCLUDED_#{fee_code}"
           fee_name = "#{fee_name} (included)"
         end
 

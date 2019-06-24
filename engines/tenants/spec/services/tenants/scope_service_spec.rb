@@ -11,6 +11,7 @@ RSpec.describe Tenants::ScopeService do
     context 'no key given' do
       let(:expected_scope) do
         {
+          base_pricing: false,
           cargo_info_level: 'text',
           cargo_overview_only: false,
           carriage_options: { on_carriage: { export: 'optional', import: 'optional' }, pre_carriage: { export: 'optional', import: 'optional' } },
@@ -87,12 +88,17 @@ RSpec.describe Tenants::ScopeService do
             voyage_code: true,
             vessel: true,
             service_level: true
+          },
+          side_nav: {
+            agent: %w(dashboard shipments profile),
+            admin: %w(dashboard shipments hubs pricing schedules clients routes currencies settings),
+            shipper: %w(dashboard shipments pricings profile contacts)
           }
         }
       end
 
       it 'returns the entire correct scope' do
-        expect(described_class.new(user: legacy_user).fetch).to eq(expected_scope.with_indifferent_access)
+        expect(described_class.new(target: legacy_user).fetch).to eq(expected_scope.with_indifferent_access)
       end
     end
 
@@ -100,7 +106,7 @@ RSpec.describe Tenants::ScopeService do
       let(:key) { :quote_notes }
 
       it 'returns correct value of the correct scope' do
-        expect(described_class.new(user: legacy_user).fetch(key)).to eq(
+        expect(described_class.new(target: legacy_user).fetch(key)).to eq(
           'Quote Notes from the FactoryBot Factory'
         )
       end

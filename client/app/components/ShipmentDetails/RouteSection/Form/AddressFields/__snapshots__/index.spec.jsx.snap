@@ -115,6 +115,7 @@ exports[`renders correctly 1`] = `
       hideIcon={false}
       mainWrapperStyle={Object {}}
       minHeight=""
+      overflow={false}
       parentClass=""
       showArrow={false}
       showArrowSpacer={false}

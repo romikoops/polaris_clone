@@ -4,6 +4,8 @@ module Tenants
   class Membership < ApplicationRecord
     belongs_to :member, polymorphic: true
     belongs_to :group
+    validates_uniqueness_of :member_type, scope: %i(member_id priority)
+    before_validation :set_priority
 
     default_scope { order(:priority) }
 
@@ -34,11 +36,27 @@ module Tenants
       end
     end
 
-    def for_list_json(options = {})
-      new_options = options.reverse_merge(
-        methods: %i(member_name member_type member_email original_member_id)
-      )
-      as_json(new_options)
+    def human_type
+      case member.class.to_s
+      when 'Tenants::User'
+        'client'
+      when 'Tenants::Group'
+        'group'
+      when 'Tenants::Company'
+        'company'
+      end
+    end
+
+    private
+
+    def set_priority
+      existing_memberships = Tenants::Membership
+                             .where(member: member)
+                             .order(priority: :desc)
+
+      return if existing_memberships.empty?
+
+      self.priority = existing_memberships.first.priority + 1
     end
   end
 end

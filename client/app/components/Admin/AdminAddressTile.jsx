@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from 'prop-types'
 import styles from './Admin.scss'
 import userStyles from '../UserAccount/UserAccount.scss'
 
@@ -29,12 +28,12 @@ class AdminAddressTile extends Component {
     const { name, value } = event.target
     this.setState({ editor: { ...this.state.editor, [name]: value } })
   }
+  
   saveEdit () {
-    // ??
     this.props.saveEdit(this.state.editor)
   }
+
   deleteAddress () {
-    // ??
     this.props.deleteAddress(this.props.address.id)
   }
 
@@ -206,14 +205,6 @@ class AdminAddressTile extends Component {
       </div>
     )
   }
-}
-AdminAddressTile.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  saveEdit: PropTypes.func.isRequired,
-  deleteAddress: PropTypes.func.isRequired,
-  address: PropTypes.address,
-  showDelete: PropTypes.bool
 }
 
 AdminAddressTile.defaultProps = {

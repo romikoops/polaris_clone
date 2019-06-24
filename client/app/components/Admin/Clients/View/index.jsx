@@ -1,17 +1,21 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
-import PropTypes from '../../prop-types'
-import AdminAddressTile from './AdminAddressTile'
-import styles from './Admin.scss'
-import GreyBox from '../GreyBox/GreyBox'
-import TextHeading from '../TextHeading/TextHeading'
-import { gradientTextGenerator, capitalizeCities } from '../../helpers'
-import { NamedSelect } from '../NamedSelect/NamedSelect'
-import { managerRoles, adminClientsTooltips as clientTip } from '../../constants'
-import { RoundButton } from '../RoundButton/RoundButton'
-import AdminPromptConfirm from './Prompt/Confirm'
-import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
+import { connect } from 'react-redux'
+import { get } from 'lodash'
+import { bindActionCreators } from 'redux'
+import { clientsActions } from '../../../../actions'
+import AdminAddressTile from '../../AdminAddressTile'
+import styles from '../../Admin.scss'
+import GreyBox from '../../../GreyBox/GreyBox'
+import TextHeading from '../../../TextHeading/TextHeading'
+import { gradientTextGenerator, capitalizeCities } from '../../../../helpers'
+import { NamedSelect } from '../../../NamedSelect/NamedSelect'
+import { managerRoles, adminClientsTooltips as clientTip } from '../../../../constants'
+import { RoundButton } from '../../../RoundButton/RoundButton'
+import AdminPromptConfirm from '../../Prompt/Confirm'
+import AdminShipmentsComp from '../../Shipments/Comp'
+import { AdminClientMembershipManager, AdminClientGroups, AdminClientMarginPreview } from '..'
 
 export class AdminClientView extends Component {
   static prepShipment (baseShipment, client) {
@@ -31,9 +35,11 @@ export class AdminClientView extends Component {
     this.state = {
       selectedManager: {},
       selectedRole: {},
-      showAddManager: false
+      showAddManager: false,
+      editGroups: false
     }
     this.handleClick = this.handleClick.bind(this)
+    this.toggleGroupEdit = this.toggleGroupEdit.bind(this)
     this.handleShipmentAction = this.handleShipmentAction.bind(this)
     this.handleManagerAssigment = this.handleManagerAssigment.bind(this)
     this.handleRoleAssigment = this.handleRoleAssigment.bind(this)
@@ -43,6 +49,8 @@ export class AdminClientView extends Component {
 
   componentDidMount () {
     window.scrollTo(0, 0)
+    const { clientsDispatch, match } = this.props
+    clientsDispatch.viewClient(get(match, ['params', 'id'], 0))
   }
 
   handleManagerAssigment (event) {
@@ -55,6 +63,22 @@ export class AdminClientView extends Component {
 
   toggleNewManager () {
     this.setState({ showAddManager: !this.state.showAddManager })
+  }
+
+  editScope () {
+    const { adminDispatch, client } = this.props
+    adminDispatch.goTo(`/admin/clients/scopeeditor/user/${client.id}`)
+  }
+
+  toggleGroupEdit () {
+    const { clientsDispatch, client } = this.props
+    this.setState((prevState) => {
+      if (prevState.editGroups) {
+        clientsDispatch.viewClient(client.id)
+      }
+
+      return { editGroups: !prevState.editGroups }
+    })
   }
 
   assignNewManager () {
@@ -103,23 +127,20 @@ export class AdminClientView extends Component {
 
   render () {
     const {
-      t, theme, clientData, hubs, managers, adminDispatch
+      t, theme, managers, addresses, managerAssignments, client, groups, user, scope
     } = this.props
-    if (!clientData) {
+    if (!client) {
       return ''
     }
-
+    const groupIds = groups.map(g => g.id)
     const {
-      selectedManager, selectedRole, showAddManager, confirm
+      selectedManager, selectedRole, showAddManager, confirm, editGroups
     } = this.state
-    const {
-      client, shipments, addresses, managerAssignments
-    } = clientData
+
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const shipRows = []
     const managerOpts = managers
       ? managers.map(m => ({
         label: `${m.first_name} ${m.last_name}`,
@@ -148,14 +169,7 @@ export class AdminClientView extends Component {
         </div>
       ))
       : []
-    shipments.forEach((ship) => {
-      shipRows.push(<ShipmentOverviewCard
-        shipments={AdminClientView.prepShipment(ship, client)}
-        dispatches={adminDispatch}
-        hubs={hubs}
-        theme={theme}
-      />)
-    })
+
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
@@ -167,6 +181,7 @@ export class AdminClientView extends Component {
     ) : (
       ''
     )
+
     const addressArr = addresses.map(loc => (
       <AdminAddressTile
         key={v4()}
@@ -177,6 +192,25 @@ export class AdminClientView extends Component {
         showTooltip
       />
     ))
+
+    const groupTable = editGroups
+      ? (
+        <AdminClientMembershipManager
+          addedGroups={groupIds}
+          targetId={client.id}
+          targetType="user"
+          toggleEdit={this.toggleGroupEdit}
+        />
+      )
+      : (
+        <AdminClientGroups
+          editable={editGroups}
+          targetId={client.id}
+          targetType="user"
+          withMargins
+          toggleEdit={this.toggleGroupEdit}
+        />
+      )
     const assignManagerBox = (
       <div className="flex-100 layout-row layout-wrap">
         <div className="flex-100 layout-row layout-wrap layout-align-center-center padd_20">
@@ -223,7 +257,7 @@ export class AdminClientView extends Component {
             </sup>
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
-            <p className="flex-none"> 
+            <p className="flex-none">
               {' '}
               {user.company_name}
             </p>
@@ -236,7 +270,7 @@ export class AdminClientView extends Component {
             </sup>
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
-            <p className="flex-none"> 
+            <p className="flex-none">
               {' '}
               {user.email}
             </p>
@@ -249,7 +283,7 @@ export class AdminClientView extends Component {
             </sup>
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
-            <p className="flex-none"> 
+            <p className="flex-none">
               {' '}
               {user.phone}
             </p>
@@ -257,12 +291,6 @@ export class AdminClientView extends Component {
         </div>
       </div>
     )
-
-    ProfileBox.propTypes = {
-      user: PropTypes.client.isRequired,
-      edit: PropTypes.func.isRequired,
-      style: PropTypes.objectOf(PropTypes.string)
-    }
 
     ProfileBox.defaultProps = {
       style: {}
@@ -343,7 +371,7 @@ export class AdminClientView extends Component {
             )}
             <GreyBox
               wrapperClassName="flex-25 layout-row layout-align-center-center card_margin_right"
-              contentClassName="layout-row flex-75 layout-align-center-center"
+              contentClassName="layout-row flex-75 layout-align-center-space-around layout-wrap"
             >
               <RoundButton
                 theme={theme}
@@ -352,34 +380,56 @@ export class AdminClientView extends Component {
                 handleNext={() => this.confirmDelete()}
                 iconClass="fa-trash"
               />
+              { user.internal ? (
+                <RoundButton
+                  theme={theme}
+                  size="full"
+                  text={t('common:editScope')}
+                  handleNext={() => this.editScope()}
+                  iconClass="fa-trash"
+                />
+              ) : '' }
             </GreyBox>
           </div>
         </div>
 
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
           <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+            className={`flex-100 layout-row layout-align-space-between-center greyBg ${styles.grey_section_head}`}
           >
-            <TextHeading theme={theme} size={2} text=" " />
+            <TextHeading theme={theme} size={3} text={t('admin:shipments')} />
           </div>
-          <ShipmentOverviewCard
-            admin
-            shipments={shipments}
-            dispatches={adminDispatch}
-            hubs={hubs}
-            theme={theme}
-            handleSelect={this.handleClick}
-            handleAction={this.handleShipmentAction}
-            paginate
-          />
+          <AdminShipmentsComp targetUserId={client.id} />
         </div>
+        { scope.base_pricing
+          ? [
+            (<div className="layout-row flex-100 layout-wrap layout-align-start-center">
+              <div
+                className={`flex-100 layout-row layout-align-space-between-center greyBg ${styles.grey_section_head}`}
+              >
+                <TextHeading theme={theme} size={3} text={t('admin:groups')} />
+                <div
+                  className="flex-none layout-row layotu-align-center-center pointy"
+                  onClick={this.toggleGroupEdit}
+                >
+                  <i className="fa fa-pencil" />
+                  <p className="flex">{t('admin:edit')}</p>
+                </div>
+              </div>
+              {groupTable}
+            </div>),
+            (<div className="layout-row flex-100 layout-wrap layout-align-start-center buffer_10">
+              <AdminClientMarginPreview
+                targetId={client.id}
+                targetType="user"
+              />
+            </div>)
+          ] : '' }
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
           <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+            className={`flex-100 layout-row layout-align-space-between-center greyBg ${styles.grey_section_head}`}
           >
-            <div className="layout-padding flex-100 layout-align-start-center greyBg">
-              <span><b>{t('shipment:locations')}</b></span>
-            </div>
+            <TextHeading theme={theme} size={3} text={t('shipment:locations')} />
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom">
             {addressArr}
@@ -390,25 +440,38 @@ export class AdminClientView extends Component {
     )
   }
 }
-AdminClientView.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
-  adminDispatch: PropTypes.func.isRequired,
-  managers: PropTypes.arrayOf(PropTypes.String).isRequired,
-  handleClick: PropTypes.func,
-  clientData: PropTypes.shape({
-    client: PropTypes.client,
-    shipments: PropTypes.shipments,
-    addresses: PropTypes.arrayOf(PropTypes.location)
-  })
-}
 
 AdminClientView.defaultProps = {
   theme: null,
   hubs: [],
   handleClick: null,
-  clientData: null
+  clientData: null,
+  groups: []
 }
 
-export default withNamespaces(['admin', 'common', 'user', 'shipment'])(AdminClientView)
+function mapStateToProps (state) {
+  const { clients, app, authentication } = state
+  const { client } = clients
+  const { user } = authentication
+  const {
+    clientData, addresses, managerAssignments, groups
+  } = client || {}
+  const { theme, scope } = app.tenant
+
+  return {
+    groups,
+    client: clientData,
+    addresses,
+    managerAssignments,
+    theme,
+    scope,
+    user
+  }
+}
+function mapDispatchToProps (dispatch) {
+  return {
+    clientsDispatch: bindActionCreators(clientsActions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces(['admin', 'common', 'user', 'shipment'])(AdminClientView))

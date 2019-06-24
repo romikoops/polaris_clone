@@ -9,7 +9,8 @@ class TenantsController < ApplicationController
     tenants = if Rails.env.production?
                 []
               else
-                Tenant.where("subdomain NOT LIKE '%-sandbox'").order(:subdomain).map { |t| { label: t.name, value: t } }
+                # Tenant.where("subdomain NOT LIKE '%-sandbox'").order(:subdomain).map { |t| { label: t.name, value: t } }
+                Tenant.order(:subdomain).map { |t| { label: t.name, value: t } }
               end
 
     response_handler(tenants)
@@ -25,16 +26,16 @@ class TenantsController < ApplicationController
   end
 
   def fetch_scope
-    tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : params[:id])
-    tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
-    scope = ::Tenants::ScopeService.new(user: current_user, tenant: tenants_tenant).fetch
+    tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : (params[:tenant_id] || params[:id]))
+    tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant&.id)
+    scope = ::Tenants::ScopeService.new(target: current_user, tenant: tenants_tenant).fetch
     response_handler(scope)
   end
 
   def show
-    tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : params[:id])
+    tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : (params[:tenant_id] || params[:id]))
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
-    scope = ::Tenants::ScopeService.new(user: current_user, tenant: tenants_tenant).fetch
+    scope = ::Tenants::ScopeService.new(target: current_user, tenant: tenants_tenant).fetch
     tenant_json = tenant.as_json
     tenant_json['scope'] = scope
     response_handler(tenant: tenant_json)

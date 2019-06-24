@@ -51,6 +51,7 @@ function QuoteCardScheduleListItem ({ schedule, theme, onSelectSchedule, t }) {
           size="full"
           handleNext={() => onSelectSchedule(schedule)}
           theme={theme}
+          active
           text={t('common:select')}
         />
       </div>

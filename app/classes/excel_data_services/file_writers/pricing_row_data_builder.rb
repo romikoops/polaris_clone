@@ -2,21 +2,30 @@
 
 module ExcelDataServices
   module FileWriters
-    class PricingRowDataBuilder < Base # rubocop:disable Metrics/ClassLength
-      def self.build_raw_pricing_rows(pricings)
+    class PricingRowDataBuilder < ExcelDataServices::FileWriters::Base # rubocop:disable Metrics/ClassLength
+      def self.build_raw_pricing_rows(pricings, scope = {})
         raw_pricing_rows = []
-
-        pricings.each do |pricing|
-          pricing_only_attributes = build_pricing_only_row_data(pricing)
-          pricing.pricing_details.each do |pricing_detail|
-            pricing_detail_only_attributes = build_pricing_detail_only_row_data(pricing_detail)
-            raw_pricing_rows << pricing_only_attributes.merge(pricing_detail_only_attributes)
+        if scope['base_pricing']
+          pricings.each do |pricing|
+            pricing_only_attributes = build_pricing_only_row_data(pricing)
+            pricing.fees.each do |pricing_detail|
+              pricing_detail_only_attributes = build_pricing_detail_only_row_data(pricing_detail, scope)
+              raw_pricing_rows << pricing_only_attributes.merge(pricing_detail_only_attributes)
+            end
+          end
+        else
+          pricings.each do |pricing|
+            pricing_only_attributes = build_pricing_only_row_data(pricing)
+            pricing.pricing_details.each do |pricing_detail|
+              pricing_detail_only_attributes = build_pricing_detail_only_row_data(pricing_detail, scope)
+              raw_pricing_rows << pricing_only_attributes.merge(pricing_detail_only_attributes)
+            end
           end
         end
         raw_pricing_rows
       end
 
-      def self.build_pricing_only_row_data(pricing) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def self.build_pricing_only_row_data(pricing, scope = {}) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         pricing_attributes = pricing.attributes.with_indifferent_access.except(
           :id,
           :created_at,
@@ -70,17 +79,32 @@ module ExcelDataServices
         name.remove(/ #{str_to_remove}$/)
       end
 
-      def self.build_pricing_detail_only_row_data(pricing_detail)
-        charge_category = ChargeCategory.from_code(pricing_detail.shipping_type, pricing_detail.tenant.id)
-        fee_name = charge_category.name
-        pricing_detail.attributes.with_indifferent_access.except(
-          :id,
-          :created_at,
-          :updated_at,
-          :priceable_type,
-          :priceable_id,
-          :tenant_id
-        ).merge(fee_name: fee_name)
+      def self.build_pricing_detail_only_row_data(pricing_detail, scope = {})
+        if scope['base_pricing']
+          charge_category = pricing_detail.charge_category
+          fee_name = charge_category.name
+          rate_basis_string = pricing_detail.rate_basis&.external_code
+          pricing_detail.attributes.with_indifferent_access.except(
+            :id,
+            :created_at,
+            :updated_at,
+            :rate_basis_id,
+            :charge_category_id,
+            :pricing_id,
+            :tenant_id
+          ).merge(fee_name: fee_name, rate_basis: rate_basis_string, shipping_type: charge_category.code)
+        else
+          charge_category = ChargeCategory.from_code(code: pricing_detail.shipping_type, tenant_id: pricing_detail.tenant.id)
+          fee_name = charge_category.name
+          pricing_detail.attributes.with_indifferent_access.except(
+            :id,
+            :created_at,
+            :updated_at,
+            :priceable_type,
+            :priceable_id,
+            :tenant_id
+          ).merge(fee_name: fee_name)
+        end
       end
 
       def self.expand_ranges(data)

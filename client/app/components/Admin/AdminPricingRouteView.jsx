@@ -2,11 +2,10 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import { has } from 'lodash'
-import { AdminClientTile, AdminPriceEditor } from '.'
+import { AdminPriceEditor } from '.'
 import styles from './Admin.scss'
 import shipmentStyles from './AdminShipments.scss'
 import AdminPromptConfirm from './Prompt/Confirm'
-import GreyBox from '../GreyBox/GreyBox'
 import {
   history,
   gradientBorderGenerator,
@@ -15,10 +14,9 @@ import {
 } from '../../helpers'
 import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from './AdminShipmentView/ShipmentOverviewShowCard'
-import AdminPricingDedicated from './Pricing/Dedicated'
-import { AdminPricingBox } from './Pricing/Box'
 import AdminPricingTable from './Pricing/Table'
-import CollapsingContent from '../CollapsingBar/Content'
+import TextHeading from '../TextHeading/TextHeading'
+import { AdminClientMargins } from './Clients'
 
 export class AdminPricingRouteView extends Component {
   static backToIndex () {
@@ -30,13 +28,15 @@ export class AdminPricingRouteView extends Component {
     this.state = {
       selectedClient: false,
       showPricingAdder: false,
-      expander: {}
+      expander: {},
+      editMargins: false
     }
     this.editThis = this.editThis.bind(this)
     this.closeEdit = this.closeEdit.bind(this)
     this.selectClient = this.selectClient.bind(this)
     this.closeClientView = this.closeClientView.bind(this)
     this.viewClient = this.viewClient.bind(this)
+    this.toggleMarginEdit = this.toggleMarginEdit.bind(this)
   }
 
   componentDidMount () {
@@ -111,9 +111,20 @@ export class AdminPricingRouteView extends Component {
     this.setState({ confirm: false })
   }
 
+  toggleMarginEdit () {
+    const { clientsDispatch, id } = this.props
+    this.setState((prevState) => {
+      if (prevState.editMargins && id) {
+        clientsDispatch.viewGroup(id)
+      }
+
+      return { editMargins: !prevState.editMargins }
+    })
+  }
+
   render () {
     const {
-      theme, pricings, clients, adminActions, scope, match, t
+      theme, pricings, adminActions, scope, match, t
     } = this.props
     const itineraryId = match.params.id
     const {
@@ -124,7 +135,8 @@ export class AdminPricingRouteView extends Component {
       confirm,
       expander,
       pricingToDelete,
-      showPricingAdder
+      showPricingAdder,
+      editMargins
     } = this.state
     const { selectedClient } = this.state
 
@@ -133,9 +145,7 @@ export class AdminPricingRouteView extends Component {
     if (!pricings || !pricings[itineraryId]) return ''
     const {
       itinerary,
-      itineraryPricingData,
-      stops,
-      userPricings
+      stops
     } = pricings[itineraryId]
     if (!itinerary) {
       return ''
@@ -178,35 +188,6 @@ export class AdminPricingRouteView extends Component {
     ) : (
       ''
     )
-
-    const clientTiles = userPricings ? userPricings.map((up, i) => {
-      const client = clients.filter(cl => cl.id === up.user_id)[0]
-
-      if (!client) {
-        return ''
-      }
-
-      return (
-        <div
-          className="flex-20 layout-row pointy"
-          onClick={() => this.selectClient(client)}
-        >
-          {userPricings[i].length !== 0 ? (
-            <AdminClientTile
-              showCollapsing
-              hideContent
-              collapsed={!expander[client.id]}
-              handleCollapser={() => this.toggleExpander(client.id)}
-              key={v4()}
-              handleClick={() => this.selectClient(client)}
-              flexClasses="layout-row flex-100 pointy"
-              client={client}
-              theme={theme}
-            />
-          ) : '' }
-        </div>
-      )
-    }) : []
 
     return (
       <div
@@ -256,13 +237,45 @@ export class AdminPricingRouteView extends Component {
           />
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-center-center padding_top">
+          <div
+            className={`flex-100 layout-row layout-align-space-between-center greyBg ${styles.grey_section_head}`}
+          >
+            <TextHeading theme={theme} size={3} text={t('admin:pricings')} />
+          </div>
 
           <div
-            className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
           >
             <AdminPricingTable itineraryId={itinerary.id} classNames="flex-100" />
           </div>
         </div>
+        { scope.base_pricing ? (
+          <div className="flex-100 layout-row layout-wrap layout-align-center-center padding_top">
+            <div
+              className={`flex-100 layout-row layout-align-space-between-center greyBg ${styles.grey_section_head}`}
+            >
+              <TextHeading theme={theme} size={3} text={t('admin:margins')} />
+              <div
+                className="flex-none layout-row layotu-align-center-center pointy"
+                onClick={this.toggleMarginEdit}
+              >
+                <i className="fa fa-pencil" />
+                <p className="flex">{t('admin:edit')}</p>
+              </div>
+            </div>
+
+            <div
+              className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+            >
+              <AdminClientMargins
+                targetId={itinerary.id}
+                targetType="itinerary"
+                editable={editMargins}
+                toggleEdit={this.toggleMarginEdit}
+              />
+            </div>
+          </div>
+        ) : '' }
 
         {confimPrompt}
         {editorBool ? (

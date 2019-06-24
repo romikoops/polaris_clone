@@ -9,7 +9,9 @@ const propsBase = {
   theme,
   autofillContact: identity
 }
-
+jest.mock('react-redux', () => ({
+  connect: (mapStateToProps, mapDispatchToProps) => Component => Component
+}))
 test('shallow render', () => {
   expect(shallow(<AddressBook {...propsBase} />)).toMatchSnapshot()
 })

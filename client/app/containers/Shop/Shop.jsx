@@ -152,7 +152,7 @@ class Shop extends Component {
 
   chooseOffer (obj) {
     const { shipmentDispatch, bookingSummaryDispatch, bookingData, user } = this.props
-    const { schedule, total } = obj
+    const { schedule, total, meta } = obj
     // eslint-disable-next-line camelcase
     const { id, user_id, customs_credit } = bookingData.response.stage2.shipment
     const req = {
@@ -160,9 +160,9 @@ class Shop extends Component {
       schedule,
       total,
       user_id,
-      customs_credit
+      customs_credit,
+      meta
     }
-
     if (user.guest) {
       req.action = 'chooseOffer'
       this.toggleShowRegistration(req)

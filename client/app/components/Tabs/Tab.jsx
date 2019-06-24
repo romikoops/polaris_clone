@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from '../../prop-types'
 import styles from './Tabs.scss'
 import { gradientBorderGenerator, gradientTextGenerator, switchIcon } from '../../helpers'
 
@@ -45,19 +44,6 @@ export default function Tab (props) {
       </div>
     </div>
   )
-}
-
-Tab.propTypes = {
-  onClick: PropTypes.func,
-  extraClick: PropTypes.func,
-  tabIndex: PropTypes.number,
-  isUniq: PropTypes.bool,
-  isActive: PropTypes.bool,
-  linkClassName: PropTypes.string,
-  mot: PropTypes.string,
-  tabTitle: PropTypes.string.isRequired,
-  theme: PropTypes.theme,
-  icon: PropTypes.string
 }
 
 Tab.defaultProps = {

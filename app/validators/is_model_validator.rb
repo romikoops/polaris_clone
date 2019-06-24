@@ -6,7 +6,7 @@ class IsModelValidator < ActiveModel::EachValidator
     @attribute = attribute
 
     camelized_value = value.camelize
-    unless camelized_value.safe_constantize.try(:superclass) == ApplicationRecord
+    unless camelized_value.safe_constantize.ancestors.include?(ActiveRecord::Base)
       add_error "#{camelized_value} is not a valid model"
     end
   end

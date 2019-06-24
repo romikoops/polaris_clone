@@ -37,7 +37,6 @@ exports[`scope.modes_of_transport is true 1`] = `
             "getRoutePricings": [Function],
           }
         }
-        allNumPages={Object {}}
         documentDispatch={
           Object {
             "closeViewer": [Function],
@@ -48,6 +47,7 @@ exports[`scope.modes_of_transport is true 1`] = `
         itineraries={Object {}}
         lastUpdate="LAST_UPDATE"
         mot="0"
+        numPages={Object {}}
         scope={
           Object {
             "modes_of_transport": Array [

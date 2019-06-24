@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 class Contact < ApplicationRecord
+  include PgSearch
   has_paper_trail
-
+  pg_search_scope :contact_search, against: %i(first_name last_name company_name email phone), using: {
+    tsearch: { prefix: true }
+  }
   belongs_to :user
   has_many :shipment_contacts
   belongs_to :address, optional: true

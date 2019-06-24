@@ -1,0 +1,23 @@
+:local {
+  .result_table {
+    margin: 5px;
+    th {
+      text-align: start;
+    }
+    td {
+      font-size: 12px;
+    }
+  }
+  .header {
+    padding: 5px;
+    h2, h4 {
+      margin: 2.5px;
+    }
+  }
+  .result_box {
+    margin-top: 10px;
+  }
+  .filter_row {
+    background-color: #eae8e8;
+  }
+}

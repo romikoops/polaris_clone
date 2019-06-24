@@ -51,7 +51,7 @@ class AdminClientMarginCreator extends Component {
     let serviceLevels = []
 
     if (attachedToPricing) {
-      const filteredPricings = pricings.filter(p => p.itinerary_id === selectedItineraries.value.id)
+      const filteredPricings = pricings.filter(p => selectedItineraries.map(it => it.value.id).includes(p.itinerary_id))
       newState = { pricings: filteredPricings }
     } else if (selectedItineraries.length < 1 || get(selectedItineraries, [0, 'value']) === null) {
       newState = {
@@ -158,6 +158,26 @@ class AdminClientMarginCreator extends Component {
     this.setState({ counterpartHub: e })
   }
 
+  selectHub (n, e) {
+    const freshState = {
+      cargoClasses: [],
+      carriers: [],
+      serviceLevels: [],
+      pricings: [],
+      selectedHubs: e,
+      selectedCargoClasses: [],
+      selectedCarrier: [],
+      selectedServiceLevels: []
+    }
+    this.setState(freshState)
+    const { clientsDispatch } = this.props
+    clientsDispatch.getMarginFormData()
+  }
+
+  selectCounterpartHub (n, e) {
+    this.setState({ counterpartHub: e })
+  }
+
   handleMarginValueChange (e) {
     this.setState({ marginValue: e.target.value })
   }
@@ -240,6 +260,7 @@ class AdminClientMarginCreator extends Component {
         tenant_vehicle_ids: selectedServiceLevels.map(sl => get(sl, ['value', 'tenant_vehicle_id'], 'all')),
         pricing_id: get(selectedPricing, ['value', 'id'], null)
       }
+
       clientsDispatch.getFinerMarginDetails(req)
       newFeeValues = fineFeeValues
     } else {
@@ -275,7 +296,7 @@ class AdminClientMarginCreator extends Component {
     if (!attachedTo) {
       return 1
     }
-    const attachedSelected = (selectedItineraries.length < 1 || selectedHubs.length < 1)
+    const attachedSelected = (selectedItineraries.length > 0 || selectedHubs.length > 0)
     if (!attachedSelected && selectedCargoClasses.length < 1) {
       return 2
     }
@@ -287,10 +308,16 @@ class AdminClientMarginCreator extends Component {
       return 7
     }
     if (attachedSelected && selectedCargoClasses.length < 1) {
-      return 4
+      return 3
     }
     if (attachedSelected && selectedCargoClasses.length > 1 &&
       selectedServiceLevels.length < 1 && marginType !== 'trucking') {
+      return 4
+    }
+
+    if (attachedSelected && selectedCargoClasses.length > 1 &&
+      (selectedServiceLevels.length > 1 || marginType === 'trucking') &&
+      (!selectedDates.effective_date || !selectedDates.expiration_date)) {
       return 5
     }
 
@@ -457,7 +484,6 @@ class AdminClientMarginCreator extends Component {
 
     const step = this.determineStep()
     const selectedBorderStyle = { border: `5px solid ${theme.colors.primary}` }
-
     const getItineraryOptions = (input) => {
       const requestOptions = {
         method: 'GET',
@@ -582,7 +608,8 @@ class AdminClientMarginCreator extends Component {
                 </div>
                 <div className="flex-33 layout-row layout-align-end-center">
                   <GreyBox
-                    contentClassName={`flex-100 layout-row layout-align-center-center layout-wrap pointy ${styles.box_button}`}
+                    contentClassName={`flex-100 layout-row layout-align-center-center 
+                    layout-wrap pointy ${styles.box_button}`}
                     wrapperClassName="flex-90"
                     onClick={() => this.setAttachment('itinerary')}
                     style={step > 1 && attachedTo === 'itinerary' ? selectedBorderStyle : {}}
@@ -666,43 +693,6 @@ class AdminClientMarginCreator extends Component {
                   </GreyBox>
                 )
             }
-            { selectedItineraries.length === 1 && get(selectedItineraries, [0, 'value', 'id']) ? (
-              <GreyBox
-                contentClassName={`flex-100 layout-row layout-align-space-between-center 
-                layout-wrap ${styles.option_row_wrapper} ${step < 3 ? styles.option_fade : ''}`}
-                wrapperClassName={`flex-100 ${styles.option_row}`}
-              >
-                { step < 3 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
-                <div className="flex-33">
-                  <p>{t('admin:attachToPricing')}</p>
-                </div>
-                <div className="flex-33 layout-row layout-align-end-center">
-                  <GreyBox
-                    contentClassName={`flex-100 layout-row layout-align-center-center 
-                    layout-wrap pointy ${styles.box_button}`}
-                    wrapperClassName="flex-90"
-                    onClick={() => this.toggleAttachedToPricing(false)}
-                    style={step > 1 && !attachedToPricing ? selectedBorderStyle : {}}
-                  >
-                    <p className="flex-none">
-                      {t('common:no')}
-                    </p>
-                  </GreyBox>
-                </div>
-                <div className="flex-33 layout-row layout-align-end-center">
-                  <GreyBox
-                    contentClassName={`flex-100 layout-row layout-align-center-center layout-wrap pointy ${styles.box_button}`}
-                    wrapperClassName="flex-90"
-                    onClick={() => this.toggleAttachedToPricing(true)}
-                    style={step > 1 && attachedToPricing ? selectedBorderStyle : {}}
-                  >
-                    <p className="flex-none">
-                      {t('common:yes')}
-                    </p>
-                  </GreyBox>
-                </div>
-              </GreyBox>
-            ) : '' }
             {
               attachedToPricing
                 ? (
@@ -729,10 +719,10 @@ class AdminClientMarginCreator extends Component {
                 ) : [
                   (<GreyBox
                     contentClassName={`flex-100 layout-row layout-align-space-between-center 
-                layout-wrap ${styles.option_row_wrapper} ${step < 4 ? styles.option_fade : ''}`}
+                layout-wrap ${styles.option_row_wrapper} ${step < 3 ? styles.option_fade : ''}`}
                     wrapperClassName={`flex-100 ${styles.option_row}`}
                   >
-                    { step < 4 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
+                    { step < 3 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
                     <div className="flex-33">
                       <p>{t('admin:chooseCargoClass')}</p>
                     </div>
@@ -752,10 +742,10 @@ class AdminClientMarginCreator extends Component {
                   marginType !== 'trucking' ? (
                     <GreyBox
                       contentClassName={`flex-100 layout-row layout-align-space-between-center 
-                layout-wrap ${styles.option_row_wrapper} ${step < 5 ? styles.option_fade : ''}`}
+                layout-wrap ${styles.option_row_wrapper} ${step < 4 ? styles.option_fade : ''}`}
                       wrapperClassName={`flex-100 ${styles.option_row}`}
                     >
-                      { step < 5 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
+                      { step < 4 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
                       <div className="flex-33">
                         <p>{t('admin:chooseServiceLevel')}</p>
                       </div>
@@ -774,10 +764,10 @@ class AdminClientMarginCreator extends Component {
                   ) : '',
                   (<GreyBox
                     contentClassName={`flex-100 layout-row layout-align-space-between-center 
-                layout-wrap ${styles.option_row_wrapper} ${step < 6 ? styles.option_fade : ''}`}
+                layout-wrap ${styles.option_row_wrapper} ${step < 5 ? styles.option_fade : ''}`}
                     wrapperClassName={`flex-100 ${styles.option_row}`}
                   >
-                    { step < 6 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
+                    { step < 5 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
                     <div className="flex-33">
                       <p>{t('admin:chooseEffectiveDates')}</p>
                     </div>
@@ -812,10 +802,10 @@ class AdminClientMarginCreator extends Component {
               ? (
                 <GreyBox
                   contentClassName={`flex-100 layout-row layout-align-space-between-center 
-                layout-wrap ${styles.option_row_wrapper} ${step < 7 ? styles.option_fade : ''}`}
+                layout-wrap ${styles.option_row_wrapper} ${step < 6 ? styles.option_fade : ''}`}
                   wrapperClassName={`flex-100 ${styles.option_row}`}
                 >
-                  { step < 7 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
+                  { step < 6 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
                   <div className="flex-33">
                     <p>{t('admin:createIndividualFeeMargins')}</p>
                   </div>
@@ -860,10 +850,10 @@ class AdminClientMarginCreator extends Component {
               ) : [
                 (<GreyBox
                   contentClassName={`flex-100 layout-row layout-align-space-between-center 
-                layout-wrap ${styles.option_row_wrapper} ${step < 7 ? styles.option_fade : ''}`}
+                layout-wrap ${styles.option_row_wrapper} ${step < 6 ? styles.option_fade : ''}`}
                   wrapperClassName={`flex-100 ${styles.option_row}`}
                 >
-                  { step < 7 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
+                  { step < 6 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
                   <div className="flex-33">
                     <p>{t('admin:chooseMarginType')}</p>
                   </div>
@@ -879,10 +869,10 @@ class AdminClientMarginCreator extends Component {
                 </GreyBox>),
                 (<GreyBox
                   contentClassName={`flex-100 layout-row layout-align-space-between-center 
-                layout-wrap ${styles.option_row_wrapper} ${step < 7 ? styles.option_fade : ''}`}
+                layout-wrap ${styles.option_row_wrapper} ${step < 6 ? styles.option_fade : ''}`}
                   wrapperClassName={`flex-100 ${styles.option_row}`}
                 >
-                  { step < 7 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
+                  { step < 6 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
                   <div className="flex-33">
                     <p>{t('admin:chooseMarginAmount')}</p>
                   </div>
@@ -894,10 +884,10 @@ class AdminClientMarginCreator extends Component {
           </div>
           <GreyBox
             contentClassName={`flex-100 layout-row layout-align-space-between-center 
-              layout-wrap ${styles.option_row_wrapper} ${step < 7 ? styles.option_fade : ''}`}
+              layout-wrap ${styles.option_row_wrapper} ${step < 6 ? styles.option_fade : ''}`}
             wrapperClassName={`flex-100 ${styles.option_row}`}
           >
-            { step < 7 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
+            { step < 6 ? <div className={`flex-none ${styles.blocked_off}`} /> : '' }
             <div className="flex-33 layout-row layout-align-start-center">
               <p>{t('admin:saveMargin')}</p>
             </div>

@@ -310,7 +310,9 @@ exports[`shallow render 1`] = `
         flexMd={0}
         fullWidth={false}
         isBox={false}
+        onClick={null}
         padding={false}
+        style={Object {}}
         title=""
         titleAction={false}
         wrapperClassName="flex layout-row layout-align-start-center"
@@ -360,6 +362,7 @@ exports[`shallow render 1`] = `
                   square={false}
                   t={[Function]}
                   target="gdpr"
+                  targetOptions={Array []}
                   theme={
                     Object {
                       "colors": Object {
@@ -465,7 +468,9 @@ exports[`shallow render 1`] = `
         flexMd={0}
         fullWidth={false}
         isBox={false}
+        onClick={null}
         padding={false}
+        style={Object {}}
         title="Your Data"
         titleAction={false}
         wrapperClassName="flex-gt-md-35 offset-gt-md-5 flex-100 layout-row layout-align-stretch"

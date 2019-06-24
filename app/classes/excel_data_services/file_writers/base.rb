@@ -59,6 +59,8 @@ module ExcelDataServices
 
       def initialize(tenant:, file_name:)
         @tenant = tenant
+        @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant&.id)
+        @scope = ::Tenants::ScopeService.new(tenant: tenants_tenant).fetch
         @file_name = file_name.remove(/.xlsx$/) + '.xlsx'
         @xlsx = nil
       end
@@ -100,7 +102,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :tenant, :file_name, :xlsx
+      attr_reader :tenant, :file_name, :xlsx, :tenants_tenant, :scope
 
       def load_and_prepare_data
         raise NotImplementedError, "This method must be implemented in #{self.class.name}."

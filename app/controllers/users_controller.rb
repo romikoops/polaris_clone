@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  include PricingTools
-  include CurrencyTools
   skip_before_action :require_authentication!, only: :currencies
   skip_before_action :require_non_guest_authentication!, only: %i(update set_currency currencies)
 
@@ -57,7 +55,7 @@ class UsersController < ApplicationController
 
   def currencies
     currency = current_user.try(:currency) || 'EUR'
-    results = get_currency_array(currency, params[:tenant_id])
+    results = CurrencyTools.new.get_currency_array(currency, params[:tenant_id])
     response_handler(results)
   end
 
@@ -69,7 +67,7 @@ class UsersController < ApplicationController
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!
-    rates = get_rates(params[:currency], current_user.tenant_id)
+    rates = CurrencyToolss.new.get_rates(params[:currency], current_user.tenant_id)
     response_handler(user: current_user.token_validation_response, rates: rates)
   end
 

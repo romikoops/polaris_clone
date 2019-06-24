@@ -15,7 +15,6 @@ class Pricing < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
 
-  validates :uuid, uniqueness: true
   validates :transport_category, uniqueness: {
     scope: %i(itinerary_id tenant_id user_id tenant_vehicle_id effective_date expiration_date)
   }

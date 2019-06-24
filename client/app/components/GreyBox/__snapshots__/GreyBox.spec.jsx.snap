@@ -9,6 +9,8 @@ exports[`flex > 0 1`] = `
       
        
       "
+  onClick={null}
+  style={Object {}}
 >
   <div
     className="CONTENT_CLASSNAME"
@@ -36,6 +38,8 @@ exports[`flexGtLg > 0 1`] = `
       
        
       "
+  onClick={null}
+  style={Object {}}
 >
   <div
     className="CONTENT_CLASSNAME"
@@ -63,6 +67,8 @@ exports[`flexMd > 0 1`] = `
       
        
       "
+  onClick={null}
+  style={Object {}}
 >
   <div
     className="CONTENT_CLASSNAME"
@@ -90,6 +96,8 @@ exports[`fullWidth is true 1`] = `
       
        
       fullWidth"
+  onClick={null}
+  style={Object {}}
 >
   <div
     className="CONTENT_CLASSNAME"
@@ -117,6 +125,8 @@ exports[`isBox is true 1`] = `
       
       layout-row flex-sm-100 flex-xs-100 layout-align-center-center 
       "
+  onClick={null}
+  style={Object {}}
 >
   <div
     className="CONTENT_CLASSNAME"
@@ -144,6 +154,8 @@ exports[`padding is true 1`] = `
       boxpadding
        
       "
+  onClick={null}
+  style={Object {}}
 >
   <div
     className="CONTENT_CLASSNAME"
@@ -171,6 +183,8 @@ exports[`shallow render 1`] = `
       
        
       "
+  onClick={null}
+  style={Object {}}
 >
   <div
     className="CONTENT_CLASSNAME"
@@ -198,6 +212,8 @@ exports[`title is falsy 1`] = `
       
        
       "
+  onClick={null}
+  style={Object {}}
 >
   <div
     className="CONTENT_CLASSNAME"

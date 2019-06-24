@@ -46,7 +46,8 @@ export function configureStore () {
         bookingProcess: oldState.bookingProcess,
         tenant: oldState.tenant,
         admin: oldState.admin,
-        bookingSummary: oldState.bookingSummary
+        bookingSummary: oldState.bookingSummary,
+        clients: oldState.clients
       })
     }),
     1000

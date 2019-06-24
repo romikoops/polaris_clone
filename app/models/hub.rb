@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Hub < Legacy::Hub
+  include PgSearch
   belongs_to :tenant
   belongs_to :nexus
   belongs_to :address
@@ -20,7 +21,9 @@ class Hub < Legacy::Hub
   has_many :rates, -> { distinct }, through: :truckings
   has_many :locations, -> { distinct }, through: :truckings
   belongs_to :mandatory_charge, optional: true
-
+  pg_search_scope :list_search, against: %i(name), using: {
+    tsearch: { prefix: true }
+  }
   MOT_HUB_NAME = {
     'ocean' => 'Port',
     'air' => 'Airport',

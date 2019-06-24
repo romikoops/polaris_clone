@@ -42,20 +42,24 @@ class QuoteChargeBreakdown extends Component {
 
   determineSubKey (charge) {
     const { scope, mot, t } = this.props
-
+    let effectiveCharge
     if (charge[0].includes('unknown')) {
-      return `${t('shipment:motCargo', { mot: capitalize(mot) })}: ${charge[1].name}`
+      effectiveCharge = [charge[0].replace('unknown_', ''), charge[1]]
+    } else if (charge[0].includes('included_')) {
+      effectiveCharge = [charge[0].replace('included_', ''), charge[1]]
+    } else {
+      effectiveCharge = charge
     }
 
     switch (scope.fee_detail) {
       case 'key':
-        return this.displayKeyOnly(charge[0])
+        return this.displayKeyOnly(effectiveCharge[0])
       case 'name':
-        return charge[1].name
+        return effectiveCharge[1].name
       case 'key_and_name':
-        return this.displayKeyAndName(charge)
+        return this.displayKeyAndName(effectiveCharge)
       default:
-        return this.displayKeyOnly(charge[0])
+        return this.displayKeyOnly(effectiveCharge[0])
     }
   }
 
@@ -150,7 +154,7 @@ class QuoteChargeBreakdown extends Component {
   dynamicSubKey (key, price, i) {
     const { t, scope } = this.props
 
-    if (key === 'cargo' && !get(scope, ['consolidation', 'cargo', 'backend'])) {
+    if (key === 'cargo' && !get(scope, ['consolidation', 'cargo', 'backend']) && !scope.fine_fee_detail) {
       return t('cargo:unitFreightRate', { unitNo: i + 1 })
     }
     if (key === 'cargo' && get(scope, ['consolidation', 'cargo', 'backend'])) {
@@ -161,17 +165,23 @@ class QuoteChargeBreakdown extends Component {
   }
 
   generateContent (key) {
-    const { quote, t, scope } = this.props
+    const { quote } = this.props
 
     const contentSections = Object.entries(quote[`${key}`])
       .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
       .filter(value => value.length !== 1)
+
     const currencySections = {}
+    const includedSections = []
+    const excludedSections = []
     const currencyTotals = {}
     contentSections.forEach((price) => {
       const { currency, value, overridePrice } = this.dynamicValueExtractor(key, price)
-
-      if (value && currency) {
+      if (price[0].includes('included')) {
+        includedSections.push(price)
+      } else if (price[0].includes('unknown')) {
+        excludedSections.push(price)
+      } else if (value && currency) {
         if (!currencySections[currency]) {
           currencySections[currency] = []
         }
@@ -183,42 +193,7 @@ class QuoteChargeBreakdown extends Component {
       }
     })
 
-    return Object.entries(currencySections).map(currencyFees => (
-      <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
-
-        {scope.detailed_billing && get(scope, ['quote_card', 'sections', key], false) ? currencyFees[1].map((price, i) => {
-          const subPrices = (
-            <div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
-              <div className="flex-45 layout-row layout-align-start-center">
-                <span>
-                  {this.dynamicSubKey(key, price, i)}
-                </span>
-              </div>
-              <div className="flex-50 layout-row layout-align-end-center">
-                <p>
-                  {numberSpacing(price[1].value || price[1].total.value, 2)}
-                  &nbsp;
-                  {(price[1].currency || price[1].total.currency)}
-                </p>
-              </div>
-            </div>
-          )
-
-          return subPrices
-        }) : ''}
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.currency_header}`}>
-          <div className="flex-70 layout-row layout-align-start-center">
-            <span className="flex-none bold">
-              {' '}
-              {t('cargo:feesIn', { currency: currencyFees[0] })}
-            </span>
-          </div>
-          <div className="flex-25 layout-row layout-align-end-center">
-            <p className="flex-none bold">{`${numberSpacing(currencyTotals[currencyFees[0]] || 0, 2)} ${currencyFees[0]}`}</p>
-          </div>
-        </div>
-      </div>
-    ))
+    return this.renderContent(key, currencySections, currencyTotals, includedSections, excludedSections, true)
   }
 
   fetchCargoData (id) {
@@ -269,63 +244,29 @@ class QuoteChargeBreakdown extends Component {
         .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
         .filter(value => value.length !== 1)
       const currencySections = {}
+      const includedSections = []
+      const excludedSections = []
       const currencyTotals = {}
       contentSections.forEach((price) => {
         const { currency, value } = price[1]
-
-        if (!currencySections[currency]) {
-          currencySections[currency] = []
+        if (price[0].includes('included')) {
+          includedSections.push(price)
+        } else if (price[0].includes('unknown')) {
+          excludedSections.push(price)
+        } else {
+          if (!currencySections[currency]) {
+            currencySections[currency] = []
+          }
+          if (!currencyTotals[currency]) {
+            currencyTotals[currency] = 0.0
+          }
+          currencyTotals[currency] += parseFloat(value)
+          currencySections[currency].push(price)
         }
-        if (!currencyTotals[currency]) {
-          currencyTotals[currency] = 0.0
-        }
-        currencyTotals[currency] += parseFloat(value)
-        currencySections[currency].push(price)
       })
-
       const showSubTotal = QuoteChargeBreakdown.shouldShowSubTotal(currencySections)
-      const sections = Object.entries(currencySections).map(currencyFees => (
-        <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
 
-          {scope.detailed_billing && get(scope, ['quote_card', 'sections', key], false) ? currencyFees[1].map((price, i) => {
-            const subPrices = (
-              <div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
-                <div className="flex-70 layout-row layout-align-start-center">
-                  <span>
-                    {this.determineSubKey(price)}
-                  </span>
-                </div>
-                <div className="flex-25 layout-row layout-align-end-center">
-                  {price[0].includes('unknown') ? '' : (
-                    <p>
-                      {numberSpacing(price[1].value || price[1].total.value, 2)}
-                      &nbsp;
-                      {(price[1].currency || price[1].total.currency)}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )
-
-            return subPrices
-          }) : ''}
-
-          {showSubTotal ? (
-            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.currency_header}`}>
-              <div className="flex-45 layout-row layout-align-start-center">
-                <span className="flex-none bold">
-                  {' '}
-                  {t('cargo:feesIn', { currency: currencyFees[0] })}
-                </span>
-              </div>
-              <div className="flex-45 layout-row layout-align-end-center">
-                <p className="flex-none bold">{`${numberSpacing(currencyTotals[currencyFees[0]] || 0, 2)} ${currencyFees[0]}`}</p>
-              </div>
-            </div>
-          ) : ''}
-
-        </div>
-      ))
+      const sections = this.renderContent(key, currencySections, currencyTotals, includedSections, excludedSections, showSubTotal)
 
       const description = cargo ? CONTAINER_DESCRIPTIONS[cargo.size_class] || get(cargo, ['cargo_item_type', 'description']) : capitalize(unitArray[0])
 
@@ -348,6 +289,118 @@ class QuoteChargeBreakdown extends Component {
     }
 
     return capitalize(t(key))
+  }
+
+  renderContent (key, currencySections, currencyTotals, includedSections, excludedSections, showSubTotal) {
+    const { t, scope } = this.props
+    const feeSections = Object.entries(currencySections).map(currencyFees => (
+      <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+
+        {scope.detailed_billing ? currencyFees[1].map((price, i) => {
+          const subPrices = (
+            <div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
+              <div className="flex-45 layout-row layout-align-start-center">
+                <span>
+                  {this.dynamicSubKey(key, price, i)}
+                </span>
+              </div>
+              <div className="flex-50 layout-row layout-align-end-center">
+                <p>
+                  {numberSpacing(price[1].value || price[1].total.value, 2)}
+                  &nbsp;
+                  {(price[1].currency || price[1].total.currency)}
+                </p>
+              </div>
+            </div>
+          )
+
+          return subPrices
+        }) : ''}
+        { showSubTotal && currencyFees[0] !== 'null'
+          ? (
+            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.currency_header}`}>
+              <div className="flex-70 layout-row layout-align-start-center">
+                <span className="flex-none bold">
+                  {' '}
+                  {t('cargo:feesIn', { currency: currencyFees[0] })}
+                </span>
+              </div>
+              <div className="flex-25 layout-row layout-align-end-center">
+                <p className="flex-none bold">{`${numberSpacing(currencyTotals[currencyFees[0]] || 0, 2)} ${currencyFees[0]}`}</p>
+              </div>
+            </div>
+          ) : ''
+        }
+      </div>
+    ))
+
+    if (scope.detailed_billing && includedSections.length > 0) {
+      const includedFees = includedSections.map((price, i) => {
+        const subPrices = (
+          <div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
+
+            <div className="flex-70 layout-row layout-align-start-center">
+              <span>
+                {this.determineSubKey(price)}
+              </span>
+            </div>
+            <div className="flex-25 layout-row layout-align-end-center">
+              {price[0].includes('unknown') || price[0].includes('included') ? '' : (
+                <p>
+                  {numberSpacing(price[1].value || price[1].total.value, 2)}
+                    &nbsp;
+                  {(price[1].currency || price[1].total.currency)}
+                </p>
+              )}
+            </div>
+          </div>
+        )
+
+        return subPrices
+      })
+      feeSections.push(
+        <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+          <div className={`flex-100 layout-row layout-align-start-center ${styles.cargo_title}`}>
+            <p className="flex-none">{t('shipment:includedFees')}</p>
+          </div>
+          {includedFees}
+        </div>
+      )
+    }
+    if (scope.detailed_billing && excludedSections.length > 0) {
+      const excludedFees = excludedSections.map((price, i) => {
+        const subPrices = (
+          <div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
+            <div className="flex-70 layout-row layout-align-start-center">
+              <span>
+                {this.determineSubKey(price)}
+              </span>
+            </div>
+            <div className="flex-25 layout-row layout-align-end-center">
+              {price[0].includes('unknown') || price[0].includes('included') ? '' : (
+                <p>
+                  {numberSpacing(price[1].value || price[1].total.value, 2)}
+                    &nbsp;
+                  {(price[1].currency || price[1].total.currency)}
+                </p>
+              )}
+            </div>
+          </div>
+        )
+
+        return subPrices
+      })
+      feeSections.push(
+        <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+          <div className={`flex-100 layout-row layout-align-start-center ${styles.cargo_title}`}>
+            <p className="flex-none">{t('shipment:excludedFees')}</p>
+          </div>
+          {excludedFees}
+        </div>
+      )
+    }
+
+    return feeSections
   }
 
   renderChargeableWeight (key) {

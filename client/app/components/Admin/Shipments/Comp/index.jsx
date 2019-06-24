@@ -8,7 +8,7 @@ export class AdminShipmentsComp extends PureComponent {
     const {
       isUser
     } = this.props
-    return isUser ? <ShipmentsCompUser /> : <ShipmentsCompAdmin />
+    return isUser ? <ShipmentsCompUser {...this.props} /> : <ShipmentsCompAdmin {...this.props} />
   }
 }
 AdminShipmentsComp.propTypes = {

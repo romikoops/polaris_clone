@@ -1,7 +1,7 @@
 import { push } from 'react-router-redux'
 import { adminConstants } from '../constants/admin.constants'
 import { adminService } from '../services/admin.service'
-import { alertActions, documentActions } from './'
+import { alertActions, documentActions, clientsActions } from './'
 
 function getHubs (redirect, page, hubType, country, status) {
   function request (hubData) {
@@ -776,7 +776,7 @@ function getClient (id, redirect) {
     adminService.getClient(id).then(
       (data) => {
         if (redirect) {
-          dispatch(push(`/admin/clients/${id}`))
+          dispatch(push(`/admin/clients/client/${id}`))
         }
 
         dispatch(success(data))
@@ -1636,7 +1636,32 @@ function loadItinerarySchedules (id, redirect) {
   }
 }
 
-function uploadTrucking (url, file, direction) {
+function disablePricing (args) {
+  function request (pricingData) {
+    return { type: adminConstants.DISABLE_PRICING_REQUEST, payload: pricingData }
+  }
+  function success (pricingData) {
+    return { type: adminConstants.DISABLE_PRICING_SUCCESS, payload: pricingData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.DISABLE_PRICING_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+    adminService.disablePricing(args).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function uploadTrucking (url, file, group) {
   function request (truckingData) {
     return { type: adminConstants.UPLOAD_TRUCKING_REQUEST, payload: truckingData }
   }
@@ -1650,7 +1675,7 @@ function uploadTrucking (url, file, direction) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.uploadTrucking(url, file, direction).then(
+    adminService.uploadTrucking(url, file, group).then(
       (data) => {
         dispatch(documentActions.setStats(data.data))
         dispatch(success(data))
@@ -1663,23 +1688,24 @@ function uploadTrucking (url, file, direction) {
   }
 }
 
-function uploadAgents (url, file) {
+function uploadAgents (file) {
   function request (agentData) {
-    return { type: adminConstants.UPLOAD_TRUCKING_REQUEST, payload: agentData }
+    return { type: adminConstants.UPLOAD_COMPANIES_REQUEST, payload: agentData }
   }
   function success (agentData) {
-    return { type: adminConstants.UPLOAD_TRUCKING_SUCCESS, payload: agentData.data }
+    return { type: adminConstants.UPLOAD_COMPANIES_SUCCESS, payload: agentData.data }
   }
   function failure (error) {
-    return { type: adminConstants.UPLOAD_TRUCKING_FAILURE, error }
+    return { type: adminConstants.UPLOAD_COMPANIES_FAILURE, error }
   }
 
   return (dispatch) => {
     dispatch(request())
 
-    adminService.uploadAgents(url, file).then(
+    adminService.uploadAgents(file).then(
       (data) => {
         dispatch(documentActions.setStats(data.data))
+        dispatch(clientsActions.getCompaniesForList({ page: 1, pageSize: 10 }))
         dispatch(success(data))
       },
       (error) => {
@@ -1847,7 +1873,8 @@ export const adminActions = {
   deleteDocument,
   searchPricings,
   getLocalCharges,
-  uploadAgents
+  uploadAgents,
+  disablePricing
 }
 
 export default adminActions

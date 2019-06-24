@@ -27,7 +27,7 @@ module ExcelDataServices
         end
 
         keys_and_names.uniq { |pair| pair[:key] }.each do |pair|
-          ChargeCategory.from_code(pair[:key], tenant.id, pair[:name])
+          ChargeCategory.from_code(code: pair[:key], tenant_id: tenant.id, name: pair[:name])
         end
       end
 

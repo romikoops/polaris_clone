@@ -46,7 +46,7 @@ module ExcelDataServices
         restructured_data = expand_fcl_to_all_sizes(restructured_data)
 
         # Necessary until we get rid of structure "one pricing<->many pricing_details"
-        restructured_data = group_by_pricing_params(restructured_data)
+        restructured_data = group_by_params(restructured_data, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS)
 
         { 'Pricing' => restructured_data }
       end

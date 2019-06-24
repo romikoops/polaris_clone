@@ -1119,4 +1119,25 @@
       margin-bottom: 25px;
     }
   }
+  .grey_section_head { 
+    background-color: #E0E0E0;
+    h1,h2,h3,h4 {
+      margin: 5px;
+    }
+    padding: 12px 18px;
+    padding-left: 15px;
+    margin-top: 25px;
+  }
+  .header_with_text {
+    padding-top: 25px;
+    padding-left: -10px;
+    h2 {
+      color: darkgray;
+      margin: 5px;
+    }
+    p {
+      font-size: 14px;
+      text-align: center;
+    }
+  }
 }

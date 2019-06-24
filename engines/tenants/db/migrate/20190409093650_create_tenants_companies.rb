@@ -7,6 +7,7 @@ class CreateTenantsCompanies < ActiveRecord::Migration[5.2]
       t.integer :address_id
       t.string :vat_number
       t.string :email
+      t.string :phone
       t.uuid :tenant_id
       t.timestamps
     end

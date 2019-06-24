@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import PropTypes from '../../../prop-types'
 import GenericError from '../../ErrorHandling/Generic'
 import styles from './AdminSettings.scss'
 import AdminEmailForm from './AdminEmailForm'
 import AdminRemarksEditor from './AdminRemarksEditor'
+import AdminMargins from './Margins'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import { authenticationActions } from '../../../actions'
@@ -101,6 +101,16 @@ class AdminSettings extends PureComponent {
             faClass="fa fa-edit"
             content={quotationRemarks}
           />
+          <CollapsingBar
+            showArrow
+            collapsed={!expander.margins}
+            theme={theme}
+            mainWrapperStyle={{ background: '#E0E0E0', color: '#4F4F4F', margin: '10px' }}
+            handleCollapser={() => this.toggleExpander('margins')}
+            contentHeader={t('admin:updateDefaultMargins')}
+            faClass="fa fa-edit"
+            content={<AdminMargins tenant={tenant} />}
+          />
           <CircleCompletion
             icon="fa fa-check"
             iconColor={theme.colors.primary || 'green'}
@@ -122,19 +132,6 @@ class AdminSettings extends PureComponent {
       </GenericError>
     )
   }
-}
-
-AdminSettings.propTypes = {
-  tenant: PropTypes.tenant.isRequired,
-  tenantDispatch: PropTypes.shape({
-    updateEmails: PropTypes.func
-  }).isRequired,
-  remarkDispatch: PropTypes.shape({
-    addPdfRemark: PropTypes.func,
-    updatePdfRemarks: PropTypes.func
-  }).isRequired,
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired
 }
 
 AdminSettings.defaultProps = {

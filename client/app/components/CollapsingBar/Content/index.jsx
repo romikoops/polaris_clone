@@ -32,7 +32,7 @@ export default class CollapsingContent extends React.PureComponent {
 
   render () {
     const {
-      collapsed, content, children, minHeight, wrapperContentClasses
+      collapsed, content, children, minHeight, wrapperContentClasses, overflow
     } = this.props
     const { firstRender } = this.state
 
@@ -45,7 +45,7 @@ export default class CollapsingContent extends React.PureComponent {
           transition: `max-height ${Math.log(1 + this.state.panelHeight) / 10}s linear`
         }}
       >
-        <div className={styles.inner_wrapper} ref={(div) => { this.panel = div }}>
+        <div className={overflow ? '' : styles.inner_wrapper} ref={(div) => { this.panel = div }}>
           { content }
           { children }
         </div>
@@ -54,17 +54,10 @@ export default class CollapsingContent extends React.PureComponent {
   }
 }
 
-CollapsingContent.propTypes = {
-  collapsed: Proptypes.bool,
-  content: Proptypes.node,
-  minHeight: Proptypes.string,
-  wrapperContentClasses: Proptypes.string,
-  children: Proptypes.arrayOf(Proptypes.node)
-}
-
 CollapsingContent.defaultProps = {
   collapsed: false,
   content: '',
+  overflow: false,
   wrapperContentClasses: '',
   minHeight: '',
   children: null

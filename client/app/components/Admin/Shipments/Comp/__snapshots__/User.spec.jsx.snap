@@ -75,7 +75,11 @@ exports[`shallow render 1`] = `
         </div>
         <AdminShipmentsBox
           confirmShipmentData={Object {}}
-          dispatches={Object {}}
+          dispatches={
+            Object {
+              "getShipments": [Function],
+            }
+          }
           handleClick={[Function]}
           handleSearchChange={[Function]}
           nextPage={[Function]}
@@ -159,7 +163,11 @@ exports[`shallow render 1`] = `
         </div>
         <AdminShipmentsBox
           confirmShipmentData={Object {}}
-          dispatches={Object {}}
+          dispatches={
+            Object {
+              "getShipments": [Function],
+            }
+          }
           handleClick={[Function]}
           handleSearchChange={[Function]}
           nextPage={[Function]}
@@ -243,7 +251,11 @@ exports[`shallow render 1`] = `
         </div>
         <AdminShipmentsBox
           confirmShipmentData={Object {}}
-          dispatches={Object {}}
+          dispatches={
+            Object {
+              "getShipments": [Function],
+            }
+          }
           handleClick={[Function]}
           handleSearchChange={[Function]}
           nextPage={[Function]}
@@ -327,7 +339,11 @@ exports[`shallow render 1`] = `
         </div>
         <AdminShipmentsBox
           confirmShipmentData={Object {}}
-          dispatches={Object {}}
+          dispatches={
+            Object {
+              "getShipments": [Function],
+            }
+          }
           handleClick={[Function]}
           handleSearchChange={[Function]}
           nextPage={[Function]}
@@ -410,7 +426,11 @@ exports[`shallow render 1`] = `
         </div>
         <AdminShipmentsBox
           confirmShipmentData={Object {}}
-          dispatches={Object {}}
+          dispatches={
+            Object {
+              "getShipments": [Function],
+            }
+          }
           handleClick={[Function]}
           handleSearchChange={[Function]}
           nextPage={[Function]}
@@ -462,7 +482,11 @@ exports[`shipments.pages is truthy 1`] = `
       >
         <AdminShipmentsBox
           confirmShipmentData={Object {}}
-          dispatches={Object {}}
+          dispatches={
+            Object {
+              "getShipments": [Function],
+            }
+          }
           handleClick={[Function]}
           handleSearchChange={[Function]}
           nextPage={[Function]}

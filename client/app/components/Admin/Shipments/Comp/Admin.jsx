@@ -48,6 +48,7 @@ export class ShipmentsCompAdmin extends Component {
   componentDidMount () {
     window.scrollTo(0, 0)
     this.determinePerPage()
+    this.handleFilters()
     window.addEventListener('resize', this.determinePerPage)
   }
 
@@ -132,7 +133,8 @@ export class ShipmentsCompAdmin extends Component {
 
   handleFilters (target, realPage) {
     const { searchFilters } = this.state
-    const { pages } = this.props.shipments
+    const { targetUserId, shipments } = this.props
+    const { pages } = shipments
 
     const hubTypes = searchFilters.hubType
       ? searchFilters.hubType.filter(key => !searchFilters.hubType[key])
@@ -148,6 +150,9 @@ export class ShipmentsCompAdmin extends Component {
       : null
     const params = {}
 
+    if (targetUserId) {
+      params.target_user_id = targetUserId
+    }
     if (hubTypes) {
       params.hub_type = hubTypes
     }
@@ -184,7 +189,8 @@ export class ShipmentsCompAdmin extends Component {
       clients,
       numShipmentsPages,
       hubHash,
-      adminDispatch
+      adminDispatch,
+      targetUserId
     } = this.props
     const { search } = this.state
 
@@ -254,18 +260,20 @@ export class ShipmentsCompAdmin extends Component {
                       onChange={e => this.handleInput(e)}
                     />
                   </div>
-                  <div className="flex-15 layout-row">
-                    <NamedSelect
-                      className="flex-100 selectors"
-                      multi
-                      name="clients"
-                      placeholder="Clients"
-                      value={this.state.searchFilters.clients}
-                      autoload={false}
-                      options={filters.sortByAlphabet(loadClients(clients), 'label')}
-                      onChange={e => this.handleInput(e)}
-                    />
-                  </div>
+                  { targetUserId ? '' : (
+                    <div className="flex-15 layout-row">
+                      <NamedSelect
+                        className="flex-100 selectors"
+                        multi
+                        name="clients"
+                        placeholder="Clients"
+                        value={this.state.searchFilters.clients}
+                        autoload={false}
+                        options={filters.sortByAlphabet(loadClients(clients), 'label')}
+                        onChange={e => this.handleInput(e)}
+                      />
+                    </div>
+                  ) }
                 </div>
                 <AdminShipmentsBox
                   handleClick={this.viewShipment}

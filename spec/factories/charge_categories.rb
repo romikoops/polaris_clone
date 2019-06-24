@@ -2,8 +2,19 @@
 
 FactoryBot.define do
   factory :charge_category do
+    association :tenant
     name { 'Grand Total' }
     code { 'grand_total' }
+
+    trait :bas do
+      name { 'Basic Ocean Freight' }
+      code { 'BAS' }
+    end
+
+    trait :has do
+      name { 'Heavy Weight Freight' }
+      code { 'HAS' }
+    end
   end
 end
 

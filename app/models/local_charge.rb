@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class LocalCharge < ApplicationRecord
+class LocalCharge < Legacy::LocalCharge
   has_paper_trail
   belongs_to :hub
   belongs_to :tenant
@@ -8,8 +8,6 @@ class LocalCharge < ApplicationRecord
   belongs_to :counterpart_hub, class_name: 'Hub', optional: true
 
   before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
-
-  validates :uuid, uniqueness: true
 
   scope :for_load_type, ->(load_type) { where(load_type: load_type.downcase) }
   scope :for_mode_of_transport, ->(mot) { where(mode_of_transport: mot.downcase) }

@@ -4,9 +4,7 @@ require 'bigdecimal'
 require 'net/http'
 
 module ShippingTools # rubocop:disable Metrics/ModuleLength
-  include PricingTools
   include NotificationTools
-  extend PricingTools
   extend NotificationTools
   InternalError = Class.new(StandardError)
 
@@ -37,7 +35,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     main_quote
   end
 
-  def self.create_shipment(details, current_user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def self.create_shipment(details, current_user) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     tenant = current_user.tenant
     load_type = details['loadType'].underscore
     direction = details['direction']
@@ -49,23 +47,52 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       tenant_id: tenant.id
     )
     shipment.save!
+    scope = Tenants::ScopeService.new(target: current_user).fetch
 
-    if ::Tenants::ScopeService.new(user: current_user).fetch(:closed_quotation_tool)
-      raise ApplicationError::NonAgentUser if current_user.agency.nil?
-
-      user_pricing_id = current_user.agency.agency_manager_id
-      itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-        Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
+    if scope['base_pricing']
+      if scope[:display_itineraries_with_rates]
+        cargo_classes = [nil] + (load_type == 'cargo_item' ? ['lcl'] : %w(fcl_20 fcl_40 fcl_40_hq))
+        no_general_margins = Pricings::Margin.where(
+          itinerary_id: nil,
+          applicable: current_user.all_groups,
+          cargo_class: cargo_classes
+        ).empty?
+        itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
+          no_pricings = Pricings::Pricing.where(itinerary_id: id, load_type: load_type, disabled: false).empty?
+          no_margins = if no_general_margins
+            Pricings::Margin.where(
+              itinerary_id: id,
+              applicable: current_user.all_groups,
+              cargo_class: cargo_classes
+            ).empty?
+          else
+            no_general_margins
+          end
+          no_pricings || no_margins
+        end
+      else
+        itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
+          Pricings::Pricing.where(itinerary_id: id, load_type: load_type, disabled: false).empty?
+        end
       end
     else
-      itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-        Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
+      if scope[:closed_quotation_tool]
+        raise ApplicationError::NonAgentUser if current_user.agency.nil?
+
+        user_pricing_id = current_user.agency.agency_manager_id
+        itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
+          Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
+        end
+      else
+        itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
+          Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
+        end
       end
     end
-
     routes_data = Route.detailed_hashes_from_itinerary_ids(
       itinerary_ids,
-      with_truck_types: { load_type: load_type }
+      with_truck_types: { load_type: load_type },
+      base_pricing: scope['base_pricing']
     )
 
     {
@@ -79,7 +106,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
-  def self.get_offers(params, current_user)
+  def self.get_offers(params, current_user) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
     shipment = Shipment.find(params[:shipment_id])
     offer_calculator = OfferCalculator.new(shipment, params, current_user)
 
@@ -93,7 +120,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
                     offer_calculator.shipment.cargo_units
                   end
 
-    if current_user.tenant.quotation_tool? && ::Tenants::ScopeService.new(user: current_user).fetch(:email_all_quotes)
+    if current_user.tenant.quotation_tool? && ::Tenants::ScopeService.new(target: current_user).fetch(:email_all_quotes)
       quote = ShippingTools.create_shipments_from_quotation(
         offer_calculator.shipment,
         offer_calculator.detailed_schedules.map(&:deep_stringify_keys!)
@@ -109,11 +136,11 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       cargoUnits: cargo_units,
       aggregatedCargo: offer_calculator.shipment.aggregated_cargo
     }
-  rescue ArgumentError
+  rescue ArgumentError => e
     raise ApplicationError::InternalError
   end
 
-  def self.generate_shipment_pdf(shipment:)
+  def self.generate_shipment_pdf(shipment:) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     cargo_count = shipment.cargo_units.count
     load_type = ''
     if shipment.load_type == 'cargo_item' && cargo_count > 1
@@ -140,7 +167,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     shipment_recap.generate
   end
 
-  def self.update_shipment(params, current_user)
+  def self.update_shipment(params, current_user) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
     tenant = current_user.tenant
     shipment = Shipment.find(params[:shipment_id])
     shipment_data = params[:shipment]
@@ -190,7 +217,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     # TBD - Adjust for itinerary logic
     if shipment_data[:insurance][:bool]
       @insurance_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code('insurance', shipment.tenant_id),
+        children_charge_category: ChargeCategory.from_code(code: 'insurance', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
         price: Price.create(currency: shipment.user.currency, value: shipment_data[:insurance][:value]),
@@ -199,7 +226,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     end
     if shipment_data[:customs][:total][:val].to_d.positive? || shipment_data[:customs][:total][:hasUnknown]
       @customs_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code('customs', shipment.tenant_id),
+        children_charge_category: ChargeCategory.from_code(code: 'customs', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
         price: Price.create(
@@ -210,7 +237,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       )
       if shipment_data[:customs][:import][:bool]
         @import_customs_charge = Charge.create(
-          children_charge_category: ChargeCategory.from_code('import_customs', shipment.tenant_id),
+          children_charge_category: ChargeCategory.from_code(code: 'import_customs', tenant_id: shipment.tenant_id),
           charge_category: ChargeCategory.grand_total,
           charge_breakdown: charge_breakdown,
           price: Price.create(
@@ -222,7 +249,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       end
       if shipment_data[:customs][:export][:bool]
         @export_customs_charge = Charge.create(
-          children_charge_category: ChargeCategory.from_code('export_customs', shipment.tenant_id),
+          children_charge_category: ChargeCategory.from_code(code: 'export_customs', tenant_id: shipment.tenant_id),
           charge_category: ChargeCategory.grand_total,
           charge_breakdown: charge_breakdown,
           price: Price.create(
@@ -237,7 +264,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     end
     if shipment_data[:addons][:customs_export_paper]
       @addons_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code('addons', shipment.tenant_id),
+        children_charge_category: ChargeCategory.from_code(code: 'addons', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
         price: Price.create(
@@ -247,7 +274,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
         parent: charge_breakdown.charge('grand_total')
       )
       @customs_export_paper = Charge.create(
-        children_charge_category: ChargeCategory.from_code('customs_export_paper', shipment.tenant_id),
+        children_charge_category: ChargeCategory.from_code(code: 'customs_export_paper', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
         price: Price.create(
@@ -396,7 +423,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
 
   def self.choose_offer(params, current_user) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
     shipment = Shipment.find(params[:shipment_id])
-
+    shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
     shipment.user_id = current_user.id
     shipment.customs_credit = params[:customs_credit]
     shipment.trip_id = params[:schedule]['trip_id']
@@ -442,14 +469,6 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
-    @contacts = current_user.contacts.map do |contact|
-      {
-        address: contact.address.try(:to_custom_hash) || {},
-        contact: contact.attributes
-      }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
-    end
-
-    hub_route = @schedule['hub_route_id']
     cargo_items = shipment.cargo_items
     containers = shipment.containers
     if containers.present?
@@ -487,9 +506,9 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       cargos,
       current_user
     )
-
+    @pricing_tools = PricingTools.new(shipment: shipment, user: current_user)
     import_fees = if destination_customs_fee
-                    calc_customs_fees(
+                    @pricing_tools.calc_customs_fees(
                       destination_customs_fee['fees'],
                       cargos,
                       shipment.load_type,
@@ -500,7 +519,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
                     { unknown: true }
                   end
     export_fees = if origin_customs_fee
-                    calc_customs_fees(
+                    @pricing_tools.calc_customs_fees(
                       origin_customs_fee['fees'],
                       cargos,
                       shipment.load_type,
@@ -535,7 +554,6 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     {
       shipment: shipment_as_json,
       hubs: hubs,
-      contacts: @contacts,
       userLocations: @user_addresses,
       schedule: @schedule,
       dangerousGoods: @dangerous,
@@ -629,7 +647,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     trips = trip.earliest_trips.sort_by(&:start_date) if (trips.length < 5 || trips.empty?) && !delta.to_i.positive?
 
     {
-      schedules: Schedule.from_trips(trips),
+      schedules: Legacy::Schedule.from_trips(trips),
       itinerary_id: trip.itinerary_id,
       tenant_vehicle_id: trip.tenant_vehicle_id,
       finalResults: final_results
@@ -647,7 +665,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
     @quotes = main_quote.shipments.map(&:selected_offer)
     logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
-    send_on_download = ::Tenants::ScopeService.new(user: @user).fetch(:send_email_on_quote_download)
+    send_on_download = ::Tenants::ScopeService.new(target: @user).fetch(:send_email_on_quote_download)
     QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_download
     quotation = PdfHandler.new(
       layout: 'pdfs/simple.pdf.html.erb',
@@ -667,7 +685,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   def self.save_and_send_quotes(shipment, schedules, email)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
     QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote).deliver_later
-    send_on_quote = ::Tenants::ScopeService.new(user: @user).fetch(:send_email_on_quote_email)
+    send_on_quote = ::Tenants::ScopeService.new(target: @user).fetch(:send_email_on_quote_email)
     QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_quote
   end
 
@@ -736,8 +754,10 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       },
       load_type: original_shipment.load_type,
       itinerary_id: trip.itinerary_id,
-      desired_start_date: original_shipment.desired_start_date
+      desired_start_date: original_shipment.desired_start_date,
+      meta: original_shipment.meta
     )
+    new_shipment.meta['pricing_rate_data'] = result[:meta][:pricing_rate_data]
     charge_category_map = {}
     original_shipment.cargo_units.each do |unit|
       new_unit = unit.dup
@@ -750,7 +770,6 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     elsif new_shipment.lcl? && new_shipment.aggregated_cargo.nil?
       new_shipment.cargo_units.map(&:set_chargeable_weight!)
     end
-
     original_shipment.charge_breakdowns.where(trip: trip).each do |charge_breakdown|
       new_charge_breakdown = charge_breakdown.dup
       new_charge_breakdown.update(shipment: new_shipment)
@@ -762,9 +781,19 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
           old_charge_category = new_charge&.children_charge_category
           next if old_charge_category&.cargo_unit_id.nil?
 
-          new_charge_category = old_charge_category.dup
-          new_charge_category.cargo_unit_id = charge_category_map[old_charge_category.cargo_unit_id]
-          new_charge_category.save!
+          existing_charge_category = ChargeCategory.find_by(
+            cargo_unit_id: charge_category_map[old_charge_category.cargo_unit_id],
+            tenant_id: old_charge_category.tenant_id,
+            code: old_charge_category.code,
+            name: old_charge_category.name
+          )
+          if existing_charge_category
+            new_charge_category = existing_charge_category
+          else
+            new_charge_category = old_charge_category.dup
+            new_charge_category.cargo_unit_id = charge_category_map[old_charge_category.cargo_unit_id]
+            new_charge_category.save!
+          end
           new_charge.children_charge_category = new_charge_category
           new_charge.save!
         end

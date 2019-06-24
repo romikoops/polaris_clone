@@ -19,6 +19,7 @@ class DocumentsSelector extends React.Component {
 
     return response.json()
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -30,28 +31,34 @@ class DocumentsSelector extends React.Component {
     this.onChange = this.onChange.bind(this)
     this.fileUpload = this.fileUpload.bind(this)
   }
+
   componentWillMount () {
     if (this.props.options.length < 1 && !this.state.selected) {
       this.setState({ selected: true })
     }
   }
+
   componentWillReceiveProps (nextProps) {
     if (this.props.options.length < 1 || (nextProps.options.length < 1 && !this.state.selected)) {
       this.setState({ selected: true })
     }
   }
+
   onFormSubmit (e) {
     e.preventDefault()
     if (this.state.file) {
       this.fileUpload(this.state.file)
     }
   }
+
   onChange (e) {
     this.fileUpload(e.target.files[0])
   }
+
   handleSelected (e) {
     this.setState({ selected: e.value })
   }
+
   fileUpload (baseFile) {
     const file = baseFile
     const { selected } = this.state
@@ -72,6 +79,7 @@ class DocumentsSelector extends React.Component {
         if (this.uploaderInput.files.length) {
           this.uploaderInput.value = ''
         }
+
         return null
       }
       if (uploadFn) {
@@ -96,14 +104,17 @@ class DocumentsSelector extends React.Component {
 
     return this.showFileTypeError()
   }
+
   showFileTypeError () {
     this.setState({ error: true })
     this.alertTimeout = setTimeout(() => this.setState({ error: false }), 5000)
   }
+
   clickUploaderInput (e) {
     e.preventDefault()
     this.uploaderInput.click()
   }
+
   render () {
     const {
       theme, type, tooltip, options, t
@@ -152,17 +163,6 @@ class DocumentsSelector extends React.Component {
       </div>
     )
   }
-}
-
-DocumentsSelector.propTypes = {
-  url: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  dispatchFn: PropTypes.func,
-  uploadFn: PropTypes.func,
-  tooltip: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.any)
 }
 
 DocumentsSelector.defaultProps = {

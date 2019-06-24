@@ -4,7 +4,6 @@ import fetch from 'isomorphic-fetch'
 import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
-import PropTypes from '../../prop-types'
 import { getTenantApiUrl } from '../../constants/api.constants'
 import { authHeader } from '../../helpers'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -137,19 +136,6 @@ class FileUploader extends React.Component {
       </div>
     )
   }
-}
-
-FileUploader.propTypes = {
-  url: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
-  square: PropTypes.bool,
-  type: PropTypes.string.isRequired,
-  theme: PropTypes.theme,
-  dispatchFn: PropTypes.func,
-  uploadFn: PropTypes.func,
-  tooltip: PropTypes.string,
-  formClasses: PropTypes.string,
-  size: PropTypes.string
 }
 
 FileUploader.defaultProps = {

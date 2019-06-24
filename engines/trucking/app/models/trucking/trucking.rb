@@ -12,7 +12,18 @@ module Trucking
     validates :hub_id, :location_id, presence: true
     validates :hub_id,
               uniqueness: {
-                scope: %i(carriage load_type cargo_class location_id courier_id user_id modifier tenant_id truck_type),
+                scope: %i(
+                  carriage
+                  load_type
+                  cargo_class
+                  location_id
+                  courier_id
+                  user_id
+                  modifier
+                  tenant_id
+                  truck_type
+                  group_id
+                ),
                 message: lambda { |obj, _msg|
                   "#{obj.truck_type} taken for '#{obj.carriage}-carriage', #{obj.load_type}"
                 }
@@ -52,7 +63,7 @@ module Trucking
 
     def location_info
       return {} if location.nil?
-      
+
       if location&.zipcode
         { 'zipCode' => location.zipcode }
       elsif location&.distance
@@ -88,4 +99,5 @@ end
 #  truck_type          :string
 #  user_id             :integer
 #  parent_id           :uuid
+#  group_id            :integer
 #

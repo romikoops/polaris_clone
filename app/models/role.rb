@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Role < ApplicationRecord
+class Role < Legacy::Role
   has_many :users
 end
 

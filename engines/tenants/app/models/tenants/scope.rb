@@ -3,6 +3,7 @@
 module Tenants
   class Scope < ApplicationRecord
     belongs_to :target, polymorphic: true
+    validates_uniqueness_of :target_id, scope: :target_type
   end
 end
 

@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import styles from './ContactSetter.scss'
 import defs from '../../styles/default_classes.scss'
 import { Modal } from '../Modal/Modal'
 import ContactSetterBody from './Body'
 import ContactSetterNewContactWrapper from './NewContactWrapper'
+import { bookingProcessActions } from '../../actions'
 // eslint-disable-next-line no-named-as-default
 import ShipmentContactForm from '../ShipmentContactForm/ShipmentContactForm'
 
@@ -25,6 +27,7 @@ class ContactSetter extends Component {
         address: {}
       }
     }
+
     this.showAddressBook = this.showAddressBook.bind(this)
     this.showEditContact = this.showEditContact.bind(this)
   }
@@ -39,32 +42,24 @@ class ContactSetter extends Component {
     })
   }
 
-  availableContacts (contactType) {
-    const {
-      shipper, consignee, notifyees, contacts
-    } = this.props
-
-    return contacts.filter(contactData => (
-      shipper !== contactData &&
-      consignee !== contactData &&
-      notifyees.indexOf(contactData) === -1
-    ))
-  }
-
   toggleShowModal () {
     this.setState({ showModal: !this.state.showModal })
   }
 
   showAddressBook (contactType, index) {
+    const {
+      shipper, consignee, notifyees, theme, setContact
+    } = this.props
     const modal = (
       <Modal
-        component={
+        component={(
           <ContactSetterNewContactWrapper
             AddressBookProps={{
-              theme: this.props.theme,
-              contacts: this.availableContacts(contactType),
+              theme,
+              contactType,
+              setContacts: [shipper, consignee, ...notifyees],
               setContact: (contactData) => {
-                this.props.setContact(contactData, contactType, index)
+                setContact(contactData, contactType, index)
                 this.setState({
                   modal: null,
                   showModal: false
@@ -73,16 +68,16 @@ class ContactSetter extends Component {
             }}
             ShipmentContactFormProps={{
               contactType,
-              theme: this.props.theme,
+              theme,
               selectedContact: { contact: {}, address: {} },
               setContact: (contactData) => {
-                this.props.setContact(contactData, contactType, index)
+                setContact(contactData, contactType, index)
                 this.setState({ modal: null, showModal: false })
               }
             }}
             contactType={contactType}
           />
-        }
+        )}
         verticalPadding="30px"
         horizontalPadding="40px"
         parentToggle={() => this.toggleShowModal()}
@@ -107,7 +102,7 @@ class ContactSetter extends Component {
     const modal = (
       <Modal
         flexOptions="flex-80"
-        component={
+        component={(
           <ShipmentContactForm
             showEdit
             selectedContact={newSelectedContact}
@@ -120,7 +115,7 @@ class ContactSetter extends Component {
             }}
             contactType={contactType}
           />
-        }
+        )}
         verticalPadding="30px"
         horizontalPadding="40px"
         parentToggle={() => this.toggleShowModal()}
@@ -177,25 +172,13 @@ class ContactSetter extends Component {
   }
 }
 
-ContactSetter.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.any).isRequired,
-  t: PropTypes.func.isRequired,
-  shipper: PropTypes.objectOf(PropTypes.any),
-  consignee: PropTypes.objectOf(PropTypes.any),
-  notifyees: PropTypes.arrayOf(PropTypes.any),
-  direction: PropTypes.string.isRequired,
-  theme: PropTypes.theme,
-  finishBookingAttempted: PropTypes.bool,
-  setContact: PropTypes.func.isRequired,
-  shipmentDispatch: PropTypes.shape.isRequired,
-  removeNotifyee: PropTypes.func.isRequired
-}
 ContactSetter.defaultProps = {
   shipper: {},
   consignee: {},
   notifyees: [],
+  contacts: [],
   theme: null,
   finishBookingAttempted: false
 }
 
-export default withNamespaces()(ContactSetter)
+export default withNamespaces(['common', 'errors'])(ContactSetter)
