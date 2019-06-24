@@ -89,6 +89,7 @@ module OfferCalculatorService
         destination_hub: schedule.destination_hub,
         charge_trip_id: schedule.trip_id,
         ocean_chargeable_weight: chargeable_weight,
+        pricing_ids: pricing_ids,
         pricing_rate_data: grab_pricing_rates(schedule: schedule, load_type: shipment.load_type)
       }
     end
