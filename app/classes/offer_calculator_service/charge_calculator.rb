@@ -54,8 +54,8 @@ module OfferCalculatorService
         start_date = sched.etd || Date.today + 4.days
         export_key = export_periods.keys.select { |exk| start_date < exk[:expiration_date] && start_date > exk[:effective_date] }.first
         import_key = import_periods.keys.select { |imk| start_date < imk[:expiration_date] && start_date > imk[:effective_date] }.first
-        next if import_key.nil? &&  @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.import_charges
-        next if export_key.nil? &&  @shipment.has_pre_carriage || @schedule.origin_hub.mandatory_charge.export_charges
+        next if import_key.nil? && (@shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.import_charges)
+        next if export_key.nil? && (@shipment.has_pre_carriage || @schedule.origin_hub.mandatory_charge.export_charges)
 
         {
           schedule: sched,

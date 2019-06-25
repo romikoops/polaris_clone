@@ -13,7 +13,11 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     results.each do |result|
       next unless main_quote.shipments.where(trip_id: result['meta']['charge_trip_id']).empty?
 
-      ShippingTools.create_shipment_from_result(main_quote: main_quote, original_shipment: shipment, result: result)
+      ShippingTools.create_shipment_from_result(
+        main_quote: main_quote,
+        original_shipment: shipment,
+        result: result.with_indifferent_access
+      )
     end
     main_quote.shipments.map(&:reload)
     main_quote
@@ -757,6 +761,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       desired_start_date: original_shipment.desired_start_date,
       meta: original_shipment.meta
     )
+
     new_shipment.meta['pricing_rate_data'] = result[:meta][:pricing_rate_data]
     charge_category_map = {}
     original_shipment.cargo_units.each do |unit|

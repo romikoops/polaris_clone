@@ -134,7 +134,7 @@ module OfferCalculatorService
         end
       else
         itinerary.pricings
-                 .where(tenant_vehicle_id: tenant_vehicle_id)
+                 .where(tenant_vehicle_id: tenant_vehicle_id, user_id: user.pricing_id)
                  .for_dates(etd, eta)
                  .for_load_type(load_type)
                  .each_with_object({}) do |pricing, hash|

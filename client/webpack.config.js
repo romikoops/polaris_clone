@@ -137,7 +137,7 @@ module.exports = (env, options) => ({
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
     new CopyWebpackPlugin([
-      { from: 'app/config.201811291749.js' }
+      { from: 'app/config.201906251733.js' }
     ]),
 
     new MiniCssExtractPlugin({
@@ -160,7 +160,7 @@ module.exports = (env, options) => ({
       release: process.env.RELEASE,
       include: path.resolve(__dirname, './dist'),
       ignoreFile: '.sentrycliignore',
-      ignore: ['config.201811291749.js']
+      ignore: ['config.201906251733.js']
     })
   ]
 })
