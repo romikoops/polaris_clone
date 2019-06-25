@@ -151,7 +151,7 @@ class QuoteCard extends PureComponent {
 
     if (scope.detailed_billing && result.schedules.length > 0 && result.schedules[0].eta !== null) {
       return (
-        <div className="flex-33 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
+        <div className="flex layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
           {showSchedules ? showPriceBreakdownBtn : showSchedulesBtn}
         </div>
       )
@@ -333,7 +333,7 @@ class QuoteCard extends PureComponent {
           <div className={`flex-100 layout-row layout-align-space-between-stretch layout-wrap ${styles.total_row}`}>
             { isQuote(tenant)
               ? '' : (
-                <div className="flex-40 layout-row layout-align-start-center" >
+                <div className="flex-30 layout-row layout-align-start-center" >
                   {this.buttonToDisplay()}
                 </div>
               ) }
