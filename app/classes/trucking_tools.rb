@@ -90,15 +90,15 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
     extra_fees_results.each do |_ek, evalue|
       result['value'] += evalue
     end
-
-    if !pricing['min_value'] || (pricing['min_value'] && result['value'] > pricing['min_value'])
+    if !pricing[:rate]['min_value'] || (pricing[:rate]['min_value'] && result['value'] > pricing[:rate]['min_value'])
       return { value: result['value'], currency: result['currency'] }
     else
-      return { value: pricing['min_value'], currency: result['currency'] }
+      return { value: pricing[:rate]['min_value'], currency: result['currency'] }
     end
   end
 
   def fare_calculator(key, fee, cargo, kms, scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+    fee = fee.with_indifferent_access
     fare = case fee[:rate_basis]
            when 'PER_KG'
 
