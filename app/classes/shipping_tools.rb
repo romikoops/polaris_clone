@@ -51,7 +51,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
 
     if scope['base_pricing']
       if scope[:display_itineraries_with_rates]
-        cargo_classes = [nil] + (load_type == 'cargo_item' ? ['lcl'] : %w(fcl_20 fcl_40 fcl_40_hq))
+        cargo_classes = [nil] + (load_type == 'cargo_item' ? ['lcl'] : Container::CARGO_CLASSES)
         no_general_margins = Pricings::Margin.where(
           itinerary_id: nil,
           applicable: current_user.all_groups,

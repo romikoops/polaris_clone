@@ -78,7 +78,11 @@ module OfferCalculatorService
       cargo_units = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : cargo_unit_array
       return nil if cargo_units.empty?
 
-      manipulated_trucking_pricing = get_manipulated_trucking_pricing(trucking_pricing)
+      manipulated_trucking_pricing = if @scope['base_pricing']
+                                       get_manipulated_trucking_pricing(trucking_pricing)
+                                     else
+                                      trucking_pricing
+                                     end
 
       return nil if manipulated_trucking_pricing.nil?
 
