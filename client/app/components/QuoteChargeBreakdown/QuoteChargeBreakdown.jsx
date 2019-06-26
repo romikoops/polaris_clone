@@ -10,11 +10,11 @@ import {
 
 class QuoteChargeBreakdown extends Component {
   static shouldShowSubTotal (currencySections) {
+    if (Object.keys(currencySections).length < 1) return false
+
     if (Object.keys(currencySections).length > 1) return true
 
     if (Object.values(currencySections)[0].length > 1) return true
-
-    if (Object.values(currencySections)[0][0][0].includes('unknown')) return false
 
     return true
   }

@@ -135,7 +135,6 @@ module OfferCalculatorService
       else
         pricings = itinerary.pricings.where(tenant_vehicle_id: tenant_vehicle_id, user_id: user.pricing_id)
         pricings = itinerary.pricings.where(tenant_vehicle_id: tenant_vehicle_id) if pricings.empty?
-        
         pricings.for_dates(etd, eta)
                 .for_load_type(load_type)
                 .each_with_object({}) do |pricing, hash|
