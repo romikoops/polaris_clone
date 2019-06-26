@@ -133,11 +133,12 @@ module OfferCalculatorService
           hash[pricing.cargo_class] = pricing_hash
         end
       else
-        itinerary.pricings
-                 .where(tenant_vehicle_id: tenant_vehicle_id, user_id: user.pricing_id)
-                 .for_dates(etd, eta)
-                 .for_load_type(load_type)
-                 .each_with_object({}) do |pricing, hash|
+        pricings = itinerary.pricings.where(tenant_vehicle_id: tenant_vehicle_id, user_id: user.pricing_id)
+        pricings = itinerary.pricings.where(tenant_vehicle_id: tenant_vehicle_id) if pricings.empty?
+        
+        pricings.for_dates(etd, eta)
+                .for_load_type(load_type)
+                .each_with_object({}) do |pricing, hash|
           pricing_hash = pricing.as_json.dig('data')
           pricing_hash['total'] = pricing_hash.keys.each_with_object('value' => 0, 'currency' => nil) do |key, obj|
             obj['value'] += pricing_hash[key]['rate']
