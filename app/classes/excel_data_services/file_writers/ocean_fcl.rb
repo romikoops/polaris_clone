@@ -7,12 +7,11 @@ module ExcelDataServices
 
       def load_and_prepare_data
         pricings = if scope['base_pricing']
-                     tenant.rates.for_mode_of_transport('ocean').for_cargo_classes(['lcl'])
+                     tenant.rates.for_mode_of_transport('ocean').for_cargo_classes(Container::CARGO_CLASSES)
                    else
-                     tenant.pricings.for_mode_of_transport('ocean').for_cargo_classes(['lcl'])
+                     tenant.pricings.for_mode_of_transport('ocean').for_cargo_classes(Container::CARGO_CLASSES)
                    end
         raw_pricing_rows = PricingRowDataBuilder.build_raw_pricing_rows(pricings, scope)
-
         dynamic_headers = build_dynamic_headers(raw_pricing_rows)
         data_with_dynamic_headers, data_static_fee_col = raw_pricing_rows.group_by { |row| row[:range].blank? }.values
 
