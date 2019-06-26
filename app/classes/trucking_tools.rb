@@ -59,6 +59,7 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
     fees = {}
     result = {}
     total_fees = {}
+    pricing = pricing.with_indifferent_access
     return {} if pricing.empty?
 
     pricing[:fees].each do |k, fee|
@@ -90,6 +91,7 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
     extra_fees_results.each do |_ek, evalue|
       result['value'] += evalue
     end
+
     if !pricing[:rate]['min_value'] || (pricing[:rate]['min_value'] && result['value'] > pricing[:rate]['min_value'])
       return { value: result['value'], currency: result['currency'] }
     else
