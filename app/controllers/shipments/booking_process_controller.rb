@@ -104,14 +104,12 @@ class Shipments::BookingProcessController < ApplicationController
   private
 
   def result_params
-    params.require(:options).permit(quotes: 
+    params.require(:options).permit(quotes:
       [
         quote: {},
-        schedules: %i(id origin_hub destination_hub mode_of_transport 
-          total_price eta etd closing_date vehicle_name carrier_name trip_id
-        ),
+        schedules: [:id, :mode_of_transport, :total_price, :eta, :etd, :closing_date, :vehicle_name,
+                    :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
         meta: {}
-      ]
-    )
+      ])
   end
 end
