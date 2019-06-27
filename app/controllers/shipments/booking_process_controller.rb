@@ -38,7 +38,9 @@ class Shipments::BookingProcessController < ApplicationController
       user: current_user,
       tenant: current_user.tenant,
       file: {
-        io: StringIO.new(ShippingTools.save_pdf_quotes(shipment, current_user.tenant, params[:options][:quotes])),
+        io: StringIO.new(
+          ShippingTools.save_pdf_quotes(shipment, current_user.tenant, result_params[:quotes].map(&:to_h))
+        ),
         filename: "quotation_#{shipment.imc_reference}.pdf",
         content_type: 'application/pdf'
       }
@@ -97,5 +99,19 @@ class Shipments::BookingProcessController < ApplicationController
 
   def shipment
     @shipment ||= Shipment.find(params[:shipment_id])
+  end
+
+  private
+
+  def result_params
+    params.require(:options).permit(quotes: 
+      [
+        quote: {},
+        schedules: %i(id origin_hub destination_hub mode_of_transport 
+          total_price eta etd closing_date vehicle_name carrier_name trip_id
+        ),
+        meta: {}
+      ]
+    )
   end
 end
