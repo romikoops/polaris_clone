@@ -98,7 +98,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     # reindex models
-    Locations::Name.search_index.delete if Locations::Name.search_index
+    Locations::Name.search_index.delete if Locations::Name.search_index.exists?
     Locations::Name.reindex
 
     # and disable callbacks
@@ -110,7 +110,7 @@ RSpec.configure do |config|
       example.run
     end
   end
-  
+
   # Seed global randomization in this process using the `--seed` CLI option.
   # Setting this allows you to use `--seed` to deterministically reproduce
   # test failures related to randomization by passing the same `--seed` value

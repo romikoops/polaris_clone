@@ -99,5 +99,5 @@ end
 #  truck_type          :string
 #  user_id             :integer
 #  parent_id           :uuid
-#  group_id            :integer
+#  group_id            :uuid
 #
