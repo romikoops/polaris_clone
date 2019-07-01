@@ -5,6 +5,7 @@ module ExcelTool
     attr_reader :user, :dangerous
     def post_initialize(args)
       @user = args[:user]
+      @sandbox = args[:sandbox]
       @dangerous = {}
     end
 
@@ -139,7 +140,13 @@ module ExcelTool
 
     def create_vehicle_from_name(row, name = nil)
       name ||= row[:service_level]
-      Vehicle.create_from_name(name, row[:mot].downcase, user.tenant_id, row[:carrier]).id
+      Vehicle.create_from_name(
+        name: name,
+        mot: row[:mot].downcase,
+        tenant_id: user.tenant_id,
+        carrier: row[:carrier],
+        sandbox: @sandbox
+      ).try(:id)
     end
 
     def sanitize_rows(rows)

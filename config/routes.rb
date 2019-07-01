@@ -76,7 +76,10 @@ Rails.application.routes.draw do
           post :download
         end
       end
+
       post 'companies/:id/edit_employees', to: 'companies#edit_employees'
+      resources :memberships, only: %i(index show create destroy)
+
       get 'margins/form/data', to: 'margins#form_data'
       get 'margins/test/data', to: 'margins#test'
       get 'margins/form/itineraries', to: 'margins#itinerary_list'
@@ -163,6 +166,7 @@ Rails.application.routes.draw do
       get 'account', as: :account
       get 'hubs',    as: :hubs
       put 'update',  as: :update
+      get 'toggle_sandbox',  as: :toggle_sandbox
 
       resources :addresses, controller: :user_addresses, only: %i(index create update destroy)
       post 'addresses/:address_id/edit', to: 'user_addresses#edit'

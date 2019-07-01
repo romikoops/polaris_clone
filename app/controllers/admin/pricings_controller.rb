@@ -6,9 +6,9 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
   def index # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     tenant = current_user.tenant
-    @itineraries = tenant.itineraries
+    @itineraries = tenant.itineraries.where(sandbox: @sandbox)
     response = Rails.cache.fetch("#{@itineraries.cache_key}/pricings_index", expires_in: 12.hours) do
-      @transports = TransportCategory.all.uniq
+      @transports = TransportCategory.all.where(sandbox: @sandbox).uniq
       @scope = ::Tenants::ScopeService.new(target: current_user).fetch
       mots = @scope['modes_of_transport'].keys.reject do |key|
         !@scope['modes_of_transport'][key]['container'] &&
@@ -18,9 +18,9 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       mot_page_counts = {}
       mots.each do |mot|
         mot_itineraries = @itineraries
-                          .where(mode_of_transport: mot)
+                          .where(mode_of_transport: mot, sandbox: @sandbox)
                           .paginate(page: params[mot] || 1)
-        detailed_itineraries[mot] = mot_itineraries.map(&:as_pricing_json)
+        detailed_itineraries[mot] = mot_itineraries.map { |it| it.as_pricing_json(sandbox: @sandbox) }
         mot_page_counts[mot] = mot_itineraries.total_pages
       end
       last_updated = @itineraries.first ? @itineraries.first.updated_at : DateTime.now
@@ -35,7 +35,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def client
-    @client = User.find(params[:id])
+    @client = User.find_by(id: params[:id], sandbox: @sandbox)
     @pricings = PricingTools.new(user: @client).get_user_pricings(params[:id])
 
     response_handler(userPricings: @pricings, client: @client)
@@ -43,13 +43,14 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
   def search # rubocop:disable Metrics/AbcSize
     query = {
-      tenant_id: current_user.tenant_id
+      tenant_id: current_user.tenant_id,
+      sandbox: @sandbox
     }
 
     query[:mode_of_transport] = params[:mot] if params[:mot]
     itineraries = Itinerary.where(query).order('name ASC')
     itinerary_results = itineraries.where('name ILIKE ?', "%#{params[:text]}%")
-    @transports = TransportCategory.all.uniq
+    @transports = TransportCategory.all.where(sandbox: @sandbox).uniq
     detailed_itineraries = itinerary_results.paginate(page: params[:page])
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
     response_handler(
@@ -62,18 +63,22 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def disable
-    pricing = Pricings::Pricing.find_by(id: params[:pricing_id], tenant_id: params[:tenant_id])
+    pricing = Pricings::Pricing.find_by(
+      id: params[:pricing_id],
+      tenant_id: params[:tenant_id],
+      sandbox: @sandbox
+    )
     pricing.update(disabled: params[:action] == 'disable')
     response_handler(pricing.for_table_json)
   end
 
   def route
-    itinerary = Itinerary.find(params[:id])
+    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
     scope = current_user.tenant_scope
     if scope['base_pricing']
-      pricings = itinerary.rates
+      pricings = itinerary.rates.where(sandbox: @sandbox)
     else
-      pricings = itinerary.pricings
+      pricings = itinerary.pricings.where(sandbox: @sandbox)
       pricings = pricings.reject { |pricing| pricing&.user&.internal } unless current_user.internal
     end
     response_handler(
@@ -86,7 +91,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   def assign_dedicated # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     new_pricings = params[:clientIds].map do |client_id| # rubocop:disable Metrics/BlockLength
       itinerary_id = params[:pricing][:itinerary_id]
-      ex_pricing = Pricing.where(user_id: client_id, itinerary_id: itinerary_id).first
+      ex_pricing = Pricing.where(user_id: client_id, itinerary_id: itinerary_id, sandbox: @sandbox).first
       pricing_to_update = ex_pricing || Pricing.new
       new_pricing_data = params[:pricing].as_json
       new_pricing_data.delete('controller')
@@ -109,7 +114,8 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
         range = pricing_detail_params.delete('range')
         pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
           shipping_type: shipping_type,
-          tenant: current_user.tenant
+          tenant: current_user.tenant,
+          sandbox: @sandbox
         )
         pricing_detail.update!(pricing_detail_params)
         pricing_detail.update!(range: range, currency_name: currency)
@@ -142,7 +148,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def update_price
-    pricing_to_update = Pricing.find(params[:id])
+    pricing_to_update = Pricing.find_by(id: params[:id], sandbox: @sandbox)
     new_pricing_data = sanitized_params
     new_pricing_data.delete('cargo_class')
     new_pricing_data.delete('data')
@@ -157,7 +163,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def destroy
-    Pricing.find_by(tenant_id: current_tenant.id, id: params[:id])&.destroy
+    Pricing.find_by(tenant_id: current_tenant.id, id: params[:id], sandbox: @sandbox)&.destroy
     response_handler({})
   end
 
@@ -165,7 +171,8 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     file = upload_params[:file].tempfile
 
     options = { tenant: current_tenant,
-                file_or_path: file }
+                file_or_path: file,
+                options: { sandbox: @sandbox } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
@@ -181,7 +188,8 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
     options = { tenant: current_tenant,
                 specific_identifier: "#{mot}_#{new_load_type}".camelcase,
-                file_name: file_name }
+                file_name: file_name,
+                sandbox: @sandbox }
     downloader = ExcelDataServices::Loaders::Downloader.new(options)
 
     document = downloader.perform
@@ -191,7 +199,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def test
-    itinerary = Itinerary.find(params[:id])
+    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
     itinerary.test_pricings(params[:data], current_user)
   end
 
@@ -219,14 +227,14 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
   def ordinary_pricings(itinerary)
     if current_tenant.quotation_tool?
-      itinerary.pricings.map(&:as_json)
+      itinerary.pricings.where(sandbox: @sandbox).map(&:as_json)
     else
-      itinerary.pricings.where(user_id: nil).map(&:as_json)
+      itinerary.pricings.where(sandbox: @sandbox, user_id: nil).map(&:as_json)
     end
   end
 
   def user_pricing(itinerary)
-    itinerary.pricings.where.not(user_id: nil).map do |pricing|
+    itinerary.pricings.where(sandbox: @sandbox).where.not(user_id: nil).map do |pricing|
       { pricing: pricing,
         transport_category: pricing.transport_category,
         user_id: pricing.user_id }

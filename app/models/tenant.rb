@@ -81,9 +81,9 @@ class Tenant < Legacy::Tenant
     ).perform
   end
 
-  def autogenerate_all_schedules(end_date)
-    itineraries.each do |itinerary|
-      itinerary.default_generate_schedules(end_date)
+  def autogenerate_all_schedules(end_date:, sandbox: nil)
+    itineraries.where(sandbox: sandbox).each do |itinerary|
+      itinerary.default_generate_schedules(end_date: end_date, sandbox: sandbox)
     end
   end
 

@@ -23,7 +23,8 @@ module OfferCalculatorService
         address: address,
         carriage: carriage,
         shipment: @shipment,
-        user_id: @scope['base_pricing'] ? @shipment.user_id : @shipment.user.pricing_id
+        user_id: @scope['base_pricing'] ? @shipment.user_id : @shipment.user.pricing_id,
+        sandbox: @sandbox
       )
 
       data = Hub.where(id: hub_ids).each_with_object({}) do |hub, obj|
@@ -37,6 +38,7 @@ module OfferCalculatorService
         obj[hub.id] = { trucking_charge_data: trucking_charge_data }
       end
       valid_object = validate_data_for_hubs(data)
+
       raise ApplicationError::MissingTruckingData if valid_object.empty?
 
       valid_object

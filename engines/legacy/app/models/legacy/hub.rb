@@ -7,6 +7,7 @@ module Legacy
     belongs_to :tenant, class_name: 'Legacy::Tenant'
     belongs_to :nexus
     belongs_to :address, class_name: 'Legacy::Address'
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     has_many :addons
     has_many :stops,    dependent: :destroy
@@ -44,4 +45,5 @@ end
 #  photo               :string
 #  nexus_id            :integer
 #  mandatory_charge_id :integer
+#  sandbox_id          :uuid
 #

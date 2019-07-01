@@ -5,7 +5,15 @@ module Pricings
     attr_accessor :schedules, :tenant_vehicle_id, :start_date, :end_date,
                   :closing_start_date, :closing_end_date, :cargo_classes, :user_pricing_id
 
-    def initialize(schedules:, user_pricing_id:, cargo_classes:, dates:, dedicated_pricings_only:, shipment:)
+    def initialize( # rubocop:disable Metrics/ParameterLists
+        schedules:,
+        user_pricing_id:,
+        cargo_classes:,
+        dates:,
+        dedicated_pricings_only:,
+        shipment:,
+        sandbox: nil
+      )
       @shipment = shipment
       @schedules = schedules
       @tenant_vehicle_id = schedules.first.trip.tenant_vehicle_id
@@ -15,17 +23,19 @@ module Pricings
       @closing_end_date = dates[:closing_end_date]
       @cargo_classes = cargo_classes
       @user = ::Tenants::User.find_by(legacy_id: user_pricing_id)
+      @sandbox = sandbox
     end
 
     def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       pricings_by_cargo_class = ::Pricings::Pricing
                                 .where(
-                                  disabled: false,
+                                  internal: false,
                                   tenant_vehicle_id: tenant_vehicle_id,
                                   itinerary_id: schedules.first.trip.itinerary_id,
                                   cargo_class: cargo_classes,
                                   user_id: nil,
-                                  tenant_id: @shipment.tenant_id
+                                  tenant_id: @shipment.tenant_id,
+                                  sandbox: @sandbox
                                 )
       pricings_by_cargo_class_and_dates = pricings_by_cargo_class.for_dates(start_date, end_date)
 
@@ -45,7 +55,8 @@ module Pricings
           args: {
             schedules: filtered_schedules,
             shipment: @shipment,
-            pricing: pricing
+            pricing: pricing,
+            sandbox: @sandbox
           }
         ).perform
       end

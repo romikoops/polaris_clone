@@ -25,4 +25,5 @@ end
 #  tenant_vehicle_id :integer
 #  closing_date      :datetime
 #  load_type         :string
+#  sandbox_id        :uuid
 #

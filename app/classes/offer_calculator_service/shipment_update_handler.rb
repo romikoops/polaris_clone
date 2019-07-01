@@ -2,9 +2,9 @@
 
 module OfferCalculatorService
   class ShipmentUpdateHandler < Base
-    def initialize(shipment, params)
+    def initialize(shipment:, params:, sandbox:)
       @params = params
-      super(shipment)
+      super(shipment: shipment, sandbox: sandbox)
     end
 
     def clear_previous_itinerary
@@ -115,6 +115,7 @@ module OfferCalculatorService
       snakefied_address_hash.deep_symbolize_keys!
       snakefied_address_hash[:geocoded_address] = snakefied_address_hash.delete(:full_address)
       snakefied_address_hash[:street_number] = snakefied_address_hash.delete(:number)
+      snakefied_address_hash[:sandbox] = @sandbox
       ActionController::Parameters.new(snakefied_address_hash)
     end
 

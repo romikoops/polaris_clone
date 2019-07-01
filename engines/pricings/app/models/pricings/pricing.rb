@@ -3,6 +3,7 @@
 module Pricings
   class Pricing < ApplicationRecord
     attr_accessor :transient_marked_as_old
+    self.ignored_columns = ['disabled']
 
     include ::Pricings::Legacy
     has_paper_trail
@@ -13,6 +14,7 @@ module Pricings
     has_many :fees, class_name: 'Pricings::Fee', dependent: :destroy
     has_many :pricing_requests, dependent: :destroy
     has_many :margins, class_name: 'Pricings::Margin'
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     validates :itinerary_id, uniqueness: {
       scope: %i(tenant_id user_id tenant_vehicle_id effective_date expiration_date cargo_class load_type legacy_id)
@@ -88,5 +90,6 @@ end
 #  legacy_id         :integer
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  disabled          :boolean          default(FALSE)
+#  sandbox_id        :uuid
+#  internal          :boolean          default(FALSE)
 #

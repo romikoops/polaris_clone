@@ -6,12 +6,12 @@ class OfferCalculator
   attr_reader :shipment, :detailed_schedules, :hubs
   include OfferCalculatorService
 
-  def initialize(shipment, params, user)
+  def initialize(shipment:, params:, user:, sandbox: nil)
     @user           = user
     @shipment       = shipment
     @delay          = params['delay']
     @quotation_tool = params['shipment'].delete('isQuote') || @user.tenant.quotation_tool?
-
+    @sandbox = sandbox
     instantiate_service_classes(params)
     update_shipment
   end
@@ -27,14 +27,14 @@ class OfferCalculator
   private
 
   def instantiate_service_classes(params)
-    @shipment_update_handler    = ShipmentUpdateHandler.new(@shipment, params)
-    @hub_finder                 = HubFinder.new(@shipment)
-    @trucking_data_builder      = TruckingDataBuilder.new(@shipment)
-    @route_finder               = RouteFinder.new(@shipment)
-    @route_filter               = RouteFilter.new(@shipment)
-    @schedule_finder            = ScheduleFinder.new(@shipment)
-    @quote_route_builder        = QuoteRouteBuilder.new(@shipment)
-    @detailed_schedules_builder = DetailedSchedulesBuilder.new(@shipment)
+    @shipment_update_handler    = ShipmentUpdateHandler.new(shipment: @shipment, params: params, sandbox: @sandbox)
+    @hub_finder                 = HubFinder.new(shipment: @shipment, sandbox: @sandbox)
+    @trucking_data_builder      = TruckingDataBuilder.new(shipment: @shipment, sandbox: @sandbox)
+    @route_finder               = RouteFinder.new(shipment: @shipment, sandbox: @sandbox)
+    @route_filter               = RouteFilter.new(shipment: @shipment, sandbox: @sandbox)
+    @schedule_finder            = ScheduleFinder.new(shipment: @shipment, sandbox: @sandbox)
+    @quote_route_builder        = QuoteRouteBuilder.new(shipment: @shipment, sandbox: @sandbox)
+    @detailed_schedules_builder = DetailedSchedulesBuilder.new(shipment: @shipment, sandbox: @sandbox)
   end
 
   def update_shipment

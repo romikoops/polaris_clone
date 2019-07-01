@@ -23,7 +23,8 @@ module ExcelDataServices
           email: params[:email],
           phone: params[:phone],
           vat_number: params[:vat_number],
-          role_id: Role.find_by(name: 'shipper')
+          role_id: Role.find_by(name: 'shipper'),
+          sandbox: @sandbox
         )
 
         tenants_user = Tenants::User.find_by(legacy_id: legacy_user)

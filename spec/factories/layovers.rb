@@ -26,4 +26,5 @@ end
 #  itinerary_id :integer
 #  trip_id      :integer
 #  closing_date :datetime
+#  sandbox_id   :uuid
 #

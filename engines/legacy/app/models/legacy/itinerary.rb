@@ -6,6 +6,7 @@ module Legacy
     self.table_name = 'itineraries'
     belongs_to :tenant
     has_many :stops,     dependent: :destroy
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_many :layovers,  dependent: :destroy
     has_many :shipments, dependent: :destroy
     has_many :trips,     dependent: :destroy
@@ -23,14 +24,15 @@ module Legacy
     pg_search_scope :list_search, against: %i(name), using: {
       tsearch: { prefix: true }
     }
-    def generate_schedules_from_sheet(stops, # rubocop:disable Metrics/MethodLength
-                                      start_date,
-                                      end_date,
-                                      tenant_vehicle_id,
-                                      closing_date,
-                                      vessel,
-                                      voyage_code,
-                                      load_type)
+    def generate_schedules_from_sheet(stops:, # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
+                                      start_date:,
+                                      end_date:,
+                                      tenant_vehicle_id:,
+                                      closing_date:,
+                                      vessel:,
+                                      voyage_code:,
+                                      load_type:,
+                                      sandbox: nil)
       results = {
         layovers: [],
         trips: []
@@ -94,29 +96,28 @@ module Legacy
                              rand(20..50)
                            end
           generate_weekly_schedules(
-            stops_in_order,
-            [steps_in_order],
-            DateTime.now,
-            finish_date,
-            [1, 5],
-            tv_id,
-            4,
-            load_type
+            stops_in_order: stops_in_order,
+            steps_in_order: [steps_in_order],
+            start_date: DateTime.now,
+            end_date: finish_date,
+            ordinal_array: [1, 5],
+            tenant_vehicle_id: tv_id,
+            closing_date_buffer: 4,
+            load_type: load_type
           )
         end
       end
     end
 
-    def generate_weekly_schedules( # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/ParameterLists, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-      stops_in_order,
-      steps_in_order,
-      start_date,
-      end_date,
-      ordinal_array,
-      tenant_vehicle_id,
-      closing_date_buffer = 4,
-      load_type
-    )
+    def generate_weekly_schedules(stops_in_order:, # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/ParameterLists, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+                                  steps_in_order:,
+                                  start_date:,
+                                  end_date:,
+                                  ordinal_array:,
+                                  tenant_vehicle_id:,
+                                  closing_date_buffer: 4,
+                                  load_type:,
+                                  sandbox: nil)
       results = {
         layovers: [],
         trips: []
@@ -504,4 +505,5 @@ end
 #  name              :string
 #  mode_of_transport :string
 #  tenant_id         :integer
+#  sandbox_id        :uuid
 #

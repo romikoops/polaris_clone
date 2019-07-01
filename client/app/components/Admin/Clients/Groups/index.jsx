@@ -7,8 +7,8 @@ import 'react-table/react-table.css'
 import { clientsActions } from '../../../../actions'
 import styles from '../index.scss'
 import { AdminClientMargins } from '..'
-import Checkbox from '../../../Checkbox/Checkbox';
-import NamedSelect from '../../../NamedSelect/NamedSelect';
+import Checkbox from '../../../Checkbox/Checkbox'
+import NamedSelect from '../../../NamedSelect/NamedSelect'
 
 class AdminClientGroups extends PureComponent {
   constructor (props) {

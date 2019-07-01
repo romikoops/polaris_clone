@@ -18,4 +18,5 @@ end
 #  tenant_id    :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  sandbox_id   :uuid
 #

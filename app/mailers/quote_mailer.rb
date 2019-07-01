@@ -5,7 +5,7 @@ class QuoteMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  def quotation_email(shipment, shipments, email, quotation) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def quotation_email(shipment, shipments, email, quotation, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     @shipments = shipments
     @shipment = shipment
     @quotation = quotation
@@ -14,7 +14,7 @@ class QuoteMailer < ApplicationMailer
     @theme = @user.tenant.theme
     @email = email[/[^@]+/]
     @content = Content.get_component('QuotePdf', @user.tenant.id)
-    @scope = ::Tenants::ScopeService.new(target: @user).fetch
+    @scope = ::Tenants::ScopeService.new(target: @user, sandbox: sandbox).fetch
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipments.first.mode_of_transport}.png"
     ).read
@@ -25,6 +25,7 @@ class QuoteMailer < ApplicationMailer
       doc_type: 'quotation',
       user: @user,
       tenant: @user.tenant,
+      sandbox: sandbox,
       file: {
         io: StringIO.new(quotation),
         filename: "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf",
@@ -41,14 +42,14 @@ class QuoteMailer < ApplicationMailer
                          .tap { |a| a.display_name = @user.tenant.name }.format,
       reply_to: @user.tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, email),
-      subject: "Quotation for #{@shipments.pluck(:imc_reference).join(',')}"
+      subject: "#{sandbox ? '[SANDBOX] - ' : ''} Quotation for #{@shipments.pluck(:imc_reference).join(',')}"
     ) do |format|
       format.html
       format.mjml
     end
   end
 
-  def quotation_admin_email(quotation) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def quotation_admin_email(quotation, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     @shipments = quotation.shipments
     @shipment = Shipment.find(quotation.original_shipment_id)
     @quotation = quotation
@@ -57,13 +58,14 @@ class QuoteMailer < ApplicationMailer
     @theme = @user.tenant.theme
     @content = Content.get_component('QuotePdf', @user.tenant.id)
     @scope = ::Tenants::ScopeService.new(target: @user).fetch
-    quotation = generate_and_upload_quotation(@quotes)
+    quotation = generate_and_upload_quotation(@quotes, sandbox)
     @document = Document.create!(
       shipment: @shipment,
       text: "quotation_#{@shipments.pluck(:imc_reference).join(',')}",
       doc_type: 'quotation',
       user: @user,
       tenant: @user.tenant,
+      sandbox: sandbox,
       file: {
         io: StringIO.new(quotation),
         filename: "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf",
@@ -79,7 +81,7 @@ class QuoteMailer < ApplicationMailer
                          .tap { |a| a.display_name = 'ItsMyCargo Quotation Tool' }.format,
       reply_to: Settings.emails.support,
       to: mail_target_interceptor(@user, @user.tenant.email_for(:sales, @shipment.mode_of_transport)),
-      subject: "Quotation for #{@shipments.pluck(:imc_reference).join(',')}"
+      subject: "#{sandbox ? '[SANDBOX] - ' : ''} Quotation for #{@shipments.pluck(:imc_reference).join(',')}"
     ) do |format|
       format.html
       format.mjml
@@ -88,7 +90,7 @@ class QuoteMailer < ApplicationMailer
 
   private
 
-  def generate_and_upload_quotation(quotes)
+  def generate_and_upload_quotation(quotes, sandbox = nil)
     quotation = PdfHandler.new(
       layout: 'pdfs/simple.pdf.html.erb',
       template: 'shipments/pdfs/quotations.pdf.erb',
@@ -99,8 +101,8 @@ class QuoteMailer < ApplicationMailer
       quotes: quotes,
       color: @user.tenant.theme['colors']['primary'],
       name: 'quotation',
-      remarks: Remark.where(tenant_id: @user.tenant_id).order(order: :asc),
-      scope: ::Tenants::ScopeService.new(target: @user).fetch
+      remarks: Remark.where(tenant_id: @user.tenant_id, sandbox: sandbox).order(order: :asc),
+      scope: ::Tenants::ScopeService.new(target: @user, sandbox: sandbox).fetch
     )
     quotation.generate
   end

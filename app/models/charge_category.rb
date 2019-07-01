@@ -3,6 +3,7 @@
 class ChargeCategory < Legacy::ChargeCategory
   has_many :charges
   belongs_to :tenant, optional: true
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   validates :name, :code, presence: true
   validates :code, is_model: true, unless: ->(obj) { obj.cargo_unit_id.nil? }
@@ -40,16 +41,17 @@ class ChargeCategory < Legacy::ChargeCategory
     end
   end
 
-  def self.from_code(code:, tenant_id: nil, name: nil)
+  def self.from_code(code:, tenant_id: nil, name: nil, sandbox: nil)
     name ||= code
     code = code.to_s.downcase
-    tenant_charge_category = find_by(code: code, tenant_id: tenant_id)
+    tenant_charge_category = find_by(code: code, tenant_id: tenant_id, sandbox: sandbox)
     return tenant_charge_category unless tenant_charge_category.nil?
 
     find_or_create_by(
       code: code,
       name: name,
-      tenant_id: tenant_id
+      tenant_id: tenant_id,
+      sandbox: sandbox
     )
   end
 
@@ -81,4 +83,5 @@ end
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  tenant_id     :integer
+#  sandbox_id    :uuid
 #

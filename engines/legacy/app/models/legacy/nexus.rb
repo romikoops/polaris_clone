@@ -6,6 +6,7 @@ module Legacy
     has_many :hubs, class_name: 'Legacy::Hub'
     belongs_to :tenant, class_name: 'Legacy::Tenant'
     belongs_to :country, class_name: 'Legacy::Country'
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   end
 end
 
@@ -22,4 +23,5 @@ end
 #  country_id :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  sandbox_id :uuid
 #

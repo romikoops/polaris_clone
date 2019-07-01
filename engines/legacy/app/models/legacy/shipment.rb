@@ -4,6 +4,7 @@ module Legacy
     LOAD_TYPES = %w(cargo_item container).freeze
     belongs_to :user, class_name: 'Legacy::User'
     # belongs_to :quotation, optional: true
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :tenant, class_name: 'Legacy::Tenant'
     # has_many :documents
     # has_many :shipment_contacts
@@ -69,4 +70,5 @@ end
 #  planned_destination_collection_date :datetime
 #  desired_start_date                  :datetime
 #  meta                                :jsonb
+#  sandbox_id                          :uuid
 #

@@ -7,17 +7,15 @@ module Trucking
 
       def initialize(args)
         params = args[:params]
+        @sandbox = args[:sandbox]
         @stats = _stats
         @results = _results
-
         if args[:hub_id]
           @hub_id = args[:hub_id]
           @hub = Hub.find(@hub_id)
         end
-        if args[:group]
-          @group_id = args[:group]
-        end
-
+        @group_id = args[:group] if args[:group]
+        @user = args[:user] if args[:user]
         if params['xlsx']
           @xlsx = open_file(params['xlsx'])
         elsif params['key']
@@ -76,7 +74,7 @@ module Trucking
         end
       end
 
-      def set_regular_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id) # rubocop:disable Metrics/ParameterLists
+      def set_regular_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
         if load_type == 'fcl'
           Container::CARGO_CLASSES.each do |lt|
             all_charges[counterpart_hub_id][tenant_vehicle_id][direction][lt]['fees'][charge[:key]] = charge

@@ -57,12 +57,13 @@ module ExcelDataServices
         new(options).perform
       end
 
-      def initialize(tenant:, file_name:)
+      def initialize(tenant:, file_name:, sandbox: nil)
         @tenant = tenant
         @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant&.id)
         @scope = ::Tenants::ScopeService.new(tenant: tenants_tenant).fetch
         @file_name = file_name.remove(/.xlsx$/) + '.xlsx'
         @xlsx = nil
+        @sandbox = sandbox
       end
 
       def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength

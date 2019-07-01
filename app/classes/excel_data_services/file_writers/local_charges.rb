@@ -14,10 +14,11 @@ module ExcelDataServices
 
       def load_and_prepare_data
         rows_data = []
+        all_local_charges = tenant.local_charges.where(sandbox: @sandbox)
         local_charges = if mode_of_transport.nil? || mode_of_transport == 'all'
-                          tenant.local_charges
+                          all_local_charges
                         else
-                          tenant.local_charges.for_mode_of_transport(mode_of_transport)
+                          all_local_charges.for_mode_of_transport(mode_of_transport)
                         end
         local_charges&.each do |local_charge|
           local_charge[:fees].values.each do |fee_values_h|

@@ -13,14 +13,22 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
   has_many :notes,     dependent: :destroy
   has_many :pricings,  dependent: :destroy
   has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
-  has_many :hubs,      through: :stops
-  has_many :map_data,  dependent: :destroy
-
-  validate :must_have_stops
+  has_many :hubs, through: :stops
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   self.per_page = 12
 
-  def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code, load_type) # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
+  def generate_schedules_from_sheet( # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
+    stops:,
+    start_date:,
+    end_date:,
+    tenant_vehicle_id:,
+    closing_date:,
+    vessel:,
+    voyage_code:,
+    load_type:,
+    sandbox: nil
+  )
     results = {
       layovers: [],
       trips: []
@@ -71,40 +79,45 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def default_generate_schedules(end_date)
+  def default_generate_schedules(end_date:, sandbox: nil) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     finish_date = end_date || DateTime.now + 21.days
-    tenant_vehicle_ids = pricings.pluck(:tenant_vehicle_id).uniq + rates.pluck(:tenant_vehicle_id).uniq
-    stops_in_order = stops.order(:index)
+    tenant_vehicle_ids = [
+      pricings.where(sandbox: sandbox).pluck(:tenant_vehicle_id).uniq,
+      rates.where(sandbox: sandbox).pluck(:tenant_vehicle_id).uniq
+    ].flatten
+    stops_in_order = stops.where(sandbox: sandbox).order(:index)
     tenant_vehicle_ids.each do |tv_id|
       %w(container cargo_item).each do |load_type|
-        existing_trip = trips.where(tenant_vehicle_id: tv_id, load_type: load_type).first
+        existing_trip = trips.where(tenant_vehicle_id: tv_id, load_type: load_type, sandbox: sandbox).first
         steps_in_order = if existing_trip
                            (existing_trip.end_date - existing_trip.start_date) / 86_400
                          else
                            rand(20..50)
                          end
         generate_weekly_schedules(
-          stops_in_order,
-          [steps_in_order],
-          DateTime.now,
-          finish_date,
-          [1, 5],
-          tv_id,
-          4,
-          load_type
+          stops_in_order: stops_in_order,
+          steps_in_order: [steps_in_order],
+          start_date: DateTime.now,
+          end_date: finish_date,
+          ordinal_array: [1, 5],
+          tenant_vehicle_id: tv_id,
+          closing_date_buffer: 4,
+          load_type: load_type,
+          sandbox: sandbox
         )
       end
     end
   end
 
-  def generate_weekly_schedules(stops_in_order, # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/ParameterLists, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-                                steps_in_order,
-                                start_date,
-                                end_date,
-                                ordinal_array,
-                                tenant_vehicle_id,
-                                closing_date_buffer = 4,
-                                load_type)
+  def generate_weekly_schedules(stops_in_order:, # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/ParameterLists, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+                                steps_in_order:,
+                                start_date:,
+                                end_date:,
+                                ordinal_array:,
+                                tenant_vehicle_id:,
+                                closing_date_buffer: 4,
+                                load_type:,
+                                sandbox: nil)
     results = {
       layovers: [],
       trips: []
@@ -127,7 +140,8 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
           end_date: journey_end,
           tenant_vehicle_id: tenant_vehicle_id,
           closing_date: closing_date,
-          load_type: parse_load_type(load_type)
+          load_type: parse_load_type(load_type),
+          sandbox_id: sandbox&.id
         )
 
         unless trip.save
@@ -146,7 +160,8 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
               itinerary_id: stop.itinerary_id,
               stop_id: stop.id,
               closing_date: closing_date,
-              trip_id: trip.id
+              trip_id: trip.id,
+              sandbox_id: sandbox&.id
             }
           else
             journey_start += steps_in_order[stop.index - 1].days
@@ -157,7 +172,8 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
               itinerary_id: stop.itinerary_id,
               stop_id: stop.id,
               trip_id: trip.id,
-              closing_date: nil
+              closing_date: nil,
+              sandbox_id: sandbox&.id
             }
           end
         end
@@ -285,8 +301,8 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     pricings.exists?(user_id: ids)
   end
 
-  def pricing_count
-    pricings.count
+  def pricing_count(sandbox = nil)
+    pricings.where(sandbox: sandbox).count
   end
 
   def dedicated_pricing_count(user)
@@ -454,10 +470,11 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     as_json(new_options)
   end
 
-  def as_pricing_json(_options = {})
-    new_options = {
+  def as_pricing_json(options = {})
+    sandbox = options.delete(:sandbox)
+    {
       users_with_pricing: users_with_pricing,
-      pricing_count: pricing_count
+      pricing_count: pricing_count(sandbox)
     }.merge(attributes)
   end
 
@@ -485,4 +502,5 @@ end
 #  name              :string
 #  mode_of_transport :string
 #  tenant_id         :integer
+#  sandbox_id        :uuid
 #

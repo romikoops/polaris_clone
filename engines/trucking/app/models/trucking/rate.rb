@@ -12,6 +12,7 @@ module Trucking
     has_many :truckings, dependent: :destroy, class_name: '::Trucking::Trucking'
     has_many :hubs, class_name: 'Legacy::Hub', through: :truckings
     has_many :locations, class_name: '::Trucking::Location', through: :truckings
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     SCOPING_ATTRIBUTE_NAMES = %i(load_type cargo_class carriage courier_id truck_type).freeze
 

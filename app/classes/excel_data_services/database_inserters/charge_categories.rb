@@ -16,7 +16,8 @@ module ExcelDataServices
       def update_or_create_charge_category(params)
         correct_charge_category = ChargeCategory.find_or_initialize_by(
           tenant_id: @tenant.id,
-          code: params[:fee_code].downcase
+          code: params[:fee_code].downcase,
+          sandbox: @sandbox
         )
         correct_charge_category.name = params[:fee_name] if correct_charge_category.name != params[:fee_name]
         add_stats(correct_charge_category)

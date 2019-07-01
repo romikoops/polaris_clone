@@ -22,7 +22,11 @@ class NotificationsController < ApplicationController
   def send_message
     message = params[:message].as_json
     isAdmin = current_user.role.name.include?('admin')
-    user = isAdmin ? Shipment.find_by_imc_reference(message['shipmentRef']).user : current_user
+    user = if isAdmin
+             Shipment.find_by(sandbox: @sandbox, imc_reference: message['shipmentRef']).user
+           else
+             current_user
+           end
     resp = add_message_to_convo(user, message, isAdmin)
     response_handler(resp)
   end
@@ -41,7 +45,7 @@ class NotificationsController < ApplicationController
     @shipment = Shipment.find_by_imc_reference(params[:ref])
     @cargo_items = @shipment.cargo_items
     @containers = @shipment.containers
-    @shipment_contacts = @shipment.shipment_contacts
+    @shipment_contacts = @shipment.shipment_contacts.where(sandbox: @sandbox)
     @contacts = []
     @shipment_contacts.each do |sc|
       @contacts.push(contact: sc.contact, type: sc.contact_type, address: sc.contact.address)

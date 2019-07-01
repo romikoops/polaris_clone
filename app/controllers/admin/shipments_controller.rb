@@ -87,8 +87,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def edit_service_price
-    @shipment = Shipment.find(params[:id])
-    new_price = Price.new(price_params)
+    @shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
+    new_price = Price.new(price_params.merge(sandbox: @sandbox))
     charge = edit_service_charge_breakdown.charge(params['charge_category'])
     charge.edited_price = new_price
 
@@ -106,8 +106,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def edit
-    @shipment = Shipment.find(params[:id])
-    @containers = Container.where(shipment_id: @shipment.id)
+    @shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
+    @containers = Container.where(shipment_id: @shipment.id, sandbox: @sandbox)
     @container_descriptions = CONTAINER_DESCRIPTIONS.invert
     @all_hubs = Address.all_hubs_prepared
   end
@@ -121,7 +121,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         doc_type: params[:type],
         user: @shipment.user,
         tenant: current_user.tenant,
-        file: params[:file]
+        file: params[:file],
+        sandbox: @sandbox
       )
 
       @doc.as_json.merge(
@@ -133,12 +134,12 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def update
-    @shipment = Shipment.find(params[:id])
+    @shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
     shipment_action if params[:shipment_action]
   end
 
   def document_action
-    @document = Document.find(params[:id])
+    @document = Document.find_by(id: params[:id], sandbox: @sandbox)
     @user = @document.user
     decide_document_action
 
@@ -147,7 +148,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def document_delete
-    @document = Document.find(params[:id])
+    @document = Document.find_by(id: params[:id], sandbox: @sandbox)
     @document.destroy
 
     response_handler(id: params[:id])
@@ -308,7 +309,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     if @shipment
       @shipment
     else
-      shipment = Shipment.find(params[:id])
+      shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
       shipment.planned_eta = new_eta
       shipment.planned_etd = new_etd
       shipment.planned_origin_drop_off_date = new_planned_origin_drop_off_date
@@ -356,7 +357,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     if @shipment
       @shipment
     else
-      shipment = Shipment.find(params[:id])
+      shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
       shipment.total_price = { value: params[:priceObj]['value'], currency: params[:priceObj]['currency'] }
       shipment.save!
       @shipment = shipment
@@ -392,19 +393,19 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def populate_documents
-    @documents = @shipment.documents.select { |doc| doc.file.attached? }.map do |doc|
+    @documents = @shipment.documents.where(sandbox: @sandbox).select { |doc| doc.file.attached? }.map do |doc|
       doc.as_json.merge(signed_url: rails_blob_url(doc.file, disposition: 'attachment'))
     end
   end
 
   def do_for_show
-    @shipment = Shipment.find(params[:id])
+    @shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
     @cargo_items = @shipment.cargo_items
     @containers = @shipment.containers
   end
 
   def populate_contacts
-    @shipment_contacts = @shipment.shipment_contacts
+    @shipment_contacts = @shipment.shipment_contacts.where(sandbox: @sandbox)
     @shipment_contacts.each do |sc|
       next unless sc.contact
 
@@ -448,7 +449,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def tenant_shipments
-    @tenant_shipments ||= Shipment.where(tenant_id: current_user.tenant_id)
+    @tenant_shipments ||= Shipment.where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
 
     current_user.internal ? @tenant_shipments : @tenant_shipments.external_user
   end
@@ -533,11 +534,26 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def documents
     @documents ||= {
-      'requested_shipments' => Document.where(shipment_id: tenant_shipments.requested.select(:id)).group_by(&:doc_type),
-      'open_shipments' => Document.where(shipment_id: tenant_shipments.open.select(:id)).group_by(&:doc_type),
-      'finished_shipments' => Document.where(shipment_id: tenant_shipments.finished.select(:id)).group_by(&:doc_type),
-      'rejected_shipments' => Document.where(shipment_id: tenant_shipments.rejected.select(:id)).group_by(&:doc_type),
-      'archived_shipments' => Document.where(shipment_id: tenant_shipments.archived.select(:id)).group_by(&:doc_type)
+      'requested_shipments' => Document.where(
+        shipment_id: tenant_shipments.requested.select(:id),
+        sandbox: @sandbox
+      ).group_by(&:doc_type),
+      'open_shipments' => Document.where(
+        shipment_id: tenant_shipments.open.select(:id),
+        sandbox: @sandbox
+      ).group_by(&:doc_type),
+      'finished_shipments' => Document.where(
+        shipment_id: tenant_shipments.finished.select(:id),
+        sandbox: @sandbox
+      ).group_by(&:doc_type),
+      'rejected_shipments' => Document.where(
+        shipment_id: tenant_shipments.rejected.select(:id),
+        sandbox: @sandbox
+      ).group_by(&:doc_type),
+      'archived_shipments' => Document.where(
+        shipment_id: tenant_shipments.archived.select(:id),
+        sandbox: @sandbox
+      ).group_by(&:doc_type)
     }
   end
 

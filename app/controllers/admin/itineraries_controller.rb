@@ -4,7 +4,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   include ItineraryTools
 
   def index
-    map_data = current_user.tenant.map_data
+    map_data = current_user.tenant.map_data.where(sandbox: @sandbox)
     response_handler(mapData: map_data, itineraries: as_json_itineraries)
   end
 
@@ -23,7 +23,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def stops
-    response_handler(itinerary_stops.map(&:as_options_json))
+    response_handler(itinerary_stops.where(sandbox: @sandbox).map(&:as_options_json))
   end
 
   def edit_notes
@@ -31,45 +31,20 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def show
-    itinerary = Itinerary.find(params[:id])
-    resp = { hubs: itinerary.hubs,
+    itinerary = Itinerary.find(params[:id], sandbox: @sandbox)
+    resp = { hubs: itinerary.hubs.where(sandbox: @sandbox),
              itinerary: itinerary,
              hubItinerarys: itinerary.as_options_json,
              schedules: itinerary.prep_schedules(10),
-             stops: itinerary.stops.order(:index),
+             stops: itinerary.stops.where(sandbox: @sandbox).order(:index),
              notes: itinerary.notes }
     response_handler(resp)
   end
 
   private
 
-  def work_itinerary(itinerary_row)
-    itinerary_row = itinerary_row.compact # remove nil's
-    itinerary = Itinerary.find_or_create_by(name: itinerary_row[0])
-    new_ids << itinerary.id
-    itinerary.trade_direction = itinerary_row[1].downcase
-    address_data = itinerary_row[2..-1]
-    current_hub_type = nil
-    address_data.each_with_index do |el, i|
-      if i.even?
-        current_hub_type = el
-      else
-        address = hub_address(current_hub_type, el)
-        rl = find_or_create_itinerary_address(itinerary, address, i)
-        itinerary.update_attributes(starthub: rl.address) if i == 1
-        itinerary.update_attributes(endhub: rl.address) if i == address_data.length - 1
-      end
-    end
-  end
-
-  def find_or_create_itinerary_address(itinerary, address, index)
-    ItineraryLocation.find_or_create_by(itinerary: itinerary,
-                                        address: address,
-                                        position_in_hub_chain: (index + 1) / 2)
-  end
-
   def hub_address(current_hub_type, el)
-    Address.find_by(address_type: "hub_#{current_hub_type.downcase}", hub_name: el)
+    Address.find_by(address_type: "hub_#{current_hub_type.downcase}", hub_name: el, sandbox: @sandbox)
   end
 
   def first_sheet
@@ -81,12 +56,13 @@ class Admin::ItinerariesController < Admin::AdminBaseController
     {
       mode_of_transport: params['itinerary']['mot'],
       name: params['itinerary']['name'],
-      tenant_id: current_user.tenant_id
+      tenant_id: current_user.tenant_id,
+      sandbox: @sandbox
     }
   end
 
   def as_json_itineraries
-    itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
+    itineraries = Itinerary.where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
     itineraries.map(&:as_options_json)
   end
 
@@ -109,15 +85,16 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def itinerary_stops
-    itinerary = Itinerary.find(params[:id])
+    itinerary = Itinerary.find(params[:id], sandbox: @sandbox)
     itinerary.stops.order(:index)
   end
 
   def itinerary_with_notes
-    itinerary = Itinerary.find(params[:id])
+    itinerary = Itinerary.find(params[:id], sandbox: @sandbox)
     itinerary.notes.find_or_create_by!(body: params[:notes][:body],
                                        header: params[:notes][:header],
-                                       level: params[:notes][:level])
+                                       level: params[:notes][:level],
+                                       sandbox: @sandbox)
     itinerary.notes
   end
 

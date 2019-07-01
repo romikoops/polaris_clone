@@ -24,6 +24,7 @@ module Trucking
         @nexus_ids    = args[:nexus_ids]
         @hub_ids      = args[:hub_ids]
         @distance     = args[:distance]
+        @sandbox = args[:sandbox]
       end
 
       def perform
@@ -41,7 +42,12 @@ module Trucking
       end
 
       def find_trucking_locations
-        @klass.where(hub_id: @relevant_hubs.pluck(:id, ), carriage: @carriage, tenant_id: @tenant_id,)
+        @klass.where(
+          hub_id: @relevant_hubs.pluck(:id),
+          carriage: @carriage,
+          tenant_id: @tenant_id,
+          sandbox_id: @sandbox&.id
+        )
               .where(cargo_class_condition)
               .where(truck_type_condition)
               .where(nexuses_condition)
@@ -51,7 +57,7 @@ module Trucking
 
       def trucking_location_where_statement
         if @distance
-          { trucking_locations: { distance: @distance } }
+          { trucking_locations: { distance: @distance, sandbox_id: @sandbox&.id } }
         else
           <<-SQL
             trucking_locations.distance = ROUND(ST_Distance(
@@ -92,7 +98,7 @@ module Trucking
       end
 
       def hubs_condition
-        @hub_ids ? { 'id': @hub_ids } : {}
+        @hub_ids ? { 'id': @hub_ids, 'sandbox': @sandbox } : {}
       end
 
       # Argument Errors

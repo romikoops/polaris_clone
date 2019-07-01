@@ -8,7 +8,7 @@ class Admin::TruckingController < Admin::AdminBaseController
   end
 
   def show
-    hub = Hub.find(params[:id])
+    hub = Hub.find_by(id: params[:id], sandbox: @sandbox)
     filters = {
       cargo_class: params[:cargo_class],
       truck_type: params[:truck_type],
@@ -22,10 +22,14 @@ class Admin::TruckingController < Admin::AdminBaseController
         page: params[:page] || 1,
         filters: filters,
         per_page: params[:page_size],
-        group_id: params[:group] == 'all' ? nil : params[:group]
+        group_id: params[:group] == 'all' ? nil : params[:group],
+        sandbox: @sandbox
       }
     )
-    groups = Tenants::Group.where(tenant_id: Tenants::Tenant.find_by(legacy_id: current_tenant&.id)&.id)
+    groups = Tenants::Group.where(
+      tenant_id: Tenants::Tenant.find_by(legacy_id: current_tenant&.id)&.id,
+      sandbox: @sandbox
+    )
     response_handler(
       hub: hub,
       truckingPricings: results.map(&:as_index_result),
@@ -36,7 +40,7 @@ class Admin::TruckingController < Admin::AdminBaseController
   end
 
   def edit
-    tp = Trucking::Trucking.find(params[:id])
+    tp = Trucking::Trucking.find_by(id: params[:id], sandbox: @sandbox)
     ntp = params[:pricing].as_json
     tp.update_attributes(ntp.except('id', 'cargo_class', 'load_type', 'courier_id', 'truck_type', 'carriage'))
     response_handler(tp)
@@ -53,7 +57,8 @@ class Admin::TruckingController < Admin::AdminBaseController
         params: { 'xlsx' => params[:file] },
         hub_id: params[:id],
         user: current_user,
-        group: params[:group] == 'all' ? nil : params[:group]
+        group: params[:group] == 'all' ? nil : params[:group],
+        sandbox: @sandbox
       }
 
       resp = Trucking::Excel::Inserter.new(args).perform

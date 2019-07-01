@@ -83,4 +83,5 @@ end
 #  planned_destination_collection_date :datetime
 #  desired_start_date                  :datetime
 #  meta                                :jsonb
+#  sandbox_id                          :uuid
 #

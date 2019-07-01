@@ -13,6 +13,7 @@ module ExcelTool
       @new_pricings = {}
       @nested_pricings = {}
       @generate = args[:generate]
+      @sandbox = args[:sandbox]
     end
 
     def perform
@@ -189,7 +190,13 @@ module ExcelTool
         vehicle = tenant_vehicle(row)
 
         aux_data[pricing_key][:tenant_vehicle] = vehicle.presence ||
-                                                 Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id, row[:carrier])
+                                                 Vehicle.create_from_name(
+                                                   name: row[:vehicle],
+                                                   mot: row[:mot],
+                                                   tenant_id: tenant.id,
+                                                   carrier: row[:carrier],
+                                                   sandbox: @sandbox
+                                                 )
       end
       aux_data[pricing_key][:load_type] = row[:cargo_type] == 'lcl' ? 'cargo_item' : 'container'
       aux_data[pricing_key][:customer] = User.find_by(email: row[:customer_id], tenant_id: user.tenant_id) if row[:customer_id]
@@ -243,13 +250,15 @@ module ExcelTool
       end_date = generate ? start_date + 60.days : start_date + 5.days
       unless @unsaved_itins.include?(@itinerary)
         generator_results = aux_data[pricing_key][:itinerary].generate_weekly_schedules(
-          aux_data[pricing_key][:stops_in_order],
-          steps_in_order,
-          start_date,
-          end_date,
-          [1, 5],
-          aux_data[pricing_key][:tenant_vehicle].id,
-          aux_data[pricing_key][:load_type]
+          stops_in_order: aux_data[pricing_key][:stops_in_order],
+          steps_in_order: steps_in_order,
+          start_date: start_date,
+          end_date: end_date,
+          ordinal_array: [1, 5],
+          tenant_vehicle_id: aux_data[pricing_key][:tenant_vehicle].id,
+          closing_date_buffer: 4,
+          load_type: aux_data[pricing_key][:load_type],
+          sandbox: @sandbox
         )
         results[:layovers] = generator_results[:results][:layovers]
         results[:trips] = generator_results[:results][:trips]

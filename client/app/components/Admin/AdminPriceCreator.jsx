@@ -462,7 +462,6 @@ export class AdminPriceCreator extends Component {
         <h4 className="flex-none letter_3">{transportCategory.label}</h4>
       </div>
     )
-
     const contextPanel = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">

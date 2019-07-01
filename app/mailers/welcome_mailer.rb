@@ -4,7 +4,7 @@ class WelcomeMailer < ApplicationMailer
   layout 'mailer.html.mjml'
   add_template_helper(ApplicationHelper)
 
-  def welcome_email(user) # rubocop:disable Metrics/AbcSize
+  def welcome_email(user, sandbox = nil) # rubocop:disable Metrics/AbcSize
     return unless Content.exists?(tenant_id: user.tenant_id, component: 'WelcomeMail')
 
     @user = user
@@ -17,13 +17,13 @@ class WelcomeMailer < ApplicationMailer
     attachments.inline['ngl_welcome_image.jpg'] = URI.open(
       'https://assets.itsmycargo.com/assets/tenants/normanglobal/ngl_welcome_image.jpg'
     ).read
-
+    subject = sandbox ? "[SANDBOX] - #{@content['subject'][0]['text']}" : @content['subject'][0]['text']
     mail(
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
                          .tap { |a| a.display_name = @user.tenant.name }.format,
       reply_to: @user.tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, @user.email),
-      subject: @content['subject'][0]['text']
+      subject: subject
     ) do |format|
       format.html
       format.mjml

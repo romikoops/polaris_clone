@@ -14,7 +14,7 @@ module OfferCalculatorService
       if @shipment.has_carriage?(carriage)
         Hub.where(id: trucking_hub_ids(carriage))
       else
-        @shipment.tenant.hubs.where(nexus_id: @shipment["#{target}_nexus_id"])
+        @shipment.tenant.hubs.where(sandbox: @sandbox, nexus_id: @shipment["#{target}_nexus_id"])
       end
     end
 
@@ -27,7 +27,8 @@ module OfferCalculatorService
         tenant_id: @shipment.tenant_id,
         truck_type: trucking_details['truck_type'],
         carriage: carriage,
-        cargo_classes: @shipment.cargo_classes
+        cargo_classes: @shipment.cargo_classes,
+        sandbox: @sandbox
       }
       results = Trucking::Queries::Availability.new(args).perform | Trucking::Queries::Distance.new(args).perform
       results.map(&:hub_id)

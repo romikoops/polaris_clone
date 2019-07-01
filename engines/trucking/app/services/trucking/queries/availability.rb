@@ -24,6 +24,7 @@ module Trucking
         @nexus_ids    = args[:nexus_ids]
         @hub_ids      = args[:hub_ids]
         @distance     = args[:distance]
+        @sandbox = args[:sandbox]
         @locations_locations = []
         @trucking_locations = []
         @trucking_truckings = []
@@ -43,9 +44,11 @@ module Trucking
 
       def find_trucking_locations
         @trucking_locations = ::Trucking::Location.where(
-          location_id: @locations_locations.pluck(:id), country_code: @country_code
+          sandbox: @sandbox,
+          location_id: @locations_locations.pluck(:id),
+          country_code: @country_code
         ).or(
-          ::Trucking::Location.where(zipcode: @zipcode, country_code: @country_code)
+          ::Trucking::Location.where(zipcode: @zipcode, country_code: @country_code, sandbox: @sandbox)
         )
       end
 
@@ -55,12 +58,9 @@ module Trucking
                                 tenant_id: @tenant_id,
                                 location_id: @trucking_locations.pluck(:id),
                                 load_type: @load_type,
-                                carriage: @carriage
+                                carriage: @carriage,
+                                sandbox_id: @sandbox&.id
                               )
-                              .where(hubs_condition)
-                              .where(cargo_class_condition)
-                              .where(truck_type_condition)
-                              .where(nexuses_condition)
       end
 
       def truck_type_condition

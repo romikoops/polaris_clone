@@ -7,9 +7,9 @@ module ExcelDataServices
 
       def load_and_prepare_data
         pricings = if scope['base_pricing']
-                     tenant.rates.for_mode_of_transport('ocean').for_cargo_classes(['lcl'])
+                     tenant.rates.where(sandbox: @sandbox).for_mode_of_transport('ocean').for_cargo_classes(['lcl'])
                    else
-                     tenant.pricings.for_mode_of_transport('ocean').for_cargo_classes(['lcl'])
+                     tenant.pricings.where(sandbox: @sandbox).for_mode_of_transport('ocean').for_cargo_classes(['lcl'])
                    end
         raw_pricing_rows = PricingRowDataBuilder.build_raw_pricing_rows(pricings, scope)
         rows_data_static_fee_col = PricingRowDataBuilder.build_rows_data_with_static_fee_col(raw_pricing_rows)

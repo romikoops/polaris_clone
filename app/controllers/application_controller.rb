@@ -5,6 +5,7 @@ require "#{Rails.root}/app/classes/application_error.rb"
 class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
   include Response
+  before_action :set_sandbox
   before_action :set_raven_context
   before_action :require_authentication!
   before_action :require_non_guest_authentication!
@@ -69,6 +70,10 @@ class ApplicationController < ActionController::API
       url: request.url,
       scope: current_scope
     )
+  end
+
+  def set_sandbox
+    @sandbox = Tenants::Sandbox.find_by(id: request.headers[:sandbox])
   end
 
   def clear_shoryuken

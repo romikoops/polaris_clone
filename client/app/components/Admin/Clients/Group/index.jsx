@@ -12,8 +12,8 @@ import AdminClientMargins from '../Margins'
 import GreyBox from '../../../GreyBox/GreyBox'
 import SquareButton from '../../../SquareButton'
 import FileUploader from '../../../FileUploader/FileUploader'
-import TextHeading from '../../../TextHeading/TextHeading';
-import { AdminClientMarginPreview } from '..';
+import TextHeading from '../../../TextHeading/TextHeading'
+import { AdminClientMarginPreview } from '..'
 
 class AdminClientGroup extends Component {
   constructor (props) {

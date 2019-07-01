@@ -4,8 +4,8 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
   include ExcelTools
 
   def hub_charges # rubocop:disable Metrics/AbcSize
-    hub = Hub.find(params[:id])
-    charges = hub.local_charges
+    hub = Hub.find_by(id: params[:id], sandbox: @sandbox)
+    charges = hub.local_charges.where(sandbox: @sandbox)
     service_levels = charges.map(&:tenant_vehicle).uniq.map(&:with_carrier).map do |tenant_vehicle|
       carrier_name = if tenant_vehicle['carrier']
                        "#{tenant_vehicle['carrier']['name']} - #{tenant_vehicle['name']}"
@@ -21,7 +21,7 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
 
     resp = {
       hub_id: params[:id],
-      charges: hub.local_charges,
+      charges: hub.local_charges.where(sandbox: @sandbox),
       customs: hub.customs_fees,
       serviceLevels: service_levels,
       counterpartHubs: counter_part_hubs
@@ -32,7 +32,7 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
   def edit
     data = params[:data].as_json
     id = data.delete('id')
-    local_charge = LocalCharge.find(id)
+    local_charge = LocalCharge.find_by(id: id, sandbox: @sandbox)
     local_charge.update(fees: data['fees'])
     response_handler(local_charge)
   end
@@ -50,7 +50,8 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
     file = upload_params[:file].tempfile
 
     options = { tenant: current_tenant,
-                file_or_path: file }
+                file_or_path: file,
+                options: { sandbox: @sandbox } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
@@ -63,7 +64,12 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
     klass_identifier = 'LocalCharges'
     file_name = "#{current_tenant.subdomain.downcase}__local_charges_#{mot}"
 
-    options = { tenant: current_tenant, specific_identifier: klass_identifier, file_name: file_name }
+    options = {
+      tenant: current_tenant,
+      specific_identifier: klass_identifier,
+      file_name: file_name,
+      sandbox: @sandbox
+    }
     downloader = ExcelDataServices::Loaders::Downloader.new(options)
 
     document = downloader.perform

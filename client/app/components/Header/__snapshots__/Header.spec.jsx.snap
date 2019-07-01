@@ -54,6 +54,12 @@ exports[`error && error[currentStage] 1`] = `
                 "url": "/account/profile",
               },
               Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
+              },
+              Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
                 "text": "Sign out",
@@ -150,6 +156,12 @@ exports[`invert is true 1`] = `
                 "url": "/account/profile",
               },
               Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
+              },
+              Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
                 "text": "Sign out",
@@ -233,6 +245,12 @@ exports[`noMessages is true 1`] = `
                 "key": "settings",
                 "text": "Account",
                 "url": "/account/profile",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -320,6 +338,12 @@ exports[`scrollable is true 1`] = `
                 "url": "/account/profile",
               },
               Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
+              },
+              Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
                 "text": "Sign out",
@@ -405,6 +429,12 @@ exports[`shallow render 1`] = `
                 "url": "/account/profile",
               },
               Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
+              },
+              Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
                 "text": "Sign out",
@@ -488,6 +518,12 @@ exports[`showModal is true 1`] = `
                 "key": "settings",
                 "text": "Account",
                 "url": "/account/profile",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -696,6 +732,12 @@ exports[`showRegistration is true 1`] = `
                 "url": "/account/profile",
               },
               Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
+              },
+              Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
                 "text": "Sign out",
@@ -779,6 +821,12 @@ exports[`tenant is falsy 1`] = `
                 "key": "settings",
                 "text": "Account",
                 "url": "/account/profile",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -866,6 +914,12 @@ exports[`theme has logoLarge 1`] = `
                 "url": "/account/profile",
               },
               Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
+              },
+              Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
                 "text": "Sign out",
@@ -951,6 +1005,12 @@ exports[`theme has logoWide 1`] = `
                 "url": "/account/profile",
               },
               Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
+              },
+              Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
                 "text": "Sign out",
@@ -1034,6 +1094,12 @@ exports[`unread > 0 1`] = `
                 "key": "settings",
                 "text": "Account",
                 "url": "/account/profile",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -1206,6 +1272,12 @@ exports[`user is falsy 1`] = `
                 "url": "/account/profile",
               },
               Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
+              },
+              Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
                 "text": "Sign out",
@@ -1275,6 +1347,12 @@ exports[`user.role_id === 2 1`] = `
                 "key": "settings",
                 "text": "Account",
                 "url": "/account/profile",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-superpowers",
+                "key": "sandbox",
+                "select": [Function],
+                "text": "Deactivate Sandbox",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",

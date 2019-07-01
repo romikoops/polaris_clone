@@ -70,4 +70,5 @@ end
 #  photo               :string
 #  nexus_id            :integer
 #  mandatory_charge_id :integer
+#  sandbox_id          :uuid
 #

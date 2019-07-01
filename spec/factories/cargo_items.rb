@@ -37,4 +37,5 @@ end
 #  stackable          :boolean          default(TRUE)
 #  quantity           :integer
 #  unit_price         :jsonb
+#  sandbox_id         :uuid
 #

@@ -170,4 +170,5 @@ end
 #  photo            :string
 #  premise          :string
 #  country_id       :integer
+#  sandbox_id       :uuid
 #

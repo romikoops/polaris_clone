@@ -26,4 +26,5 @@ end
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  load_type         :string
+#  sandbox_id        :uuid
 #

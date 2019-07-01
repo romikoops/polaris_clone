@@ -25,15 +25,15 @@ class Admin::DashboardController < Admin::AdminBaseController
   private
 
   def initialize_variables
-    @shipments = Shipment.where(tenant_id: current_user.tenant_id)
+    @shipments = Shipment.where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
     @requested_shipments = requested_shipments
     @quoted_shipments = quoted_shipments
     @detailed_itineraries = detailed_itin_json
-    hubs = current_user.tenant.hubs
+    hubs = current_user.tenant.hubs.where(sandbox: @sandbox)
     @hubs = hubs.limit(8).map do |hub|
       { data: hub, address: hub.address.to_custom_hash }
     end
-    @map_data = current_user.tenant.map_data
+    @map_data = current_user.tenant.map_data.where(sandbox: @sandbox)
     @tenant = Tenant.find(current_user.tenant_id)
   end
 
@@ -59,6 +59,9 @@ class Admin::DashboardController < Admin::AdminBaseController
   end
 
   def detailed_itin_json
-    Itinerary.for_tenant(current_user.tenant_id).limit(DASH_ITINERARIES).map(&:as_options_json)
+    Itinerary
+      .where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
+      .limit(DASH_ITINERARIES)
+      .map(&:as_options_json)
   end
 end

@@ -8,14 +8,14 @@ class PricingsController < ApplicationController
     closed_quotation_tool = ::Tenants::ScopeService.new(target: current_user).fetch(:closed_quotation_tool)
     if closed_quotation_tool
       user_pricing_id = current_user.agency.agency_manager_id
-      @pricings = tenant.pricings.where(user_id: user_pricing_id)
+      @pricings = tenant.pricings.where(user_id: user_pricing_id, sandbox: @sandbox)
       @itineraries = @pricings.map(&:itinerary)
     else
-      @pricings = tenant.pricings
-      @itineraries = tenant.itineraries
+      @pricings = tenant.pricings.where(sandbox: @sandbox)
+      @itineraries = tenant.itineraries.where(sandbox: @sandbox)
     end
     response = Rails.cache.fetch("#{@pricings.cache_key}/pricings_index", expires_in: 12.hours) do
-      @transports = TransportCategory.all.uniq
+      @transports = TransportCategory.where(sandbox: @sandbox).uniq
       itineraries = @itineraries
                     .map { |itin| itin.as_user_pricing_json(current_user) }
 
@@ -30,8 +30,8 @@ class PricingsController < ApplicationController
   end
 
   def show
-    @itinerary = Itinerary.find(params[:id])
-    @pricings = filter_for_dedicated_pricings(@itinerary.pricings).map(&:as_json)
+    @itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
+    @pricings = filter_for_dedicated_pricings(@itinerary.pricings.where(sandbox: @sandbox)).map(&:as_json)
     set_requested_flag(@pricings, current_user.id)
     response_handler(
       itinerary_id: params[:id],
@@ -46,8 +46,8 @@ class PricingsController < ApplicationController
     new_pricing_request[:status] = 'requested'
     @pricing_request = PricingRequest.create!(new_pricing_request)
 
-    @itinerary = Pricing.find(new_pricing_request[:pricing_id]).itinerary
-    @pricings = filter_for_dedicated_pricings(@itinerary.pricings).map(&:as_json)
+    @itinerary = Pricing.find_by(id: new_pricing_request[:pricing_id], sandbox: @sandbox).itinerary
+    @pricings = filter_for_dedicated_pricings(@itinerary.pricings.where(sandbox: @sandbox)).map(&:as_json)
     set_requested_flag(@pricings, new_pricing_request[:user_id])
 
     response_handler(

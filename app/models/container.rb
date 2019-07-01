@@ -36,6 +36,7 @@ class Container < Legacy::Container
   PRICING_WEIGHT_STEPS = [28.0, 24.0, 18.0, 14.0, 5.0].freeze
 
   belongs_to :shipment
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   before_validation :set_gross_weight, :set_weight_class, :sync_cargo_class, :set_tare_weight
 
@@ -107,4 +108,5 @@ end
 #  customs_text    :string
 #  quantity        :integer
 #  unit_price      :jsonb
+#  sandbox_id      :uuid
 #

@@ -33,4 +33,5 @@ end
 #  customs_text    :string
 #  quantity        :integer
 #  unit_price      :jsonb
+#  sandbox_id      :uuid
 #

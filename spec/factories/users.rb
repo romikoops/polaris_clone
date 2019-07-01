@@ -7,7 +7,7 @@ FactoryBot.define do
     last_name { 'Doe' }
     sequence(:email) { |n| "demo#{n}@demo.com" }
     password { 'demo123456789' }
-
+    sandbox { false }
     association :tenant
     association :role
     association :optin_status
@@ -56,4 +56,5 @@ end
 #  agency_id              :integer
 #  internal               :boolean          default(FALSE)
 #  deleted_at             :datetime
+#  sandbox_id             :uuid
 #

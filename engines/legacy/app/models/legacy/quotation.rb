@@ -3,6 +3,7 @@
 module Legacy
   class Quotation < ApplicationRecord
     self.table_name = 'quotations'
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   end
 end
 
@@ -17,4 +18,5 @@ end
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  original_shipment_id :integer
+#  sandbox_id           :uuid
 #

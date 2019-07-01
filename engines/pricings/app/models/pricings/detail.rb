@@ -4,6 +4,7 @@ module Pricings
   class Detail < ApplicationRecord
     belongs_to :tenant, class_name: 'Tenants::Tenant'
     belongs_to :margin
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
 
     def rate_basis
@@ -32,4 +33,5 @@ end
 #  charge_category_id :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  sandbox_id         :uuid
 #

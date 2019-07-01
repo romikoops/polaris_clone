@@ -6,6 +6,7 @@ class Document < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :tenant
   belongs_to :quotation, optional: true
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   def self.upload_doc(options)
     upload(options)
@@ -70,4 +71,5 @@ end
 #  approval_details :jsonb
 #  tenant_id        :integer
 #  quotation_id     :integer
+#  sandbox_id       :uuid
 #

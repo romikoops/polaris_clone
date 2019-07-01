@@ -31,7 +31,8 @@ RSpec.describe OfferCalculatorService::ChargeCalculator do
           shipment: shipment,
           trucking_data: @trucking_data,
           schedule: schedule,
-          user: user
+          user: user,
+          sandbox: nil
         ).perform
 
         expect(offer_charge.price.value.to_f.round(2)).to eq(test[:target_price])

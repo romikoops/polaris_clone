@@ -28,14 +28,22 @@ export function NavDropdown ({
 
     if (op.url) {
       return (
-        <a key={op.key} href={op.url}>
+        <a
+          key={op.key}
+          href={op.url}
+        >
           {op.fontAwesomeIcon ? icon : ''}
           {op.text}
         </a>
       )
     }
 
-    return <div onClick={op.select}>{op.key}</div>
+    return (
+      <div onClick={op.select}>
+        {op.fontAwesomeIcon ? icon : ''}
+        {op.text || op.key}
+      </div>
+    )
   })
 
   return (
@@ -57,7 +65,11 @@ export function NavDropdown ({
         </div>
       ) : (
         <div className={`pointy layout-row layout-align-center-center ${styles.dropbtn} ccb_login`}>
-          <a onClick={toggleShowLogin} style={isLanding ? {} : { color: '#4F4F4F' }}> {loginText} </a>
+          <a onClick={toggleShowLogin} style={isLanding ? {} : { color: '#4F4F4F' }}>
+            {' '}
+            {loginText}
+            {' '}
+          </a>
         </div>
       )}
     </div>

@@ -22,6 +22,10 @@ function handleResponse (response) {
   return response.json()
 }
 
+function toggleSandbox (id) {
+  localStorage.setItem('sandbox', id)
+}
+
 function login (data) {
   const requestOptions = {
     method: 'POST',
@@ -156,6 +160,7 @@ const authenticationService = {
   register,
   getStoredUser,
   updateUser,
+  toggleSandbox,
   changePassword
 }
 

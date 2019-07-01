@@ -12,7 +12,7 @@ class NotesController < ApplicationController
     itineraries.each do |itin|
       next unless origins.include?(itin['origin']['nexusId']) && destinations.include?(itin['destination']['nexusId'])
 
-      itinerary = Itinerary.find(itin['itineraryId'])
+      itinerary = Itinerary.find_by(id: itin['itineraryId'], sandbox: @sandbox)
       itinerary.notes.each do |note|
         notes.push(transform_note(itinerary, note))
       end
@@ -21,10 +21,10 @@ class NotesController < ApplicationController
   end
 
   def delete
-    itinerary = current_tenant.itineraries.find(params[:itinerary_id])
-    note = itinerary.notes.find(params[:id])
+    itinerary = current_tenant.itineraries.find_by(id: params[:itinerary_id], sandbox: @sandbox)
+    note = itinerary.notes.find_by(id: params[:id], sandbox: @sandbox)
     note.destroy
-    resp = itinerary.notes
+    resp = itinerary.notes.where(sandbox: @sandbox)
     response_handler(resp)
   end
 

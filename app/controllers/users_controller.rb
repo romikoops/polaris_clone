@@ -5,8 +5,9 @@ class UsersController < ApplicationController
   skip_before_action :require_non_guest_authentication!, only: %i(update set_currency currencies)
 
   def home
-    response = Rails.cache.fetch("#{current_user.shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
-      @contacts = current_user.contacts.map do |contact|
+    current_shipments = current_user.shipments.where(sandbox: @sandbox)
+    response = Rails.cache.fetch("#{current_shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
+      @contacts = current_user.contacts.where(sandbox: @sandbox).limit(6).map do |contact|
         contact.as_json(
           include: { address: { include: { country: { only: :name } },
                                 except: %i(created_at updated_at country_id) } },
@@ -15,7 +16,7 @@ class UsersController < ApplicationController
       end
       user_locs = current_user.user_addresses
       addresses = user_locs.map do |ul|
-        { user: ul, address: ul.address.to_custom_hash }
+        { user: ul, address: ul.address.to_custom_hash } if ul.address.sandbox == @sandbox
       end
 
       resp = {
@@ -30,7 +31,7 @@ class UsersController < ApplicationController
 
   def account
     @user = current_user
-    @addresses = @user.addresses
+    @addresses = @user.addresses.where(sandbox: @sandbox)
 
     { addresses: @addresses }
   end
@@ -41,7 +42,7 @@ class UsersController < ApplicationController
     @user.update_attributes(user_params)
 
     if @user.valid? && !@user.guest && params[:update][:address]
-      address = Address.create_from_raw_params!(address_params)
+      address = Address.create_from_raw_params!(address_params.merge(sandbox: @sandbox))
       address.geocode_from_address_fields!
       @user.addresses << address unless address.nil?
       @user.optin_status = OptinStatus.find_by(tenant: true, itsmycargo: true, cookies: @user.optin_status.cookies)
@@ -67,7 +68,7 @@ class UsersController < ApplicationController
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!
-    rates = CurrencyToolss.new.get_rates(params[:currency], current_user.tenant_id)
+    rates = CurrencyTools.new.get_rates(params[:currency], current_user.tenant_id)
     response_handler(user: current_user.token_validation_response, rates: rates)
   end
 
@@ -121,27 +122,27 @@ class UsersController < ApplicationController
   end
 
   def requested_shipments
-    @requested_shipments ||= current_user.shipments.requested
+    @requested_shipments ||= current_user.shipments.where(sandbox: @sandbox).requested
   end
 
   def quoted_shipments
-    @quoted_shipments ||= current_user.shipments.quoted
+    @quoted_shipments ||= current_user.shipments.where(sandbox: @sandbox).quoted
   end
 
   def open_shipments
-    @open_shipments ||= current_user.shipments.open
+    @open_shipments ||= current_user.shipments.where(sandbox: @sandbox).open
   end
 
   def rejected_shipments
-    @rejected_shipments ||= current_user.shipments.rejected
+    @rejected_shipments ||= current_user.shipments.where(sandbox: @sandbox).rejected
   end
 
   def archived_shipments
-    @archived_shipments ||= current_user.shipments.archived
+    @archived_shipments ||= current_user.shipments.where(sandbox: @sandbox).archived
   end
 
   def finished_shipments
-    @finished_shipments ||= current_user.shipments.finished
+    @finished_shipments ||= current_user.shipments.where(sandbox: @sandbox).finished
   end
 
   def address_params

@@ -3,10 +3,10 @@
 class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:disable # Style/ClassAndModuleChildren
   def upload
     file = upload_params[:file].tempfile
-    identifier = 'ChargeCategories'
 
     options = { tenant: current_tenant,
-                file_or_path: file }
+                file_or_path: file,
+                options: { sandbox: @sandbox } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
@@ -18,7 +18,12 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:d
     klass_identifier = 'ChargeCategories'
     key = 'charge_categories'
 
-    options = { tenant: current_tenant, specific_identifier: klass_identifier, file_name: file_name }
+    options = {
+      tenant: current_tenant,
+      specific_identifier: klass_identifier,
+      file_name: file_name,
+      sandbox: @sandbox
+    }
     downloader = ExcelDataServices::Loaders::Downloader.new(options)
     document = downloader.perform
 

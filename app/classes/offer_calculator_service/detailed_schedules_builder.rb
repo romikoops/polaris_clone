@@ -8,7 +8,6 @@ module OfferCalculatorService
       schedules_by_pricings = grouped_schedules(schedules: schedules,
                                                 shipment: @shipment,
                                                 user: user).compact
-      
       raise ApplicationError::NoValidPricings if schedules_by_pricings.empty?
 
       detailed_schedules = schedules_by_pricings.map do |grouped_result|
@@ -19,7 +18,8 @@ module OfferCalculatorService
           trucking_data: trucking_data,
           shipment: @shipment,
           user: user,
-          data: current_result
+          data: current_result,
+          sandbox: @sandbox
         ).perform
         next if grand_total_charges.nil? || grand_total_charges.empty?
 
@@ -112,7 +112,7 @@ module OfferCalculatorService
       etd = schedule.etd || Date.today
       if @scope['base_pricing']
         itinerary.rates
-                 .where(tenant_vehicle_id: tenant_vehicle_id, disabled: false)
+                 .where(tenant_vehicle_id: tenant_vehicle_id, internal: false, sandbox: @sandbox)
                  .for_dates(etd, eta)
                  .for_load_type(load_type)
                  .each_with_object({}) do |pricing, hash|
@@ -133,8 +133,19 @@ module OfferCalculatorService
           hash[pricing.cargo_class] = pricing_hash
         end
       else
-        pricings = itinerary.pricings.where(tenant_vehicle_id: tenant_vehicle_id, user_id: user.pricing_id)
-        pricings = itinerary.pricings.where(tenant_vehicle_id: tenant_vehicle_id) if pricings.empty?
+        pricings = itinerary.pricings.where(
+          tenant_vehicle_id: tenant_vehicle_id,
+          user_id: user.pricing_id,
+          sandbox: @sandbox,
+          internal: false
+        )
+        if pricings.empty?
+          pricings = itinerary.pricings.where(
+            tenant_vehicle_id: tenant_vehicle_id,
+            sandbox: @sandbox,
+            internal: false
+          )
+        end
         pricings.for_dates(etd, eta)
                 .for_load_type(load_type)
                 .each_with_object({}) do |pricing, hash|
@@ -152,7 +163,7 @@ module OfferCalculatorService
       if @scope['base_pricing']
         @scope['dedicated_pricings_only']
       else
-        user.pricings.exists? && @scope['dedicated_pricings_only']
+        user.pricings.where(internal: false, sandbox: @sandbox).exists? && @scope['dedicated_pricings_only']
       end
     end
 
@@ -178,6 +189,7 @@ module OfferCalculatorService
                          .values
                          .reject { |pricing_group| pricing_group == most_diverse_set }
                          .flatten
+
         if most_diverse_set.nil?
           result_to_return << nil
         else
@@ -294,7 +306,8 @@ module OfferCalculatorService
           cargo_classes: cargo_classes,
           dates: dates,
           dedicated_pricings_only: dedicated_pricings_only,
-          shipment: @shipment
+          shipment: @shipment,
+          sandbox: @sandbox
         ).perform
       end
       tenant_vehicle_id = schedules.first.trip.tenant_vehicle_id
@@ -303,7 +316,7 @@ module OfferCalculatorService
       closing_start_date = dates[:closing_start_date]
       closing_end_date = dates[:closing_end_date]
       pricings_by_cargo_class = schedules.first.trip.itinerary.pricings
-                                         .where(tenant_vehicle_id: tenant_vehicle_id)
+                                         .where(tenant_vehicle_id: tenant_vehicle_id, sandbox: @sandbox)
                                          .for_cargo_classes(cargo_classes)
       if start_date && end_date
         pricings_by_cargo_class_and_dates = pricings_by_cargo_class.for_dates(start_date, end_date)
@@ -324,7 +337,6 @@ module OfferCalculatorService
     end
 
     def extract_dates_and_quote(schedules)
-
       start_date = schedules.first.etd
       end_date = schedules.last.etd
       closing_start_date = schedules.first.closing_date

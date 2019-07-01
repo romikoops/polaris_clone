@@ -5,6 +5,7 @@ module Legacy
     self.table_name = 'charge_categories'
     has_many :charges
     belongs_to :tenant, class_name: 'Legacy::Tenant', optional: true
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     def self.from_code(code:, tenant_id: nil, name: nil)
       name ||= code
@@ -32,4 +33,5 @@ end
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  tenant_id     :integer
+#  sandbox_id    :uuid
 #

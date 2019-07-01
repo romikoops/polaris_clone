@@ -3,6 +3,7 @@
 module Legacy
   class Container < ApplicationRecord
     self.table_name = 'containers'
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     TARE_WEIGHTS = {
       fcl_20: 2370,
@@ -52,4 +53,5 @@ end
 #  customs_text    :string
 #  quantity        :integer
 #  unit_price      :jsonb
+#  sandbox_id      :uuid
 #

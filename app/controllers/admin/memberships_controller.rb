@@ -2,26 +2,26 @@
 
 class Admin::MembershipsController < ApplicationController
   def bulk_edit # rubocop:disable Metrics/AbcSize
-    active_memberships = target_member.memberships
+    active_memberships = target_member.memberships.where(sandbox: @sandbox)
     active_memberships.each do |m|
       m.destroy unless params[:addedGroups].include?(m.group_id)
     end
     params[:addedGroups].sort_by { |g| }.each do |group_id|
-      Tenants::Membership.find_or_create_by(group_id: group_id, member: target_member)
+      Tenants::Membership.find_or_create_by(group_id: group_id, member: target_member, sandbox: @sandbox)
     end
 
     params[:memberships].each do |m|
-      membership = Tenants::Membership.find_by(member: target_member, group_id: m[:id])
+      membership = Tenants::Membership.find_by(member: target_member, group_id: m[:id], sandbox: @sandbox)
       membership&.update(priority: m[:priority])
     end
 
     target_member.reload
-    active_memberships = target_member.memberships
+    active_memberships = target_member.memberships.where(sandbox: @sandbox)
     response_handler(active_memberships)
   end
 
   def membership_data
-    memberships = Tenants::Membership.where(member: target_member)
+    memberships = Tenants::Membership.where(member: target_member, sandbox: @sandbox)
     response_handler(memberships.map { |m| for_list_json(m) })
   end
 
@@ -31,11 +31,11 @@ class Admin::MembershipsController < ApplicationController
     @target_member ||= if params[:targetId]
                          case params[:targetType]
                          when 'company'
-                           Tenants::Company.find(params[:targetId])
+                           Tenants::Company.find_by(id: params[:targetId], sandbox: @sandbox)
                          when 'group'
-                           Tenants::Group.find(params[:targetId])
+                           Tenants::Group.find_by(id: params[:targetId], sandbox: @sandbox)
                          when 'user'
-                           Tenants::User.find_by(legacy_id: params[:targetId])
+                           Tenants::User.find_by(legacy_id: params[:targetId], sandbox: @sandbox)
                          end
                        end
   end

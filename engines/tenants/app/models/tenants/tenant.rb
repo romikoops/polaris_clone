@@ -3,7 +3,7 @@
 module Tenants
   class Tenant < ApplicationRecord
     include ::Tenants::Legacy
-
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :legacy, class_name: 'Legacy::Tenant', optional: true
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
     has_many :users

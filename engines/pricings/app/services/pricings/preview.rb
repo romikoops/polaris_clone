@@ -24,7 +24,6 @@ module Pricings
       margin_preview = @pricings.map do |pricing|
         @pricing = pricing
         schedules = create_schedules_for_pricing(pricing: pricing)
-
         next if schedules.empty?
 
         @applicable_margins = find_applicable_margins
@@ -256,7 +255,6 @@ module Pricings
           margin = mdata[:margin]
           fees.each do |fee|
             fee_json = fee.as_json
-
             effective_margin = (margin.details.find_by(charge_category_id: fee.charge_category_id) || margin)
             effective_value = if effective_margin.operator == '+' && effective_margin == margin
                                 effective_margin.value / fees.size

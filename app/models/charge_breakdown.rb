@@ -3,6 +3,7 @@
 class ChargeBreakdown < ApplicationRecord
   belongs_to :shipment
   belongs_to :trip
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   validates :trip_id, uniqueness: {
     scope: :shipment_id,
@@ -58,4 +59,5 @@ end
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  trip_id     :integer
+#  sandbox_id  :uuid
 #

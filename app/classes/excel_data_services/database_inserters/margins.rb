@@ -28,7 +28,8 @@ module ExcelDataServices
         Itinerary.find_by(
           tenant: tenant,
           name: row.itinerary_name,
-          mode_of_transport: row.mot
+          mode_of_transport: row.mot,
+          sandbox: @sandbox
         )
       end
 
@@ -39,7 +40,8 @@ module ExcelDataServices
           tenant: tenant,
           name: row.service_level,
           mode_of_transport: row.mot,
-          carrier: carrier
+          carrier: carrier,
+          sandbox: @sandbox
         )
       end
 
@@ -53,6 +55,7 @@ module ExcelDataServices
             operator: margin_applies_to_all_fees ? row.operator : nil,
             value: margin_applies_to_all_fees ? row.margin : nil,
             cargo_class: row.load_type,
+            sandbox: @sandbox,
             effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
             expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
@@ -112,12 +115,14 @@ module ExcelDataServices
           fee_code = row.fee_code.upcase
           charge_category = ChargeCategory.find_by(
             tenant_id: tenant.id,
-            code: fee_code
+            code: fee_code,
+            sandbox: @sandbox
           )
 
           { tenant_id: tenants_tenant.id,
             charge_category_id: charge_category.id,
             operator: row.operator,
+            sandbox: @sandbox,
             value: row.margin }
         end
       end

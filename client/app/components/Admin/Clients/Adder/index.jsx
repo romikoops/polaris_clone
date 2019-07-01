@@ -40,7 +40,6 @@ class AdminClientAdder extends Component {
         case 'group':
           type = 'groups'
           break
-
         default:
           break
       }

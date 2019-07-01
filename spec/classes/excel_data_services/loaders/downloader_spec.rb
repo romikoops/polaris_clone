@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Loaders::Downloader do
   let(:tenant) { create(:tenant) }
-  let(:downloader) { described_class.new(tenant: tenant, specific_identifier: specific_identifier, file_name: file_name) }
+  let(:downloader) { described_class.new(tenant: tenant, specific_identifier: specific_identifier, file_name: file_name, sandbox: nil) }
   let(:specific_identifier) { 'LocalCharges' }
   let(:file_name) { 'xyz.xlsx' }
 

@@ -19,7 +19,8 @@ RSpec.describe OfferCalculatorService::TruckingPricingFinder do
         address: address,
         carriage: 'pre',
         shipment: shipment,
-        user_id: nil
+        user_id: nil,
+        sandbox: nil
       )
       results = service.perform(hub.id, 0)
       expect(results['lcl']).to eq(common_trucking)
@@ -30,7 +31,8 @@ RSpec.describe OfferCalculatorService::TruckingPricingFinder do
         address: address,
         carriage: 'pre',
         shipment: shipment,
-        user_id: user.id
+        user_id: user.id,
+        sandbox: nil
       )
       results = service.perform(hub.id, 0)
       expect(results['lcl']).to eq(user_trucking)
@@ -55,7 +57,8 @@ RSpec.describe OfferCalculatorService::TruckingPricingFinder do
         address: address_bp,
         carriage: 'pre',
         shipment: shipment_bp,
-        user_id: nil
+        user_id: nil,
+        sandbox: nil
       )
       results = service.perform(hub.id, 0)
       expect(results['lcl']).to eq(common_trucking)
@@ -66,7 +69,8 @@ RSpec.describe OfferCalculatorService::TruckingPricingFinder do
         address: address_bp,
         carriage: 'pre',
         shipment: shipment_bp,
-        user_id: user_bp.id
+        user_id: user_bp.id,
+        sandbox: nil
       )
       results = service.perform(hub.id, 0)
       expect(results['lcl']).to eq(group_trucking)

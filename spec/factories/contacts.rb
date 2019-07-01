@@ -27,4 +27,5 @@ end
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  alias        :boolean          default(FALSE)
+#  sandbox_id   :uuid
 #

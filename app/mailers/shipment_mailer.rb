@@ -7,7 +7,7 @@ class ShipmentMailer < ApplicationMailer
 
   TESTING_EMAIL = 'angelica@itsmycargo.com'
 
-  def tenant_notification(user, shipment) # rubocop:disable Metrics/AbcSize
+  def tenant_notification(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
     @user = user
     tenant = user.tenant
     @shipment = shipment
@@ -31,13 +31,13 @@ class ShipmentMailer < ApplicationMailer
                          .tap { |a| a.display_name = 'ItsMyCargo Bookings' }.format,
       reply_to: 'support@itsmycargo.com',
       to: mail_target_interceptor(@user, tenant.email_for(:sales, shipment.mode_of_transport)),
-      subject: "Your booking through #{tenant.name}"
+      subject: "#{sandbox ? '[SANDBOX] - ' : ''}Your booking through #{tenant.name}"
     }
 
     mail(mail_options, &:html)
   end
 
-  def shipper_notification(user, shipment) # rubocop:disable Metrics/AbcSize
+  def shipper_notification(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
     @user = user
     tenant = user.tenant
     @shipment = shipment
@@ -58,13 +58,13 @@ class ShipmentMailer < ApplicationMailer
       reply_to: tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, @user.email.blank? ? 'itsmycargodev@gmail.com' : @user.email),
       bcc: [Settings.emails.booking],
-      subject: "Your booking through #{tenant.name}"
+      subject: "#{sandbox ? '[SANDBOX] - ' : ''}Your booking through #{tenant.name}"
     }
 
     mail(mail_options, &:html)
   end
 
-  def shipper_confirmation(user, shipment) # rubocop:disable Metrics/AbcSize
+  def shipper_confirmation(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
     @user = user
     @shipment = shipment
     tenant = shipment.tenant
@@ -84,7 +84,7 @@ class ShipmentMailer < ApplicationMailer
       reply_to: @user.tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, user.email.blank? ? 'itsmycargodev@gmail.com' : user.email),
       bcc: [Settings.emails.booking],
-      subject: "Your booking through #{@user.tenant.name}"
+      subject: "#{sandbox ? '[SANDBOX] - ' : ''}Your booking through #{@user.tenant.name}"
     }
 
     mail(mail_options, &:html)

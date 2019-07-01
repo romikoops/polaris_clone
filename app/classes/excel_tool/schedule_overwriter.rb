@@ -8,6 +8,7 @@ module ExcelTool
       @mot = args[:mot]
       @first_sheet = xlsx.sheet(xlsx.sheets.first)
       @user = args[:_user]
+      @sandbox = args[:sandbox]
     end
 
     def perform
@@ -34,7 +35,11 @@ module ExcelTool
     def create_tenant_vehicle(row, itinerary)
       service_level = row[:service_level] || 'standard'
       Vehicle.create_from_name(
-        service_level, itinerary.mode_of_transport, @user.tenant_id, row[:carrier]
+        name: service_level,
+        mot: itinerary.mode_of_transport,
+        tenant_id: @user.tenant_id,
+        carrier: row[:carrier],
+        sandbox: @sandbox
       )
     end
 
@@ -77,7 +82,12 @@ module ExcelTool
     def find_itinerary(row)
       itinerary_from = row[:from].split(' ').map(&:capitalize).join(' ')
       itinerary_to = row[:to].split(' ').map(&:capitalize).join(' ')
-      Itinerary.find_by(name: "#{itinerary_from} - #{itinerary_to}", mode_of_transport: mot, tenant_id: @user.tenant_id)
+      Itinerary.find_by(
+        name: "#{itinerary_from} - #{itinerary_to}",
+        mode_of_transport: mot,
+        tenant_id: @user.tenant_id,
+        sandbox: @sandbox
+      )
     end
 
     def find_or_create_tenant_vehicle(row, itinerary)
@@ -91,14 +101,22 @@ module ExcelTool
         tenant_id: @user.tenant_id,
         mode_of_transport: itinerary.mode_of_transport,
         name: row[:service_level],
-        carrier: Carrier.find_by(name: row[:carrier])
+        carrier: Carrier.find_by(name: row[:carrier]),
+        sandbox: @sandbox
       )
       tv ||= TenantVehicle.find_by(
         tenant_id: @user.tenant_id,
         mode_of_transport: itinerary.mode_of_transport,
-        name: row[:service_level]
+        name: row[:service_level],
+        sandbox: @sandbox
       )
-      tv ||= Vehicle.create_from_name(service_level, itinerary.mode_of_transport, @user.tenant_id, row[:carrier])
+      tv ||= Vehicle.create_from_name(
+        name: service_level,
+        mot: itinerary.mode_of_transport,
+        tenant_id: @user.tenant_id,
+        carrier: row[:carrier],
+        sandbox: @sandbox
+      )
 
       tv
     end
@@ -109,8 +127,17 @@ module ExcelTool
       stops = itinerary.stops.order(:index)
 
       tenant_vehicle_id = find_or_create_tenant_vehicle(row, itinerary).id
-      generator_results = itinerary.generate_schedules_from_sheet(stops, start_date,
-                                                                  end_date, tenant_vehicle_id, row[:closing_date], row[:vessel], row[:voyage_code], row[:load_type])
+      generator_results = itinerary.generate_schedules_from_sheet(
+        stops: stops,
+        start_date: start_date,
+        end_date: end_date,
+        tenant_vehicle_id: tenant_vehicle_id,
+        closing_date: row[:closing_date],
+        vessel: row[:vessel],
+        voyage_code: row[:voyage_code],
+        load_type: row[:load_type],
+        sandbox: @sandbox
+      )
       results[:trips] = generator_results[:trips]
       results[:layovers] = generator_results[:layovers]
       stats[:trips][:number_created] = generator_results[:trips].count

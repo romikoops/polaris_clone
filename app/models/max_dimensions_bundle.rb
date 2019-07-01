@@ -2,6 +2,7 @@
 
 class MaxDimensionsBundle < ApplicationRecord
   belongs_to :tenant
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   validates :mode_of_transport, presence: true, uniqueness: {
     scope: %i(tenant_id aggregate),
     message: lambda do |obj, _|
@@ -117,4 +118,5 @@ end
 #  chargeable_weight :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  sandbox_id        :uuid
 #

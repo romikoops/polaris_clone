@@ -6,9 +6,11 @@ class Contact < ApplicationRecord
   pg_search_scope :contact_search, against: %i(first_name last_name company_name email phone), using: {
     tsearch: { prefix: true }
   }
+
   belongs_to :user
   has_many :shipment_contacts
   belongs_to :address, optional: true
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   # Validations
   # validates :company_name, presence: true, length: { in: 2..50 }
@@ -134,4 +136,5 @@ end
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  alias        :boolean          default(FALSE)
+#  sandbox_id   :uuid
 #

@@ -136,7 +136,6 @@ export class AdminClientView extends Component {
     const {
       selectedManager, selectedRole, showAddManager, confirm, editGroups
     } = this.state
-
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -169,7 +168,6 @@ export class AdminClientView extends Component {
         </div>
       ))
       : []
-
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
@@ -181,7 +179,6 @@ export class AdminClientView extends Component {
     ) : (
       ''
     )
-
     const addressArr = addresses.map(loc => (
       <AdminAddressTile
         key={v4()}
@@ -425,6 +422,20 @@ export class AdminClientView extends Component {
               />
             </div>)
           ] : '' }
+        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+          <div
+            className={`flex-100 layout-row layout-align-space-between-center greyBg ${styles.grey_section_head}`}
+          >
+            <TextHeading theme={theme} size={3} text={t('shipment:locations')} />
+          </div>
+          {groupTable}
+        </div>
+        <div className="layout-row flex-100 layout-wrap layout-align-start-center buffer_10">
+          <AdminClientMarginPreview
+            targetId={client.id}
+            targetType="user"
+          />
+        </div>
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
           <div
             className={`flex-100 layout-row layout-align-space-between-center greyBg ${styles.grey_section_head}`}

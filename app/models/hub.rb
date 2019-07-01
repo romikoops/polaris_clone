@@ -8,6 +8,7 @@ class Hub < Legacy::Hub
 
   has_many :addons
   has_many :stops,    dependent: :destroy
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   has_many :layovers, through: :stops
   has_many :hub_truckings
   has_many :trucking_pricings, -> { distinct }, through: :hub_truckings
@@ -226,4 +227,5 @@ end
 #  photo               :string
 #  nexus_id            :integer
 #  mandatory_charge_id :integer
+#  sandbox_id          :uuid
 #

@@ -615,6 +615,8 @@
     "loginPage": "LoginPage",
     "registrationPage": "RegistrationPage",
     "account": "Account",
+    "activateSandbox": "Activate Sandbox",
+    "deactivateSandbox": "Deactivate Sandbox",
     "searchAddress": "Search for address",
     "noDetailsAvailable": "No details available for input: {{placeName}}"
   },

@@ -564,7 +564,8 @@ module DataValidator
           cargo_classes: cargo_classes,
           dates: dates,
           dedicated_pricings_only: dedicated_pricings_only,
-          shipment: @shipment
+          shipment: @shipment,
+          sandbox: nil
           ).perform
       end
       tenant_vehicle_id = schedules.first.trip.tenant_vehicle_id

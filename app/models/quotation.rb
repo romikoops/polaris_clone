@@ -2,6 +2,7 @@
 
 class Quotation < ApplicationRecord
   has_many :shipments
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 end
 
 # == Schema Information
@@ -15,4 +16,5 @@ end
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  original_shipment_id :integer
+#  sandbox_id           :uuid
 #

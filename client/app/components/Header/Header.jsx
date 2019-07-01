@@ -29,6 +29,7 @@ class Header extends Component {
     }
     this.goHome = this.goHome.bind(this)
     this.toggleShowLogin = this.toggleShowLogin.bind(this)
+    this.toggleSandbox = this.toggleSandbox.bind(this)
     this.toggleShowMessages = this.toggleShowMessages.bind(this)
     this.checkIsTop = this.checkIsTop.bind(this)
     this.hideAlert = this.hideAlert.bind(this)
@@ -104,6 +105,11 @@ class Header extends Component {
     }
   }
 
+  toggleSandbox () {
+    const { authenticationDispatch, user } = this.props
+    authenticationDispatch.toggleSandbox(user.id)
+  }
+
   toggleShowMessages () {
     const { messageDispatch } = this.props
     messageDispatch.showMessageCenter()
@@ -127,6 +133,7 @@ class Header extends Component {
     const { isTop } = this.state
     const scope = tenant && tenant.id ? tenant.scope : {}
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
+    const sandbox = get(user, ['sandbox'], false)
     const accountLinks = user && user.role && user.role.name.includes('admin')
       ? [
         {
@@ -135,6 +142,12 @@ class Header extends Component {
           fontAwesomeIcon: 'fa-cog',
           key: 'settings'
         },
+        // {
+        //   select: this.toggleSandbox,
+        //   text: sandbox ? t('nav:deactivateSandbox') : t('nav:activateSandbox'),
+        //   fontAwesomeIcon: 'fa-superpowers',
+        //   key: 'sandbox'
+        // },
         {
           url: '/signout',
           text: t('nav:signOut'),
@@ -148,6 +161,12 @@ class Header extends Component {
           text: t('nav:account'),
           fontAwesomeIcon: 'fa-cog',
           key: 'settings'
+        },
+        {
+          select: this.toggleSandbox,
+          text: sandbox ? t('nav:activateSandbox') : t('nav:deactivateSandbox'),
+          fontAwesomeIcon: 'fa-superpowers',
+          key: 'sandbox'
         },
         {
           url: '/signout',

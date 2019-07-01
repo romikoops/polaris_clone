@@ -8,6 +8,7 @@ module Trucking
     QUERY_METHODS = %i(distance zipcode location not_set).freeze
 
     has_many :hub_availabilities
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     validates :truck_type,
               uniqueness: {
                 scope: %i(carriage load_type query_method),
@@ -46,4 +47,5 @@ end
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  query_method :integer
+#  sandbox_id   :uuid
 #

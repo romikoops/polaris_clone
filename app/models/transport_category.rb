@@ -11,6 +11,8 @@ class TransportCategory < ApplicationRecord
 
   belongs_to :vehicle
 
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+
   before_validation :set_load_type
 
   validates :cargo_class, presence: true
@@ -43,7 +45,7 @@ class TransportCategory < ApplicationRecord
   validates :name,
             presence: true,
             uniqueness: {
-              scope: %i(vehicle_id cargo_class),
+              scope: %i(vehicle_id cargo_class sandbox),
               message: lambda do |record, _|
                          "'#{record.name}' taken for " \
                              "vehicle id '#{record.vehicle_id}' cargo class '#{record.cargo_class}'"
@@ -94,4 +96,5 @@ end
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  load_type         :string
+#  sandbox_id        :uuid
 #

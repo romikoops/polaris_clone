@@ -4,7 +4,7 @@
 module OfferCalculatorService
   class RouteFinder < Base
     def perform(hubs)
-      tenant_itinerary_ids = @shipment.tenant.itineraries.ids
+      tenant_itinerary_ids = @shipment.tenant.itineraries.where(sandbox: @sandbox).ids
       routes_attributes = Route.attributes_from_hub_and_itinerary_ids(
         hubs[:origin].ids, hubs[:destination].ids, tenant_itinerary_ids
       )

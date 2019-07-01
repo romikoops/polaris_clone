@@ -8,7 +8,7 @@ class Vehicle < Legacy::Vehicle
   validates :name,
             presence: true,
             uniqueness: {
-              scope: :mode_of_transport,
+              scope: %i(mode_of_transport),
               message: ->(obj, _) { "'#{obj.name}' taken for mode of transport '#{obj.mode_of_transport}'" }
             }
 
@@ -16,7 +16,7 @@ class Vehicle < Legacy::Vehicle
   TRANSPORT_CATEGORY_NAMES = %w(dry_goods liquid_bulk gas_bulk any).freeze
   CARGO_CLASSES = (%w(lcl) + Container::CARGO_CLASSES).freeze
 
-  def self.create_from_name(name, mot, tenant_id, carrier_name)
+  def self.create_from_name(name:, mot:, tenant_id:, carrier_name: nil, sandbox: nil)
     vehicle = Vehicle.find_or_create_by!(name: name, mode_of_transport: mot)
 
     if carrier_name
@@ -45,15 +45,18 @@ class Vehicle < Legacy::Vehicle
   end
 
   def create_all_transport_categories
-    CARGO_CLASSES.each do |cargo_class|
-      TRANSPORT_CATEGORY_NAMES.each do |transport_category_name|
-        transport_category = TransportCategory.new(
-          name: transport_category_name,
-          mode_of_transport: mode_of_transport,
-          cargo_class: cargo_class,
-          vehicle: self
-        )
-        puts transport_category.errors.full_messages unless transport_category.save
+    [true, false].each do |sandbox|
+      CARGO_CLASSES.each do |cargo_class|
+        TRANSPORT_CATEGORY_NAMES.each do |transport_category_name|
+          transport_category = TransportCategory.new(
+            name: transport_category_name,
+            mode_of_transport: mode_of_transport,
+            cargo_class: cargo_class,
+            vehicle: self,
+            sandbox: sandbox
+          )
+          puts transport_category.errors.full_messages unless transport_category.save
+        end
       end
     end
   end

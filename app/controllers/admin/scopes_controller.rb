@@ -24,7 +24,7 @@ class Admin::ScopesController < ApplicationController
     target = get_target(type: params[:target_type], id: params[:target_id])
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: current_user.tenant_id)
     service_scope = Tenants::ScopeService.new(target: target, tenant: tenants_tenant).fetch
-    scope = Tenants::Scope.find_by(target: target) || {}
+    scope = Tenants::Scope.find_by(target: target, sandbox: @sandbox) || {}
     response_handler(targetScope: scope, serviceScope: service_scope, selectOptions: SCOPE_SELECT_OPTIONS)
   end
 
@@ -33,11 +33,11 @@ class Admin::ScopesController < ApplicationController
   def get_target(type:, id:)
     case type
     when 'group'
-      Tenants::Group.find(id)
+      Tenants::Group.find_by(id: id, sandbox: @sandbox)
     when 'company'
-      Tenants::Company.find(id)
+      Tenants::Company.find_by(id: id, sandbox: @sandbox)
     when 'user'
-      Tenants::User.find_by(legacy_id: id)
+      Tenants::User.find_by(legacy_id: id, sandbox: @sandbox)
     end
   end
 end

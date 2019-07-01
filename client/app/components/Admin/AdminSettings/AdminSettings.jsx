@@ -111,6 +111,16 @@ class AdminSettings extends PureComponent {
             faClass="fa fa-edit"
             content={<AdminMargins tenant={tenant} />}
           />
+          {/* <CollapsingBar
+            showArrow
+            collapsed={!expander.sandbox}
+            theme={theme}
+            mainWrapperStyle={{ background: '#E0E0E0', color: '#4F4F4F', margin: '10px' }}
+            handleCollapser={() => this.toggleExpander('sandbox')}
+            contentHeader={t('admin:clearSandboxData')}
+            faClass="fa fa-trash"
+            content={sandboxDataForm}
+          /> */}
           <CircleCompletion
             icon="fa fa-check"
             iconColor={theme.colors.primary || 'green'}

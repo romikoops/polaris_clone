@@ -7,6 +7,7 @@ module ExcelTool
     def post_initialize(args)
       @first_sheet = xlsx.sheet(xlsx.sheets.first)
       @user = args[:_user]
+      @sandbox = args.fetch(:sandbox)
     end
 
     def perform
@@ -81,7 +82,8 @@ module ExcelTool
       Nexus.find_by(
         name: hub_row[:hub_name],
         country: country,
-        tenant_id: @user.tenant_id
+        tenant_id: @user.tenant_id,
+        sandbox: @sandbox
       )
     end
 
@@ -92,7 +94,8 @@ module ExcelTool
         longitude: hub_row[:longitude],
         photo: hub_row[:photo],
         country: country,
-        tenant_id: @user.tenant_id
+        tenant_id: @user.tenant_id,
+        sandbox: @sandbox
       )
     end
 
@@ -111,7 +114,8 @@ module ExcelTool
         longitude: hub_row[:longitude],
         country: country,
         city: hub_row[:hub_name],
-        geocoded_address: hub_row[:geocoded_address]
+        geocoded_address: hub_row[:geocoded_address],
+        sandbox: @sandbox
       )
     end
 
@@ -128,7 +132,8 @@ module ExcelTool
         nexus_id: nexus.id,
         tenant_id: user.tenant_id,
         hub_type: hub_row[:hub_type],
-        name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}"
+        name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
+        sandbox: @sandbox
       )
     end
 
@@ -170,7 +175,8 @@ module ExcelTool
         longitude: hub_row[:longitude],
         name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
         photo: hub_row[:photo],
-        mandatory_charge: @mandatory_charge
+        mandatory_charge: @mandatory_charge,
+        sandbox: @sandbox
       )
     end
 

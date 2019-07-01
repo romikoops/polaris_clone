@@ -4,6 +4,7 @@ module Legacy
   class AggregatedCargo < ApplicationRecord
     self.table_name = 'aggregated_cargos'
     belongs_to :shipment, class_name: 'Legacy::Shipment'
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     before_validation :set_chargeable_weight!
 
     def set_chargeable_weight!
@@ -33,4 +34,5 @@ end
 #  shipment_id       :integer
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  sandbox_id        :uuid
 #

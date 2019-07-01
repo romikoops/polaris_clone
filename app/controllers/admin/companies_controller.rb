@@ -15,15 +15,15 @@ class Admin::CompaniesController < ApplicationController
   end
 
   def show
-    company = Tenants::Company.find(params[:id])
-    employees = Tenants::User.where(company_id: params[:id]).map(&:legacy)
+    company = Tenants::Company.find_by(id: params[:id], sandbox: @sandbox)
+    employees = Tenants::User.where(company_id: params[:id], sandbox: @sandbox).map(&:legacy)
     groups = company.groups.map { |g| group_index_json(g) }
 
     response_handler(groups: groups, employees: employees, data: company)
   end
 
   def create # rubocop:disable Metrics/AbcSize
-    tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)
+    tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id, sandbox: @sandbox)
     address_string = [
       params[:address][:streetNumber],
       params[:address][:street],
@@ -31,13 +31,14 @@ class Admin::CompaniesController < ApplicationController
       params[:address][:zipCode],
       params[:address][:country]
     ].join(', ')
-    address = Legacy::Address.geocoded_address(address_string)
+    address = Legacy::Address.geocoded_address(address_string, @sandbox)
     company = ::Tenants::Company.find_or_create_by(
       name: params[:name],
       email: params[:email],
       vat_number: params[:vatNumber],
       address: address,
-      tenant: tenant
+      tenant: tenant,
+      sandbox: @sandbox
     )
     unless params[:addedMembers].nil? || params[:addedMembers].empty?
       params[:addedMembers].each do |id|
@@ -49,14 +50,14 @@ class Admin::CompaniesController < ApplicationController
     response_handler(company)
   end
 
-  def edit_employees # rubocop:disable Metrics/AbcSize
-    company = ::Tenants::Company.find(params[:id])
+  def edit_employees
+    company = ::Tenants::Company.find_by(id: params[:id], sandbox: @sandbox)
     company.employees.each do |employee|
       employee.update(company: nil) unless params[:addedMembers].include?(employee.legacy_id)
     end
     unless params[:addedMembers].nil? || params[:addedMembers].empty?
       params[:addedMembers].each do |user|
-        ::Tenants::User.find_by(legacy_id: user[:id]).update(company: company)
+        ::Tenants::User.find_by(legacy_id: user[:id], sandbox: @sandbox).update(company: company)
       end
     end
     response_handler(company)
@@ -65,8 +66,8 @@ class Admin::CompaniesController < ApplicationController
   private
 
   def handle_search(params)
-    user = ::Tenants::User.find_by(legacy_id: current_user.id)
-    query = ::Tenants::Company.where(tenant_id: user.tenant_id)
+    user = ::Tenants::User.find_by(legacy_id: current_user.id, sandbox: @sandbox)
+    query = ::Tenants::Company.where(tenant_id: user.tenant_id, sandbox: @sandbox)
     query = query.country_search(params[:country]) if params[:country]
     query = query.name_search(params[:company_name]) if params[:company_name]
     query

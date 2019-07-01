@@ -8,7 +8,6 @@ export default function ContactCard ({
 }) {
   const { contact, address } = contactData
   if (!contact) return ''
-
   const contactToRender = contact.first_name ? deepCamelizeKeys(contact) : contact
   const addressToRender = address.street_number ? deepCamelizeKeys(address) : address
   const iconStyle = {

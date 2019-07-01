@@ -37,4 +37,5 @@ end
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  trip_id     :integer
+#  sandbox_id  :uuid
 #

@@ -33,15 +33,16 @@ module ExcelDataServices
         Itinerary.find_or_initialize_by(
           tenant: tenant,
           name: row.itinerary_name,
-          mode_of_transport: row.mot
+          mode_of_transport: row.mot,
+          sandbox: @sandbox
         )
       end
 
       def find_or_initialize_stops(hub_names, itinerary)
         hub_names.map.with_index do |hub_name, i|
-          hub = Hub.find_by(tenant: tenant, name: hub_name)
-          stop = itinerary.stops.find_by(hub_id: hub.id, index: i)
-          stop ||= Stop.new(hub_id: hub.id, index: i)
+          hub = Hub.find_by(tenant: tenant, name: hub_name, sandbox: @sandbox)
+          stop = itinerary.stops.find_by(hub_id: hub.id, index: i, sandbox: @sandbox)
+          stop ||= Stop.new(hub_id: hub.id, index: i, sandbox: @sandbox)
           add_stats(stop)
 
           stop
@@ -55,15 +56,17 @@ module ExcelDataServices
           tenant: tenant,
           name: row.service_level,
           mode_of_transport: row.mot,
-          carrier: carrier
+          carrier: carrier,
+          sandbox: @sandbox
         )
 
         # TODO: fix!! `Vehicle` shouldn't be creating a `TenantVehicle`!:
         tenant_vehicle || Vehicle.create_from_name(
-          row.service_level,
-          row.mot,
-          tenant.id,
-          carrier&.name
+          name: row.service_level,
+          mot: row.mot,
+          tenant_id: tenant.id,
+          carrier_name: carrier&.name,
+          sandbox: @sandbox
         ) # returns a `TenantVehicle`!
       end
 
@@ -71,7 +74,8 @@ module ExcelDataServices
         # TODO: what is called 'load_type' in the excel file is actually a cargo_class!
         tenant_vehicle.vehicle.transport_categories.find_by(
           name: 'any',
-          cargo_class: cargo_class.downcase
+          cargo_class: cargo_class.downcase,
+          sandbox: @sandbox
         )
       end
 
@@ -83,6 +87,7 @@ module ExcelDataServices
               cargo_class: row.load_type,
               load_type: load_type,
               tenant_vehicle: tenant_vehicle,
+              sandbox: @sandbox,
               effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
               expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
@@ -110,6 +115,7 @@ module ExcelDataServices
           { tenant: tenant,
             transport_category: transport_category,
             tenant_vehicle: tenant_vehicle,
+            sandbox: @sandbox,
             user: User.find_by(tenant_id: tenant.id, email: row.customer_email),
             effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
             expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
@@ -187,7 +193,8 @@ module ExcelDataServices
           charge_category = ChargeCategory.from_code(
             tenant_id: tenant.id,
             code: fee_code,
-            name: row.fee_name || fee_code
+            name: row.fee_name || fee_code,
+            sandbox: @sandbox
           )
           if scope['base_pricing']
             rate_basis = Pricings::RateBasis.create_from_external_key(row.rate_basis)
@@ -198,6 +205,7 @@ module ExcelDataServices
               charge_category: charge_category,
               currency_name: row.currency&.upcase,
               currency_id: nil,
+              sandbox: @sandbox,
               hw_threshold: row.hw_threshold,
               hw_rate_basis: hw_rate_basis }
 
@@ -221,6 +229,7 @@ module ExcelDataServices
               shipping_type: fee_code,
               currency_name: row.currency&.upcase,
               currency_id: nil,
+              sandbox: @sandbox,
               hw_threshold: row.hw_threshold,
               hw_rate_basis: row.hw_rate_basis }
 

@@ -4,28 +4,28 @@ class Shipments::BookingProcessController < ApplicationController
   skip_before_action :require_non_guest_authentication!,
                      except: %i(update_shipment request_shipment)
   def create_shipment
-    resp = ShippingTools.create_shipment(params[:details], current_user)
+    resp = ShippingTools.create_shipment(params[:details], current_user, @sandbox)
     response_handler(resp)
   end
 
   def get_offers
-    resp = ShippingTools.get_offers(params, current_user)
+    resp = ShippingTools.get_offers(params, current_user, @sandbox)
     response_handler(resp)
   end
 
   def choose_offer
-    resp = ShippingTools.choose_offer(params, current_user)
+    resp = ShippingTools.choose_offer(params, current_user, @sandbox)
 
     response_handler(resp)
   end
 
   def send_quotes
-    ShippingTools.save_and_send_quotes(shipment, params[:quotes], params[:email])
+    ShippingTools.save_and_send_quotes(shipment, params[:quotes], params[:email], @sandbox)
     response_handler(params)
   end
 
   def update_shipment
-    resp = ShippingTools.update_shipment(params, current_user)
+    resp = ShippingTools.update_shipment(params, current_user, @sandbox)
     response_handler(resp)
   end
 
@@ -37,9 +37,10 @@ class Shipments::BookingProcessController < ApplicationController
       doc_type: 'quotation',
       user: current_user,
       tenant: current_user.tenant,
+      sandbox: @sandbox,
       file: {
         io: StringIO.new(
-          ShippingTools.save_pdf_quotes(shipment, current_user.tenant, result_params[:quotes].map(&:to_h))
+          ShippingTools.save_pdf_quotes(shipment, current_user.tenant, result_params[:quotes].map(&:to_h), @sandbox)
         ),
         filename: "quotation_#{shipment.imc_reference}.pdf",
         content_type: 'application/pdf'
@@ -59,8 +60,9 @@ class Shipments::BookingProcessController < ApplicationController
         doc_type: 'shipment_recap',
         user: shipment.user,
         tenant: shipment.user.tenant,
+        sandbox: @sandbox,
         file: {
-          io: StringIO.new(ShippingTools.generate_shipment_pdf(shipment: shipment)),
+          io: StringIO.new(ShippingTools.generate_shipment_pdf(shipment: shipment, sandbox: @sandbox)),
           filename: "shipment_recap_#{shipment.imc_reference}.pdf",
           content_type: 'application/pdf'
         }
@@ -73,8 +75,9 @@ class Shipments::BookingProcessController < ApplicationController
         doc_type: 'shipment_recap',
         user: shipment.user,
         tenant: shipment.user.tenant,
+        sandbox: @sandbox,
         file: {
-          io: StringIO.new(ShippingTools.generate_shipment_pdf(shipment: shipment)),
+          io: StringIO.new(ShippingTools.generate_shipment_pdf(shipment: shipment, sandbox: @sandbox)),
           filename: "shipment_recap_#{shipment.imc_reference}.pdf",
           content_type: 'application/pdf'
         }
@@ -85,20 +88,20 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def view_more_schedules
-    response = ShippingTools.view_more_schedules(params[:trip_id], params[:delta])
+    response = ShippingTools.view_more_schedules(params[:trip_id], params[:delta], @sandbox)
 
     response_handler(response)
   end
 
   def request_shipment
-    resp = ShippingTools.request_shipment(params, current_user)
-    ShippingTools.tenant_notification_email(resp.user, resp)
-    ShippingTools.shipper_notification_email(resp.user, resp)
+    resp = ShippingTools.request_shipment(params, current_user, @sandbox)
+    ShippingTools.tenant_notification_email(resp.user, resp, @sandbox)
+    ShippingTools.shipper_notification_email(resp.user, resp, @sandbox)
     response_handler(shipment: resp)
   end
 
   def shipment
-    @shipment ||= Shipment.find(params[:shipment_id])
+    @shipment ||= Shipment.find_by(id: params[:shipment_id], sandbox: @sandbox)
   end
 
   private

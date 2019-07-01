@@ -4,6 +4,7 @@ class Note < ApplicationRecord
   belongs_to :itinerary, optional: true
   belongs_to :hub, optional: true
   belongs_to :trucking_pricing, optional: true
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 end
 
 # == Schema Information
@@ -19,4 +20,5 @@ end
 #  level               :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  sandbox_id          :uuid
 #

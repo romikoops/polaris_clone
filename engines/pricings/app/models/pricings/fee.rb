@@ -9,6 +9,7 @@ module Pricings
     belongs_to :rate_basis, class_name: '::Pricings::RateBasis'
     belongs_to :hw_rate_basis, class_name: '::Pricings::RateBasis', optional: true
     belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     def as_json(options = {})
       new_options = options.reverse_merge(
@@ -80,4 +81,5 @@ end
 #  legacy_id          :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  sandbox_id         :uuid
 #

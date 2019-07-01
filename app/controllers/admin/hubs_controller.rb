@@ -16,6 +16,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     query[:hub_type] = params[:hub_type].split(',') if params[:hub_type]
 
     query[:name] = params[:name] if params[:name]
+    query[:sandbox] = @sandbox
 
     query[:hub_status] = params[:hub_status].split(',') if params[:hub_status]
     if params[:country_ids]
@@ -45,13 +46,12 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     )
   end
 
-  def show # rubocop:disable Metrics/AbcSize
-    hub = Hub.find(params[:id])
-    charges = hub.local_charges
+  def show
+    hub = Hub.find_by(id: params[:id], sandbox: @sandbox)
     resp = {
       hub: hub.as_options_json,
       routes: hub_route_map(hub),
-      relatedHubs: hub.nexus.hubs,
+      relatedHubs: hub.nexus.hubs.where(sandbox: @sandbox),
       schedules: hub.layovers.limit(20),
       address: hub.address,
       mandatoryCharges: hub.mandatory_charge
@@ -60,38 +60,41 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def download_hubs
-    url = DocumentService::HubsWriter.new(tenant_id: current_user.tenant_id).perform
+    url = DocumentService::HubsWriter.new(tenant_id: current_user.tenant_id, sandbox: @sandbox).perform
     response_handler(url: url, key: 'hubs')
   end
 
   def options_search
-    list_options = current_tenant.hubs.list_search(params[:query]).limit(30).map do |it|
+    list_options = current_tenant.hubs
+                                 .where(sandbox: @sandbox)
+                                 .list_search(params[:query])
+                                 .limit(30).map do |it|
       { label: it.name, value: it.as_options_json }
     end
     response_handler(list_options)
   end
 
   def set_status
-    hub = Hub.find(params[:hub_id])
+    hub = Hub.find(params[:hub_id], sandbox: @sandbox)
     hub.toggle_hub_status!
     response_handler(data: hub.as_options_json, address: hub.address.to_custom_hash)
   end
 
   def delete
-    hub = Hub.find(params[:hub_id])
+    hub = Hub.find(params[:hub_id], sandbox: @sandbox)
     hub.destroy!
     response_handler(id: params[:hub_id])
   end
 
   def update_image
-    hub = Hub.find(params[:hub_id])
+    hub = Hub.find(params[:hub_id], sandbox: @sandbox)
     hub.photo = save_on_aws(hub.tenant_id)
     hub.save!
     response_handler(hub.as_options_json)
   end
 
   def update
-    hub = Hub.find(params[:id])
+    hub = Hub.find(params[:id], sandbox: @sandbox)
     address = hub.address
     new_loc = params[:address].as_json
     new_hub = params[:data].as_json
@@ -106,7 +109,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   def overwrite
     if params[:file]
       req = { 'xlsx' => params[:file] }
-      resp = ExcelTool::HubsOverwriter.new(params: req, _user: current_user).perform
+      resp = ExcelTool::HubsOverwriter.new(params: req, _user: current_user, sandbox: @sandbox).perform
       response_handler(resp)
     else
       response_handler(false)
@@ -120,16 +123,17 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     query[:hub_type] = params[:hub_type].split(',') if params[:hub_type]
 
     query[:name] = params[:name] if params[:name]
+    query[:sandbox] = @sandbox
 
     query[:hub_status] = params[:hub_status].split(',') if params[:hub_status]
-    if params[:country_ids]
-      hubs = Hub.where(query)
+    hubs = if params[:country_ids]
+             Hub.where(query)
                 .joins(:address)
                 .where('addresses.country_id IN (?)', params[:country_ids].split(',')
-                .map(&:to_i))
-    else
-      hubs = Hub.where(query).order('name ASC')
-    end
+                       .map(&:to_i))
+           else
+             Hub.where(query).order('name ASC')
+           end
     hub_results = hubs.where('name ILIKE ?', "%#{params[:text]}%")
 
     paginated_hub_hashes = hub_results.paginate(page: params[:page]).map do |hub|
@@ -139,7 +143,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def all_hubs
-    processed_hubs = current_user.tenant.hubs.map do |hub|
+    processed_hubs = current_user.tenant.hubs.where(sandbox: @sandbox).map do |hub|
       { data: hub, address: hub.address.to_custom_hash }
     end
     response_handler(hubs: processed_hubs)
@@ -157,6 +161,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     hub[:tenant_id] = current_user.tenant_id
     hub[:address_id] = @new_loc.id
     hub[:nexus_id] = @new_nexus.id
+    hub[:sandbox] = @sandbox
     hub
   end
 
@@ -166,7 +171,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def geo_address
-    Address.create_and_geocode(params[:address].as_json)
+    Address.create_and_geocode(params[:address].as_json.merge(sandbox: @sandbox))
   end
 
   def nexus
@@ -179,7 +184,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def create_hub_mandatory_charge
-    hub = Hub.find(params[:id])
+    hub = Hub.find(params[:id], sandbox: @sandbox)
     hub.mandatory_charge = new_mandatory_charge
     hub.save!
     hub
@@ -193,7 +198,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def hub_route_map(hub)
-    hub.stops.map(&:itinerary).map do |itinerary|
+    hub.stops.where(sandbox: @sandbox).map(&:itinerary).map do |itinerary|
       itinerary.as_options_json(methods: :routes)
     end
   end

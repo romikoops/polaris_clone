@@ -3,7 +3,7 @@
 module Admin
   class RemarksController < Admin::AdminBaseController
     def create
-      remark = Remark.new(remarks_params)
+      remark = Remark.new(remarks_params.merge(sandbox: @sandbox))
       remark.tenant_id = current_tenant.id
 
       raise ApplicationError::InvalidRemark unless remark.save
@@ -12,12 +12,12 @@ module Admin
     end
 
     def index
-      remarks = Remark.where(tenant_id: current_tenant.id).order(order: :asc)
+      remarks = Remark.where(tenant_id: current_tenant.id, sandbox: @sandbox).order(order: :asc)
       response_handler(remarks)
     end
 
     def update
-      remark = Remark.find(params[:id])
+      remark = Remark.find_by(id: params[:id], sandbox: @sandbox)
       remark.assign_attributes(remarks_params)
 
       raise ApplicationError::InvalidRemark unless remark.save
@@ -26,7 +26,7 @@ module Admin
     end
 
     def destroy
-      remark = Remark.find(params[:id])
+      remark = Remark.find_by(id: params[:id], sandbox: @sandbox)
       raise ApplicationError::UnableToDeleteRemark unless remark.destroy!
 
       response_handler(remark)

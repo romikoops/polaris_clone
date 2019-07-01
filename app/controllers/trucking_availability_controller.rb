@@ -16,7 +16,7 @@ class TruckingAvailabilityController < ApplicationController
       truck_type = trucking_pricing.truck_type
       truck_type_object[hub_id] << trucking_pricing.truck_type unless truck_type_object[hub_id].include?(truck_type)
     end
-    nexus_ids = Hub.where(id: hub_ids).pluck(:nexus_id).uniq
+    nexus_ids = Hub.where(id: hub_ids, sandbox: @sandbox).pluck(:nexus_id).uniq
 
     response = build_response_hash(trucking_pricings, nexus_ids, hub_ids, truck_type_object)
     response_handler(response)
@@ -27,8 +27,8 @@ class TruckingAvailabilityController < ApplicationController
   def build_response_hash(trucking_pricings, nexus_ids, hub_ids, truck_type_object)
     {
       trucking_available: !trucking_pricings.empty?,
-      nexus_ids: nexus_ids,
-      hub_ids: hub_ids,
+      nexus_ids: nexus_ids.compact,
+      hub_ids: hub_ids.compact,
       truck_type_object: truck_type_object
     }.deep_transform_keys { |k| k.to_s.camelize(:lower) }
   end
@@ -40,7 +40,8 @@ class TruckingAvailabilityController < ApplicationController
       address: Address.new(latitude: params[:lat], longitude: params[:lng]).reverse_geocode,
       hub_ids: params[:hub_ids].split(',').map(&:to_i),
       carriage: params[:carriage],
-      klass: Trucking::Trucking
+      klass: Trucking::Trucking,
+      sandbox: @sandbox
     }
     reg_results = Trucking::Queries::Availability.new(args).perform
     distance_results = Trucking::Queries::Distance.new(args).perform

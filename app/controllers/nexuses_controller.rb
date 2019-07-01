@@ -25,7 +25,9 @@ class NexusesController < ApplicationController
     target    = params[:target]
 
     itinerary_ids = params[:itinerary_ids].split(',').map(&:to_i)
-    itineraries = current_user.tenant.itineraries.joins(:stops)
+    itineraries = current_user.tenant.itineraries
+                              .where(sandbox: @sandbox)
+                              .joins(:stops)
                               .where(id: itinerary_ids)
                               .where('stops.hub_id': hub_ids)
 

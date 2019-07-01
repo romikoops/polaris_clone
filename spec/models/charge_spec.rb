@@ -55,4 +55,5 @@ end
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  edited_price_id             :integer
+#  sandbox_id                  :uuid
 #

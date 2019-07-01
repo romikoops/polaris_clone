@@ -53,7 +53,6 @@ export default function clients (state = {}, action) {
       }
     }
     // case 'EDIT_MEMBERSHIP_SUCCESS': {
-
     //   return {
     //     ...state,
     //     group: action.payload

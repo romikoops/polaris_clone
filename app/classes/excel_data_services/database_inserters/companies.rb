@@ -21,7 +21,8 @@ module ExcelDataServices
           external_id: params[:external_id],
           phone: params[:phone],
           email: params[:email],
-          address_id: params[:address_id]
+          address_id: params[:address_id],
+          sandbox: @sandbox
         )
         add_stats(company)
         company.save!

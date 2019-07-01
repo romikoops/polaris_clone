@@ -36,6 +36,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   belongs_to :tenant
   belongs_to :role
   belongs_to :optin_status
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   has_many :shipments
   has_many :documents
   has_many :conversations
@@ -53,7 +54,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
 
   has_many :user_managers
   has_many :pricings
-  has_many :rates, class_name: 'Pricing:Pricing'
+  has_many :rates, class_name: 'Pricings::Pricing'
   has_one :tenants_user, class_name: 'Tenants::User', foreign_key: 'legacy_id'
 
   belongs_to :agency, optional: true
@@ -339,4 +340,5 @@ end
 #  agency_id              :integer
 #  internal               :boolean          default(FALSE)
 #  deleted_at             :datetime
+#  sandbox_id             :uuid
 #

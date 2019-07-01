@@ -84,7 +84,8 @@ RSpec.describe Pricings::Finder do
         cargo_classes: ['lcl'],
         dates: dates,
         dedicated_pricings_only: false,
-        shipment: lcl_shipment
+        shipment: lcl_shipment,
+        sandbox: nil
       ).perform
       expect(results.keys.length).to eq(1)
       expect(results.values.first.first['id']).to eq(pricing_1.id)
@@ -130,7 +131,8 @@ RSpec.describe Pricings::Finder do
         cargo_classes: %w(fcl_20 fcl_40 fcl_40_hq),
         dates: dates,
         dedicated_pricings_only: false,
-        shipment: fcl_20_shipment
+        shipment: fcl_20_shipment,
+        sandbox: nil
       ).perform
 
       expect(results.keys.length).to eq(3)
@@ -172,7 +174,8 @@ RSpec.describe Pricings::Finder do
         cargo_classes: ['lcl'],
         dates: dates,
         dedicated_pricings_only: false,
-        shipment: lcl_shipment
+        shipment: lcl_shipment,
+        sandbox: nil
       ).perform
       expect(results.keys.length).to eq(1)
       expect(results.values.first.first['id']).to eq(pricing_1.id)

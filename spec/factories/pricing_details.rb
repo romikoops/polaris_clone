@@ -28,4 +28,5 @@ end
 #  tenant_id      :bigint(8)
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  sandbox_id     :uuid
 #

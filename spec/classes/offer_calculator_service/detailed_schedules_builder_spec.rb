@@ -102,7 +102,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
              itinerary: itinerary_2,
              tenant_vehicle: tenant_vehicle_2,
              transport_category: cargo_transport_category)
-      service = described_class.new(cargo_shipment)
+      service = described_class.new(shipment: cargo_shipment, sandbox: nil)
       results = service.grouped_schedules(schedules: schedules,
                                           shipment: cargo_shipment,
                                           user: user)
@@ -123,7 +123,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
              itinerary: itinerary_2,
              tenant_vehicle: tenant_vehicle_2,
              transport_category: cargo_transport_category)
-      service = described_class.new(cargo_shipment)
+      service = described_class.new(shipment: cargo_shipment, sandbox: nil)
       dates = {
         start_date: schedules.first.etd,
         end_date: schedules.first.etd,
@@ -154,7 +154,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
                          itinerary: itinerary_1,
                          tenant_vehicle: tenant_vehicle_1,
                          transport_category: fcl_40_hq_transport_category)
-      service = described_class.new(cargo_shipment)
+      service = described_class.new(shipment: cargo_shipment, sandbox: nil)
       dates = {
         start_date: schedules.first.etd,
         end_date: schedules.first.etd,
@@ -190,7 +190,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
                     tenant_vehicle: tenant_vehicle_1,
                     itinerary: itinerary_1)
       schedules = [Legacy::Schedule.from_trip(trip)]
-      service = described_class.new(cargo_shipment)
+      service = described_class.new(shipment: cargo_shipment, sandbox: nil)
       dates = {
         start_date: schedules.first.etd,
         end_date: schedules.first.etd,
@@ -230,7 +230,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
                     tenant_vehicle: tenant_vehicle_1,
                     itinerary: itinerary_1)
       schedules = [Legacy::Schedule.from_trip(trip)]
-      service = described_class.new(cargo_shipment)
+      service = described_class.new(shipment: cargo_shipment, sandbox: nil)
       dates = {
         start_date: schedules.first.etd,
         end_date: schedules.first.etd,
@@ -252,7 +252,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
 
   describe '.sort_schedule_permutations', :vcr do
     it 'returns an object containing schedules grouped by pricing permutation' do
-      service = described_class.new(cargo_shipment)
+      service = described_class.new(shipment: cargo_shipment, sandbox: nil)
 
       results = service.sort_schedule_permutations(schedules: schedules)
       expect(results.keys.length).to eq(2)

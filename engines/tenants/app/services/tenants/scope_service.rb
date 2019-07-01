@@ -127,15 +127,16 @@ module Tenants
       }
     }.freeze
 
-    def initialize(target: nil, tenant: nil)
+    def initialize(target: nil, tenant: nil, sandbox: nil)
       adjusted_target = determine_target(target)
       tenant = adjusted_target&.tenant if tenant.nil?
       @hierarchy = HierarchyService.new(target: adjusted_target, tenant: tenant).fetch
+      @sandbox = sandbox
     end
 
     def fetch(key = nil)
       final_scope = hierarchy.each_with_object(DEFAULT_SCOPE.dup) do |obj, result_scope|
-        scope_hsh = obj.scope&.content&.deep_symbolize_keys!
+        scope_hsh = Tenants::Scope.find_by(target: obj, sandbox: @sandbox)&.content&.deep_symbolize_keys!
         result_scope.deep_merge!(scope_hsh) if scope_hsh
       end
 

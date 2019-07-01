@@ -4,6 +4,7 @@ class ShipmentContact < ApplicationRecord
   CONTACT_TYPES = %w(shipper consignee notifyee).freeze
 
   belongs_to :shipment
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   belongs_to :contact
 
   CustomValidations.inclusion(self, :contact_type, CONTACT_TYPES)
@@ -19,4 +20,5 @@ end
 #  contact_type :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  sandbox_id   :uuid
 #

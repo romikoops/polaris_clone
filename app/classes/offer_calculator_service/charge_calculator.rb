@@ -3,38 +3,42 @@
 module OfferCalculatorService
   class ChargeCalculator < Base
     def initialize(args = {})
-      @trucking_data = args[:trucking_data]
-      @schedules = args[:data][:schedules]
-      @schedule      = args[:data][:schedules].first
-      @user          = args[:user]
-      @data = args[:data]
-      super(args[:shipment])
+      @data = args.fetch(:data)
+      @trucking_data = args.fetch(:trucking_data)
+      @schedules = @data.fetch(:schedules)
+      @schedule      = @data.fetch(:schedules)&.first
+      @user          = args.fetch(:user)
+      @sandbox       = args.fetch(:sandbox)
+      @shipment      = args.fetch(:shipment)
+      super(shipment: @shipment, sandbox: @sandbox)
     end
 
-    def perform # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       return nil unless trucking_valid_for_schedule
 
       periods = local_charge_periods
-
       return nil if periods.values.compact.any?(&:empty?)
 
       charges_by_period = sort_by_local_charge_periods(periods)
-
       charges_by_period.values.map do |charge_obj|
         destroy_previous_charge_breakdown(charge_obj[:schedules].first.trip_id)
-        @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, trip_id: charge_obj[:schedules].first.trip_id)
+        @charge_breakdown = ChargeBreakdown.create!(
+          shipment: @shipment,
+          trip_id: charge_obj[:schedules].first.trip_id,
+          sandbox: @sandbox
+        )
         @grand_total_charge = Charge.create(
           children_charge_category: ChargeCategory.grand_total,
           charge_category: ChargeCategory.base_node,
           charge_breakdown: @charge_breakdown,
-          price: Price.create(currency: @shipment.user.currency)
+          price: Price.create(currency: @shipment.user.currency),
+          sandbox: @sandbox
         )
 
         local_charge_result = calc_local_charges(charge_obj)
         create_trucking_charges
 
         cargo_result = calc_cargo_charges
-
         next if cargo_result.nil? || local_charge_result.nil?
 
         @grand_total_charge.update_price!
@@ -47,7 +51,6 @@ module OfferCalculatorService
     private
 
     def sort_by_local_charge_periods(periods) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    
       export_periods = periods[:export] || {}
       import_periods = periods[:import] || {}
       schedules_by_charges = @schedules.map do |sched|
@@ -75,17 +78,14 @@ module OfferCalculatorService
         inner_hash[:expiration_date] = [charge_keys.dig(:import_key, :expiration_date), charge_keys.dig(:export_key, :expiration_date)].compact.min
         hash[charge_keys] = inner_hash
       end
-
     end
 
-    def local_charge_periods # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
-
+    def local_charge_periods # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       cargo_units = if @shipment.aggregated_cargo
                       [@shipment.aggregated_cargo]
                     else
                       @shipment.cargo_units
                     end
-
       %w(import export).each_with_object({}) do |direction, hash|
         if direction == 'export'
           next unless @shipment.has_pre_carriage || @schedule.origin_hub.mandatory_charge.export_charges
@@ -107,8 +107,8 @@ module OfferCalculatorService
       on_carriage = nil
       %i(import export).each do |direction| # rubocop:disable Metrics/BlockLength
         next if charge_obj[direction].nil? || charge_obj[direction].empty?
-        
-        charge_category = ChargeCategory.from_code(code: direction.to_s, tenant_id: @user.tenant_id)
+
+        charge_category = ChargeCategory.from_code(code: direction.to_s, tenant_id: @user.tenant_id, sandbox: @sandbox)
         parent_charge = create_parent_charge(charge_category)
         charge_obj[direction].each do |charge|
           next if charge.except('total').empty?
@@ -125,7 +125,8 @@ module OfferCalculatorService
             name: cargo_unit_model.humanize,
             code: cargo_unit_model.underscore.downcase,
             tenant_id: @shipment.tenant_id,
-            cargo_unit_id: charge['key']
+            cargo_unit_id: charge['key'],
+            sandbox: @sandbox
           )
           create_charges_from_fees_data!(charge.except('key'), children_charge_category, charge_category, parent_charge)
         end
@@ -144,7 +145,11 @@ module OfferCalculatorService
 
     def create_trucking_charges
       @trucking_data.each do |carriage, data|
-        charge_category = ChargeCategory.from_code(code: "trucking_#{carriage}", tenant_id: @user.tenant_id)
+        charge_category = ChargeCategory.from_code(
+          code: "trucking_#{carriage}",
+          tenant_id: @user.tenant_id,
+          sandbox: @sandbox
+        )
 
         parent_charge = create_parent_charge(charge_category)
 
@@ -153,7 +158,11 @@ module OfferCalculatorService
         next if hub_data.nil?
 
         hub_data[:trucking_charge_data].each do |cargo_class, trucking_charges|
-          children_charge_category = ChargeCategory.from_code(code: "trucking_#{cargo_class}", tenant_id: @user.tenant_id)
+          children_charge_category = ChargeCategory.from_code(
+            code: "trucking_#{cargo_class}",
+            tenant_id: @user.tenant_id,
+            sandbox: @sandbox
+          )
           create_charges_from_fees_data!(
             trucking_charges, children_charge_category, charge_category, parent_charge
           )
@@ -167,7 +176,11 @@ module OfferCalculatorService
         sum + cargo_unit.try(:quantity).to_i
       end
 
-      charge_category = ChargeCategory.from_code(code: 'cargo', tenant_id: @user.tenant_id)
+      charge_category = ChargeCategory.from_code(
+        code: 'cargo',
+        tenant_id: @user.tenant_id,
+        sandbox: @sandbox
+      )
       parent_charge = create_parent_charge(charge_category)
       is_agg_cargo = !@shipment.aggregated_cargo.nil?
       cargo_unit_array = is_agg_cargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
@@ -201,7 +214,8 @@ module OfferCalculatorService
           name: cargo_unit_model.humanize,
           code: cargo_unit_model.underscore.downcase,
           tenant_id: @shipment.tenant_id,
-          cargo_unit_id: cargo_unit[:id]
+          cargo_unit_id: cargo_unit[:id],
+          sandbox: @sandbox
         )
 
         create_charges_from_fees_data!(charge_result, children_charge_category, charge_category, parent_charge)
@@ -217,7 +231,8 @@ module OfferCalculatorService
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: @charge_breakdown,
         parent: @grand_total_charge,
-        price: Price.create(currency: @shipment.user.currency)
+        price: Price.create(currency: @shipment.user.currency),
+        sandbox: @sandbox
       )
     end
 
@@ -232,7 +247,8 @@ module OfferCalculatorService
         charge_category: charge_category,
         charge_breakdown: @charge_breakdown,
         parent: parent,
-        price: Price.create(fees_data['total'] || fees_data[:total])
+        price: Price.create(fees_data['total'] || fees_data[:total]),
+        sandbox: @sandbox
       )
 
       fees_data.each do |code, charge|
@@ -243,13 +259,14 @@ module OfferCalculatorService
           charge_category: children_charge_category,
           charge_breakdown: @charge_breakdown,
           parent: parent_charge,
-          price: Price.create(charge)
+          price: Price.create(charge),
+          sandbox: @sandbox
         )
       end
     end
 
     def destroy_previous_charge_breakdown(trip_id)
-      ChargeBreakdown.find_by(shipment: @shipment, trip_id: trip_id).try(:destroy)
+      ChargeBreakdown.find_by(shipment: @shipment, trip_id: trip_id, sandbox: @sandbox).try(:destroy)
     end
 
     def consolidate_cargo(cargo_array, mot)  # rubocop:disable Metrics/AbcSize

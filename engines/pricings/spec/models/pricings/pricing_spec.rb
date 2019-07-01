@@ -13,7 +13,6 @@ module Pricings
       let!(:fcl_20_pricing) { FactoryBot.create(:fcl_20_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
       let!(:fcl_40_pricing) { FactoryBot.create(:fcl_40_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
       let!(:fcl_40_hq_pricing) { FactoryBot.create(:fcl_40_hq_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
-
       describe '.for_cargo_classes' do
         it 'returns the lcl pricings only' do
           expect(::Pricings::Pricing.for_cargo_classes(['lcl'])).to eq([lcl_pricing])

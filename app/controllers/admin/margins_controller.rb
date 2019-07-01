@@ -19,7 +19,7 @@ class Admin::MarginsController < ApplicationController
     response_handler(true)
   end
 
-  def create # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+  def create # rubocop:disable Metrics/AbcSize
     args = {
       itinerary_ids: params[:itinerary_ids],
       hub_ids: params[:hub_ids],
@@ -142,17 +142,17 @@ class Admin::MarginsController < ApplicationController
     applicable = get_target(type: upload_params[:target_type], id: upload_params[:target_id])
     case upload_params[:target_type]
     when 'group'
-      Tenants::Group.find(upload_params[:target_id])
+      Tenants::Group.find_by(id: upload_params[:target_id], sandbox: @sandbox)
     when 'company'
-      Tenants::Company.find(upload_params[:target_id])
+      Tenants::Company.find_by(id: upload_params[:target_id], sandbox: @sandbox)
     when 'user'
       Tenants::User.find_by(legacy_id: upload_params[:target_id])
-                  end
+    end
     file = upload_params[:file].tempfile
 
     options = { tenant: current_tenant,
                 file_or_path: file,
-                options: { applicable: applicable } }
+                options: { applicable: applicable, sandbox: @sandbox } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
@@ -168,19 +168,20 @@ class Admin::MarginsController < ApplicationController
   def get_target(type:, id:)
     case type
     when 'group'
-      Tenants::Group.find(id)
+      Tenants::Group.find_by(id: id, sandbox: @sandbox)
     when 'company'
-      Tenants::Company.find(id)
+      Tenants::Company.find_by(id: id, sandbox: @sandbox)
     when 'user'
-      Tenants::User.find_by(legacy_id: id)
+      Tenants::User.find_by(legacy_id: id, sandbox: @sandbox)
     end
   end
 
   def extract_tenant_vehicle_ids
     if params[:tenant_vehicle_ids] == 'all' && params[:itinerary_id]
-      current_tenant.itineraries.find(params[:itinerary_id]).rates.pluck(:tenant_vehicle_id)
+      current_tenant.itineraries.where(sandbox: @sandbox)
+                    .find(params[:itinerary_id]).rates.pluck(:tenant_vehicle_id)
     elsif params[:tenant_vehicle_ids] == 'all'
-      current_tenant.tenant_vehicles.ids
+      current_tenant.tenant_vehicles.where(sandbox: @sandbox).ids
     else
       params[:tenant_vehicle_ids].split(',')
     end
@@ -188,7 +189,8 @@ class Admin::MarginsController < ApplicationController
 
   def extract_cargo_classes
     if params[:cargo_classes] == 'all' && params[:itinerary_id]
-      current_tenant.itineraries.find(params[:itinerary_id]).rates.pluck(:cargo_class)
+      current_tenant.itineraries.where(sandbox: @sandbox)
+                    .find(params[:itinerary_id]).rates.pluck(:cargo_class)
     elsif params[:cargo_classes] == 'all'
       %w(lcl) + Legacy::Container::CARGO_CLASSES
     else
@@ -198,7 +200,7 @@ class Admin::MarginsController < ApplicationController
 
   def pricing_fees # rubocop:disable Metrics/AbcSize
     if params[:pricing_id] && params[:pricing_id] != 'null'
-      pricing = current_tenant.rates.find(params[:pricing_id])
+      pricing = current_tenant.rates.where(sandbox: @sandbox).find(params[:pricing_id])
       pricing&.fees&.map(&:fee_name_and_code)
     else
       pricings = current_tenant.rates.where(
@@ -219,6 +221,7 @@ class Admin::MarginsController < ApplicationController
   def local_charge_fees
     local_charges =
       current_tenant.local_charges.where(
+        sandbox: @sandbox,
         hub_id: params[:hub_ids].split(','),
         direction: params[:directions].split(','),
         counterpart_hub_id: params[:counterpart_hub_id] != 'null' ? params[:counterpart_hub_id] : nil,
@@ -238,18 +241,19 @@ class Admin::MarginsController < ApplicationController
 
     truckings =
       Trucking::Trucking.where(
+        sandbox: @sandbox,
         hub_id: params[:hub_ids].split(','),
         carriage: carriages,
         tenant: current_tenant,
         cargo_class: extract_cargo_classes
       )
 
-    truckings.map {|tr| tr&.fees&.values.map { |fee| "#{fee['key']} - #{fee['name']}" } }.flatten
+    truckings.map { |tr| tr&.fees&.values&.map { |fee| "#{fee['key']} - #{fee['name']}" } }.flatten
   end
 
   def margins
     tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)
-    @margins ||= ::Pricings::Margin.where(tenant_id: tenant.id)
+    @margins ||= ::Pricings::Margin.where(tenant_id: tenant.id, sandbox: @sandbox)
   end
 
   def pagination_options
@@ -268,13 +272,21 @@ class Admin::MarginsController < ApplicationController
     if params[:target_id]
       case params[:target_type]
       when 'company'
-        query = query.where(applicable: Tenants::Company.find(params[:target_id]))
+        query = query.where(
+          applicable: Tenants::Company.find_by(id: params[:target_id], sandbox: @sandbox)
+        )
       when 'group'
-        query = query.where(applicable: Tenants::Group.find(params[:target_id]))
+        query = query.where(
+          applicable: Tenants::Group.find_by(id: params[:target_id], sandbox: @sandbox)
+        )
       when 'user'
-        query = query.where(applicable: Tenants::User.find_by(legacy_id: params[:target_id]))
+        query = query.where(
+          applicable: Tenants::User.find_by(legacy_id: params[:target_id], sandbox: @sandbox)
+        )
       when 'tenant'
-        query = query.where(applicable: Tenants::Tenant.find_by(legacy_id: params[:target_id]))
+        query = query.where(
+          applicable: Tenants::Tenant.find_by(legacy_id: params[:target_id], sandbox: @sandbox)
+        )
       when 'itinerary'
         query = query.where(itinerary_id: params[:target_id])
       end

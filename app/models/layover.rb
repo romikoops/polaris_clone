@@ -5,6 +5,7 @@ class Layover < Legacy::Layover
   belongs_to :itinerary
   belongs_to :trip
   delegate :hub_id, :hub, to: :stop
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   scope :hub_id, ->(hub_id) { joins(:stop).where('stops.hub_id': hub_id) }
 
@@ -43,4 +44,5 @@ end
 #  itinerary_id :integer
 #  trip_id      :integer
 #  closing_date :datetime
+#  sandbox_id   :uuid
 #

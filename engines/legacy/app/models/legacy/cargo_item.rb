@@ -15,6 +15,7 @@ module Legacy
     has_paper_trail
     belongs_to :shipment, class_name: 'Legacy::Shipment'
     delegate :tenant, to: :shipment
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     belongs_to :cargo_item_type
     def self.extract(cargo_items_attributes)
@@ -103,4 +104,5 @@ end
 #  stackable          :boolean          default(TRUE)
 #  quantity           :integer
 #  unit_price         :jsonb
+#  sandbox_id         :uuid
 #

@@ -79,7 +79,7 @@ class ShipmentsController < ApplicationController
 
   # Uploads document and returns Document item
   def upload_document
-    @shipment = Shipment.find(params[:shipment_id])
+    @shipment = Shipment.find_by(id: params[:shipment_id], sandbox: @sandbox)
     if params[:file]
       @doc = Document.create!(
         shipment: @shipment,
@@ -87,7 +87,8 @@ class ShipmentsController < ApplicationController
         doc_type: params[:type],
         user: current_user,
         tenant: current_user.tenant,
-        file: params[:file]
+        file: params[:file],
+        sandbox: @sandbox
       )
 
       @doc.as_json.merge(
@@ -98,18 +99,20 @@ class ShipmentsController < ApplicationController
     response_handler(@doc)
   end
 
-  def show
-    shipment = Shipment.find(params[:id])
+  def show # rubocop:disable Metrics/AbcSize
+    shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
 
-    cargo_item_types = shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
+    cargo_item_types = shipment.cargo_item_types
+                               .where(sandbox: @sandbox)
+                               .each_with_object({}) do |cargo_item_type, return_h|
       return_h[cargo_item_type.id] = cargo_item_type
     end
 
-    contacts = shipment.shipment_contacts.map do |sc|
+    contacts = shipment.shipment_contacts.where(sandbox: @sandbox).map do |sc|
       { contact: sc.contact, type: sc.contact_type, address: sc.contact.address } if sc.contact
     end
 
-    documents = shipment.documents.select { |doc| doc.file.attached? }.map do |doc|
+    documents = shipment.documents.where(sandbox: @sandbox).select { |doc| doc.file.attached? }.map do |doc|
       doc.as_json.merge(
         signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: 'attachment')
       )
@@ -128,14 +131,24 @@ class ShipmentsController < ApplicationController
     )
   end
 
-  def get_booking_index
-    response = Rails.cache.fetch("#{requested_shipments.cache_key}/shipment_index", expires_in: 12.hours) do
+  def get_booking_index # rubocop:disable Metrics/AbcSize, Naming/AccessorMethodName, Metrics/MethodLength
+    response = Rails.cache.fetch("#{requested_shipments.cache_key}/shipment_index", expires_in: 12.hours) do # rubocop:disable Metrics/BlockLength
       per_page = params.fetch(:per_page, 4).to_f
-      r_shipments = requested_shipments.order(booking_placed_at: :desc).paginate(page: params[:requested_page], per_page: per_page)
-      o_shipments = open_shipments.order(booking_placed_at: :desc).paginate(page: params[:open_page], per_page: per_page)
-      f_shipments = finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
-      rj_shipments = rejected_shipments.order(booking_placed_at: :desc).paginate(page: params[:rejected_page], per_page: per_page)
-      a_shipments = archived_shipments.order(booking_placed_at: :desc).paginate(page: params[:archived_page], per_page: per_page)
+      r_shipments = requested_shipments
+                    .order(booking_placed_at: :desc)
+                    .paginate(page: params[:requested_page], per_page: per_page)
+      o_shipments = open_shipments
+                    .order(booking_placed_at: :desc)
+                    .paginate(page: params[:open_page], per_page: per_page)
+      f_shipments = finished_shipments
+                    .order(booking_placed_at: :desc)
+                    .paginate(page: params[:finished_page], per_page: per_page)
+      rj_shipments = rejected_shipments
+                     .order(booking_placed_at: :desc)
+                     .paginate(page: params[:rejected_page], per_page: per_page)
+      a_shipments = archived_shipments
+                    .order(booking_placed_at: :desc)
+                    .paginate(page: params[:archived_page], per_page: per_page)
 
       num_pages = {
         finished: f_shipments.total_pages,
@@ -206,14 +219,15 @@ class ShipmentsController < ApplicationController
 
   def filtered_user_shipments
     @filtered_user_shipments ||= begin
-      @filtered_user_shipments = current_user.shipments
+      @filtered_user_shipments = current_user.shipments.where(sandbox: @sandbox)
 
       if params[:origin_nexus]
         @filtered_user_shipments = @filtered_user_shipments.where(origin_nexus_id: params[:origin_nexus].split(','))
       end
 
       if params[:destination_nexus]
-        @filtered_user_shipments = @filtered_user_shipments.where(destination_nexus_id: params[:destination_nexus].split(','))
+        @filtered_user_shipments = @filtered_user_shipments
+                                   .where(destination_nexus_id: params[:destination_nexus].split(','))
       end
 
       if params[:hub_type] && params[:hub_type] != ''

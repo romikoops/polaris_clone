@@ -6,6 +6,7 @@ class Nexus < Legacy::Nexus
   belongs_to :tenant
   belongs_to :country
   geocoded_by :geocoded_address
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   reverse_geocoded_by :latitude, :longitude do |location, results|
     if (geo = results.first)
@@ -148,4 +149,5 @@ end
 #  country_id :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  sandbox_id :uuid
 #

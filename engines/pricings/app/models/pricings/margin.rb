@@ -3,7 +3,9 @@
 module Pricings
   class Margin < ApplicationRecord
     attr_accessor :transient_marked_as_old
+
     enum margin_type: { trucking_pre_margin: 1, export_margin: 2, freight_margin: 3, import_margin: 4, trucking_on_margin: 5 }
+
     belongs_to :applicable, polymorphic: true
     belongs_to :tenant, class_name: 'Tenants::Tenant'
     has_many :details, class_name: 'Pricings::Detail', dependent: :destroy
@@ -12,6 +14,7 @@ module Pricings
     belongs_to :itinerary, class_name: 'Legacy::Itinerary', optional: true
     belongs_to :origin_hub, class_name: 'Legacy::Hub', optional: true
     belongs_to :destination_hub, class_name: 'Legacy::Hub', optional: true
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     scope :for_cargo_classes, (lambda do |cargo_classes|
       where(cargo_class: cargo_classes.map(&:downcase))
@@ -104,4 +107,5 @@ end
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  margin_type        :integer
+#  sandbox_id         :uuid
 #

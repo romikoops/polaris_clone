@@ -8,7 +8,8 @@ module DocumentService
 
     def initialize(options)
       @tenant = Tenant.find(options[:tenant_id])
-      @hubs = @tenant.hubs
+      @sandbox = options[:sandbox] || false
+      @hubs = @tenant.hubs.where(sandbox: @sandbox)
       @filename = "hubs_#{formated_date}.xlsx"
       @directory = "tmp/#{@filename}"
       workbook_hash = add_worksheet_to_workbook(create_workbook(@directory), header_values)

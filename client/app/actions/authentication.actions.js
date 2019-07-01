@@ -204,6 +204,35 @@ function changePassword (email, redirect) {
   }
 }
 
+
+function toggleSandbox (id) {
+  function request () {
+    return { type: authenticationConstants.TOGGLE_SANDBOX_REQUEST }
+  }
+
+  function success (response) {
+    const payload = response.data
+
+    return { type: authenticationConstants.TOGGLE_SANDBOX_SUCCESS, payload }
+  }
+
+  function failure (error) {
+    return { type: authenticationConstants.TOGGLE_SANDBOX_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    authenticationService.toggleSandbox(id).then(
+      (response) => {
+        dispatch(success(response))
+      },
+      error => dispatch(failure(error))
+    )
+  }
+}
+
+
 function updateReduxStore (payload) {
   return dispatch => dispatch({ type: 'GENERAL_UPDATE', payload })
 }
@@ -218,7 +247,8 @@ export const authenticationActions = {
   showLogin,
   closeLogin,
   changePassword,
-  updateReduxStore
+  updateReduxStore,
+  toggleSandbox
 }
 
 export default authenticationActions

@@ -27,7 +27,7 @@ module ExcelDataServices
         end
 
         keys_and_names.uniq { |pair| pair[:key] }.each do |pair|
-          ChargeCategory.from_code(code: pair[:key], tenant_id: tenant.id, name: pair[:name])
+          ChargeCategory.from_code(code: pair[:key], tenant_id: tenant.id, name: pair[:name], sandbox: @sandbox)
         end
       end
 
@@ -35,14 +35,18 @@ module ExcelDataServices
         charges_data.each do |params|
           mot = params[:mot]
 
-          hub = Hub.find_by(tenant: tenant, name: params[:hub_name], hub_type: mot)
+          hub = Hub.find_by(tenant: tenant, name: params[:hub_name], hub_type: mot, sandbox: @sandbox)
           params[:hub_id] = hub.id
 
           if params[:counterpart_hub]
             if params[:counterpart_hub].downcase.casecmp('all').zero?
               counterpart_hub_id = nil
             else
-              counterpart_hub = tenant.hubs.find_by(name: params[:counterpart_hub_name], hub_type: mot)
+              counterpart_hub = tenant.hubs.find_by(
+                name: params[:counterpart_hub_name],
+                hub_type: mot,
+                sandbox: @sandbox
+              )
               counterpart_hub_id = counterpart_hub.id
             end
           end
@@ -59,7 +63,9 @@ module ExcelDataServices
       end
 
       def all_carriers_of_tenant
-        @all_carriers_of_tenant ||= Carrier.where(id: tenant.tenant_vehicles.pluck(:carrier_id).compact.uniq)
+        @all_carriers_of_tenant ||= Carrier.where(
+          id: tenant.tenant_vehicles.where(sandbox: @sandbox).pluck(:carrier_id).compact.uniq
+        )
       end
 
       def find_or_create_tenant_vehicles(params, carrier)
@@ -68,7 +74,8 @@ module ExcelDataServices
           return TenantVehicle.where(
             carrier: carrier,
             tenant: tenant,
-            mode_of_transport: params[:mot]
+            mode_of_transport: params[:mot],
+            sandbox: @sandbox
           )
         end
 
@@ -76,15 +83,17 @@ module ExcelDataServices
           name: service_level,
           mode_of_transport: params[:mot],
           tenant_id: tenant.id,
-          carrier: carrier
+          carrier: carrier,
+          sandbox: @sandbox
         )
 
         # TODO: fix!! `Vehicle` shouldn't be creating a `TenantVehicle`!:
         tenant_vehicle ||= Vehicle.create_from_name(
-          service_level,
-          params[:mot],
-          tenant.id,
-          carrier&.name
+          name: service_level,
+          mot: params[:mot],
+          tenant_id: tenant.id,
+          carrier_name: carrier&.name,
+          sandbox: @sandbox
         ) # returns a `TenantVehicle`!
 
         [tenant_vehicle]
@@ -107,7 +116,8 @@ module ExcelDataServices
             :direction
           ).merge(
             effective_date: Date.parse(params[:effective_date].to_s).beginning_of_day,
-            expiration_date: Date.parse(params[:expiration_date].to_s).end_of_day.change(usec: 0)
+            expiration_date: Date.parse(params[:expiration_date].to_s).end_of_day.change(usec: 0),
+            sandbox: @sandbox
           )
 
         new_local_charge = tenant.local_charges.new(local_charge_params)

@@ -64,6 +64,7 @@ class Shipment < Legacy::Shipment
   has_one :aggregated_cargo
   has_many :conversations
   has_many :messages, through: :conversations
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   has_many :charge_breakdowns do
     def to_schedules_charges
       reduce({}) { |obj, charge_breakdown| obj.merge(charge_breakdown.to_schedule_charges) }
@@ -659,4 +660,5 @@ end
 #  planned_destination_collection_date :datetime
 #  desired_start_date                  :datetime
 #  meta                                :jsonb
+#  sandbox_id                          :uuid
 #

@@ -13,7 +13,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
   end
 
   describe 'tenant_notification' do
-    let(:mail) { described_class.tenant_notification(user, shipment).deliver_now }
+    let(:mail) { described_class.tenant_notification(user, shipment, false).deliver_now }
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq('Your booking through Demo')
@@ -24,7 +24,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
   end
 
   describe 'shipper_notification' do
-    let(:mail) { described_class.shipper_notification(user, shipment).deliver_now }
+    let(:mail) { described_class.shipper_notification(user, shipment, false).deliver_now }
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq('Your booking through Demo')
@@ -35,7 +35,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
   end
 
   describe 'shipper_confirmation' do
-    let(:mail) { described_class.shipper_confirmation(user, shipment).deliver_now }
+    let(:mail) { described_class.shipper_confirmation(user, shipment, false).deliver_now }
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq('Your booking through Demo')

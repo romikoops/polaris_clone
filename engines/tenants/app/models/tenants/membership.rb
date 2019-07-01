@@ -2,6 +2,7 @@
 
 module Tenants
   class Membership < ApplicationRecord
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :member, polymorphic: true
     belongs_to :group
     validates_uniqueness_of :member_type, scope: %i(member_id priority)
@@ -69,7 +70,8 @@ end
 #  member_type :string
 #  member_id   :uuid
 #  group_id    :uuid
+#  priority    :integer          default(0)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  priority    :integer          default(0)
+#  sandbox_id  :uuid
 #

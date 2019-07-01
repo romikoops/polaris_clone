@@ -38,4 +38,6 @@ end
 #  updated_at            :datetime         not null
 #  tenant_vehicle_id     :integer
 #  uuid                  :uuid
+#  sandbox_id            :uuid
+#  internal              :boolean          default(FALSE)
 #

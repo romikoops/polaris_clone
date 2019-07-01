@@ -12,6 +12,7 @@ class Pricing < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_many :pricing_details, as: :priceable, dependent: :destroy
   has_many :pricing_exceptions, dependent: :destroy
   has_many :pricing_requests, dependent: :destroy
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
 
@@ -135,4 +136,6 @@ end
 #  updated_at            :datetime         not null
 #  tenant_vehicle_id     :integer
 #  uuid                  :uuid
+#  sandbox_id            :uuid
+#  internal              :boolean          default(FALSE)
 #

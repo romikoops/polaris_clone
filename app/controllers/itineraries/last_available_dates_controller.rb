@@ -17,8 +17,9 @@ module Itineraries
 
     def available_dates
       Itinerary
+        .where(sandbox: @sandbox)
         .joins(:trips)
-        .where(id: last_available_date_params[:itinerary_ids].split(','))
+        .where(id: last_available_date_params[:itinerary_ids].split(','), trips: { sandbox: @sandbox })
         .distinct
         .order(Trip.arel_table[:closing_date].asc)
         .pluck(Trip.arel_table[:closing_date])

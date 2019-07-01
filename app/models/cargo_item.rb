@@ -15,6 +15,7 @@ class CargoItem < Legacy::CargoItem
   delegate :tenant, to: :shipment
 
   belongs_to :cargo_item_type
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   before_validation :set_chargeable_weight!
   before_validation :set_default_cargo_class!, on: :create
@@ -107,4 +108,5 @@ end
 #  stackable          :boolean          default(TRUE)
 #  quantity           :integer
 #  unit_price         :jsonb
+#  sandbox_id         :uuid
 #

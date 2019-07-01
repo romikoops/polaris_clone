@@ -7,6 +7,7 @@ module Legacy
     belongs_to :tenant, class_name: 'Legacy::Tenant'
     belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
     belongs_to :counterpart_hub, class_name: 'Legacy::Hub', optional: true
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     scope :for_dates, (lambda do |start_date, end_date|
       where(Arel::Nodes::InfixOperation.new(
               'OVERLAPS',
@@ -37,4 +38,5 @@ end
 #  expiration_date    :datetime
 #  user_id            :integer
 #  uuid               :uuid
+#  sandbox_id         :uuid
 #

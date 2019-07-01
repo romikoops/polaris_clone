@@ -47,4 +47,5 @@ end
 #  name              :string
 #  mode_of_transport :string
 #  tenant_id         :integer
+#  sandbox_id        :uuid
 #

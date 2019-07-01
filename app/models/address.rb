@@ -11,6 +11,7 @@ class Address < Legacy::Address
   has_many :routes
   has_many :stops, through: :hubs
   belongs_to :country, optional: true
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   scope :nexus, -> { where(address_type: 'nexus') }
 
@@ -166,4 +167,5 @@ end
 #  photo            :string
 #  premise          :string
 #  country_id       :integer
+#  sandbox_id       :uuid
 #

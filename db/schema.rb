@@ -10,15 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_17_134641) do
+ActiveRecord::Schema.define(version: 2019_06_27_100046) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "fuzzystrmatch"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "postgis"
-  enable_extension "postgis_tiger_geocoder"
-  enable_extension "postgis_topology"
   enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -79,6 +76,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.string "photo"
     t.string "premise"
     t.integer "country_id"
+    t.uuid "sandbox_id"
   end
 
   create_table "agencies", force: :cascade do |t|
@@ -96,6 +94,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "shipment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "alternative_names", force: :cascade do |t|
@@ -134,12 +133,14 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.boolean "stackable", default: true
     t.integer "quantity"
     t.jsonb "unit_price"
+    t.uuid "sandbox_id"
   end
 
   create_table "carriers", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "charge_breakdowns", force: :cascade do |t|
@@ -147,6 +148,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "trip_id"
+    t.uuid "sandbox_id"
   end
 
   create_table "charge_categories", force: :cascade do |t|
@@ -156,6 +158,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "tenant_id"
+    t.uuid "sandbox_id"
   end
 
   create_table "charges", force: :cascade do |t|
@@ -168,6 +171,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "edited_price_id"
+    t.uuid "sandbox_id"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -181,6 +185,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "alias", default: false
+    t.uuid "sandbox_id"
   end
 
   create_table "containers", force: :cascade do |t|
@@ -198,6 +203,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.string "customs_text"
     t.integer "quantity"
     t.jsonb "unit_price"
+    t.uuid "sandbox_id"
   end
 
   create_table "contents", force: :cascade do |t|
@@ -234,6 +240,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "currencies", force: :cascade do |t|
@@ -270,6 +277,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.jsonb "approval_details"
     t.integer "tenant_id"
     t.integer "quotation_id"
+    t.uuid "sandbox_id"
   end
 
   create_table "geometries", force: :cascade do |t|
@@ -315,6 +323,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.string "photo"
     t.integer "nexus_id"
     t.integer "mandatory_charge_id"
+    t.uuid "sandbox_id"
   end
 
   create_table "incoterm_charges", force: :cascade do |t|
@@ -386,6 +395,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.string "name"
     t.string "mode_of_transport"
     t.integer "tenant_id"
+    t.uuid "sandbox_id"
     t.index ["mode_of_transport"], name: "index_itineraries_on_mode_of_transport"
     t.index ["name"], name: "index_itineraries_on_name"
     t.index ["tenant_id"], name: "index_itineraries_on_tenant_id"
@@ -401,6 +411,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "itinerary_id"
     t.integer "trip_id"
     t.datetime "closing_date"
+    t.uuid "sandbox_id"
     t.index ["stop_id"], name: "index_layovers_on_stop_id"
   end
 
@@ -510,6 +521,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "expiration_date"
     t.integer "user_id"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }
+    t.uuid "sandbox_id"
     t.index ["uuid"], name: "index_local_charges_on_uuid", unique: true
   end
 
@@ -599,6 +611,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "max_dimensions_bundles", force: :cascade do |t|
@@ -612,6 +625,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.decimal "chargeable_weight"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -645,6 +659,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "country_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -656,6 +671,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.string "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "oauth_access_grants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -709,6 +725,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.boolean "itsmycargo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "ports", force: :cascade do |t|
@@ -730,6 +747,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "pricing_details", force: :cascade do |t|
@@ -747,6 +765,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.bigint "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
     t.index ["currency_id"], name: "index_pricing_details_on_currency_id"
     t.index ["priceable_type", "priceable_id"], name: "index_pricing_details_on_priceable_type_and_priceable_id"
     t.index ["tenant_id"], name: "index_pricing_details_on_tenant_id"
@@ -787,6 +806,8 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "updated_at", null: false
     t.integer "tenant_vehicle_id"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }
+    t.uuid "sandbox_id"
+    t.boolean "internal", default: false
     t.index ["itinerary_id"], name: "index_pricings_on_itinerary_id"
     t.index ["tenant_id"], name: "index_pricings_on_tenant_id"
     t.index ["transport_category_id"], name: "index_pricings_on_transport_category_id"
@@ -802,6 +823,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "charge_category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
     t.index ["margin_id"], name: "index_pricings_details_on_margin_id"
     t.index ["tenant_id"], name: "index_pricings_details_on_tenant_id"
   end
@@ -822,6 +844,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "legacy_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "pricings_margins", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -843,6 +866,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "margin_type"
+    t.uuid "sandbox_id"
     t.index ["applicable_type", "applicable_id"], name: "index_pricings_margins_on_applicable_type_and_applicable_id"
     t.index ["application_order"], name: "index_pricings_margins_on_application_order"
     t.index ["cargo_class"], name: "index_pricings_margins_on_cargo_class"
@@ -869,7 +893,8 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "legacy_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "disabled", default: false
+    t.uuid "sandbox_id"
+    t.boolean "internal", default: false
     t.index ["cargo_class"], name: "index_pricings_pricings_on_cargo_class"
     t.index ["itinerary_id"], name: "index_pricings_pricings_on_itinerary_id"
     t.index ["load_type"], name: "index_pricings_pricings_on_load_type"
@@ -884,6 +909,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
     t.index ["external_code"], name: "index_pricings_rate_bases_on_external_code"
   end
 
@@ -894,6 +920,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "original_shipment_id"
+    t.uuid "sandbox_id"
   end
 
   create_table "rate_bases", force: :cascade do |t|
@@ -911,6 +938,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "order"
+    t.uuid "sandbox_id"
     t.index ["tenant_id"], name: "index_remarks_on_tenant_id"
   end
 
@@ -938,6 +966,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.string "contact_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "shipments", force: :cascade do |t|
@@ -980,6 +1009,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "planned_destination_collection_date"
     t.datetime "desired_start_date"
     t.jsonb "meta", default: {}
+    t.uuid "sandbox_id"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
@@ -989,6 +1019,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "index"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -1005,6 +1036,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.bigint "cargo_item_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
     t.index ["cargo_item_type_id"], name: "index_tenant_cargo_item_types_on_cargo_item_type_id"
     t.index ["tenant_id"], name: "index_tenant_cargo_item_types_on_tenant_id"
   end
@@ -1025,6 +1057,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.integer "carrier_id"
+    t.uuid "sandbox_id"
   end
 
   create_table "tenants", force: :cascade do |t|
@@ -1052,6 +1085,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "updated_at", null: false
     t.string "external_id"
     t.string "phone"
+    t.uuid "sandbox_id"
   end
 
   create_table "tenants_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1059,6 +1093,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.uuid "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "tenants_memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1068,7 +1103,15 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "priority", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
     t.index ["member_type", "member_id"], name: "index_tenants_memberships_on_member_type_and_member_id"
+  end
+
+  create_table "tenants_sandboxes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "tenant_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tenants_scopes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1077,6 +1120,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.jsonb "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
     t.index ["target_type", "target_id"], name: "index_tenants_scopes_on_target_type_and_target_id"
   end
 
@@ -1110,6 +1154,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "legacy_id"
     t.uuid "tenant_id"
     t.uuid "company_id"
+    t.uuid "sandbox_id"
     t.index ["activation_token"], name: "index_tenants_users_on_activation_token"
     t.index ["email", "tenant_id"], name: "index_tenants_users_on_email_and_tenant_id", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_tenants_users_on_last_logout_at_and_last_activity_at"
@@ -1125,6 +1170,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "load_type"
+    t.uuid "sandbox_id"
   end
 
   create_table "trips", force: :cascade do |t|
@@ -1138,6 +1184,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "tenant_vehicle_id"
     t.datetime "closing_date"
     t.string "load_type"
+    t.uuid "sandbox_id"
     t.index ["closing_date"], name: "index_trips_on_closing_date"
     t.index ["itinerary_id"], name: "index_trips_on_itinerary_id"
     t.index ["tenant_vehicle_id"], name: "index_trips_on_tenant_vehicle_id"
@@ -1156,6 +1203,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "trucking_coverages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1163,6 +1211,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.geometry "bounds", limit: {:srid=>0, :type=>"geometry"}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
     t.index ["bounds"], name: "index_trucking_coverages_on_bounds", using: :gist
   end
 
@@ -1174,6 +1223,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "location_id"
+    t.uuid "sandbox_id"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
     t.index ["distance"], name: "index_trucking_destinations_on_distance"
@@ -1185,6 +1235,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.uuid "type_availability_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
   end
 
   create_table "trucking_locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1195,6 +1246,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.uuid "location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "sandbox_id"
     t.index ["city_name"], name: "index_trucking_locations_on_city_name"
     t.index ["country_code"], name: "index_trucking_locations_on_country_code"
     t.index ["distance"], name: "index_trucking_locations_on_distance"
@@ -1271,6 +1323,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "user_id"
     t.uuid "parent_id"
     t.uuid "group_id"
+    t.uuid "sandbox_id"
     t.index ["hub_id"], name: "index_trucking_truckings_on_hub_id"
     t.index ["location_id"], name: "index_trucking_truckings_on_location_id"
     t.index ["rate_id", "location_id", "hub_id"], name: "trucking_foreign_keys", unique: true
@@ -1283,6 +1336,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "query_method"
+    t.uuid "sandbox_id"
   end
 
   create_table "user_addresses", force: :cascade do |t|
@@ -1342,6 +1396,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_134641) do
     t.integer "agency_id"
     t.boolean "internal", default: false
     t.datetime "deleted_at"
+    t.uuid "sandbox_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email"

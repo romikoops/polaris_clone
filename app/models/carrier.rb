@@ -2,6 +2,7 @@
 
 class Carrier < ApplicationRecord
   has_many :tenant_vehicles
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   def get_tenant_vehicle(tenant_id, mode_of_transport, name)
     tv = tenant_vehicles.find_by(
@@ -9,7 +10,7 @@ class Carrier < ApplicationRecord
       mode_of_transport: mode_of_transport,
       name: name
     )
-    tv ||= Vehicle.create_from_name(name, mode_of_transport, tenant_id, self.name)
+    tv ||= Vehicle.create_from_name(name: name, mot: mode_of_transport, tenant_id: tenant_id, carrier: self.name)
 
     tv
   end
@@ -23,4 +24,5 @@ end
 #  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  sandbox_id :uuid
 #

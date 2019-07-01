@@ -15,26 +15,26 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
   end
 
   def create # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-    tenant = ::Tenants::User.find_by(legacy_id: current_user.id)&.tenant
-    group = ::Tenants::Group.create(name: params[:name], tenant_id: tenant.id)
+    tenant = ::Tenants::User.find_by(legacy_id: current_user.id, sandbox: @sandbox)&.tenant
+    group = ::Tenants::Group.create(name: params[:name], tenant_id: tenant.id, sandbox: @sandbox)
     params[:addedMembers].keys.each do |type|
       params[:addedMembers][type].each do |new_member|
         case type
         when 'clients'
-          user = ::Tenants::User.find_by(legacy_id: new_member[:id])
+          user = ::Tenants::User.find_by(legacy_id: new_member[:id], sandbox: @sandbox)
           next unless user
 
-          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: user)
+          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: user, sandbox: @sandbox)
         when 'companies'
           company = ::Tenants::Company.find(new_member[:id])
           next unless company
 
-          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: company)
+          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: company, sandbox: @sandbox)
         when 'groups'
           group = ::Tenants::Group.find(new_member[:id])
           next unless group
 
-          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: group)
+          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: group, sandbox: @sandbox)
         end
       end
     end
@@ -49,20 +49,20 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
       params[:addedMembers][type].each do |new_member|
         case type
         when 'clients'
-          user = ::Tenants::User.find_by(legacy_id: new_member[:id])
+          user = ::Tenants::User.find_by(legacy_id: new_member[:id], sandbox: @sandbox)
           next unless user
 
           ::Tenants::Membership.find_or_create_by(group_id: group.id, member: user)
         when 'companies'
-          company = ::Tenants::Company.find(new_member[:id])
+          company = ::Tenants::Company.find_by(id: new_member[:id], sandbox: @sandbox)
           next unless company
 
           ::Tenants::Membership.find_or_create_by(group_id: group.id, member: company)
         when 'groups'
-          group = ::Tenants::Group.find(new_member[:id])
+          group = ::Tenants::Group.find_by(id: new_member[:id], sandbox: @sandbox)
           next unless group
 
-          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: group)
+          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: group, sandbox: @sandbox)
         end
       end
     end
@@ -78,7 +78,7 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
   end
 
   def show
-    group = ::Tenants::Group.find(params[:id])
+    group = ::Tenants::Group.find(params[:id], sandbox: @sandbox)
     response_handler(for_show_json(group))
   end
 
@@ -86,7 +86,7 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
 
   def groups
     tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)
-    @groups ||= ::Tenants::Group.where(tenant_id: tenant.id)
+    @groups ||= ::Tenants::Group.where(tenant_id: tenant.id, sandbox: @sandbox)
   end
 
   def pagination_options
@@ -111,7 +111,7 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
         query = query.joins(:memberships)
                      .where(tenants_memberships: { member_type: 'Tenants::Group', member_id: params[:target_id] })
       when 'user'
-        tenant_user = Tenants::User.find_by(legacy_id: params[:target_id])
+        tenant_user = Tenants::User.find_by(legacy_id: params[:target_id], sandbox: @sandbox)
         group_ids = tenant_user.all_groups.ids
         query = query.where(id: group_ids)
       end

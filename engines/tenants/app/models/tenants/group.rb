@@ -4,6 +4,7 @@ module Tenants
   class Group < ApplicationRecord
     include PgSearch
 
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
     belongs_to :tenant, class_name: 'Tenants::Tenant'
     has_many :memberships, class_name: 'Tenants::Membership'
@@ -44,4 +45,5 @@ end
 #  tenant_id  :uuid
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  sandbox_id :uuid
 #

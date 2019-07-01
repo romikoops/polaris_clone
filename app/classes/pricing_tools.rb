@@ -4,10 +4,11 @@ require 'bigdecimal'
 
 class PricingTools # rubocop:disable Metrics/ClassLength
   attr_accessor :scope, :user, :shipment
-  def initialize(user:, shipment: nil)
+  def initialize(user:, shipment: nil, sandbox: nil)
     @user = user
     @shipment = shipment
     @scope = @user.tenant_scope
+    @sandbox = sandbox
   end
 
   DEFAULT_MAX = Float::INFINITY
@@ -52,7 +53,8 @@ class PricingTools # rubocop:disable Metrics/ClassLength
                               .where(
                                 direction: direction,
                                 mode_of_transport: schedules.first.mode_of_transport,
-                                tenant_vehicle_id: schedules.first.trip.tenant_vehicle_id
+                                tenant_vehicle_id: schedules.first.trip.tenant_vehicle_id,
+                                sandbox: @sandbox
                               )
 
     charges_for_filtering = []
@@ -69,7 +71,6 @@ class PricingTools # rubocop:disable Metrics/ClassLength
           load_type: load_type,
           counterpart_hub_id: nil
         )
-
         if @scope['base_pricing']
           charges = get_manipulated_local_charge(charge, cargos.first.shipment, schedules)
           charges.each { |c| charges_for_filtering << c } if charges.present?
@@ -530,7 +531,8 @@ class PricingTools # rubocop:disable Metrics/ClassLength
         cargo_class: local_charge.load_type,
         schedules: schedules,
         shipment: shipment,
-        local_charge: local_charge
+        local_charge: local_charge,
+        sandbox: @sandbox
       }
     ).perform
   end

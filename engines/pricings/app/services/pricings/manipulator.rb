@@ -9,6 +9,7 @@ module Pricings
       @user = user
       @tenant = @user.tenant
       @shipment = args[:shipment]
+      @sandbox = args[:sandbox]
       @meta = @shipment.meta
       if @type == :freight_margin
         freight_variables(args: args)
@@ -44,8 +45,8 @@ module Pricings
     end
 
     def apply_hierarchy(hierarchy) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Metrics/MethodLength
-      # Dynamically generates the arguments for the margin finder based on the inputs handed to the Manipulator. 
-      # Required due to the differing data points for freight v local_charge v trucking 
+      # Dynamically generates the arguments for the margin finder based on the inputs handed to the Manipulator.
+      # Required due to the differing data points for freight v local_charge v trucking
       default_args = []
       if @pricing
         default_args.push(
@@ -196,7 +197,7 @@ module Pricings
       }
       all_margins = []
       all_margin_ids = []
-      
+
       default_args.each do |args|
         hierarchy.each do |h_data|
           h_data[:data].each do |target|
@@ -516,10 +517,14 @@ module Pricings
 
       @start_date = @schedules.first.etd
       @end_date = @schedules.last.eta
-
+      query_args = {
+        margin_type: @type,
+        tenant_id: @tenant.id,
+        sandbox: @sandbox
+      }
       if args[:pricing]
         @pricing = args[:pricing]
-        @margins = ::Pricings::Margin.for_dates(@pricing.effective_date, @pricing.expiration_date).where(margin_type: @type)
+        @margins = ::Pricings::Margin.for_dates(@pricing.effective_date, @pricing.expiration_date).where(query_args)
         @tenant_vehicle_id = @pricing.tenant_vehicle_id
         @cargo_class = @pricing.cargo_class
       else
@@ -532,7 +537,7 @@ module Pricings
         @tenant_vehicle_id = args[:tenant_vehicle_id]
         @cargo_class = args[:cargo_class]
         @margins = ::Pricings::Margin
-                   .where(margin_type: @type, tenant_id: @tenant.id)
+                   .where(query_args)
                    .for_dates(@start_date, @end_date)
       end
 
@@ -543,7 +548,11 @@ module Pricings
     end
 
     def trucking_variables(args:)
-      query_args = { margin_type: @type, tenant_id: @tenant.id }
+      query_args = {
+        margin_type: @type,
+        tenant_id: @tenant.id,
+        sandbox: @sandbox
+      }
       @trucking_pricing = args[:trucking_pricing]
       if @type == :trucking_pre_margin
         @trucking_charge_category = ::Legacy::ChargeCategory.find_by(tenant_id: @user.tenant_id, code: 'trucking_pre')
@@ -558,7 +567,11 @@ module Pricings
     end
 
     def local_charge_variables(args:)
-      query_args = { margin_type: @type, tenant_id: @tenant.id }
+      query_args = {
+        margin_type: @type,
+        tenant_id: @tenant.id,
+        sandbox: @sandbox
+      }
       @local_charge = args[:local_charge]
       @counterpart_hub_id = @local_charge.counterpart_hub_id
       if @type == :import_margin

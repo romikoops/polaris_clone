@@ -68,6 +68,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             pricing: lcl_pricing_1,
             schedules: schedules,
             shipment: lcl_shipment
@@ -110,6 +111,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             pricing: lcl_pricing_1,
             schedules: schedules,
             shipment: lcl_shipment
@@ -138,6 +140,7 @@ RSpec.describe Pricings::Manipulator do
           type: :freight_margin,
           user: tenants_user,
           args: {
+            sandbox: nil,
             pricing: group_pricing,
             schedules: schedules,
             shipment: lcl_shipment
@@ -174,6 +177,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             itinerary_id: group_pricing.itinerary_id,
             tenant_vehicle_id: group_pricing.tenant_vehicle_id,
             cargo_class: group_pricing.cargo_class,
@@ -220,6 +224,7 @@ RSpec.describe Pricings::Manipulator do
             user: tenants_user,
             type: :freight_margin,
             args: {
+              sandbox: nil,
               itinerary_id: group_pricing.itinerary_id,
               tenant_vehicle_id: group_pricing.tenant_vehicle_id,
               cargo_class: group_pricing.cargo_class,
@@ -264,6 +269,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             pricing: group_pricing,
             schedules: schedules,
             shipment: lcl_shipment
@@ -294,6 +300,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             pricing: lcl_pricing_2,
             schedules: schedules,
             shipment: lcl_shipment
@@ -325,6 +332,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             pricing: lcl_pricing_3,
             schedules: schedules,
             shipment: lcl_shipment
@@ -356,6 +364,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             pricing: lcl_range_pricing,
             schedules: schedules,
             shipment: lcl_shipment
@@ -385,6 +394,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             pricing: lcl_pricing_4,
             schedules: schedules,
             shipment: lcl_shipment
@@ -422,6 +432,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             itinerary_id: group_pricing.itinerary_id,
             tenant_vehicle_id: group_pricing.tenant_vehicle_id,
             cargo_class: group_pricing.cargo_class,
@@ -458,6 +469,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             itinerary_id: group_pricing.itinerary_id,
             tenant_vehicle_id: group_pricing.tenant_vehicle_id,
             cargo_class: group_pricing.cargo_class,
@@ -494,6 +506,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             itinerary_id: group_pricing.itinerary_id,
             tenant_vehicle_id: group_pricing.tenant_vehicle_id,
             cargo_class: group_pricing.cargo_class,
@@ -529,6 +542,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :freight_margin,
           args: {
+            sandbox: nil,
             itinerary_id: group_pricing.itinerary_id,
             tenant_vehicle_id: group_pricing.tenant_vehicle_id,
             cargo_class: group_pricing.cargo_class,
@@ -571,6 +585,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :export_margin,
           args: {
+            sandbox: nil,
             local_charge: local_charge,
             schedules: schedules,
             shipment: lcl_shipment
@@ -608,6 +623,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :import_margin,
           args: {
+            sandbox: nil,
             local_charge: local_charge,
             schedules: schedules,
             shipment: lcl_shipment
@@ -656,6 +672,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :export_margin,
           args: {
+            sandbox: nil,
             local_charge: local_charge,
             schedules: schedules,
             shipment: lcl_shipment
@@ -703,6 +720,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :import_margin,
           args: {
+            sandbox: nil,
             local_charge: local_charge,
             schedules: schedules,
             shipment: lcl_shipment
@@ -736,6 +754,7 @@ RSpec.describe Pricings::Manipulator do
           type: :export_margin,
           user: tenants_user,
           args: {
+            sandbox: nil,
             local_charge: local_charge,
             schedules: schedules,
             shipment: lcl_shipment
@@ -784,6 +803,7 @@ RSpec.describe Pricings::Manipulator do
             user: tenants_user,
             type: :export_margin,
             args: {
+              sandbox: nil,
               local_charge: local_charge,
               schedules: schedules,
               shipment: lcl_shipment
@@ -832,6 +852,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :export_margin,
           args: {
+            sandbox: nil,
             local_charge: local_charge,
             schedules: schedules,
             shipment: lcl_shipment
@@ -866,6 +887,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :export_margin,
           args: {
+            sandbox: nil,
             local_charge: local_charge,
             schedules: schedules,
             shipment: lcl_shipment
@@ -920,6 +942,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :export_margin,
           args: {
+            sandbox: nil,
             local_charge: local_charge,
             schedules: schedules,
             shipment: lcl_shipment
@@ -970,6 +993,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :export_margin,
           args: {
+            sandbox: nil,
             local_charge: local_charge,
             schedules: schedules,
             shipment: lcl_shipment
@@ -1005,6 +1029,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :export_margin,
           args: {
+            sandbox: nil,
             local_charge: local_charge,
             schedules: schedules,
             shipment: lcl_shipment
@@ -1041,6 +1066,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :export_margin,
           args: {
+            sandbox: nil,
             local_charge: local_charge,
             schedules: schedules,
             shipment: lcl_shipment
@@ -1064,6 +1090,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :trucking_pre_margin,
           args: {
+            sandbox: nil,
             trucking_pricing: trucking_pricing,
             shipment: lcl_shipment,
             date: Date.today + 5.days
@@ -1100,6 +1127,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :trucking_pre_margin,
           args: {
+            sandbox: nil,
             trucking_pricing: trucking_pricing,
             shipment: lcl_shipment,
             date: Date.today + 5.days
@@ -1122,6 +1150,7 @@ RSpec.describe Pricings::Manipulator do
           type: :trucking_pre_margin,
           user: tenants_user,
           args: {
+            sandbox: nil,
             trucking_pricing: trucking_pricing,
             shipment: lcl_shipment,
             date: Date.today + 5.days
@@ -1157,6 +1186,7 @@ RSpec.describe Pricings::Manipulator do
             user: tenants_user,
             type: :trucking_pre_margin,
             args: {
+              sandbox: nil,
               trucking_pricing: trucking_pricing,
               shipment: lcl_shipment,
               date: Date.today + 5.days
@@ -1198,6 +1228,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :trucking_on_margin,
           args: {
+            sandbox: nil,
             trucking_pricing: trucking_pricing,
             shipment: lcl_shipment,
             date: Date.today + 5.days
@@ -1216,11 +1247,11 @@ RSpec.describe Pricings::Manipulator do
         trucking_pricing = FactoryBot.create(:trucking_trucking, hub: hub, tenant: tenant, carriage: 'on')
         user_base_margin = FactoryBot.create(:trucking_on_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user)
         FactoryBot.create(:pricings_detail, margin: user_base_margin, value: 0.25, charge_category: puf_charge_category)
-
         manipulated_pricings = described_class.new(
           user: tenants_user,
           type: :trucking_on_margin,
           args: {
+            sandbox: nil,
             trucking_pricing: trucking_pricing,
             shipment: lcl_shipment,
             date: Date.today + 5.days
@@ -1261,6 +1292,7 @@ RSpec.describe Pricings::Manipulator do
           user: tenants_user,
           type: :trucking_on_margin,
           args: {
+            sandbox: nil,
             trucking_pricing: trucking_pricing,
             shipment: lcl_shipment,
             date: Date.today + 5.days
@@ -1296,6 +1328,7 @@ RSpec.describe Pricings::Manipulator do
         user: tenants_user,
         type: :freight_margin,
         args: {
+          sandbox: nil,
           pricing: lcl_pricing_user,
           schedules: schedules,
           shipment: lcl_shipment
@@ -1321,6 +1354,7 @@ RSpec.describe Pricings::Manipulator do
         user: tenants_user,
         type: :freight_margin,
         args: {
+          sandbox: nil,
           pricing: lcl_pricing_tenant,
           schedules: schedules,
           shipment: lcl_shipment

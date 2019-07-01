@@ -13,7 +13,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def show
-    itinerary = Itinerary.find(params[:id])
+    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
     schedules = itinerary.trips.lastday_today.limit(100).order(:start_date)
     response_handler(schedules: schedules, itinerary: itinerary.as_options_json)
   end
@@ -45,7 +45,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def destroy
-    Trip.find(params[:id]).destroy
+    Trip.find_by(id: params[:id], sandbox: @sandbox).destroy
     response_handler(true)
   end
 
@@ -55,10 +55,14 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def schedules_by_itinerary
     if params[:file]
-      itinerary = Itinerary.find(params[:id])
+      itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
 
       req = { 'xlsx' => params[:file], 'itinerary' => itinerary }
-      results = ExcelTool::OverwriteSchedulesByItinerary.new(params: req, _user: current_user).perform
+      results = ExcelTool::OverwriteSchedulesByItinerary.new(
+        params: req,
+        _user: current_user,
+        sandbox: @sandbox
+      ).perform
       response_handler(results)
     else
       response_handler(false)
@@ -68,7 +72,12 @@ class Admin::SchedulesController < Admin::AdminBaseController
   def overwrite_trains
     if params[:file]
       req = { 'xlsx' => params[:file] }
-      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: 'rail', _user: current_user).perform
+      results = ExcelTool::ScheduleOverwriter.new(
+        params: req,
+        mot: 'rail',
+        _user: current_user,
+        sandbox: @sandbox
+      ).perform
       response_handler(results)
     else
       response_handler(false)
@@ -78,7 +87,12 @@ class Admin::SchedulesController < Admin::AdminBaseController
   def overwrite_vessels
     if params[:file]
       req = { 'xlsx' => params[:file] }
-      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: 'ocean', _user: current_user).perform
+      results = ExcelTool::ScheduleOverwriter.new(
+        params: req,
+        mot: 'ocean',
+        _user: current_user,
+        sandbox: @sandbox
+      ).perform
       response_handler(results)
     else
       response_handler(false)
@@ -88,7 +102,12 @@ class Admin::SchedulesController < Admin::AdminBaseController
   def overwrite_air
     if params[:file]
       req = { 'xlsx' => params[:file] }
-      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: 'air', _user: current_user).perform
+      results = ExcelTool::ScheduleOverwriter.new(
+        params: req,
+        mot: 'air',
+        _user: current_user,
+        sandbox: @sandbox
+      ).perform
       response_handler(results)
     else
       response_handler(false)
@@ -105,17 +124,17 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def mot_schedule(mot)
-    tenant.itineraries.where(mode_of_transport: mot).flat_map do |itin|
+    tenant.itineraries.where(mode_of_transport: mot, sandbox: @sandbox).flat_map do |itin|
       itin.trips.limit(10).order(:start_date)
     end
   end
 
   def tenant
-    @tenant ||= Tenant.find(current_user.tenant_id)
+    @tenant ||= Tenant.find_by(id: current_user.tenant_id)
   end
 
   def itinerary_route_json
-    Itinerary.where(tenant_id: current_user.tenant_id).map(&:as_options_json)
+    Itinerary.where(tenant_id: current_user.tenant_id, sandbox: @sandbox).map(&:as_options_json)
   end
 
   def stops
@@ -123,20 +142,29 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def vehicle
-    @vehicle ||= TenantVehicle.find(params[:vehicleTypeId]).id
+    @vehicle ||= TenantVehicle.find_by(id: params[:vehicleTypeId], sandbox: @sandbox).id
   end
 
   def itin_weekly_schedules
-    itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate],
-                                        params[:endDate], params[:weekdays], vehicle, params[:closing_date].to_i)
+    itinerary.generate_weekly_schedules(
+      stops_in_order: stops,
+      steps_in_order: params[:steps],
+      start_date: params[:startDate],
+      end_date: params[:endDate],
+      ordinal_array: params[:weekdays],
+      tenant_vehicle_id: vehicle,
+      closing_date_buffer: params[:closing_date].to_i,
+      load_type: params[:load_type].to_i,
+      sandbox: @sandbox
+    )
   end
 
   def itinerary
-    @itinerary ||= Itinerary.find(params[:itinerary])
+    @itinerary ||= Itinerary.find_by(id: params[:itinerary], sandbox: @sandbox)
   end
 
   def itineraries
-    @itineraries ||= Itinerary.where(tenant_id: current_user.tenant_id)
+    @itineraries ||= Itinerary.where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
   end
 
   def trip_layovers
@@ -146,7 +174,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def trip
-    @trip ||= Trip.find(params[:id])
+    @trip ||= Trip.find_by(id: params[:id], sandbox: @sandbox)
   end
 
   def upload_params

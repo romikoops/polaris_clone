@@ -19,7 +19,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   # Return selected User, assigned managers, shipments made and user addresses
 
   def show
-    client = User.find(params[:id])
+    client = User.find(params[:id], sandbox: @sandbox)
     addresses = client.addresses
     groups = client.groups.map { |g| group_index_json(g) }
     manager_assignments = UserManager.where(user_id: client)
@@ -37,7 +37,8 @@ class Admin::ClientsController < Admin::AdminBaseController
       phone: json['phone'],
       last_name: json['lastName'],
       password: json['password'],
-      password_confirmation: json['password_confirmation']
+      password_confirmation: json['password_confirmation'],
+      sandbox: @sandbox
     }
     new_user = current_user.tenant.users.create!(user_data)
 
@@ -48,7 +49,8 @@ class Admin::ClientsController < Admin::AdminBaseController
     file = upload_params[:file].tempfile
 
     options = { tenant: current_tenant,
-                file_or_path: file }
+                file_or_path: file,
+                options: { sandbox: @sandbox } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
@@ -58,7 +60,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   # Destroy User account
 
   def destroy
-    User.find(params[:id]).destroy
+    User.find(params[:id], sandbox: @sandbox).destroy
     response_handler(params[:id])
   end
 
@@ -66,7 +68,10 @@ class Admin::ClientsController < Admin::AdminBaseController
 
   def clients
     blocked_roles = Role.where(name: %w(admin super_admin))
-    @clients ||= current_tenant.users.where(guest: false).where.not(role: blocked_roles).order(updated_at: :desc)
+    @clients ||=  current_tenant.users
+                                .where(guest: false, sandbox: @sandbox)
+                                .where.not(role: blocked_roles)
+                                .order(updated_at: :desc)
   end
 
   def pagination_options

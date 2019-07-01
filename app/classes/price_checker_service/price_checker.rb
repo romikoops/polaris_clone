@@ -196,6 +196,7 @@ module PriceCheckerService
                                               @shipment.planned_pickup_date,
                                               @schedule.mode_of_transport)
                         end
+
         next if charge_result.nil?
 
         cargo_unit_model = cargo_unit.class.to_s == 'Hash' ? 'CargoItem' : cargo_unit.class.to_s

@@ -3,14 +3,16 @@
 module OfferCalculatorService
   class TruckingPricingFinder < Base
     def initialize(args = {})
-      @address          = args[:address]
-      @trucking_details = args[:trucking_details]
-      @carriage         = args[:carriage]
+      @address          = args.fetch(:address)
+      @trucking_details = args.fetch(:trucking_details)
+      @carriage         = args.fetch(:carriage)
+      @sandbox          = args.fetch(:sandbox)
+      @shipment         = args.fetch(:shipment)
       @user = User.find(args[:user_id]) if args[:user_id]
-      super(args[:shipment])
+      super(shipment: @shipment, sandbox: @sandbox)
     end
 
-    def perform(hub_id, distance) # rubocp:disable metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Meetrics?MethodLength
+    def perform(hub_id, distance) # rubocp:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Meetrics/MethodLength
       args = {
         address: @address,
         load_type: @shipment.load_type,
@@ -19,8 +21,10 @@ module OfferCalculatorService
         cargo_classes: @shipment.cargo_classes,
         carriage: @carriage,
         hub_ids: [hub_id],
-        distance: distance.round
+        distance: distance.round,
+        sandbox: @sandbox
       }
+
       results = Trucking::Queries::Availability.new(args).perform | Trucking::Queries::Distance.new(args).perform
       return [] if results.empty?
 

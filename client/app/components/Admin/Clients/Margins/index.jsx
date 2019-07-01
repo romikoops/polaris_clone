@@ -120,6 +120,15 @@ class AdminClientMargins extends Component {
             }}
           />
         )
+      } else if (cellInfo.column.id === 'applicationOrder') {
+        cellToRender = (
+          <div
+            className={`${styles.table_cell} flex layout-row layout-align-start-center center`}
+            dangerouslySetInnerHTML={{
+              __html: margins[cellInfo.index][cellInfo.column.id]
+            }}
+          />
+        )
       } else {
         let value
         const rawValue = margins[cellInfo.index][cellInfo.column.id]
@@ -129,7 +138,6 @@ class AdminClientMargins extends Component {
         } else {
           value = '-'
         }
-
         cellToRender = (
           <div
             className={`${styles.table_cell} flex layout-row layout-align-start-center center`}
@@ -223,6 +231,71 @@ class AdminClientMargins extends Component {
         </div>
       )
     }
+
+    if (cellInfo.column.id === 'applicationOrder') {
+      return (
+        <div
+          className={`${styles.table_cell} edit flex layout-row layout-align-start-center pointy`}
+        >
+          <div
+            className="flex layout-row layout-align-center-center"
+            style={{ visibility: margins[cellInfo.index].applicationOrder === 0 ? 'hidden' : 'visible' }}
+            onClick={() => this.handleOrderChange(margins[cellInfo.index].id, -1)}
+          >
+            <i className="flex-none fa fa-arrow-up" />
+          </div>
+          <div
+            className="flex layout-row layout-align-center-center"
+            style={{ visibility: margins[cellInfo.index].applicationOrder === margins.length - 1 ? 'hidden' : 'visible' }}
+            onClick={() => this.handleOrderChange(margins[cellInfo.index].id, 1)}
+          >
+            <i className="flex-none fa fa-arrow-down" />
+          </div>
+        </div>
+      )
+    }
+    if (['effectiveDate', 'expirationDate'].includes(cellInfo.column.id)) {
+      const dayPickerProps = {
+        disabledDays: {
+          before: new Date(moment()
+            .add(7, 'days'))
+        },
+        month: new Date(
+          moment()
+            .add(7, 'days')
+            .format('YYYY'),
+          moment()
+            .add(7, 'days')
+            .format('M') - 1
+        ),
+        name: 'dayPicker'
+      }
+
+      return (
+        <div className={styles.day_picker}>
+          <DayPickerInput
+            name="dayPicker"
+            format="LL"
+            formatDate={formatDate}
+            classNames={
+              {
+                overlayWrapper: styles.day_picker_overlay_wrapper,
+                container: 'input_box_full'
+              }
+            }
+            parseDate={parseDate}
+            placeholder={`${formatDate(new Date())}`}
+            value={moment(this.state.margins[cellInfo.index][cellInfo.column.id]).format('DD/MM/YYYY')}
+            onDayChange={(e) => {
+              const margins = [...this.state.margins]
+              margins[cellInfo.index][cellInfo.column.id] = e
+              this.setState({ margins })
+            }}
+            dayPickerProps={dayPickerProps}
+          />
+        </div>
+      )
+    }
     let value
     const rawValue = margins[cellInfo.index][cellInfo.column.id]
     const { operator } = margins[cellInfo.index]
@@ -231,7 +304,6 @@ class AdminClientMargins extends Component {
     } else {
       value = '-'
     }
-
     return (
       <div
         style={{ backgroundColor: '#fafafa', textAlign: 'center' }}

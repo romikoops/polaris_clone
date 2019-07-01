@@ -8,6 +8,7 @@ module Legacy
     belongs_to :tenant
     belongs_to :role, optional: true, class_name: 'Legacy::Role'
     belongs_to :agency, optional: true
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     def tenant_scope
       ::Tenants::ScopeService.new(target: self, tenant: tenants_user&.tenant).fetch
@@ -91,4 +92,5 @@ end
 #  agency_id              :integer
 #  internal               :boolean          default(FALSE)
 #  deleted_at             :datetime
+#  sandbox_id             :uuid
 #

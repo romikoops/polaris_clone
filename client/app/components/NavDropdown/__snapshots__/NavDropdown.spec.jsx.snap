@@ -31,7 +31,11 @@ exports[`dropDownText is falsy 1`] = `
       className="dropdowncontent"
     >
       <div>
-        LINK_OPTION_KEY
+        <i
+          aria-hidden="true"
+          className="fa LINK_OPTION_ICON spacing_sm_right"
+        />
+        LINK_OPTION_TEXT
       </div>
     </div>
   </div>
@@ -170,7 +174,11 @@ exports[`shallow rendering 1`] = `
       className="dropdowncontent"
     >
       <div>
-        LINK_OPTION_KEY
+        <i
+          aria-hidden="true"
+          className="fa LINK_OPTION_ICON spacing_sm_right"
+        />
+        LINK_OPTION_TEXT
       </div>
     </div>
   </div>

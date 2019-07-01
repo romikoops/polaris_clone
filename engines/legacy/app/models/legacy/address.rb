@@ -7,6 +7,7 @@ module Legacy
     belongs_to :country, class_name: 'Legacy::Country', optional: true
     geocoded_by :geocoded_address
     before_validation :sanitize_zip_code!
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     reverse_geocoded_by :latitude, :longitude do |address, results|
       if geo = results.first
@@ -41,8 +42,9 @@ module Legacy
       zip_code
     end
 
-    def self.geocoded_address(user_input)
+    def self.geocoded_address(user_input, sandbox = nil)
       address = Address.new(geocoded_address: user_input)
+      address.sandbox = sandbox
       address.geocode
       address.reverse_geocode
       address.save!
@@ -64,7 +66,6 @@ module Legacy
       ).each do |attribute|
         custom_hash[attribute] = self[attribute]
       end
-
       custom_hash
     end
   end
@@ -91,4 +92,5 @@ end
 #  photo            :string
 #  premise          :string
 #  country_id       :integer
+#  sandbox_id       :uuid
 #

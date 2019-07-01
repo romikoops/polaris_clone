@@ -4,6 +4,7 @@ class PricingDetail < ApplicationRecord
   has_paper_trail
   belongs_to :tenant
   belongs_to :priceable, polymorphic: true
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   def as_json(options = {})
     new_options = options.reverse_merge(
@@ -60,4 +61,5 @@ end
 #  tenant_id      :bigint(8)
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  sandbox_id     :uuid
 #

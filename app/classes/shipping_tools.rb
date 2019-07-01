@@ -8,23 +8,28 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   extend NotificationTools
   InternalError = Class.new(StandardError)
 
-  def self.create_shipments_from_quotation(shipment, results)
-    main_quote = ShippingTools.handle_existing_quote(shipment, results)
+  def self.create_shipments_from_quotation(shipment, results, sandbox = nil)
+    main_quote = ShippingTools.handle_existing_quote(shipment, results, sandbox)
     results.each do |result|
       next unless main_quote.shipments.where(trip_id: result['meta']['charge_trip_id']).empty?
 
       ShippingTools.create_shipment_from_result(
         main_quote: main_quote,
         original_shipment: shipment,
-        result: result.with_indifferent_access
+        result: result.with_indifferent_access,
+        sandbox: sandbox
       )
     end
     main_quote.shipments.map(&:reload)
     main_quote
   end
 
-  def self.handle_existing_quote(shipment, results)
-    existing_quote = Quotation.find_by(user_id: shipment.user_id, original_shipment_id: shipment.id)
+  def self.handle_existing_quote(shipment, results, sandbox = nil)
+    existing_quote = Quotation.find_by(
+      user_id: shipment.user_id,
+      original_shipment_id: shipment.id,
+      sandbox: sandbox
+    )
     trip_ids = results.map { |r| r['meta']['charge_trip_id'] }
     if existing_quote && shipment.updated_at < existing_quote.updated_at
       main_quote = existing_quote
@@ -33,13 +38,17 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       main_quote = existing_quote
       main_quote.shipments.destroy_all
     elsif !existing_quote
-      main_quote = Quotation.create(user_id: shipment.user_id, original_shipment_id: shipment.id)
+      main_quote = Quotation.create(
+        user_id: shipment.user_id,
+        original_shipment_id: shipment.id,
+        sandbox: sandbox
+      )
     end
 
     main_quote
   end
 
-  def self.create_shipment(details, current_user) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def self.create_shipment(details, current_user, sandbox = nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Metrics/MethodLength
     tenant = current_user.tenant
     load_type = details['loadType'].underscore
     direction = details['direction']
@@ -48,35 +57,49 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       status: 'booking_process_started',
       load_type: load_type,
       direction: direction,
-      tenant_id: tenant.id
+      tenant_id: tenant.id,
+      sandbox: sandbox
     )
     shipment.save!
     scope = Tenants::ScopeService.new(target: current_user).fetch
-
+    tenant_itineraries = current_user.tenant.itineraries.where(sandbox: sandbox)
     if scope['base_pricing']
       if scope[:display_itineraries_with_rates]
         cargo_classes = [nil] + (load_type == 'cargo_item' ? ['lcl'] : Container::CARGO_CLASSES)
         no_general_margins = Pricings::Margin.where(
           itinerary_id: nil,
           applicable: current_user.all_groups,
-          cargo_class: cargo_classes
+          cargo_class: cargo_classes,
+          sandbox: sandbox
         ).empty?
-        itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-          no_pricings = Pricings::Pricing.where(itinerary_id: id, load_type: load_type, disabled: false).empty?
+        itinerary_ids = tenant_itineraries.ids.reject do |id|
+          no_pricings = Pricings::Pricing.where(
+            sandbox: sandbox,
+            itinerary_id: id,
+            load_type: load_type,
+            internal: false
+          ).empty?
           no_margins = if no_general_margins
-            Pricings::Margin.where(
-              itinerary_id: id,
-              applicable: current_user.all_groups,
-              cargo_class: cargo_classes
-            ).empty?
-          else
-            no_general_margins
-          end
+                         Pricings::Margin.where(
+                           itinerary_id: id,
+                           applicable: current_user.all_groups,
+                           cargo_class: cargo_classes,
+                           sandbox: sandbox
+                         ).empty?
+                       else
+                         no_general_margins
+                       end
           no_pricings || no_margins
         end
       else
-        itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-          Pricings::Pricing.where(itinerary_id: id, load_type: load_type, disabled: false).empty?
+        itinerary_ids = tenant_itineraries.ids.reject do |id|
+          Pricings::Pricing.where(
+            sandbox: sandbox,
+            itinerary_id: id,
+            load_type: load_type,
+            disabled: false,
+            internal: false
+          ).empty?
         end
       end
     else
@@ -84,12 +107,17 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
         raise ApplicationError::NonAgentUser if current_user.agency.nil?
 
         user_pricing_id = current_user.agency.agency_manager_id
-        itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-          Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
+        itinerary_ids = tenant_itineraries.ids.reject do |id|
+          Pricing.where(
+            sandbox: sandbox,
+            itinerary_id: id,
+            user_id: user_pricing_id,
+            internal: false
+          ).for_load_type(load_type).empty?
         end
       else
-        itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-          Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
+        itinerary_ids = tenant_itineraries.ids.reject do |id|
+          Pricing.where(sandbox: sandbox, itinerary_id: id, internal: false).for_load_type(load_type).empty?
         end
       end
     end
@@ -110,9 +138,9 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
-  def self.get_offers(params, current_user) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
-    shipment = Shipment.find(params[:shipment_id])
-    offer_calculator = OfferCalculator.new(shipment, params, current_user)
+  def self.get_offers(params, current_user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+    shipment = Shipment.where(sandbox: sandbox).find(params[:shipment_id])
+    offer_calculator = OfferCalculator.new(shipment: shipment, params: params, user: current_user, sandbox: sandbox)
 
     offer_calculator.perform
     offer_calculator.shipment.save!
@@ -146,7 +174,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     raise ApplicationError::InternalError
   end
 
-  def self.generate_shipment_pdf(shipment:) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def self.generate_shipment_pdf(shipment:, sandbox: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     cargo_count = shipment.cargo_units.count
     load_type = ''
     if shipment.load_type == 'cargo_item' && cargo_count > 1
@@ -167,15 +195,14 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       shipments: [shipment],
       load_type: load_type,
       name: 'shipment_recap',
-      remarks: Remark.where(tenant_id: shipment.tenant_id).order(order: :asc)
+      remarks: Remark.where(sandbox: sandbox, tenant_id: shipment.tenant_id).order(order: :asc)
     )
 
     shipment_recap.generate
   end
 
-  def self.update_shipment(params, current_user) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
-    tenant = current_user.tenant
-    shipment = Shipment.find(params[:shipment_id])
+  def self.update_shipment(params, current_user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+    shipment = Shipment.where(sandbox: sandbox).find(params[:shipment_id])
     shipment_data = params[:shipment]
 
     hsCodes = shipment_data[:hsCodes].as_json
@@ -188,27 +215,39 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
 
     # Shipper
     resource = shipment_data.require(:shipper)
-    contact_address = Address.create_and_geocode(contact_address_params(resource))
+    contact_address = Address.create_and_geocode(contact_address_params(resource).merge(sandbox: sandbox))
     contact_params = contact_params(resource, contact_address.id)
-    contact = search_contacts(contact_params, current_user)
-    shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'shipper')
+    contact = search_contacts(contact_params, current_user, sandbox)
+    shipment.shipment_contacts.find_or_create_by(
+      contact_id: contact.id,
+      contact_type: 'shipper',
+      sandbox: sandbox
+    )
     shipper = { data: contact, address: contact_address.to_custom_hash }
     # NOT CORRECT:UserAddress.create(user: current_user, address: contact_address) if shipment.export?
 
     # Consignee
     resource = shipment_data.require(:consignee)
-    contact_address = Address.create_and_geocode(contact_address_params(resource))
+    contact_address = Address.create_and_geocode(contact_address_params(resource).merge(sandbox: sandbox))
     contact_params = contact_params(resource, contact_address.id)
-    contact = search_contacts(contact_params, current_user)
-    shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'consignee')
+    contact = search_contacts(contact_params, current_user, sandbox)
+    shipment.shipment_contacts.find_or_create_by!(
+      contact_id: contact.id,
+      contact_type: 'consignee',
+      sandbox: sandbox
+    )
     consignee = { data: contact, address: contact_address.to_custom_hash }
     # NOT CORRECT:UserAddress.create(user: current_user, address: contact_address) if shipment.import?
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
       contact_params = contact_params(resource, nil)
-      contact = search_contacts(contact_params, current_user)
-      shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'notifyee')
+      contact = search_contacts(contact_params, current_user, sandbox)
+      shipment.shipment_contacts.find_or_create_by!(
+        contact_id: contact.id,
+        contact_type: 'notifyee',
+        sandbox: sandbox
+      )
       contact
     end || []
 
@@ -227,7 +266,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
         price: Price.create(currency: shipment.user.currency, value: shipment_data[:insurance][:value]),
-        parent: charge_breakdown.charge('grand_total')
+        parent: charge_breakdown.charge('grand_total'),
+        sandbox: sandbox
       )
     end
     if shipment_data[:customs][:total][:val].to_d.positive? || shipment_data[:customs][:total][:hasUnknown]
@@ -239,7 +279,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
           currency: shipment_data[:customs][:total][:currency],
           value: shipment_data[:customs][:total][:val]
         ),
-        parent: charge_breakdown.charge('grand_total')
+        parent: charge_breakdown.charge('grand_total'),
+        sandbox: sandbox
       )
       if shipment_data[:customs][:import][:bool]
         @import_customs_charge = Charge.create(
@@ -250,7 +291,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
             currency: shipment_data[:customs][:import][:currency],
             value: shipment_data[:customs][:import][:val]
           ),
-          parent: @customs_charge
+          parent: @customs_charge,
+          sandbox: sandbox
         )
       end
       if shipment_data[:customs][:export][:bool]
@@ -260,9 +302,11 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
           charge_breakdown: charge_breakdown,
           price: Price.create(
             currency: shipment_data[:customs][:total][:currency],
-            value: shipment_data[:customs][:export][:val]
+            value: shipment_data[:customs][:export][:val],
+            sandbox: sandbox
           ),
-          parent: @customs_charge
+          parent: @customs_charge,
+          sandbox: sandbox
         )
       end
 
@@ -275,9 +319,11 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
         charge_breakdown: charge_breakdown,
         price: Price.create(
           currency: shipment_data[:addons][:customs_export_paper][:currency],
-          value: shipment_data[:addons][:customs_export_paper][:value]
+          value: shipment_data[:addons][:customs_export_paper][:value],
+          sandbox: sandbox
         ),
-        parent: charge_breakdown.charge('grand_total')
+        parent: charge_breakdown.charge('grand_total'),
+        sandbox: sandbox
       )
       @customs_export_paper = Charge.create(
         children_charge_category: ChargeCategory.from_code(code: 'customs_export_paper', tenant_id: shipment.tenant_id),
@@ -285,9 +331,11 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
         charge_breakdown: charge_breakdown,
         price: Price.create(
           currency: shipment_data[:addons][:customs_export_paper][:currency],
-          value: shipment_data[:addons][:customs_export_paper][:value]
+          value: shipment_data[:addons][:customs_export_paper][:value],
+          sandbox: sandbox
         ),
-        parent: @addons_charge
+        parent: @addons_charge,
+        sandbox: sandbox
       )
       @addons_charge.update_price!
     end
@@ -383,8 +431,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     }
   end
 
-  def self.request_shipment(params, current_user)
-    shipment = Shipment.find(params[:shipment_id])
+  def self.request_shipment(params, current_user, sandbox = nil)
+    shipment = Shipment.find_by(id: params[:shipment_id], sandbox: sandbox)
     shipment.status = current_user.confirmed? ? 'requested' : 'requested_by_unconfirmed_account'
     shipment.booking_placed_at = DateTime.now
     shipment.save!
@@ -427,8 +475,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
             .merge(address_id: address_id)
   end
 
-  def self.choose_offer(params, current_user) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
-    shipment = Shipment.find(params[:shipment_id])
+  def self.choose_offer(params, current_user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+    shipment = Shipment.find_by(id: params[:shipment_id], sandbox: sandbox)
     shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
     shipment.user_id = current_user.id
     shipment.customs_credit = params[:customs_credit]
@@ -437,7 +485,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
 
     @schedule = params[:schedule].as_json
 
-    shipment.itinerary = Trip.find(@schedule['trip_id']).itinerary
+    shipment.itinerary = Trip.find_by(id: @schedule['trip_id'], sandbox: sandbox)&.itinerary
     case shipment.load_type
     when 'cargo_item'
       @dangerous = false
@@ -448,8 +496,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       res = shipment.containers.where(dangerous_goods: true)
       @dangerous = true unless res.empty?
     end
-    @origin_hub      = Hub.find(@schedule['origin_hub']['id'])
-    @destination_hub = Hub.find(@schedule['destination_hub']['id'])
+    @origin_hub      = Hub.find_by(id: @schedule['origin_hub']['id'], sandbox: sandbox)
+    @destination_hub = Hub.find_by(id: @schedule['destination_hub']['id'], sandbox: sandbox)
     if shipment.has_pre_carriage
       trucking_seconds = shipment.trucking['pre_carriage']['trucking_time_in_seconds'].seconds
       shipment.planned_pickup_date = shipment.trip.closing_date - 1.day - trucking_seconds
@@ -487,7 +535,11 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       cargos = cargo_items
     end
 
-    shipment.transport_category = shipment.trip.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey)
+    shipment.transport_category = shipment
+                                  .trip
+                                  .vehicle
+                                  .transport_categories
+                                  .find_by(name: 'any', cargo_class: cargoKey, sandbox: sandbox)
     shipment.save!
     origin_customs_fee = @origin_hub.get_customs(
       customsKey,
@@ -575,14 +627,15 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     }
   end
 
-  def self.reuse_booking_data(id, _user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    old_shipment = Shipment.find(id)
+  def self.reuse_booking_data(id, _user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    old_shipment = Shipment.find_by(id: id, sandbox: sandbox)
     new_shipment_json = old_shipment.clone.as_json
     ids_to_remove = %w(has_pre_carriage has_on_carriage id selected_day)
     ids_to_remove.each do |rid|
       new_shipment_json.delete(rid)
     end
     new_shipment_json['selected_day'] = DateTime.new + 5.days
+    new_shipment_json['sandbox'] = sandbox
     new_shipment = Shipment.create!(new_shipment_json)
     if old_shipment.aggregated_cargo
       reuse_aggregrated_cargo(new_shipment, old_shipment.aggregated_cargo)
@@ -594,8 +647,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       shipment: new_shipment.as_json
     }
 
-    itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-      Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
+    itinerary_ids = current_user.tenant.itineraries.where(sandbox: sandbox).ids.reject do |it_id|
+      Pricing.where(itinerary_id: it_id, sandbox: sandbox).for_load_type(load_type).empty?
     end
 
     routes_data = Route.detailed_hashes_from_itinerary_ids(
@@ -613,13 +666,13 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
-  def self.search_contacts(contact_params, current_user)
+  def self.search_contacts(contact_params, current_user, sandbox = nil)
     contact_email = contact_params['email']
-    existing_contact = current_user.contacts.where(email: contact_email).first
+    existing_contact = current_user.contacts.where(email: contact_email, sandbox: sandbox).first
     if existing_contact
       return existing_contact
     else
-      current_user.contacts.create(contact_params(resource, contact_address.id))
+      current_user.contacts.create(contact_params(resource, contact_address.id).merge(sandbox: sandbox))
     end
   end
 
@@ -641,16 +694,21 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def self.view_more_schedules(trip_id, delta) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def self.view_more_schedules(trip_id, delta, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     trip = Trip.find(trip_id)
-    trips = delta.to_i.positive? ? trip.later_trips : trip.earlier_trips.sort_by(&:start_date)
+    trips = if delta.to_i.positive?
+              trip.later_trips(sandbox: sandbox)
+            else
+              trip.earlier_trips(sandbox: sandbox).sort_by(&:start_date)
+            end
     final_results = false
 
-    trips = trip.last_trips.sort_by(&:start_date) if trips.empty? && delta.to_i.positive?
+    trips = trip.last_trips(sandbox: sandbox).sort_by(&:start_date) if trips.empty? && delta.to_i.positive?
 
     final_results = true if (trips.length < 5 || trips.empty?) && delta.to_i.positive?
-
-    trips = trip.earliest_trips.sort_by(&:start_date) if (trips.length < 5 || trips.empty?) && !delta.to_i.positive?
+    if (trips.length < 5 || trips.empty?) && !delta.to_i.positive?
+      trips = trip.earliest_trips(sandbox: sandbox).sort_by(&:start_date)
+    end
 
     {
       schedules: Legacy::Schedule.from_trips(trips),
@@ -667,8 +725,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     shipment.aggregated_cargo.create!(aggregated_cargo_json)
   end
 
-  def self.save_pdf_quotes(shipment, tenant, schedules)
-    main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
+  def self.save_pdf_quotes(shipment, tenant, schedules, sandbox = nil)
+    main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules, sandbox)
     @quotes = main_quote.shipments.map(&:selected_offer)
     logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
     send_on_download = ::Tenants::ScopeService.new(target: @user).fetch(:send_email_on_quote_download)
@@ -683,35 +741,36 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       logo: logo,
       quotation: main_quote,
       name: 'quotation',
-      remarks: Remark.where(tenant_id: tenant.id).order(order: :asc)
+      remarks: Remark.where(tenant_id: tenant.id, sandbox: sandbox).order(order: :asc)
     )
     quotation.generate
   end
 
-  def self.save_and_send_quotes(shipment, schedules, email)
-    main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
-    QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote).deliver_later
-    send_on_quote = ::Tenants::ScopeService.new(target: @user).fetch(:send_email_on_quote_email)
-    QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_quote
+  def self.save_and_send_quotes(shipment, schedules, email, sandbox = nil)
+    main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules, sandbox)
+    QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote, sandbox).deliver_later
+    send_on_quote = ::Tenants::ScopeService.new(target: @user, sandbox: sandbox).fetch(:send_email_on_quote_email)
+    QuoteMailer.quotation_admin_email(main_quote, sandbox).deliver_later if send_on_quote
   end
 
-  def self.tenant_notification_email(user, shipment)
-    ShipmentMailer.tenant_notification(user, shipment).deliver_later
+  def self.tenant_notification_email(user, shipment, sandbox = nil)
+    ShipmentMailer.tenant_notification(user, shipment, sandbox).deliver_later
   end
 
-  def self.shipper_notification_email(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment).deliver_later
+  def self.shipper_notification_email(user, shipment, sandbox = nil)
+    ShipmentMailer.shipper_notification(user, shipment, sandbox).deliver_later
   end
 
-  def self.shipper_welcome_email(user, shipment)
+  def self.shipper_welcome_email(user, shipment, sandbox = nil)
     no_welcome_content = Content.where(tenant_id: user.tenant_id, component: 'WelcomeMail').empty?
-    WelcomeMailer.welcome_email(user, shipment).deliver_later unless no_welcome_content
+    WelcomeMailer.welcome_email(user, shipment, sandbox).deliver_later unless no_welcome_content
   end
 
-  def self.shipper_confirmation_email(user, shipment)
+  def self.shipper_confirmation_email(user, shipment, sandbox = nil)
     ShipmentMailer.shipper_confirmation(
       user,
-      shipment
+      shipment,
+      sandbox
     ).deliver_later
   end
 
@@ -735,7 +794,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
   end
 
-  def self.create_shipment_from_result(main_quote:, original_shipment:, result:) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+  def self.create_shipment_from_result(main_quote:, original_shipment:, result:, sandbox: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
     schedule = result['schedules'].first
     trip = Trip.find(schedule['trip_id'])
     on_carriage_hash = (original_shipment.trucking['on_carriage'] if result['quote']['trucking_on'])
@@ -761,7 +820,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       load_type: original_shipment.load_type,
       itinerary_id: trip.itinerary_id,
       desired_start_date: original_shipment.desired_start_date,
-      meta: original_shipment.meta
+      meta: original_shipment.meta,
+      sandbox: sandbox
     )
 
     new_shipment.meta['pricing_rate_data'] = result[:meta][:pricing_rate_data]

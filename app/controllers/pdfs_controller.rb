@@ -5,7 +5,7 @@ class PdfsController < ApplicationController
   skip_before_action :require_non_guest_authentication!
 
   def bill_of_lading
-    shipment = current_user.shipments.find(params[:shipment_id])
+    shipment = current_user.shipments.find_by(id: params[:shipment_id], sandbox: @sandbox)
 
     return unless shipment
 

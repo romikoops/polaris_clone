@@ -243,7 +243,7 @@ class NavBar extends Component {
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
           >
             {' '}
-            {`${capitalize(users.clientPricings.client.first_name)}  ${capitalize(users.clientPricings.client.last_name)}`}
+            {/* {`${capitalize(users.clientPricings.client.first_name)}  ${capitalize(users.clientPricings.client.last_name)}`} */}
           </div>
         )
 
@@ -292,7 +292,6 @@ class NavBar extends Component {
       <i className="fa fa-home clip" style={iconStyle} />
       {' '}
     </div>)
-
     pathPieces.forEach((br, i) => {
       if (br !== 'view' && i > 0) {
         breadcrumbs.push(<div className="flex-none layout-row layout-align-center-center pointy">

@@ -3,7 +3,7 @@
 module Tenants
   class User < ApplicationRecord
     include ::Tenants::Legacy
-
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :legacy, class_name: 'Legacy::User', optional: true
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
     belongs_to :tenant, optional: true
@@ -65,4 +65,5 @@ end
 #  legacy_id                           :integer
 #  tenant_id                           :uuid
 #  company_id                          :uuid
+#  sandbox_id                          :uuid
 #

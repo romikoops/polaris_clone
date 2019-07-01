@@ -3,6 +3,7 @@
 module Trucking
   class Coverage < ApplicationRecord
     belongs_to :hub, class_name: 'Legacy::Hub'
+    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_many :truckings, through: :hub
 
     before_validation :generate_bounds
@@ -55,4 +56,5 @@ end
 #  bounds     :geometry({:srid= geometry, 0
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  sandbox_id :uuid
 #

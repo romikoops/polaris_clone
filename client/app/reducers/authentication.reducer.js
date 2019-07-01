@@ -88,6 +88,12 @@ export default function (state = initialState, action) {
 
       return newState
     }
+
+    case authenticationConstants.TOGGLE_SANDBOX_SUCCESS:
+      return {
+        ...state,
+        user: action.payload
+      }
     case authenticationConstants.REGISTRATION_REQUEST:
       return {
         ...state,

@@ -9,9 +9,7 @@ FactoryBot.define do
       filter = tenant_vehicle.as_json(only: %i(mode_of_transport name))
       existing_vehicle = Vehicle.where(filter).first
       tenant_vehicle.update(vehicle: existing_vehicle ||
-        create(:vehicle,
-               name: filter['name'],
-               mode_of_transport: filter['mode_of_transport']))
+        create(:vehicle, name: filter['name'], mode_of_transport: filter['mode_of_transport']))
     end
   end
 end
@@ -29,4 +27,5 @@ end
 #  updated_at        :datetime         not null
 #  name              :string
 #  carrier_id        :integer
+#  sandbox_id        :uuid
 #
