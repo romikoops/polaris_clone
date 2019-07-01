@@ -153,6 +153,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                          " (Chargeable&nbsp;Weight: #{chargeable_weight_cargo} kg)"
                        end
         shipment.cargo_units.each do |hash|
+          hash.set_chargeable_weight! unless hash[:chargeable_weight]
           single_string = if show_volume
                             "#{format('%.3f', (hash[:chargeable_weight] / 1000))} m<sup>3</sup>"
                           else

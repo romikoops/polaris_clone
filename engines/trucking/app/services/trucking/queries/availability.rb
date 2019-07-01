@@ -61,6 +61,10 @@ module Trucking
                                 carriage: @carriage,
                                 sandbox_id: @sandbox&.id
                               )
+                              .where(cargo_class_condition)
+                              .where(hubs_condition)
+                              .where(truck_type_condition)
+                              .where(nexuses_condition)
       end
 
       def truck_type_condition

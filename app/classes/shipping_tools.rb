@@ -97,7 +97,6 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
             sandbox: sandbox,
             itinerary_id: id,
             load_type: load_type,
-            disabled: false,
             internal: false
           ).empty?
         end

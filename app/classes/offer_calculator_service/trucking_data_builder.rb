@@ -31,14 +31,12 @@ module OfferCalculatorService
         distance = calc_distance(address, hub)
 
         trucking_pricings = trucking_pricing_finder.perform(hub.id, distance)
-
         trucking_charge_data = data_for_trucking_charges(trucking_pricings, distance)
         next if trucking_charge_data.empty?
 
         obj[hub.id] = { trucking_charge_data: trucking_charge_data }
       end
       valid_object = validate_data_for_hubs(data)
-
       raise ApplicationError::MissingTruckingData if valid_object.empty?
 
       valid_object
