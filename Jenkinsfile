@@ -26,7 +26,7 @@ withPipeline(timeout: 120) {
     ]
   ) { label ->
     withNode(label) {
-      stage('Checkout') {
+      withStage('Checkout') {
         checkoutScm()
 
         // Stash for docker
@@ -35,7 +35,7 @@ withPipeline(timeout: 120) {
         stash(name: 'qa', includes: 'qa/**/*')
       }
 
-      stage('Prepare') {
+      withStage('Prepare') {
         milestone()
 
         def jobs = [:]
@@ -107,63 +107,38 @@ withPipeline(timeout: 120) {
 
       def error = null
 
-      stage('Test') {
+      withStage('Test') {
         milestone()
-        try {
-          parallel(
-            api: {
-              container('api') {
-                retry(2) {
-                  withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}"]) {
-                    try {
-                      sh(label: 'Test', script: "scripts/test --no-prepare --test")
-                    } catch (err) {
-                      throw err
-                    } finally {
-                      junit allowEmptyResults: true, testResults: '**/rspec.xml'
-                      publishCoverage adapters: [istanbulCoberturaAdapter('**/coverage.xml')]
-                    }
-                  }
+
+        parallel(
+          api: {
+            container('api') {
+              withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}"]) {
+                try {
+                  sh(label: 'Test', script: "scripts/test --no-prepare --test")
+                } catch (err) {
+                  throw err
+                } finally {
+                  junit allowEmptyResults: true, testResults: '**/rspec.xml'
+                  publishCoverage adapters: [istanbulCoberturaAdapter('**/coverage.xml')]
                 }
               }
-            },
+            }
+          },
 
-            client: {
-              container('client') {
-                retry(2) {
-                  try {
-                    dir('client') { sh(label: 'Run Tests', script: 'npm run test:ci') }
-                  } catch (err) {
-                    throw err
-                  } finally {
-                    junit allowEmptyResults: true, testResults: '**/junit.xml'
-                    publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
-                  }
-                }
+          client: {
+            container('client') {
+              try {
+                dir('client') { sh(label: 'Run Tests', script: 'npm run test:ci') }
+              } catch (err) {
+                throw err
+              } finally {
+                junit allowEmptyResults: true, testResults: '**/junit.xml'
+                publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
               }
-            },
-
-            analyse: { container('api') { codestyle.analyse(eslint: 'client', rubocop: true) } }
-          )
-        } catch (err) {
-          error = err
-        }
-
-        if (env.CHANGE_ID) {
-          try {
-            parallel(
-              danger: { container('api') { withEnv(["LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor"]) { codestyle.danger() } } },
-              pronto: { container('api') { withEnv(["LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor"]) { codestyle.pronto() } } }
-            )
-          } catch (err) {
-            // error = err
+            }
           }
-        }
-      }
-
-      if (error) {
-        currentBuild.result = 'FAILURE'
-        throw error
+        )
       }
     }
   }
@@ -195,7 +170,7 @@ withPipeline(timeout: 120) {
     }
   }
 
-  stage('Prepare Deploy') {
+  withStage('Prepare Deploy') {
     lock(label: "${env.GIT_BRANCH}-build", inversePrecedence: true) {
       inPod { label ->
         withNode(label) {
@@ -208,7 +183,7 @@ withPipeline(timeout: 120) {
   }
 
   if (env.CHANGE_ID) {
-    stage('Review') {
+    withStage('Review') {
       milestone()
 
       env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG
@@ -226,7 +201,7 @@ withPipeline(timeout: 120) {
       }
     }
 
-    stage('QA') {
+    withStage('QA') {
       milestone()
 
       build(
