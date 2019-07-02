@@ -285,7 +285,7 @@ class Admin::MarginsController < ApplicationController
         )
       when 'tenant'
         query = query.where(
-          applicable: Tenants::Tenant.find_by(legacy_id: params[:target_id], sandbox: @sandbox)
+          applicable: Tenants::Tenant.find_by(legacy_id: params[:target_id])
         )
       when 'itinerary'
         query = query.where(itinerary_id: params[:target_id])
