@@ -2,33 +2,14 @@
 
 namespace :db do
   APP_ROOT = Pathname.new(File.expand_path('../../../', __dir__))
+  PROJECT = 'itsmycargo-main'
   BUCKET = 'itsmycargo-main-engineering-resources'
-  SEED_FILE = APP_ROOT.join('tmp/full_anon.sqlc')
-  SEED_FILE_NAME = 'db/full_anon.sql.gz'
-
-  desc 'Reloads database (truncate and pull latest dump)'
-  task :reload do
-    Rake::Task['db:import:fetch'].invoke
-
-    Rake::Task['db:drop'].invoke
-    Rake::Task['db:create'].invoke
-
-    Rake::Task['db:import:restore'].invoke
-
-    Rake::Task['db:import:clean'].invoke
-
-    Rake::Task['db:migrate'].invoke unless ENV['SKIP_MIGRATE']
-  end
-
-  desc 'Import latest Development Seed database'
-  task :import do
-    Rake::Task['db:import:fetch'].invoke
-    Rake::Task['db:import:restore'].invoke
-    Rake::Task['db:import:clean'].invoke
-  end
+  SEED_FILE = APP_ROOT.join('tmp/seed.sql.gz')
 
   namespace :import do
-    task :fetch do
+    task :fetch, [:profile] do |t, args|
+      seed_profile = args[:profile]
+
       DateHelper = Class.new { include ActionView::Helpers::DateHelper }.new
 
       puts 'Downloading latest Database Seed file...'
@@ -37,10 +18,10 @@ namespace :db do
         require 'google/cloud/storage'
 
         # Instantiates a client
-        storage = Google::Cloud::Storage.new(project: 'itsmycargo-main')
+        storage = Google::Cloud::Storage.new(project: PROJECT)
 
         bucket = storage.bucket(BUCKET)
-        file = bucket.file(SEED_FILE_NAME)
+        file = bucket.file("db/#{args[:profile]}.sql.gz")
 
         # Warn if seed file is out-of-date
         puts ''
@@ -55,7 +36,7 @@ namespace :db do
 
         # Speed up download if possible
         if (gsutil = `which gsutil`.strip)
-          system(gsutil, 'cp', "gs://#{BUCKET}/#{SEED_FILE_NAME}", SEED_FILE.to_s)
+          system(gsutil, 'cp', "gs://#{BUCKET}/#{"db/#{args[:profile]}.sql.gz"}", SEED_FILE.to_s)
         else
           puts ' *** For faster download, please install gsutil ***'
           file.download(SEED_FILE.to_s)
@@ -64,7 +45,7 @@ namespace :db do
         puts '  Done.'
       rescue Google::Cloud::PermissionDeniedError
         puts ''
-        puts 'Cannot access GCS Bucket `itsmycargo-main-engineering-resources`'
+        puts "Cannot access GCS Bucket `#{BUCKET}`"
         puts ''
         puts 'Please run following command:'
         puts ''

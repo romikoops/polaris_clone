@@ -65,6 +65,5 @@ end
 #  legacy_id                           :integer
 #  tenant_id                           :uuid
 #  company_id                          :uuid
-#  deleted_at                          :datetime
 #  sandbox_id                          :uuid
 #

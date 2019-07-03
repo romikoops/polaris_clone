@@ -62,6 +62,5 @@ end
 #  updated_at  :datetime         not null
 #  external_id :string
 #  phone       :string
-#  deleted_at  :datetime
 #  sandbox_id  :uuid
 #

@@ -146,19 +146,29 @@ withPipeline(timeout: 120) {
   def prepareJobs = [:]
 
   // Always build images
-  prepareJobs['images/qa'] = { dockerBuild(dir: 'qa/', image: "${jobName()}/qa", memory: 1500, stash: 'qa') }
-  prepareJobs['images/backend'] = { dockerBuild(dir: '.', image: "${jobName()}/backend", memory: 1500, stash: 'backend') }
+  prepareJobs['images/qa'] = {
+    withRetry {
+      dockerBuild(dir: 'qa/', image: "${jobName()}/qa", memory: 1500, stash: 'qa')
+    }
+  }
+  prepareJobs['images/backend'] = {
+    withRetry {
+      dockerBuild(dir: '.', image: "${jobName()}/backend", memory: 1500, stash: 'backend')
+    }
+  }
   prepareJobs['images/frontend'] = {
-    dockerBuild(
-      dir: 'client/',
-      image: "${jobName()}/frontend",
-      memory: 2000,
-      args: [
-        RELEASE: env.COMMIT_SHA,
-        SENTRY_AUTH_TOKEN: '099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95'
-      ],
-      stash: 'frontend'
-    )
+    withRetry {
+      dockerBuild(
+        dir: 'client/',
+        image: "${jobName()}/frontend",
+        memory: 2000,
+        args: [
+          RELEASE: env.COMMIT_SHA,
+          SENTRY_AUTH_TOKEN: '099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95'
+        ],
+        stash: 'frontend'
+      )
+    }
   }
 
   if (env.CHANGE_ID) {

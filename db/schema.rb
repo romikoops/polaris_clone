@@ -1085,7 +1085,6 @@ ActiveRecord::Schema.define(version: 2019_07_01_163919) do
     t.datetime "updated_at", null: false
     t.string "external_id"
     t.string "phone"
-    t.datetime "deleted_at"
     t.uuid "sandbox_id"
   end
 
@@ -1155,7 +1154,6 @@ ActiveRecord::Schema.define(version: 2019_07_01_163919) do
     t.integer "legacy_id"
     t.uuid "tenant_id"
     t.uuid "company_id"
-    t.datetime "deleted_at"
     t.uuid "sandbox_id"
     t.index ["activation_token"], name: "index_tenants_users_on_activation_token"
     t.index ["email", "tenant_id"], name: "index_tenants_users_on_email_and_tenant_id", unique: true
