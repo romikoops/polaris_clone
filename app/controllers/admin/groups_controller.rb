@@ -78,7 +78,7 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
   end
 
   def show
-    group = ::Tenants::Group.find(params[:id], sandbox: @sandbox)
+    group = ::Tenants::Group.find_by(id: params[:id], sandbox: @sandbox)
     response_handler(for_show_json(group))
   end
 

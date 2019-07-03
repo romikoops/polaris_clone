@@ -142,12 +142,6 @@ class Header extends Component {
           fontAwesomeIcon: 'fa-cog',
           key: 'settings'
         },
-        // {
-        //   select: this.toggleSandbox,
-        //   text: sandbox ? t('nav:deactivateSandbox') : t('nav:activateSandbox'),
-        //   fontAwesomeIcon: 'fa-superpowers',
-        //   key: 'sandbox'
-        // },
         {
           url: '/signout',
           text: t('nav:signOut'),
@@ -161,12 +155,6 @@ class Header extends Component {
           text: t('nav:account'),
           fontAwesomeIcon: 'fa-cog',
           key: 'settings'
-        },
-        {
-          select: this.toggleSandbox,
-          text: sandbox ? t('nav:activateSandbox') : t('nav:deactivateSandbox'),
-          fontAwesomeIcon: 'fa-superpowers',
-          key: 'sandbox'
         },
         {
           url: '/signout',
