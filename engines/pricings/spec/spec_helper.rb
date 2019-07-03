@@ -5,9 +5,9 @@ require 'simplecov'
 
 SimpleCov.start 'rails' do
   minimum_coverage 91
+  command_name 'engines/pricings'
 
   if ENV['COVERAGE_DIR']
-    command_name 'engines/pricings'
     coverage_dir(ENV['COVERAGE_DIR'])
     merge_timeout 3600
   end

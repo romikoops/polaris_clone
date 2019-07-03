@@ -37,16 +37,6 @@ RSpec.describe TruckingDestination, type: :model do
           }.to raise_error(ArgumentError)
         end
       end
-
-      context 'main tests' do
-        it 'finds correct trucking destination', pending: 'Outdated spec' do
-          found_trucking_destination = described_class.find_via_distance_to_hub(
-            hub: hub, latitude: latitude, longitude: longitude
-          ).first
-
-          expect(found_trucking_destination).to eq(trucking_destination)
-        end
-      end
     end
   end
 end

@@ -6,9 +6,9 @@ SimpleCov.start 'rails' do
   add_group 'Validators', 'app/validators'
 
   minimum_coverage 14
+  command_name 'app'
 
   if ENV['COVERAGE_DIR']
-    command_name 'app'
     coverage_dir(ENV['COVERAGE_DIR'])
     merge_timeout 3600
   end

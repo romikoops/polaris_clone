@@ -34,15 +34,17 @@ end.parse!
 APP_ROOT = Pathname.new(File.expand_path('..', __dir__))
 
 # Set up environment
-ENV['SEED'] ||= rand(0xFFFF).to_s
+def set_environment
+  ENV['SEED'] ||= rand(0xFFFF).to_s
 
-ENV['CI'] ||= nil
-ENV['DISABLE_PROFILE'] ||= ENV['CI']
-ENV['COVERAGE'] ||= 'true'
-ENV['COVERAGE_DIR'] ||= APP_ROOT.join('coverage').to_s
-ENV['DISABLE_PROFILE'] ||= '1'
-ENV['RAILS_ENV'] ||= 'test'
-ENV['SPEC_OPTS'] ||= "--order rand:#{ENV['SEED']} --format progress --color #{(ENV['CI'] ? '--format RspecJunitFormatter --out rspec.xml' : '')}"
+  ENV['CI'] ||= nil
+  ENV['DISABLE_PROFILE'] ||= ENV['CI']
+  ENV['COVERAGE'] ||= 'true'
+  ENV['COVERAGE_DIR'] ||= APP_ROOT.join('coverage').to_s
+  ENV['DISABLE_PROFILE'] ||= '1'
+  ENV['RAILS_ENV'] ||= 'test'
+  ENV['SPEC_OPTS'] ||= "--order rand:#{ENV['SEED']} --format progress --color #{(ENV['CI'] ? '--format RspecJunitFormatter --out rspec.xml' : '')}"
+end
 
 # Set up coloring
 def red(msg)
@@ -67,7 +69,8 @@ def runner(dir:, name:)
     code = true
     if File.directory?('spec')
       puts yellow("--- Running specs for #{name} ---")
-      Bundler.with_clean_env do
+      Bundler.with_original_env do
+        set_environment
         code &= system('bin/rspec')
       end
     end
@@ -104,6 +107,8 @@ COMPONENTS['app'] = APP_ROOT
 
 # Set up test suite
 @results = {}
+
+set_environment
 
 puts '     Backend Test Suite'
 puts '============================'

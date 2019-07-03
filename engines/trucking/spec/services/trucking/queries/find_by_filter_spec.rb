@@ -172,36 +172,6 @@ module Trucking
                                 rate: trucking_rate)
             end
 
-            it 'finds the correct trucking_rate with avulsed address filters', pending: 'Outdated spec' do
-              trucking_rates = described_class.new(
-                klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage,   country_code: country_code,
-                latitude: latitude,   longitude: longitude
-              ).perform
-
-              expect(trucking_rates).to match([trucking_rate])
-            end
-
-            it 'finds the correct trucking_rate with address object filter', pending: 'Outdated spec' do
-              trucking_rates = described_class.new(
-                klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage, country_code: country_code,
-                address: address
-              ).perform
-
-              expect(trucking_rates).to match([trucking_rate])
-            end
-
-            it 'finds the correct trucking_rate with cargo_class filter', pending: 'Outdated spec' do
-              trucking_rates = described_class.new(
-                klass: Rate, tenant_id: tenant.id, load_type: load_type,
-                carriage: carriage, country_code: country_code,
-                address: address, cargo_class: 'lcl'
-              ).perform
-
-              expect(trucking_rates).to match([trucking_rate])
-            end
-
             it 'return empty collection if cargo_class filter does not match any item in db' do
               trucking_rates = described_class.new(
                 klass: Rate, tenant_id: tenant.id, load_type: load_type,

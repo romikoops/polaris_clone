@@ -5,9 +5,9 @@ require 'bundler/setup'
 require 'simplecov'
 SimpleCov.start do
   minimum_coverage 98 unless ENV['SKIP_COVERAGE']
+  command_name 'lib/charge_calculator'
 
   if ENV['COVERAGE_DIR']
-    command_name 'lib/charge_calculator'
     coverage_dir(ENV['COVERAGE_DIR'])
     merge_timeout 3600
   end

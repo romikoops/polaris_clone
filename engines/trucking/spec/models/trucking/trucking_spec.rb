@@ -150,36 +150,6 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
       context 'distance identifier' do
         let!(:km_trucking) { FactoryBot.create(:trucking_trucking, hub: hub, tenant: tenant, location: trucking_location_distance) }
 
-        it 'finds the correct trucking_rate with avulsed address filters', pending: 'Outdated spec' do
-          trucking_rates = ::Trucking::Trucking.find_by_filter(
-            tenant_id: tenant.id, load_type: load_type,
-            carriage: carriage,   country_code: country_code,
-            latitude: latitude,   longitude: longitude
-          )
-
-          expect(trucking_rates).to match([km_trucking])
-        end
-
-        it 'finds the correct trucking_rate with address object filter', pending: 'Outdated spec' do
-          trucking_rates = ::Trucking::Trucking.find_by_filter(
-            tenant_id: tenant.id, load_type: load_type,
-            carriage: carriage,   country_code: country_code,
-            address: address
-          )
-
-          expect(trucking_rates).to match([km_trucking])
-        end
-
-        it 'finds the correct trucking_rate with cargo_class filter', pending: 'Outdated spec' do
-          trucking_rates = ::Trucking::Trucking.find_by_filter(
-            tenant_id: tenant.id, load_type: load_type,
-            carriage: carriage,   country_code: country_code,
-            address: address, cargo_class: 'lcl'
-          )
-
-          expect(trucking_rates).to match([km_trucking])
-        end
-
         it 'return empty collection if cargo_class filter does not match any item in db' do
           trucking_rates = ::Trucking::Trucking.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,

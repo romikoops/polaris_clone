@@ -5,9 +5,9 @@ require 'simplecov'
 
 SimpleCov.start 'rails' do
   minimum_coverage 98 unless ENV['SKIP_COVERAGE']
+  command_name 'engines/admiralty_tenants'
 
   if ENV['COVERAGE_DIR']
-    command_name 'engines/admiralty_tenants'
     coverage_dir(ENV['COVERAGE_DIR'])
     merge_timeout 3600
   end
