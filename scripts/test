@@ -134,7 +134,7 @@ if CONFIG[:test]
 
   # Always ensure we have clean database
   tasks = {
-    'test database' => 'RAILS_ENV=development bin/rails db:test:prepare'
+    'test database' => 'RAILS_ENV=test bin/rails db:test:prepare'
   }
 
   tasks.each do |label, cmd|
