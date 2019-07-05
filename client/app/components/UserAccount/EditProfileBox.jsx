@@ -7,8 +7,6 @@ import { NamedSelect } from '../NamedSelect/NamedSelect'
 const EditProfileBox = ({
   user,
   handleChange,
-  onSave,
-  close,
   style,
   theme,
   currentCurrency,
@@ -19,23 +17,6 @@ const EditProfileBox = ({
   scope
 }) => !hide && (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
-    <div className="layout-row flex-90" />
-    <div className="flex-10 layout-row layout-align-end-center layout-wrap">
-      <span className="layout-row flex-100 layout-align-center-stretch">
-        <div
-          onClick={onSave}
-          className={`layout-row flex-50 ${styles.save} layout-align-center-center`}
-        >
-          <i className="fa fa-check" />
-        </div>
-        <div
-          onClick={close}
-          className={`layout-row flex-50 ${styles.cancel} layout-align-center-center`}
-        >
-          <i className="fa fa-times" />
-        </div>
-      </span>
-    </div>
     <div
       className={`flex-100 layout-row layout-align-start-start layout-wrap
       ${styles.margin_top} margin_bottom`}

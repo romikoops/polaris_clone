@@ -708,7 +708,8 @@
     "contactEmail": "Contact via email",
     "userEmail": "User Email",
     "checkEmailForPassword": "Please check your email for a link to reset your ItsMyCargo Account password.",
-    "addresses": "Addresses"
+    "addresses": "Addresses",
+    "editProfile": "Edit Profile"
   },
   "cargo": {
     "consolidatedCargoRate": "Consolidated Freight Rate",
@@ -994,6 +995,8 @@
     "changeMyPassword": "Change my Password",
     "checkForPassword": "Please check your email for a link to change your password.",
     "yourData": "Your Data",
+    "currency": "Currency",
+    "yourProfile": "Your Profile",
     "companyDetails": "Company Details",
     "userBilling": "User Billing",
     "accountConfirmation": "Hello, {{firstName}}, your account is now confirmed.",

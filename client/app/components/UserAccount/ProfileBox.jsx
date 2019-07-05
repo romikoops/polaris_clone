@@ -3,13 +3,13 @@ import { withNamespaces } from 'react-i18next'
 import styles from './UserAccount.scss'
 
 const ProfileBox = ({
-  user, style, edit, t, hide, hideEdit
+  user, style, t, hide
 }) => !hide && (
   <div
     className={`flex-100 layout-row layout-align-start-start
     layout-wrap section_padding relative ${styles.content_details}`}
   >
-    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
           {t('user:fullName')}
@@ -21,7 +21,7 @@ const ProfileBox = ({
         </p>
       </div>
     </div>
-    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
           {t('user:email')}
@@ -33,7 +33,7 @@ const ProfileBox = ({
         </p>
       </div>
     </div>
-    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
           {t('user:phone')}
@@ -45,7 +45,7 @@ const ProfileBox = ({
         </p>
       </div>
     </div>
-    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
           {t('user:company')}
@@ -57,7 +57,7 @@ const ProfileBox = ({
         </p>
       </div>
     </div>
-    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
           {t('user:vatNo')}
@@ -65,19 +65,22 @@ const ProfileBox = ({
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
         <p className="flex-none">
-          {user.vat_number}
+          {user.vat_number || '-'}
         </p>
       </div>
     </div>
-
-    {
-      !hideEdit && (
-        <div className={`flex-none layout-row layout-align-center-center ${styles.profile_edit_icon}`} onClick={edit}>
-          <i className="fa fa-pencil flex-none" />
-        </div>
-      )
-    }
-
+    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-start-start layout-wrap">
+      <div className="flex-100 layout-row layout-align-start-start ">
+        <sup style={style} className="clip flex-none">
+          {t('user:currency')}
+        </sup>
+      </div>
+      <div className="flex-100 layout-row layout-align-start-center ">
+        <p className="flex-none">
+          {user.currency || '-'}
+        </p>
+      </div>
+    </div>
   </div>
 )
 

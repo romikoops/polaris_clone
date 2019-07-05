@@ -304,7 +304,7 @@ exports[`shallow render 1`] = `
             />
           </div>
         }
-        contentClassName="layout-row flex"
+        contentClassName="layout-row layout-wrap flex"
         flex={0}
         flexGtLg={0}
         flexMd={0}
@@ -313,8 +313,22 @@ exports[`shallow render 1`] = `
         onClick={null}
         padding={false}
         style={Object {}}
-        title=""
-        titleAction={false}
+        title="Your Profile"
+        titleAction={
+          <div
+            className="flex-20 layout-row layout-align-space-around-center pointy edit_button"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-pencil flex-none"
+            />
+            <p
+              className="flex-none"
+            >
+              Edit Profile
+            </p>
+          </div>
+        }
         wrapperClassName="flex layout-row layout-align-start-center"
       />
       <GreyBox
@@ -462,7 +476,7 @@ exports[`shallow render 1`] = `
             </div>
           </div>
         }
-        contentClassName="layout-row layout-wrap flex layout-align-start-start"
+        contentClassName="layout-row layout-wrap flex-100 layout-align-start-start"
         flex={0}
         flexGtLg={0}
         flexMd={0}

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { isEmpty } from 'lodash'
 import { v4 as uuidV4 } from 'uuid'
 import styles from './UserAccount.scss'
 import ProfileBox from './ProfileBox'
@@ -51,7 +52,11 @@ class UserProfile extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { authenticationDispatch } = this.props
+    const { authenticationDispatch, user } = this.props
+    const { currentCurrency } = this.state
+    if (isEmpty(currentCurrency)) {
+      this.setState({ currentCurrency: currencyOptions.filter(c => c.label === user.currency)[0] })
+    }
 
     if (nextProps.authentication.passwordEmailSent) {
       setTimeout(() => {
@@ -143,6 +148,36 @@ class UserProfile extends Component {
       ? <DeleteAccountModal closeModal={this.closeDeleteAccountModal} tenant={tenant} user={user} theme={theme} />
       : ''
 
+    const editButton = editBool
+      ? (
+        <div className={`flex-30 layout-row layout-align-end-center layout-wrap ${styles.edit_button}`}>
+          <span className="layout-row flex-100 layout-align-center-stretch">
+            <div
+              onClick={this.saveEdit}
+              className={`layout-row flex-50 ${styles.save} layout-align-space-around-center`}
+            >
+              <i className="fa fa-check flex-none" />
+              <p className="flex-none">{t('common:save')}</p>
+            </div>
+            <div
+              onClick={this.closeEdit}
+              className={`layout-row flex-50 ${styles.cancel} layout-align-space-around-center`}
+            >
+              <i className="fa fa-times flex-none" />
+              <p className="flex-none">{t('common:close')}</p>
+            </div>
+          </span>
+        </div>
+      ) : (
+        <div
+          className={`flex-20 layout-row layout-align-space-around-center pointy ${styles.edit_button}`}
+          onClick={this.editProfile}
+        >
+          <i className="fa fa-pencil flex-none" />
+          <p className="flex-none">{t('account:editProfile')}</p>
+        </div>
+      )
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding">
         {deleteAccountModal}
@@ -169,8 +204,10 @@ class UserProfile extends Component {
         >
           <div className="flex-100 layout-row layout-wrap layout-align-space-between-stretch">
             <GreyBox
+              title={t('user:yourProfile')}
+              titleAction={editButton}
               wrapperClassName="flex layout-row layout-align-start-center"
-              contentClassName="layout-row flex"
+              contentClassName="layout-row layout-wrap flex"
               content={(
                 <div className="layout-row flex-100">
                   <EditProfileBox
@@ -203,7 +240,7 @@ class UserProfile extends Component {
             <GreyBox
               title={t('user:yourData')}
               wrapperClassName="flex-gt-md-35 offset-gt-md-5 flex-100 layout-row layout-align-stretch"
-              contentClassName="layout-row layout-wrap flex layout-align-start-start"
+              contentClassName="layout-row layout-wrap flex-100 layout-align-start-start"
               content={(
                 <div className={`flex-100 layout-row layout-wrap ${styles.conditions_box}`}>
                   <div className="flex-100">
@@ -289,10 +326,10 @@ class UserProfile extends Component {
                 </div>
               </div>
               {
-                addresses.map(address => (
+                addresses.map(addressObj => (
                   <AdminAddressTile
                     key={uuidV4()}
-                    address={address}
+                    address={addressObj.address}
                     theme={theme}
                     client={user}
                     showDelete={false}

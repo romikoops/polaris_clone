@@ -160,6 +160,14 @@
   .edit_icon {
     cursor: pointer;
   }
+  .edit_button {
+    cursor: pointer;
+    background: transparent;
+    p, i {
+      background: transparent;
+      font-size: 14px;
+    }
+  }
   .profile_edit_icon {
     position: absolute;
     top: 10px;

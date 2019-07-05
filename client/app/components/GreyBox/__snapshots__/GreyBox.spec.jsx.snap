@@ -16,10 +16,10 @@ exports[`flex > 0 1`] = `
     className="CONTENT_CLASSNAME"
   >
     <div
-      className="layout-align-space-between-center flex-100 layout-row"
+      className="layout-align-space-between-center flex-100 layout-row title_grey"
     >
       <p
-        className="layout-align-start-center flex layout-row title_grey"
+        className="layout-align-start-center flex layout-row "
       >
         TITLE
       </p>
@@ -45,10 +45,10 @@ exports[`flexGtLg > 0 1`] = `
     className="CONTENT_CLASSNAME"
   >
     <div
-      className="layout-align-space-between-center flex-100 layout-row"
+      className="layout-align-space-between-center flex-100 layout-row title_grey"
     >
       <p
-        className="layout-align-start-center flex layout-row title_grey"
+        className="layout-align-start-center flex layout-row "
       >
         TITLE
       </p>
@@ -74,10 +74,10 @@ exports[`flexMd > 0 1`] = `
     className="CONTENT_CLASSNAME"
   >
     <div
-      className="layout-align-space-between-center flex-100 layout-row"
+      className="layout-align-space-between-center flex-100 layout-row title_grey"
     >
       <p
-        className="layout-align-start-center flex layout-row title_grey"
+        className="layout-align-start-center flex layout-row "
       >
         TITLE
       </p>
@@ -103,10 +103,10 @@ exports[`fullWidth is true 1`] = `
     className="CONTENT_CLASSNAME"
   >
     <div
-      className="layout-align-space-between-center flex-100 layout-row"
+      className="layout-align-space-between-center flex-100 layout-row title_grey"
     >
       <p
-        className="layout-align-start-center flex layout-row title_grey"
+        className="layout-align-start-center flex layout-row "
       >
         TITLE
       </p>
@@ -132,10 +132,10 @@ exports[`isBox is true 1`] = `
     className="CONTENT_CLASSNAME"
   >
     <div
-      className="layout-align-space-between-center flex-100 layout-row"
+      className="layout-align-space-between-center flex-100 layout-row title_grey"
     >
       <p
-        className="layout-align-start-center flex layout-row title_grey"
+        className="layout-align-start-center flex layout-row "
       >
         TITLE
       </p>
@@ -161,10 +161,10 @@ exports[`padding is true 1`] = `
     className="CONTENT_CLASSNAME"
   >
     <div
-      className="layout-align-space-between-center flex-100 layout-row"
+      className="layout-align-space-between-center flex-100 layout-row title_grey"
     >
       <p
-        className="layout-align-start-center flex layout-row title_grey"
+        className="layout-align-start-center flex layout-row "
       >
         TITLE
       </p>
@@ -190,10 +190,10 @@ exports[`shallow render 1`] = `
     className="CONTENT_CLASSNAME"
   >
     <div
-      className="layout-align-space-between-center flex-100 layout-row"
+      className="layout-align-space-between-center flex-100 layout-row title_grey"
     >
       <p
-        className="layout-align-start-center flex layout-row title_grey"
+        className="layout-align-start-center flex layout-row "
       >
         TITLE
       </p>

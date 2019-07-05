@@ -107,6 +107,7 @@ class ContactsController < ApplicationController
     loc = Address.find_by(id: data['id'], sandbox: @sandbox)
     data['country'] = Country.geo_find_by_name(data['country'])
     data.delete('id')
+    data.delete('address_type')
     loc.update_attributes(data)
     loc.save!
     response_handler(loc.to_custom_hash)
