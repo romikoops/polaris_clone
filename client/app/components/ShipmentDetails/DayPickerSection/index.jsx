@@ -1,6 +1,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import * as Scroll from 'react-scroll'
 import moment from 'moment'
 import { withNamespaces } from 'react-i18next'
 import FormsyDayPickerInput from '../../Formsy/DayPickerInput'
@@ -27,6 +28,7 @@ class DayPickerSection extends React.PureComponent {
   handleDayChange (selectedDay, modifiers, name) {
     const { bookingProcessDispatch } = this.props
     bookingProcessDispatch.updateShipment(name, selectedDay)
+    scrollTo('cargoSection')
   }
 
   render () {
@@ -139,6 +141,14 @@ function mapDispatchToProps (dispatch) {
   return {
     bookingProcessDispatch: bindActionCreators(bookingProcessActions, dispatch)
   }
+}
+
+function scrollTo (target, offset) {
+  Scroll.scroller.scrollTo(target, {
+    duration: 1500,
+    smooth: true,
+    offset: offset || -150
+  })
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces('common', 'errors')(DayPickerSection))

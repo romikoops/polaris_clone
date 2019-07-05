@@ -3,6 +3,7 @@
 exports[`cargoUnits is empty 1`] = `
 <div
   className="route_section_form layout-row flex-100 layout-wrap layout-align-center-center"
+  name="cargoSection"
 >
   <div
     className="layout-row flex-none layout-wrap layout-align-center-center content_width_booking_half"
@@ -301,6 +302,7 @@ exports[`cargoUnits is empty 1`] = `
 exports[`renders correctly 1`] = `
 <div
   className="route_section_form layout-row flex-100 layout-wrap layout-align-center-center"
+  name="cargoSection"
 >
   <div
     className="layout-row flex-none layout-wrap layout-align-center-center content_width_booking_half"

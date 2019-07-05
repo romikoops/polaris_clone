@@ -138,7 +138,7 @@ class CargoSection extends React.PureComponent {
     const contentWidthClass = loadType === 'cargo_item' ? 'content_width_booking' : 'content_width_booking_half'
 
     return (
-      <div className="route_section_form layout-row flex-100 layout-wrap layout-align-center-center">
+      <div name="cargoSection" className="route_section_form layout-row flex-100 layout-wrap layout-align-center-center">
         <div className={`layout-row flex-none layout-wrap layout-align-center-center ${contentWidthClass}`}>
           {loadType === 'cargo_item' && (
             <CargoUnitToggleMode
