@@ -82,8 +82,7 @@ export class AdminClientView extends Component {
   }
 
   assignNewManager () {
-    const { adminDispatch, clientData } = this.props
-    const { client } = clientData
+    const { adminDispatch, client } = this.props
     const { selectedRole, selectedManager } = this.state
     adminDispatch.assignManager({
       manager_id: selectedManager.value,
@@ -94,8 +93,7 @@ export class AdminClientView extends Component {
   }
 
   deleteClient (id) {
-    const { clientData, adminDispatch } = this.props
-    const { client } = clientData
+    const { adminDispatch, client } = this.props
     adminDispatch.deleteClient(client.id, true)
     this.closeConfirm()
     adminDispatch.getClients(true)
