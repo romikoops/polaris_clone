@@ -26,7 +26,6 @@ module ExcelDataServices
           role_id: Role.find_by(name: 'shipper'),
           sandbox: @sandbox
         )
-
         tenants_user = Tenants::User.find_by(legacy_id: legacy_user)
         tenants_user.update(company: params[:company])
         add_stats(tenants_user)

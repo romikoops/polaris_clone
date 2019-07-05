@@ -3,8 +3,8 @@
 class Admin::CompaniesController < ApplicationController
   def index
     paginated_companies = handle_search(params).paginate(pagination_options)
-    response_companies = paginated_companies.map do |contact|
-      contact.for_table_json.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+    response_companies = paginated_companies.map do |company|
+      company.for_table_json.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
     response_handler(
       pagination_options.merge(
@@ -15,7 +15,6 @@ class Admin::CompaniesController < ApplicationController
   end
 
   def show
-    company = Tenants::Company.find_by(id: params[:id], sandbox: @sandbox)
     employees = Tenants::User.where(company_id: params[:id], sandbox: @sandbox).map(&:legacy)
     groups = company.groups.map { |g| group_index_json(g) }
 
@@ -32,7 +31,7 @@ class Admin::CompaniesController < ApplicationController
       params[:address][:country]
     ].join(', ')
     address = Legacy::Address.geocoded_address(address_string, @sandbox)
-    company = ::Tenants::Company.find_or_create_by(
+    new_company = ::Tenants::Company.find_or_create_by(
       name: params[:name],
       email: params[:email],
       vat_number: params[:vatNumber],
@@ -43,15 +42,28 @@ class Admin::CompaniesController < ApplicationController
     unless params[:addedMembers].nil? || params[:addedMembers].empty?
       params[:addedMembers].each do |id|
         tenants_user = ::Tenants::User.find_by(legacy_id: id)
-        tenants_user.company = company
+        tenants_user.company = new_company
         tenants_user.save!
       end
     end
     response_handler(company)
   end
 
+  def company
+    @company ||= ::Tenants::Company.find_by(id: params[:id], sandbox: @sandbox)
+  end
+
+  def destroy
+    company_to_destroy = company
+    if company_to_destroy
+      company_to_destroy.employees.destroy_all
+      result = company_to_destroy.destroy
+      resp = result.destroyed? || result.deleted_at
+    end
+    response_handler(success: resp)
+  end
+
   def edit_employees
-    company = ::Tenants::Company.find_by(id: params[:id], sandbox: @sandbox)
     company.employees.each do |employee|
       employee.update(company: nil) unless params[:addedMembers].include?(employee.legacy_id)
     end
@@ -68,8 +80,24 @@ class Admin::CompaniesController < ApplicationController
   def handle_search(params)
     user = ::Tenants::User.find_by(legacy_id: current_user.id, sandbox: @sandbox)
     query = ::Tenants::Company.where(tenant_id: user.tenant_id, sandbox: @sandbox)
-    query = query.country_search(params[:country]) if params[:country]
-    query = query.name_search(params[:company_name]) if params[:company_name]
+    query = query.country_search(search_params[:country]) if search_params[:country].present?
+    query = query.name_search(search_params[:name]) if search_params[:name].present?
+    query = query.order(name: search_params[:name_desc] == 'true' ? :desc : :asc) if search_params[:name_desc].present?
+    if search_params[:vat_number_desc].present?
+      query = query.order(vat_number: search_params[:vat_number_desc] == 'true' ? :desc : :asc)
+    end
+    if search_params[:address_desc]
+      query = query.left_joins(:address)
+                   .order(addresses: { geocoded_address: search_params[:address_desc] == 'true' ? 'DESC' : 'ASC' })
+    end
+    if search_params[:country_desc].present?
+      query.left_joins(:address).left_joins(address: :country)
+           .order(countries: { name: search_params[:address_desc] == 'true' ? 'DESC' : 'ASC'})
+    end
+    if search_params[:employee_count_desc].present?
+      query = query.left_joins(:users).group(:id)
+                   .order("COUNT(tenants_users.id) #{search_params[:member_count_desc] == 'true' ? 'DESC' : 'ASC'}")
+    end
     query
   end
 
@@ -89,5 +117,18 @@ class Admin::CompaniesController < ApplicationController
 
   def current_page
     params[:page]&.to_i || 1
+  end
+
+  def search_params
+    params.permit(
+      :vat_number_desc,
+      :address_desc,
+      :country_desc,
+      :employee_count_desc,
+      :country,
+      :name,
+      :page_size,
+      :per_page
+    )
   end
 end

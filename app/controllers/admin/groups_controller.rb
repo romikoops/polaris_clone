@@ -82,6 +82,16 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
     response_handler(for_show_json(group))
   end
 
+  def destroy
+    group = Tenants::Group.find(params[:id])
+    if group
+      group.memberships.destroy_all
+      group.margins.destroy_all
+      group.destroy
+    end
+    response_handler(success: true)
+  end
+
   private
 
   def groups
@@ -117,6 +127,11 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
       end
     end
     query = query.search(params[:query]) if params[:query]
+    query = query.order(name: params[:name_desc] == 'true' ? :desc : :asc) if params[:name_desc]
+    if params[:member_count_desc]
+      query = query.left_joins(:memberships)
+              .order("COUNT(tenants_memberships.id) #{params[:member_count_desc] == 'true' ? 'DESC' : 'ASC'}")
+    end
     query
   end
 

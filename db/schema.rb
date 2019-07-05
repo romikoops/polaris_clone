@@ -1086,6 +1086,7 @@ ActiveRecord::Schema.define(version: 2019_07_01_163919) do
     t.string "external_id"
     t.string "phone"
     t.uuid "sandbox_id"
+    t.datetime "deleted_at"
   end
 
   create_table "tenants_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1155,6 +1156,7 @@ ActiveRecord::Schema.define(version: 2019_07_01_163919) do
     t.uuid "tenant_id"
     t.uuid "company_id"
     t.uuid "sandbox_id"
+    t.datetime "deleted_at"
     t.index ["activation_token"], name: "index_tenants_users_on_activation_token"
     t.index ["email", "tenant_id"], name: "index_tenants_users_on_email_and_tenant_id", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_tenants_users_on_last_logout_at_and_last_activity_at"

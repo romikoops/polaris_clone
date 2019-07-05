@@ -38,6 +38,7 @@ class AdminClientList extends Component {
     clientsDispatch.getClientsForList({
       page: tableState.page + 1,
       filters: tableState.filtered,
+      sorted: tableState.sorted,
       pageSize: tableState.pageSize
     })
 

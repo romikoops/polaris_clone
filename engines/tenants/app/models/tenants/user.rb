@@ -15,6 +15,7 @@ module Tenants
     authenticates_with_sorcery!
 
     has_paper_trail
+    acts_as_paranoid
 
     def all_groups
       membership_ids = [memberships.pluck(:group_id), company&.memberships&.pluck(:group_id)].compact.flatten
@@ -66,4 +67,5 @@ end
 #  tenant_id                           :uuid
 #  company_id                          :uuid
 #  sandbox_id                          :uuid
+#  deleted_at                          :datetime
 #

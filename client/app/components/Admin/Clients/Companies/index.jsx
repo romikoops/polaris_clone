@@ -6,7 +6,8 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import { clientsActions } from '../../../../actions'
 import styles from '../index.scss'
-import Checkbox from '../../../Checkbox/Checkbox';
+import Checkbox from '../../../Checkbox/Checkbox'
+import AdminPromptConfirm from '../../Prompt/Confirm'
 
 class AdminClientCompanies extends PureComponent {
   constructor (props) {
@@ -39,16 +40,36 @@ class AdminClientCompanies extends PureComponent {
     clientsDispatch.getCompaniesForList({
       page: tableState.page + 1,
       filters: tableState.filtered,
+      sorted: tableState.sorted,
       pageSize: tableState.pageSize
     })
 
     this.setState({ filters: tableState.filtered })
   }
 
+  deleteCompany () {
+    const { clientsDispatch } = this.props
+    const { companyToDelete } = this.state
+    clientsDispatch.deleteCompany(companyToDelete)
+    this.closeConfirm()
+  }
+
+  confirmDelete (company) {
+    this.setState({
+      confirm: true,
+      companyToDelete: company
+    })
+  }
+
+  closeConfirm () {
+    this.setState({ confirm: false })
+  }
+
   render () {
     const {
       companiesData, t, numPages, isPage, addedMembers, theme
     } = this.props
+    const { confirm } = this.state
     const columns = [
       {
         Header: t('admin:name'),
@@ -128,6 +149,19 @@ class AdminClientCompanies extends PureComponent {
             </p>
           </div>
         )
+      },
+      {
+        id: 'delete',
+        accessor: 'delete',
+        maxWidth: 30,
+        Cell: rowData => (
+          <div
+            className={`${styles.table_cell} flex layout-row layout-align-center-center pointy`}
+            onClick={() => this.confirmDelete(rowData.original.id)}
+          >
+            <i className="flex-none fa fa-trash red" />
+          </div>
+        )
       }
     ]
     if (addedMembers) {
@@ -140,7 +174,7 @@ class AdminClientCompanies extends PureComponent {
             className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
           >
             <Checkbox
-              checked={rowData.row.added}  
+              checked={rowData.row.added}
               theme={theme}
               onChange={() => this.handleClick(rowData.original.id)}
             />
@@ -149,6 +183,19 @@ class AdminClientCompanies extends PureComponent {
         maxWidth: 75
       })
     }
+
+    const confimPrompt = confirm ? (
+      <AdminPromptConfirm
+        theme={theme}
+        heading={t('common:areYouSure')}
+        text={t('admin:confirmDeleteCompanyImmediately')}
+        confirm={() => this.deleteCompany()}
+        deny={() => this.closeConfirm()}
+      />
+    ) : (
+      ''
+    )
+
     const table = (
       <ReactTable
         className="flex-100 height_100"
@@ -162,6 +209,7 @@ class AdminClientCompanies extends PureComponent {
         ]}
         defaultPageSize={10}
         filterable
+        sortable
         pages={numPages}
         manual
         onFetchData={this.fetchData}
@@ -172,6 +220,7 @@ class AdminClientCompanies extends PureComponent {
 
     return (
       <div className={wrapperClasses}>
+        {confimPrompt}
         { table }
       </div>
     )
@@ -180,7 +229,7 @@ class AdminClientCompanies extends PureComponent {
 
 function mapStateToProps (state) {
   const { clients, app } = state
-  const  { theme } = app.tenant
+  const { theme } = app.tenant
   const { groups, margins, companies } = clients
   const { companiesData, numPages, page } = companies || {}
 

@@ -569,6 +569,60 @@ function membershipData (args) {
   }
 }
 
+function deleteGroup (id) {
+  function request () {
+    return { type: clientsConstants.DELETE_GROUP_REQUEST }
+  }
+  function success (payload) {
+    return { type: clientsConstants.DELETE_GROUP_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: clientsConstants.DELETE_GROUP_ERROR, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request)
+    clientsService.deleteGroup(id).then(
+      (resp) => {
+        dispatch(getGroupsForList({ page: 1, pageSize: 10 }))
+        dispatch(success(resp.data))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+
+function deleteCompany (id) {
+  function request () {
+    return { type: clientsConstants.DELETE_COMPANY_REQUEST }
+  }
+  function success (payload) {
+    return { type: clientsConstants.DELETE_COMPANY_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: clientsConstants.DELETE_COMPANY_ERROR, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request)
+    clientsService.deleteCompany(id).then(
+      (resp) => {
+        dispatch(getCompaniesForList({ page: 1, pageSize: 10 }))
+        dispatch(success(resp.data))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+
 function newMarginFromGroup (id) {
   return (dispatch) => {
     dispatch({ type: clientsConstants.NEW_MARGIN_FROM_GROUP, payload: id })
@@ -610,7 +664,9 @@ export const clientsActions = {
   testMargins,
   fetchTargetScope,
   goTo,
-  logOut
+  logOut,
+  deleteGroup,
+  deleteCompany
 }
 
 export default clientsActions

@@ -11,6 +11,9 @@ module ExcelDataServices
             tenant: Tenants::Tenant.find_by(legacy_id: @tenant.id)
           )
           row[:email] = row[:email].downcase.strip
+          password = row[:password].is_a?(Numeric) ? row[:password].to_i.to_s : row[:password]
+          row[:password] = password.strip
+
           row
         end
 

@@ -4,6 +4,7 @@ require 'core'
 require 'legacy'
 require 'mailers'
 
+require 'paranoia'
 require 'pg_search'
 require 'sorcery'
 

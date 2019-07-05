@@ -9,6 +9,7 @@ import styles from '../index.scss'
 import { AdminClientMargins } from '..'
 import Checkbox from '../../../Checkbox/Checkbox'
 import NamedSelect from '../../../NamedSelect/NamedSelect'
+import AdminPromptConfirm from '../../Prompt/Confirm'
 
 class AdminClientGroups extends PureComponent {
   constructor (props) {
@@ -22,7 +23,9 @@ class AdminClientGroups extends PureComponent {
 
   componentDidMount () {
     const { clientsDispatch, targetId, targetType } = this.props
-    clientsDispatch.getGroupsForList({ page: 1, pageSize: 10, targetId, targetType })
+    clientsDispatch.getGroupsForList({
+      page: 1, pageSize: 10, targetId, targetType
+    })
   }
 
   handleClick (id) {
@@ -42,7 +45,7 @@ class AdminClientGroups extends PureComponent {
         <div className={styles.nested_table}>
           <AdminClientMargins
             targetId={row.original.id}
-            targetType='group'
+            targetType="group"
             className={styles.nested_table}
           />
         </div>
@@ -50,6 +53,24 @@ class AdminClientGroups extends PureComponent {
     }
 
     return ''
+  }
+
+  deleteGroup () {
+    const { clientsDispatch } = this.props
+    const { groupToDelete } = this.state
+    clientsDispatch.deleteGroup(groupToDelete)
+    this.closeConfirm()
+  }
+
+  confirmDelete (group) {
+    this.setState({
+      confirm: true,
+      groupToDelete: group
+    })
+  }
+
+  closeConfirm () {
+    this.setState({ confirm: false })
   }
 
   fetchData (tableState) {
@@ -60,6 +81,7 @@ class AdminClientGroups extends PureComponent {
       targetType,
       page: tableState.page + 1,
       filters: tableState.filtered,
+      sorted: tableState.sorted,
       pageSize: tableState.pageSize
     })
 
@@ -70,6 +92,7 @@ class AdminClientGroups extends PureComponent {
     const {
       groupData, t, page, numPages, isPage, addedMembers, theme, targetId
     } = this.props
+    const { confirm } = this.state
 
     const columns = [
       {
@@ -118,9 +141,22 @@ class AdminClientGroups extends PureComponent {
             </p>
           </div>
         )
+      },
+      {
+        id: 'delete',
+        maxWidth: 30,
+        accessor: 'delete',
+        Cell: rowData => (
+          <div
+            className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
+            onClick={() => this.confirmDelete(rowData.original.id)}
+          >
+            <i className="fa fa-trash red" />
+          </div>
+        )
       }
     ]
-    
+
     if (addedMembers) {
       columns.push({
         id: 'added',
@@ -131,7 +167,7 @@ class AdminClientGroups extends PureComponent {
             className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
           >
             <Checkbox
-              checked={rowData.row.added}  
+              checked={rowData.row.added}
               theme={theme}
               onChange={() => this.handleClick(rowData.original.id)}
             />
@@ -140,6 +176,17 @@ class AdminClientGroups extends PureComponent {
         maxWidth: 75
       })
     }
+    const confimPrompt = confirm ? (
+      <AdminPromptConfirm
+        theme={theme}
+        heading={t('common:areYouSure')}
+        text={t('admin:confirmDeleteGroupImmediately')}
+        confirm={() => this.deleteGroup()}
+        deny={() => this.closeConfirm()}
+      />
+    ) : (
+      ''
+    )
     const table = (
       <ReactTable
         className="flex-100 height_100"
@@ -162,9 +209,11 @@ class AdminClientGroups extends PureComponent {
       />
     )
     const wrapperClasses = isPage ? 'flex-100 layout-row layout-align-center-center header_buffer extra_padding'
-    : 'flex-100 layout-row layout-align-center-center'
+      : 'flex-100 layout-row layout-align-center-center'
+
     return (
       <div className={wrapperClasses}>
+        { confimPrompt }
         { table }
       </div>
     )
@@ -177,7 +226,7 @@ AdminClientGroups.defaultProps = {
 
 function mapStateToProps (state) {
   const { clients, app } = state
-  const  { theme } = app.tenant
+  const { theme } = app.tenant
   const { groups, margins, users } = clients
   const { groupData, numPages, page } = groups || {}
 

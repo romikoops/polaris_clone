@@ -25,6 +25,11 @@ function getClientsForList (args) {
       queryObj[filter.id] = filter.value
     })
   }
+  if (args.sorted) {
+    args.sorted.forEach((filter) => {
+      queryObj[`${filter.id}_desc`] = filter.desc
+    })
+  }
 
   const query = toSnakeQueryString(queryObj, true)
 
@@ -42,6 +47,11 @@ function getGroupsForList (args) {
   if (args.filters) {
     args.filters.forEach((filter) => {
       queryObj[filter.id] = filter.value
+    })
+  }
+  if (args.sorted) {
+    args.sorted.forEach((filter) => {
+      queryObj[`${filter.id}_desc`] = filter.desc
     })
   }
 
@@ -260,6 +270,11 @@ function getCompaniesForList (args) {
       queryObj[filter.id] = filter.value
     })
   }
+  if (args.sorted) {
+    args.sorted.forEach((filter) => {
+      queryObj[`${filter.id}_desc`] = filter.desc
+    })
+  }
 
   const query = toSnakeQueryString(queryObj, true)
 
@@ -276,6 +291,26 @@ function fetchTargetScope (args) {
   const query = toSnakeQueryString(args, true)
 
   return fetch(`${getTenantApiUrl()}/admin/scopes/${args.target_id}?${query}`, requestOptions)
+    .then(handleResponse)
+}
+
+function deleteGroup (id) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader()
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/groups/${id}`, requestOptions)
+    .then(handleResponse)
+}
+
+function deleteCompany (id) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader()
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/companies/${id}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -300,7 +335,9 @@ export const clientsService = {
   testMargins,
   deleteMargin,
   editCompanyEmployees,
-  createCompany
+  createCompany,
+  deleteGroup,
+  deleteCompany
 }
 
 export default clientsService

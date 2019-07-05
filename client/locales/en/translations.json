@@ -251,6 +251,8 @@
       "dedicatedPricings": "Dedicated Pricings",
       "openPricing": "Open Pricing",
       "confirmDeletePricingImmediately": "This will delete the pricing immediately and all related data",
+      "confirmDeleteGroupImmediately": "This will delete the group with all memberships and margins attached to it. Members will lose access to any margins attached to the group.",
+      "confirmDeleteCompanyImmediately": "This will delete the company and all employees immediately and all related data",
       "confirmDisablePricingImmediately": "This will disable the pricing immediately, hiding it from all searches",
       "confirmEnablePricingImmediately": "This will enable the pricing immediately, making it bookable.",
       "newRoutePlain": "New Route",

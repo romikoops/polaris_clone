@@ -151,6 +151,7 @@ PATH
       core
       legacy
       mailers
+      paranoia
       pg_search
       sorcery (~> 0.13.0)
 
