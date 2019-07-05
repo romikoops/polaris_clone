@@ -19,7 +19,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   # Return selected User, assigned managers, shipments made and user addresses
 
   def show
-    client = User.find(params[:id], sandbox: @sandbox)
+    client = User.find_by(id: params[:id], sandbox: @sandbox)
     addresses = client.addresses
     groups = client.groups.map { |g| group_index_json(g) }
     manager_assignments = UserManager.where(user_id: client)
