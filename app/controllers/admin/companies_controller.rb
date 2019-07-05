@@ -23,7 +23,7 @@ class Admin::CompaniesController < ApplicationController
   end
 
   def create # rubocop:disable Metrics/AbcSize
-    tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id, sandbox: @sandbox)
+    tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)
     address_string = [
       params[:address][:streetNumber],
       params[:address][:street],

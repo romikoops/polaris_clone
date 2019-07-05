@@ -593,7 +593,8 @@
       "attachToHubOrItinerary": "Attach to Hub or Itinerary",
       "groupcreator": "Group Creator",
       "margincreator": "Margin Creator",
-      "companycreator": "Company Creator"
+      "companycreator": "Company Creator",
+      "saveCompany": "Save Company"
   },
   "itbox": {
     "component": "IncotermBox",
