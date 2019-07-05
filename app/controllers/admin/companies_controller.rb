@@ -83,6 +83,7 @@ class Admin::CompaniesController < ApplicationController
     query = query.country_search(search_params[:country]) if search_params[:country].present?
     query = query.name_search(search_params[:name]) if search_params[:name].present?
     query = query.order(name: search_params[:name_desc] == 'true' ? :desc : :asc) if search_params[:name_desc].present?
+    query = query.vat_search(search_params[:vat_number]) if search_params[:vat_number].present?
     if search_params[:vat_number_desc].present?
       query = query.order(vat_number: search_params[:vat_number_desc] == 'true' ? :desc : :asc)
     end

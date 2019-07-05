@@ -17,6 +17,9 @@ module Tenants
     pg_search_scope :name_search, against: %i(name), using: {
       tsearch: { prefix: true }
     }
+    pg_search_scope :vat_search, against: %i(vat_number), using: {
+      tsearch: { prefix: true }
+    }
     pg_search_scope :country_search,
                     against: %i(name),
                     associated_against: {
