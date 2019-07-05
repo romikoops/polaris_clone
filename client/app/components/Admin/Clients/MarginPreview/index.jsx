@@ -43,8 +43,9 @@ class AdminClientMarginPreview extends Component {
     })
   }
 
-  setFilter (n, e, target) {
-    this.setState({ [target]: e })
+  setFilter (e) {
+    const { name, label, value } = e
+    this.setState({ [name]: { value, label } })
   }
 
   toggleCollapsed () {
