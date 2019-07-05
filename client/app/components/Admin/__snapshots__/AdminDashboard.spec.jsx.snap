@@ -334,8 +334,7 @@ exports[`shallow render 1`] = `
                 "quantity": 2,
               },
             ],
-            "clientName": "Sebastian Muller",
-            "companyName": "Mehristweniger",
+            "clientName": "FOO_CLIENT_NAME",
             "destination_hub": Object {
               "name": "FOO_DESTINATION_HUB",
             },
@@ -624,8 +623,7 @@ exports[`tenant is falsy 1`] = `
                 "quantity": 2,
               },
             ],
-            "clientName": "Sebastian Muller",
-            "companyName": "Mehristweniger",
+            "clientName": "FOO_CLIENT_NAME",
             "destination_hub": Object {
               "name": "FOO_DESTINATION_HUB",
             },
@@ -907,8 +905,7 @@ exports[`theme is falsy 1`] = `
                 "quantity": 2,
               },
             ],
-            "clientName": "Sebastian Muller",
-            "companyName": "Mehristweniger",
+            "clientName": "FOO_CLIENT_NAME",
             "destination_hub": Object {
               "name": "FOO_DESTINATION_HUB",
             },

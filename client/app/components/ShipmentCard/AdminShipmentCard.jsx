@@ -275,7 +275,7 @@ class AdminShipmentCard extends Component {
                   <i className="fa fa-user clip" style={gradientFontStyle} />
                 </div>
                 <div className="flex-80 layout-row layout-align-start-start">
-                  <h4>{shipment.clientName}</h4>
+                  <h4>{shipment.client_name}</h4>
                 </div>
               </div>
               <div className="layout-row flex-100 layout-align-start-center">
@@ -283,7 +283,7 @@ class AdminShipmentCard extends Component {
                   <i className="fa fa-building clip" style={gradientFontStyle} />
                 </span>
                 <span className={`flex-80 layout-row layout-align-start-center ${styles.grey}`}>
-                  <p>{shipment.companyName}</p>
+                  <p>{shipment.company_name}</p>
                 </span>
               </div>
             </div>

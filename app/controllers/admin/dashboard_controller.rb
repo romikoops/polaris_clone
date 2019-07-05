@@ -25,7 +25,8 @@ class Admin::DashboardController < Admin::AdminBaseController
   private
 
   def initialize_variables
-    @shipments = Shipment.where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
+    tenant_shipments = Shipment.where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
+    @shipments = current_user.internal ? tenant_shipments : tenant_shipments.external_user
     @requested_shipments = requested_shipments
     @quoted_shipments = quoted_shipments
     @detailed_itineraries = detailed_itin_json

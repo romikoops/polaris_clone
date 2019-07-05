@@ -12,14 +12,6 @@ import SquareButton from '../SquareButton'
 import Loading from '../Loading/Loading'
 
 class UserDashboard extends Component {
-  static prepShipment (baseShipment, user) {
-    const shipment = Object.assign({}, baseShipment)
-    shipment.clientName = user ? `${user.first_name} ${user.last_name}` : ''
-    shipment.companyName = user ? `${user.company_name}` : ''
-
-    return shipment
-  }
-
   static limitArray (shipments, limit) {
     return limit ? shipments.slice(0, limit) : shipments
   }
@@ -109,8 +101,7 @@ class UserDashboard extends Component {
 
     const shipmentsToDisplay = isQuote(tenant) ? shipments.quoted : shipments.requested
     const preppedShipments = shipmentsToDisplay ? shipmentsToDisplay.slice(0, perPage)
-      .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
-      .map(s => UserDashboard.prepShipment(s, user)) : []
+      .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at)) : []
     const gradientFontStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)

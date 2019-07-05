@@ -121,9 +121,7 @@ exports[`shallow rendering 1`] = `
           <div
             className="flex-80 layout-row layout-align-start-start"
           >
-            <h4>
-              SHIPMENT_CLIENT_NAME
-            </h4>
+            <h4 />
           </div>
         </div>
         <div

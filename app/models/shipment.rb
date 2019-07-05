@@ -410,9 +410,17 @@ class Shipment < Legacy::Shipment
   end
   deprecate :view_offers, deprecator: APP_DEPRECATION
 
+  def client_name
+    user&.full_name
+  end
+
+  def company_name
+    user&.company_name
+  end
+
   def as_options_json(options = {})
     new_options = options.reverse_merge(
-      methods: %i(selected_offer mode_of_transport cargo_count),
+      methods: %i(selected_offer mode_of_transport cargo_count company_name client_name),
       include: [
         :destination_nexus,
         :origin_nexus,
@@ -441,7 +449,7 @@ class Shipment < Legacy::Shipment
 
   def as_index_json(options = {})
     new_options = options.reverse_merge(
-      methods: %i(total_price mode_of_transport cargo_units cargo_count edited_total),
+      methods: %i(total_price mode_of_transport cargo_units cargo_count edited_total company_name client_name),
       include: [
         :destination_nexus,
         :origin_nexus,

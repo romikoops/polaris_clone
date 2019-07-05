@@ -13,18 +13,6 @@ import styles from './AdminDashboard.scss'
 import GenericError from '../ErrorHandling/Generic'
 
 export class AdminDashboard extends Component {
-  static prepShipment (baseShipment, clients, hubsObj) {
-    const shipment = Object.assign({}, baseShipment)
-    shipment.clientName = clients[shipment.user_id]
-      ? `${clients[shipment.user_id].first_name} ${clients[shipment.user_id].last_name}`
-      : ''
-    shipment.companyName = clients[shipment.user_id]
-      ? `${clients[shipment.user_id].company_name}`
-      : ''
-
-    return shipment
-  }
-
   constructor (props) {
     super(props)
     this.state = {
@@ -116,8 +104,7 @@ export class AdminDashboard extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
     const shipmentsToDisplay = isQuote(tenant) ? shipments.quoted : shipments.requested
-    const preppedShipments = shipmentsToDisplay ? shipmentsToDisplay.slice(0, perPage)
-      .map(s => AdminDashboard.prepShipment(s, clientHash, hubHash)) : []
+    const preppedShipments = shipmentsToDisplay ? shipmentsToDisplay.slice(0, perPage) : []
 
     const mapComponent = (
       <div className="layout-row flex-100 layout-align-space-between-stretch layout-wrap">
