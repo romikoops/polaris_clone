@@ -58,6 +58,7 @@ module Tenants
       incoterm_info_level: 'text',
       non_stackable_goods: true,
       open_quotation_tool: false,
+      hide_user_pricing_requests: true,
       customs_export_paper: false,
       fixed_exchange_rates: true,
       base_pricing: false,

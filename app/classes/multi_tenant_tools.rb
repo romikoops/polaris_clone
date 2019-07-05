@@ -168,7 +168,9 @@ module MultiTenantTools
 
   def new_site(tenant, _is_demo)
     tenant.delete(:other_data)
-    Tenant.create!(tenant)
+    new_tenant = Tenant.create!(tenant)
+    tenants_tenant = Tenants::Tenant.find_by(legacy_id: new_tenant.id)
+    Tenants::Scope.create(target: tenants_tenant, content: {})
     title = tenant[:name] + ' | ItsMyCargo'
     meta = tenant[:meta]
     favicon = tenant[:favicon] || 'https://assets.itsmycargo.com/assets/favicon.ico'

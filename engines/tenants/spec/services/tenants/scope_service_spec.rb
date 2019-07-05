@@ -41,6 +41,7 @@ RSpec.describe Tenants::ScopeService do
           hard_trucking_limit: true,
           has_customs: false,
           has_insurance: false,
+          hide_user_pricing_requests: true,
           hide_converted_grand_total: false,
           hide_grand_total: false,
           hide_sub_totals: false,
