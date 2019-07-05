@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if Rails.env.development?
+if Rails.env.development? && !ENV['SKIP_ANNOTATE']
   require 'annotate'
   namespace :annotate do
     desc 'Annotate models'

@@ -4,12 +4,10 @@ namespace :db do
   APP_ROOT = Pathname.new(File.expand_path('../../../', __dir__))
   PROJECT = 'itsmycargo-main'
   BUCKET = 'itsmycargo-main-engineering-resources'
-  SEED_FILE = APP_ROOT.join('tmp/seed.sql.gz')
+  SEED_FILE = APP_ROOT.join('tmp', 'database.sqlc')
 
   namespace :import do
     task :fetch, [:profile] do |t, args|
-      seed_profile = args[:profile]
-
       DateHelper = Class.new { include ActionView::Helpers::DateHelper }.new
 
       puts 'Downloading latest Database Seed file...'
@@ -21,7 +19,7 @@ namespace :db do
         storage = Google::Cloud::Storage.new(project: PROJECT)
 
         bucket = storage.bucket(BUCKET)
-        file = bucket.file("db/#{args[:profile]}.sql.gz")
+        file = bucket.file("db/#{args[:profile]}.sqlc")
 
         # Warn if seed file is out-of-date
         puts ''
@@ -36,7 +34,7 @@ namespace :db do
 
         # Speed up download if possible
         if (gsutil = `which gsutil`.strip)
-          system(gsutil, 'cp', "gs://#{BUCKET}/#{"db/#{args[:profile]}.sql.gz"}", SEED_FILE.to_s)
+          system(gsutil, 'cp', "gs://#{BUCKET}/#{"db/#{args[:profile]}.sqlc"}", SEED_FILE.to_s)
         else
           puts ' *** For faster download, please install gsutil ***'
           file.download(SEED_FILE.to_s)
@@ -60,14 +58,16 @@ namespace :db do
       require 'open3'
       require 'zlib'
 
+      database_name = ENV.fetch('DATABASE_NAME') { ActiveRecord::Base.configurations[Rails.env]['database'] }
+
       puts 'Re-create development database'
       Rake::Task['db:create'].invoke
 
       puts 'Restore from Database Seed'
-      gzip_cmd = "gzip -cd #{SEED_FILE}"
-      psql_cmd = "psql -q -v ON_ERROR_STOP=1 #{ENV.fetch('DATABASE_NAME', 'imcr_development')}"
+      cmd = "pg_restore --dbname=#{database_name} --no-owner --no-privileges --jobs=8 #{SEED_FILE}"
 
-      system("#{gzip_cmd} | #{psql_cmd}") || exit(1)
+      system(cmd) || exit(1)
+      Rake::Task['db:environment:set'].invoke
     end
 
     task :clean do
