@@ -368,24 +368,22 @@ class UserShipmentView extends Component {
               remarkDispatch={remarkDispatch}
             />
           )}
-          {shipment.status !== 'quoted' ? (
             <div className="flex-100 layout-row layout-wrap">
               <div className="layout-row flex-100 layout-wrap layout-align-center-center" style={{ paddingTop: '30px' }}>
                 <p
                   className="flex-100 layout-row layout-align-center-center"
                   style={{ paddingBottom: '14px', textAlign: 'center' }}
                 >
-                  {t('doc:shipmentPDF')}
+                  {shipment.status === 'quoted' ? t('doc:quotePDF') : t('doc:shipmentPDF')}
                 </p>
                 <DocumentsDownloader
                   theme={theme}
-                  target="shipment_recap"
+                  target={shipment.status === 'quoted' ? 'quote' : 'shipment_recap'}
                   options={{ shipment }}
                   size="full"
                 />
               </div>
             </div>
-          ) : ''}
 
         </div>
       </div>

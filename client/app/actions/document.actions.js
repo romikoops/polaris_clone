@@ -230,6 +230,31 @@ function downloadQuotations (options) {
     )
   }
 }
+
+function downloadQuote (options) {
+  function request (downloadData) {
+    return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
+  }
+  function success (downloadData) {
+    return { type: documentConstants.DOWNLOAD_SUCCESS, payload: downloadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.DOWNLOAD_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+    documentService.downloadQuote(options).then(
+      (response) => {
+        dispatch(success(response))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function downloadShipment (options) {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -464,7 +489,8 @@ export const documentActions = {
   downloadChargeCategories,
   uploadChargeCategories,
   uploadGeneratorSheet,
-  uploadMargins
+  uploadMargins,
+  downloadQuote
 }
 
 export default documentActions

@@ -649,7 +649,8 @@
     "download": "Download",
     "notUploaded": "Not uploaded",
     "uploadNewDocument": "Upload New Document",
-    "shipmentPDF": "Download shipment pdf"
+    "shipmentPDF": "Download shipment pdf",
+    "quotePDF": "Download quotation pdf"
   },
   "account": {
     "signInFirst": "Sign In First",

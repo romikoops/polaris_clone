@@ -163,6 +163,16 @@ function downloadHubs () {
 
   return fetch(`${getTenantApiUrl()}/admin/hubs/sheet/download`, requestOptions).then(handleResponse)
 }
+
+function downloadQuote (options) {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader() }
+  }
+
+  return fetch(`${getTenantApiUrl()}/quotations/download/${options.shipment.id}`, requestOptions).then(handleResponse)
+}
+
 function downloadChargeCategories () {
   const requestOptions = {
     method: 'GET',
@@ -218,7 +228,8 @@ export const documentService = {
   downloadChargeCategories,
   uploadChargeCategories,
   uploadGeneratorSheet,
-  uploadMargins
+  uploadMargins,
+  downloadQuote
 }
 
 export default documentService

@@ -221,6 +221,7 @@ Rails.application.routes.draw do
         controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
     get 'tenants/:name', to: 'tenants#get_tenant'
 
+    get 'quotations/download/:id', to: 'quotations#download_pdf'
     get 'currencies/get', to: 'users#currencies'
     post 'currencies/set', to: 'users#set_currency'
 
