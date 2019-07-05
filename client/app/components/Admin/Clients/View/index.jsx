@@ -295,7 +295,7 @@ export class AdminClientView extends Component {
     const managerBox = (
       <div className="flex-100 layout-row layout-wrap">
         <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-          <div className="flex-60 layout-row" style={{ margin: '10px 0' }}>
+          <div className="flex-60 layout-row" style={{ marginBottom: '10px' }}>
             <RoundButton
               theme={theme}
               size="full"
@@ -304,7 +304,7 @@ export class AdminClientView extends Component {
               iconClass="fa-plus"
             />
           </div>
-          <div className="flex-60 layout-row" style={{ margin: '10px 0' }}>
+          <div className="flex-60 layout-row" style={{ marginTop: '10px' }}>
             <RoundButton
               theme={theme}
               size="full"
@@ -376,6 +376,7 @@ export class AdminClientView extends Component {
                 text={t('common:delete')}
                 handleNext={() => this.confirmDelete()}
                 iconClass="fa-trash"
+                classNames="five_m"
               />
               { user.internal ? (
                 <RoundButton
@@ -384,6 +385,7 @@ export class AdminClientView extends Component {
                   text={t('common:editScope')}
                   handleNext={() => this.editScope()}
                   iconClass="fa-trash"
+                  classNames="five_m"
                 />
               ) : '' }
             </GreyBox>
@@ -422,20 +424,6 @@ export class AdminClientView extends Component {
               />
             </div>)
           ] : '' }
-        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center greyBg ${styles.grey_section_head}`}
-          >
-            <TextHeading theme={theme} size={3} text={t('shipment:locations')} />
-          </div>
-          {groupTable}
-        </div>
-        <div className="layout-row flex-100 layout-wrap layout-align-start-center buffer_10">
-          <AdminClientMarginPreview
-            targetId={client.id}
-            targetType="user"
-          />
-        </div>
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
           <div
             className={`flex-100 layout-row layout-align-space-between-center greyBg ${styles.grey_section_head}`}

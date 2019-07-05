@@ -8,6 +8,7 @@ class Admin::ClientsController < Admin::AdminBaseController
     response_clients = paginated_clients.map do |contact|
       contact.for_admin_json.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
+
     response_handler(
       pagination_options.merge(
         clientData: response_clients,

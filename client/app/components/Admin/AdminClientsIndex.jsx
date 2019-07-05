@@ -36,7 +36,7 @@ class AdminClientsIndex extends Component {
       t, theme, adminDispatch, tabReset, scope, user
     } = this.props
     const { expander } = this.state
-    const legacyTabs = (
+    const legacyTab = (
       <Tab
         tabTitle={t('admin:clients')}
         theme={theme}
@@ -46,7 +46,7 @@ class AdminClientsIndex extends Component {
         </div>
       </Tab>
     )
-    const marginTabs = [legacyTabs, (<Tab
+    const marginTabs = [legacyTab, (<Tab
       tabTitle={t('admin:companies')}
       theme={theme}
     >
@@ -80,7 +80,7 @@ class AdminClientsIndex extends Component {
               tabReset={tabReset}
             >
 
-              { scope.base_pricing ? marginTabs : legacyTabs }
+              { scope.base_pricing ? marginTabs : [legacyTab] }
 
             </Tabs>
           </div>
