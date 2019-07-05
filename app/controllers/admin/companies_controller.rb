@@ -124,6 +124,7 @@ class Admin::CompaniesController < ApplicationController
     params.permit(
       :vat_number_desc,
       :address_desc,
+      :name_desc,
       :country_desc,
       :employee_count_desc,
       :country,

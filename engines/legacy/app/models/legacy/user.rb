@@ -9,6 +9,8 @@ module Legacy
     belongs_to :role, optional: true, class_name: 'Legacy::Role'
     belongs_to :agency, optional: true
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+    has_one :tenants_user
+    delegate :company, to: :tenants_user
 
     def tenant_scope
       ::Tenants::ScopeService.new(target: self, tenant: tenants_user&.tenant).fetch

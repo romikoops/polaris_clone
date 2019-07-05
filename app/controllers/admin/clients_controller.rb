@@ -103,6 +103,20 @@ class Admin::ClientsController < Admin::AdminBaseController
 
       query = query.where(id: user_ids)
     end
+    if search_params[:first_name_desc].present?
+      query = query.reorder(first_name: search_params[:first_name_desc] == 'true' ? :desc : :asc)
+    end
+    if search_params[:last_name_desc].present?
+      query = query.reorder(last_name: search_params[:last_name_desc] == 'true' ? :desc : :asc)
+    end
+    if search_params[:email_desc].present?
+      query = query.reorder(email: search_params[:email_desc] == 'true' ? :desc : :asc)
+    end
+    if search_params[:company_name_desc].present?
+      query = query.left_joins(tenants_user: :company)
+                   .reorder("tenants_companies.name #{search_params[:company_name_desc] == 'true' ? 'desc' : 'asc'}")
+    end
+
     query
   end
 
@@ -119,5 +133,20 @@ class Admin::ClientsController < Admin::AdminBaseController
       methods: %i(member_count margin_count)
     )
     group.as_json(new_options)
+  end
+
+  def search_params
+    params.permit(
+      :first_name_desc,
+      :last_name_desc,
+      :email_desc,
+      :company_name_desc,
+      :first_name,
+      :last_name,
+      :email,
+      :company_name,
+      :page_size,
+      :per_page
+    )
   end
 end

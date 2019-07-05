@@ -44,8 +44,13 @@ class AdminClientCompany extends Component {
   }
 
   newGroup () {
-    const { clientsDispatch, id } = this.props
+    const { clientsDispatch } = this.props
     clientsDispatch.goTo('/admin/clients/groupcreator')
+  }
+
+  viewEmployee (id) {
+    const { clientsDispatch } = this.props
+    clientsDispatch.goTo(`/admin/clients/client/${id}`)
   }
 
   toggleUserEdit () {
@@ -85,7 +90,8 @@ class AdminClientCompany extends Component {
         accessor: d => `${d.first_name} ${d.last_name}`,
         Cell: rowData => (
           <div
-            className={`${styles.table_cell} flex layout-row layout-align-start-center`}
+            className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
+            onClick={() => this.viewEmployee(rowData.original.id)}
           >
             <p className="flex-none">
               {' '}
@@ -100,7 +106,8 @@ class AdminClientCompany extends Component {
         accessor: 'email',
         Cell: rowData => (
           <div
-            className={`${styles.table_cell} flex layout-row layout-align-start-center`}
+            className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
+            onClick={() => this.viewEmployee(rowData.original.id)}
           >
             <p className="flex-none">
               {' '}
@@ -115,7 +122,8 @@ class AdminClientCompany extends Component {
         accessor: 'phone',
         Cell: rowData => (
           <div
-            className={`${styles.table_cell} flex layout-row layout-align-start-center`}
+            className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
+            onClick={() => this.viewEmployee(rowData.original.id)}
           >
             <p className="flex-none">
               {' '}
