@@ -53,11 +53,10 @@ module Tenants
     def set_priority
       existing_memberships = Tenants::Membership
                              .where(member: member)
-                             .order(priority: :desc)
+                             .reorder(priority: :desc)
+      priority = existing_memberships.empty? ? 0 : existing_memberships.first.priority + 1
 
-      return if existing_memberships.empty?
-
-      self.priority = existing_memberships.first.priority + 1
+      self.priority = priority
     end
   end
 end
