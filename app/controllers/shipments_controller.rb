@@ -103,7 +103,6 @@ class ShipmentsController < ApplicationController
     shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
 
     cargo_item_types = shipment.cargo_item_types
-                               .where(sandbox: @sandbox)
                                .each_with_object({}) do |cargo_item_type, return_h|
       return_h[cargo_item_type.id] = cargo_item_type
     end
