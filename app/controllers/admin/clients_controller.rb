@@ -51,7 +51,7 @@ class Admin::ClientsController < Admin::AdminBaseController
 
     options = { tenant: current_tenant,
                 file_or_path: file,
-                options: { sandbox: @sandbox } }
+                options: { sandbox: @sandbox, user: current_user } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
