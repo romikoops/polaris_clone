@@ -826,47 +826,26 @@ class AdminShipmentView extends Component {
           )}
 
         </div>
-
-        {shipment.status !== 'quoted' ? (
-          <div className="flex-100 layout-row layout-wrap">
-            <div className="layout-row flex-100 layout-wrap layout-align-center-center" style={{ paddingTop: '30px' }}>
-              <p
-                className="flex-100 layout-row layout-align-center-center"
-                style={{ paddingBottom: '14px', textAlign: 'center' }}
-              >
-                Download shipment pdf
-              </p>
-              <DocumentsDownloader
-                theme={theme}
-                target="shipment_recap"
-                options={{ shipment }}
-                size="full"
-                shipment={shipment}
-              />
-            </div>
+        <div className="flex-100 layout-row layout-wrap">
+          <div className="layout-row flex-100 layout-wrap layout-align-center-center" style={{ paddingTop: '30px' }}>
+            <p
+              className="flex-100 layout-row layout-align-center-center"
+              style={{ paddingBottom: '14px', textAlign: 'center' }}
+            >
+              {shipment.status === 'quoted' ? t('doc:quotePDF') : t('doc:shipmentPDF')}
+            </p>
+            <DocumentsDownloader
+              theme={theme}
+              target={shipment.status === 'quoted' ? 'quote' : 'shipment_recap'}
+              options={{ shipment }}
+              size="full"
+              shipment={shipment}
+            />
           </div>
-        ) : (
-          ''
-        )}
-
+        </div>
       </div>
     )
   }
-}
-
-AdminShipmentView.propTypes = {
-  theme: PropTypes.theme,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
-  shipmentData: PropTypes.shipmentData,
-  clients: PropTypes.arrayOf(PropTypes.client),
-  handleShipmentAction: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
-  adminDispatch: PropTypes.shape({
-    getShipment: PropTypes.func
-  }).isRequired,
-  match: PropTypes.match.isRequired,
-  t: PropTypes.func,
-  scope: PropTypes.objectOf(PropTypes.any)
 }
 
 AdminShipmentView.defaultProps = {
@@ -879,4 +858,4 @@ AdminShipmentView.defaultProps = {
   scope: {}
 }
 
-export default withNamespaces('common')(AdminShipmentView)
+export default withNamespaces(['common', 'doc'])(AdminShipmentView)

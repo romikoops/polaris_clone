@@ -352,7 +352,7 @@ class UserShipmentView extends Component {
               userDispatch={userDispatch}
               remarkDispatch={remarkDispatch}
             />) : (
-            <ShipmentQuotationContent
+              <ShipmentQuotationContent
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
@@ -368,43 +368,27 @@ class UserShipmentView extends Component {
               remarkDispatch={remarkDispatch}
             />
           )}
-            <div className="flex-100 layout-row layout-wrap">
-              <div className="layout-row flex-100 layout-wrap layout-align-center-center" style={{ paddingTop: '30px' }}>
-                <p
-                  className="flex-100 layout-row layout-align-center-center"
-                  style={{ paddingBottom: '14px', textAlign: 'center' }}
-                >
-                  {shipment.status === 'quoted' ? t('doc:quotePDF') : t('doc:shipmentPDF')}
-                </p>
-                <DocumentsDownloader
-                  theme={theme}
-                  target={shipment.status === 'quoted' ? 'quote' : 'shipment_recap'}
-                  options={{ shipment }}
-                  size="full"
-                />
-              </div>
+          <div className="flex-100 layout-row layout-wrap">
+            <div className="layout-row flex-100 layout-wrap layout-align-center-center" style={{ paddingTop: '30px' }}>
+              <p
+                className="flex-100 layout-row layout-align-center-center"
+                style={{ paddingBottom: '14px', textAlign: 'center' }}
+              >
+                {shipment.status === 'quoted' ? t('doc:quotePDF') : t('doc:shipmentPDF')}
+              </p>
+              <DocumentsDownloader
+                theme={theme}
+                target={shipment.status === 'quoted' ? 'quote' : 'shipment_recap'}
+                options={{ shipment }}
+                size="full"
+              />
             </div>
+          </div>
 
         </div>
       </div>
     )
   }
-}
-
-UserShipmentView.propTypes = {
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  hubs: PropTypes.arrayOf(PropTypes.object),
-  loading: PropTypes.bool,
-  shipmentData: PropTypes.shipmentData.isRequired,
-  user: PropTypes.user,
-  userDispatch: PropTypes.shape({
-    deleteDocument: PropTypes.func
-  }).isRequired,
-  match: PropTypes.match.isRequired,
-  setNav: PropTypes.func.isRequired,
-  setCurrentUrl: PropTypes.func.isRequired,
-  tenant: PropTypes.tenant
 }
 
 UserShipmentView.defaultProps = {
