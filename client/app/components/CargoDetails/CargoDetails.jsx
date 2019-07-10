@@ -165,6 +165,7 @@ class CargoDetails extends Component {
   }
 
   handleChange (event) {
+    if (event.target.value === '') return
     this.props.handleChange(event)
   }
 
