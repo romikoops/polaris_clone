@@ -92,9 +92,10 @@ class AdminClientAdder extends Component {
         default:
           break
       }
+      const obj = target || { id }
 
-      if (target && !addedMembers[type].includes(target)) {
-        addedMembers[type].push(target)
+      if (!addedMembers[type].some(x => x.id === obj.id)) {
+        addedMembers[type].push(obj)
       }
 
       return { addedMembers }
