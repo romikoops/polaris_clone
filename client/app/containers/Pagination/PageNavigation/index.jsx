@@ -9,7 +9,7 @@ function PageNavigation ({
     <div className={`layout-row layout-align-center-center ${styles.page_navigation}`}>
       <div
         className={`
-          layout-row layout-align-center-center
+          layout-row layout-align-center-center pointy
           ${styles.navigation_button} ${+page > 1 ? '' : styles.disabled}
         `}
         onClick={+page > 1 ? prevPage : null}
@@ -22,7 +22,7 @@ function PageNavigation ({
       <p>{`${page} / ${numPages} `}</p>
       <div
         className={`
-          layout-row layout-align-center-center
+          layout-row layout-align-center-center pointy
           ${styles.navigation_button} ${+page < numPages ? '' : styles.disabled}
         `}
         onClick={+page < numPages ? nextPage : null}

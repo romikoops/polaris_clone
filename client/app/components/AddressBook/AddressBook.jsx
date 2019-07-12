@@ -119,10 +119,9 @@ function mapStateToProps (state) {
   const { BookingDetails } = bookingProcess
   const { contactsData } = BookingDetails
   const { user } = authentication
-
   const {
-    contacts, per_page, page, numContactPages
-  } = contactsData || {}
+ contacts, per_page, page, numContactPages 
+} = contactsData || {}
 
   return {
     contacts, user, per_page, page, numContactPages

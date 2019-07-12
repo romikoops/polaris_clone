@@ -31,7 +31,7 @@ And('I select choose a receiver') do
 end
 
 And('I select a receiver') do
-  elem = all('.ccb_contact').last
+  elem = all('.ccb_contact').first
   elem.click
 end
 
