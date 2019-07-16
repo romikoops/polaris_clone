@@ -15,6 +15,22 @@ module Legacy
               Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
             ))
     end)
+
+    def hub_name
+      hub&.name
+    end
+
+    def counterpart_hub_name
+      counterpart_hub&.name
+    end
+
+    def carrier_name
+      tenant_vehicle&.carrier&.name
+    end
+
+    def service_level
+      tenant_vehicle&.name
+    end
   end
 end
 
@@ -39,4 +55,5 @@ end
 #  user_id            :integer
 #  uuid               :uuid
 #  sandbox_id         :uuid
+#  group_id           :uuid
 #

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_01_163919) do
+ActiveRecord::Schema.define(version: 2019_07_11_111439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -522,6 +522,7 @@ ActiveRecord::Schema.define(version: 2019_07_01_163919) do
     t.integer "user_id"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }
     t.uuid "sandbox_id"
+    t.uuid "group_id"
     t.index ["uuid"], name: "index_local_charges_on_uuid", unique: true
   end
 
@@ -895,6 +896,7 @@ ActiveRecord::Schema.define(version: 2019_07_01_163919) do
     t.datetime "updated_at", null: false
     t.uuid "sandbox_id"
     t.boolean "internal", default: false
+    t.uuid "group_id"
     t.index ["cargo_class"], name: "index_pricings_pricings_on_cargo_class"
     t.index ["itinerary_id"], name: "index_pricings_pricings_on_itinerary_id"
     t.index ["load_type"], name: "index_pricings_pricings_on_load_type"
@@ -940,6 +942,40 @@ ActiveRecord::Schema.define(version: 2019_07_01_163919) do
     t.integer "order"
     t.uuid "sandbox_id"
     t.index ["tenant_id"], name: "index_remarks_on_tenant_id"
+  end
+
+  create_table "rms_data_books", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "sheet_type"
+    t.uuid "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sheet_type"], name: "index_rms_data_books_on_sheet_type"
+    t.index ["tenant_id"], name: "index_rms_data_books_on_tenant_id"
+  end
+
+  create_table "rms_data_cells", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "tenant_id"
+    t.integer "row"
+    t.integer "column"
+    t.string "value"
+    t.uuid "sheet_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["column"], name: "index_rms_data_cells_on_column"
+    t.index ["row"], name: "index_rms_data_cells_on_row"
+    t.index ["sheet_id"], name: "index_rms_data_cells_on_sheet_id"
+    t.index ["tenant_id"], name: "index_rms_data_cells_on_tenant_id"
+  end
+
+  create_table "rms_data_sheets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "sheet_index"
+    t.uuid "tenant_id"
+    t.uuid "book_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_rms_data_sheets_on_book_id"
+    t.index ["sheet_index"], name: "index_rms_data_sheets_on_sheet_index"
+    t.index ["tenant_id"], name: "index_rms_data_sheets_on_tenant_id"
   end
 
   create_table "roles", force: :cascade do |t|

@@ -872,6 +872,30 @@ export default function admin (state = {}, action) {
         loading: false,
         error: { pricings: action.error }
       }
+    case adminConstants.GET_ADMIN_GROUP_PRICINGS_REQUEST: {
+      const pricings = state.pricings || {}
+
+      return { ...state, loading: true, pricings }
+    }
+    case adminConstants.GET_ADMIN_GROUP_PRICINGS_SUCCESS: {
+      return {
+        ...state,
+        pricings: {
+          ...state.pricings,
+          groups: {
+            ...state.pricings.groups,
+            [action.payload.group_id]: action.payload
+          }
+        },
+        loading: false
+      }
+    }
+    case adminConstants.GET_ADMIN_GROUP_PRICINGS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: { pricings: action.error }
+      }
     case adminConstants.DISABLE_PRICING_REQUEST: {
       const pricings = state.pricings || {}
 
@@ -1007,6 +1031,25 @@ export default function admin (state = {}, action) {
       return {
         ...state,
         error: { pricings: action.error },
+        loading: false
+      }
+    }
+    case adminConstants.DELETE_LOCAL_CHARGE_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case adminConstants.DELETE_LOCAL_CHARGE_SUCCESS: {
+      return {
+        ...state,
+        loading: false
+      }
+    }
+    case adminConstants.DELETE_LOCAL_CHARGE_FAILURE: {
+      return {
+        ...state,
+        error: { localCharges: action.error },
         loading: false
       }
     }

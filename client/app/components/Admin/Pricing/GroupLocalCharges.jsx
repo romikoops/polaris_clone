@@ -7,30 +7,36 @@ import 'react-table/react-table.css'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import styles from './index.scss'
-import { adminActions, appActions } from '../../../actions'
+import { adminActions, appActions, clientsActions } from '../../../actions'
 import AdminFeeTable from './FeeTable'
 import AdminRangeFeeTable from './RangeTable'
 import { moment } from '../../../constants'
 import { determineSortingCaret } from '../../../helpers/sortingCaret'
 import AdminPromptConfirm from '../Prompt/Confirm'
-import Checkbox from '../../Checkbox/Checkbox';
 
-class AdminPricesTable extends PureComponent {
+class AdminPricesGroupLocalCharges extends PureComponent {
   static determineFeeTable (row) {
+    const adjRow = {
+      ...row,
+      original: {
+        ...row.original,
+        data: row.original.fees
+      }
+    }
     if (
-      Object.values(row.original.data)
+      Object.values(row.original.fees)
         .some(val => val.range && val.range.length > 0)
     ) {
       return (
         <div className={styles.nested_table}>
-          <AdminRangeFeeTable row={row} className={styles.nested_table} />
+          <AdminRangeFeeTable row={adjRow} className={styles.nested_table} isLocalCharge />
         </div>
       )
     }
 
     return (
       <div className={styles.nested_table}>
-        <AdminFeeTable row={row} className={styles.nested_table} />
+        <AdminFeeTable row={adjRow} className={styles.nested_table} isLocalCharge />
       </div>
     )
   }
@@ -43,19 +49,18 @@ class AdminPricesTable extends PureComponent {
       confirm: false,
       confirmAction: false
     }
+    this.fetchData = this.fetchData.bind(this)
   }
 
   componentDidMount () {
-    const { pricings, adminDispatch, itineraryId, groupId } = this.props
-    if (!has(pricings, `show.${itineraryId}`)) {
-      adminDispatch.getItineraryPricings(itineraryId, groupId)
-    }
+    const { clientsDispatch, groupId } = this.props
+    clientsDispatch.getLocalChargesForList({ groupId })
   }
 
-  deletePricing () {
+  deleteLocalCharge () {
     const { adminDispatch } = this.props
     const { pricingToDelete } = this.state
-    adminDispatch.deletePricing(pricingToDelete)
+    adminDispatch.deleteLocalCharge(pricingToDelete)
     this.closeConfirm()
   }
 
@@ -63,15 +68,24 @@ class AdminPricesTable extends PureComponent {
     const { confirmAction } = this.state
     switch (confirmAction) {
       case 'delete':
-        return this.deletePricing()
-      case 'disable':
-        return this.toggleDisabled(confirmAction)
-      case 'enable':
-        return this.toggleDisabled(confirmAction)
-
+        return this.deleteLocalCharge()
       default:
         break
     }
+  }
+
+  fetchData (tableState) {
+    const { clientsDispatch, groupId } = this.props
+
+    clientsDispatch.getLocalChargesForList({
+      page: tableState.page + 1,
+      filters: tableState.filtered,
+      sorted: tableState.sorted,
+      pageSize: tableState.pageSize,
+      groupId
+    })
+
+    this.setState({ filters: tableState.filtered })
   }
 
   confirmDialog (action, pricing) {
@@ -86,36 +100,15 @@ class AdminPricesTable extends PureComponent {
     this.setState({ confirm: false, pricingToDelete: false, confirmAction: false })
   }
 
-  requestPricing (data) {
-    const { adminDispatch, user } = this.props
-    const req = {
-      pricing_id: data.id,
-      tenant_id: data.tenant_id,
-      user_id: user.id
-    }
-    adminDispatch.requestPricing(req)
-  }
-
-  toggleDisabled (action) {
-    const { adminDispatch } = this.props
-    const { pricingToDelete } = this.state
-    const req = {
-      pricing_id: pricingToDelete.id,
-      tenant_id: pricingToDelete.tenant_id,
-      action
-    }
-    adminDispatch.disablePricing(req)
-    this.closeConfirm()
-  }
 
   render () {
     const {
-      t, pricings, theme, itineraryId, classNames, scope
+      t, localCharges, theme, groupId, classNames, scope
     } = this.props
     const { sorted, confirm, confirmAction } = this.state
 
-    const data = get(pricings, ['show', itineraryId], false)
-    if (!data) return ''
+    const { localChargeData, numPages, page, per_page } = localCharges
+    if (!localChargeData) return ''
     const columns = [
       {
         Header: (<div className="flex layout-row layout-center-center">
@@ -155,18 +148,72 @@ class AdminPricesTable extends PureComponent {
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
-          {determineSortingCaret('carrier', sorted)}
-          <p className="flex-none">{t('account:carrier')}</p>
+          {determineSortingCaret('hub_name', sorted)}
+          <p className="flex-none">{t('admin:hub')}</p>
         </div>),
-        id: 'carrier',
-        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['carrier'] }),
+        id: 'hub_name',
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['hub_name'] }),
         filterAll: true,
-        accessor: d => d.carrier,
+        accessor: d => d.hub_name,
         Cell: rowData => (
           <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
             <p className="flex-none">
               {' '}
-              {rowData.row.carrier || '-'}
+              {rowData.row.hub_name || '-'}
+            </p>
+          </div>
+        )
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('counterpart_hub_name', sorted)}
+          <p className="flex-none">{t('admin:destination')}</p>
+        </div>),
+        id: 'counterpart_hub_name',
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['counterpart_hub_name'] }),
+        filterAll: true,
+        accessor: d => d.counterpart_hub_name,
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            <p className="flex-none">
+              {' '}
+              {rowData.row.counterpart_hub_name || '-'}
+            </p>
+          </div>
+        )
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('mode_of_transport', sorted)}
+          <p className="flex-none">{t('admin:modeOfTransport')}</p>
+        </div>),
+        id: 'mode_of_transport',
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['mode_of_transport'] }),
+        filterAll: true,
+        accessor: d => d.mode_of_transport,
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            <p className="flex-none">
+              {' '}
+              {rowData.row.mode_of_transport || '-'}
+            </p>
+          </div>
+        )
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('carrier_name', sorted)}
+          <p className="flex-none">{t('admin:carrier')}</p>
+        </div>),
+        id: 'carrier_name',
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['carrier_name'] }),
+        filterAll: true,
+        accessor: d => d.carrier_name,
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            <p className="flex-none">
+              {' '}
+              {rowData.row.carrier_name || '-'}
             </p>
           </div>
         )
@@ -191,43 +238,21 @@ class AdminPricesTable extends PureComponent {
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
-          {determineSortingCaret('cargo_class', sorted)}
-          <p className="flex-none">{t('account:loadType')}</p>
+          {determineSortingCaret('load_type', sorted)}
+          <p className="flex-none">{t('admin:loadType')}</p>
         </div>),
-        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['cargo_class'] }),
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['load_type'] }),
         filterAll: true,
-        accessor: 'cargo_class',
+        accessor: 'load_type',
         Cell: rowData => (
           <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
             <p className="flex-none">
               {' '}
-              {t(`common:${rowData.row.cargo_class}`)}
+              {t(`common:${rowData.row.load_type}`)}
             </p>
           </div>
         )
       },
-      scope.base_pricing ? {
-        maxWidth: 75,
-        Header: (<div className="flex layout-row layout-center-center">
-          <p className="flex-none">{t('common:enabled')}</p>
-        </div>),
-        accessor: 'internal',
-        Cell: (rowData) => {
-          const action = rowData.row.internal ? 'enable' : 'disable'
-
-          return (
-            <div
-              className={`${styles.pricing_cell} flex layout-row layout-align-center-center pointy`}
-            >
-              <Checkbox
-                checked={!rowData.row.internal}
-                theme={theme}
-                onChange={() => this.confirmDialog(action, rowData.original)}
-              />
-            </div>
-          )
- }
-      } : false,
       {
         maxWidth: 75,
         Header: (<div className="flex layout-row layout-center-center">
@@ -235,7 +260,7 @@ class AdminPricesTable extends PureComponent {
         </div>),
         Cell: rowData => (
           <div
-            onClick={() => this.confirmDialog('delete', rowData.original)}
+            onClick={() => this.confirmDialog('delete', rowData.original.id)}
             className={`${styles.delete_cell} flex layout-row layout-align-center-center pointy`}
           >
             <i className="flex-none fa fa-trash" />
@@ -243,26 +268,12 @@ class AdminPricesTable extends PureComponent {
         )
       }
     ].filter(x => !!x)
-    let confirmText
-    switch (confirmAction) {
-      case 'delete':
-        confirmText = t('admin:confirmDeletePricingImmediately')
-        break
-      case 'disable':
-        confirmText = t('admin:confirmDisablePricingImmediately')
-        break
-      case 'enable':
-        confirmText = t('admin:confirmEnablePricingImmediately')
-        break
-    
-      default:
-        break
-    }
+
     const confirmDeletePrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
         heading={t('common:areYouSure')}
-        text={confirmText}
+        text={t('admin:confirmDeleteLocalChargeImmediately')}
         confirm={() => this.onConfirm()}
         deny={() => this.closeConfirm()}
       />
@@ -275,8 +286,7 @@ class AdminPricesTable extends PureComponent {
         {confirmDeletePrompt}
         <ReactTable
           className={`${styles.no_footer} ${classNames}`}
-          data={data.pricings}
-          filterable
+          data={localChargeData}
           defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
           columns={columns}
           defaultSorted={[
@@ -285,29 +295,37 @@ class AdminPricesTable extends PureComponent {
               desc: true
             }
           ]}
-          defaultPageSize={data.pricings.length}
+          defaultPageSize={per_page}
           showPaginationBottom={false}
           expanded={this.state.expanded}
-          sorted={this.state.sorted}
-          onSortedChange={newSorted => this.setState({ sorted: newSorted })}
+          defaultPageSize={10}
+          filterable
+          pages={numPages}
+          manual
+          onFetchData={this.fetchData}
           onExpandedChange={newExpanded => this.setState({ expanded: newExpanded })}
-          SubComponent={subRow => AdminPricesTable.determineFeeTable(subRow)}
+          SubComponent={subRow => AdminPricesGroupLocalCharges.determineFeeTable(subRow)}
         />
       </div>
     )
   }
 }
 
+AdminPricesGroupLocalCharges.defaultProps = {
+  classNames: 'flex-100',
+  localCharges: {}
+}
+
 function mapStateToProps (state) {
   const {
-    authentication, app, admin
+    authentication, app, clients
   } = state
   const { tenant } = app
   const { theme, scope } = tenant
   const { user, loggedIn } = authentication
   const {
-    pricings
-  } = admin
+    localCharges
+  } = clients
 
   return {
     user,
@@ -315,14 +333,15 @@ function mapStateToProps (state) {
     loggedIn,
     theme,
     scope,
-    pricings
+    localCharges
   }
 }
 function mapDispatchToProps (dispatch) {
   return {
     adminDispatch: bindActionCreators(adminActions, dispatch),
+    clientsDispatch: bindActionCreators(clientsActions, dispatch),
     appDispatch: bindActionCreators(appActions, dispatch)
   }
 }
 
-export default withNamespaces(['common', 'shipment', 'account'])(connect(mapStateToProps, mapDispatchToProps)(AdminPricesTable))
+export default withNamespaces(['common', 'shipment', 'account'])(connect(mapStateToProps, mapDispatchToProps)(AdminPricesGroupLocalCharges))

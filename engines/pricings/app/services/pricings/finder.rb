@@ -26,17 +26,8 @@ module Pricings
       @sandbox = sandbox
     end
 
-    def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      pricings_by_cargo_class = ::Pricings::Pricing
-                                .where(
-                                  internal: false,
-                                  tenant_vehicle_id: tenant_vehicle_id,
-                                  itinerary_id: schedules.first.trip.itinerary_id,
-                                  cargo_class: cargo_classes,
-                                  user_id: nil,
-                                  tenant_id: @shipment.tenant_id,
-                                  sandbox: @sandbox
-                                )
+    def perform
+      pricings_by_cargo_class = pricings_for_cargo_classes_and_groups
       pricings_by_cargo_class_and_dates = pricings_by_cargo_class.for_dates(start_date, end_date)
 
       ## If etd filter results in no pricings, check using closing_date
@@ -62,6 +53,25 @@ module Pricings
       end
 
       margin_pricings_by_cargo_class_and_dates.flatten.compact.group_by { |pricing| pricing['cargo_class'] }
+    end
+
+    def pricings_for_cargo_classes_and_groups
+      query = ::Pricings::Pricing.where(
+        internal: false,
+        tenant_vehicle_id: tenant_vehicle_id,
+        itinerary_id: schedules.first.trip.itinerary_id,
+        cargo_class: cargo_classes,
+        user_id: nil,
+        tenant_id: @shipment.tenant_id,
+        sandbox: @sandbox
+      )
+
+      @user.group_ids.each do |group_id|
+        group_result = query.where(group_id: group_id)
+        return group_result unless group_result.empty?
+      end
+
+      query.where(group_id: nil)
     end
 
     def schedules_for_pricing(schedules:, pricing:)

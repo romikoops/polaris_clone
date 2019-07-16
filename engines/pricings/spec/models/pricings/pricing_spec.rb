@@ -34,7 +34,9 @@ module Pricings
           expect(::Pricings::Pricing.for_load_type('cargo_item')).to eq([lcl_pricing])
         end
         it 'returns the fcl_20 & fcl_40 pricings only' do
-          expect(::Pricings::Pricing.for_load_type('container')).to eq([fcl_20_pricing, fcl_40_pricing, fcl_40_hq_pricing])
+          expect(::Pricings::Pricing.for_load_type('container')).to eq(
+            [fcl_20_pricing, fcl_40_pricing, fcl_40_hq_pricing].sort_by(&:cargo_class)
+          )
         end
       end
       describe '.for_dates' do

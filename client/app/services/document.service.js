@@ -41,6 +41,7 @@ function uploadHubs (file) {
 
   return fetch(`${getTenantApiUrl()}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
 }
+
 function uploadMargins (args) {
   const formData = new FormData()
   formData.append('file', args.file)
@@ -53,6 +54,19 @@ function uploadMargins (args) {
   }
 
   return fetch(`${getTenantApiUrl()}/admin/margins/upload`, requestOptions).then(handleResponse)
+}
+
+function uploadGroupPricings (args) {
+  const formData = new FormData()
+  formData.append('file', args.file)
+  formData.append('group_id', args.groupId)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/pricings/upload`, requestOptions).then(handleResponse)
 }
 
 function downloadPricings (options) {
@@ -89,10 +103,11 @@ function uploadItinerarySchedules (file, target) {
   return fetch(`${getTenantApiUrl()}/admin/schedules/overwrite/${target}`, requestOptions).then(handleResponse)
 }
 
-function uploadLocalCharges (file, mot) {
+function uploadLocalCharges (file, mot, groupId) {
   const formData = new FormData()
   formData.append('file', file)
   formData.append('mot', mot)
+  formData.append('group_id', groupId)
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader() },
@@ -229,7 +244,8 @@ export const documentService = {
   uploadChargeCategories,
   uploadGeneratorSheet,
   uploadMargins,
-  downloadQuote
+  downloadQuote,
+  uploadGroupPricings
 }
 
 export default documentService

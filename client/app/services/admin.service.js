@@ -282,13 +282,24 @@ function getShipment (id) {
   return fetch(`${getTenantApiUrl()}/admin/shipments/${id}`, requestOptions).then(handleResponse)
 }
 
-function getItineraryPricings (id) {
+function getItineraryPricings (id, groupId) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  const queryString = groupId ? `?group_id=${groupId}` : ''
+
+  return fetch(`${getTenantApiUrl()}/admin/route_pricings/${id}${queryString}`, requestOptions)
+    .then(handleResponse)
+}
+
+function getGroupPricings (id) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
 
-  return fetch(`${getTenantApiUrl()}/admin/route_pricings/${id}`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/admin/group_pricings/${id}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -338,6 +349,16 @@ function deletePricing (pricing) {
   }
 
   return fetch(`${getTenantApiUrl()}/admin/pricings/${pricing.id}`, requestOptions)
+    .then(handleResponse)
+}
+
+function deleteLocalCharge (localChargeId) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader()
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/local_charges/${localChargeId}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -796,7 +817,9 @@ export const adminService = {
   uploadDocument,
   updateEmails,
   getLocalCharges,
-  uploadAgents
+  uploadAgents,
+  getGroupPricings,
+  deleteLocalCharge
 }
 
 export default adminService

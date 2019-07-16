@@ -19,6 +19,7 @@ module ExcelDataServices
         @klass_identifier = self.class.name.split('::').last
         @options = options
         @sandbox = options[:sandbox]
+        @group_id = options[:group_id]
         @stats = {}
       end
 

@@ -33,12 +33,13 @@ class TruckingTable extends Component {
   }
 
   fetchData (tableState) {
-    const { adminDispatch, hub } = this.props
+    const { adminDispatch, hub, groupId } = this.props
     adminDispatch.viewTrucking({
       hubId: hub.id,
       page: tableState.page + 1,
       filters: tableState.filtered,
-      pageSize: tableState.pageSize
+      pageSize: tableState.pageSize,
+      groupId
     })
 
     this.setState({ filters: tableState.filtered })
@@ -52,7 +53,7 @@ class TruckingTable extends Component {
 
   render () {
     const {
-      t, truckingPricings, pages, groups, scope
+      t, truckingPricings, pages, groups, scope, groupId
     } = this.props
     if (!truckingPricings) return ''
     const {
@@ -141,7 +142,7 @@ class TruckingTable extends Component {
               </select>
             )
           },
-          scope.base_pricing ? {
+          scope.base_pricing && !groupId ? {
             Header: (<div className="flex layout-row layout-center-center">
               {determineSortingCaret('group', sorted)}
               <p className="flex-none">{t('common:group')}</p>

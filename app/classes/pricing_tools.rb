@@ -60,22 +60,40 @@ class PricingTools # rubocop:disable Metrics/ClassLength
     charges_for_filtering = []
     cargos.each do |cargo|
       load_type = cargo.is_a?(Container) ? cargo.size_class : 'lcl'
-      [user.id, nil].each do |user_id|
-        charge = effective_local_charges.find_by(
-          user_id: user_id,
-          load_type: load_type,
-          counterpart_hub_id: counterpart_hub_id
-        )
-        charge ||= effective_local_charges.find_by(
-          user_id: user_id,
-          load_type: load_type,
-          counterpart_hub_id: nil
-        )
-        if @scope['base_pricing']
+      if @scope['base_pricing']
+        group_ids = user.group_ids | [nil]
+        group_ids.each do |group_id|
+          charge = effective_local_charges.find_by(
+            group_id: group_id,
+            load_type: load_type,
+            counterpart_hub_id: counterpart_hub_id
+          )
+          charge ||= effective_local_charges.find_by(
+            group_id: group_id,
+            load_type: load_type,
+            counterpart_hub_id: nil
+          )
           charges = get_manipulated_local_charge(charge, cargos.first.shipment, schedules)
           charges.each { |c| charges_for_filtering << c } if charges.present?
-        else
+          break if charges.present?
+
+        end
+      else
+        [user.id, nil].each do |user_id|
+          charge = effective_local_charges.find_by(
+            user_id: user_id,
+            load_type: load_type,
+            counterpart_hub_id: counterpart_hub_id
+          )
+          charge ||= effective_local_charges.find_by(
+            user_id: user_id,
+            load_type: load_type,
+            counterpart_hub_id: nil
+          )
+          
           charges_for_filtering << charge&.as_json&.with_indifferent_access
+          break if charge.present?
+
         end
       end
     end

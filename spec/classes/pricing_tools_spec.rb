@@ -6,6 +6,7 @@ RSpec.describe PricingTools do
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }
   let(:tenant) { create(:tenant) }
+  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:cargo_transport_category) do
     create(:transport_category, cargo_class: 'lcl', load_type: 'cargo_item')
   end
@@ -44,6 +45,9 @@ RSpec.describe PricingTools do
   end
   let(:all_trips) { lcl_trips | fcl_trips }
   let(:user) { create(:user, tenant: tenant) }
+  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
+  let(:group) { create(:tenants_group, tenant: tenants_tenant, name: 'TEST') }
+  let(:membership) { create(:tenants_membership, group: group, member: tenants_user) }
   let(:shipment) { create(:shipment, load_type: load_type, direction: direction, user: user, tenant: tenant, origin_nexus: origin_nexus, destination_nexus: destination_nexus, trip: itinerary.trips.first, itinerary: itinerary) }
   let(:origin_nexus) { create(:nexus, hubs: [origin_hub]) }
   let(:destination_nexus) { create(:nexus, hubs: [destination_hub]) }
@@ -68,6 +72,7 @@ RSpec.describe PricingTools do
    { 'key' => 'FILL', 'max' => nil, 'min' => nil, 'name' => 'Filling Charges', 'value' => 35, 'currency' => 'EUR', 'rate_basis' => 'PER_ITEM', 'effective_date' => '2018-04-16', 'expiration_date' => '2018-05-15' },
       'ISPS' => { 'key' => 'ISPS', 'max' => nil, 'min' => nil, 'name' => 'ISPS', 'value' => 25, 'currency' => 'EUR', 'rate_basis' => 'PER_ITEM', 'effective_date' => '2018-04-16', 'expiration_date' => '2018-05-15' } }
   end
+  let!(:local_charge_margin) { create(:export_margin, tenant: tenants_tenant, origin_hub: origin_hub)}
   let!(:lcl_local_charge) do
     create(:local_charge,
            tenant: tenant,
@@ -79,6 +84,19 @@ RSpec.describe PricingTools do
            fees: lcl_local_charge_fees,
            effective_date: Date.today,
            expiration_date: Date.today + 3.months)
+  end
+  let!(:group_lcl_local_charge) do
+    create(:local_charge,
+           tenant: tenant,
+           hub: origin_hub,
+           mode_of_transport: 'ocean',
+           load_type: 'lcl',
+           direction: 'export',
+           tenant_vehicle: tenant_vehicle_1,
+           fees: lcl_local_charge_fees,
+           effective_date: Date.today,
+           expiration_date: Date.today + 3.months,
+           group_id: group.id)
   end
   let!(:fcl_20_local_charge) do
     create(:local_charge,
@@ -149,6 +167,53 @@ RSpec.describe PricingTools do
       local_charges_data = described_class.new(user: user, shipment: shipment).find_local_charge(fcl_schedules, cargos, 'export', user)
       expect(local_charges_data.values.first.length).to eq(2)
       expect(local_charges_data.values.first.first.length).to eq(3)
+    end
+
+    it 'returns the correct number of charges for single cargo classes (LCL & BASE PRICING)' do
+      lcl = create(:cargo_item, shipment_id: shipment.id)
+      scope = create(:tenants_scope, target: tenants_user, content: {base_pricing: true})
+      create(:export_margin, applicable: tenants_tenant, tenant: tenants_tenant)
+      local_charges_data = described_class.new(user: user, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user)
+      expect(local_charges_data.values.first.length).to eq(2)
+      expect(local_charges_data.values.length).to eq(1)
+    end
+
+    it 'returns the correct number of charges for single cargo classes (LCL & BASE PRICING & multiple groups)' do
+      user_mg = create(:user, tenant: tenant)
+      tenants_user_mg = Tenants::User.find_by(legacy_id: user_mg.id)
+      group_1 = create(:tenants_group, tenant: tenants_tenant, name: 'TEST1')
+      create(:tenants_membership, group: group_1, member: tenants_user_mg)
+      group_2 = create(:tenants_group, tenant: tenants_tenant, name: 'TEST2')
+      create(:tenants_membership, group: group_2, member: tenants_user_mg)
+      group_local_charge_1 = create(:local_charge,
+        tenant: tenant,
+        hub: origin_hub,
+        mode_of_transport: 'ocean',
+        load_type: 'lcl',
+        direction: 'export',
+        tenant_vehicle: tenant_vehicle_1,
+        fees: lcl_local_charge_fees,
+        effective_date: Date.today,
+        expiration_date: Date.today + 3.months,
+        group_id: group_1.id)
+      create(:local_charge,
+        tenant: tenant,
+        hub: origin_hub,
+        mode_of_transport: 'ocean',
+        load_type: 'lcl',
+        direction: 'export',
+        tenant_vehicle: tenant_vehicle_1,
+        fees: lcl_local_charge_fees,
+        effective_date: Date.today,
+        expiration_date: Date.today + 3.months,
+        group_id: group_2.id)
+      lcl = create(:cargo_item, shipment_id: shipment.id)
+      scope = create(:tenants_scope, target: tenants_user_mg, content: {base_pricing: true})
+      create(:export_margin, applicable: tenants_tenant, tenant: tenants_tenant)
+      local_charges_data = described_class.new(user: user_mg, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user_mg)
+      expect(local_charges_data.values.first.length).to eq(2)
+      expect(local_charges_data.values.length).to eq(1)
+      expect(local_charges_data.values.dig(0,0,0)['id']).to eq(group_local_charge_1.id)
     end
 
     it 'returns the correct number of charges for single cargo classes (LCL)' do

@@ -450,6 +450,31 @@ function deletePricing (pricingId) {
     )
   }
 }
+function deleteLocalCharge (localChargeId) {
+  function request (payload) {
+    return { type: adminConstants.DELETE_LOCAL_CHARGE_REQUEST, payload }
+  }
+  function success (payload) {
+    return { type: adminConstants.DELETE_LOCAL_CHARGE_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_LOCAL_CHARGE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request(localChargeId))
+    adminService.deleteLocalCharge(localChargeId).then(
+      () => {
+        dispatch(clientsActions.removeLocalCharge(localChargeId))
+        dispatch(success(localChargeId))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function getClientPricings (id, redirect) {
   function request (prData) {
@@ -481,7 +506,7 @@ function getClientPricings (id, redirect) {
   }
 }
 
-function getItineraryPricings (id, redirect) {
+function getItineraryPricings (id, groupId, redirect) {
   function request (prData) {
     return { type: adminConstants.GET_ADMIN_ITINERARY_PRICINGS_REQUEST, payload: prData }
   }
@@ -495,11 +520,37 @@ function getItineraryPricings (id, redirect) {
   return (dispatch) => {
     dispatch(request())
     dispatch(getTrucking())
-    adminService.getItineraryPricings(id).then(
+    adminService.getItineraryPricings(id, groupId).then(
       (response) => {
         if (redirect) {
           dispatch(push(`/admin/pricings/routes/${id}`))
         }
+        dispatch(success(response.data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function getGroupPricings (groupId) {
+  function request (prData) {
+    return { type: adminConstants.GET_ADMIN_GROUP_PRICINGS_REQUEST, payload: prData }
+  }
+  function success (prData) {
+    return { type: adminConstants.GET_ADMIN_GROUP_PRICINGS_SUCCESS, payload: prData }
+  }
+  function failure (error) {
+    return { type: adminConstants.GET_ADMIN_GROUP_PRICINGS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+    dispatch(getTrucking())
+    adminService.getGroupPricings(groupId).then(
+      (response) => {
         dispatch(success(response.data))
       },
       (error) => {
@@ -1874,7 +1925,9 @@ export const adminActions = {
   searchPricings,
   getLocalCharges,
   uploadAgents,
-  disablePricing
+  disablePricing,
+  getGroupPricings,
+  deleteLocalCharge
 }
 
 export default adminActions

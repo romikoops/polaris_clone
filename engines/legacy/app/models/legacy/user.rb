@@ -32,6 +32,10 @@ module Legacy
       tenants_user.all_groups
     end
 
+    def group_ids
+      all_groups.ids
+    end
+
     private
 
     def set_default_role

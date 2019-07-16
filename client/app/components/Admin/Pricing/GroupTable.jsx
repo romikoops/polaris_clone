@@ -13,9 +13,9 @@ import AdminRangeFeeTable from './RangeTable'
 import { moment } from '../../../constants'
 import { determineSortingCaret } from '../../../helpers/sortingCaret'
 import AdminPromptConfirm from '../Prompt/Confirm'
-import Checkbox from '../../Checkbox/Checkbox';
+import Checkbox from '../../Checkbox/Checkbox'
 
-class AdminPricesTable extends PureComponent {
+class AdminPricesGroupTable extends PureComponent {
   static determineFeeTable (row) {
     if (
       Object.values(row.original.data)
@@ -46,10 +46,10 @@ class AdminPricesTable extends PureComponent {
   }
 
   componentDidMount () {
-    const { pricings, adminDispatch, itineraryId, groupId } = this.props
-    if (!has(pricings, `show.${itineraryId}`)) {
-      adminDispatch.getItineraryPricings(itineraryId, groupId)
-    }
+    const { pricings, adminDispatch, groupId } = this.props
+    // if (!has(pricings, `groups.${groupId}`)) {
+    adminDispatch.getGroupPricings(groupId)
+    // }
   }
 
   deletePricing () {
@@ -110,11 +110,11 @@ class AdminPricesTable extends PureComponent {
 
   render () {
     const {
-      t, pricings, theme, itineraryId, classNames, scope
+      t, pricings, theme, groupId, classNames, scope
     } = this.props
     const { sorted, confirm, confirmAction } = this.state
 
-    const data = get(pricings, ['show', itineraryId], false)
+    const data = get(pricings, ['groups', groupId], false)
     if (!data) return ''
     const columns = [
       {
@@ -155,8 +155,44 @@ class AdminPricesTable extends PureComponent {
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('itinerary_name', sorted)}
+          <p className="flex-none">{t('admin:itinerary')}</p>
+        </div>),
+        id: 'itinerary_name',
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['itinerary_name'] }),
+        filterAll: true,
+        accessor: d => d.itinerary_name,
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            <p className="flex-none">
+              {' '}
+              {rowData.row.itinerary_name || '-'}
+            </p>
+          </div>
+        )
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('mode_of_transport', sorted)}
+          <p className="flex-none">{t('admin:modeOfTransport')}</p>
+        </div>),
+        id: 'mode_of_transport',
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['mode_of_transport'] }),
+        filterAll: true,
+        accessor: d => d.mode_of_transport,
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            <p className="flex-none">
+              {' '}
+              {rowData.row.mode_of_transport || '-'}
+            </p>
+          </div>
+        )
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
           {determineSortingCaret('carrier', sorted)}
-          <p className="flex-none">{t('account:carrier')}</p>
+          <p className="flex-none">{t('admin:carrier')}</p>
         </div>),
         id: 'carrier',
         filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['carrier'] }),
@@ -206,28 +242,6 @@ class AdminPricesTable extends PureComponent {
           </div>
         )
       },
-      scope.base_pricing ? {
-        maxWidth: 75,
-        Header: (<div className="flex layout-row layout-center-center">
-          <p className="flex-none">{t('common:enabled')}</p>
-        </div>),
-        accessor: 'internal',
-        Cell: (rowData) => {
-          const action = rowData.row.internal ? 'enable' : 'disable'
-
-          return (
-            <div
-              className={`${styles.pricing_cell} flex layout-row layout-align-center-center pointy`}
-            >
-              <Checkbox
-                checked={!rowData.row.internal}
-                theme={theme}
-                onChange={() => this.confirmDialog(action, rowData.original)}
-              />
-            </div>
-          )
- }
-      } : false,
       {
         maxWidth: 75,
         Header: (<div className="flex layout-row layout-center-center">
@@ -254,7 +268,7 @@ class AdminPricesTable extends PureComponent {
       case 'enable':
         confirmText = t('admin:confirmEnablePricingImmediately')
         break
-    
+
       default:
         break
     }
@@ -291,11 +305,15 @@ class AdminPricesTable extends PureComponent {
           sorted={this.state.sorted}
           onSortedChange={newSorted => this.setState({ sorted: newSorted })}
           onExpandedChange={newExpanded => this.setState({ expanded: newExpanded })}
-          SubComponent={subRow => AdminPricesTable.determineFeeTable(subRow)}
+          SubComponent={subRow => AdminPricesGroupTable.determineFeeTable(subRow)}
         />
       </div>
     )
   }
+}
+
+AdminPricesGroupTable.defaultProps = {
+  classNames: 'flex-100'
 }
 
 function mapStateToProps (state) {
@@ -325,4 +343,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withNamespaces(['common', 'shipment', 'account'])(connect(mapStateToProps, mapDispatchToProps)(AdminPricesTable))
+export default withNamespaces(['common', 'shipment', 'account'])(connect(mapStateToProps, mapDispatchToProps)(AdminPricesGroupTable))

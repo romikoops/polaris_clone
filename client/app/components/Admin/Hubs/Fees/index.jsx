@@ -210,7 +210,6 @@ export class AdminHubFees extends Component {
   }
 
   handleDayChange (e, direction, key, chargeKey, target) {
-    console.log(e, direction, key, chargeKey)
     this.setState({
       editor: {
         ...this.state.editor,

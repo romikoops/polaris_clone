@@ -6,6 +6,7 @@ FactoryBot.define do
     association :tenant, factory: :legacy_tenant
     first_name { 'John' }
     last_name { 'Smith' }
+    company_name { 'ItsMyCargo'}
     sandbox { false }
   end
 end

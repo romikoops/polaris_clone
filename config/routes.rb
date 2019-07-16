@@ -92,6 +92,7 @@ Rails.application.routes.draw do
       post 'maps/country_overlay', to: 'maps#country_overlay'
       get  'client_pricings/:id', to: 'pricings#client'
       get  'route_pricings/:id',  to: 'pricings#route'
+      get  'group_pricings/:id',  to: 'pricings#group'
       post 'pricings/update/:id', to: 'pricings#update_price'
       post 'pricings/test/:id', to: 'pricings#test'
       post 'pricings/train_and_ocean_pricings/process_csv',
@@ -105,21 +106,26 @@ Rails.application.routes.draw do
       resources :vehicle_types, only: [:index]
       resources :clients, only: %i(index show create destroy)
       resources :companies, only: %i(index show create destroy)
-      resources :groups, only: %i(index show create destroy)
-      post 'groups/:id/edit_members', to: 'groups#edit_members'
-      get 'groups/with_margins', to: 'groups#with_margins'
+      resources :groups, only: %i(index show create destroy) do
+        member do
+          post :edit_members
+        end
+        collection do
+          get :with_margins
+        end
+      end
+
       resources :open_pricings, only: [:index]
       post 'open_pricings/ocean_lcl_pricings/process_csv', to: 'open_pricings#overwrite_main_lcl_carriage', as: :open_main_lcl_carriage_pricings_overwrite
-      # post "open_pricings/train_and_ocean_pricings/process_csv",
-      # to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
       post 'shipments/:shipment_id/upload/:type', to: 'shipments#upload_client_document'
-      resources :local_charges, only: %i(index update)
-      post 'local_charges/upload', to: 'local_charges#upload'
-
-      resources :local_charges, only: %i(index update) do
+      resources :local_charges, only: %i(index update destroy) do
         collection do
           post :upload
           post :download
+          get :group
+        end
+        member do
+          post :edit
         end
       end
       resources :charge_categories, only: %i(index update) do
@@ -129,7 +135,7 @@ Rails.application.routes.draw do
         end
       end
       get 'local_charges/:id/hub', to: 'local_charges#hub_charges'
-      post 'local_charges/:id/edit', to: 'local_charges#edit'
+      # post 'local_charges/:id/edit', to: 'local_charges#edit'
       post 'customs_fees/:id/edit', to: 'local_charges#edit_customs'
       resources :discounts, only: [:index]
       get  'discounts/users/:user_id', to: 'discounts#user_itineraries', as: :discounts_user_itineraries

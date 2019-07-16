@@ -88,6 +88,7 @@ module ExcelDataServices
               load_type: load_type,
               tenant_vehicle: tenant_vehicle,
               sandbox: @sandbox,
+              group_id: @group_id,
               effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
               expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 

@@ -31,7 +31,7 @@ class AdminRangeFeeTable extends PureComponent {
   }
 
   render () {
-    const { t, row } = this.props
+    const { t, row, isLocalCharge } = this.props
     if (!row || (row && !row.original)) return ''
     const { sorted, innerSorted } = this.state
     const fees = row.original.data
@@ -154,22 +154,50 @@ class AdminRangeFeeTable extends PureComponent {
             Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
               <p className="flex-none"> {rowData.row.max}</p>
             </div>)
-          },
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('rate', innerSorted)}
-              <p className="flex-none">{t('common:rate')}</p>
-            </div>),
-            id: 'rate',
-            className: cellClass,
-            accessor: d => d.rate,
-            Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
-              <p className="flex-none"> {rowData.row.rate}</p>
-            </div>)
           }
         ]
       }
     ]
+
+    const feeColumns = [
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('rate', sorted)}
+          <p className="flex-none">{t('common:rate')}</p>
+        </div>),
+        id: 'rate',
+        style: { 'white-space': 'unset' },
+        accessor: d => d.rate,
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex-100 layout-row layout-align-start-center`}>
+            <p className="flex-100">
+              {this.determineStringToRender(rowData.row.rate, 'rate')}
+            </p>
+          </div>
+        )
+      }
+    ]
+    const localChargeColumns = localChargeKeys.map((k) => (
+        {
+          Header: (<div className="flex layout-row layout-center-center">
+            {determineSortingCaret(k, sorted)}
+            <p className="flex-none">{t('common:rate')}</p>
+          </div>),
+          id: k,
+          style: { 'white-space': 'unset' },
+          accessor: d => d[k],
+          Cell: rowData => (
+            <div className={`${styles.pricing_cell} flex-100 layout-row layout-align-start-center`}>
+              <p className="flex-100">
+                {this.determineStringToRender(rowData.row[k], k)}
+              </p>
+            </div>
+          )
+        }
+      ))
+    const feeRenderColumns = isLocalCharge ? localChargeColumns : feeColumns
+    feeRenderColumns.forEach(col => rangeColumns.push(col))
+
 
     return (
       <ReactTable

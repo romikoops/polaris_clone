@@ -37,6 +37,24 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
     response_handler(local_charge)
   end
 
+  def destroy
+    result = LocalCharge.find(params[:id]).destroy
+    response_handler(success: result)
+  end
+
+  def index
+    paginated_local_charges = handle_search.paginate(pagination_options)
+    response_local_charges = paginated_local_charges.map do |local_charge|
+      for_index_json(local_charge)
+    end
+    response_handler(
+      pagination_options.merge(
+        localChargeData: response_local_charges,
+        numPages: paginated_local_charges.total_pages
+      )
+    )
+  end
+
   def edit_customs
     data = params[:data].as_json
     id = data['id']
@@ -51,7 +69,7 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
 
     options = { tenant: current_tenant,
                 file_or_path: file,
-                options: { sandbox: @sandbox, user: current_user } }
+                options: { sandbox: @sandbox, user: current_user, group_id: upload_params[:group_id] } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
@@ -68,7 +86,8 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
       tenant: current_tenant,
       specific_identifier: klass_identifier,
       file_name: file_name,
-      sandbox: @sandbox
+      sandbox: @sandbox,
+      group_id: upload_params[:group_id]
     }
     downloader = ExcelDataServices::Loaders::Downloader.new(options)
 
@@ -81,10 +100,43 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
   private
 
   def upload_params
-    params.permit(:file)
+    params.permit(:file, :group_id)
+  end
+
+  def for_index_json(local_charge, options = {})
+    new_options = options.reverse_merge(
+      methods: %i(hub_name counterpart_hub_name service_level carrier_name)
+    )
+    local_charge.as_json(new_options)
   end
 
   def download_params
-    params.require(:options).permit(:mot)
+    params.require(:options).permit(:mot, :group_id)
+  end
+
+  def handle_search # rubocop:disable Metrics/CyclomaticComplexity
+    query = LocalCharge.all
+    query = query.where(group_id: search_params[:group_id]) if search_params[:group_id]
+    query = query.search(search_params[:query]) if search_params[:query]
+    query = query.joins(:hub).order(hub: { name: search_params[:name_desc] == 'true' ? :desc : :asc} ) if search_params[:name_desc]
+    query
+  end
+
+  def search_params
+    params.permit(:group_id,
+      :page_size,
+      :per_page,
+      :page)
+  end
+
+  def pagination_options
+    {
+      page: current_page,
+      per_page: (search_params[:page_size] || search_params[:per_page])&.to_f
+    }.compact
+  end
+
+  def current_page
+    search_params[:page]&.to_i || 1
   end
 end

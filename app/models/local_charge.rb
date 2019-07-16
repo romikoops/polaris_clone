@@ -42,4 +42,5 @@ end
 #  user_id            :integer
 #  uuid               :uuid
 #  sandbox_id         :uuid
+#  group_id           :uuid
 #

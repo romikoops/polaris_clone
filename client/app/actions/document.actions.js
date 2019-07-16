@@ -1,7 +1,7 @@
 // import { push } from 'react-router-redux'
 import { documentConstants } from '../constants/document.constants'
 import { documentService } from '../services/document.service'
-import { alertActions, adminActions } from './'
+import { alertActions, adminActions, clientsActions } from "."
 // import { Promise } from 'es6-promise-promise';
 
 function uploadPricings (file, mot, loadType, open) {
@@ -106,6 +106,34 @@ function uploadMargins (args) {
     )
   }
 }
+
+function uploadGroupPricings (args) {
+  function request (uploadData) {
+    return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
+  }
+  function success (uploadData) {
+    return { type: documentConstants.UPLOAD_SUCCESS, payload: uploadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.UPLOAD_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.uploadGroupPricings(args).then(
+      (data) => {
+        dispatch(success(data))
+        dispatch(adminActions.getGroupPricings(args.groupId))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function uploadChargeCategories (file) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
@@ -433,7 +461,7 @@ function uploadItinerarySchedules (file, target) {
     )
   }
 }
-function uploadLocalCharges (file, mot) {
+function uploadLocalCharges (file, mot, groupId) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
   }
@@ -447,9 +475,10 @@ function uploadLocalCharges (file, mot) {
   return (dispatch) => {
     dispatch(request())
 
-    documentService.uploadLocalCharges(file, mot).then(
+    documentService.uploadLocalCharges(file, mot, groupId).then(
       (data) => {
         dispatch(success(data))
+        dispatch(clientsActions.getLocalChargesForList({ groupId }))
       },
       (error) => {
         dispatch(failure(error))
@@ -490,7 +519,8 @@ export const documentActions = {
   uploadChargeCategories,
   uploadGeneratorSheet,
   uploadMargins,
-  downloadQuote
+  downloadQuote,
+  uploadGroupPricings
 }
 
 export default documentActions

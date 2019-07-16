@@ -88,6 +88,14 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     )
   end
 
+  def group
+    pricings = Pricings::Pricing.where(sandbox: @sandbox, group_id: params[:id])
+    response_handler(
+      pricings: pricings.map(&:for_table_json),
+      group_id: params[:id]
+    )
+  end
+
   def assign_dedicated # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     new_pricings = params[:clientIds].map do |client_id| # rubocop:disable Metrics/BlockLength
       itinerary_id = params[:pricing][:itinerary_id]
@@ -172,7 +180,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
     options = { tenant: current_tenant,
                 file_or_path: file,
-                options: { sandbox: @sandbox, user: current_user } }
+                options: { sandbox: @sandbox, user: current_user, group_id: upload_params[:group_id] } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
@@ -182,6 +190,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   def download
     mot = download_params[:mot]
     load_type = download_params[:load_type]
+    group_id = download_params[:group_id]
     key = "pricing_#{load_type}"
     new_load_type = load_type_renamed(load_type)
     file_name = "#{current_tenant.subdomain.downcase}__pricing_#{mot.downcase}_#{new_load_type.downcase}"
@@ -189,7 +198,8 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     options = { tenant: current_tenant,
                 specific_identifier: "#{mot}_#{new_load_type}".camelcase,
                 file_name: file_name,
-                sandbox: @sandbox }
+                sandbox: @sandbox,
+                group_id: group_id }
     downloader = ExcelDataServices::Loaders::Downloader.new(options)
 
     document = downloader.perform
@@ -293,11 +303,11 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def upload_params
-    params.permit(:file, :mot, :load_type)
+    params.permit(:file, :mot, :load_type, :group_id)
   end
 
   def download_params
-    params.require(:options).permit(:mot, :load_type)
+    params.require(:options).permit(:mot, :load_type, :group_id)
   end
 
   def itinerary_pricing_exists?(args)

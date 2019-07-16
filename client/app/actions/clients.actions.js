@@ -106,6 +106,32 @@ function getMarginsForList (args) {
   }
 }
 
+function getLocalChargesForList (args) {
+  function request () {
+    return { type: clientsConstants.GET_LOCAL_CHARGES_LIST_REQUEST }
+  }
+  function success (payload) {
+    return { type: clientsConstants.GET_LOCAL_CHARGES_LIST_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: clientsConstants.GET_LOCAL_CHARGES_LIST_ERROR, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request)
+    clientsService.getLocalChargesForList(args).then(
+      (resp) => {
+        dispatch(success(resp.data))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+
 function createGroup (args) {
   function request () {
     return { type: clientsConstants.CREATE_GROUP_REQUEST }
@@ -569,6 +595,10 @@ function membershipData (args) {
   }
 }
 
+function removeLocalCharge (id) {
+  return { type: clientsConstants.REMOVE_LOCAL_CHARGE, payload: id }
+}
+
 function deleteGroup (id) {
   function request () {
     return { type: clientsConstants.DELETE_GROUP_REQUEST }
@@ -666,7 +696,9 @@ export const clientsActions = {
   goTo,
   logOut,
   deleteGroup,
-  deleteCompany
+  deleteCompany,
+  getLocalChargesForList,
+  removeLocalCharge
 }
 
 export default clientsActions

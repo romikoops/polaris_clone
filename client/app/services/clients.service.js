@@ -99,6 +99,24 @@ function getMarginsForList (args) {
     .then(handleResponse)
 }
 
+function getLocalChargesForList (args) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  const queryObj = args
+
+  if (args.filters) {
+    args.filters.forEach((filter) => {
+      queryObj[filter.id] = filter.value
+    })
+  }
+  const query = toSnakeQueryString(queryObj, true)
+
+  return fetch(`${getTenantApiUrl()}/admin/local_charges?${query}`, requestOptions)
+    .then(handleResponse)
+}
+
 function viewGroup (id) {
   const requestOptions = {
     method: 'GET',
@@ -337,7 +355,8 @@ export const clientsService = {
   editCompanyEmployees,
   createCompany,
   deleteGroup,
-  deleteCompany
+  deleteCompany,
+  getLocalChargesForList
 }
 
 export default clientsService

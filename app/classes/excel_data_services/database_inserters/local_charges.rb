@@ -117,7 +117,8 @@ module ExcelDataServices
           ).merge(
             effective_date: Date.parse(params[:effective_date].to_s).beginning_of_day,
             expiration_date: Date.parse(params[:expiration_date].to_s).end_of_day.change(usec: 0),
-            sandbox: @sandbox
+            sandbox: @sandbox,
+            group_id: @group_id
           )
 
         new_local_charge = tenant.local_charges.new(local_charge_params)

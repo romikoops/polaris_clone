@@ -9,11 +9,15 @@ import { clientsActions, documentActions } from '../../../../actions'
 import styles from '../index.scss'
 import AdminClientAdder from '../Adder'
 import AdminClientMargins from '../Margins'
-import GreyBox from '../../../GreyBox/GreyBox'
 import SquareButton from '../../../SquareButton'
-import FileUploader from '../../../FileUploader/FileUploader'
-import TextHeading from '../../../TextHeading/TextHeading'
 import { AdminClientMarginPreview } from '..'
+import AdminPricesGroupTable from '../../Pricing/GroupTable'
+import AdminPricesGroupLocalCharges from '../../Pricing/GroupLocalCharges'
+import Tab from '../../../Tabs/Tab'
+import Tabs from '../../../Tabs/Tabs'
+import MarginButtons from './MarginButtons'
+import PricingButtons from './PricingButtons'
+import LocalChargeButtons from './LocalChargeButtons'
 
 class AdminClientGroup extends Component {
   constructor (props) {
@@ -25,6 +29,10 @@ class AdminClientGroup extends Component {
     }
     this.getItineraryNameFromMargin = this.getItineraryNameFromMargin.bind(this)
     this.toggleMarginEdit = this.toggleMarginEdit.bind(this)
+    this.newMargin = this.newMargin.bind(this)
+    this.uploadMargins = this.uploadMargins.bind(this)
+    this.uploadGroupPricings = this.uploadGroupPricings.bind(this)
+    this.uploadGroupLocalCharges = this.uploadGroupLocalCharges.bind(this)
     this.viewMember = this.viewMember.bind(this)
   }
 
@@ -103,6 +111,20 @@ class AdminClientGroup extends Component {
     documentDispatch.uploadMargins(args)
   }
 
+  uploadGroupPricings (file) {
+    const { documentDispatch, id } = this.props
+    const args = {
+      file,
+      groupId: id
+    }
+    documentDispatch.uploadGroupPricings(args)
+  }
+
+  uploadGroupLocalCharges (file) {
+    const { documentDispatch, id } = this.props
+    documentDispatch.uploadLocalCharges(file, '', id)
+  }
+
   render () {
     const {
       member_list, t, name, id, margins_list, theme
@@ -176,61 +198,7 @@ class AdminClientGroup extends Component {
         />
       </div>
     )
-    const view = currentView === 'margins' ? (
-      <AdminClientMargins
-        targetId={id}
-        targetType="group"
-        editable={editMargins}
-        toggleEdit={this.toggleMarginEdit}
-      />
-    ) : userTable
 
-    const rightButtons = currentView === 'margins' ? [
-      (<div className="flex-100 layout-row layout-align-center-center margin_5">
-        <SquareButton
-          text={t('admin:editMargins')}
-          theme={theme}
-          handleNext={() => this.toggleMarginEdit()}
-          size="small"
-          border
-          active
-        />
-      </div>)
-      ,
-      (<div className="flex-100 layout-row layout-align-center-center margin_5">
-        <SquareButton
-          text={t('admin:newMargins')}
-          theme={theme}
-          handleNext={() => this.newMargin()}
-          size="small"
-          border
-          active
-        />
-      </div>
-      )
-      ,
-      (
-        <FileUploader
-          text={t('admin:uploadGroupMargins')}
-          theme={theme}
-          dispatchFn={file => this.uploadMargins(file)}
-          size="small"
-          active
-          square
-        />
-      )
-    ] : [
-      (<div className="flex-100 layout-row layout-align-center-center margin_5">
-        <SquareButton
-          text={t('admin:editMembers')}
-          theme={theme}
-          handleNext={() => this.toggleUserEdit()}
-          size="small"
-          border
-          active
-        />
-      </div>)
-    ]
     const statBoxes = groupBy(member_list, m => m.human_type)
 
     return (
@@ -246,83 +214,98 @@ class AdminClientGroup extends Component {
               {' '}
             </h1>
           </div>
-          <div className="flex-100 layout-row layout-align-space-between-center">
-            <div className="flex-45 layout-row layout-align-center-center">
-              <GreyBox
-                wrapperClassName="flex tile_padding pointy"
-                contentClassName="flex layout-row layout-align-center-center"
-                onClick={() => this.setView('members')}
-              >
-                <i className="flex-none fa fa-users" />
-                <p
-                  className="flex center"
-
-                >
-                  {t('admin:members')}
-                </p>
-              </GreyBox>
-            </div>
-            <div className="flex-45 layout-row layout-align-center-center">
-              <GreyBox
-                wrapperClassName="flex tile_padding pointy"
-                contentClassName="flex layout-row layout-align-center-center"
-                onClick={() => this.setView('margins')}
-              >
-                <i className="flex-none fa fa-percent" />
-                <p
-                  className="flex center"
-
-                >
-                  {t('admin:margins')}
-                </p>
-              </GreyBox>
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-aling-center-start layout-wrap margin_top">
-            {view}
-          </div>
-        </div>
-        <div className="flex-20 layout-row layout-wrap padd_20 layout-align-center-start">
-          <div className={`flex-100 layout-row ${styles.group_header}`}>
-            <h2 className="flex-none">
-              {`${t('admin:groupDetails')}: `}
-            </h2>
-          </div>
-          <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-            {
-              Object.entries(statBoxes).map(statArr => (
-                <div
-                  className={`flex-100 five_m layout-row layout-align-start-center ${styles.stat_box}`}
-                >
-                  <h4
-                    className="flex"
-                  >
-                    {`${t(`admin:${statArr[0]}Count`)}: ${statArr[1].length}`}
-                  </h4>
-                </div>
-              ))
-            }
-
-            <div
-              className={`flex-100 five_m layout-row layout-align-center-center ${styles.stat_box}`}
+          <Tabs
+            wrapperTabs="layout-row flex margin_bottom"
+            paddingFixes
+          >
+            <Tab
+              tabTitle={t('admin:members')}
+              theme={theme}
             >
-              <h4
-                className="flex"
-              >
-                {`${t(`admin:marginCount`)}: ${margins_list.length}`}
-              </h4>
-            </div>
+              <div className="flex-100 layout-row layout-wrap">
+                <div className="flex flex-xs-100 layout-row">
+                  {userTable}
+                </div>
+                <div className="flex-15 flex-xs-100 layout-row layout-wrap">
+                  <div className="flex-100 layout-row layout-align-center-start margin_5">
+                    <SquareButton
+                      text={t('admin:editMembers')}
+                      theme={theme}
+                      handleNext={() => this.toggleUserEdit()}
+                      size="small"
+                      border
+                      active
+                    />
+                  </div>
+                </div>
+              </div>
+            </Tab>
+            <Tab
+              tabTitle={t('admin:pricings')}
+              theme={theme}
+            >
+              <div className="flex-100 layout-row layout-wrap">
+                <div className="flex flex-xs-100 layout-row">
+                  {<AdminPricesGroupTable groupId={id} />}
+                </div>
+                <div className="flex-15 flex-xs-100 layout-row layout-wrap">
+                  <PricingButtons
+                    theme={theme}
+                    toggleEdit={this.toggleMarginEdit}
+                    newFn={this.newMargin}
+                    uploadFn={this.uploadGroupPricings}
+                    t={t}
+                  />
+                </div>
+              </div>
 
-          </div>
-          <div className="flex-100 layout-row layout-align-center-start layout-wrap tile_padding">
-            <div className={`flex-100 layout-align layout-row ${styles.group_header}`}>
-              <h2 className="flex-none">
-                {`${t('admin:groupActions')}: `}
-              </h2>
-            </div>
-            {rightButtons}
-          </div>
+            </Tab>
+            <Tab
+              tabTitle={t('admin:localCharges')}
+              theme={theme}
+            >
+              <div className="flex-100 layout-row layout-wrap">
+                <div className="flex flex-xs-100 layout-row">
+                  {<AdminPricesGroupLocalCharges groupId={id} />}
+                </div>
+                <div className="flex-15 flex-xs-100 layout-row layout-wrap">
+                  <LocalChargeButtons
+                    theme={theme}
+                    toggleEdit={this.toggleMarginEdit}
+                    newFn={this.newMargin}
+                    uploadFn={this.uploadGroupLocalCharges}
+                    t={t}
+                  />
+                </div>
+              </div>
 
+            </Tab>
+            <Tab
+              tabTitle={t('admin:margins')}
+              theme={theme}
+            >
+              <div className="flex-100 layout-row layout-wrap">
+                <div className="flex flex-xs-100 layout-row">
+                  <AdminClientMargins
+                    targetId={id}
+                    targetType="group"
+                    editable={editMargins}
+                    toggleEdit={this.toggleMarginEdit}
+                  />
+                </div>
+                <div className="flex-15 flex-xs-100 layout-row layout-wrap">
+                  <MarginButtons
+                    theme={theme}
+                    toggleEdit={this.toggleMarginEdit}
+                    newFn={this.newMargin}
+                    uploadFn={this.uploadMargins}
+                    t={t}
+                  />
+                </div>
+              </div>
+
+            </Tab>
+          </Tabs>
         </div>
         <div className="layout-row flex-100 layout-wrap layout-align-start-center padd_20">
           <AdminClientMarginPreview

@@ -50,13 +50,21 @@ module Pricings
 
     def for_table_json(options = {})
       new_options = options.reverse_merge(
-        methods: %i(data load_type cargo_class carrier service_level),
+        methods: %i(data load_type cargo_class carrier service_level itinerary_name mode_of_transport),
         only: %i(
           effective_date expiration_date wm_rate itinerary_id
           tenant_id id tenant_vehicle_id disabled
         )
       )
       as_json(new_options)
+    end
+
+    def itinerary_name
+      itinerary&.name
+    end
+  
+    def mode_of_transport
+      itinerary&.mode_of_transport
     end
 
     def data
@@ -92,4 +100,5 @@ end
 #  updated_at        :datetime         not null
 #  sandbox_id        :uuid
 #  internal          :boolean          default(FALSE)
+#  group_id          :uuid
 #

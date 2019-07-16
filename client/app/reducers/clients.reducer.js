@@ -1,4 +1,5 @@
 import { get } from 'lodash'
+
 export default function clients (state = {}, action) {
   switch (action.type) {
     case 'CLIENT_LOG_OUT': {
@@ -20,6 +21,20 @@ export default function clients (state = {}, action) {
       return {
         ...state,
         margins: action.payload
+      }
+    }
+    case 'GET_LOCAL_CHARGES_LIST_SUCCESS': {
+      return {
+        ...state,
+        localCharges: action.payload
+      }
+    }
+    case 'REMOVE_LOCAL_CHARGE': {
+      const localCharges = state.localCharges.localChargeData.filter(lc => lc.id !== action.payload)
+
+      return {
+        ...state,
+        localCharges
       }
     }
     case 'GET_GROUPS_LIST_SUCCESS': {
