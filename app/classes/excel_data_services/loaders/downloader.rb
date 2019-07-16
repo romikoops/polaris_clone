@@ -3,11 +3,12 @@
 module ExcelDataServices
   module Loaders
     class Downloader < Base
-      def initialize(tenant:, specific_identifier:, file_name:, sandbox:)
+      def initialize(tenant:, specific_identifier:, file_name:, sandbox:, group_id: nil)
         super(tenant: tenant)
         @specific_identifier = specific_identifier
         @file_name = file_name
         @sandbox = sandbox
+        @group_id = group_id
       end
 
       def perform

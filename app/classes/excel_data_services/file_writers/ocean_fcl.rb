@@ -8,7 +8,7 @@ module ExcelDataServices
       def load_and_prepare_data
         pricings = if scope['base_pricing']
                      tenant.rates
-                           .where(sandbox: @sandbox)
+                           .where(sandbox: @sandbox, group_id: @group_id)
                            .for_mode_of_transport('ocean')
                            .for_cargo_classes(Container::CARGO_CLASSES)
                    else

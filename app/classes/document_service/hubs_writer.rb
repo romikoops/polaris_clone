@@ -37,10 +37,10 @@ module DocumentService
       worksheet.write(row, 5, hub.address.longitude)
       worksheet.write(row, 6, hub.address.country.name)
       worksheet.write(row, 7, hub.address.geocoded_address)
-      worksheet.write(row, 8, @mandatory_charges[hub.id].import_charges.to_s)
-      worksheet.write(row, 9, @mandatory_charges[hub.id].export_charges.to_s)
-      worksheet.write(row, 10, @mandatory_charges[hub.id].pre_carriage.to_s)
-      worksheet.write(row, 11, @mandatory_charges[hub.id].on_carriage.to_s)
+      worksheet.write(row, 8, @mandatory_charges[hub.id]&.import_charges&.to_s)
+      worksheet.write(row, 9, @mandatory_charges[hub.id]&.export_charges&.to_s)
+      worksheet.write(row, 10, @mandatory_charges[hub.id]&.pre_carriage&.to_s)
+      worksheet.write(row, 11, @mandatory_charges[hub.id]&.on_carriage&.to_s)
       worksheet.write(row, 12, hub.photo)
     end
 

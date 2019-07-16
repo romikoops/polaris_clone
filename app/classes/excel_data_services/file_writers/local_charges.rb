@@ -3,7 +3,7 @@
 module ExcelDataServices
   module FileWriters
     class LocalCharges < Base # rubocop:disable Metrics/ClassLength
-      def initialize(tenant:, file_name:, mode_of_transport: nil)
+      def initialize(tenant:, file_name:, mode_of_transport: nil, sandbox: nil)
         super(tenant: tenant, file_name: file_name)
         @mode_of_transport = mode_of_transport
       end
@@ -14,7 +14,7 @@ module ExcelDataServices
 
       def load_and_prepare_data
         rows_data = []
-        all_local_charges = tenant.local_charges.where(sandbox: @sandbox)
+        all_local_charges = tenant.local_charges.where(sandbox: @sandbox, group_id: @group_id)
         local_charges = if mode_of_transport.nil? || mode_of_transport == 'all'
                           all_local_charges
                         else
