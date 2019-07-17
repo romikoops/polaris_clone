@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Carrier < ApplicationRecord
+class Carrier < Legacy::Carrier
   has_many :tenant_vehicles
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 

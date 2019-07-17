@@ -1,0 +1,108 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+module RmsData
+  RSpec.describe Sheet, type: :model do
+    context 'instance methods' do
+      let!(:tenant) { FactoryBot.create(:legacy_tenant) }
+      let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+      let!(:sheet) { FactoryBot.create(:rms_data_sheet, tenant: tenants_tenant) }
+      let!(:headers) do
+        %w(STATUS
+           TYPE
+           NAME
+           CODE
+           LATITUDE
+           LONGITUDE
+           COUNTRY
+           FULL_ADDRESS
+           PHOTO
+           IMPORT_CHARGES
+           EXPORT_CHARGES
+           PRE_CARRIAGE
+           ON_CARRIAGE
+           ALTERNATIVE_NAMES)
+      end
+
+      describe 'rows' do
+        it 'returns the values of the rows in order' do
+          [0, 1, 2, 3].each do |no|
+            headers.map.with_index do |header, i|
+              FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+          end
+        
+          expect(sheet.rows.count).to eq(4)
+        end
+      end
+
+      describe 'row(index)' do
+        it 'returns the values of the desired row' do
+          [0, 1, 2, 3].each do |no|
+            headers.map.with_index do |header, i|
+              FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+          end
+          expect(sheet.row(1)).to eq(headers.map{|h| "#{h} - value - ##{1}"})
+        end
+      end
+
+      describe 'headers' do
+        it 'returns the values of the header row' do
+          [0, 1, 2, 3].each do |no|
+            headers.map.with_index do |header, i|
+              FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+          end
+          expect(sheet.headers).to eq(headers)
+        end
+      end
+
+      describe 'cell' do
+        it 'returns the value from row and column' do
+          [0, 1, 2, 3].each do |no|
+            headers.map.with_index do |header, i|
+              FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+          end
+          expect(sheet.cell(row: 1, column: 0)).to eq('STATUS - value - #1')
+        end
+
+        it 'returns the value from row and header value' do
+          [0, 1, 2, 3].each do |no|
+            headers.map.with_index do |header, i|
+              FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+          end
+          expect(sheet.cell(row: 1, column: 'NAME')).to eq('NAME - value - #1')
+        end
+      end
+    end
+  end
+end

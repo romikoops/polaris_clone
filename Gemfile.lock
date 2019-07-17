@@ -145,6 +145,24 @@ PATH
       trucking
 
 PATH
+  remote: engines/rms_data
+  specs:
+    rms_data (9999.1.0.0)
+      core
+      tenants
+
+PATH
+  remote: engines/rms_sync
+  specs:
+    rms_sync (9999.1.0.0)
+      activerecord-import
+      core
+      legacy
+      pricings
+      rms_data
+      tenants
+
+PATH
   remote: engines/tenants
   specs:
     tenants (9999.1.0.0)
@@ -914,6 +932,8 @@ DEPENDENCIES
   recipient_interceptor
   rgeo!
   rgeo-geojson
+  rms_data!
+  rms_sync!
   roo
   roo-xls
   rspec-rails

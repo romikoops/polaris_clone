@@ -21,5 +21,22 @@ FactoryBot.define do
         }
       }
     end
+
+    trait :range do
+      fees do
+        {
+          "QDF"=>
+            {"key"=>"QDF",
+              "max"=>nil,
+              "min"=>57,
+              "name"=>"Wharfage / Quay Dues",
+              "range"=>[{"max"=>5, "min"=>0, "ton"=>41, "currency"=>"EUR"}, {"cbm"=>8, "max"=>40, "min"=>6, "currency"=>"EUR"}],
+              "currency"=>"EUR",
+              "rate_basis"=>"PER_UNIT_TON_CBM_RANGE"},
+        }
+      end
+    end
+
+    factory :local_charge_range, traits: [:range]
   end
 end
