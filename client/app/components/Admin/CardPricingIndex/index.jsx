@@ -36,7 +36,7 @@ class CardPricingIndex extends Component {
 
   handleClick (id) {
     const { adminDispatch } = this.props
-    adminDispatch.getItineraryPricings(id, true)
+    adminDispatch.getItineraryPricings(id, null, true)
   }
 
   generateViewType (mot) {

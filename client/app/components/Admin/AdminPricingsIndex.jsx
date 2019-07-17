@@ -63,7 +63,7 @@ export class AdminPricingsIndex extends Component {
 
   viewRoute (route) {
     const { adminDispatch } = this.props
-    adminDispatch.getItineraryPricings(route.id, true)
+    adminDispatch.getItineraryPricings(route.id, null, true)
   }
 
   lclUpload (file) {

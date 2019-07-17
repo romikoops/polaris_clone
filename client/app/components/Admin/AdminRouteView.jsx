@@ -54,7 +54,7 @@ export class AdminRouteView extends Component {
         break
       case 'pricings':
         adminDispatch.getPricings()
-        adminDispatch.getItineraryPricings(itinerary.id, true)
+        adminDispatch.getItineraryPricings(itinerary.id, null, true)
         break
       default:
         break

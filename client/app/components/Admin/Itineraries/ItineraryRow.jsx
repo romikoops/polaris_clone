@@ -12,7 +12,7 @@ class ItineraryRow extends PureComponent {
   }
   viewPricings () {
     const { adminDispatch, itinerary } = this.props
-    adminDispatch.getItineraryPricings(itinerary.id, true)
+    adminDispatch.getItineraryPricings(itinerary.id, null, true)
   }
 
   render () {

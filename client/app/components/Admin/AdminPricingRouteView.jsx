@@ -44,7 +44,7 @@ export class AdminPricingRouteView extends Component {
       pricings, loading, adminActions, match
     } = this.props
     if (!has(pricings, [match.params.id]) && !loading) {
-      adminActions.getItineraryPricings(parseInt(match.params.id, 10), false)
+      adminActions.getItineraryPricings(parseInt(match.params.id, 10), null, false)
     }
     window.scrollTo(0, 0)
   }
