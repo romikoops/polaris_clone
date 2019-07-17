@@ -27,14 +27,16 @@
   </div>
 
 
-  <% shipments.map do |s| %>
-    <% origin_fee_color = s.selected_offer["export"] ? primary_color : neutral_color %>
-    <% destination_fee_color = s.selected_offer["import"] ? primary_color : neutral_color %>
+  <% quotes.map do |q| %>
+    <% s = shipments.find { |shipment| shipment.trip_id === q['trip_id'] } || shipment %>
+    <% selected_offer = s.trip_id ? s.selected_offer : q %>
+    <% origin_fee_color = selected_offer["export"] ? primary_color : neutral_color %>
+    <% destination_fee_color = selected_offer["import"] ? primary_color : neutral_color %>
     <div class="all-row">
       <div class="main-container">
         <div class="validity">
           <p><b>Price valid until:</b></p>
-          <p class="text-right"><%= s.valid_until&.strftime('%d.%m.%Y') %></p>
+          <p class="text-right"><%= s&.valid_until&.strftime('%d.%m.%Y') %></p>
         </div>
         <div class="info">
           <% if s.mode_of_transport == "ocean" %>
@@ -46,8 +48,8 @@
           <% end %>
           <i class="fa fa-<%= mot %> mot-icon" style="color: <%= primary_color %>"></i>
           <div class="shipment-info">
-            <p>From:&nbsp;<span><%= s.origin_hub.name %></span></p>
-            <p>To:&nbsp;<span><%= s.destination_hub.name %></span></p>
+            <p>From:&nbsp;<span><%= s.origin_hub&.name || hub_names[q['trip_id']][:origin] %></span></p>
+            <p>To:&nbsp;<span><%= s.destination_hub&.name || hub_names[q['trip_id']][:destination] %></span></p>
             <p>Ref:&nbsp;<span><%= s.imc_reference %></span></p>
           </div>
           <div class="text-right cargo-info">
@@ -224,7 +226,7 @@
       </div>
       <% ['trucking_pre', 'export', 'cargo', 'import', 'trucking_on' ].each do |charge_key| %>
         <% if scope['freight_in_original_currency']  && charge_key == 'cargo'
-            original_charge = s.selected_offer[charge_key]
+            original_charge = selected_offer[charge_key]
             charge = {
               "total" => {
                 "value" => 0.0,
@@ -250,7 +252,7 @@
               end
               charge['name'] = original_charge['name']
           elsif %w(import export).include?(charge_key) && scope['condense_local_fees_pdf']
-            tmp_charge = s.selected_offer[charge_key]
+            tmp_charge = selected_offer[charge_key]
             next unless tmp_charge
             charge = tmp_charge.slice('name', 'total', 'edited_total')
 
@@ -264,7 +266,7 @@
               end
             end
           else
-            charge = s.selected_offer[charge_key]
+            charge = selected_offer[charge_key]
           end %>
         <% next if !charge%>
         <% charge_name =  if charge_key == 'cargo' && charge['name'] == 'Freight'
@@ -410,8 +412,8 @@
       <% unless hide_grand_total[s.id] %>
         <div class="total-row">
           <h4>Total</h4>
-          <p class="quote"><%= '%.2f' % s.selected_offer["total"]["value"].to_f %>
-            &nbsp;<%= s.selected_offer["total"]["currency"] %>
+          <p class="quote"><%= '%.2f' % selected_offer["total"]["value"].to_f %>
+            &nbsp;<%= selected_offer["total"]["currency"] %>
           </p>
         </div>
       <% end %>

@@ -25,6 +25,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @content               = {}
     @hide_grand_total = {}
     @has_legacy_charges = {}
+    @hub_names = {}
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
     @scope = ::Tenants::ScopeService.new(target: @shipment.user, tenant: tenants_tenant).fetch
     @pricing_data = {}
@@ -35,7 +36,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       chargeable_weight: {},
       item_strings: {}
     }
-
+    prep_hub_data if @quotes
     @shipments << @shipment if @shipments.empty?
     @shipments.each do |s|
       calculate_cargo_data(s)
@@ -49,6 +50,15 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
 
   def calculate_pricing_data(shipment)
     @pricing_data[shipment.id] = shipment.meta['pricing_rate_data']
+  end
+
+  def prep_hub_data
+    @quotes.each do |quote|
+      @hub_names[quote['trip_id']] = {
+        origin: Trip.find(quote['trip_id']).itinerary.first_stop.hub.name,
+        destination: Trip.find(quote['trip_id']).itinerary.last_stop.hub.name
+      }
+    end
   end
 
   def hide_grand_total?(shipment) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -154,6 +164,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                        end
         shipment.cargo_units.each do |hash|
           hash.set_chargeable_weight! unless hash[:chargeable_weight]
+          hash[:chargeable_weight] = hash.calc_chargeable_weight('ocean') unless hash[:chargeable_weight]
           single_string = if show_volume
                             "#{format('%.3f', (hash[:chargeable_weight] / 1000))} m<sup>3</sup>"
                           else
@@ -232,7 +243,8 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         hide_grand_total: @hide_grand_total,
         has_legacy_charges: @has_legacy_charges,
         pricing_data: @pricing_data,
-        scope: @scope
+        scope: @scope,
+        hub_names: @hub_names
       }
     )
     response = BreezyPDFLite::RenderRequest.new(

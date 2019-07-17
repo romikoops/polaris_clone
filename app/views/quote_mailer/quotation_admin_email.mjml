@@ -3,7 +3,7 @@
   <mj-column>
     <mj-text>
       <p style="display: none;max-height: 0px;overflow: hidden;">
-        Hello <%= @email %>, <%= @user.full_name %> from <%= @user.agency.name %>
+        Hello <%= @email %>, <%= @user.full_name %> from <%= @user.agency&.name || @user.company_name %>
               has generated a quote using the ItsMyCargo Quotation Tool: 
       </p>
     </mj-text>
@@ -51,7 +51,7 @@
       <mj-text line-height="24px">
         <p>
           <%= @user.full_name %> from <strong>
-            <%= @user.agency.name %></strong>
+            <%= @user.agency&.name || @user.company_name %></strong>
           generated a quote through your ItsMyCargo Quotation Tool:
         </p>
       </mj-text>
@@ -72,9 +72,9 @@
       <mj-column>
         <mj-text line-height="16px" padding="0" font-size="18px">
           <p>From: <strong>
-              <%= @shipments.first.origin_hub.name %></strong></p>
+              <%= @shipments.first.origin_hub&.name || @hub_names[:origin] %></strong></p>
           <p>To: <strong>
-              <%= @shipments.first.destination_hub.name %></strong> </p>
+              <%= @shipments.first.destination_hub&.name || @hub_names[:destination] %></strong> </p>
         </mj-text>
       </mj-column>
       <mj-column>

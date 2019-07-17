@@ -283,6 +283,8 @@ class Shipment < Legacy::Shipment
     cargo_classes = cargo_units.pluck(:cargo_class)
     start_date = planned_etd || desired_start_date
     end_date = planned_eta || desired_start_date
+    return nil if itinerary.nil?
+    
     query = self&.itinerary&.pricings
                 .for_cargo_classes(cargo_classes)
                 .for_dates(start_date, end_date)

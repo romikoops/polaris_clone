@@ -49,11 +49,15 @@ class QuoteMailer < ApplicationMailer
     end
   end
 
-  def quotation_admin_email(quotation, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    @shipments = quotation.shipments
-    @shipment = Shipment.find(quotation.original_shipment_id)
+  def quotation_admin_email(quotation, shipment = nil, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    @shipments = quotation ? quotation.shipments : [shipment]
+    @shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
     @quotation = quotation
-    @quotes = @shipments.map(&:selected_offer)
+    @quotes = if quotation
+                @shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
+              else
+                @shipment.charge_breakdowns.map { |cb| cb.to_nested_hash.merge(trip_id: cb.trip_id).deep_stringify_keys }
+              end
     @user = @shipment.user
     @theme = @user.tenant.theme
     @content = Content.get_component('QuotePdf', @user.tenant.id)
@@ -75,6 +79,10 @@ class QuoteMailer < ApplicationMailer
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
     attachments.inline['logo.png'] = URI.open(@theme['logoLarge']).read
     attachments[pdf_name] = quotation
+    @hub_names = {
+      origin: Trip.find(@quotes.first['trip_id']).itinerary.first_stop.hub.name,
+      destination: Trip.find(@quotes.first['trip_id']).itinerary.last_stop.hub.name
+    }
 
     mail(
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
