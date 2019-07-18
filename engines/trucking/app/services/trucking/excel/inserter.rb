@@ -181,7 +181,8 @@ module Trucking
             :load_type,
             :courier_id,
             :truck_type,
-            :user_id
+            :user_id,
+            :group_id
           ).merge(location_id: tl.id)
           trucking = ::Trucking::Trucking.find_or_initialize_by(trucking_attr)
           trucking.assign_attributes(trucking_rate.merge(location_id: tl.id))
@@ -243,11 +244,13 @@ module Trucking
 
       def load_ident_values_and_countries # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
         current_country = { name: nil, code: nil }
+       
         zones.each do |zone_name, idents_and_countries| # rubocop:disable Metrics/BlockLength
           current_country = {
             name: Legacy::Country.find_by_code(idents_and_countries.first[:country]).name,
             code: idents_and_countries.first[:country]
           }
+          valid_postal_codes = ::Trucking::PostalCodes.for(country_code: idents_and_countries.first[:country])
           all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country| # rubocop:disable Metrics/BlockLength
             if current_country[:code] != idents_and_country[:country]
               current_country = {
@@ -265,6 +268,7 @@ module Trucking
                 else
                   ident_value = ident
                 end
+                next if valid_postal_codes.present? && !valid_postal_codes.include?(ident_value)
 
                 { ident: ident_value, country: idents_and_country[:country] }
               end
