@@ -9,7 +9,7 @@ class QuoteMailer < ApplicationMailer
     @shipments = shipments
     @shipment = shipment
     @quotation = quotation
-    @quotes = @shipments.map(&:selected_offer)
+    @quotes = quotes_with_trip_id(@quotation, @shipments)
     @user = @shipment.user
     @theme = @user.tenant.theme
     @email = email[/[^@]+/]
@@ -49,15 +49,19 @@ class QuoteMailer < ApplicationMailer
     end
   end
 
+  def quotes_with_trip_id(quotation, shipments)
+    if quotation
+      shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
+    else
+      shipment.charge_breakdowns.map { |cb| cb.to_nested_hash.merge(trip_id: cb.trip_id).deep_stringify_keys }
+    end
+  end
+
   def quotation_admin_email(quotation, shipment = nil, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     @shipments = quotation ? quotation.shipments : [shipment]
     @shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
     @quotation = quotation
-    @quotes = if quotation
-                @shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
-              else
-                @shipment.charge_breakdowns.map { |cb| cb.to_nested_hash.merge(trip_id: cb.trip_id).deep_stringify_keys }
-              end
+    @quotes = quotes_with_trip_id(@quotation, @shipments)
     @user = @shipment.user
     @theme = @user.tenant.theme
     @content = Content.get_component('QuotePdf', @user.tenant.id)
