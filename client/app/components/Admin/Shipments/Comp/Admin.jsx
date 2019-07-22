@@ -48,7 +48,6 @@ export class ShipmentsCompAdmin extends Component {
   componentDidMount () {
     window.scrollTo(0, 0)
     this.determinePerPage()
-    this.handleFilters()
     window.addEventListener('resize', this.determinePerPage)
   }
 
@@ -73,15 +72,9 @@ export class ShipmentsCompAdmin extends Component {
   }
 
   determinePerPage () {
-    const { perPage } = this.state
-    const { adminDispatch, shipments } = this.props
-    const { pages } = shipments
     const width = window.innerWidth
     const newPerPage = width >= 1920 ? 6 : 4
-    if (newPerPage !== perPage) {
-      adminDispatch.getShipments(pages, newPerPage, false)
-    }
-    this.setState({ perPage: newPerPage })
+    this.setState({ perPage: newPerPage }, () => this.handleFilters())
   }
 
   searchShipmentsFromPage (text, target, page) {
