@@ -37,7 +37,11 @@ class Admin::SchedulesController < Admin::AdminBaseController
     file = upload_params[:file].tempfile
 
     options = { tenant: current_tenant,
-                file_or_path: file, user: current_user, sandbox: @sandbox }
+                file_or_path: file,
+                options: {
+                  user: current_user,
+                  sandbox: @sandbox
+                } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
