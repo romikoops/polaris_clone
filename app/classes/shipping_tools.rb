@@ -726,7 +726,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
 
   def self.save_pdf_quotes(shipment, tenant, schedules, sandbox = nil)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules, sandbox)
-    @quotes = main_quote.shipments.map(&:selected_offer)
+    @quotes = main_quote.shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
     logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
     send_on_download = ::Tenants::ScopeService.new(target: @user).fetch(:send_email_on_quote_download)
     QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_download
