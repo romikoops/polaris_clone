@@ -47,7 +47,6 @@ module ExcelDataServices
 
       def create_margin_with_margin_details(group_of_row_data, row, tenant_vehicle, itinerary) # rubocop:disable Metrics/AbcSize
         margin_applies_to_all_fees = margin_applies_to_all_fees?(group_of_row_data.size, row.fee_code)
-
         margin_params =
           { tenant: tenants_tenant,
             tenant_vehicle: tenant_vehicle,
@@ -55,12 +54,14 @@ module ExcelDataServices
             operator: margin_applies_to_all_fees ? row.operator : nil,
             value: margin_applies_to_all_fees ? row.margin : nil,
             cargo_class: row.load_type,
+            itinerary_id: itinerary.id,
             sandbox: @sandbox,
+            margin_type: row.margin_type,
             effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
             expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
-        old_margins = itinerary.margins.where(margin_params.except(:effective_date, :expiration_date))
-        new_margin = itinerary.margins.new(margin_params)
+        old_margins = Pricings::Margin.where(margin_params.except(:effective_date, :expiration_date))
+        new_margin = Pricings::Margin.new(margin_params)
 
         overlap_handler = ExcelDataServices::DatabaseInserters::DateOverlapHandler.new(old_margins, new_margin)
         margins_with_actions = overlap_handler.perform

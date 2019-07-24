@@ -14,6 +14,19 @@ module ExcelDataServices
       def margin
         @margin ||= data[:margin]
       end
+
+      def margin_type
+        key = data[:margin_type]&.downcase&.strip
+        @margin_type ||= if %w(freight trucking_pre trucking_on import export).include?(key)
+                           "#{key}_margin".to_sym
+                         elsif key.include?('on')
+                           :trucking_on_margin
+                         elsif key.include?('pre')
+                           :trucking_pre_margin
+                         else
+                           :freight_margin
+                         end
+      end
     end
   end
 end

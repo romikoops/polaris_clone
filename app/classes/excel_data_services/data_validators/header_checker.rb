@@ -100,6 +100,7 @@ module ExcelDataServices
           mot
           carrier
           service_level
+          margin_type
           load_type
           fee_code
           operator
