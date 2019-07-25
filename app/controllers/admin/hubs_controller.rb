@@ -75,26 +75,26 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def set_status
-    hub = Hub.find(params[:hub_id], sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:hub_id], sandbox: @sandbox)
     hub.toggle_hub_status!
     response_handler(data: hub.as_options_json, address: hub.address.to_custom_hash)
   end
 
   def delete
-    hub = Hub.find(params[:hub_id], sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:hub_id], sandbox: @sandbox)
     hub.destroy!
     response_handler(id: params[:hub_id])
   end
 
   def update_image
-    hub = Hub.find(params[:hub_id], sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:hub_id], sandbox: @sandbox)
     hub.photo = save_on_aws(hub.tenant_id)
     hub.save!
     response_handler(hub.as_options_json)
   end
 
   def update
-    hub = Hub.find(params[:id], sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:id], sandbox: @sandbox)
     address = hub.address
     new_loc = params[:address].as_json
     new_hub = params[:data].as_json
@@ -184,7 +184,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def create_hub_mandatory_charge
-    hub = Hub.find(params[:id], sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:id], sandbox: @sandbox)
     hub.mandatory_charge = new_mandatory_charge
     hub.save!
     hub
