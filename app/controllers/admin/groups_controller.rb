@@ -14,56 +14,24 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
     )
   end
 
-  def create # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  def create
     tenant = ::Tenants::User.find_by(legacy_id: current_user.id, sandbox: @sandbox)&.tenant
     group = ::Tenants::Group.create(name: params[:name], tenant_id: tenant.id, sandbox: @sandbox)
     params[:addedMembers].keys.each do |type|
       params[:addedMembers][type].each do |new_member|
-        case type
-        when 'clients'
-          user = ::Tenants::User.find_by(legacy_id: new_member[:id], sandbox: @sandbox)
-          next unless user
-
-          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: user, sandbox: @sandbox)
-        when 'companies'
-          company = ::Tenants::Company.find(new_member[:id])
-          next unless company
-
-          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: company, sandbox: @sandbox)
-        when 'groups'
-          group = ::Tenants::Group.find(new_member[:id])
-          next unless group
-
-          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: group, sandbox: @sandbox)
-        end
+        create_member_from_type(group: group, type: type, member: new_member)
       end
     end
     response_handler(group)
   end
 
-  def edit_members # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  def edit_members # rubocop:disable Metrics/AbcSize
     tenant = ::Tenants::User.find_by(legacy_id: current_user.id)&.tenant
     group = ::Tenants::Group.find_by(id: params[:id], tenant_id: tenant.id)
 
-    params[:addedMembers].keys.each do |type| # rubocop:disable Metrics/BlockLength
+    params[:addedMembers].keys.each do |type|
       params[:addedMembers][type].each do |new_member|
-        case type
-        when 'clients'
-          user = ::Tenants::User.find_by(legacy_id: new_member[:id], sandbox: @sandbox)
-          next unless user
-
-          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: user)
-        when 'companies'
-          company = ::Tenants::Company.find_by(id: new_member[:id], sandbox: @sandbox)
-          next unless company
-
-          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: company)
-        when 'groups'
-          group = ::Tenants::Group.find_by(id: new_member[:id], sandbox: @sandbox)
-          next unless group
-
-          ::Tenants::Membership.find_or_create_by(group_id: group.id, member: group, sandbox: @sandbox)
-        end
+        create_member_from_type(group: group, type: type, member: new_member)
       end
     end
     params_members_ids = params[:addedMembers].values.flatten.map { |param| param[:id].to_s }
@@ -94,6 +62,26 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
 
   private
 
+  def create_member_from_type(group:, type:, member:) # rubocop:disable Metrics/CyclomaticComplexity
+    case type
+    when 'clients'
+      user = ::Tenants::User.find_by(legacy_id: member[:id], sandbox: @sandbox)
+      return nil unless user
+
+      ::Tenants::Membership.find_or_create_by(group_id: group.id, member: user)
+    when 'companies'
+      company = ::Tenants::Company.find_by(id: member[:id], sandbox: @sandbox)
+      return nil unless company
+
+      ::Tenants::Membership.find_or_create_by(group_id: group.id, member: company)
+    when 'groups'
+      member_group = ::Tenants::Group.find_by(id: member[:id], sandbox: @sandbox)
+      return nil unless member_group
+      
+      ::Tenants::Membership.find_or_create_by(group_id: group.id, member: member_group, sandbox: @sandbox)
+    end
+  end
+
   def groups
     tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)
     @groups ||= ::Tenants::Group.where(tenant_id: tenant.id, sandbox: @sandbox)
@@ -110,7 +98,7 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
     params[:page]&.to_i || 1
   end
 
-  def handle_search(params) # rubocop:disable Metrics/CyclomaticComplexity
+  def handle_search(params) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
     query = groups
     if params[:target_type] && params[:target_id]
       case params[:target_type]
@@ -130,7 +118,7 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
     query = query.order(name: params[:name_desc] == 'true' ? :desc : :asc) if params[:name_desc]
     if params[:member_count_desc]
       query = query.left_joins(:memberships)
-              .order("COUNT(tenants_memberships.id) #{params[:member_count_desc] == 'true' ? 'DESC' : 'ASC'}")
+                   .order("COUNT(tenants_memberships.id) #{params[:member_count_desc] == 'true' ? 'DESC' : 'ASC'}")
     end
     query
   end
