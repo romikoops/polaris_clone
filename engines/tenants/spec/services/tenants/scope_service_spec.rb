@@ -68,7 +68,8 @@ RSpec.describe Tenants::ScopeService do
               cargo: true,
               trucking_pre: true,
               trucking_on: true
-            }
+            },
+            consolidated_fees: false
           },
           quote_notes: 'Quote Notes from the FactoryBot Factory',
           require_full_address: true,

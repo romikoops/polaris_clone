@@ -157,7 +157,10 @@ class QuoteChargeBreakdown extends Component {
     if (key === 'cargo' && !get(scope, ['consolidation', 'cargo', 'backend']) && !scope.fine_fee_detail) {
       return t('cargo:unitFreightRate', { unitNo: i + 1 })
     }
-    if (key === 'cargo' && get(scope, ['consolidation', 'cargo', 'backend'])) {
+    if (
+      key === 'cargo' && get(scope, ['consolidation', 'cargo', 'backend']) &&
+      !get(scope, ['quote_card', 'consolidated_fees'], false)
+    ) {
       return t('cargo:consolidatedCargoRate')
     }
 

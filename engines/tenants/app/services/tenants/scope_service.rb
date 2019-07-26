@@ -107,7 +107,8 @@ module Tenants
           cargo: true,
           trucking_pre: true,
           trucking_on: true
-        }
+        },
+        consolidated_fees: false
       },
       values: {
         weight: {
