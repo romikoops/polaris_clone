@@ -18,7 +18,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def destroy
-    itinerary = Itinerary.find(params[:id]).destroy
+    itinerary = Itinerary.find_by(id: params[:id]).destroy
     response_handler(true)
   end
 
@@ -31,7 +31,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def show
-    itinerary = Itinerary.find(params[:id], sandbox: @sandbox)
+    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
     resp = { hubs: itinerary.hubs.where(sandbox: @sandbox),
              itinerary: itinerary,
              hubItinerarys: itinerary.as_options_json,
@@ -85,12 +85,12 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def itinerary_stops
-    itinerary = Itinerary.find(params[:id], sandbox: @sandbox)
+    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
     itinerary.stops.order(:index)
   end
 
   def itinerary_with_notes
-    itinerary = Itinerary.find(params[:id], sandbox: @sandbox)
+    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
     itinerary.notes.find_or_create_by!(body: params[:notes][:body],
                                        header: params[:notes][:header],
                                        level: params[:notes][:level],

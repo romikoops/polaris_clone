@@ -61,7 +61,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   # Destroy User account
 
   def destroy
-    User.find(params[:id], sandbox: @sandbox).destroy
+    User.find_by(id: params[:id], sandbox: @sandbox).destroy
     response_handler(params[:id])
   end
 
