@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_11_111439) do
+ActiveRecord::Schema.define(version: 2019_07_24_091123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "postgis"
+  enable_extension "tablefunc"
   enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -1365,6 +1366,7 @@ ActiveRecord::Schema.define(version: 2019_07_11_111439) do
     t.index ["hub_id"], name: "index_trucking_truckings_on_hub_id"
     t.index ["location_id"], name: "index_trucking_truckings_on_location_id"
     t.index ["rate_id", "location_id", "hub_id"], name: "trucking_foreign_keys", unique: true
+    t.index ["tenant_id"], name: "index_trucking_truckings_on_tenant_id"
   end
 
   create_table "trucking_type_availabilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
