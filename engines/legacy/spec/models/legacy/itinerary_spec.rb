@@ -15,5 +15,23 @@ module Legacy
         expect(itinerary.parse_load_type('fcl')).to eq('container')
       end
     end
+
+    describe '.destination_hub_ids' do
+      let(:tenant) { FactoryBot.create(:legacy_tenant) }
+      let(:o_hub) { FactoryBot.create(:legacy_hub, tenant: tenant) }
+      let(:d_hub) { FactoryBot.create(:legacy_hub, tenant: tenant) }
+      let(:itinerary) do
+        FactoryBot.create(:legacy_itinerary,
+          tenant: tenant,
+          stops: [
+            FactoryBot.build(:legacy_stop, hub: o_hub, index: 0),
+            FactoryBot.build(:legacy_stop, hub: d_hub, index: 1)
+          ]
+        )
+      end
+      it 'returns the hub ids for the destination' do
+        expect(itinerary.destination_hub_ids).to eq([d_hub.id])
+      end
+    end
   end
 end
