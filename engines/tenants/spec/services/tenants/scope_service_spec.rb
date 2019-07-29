@@ -113,5 +113,121 @@ RSpec.describe Tenants::ScopeService do
         )
       end
     end
+
+    context 'merging scope from user' do
+      let(:tenant) { FactoryBot.create(:legacy_tenant) }
+      let(:tenants_tenant_h) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
+      let(:legacy_user_h) { FactoryBot.create(:legacy_user, tenant: tenant) }
+      let(:tenants_user_h) { ::Tenants::User.find_by(legacy_id: legacy_user_h.id) }
+
+      it 'returns true' do
+        FactoryBot.create(:tenants_scope, target: tenants_tenant_h)
+        FactoryBot.create(:tenants_scope, target: tenants_user_h, content: { one: true })
+        expect(described_class.new(target: legacy_user_h).fetch(:one)).to eq(true)
+      end
+    end
+
+    context 'merging scope from users company' do
+      let(:tenant) { FactoryBot.create(:legacy_tenant) }
+      let!(:company) { FactoryBot.create(:tenants_company, tenant: tenants_tenant_h, name: 'One') }
+      let(:tenants_tenant_h) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
+      let(:legacy_user_h) { FactoryBot.create(:legacy_user, tenant: tenant) }
+      let(:tenants_user_h) { ::Tenants::User.find_by(legacy_id: legacy_user_h.id) }
+
+      it 'returns true' do
+        tenants_user_h.update(company: company)
+        FactoryBot.create(:tenants_scope, target: tenants_tenant_h)
+        FactoryBot.create(:tenants_scope, target: company, content: { one: true })
+        expect(described_class.new(target: legacy_user_h).fetch(:one)).to eq(true)
+      end
+    end
+
+    context 'merging scope from users company groups' do
+      let(:tenant) { FactoryBot.create(:legacy_tenant) }
+      let(:tenants_tenant_h) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
+      let!(:company) { FactoryBot.create(:tenants_company, tenant: tenants_tenant_h, name: 'One') }
+      let(:legacy_user_h) { FactoryBot.create(:legacy_user, tenant: tenant) }
+      let(:tenants_user_h) { ::Tenants::User.find_by(legacy_id: legacy_user_h.id) }
+      let!(:group) { FactoryBot.create(:tenants_group, tenant: tenants_tenant_h, name: 'Two') }
+      let!(:membership) { FactoryBot.create(:tenants_membership, group: group, member: company) }
+
+      it 'returns true' do
+        tenants_user_h.update(company: company)
+        FactoryBot.create(:tenants_scope, target: tenants_tenant_h)
+        FactoryBot.create(:tenants_scope, target: company, content: { one: true })
+        FactoryBot.create(:tenants_scope, target: group, content: { two: true })
+        expect(described_class.new(target: legacy_user_h).fetch(:one)).to eq(true)
+        expect(described_class.new(target: legacy_user_h).fetch(:two)).to eq(true)
+      end
+    end
+
+    context 'merging scope from users company groups of groups' do
+      let(:tenant) { FactoryBot.create(:legacy_tenant) }
+      let(:tenants_tenant_h) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
+      let!(:company) { FactoryBot.create(:tenants_company, tenant: tenants_tenant_h, name: 'Zero') }
+      let(:legacy_user_h) { FactoryBot.create(:legacy_user, tenant: tenant) }
+      let(:tenants_user_h) { ::Tenants::User.find_by(legacy_id: legacy_user_h.id) }
+      let!(:group_1) { FactoryBot.create(:tenants_group, tenant: tenants_tenant_h, name: 'One') }
+      let!(:group_2) { FactoryBot.create(:tenants_group, tenant: tenants_tenant_h, name: 'Two') }
+      let!(:group_3) { FactoryBot.create(:tenants_group, tenant: tenants_tenant_h, name: 'Three') }
+      let!(:membership_1) { FactoryBot.create(:tenants_membership, group: group_1, member: tenants_user_h) }
+      let!(:membership_2) { FactoryBot.create(:tenants_membership, group: group_2, member: tenants_user_h) }
+      let!(:membership_3) { FactoryBot.create(:tenants_membership, group: group_3, member: group_1) }
+
+      it 'returns true' do
+        tenants_user_h.update(company: company)
+        FactoryBot.create(:tenants_scope, target: tenants_tenant_h)
+        FactoryBot.create(:tenants_scope, target: company, content: { zero: true })
+        FactoryBot.create(:tenants_scope, target: group_1, content: { one: true })
+        FactoryBot.create(:tenants_scope, target: group_2, content: { two: true })
+        FactoryBot.create(:tenants_scope, target: group_3, content: { three: true })
+        expect(described_class.new(target: legacy_user_h).fetch(:zero)).to eq(true)
+        expect(described_class.new(target: legacy_user_h).fetch(:one)).to eq(true)
+        expect(described_class.new(target: legacy_user_h).fetch(:two)).to eq(true)
+        expect(described_class.new(target: legacy_user_h).fetch(:three)).to eq(true)
+      end
+    end
+
+    context 'merging scope from users groups' do
+      let(:tenant) { FactoryBot.create(:legacy_tenant) }
+      let(:tenants_tenant_h) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
+      let(:legacy_user_h) { FactoryBot.create(:legacy_user, tenant: tenant) }
+      let(:tenants_user_h) { ::Tenants::User.find_by(legacy_id: legacy_user_h.id) }
+      let!(:group_1) { FactoryBot.create(:tenants_group, tenant: tenants_tenant_h, name: 'One') }
+      let!(:group_2) { FactoryBot.create(:tenants_group, tenant: tenants_tenant_h, name: 'Two') }
+      let!(:membership_1) { FactoryBot.create(:tenants_membership, group: group_1, member: tenants_user_h) }
+      let!(:membership_2) { FactoryBot.create(:tenants_membership, group: group_2, member: tenants_user_h) }
+
+      it 'returns true' do
+        FactoryBot.create(:tenants_scope, target: tenants_tenant_h)
+        FactoryBot.create(:tenants_scope, target: group_1, content: { one: true })
+        FactoryBot.create(:tenants_scope, target: group_2, content: { two: true })
+        expect(described_class.new(target: legacy_user_h).fetch(:one)).to eq(true)
+        expect(described_class.new(target: legacy_user_h).fetch(:two)).to eq(true)
+      end
+    end
+
+    context 'merging scope from users groups of groups' do
+      let(:tenant) { FactoryBot.create(:legacy_tenant) }
+      let(:tenants_tenant_h) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
+      let(:legacy_user_h) { FactoryBot.create(:legacy_user, tenant: tenant) }
+      let(:tenants_user_h) { ::Tenants::User.find_by(legacy_id: legacy_user_h.id) }
+      let!(:group_1) { FactoryBot.create(:tenants_group, tenant: tenants_tenant_h, name: 'One') }
+      let!(:group_2) { FactoryBot.create(:tenants_group, tenant: tenants_tenant_h, name: 'Two') }
+      let!(:group_3) { FactoryBot.create(:tenants_group, tenant: tenants_tenant_h, name: 'Three') }
+      let!(:membership_1) { FactoryBot.create(:tenants_membership, group: group_1, member: tenants_user_h) }
+      let!(:membership_2) { FactoryBot.create(:tenants_membership, group: group_2, member: tenants_user_h) }
+      let!(:membership_3) { FactoryBot.create(:tenants_membership, group: group_3, member: group_1) }
+
+      it 'returns true' do
+        FactoryBot.create(:tenants_scope, target: tenants_tenant_h)
+        FactoryBot.create(:tenants_scope, target: group_1, content: { one: true })
+        FactoryBot.create(:tenants_scope, target: group_2, content: { two: true })
+        FactoryBot.create(:tenants_scope, target: group_3, content: { three: true })
+        expect(described_class.new(target: legacy_user_h).fetch(:one)).to eq(true)
+        expect(described_class.new(target: legacy_user_h).fetch(:two)).to eq(true)
+        expect(described_class.new(target: legacy_user_h).fetch(:three)).to eq(true)
+      end
+    end
   end
 end

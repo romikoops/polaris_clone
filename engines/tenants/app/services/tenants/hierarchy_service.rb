@@ -16,6 +16,7 @@ module Tenants
         [
           target.tenant&.groups,
           target.tenant,
+          target.groups&.map(&:groups)&.flatten,
           target.groups,
           target
         ].flatten.compact
@@ -23,6 +24,7 @@ module Tenants
         [
           target.tenant&.groups,
           target.tenant,
+          target.groups&.map(&:groups)&.flatten,
           target.groups,
           target
         ].flatten.compact
@@ -30,8 +32,10 @@ module Tenants
         [
           target.tenant&.groups,
           target.tenant,
+          target.company&.groups&.map(&:groups)&.flatten,
           target.company&.groups,
           target.company,
+          target.groups&.map(&:groups)&.flatten,
           target.groups,
           target
         ].flatten.compact
