@@ -54,6 +54,8 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
 
   def prep_hub_data
     @quotes.each do |quote|
+      next unless quote['trip_id']
+
       @hub_names[quote['trip_id']] = {
         origin: Trip.find(quote['trip_id']).itinerary.first_stop.hub.name,
         destination: Trip.find(quote['trip_id']).itinerary.last_stop.hub.name
