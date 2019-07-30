@@ -51,7 +51,7 @@ RSpec.describe RmsSync::Pricings do
                                      CURRENCY
                                      FEE_MIN
                                      FEE))
-      first_row = sheet.rows.select { |r| r[9] == 'lcl'}.reverse.first
+      first_row = sheet.rows.select { |r| r[9] == 'lcl' && r[8] == 'slowly'}.first
       expect(first_row).to eq([pricings.first.effective_date.to_s,
                                   pricings.first.expiration_date.to_s,
                                   'Gothenburg',
