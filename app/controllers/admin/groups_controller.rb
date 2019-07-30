@@ -100,26 +100,28 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
 
   def handle_search(params) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
     query = groups
-    if params[:target_type] && params[:target_id]
-      case params[:target_type]
+    if search_params[:target_type] && search_params[:target_id]
+      case search_params[:target_type]
       when 'company'
         query = query.joins(:memberships)
-                     .where(tenants_memberships: { member_type: 'Tenants::Company', member_id: params[:target_id] })
+                     .where(tenants_memberships: { member_type: 'Tenants::Company', member_id: search_params[:target_id] })
       when 'group'
         query = query.joins(:memberships)
-                     .where(tenants_memberships: { member_type: 'Tenants::Group', member_id: params[:target_id] })
+                     .where(tenants_memberships: { member_type: 'Tenants::Group', member_id: search_params[:target_id] })
       when 'user'
-        tenant_user = Tenants::User.find_by(legacy_id: params[:target_id], sandbox: @sandbox)
+        tenant_user = Tenants::User.find_by(legacy_id: search_params[:target_id], sandbox: @sandbox)
         group_ids = tenant_user.all_groups.ids
         query = query.where(id: group_ids)
       end
     end
-    query = query.search(params[:query]) if params[:query]
-    query = query.order(name: params[:name_desc] == 'true' ? :desc : :asc) if params[:name_desc]
-    if params[:member_count_desc]
+    query = query.order(name: search_params[:name_desc] == 'true' ? :desc : :asc) if search_params[:name_desc]
+    if search_params[:member_count_desc]
       query = query.left_joins(:memberships)
-                   .order("COUNT(tenants_memberships.id) #{params[:member_count_desc] == 'true' ? 'DESC' : 'ASC'}")
+              .order("COUNT(tenants_memberships.id) #{search_params[:member_count_desc] == 'true' ? 'DESC' : 'ASC'}")
     end
+    query = query.search(search_params[:query]) if search_params[:query]
+    query = query.search(search_params[:name]) if search_params[:name]
+
     query
   end
 
@@ -159,5 +161,17 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
       methods: %i(member_name human_type member_email original_member_id)
     )
     membership.as_json(new_options)
+  end
+  def search_params
+    params.permit(
+      :member_count_desc,
+      :name_desc,
+      :margin_count_desc,
+      :name,
+      :page_size,
+      :per_page,
+      :target_type,
+      :target_id
+    )
   end
 end
