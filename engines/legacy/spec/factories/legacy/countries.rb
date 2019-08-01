@@ -6,12 +6,33 @@ FactoryBot.define do
     code { 'SE' }
     flag { 'https://restcountries.eu/data/swe.svg' }
 
-    trait :china do
+    trait :cn do
       name { 'China' }
       code { 'CN' }
       flag { 'https://restcountries.eu/data/cny.svg' }
     end
 
-    factory :country_china, traits: [:china]
+    trait :se do
+      name { 'Sweden' }
+      code { 'SE' }
+      flag { 'https://restcountries.eu/data/sek.svg' }
+    end
+
+    trait :uk do
+      name { 'United Kingdom' }
+      code { 'GB' }
+      flag { 'https://restcountries.eu/data/gbp.svg' }
+    end
+
+    trait :de do
+      name { 'Germany' }
+      code { 'DE' }
+      flag { 'https://restcountries.eu/data/de.svg' }
+    end
+
+    factory :country_cn, traits: [:cn]
+    factory :country_uk, traits: [:uk]
+    factory :country_de, traits: [:de]
+    factory :country_se, traits: [:se]
   end
 end

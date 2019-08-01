@@ -5,7 +5,7 @@ FactoryBot.define do
     start_date { Date.today + 7.days }
     end_date { Date.tomorrow + 20.days }
     closing_date { Date.today + 2.days }
-    association :itinerary, factory: :legacy_itinerary
+    association :itinerary, factory: :default_itinerary
     association :tenant_vehicle, factory: :legacy_tenant_vehicle
     trait :with_layovers do
       after(:build) do |trip|

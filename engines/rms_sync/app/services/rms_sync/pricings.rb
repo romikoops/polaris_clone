@@ -16,7 +16,7 @@ module RmsSync
 
     def pricings
       ::Pricings::Pricing.where(tenant_id: @tenant.legacy_id, sandbox: @sandbox)
-                         .for_dates(Date.today - 1, Date.today + 2.months)
+                          .for_dates(Date.today - 1, Date.today + 2.months)
     end
 
     def create_sheet
@@ -116,5 +116,4 @@ module RmsSync
     end
     attr_accessor :purge_ids, :book
   end
-
 end

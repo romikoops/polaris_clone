@@ -47,7 +47,7 @@ RSpec.describe Pricings::Manipulator do
     }
   end
   let(:wm_rate_basis) { double('WM Rate basis', external_code: 'PER_WM', internal_code: 'PER_WM') }
-  let(:itinerary_1) { FactoryBot.create(:legacy_itinerary, tenant: tenant) }
+  let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
 
   context 'freight pricings' do
     describe '.perform' do
@@ -156,7 +156,7 @@ RSpec.describe Pricings::Manipulator do
         group_pricing = FactoryBot.create(:lcl_pricing,
                                           tenant_vehicle: tenant_vehicle_1,
                                           tenant: tenant,
-                                          itinerary: FactoryBot.create(:legacy_itinerary, tenant: tenant))
+                                          itinerary: FactoryBot.create(:default_itinerary, tenant: tenant))
         trips = [1, 3].map do |num|
           base_date = num.days.from_now
           FactoryBot.create(:legacy_trip,
@@ -196,7 +196,7 @@ RSpec.describe Pricings::Manipulator do
           group_pricing = FactoryBot.create(:lcl_pricing,
                                             tenant_vehicle: tenant_vehicle_1,
                                             tenant: tenant,
-                                            itinerary: FactoryBot.create(:legacy_itinerary, tenant: tenant))
+                                            itinerary: FactoryBot.create(:default_itinerary, tenant: tenant))
           trips = [1, 3, 10, 13].map do |num|
             base_date = num.days.from_now
             FactoryBot.create(:legacy_trip,
@@ -411,7 +411,7 @@ RSpec.describe Pricings::Manipulator do
         group_pricing = FactoryBot.create(:lcl_pricing,
                                           tenant_vehicle: tenant_vehicle_1,
                                           tenant: tenant,
-                                          itinerary: FactoryBot.create(:legacy_itinerary, tenant: tenant))
+                                          itinerary: FactoryBot.create(:default_itinerary, tenant: tenant))
         trips = [1, 3].map do |num|
           base_date = num.days.from_now
           FactoryBot.create(:legacy_trip,
@@ -450,7 +450,7 @@ RSpec.describe Pricings::Manipulator do
         group_pricing = FactoryBot.create(:lcl_pricing,
                                           tenant_vehicle: tenant_vehicle_1,
                                           tenant: tenant,
-                                          itinerary: FactoryBot.create(:legacy_itinerary, tenant: tenant))
+                                          itinerary: FactoryBot.create(:default_itinerary, tenant: tenant))
         trips = [1, 3].map do |num|
           base_date = num.days.from_now
           FactoryBot.create(:legacy_trip,
@@ -487,7 +487,7 @@ RSpec.describe Pricings::Manipulator do
         group_pricing = FactoryBot.create(:lcl_pricing,
                                           tenant_vehicle: tenant_vehicle_1,
                                           tenant: tenant,
-                                          itinerary: FactoryBot.create(:legacy_itinerary, tenant: tenant))
+                                          itinerary: FactoryBot.create(:default_itinerary, tenant: tenant))
         trips = [1, 3].map do |num|
           base_date = num.days.from_now
           FactoryBot.create(:legacy_trip,
@@ -524,7 +524,7 @@ RSpec.describe Pricings::Manipulator do
         group_pricing = FactoryBot.create(:lcl_pricing,
                                           tenant_vehicle: tenant_vehicle_1,
                                           tenant: tenant,
-                                          itinerary: FactoryBot.create(:legacy_itinerary, tenant: tenant))
+                                          itinerary: FactoryBot.create(:default_itinerary, tenant: tenant))
         trips = [1, 3].map do |num|
           base_date = num.days.from_now
           FactoryBot.create(:legacy_trip,

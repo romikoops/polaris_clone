@@ -11,7 +11,7 @@ module Legacy
     has_many :shipments, dependent: :destroy
     has_many :trips,     dependent: :destroy
     has_many :notes,     dependent: :destroy
-    has_many :pricings,  dependent: :destroy
+    has_many :pricings,  dependent: :destroy, class_name: 'Legacy::Pricing'
     has_many :margins,   dependent: :destroy, class_name: 'Pricings::Margin'
     has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
     has_many :hubs,      through: :stops

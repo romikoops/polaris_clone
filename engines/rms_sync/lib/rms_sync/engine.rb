@@ -3,6 +3,7 @@ require 'activerecord-import'
 require 'legacy'
 require 'pricings'
 require 'rms_data'
+require 'routing'
 require 'tenants'
 
 module RmsSync

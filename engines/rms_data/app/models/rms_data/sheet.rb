@@ -23,11 +23,11 @@ module RmsData
 
     def cell(row:, column:)
       column_id = if column.is_a?(String)
-         headers.index(column)
-        else
-          column
+                    headers.index(column)
+                  else
+                    column
        end
-       cells.find_by(row: row, column: column_id)&.value
+      cells.find_by(row: row, column: column_id)&.value
     end
   end
 end

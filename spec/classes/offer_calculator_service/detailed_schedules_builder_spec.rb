@@ -139,7 +139,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
         dedicated_pricings_only: false
       )
       expect(results.keys.length).to eq(1)
-      expect(results.values.first.first).to eq(pricing_1)
+      expect(results.values.first.first.id).to eq(pricing_1.id)
     end
     it 'returns an object containing pricings grouped by transport category (fcl)' do
       pricing_1 = create(:pricing,
@@ -171,9 +171,9 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
       )
 
       expect(results.keys.length).to eq(3)
-      expect(results[fcl_40_hq_transport_category.id.to_s].first).to eq(pricing_3)
-      expect(results[fcl_40_transport_category.id.to_s].first).to eq(pricing_2)
-      expect(results[fcl_20_transport_category.id.to_s].first).to eq(pricing_1)
+      expect(results[fcl_40_hq_transport_category.id.to_s].first.id).to eq(pricing_3.id)
+      expect(results[fcl_40_transport_category.id.to_s].first.id).to eq(pricing_2.id)
+      expect(results[fcl_20_transport_category.id.to_s].first.id).to eq(pricing_1.id)
     end
 
     it 'returns pricings valid for closing_dates if departure dates return nil' do
@@ -206,7 +206,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
         dedicated_pricings_only: false
       )
       expect(results.keys.length).to eq(1)
-      expect(results.values.first.first).to eq(pricing_1)
+      expect(results.values.first.first.id).to eq(pricing_1.id)
     end
 
     it 'returns pricings valid for closing_dates and user if dedicated pricing available' do
@@ -246,7 +246,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
         dedicated_pricings_only: true
       )
       expect(results.keys.length).to eq(1)
-      expect(results.values.first.first).to eq(pricing_target)
+      expect(results.values.first.first.id).to eq(pricing_target.id)
     end
   end
 

@@ -8,7 +8,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     cargo_class { 'lcl' }
     load_type { 'cargo_item' }
     association :tenant, factory: :legacy_tenant
-    association :itinerary, factory: :legacy_itinerary
+    association :itinerary, factory: :default_itinerary
     association :tenant_vehicle, factory: :legacy_tenant_vehicle
 
     trait :lcl do

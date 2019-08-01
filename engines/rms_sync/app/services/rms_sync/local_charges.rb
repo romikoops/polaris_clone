@@ -16,7 +16,7 @@ module RmsSync
 
     def local_charges
       ::Legacy::LocalCharge.where(tenant_id: @tenant.legacy_id, sandbox: @sandbox)
-                           .for_dates(Date.today, 2.months.from_now)
+                          .for_dates(Date.today, 2.months.from_now)
     end
 
     def create_sheet
@@ -85,7 +85,7 @@ module RmsSync
 
     def non_rate_headers
       %w(HUB COUNTRY EFFECTIVE_DATE EXPIRATION_DATE COUNTERPART_HUB COUNTERPART_COUNTRY SERVICE_LEVEL CARRIER FEE_CODE
-         FEE MOT LOAD_TYPE DIRECTION CURRENCY RATE_BASIS MINIMUM MAXIMUM BASE RANGE_MIN	RANGE_MAX	DANGEROUS)
+        FEE MOT LOAD_TYPE DIRECTION CURRENCY RATE_BASIS MINIMUM MAXIMUM BASE RANGE_MIN	RANGE_MAX	DANGEROUS)
     end
 
 

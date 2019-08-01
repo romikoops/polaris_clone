@@ -11,9 +11,12 @@ end
 #
 # Table name: rms_data_books
 #
-#  id         :uuid             not null, primary key
-#  sheet_type :integer
-#  tenant_id  :uuid
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id          :uuid             not null, primary key
+#  sheet_type  :integer
+#  tenant_id   :uuid
+#  target_type :string
+#  target_id   :uuid
+#  book_type   :integer          default(0), not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #

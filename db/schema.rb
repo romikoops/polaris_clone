@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_24_091123) do
+ActiveRecord::Schema.define(version: 2019_07_31_093414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -472,6 +472,11 @@ ActiveRecord::Schema.define(version: 2019_07_24_091123) do
   end
 
   create_table "legacy_local_charges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_pricings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -948,9 +953,13 @@ ActiveRecord::Schema.define(version: 2019_07_24_091123) do
   create_table "rms_data_books", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "sheet_type"
     t.uuid "tenant_id"
+    t.string "target_type"
+    t.uuid "target_id"
+    t.integer "book_type", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["sheet_type"], name: "index_rms_data_books_on_sheet_type"
+    t.index ["target_type", "target_id"], name: "index_rms_data_books_on_target_type_and_target_id"
     t.index ["tenant_id"], name: "index_rms_data_books_on_tenant_id"
   end
 
@@ -981,6 +990,74 @@ ActiveRecord::Schema.define(version: 2019_07_24_091123) do
 
   create_table "roles", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "routing_carriers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "abbreviated_name"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "routing_line_services", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "carrier_id"
+    t.integer "category", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["carrier_id", "name"], name: "line_service_unique_index", unique: true
+    t.index ["carrier_id"], name: "index_routing_line_services_on_carrier_id"
+  end
+
+  create_table "routing_locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "locode"
+    t.geometry "center", limit: {:srid=>0, :type=>"geometry"}
+    t.geometry "bounds", limit: {:srid=>0, :type=>"geometry"}
+    t.string "name"
+    t.string "country_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bounds"], name: "index_routing_locations_on_bounds", using: :gist
+    t.index ["center"], name: "index_routing_locations_on_center"
+    t.index ["locode"], name: "index_routing_locations_on_locode"
+  end
+
+  create_table "routing_route_line_services", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "route_id"
+    t.uuid "line_service_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["route_id", "line_service_id"], name: "route_line_service_index", unique: true
+  end
+
+  create_table "routing_routes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "origin_id"
+    t.uuid "destination_id"
+    t.integer "allowed_cargo", default: 0, null: false
+    t.integer "mode_of_transport", default: 0, null: false
+    t.decimal "price_factor"
+    t.decimal "time_factor"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["origin_id", "destination_id", "mode_of_transport"], name: "routing_routes_index", unique: true
+  end
+
+  create_table "routing_terminals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "location_id"
+    t.geometry "center", limit: {:srid=>0, :type=>"geometry"}
+    t.string "terminal_code"
+    t.boolean "default", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["center"], name: "index_routing_terminals_on_center"
+  end
+
+  create_table "routing_transit_times", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "route_line_service_id"
+    t.decimal "days"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -1083,6 +1160,28 @@ ActiveRecord::Schema.define(version: 2019_07_24_091123) do
     t.integer "incoterm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "tenant_routing_connections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "inbound_id"
+    t.uuid "outbound_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inbound_id"], name: "index_tenant_routing_connections_on_inbound_id"
+    t.index ["outbound_id"], name: "index_tenant_routing_connections_on_outbound_id"
+  end
+
+  create_table "tenant_routing_routes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "tenant_id"
+    t.uuid "route_id"
+    t.integer "mode_of_transport", default: 0
+    t.integer "price_factor"
+    t.integer "time_factor"
+    t.uuid "line_service_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["line_service_id"], name: "index_tenant_routing_routes_on_line_service_id"
+    t.index ["mode_of_transport"], name: "index_tenant_routing_routes_on_mode_of_transport"
   end
 
   create_table "tenant_vehicles", force: :cascade do |t|

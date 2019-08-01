@@ -10,19 +10,21 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     mode_of_transport { 'ocean' }
     association :tenant, factory: :legacy_tenant
 
-    after(:build) do |itinerary, evaluator|
-      next if itinerary.stops.length >= 2
-
-      index = 0
-      evaluator.num_stops.times do
-        itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: index,
-                                 hub: build(:legacy_hub,
-                                            tenant: itinerary.tenant,
-                                            nexus: build(:legacy_nexus,
-                                                         tenant: itinerary.tenant)))
-        index += 1
+    trait :default do
+      after(:build) do |itinerary, evaluator|
+        next if itinerary.stops.length >= 2
+ 
+        index = 0
+        evaluator.num_stops.times do
+          itinerary.stops << build(:legacy_stop,
+                                  itinerary: itinerary,
+                                  index: index,
+                                  hub: build(:legacy_hub,
+                                              tenant: itinerary.tenant,
+                                              nexus: build(:legacy_nexus,
+                                                          tenant: itinerary.tenant)))
+          index += 1
+        end
       end
     end
 
@@ -42,5 +44,146 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                itinerary: itinerary)
       end
     end
+
+    trait :gothenburg_shanghai do
+      name { 'Gothenburg - Shanghai' }
+
+      after(:build) do |itinerary|
+        next if itinerary.stops.length >= 2
+
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 0,
+                                 hub: build(:gothenburg_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:gothenburg_nexus,
+                                                         tenant: itinerary.tenant)))
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 1,
+                                 hub: build(:shanghai_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:shanghai_nexus,
+                                                         tenant: itinerary.tenant)))
+      end
+    end
+
+    trait :shanghai_gothenburg do
+      name { 'Shanghai - Gothenburg' }
+      after(:build) do |itinerary|
+        next if itinerary.stops.length >= 2
+
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 0,
+                                 hub: build(:shanghai_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:shanghai_nexus,
+                                                         tenant: itinerary.tenant)))
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 1,
+                                 hub: build(:gothenburg_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:gothenburg_nexus,
+                                                         tenant: itinerary.tenant)))
+      end
+    end
+
+    trait :felixstowe_shanghai do
+      name { 'Felixstowe - Shanghai' }
+      after(:build) do |itinerary|
+        next if itinerary.stops.length >= 2
+
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 0,
+                                 hub: build(:felixstowe_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:felixstowe_nexus,
+                                                         tenant: itinerary.tenant)))
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 1,
+                                 hub: build(:shanghai_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:shanghai_nexus,
+                                                         tenant: itinerary.tenant)))
+      end
+    end
+
+    trait :shanghai_felixstowe do
+      name { 'Shanghai - Felixstowe' }
+      after(:build) do |itinerary|
+        next if itinerary.stops.length >= 2
+
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 0,
+                                 hub: build(:shanghai_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:shanghai_nexus,
+                                                         tenant: itinerary.tenant)))
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 1,
+                                 hub: build(:felixstowe_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:felixstowe_nexus,
+                                                         tenant: itinerary.tenant)))
+      end
+    end
+
+    trait :hamburg_shanghai do
+      name { 'Hamburg - Shanghai' }
+      after(:build) do |itinerary|
+        next if itinerary.stops.length >= 2
+
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 0,
+                                 hub: build(:hamburg_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:hamburg_nexus,
+                                                         tenant: itinerary.tenant)))
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 1,
+                                 hub: build(:shanghai_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:shanghai_nexus,
+                                                         tenant: itinerary.tenant)))
+      end
+    end
+
+    trait :shanghai_hamburg do
+      name { 'Shanghai - Hamburg' }
+      after(:build) do |itinerary|
+        next if itinerary.stops.length >= 2
+
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 0,
+                                 hub: build(:shanghai_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:shanghai_nexus,
+                                                         tenant: itinerary.tenant)))
+        itinerary.stops << build(:legacy_stop,
+                                 itinerary: itinerary,
+                                 index: 1,
+                                 hub: build(:hamburg_hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:hamburg_nexus,
+                                                         tenant: itinerary.tenant)))
+      end
+    end
+
+    factory :gothenburg_shanghai_itinerary, traits: [:gothenburg_shanghai]
+    factory :shanghai_gothenburg_itinerary, traits: [:shanghai_gothenburg]
+    factory :felixstowe_shanghai_itinerary, traits: [:felixstowe_shanghai]
+    factory :shanghai_felixstowe_itinerary, traits: [:shanghai_felixstowe]
+    factory :hamburg_shanghai_itinerary, traits: [:hamburg_shanghai]
+    factory :shanghai_hamburg_itinerary, traits: [:shanghai_hamburg]
+    factory :default_itinerary, traits: [:default]
   end
 end

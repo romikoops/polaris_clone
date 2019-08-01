@@ -37,7 +37,7 @@ RSpec.describe Pricings::MarginCreator do
       "Felixstowe - Ningbo",
       "Felixstowe - Qingdao"
     ].map do |name|
-      it = FactoryBot.create(:legacy_itinerary, name: name, tenant: tenant, mode_of_transport: 'ocean')
+      it = FactoryBot.create(:default_itinerary, name: name, tenant: tenant, mode_of_transport: 'ocean')
       %w(lcl fcl_20 fcl_40 fcl_40_hq).each do |cc|
         tenant_vehicles.each do |tv|
           FactoryBot.create(:pricings_pricing,
@@ -70,7 +70,7 @@ RSpec.describe Pricings::MarginCreator do
     }
   end
   let(:wm_rate_basis) { double('WM Rate basis', external_code: 'PER_WM', internal_code: 'PER_WM') }
-  let(:itinerary_1) { FactoryBot.create(:legacy_itinerary, tenant: tenant) }
+  let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
 
   context 'freight margin creator' do
     describe '.perform' do

@@ -8,7 +8,7 @@ module Pricings
       let(:tenant) { FactoryBot.create(:legacy_tenant) }
       let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
       let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
-      let(:itinerary_1) { FactoryBot.create(:legacy_itinerary, tenant: tenant) }
+      let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
       let!(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
       let!(:fcl_20_pricing) { FactoryBot.create(:fcl_20_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
       let!(:fcl_40_pricing) { FactoryBot.create(:fcl_40_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
@@ -50,7 +50,7 @@ module Pricings
       let(:tenant) { FactoryBot.create(:legacy_tenant) }
       let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
       let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
-      let(:itinerary_1) { FactoryBot.create(:legacy_itinerary, tenant: tenant) }
+      let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
       let!(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
       describe '.for_table_json' do
         it 'returns the pricing as a hash' do

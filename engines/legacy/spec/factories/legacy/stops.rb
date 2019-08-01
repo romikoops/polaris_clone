@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :legacy_stop, class: 'Legacy::Stop' do
     association :hub, factory: :legacy_hub
-    association :itinerary, factory: :legacy_itinerary
+    association :itinerary, factory: :default_itinerary
     sequence(:index) { |n| n }
   end
 end

@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'legacy'
   s.add_dependency 'pricings'
   s.add_dependency 'rms_data'
+  s.add_dependency 'routing'
   s.add_dependency 'tenants'
 
   s.add_development_dependency 'factory_bot_rails'

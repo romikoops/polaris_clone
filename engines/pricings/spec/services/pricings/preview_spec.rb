@@ -9,7 +9,7 @@ RSpec.describe Pricings::Preview do
   let!(:currency) { FactoryBot.create(:legacy_currency) }
   let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
   let!(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
-  let(:itinerary_1) { FactoryBot.create(:legacy_itinerary, tenant: tenant) }
+  let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
 
   describe '.perform' do
     it 'retruns the examples' do

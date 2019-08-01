@@ -46,8 +46,8 @@ RSpec.describe Pricings::Finder do
       quantity: 1
     }
   end
-  let(:itinerary_1) { FactoryBot.create(:legacy_itinerary, tenant: tenant) }
-  let(:itinerary_2) { FactoryBot.create(:legacy_itinerary, tenant: tenant) }
+  let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
+  let(:itinerary_2) { FactoryBot.create(:default_itinerary, tenant: tenant) }
 
   describe '.perform' do
     it 'returns an object containing pricings grouped by transport category (lcl)' do

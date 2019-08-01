@@ -112,6 +112,15 @@ PATH
       strong_migrations (= 0.3.1)
 
 PATH
+  remote: engines/helmsman
+  specs:
+    helmsman (9999.1.0.0)
+      core
+      routing
+      tenant_routing
+      tenants
+
+PATH
   remote: engines/legacy
   specs:
     legacy (9999.1.0.0)
@@ -152,6 +161,13 @@ PATH
       tenants
 
 PATH
+  remote: engines/rms_export
+  specs:
+    rms_export (9999.1.0.0)
+      core
+      routing
+
+PATH
   remote: engines/rms_sync
   specs:
     rms_sync (9999.1.0.0)
@@ -160,6 +176,26 @@ PATH
       legacy
       pricings
       rms_data
+      routing
+      tenants
+
+PATH
+  remote: engines/routing
+  specs:
+    routing (9999.1.0.0)
+      activerecord-import
+      bitfields
+      core
+      rgeo
+      rgeo-geojson
+
+PATH
+  remote: engines/tenant_routing
+  specs:
+    tenant_routing (9999.1.0.0)
+      bitfields
+      core
+      routing
       tenants
 
 PATH
@@ -288,6 +324,7 @@ GEM
       rack (>= 0.9.0)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
+    bitfields (0.10.0)
     bootsnap (1.4.3)
       msgpack (~> 1.0)
     bootstrap (4.2.1)
@@ -894,6 +931,7 @@ DEPENDENCIES
   google-cloud-storage
   google-cloud-translate
   googleauth
+  helmsman!
   holidays
   legacy!
   letter_opener (~> 1.6)
@@ -933,9 +971,11 @@ DEPENDENCIES
   rgeo!
   rgeo-geojson
   rms_data!
+  rms_export!
   rms_sync!
   roo
   roo-xls
+  routing!
   rspec-rails
   rspec_junit_formatter
   rubocop
@@ -958,6 +998,7 @@ DEPENDENCIES
   sprockets-rails
   strong_migrations
   table_print
+  tenant_routing!
   tenants!
   timecop
   traceroute
