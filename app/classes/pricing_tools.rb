@@ -76,24 +76,23 @@ class PricingTools # rubocop:disable Metrics/ClassLength
           charges = get_manipulated_local_charge(charge, cargos.first.shipment, schedules)
           charges.each { |c| charges_for_filtering << c } if charges.present?
           break if charges.present?
-
+          
         end
       else
-        [user.id, nil].each do |user_id|
+        [user.pricing_id, nil].each do |user_pricing_id|
           charge = effective_local_charges.find_by(
-            user_id: user_id,
+            user_id: user_pricing_id,
             load_type: load_type,
             counterpart_hub_id: counterpart_hub_id
           )
           charge ||= effective_local_charges.find_by(
-            user_id: user_id,
+            user_id: user_pricing_id,
             load_type: load_type,
             counterpart_hub_id: nil
           )
-          
+
           charges_for_filtering << charge&.as_json&.with_indifferent_access
           break if charge.present?
-
         end
       end
     end
