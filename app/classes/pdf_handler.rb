@@ -84,7 +84,13 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                                            .except('total', 'edited_total', 'name')
                                            .keys
                                            .reject { |rk| rk.include?('unknown') }
-                                           .map { |ck| charge.dig(k, ck, 'currency') }
+                                           .map do |ck|
+                                             if %w(cargo_item container).include?(k)
+                                               charge.dig(k, 'currency')
+                                             else
+                                               charge.dig(k, ck, 'currency')
+                                             end
+                                           end
                                        end
                                    else
                                      charge_keys.map { |k| charge[k]['total']['currency'] }
