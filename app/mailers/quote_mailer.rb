@@ -53,7 +53,7 @@ class QuoteMailer < ApplicationMailer
     if quotation
       shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
     else
-      shipment.charge_breakdowns.map { |cb| cb.to_nested_hash.merge(trip_id: cb.trip_id).deep_stringify_keys }
+      shipments.first.charge_breakdowns.map { |cb| cb.to_nested_hash.merge(trip_id: cb.trip_id).deep_stringify_keys }
     end
   end
 
