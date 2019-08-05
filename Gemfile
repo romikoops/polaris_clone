@@ -29,9 +29,6 @@ gem 'skylight'
 # Nicer logs
 gem 'lograge'
 
-# Setup RailsConfig for easier secret management
-gem 'config'
-
 gem 'devise_token_auth', '~> 0.1.43'
 gem 'omniauth'
 

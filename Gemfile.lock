@@ -912,7 +912,6 @@ DEPENDENCIES
   breezy_pdf_lite
   byebug
   chronic
-  config
   core!
   danger
   danger-auto_label
