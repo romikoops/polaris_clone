@@ -237,7 +237,7 @@
               .reject {|k| ['name', 'total', 'edited_total'].include?(k)}
               .each do |k|
                 charge[k] = original_charge[k]
-                charge[k]['total']['value'] = 0.0
+                charge[k]['total'] = {'value' => 0.0 }
                 item_charge_keys = original_charge[k].keys
                   .reject {|fk| ['name', 'total', 'edited_total'].include?(fk)}
                 if item_charge_keys.length == 1 && item_charge_keys.first.include?('unknown')
