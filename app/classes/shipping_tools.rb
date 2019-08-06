@@ -524,6 +524,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
 
     cargo_items = shipment.cargo_items
     containers = shipment.containers
+    aggregated_cargo = shipment.aggregated_cargo
     if containers.present?
       cargoKey = containers.first.size_class.dup
       customsKey = cargoKey.dup
@@ -531,7 +532,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     else
       cargoKey = 'lcl'
       customsKey = 'lcl'
-      cargos = cargo_items
+      cargos = cargo_items.present? ? cargo_items : [aggregated_cargo]
     end
 
     shipment.transport_category = shipment
