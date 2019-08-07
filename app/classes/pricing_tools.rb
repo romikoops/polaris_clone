@@ -76,7 +76,6 @@ class PricingTools # rubocop:disable Metrics/ClassLength
           charges = get_manipulated_local_charge(charge, cargos.first.shipment, schedules)
           charges.each { |c| charges_for_filtering << c } if charges.present?
           break if charges.present?
-          
         end
       else
         [user.pricing_id, nil].each do |user_pricing_id|
@@ -108,7 +107,7 @@ class PricingTools # rubocop:disable Metrics/ClassLength
         next if filter_charge['fees'].empty?
 
         filter_charge['fees'].each do |fk, fee|
-          if %w(PER_SHIPMENT PER_BILL).include?(RateBasis.get_internal_key(fee['rate_basis']))
+          if %w(PER_SHIPMENT PER_BILL PER_SHIPMENT_TON).include?(RateBasis.get_internal_key(fee['rate_basis']))
             shipment_charges['fees'][fk] = filter_charge['fees'].delete(fk)
           end
         end
@@ -130,17 +129,20 @@ class PricingTools # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def cargo_hash_for_local_charges(cargos, consolidation) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def consolidated_cargo_hash(cargos)
+    cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+      weight = get_cargo_weight(cargo_unit)
+
+      return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
+      return_h[:volume]   += (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
+
+      return_h[:weight]   += (cargo_unit.try(:weight) || weight)
+    end
+  end
+
+  def cargo_hash_for_local_charges(cargos, consolidated_hash, consolidation) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if consolidation.dig('cargo', 'backend')
-      cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
-        weight = get_cargo_weight(cargo_unit)
-
-        return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
-        return_h[:volume]   += (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
-
-        return_h[:weight]   += (cargo_unit.try(:weight) || weight)
-      end
-      [cargo_hash]
+      [consolidated_hash]
     else
       cargos.map do |cargo_unit|
         return_h = {}
@@ -156,14 +158,19 @@ class PricingTools # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def local_charge_calculation_block(charge_object, cargo_hash, user)
+  def local_charge_calculation_block(charge_object, cargo_hash, consolidated_hash, user)
     totals = { 'total' => {} }
 
     charge_object.dig('fees')&.each do |k, fee|
       totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[k]['currency'] ||= fee['currency']
       totals[k]['value'] +=
-        fee_value(fee, cargo_hash, @scope.fetch(:continuous_rounding))
+        fee_value(
+          fee: fee,
+          cargo: cargo_hash,
+          consolidated: consolidated_hash,
+          rounding: @scope.fetch(:continuous_rounding)
+        )
     end
 
     converted = CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
@@ -176,6 +183,8 @@ class PricingTools # rubocop:disable Metrics/ClassLength
   def determine_local_charges(schedules, cargos, direction, user) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     charges_by_dates = find_local_charge(schedules, cargos, direction, user)
     return {} if charges_by_dates.empty?
+
+    consolidated_hash = consolidated_cargo_hash(cargos)
 
     charges_by_dates.each_with_object({}) do |(dates, values), hash|
       unit_charges_array, shipment_charges = values
@@ -191,12 +200,24 @@ class PricingTools # rubocop:disable Metrics/ClassLength
                           else
                             cargos.select { |c| c.size_class == charge_object['load_type'] }
                           end
-        cargo_hash_for_local_charges(relevant_cargos, @scope.fetch(:consolidation))
-          .map do |cargo_hash|
-          local_charge_calculation_block(charge_object, cargo_hash, user)
+        cargo_hashes = cargo_hash_for_local_charges(relevant_cargos, consolidated_hash, @scope.fetch(:consolidation))
+        cargo_hashes.map do |cargo_hash|
+          local_charge_calculation_block(
+            charge_object,
+            cargo_hash,
+            consolidated_hash,
+            user
+          )
         end
       end
-      charge_results << local_charge_calculation_block(shipment_charges, null_cargo_hash, user) if shipment_charges
+      if shipment_charges
+        charge_results << local_charge_calculation_block(
+          shipment_charges,
+          null_cargo_hash,
+          consolidated_hash,
+          user
+        )
+      end
       hash[dates] = charge_results.flatten.compact
     end
   end
@@ -220,8 +241,11 @@ class PricingTools # rubocop:disable Metrics/ClassLength
       totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[k]['currency'] ||= fee['currency']
 
-      totals[k]['value'] +=
-        fee_value(fee, cargo_hash, @scope.fetch(:continuous_rounding))
+      totals[k]['value'] += fee_value(
+        fee: fee,
+        cargo: cargo_hash,
+        rounding: @scope.fetch(:continuous_rounding)
+      )
     end
 
     converted = CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
@@ -249,8 +273,11 @@ class PricingTools # rubocop:disable Metrics/ClassLength
       if !fee['unknown']
         totals[k]['currency'] ||= fee['currency']
 
-        totals[k]['value'] +=
-          fee_value(fee, cargo_hash, @scope.fetch(:continuous_rounding))
+        totals[k]['value'] += fee_value(
+          fee: fee,
+          cargo: cargo_hash,
+          rounding: @scope.fetch(:continuous_rounding)
+        )
       else
         totals[k]['value'] += 0
       end
@@ -280,7 +307,11 @@ class PricingTools # rubocop:disable Metrics/ClassLength
         if fee['hw_rate_basis']
           heavy_weight_fee_value(fee, cargo, @scope.fetch(:continuous_rounding))
         else
-          fee_value(fee, get_cargo_hash(cargo, mot), @scope.fetch(:continuous_rounding))
+          fee_value(
+            fee: fee,
+            cargo: get_cargo_hash(cargo, mot),
+            rounding: @scope.fetch(:continuous_rounding)
+          )
         end
     end
 
@@ -300,12 +331,15 @@ class PricingTools # rubocop:disable Metrics/ClassLength
 
     totals = { 'total' => {} }
     cargo_hash = get_cargo_hash(container, mot)
-    continuous_rounding = @scope.fetch(:continuous_rounding)
     pricing.each do |k, fee|
       totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[k]['currency'] ||= fee['currency']
 
-      totals[k]['value'] += fee_value(fee, cargo_hash, continuous_rounding)
+      totals[k]['value'] += fee_value(
+        fee: fee,
+        cargo: cargo_hash,
+        rounding: @scope.fetch(:continuous_rounding)
+      )
     end
 
     cargo_rate_value = CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
@@ -456,61 +490,67 @@ class PricingTools # rubocop:disable Metrics/ClassLength
     round_fee(result, continuous_rounding)
   end
 
-  def fee_value(fee, cargo_hash, continuous_rounding = false) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def fee_value(fee:, cargo:, consolidated: {}, rounding: false) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     rate_basis = RateBasis.get_internal_key(fee['rate_basis'])
     fee_value = fee['value'] || fee['rate']
     result = case rate_basis
              when 'PER_SHIPMENT', 'PER_BILL'
                fee_value.to_d
              when 'PER_ITEM', 'PER_CONTAINER'
-               fee_value.to_d * cargo_hash[:quantity]
+               fee_value.to_d * cargo[:quantity]
              when 'PER_CBM'
                min = fee['min'] || 0
                max = fee['max'] || DEFAULT_MAX
                val = fee_value
-               cbm = val.to_d * cargo_hash[:volume]
+               cbm = val.to_d * cargo[:volume]
                res = [cbm, min].max
                [res, max].min
              when 'PER_KG'
                max = fee['max'] || DEFAULT_MAX
-               val = fee_value.to_d * cargo_hash[:weight]
+               val = fee_value.to_d * cargo[:weight]
                min = fee['min'] || 0
                res = [val, min].max
                [res, max].min
              when 'PER_X_KG_FLAT'
                max = fee['max'] || DEFAULT_MAX
                base = fee['base'].to_d
-               val = fee_value * (cargo_hash[:weight].round(2) / base).ceil * base
+               val = fee_value * (cargo[:weight].round(2) / base).ceil * base
                min = fee['min'] || 0
                res = [val, min].max
                [res, max].min
              when 'PER_CBM_TON'
                max = fee['max'] || DEFAULT_MAX
-               cbm = cargo_hash[:volume] * fee['cbm']
-               ton = (cargo_hash[:weight] / 1000) * fee['ton']
+               cbm = cargo[:volume] * fee['cbm']
+               ton = (cargo[:weight] / 1000) * fee['ton']
                min = fee['min'] || 0
 
                res = [cbm, ton, min].max
                [res, max].min
              when 'PER_TON'
                max = fee['max'] || DEFAULT_MAX
-               ton = (cargo_hash[:weight] / 1000) * fee['ton']
+               ton = (cargo[:weight] / 1000) * fee['ton']
+               min = fee['min'] || 0
+               res = [ton, min].max
+               [res, max].min
+             when 'PER_SHIPMENT_TON'
+               max = fee['max'] || DEFAULT_MAX
+               ton = (consolidated[:weight] / 1000) * fee['value']
                min = fee['min'] || 0
                res = [ton, min].max
                [res, max].min
              when 'PER_WM'
                max = fee['max'] || DEFAULT_MAX
-               cbm = cargo_hash[:volume] * fee_value
-               ton = (cargo_hash[:weight] / 1000) * fee_value
+               cbm = cargo[:volume] * fee_value
+               ton = (cargo[:weight] / 1000) * fee_value
                min = fee['min'] || 0
                res = [cbm, ton, min].max
 
                [res, max].min
              when /RANGE/
-               handle_range_fee(fee, cargo_hash)
+               handle_range_fee(fee, cargo)
              end
 
-    round_fee(result, continuous_rounding)
+    round_fee(result, rounding)
   end
 
   def get_cargo_hash(cargo, mot)

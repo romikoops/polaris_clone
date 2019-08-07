@@ -145,6 +145,7 @@ module ExcelDataServices
 
       def specific_charge_params(rate_basis, single_data) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         return { value: single_data[:kg], base: single_data[:base] } if rate_basis == 'PER_X_KG_FLAT'
+        return { value: single_data[:ton], base: single_data[:base] } if rate_basis == 'PER_SHIPMENT_TON'
 
         if rate_basis == 'PER_UNIT_TON_CBM_RANGE' && (single_data[:cbm] && single_data[:ton])
           raise StandardError, "There should only be one value for rate_basis 'PER_UNIT_TON_CBM_RANGE'."

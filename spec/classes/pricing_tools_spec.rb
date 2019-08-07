@@ -231,8 +231,10 @@ RSpec.describe PricingTools do
         fcl_40 = create(:container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
         fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
         cargos = [fcl_20, fcl_40, fcl_40_hq]
+        klass= described_class.new(user: user, shipment: shipment)
+        consolidated_hash = klass.consolidated_cargo_hash(cargos)
         scope = { cargo: { backend: true } }.with_indifferent_access
-        cargo_objects = described_class.new(user: user, shipment: shipment).cargo_hash_for_local_charges(cargos, scope)
+        cargo_objects = klass.cargo_hash_for_local_charges(cargos, consolidated_hash, scope)
         expect(cargo_objects.length).to eq(1)
       end
     end
@@ -243,8 +245,10 @@ RSpec.describe PricingTools do
         fcl_40 = create(:container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
         fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
         cargos = [fcl_20, fcl_40, fcl_40_hq]
+        klass= described_class.new(user: user, shipment: shipment)
+        consolidated_hash = klass.consolidated_cargo_hash(cargos)
         scope = { cargo: { backend: false } }.with_indifferent_access
-        cargo_objects = described_class.new(user: user, shipment: shipment).cargo_hash_for_local_charges(cargos, scope)
+        cargo_objects = klass.cargo_hash_for_local_charges(cargos, consolidated_hash, scope)
         expect(cargo_objects.length).to eq(3)
       end
     end

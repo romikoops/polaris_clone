@@ -21,6 +21,7 @@ module ExcelDataServices
           PER_WM_RANGE
           PER_X_KG_FLAT
           PER_UNIT_TON_CBM_RANGE
+          PER_SHIPMENT_TON
         ).freeze
 
         private
