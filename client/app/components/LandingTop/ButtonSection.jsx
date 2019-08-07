@@ -73,7 +73,7 @@ const ButtonSection = ({
       </div>
       <div className={`flex-75 ${styles.banner_text}`}>
         {showLogo ? (
-          <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
+          <div className="flex layout-row flex-100 banner_text">
             <div className="flex-none layout-row layout-align-start-center">
               <h4 className="flex-none">{t('landing:poweredBy')}</h4>
               <a

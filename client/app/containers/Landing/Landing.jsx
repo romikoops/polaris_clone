@@ -81,7 +81,7 @@ class Landing extends Component {
         <i className="fa fa-check" />
         <p> View or download documents when you need them </p>
       </div>),
-      ( <div className="flex layout-row layout-align-start-center">
+      (<div className="flex layout-row layout-align-start-center">
         <i className="fa fa-check" />
         <p> Pull statistics and reports on your logistics </p>
       </div>)
@@ -91,11 +91,13 @@ class Landing extends Component {
     const serviceContentToRender = content && content.services ? contentToHtml(content.services) : ['', '', '']
     const serviceTitlesToRender = content && content.serviceTitles ? contentToHtml(content.serviceTitles) : ([<h2 className="flex-none">
     Introducing Online Freight Booking Services
-  </h2>])
+    </h2>])
     const bulletTitlesToRender = content && content.bulletTitles ? contentToHtml(content.bulletTitles) : ([<h2 className="flex-none">
     There are tons of benefits of managing your logistics online:
-  </h2>])
+    </h2>])
     const bulletContentToRender = content && content.bullets ? contentToHtml(content.bullets) : defaultBulletContent
+    const imageUrlRender = content && content.bulletImage ? `url(${content.bulletImage[0].image_url})` : false
+
     return (
       <div className={`${styles.wrapper_landing} layout-row flex-100 layout-wrap`}>
         <div className=" layout-row flex-100 layout-wrap" style={innerWrapperStyle}>
@@ -117,7 +119,7 @@ class Landing extends Component {
                   <div
                     className="layout-row flex-100 flex-gt-sm-80 card layout-align-space-between-center"
                   >
-                   
+
                     <div
                       className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                     >
@@ -125,7 +127,7 @@ class Landing extends Component {
                       <h3> Real Time Quotes </h3>
                       <div
                         className={`flex-none layout-column layout-align-center-center ${styles.service_text}`}
-                      >  
+                      >
                         {serviceContentToRender[0]}
                       </div>
                     </div>
@@ -136,7 +138,7 @@ class Landing extends Component {
                       <h3> Full Transparency </h3>
                       <div
                         className={`flex-none layout-column layout-align-center-center ${styles.service_text}`}
-                      >  
+                      >
                         {serviceContentToRender[1]}
                       </div>
                     </div>
@@ -147,7 +149,7 @@ class Landing extends Component {
                       <h3> Instant Booking </h3>
                       <div
                         className={`flex-none layout-column layout-align-center-center ${styles.service_text}`}
-                      >  
+                      >
                         {serviceContentToRender[2]}
                       </div>
                     </div>
@@ -155,7 +157,10 @@ class Landing extends Component {
                 </div>
               </div>
               <div className={`${styles.btm_promo} flex-100 layout-row`}>
-                <div className={`flex-45 ${styles.btm_promo_img}`} />
+                <div
+                  className={`flex-45 btm_promo_img ${imageUrlRender ? '' : 'default'}`}
+                  style={{ backgroundImage: imageUrlRender }}
+                />
                 <div className={`${styles.btm_promo_text} flex-55 layout-row layout-align-start-start`}>
                   <div className="flex-90 layout-column layout-align-start-start height_100">
                     <div className="flex-20 layout-column layout-align-center-start">

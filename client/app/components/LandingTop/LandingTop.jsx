@@ -51,7 +51,7 @@ function LandingTop ({
     (<img
       src={whiteLogo}
       alt=""
-      className={`flex-none ${styles.tenant_logo_landing}`}
+      className="flex-none tenant_logo_landing"
     />),
     (<h2 className="flex-none">
       <b>{t('landing:welcomeTextHead')}</b>
@@ -64,10 +64,10 @@ function LandingTop ({
         {welcomeTextTail}
       </b>
     </h2>),
-    (<div className={styles.wrapper_hr}>
+    (<div className="wrapper_hr">
       <hr />
     </div>),
-    (<div className={styles.wrapper_h3}>
+    (<div className="wrapper_h3">
       {isQuote(tenant) ? (
         <h3 className="flex-none">
           {t('landing:descriptionQuoteHead')}
@@ -95,7 +95,7 @@ function LandingTop ({
         </div>
         <div className="flex-50 layout-row layout-align-center layout-wrap">
           <div className={`${styles.content_wrapper} flex-100 layout-row layout-wrap layout-align-center-center`}>
-            <div className={`flex-75 ${styles.banner_text}`}>
+            <div className="flex-75 banner_text">
               { contentToRender }
             </div>
             <ButtonSection {...buttonSectionProps} className="hide_h_xxs" />
