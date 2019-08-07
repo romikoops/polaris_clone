@@ -3,6 +3,7 @@ import { withNamespaces } from 'react-i18next'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import { bindActionCreators } from 'redux'
+import { get } from 'lodash'
 import { connect } from 'react-redux'
 import PropTypes from '../../../prop-types'
 import { userActions, appActions } from '../../../actions'
@@ -47,7 +48,7 @@ class PricingList extends PureComponent {
               <p className="flex-none">{t('shipment:origin')}</p>
             </div>),
             id: 'origin_name',
-            accessor: d => d.stops[0].hub.nexus.name,
+            accessor: d => get(d, ['stops', 0, 'hub', 'nexus', 'name'], ''),
             Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
               <p className="flex-none"> {row.row.origin_name}</p>
             </div>)
@@ -58,7 +59,7 @@ class PricingList extends PureComponent {
               <p className="flex-none">{t('shipment:destination')}</p>
             </div>),
             id: 'destination_name',
-            accessor: d => d.stops[1].hub.nexus.name,
+            accessor: d => get(d, ['stops', 1, 'hub', 'nexus', 'name'], ''),
             Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
               <p className="flex-none"> {row.row.destination_name}</p>
             </div>)
