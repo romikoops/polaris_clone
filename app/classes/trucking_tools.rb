@@ -133,7 +133,10 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
              value = ((fee[:km] * kms) + fee[:unit]) * cargo['number_of_items']
              min = fee[:min_value] || 0
              [min, value].max
-
+           when 'PER_UNIT_KG'
+             value = (fee[:kg]) + ((fee[:kgr] || 0)  * cargo['weight'])
+             min = fee[:min_value] || 0
+             [min, value].max
            when 'PER_CBM_TON'
              cbm_value = cargo['volume'] * fee[:cbm]
              ton_value = (cargo['weight'] / 1000) * fee[:ton]
@@ -276,6 +279,33 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
       result[:km] = trucking_pricing['rates']['km'][0]['rate']['value']
       result[:min_value] = trucking_pricing['rates']['unit'][0]['min_value']
       result[:currency] = trucking_pricing['rates']['unit'][0]['rate']['currency']
+
+      return { rate: result, fees: trucking_pricing['fees'] }
+    when 'unit_and_kg'
+      result = { rate_basis: 'PER_UNIT_KG' }
+      result[:fees] = trucking_pricing['fees']
+      result[:min_value] = trucking_pricing['rates']['kg'][0]['min_value']
+      result[:currency] = trucking_pricing['rates']['kg'][0]['rate']['currency']
+      if cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].compact.last['max_kg'].to_i && scope['hard_trucking_limit']
+        raise TruckingTools::LoadMeterageExceeded
+      elsif cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].compact.last['max_kg'].to_i && !scope['hard_trucking_limit']
+        rate = trucking_pricing['rates']['kg'].compact.last
+        rate['rate']['min_value'] = rate['min_value']
+        result[:kg] = rate['rate']['value']
+      end
+
+      trucking_pricing['rates']['kg'].each do |rate|
+        if cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
+          rate['rate']['min_value'] = rate['min_value']
+          result[:kg] = rate['rate']['value']
+        end
+      end
+      trucking_pricing['rates']['unit_in_kg'].each do |rate|
+        if cargo_values['weight'].to_i <= rate['max_unit_in_kg'].to_i && cargo_values['weight'].to_i >= rate['min_unit_in_kg'].to_i
+          rate['rate']['min_value'] = rate['min_value']
+          result[:kgr] = rate['rate']['value']
+        end
+      end
 
       return { rate: result, fees: trucking_pricing['fees'] }
     end
