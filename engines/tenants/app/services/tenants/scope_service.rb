@@ -125,7 +125,7 @@ module Tenants
       side_nav: {
         agent: %w(dashboard shipments profile),
         admin: %w(dashboard shipments hubs pricing schedules clients routes currencies settings),
-        shipper: %w(dashboard shipments pricings profile contacts)
+        shipper: %w(dashboard shipments profile contacts)
       }
     }.freeze
 
