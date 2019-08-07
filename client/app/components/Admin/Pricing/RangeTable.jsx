@@ -23,7 +23,8 @@ class AdminRangeFeeTable extends PureComponent {
     if (!scope) return value
     if (scope.cargo_price_notes && scope.cargo_price_notes.cargo && target === 'rate') {
       return scope.cargo_price_notes.cargo
-    } else if (scope.cargo_price_notes && scope.cargo_price_notes.cargo && target === 'min') {
+    } 
+    if (scope.cargo_price_notes && scope.cargo_price_notes.cargo && target === 'min') {
       return ''
     }
 
@@ -50,19 +51,19 @@ class AdminRangeFeeTable extends PureComponent {
         Header: () => <strong>More</strong>,
         width: 65,
         Expander: ({ isExpanded, ...rest }) => {
-          if(rest.original.range) {
-            return(
+          if (rest.original.range) {
+            return (
               <div>
                 {isExpanded
-                  ? <div><i className="fa fa-caret-up"></i></div>
-                  : <div><i className="fa fa-caret-right"></i></div>
+                  ? <div><i className="fa fa-caret-up" /></div>
+                  : <div><i className="fa fa-caret-right" /></div>
                 }
               </div>
             )
-          } else {
-            return null
           }
-        },
+
+          return null
+        }
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
@@ -72,9 +73,14 @@ class AdminRangeFeeTable extends PureComponent {
         id: 'fee_code',
         className: cellClass,
         accessor: d => d.feeCode,
-        Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {rowData.row.fee_code}</p>
-        </div>)
+        Cell: rowData => (
+          <div className=" flex layout-row layout-align-start-center">
+            <p className="flex-none">
+                        {' '}
+              {rowData.row.fee_code}
+                      </p>
+          </div>
+        )
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
@@ -84,9 +90,14 @@ class AdminRangeFeeTable extends PureComponent {
         className: cellClass,
         id: 'rate_basis',
         accessor: d => d.rate_basis,
-        Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {rowData.row.rate_basis}</p>
-        </div>)
+        Cell: rowData => (
+          <div className=" flex layout-row layout-align-start-center">
+            <p className="flex-none">
+              {' '}
+              {rowData.row.rate_basis}
+                      </p>
+          </div>
+        )
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
@@ -96,9 +107,14 @@ class AdminRangeFeeTable extends PureComponent {
         className: cellClass,
         id: 'currency',
         accessor: d => d.currency,
-        Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {rowData.row.currency}</p>
-        </div>)
+        Cell: rowData => (
+          <div className=" flex layout-row layout-align-start-center">
+            <p className="flex-none">
+                        {' '}
+              {rowData.row.currency}
+            </p>
+          </div>
+        )
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
@@ -108,9 +124,14 @@ class AdminRangeFeeTable extends PureComponent {
         id: 'min',
         className: cellClass,
         accessor: d => d.min,
-        Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {rowData.row.min}</p>
-        </div>)
+        Cell: rowData => (
+          <div className=" flex layout-row layout-align-start-center">
+            <p className="flex-none">
+              {' '}
+              {rowData.row.min}
+                      </p>
+          </div>
+        )
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
@@ -121,11 +142,13 @@ class AdminRangeFeeTable extends PureComponent {
         className: cellClass,
         style: { 'white-space': 'unset' },
         accessor: d => d.rate,
-        Cell: rowData => (<div className={` flex-100 layout-row layout-align-start-center`}>
-          <p className="flex-100">
-            {this.determineStringToRender(rowData.row.rate, 'rate')}
-          </p>
-        </div>)
+        Cell: rowData => (
+          <div className=" flex-100 layout-row layout-align-start-center">
+            <p className="flex-100">
+                        {this.determineStringToRender(rowData.row.rate, 'rate')}
+                      </p>
+          </div>
+        )
       }
     ]
     const rangeColumns = [
@@ -139,9 +162,14 @@ class AdminRangeFeeTable extends PureComponent {
             id: 'min',
             className: cellClass,
             accessor: d => d.min,
-            Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
-              <p className="flex-none"> {rowData.row.min}</p>
-            </div>)
+            Cell: rowData => (
+              <div className=" flex layout-row layout-align-start-center">
+                <p className="flex-none">
+                  {' '}
+                  {rowData.row.min}
+                </p>
+              </div>
+            )
           },
           {
             Header: (<div className="flex layout-row layout-center-center">
@@ -151,9 +179,14 @@ class AdminRangeFeeTable extends PureComponent {
             id: 'max',
             className: cellClass,
             accessor: d => d.max,
-            Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
-              <p className="flex-none"> {rowData.row.max}</p>
-            </div>)
+            Cell: rowData => (
+              <div className=" flex layout-row layout-align-start-center">
+                <p className="flex-none">
+                  {' '}
+                  {rowData.row.max}
+                </p>
+              </div>
+            )
           }
         ]
       }
@@ -177,27 +210,26 @@ class AdminRangeFeeTable extends PureComponent {
         )
       }
     ]
-    const localChargeColumns = localChargeKeys.map((k) => (
-        {
-          Header: (<div className="flex layout-row layout-center-center">
-            {determineSortingCaret(k, sorted)}
-            <p className="flex-none">{t('common:rate')}</p>
-          </div>),
-          id: k,
-          style: { 'white-space': 'unset' },
-          accessor: d => d[k],
-          Cell: rowData => (
-            <div className={`${styles.pricing_cell} flex-100 layout-row layout-align-start-center`}>
-              <p className="flex-100">
-                {this.determineStringToRender(rowData.row[k], k)}
-              </p>
-            </div>
-          )
-        }
-      ))
+    const localChargeColumns = localChargeKeys ? localChargeKeys.map(k => (
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret(k, sorted)}
+          <p className="flex-none">{t('common:rate')}</p>
+        </div>),
+        id: k,
+        style: { 'white-space': 'unset' },
+        accessor: d => d[k],
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex-100 layout-row layout-align-start-center`}>
+            <p className="flex-100">
+              {this.determineStringToRender(rowData.row[k], k)}
+            </p>
+          </div>
+        )
+      }
+    )) : []
     const feeRenderColumns = isLocalCharge ? localChargeColumns : feeColumns
     feeRenderColumns.forEach(col => rangeColumns.push(col))
-
 
     return (
       <ReactTable
@@ -214,20 +246,17 @@ class AdminRangeFeeTable extends PureComponent {
             desc: true
           }
         ]}
-        getTdProps={(state, rowInfo, column, instance) => {
-          return {
-            onClick: (e, handleOriginal) => {
-              if (handleOriginal && !rowInfo.original.range && column.expander) {
-                null
-              } else {
-                handleOriginal();
-              }
+        getTdProps={(state, rowInfo, column, instance) => ({
+          onClick: (e, handleOriginal) => {
+            if (handleOriginal && !rowInfo.original.range && column.expander) {
+              null
+            } else {
+              handleOriginal()
             }
-          };
-        }}
+          }
+        })}
         defaultPageSize={data.length}
-        SubComponent={d => { 
-          return d.original.range ? (
+        SubComponent={d => (d.original.range ? (
           <div className={styles.nested_table}>
             <ReactTable
               data={d.original.range}
@@ -244,7 +273,7 @@ class AdminRangeFeeTable extends PureComponent {
               defaultPageSize={d.original.range.length}
             />
           </div>
-        ): ''}}
+        ) : '')}
       />
     )
   }
