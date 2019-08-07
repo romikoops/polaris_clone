@@ -267,13 +267,15 @@ class Autocomplete extends PureComponent {
   }
 
   handleArea (location) {
-    listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
+    if (location) {
+      listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
 
-    const { target, onAutocompleteTrigger } = this.props
-
-    onAutocompleteTrigger(target, addressFromLocation(location))
-
-    this.setState({ hideResults: true, listenerSet: false })
+      const { target, onAutocompleteTrigger } = this.props
+  
+      onAutocompleteTrigger(target, addressFromLocation(location))
+  
+      this.setState({ hideResults: true, listenerSet: false })
+    }
   }
 
   shouldExpandResults () {
