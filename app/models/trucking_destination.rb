@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class TruckingDestination < ApplicationRecord
-
-  validates given_attribute_names.first.to_sym,
+  validates :zipcode,
             uniqueness: {
-              scope: given_attribute_names[1..-1],
+              scope: %i(country_code city_name distance location_id sandbox_id),
               message: 'is a duplicate (all attributes match an existing record in the DB)'
             }
 

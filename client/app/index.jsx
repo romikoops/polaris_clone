@@ -15,7 +15,7 @@ Sentry.init({
   debug: (process.env.NODE_ENV === 'development'),
   dsn: (process.env.NODE_ENV === 'development') ? '' : window.keel.sentryUrl,
   environment: window.keel.environment,
-  release: process.env.RELEASE
+  release: window.keel.release || process.env.RELEASE
 })
 
 const store = configureStore()

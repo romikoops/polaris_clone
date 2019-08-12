@@ -44,7 +44,7 @@ withPipeline(timeout: 120) {
         )
       }
 
-      def error = null
+      def error = false
 
       withStage('Test') {
         milestone()
@@ -55,27 +55,31 @@ withPipeline(timeout: 120) {
 
           client: {
             container('client') {
-              try {
-                dir('client') { sh(label: 'Run Tests', script: 'npm run test:ci') }
-              } catch (err) {
-                throw err
-              } finally {
-                junit allowEmptyResults: true, testResults: '**/junit.xml'
+              dir('client') {
+                def ret = sh(label: 'Run Tests', script: 'npm run test:ci', returnStatus: true)
+                error = (ret != 0)
               }
             }
           }
         )
       }
 
-      withStage('Report') {
+      withStage('Report', retry: false) {
         milestone()
 
         container('app') {
-          sh("scripts/ci-results")
+          def ret = sh(label: 'Result Reporter', script: 'scripts/ci-results', returnStatus: true)
+          error = error || (ret != 0)
         }
+
+        junit allowEmptyResults: false, testResults: "**/junit.xml"
 
         if (env.BRANCH_NAME == 'master') {
           publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
+        }
+
+        if (currentBuild.result != null || error) {
+          error("Failed Tests")
         }
       }
     }
@@ -110,7 +114,7 @@ withPipeline(timeout: 120) {
   }
 
   if (env.CHANGE_ID || env.GIT_BRANCH == 'master') {
-    withStage('Prepare Deploy') {
+    withStage('Docker Build') {
       lock(label: "${env.GIT_BRANCH}-build", inversePrecedence: true) {
         inPod { label ->
           withNode(label) {
@@ -123,42 +127,42 @@ withPipeline(timeout: 120) {
     }
   }
 
-  // if (env.CHANGE_ID) {
-  //   withStage('Review') {
-  //     milestone()
-  //
-  //     env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG
-  //
-  //     lock(label: "${env.GIT_BRANCH}-deploy", inversePrecedence: true) {
-  //       inPod { label ->
-  //         withNode(label) {
-  //           githubDeploy(environment: env.REVIEW_NAME, url: "https://${env.REVIEW_NAME}.itsmycargo.tech") {
-  //             deployReview(env.REVIEW_NAME)
-  //           }
-  //         }
-  //       }
-  //
-  //       milestone()
-  //     }
-  //   }
-  //
-  //   withStage('QA') {
-  //     milestone()
-  //
-  //     build(
-  //       job: 'Voyage/imc-react-api',
-  //       parameters: [
-  //         string(name: 'APP_NAME', value: 'imc-app'),
-  //         string(name: 'ENVIRONMENT', value: 'review'),
-  //         string(name: 'NAMESPACE', value: 'review'),
-  //         string(name: 'RELEASE', value: env.REVIEW_NAME),
-  //         string(name: 'REPOSITORY', value: jobBaseName()),
-  //         string(name: 'REVISION', value: env.GIT_COMMIT),
-  //       ],
-  //       wait: false
-  //     )
-  //   }
-  // }
+  if (env.CHANGE_ID) {
+    withStage('Deploy Review') {
+      milestone()
+
+      env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG
+
+      lock(label: "${env.GIT_BRANCH}-deploy", inversePrecedence: true) {
+        inPod { label ->
+          withNode(label) {
+            githubDeploy(environment: env.REVIEW_NAME, url: "https://${env.REVIEW_NAME}.itsmycargo.tech") {
+              deployReview(env.REVIEW_NAME)
+            }
+          }
+        }
+
+        milestone()
+      }
+    }
+
+    withStage('QA') {
+      milestone()
+
+      build(
+        job: 'Voyage/imc-react-api',
+        parameters: [
+          string(name: 'APP_NAME', value: 'imc-app'),
+          string(name: 'ENVIRONMENT', value: 'review'),
+          string(name: 'NAMESPACE', value: 'review'),
+          string(name: 'RELEASE', value: env.REVIEW_NAME),
+          string(name: 'REPOSITORY', value: jobBaseName()),
+          string(name: 'REVISION', value: env.GIT_COMMIT),
+        ],
+        wait: false
+      )
+    }
+  }
 }
 
 void appPrepare() {
@@ -221,17 +225,23 @@ void clientPrepare() {
 
 void appRunner(String name) {
   withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}", "LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby"]) {
-    try {
-      sh(label: 'Test', script: "scripts/ci-test ${name}")
-    } catch (err) {
-      throw err
-    } finally {
-      junit allowEmptyResults: true, testResults: '**/rspec.xml'
-    }
+    sh(label: 'Test', script: "scripts/ci-test ${name}")
   }
 }
 
 void deployReview(String reviewName) {
+  def secretTemplate = """\
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: registry-default
+    type: kubernetes.io/dockerconfigjson
+    data:
+    {{- range \\\$key, \\\$value := .data }}
+      {{ \\\$key }}: {{ \\\$value }}
+    {{- end }}
+  """.stripIndent()
+
   inPod(
     containers: [
       containerTemplate(name: 'deploy', image: 'eu.gcr.io/itsmycargo-main/deploy:latest', ttyEnabled: true, command: 'cat',
@@ -244,7 +254,15 @@ void deployReview(String reviewName) {
       checkoutScm()
 
       container('deploy') {
-        sh(label: 'Destory failed deployment',
+        sh(label: 'Create Namespace',
+        script: """
+          kubectl get namespace -o name | grep -q 'namespace/${reviewName}' || kubectl create namespace ${reviewName}
+          kubectl annotate --overwrite namespace ${reviewName} itsmycargo.tech/change-id=${env.CHANGE_ID}
+          kubectl annotate --overwrite namespace ${reviewName} itsmycargo.tech/change-repo=${jobShortName()}
+          kubectl get secrets -n default registry-default -ogo-template="${secretTemplate}" | kubectl apply -n ${reviewName} -f -
+        """)
+
+        sh(label: 'Destroy failed deployment',
           script: """
             if [[ -n "\$(helm ls --failed -q "^${reviewName}\$")" ]]; then
               helm delete --purge "${reviewName}" || true
@@ -257,14 +275,9 @@ void deployReview(String reviewName) {
             helm upgrade --install \
               --wait \
               --timeout 600 \
-              --set meta.changeId="${env.CHANGE_ID}" \
-              --set meta.changeRepo="${jobName()}" \
               --set image.tag="${env.GIT_COMMIT}" \
               --set ingress.domain="itsmycargo.tech" \
-              --set postgres.database=${reviewName} \
-              --set vault.endpoint="${env.VAULT_ADDR}" \
-              --set vault.roleName="${jobName()}" \
-              --namespace=review \
+              --namespace=${reviewName} \
               "${reviewName}" \
               chart/
           """

@@ -16,13 +16,13 @@ ROOTDIR="$(cd "$( dirname "${BASH_SOURCE[0]}/" )/../" >/dev/null 2>&1 && pwd )"
 : ${COVERAGE_DIR:="${ROOTDIR}/coverage"}
 : ${DISABLE_PROFILE:=1}
 : ${RAILS_ENV:=test}
-: ${SPEC_OPTS:="--order rand:${SEED} --format progress --color --format RspecJunitFormatter --out rspec.xml"}
+: ${SPEC_OPTS:="--order rand:${SEED} --format progress --color --format RspecJunitFormatter --out junit.xml"}
 
 export SEED CI DISABLE_PROFILE COVERAGE COVERAGE_DIR DISABLE_PROFILE RAILS_ENV SPEC_OPTS
 
 (
   cd "$2"
-  bin/rspec
+  bin/rspec || bin/rspec --only-failures
 )
 
 exit $?

@@ -2,6 +2,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  imagePullSecrets:
+    - registry-default
+
 replicaCount: 1
 
 meta:
@@ -45,9 +49,13 @@ frontend:
     type: ClusterIP
     port: 80
 
-imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+
+serviceAccount:
+  enabled: true
+  ## Name of an already existing service account. Setting this value disables the automatic service account creation.
+  # name:
 
 ingress:
   enabled: true
@@ -55,14 +63,45 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: traefik
 
-vault:
-  endpoint:
-  roleName:
-  tokenPath: /home/vault/.token
-
 nodeSelector:
   cloud.google.com/gke-preemptible: "true"
 
 tolerations: []
 
 affinity: {}
+
+postgresql:
+  image:
+    registry: eu.gcr.io
+    repository: itsmycargo-main/postgis-review
+    tag: latest
+    # repository: mdillon/postgis
+    # tag: 11-alpine
+  securityContext:
+    enabled: false
+  serviceAccount:
+    enabled: true
+    name: imc-react-api
+  postgresqlDataDir: /data/pgdata
+  persistence:
+    mountPath: /data
+  postgresqlPassword: postgres
+  master:
+    podAnnotations:
+      vault.security.banzaicloud.io/vault-role: review-imc-react-api
+  extraEnv:
+    - name: GOOGLE_CREDENTIALS
+      value: "vault:secret/data/review/imc-react-api#google-service-account.json"
+
+redis:
+  cluster:
+    enabled: false
+  password: hellocargo
+
+elasticsearch:
+  master:
+    replicas: 0
+  data:
+    replicas: 0
+  coordinating:
+    replicas: 0

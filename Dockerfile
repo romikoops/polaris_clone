@@ -109,6 +109,4 @@ WORKDIR /app
 
 EXPOSE 3000
 
-ENTRYPOINT ["/tini", "--", "/bin/vaultenv"]
-
 CMD ["bin/rails", "server", "puma", "-b", "0.0.0.0", "-p", "3000"]

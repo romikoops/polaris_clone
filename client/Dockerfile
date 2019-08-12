@@ -19,22 +19,28 @@ RUN npm install --no-progress --production
 
 COPY . .
 
+ARG RELEASE=""
+ENV RELEASE $RELEASE
+RUN npm run build
+
+# Sentry Uploader
+FROM getsentry/sentry-cli AS sentry
+
 ARG SENTRY_AUTH_TOKEN=""
 ARG SENTRY_URL=https://sentry.itsmycargo.tech
 ARG SENTRY_ORG=itsmycargo
 ARG SENTRY_PROJECT=frontend
+
+ENV SENTRY_URL $SENTRY_URL
+ENV SENTRY_ORG $SENTRY_ORG
+ENV SENTRY_PROJECT $SENTRY_PROJECT
+ENV SENTRY_AUTH_TOKEN $SENTRY_AUTH_TOKEN
+
+COPY --from=builder /dist /work
 ARG RELEASE=""
+ENV RELEASE $RELEASE
 
-RUN \
-    SENTRY_URL=$SENTRY_URL \
-    SENTRY_ORG=$SENTRY_ORG \
-    SENTRY_PROJECT=$SENTRY_PROJECT \
-    SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN \
-    RELEASE=$RELEASE \
-    npm run build
-
-# Clear out source-maps
-RUN rm -v /dist/*.map*
+RUN sentry-cli releases files $RELEASE upload-sourcemaps --rewrite --validate /work/ || true
 
 # Deployment Image
 FROM nginx:alpine AS app
@@ -44,7 +50,8 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-COPY --from=builder --chown=nginx:nginx /dist /usr/share/nginx/html
 COPY nginx/nginx.tmpl /etc/nginx/
+
+COPY --from=builder --chown=nginx:nginx /dist /usr/share/nginx/html
 
 CMD ["dockerize", "-template", "/etc/nginx/nginx.tmpl:/etc/nginx/nginx.conf", "nginx", "-g", "daemon off;"]

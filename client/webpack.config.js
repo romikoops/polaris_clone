@@ -8,7 +8,6 @@ const HtmlWebPackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
-const SentryCliPlugin = require('@sentry/webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = (env, options) => ({
@@ -153,14 +152,6 @@ module.exports = (env, options) => ({
     new CompressionPlugin({
       include: /\.(css|html|js|map)$/,
       threshold: 2 * 1024
-    }),
-
-    new SentryCliPlugin({
-      dryRun: options.mode !== 'production',
-      release: process.env.RELEASE,
-      include: path.resolve(__dirname, './dist'),
-      ignoreFile: '.sentrycliignore',
-      ignore: ['config.201906251733.js']
     })
   ]
 })

@@ -21,6 +21,10 @@ To access Rails Console:
 
 To view logs:
 
+Migration:
+
+  kubectl -n {{ .Release.Namespace }} logs -l app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=migrate
+
 Backend:
 
   kubectl -n {{ .Release.Namespace }} logs -l app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=backend

@@ -42,8 +42,12 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- if .Values.meta.changeId }}
 itsmycargo.tech/change-id: {{ .Values.meta.changeId | quote }}
+{{- end }}
+{{- if .Values.meta.changeRepo }}
 itsmycargo.tech/change-repo: {{ .Values.meta.changeRepo | quote }}
+{{- end }}
 {{- end -}}
 
 {{/*
@@ -60,4 +64,37 @@ https://{{ include "app.api_host" . }}
 {{- end -}}
 {{- define "app.app_url" -}}
 https://{{ include "app.host" . }}
+{{- end -}}
+
+{{- define "app.db_url" -}}
+postgis://{{ default "postgres" .Values.postgresql.postgresUser }}:postgres@{{ template "app.fullname" . }}-postgresql:5432/app
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "app.imagePullSecrets" -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+Also, we can not use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+{{- if .Values.global.imagePullSecrets }}
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- else if .Values.image.pullSecrets }}
+imagePullSecrets:
+{{- range .Values.image.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- end -}}
+{{- else if .Values.image.pullSecrets }}
+imagePullSecrets:
+{{- range .Values.image.pullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- end -}}
 {{- end -}}

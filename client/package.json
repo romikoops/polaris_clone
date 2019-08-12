@@ -8,7 +8,7 @@
     "test:ci": "jest --reporters=default --reporters=jest-junit --coverageReporters=cobertura --forceExit --detectOpenHandles --no-watchman --silent --runInBand",
     "test:watch": "jest --watch",
     "start": "webpack-dev-server --mode development --config webpack.config.js --open",
-    "build": "SENTRY_AUTH_TOKEN=099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95 webpack --mode production --config webpack.config.js --display-error-details",
+    "build": "webpack --mode production --config webpack.config.js --hide-modules --display errors-only",
     "eslint": "eslint .",
     "eslint:watch": "esw -w --report-unused-disable-directives --cache --ext .js --ext .jsx --ext .json",
     "eslint-file": "eslint",
