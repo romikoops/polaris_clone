@@ -1,0 +1,28 @@
+#!/bin/bash
+
+if [[ $# -lt 2 ]];
+then
+  echo "Usage: $0 NAME DIR"
+  exit 1
+fi
+
+ROOTDIR="$(cd "$( dirname "${BASH_SOURCE[0]}/" )/../" >/dev/null 2>&1 && pwd )"
+
+# Setup Environment
+: ${SEED:=$(((RANDOM % 0xFFFF) + 1))}
+: ${CI:=1}
+: ${DISABLE_PROFILE:=$CI}
+: ${COVERAGE:=1}
+: ${COVERAGE_DIR:="${ROOTDIR}/coverage"}
+: ${DISABLE_PROFILE:=1}
+: ${RAILS_ENV:=test}
+: ${SPEC_OPTS:="--order rand:${SEED} --format progress --color --format RspecJunitFormatter --out rspec.xml"}
+
+export SEED CI DISABLE_PROFILE COVERAGE COVERAGE_DIR DISABLE_PROFILE RAILS_ENV SPEC_OPTS
+
+(
+  cd "$2"
+  bin/rspec
+)
+
+exit $?

@@ -5,7 +5,7 @@ require 'simplecov'
 
 SimpleCov.start 'rails' do
   minimum_coverage 95 unless ENV['SKIP_COVERAGE']
-  command_name 'engines/tenants'
+  command_name 'tenants'
 
   if ENV['COVERAGE_DIR']
     coverage_dir(ENV['COVERAGE_DIR'])

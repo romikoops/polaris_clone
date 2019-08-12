@@ -5,7 +5,7 @@ require 'simplecov'
 
 SimpleCov.start 'rails' do
   minimum_coverage 30
-  command_name 'engines/legacy'
+  command_name 'legacy'
 
   if ENV['COVERAGE_DIR']
     coverage_dir(ENV['COVERAGE_DIR'])

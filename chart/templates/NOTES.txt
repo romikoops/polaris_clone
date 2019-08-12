@@ -17,7 +17,7 @@ To access Rails Console:
       -l app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=backend \
       -o jsonpath='{.items[].metadata.name}' \
     ) \
-    vaultenv bin/rails c
+    bin/rails c
 
 To view logs:
 

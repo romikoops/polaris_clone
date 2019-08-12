@@ -1,0 +1,110 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'set'
+
+class BuildFinder
+  def self.affected
+    finder = new
+    affected = finder.affected
+
+    unless (finder.affected_libraries - finder.dirty_libraries).empty?
+      warn 'Dirty Libraries'
+      warn '------------------'
+      finder.dirty_libraries.each do |library|
+        warn "  * #{library}"
+      end
+      warn ''
+    end
+
+    warn 'Affected Libraries'
+    warn '------------------'
+    affected.each do |depth, libraries|
+      warn "#{'  ' * depth}#{libraries.join(' ')}"
+    end
+    warn ''
+
+    finder.affected_libraries.entries
+  end
+
+  def affected_libraries
+    Set.new(affected.values.flatten)
+  end
+
+  def affected
+    @affected ||= begin
+      result = {}
+
+      add_library = proc do |library, depth|
+        result[library] = depth
+        dependency_tree[library].each do |dependency|
+          next if result.has_key?(dependency) && result[dependency] <= (depth + 1)
+
+          add_library.call(dependency, depth + 1)
+        end
+      end
+
+      dirty_libraries.each do |library|
+        add_library.call(library, 0)
+      end
+
+      result.keys.group_by { |key| result[key] }
+    end
+  end
+
+  def change_target
+    "origin/#{ENV.fetch('CHANGE_TARGET', 'master')}"
+  end
+
+  def dependency_tree
+    @dependency_tree ||= begin
+      pattern = File.expand_path('../engines/**/*.gemspec', __dir__)
+      gemspecs = Dir.glob(pattern).map do |gemspec_file|
+        Gem::Specification.load(gemspec_file)
+      end
+
+      names = gemspecs.each_with_object({}) do |gemspec, hash|
+        hash[gemspec.name] = []
+      end
+
+      gemspecs.each_with_object(names) do |gemspec, hash|
+        deps = Set.new(gemspec.dependencies.map(&:name)) + Set.new(gemspec.development_dependencies.map(&:name))
+        local_deps = deps & Set.new(names.keys)
+        local_deps.each do |local_dep|
+          hash[local_dep] << gemspec.name
+        end
+      end
+    end
+  end
+
+  def all_libraries
+    @all_libraries ||= begin
+      pattern = File.expand_path('../engines/**/*.gemspec', __dir__)
+      Set.new(Dir.glob(pattern).map { |e| e.match(%r{engines/(\w+)/(\w+).gemspec})[1] })
+    end
+  end
+
+  def dirty_libraries
+    @dirty_libraries ||= begin
+      return all_libraries if ENV['GIT_BRANCH'] == 'master'
+
+      changed_files = `git diff $(git merge-base #{change_target} HEAD) --name-only`.split("\n")
+      raise 'failed to get changed files' unless $?.success?
+
+      changed_engines = Set.new
+
+      changed_files.each do |file|
+        case file
+        when %r{^engines/(\w+)}
+          changed_engines << Regexp.last_match[1]
+        when %r{^scripts/} # rubocop:disable Lint/EmptyWhen
+          # scripts do not affect the build
+        end
+      end
+
+      changed_engines
+    end
+  end
+end
+
+puts BuildFinder.affected

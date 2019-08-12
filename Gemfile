@@ -160,23 +160,7 @@ group :development, :test do
   gem 'debase'
   gem 'ruby-debug-ide'
 
-  # Code Style
-  gem 'danger'
-  gem 'danger-auto_label'
-  gem 'danger-jira'
-  gem 'danger-reviewer', '~> 0.0.5'
-
-  # gem 'pronto'
-  gem 'pronto', git: 'https://github.com/mikian/pronto.git', branch: 'gh_status'
-  gem 'pronto-brakeman'
-  gem 'pronto-eslint_npm'
-  gem 'pronto-fasterer'
-  gem 'pronto-flay'
-  gem 'pronto-rubocop'
-  gem 'pronto-undercover', git: 'https://github.com/mikian/pronto-undercover.git', branch: 'master'
-
   gem 'rubocop'
-  gem 'rubocop-checkstyle_formatter'
   gem 'rubocop-rspec'
   gem 'rubocop-performance'
 end

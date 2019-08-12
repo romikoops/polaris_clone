@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_31_093414) do
+ActiveRecord::Schema.define(version: 2019_07_24_091123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -244,6 +244,12 @@ ActiveRecord::Schema.define(version: 2019_07_31_093414) do
     t.uuid "sandbox_id"
   end
 
+  create_table "ct", id: false, force: :cascade do |t|
+    t.integer "itinerary_id"
+    t.text "case"
+    t.string "name"
+  end
+
   create_table "currencies", force: :cascade do |t|
     t.jsonb "today"
     t.jsonb "yesterday"
@@ -472,11 +478,6 @@ ActiveRecord::Schema.define(version: 2019_07_31_093414) do
   end
 
   create_table "legacy_local_charges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "legacy_pricings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -953,13 +954,9 @@ ActiveRecord::Schema.define(version: 2019_07_31_093414) do
   create_table "rms_data_books", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "sheet_type"
     t.uuid "tenant_id"
-    t.string "target_type"
-    t.uuid "target_id"
-    t.integer "book_type", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["sheet_type"], name: "index_rms_data_books_on_sheet_type"
-    t.index ["target_type", "target_id"], name: "index_rms_data_books_on_target_type_and_target_id"
     t.index ["tenant_id"], name: "index_rms_data_books_on_tenant_id"
   end
 

@@ -1,9 +1,0 @@
-github:
-  format: '**%{runner}**: %{msg}'
-text:
-  format: '%{color_location}: %{color_level}: %{runner}: %{msg}'
-checkstyle:
-  format: '**%{runner}**: %{msg}'
-rails_best_practices:
-  exclude:
-    - '**/*'

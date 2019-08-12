@@ -1,0 +1,64 @@
+#!/bin/bash
+
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM
+
+# Helpers
+fail () {
+  echo -e "\033[0;31m$1\033[0m"
+}
+success () {
+  echo -e "\033[0;32m$1\033[0m"
+}
+warn () {
+  echo -e "\033[0;33m$1\033[0m"
+}
+
+ci-runner () {
+  warn "--- Running tests for $1 ---"
+  $SCRIPTDIR/ci-runner $1 $2
+  ret=$?
+
+  if [[ -n "$(which lockfile)" ]]
+  then
+    lockfile "$RESULTFILE.lock"
+  fi
+  echo "$1:$ret" >> $RESULTFILE
+  rm -f "$RESULTFILE.lock"
+
+  if [[ $ret -eq 0 ]];
+  then
+    success "--- SUCCESS for $1 ---"
+  else
+    fail "--- FAILURE for $1 ---"
+  fi
+}
+
+ROOTDIR="$(cd "$( dirname "${BASH_SOURCE[0]}/" )/../" >/dev/null 2>&1 && pwd )"
+SCRIPTDIR="$ROOTDIR/scripts"
+REPORTSDIR="$ROOTDIR/reports"
+RESULTFILE="$ROOTDIR/.results"
+
+# Set Environment
+: ${SEED:=$(((RANDOM % 0xFFFF) + 1))}
+export SEED
+
+mkdir -p $REPORTSDIR
+
+for run in $*;
+do
+  case "$run" in
+    app )
+      ci-runner app $ROOTDIR
+      ;;
+    engines )
+      for engine in $($SCRIPTDIR/ci-finder);
+      do
+        ci-runner $engine engines/$engine
+      done
+      ;;
+    * )
+      echo "Usage: $0 [app|engines]"
+      exit 1
+      ;;
+  esac
+done

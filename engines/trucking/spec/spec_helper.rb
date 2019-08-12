@@ -5,7 +5,7 @@ require 'simplecov'
 
 SimpleCov.start 'rails' do
   minimum_coverage 16
-  command_name 'engines/trucking'
+  command_name 'trucking'
 
   if ENV['COVERAGE_DIR']
     coverage_dir(ENV['COVERAGE_DIR'])

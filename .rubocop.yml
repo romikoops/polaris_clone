@@ -97,3 +97,6 @@ Style/PreferredHashMethods:
 
 Style/SingleLineMethods:
   AllowIfMethodIsEmpty: false
+
+Style/SpecialGlobalVars:
+  Enabled: false

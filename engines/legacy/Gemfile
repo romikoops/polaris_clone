@@ -8,7 +8,7 @@ source 'https://rubygems.org'
 gemspec
 
 # Allow access to other engines
-Gem::Specification.load(Dir['*.gemspec'].first).dependencies.each do |dep|
+Gem::Specification.load(Dir[File.join(__dir__, '*.gemspec')].first).dependencies.each do |dep|
   next unless File.directory?(File.join('..', dep.name))
 
   gem dep.name, path: '..'

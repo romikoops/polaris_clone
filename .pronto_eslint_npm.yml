@@ -1,2 +1,0 @@
-eslint_executable: 'client/node_modules/.bin/eslint'
-cmd_line_opts: '-c client/.eslintrc'

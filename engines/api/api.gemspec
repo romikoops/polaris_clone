@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = 'Summary of Api.'
 
   # Uncomment line below to mark this component to be directly required by app.
-  # s.metadata = { 'type' => 'direct' }
+  s.metadata = { 'type' => 'direct' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 

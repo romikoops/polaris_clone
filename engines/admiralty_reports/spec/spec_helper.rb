@@ -5,7 +5,7 @@ require 'simplecov'
 
 SimpleCov.start 'rails' do
   minimum_coverage 86
-  command_name 'engines/admiralty_reports'
+  command_name 'admiralty_reports'
 
   if ENV['COVERAGE_DIR']
     coverage_dir(ENV['COVERAGE_DIR'])

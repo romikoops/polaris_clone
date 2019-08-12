@@ -90,15 +90,6 @@ RUN apt-key add /root/nodesource.gpg.key \
 
 RUN npm install -g 'mjml@4.3.1'
 
-# 0.7.3 does not support KV 2
-# ARG ENVCONSUL_VERSION=0.7.3
-# ADD https://releases.hashicorp.com/envconsul/${ENVCONSUL_VERSION}/envconsul_${ENVCONSUL_VERSION}_linux_amd64.tgz /tmp
-# RUN tar -C /bin -xzvf /tmp/envconsul_${ENVCONSUL_VERSION}_linux_amd64.tgz \
-#     && rm /tmp/envconsul_${ENVCONSUL_VERSION}_linux_amd64.tgz
-# Use vendored, masdter-build version of envconsul
-COPY scripts/envconsul /bin/envconsul
-COPY scripts/vaultenv.sh /bin/vaultenv
-
 # Add user
 RUN groupadd -r -g 1000 app && useradd -r -d /app/tmp -s /sbin/nologin -g app -u 1000 app
 

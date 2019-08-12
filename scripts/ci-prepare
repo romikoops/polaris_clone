@@ -1,0 +1,50 @@
+#!/bin/bash
+
+set -e
+
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM
+
+# Helpers
+fail () {
+  echo -e "\033[0;31m$1\033[0m"
+}
+success () {
+  echo -e "\033[0;32m$1\033[0m"
+}
+warn () {
+  echo -e "\033[0;33m$1\033[0m"
+}
+
+bundler () {
+  warn "=== Install Dependencies"
+  if [[ -n "$(which nproc)" ]];
+  then
+    BUNDLE_JOBS="--jobs=$(nproc)"
+  elif [[ -n "$(which sysctl)" ]];
+  then
+    BUNDLE_JOBS="--jobs=$(sysctl -n hw.ncpu)"
+  fi
+
+  PATHS=$(find engines -maxdepth 2 -name "Gemfile" | sed 's/\/Gemfile//' | sort )
+
+  for dir in . $PATHS
+  do
+    (
+      cd $dir
+      bundle --retry=2 $BUNDLE_JOBS
+    )
+  done
+}
+
+database () {
+  warn "=== Prepare Test Database"
+  (
+    cd "$ROOTDIR"
+    RAILS_ENV=test bin/rails db:test:prepare
+  )
+}
+
+ROOTDIR="$(cd "$( dirname "${BASH_SOURCE[0]}/" )/../" >/dev/null 2>&1 && pwd )"
+
+bundler
+database
