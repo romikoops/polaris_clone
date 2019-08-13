@@ -14,10 +14,10 @@ module OfferCalculatorService
 
     private
 
-    def data_for_hubs(hub_ids, carriage)
+    def data_for_hubs(hub_ids, carriage) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       trucking_details = @shipment.trucking["#{carriage}_carriage"]
       address          = Address.find(trucking_details['address_id'])
-
+      errors = []
       trucking_pricing_finder = TruckingPricingFinder.new(
         trucking_details: trucking_details,
         address: address,
@@ -32,14 +32,26 @@ module OfferCalculatorService
 
         trucking_pricings = trucking_pricing_finder.perform(hub.id, distance)
         trucking_charge_data = data_for_trucking_charges(trucking_pricings, distance)
+        if trucking_charge_data[:error]
+          errors << trucking_charge_data[:error]
+          next
+        end
         next if trucking_charge_data.empty?
 
         obj[hub.id] = { trucking_charge_data: trucking_charge_data }
       end
       valid_object = validate_data_for_hubs(data)
+
+      raise errors.first if errors.length == hub_ids.length
       raise ApplicationError::MissingTruckingData if valid_object.empty?
 
       valid_object
+    rescue TruckingDataBuilder::MissingTruckingData
+      raise ApplicationError::MissingTruckingData
+    rescue TruckingTools::LoadMeterageExceeded
+      raise ApplicationError::LoadMeterageExceeded
+    rescue StandardError
+      raise ApplicationError::MissingTruckingData
     end
 
     def validate_data_for_hubs(data)
@@ -62,10 +74,11 @@ module OfferCalculatorService
         trucking_charges = calc_trucking_charges(distance, trucking_pricing)
         trucking_charge_data[key] = trucking_charges
       end
+
     rescue TruckingDataBuilder::MissingTruckingData => e
-      raise ApplicationError::MissingTruckingData
+      return { error: e }
     rescue TruckingTools::LoadMeterageExceeded => e
-      raise ApplicationError::LoadMeterageExceeded
+      return { error: e }
     rescue StandardError => e
       raise ApplicationError::MissingTruckingData
     end
