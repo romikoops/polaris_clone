@@ -108,7 +108,7 @@ gem 'filterrific'
 gem 'will_paginate', '~> 3.1.5'
 
 # Email support
-gem 'mailgun-ruby', '~> 1.1', '>= 1.1.11'
+gem 'mailgun-ruby', '~> 1.2.0'
 gem 'recipient_interceptor'
 
 # New email gem

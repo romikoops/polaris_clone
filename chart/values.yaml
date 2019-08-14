@@ -5,6 +5,9 @@
 global:
   imagePullSecrets:
     - registry-default
+  postgresql:
+    postgresqlPassword: postgres
+
 
 replicaCount: 1
 
@@ -13,7 +16,7 @@ meta:
   changeRepo:
 
 image:
-  repository: eu.gcr.io/itsmycargo-main/imc-react-api
+  repository: eu.gcr.io/itsmycargo-main/development/imc-react-api
   tag: latest
   pullPolicy: Always
 
@@ -74,7 +77,8 @@ postgresql:
   image:
     registry: eu.gcr.io
     repository: itsmycargo-main/postgis-review
-    tag: latest
+    tag: pipeline
+    pullPolicy: Always
     # repository: mdillon/postgis
     # tag: 11-alpine
   securityContext:
@@ -85,13 +89,6 @@ postgresql:
   postgresqlDataDir: /data/pgdata
   persistence:
     mountPath: /data
-  postgresqlPassword: postgres
-  master:
-    podAnnotations:
-      vault.security.banzaicloud.io/vault-role: review-imc-react-api
-  extraEnv:
-    - name: GOOGLE_CREDENTIALS
-      value: "vault:secret/data/review/imc-react-api#google-service-account.json"
 
 redis:
   cluster:

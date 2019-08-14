@@ -121,10 +121,11 @@ client/*.tgz
 
 blank.html
 
+.results
 .rspec_status
-rspec.xml
-/client/junit.xml
 examples.txt
+junit.xml
+rspec.xml
 
 config/settings.local.yml
 config/settings/*.local.yml

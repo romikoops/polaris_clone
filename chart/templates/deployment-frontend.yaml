@@ -35,6 +35,8 @@ spec:
               value: review
             - name: APP_NAME
               value: {{ .Release.Name }}
+            - name: REVIEW_APP_NAME
+              value: {{ .Release.Name }}
           ports:
             - name: http
               containerPort: 80

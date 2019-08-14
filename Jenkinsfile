@@ -33,6 +33,7 @@ withPipeline(timeout: 120) {
         stash(name: 'backend', excludes: 'client/**/*,qa/**/*')
         stash(name: 'frontend', includes: 'client/**/*')
         stash(name: 'qa', includes: 'qa/**/*')
+        stash(name: 'chart', includes: 'chart/**/*')
       }
 
       withStage('Prepare') {
@@ -44,8 +45,6 @@ withPipeline(timeout: 120) {
         )
       }
 
-      def error = false
-
       withStage('Test') {
         milestone()
 
@@ -56,8 +55,9 @@ withPipeline(timeout: 120) {
           client: {
             container('client') {
               dir('client') {
-                def ret = sh(label: 'Run Tests', script: 'npm run test:ci', returnStatus: true)
-                error = (ret != 0)
+                catchError(buildResult: null, stageResult: 'FAILURE') {
+                  sh(label: 'Run Tests', script: 'npm run test:ci')
+                }
               }
             }
           }
@@ -68,8 +68,9 @@ withPipeline(timeout: 120) {
         milestone()
 
         container('app') {
-          def ret = sh(label: 'Result Reporter', script: 'scripts/ci-results', returnStatus: true)
-          error = error || (ret != 0)
+          catchError(buildResult: null, stageResult: 'FAILURE') {
+            sh(label: 'Result Reporter', script: 'scripts/ci-results')
+          }
         }
 
         junit allowEmptyResults: false, testResults: "**/junit.xml"
@@ -78,7 +79,7 @@ withPipeline(timeout: 120) {
           publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
         }
 
-        if (currentBuild.result != null || error) {
+        if (currentBuild.result != null) {
           error("Failed Tests")
         }
       }
@@ -131,12 +132,12 @@ withPipeline(timeout: 120) {
     withStage('Deploy Review') {
       milestone()
 
-      env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG
+      env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG.replaceAll(/[^\w-\.]/, '').take(43).replaceAll(/-\z/, '')
 
       lock(label: "${env.GIT_BRANCH}-deploy", inversePrecedence: true) {
         inPod { label ->
           withNode(label) {
-            githubDeploy(environment: env.REVIEW_NAME, url: "https://${env.REVIEW_NAME}.itsmycargo.tech") {
+            githubDeploy(environment: env.REVIEW_NAME, url: "https://${env.REVIEW_NAME}.${env.REVIEW_DOMAIN}") {
               deployReview(env.REVIEW_NAME)
             }
           }
@@ -225,7 +226,9 @@ void clientPrepare() {
 
 void appRunner(String name) {
   withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}", "LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby"]) {
-    sh(label: 'Test', script: "scripts/ci-test ${name}")
+    catchError(buildResult: null, stageResult: 'FAILURE') {
+      sh(label: 'Test', script: "scripts/ci-test ${name}")
+    }
   }
 }
 
@@ -251,7 +254,7 @@ void deployReview(String reviewName) {
     ]
   ) { label ->
     withNode("${label}") {
-      checkoutScm()
+      unstash(name: 'chart')
 
       container('deploy') {
         sh(label: 'Create Namespace',
@@ -273,10 +276,9 @@ void deployReview(String reviewName) {
         sh(label: 'Helm Deploy',
           script: """
             helm upgrade --install \
-              --wait \
               --timeout 600 \
               --set image.tag="${env.GIT_COMMIT}" \
-              --set ingress.domain="itsmycargo.tech" \
+              --set ingress.domain="${env.REVIEW_DOMAIN}" \
               --namespace=${reviewName} \
               "${reviewName}" \
               chart/

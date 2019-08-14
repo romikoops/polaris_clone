@@ -2,12 +2,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "app.fullname" . }}-migrate-{{ .Release.Revision }}
+  name: {{ include "app.fullname" . }}-database-reset-{{ .Release.Revision }}
   labels:
     app.kubernetes.io/component: migrate
 {{ include "app.labels" . | indent 4 }}
   annotations:
     "helm.sh/hook": "post-install,post-upgrade"
+    "helm.sh/hook-weight": "-1"
     "helm.sh/hook-delete-policy": "before-hook-creation"
 spec:
   backoffLimit: 1
@@ -16,7 +17,7 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "app.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/component: migrate
+        app.kubernetes.io/component: database-reset
       annotations:
         vault.security.banzaicloud.io/vault-role: review-{{ .Chart.Name }}
     spec:
@@ -42,28 +43,27 @@ spec:
             - dockerize
             - -wait
             - tcp://{{ template "app.fullname" . }}-postgresql:5432
-            - -wait
-            - tcp://{{ template "app.fullname" . }}-redis-master:6379
             - -timeout
             - '300s'
       containers:
-        - name: migrate
-          image: "{{ .Values.image.repository }}/backend:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: database-reset
+          image: {{ .Values.postgresql.image.registry }}/{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}
+          imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
           args:
-            - bin/rails
-            - db:migrate
+            - /usr/local/bin/reset.sh
           env:
-            - name: DATABASE_URL
-              value: {{ template "app.db_url" . }}
-            - name: REDIS_URL
-              value: redis://:{{ .Values.redis.password }}@{{ template "app.fullname" . }}-redis-master:6379
-            - name: REVIEW_URL
-              value: {{ include "app.app_url" . | quote }}
+            - name: PGUSER
+              value: {{ template "postgresql.username" . }}
+            - name: PGPASSWORD
+              value: {{ template "postgresql.password" . }}
+            - name: PGHOST
+              value: {{ template "app.fullname" . }}-postgresql
+            - name: PGPORT
+              value: "5432"
+            - name: PGDATABASE
+              value: app
             - name: GOOGLE_CREDENTIALS
               value: "vault:secret/data/review/{{ .Chart.Name }}#google-service-account.json"
-            - name: RAILS_MASTER_KEY
-              value: "vault:secret/data/review/{{ .Chart.Name }}#rails_master_key"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

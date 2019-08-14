@@ -7,7 +7,7 @@ Raven.configure do |config|
   config.processors -= [Raven::Processor::Cookies] # Send cookies by default
 
   config.tags = {
-    namespace: ENV['REVIEW_NAME']
+    namespace: ENV['REVIEW_APP_NAME']
   }
 
   if File.exist?('/opt/elasticbeanstalk/deploy/appsource/source_bundle')

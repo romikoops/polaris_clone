@@ -31,7 +31,7 @@ bundler () {
   do
     (
       cd $dir
-      bundle --retry=2 $BUNDLE_JOBS
+      bundle check || bundle --retry=2 $BUNDLE_JOBS
     )
   done
 }

@@ -12,12 +12,12 @@ API: {{ include "app.api_url" . }}
 
 To access Rails Console:
 
-  kubectl -n {{ .Release.Namespace }} exec \
+  kubectl -n {{ .Release.Namespace }} exec -ti \
     $(kubectl -n {{ .Release.Namespace }} get pods \
       -l app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=backend \
       -o jsonpath='{.items[].metadata.name}' \
     ) \
-    bin/rails c
+    /vault/vault-env bin/rails c
 
 To view logs:
 

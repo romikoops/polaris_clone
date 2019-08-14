@@ -31,6 +31,8 @@ ci-runner () {
   else
     fail "--- FAILURE for $1 ---"
   fi
+
+  return $ret
 }
 
 ROOTDIR="$(cd "$( dirname "${BASH_SOURCE[0]}/" )/../" >/dev/null 2>&1 && pwd )"
@@ -44,16 +46,20 @@ export SEED
 
 mkdir -p $REPORTSDIR
 
+exitcode=0
+
 for run in $*;
 do
   case "$run" in
     app )
       ci-runner app $ROOTDIR
+      exitcode=$?
       ;;
     engines )
       for engine in $($SCRIPTDIR/ci-finder);
       do
         ci-runner $engine engines/$engine
+        exitcode=$(($exitcode|$?))
       done
       ;;
     * )
@@ -62,3 +68,10 @@ do
       ;;
   esac
 done
+
+if [[ -z "$CI" ]];
+then
+  $SCRIPTDIR/ci-results
+fi
+
+exit $exitcode

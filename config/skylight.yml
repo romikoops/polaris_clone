@@ -4,9 +4,4 @@ authentication: aZ1SJe7hNWg4JWovj-jUmAEjMqituXcdjRdVawuQtpI
 
 # Ignore Heartbeat Endpoints
 ignored_endpoints:
-  - ServerChecksController#health_check
   - Easymon::ChecksController#index
-
-# Setup Dynamic Environments
-review:                                      # Rails environment
-  env: <%= "review-#{ENV['REVIEW_NAME']}" %> # Skylight environment
