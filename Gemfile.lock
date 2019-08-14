@@ -144,6 +144,7 @@ PATH
     rms_export (9999.1.0.0)
       core
       routing
+      write_xlsx
 
 PATH
   remote: engines/rms_sync

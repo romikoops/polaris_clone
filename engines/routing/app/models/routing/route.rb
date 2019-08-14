@@ -6,7 +6,7 @@ module Routing
 
     belongs_to :origin, class_name: 'Routing::Location'
     belongs_to :destination, class_name: 'Routing::Location'
-    enum mode_of_transport: { ocean: 1, air: 2, rail: 3, truck: 4 }
+    enum mode_of_transport: { ocean: 1, air: 2, rail: 3, truck: 4, carriage: 5 }
     bitfield :allowed_cargo, 1 => :lcl, 2 => :fcl, 4 => :fcl_reefer
   end
 end

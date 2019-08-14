@@ -2,8 +2,9 @@
 
 module TenantRouting
   class Connection < ApplicationRecord
-    belongs_to :inbound, class_name: 'TenantRouting::Route'
-    belongs_to :outbound, class_name: 'TenantRouting::Route'
+    belongs_to :tenant, class_name: 'Tenants::Tenant'
+    belongs_to :inbound, class_name: 'Routing::Route', optional: true
+    belongs_to :outbound, class_name: 'Routing::Route', optional: true
   end
 end
 
@@ -16,4 +17,5 @@ end
 #  outbound_id :uuid
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  tenant_id   :uuid
 #

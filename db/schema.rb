@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_24_091123) do
+ActiveRecord::Schema.define(version: 2019_08_02_084910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -978,6 +978,8 @@ ActiveRecord::Schema.define(version: 2019_07_24_091123) do
     t.integer "sheet_index"
     t.uuid "tenant_id"
     t.uuid "book_id"
+    t.string "name"
+    t.jsonb "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["book_id"], name: "index_rms_data_sheets_on_book_id"
@@ -1164,6 +1166,7 @@ ActiveRecord::Schema.define(version: 2019_07_24_091123) do
     t.uuid "outbound_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "tenant_id"
     t.index ["inbound_id"], name: "index_tenant_routing_connections_on_inbound_id"
     t.index ["outbound_id"], name: "index_tenant_routing_connections_on_outbound_id"
   end
@@ -1179,6 +1182,16 @@ ActiveRecord::Schema.define(version: 2019_07_24_091123) do
     t.datetime "updated_at", null: false
     t.index ["line_service_id"], name: "index_tenant_routing_routes_on_line_service_id"
     t.index ["mode_of_transport"], name: "index_tenant_routing_routes_on_mode_of_transport"
+  end
+
+  create_table "tenant_routing_visibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "target_type"
+    t.uuid "target_id"
+    t.uuid "connection_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["connection_id"], name: "visibility_connection_index"
+    t.index ["target_type", "target_id"], name: "visibility_target_index"
   end
 
   create_table "tenant_vehicles", force: :cascade do |t|

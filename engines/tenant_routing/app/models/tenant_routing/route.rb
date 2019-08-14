@@ -14,11 +14,11 @@ end
 #
 #  id                :uuid             not null, primary key
 #  tenant_id         :uuid
-#  route_id          :uuid
 #  mode_of_transport :integer          default(NULL)
 #  price_factor      :integer
 #  time_factor       :integer
 #  line_service_id   :uuid
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  route_id          :uuid
 #

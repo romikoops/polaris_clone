@@ -2,6 +2,10 @@
 
 module RmsSync
     class Routes < RmsSync::Base
+      def initialize(tenant_id:, sheet_type: 'routes', sandbox: nil)
+        super
+      end
+
       def perform
         prepare_purge
         sync_data

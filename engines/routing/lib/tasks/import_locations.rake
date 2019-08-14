@@ -34,14 +34,18 @@ namespace :routing do
     ::Legacy::Hub.find_each do |hub|
       next if Routing::Location.exists?(name: hub.nexus.name, country_code: hub.address.country.code.downcase)
 
+      next if [hub.address.longitude, hub.address.latitude].any?(&:nil?)
       lng_lat = [hub.address.longitude, hub.address.latitude].join(' ')
+      next unless lng_lat.present?
+
       hub_locations << {
         name: hub.nexus.name,
         locode: '',
         country_code: hub.address.country.code.downcase,
-        center: "POINT #{lng_lat}"
+        center: "POINT (#{lng_lat})"
       }
     end
+
     Routing::Location.import(hub_locations)
 
     trucking_locations = []

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Document < ApplicationRecord
+class Document < Legacy::Document
   has_one_attached :file
   belongs_to :shipment, optional: true
   belongs_to :user, optional: true

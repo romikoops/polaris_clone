@@ -6,6 +6,7 @@ module RmsSync
       @tenant = Tenants::Tenant.find_by(id: tenant_id)
       @sandbox = sandbox
       @book = RmsData::Book.find_or_create_by(tenant: @tenant, sheet_type: sheet_type)
+      @cells = []
     end
 
     def prepare_purge
@@ -20,6 +21,16 @@ module RmsSync
       return '' unless hub
 
       hub.name.gsub(/ (Port|Airport|Railyard|Depot)/, '')
+    end
+
+    def write_cell(sheet, row, col, val)
+      @cells << {
+        sheet_id: sheet.id,
+        tenant_id: @tenant.id,
+        row: row,
+        column: col,
+        value: val
+      }
     end
   end
 end

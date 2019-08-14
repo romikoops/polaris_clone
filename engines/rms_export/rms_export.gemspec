@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'core'
   s.add_dependency 'routing'
+  s.add_dependency 'write_xlsx'
  
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'ffaker'
@@ -26,6 +27,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pricings'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rms_sync'
+  s.add_development_dependency 'roo'
+  s.add_development_dependency 'roo-xls'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'rspec_junit_formatter'
   s.add_development_dependency 'simplecov'

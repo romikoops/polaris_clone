@@ -33,7 +33,7 @@ RSpec.describe RmsSync::Pricings do
       sheet = RmsData::Sheet.where(book_id: book.id).first
       expect(RmsData::Cell.where(sheet_id: sheet.id).length).to eq(162)
       expect(sheet.rows.length).to eq(9)
-      expect(sheet.headers).to eq(%w(EFFECTIVE_DATE
+      expect(sheet.header_values).to eq(%w(EFFECTIVE_DATE
                                      EXPIRATION_DATE
                                      ORIGIN
                                      COUNTRY_ORIGIN
@@ -51,7 +51,7 @@ RSpec.describe RmsSync::Pricings do
                                      CURRENCY
                                      FEE_MIN
                                      FEE))
-      first_row = sheet.rows.select { |r| r[9] == 'lcl' && r[8] == 'slowly'}.first
+      first_row = sheet.rows_values.select { |r| r[9] == 'lcl' && r[8] == 'slowly'}.first
       expect(first_row).to eq([pricings.first.effective_date.to_s,
                                   pricings.first.expiration_date.to_s,
                                   'Gothenburg',
@@ -79,7 +79,7 @@ RSpec.describe RmsSync::Pricings do
       book = RmsData::Book.where(sheet_type: :pricings).first
       expect(RmsData::Sheet.where(book_id: book.id).length).to eq(1)
       sheet = RmsData::Sheet.where(book_id: book.id).first
-      expect(sheet.rows).to eq([%w(EFFECTIVE_DATE
+      expect(sheet.rows_values).to eq([%w(EFFECTIVE_DATE
                                    EXPIRATION_DATE
                                    ORIGIN
                                    COUNTRY_ORIGIN

@@ -2,97 +2,98 @@
 
 namespace :routing do
   task import_routes: :environment do
-    TMP_PATH = 'tmp/tmp_csv.gz'
-    s3 = Aws::S3::Client.new
-    bucket = 'assets.itsmycargo.com'
-    puts 'Reading from csv...'
+    # TMP_PATH = 'tmp/tmp_csv.gz'
+    # s3 = Aws::S3::Client.new
+    # bucket = 'assets.itsmycargo.com'
+    # puts 'Reading from csv...'
 
-    file = s3.get_object(
-      bucket: 'assets.itsmycargo.com',
-      key: 'data/location_data/freight_results.csv.gz',
-      response_content_disposition: 'application/x-gzip'
-    ).body.read
+    # file = s3.get_object(
+    #   bucket: 'assets.itsmycargo.com',
+    #   key: 'data/location_data/freight_results.csv.gz',
+    #   response_content_disposition: 'application/x-gzip'
+    # ).body.read
 
-    File.open(TMP_PATH, 'wb') { |f| f.write(file) }
-    routes = []
-    missed_names = []
-    blocked = {}
-    default_cargo_types = { lcl: false, fcl_reefer: false, fcl: false }
-    Zlib::GzipReader.open(TMP_PATH) do |gz|
-      csv = CSV.new(gz, headers: true)
-      csv.each do |row|
-        key = [row['origin'], row['destination'], row['mode_of_transport']].join('-')
-        to_sub, time_factor, price_factor = case row['mode_of_transport']
-                                            when 'ocean'
-                                              [' Port', 8, 2]
-                                            when 'air'
-                                              [' Airport', 1, 10]
-                                            when 'truck'
-                                              [' Depot', 7, 7]
-                                            when 'rail'
-                                              [' Railyard', 10, 4]
-                                            else
-                                              ['', 1, 10]
-                  end
-        origin = Routing::Location.find_by(name: row['origin'].gsub(to_sub, ''))
-        destination = Routing::Location.find_by(name: row['destination'].gsub(to_sub, ''))
+    # File.open(TMP_PATH, 'wb') { |f| f.write(file) }
+    # routes = []
+    # missed_names = []
+    # blocked = {}
+    # default_cargo_types = { lcl: false, fcl_reefer: false, fcl: false }
+    # Legacy::Itinerary.find_each do |itinerary|
+    #   next if itinerary.tenant.nil?
 
-        missed_names << row['origin'] unless origin.present?
-        missed_names << row['destination'] unless destination.present?
-        next unless origin.present? && destination.present?
+    #   key = [itinerary.name, itinerary.mode_of_transport].join('-')
+    #   time_factor, price_factor = case itinerary.mode_of_transport
+    #                               when 'ocean'
+    #                                 [8, 2]
+    #                               when 'air'
+    #                                 [1, 10]
+    #                               when 'truck'
+    #                                 [7, 7]
+    #                               when 'rail'
+    #                                 [10, 4]
+    #                               else
+    #                                 [1, 10]
+    #                               end
+    #   origin_hub = itinerary.first_stop&.hub
+    #   dest_hub = itinerary.last_stop&.hub
+    #   origin = Routing::Location.find_or_create_by(
+    #     name: origin_hub.nexus.name,
+    #     country_code: origin_hub.address&.country&.code
+    #   )
 
-        key = [origin.id, destination.id, row['mode_of_transport']].join('-')
-        next if blocked[key].present?
+    #   destination = Routing::Location.find_or_create_by(
+    #     name: dest_hub.nexus.name,
+    #     country_code: dest_hub.address&.country&.code
+    #   )
+    #   origin.update(center: origin_hub.point_wkt) unless origin.center
+    #   destination.update(center: dest_hub.point_wkt) unless destination.center
 
-        cargo_types = default_cargo_types.dup
-        Legacy::Itinerary.where(
-          sandbox_id: nil,
-          name: [origin.name, destination.name].join(' - '),
-          mode_of_transport: row['mode_of_transport']
-        ).each do |it|
-          next if it.tenant.nil?
+    #   missed_names << origin_hub.nexus.name unless origin.present?
+    #   missed_names << dest_hub.nexus.name unless destination.present?
+    #   next unless origin.present? && destination.present?
 
-          it.pricings.map(&:cargo_class).uniq.each do |cc|
-            if cc == 'lcl'
-              cargo_types[:lcl] = true
-            elsif cc.include?('_rf')
-              cargo_types[:fcl_reefer] = true
-            else
-              cargo_types[:fcl] = true
-            end
-          end
-        end
-        route = Routing::Route.find_or_create_by(
-          origin_id: origin.id,
-          destination_id: destination.id,
-          mode_of_transport: row['mode_of_transport'].to_sym
-        )
+    #   next if blocked[key].present?
 
-        route&.update(cargo_types)
+    #   cargo_types = default_cargo_types.dup
+    #   itinerary.pricings.map(&:cargo_class).uniq.each do |cc|
+    #     if cc == 'lcl'
+    #       cargo_types[:lcl] = true
+    #     elsif cc.include?('_rf')
+    #       cargo_types[:fcl_reefer] = true
+    #     else
+    #       cargo_types[:fcl] = true
+    #     end
+    #   end
+    #   route = Routing::Route.find_or_create_by(
+    #     origin_id: origin.id,
+    #     destination_id: destination.id,
+    #     mode_of_transport: itinerary.mode_of_transport.to_sym
+    #   )
 
-        blocked[key] = true
-      end
-    end
+    #   route&.update(price_factor: price_factor, time_factor: time_factor)
+    #   route&.update(cargo_types)
 
-    puts missed_names
-    File.delete(TMP_PATH) if File.exist?(TMP_PATH)
+    #   blocked[key] = true
+    # end
+    # puts missed_names
+    # File.delete(TMP_PATH) if File.exist?(TMP_PATH)
+    # puts 'Itineraries parsed'
+    puts 'Starting carriage'
+
     ::Legacy::Hub.find_each do |hub|
-      
       hub_loc = Routing::Location.find_by(name: hub.nexus.name)
       next unless hub_loc
-      
+
       Routing::Location.where(country_code: hub.address.country.code.downcase).where.not(bounds: nil).each do |trucking_location|
         [
           { origin_id: hub_loc.id, destination_id: trucking_location.id },
           { origin_id: trucking_location.id, destination_id: hub_loc.id }
         ].each do |direction|
-          Routing::Route.create({
-            mode_of_transport: :truck,
+          Routing::Route.find_or_create_by({
+            mode_of_transport: :carriage,
             time_factor: 2,
             price_factor: 4,
-            lcl: true,
-            fcl: true,
-            fcl_reefer: false
+            allowed_cargo: 3
           }.merge(direction))
         end
       end

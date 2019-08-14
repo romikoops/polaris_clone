@@ -3,17 +3,34 @@
 namespace :tenant_routing do
   task import: :environment do
     routes = []
-    Routing::Route.find_each do |route|
-      Legacy::Itinerary.where(sandbox_id: nil, name: [route.origin.name, route.destination.name].join(' - ')).each do |it|
+    Routing::Route.where.not(mode_of_transport: :carriage).find_each do |route|
+      Legacy::Itinerary.where(
+        sandbox_id: nil,
+        name: [route.origin.name, route.destination.name].join(' - '),
+        mode_of_transport: route.mode_of_transport
+      ).each do |it|
         next if it.tenant.nil?
 
-        new_route = {
-          route_id: route.id,
-          tenant_id: it.tenant.tenants_tenant.id,
-          time_factor: route.time_factor,
-          price_factor: route.price_factor
+        routes << {
+          inbound_id: route.id,
+          outbound_id: route.id,
+          tenant_id: it.tenant.tenants_tenant.id
         }
-        routes << new_route
+
+        if Trucking::Trucking.exists?(tenant_id: it.tenant_id, hub_id: itinerary.first_stop.hub_id, carriage: 'pre')
+          routes << {
+            inbound_id: nil,
+            outbound_id: route.id,
+            tenant_id: it.tenant.tenants_tenant.id
+          }
+        end
+        if Trucking::Trucking.exists?(tenant_id: it.tenant_id, hub_id: itinerary.last_stop.hub_id, carriage: 'on')
+          routes << {
+            outbound_id: nil,
+            inbound_id: route.id,
+            tenant_id: it.tenant.tenants_tenant.id
+          }
+        end
       end
     end
     hamburgs = Hub.where("name ILIKE ?", 'Hamburg%')
@@ -42,7 +59,7 @@ namespace :tenant_routing do
       end
     end
 
-    TenantRouting::Route.import(routes)
+    TenantRouting::Connection.import(routes)
   end
 end
 

@@ -2,6 +2,7 @@ module RmsData
   class Cell < ApplicationRecord
     belongs_to :sheet, class_name: 'RmsData::Sheet'
     belongs_to :tenant, class_name: 'Tenants::Tenant'
+    validates_uniqueness_of :sheet_id, scope: %i(row column)
   end
 end
 

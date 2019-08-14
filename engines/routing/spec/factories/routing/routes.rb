@@ -5,6 +5,7 @@ FactoryBot.define do
     time_factor { 5 }
     price_factor { 5 }
     allowed_cargo { 3 }
+    mode_of_transport { 1 }
     trait :gothenburg_shanghai do
       association :origin, factory: :gothenburg_location
       association :destination, factory: :shanghai_location
@@ -33,6 +34,26 @@ FactoryBot.define do
     trait :shanghai_hamburg do
       association :origin, factory: :shanghai_location
       association :destination, factory: :hamburg_location
+    end
+
+    trait :ocean do
+      mode_of_transport { 1 }
+    end
+
+    trait :air do
+      mode_of_transport { 2 }
+    end
+
+    trait :rail do
+      mode_of_transport { 3 }
+    end
+
+    trait :truck do
+      mode_of_transport { 4 }
+    end
+
+    trait :carriage do
+      mode_of_transport { 5 }
     end
 
     factory :gothenburg_shanghai_route, traits: [:gothenburg_shanghai]

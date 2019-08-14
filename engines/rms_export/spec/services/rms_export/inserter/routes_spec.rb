@@ -23,14 +23,17 @@ RSpec.describe ::RmsExport::Inserter::Routes do
   let!(:itinerary_4) { FactoryBot.create(:shanghai_felixstowe_itinerary, tenant: tenant)}
   let!(:itinerary_5) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: tenant)}
   let!(:itinerary_6) { FactoryBot.create(:shanghai_hamburg_itinerary, tenant: tenant)}
- 
-  let!(:routes) do
-    FactoryBot.create(:gothenburg_shanghai_route)
-    FactoryBot.create(:shanghai_gothenburg_route)
-    FactoryBot.create(:felixstowe_shanghai_route)
-    FactoryBot.create(:shanghai_felixstowe_route)
-    FactoryBot.create(:hamburg_shanghai_route)
-    FactoryBot.create(:shanghai_hamburg_route)
+
+  let!(:locations) do
+    [
+      FactoryBot.create(:felixstowe_location),
+      FactoryBot.create(:shanghai_location),
+      FactoryBot.create(:gothenburg_location),
+      FactoryBot.create(:rotterdam_location),
+      FactoryBot.create(:ningbo_location),
+      FactoryBot.create(:veracruz_location),
+      FactoryBot.create(:hamburg_location)
+    ]
   end
   describe '.perform' do
     it 'creates the routes' do
@@ -52,10 +55,10 @@ RSpec.describe ::RmsExport::Inserter::Routes do
       RmsSync::Routes.new(tenant_id: tenants_tenant.id, sheet_type: :routes).perform
       data = RmsExport::Parser::Routes.new(tenant_id: tenants_tenant.id).perform
       RmsExport::Inserter::Routes.new(tenant_id: tenants_tenant.id, data: data).perform
-      expect(TenantRouting::Route.count).to be(12)
-      expect(Routing::LineService.count).to be(2)
-      expect(Routing::RouteLineService.count).to be(12)
-      expect(Routing::TransitTime.count).to be(12)
+      expect(TenantRouting::Connection.count).to eq(6)
+      expect(Routing::LineService.count).to eq(2)
+      expect(Routing::RouteLineService.count).to eq(12)
+      expect(Routing::TransitTime.count).to eq(12)
     end
 
   end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'routing'
+require 'write_xlsx'
 
 module RmsExport
   class Engine < ::Rails::Engine

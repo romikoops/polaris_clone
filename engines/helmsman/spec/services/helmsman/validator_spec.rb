@@ -5,7 +5,10 @@ require 'rails_helper'
 RSpec.describe Helmsman::Validator do
   context 'validating routes for the target tenant' do
     describe 'perform' do
-      let(:tenant) { FactoryBot.create(:tenants_tenant) }
+      let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
+      let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
+      let(:legacy_user) { FactoryBot.create(:legacy_user, tenant: legacy_tenant) }
+      let(:user) { Tenants::User.find_by(legacy_id: legacy_user.id) }
       let!(:hub_locations) do
         %w(Gothenburg Shanghai Ningbo Hamburg Rotterdam Veracruz).map do |name|
           FactoryBot.create("#{name.downcase}_location".to_sym)
@@ -62,94 +65,130 @@ RSpec.describe Helmsman::Validator do
 
       let!(:routes) do
         hub_locations.permutation(2).each do |loc_array|
-          FactoryBot.create(:routing_route, origin: loc_array.first, destination: loc_array.last)
+          %i(air ocean truck rail).each do |mot|
+            FactoryBot.create(:routing_route,
+                              origin: loc_array.first,
+                              destination: loc_array.last,
+                              mode_of_transport: mot)
+          end
         end
       end
 
       let!(:de_trucking_routes) do
         hamburg = hub_locations.find { |loc| loc.locode == 'DEHAM' }
         de_trucking_locations.map do |tl|
-          FactoryBot.create(:routing_route, origin: hamburg, destination: tl)
-          FactoryBot.create(:routing_route, origin: tl, destination: hamburg)
+          FactoryBot.create(:routing_route, origin: hamburg, destination: tl, mode_of_transport: :carriage)
+          FactoryBot.create(:routing_route, origin: tl, destination: hamburg, mode_of_transport: :carriage)
         end
       end
 
       let!(:cn_trucking_routes) do
         shanghai = hub_locations.find { |loc| loc.locode == 'CNSHA' }
         cn_trucking_locations.map do |tl|
-          FactoryBot.create(:routing_route, origin: shanghai, destination: tl)
-          FactoryBot.create(:routing_route, origin: tl, destination: shanghai)
+          FactoryBot.create(:routing_route, origin: shanghai, destination: tl, mode_of_transport: :carriage)
+          FactoryBot.create(:routing_route, origin: tl, destination: shanghai, mode_of_transport: :carriage)
         end
       end
-
-      it 'finds one valid route' do
-        hamburg = hub_locations.find { |loc| loc.locode == 'DEHAM' }
-        shanghai = hub_locations.find { |loc| loc.locode == 'CNSHA' }
-        de_trucking_location = Routing::Location.find_by(name: '26759')
-        cn_trucking_location = Routing::Location.find_by(name: '盐都区 (Yandu)')
-        de_trucking_route = Routing::Route.find_by(origin: de_trucking_location, destination: hamburg)
-        cn_trucking_route = Routing::Route.find_by(origin: cn_trucking_location, destination: shanghai)
-        ocean_route = Routing::Route.find_by(origin: hamburg, destination: shanghai)
-        target_ids = [de_trucking_route, ocean_route, cn_trucking_route].map do |route|
-          FactoryBot.create(:tenant_routing_route, route_id: route.id, tenant: tenant)&.id
+      let!(:hamburg) { hub_locations.find { |loc| loc.locode == 'DEHAM' } }
+      let!(:shanghai) { hub_locations.find { |loc| loc.locode == 'CNSHA' } }
+      let!(:de_trucking_location) { Routing::Location.find_by(name: '26759') }
+      let!(:cn_trucking_location) { Routing::Location.find_by(name: '盐都区 (Yandu)') }
+      let!(:de_trucking_route) { Routing::Route.find_by(origin: de_trucking_location, destination: hamburg) }
+      let!(:cn_trucking_route) { Routing::Route.find_by(origin: cn_trucking_location, destination: shanghai) }
+      let!(:ocean_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: :ocean) }
+      let!(:air_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: :air) }
+      let!(:truck_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: :truck) }
+      let!(:rail_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: :rail) }
+      let!(:ocean_connections) do
+        [nil, ocean_route, ocean_route, nil].each_cons(2).map do |route_arr|
+          FactoryBot.create(:tenant_routing_connection,
+                            inbound: route_arr.first,
+                            outbound: route_arr.last,
+                            tenant: tenant)
         end
-        compass_results = [
+      end
+      let(:valid_freight_ids) { [ocean_route.id, air_route] }
+      let!(:air_connections) do
+        [nil, air_route, air_route, nil].each_cons(2).map do |route_arr|
+          FactoryBot.create(:tenant_routing_connection,
+                            inbound: route_arr.first,
+                            outbound: route_arr.last,
+                            tenant: tenant)
+        end
+      end
+      let!(:valid_target_ids) do
+        [
+          [de_trucking_route.id, ocean_route.id, cn_trucking_route.id],
+          [de_trucking_route.id, air_route.id, cn_trucking_route.id]
+        ]
+      end
+      let!(:vis_valid_target_ids) do
+        [
           [de_trucking_route.id, ocean_route.id, cn_trucking_route.id]
         ]
-        3.times do
-          compass_results << [
+      end
+      let!(:compass_results) do
+        [
+          [
             de_trucking_routes.reject { |tr| tr == de_trucking_route }.sample(1).first&.id,
-            routes.reject { |tr| tr == ocean_route }.sample(1).first&.id,
+            rail_route.id,
+            cn_trucking_routes.reject { |tr| tr == cn_trucking_route }.sample(1).first&.id
+          ],
+          [
+            de_trucking_routes.reject { |tr| tr == de_trucking_route }.sample(1).first&.id,
+            truck_route.id,
             cn_trucking_routes.reject { |tr| tr == cn_trucking_route }.sample(1).first&.id
           ]
-        end
-
-        results = described_class.new(tenant_id: tenant.id, routes: compass_results).perform
-
-        expect(results[:valid]).to eq([target_ids])
+        ] | valid_target_ids
+      end
+      it 'finds two valid routes' do
+        results = described_class.new(tenant_id: tenant.id, routes: compass_results, user: user).filter
+        expect(results).to eq(valid_target_ids)
       end
 
-      it 'finds one valid route and two partials' do
-        hamburg = hub_locations.find { |loc| loc.locode == 'DEHAM' }
-        shanghai = hub_locations.find { |loc| loc.locode == 'CNSHA' }
-        de_trucking_location = Routing::Location.find_by(name: '26759')
-        cn_trucking_location = Routing::Location.find_by(name: '盐都区 (Yandu)')
-        de_trucking_route = Routing::Route.find_by(origin: de_trucking_location, destination: hamburg)
-        cn_trucking_route = Routing::Route.find_by(origin: cn_trucking_location, destination: shanghai)
-        ocean_route = Routing::Route.find_by(origin: hamburg, destination: shanghai)
-        partial_result_1 = [
-          de_trucking_route&.id,
-          routes.reject { |tr| tr == ocean_route }.sample(1).first&.id,
-          cn_trucking_routes.reject { |tr| tr == cn_trucking_route }.sample(1).first&.id
-        ]
-        partial_result_2 = [
-          de_trucking_routes.reject { |tr| tr == de_trucking_route }.sample(1).first&.id,
-          routes.reject { |tr| tr == ocean_route }.sample(1).first&.id,
-          cn_trucking_route&.id
-        ]
-        valid_target_ids = [de_trucking_route, ocean_route, cn_trucking_route].map do |route|
-          FactoryBot.create(:tenant_routing_route, route_id: route.id, tenant: tenant)&.id
-        end
-        partial_target_ids_1 = [valid_target_ids.first]
-        partial_target_ids_2 = [valid_target_ids.last]
-        compass_results = [
-          [de_trucking_route.id, ocean_route.id, cn_trucking_route.id],
-          partial_result_1,
-          partial_result_2
-        ]
-        3.times do
-          compass_results << [
-            de_trucking_routes.reject { |tr| tr == de_trucking_route }.sample(1).first&.id,
-            routes.reject { |tr| tr == ocean_route }.sample(1).first&.id,
-            cn_trucking_routes.reject { |tr| tr == cn_trucking_route }.sample(1).first&.id
-          ]
+      it 'finds one valid route with user visibility' do
+        ocean_connections.each do |conn|
+          FactoryBot.create(:tenant_routing_visibility, target: user, connection: conn)
         end
 
-        results = described_class.new(tenant_id: tenant.id, routes: compass_results).perform
+        results = described_class.new(tenant_id: tenant.id, routes: compass_results, user: user).filter
 
-        expect(results[:valid]).to eq([valid_target_ids])
-        expect(results[:partial].include?(partial_target_ids_1)).to eq(true)
-        expect(results[:partial].include?(partial_target_ids_2)).to eq(true)
+        expect(results).to eq(vis_valid_target_ids)
+      end
+
+      it 'finds one valid route with group visibility' do
+        group = FactoryBot.create(:tenants_group, tenant: tenant)
+        FactoryBot.create(:tenants_membership, group: group, member: user)
+        ocean_connections.each do |conn|
+          FactoryBot.create(:tenant_routing_visibility, target: group, connection: conn)
+        end
+        results = described_class.new(tenant_id: tenant.id, routes: compass_results, user: user).filter
+
+        expect(results).to eq(vis_valid_target_ids)
+      end
+
+      it 'finds one valid route with company visibility' do
+        company = FactoryBot.create(:tenants_company, tenant: tenant)
+        user.update(company: company)
+        ocean_connections.each do |conn|
+          FactoryBot.create(:tenant_routing_visibility, target: company, connection: conn)
+        end
+        results = described_class.new(tenant_id: tenant.id, routes: compass_results, user: user).filter
+
+        expect(results).to eq(vis_valid_target_ids)
+      end
+
+      it 'finds one valid route with company group visibility' do
+        company = FactoryBot.create(:tenants_company, tenant: tenant)
+        user.update(company: company)
+        group = FactoryBot.create(:tenants_group, tenant: tenant)
+        FactoryBot.create(:tenants_membership, group: group, member: company)
+        ocean_connections.each do |conn|
+          FactoryBot.create(:tenant_routing_visibility, target: group, connection: conn)
+        end
+        results = described_class.new(tenant_id: tenant.id, routes: compass_results, user: user).filter
+
+        expect(results).to eq(vis_valid_target_ids)
       end
     end
   end

@@ -271,6 +271,11 @@ namespace :routing do
         name: 'ZIM Integrated Shipping Services Ltd',
         code: 'ZIMU' }
     ]
+    Trucking::Courier.all.group_by(&:name).keys.each do |courier|
+      list << { abbreviated_name: courier,
+                name: courier,
+                code: nil }
+    end
     Routing::Carrier.import(list)
   end
 end

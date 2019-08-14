@@ -16,7 +16,7 @@ RSpec.describe RmsSync::Hubs do
       sheet = RmsData::Sheet.where(book_id: book.id).first
       expect(RmsData::Cell.where(sheet_id: sheet.id).length).to eq(42)
       expect(sheet.rows.length).to eq(3)
-      expect(sheet.headers).to eq(%w(STATUS
+      expect(sheet.header_values).to eq(%w(STATUS
                                      TYPE
                                      NAME
                                      CODE
@@ -30,7 +30,7 @@ RSpec.describe RmsSync::Hubs do
                                      PRE_CARRIAGE
                                      ON_CARRIAGE
                                      ALTERNATIVE_NAMES))
-      expect(sheet.row(1)).to eq(['active',
+      expect(sheet.row_values(1)).to eq(['active',
                                   'ocean',
                                   'Shanghai',
                                   'SHA1',

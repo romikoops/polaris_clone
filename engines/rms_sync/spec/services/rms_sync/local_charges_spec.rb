@@ -39,7 +39,7 @@ RSpec.describe RmsSync::LocalCharges do
       sheet = RmsData::Sheet.where(book_id: book.id).first
       expect(RmsData::Cell.where(sheet_id: sheet.id).length).to eq(145)
       expect(sheet.rows.length).to eq(5)
-      expect(sheet.headers).to eq(%w(HUB
+      expect(sheet.header_values).to eq(%w(HUB
                                      COUNTRY
                                      EFFECTIVE_DATE
                                      EXPIRATION_DATE
@@ -68,7 +68,7 @@ RSpec.describe RmsSync::LocalCharges do
                                      RANGE_MIN
                                      RANGE_MAX
                                      DANGEROUS))
-      expect(sheet.row(1)).to eq([
+      expect(sheet.row_values(1)).to eq([
                                    'Gothenburg',
                                    'Sweden',
                                    local_charge.effective_date.to_s.gsub(' UTC', ''),
@@ -108,7 +108,7 @@ RSpec.describe RmsSync::LocalCharges do
       book = RmsData::Book.where(sheet_type: :local_charges).first
       expect(RmsData::Sheet.where(book_id: book.id).length).to eq(1)
       sheet = RmsData::Sheet.where(book_id: book.id).first
-      expect(sheet.rows).to eq([%w(HUB
+      expect(sheet.rows_values).to eq([%w(HUB
                                    COUNTRY
                                    EFFECTIVE_DATE
                                    EXPIRATION_DATE

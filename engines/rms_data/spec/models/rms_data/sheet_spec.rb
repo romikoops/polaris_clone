@@ -27,8 +27,9 @@ module RmsData
 
       describe 'rows' do
         it 'returns the values of the rows in order' do
+          results = []
           [0, 1, 2, 3].each do |no|
-            headers.map.with_index do |header, i|
+            results << headers.map.with_index do |header, i|
               FactoryBot.create(:rms_data_cell,
                                 tenant_id: tenants_tenant.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
@@ -38,11 +39,83 @@ module RmsData
             end
           end
         
-          expect(sheet.rows.count).to eq(4)
+          expect(sheet.rows).to eq(results)
+        end
+      end
+
+      describe 'rows_values' do
+        it 'returns the values of the rows in order' do
+          results = []
+          [0, 1, 2, 3].each do |no|
+            sub_result = []
+            headers.each_with_index do |header, i|
+              sub_result << (no.zero? ? header : "#{header} - value - ##{no}")
+              FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+            results << sub_result
+          end
+          expect(sheet.rows_values).to eq(results)
+        end
+      end
+
+      describe 'columns' do
+        it 'returns the values of the columns in order' do
+          results = Hash.new { |h,k| h[k] = [] }
+          [0, 1, 2, 3].each do |no|
+            headers.map.with_index do |header, i|
+              results[header] << FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+          end
+          expect(sheet.columns).to eq(results.values)
+        end
+      end
+
+      describe 'columns_values' do
+        it 'returns the values of the columns in order' do
+          results = Hash.new { |h,k| h[k] = [] }
+          [0, 1, 2, 3].each do |no|
+            headers.each_with_index do |header, i|
+              results[header] << (no.zero? ? header : "#{header} - value - ##{no}")
+              FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+          end
+          expect(sheet.columns_values).to eq(results.values)
         end
       end
 
       describe 'row(index)' do
+        it 'returns the values of the desired row' do
+          results = []
+          [0, 1, 2, 3].each do |no|
+            results << headers.map.with_index do |header, i|
+              FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+          end
+          expect(sheet.row(1)).to eq(results[1])
+        end
+      end
+
+      describe 'row_values(index)' do
         it 'returns the values of the desired row' do
           [0, 1, 2, 3].each do |no|
             headers.map.with_index do |header, i|
@@ -54,11 +127,63 @@ module RmsData
                                 sheet: sheet)
             end
           end
-          expect(sheet.row(1)).to eq(headers.map{|h| "#{h} - value - ##{1}"})
+          expect(sheet.row_values(1)).to eq(headers.map{|h| "#{h} - value - ##{1}"})
+        end
+      end
+
+      describe 'column(index)' do
+        it 'returns the values of the desired column' do
+          results = Hash.new { |h,k| h[k] = [] }
+          [0, 1, 2, 3].each do |no|
+            headers.map.with_index do |header, i|
+              results[header] << FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+          end
+          expect(sheet.column(1)).to eq(results['TYPE'])
+        end
+      end
+
+      describe 'column_values(index)' do
+        it 'returns the values of the desired column' do
+          results = Hash.new { |h,k| h[k] = [] }
+          [0, 1, 2, 3].each do |no|
+            headers.map.with_index do |header, i|
+              results[header] << (no.zero? ? header : "#{header} - value - ##{no}")
+              FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+          end
+          expect(sheet.column_values(1)).to eq(results['TYPE'])
         end
       end
 
       describe 'headers' do
+        it 'returns the values of the header row' do
+          results = []
+          [0, 1, 2, 3].each do |no|
+            results << headers.map.with_index do |header, i|
+              FactoryBot.create(:rms_data_cell,
+                                tenant_id: tenants_tenant.id,
+                                value: no.zero? ? header : "#{header} - value - ##{no}",
+                                row: no,
+                                column: i,
+                                sheet: sheet)
+            end
+          end
+          expect(sheet.headers).to eq(results[0])
+        end
+      end
+
+      describe 'headers_values' do
         it 'returns the values of the header row' do
           [0, 1, 2, 3].each do |no|
             headers.map.with_index do |header, i|
@@ -70,7 +195,7 @@ module RmsData
                                 sheet: sheet)
             end
           end
-          expect(sheet.headers).to eq(headers)
+          expect(sheet.header_values).to eq(headers)
         end
       end
 
