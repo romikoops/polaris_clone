@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'bitfields'
+
   s.add_dependency 'core'
   s.add_dependency 'routing'
   s.add_dependency 'tenants'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_02_084910) do
+ActiveRecord::Schema.define(version: 2019_08_15_003135) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -242,12 +242,6 @@ ActiveRecord::Schema.define(version: 2019_08_02_084910) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "sandbox_id"
-  end
-
-  create_table "ct", id: false, force: :cascade do |t|
-    t.integer "itinerary_id"
-    t.text "case"
-    t.string "name"
   end
 
   create_table "currencies", force: :cascade do |t|
@@ -956,6 +950,7 @@ ActiveRecord::Schema.define(version: 2019_08_02_084910) do
     t.uuid "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "metadata", default: {}
     t.index ["sheet_type"], name: "index_rms_data_books_on_sheet_type"
     t.index ["tenant_id"], name: "index_rms_data_books_on_tenant_id"
   end
@@ -978,10 +973,10 @@ ActiveRecord::Schema.define(version: 2019_08_02_084910) do
     t.integer "sheet_index"
     t.uuid "tenant_id"
     t.uuid "book_id"
-    t.string "name"
-    t.jsonb "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.jsonb "metadata", default: {}
     t.index ["book_id"], name: "index_rms_data_sheets_on_book_id"
     t.index ["sheet_index"], name: "index_rms_data_sheets_on_sheet_index"
     t.index ["tenant_id"], name: "index_rms_data_sheets_on_tenant_id"
@@ -1167,6 +1162,8 @@ ActiveRecord::Schema.define(version: 2019_08_02_084910) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "tenant_id"
+    t.integer "mode_of_transport", default: 0
+    t.uuid "line_service_id"
     t.index ["inbound_id"], name: "index_tenant_routing_connections_on_inbound_id"
     t.index ["outbound_id"], name: "index_tenant_routing_connections_on_outbound_id"
   end

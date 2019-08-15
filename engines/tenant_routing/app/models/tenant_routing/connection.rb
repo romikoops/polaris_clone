@@ -12,10 +12,12 @@ end
 #
 # Table name: tenant_routing_connections
 #
-#  id          :uuid             not null, primary key
-#  inbound_id  :uuid
-#  outbound_id :uuid
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  tenant_id   :uuid
+#  id                :uuid             not null, primary key
+#  inbound_id        :uuid
+#  outbound_id       :uuid
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  tenant_id         :uuid
+#  mode_of_transport :integer          default(0)
+#  line_service_id   :uuid
 #

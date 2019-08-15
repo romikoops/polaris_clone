@@ -6,8 +6,6 @@ class CreateRmsDataSheets < ActiveRecord::Migration[5.2]
       t.integer :sheet_index, index: true
       t.uuid :tenant_id, index: true
       t.uuid :book_id, index: true
-      t.string :name
-      t.jsonb :metadata, default: {}
       t.timestamps
     end
   end

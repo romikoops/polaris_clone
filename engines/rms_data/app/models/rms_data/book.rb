@@ -16,4 +16,5 @@ end
 #  tenant_id  :uuid
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  metadata   :jsonb
 #

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TenantRouting
   class Visibility < ApplicationRecord
     belongs_to :target, polymorphic: true
@@ -9,10 +11,10 @@ end
 #
 # Table name: tenant_routing_visibilities
 #
-#  id                      :uuid             not null, primary key
-#  target_type             :string
-#  target_id               :uuid
-#  tenant_routing_route_id :uuid
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  id            :uuid             not null, primary key
+#  target_type   :string
+#  target_id     :uuid
+#  connection_id :uuid
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #

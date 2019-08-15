@@ -67,10 +67,10 @@ withPipeline(timeout: 120) {
       withStage('Report', retry: false) {
         milestone()
 
+        def ret = 0
+
         container('app') {
-          catchError(buildResult: null, stageResult: 'FAILURE') {
-            sh(label: 'Result Reporter', script: 'scripts/ci-results')
-          }
+          ret = sh(label: 'Result Reporter', script: 'scripts/ci-results', returnStatus: true)
         }
 
         junit allowEmptyResults: false, testResults: "**/junit.xml"
@@ -79,7 +79,7 @@ withPipeline(timeout: 120) {
           publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
         }
 
-        if (currentBuild.result != null) {
+        if (currentBuild.result != null || ret != 0) {
           error("Failed Tests")
         }
       }
