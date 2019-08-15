@@ -132,13 +132,14 @@ withPipeline(timeout: 120) {
     withStage('Deploy Review') {
       milestone()
 
-      env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG.replaceAll(/[^\w-\.]/, '').take(43).replaceAll(/-\z/, '')
+      env.REVIEW_NAME = trimName(env.CI_COMMIT_REF_SLUG, 43)
+      env.REVIEW_NAMESPACE = trimName(env.CI_COMMIT_REF_SLUG, 63)
 
       lock(label: "${env.GIT_BRANCH}-deploy", inversePrecedence: true) {
         inPod { label ->
           withNode(label) {
-            githubDeploy(environment: env.REVIEW_NAME, url: "https://${env.REVIEW_NAME}.${env.REVIEW_DOMAIN}") {
-              deployReview(env.REVIEW_NAME)
+            githubDeploy(environment: env.REVIEW_NAMESPACE, url: "https://${env.REVIEW_NAME}.${env.REVIEW_DOMAIN}") {
+              deployReview(env.REVIEW_NAMESPACE, env.REVIEW_NAME)
             }
           }
         }
@@ -232,7 +233,7 @@ void appRunner(String name) {
   }
 }
 
-void deployReview(String reviewName) {
+void deployReview(String namespace, String name) {
   def secretTemplate = """\
     apiVersion: v1
     kind: Secret
@@ -259,16 +260,16 @@ void deployReview(String reviewName) {
       container('deploy') {
         sh(label: 'Create Namespace',
         script: """
-          kubectl get namespace -o name | grep -q 'namespace/${reviewName}' || kubectl create namespace ${reviewName}
-          kubectl annotate --overwrite namespace ${reviewName} itsmycargo.tech/change-id=${env.CHANGE_ID}
-          kubectl annotate --overwrite namespace ${reviewName} itsmycargo.tech/change-repo=${jobShortName()}
-          kubectl get secrets -n default registry-default -ogo-template="${secretTemplate}" | kubectl apply -n ${reviewName} -f -
+          kubectl get namespace -oname | grep -q 'namespace/${namespace}\$' || kubectl create namespace ${namespace}
+          kubectl annotate --overwrite namespace ${namespace} itsmycargo.tech/change-id=${env.CHANGE_ID}
+          kubectl annotate --overwrite namespace ${namespace} itsmycargo.tech/change-repo=${jobShortName()}
+          kubectl get secrets -n default registry-default -ogo-template="${secretTemplate}" | kubectl apply -n ${namespace} -f -
         """)
 
         sh(label: 'Destroy failed deployment',
           script: """
-            if [[ -n "\$(helm ls --failed -q "^${reviewName}\$")" ]]; then
-              helm delete --purge "${reviewName}" || true
+            if [[ -n "\$(helm ls --failed -q "^${name}\$")" ]]; then
+              helm delete --purge "${name}" || true
             fi
           """
         )
@@ -279,8 +280,8 @@ void deployReview(String reviewName) {
               --timeout 600 \
               --set image.tag="${env.GIT_COMMIT}" \
               --set ingress.domain="${env.REVIEW_DOMAIN}" \
-              --namespace=${reviewName} \
-              "${reviewName}" \
+              --namespace=${namespace} \
+              "${name}" \
               chart/
           """
         )

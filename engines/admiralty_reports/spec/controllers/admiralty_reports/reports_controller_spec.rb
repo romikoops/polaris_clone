@@ -13,8 +13,8 @@ module AdmiraltyReports
 
     let(:tenants) do
       [
-        Tenant.create(name: 'Demo1', subdomain: 'demo1', scope: { 'open_quotation_tool' => true }),
-        Tenant.create(name: 'Demo2', subdomain: 'demo2', scope: { 'open_quotation_tool' => false })
+        ::Legacy::Tenant.create(name: 'Demo1', subdomain: 'demo1', scope: { 'open_quotation_tool' => true }),
+        ::Legacy::Tenant.create(name: 'Demo2', subdomain: 'demo2', scope: { 'open_quotation_tool' => false })
       ]
     end
 
@@ -25,7 +25,7 @@ module AdmiraltyReports
         get :index
 
         expect(response).to be_successful
-        expect(response.body).to match(/<td>#{Regexp.quote(tenant.subdomain)}/im)
+        expect(response.body).to match(/<td>#{Regexp.quote(Tenant.find_by(legacy_id: tenant.id).slug)}/im)
       end
     end
 
@@ -34,7 +34,7 @@ module AdmiraltyReports
         let!(:tenant) { tenants.first }
 
         it 'renders page' do
-          get :show, params: { id: tenant.id }
+          get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id }
 
           expect(response).to be_successful
           expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
@@ -45,7 +45,7 @@ module AdmiraltyReports
         let!(:tenant) { tenants.second }
 
         it 'renders page' do
-          get :show, params: { id: tenant.id }
+          get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id }
 
           expect(response).to be_successful
           expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)

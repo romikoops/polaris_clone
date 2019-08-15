@@ -25,7 +25,7 @@ RSpec.describe WelcomeMailer do
 
     it 'renders correctly' do
       expect(mail.subject).to eq('WELCOME_EMAIL')
-      expect(mail.from).to eq(['no-reply@demo.itsmycargo.test'])
+      expect(mail.from).to eq(['no-reply@demo.itsmycargo.com'])
       expect(mail.reply_to).to eq(['support@demo.com'])
       expect(mail.to).to eq([user.email])
       expect(mail.body.encoded).to match('WELCOME_EMAIL')

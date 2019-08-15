@@ -5,7 +5,7 @@ import insuranceDetails from '../../static/insuranceDetails'
 import Header from '../Header/Header'
 
 export default function InsuranceDetails ({ tenant, user, theme }) {
-  const subdomain = (tenant && tenant.subdomain) || 'def'
+  const subdomain = (tenant && tenant.slug) || 'def'
   const content = insuranceDetails[subdomain] || insuranceDetails.def
   return (
     <div className="flex-100 layout-row layout-wrap">

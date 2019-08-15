@@ -35,6 +35,23 @@ ci-runner () {
   return $ret
 }
 
+ci-app () {
+  ci-runner app $ROOTDIR
+  return $?
+}
+
+ci-engines () {
+  exitcode=0
+
+  for engine in $($SCRIPTDIR/ci-finder);
+  do
+    ci-runner $engine engines/$engine
+    exitcode=$(($exitcode|$?))
+  done
+
+  return $exitcode
+}
+
 ROOTDIR="$(cd "$( dirname "${BASH_SOURCE[0]}/" )/../" >/dev/null 2>&1 && pwd )"
 SCRIPTDIR="$ROOTDIR/scripts"
 REPORTSDIR="$ROOTDIR/reports"
@@ -51,19 +68,22 @@ exitcode=0
 for run in $*;
 do
   case "$run" in
+    all )
+      ci-app
+      exitcode=$(($exitcode | $?))
+      ci-engines
+      exitcode=$(($exitcode | $?))
+      ;;
     app )
-      ci-runner app $ROOTDIR
-      exitcode=$?
+      ci-app
+      exitcode=$(($exitcode | $?))
       ;;
     engines )
-      for engine in $($SCRIPTDIR/ci-finder);
-      do
-        ci-runner $engine engines/$engine
-        exitcode=$(($exitcode|$?))
-      done
+      ci-engines
+      exitcode=$(($exitcode | $?))
       ;;
     * )
-      echo "Usage: $0 [app|engines]"
+      echo "Usage: $0 [all|app|engines]"
       exit 1
       ;;
   esac

@@ -33,24 +33,25 @@ namespace :tenant_routing do
         end
       end
     end
-    hamburgs = Hub.where("name ILIKE ?", 'Hamburg%')
+    hamburgs = Hub.where('name ILIKE ?', 'Hamburg%')
     routing_hamburg = Routing::Location.find_by(locode: 'DEHAM')
     blocked = {}
     Routing::Location.where(country_code: 'de', locode: nil).each do |tl|
       hamburgs.each do |hamburg|
-        trucking = Trucking::Trucking.where(hub: hamburg).joins(:location).where(trucking_locations: { zipcode: tl.name}).first
+        trucking = Trucking::Trucking.where(hub: hamburg).joins(:location).where(trucking_locations: { zipcode: tl.name }).first
         next unless trucking.present?
 
+        hamburg_tenant = ::Tenants::Tenant.find_by(legacy_id: hamburg.tenant.id).id
         route = Routing::Route.find_by(
           origin_id: trucking.carriage == 'pre' ? tl : routing_hamburg,
           destination_id: trucking.carriage == 'pre' ? routing_hamburg : tl
         )
-        key = [route.id, hamburg.tenant.tenants_tenant.id].join('-')
+        key = [route.id, hamburg_tenant].join('-')
         next if blocked[key].present?
 
         new_route = {
           route_id: route.id,
-          tenant_id: hamburg.tenant.tenants_tenant.id,
+          tenant_id: hamburg_tenant,
           time_factor: route.time_factor,
           price_factor: route.price_factor
         }
@@ -62,4 +63,3 @@ namespace :tenant_routing do
     TenantRouting::Connection.import(routes)
   end
 end
-

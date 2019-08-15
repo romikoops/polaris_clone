@@ -256,7 +256,7 @@ module DataValidator
                       .flatten
       if @scope['base_pricing']
           # Find the group with the most pricings and create the object to be passed on
-         
+
           if most_diverse_set.nil?
             result_to_return << nil
           else
@@ -362,7 +362,7 @@ module DataValidator
                           example[:data][:cargo_units].map do |cu|
                             cu[:cargo_item_type_id] = CargoItemType.find_by_description('Pallet').id
                             cu
-                          end 
+                          end
                         else
                           example[:data][:cargo_units]
                         end
@@ -457,7 +457,7 @@ module DataValidator
     def print_results
       DocumentService::PricingValidationWriter.new(
         data: @validation_results,
-        filename: "#{@tenant.subdomain}_pricing_validations",
+        filename: "#{::Tenants::Tenant.find_by(legacy_id: @tenant.id).slug}_pricing_validations",
         tenant_id: @tenant.id
       ).perform
     end

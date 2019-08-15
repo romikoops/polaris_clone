@@ -29,7 +29,7 @@ module MultiTenantTools
   end
 
   def update_indexes
-    Tenant.all.each do |tenant|
+    Tenant.find_each do |tenant|
       title = tenant.name + ' | ItsMyCargo'
       favicon = 'https://assets.itsmycargo.com/assets/favicon.ico'
       # indexHtml = Nokogiri::HTML(open("https://demo.itsmycargo.com/index.html"))
@@ -49,10 +49,10 @@ module MultiTenantTools
       newHtml = indexHtml.to_html
       # Replace API Host and tenantName
       newHtml.gsub!('__API_URL__', API_URL)
-      newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
+      newHtml.gsub!('__TENANT_SUBDOMAIN__', ::Tenants::Tenant.find_by(legacy_id: tenant.id).slug)
 
       deploy_bucket.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
-      invalidate(tenant.web['cloudfront'], tenant.subdomain) if tenant.web && tenant.web['cloudfront']
+      invalidate(tenant.web['cloudfront'], ::Tenants::Tenant.find_by(legacy_id: tenant.id).slug) if tenant.web && tenant.web['cloudfront']
     end
   end
 
@@ -77,17 +77,17 @@ module MultiTenantTools
       newHtml = indexHtml.to_html
       # Replace API Host and tenantName
       newHtml.gsub!('__API_URL__', DEV_API_URL)
-      newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
+      newHtml.gsub!('__TENANT_SUBDOMAIN__', ::Tenants::Tenant.find_by(legacy_id: tenant.id).slug)
 
       deploy_bucket.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
-      invalidate(tenant.web['cloudfront'], tenant.subdomain) if tenant.web && tenant.web['cloudfront']
+      invalidate(tenant.web['cloudfront'], ::Tenants::Tenant.find_by(legacy_id: tenant.id).slug) if tenant.web && tenant.web['cloudfront']
     end
   end
 
   def create_sandboxes
     sandbox_tenants = []
     Tenant.all.map do |t|
-      sandbox_tenants << t if t.subdomain.include? 'sandbox'
+      sandbox_tenants << t if ::Tenants::Tenant.find_by(legacy_id: t.id).slug.include? 'sandbox'
     end
 
     sandbox_tenants.each do |st|
@@ -194,7 +194,7 @@ module MultiTenantTools
   end
 
   def new_site_from_tenant(subdomain)
-    tenant = Tenant.find_by_subdomain(subdomain)
+    tenant = ::Tenants::Tenant.find_by(slug: subdomain).legacy
     title = tenant.name + ' | ItsMyCargo'
 
     favicon = 'https://assets.itsmycargo.com/assets/favicon.ico'
@@ -215,11 +215,11 @@ module MultiTenantTools
       secret_access_key: Settings.aws.secret_access_key,
       region: 'us-east-1'
     )
-    objKey = tenant.subdomain + '.html'
+    objKey = ::Tenants::Tenant.find_by(legacy_id: tenant.id).slug + '.html'
     newHtml = indexHtml.to_html
     # Replace API Host and tenantName
     newHtml.gsub!('__API_URL__', API_URL)
-    newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
+    newHtml.gsub!('__TENANT_SUBDOMAIN__', ::Tenants::Tenant.find_by(legacy_id: tenant.id).slug)
 
     deploy_bucket.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
 
@@ -387,7 +387,7 @@ module MultiTenantTools
       last_name: 'Smith',
       phone: '123456789',
 
-      email: "demo@#{tenant.subdomain}.#{tld}",
+      email: "demo@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).slug}.#{tld}",
       password: 'demo123456789',
       password_confirmation: 'demo123456789',
 
@@ -439,7 +439,7 @@ module MultiTenantTools
         first_name: 'John',
         last_name: 'Smith',
         phone: '123456789',
-        email: "demo@#{tenant.subdomain}.com"
+        email: "demo@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).slug}.com"
       },
       {
         company_name: 'Another Example Shipper Company',

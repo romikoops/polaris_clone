@@ -4,7 +4,7 @@
   <mj-column>
     <mj-text>
       <p style="display: none;max-height: 0px;overflow: hidden;">
-        Hello <%= @user.full_name %> and welcome to the <%= @user.tenant.name %> online shop: 
+        Hello <%= @user.full_name %> and welcome to the <%= @user.tenant.name %> online shop:
       </p>
     </mj-text>
     <mj-text>
@@ -17,7 +17,7 @@
 <mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
     <mj-text>
-      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px" %>
+      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.name}", style: "width: 150px" %>
     </mj-text>
   </mj-column>
   <mj-column>

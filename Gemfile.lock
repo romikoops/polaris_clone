@@ -29,6 +29,7 @@ PATH
       admiralty_assets
       admiralty_auth
       core
+      tenants
 
 PATH
   remote: engines/admiralty_tenants

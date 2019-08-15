@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :tenants_tenant, class: 'Tenants::Tenant' do
-    sequence(:subdomain) { |n| "test_#{n}" }
+    sequence(:slug) { |n| "test_#{n}" }
   end
 end

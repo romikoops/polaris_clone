@@ -43,7 +43,7 @@ class TenantMenu extends React.PureComponent {
             <p>
               {tenant.name}
               (
-              {tenant.subdomain}
+              {tenant.slug}
               ) | Change Tenant
             </p>
           </div>
@@ -63,12 +63,12 @@ class TenantMenu extends React.PureComponent {
             >
               {tenants.map(t => (
                 <div
-                  key={t.value.subdomain}
+                  key={t.value.slug}
                   className="pointy emulate_link layout-row flex-33"
                   style={{ paddingRight: '25px', paddingBottom: '7px' }}
                   onClick={() => this.switchTenant(t)}
                 >
-                  <p>{t.value.subdomain}</p>
+                  <p>{t.value.slug}</p>
                 </div>
               ))}
             </div>

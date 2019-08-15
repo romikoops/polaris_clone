@@ -193,7 +193,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     group_id = download_params[:group_id]
     key = "pricing_#{load_type}"
     new_load_type = load_type_renamed(load_type)
-    file_name = "#{current_tenant.subdomain.downcase}__pricing_#{mot.downcase}_#{new_load_type.downcase}"
+    file_name = "#{::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug}__pricing_#{mot.downcase}_#{new_load_type.downcase}"
 
     options = { tenant: current_tenant,
                 specific_identifier: "#{mot}_#{new_load_type}".camelcase,

@@ -15,7 +15,7 @@ class Document < Legacy::Document
   def self.obj_key(shipment, type, file_name)
     [
       'documents',
-      shipment.tenant.subdomain,
+      ::Tenants::Tenant.find_by(legacy_id: shipment.tenant.id).slug,
       'shipments',
       shipment['uuid'],
       type,

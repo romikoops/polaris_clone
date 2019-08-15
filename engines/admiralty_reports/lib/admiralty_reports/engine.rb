@@ -3,6 +3,7 @@
 require 'admiralty_assets'
 require 'admiralty_auth'
 require 'core'
+require 'tenants'
 
 module AdmiraltyReports
   class Engine < ::Rails::Engine

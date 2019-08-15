@@ -28,6 +28,9 @@ namespace :db do
       Rake::Task['db:import:clean'].invoke
 
       Rake::Task['db:migrate'].invoke unless ENV['SKIP_MIGRATE']
+      Rake::Task['db:test:prepare'].invoke unless ENV['SKIP_MIGRATE']
+
+      Rake::Task['tenants:domains'].invoke if ENV['SKIP_MIGRATE']
     end
   end
 end

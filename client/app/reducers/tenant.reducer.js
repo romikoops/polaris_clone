@@ -79,7 +79,7 @@ export const tenant = (
 export const selectedSubdomain = (state = '', action) => {
   switch (action.type) {
     case tenantConstants.SELECT_SUBDOMAIN:
-      return action.subdomain
+      return action.slug
     default:
       return state
   }

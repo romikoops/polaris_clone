@@ -27,7 +27,7 @@ export default function createSentryMiddleware (Sentry, options = {}) {
 
         const user = get(state, 'authentication.user')
         scope.setUser({ id: get(user, 'id'), email: get(user, 'email'), role: get(user, 'role.name') })
-        scope.setTag('tenant', get(state, 'app.tenant.subdomain'))
+        scope.setTag('tenant', get(state, 'app.tenant.slug'))
         scope.setTag('agency', !!get(user, 'agency_id'))
         scope.setTag('appName', window.keel.appName)
       })

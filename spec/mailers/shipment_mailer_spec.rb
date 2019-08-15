@@ -17,7 +17,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq('Your booking through Demo')
-      expect(mail.from).to eq(['no-reply@demo.itsmycargo.test'])
+      expect(mail.from).to eq(['no-reply@demo.itsmycargo.com'])
       expect(mail.reply_to).to eq(['support@itsmycargo.com'])
       expect(mail.to).to eq(['sales.general@demo.com'])
     end
@@ -28,7 +28,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq('Your booking through Demo')
-      expect(mail.from).to eq(['no-reply@demo.itsmycargo.test'])
+      expect(mail.from).to eq(['no-reply@demo.itsmycargo.com'])
       expect(mail.reply_to).to eq(['support@demo.com'])
       expect(mail.to).to eq([user.email])
     end
@@ -39,7 +39,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq('Your booking through Demo')
-      expect(mail.from).to eq(['no-reply@demo.itsmycargo.test'])
+      expect(mail.from).to eq(['no-reply@demo.itsmycargo.com'])
       expect(mail.reply_to).to eq(['support@demo.com'])
       expect(mail.to).to eq([user.email])
     end

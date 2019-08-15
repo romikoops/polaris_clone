@@ -32,7 +32,7 @@ module Tenants
 
       def __legacy_tenant_params(tenant)
         {
-          subdomain: tenant.subdomain,
+          slug: tenant.__subdomain,
           legacy_id: tenant.id
         }
       end

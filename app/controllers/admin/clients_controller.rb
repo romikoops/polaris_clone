@@ -96,7 +96,7 @@ class Admin::ClientsController < Admin::AdminBaseController
       user_ids =
         Tenants::User.where(
           company_id: ::Tenants::Company
-                        .where(tenant_id: current_tenant.tenants_tenant.id)
+                        .where(tenant_id: ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).id)
                         .name_search(params[:company_name])
                         .ids
         ).pluck(:legacy_id)

@@ -80,7 +80,7 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
     mot = download_params[:mot]
     key = 'local_charges'
     klass_identifier = 'LocalCharges'
-    file_name = "#{current_tenant.subdomain.downcase}__local_charges_#{mot}"
+    file_name = "#{::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug}__local_charges_#{mot}"
 
     options = {
       tenant: current_tenant,

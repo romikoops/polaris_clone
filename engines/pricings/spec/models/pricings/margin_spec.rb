@@ -10,6 +10,7 @@ module Pricings
     let(:hub) { FactoryBot.create(:legacy_hub, tenant: tenant, name: 'Gothenburg Port') }
     let(:pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant) }
     let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
+
     context 'instance methods' do
       let!(:no_pricing_margin) do
         FactoryBot.create(:pricings_margin,

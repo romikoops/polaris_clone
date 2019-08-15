@@ -15,8 +15,8 @@ module AdmiraltyTenants
       Array.new(5) do |i|
         tenant = ::Legacy::Tenant.create(subdomain: "demo#{i}", scope: { closed_shop: false })
         ::Tenants::Scope.create(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id), content: { closed_shop: false })
-        
-        tenant
+
+        ::Tenants::Tenant.find_by(legacy_id: tenant.id)
       end
     end
     let!(:scopes) do
@@ -32,7 +32,7 @@ module AdmiraltyTenants
         get :index
 
         expect(response).to be_successful
-        expect(response.body).to match(/<td>#{tenants.sample.subdomain}/im)
+        expect(response.body).to match(/<td>#{tenants.sample.slug}/im)
       end
     end
 
@@ -41,7 +41,7 @@ module AdmiraltyTenants
         get :show, params: { id: tenant.id }
 
         expect(response).to be_successful
-        expect(response.body).to match(/<dd.*#{tenant.subdomain}\.itsmycargo\.com/im)
+        expect(response.body).to match(/<dd.*#{tenant.slug}/im)
       end
     end
 
@@ -50,18 +50,18 @@ module AdmiraltyTenants
         get :edit, params: { id: tenant.id }
 
         expect(response).to be_successful
-        expect(response.body).to match(/value="#{tenant.subdomain}"/im)
+        expect(response.body).to match(/value="#{tenant.slug}"/im)
       end
     end
 
     describe 'PATCH #update' do
-      let(:tenant_params) { tenant.attributes.slice('name', 'subdomain').merge(scope: { foo: true }.to_json) }
+      let(:tenant_params) { tenant.attributes.slice('name', 'slug').merge(scope: { foo: true }.to_json) }
 
       it 'renders page' do
         patch :update, params: { id: tenant.id, tenant: tenant_params }
 
         expect(response).to redirect_to("/tenants/#{tenant.id}")
-        expect(::Legacy::Tenant.find(tenant.id).tenants_scope).to eq('foo' => true)
+        expect(::Tenants::Tenant.find(tenant.id).legacy.tenants_scope).to eq('foo' => true)
       end
     end
   end

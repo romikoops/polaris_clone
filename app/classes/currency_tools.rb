@@ -23,6 +23,7 @@ class CurrencyTools
   def get_currency_array(base, tenant_id)
     rates = get_rates(base, tenant_id)
     results = [{ key: base, rate: 1 }]
+
     rates['today'].each do |k, v|
       results << { key: k, rate: v }
     end

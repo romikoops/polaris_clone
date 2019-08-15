@@ -4,7 +4,7 @@
   <mj-column>
     <mj-text>
       <p style="display: none;max-height: 0px;overflow: hidden;">
-        Hello! <%= @user.full_name %> from <%= @user.company_name %> has requested a dedicated rate for the following route 
+        Hello! <%= @user.full_name %> from <%= @user.company_name %> has requested a dedicated rate for the following route
       </p>
     </mj-text>
     <mj-text>
@@ -19,7 +19,7 @@
   <mj-section padding="20px 5%" background-color="#BDBDBD">
     <mj-column>
       <mj-text>
-        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px; max-height: 150px;" %>
+        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.name}", style: "width: 150px; max-height: 150px;" %>
       </mj-text>
     </mj-column>
     <mj-column>
@@ -40,18 +40,18 @@
       <mj-text line-height="24px" font-size="27px" padding-left="34px">
         <p style="margin-top: 30px;">
           Hello!
-        </p> 
+        </p>
       </mj-text>
     </mj-column>
   </mj-section>
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%" padding="0 2.5%">
-      
+
       <mj-text line-height="24px">
         <p>
           <%= @user.full_name %> from <strong><%= @user.company_name %></strong> has signed up for the <%= @tenant.name %> Online Shop: </br>
           Go check them out!
-        </p> 
+        </p>
       </mj-text>
     </mj-column>
   </mj-section>
@@ -71,10 +71,10 @@
         </mj-text>
       </mj-column>
       <mj-column>
-        <mj-image width="30px" src=""></mj-image>        
+        <mj-image width="30px" src=""></mj-image>
       </mj-column>
       </mj-group>
   </mj-section>
-  
+
 </mj-wrapper>
 <%= render "closing_lines", user: @user %>

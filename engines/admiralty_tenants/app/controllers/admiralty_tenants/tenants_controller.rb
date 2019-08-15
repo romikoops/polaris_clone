@@ -7,7 +7,7 @@ module AdmiraltyTenants
     before_action :set_tenant, except: :index
 
     def index
-      @tenants = ::Legacy::Tenant.order(:subdomain).all
+      @tenants = Tenant.order(:subdomain).all
     end
 
     def show
@@ -17,10 +17,8 @@ module AdmiraltyTenants
     end
 
     def update
-      @tenant.update(
-        name: tenant_params[:name],
-        subdomain: tenant_params[:subdomain]
-      )
+      @tenant.update(slug: tenant_params[:slug])
+      @tenant.legacy.update(name: tenant_params[:name])
       @scope.update(content: remove_default_values)
 
       redirect_to tenant_path(@tenant)
@@ -29,13 +27,13 @@ module AdmiraltyTenants
     private
 
     def set_tenant
-      @tenant = ::Legacy::Tenant.find(params[:id])
-      @scope = ::Tenants::Tenant.find_by(legacy_id: params[:id])&.scope || {}
-      @render_scope = ::Tenants::ScopeService.new(tenant: ::Tenants::Tenant.find_by(legacy_id: params[:id])).fetch
+      @tenant = Tenant.find(params[:id])
+      @scope = @tenant.scope || {}
+      @render_scope = ::Tenants::ScopeService.new(tenant: @tenant).fetch
     end
 
     def tenant_params
-      params.require(:tenant).permit(:name, :subdomain, :scope)
+      params.require(:tenant).permit(:name, :slug, :scope)
     end
 
     def remove_default_values

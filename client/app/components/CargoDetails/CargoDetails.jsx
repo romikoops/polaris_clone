@@ -182,7 +182,7 @@ class CargoDetails extends Component {
 
   insuranceReadMore () {
     const { tenant } = this.props
-    const url = `http://${tenant.subdomain}.itsmycargo.com/insurance`
+    const url = `http://${tenant.default_domain}/insurance`
     window.open(url, '_blank')
   }
 

@@ -25,7 +25,7 @@ module Trucking
       f.close
       s_3.put_object(
         bucket: 'assets.itsmycargo.com',
-        key: "data/#{hub.tenant.subdomain}/trucking_coverage/#{hub.name}_coverage.geojson",
+        key: "data/#{::Tenants::Tenant.find_by(legacy_id: hub.tenant.id).slug}/trucking_coverage/#{hub.name}_coverage.geojson",
         body: f,
         content_type: 'application/json', acl: 'private'
       )

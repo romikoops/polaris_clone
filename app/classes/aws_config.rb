@@ -24,7 +24,9 @@ module AwsConfig
     end
 
     def path(shipment)
-      shipment.tenant.subdomain + '/documents/' + shipment['uuid']
+      slug = ::Tenants::Tenant.find_by(legacy_id: shipment.tenant.id).slug
+
+      "#{slug}/documents/#{shipment['uuid']}"
     end
 
     def create_on_aws(file, shipment)

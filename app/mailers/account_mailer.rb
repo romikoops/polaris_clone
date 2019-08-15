@@ -10,7 +10,7 @@ class AccountMailer < Devise::Mailer
     tenant = record.tenant
     @primary_color = tenant.theme.dig('colors', 'primary')
 
-    opts[:from] = Mail::Address.new("no-reply@#{tenant.subdomain}.#{Settings.emails.domain}")
+    opts[:from] = Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
     attachments.inline['logo.png'] = URI.open(tenant.theme['emailLogo']).read
@@ -28,7 +28,7 @@ class AccountMailer < Devise::Mailer
     tenant = record.tenant
     @primary_color = tenant.theme.dig('colors', 'primary')
     attachments.inline['logo.png'] = URI.open(tenant.theme['emailLogo']).read if tenant.theme['emailLogo']
-    opts[:from] = Mail::Address.new("no-reply@#{tenant.subdomain}.#{Settings.emails.domain}")
+    opts[:from] = Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
     @scope = ::Tenants::ScopeService.new(target: record).fetch
@@ -53,7 +53,7 @@ class AccountMailer < Devise::Mailer
 
   def base_url(tenant)
     case Rails.env
-    when 'production'  then "https://#{tenant.subdomain}.itsmycargo.com/"
+    when 'production'  then "https://#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}/"
     when 'review'      then ENV['REVIEW_URL']
     when 'development' then 'http://localhost:8080/'
     when 'test'        then 'http://localhost:8080/'

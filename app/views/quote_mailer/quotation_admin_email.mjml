@@ -4,7 +4,7 @@
     <mj-text>
       <p style="display: none;max-height: 0px;overflow: hidden;">
         Hello <%= @email %>, <%= @user.full_name %> from <%= @user.agency&.name || @user.company_name %>
-              has generated a quote using the ItsMyCargo Quotation Tool: 
+              has generated a quote using the ItsMyCargo Quotation Tool:
       </p>
     </mj-text>
     <mj-text>
@@ -19,7 +19,7 @@
   <mj-section padding="20px 5%" background-color="#BDBDBD">
     <mj-column>
       <mj-text>
-        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px" %>
+        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.name}", style: "width: 150px" %>
       </mj-text>
     </mj-column>
     <mj-column>

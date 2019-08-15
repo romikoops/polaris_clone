@@ -9,9 +9,17 @@ module Legacy
 
     has_many :margins, as: :applicable
     has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
-    has_one :tenants_tenant, class_name: 'Tenants::Tenant', foreign_key: 'legacy_id'
 
     has_paper_trail
+
+    def subdomain
+      super
+    end
+    deprecate :subdomain, deprecator: ActiveSupport::Deprecation.new('', Rails.application.railtie_name)
+
+    def __subdomain
+      self['subdomain']
+    end
 
     def scope_for(user:)
       ::Tenants::ScopeService.new(target: user).fetch

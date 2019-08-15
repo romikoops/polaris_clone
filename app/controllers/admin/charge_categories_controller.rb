@@ -14,7 +14,7 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:d
   end
 
   def download
-    file_name = "#{current_tenant.subdomain.downcase}__charge_categories"
+    file_name = "#{::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug}__charge_categories"
     klass_identifier = 'ChargeCategories'
     key = 'charge_categories'
 

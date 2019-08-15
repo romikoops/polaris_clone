@@ -1232,6 +1232,14 @@ ActiveRecord::Schema.define(version: 2019_08_15_003135) do
     t.datetime "deleted_at"
   end
 
+  create_table "tenants_domains", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "tenant_id"
+    t.string "domain"
+    t.boolean "default"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tenants_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.uuid "tenant_id"
@@ -1273,6 +1281,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_003135) do
     t.integer "legacy_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
   end
 
   create_table "tenants_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -37,7 +37,7 @@ class Footer extends React.PureComponent {
     }
     const home = links && links.home ? links.home : defaultLinks.home
     let termsLink = ''
-    tenant.subdomain ? termsLink = `/terms_and_conditions` : termsLink = ''
+    tenant.slug ? termsLink = `/terms_and_conditions` : termsLink = ''
     if (has(tenant, ['scope', 'links', 'terms'])) {
       termsLink = tenant.scope.links.terms
     }
@@ -83,7 +83,7 @@ class Footer extends React.PureComponent {
               {t('footer:contact')}
             </h4>
           </div>
-          
+
           <div className={`flex-100 layout-row layout-wrap ${styles.contacts}`}>
             <a
               className="pointy flex-100 layout-row layout-align-start-center"

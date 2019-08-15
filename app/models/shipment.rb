@@ -410,7 +410,7 @@ class Shipment < Legacy::Shipment
 
   def view_offers(index)
   end
-  deprecate :view_offers, deprecator: APP_DEPRECATION
+  deprecate :view_offers, deprecator: ActiveSupport::Deprecation.new('', Rails.application.railtie_name)
 
   def client_name
     user&.full_name

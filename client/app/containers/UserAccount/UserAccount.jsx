@@ -123,7 +123,7 @@ class UserAccount extends Component {
       const unixTimeStamp = moment().unix().toString()
       const randNum = Math.floor(Math.random() * 100).toString()
       const randSuffix = unixTimeStamp + randNum
-      const email = `guest${randSuffix}@${tenant.subdomain}.com`
+      const email = `guest${randSuffix}@${tenant.slug}.itsmycargo.shop`
 
       authDispatch.register(
         {

@@ -311,7 +311,7 @@ function toggleTenantCurrencyMode () {
       (resp) => {
         dispatch(success(resp.data.rates))
         dispatch(tenantActions
-          .receiveTenant(resp.data.tenant.subdomain, resp.data.tenant))
+          .receiveTenant(resp.data.tenant.slug, resp.data.tenant))
       },
       (error) => {
         error.then((data) => {

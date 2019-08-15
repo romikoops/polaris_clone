@@ -298,6 +298,7 @@ module DataValidator
     def get_top_value_currency(column, key)
       str = column[@row_keys[key]]
       to_display = string_to_currency_value(str)
+
       if to_display.nil?
         return {}
       elsif key == 'TOTAL'
@@ -400,7 +401,7 @@ module DataValidator
     def print_results
       DocumentService::PricingValidationWriter.new(
         data: @validation_results,
-        filename: "#{@tenant.subdomain}_pricing_validations",
+        filename: "#{::Tenants::Tenant.find_by(legacy_id: @tenant.id).slug}_pricing_validations",
         tenant_id: @tenant.id
       ).perform
     end

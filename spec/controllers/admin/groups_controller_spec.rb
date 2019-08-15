@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Admin::GroupsController, type: :controller do
   let!(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:user) { create(:legacy_user, tenant: tenant, email: 'user@itsmycargo.test') }
+  let!(:user) { create(:legacy_user, tenant: tenant, email: 'user@itsmycargo.com') }
   let!(:role) { create(:role, name: 'shipper') }
 
   describe 'GET #index' do

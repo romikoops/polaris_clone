@@ -27,6 +27,7 @@ class ApplicationController < ActionController::API
 
   def require_authentication!
     raise ApplicationError::NotAuthenticated unless user_signed_in?
+
     scope = ::Tenants::ScopeService.new(target: current_user).fetch
     require_non_guest_authentication! if scope['closed_shop']
   end
@@ -50,7 +51,8 @@ class ApplicationController < ActionController::API
 
   def append_info_to_payload(payload)
     super
-    payload[:tenant] = current_tenant&.subdomain
+
+    payload[:tenant] = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)&.slug if current_tenant
   end
 
   def set_raven_context
@@ -61,8 +63,8 @@ class ApplicationController < ActionController::API
     )
     Raven.tags_context(
       agency: current_user&.agency_id&.present?,
-      namespace: ENV['REVIEW_NAME'],
-      tenant: current_tenant&.subdomain
+      namespace: ENV['REVIEW_APP_NAME'],
+      tenant: current_tenant && ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)&.slug
     )
     Raven.extra_context(
       agency: current_user&.agency&.slice(%i(id name)),

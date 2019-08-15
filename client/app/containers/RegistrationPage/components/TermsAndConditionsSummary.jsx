@@ -12,7 +12,7 @@ export default function TermsAndConditionsSummary (props) {
     goToImcTermsAndConditions, tenant, shakeClass
   } = props
 
-  const subdomain = tenant && tenant.subdomain
+  const subdomain = tenant && tenant.slug
   const bulletTexts = termsAndConditionsSummaryBullets[subdomain] || []
   const bullets = bulletTexts.map(bulletText => <li key={v4()}> { bulletText } </li>)
   const bulletsJSX = bullets.length > 0

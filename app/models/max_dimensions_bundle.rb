@@ -8,8 +8,7 @@ class MaxDimensionsBundle < ApplicationRecord
     message: lambda do |obj, _|
       max_dimensions_name = "max#{aggregate ? '_aggregate' : ''}_dimensions"
 
-      "'#{obj.mode_of_transport}' already exists in " \
-      "#{max_dimensions_name} from tenant '#{obj.tenant.subdomain}'"
+      "'#{obj.mode_of_transport}' already exists"
     end
   }
   CustomValidations.inclusion(self, :mode_of_transport, %w(ocean rail air truck truck_carriage general))

@@ -37,7 +37,7 @@ module DataValidator
 
     def perform
       tenants.each do |tenant|
-        file_path = Rails.root.join('tmp', 'sample_sheets', "#{tenant.subdomain}__sample_sheet.xlsx")
+        file_path = Rails.root.join('tmp', 'sample_sheets', "#{::Tenants::Tenant.find_by(legacy_id: tenant.id).slug}__sample_sheet.xlsx")
         FileUtils.mkdir_p(File.dirname(file_path))
         xlsx = WriteXLSX.new(file_path, tempdir: Rails.root.join('tmp', 'write_xlsx/').to_s)
 

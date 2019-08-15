@@ -150,12 +150,6 @@ class Tenant < Legacy::Tenant
   def create_default_aggregate_max_dimensions
     MaxDimensionsBundle.create_defaults_for(self, aggregate: true)
   end
-
-  # Shortcuts to find_by_subdomain to use in the console
-
-  def self.method_missing(name, *args)
-    where(subdomain: name.try(:to_s)).first || super
-  end
 end
 
 # == Schema Information

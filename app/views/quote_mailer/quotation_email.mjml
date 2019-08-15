@@ -5,7 +5,7 @@
       <mj-text>
         <p style="display: none;max-height: 0px;overflow: hidden;">
           Hello <%= @email %>, <%= @user.full_name %> from <%= @shipment.tenant.name %>
-                prepared for you a document with the best quotations for the itinerary: 
+                prepared for you a document with the best quotations for the itinerary:
         </p>
       </mj-text>
       <mj-text>
@@ -20,7 +20,7 @@
   <mj-section padding="20px 5%" background-color="#BDBDBD">
     <mj-column>
       <mj-text>
-        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px; max-height: 150px;" %>
+        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.name}", style: "width: 150px; max-height: 150px;" %>
       </mj-text>
     </mj-column>
     <mj-column>
@@ -92,7 +92,7 @@
 
 <%= render "closing_lines", user: @user %>
 <mj-wrapper full-width="full-width" padding="0px">
- 
+
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%">
       <mj-text font-size="8px">
@@ -105,4 +105,3 @@
     </mj-column>
   </mj-section>
 </mj-wrapper>
-

@@ -23,7 +23,7 @@ RSpec.describe ::RmsSync::Routes do
   let!(:itinerary_4) { FactoryBot.create(:shanghai_felixstowe_itinerary, tenant: tenant)}
   let!(:itinerary_5) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: tenant)}
   let!(:itinerary_6) { FactoryBot.create(:shanghai_hamburg_itinerary, tenant: tenant)}
- 
+
   let!(:routes) do
     FactoryBot.create(:gothenburg_shanghai_route)
     FactoryBot.create(:shanghai_gothenburg_route)

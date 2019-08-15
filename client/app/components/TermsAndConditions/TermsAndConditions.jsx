@@ -5,7 +5,7 @@ import termsAndConditions from '../../static/termsAndConditions'
 import Header from '../Header/Header'
 
 export default function TermsAndConditions ({ tenant, user, theme }) {
-  const subdomain = (tenant && tenant.subdomain) || 'def'
+  const subdomain = (tenant && tenant.slug) || 'def'
   const content = termsAndConditions[subdomain] || termsAndConditions.def
 
   return (

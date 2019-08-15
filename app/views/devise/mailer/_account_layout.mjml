@@ -16,7 +16,7 @@
 <mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
     <mj-text>
-      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px; max-height: 150px;" %>
+      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.name}", style: "width: 150px; max-height: 150px;" %>
     </mj-text>
   </mj-column>
   <mj-column>
@@ -45,7 +45,7 @@
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
       <p>If you have questions about the <b> <%= tenant.name %> </b> Online Shop or are experiencing problems with this mail or shipment – do not hesitate to ask us:</p>
-    </mj-text>   
+    </mj-text>
   </mj-column>
 
   <mj-column width="100%" padding="0 2.5%">
@@ -53,7 +53,7 @@
       <p>
         Support: <%= mail_to(tenant.emails.dig('support', 'general') || 'support@itsmycargo.com') %> | <%= tenant.phones.dig('support') || '' %>
       </p>
-    </mj-text>    
+    </mj-text>
   </mj-column>
 
   <mj-column width="100%" padding="0 2.5%">
