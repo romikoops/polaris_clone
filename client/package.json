@@ -41,7 +41,7 @@
     "@babel/preset-react": "^7.0.0",
     "@redux-beacon/google-tag-manager": "^1.0.1",
     "@redux-beacon/logger": "^1.0.0",
-    "@sentry/browser": "^4.3.4",
+    "@sentry/browser": "^4.6.6",
     "@sentry/webpack-plugin": "^1.6.1",
     "autoprefixer": "^9.3.1",
     "babel-eslint": "^10.0.1",

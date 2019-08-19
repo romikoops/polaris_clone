@@ -11,8 +11,8 @@ export default function getConfig () {
   const sentryUrl = {
     development: '',
     test: '',
-    review: 'https://8bc4a8e340e84e9b86a1e374815b4117@sentry.itsmycargo.tech/5',
-    production: 'https://16d43a033af648da8b2f2933f6e62717@sentry.itsmycargo.tech/3'
+    review: 'https://3559b4ca079e44c687cd6f4c135426d0@sentry.itsmycargo.tech/3',
+    production: 'https://3559b4ca079e44c687cd6f4c135426d0@sentry.itsmycargo.tech/3'
   }
 
   const keel = window.keel || {}
