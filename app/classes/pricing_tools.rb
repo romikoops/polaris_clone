@@ -224,14 +224,15 @@ class PricingTools # rubocop:disable Metrics/ClassLength
 
   def calc_customs_fees(charge, cargos, _load_type, user, mot) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+      quantity = cargo_unit.try(:quantity) || 1
       weight = if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
-                 cargo_unit.calc_chargeable_weight(mot) * (cargo_unit.quantity || 1)
+                 cargo_unit.calc_chargeable_weight(mot) * quantity
                else
-                 cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
+                 cargo_unit.payload_in_kg * quantity
                end
-      return_h[:quantity] += cargo_unit.quantity unless cargo_unit.quantity.nil?
-      return_h[:volume]          += (cargo_unit.try(:volume) || 1) * (cargo_unit.quantity || 1) || 0
-      return_h[:weight]          += (cargo_unit.try(:weight) || weight)
+      return_h[:quantity] += quantity unless quantity.nil?
+      return_h[:volume]   += ((cargo_unit.try(:volume) || 1) * quantity) || 0
+      return_h[:weight]   += (cargo_unit.try(:weight) || weight)
     end
 
     return {} if charge.nil?
@@ -255,14 +256,15 @@ class PricingTools # rubocop:disable Metrics/ClassLength
 
   def calc_addon_charges(charge, cargos, user, mot) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+      quantity = cargo_unit.try(:quantity) || 1
       weight = if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
-                 cargo_unit.calc_chargeable_weight(mot) * (cargo_unit.quantity || 1)
+                 cargo_unit.calc_chargeable_weight(mot) * quantity
                else
-                 cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
+                 cargo_unit.payload_in_kg * quantity
                end
-      return_h[:quantity] += cargo_unit.quantity unless cargo_unit.quantity.nil?
-      return_h[:volume]          += cargo_unit.try(:volume) * (cargo_unit.quantity || 1) || 0
-      return_h[:weight]          += (cargo_unit.try(:weight) || weight)
+      return_h[:quantity] += quantity unless quantity.nil?
+      return_h[:volume]   += cargo_unit.try(:volume) * quantity || 0
+      return_h[:weight]   += (cargo_unit.try(:weight) || weight)
     end
 
     return {} if charge.nil?
