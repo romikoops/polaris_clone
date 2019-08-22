@@ -81,7 +81,7 @@ class QuoteMailer < ApplicationMailer
       }
     )
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
-    attachments.inline['logo.png'] = URI.open(@theme['logoLarge']).read
+    attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
     attachments[pdf_name] = quotation
     @hub_names = {
       origin: Trip.find(@quotes.first['trip_id']).itinerary.first_stop.hub.name,

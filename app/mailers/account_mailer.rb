@@ -13,7 +13,7 @@ class AccountMailer < Devise::Mailer
     opts[:from] = Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
-    attachments.inline['logo.png'] = URI.open(tenant.theme['emailLogo']).read
+    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read)
     opts[:subject] = "#{tenant.name} Account Confirmation Email"
     @confirmation_url = "#{base_url(tenant)}account/confirmation/#{token}"
 
@@ -27,7 +27,7 @@ class AccountMailer < Devise::Mailer
   def reset_password_instructions(record, token, opts = {})
     tenant = record.tenant
     @primary_color = tenant.theme.dig('colors', 'primary')
-    attachments.inline['logo.png'] = URI.open(tenant.theme['emailLogo']).read if tenant.theme['emailLogo']
+    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read) if tenant.theme['emailLogo']
     opts[:from] = Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
