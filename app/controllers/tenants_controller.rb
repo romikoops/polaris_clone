@@ -41,6 +41,7 @@ class TenantsController < ApplicationController
     tenant_json = tenant.as_json
     tenant_json['scope'] = scope
     tenant_json['subdomain'] = tenants_tenant.slug
+    tenant_json['slug'] = tenants_tenant.slug
 
     response_handler(tenant: tenant_json)
   end
