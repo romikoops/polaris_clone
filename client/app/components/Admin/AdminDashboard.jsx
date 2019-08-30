@@ -146,7 +146,7 @@ export class AdminDashboard extends Component {
               </span>
               <span className={`${styles.welcome} flex-90 layout-row`}>
                 {t('common:welcomeBack')}
-,&nbsp;
+&nbsp;
                 {' '}
                 <b>{user.first_name}</b>
               </span>

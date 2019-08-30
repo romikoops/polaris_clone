@@ -39,7 +39,7 @@ exports[`isQuote(tenant) is true 1`] = `
           className="welcome flex-90 layout-row"
         >
           Welcome back,
-          , 
+           
            
           <b>
             John
@@ -289,7 +289,7 @@ exports[`shallow render 1`] = `
           className="welcome flex-90 layout-row"
         >
           Welcome back,
-          , 
+           
            
           <b>
             John
@@ -578,7 +578,7 @@ exports[`tenant is falsy 1`] = `
           className="welcome flex-90 layout-row"
         >
           Welcome back,
-          , 
+           
            
           <b>
             John
@@ -860,7 +860,7 @@ exports[`theme is falsy 1`] = `
           className="welcome flex-90 layout-row"
         >
           Welcome back,
-          , 
+           
            
           <b>
             John
