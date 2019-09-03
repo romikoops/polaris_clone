@@ -7,7 +7,7 @@ module Tenants
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
     belongs_to :tenant, class_name: 'Tenants::Tenant'
-    has_many :memberships, class_name: 'Tenants::Membership'
+    has_many :memberships, class_name: 'Tenants::Membership', dependent: :destroy
     has_many :group_memberships, class_name: 'Tenants::Membership', as: :member
     has_many :groups, through: :group_memberships, as: :member
 

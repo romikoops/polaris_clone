@@ -8,7 +8,7 @@ module Tenants
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
     belongs_to :tenant, optional: true
     belongs_to :company, optional: true, class_name: 'Tenants::Company'
-    has_many :memberships, as: :member
+    has_many :memberships, as: :member, dependent: :destroy
     has_many :groups, through: :memberships, as: :member
     has_many :margins, as: :applicable
     validates :email, presence: true, uniqueness: { scope: :tenant_id }
