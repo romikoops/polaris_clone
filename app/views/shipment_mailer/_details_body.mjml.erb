@@ -19,6 +19,27 @@
         </p>
       </mj-text>
     </mj-column>
+    <mj-column padding="0 5%">
+      <mj-text padding="0">
+        <h3 style="margin: 0;">
+          Booked by: <%= @user.company_name %>
+        </h3>
+      </mj-text>
+      <mj-text padding-left="0">
+        <p style="margin: 0;"> 
+          
+          Name:  <%= @user.full_name %> 
+          <br>
+          <br>
+          Email: <%= @user.email %> 
+          <br>
+          <br>
+          Phone: <%= @user.phone %> 
+          <br>
+          <br>
+        </p>
+      </mj-text>
+    </mj-column>
   </mj-section>
   
   <mj-section background-color="#f3f3f3">

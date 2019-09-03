@@ -6,7 +6,7 @@ aws:
 
 breezy:
   secret: iqY!O}_LOnP]A-]bkBq$WJRXSn9t%0-(
-  url: https://breezypdf.itsmycargo.tech
+  url: https://breezy-pdf.armada.itsmycargo.io
 
 cors:
   origins: <%= ENV['CORS_ORIGINS'] %>
