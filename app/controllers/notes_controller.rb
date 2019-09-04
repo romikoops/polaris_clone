@@ -7,7 +7,7 @@ class NotesController < ApplicationController
   def get_notes
     itineraries = Itinerary.where(id: params[:itineraries])
     pricings = Pricings::Pricing.where(itinerary_id: params[:itineraries])
-    legacy_pricings = ::Pricing.where(itinerary_id: params[:itineraries])
+    legacy_pricings = Legacy::Pricing.where(itinerary_id: params[:itineraries])
     raw_notes = Note.where(target: itineraries | pricings | legacy_pricings).uniq { |note| note.slice(:header, :body) }
 
     response_handler(raw_notes.map { |note| transform_note(note) })

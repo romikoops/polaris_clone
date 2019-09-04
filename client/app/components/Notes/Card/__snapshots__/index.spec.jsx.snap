@@ -28,6 +28,7 @@ exports[`when level is alert 1`] = `
           
         </div>
       </div>
+      
       <div
         className="flex-100 layout-row layout-align-start-center"
       >
@@ -80,6 +81,7 @@ exports[`when level is important 1`] = `
           
         </div>
       </div>
+      
       <div
         className="flex-100 layout-row layout-align-start-center"
       >
@@ -132,6 +134,7 @@ exports[`when level is notification 1`] = `
           
         </div>
       </div>
+      
       <div
         className="flex-100 layout-row layout-align-start-center"
       >
@@ -184,6 +187,7 @@ exports[`when level is null 1`] = `
           
         </div>
       </div>
+      
       <div
         className="flex-100 layout-row layout-align-start-center"
       >
@@ -236,6 +240,7 @@ exports[`when level is urgent 1`] = `
           
         </div>
       </div>
+      
       <div
         className="flex-100 layout-row layout-align-start-center"
       >

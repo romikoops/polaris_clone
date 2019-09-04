@@ -49,6 +49,7 @@ class NotesCard extends Component {
         )
     }
   }
+
   static motSwitcher (code, style) {
     switch (code) {
       case 'ocean':
@@ -64,6 +65,7 @@ class NotesCard extends Component {
         return <i className="fa fa-ship flex-none clip " style={style} />
     }
   }
+
   static styleSwitcher (level) {
     switch (level) {
       case 'urgent':
@@ -79,15 +81,18 @@ class NotesCard extends Component {
         return styles.alert_border_style
     }
   }
+
   constructor (props) {
     super(props)
 
     this.deleteNote = this.deleteNote.bind(this)
   }
+
   deleteNote () {
     const { adminDispatch, itinerary, note } = this.props
     adminDispatch.deleteItineraryNote(itinerary.id, note.id)
   }
+
   render () {
     const { note, isAdmin } = this.props
 
@@ -96,22 +101,29 @@ class NotesCard extends Component {
         flex="30"
         wrapperClassName="margin_bottom"
         borderStyle={NotesCard.styleSwitcher(note.level)}
-        content={(<div
-          className={`${
-            styles.note_card
-          } flex-none layout-wrap layout-align-center`}
-        >
-          <div className={`${styles.note_route} flex-100 layout-row layout-align-start-center`}>
-            <div className="flex-100 layout-row layout-align-center-center">
-              {NotesCard.iconSwitcher(note.level)}
-              <span className="flex-90">{note.header}</span>
-              { isAdmin ? <i className="fa fa-trash pointy flex-10" onClick={() => this.deleteNote()} /> : '' }
+        content={(
+          <div
+            className={`${
+              styles.note_card
+            } flex-none layout-wrap layout-align-center`}
+          >
+            <div className={`${styles.note_route} flex-100 layout-row layout-align-start-center`}>
+              <div className="flex-100 layout-row layout-align-center-center">
+                {NotesCard.iconSwitcher(note.level)}
+                <span className="flex-90">{note.header}</span>
+                { isAdmin ? <i className="fa fa-trash pointy flex-10" onClick={() => this.deleteNote()} /> : '' }
+              </div>
+            </div>
+            { note.service ? (
+              <div className="flex-100 layout-row layout-align-start-center">
+                <p className="flex-95">{note.service}</p>
+              </div>
+            ) : '' }
+            <div className="flex-100 layout-row layout-align-start-center">
+              <p className="flex-95">{note.body}</p>
             </div>
           </div>
-          <div className="flex-100 layout-row layout-align-start-center">
-            <p className="flex-95">{note.body}</p>
-          </div>
-        </div>)}
+        )}
       />
 
     )
