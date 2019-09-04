@@ -11,6 +11,7 @@ import RouteSection from './RouteSection'
 import DayPickerSection from './DayPickerSection'
 import CargoSection from './CargoSection'
 import GetOffersSection from './GetOffersSection'
+import NotesSection from './NotesSection'
 import { shipmentActions, bookingProcessActions } from '../../actions'
 import { getTotalShipmentErrors } from './CargoSection/getErrors'
 
@@ -168,6 +169,7 @@ class ShipmentDetails extends React.PureComponent {
           className="flex-100 layout-row layout-wrap"
         >
           <RouteSection requiresFullAddress={scope.require_full_address} addressErrors={addressErrors} />
+          <NotesSection />
           <DayPickerSection />
           <CargoSection toggleModal={this.toggleModal} totalShipmentErrors={totalShipmentErrors} />
           <GetOffersSection totalShipmentErrors={totalShipmentErrors} getOffersDisabled={getOffersDisabled} />

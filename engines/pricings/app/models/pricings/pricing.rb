@@ -14,6 +14,7 @@ module Pricings
     has_many :fees, class_name: 'Pricings::Fee', dependent: :destroy
     has_many :pricing_requests, dependent: :destroy
     has_many :margins, class_name: 'Pricings::Margin'
+    has_many :notes, dependent: :destroy, as: :target
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     validates :itinerary_id, uniqueness: {
@@ -62,7 +63,7 @@ module Pricings
     def itinerary_name
       itinerary&.name
     end
-  
+
     def mode_of_transport
       itinerary&.mode_of_transport
     end

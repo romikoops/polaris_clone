@@ -25,10 +25,7 @@ exports[`when level is alert 1`] = `
           >
             HEADER
           </span>
-          <i
-            className="fa fa-trash pointy flex-10"
-            onClick={[Function]}
-          />
+          
         </div>
       </div>
       <div
@@ -80,10 +77,7 @@ exports[`when level is important 1`] = `
           >
             HEADER
           </span>
-          <i
-            className="fa fa-trash pointy flex-10"
-            onClick={[Function]}
-          />
+          
         </div>
       </div>
       <div
@@ -135,10 +129,7 @@ exports[`when level is notification 1`] = `
           >
             HEADER
           </span>
-          <i
-            className="fa fa-trash pointy flex-10"
-            onClick={[Function]}
-          />
+          
         </div>
       </div>
       <div
@@ -190,10 +181,7 @@ exports[`when level is null 1`] = `
           >
             HEADER
           </span>
-          <i
-            className="fa fa-trash pointy flex-10"
-            onClick={[Function]}
-          />
+          
         </div>
       </div>
       <div
@@ -245,10 +233,7 @@ exports[`when level is urgent 1`] = `
           >
             HEADER
           </span>
-          <i
-            className="fa fa-trash pointy flex-10"
-            onClick={[Function]}
-          />
+          
         </div>
       </div>
       <div

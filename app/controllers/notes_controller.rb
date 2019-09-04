@@ -5,19 +5,12 @@ class NotesController < ApplicationController
   skip_before_action :require_non_guest_authentication!
 
   def get_notes
-    notes = []
-    origins = params[:origins] || []
-    destinations = params[:destinations] || []
-    itineraries = params[:itineraries]
-    itineraries.each do |itin|
-      next unless origins.include?(itin['origin']['nexusId']) && destinations.include?(itin['destination']['nexusId'])
+    itineraries = Itinerary.where(id: params[:itineraries])
+    pricings = Pricings::Pricing.where(itinerary_id: params[:itineraries])
+    legacy_pricings = ::Pricing.where(itinerary_id: params[:itineraries])
+    raw_notes = Note.where(target: itineraries | pricings | legacy_pricings).uniq { |note| note.slice(:header, :body) }
 
-      itinerary = Itinerary.find_by(id: itin['itineraryId'], sandbox: @sandbox)
-      itinerary.notes.each do |note|
-        notes.push(transform_note(itinerary, note))
-      end
-    end
-    response_handler(notes)
+    response_handler(raw_notes.map { |note| transform_note(note) })
   end
 
   def delete
@@ -30,12 +23,15 @@ class NotesController < ApplicationController
 
   private
 
-  def transform_note(itinerary, note)
+  def transform_note(note)
     return unless note
 
     nt = note.as_json
-    nt['itineraryTitle'] = itinerary.name
-    nt['mode_of_transport'] = itinerary.mode_of_transport
+    nt['itineraryTitle'] = note.target.name if note.target_type.include?('Itinerary')
+    nt['itineraryTitle'] = note.target.itinerary.name if note.target_type.include?('Pricing')
+    nt['mode_of_transport'] = note.target.mode_of_transport if note.target_type.include?('Itinerary')
+    nt['mode_of_transport'] = note.target.itinerary.mode_of_transport if note.target_type.include?('Pricing')
+    nt['service'] = note.target.tenant_vehicle.full_name if note.target_type.include?('Pricing')
     nt
   end
 end

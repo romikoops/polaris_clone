@@ -89,7 +89,7 @@ class NotesCard extends Component {
     adminDispatch.deleteItineraryNote(itinerary.id, note.id)
   }
   render () {
-    const { note } = this.props
+    const { note, isAdmin } = this.props
 
     return (
       <GreyBox
@@ -105,7 +105,7 @@ class NotesCard extends Component {
             <div className="flex-100 layout-row layout-align-center-center">
               {NotesCard.iconSwitcher(note.level)}
               <span className="flex-90">{note.header}</span>
-              <i className="fa fa-trash pointy flex-10" onClick={() => this.deleteNote()} />
+              { isAdmin ? <i className="fa fa-trash pointy flex-10" onClick={() => this.deleteNote()} /> : '' }
             </div>
           </div>
           <div className="flex-100 layout-row layout-align-start-center">

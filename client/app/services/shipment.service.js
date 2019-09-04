@@ -116,7 +116,7 @@ function getNotes (noteIds) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify(noteIds)
+    body: JSON.stringify({itineraries: noteIds})
   }
   const url = `${getTenantApiUrl()}/notes/fetch`
 
