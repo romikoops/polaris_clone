@@ -31,4 +31,5 @@ end
 #  uuid               :uuid
 #  sandbox_id         :uuid
 #  group_id           :uuid
+#  internal           :boolean          default(FALSE)
 #

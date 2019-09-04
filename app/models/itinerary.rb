@@ -10,7 +10,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
   has_many :layovers,  dependent: :destroy
   has_many :shipments, dependent: :destroy
   has_many :trips,     dependent: :destroy
-  has_many :notes,     dependent: :destroy
+  has_many :notes,     dependent: :destroy, as: :target
   has_many :pricings,  dependent: :destroy
   has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
   has_many :hubs, through: :stops

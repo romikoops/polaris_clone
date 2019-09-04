@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Note < ApplicationRecord
+  belongs_to :target, polymorphic: true
   belongs_to :itinerary, optional: true
   belongs_to :hub, optional: true
   belongs_to :trucking_pricing, optional: true
@@ -21,4 +22,6 @@ end
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  sandbox_id          :uuid
+#  target_type         :string
+#  target_id           :integer
 #

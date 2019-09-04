@@ -53,6 +53,10 @@ RSpec.describe ExcelDataServices::DataValidators::InsertableChecks::Pricing do
         validator.perform
         expect(validator.errors).to eq(
           [{ exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks,
+             reason: 'Effective date must lie before before expiration date!',
+             row_nr: 2,
+             type: :error },
+           { exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks,
              reason: 'Hub with name "GothenERRORburg Port" not found!',
              row_nr: 2,
              type: :error },

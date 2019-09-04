@@ -80,14 +80,16 @@ module ExcelDataServices
         ).freeze
 
         SACO_SHIPPING = %i(
+          internal
           destination_country
           destination_hub
-          origin_hub
+          destination_locode
+          origin_locode
           transshipment_via
+          carrier
           effective_date
           expiration_date
           int/ref_nr
-          carrier
         ).freeze
 
         MARGINS = %i(

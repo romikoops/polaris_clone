@@ -829,6 +829,7 @@ DEPENDENCIES
   mailers!
   mailgun-ruby (~> 1.2.0)
   marginalia (~> 1.5)
+  mimemagic
   mini_magick
   mjml-rails (~> 4.1)
   mobility (~> 0.8.6)

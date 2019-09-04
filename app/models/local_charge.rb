@@ -6,6 +6,7 @@ class LocalCharge < Legacy::LocalCharge
   belongs_to :tenant
   belongs_to :tenant_vehicle, optional: true
   belongs_to :counterpart_hub, class_name: 'Hub', optional: true
+  has_many :notes, dependent: :destroy, as: :target
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
@@ -43,4 +44,5 @@ end
 #  uuid               :uuid
 #  sandbox_id         :uuid
 #  group_id           :uuid
+#  internal           :boolean          default(FALSE)
 #

@@ -12,6 +12,7 @@ class Pricing < Legacy::Pricing # rubocop:disable Metrics/ClassLength
   has_many :pricing_details, as: :priceable, dependent: :destroy
   has_many :pricing_exceptions, dependent: :destroy
   has_many :pricing_requests, dependent: :destroy
+  has_many :notes, dependent: :destroy, as: :target
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create

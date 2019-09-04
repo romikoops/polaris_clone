@@ -143,6 +143,9 @@ gem 'money'
 # Use monetize gem to parse strings into Money objects
 gem 'monetize'
 
+# Use mimemagic
+gem 'mimemagic'
+
 group :development, :test do
   gem 'annotate'
   gem 'dotenv-rails', require: 'dotenv/rails-now'

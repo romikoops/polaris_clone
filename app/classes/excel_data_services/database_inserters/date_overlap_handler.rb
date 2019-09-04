@@ -73,11 +73,9 @@ module ExcelDataServices
           after_new_obj.transient_marked_as_old = true
         when 'Pricings::Pricing'
           after_new_obj.fees << old_obj.fees.map(&:dup)
-
-          # Although after_new_obj is a new object, its data reflects the old object.
-          # It should therefore be marked, such that no new pricing_details will be added
-          # to it in the further insertion process.
           after_new_obj.transient_marked_as_old = true
+        when 'LocalCharge'
+          after_new_obj.uuid = SecureRandom.uuid
         end
 
         after_new_obj

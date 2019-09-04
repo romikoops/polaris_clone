@@ -37,7 +37,8 @@ module ExcelDataServices
           user = get_user(row)
           itinerary = Itinerary.find_by(name: row.itinerary_name, tenant: tenant)
           check_customer_email(row, user)
-          check_general_overlapping_effective_period(row, user, itinerary)
+          check_correct_individual_effective_period(row)
+          check_overlapping_effective_periods(row, user, itinerary)
           check_hub_existence(row)
         end
 
@@ -58,7 +59,7 @@ module ExcelDataServices
           end
         end
 
-        def check_general_overlapping_effective_period(row, user, itinerary)
+        def check_overlapping_effective_periods(row, user, itinerary)
           return if itinerary.nil?
 
           pricings = itinerary.pricings

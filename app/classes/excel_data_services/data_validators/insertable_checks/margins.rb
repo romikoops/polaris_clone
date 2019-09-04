@@ -7,8 +7,9 @@ module ExcelDataServices
         private
 
         def check_single_data(row)
+          check_correct_individual_effective_period(row)
           itinerary = check_itinerary(row)
-          check_general_overlapping_effective_period(row, itinerary)
+          check_overlapping_effective_periods(row, itinerary)
         end
 
         def check_itinerary(row)
@@ -18,12 +19,12 @@ module ExcelDataServices
           add_to_errors(
             type: :error,
             row_nr: row.nr,
-            reason: "No Itinerary can be found with the name #{ow.itinerary_name}.\n",
+            reason: "No Itinerary can be found with the name #{row.itinerary_name}.",
             exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks
           )
         end
 
-        def check_general_overlapping_effective_period(row, itinerary)
+        def check_overlapping_effective_periods(row, itinerary)
           return if itinerary.nil?
 
           margins = itinerary.margins

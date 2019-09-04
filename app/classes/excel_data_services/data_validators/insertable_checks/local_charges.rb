@@ -7,11 +7,13 @@ module ExcelDataServices
         private
 
         def check_single_data(row)
-          non_existent_hubs = check_hub_existence(row)
-          check_overlapping_effective_period(row) unless non_existent_hubs
+          return unless check_all_hubs_exist(row)
+
+          check_correct_individual_effective_period(row)
+          check_overlapping_effective_periods(row)
         end
 
-        def check_overlapping_effective_period(row) # rubocop:disable Metrics/AbcSize
+        def check_overlapping_effective_periods(row)
           hub = Hub.find_by(tenant: tenant, name: row.hub_name, hub_type: row.mot)
           counterpart_hub = Hub.find_by(tenant: tenant, name: row.counterpart_hub_name, hub_type: row.mot)
           local_charges = hub.local_charges
@@ -46,10 +48,10 @@ module ExcelDataServices
           )
         end
 
-        def check_hub_existence(row)
+        def check_all_hubs_exist(row)
+          all_hubs_exist = true
           hub_names = [row.hub_name, row.counterpart_hub_name].compact # counterpart hub can be nil
 
-          non_existent_hubs = false
           hub_names.each do |hub_name|
             hub = Hub.find_by(tenant: tenant, name: hub_name)
 
@@ -61,10 +63,10 @@ module ExcelDataServices
               reason: "Hub with name \"#{hub_name}\" not found!",
               exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks
             )
-            non_existent_hubs = true
+            all_hubs_exist = false
           end
 
-          non_existent_hubs
+          all_hubs_exist
         end
       end
     end

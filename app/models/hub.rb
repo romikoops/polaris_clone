@@ -14,7 +14,7 @@ class Hub < Legacy::Hub
   has_many :trucking_pricings, -> { distinct }, through: :hub_truckings
   has_many :local_charges
   has_many :customs_fees
-  has_many :notes, dependent: :destroy
+  has_many :notes, dependent: :destroy, as: :target
   has_many :hub_truck_type_availabilities
   has_many :truck_type_availabilities, through: :hub_truck_type_availabilities
   has_many :trucking_hub_availabilities, class_name: 'Trucking::HubAvailability'

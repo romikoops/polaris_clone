@@ -16,22 +16,22 @@ class Container < Legacy::Container
   }.freeze
 
   CARGO_CLASSES = %w(
-      fcl_10
-      fcl_20
-      fcl_20_ot
-      fcl_20_rf
-      fcl_20_frs
-      fcl_20_frw
-      fcl_40
-      fcl_40_hq
-      fcl_40_ot
-      fcl_40_rf
-      fcl_40_frs
-      fcl_40_frw
-      fcl_45
-      fcl_45_hq
-      fcl_45_rf
-    )
+    fcl_10
+    fcl_20
+    fcl_20_ot
+    fcl_20_rf
+    fcl_20_frs
+    fcl_20_frw
+    fcl_40
+    fcl_40_hq
+    fcl_40_ot
+    fcl_40_rf
+    fcl_40_frs
+    fcl_40_frw
+    fcl_45
+    fcl_45_hq
+    fcl_45_rf
+  ).freeze
 
   PRICING_WEIGHT_STEPS = [28.0, 24.0, 18.0, 14.0, 5.0].freeze
 

@@ -3,7 +3,6 @@
 module ExcelDataServices
   module DataRestructurers
     class Base
-
       MOT_HUB_NAME_LOOKUP =
         { 'ocean' => 'Port',
           'air' => 'Airport',
@@ -12,6 +11,7 @@ module ExcelDataServices
 
       LOCODE_TO_NAME_LOOKUP =
         { 'DEHAM' => 'Hamburg',
+          'DEWVN' => 'Wilhelmshaven',
           'BEANR' => 'Antwerp',
           'DEBRV' => 'Bremerhaven',
           'NLRTM' => 'Rotterdam' }.freeze
@@ -58,12 +58,31 @@ module ExcelDataServices
       attr_reader :tenant, :data
 
       def replace_nil_equivalents_with_nil(rows_data)
-        rows_data.map do |row_data|
+        rows_data.each do |row_data|
           row_data.each do |k, v|
-            row_data[k] = nil if v.to_s.strip =~ %r{^n/a$|^-$|^$}i # 'n/a', '-', ''
+            row_data[k] = nil if v.to_s.strip.match?(%r{^n/a$|^-$|^$}i) # 'n/a', '-', ''
           end
+        end
+      end
 
-          row_data
+      def replace_true_equivalents_with_true(rows_data)
+        rows_data.each do |row_data|
+          row_data.each do |k, v|
+            row_data[k] = true if v.to_s.strip.match?(/^x$|^true$/i) # 'x', 'true'
+          end
+        end
+      end
+
+      def clean_html_format_artifacts(rows_data)
+        rows_data.each do |row_data|
+          row_data.keys.each do |key|
+            new_key = key.to_s.remove('html')
+                         .remove(/(?<=[^a-z])[a-z](?=[^a-z])/)
+                         .remove(%r{(?<![a-z0-9\(])(_|/)})
+                         .remove(%r{(_|/)(?![a-z0-9\(])})
+                         .to_sym
+            row_data[new_key] = row_data.delete(key)
+          end
         end
       end
 
@@ -75,11 +94,10 @@ module ExcelDataServices
 
       def expand_fcl_to_all_sizes(rows_data)
         plain_fcl_local_charges_params = rows_data.select { |row_data| row_data[:load_type] == 'fcl' }
-        expanded_local_charges_params = (@scope['active_cargo_classes'] || Container::CARGO_CLASSES).reduce([]) do |memo, fcl_size|
+
+        expanded_local_charges_params = Container::CARGO_CLASSES.reduce([]) do |memo, fcl_size|
           memo + plain_fcl_local_charges_params.map do |params|
-            params.dup.tap do |pms|
-              pms[:load_type] = fcl_size
-            end
+            params.dup.tap { |pms| pms[:load_type] = fcl_size }
           end
         end
         rows_data = rows_data.reject { |params| params[:load_type] == 'fcl' }

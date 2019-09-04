@@ -22,6 +22,17 @@ module ExcelDataServices
         def check_single_data(_single_data)
           raise NotImplementedError, "This method must be implemented in #{self.class.name}."
         end
+
+        def check_correct_individual_effective_period(row)
+          return if row.effective_date < row.expiration_date
+
+          add_to_errors(
+            type: :error,
+            row_nr: row.nr,
+            reason: 'Effective date must lie before before expiration date!',
+            exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks
+          )
+        end
       end
     end
   end

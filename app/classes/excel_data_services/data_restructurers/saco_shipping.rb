@@ -3,14 +3,28 @@
 module ExcelDataServices
   module DataRestructurers
     class SacoShipping < Base # rubocop:disable Metrics/ClassLength
+      TREAT_AS_NOTE_COLUMNS = %i(
+        transshipment_via
+        remarks
+      ).freeze
+
       ROW_IDENTIFIER_KEYS = %i(
         sheet_name
         data_restructurer_name
+        internal
         destination_country
         destination_hub
-        origin_hub
-        transshipment_via
+        destination_locode
+        origin_locode
         carrier
+      ).freeze
+
+      ADDITIONAL_KEYS_SAME_FOR_ALL = %i(
+        effective_date
+        expiration_date
+        mot
+        rate_basis
+        row_nr
       ).freeze
 
       LOCAL_CHARGES_GROUPING_KEYS = %i(
@@ -26,44 +40,38 @@ module ExcelDataServices
         direction
       ).freeze
 
+      CONTAINER_CLASSES_LOOKUP = {
+        'fcl_20' => %w(fcl_20),
+        'fcl_40' => %w(fcl_40 fcl_40_hq)
+      }.freeze
+
       STANDARD_OCEAN_FREIGHT_FEE_CODE = 'BAS'
 
-      def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        sheet_name = data[:sheet_name]
-        data_restructurer_name = data[:data_restructurer_name]
-        restructured_data = replace_nil_equivalents_with_nil(data[:rows_data])
+      MONTHS_GERMAN_TO_ENGLISH_LOOKUP = {
+        'MAI' => 'MAY',
+        'OKT' => 'OCT',
+        'DEZ' => 'DEC'
+      }.freeze
 
-        restructured_data = restructured_data.map do |row_data|
-          { sheet_name: sheet_name,
-            data_restructurer_name: data_restructurer_name }.merge(row_data)
-        end
+      def initialize(tenant:, data:)
+        super
+        @restructured_data = nil # TODO: Transfer this to base class
+      end
 
-        # Throw away [internal data, remarks and transshipment]
-        # TODO: Use the data!
-        internal_keys = restructured_data.first.keys.select { |k| k.to_s.starts_with?('int/') }
-        restructured_data.each do |row_data|
-          row_data.except!(*internal_keys, :remarks, :transshipment_via)
-        end
-
-        restructured_data = expand_to_multiple(restructured_data)
-
-        restructured_data.each do |single_data|
-          klass_identifier =
-            ExcelDataServices::DataRestructurers::InsertionTypeDetector.detect(single_data, data_restructurer_name)
-          single_data[:klass_identifier] = klass_identifier
-        end
-
-        restructured_data = expand_fcl_to_all_sizes(restructured_data) # TODO: Really necessary?
+      def perform
+        @restructured_data = rows_data_with_meta_information
+        treat_some_columns_as_notes
+        ignore_data_with_int_prefix
+        replace_nil_equivalents_with_nil(restructured_data) # TODO: change method to use instance variable
+        replace_true_equivalents_with_true(restructured_data) # TODO: change method to use instance variable
+        replace_blank_with_false_for_internal_flag
+        clean_html_format_artifacts(restructured_data) # TODO: change method to use instance variable
+        @restructured_data = expand_to_multiple
 
         restructured_data_pricings, restructured_data_local_charges =
-          restructured_data.partition { |row_data| row_data[:klass_identifier] == 'Pricing' }
-
-        restructured_data_pricings.each { |row_data| row_data.delete(:direction) }
+          restructured_data.partition { |row_data| row_data.delete(:klass_identifier) == 'Pricing' }
         restructured_data_pricings = add_hub_names(restructured_data_pricings)
-
-        # Necessary until we get rid of structure "one pricing<->many pricing_details"
         restructured_data_pricings = group_by_params(restructured_data_pricings, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS)
-
         restructured_data_local_charges = pricings_format_to_local_charges_format(restructured_data_local_charges)
 
         { 'Pricing' => restructured_data_pricings,
@@ -72,128 +80,118 @@ module ExcelDataServices
 
       private
 
-      def expand_to_multiple(rows_data)
-        rows_data.flat_map do |row_data|
+      attr_reader :restructured_data
+
+      def rows_data_with_meta_information
+        data[:rows_data].map do |row_data|
+          new_row_data = row_data.dup
+          new_row_data[:sheet_name] = data[:sheet_name]
+          new_row_data[:data_restructurer_name] = data[:data_restructurer_name]
+          new_row_data
+        end
+      end
+
+      def treat_some_columns_as_notes
+        restructured_data.each do |row_data|
+          TREAT_AS_NOTE_COLUMNS.each do |col_name|
+            row_data[:"note/#{col_name}"] = row_data.delete(col_name)
+          end
+        end
+      end
+
+      def ignore_data_with_int_prefix
+        internal_keys = restructured_data.first.keys.select { |k| k.to_s.starts_with?('int/') }
+        restructured_data.each { |row_data| row_data.except!(*internal_keys) }
+      end
+
+      def replace_blank_with_false_for_internal_flag
+        restructured_data.each do |row_data|
+          row_data[:internal] = false if row_data[:internal].blank?
+        end
+      end
+
+      def expand_to_multiple
+        note_keys = restructured_data.first.keys.select { |k| k.to_s.starts_with?('note/') }
+        restructured_data.flat_map do |row_data|
           multiple_objs = expand_based_on_fee_containing_column(row_data)
-          multiple_objs = expand_based_on_effective_period(multiple_objs)
           multiple_objs = expand_based_on_type_of_fee(multiple_objs)
-          multiple_objs = adapt_origin_destination(multiple_objs)
           multiple_objs = expand_based_on_preliminary_load_type(multiple_objs)
+          notes = extract_notes(row_data, note_keys)
+          add_notes_to_pricings(multiple_objs, notes)
+          adapt_origin_destination(multiple_objs)
           multiple_objs.uniq
         end
       end
 
-      def expand_based_on_fee_containing_column(row_data) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        restructured_data = []
-
-        same_for_all_fees = row_data.slice(*ROW_IDENTIFIER_KEYS).merge(
-          mot: 'ocean',
-          rate_basis: 'PER_CONTAINER'
-        )
+      def expand_based_on_fee_containing_column(row_data)
         row_nr = row_data.delete(:row_nr)
-        whole_row_effective_date = Date.parse(row_data.delete(:effective_date).to_s)
-        whole_row_expiration_date = Date.parse(row_data.delete(:expiration_date).to_s)
-        rest = row_data.except(*ROW_IDENTIFIER_KEYS)
+        same_for_all_fees = row_data.slice(*ROW_IDENTIFIER_KEYS)
 
-        rest.each do |key, value|
+        full_effective_date = Date.parse(row_data.delete(:effective_date).to_s)
+        full_expiration_date = Date.parse(row_data.delete(:expiration_date).to_s)
+
+        # Map the data that is not the same for all fees and combine each object with the data that is the same for all
+        multiple_objs = row_data.except(*ROW_IDENTIFIER_KEYS).map do |key, value|
           col_name = key.to_s
-          next if value.blank? || col_name[/_month/]
+          next if value.blank? || col_name.starts_with?('note/') || col_name.match?(/curr_month|next_month/)
 
-          if col_name[/(curr|next)/]
-            effective_date, expiration_date = determine_correct_effective_period(
-              col_name, row_data, whole_row_effective_date, whole_row_expiration_date
-            )
-          else
-            effective_date = whole_row_effective_date
-            expiration_date = whole_row_expiration_date
-          end
+          effective_date, expiration_date =
+            determine_correct_effective_period(col_name, row_data, full_effective_date, full_expiration_date)
 
-          restructured_single_data = same_for_all_fees.merge(
+          same_for_all_fees.merge(
             key => value,
             effective_date: effective_date,
             expiration_date: expiration_date,
+            mot: 'ocean',
+            rate_basis: 'PER_CONTAINER',
             row_nr: row_nr
           )
-
-          direction_key = col_name.scan(/imp|exp/).first
-          if direction_key
-            direction = { 'imp' => 'import',
-                          'exp' => 'export' }[direction_key]
-            restructured_single_data[:direction] = direction
-          end
-
-          restructured_data << restructured_single_data
         end
 
-        restructured_data
-      end
-
-      def expand_based_on_effective_period(multiple_objs) # rubocop:disable Metrics/AbcSize
-        effective_periods = multiple_objs.map { |row_data| row_data.values_at(:effective_date, :expiration_date) }.uniq
-        return multiple_objs if effective_periods.size == 1
-
-        effective_periods.sort_by! { |date| date.second - date.first }
-        longest_period = effective_periods.last
-        shorter_periods = effective_periods[0...-1]
-        first_date_in_shorter_periods = shorter_periods.map(&:first).min
-        last_date_in_shorter_periods = shorter_periods.map(&:second).max
-
-        if longest_period.first > first_date_in_shorter_periods || longest_period.second < last_date_in_shorter_periods
-          raise "Some effective month values are out outside of #{longest_period}"
-        end
-
-        objs_with_longest_period, objs_with_shorter_period = multiple_objs.partition do |row_data|
-          row_data.values_at(:effective_date, :expiration_date) == longest_period
-        end
-
-        expanded_objs_with_longest_period = objs_with_longest_period.flat_map do |row_data|
-          shorter_periods.map do |effective_date, expiration_date|
-            row_data.merge(effective_date: effective_date, expiration_date: expiration_date)
-          end
-        end
-
-        objs_with_shorter_period + expanded_objs_with_longest_period
+        multiple_objs.compact
       end
 
       def determine_correct_effective_period(col_name, row_data, effective_date, expiration_date)
-        corresponding_month_key = col_name.sub(/(curr|next)/, '\1_month').to_sym
-        effective_month = row_data[corresponding_month_key]
+        if col_name.match?(/(curr_fee|next_fee)/)
+          corresponding_month_key = col_name.sub('fee', 'month').remove(%r{/\d+}).to_sym
+          effective_month = months_german_to_english(row_data[corresponding_month_key])
 
-        if effective_month && !effective_month[/-|incl/]
-          month_year = Date.parse("#{effective_month} #{effective_date.year}")
-          month_year = Date.parse("#{effective_month} #{expiration_date.year}") if month_year < effective_date
-          effective_date = month_year
-          expiration_date = month_year.next_month - 1.day
+          if effective_month && !effective_month.match?(%r{-|incl|n/a})
+            month_start = Date.parse("#{effective_month} #{effective_date.year}")
+            month_start = Date.parse("#{effective_month} #{expiration_date.year}") if month_start < effective_date
+
+            month_end = month_start.end_of_month.change(usec: 0)
+            if month_end < expiration_date
+              effective_date = month_start
+              expiration_date = month_end
+            end
+          end
         end
 
         [effective_date, expiration_date]
       end
 
-      def expand_based_on_type_of_fee(multiple_objs) # rubocop:disable MethodLength
-        multiple_objs = multiple_objs.map do |row_data| # rubocop:disable Metrics/BlockLength
-          additional_keys_same_for_all = %i(
-            row_nr
-            effective_date
-            expiration_date
-            mot
-            rate_basis
-            direction
-          )
-          same_for_all_fees = row_data.slice(*ROW_IDENTIFIER_KEYS, *additional_keys_same_for_all)
-          fee_column_data = row_data.except(*ROW_IDENTIFIER_KEYS, *additional_keys_same_for_all)
+      def months_german_to_english(month)
+        return if month.nil?
 
-          fee_column_key, fee_column_value = fee_column_data.first
+        month = I18n.transliterate(month[0..2]).upcase
+        MONTHS_GERMAN_TO_ENGLISH_LOOKUP[month] || month
+      end
+
+      def expand_based_on_type_of_fee(multiple_objs)
+        same_for_all_keys = [*ROW_IDENTIFIER_KEYS, *ADDITIONAL_KEYS_SAME_FOR_ALL]
+        multiple_objs.map do |row_data|
+          same_for_all_fees = row_data.slice(*same_for_all_keys)
+          fee_column_key, fee_column_value = row_data.except(*same_for_all_keys).first
           fee_is_included = fee_is_included?(fee_column_value)
 
           preliminary_load_type = determine_preliminary_load_type(fee_column_key)
-          fee_code, fee_name = determine_fee_naming_components(
-            fee_column_key, preliminary_load_type, fee_is_included
-          )
-          currency, fee = determine_fee_value_components(fee_is_included, fee_column_value)
+          fee_type, fee_code, fee_name =
+            determine_fee_identifiers(fee_column_key, preliminary_load_type, fee_is_included)
 
-          next unless fee.present?
-
+          currency, fee = determine_currency_and_fee(fee_is_included, fee_column_value)
           same_for_all_fees.merge(
+            klass_identifier: fee_type,
             preliminary_load_type: preliminary_load_type,
             fee_code: fee_code,
             fee_name: fee_name,
@@ -202,93 +200,103 @@ module ExcelDataServices
             fee_min: fee
           )
         end
-
-        multiple_objs.compact
       end
 
       def determine_preliminary_load_type(key)
-        pure_size_class = determine_pure_size_class(key.to_s)
-        "fcl_#{pure_size_class.remove('_dc')}".downcase if pure_size_class
+        pure_size_class = key.to_s.scan(/(20_?(dc)?|40_?(dc|hq)?)/).dig(0, 0)
+        pure_size_class = pure_size_class&.sub(/_*(dc|hq)/, '_\1')
+        "fcl_#{pure_size_class.remove('_dc')}" if pure_size_class
       end
 
-      def determine_pure_size_class(str)
-        pure_size_class = str.scan(/(20_?(dc)?|40_?(dc|hq)?)/).dig(0, 0)
-        pure_size_class&.sub(/_*(dc|hq)/, '_\1')
-      end
-
-      def determine_fee_naming_components(fee_column_key, preliminary_load_type, fee_is_included)
-        key_parts = fee_column_key.to_s.split('/')
-        case key_parts.size
-        when 1
-          fee_code = preliminary_load_type ? STANDARD_OCEAN_FREIGHT_FEE_CODE : key_parts.first.upcase
-          fee_name = fee_code.titleize
-        when 2
-          fee_code = key_parts.second.upcase
-          fee_name = fee_code.titleize
-        when 3
-          fee_code = key_parts.third.upcase
-          fee_name = fee_code.titleize
-        end
+      def determine_fee_identifiers(fee_column_key, preliminary_load_type, fee_is_included)
+        col_name = fee_column_key.to_s
+        fee_type = col_name.match?(%r{loch/}) ? 'LocalCharges' : 'Pricing'
+        fee_code = fee_code_by_fee_type(fee_type, preliminary_load_type, col_name)
+        fee_name = fee_code.titleize
 
         if fee_is_included
           fee_code = "INCLUDED_#{fee_code}"
           fee_name = "#{fee_name} (included)"
         end
 
-        [fee_code, fee_name]
+        [fee_type, fee_code, fee_name]
       end
 
-      def determine_fee_value_components(fee_is_included, fee_column_value)
-        if fee_is_included
-          currency = nil
-          fee = 0
-        else
-          currency = Monetize.parse(fee_column_value).currency.to_s
-          fee = fee_column_value.delete('^0-9').to_i # this regex only works correctly for integer fee values!
+      def fee_code_by_fee_type(fee_type, preliminary_load_type, col_name)
+        case fee_type
+        when 'Pricing'
+          preliminary_load_type ? STANDARD_OCEAN_FREIGHT_FEE_CODE : col_name.upcase
+        when 'LocalCharges'
+          col_name.match(%r{loch/(\d{2,}(dc|hq)*/)*([^\d/]+.*)})[3].upcase
         end
+      end
 
-        [currency, fee]
+      def determine_currency_and_fee(fee_is_included, fee_column_value)
+        return [nil, 0] if fee_is_included
+        return [nil, fee_column_value] unless fee_column_value.respond_to?(:currency)
+
+        [fee_column_value.currency.to_s, fee_column_value.to_d]
       end
 
       def fee_is_included?(value)
-        value[/incl/i]
+        value.match?(/incl/i) if value.respond_to?(:match?)
       end
 
       def adapt_origin_destination(multiple_objs)
-        multiple_objs.map do |row_data|
-          origin_hub = row_data.delete(:origin_hub)
-          origin_hub = determine_location_name_from_locode(origin_hub)
-          destination_hub = row_data.delete(:destination_hub)
-          destination_country = row_data.delete(:destination_country)
-          row_data[:origin] = origin_hub
+        multiple_objs.each do |row_data|
+          origin_locode = row_data.delete(:origin_locode)
+          row_data[:origin] = determine_location_name_from_locode(origin_locode)
           row_data[:country_origin] = nil
-          row_data[:destination] = destination_hub
-          row_data[:country_destination] = destination_country
-          row_data
+          row_data[:destination] = row_data.delete(:destination_hub)
+          row_data[:country_destination] = row_data.delete(:destination_country)
         end
       end
 
       def expand_based_on_preliminary_load_type(multiple_objs)
         multiple_objs.flat_map do |row_data|
           preliminary_load_type = row_data.delete(:preliminary_load_type)
-          determine_actual_load_types(preliminary_load_type).map do |load_type|
+
+          actual_load_types = determine_actual_load_types(preliminary_load_type, row_data[:klass_identifier])
+          actual_load_types.map do |load_type|
             row_data.merge(load_type: load_type)
           end
         end
       end
 
-      def determine_actual_load_types(preliminary_load_type)
-        if preliminary_load_type
-          [preliminary_load_type]
+      def determine_actual_load_types(preliminary_load_type, fee_type)
+        # `Container::CARGO_CLASSES` is explicitly not used, as SACO operates with a subset of containers types
+        # If no container type was explicitly specified in the header, all container classes are returned
+        return CONTAINER_CLASSES_LOOKUP.values.flatten unless preliminary_load_type
+
+        if fee_type == 'LocalCharges' && preliminary_load_type.match?(/40$/)
+          CONTAINER_CLASSES_LOOKUP[preliminary_load_type]
         else
-          Container::CARGO_CLASSES.map(&:downcase)
+          [preliminary_load_type]
+        end
+      end
+
+      def extract_notes(row_data, note_keys)
+        notes = row_data.slice(*note_keys).map do |key, val|
+          header = key.to_s.remove(%r{^note/}).titleize
+          if val == true
+            { header: header, body: nil }
+          elsif val.is_a?(String)
+            { header: header, body: val }
+          end
+        end
+        notes.compact
+      end
+
+      def add_notes_to_pricings(multiple_objs, notes)
+        multiple_objs.select { |row_data| row_data[:klass_identifier] == 'Pricing' }.each do |row_data|
+          row_data[:notes] = notes
         end
       end
 
       def pricings_format_to_local_charges_format(rows_data)
-        rows_data = adapt_for_local_charges_format(rows_data)
-        grouped_data = rows_data.group_by { |row_data| row_data.slice(*LOCAL_CHARGES_GROUPING_KEYS) }.values
+        adapt_for_local_charges_format(rows_data)
 
+        grouped_data = rows_data.group_by { |row_data| row_data.slice(*LOCAL_CHARGES_GROUPING_KEYS) }.values
         grouped_data.map do |group|
           same_for_all_in_group = group.first.slice(
             *LOCAL_CHARGES_GROUPING_KEYS,
@@ -298,29 +306,14 @@ module ExcelDataServices
           )
           row_nrs = group.map { |row_data| row_data[:row_nr] }.join(', ')
 
-          fees = {}
-          group.each do |row_data|
-            fee_code = row_data[:fee_code]
-            rate_basis = RateBasis.get_internal_key(row_data[:rate_basis].upcase)
-            fee = { fee_code => { currency: row_data[:currency],
-                                  key: fee_code,
-                                  min: row_data[:fee_min],
-                                  max: nil,
-                                  name: row_data[:fee_name],
-                                  rate_basis: rate_basis,
-                                  **specific_charge_params(rate_basis, row_data) } }
-
-            fees.merge!(fee)
-          end
-
-          same_for_all_in_group.merge(fees: fees).merge(row_nr: row_nrs)
+          same_for_all_in_group.merge(fees: local_charge_fees_from_group(group), row_nr: row_nrs)
         end
       end
 
       def adapt_for_local_charges_format(rows_data)
         rows_data.each do |row_data|
           row_data[:service_level] = 'standard'
-          row_data[:load_type] = row_data[:load_type].downcase
+          row_data[:load_type] = row_data[:load_type]
           row_data[:hub] = row_data.delete(:origin)
           row_data[:hub_name] = append_hub_suffix(row_data[:hub], row_data[:mot])
           row_data[:country] = row_data.delete(:country_origin)
@@ -328,8 +321,26 @@ module ExcelDataServices
           row_data[:counterpart_hub_name] = append_hub_suffix(row_data[:counterpart_hub], row_data[:mot])
           row_data[:counterpart_country] = row_data.delete(:country_destination)
         end
+      end
 
-        rows_data
+      def local_charge_fees_from_group(group)
+        group.each_with_object({}) do |row_data, fees_hsh|
+          fee_code = row_data[:fee_code]
+          rate_basis = RateBasis.get_internal_key(row_data[:rate_basis].upcase)
+          fee = {
+            fee_code => {
+              currency: row_data[:currency],
+              key: fee_code,
+              min: row_data[:fee_min],
+              max: nil,
+              name: row_data[:fee_name],
+              rate_basis: rate_basis,
+              **specific_charge_params(rate_basis, row_data)
+            }
+          }
+
+          fees_hsh.merge!(fee)
+        end
       end
 
       def specific_charge_params(rate_basis, single_data)

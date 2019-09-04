@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 
+require './lib/roo/excelx_money'
+
 module ExcelDataServices
   module Loaders
     class Uploader < Base
+      VALID_EXCEL_MIME_SUBTYPES = ['x-ole-storage',
+                                   'vnd.ms-excel',
+                                   'vnd.openxmlformats-officedocument.spreadsheetml.sheet'].freeze
+
       VALIDATION_FLAVORS = ['Missing Values',
                             'Insertable Checks',
                             'Smart Assumptions'].freeze
@@ -39,8 +45,9 @@ module ExcelDataServices
         all_sheets_raw_data.each do |per_sheet_raw_data|
           # Restructure individual sheet data
           data_by_insertion_type = restructure_data(per_sheet_raw_data)
+
+          # Per sheet there might be different insertion types (e.g. 'Pricing' and 'LocalCharges')
           data_by_insertion_type.each do |insertion_type, data_part|
-            # Per sheet there might be different insertion types (e.g. 'Pricing' and 'LocalCharges')
             insertion_type = insertion_type.to_s
 
             # Validate data per insertion type
@@ -65,8 +72,21 @@ module ExcelDataServices
       attr_reader :file_or_path, :options
 
       def open_spreadsheet_file(file_or_path)
-        file_or_path = Pathname(file_or_path).to_s
-        Roo::Spreadsheet.open(file_or_path)
+        path = Pathname(file_or_path).to_s
+
+        raise ExcelDataServices::DataValidators::ValidationErrors::UnsupportedFiletype unless valid_excel?(path)
+
+        Roo::ExcelxMoney.new(path)
+      end
+
+      def valid_excel?(path)
+        # Try binary first, then file extension
+        mime_subtype = MimeMagic.by_magic(File.open(path)).subtype
+        mime_subtype = MimeMagic.by_path(path).subtype if mime_subtype == 'zip'
+
+        return false unless mime_subtype
+
+        VALID_EXCEL_MIME_SUBTYPES.any? { |valid_subtype| valid_subtype.include?(mime_subtype) }
       end
 
       def parse_headers(header_row)
@@ -74,7 +94,7 @@ module ExcelDataServices
           next :'' if el.nil?
 
           el.downcase!
-          el.gsub!(%r{[^a-z0-9\/\-\_]+}, '_') # underscore instead of unwanted characters
+          el.gsub!(%r{[^a-z0-9\/\-\_\(\)]+}, '_') # underscore instead of unwanted characters
           el.to_sym
         end
       end

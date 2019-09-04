@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_15_003135) do
+ActiveRecord::Schema.define(version: 2019_09_04_092240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -524,6 +524,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_003135) do
     t.uuid "uuid", default: -> { "gen_random_uuid()" }
     t.uuid "sandbox_id"
     t.uuid "group_id"
+    t.boolean "internal", default: false
     t.index ["uuid"], name: "index_local_charges_on_uuid", unique: true
   end
 
@@ -674,6 +675,9 @@ ActiveRecord::Schema.define(version: 2019_08_15_003135) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "sandbox_id"
+    t.string "target_type"
+    t.integer "target_id"
+    t.index ["target_type", "target_id"], name: "index_notes_on_target_type_and_target_id"
   end
 
   create_table "oauth_access_grants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
