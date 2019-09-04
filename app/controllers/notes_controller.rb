@@ -8,9 +8,11 @@ class NotesController < ApplicationController
     itineraries = Itinerary.where(id: params[:itineraries])
     pricings = Pricings::Pricing.where(itinerary_id: params[:itineraries])
     legacy_pricings = Legacy::Pricing.where(itinerary_id: params[:itineraries])
-    raw_notes = Note.where(target: itineraries | pricings | legacy_pricings).uniq { |note| note.slice(:header, :body) }
+    raw_notes = Note.where(target: itineraries | pricings | legacy_pricings)
+    transformed_notes = raw_notes.map { |note| transform_note(note) }
+                                 .uniq { |note| note.slice('header', 'body', 'service') }
 
-    response_handler(raw_notes.map { |note| transform_note(note) })
+    response_handler(transformed_notes)
   end
 
   def delete
