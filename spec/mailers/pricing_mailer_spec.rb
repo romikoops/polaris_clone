@@ -9,7 +9,7 @@ RSpec.describe PricingMailer, type: :mailer do
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
-    stub_request(:post, 'https://breezypdf.itsmycargo.tech/render/html').to_return(status: 201, body: '', headers: {})
+    stub_request(:post, "#{Settings.breezy.url}/render/html").to_return(status: 201, body: '', headers: {})
   end
 
   describe 'request_email' do
