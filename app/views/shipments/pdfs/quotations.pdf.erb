@@ -200,7 +200,7 @@
           <% if  s.aggregated_cargo %>
             <div class="no_page_break item-group">
               <div class="title_row">
-                <p class="">"><strong>Aggregated Cargo</strong></p>
+                <p class=""><strong>Aggregated Cargo</strong></p>
               </div>
               <table class="data-table">
                 <tr>
@@ -215,8 +215,16 @@
                   <td class="table-value"><span><%= '%.3f' % (s.aggregated_cargo.volume) %>&nbsp;m<sup>3</span></sup></td>
                 </tr>
                  <tr>
-                  <td class="table-title"><p>Chargeable Weight</p></td>
-                  <td class="table-value"><span><%= '%.2f' % s.aggregated_cargo.chargeable_weight %></span></td>
+                  <td class="table-title">
+                    <p>
+                      <%= cargo_data[:chargeable_weight][s.id][s.aggregated_cargo.id.to_s][:total_title] %>
+                    </p>
+                  </td>
+                  <td class="table-value">
+                    <span>
+                      <%= cargo_data[:chargeable_weight][s.id][s.aggregated_cargo.id.to_s][:total_value] %>
+                    </span>
+                  </td>
                 </tr>
               </table>
             </div>

@@ -118,6 +118,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
 
     unless shipment.fcl?
       chargeable_weight = {}
+      shipment.aggregated_cargo&.set_chargeable_weight!
       vol = if shipment.aggregated_cargo
               shipment.aggregated_cargo.volume.to_f
             else
@@ -129,17 +130,20 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
               end
             end
       chargeable_value = if shipment.aggregated_cargo
-                           shipment.aggregated_cargo.weight.to_f
+                           agg = shipment.aggregated_cargo
+                           (agg.chargeable_weight || agg.calc_chargeable_weight('ocean'))&.to_f
                          else
                            shipment.cargo_units.inject(0) do |sum, hash|
                              sum + hash[:quantity].to_f * hash[:chargeable_weight].to_f
                            end
                          end
+
+      lcl_units = ([shipment.aggregated_cargo] + shipment.cargo_items).compact
       case @scope['chargeable_weight_view']
       when 'weight'
         chargeable_weight_cargo = chargeable_value
         cargo_string = " (Chargeable Weight: #{format('%.2f', chargeable_weight_cargo)} kg)"
-        shipment.cargo_units.each do |hash|
+        lcl_units.each do |hash|
           single_string = "#{format('%.2f', hash[:chargeable_weight])} kg"
           total_string = "#{format('%.2f', hash[:chargeable_weight])} kg"
           chargeable_weight[hash[:id].to_s] = {
@@ -152,9 +156,10 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       when 'volume'
         chargeable_weight_cargo = chargeable_value / 1000
         cargo_string = " (Chargeable Volume: #{format('%.3f', chargeable_weight_cargo)} m<sup>3</sup>)"
-        shipment.cargo_units.each do |hash|
+        lcl_units.each do |hash|
+          quantity = ensure_chargeable_weight_and_quantity(cargo: hash)
           single_string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} m<sup>3</sup>"
-          total_string = "#{format('%.3f', (hash[:chargeable_weight] / 1000 * hash[:quantity]))} m<sup>3</sup>"
+          total_string = "#{format('%.3f', (hash[:chargeable_weight] / 1000 * quantity))} m<sup>3</sup>"
           chargeable_weight[hash[:id].to_s] = {
             single_value: single_string,
             single_title: 'Chargeable&nbsp;Volume',
@@ -170,19 +175,17 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                        else
                          " (Chargeable&nbsp;Weight: #{chargeable_weight_cargo} kg)"
                        end
-        shipment.cargo_units.each do |hash|
-          hash.set_chargeable_weight! unless hash[:chargeable_weight]
-          hash[:chargeable_weight] = hash.calc_chargeable_weight('ocean') unless hash[:chargeable_weight]
+        lcl_units.each do |hash|
+          quantity = ensure_chargeable_weight_and_quantity(cargo: hash)
           single_string = if show_volume
                             "#{format('%.3f', (hash[:chargeable_weight] / 1000))} m<sup>3</sup>"
                           else
                             "#{format('%.2f', hash[:chargeable_weight])} kg"
                           end
-
           total_string = if show_volume
-                           "#{format('%.3f', (hash[:chargeable_weight] * hash[:quantity] / 1000))} m<sup>3</sup>"
+                           "#{format('%.3f', (hash[:chargeable_weight] * quantity / 1000))} m<sup>3</sup>"
                          else
-                           "#{format('%.2f', (hash[:chargeable_weight] * hash[:quantity]))} kg"
+                           "#{format('%.2f', (hash[:chargeable_weight] * quantity))} kg"
                          end
 
           chargeable_weight[hash[:id].to_s] = {
@@ -195,9 +198,10 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       when 'both'
         chargeable_weight_cargo = chargeable_value / 1000
         cargo_string = " (Chargeable: #{format('%.3f', chargeable_weight_cargo)} t | m<sup>3</sup>)"
-        shipment.cargo_units.each do |hash|
+        lcl_units.each do |hash|
+          quantity = ensure_chargeable_weight_and_quantity(cargo: hash)
           single_string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} t | m<sup>3</sup>"
-          total_string = "#{format('%.3f', (hash[:chargeable_weight] * hash[:quantity] / 1000))} t | m<sup>3</sup>"
+          total_string = "#{format('%.3f', (hash[:chargeable_weight] * quantity / 1000))} t | m<sup>3</sup>"
           chargeable_weight[hash[:id].to_s] = {
             single_value: single_string,
             single_title: 'Chargeable',
@@ -208,9 +212,10 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       else
         chargeable_weight_cargo = chargeable_value / 1000
         cargo_string = " (Chargeable: #{format('%.3f', chargeable_weight_cargo)} t | m<sup>3</sup>)"
-        shipment.cargo_units.each do |hash|
+        lcl_units.each do |hash|
+          quantity = ensure_chargeable_weight_and_quantity(cargo: hash)
           single_string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} t | m<sup>3</sup>"
-          total_string = "#{format('%.3f', (hash[:chargeable_weight] * hash[:quantity] / 1000))} t | m<sup>3</sup>"
+          total_string = "#{format('%.3f', (hash[:chargeable_weight] * quantity / 1000))} t | m<sup>3</sup>"
           chargeable_weight[hash[:id].to_s] = {
             single_value: single_string,
             single_title: 'Chargeable',
@@ -262,5 +267,11 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     raise BreezyError, response.body if response.code.to_i != 201
 
     response.body
+  end
+  
+  def ensure_chargeable_weight_and_quantity(cargo:)
+    cargo.set_chargeable_weight! unless cargo[:chargeable_weight]
+    cargo[:chargeable_weight] = cargo.calc_chargeable_weight('ocean') unless cargo[:chargeable_weight]
+    cargo[:quantity] || 1
   end
 end
