@@ -727,23 +727,10 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
 
   def self.save_pdf_quotes(shipment, tenant, schedules, sandbox = nil)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules, sandbox)
-    @quotes = main_quote.shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
-    logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
     send_on_download = ::Tenants::ScopeService.new(target: @user).fetch(:send_email_on_quote_download)
     QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_download
-    quotation = PdfHandler.new(
-      layout: 'pdfs/simple.pdf.html.erb',
-      template: 'shipments/pdfs/quotations.pdf.erb',
-      margin: { top: 10, bottom: 5, left: 8, right: 8 },
-      shipment: shipment,
-      shipments: main_quote.shipments,
-      quotes: @quotes,
-      logo: logo,
-      quotation: main_quote,
-      name: 'quotation',
-      remarks: Remark.where(tenant_id: tenant.id, sandbox: sandbox).order(order: :asc)
-    )
-    quotation.generate
+    document = PdfService.new(user: shipment.user, tenant: tenant).quotation_pdf(quotation: main_quote)
+    document.attachment
   end
 
   def self.save_and_send_quotes(shipment, schedules, email, sandbox = nil)

@@ -260,6 +260,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         hub_names: @hub_names
       }
     )
+
     response = BreezyPDFLite::RenderRequest.new(
       doc_erb.render
     ).submit

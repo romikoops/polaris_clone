@@ -2,7 +2,9 @@
 
 class Quotation < ApplicationRecord
   has_many :shipments
+  has_many :documents
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+  belongs_to :user
 end
 
 # == Schema Information

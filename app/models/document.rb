@@ -50,6 +50,10 @@ class Document < Legacy::Document
     @url = get_file_url(url)
   end
 
+  def attachment
+    File.read(local_file_path)
+  end
+
   def local_file_path
     ActiveStorage::Blob.service.send(:path_for, file.key)
   end

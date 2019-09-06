@@ -18,25 +18,13 @@ class QuoteMailer < ApplicationMailer
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipments.first.mode_of_transport}.png"
     ).read
-    quotation = generate_and_upload_quotation(@quotes)
-    @document = Document.create!(
-      shipment: shipment,
-      text: "quotation_#{@shipments.pluck(:imc_reference).join(',')}",
-      doc_type: 'quotation',
-      user: @user,
-      tenant: @user.tenant,
-      sandbox: sandbox,
-      file: {
-        io: StringIO.new(quotation),
-        filename: "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf",
-        content_type: 'application/pdf'
-      }
-    )
+    
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
+    document = PdfService.new(user: @user, tenant: @user.tenant).quotation_pdf(quotation: @quotation)
+    attachments[pdf_name] = document.attachment
     attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
-    attachments[pdf_name] = quotation
-
+   
     mail(
       from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: @user.tenant_id).default_domain}")
                          .tap { |a| a.display_name = @user.tenant.name }.format,
@@ -62,27 +50,14 @@ class QuoteMailer < ApplicationMailer
     @shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
     @quotation = quotation
     @quotes = quotes_with_trip_id(@quotation, @shipments)
-    @user = @shipment.user
+    @user = (quotation&.user || shipment&.user)
     @theme = @user.tenant.theme
     @content = Content.get_component('QuotePdf', @user.tenant.id)
     @scope = ::Tenants::ScopeService.new(target: @user).fetch
-    quotation = generate_and_upload_quotation(@quotes, sandbox)
-    @document = Document.create!(
-      shipment: @shipment,
-      text: "quotation_#{@shipments.pluck(:imc_reference).join(',')}",
-      doc_type: 'quotation',
-      user: @user,
-      tenant: @user.tenant,
-      sandbox: sandbox,
-      file: {
-        io: StringIO.new(quotation),
-        filename: "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf",
-        content_type: 'application/pdf'
-      }
-    )
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
+    document = PdfService.new(user: @user, tenant: @user.tenant).admin_quotation(quotation: @quotation, shipment: shipment)
+    attachments[pdf_name] = document.attachment
     attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
-    attachments[pdf_name] = quotation
     @hub_names = {
       origin: Trip.find(@quotes.first['trip_id']).itinerary.first_stop.hub.name,
       destination: Trip.find(@quotes.first['trip_id']).itinerary.last_stop.hub.name
