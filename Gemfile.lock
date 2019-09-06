@@ -697,7 +697,7 @@ GEM
       hashie
     sentry-raven (2.11.0)
       faraday (>= 0.7.6, < 1.0)
-    shoryuken (4.0.3)
+    shoryuken (5.0.1)
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
@@ -867,7 +867,7 @@ DEPENDENCIES
   sass-rails
   scientist
   sentry-raven
-  shoryuken
+  shoryuken (~> 5.0.1)
   shoulda-matchers
   signet
   simplecov

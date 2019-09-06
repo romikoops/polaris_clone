@@ -45,7 +45,7 @@ gem 'aws-sdk-s3', '~> 1.30.1'
 gem 'aws-sdk-sqs', '~> 1.10.0'
 
 gem 'font-awesome-rails'
-gem 'shoryuken'
+gem 'shoryuken', '~> 5.0.1'
 
 # Used to ensure rgeo is rebuilt on deploy
 gem 'rgeo', git: 'https://github.com/rgeo/rgeo.git', tag: 'v2.0.0'
