@@ -53,7 +53,7 @@ class PdfService
     quotes = quotes_with_trip_id(quotation, shipments)
     file = generate_pdf(
       shipment: shipment,
-      shipments: quotation.shipments,
+      shipments: shipments,
       quotes: quotes,
       quotation: quotation
     )
@@ -61,14 +61,14 @@ class PdfService
 
     Document.create!(
       shipment: shipment,
-      text: "quotation_#{quotation.shipments.pluck(:imc_reference).join(',')}",
+      text: "quotation_#{shipments.pluck(:imc_reference).join(',')}",
       doc_type: 'quotation',
       user: user,
       tenant: tenant,
       sandbox: sandbox,
       file: {
         io: StringIO.new(file),
-        filename: "quotation_#{quotation.shipments.pluck(:imc_reference).join(',')}.pdf",
+        filename: "quotation_#{shipments.pluck(:imc_reference).join(',')}.pdf",
         content_type: 'application/pdf'
       }
     )
