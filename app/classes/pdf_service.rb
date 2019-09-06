@@ -27,6 +27,8 @@ class PdfService
       remarks: Remark.where(tenant_id: tenant.id, sandbox: sandbox).order(order: :asc)
     )
     pdf.generate
+  rescue 
+    nil
   end
 
   def quotes_with_trip_id(quotation, shipments)
@@ -55,6 +57,8 @@ class PdfService
       quotes: quotes,
       quotation: quotation
     )
+    return nil if file.nil?
+
     Document.create!(
       shipment: shipment,
       text: "quotation_#{quotation.shipments.pluck(:imc_reference).join(',')}",
@@ -82,6 +86,8 @@ class PdfService
       quotes: quotes,
       quotation: quotation
     )
+    return nil if file.nil?
+    
     Document.create!(
       quotation: quotation,
       text: "quotation_#{quotation.shipments.pluck(:imc_reference).join(',')}",

@@ -20,8 +20,8 @@ class QuoteMailer < ApplicationMailer
     ).read
     
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
-    document = PdfService.new(user: @user, tenant: @user.tenant).quotation_pdf(quotation: @quotation)
-    attachments[pdf_name] = document.attachment
+    document = PdfService.new(user: @user, tenant: @user.tenant).quotation_pdf(quotation: @quotation)&.attachment
+    attachments[pdf_name] = document if document.present?
     attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
    
@@ -55,8 +55,8 @@ class QuoteMailer < ApplicationMailer
     @content = Content.get_component('QuotePdf', @user.tenant.id)
     @scope = ::Tenants::ScopeService.new(target: @user).fetch
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
-    document = PdfService.new(user: @user, tenant: @user.tenant).admin_quotation(quotation: @quotation, shipment: shipment)
-    attachments[pdf_name] = document.attachment
+    document = PdfService.new(user: @user, tenant: @user.tenant).admin_quotation(quotation: @quotation, shipment: shipment)&.attachment
+    attachments[pdf_name] = document if document.present?
     attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
     @hub_names = {
       origin: Trip.find(@quotes.first['trip_id']).itinerary.first_stop.hub.name,
