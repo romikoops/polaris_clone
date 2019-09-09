@@ -27,7 +27,10 @@ class PdfService
       remarks: Remark.where(tenant_id: tenant.id, sandbox: sandbox).order(order: :asc)
     )
     pdf.generate
-  rescue 
+  rescue Errno::ECONNRESET => e
+    Raven.capture_exception(e)
+    nil
+  rescue PdfHandler::BreezyError
     nil
   end
 
@@ -45,7 +48,7 @@ class PdfService
                         else
                           Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'quotation', sandbox: sandbox)
     end
-    return existing_document if existing_document
+    return existing_document if existing_document&.file.present?
 
     shipments = quotation ? quotation.shipments : [shipment]
     shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
@@ -76,7 +79,7 @@ class PdfService
 
   def quotation_pdf(quotation:)
     existing_document = Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox: sandbox)
-    return existing_document if existing_document
+    return existing_document if existing_document&.file.present?
 
     quotes = quotation.shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
     shipment = Shipment.find(quotation.original_shipment_id)

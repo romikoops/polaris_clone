@@ -51,7 +51,7 @@ class Document < Legacy::Document
   end
 
   def attachment
-    File.read(local_file_path)
+    file&.download
   end
 
   def local_file_path

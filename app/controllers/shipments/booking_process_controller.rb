@@ -20,7 +20,7 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def send_quotes
-    ShippingTools.save_and_send_quotes(shipment, params[:quotes], params[:email], @sandbox)
+    ShippingTools.save_and_send_quotes(shipment, save_and_send_params[:quotes].map(&:to_h), params[:email], @sandbox)
     response_handler(params)
   end
 
@@ -108,6 +108,16 @@ class Shipments::BookingProcessController < ApplicationController
 
   def result_params
     params.require(:options).permit(quotes:
+      [
+        quote: {},
+        schedules: [:id, :mode_of_transport, :total_price, :eta, :etd, :closing_date, :vehicle_name,
+                    :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
+        meta: {}
+      ])
+  end
+
+  def save_and_send_params
+    params.permit(quotes:
       [
         quote: {},
         schedules: [:id, :mode_of_transport, :total_price, :eta, :etd, :closing_date, :vehicle_name,
