@@ -1,4 +1,4 @@
-  <div class="wrapper-quotations">
+<div class="wrapper-quotations">
   <% primary_color = tenant.theme["colors"]["primary"] %>
   <% neutral_color = '#C4C4C4' %>
   <% tenant_logo_asset = "logoLarge_" + tenant["subdomain"] + ".png" %>
@@ -8,13 +8,13 @@
   <% weight_units = scope['values']['weight'] %>
 
   <div class="title display-flex">
-    <div>
+    <div class="title-left">
       <h1>QUOTATIONS</h1>
       <hr style="border-color: <%= primary_color %>">
       <p><%= tenant.name %></p>
     </div>
-    <div>
-      <img src="<%=tenant.theme['logoSmall']%>" alt="" class="header-logo">
+    <div class="title-logo">
+      <img src="data:image/png;base64,<%=logo%>" alt="" class="header-logo">
     </div>
     <div class="agent-info">
         <p><strong><%= shipment.user.first_name %> <%= shipment.user.last_name %></strong></p>
@@ -153,8 +153,8 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="table-title"><p><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_title] %></p></td>
-                  <td class="table-value"><span><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_value] %></span></td>
+                  <td class="table-title"><p><%== cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_title] %></p></td>
+                  <td class="table-value"><span><%== cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_value] %></span></td>
                 </tr>
               </table>
             </div>
@@ -210,11 +210,11 @@
                     <span><%="#{"%.#{weight_units['decimals']}f" % agc_value} #{weight_units['unit']}" %></span>
                   </td>
                 </tr>
-                 <tr>
+                <tr>
                   <td class="table-title"><p>Total Volume</p></td>
                   <td class="table-value"><span><%= '%.3f' % (s.aggregated_cargo.volume) %>&nbsp;m<sup>3</span></sup></td>
                 </tr>
-                 <tr>
+                <tr>
                   <td class="table-title">
                     <p>
                       <%= cargo_data[:chargeable_weight][s.id][s.aggregated_cargo.id.to_s][:total_title] %>
@@ -288,7 +288,7 @@
             <h4>
                 <%= charge_name %>
                 <% if scope['show_chargeable_weight'] && !['import', 'export'].include?(charge_key) %>
-                  <%= cargo_data[:chargeable_weight][s.id][charge_key.to_sym] %>
+                  <%== cargo_data[:chargeable_weight][s.id][charge_key.to_sym] %>
                  <% end %>
             </h4>
              <% if charge_key == 'cargo'
@@ -359,9 +359,9 @@
                           if scope['hide_sub_totals'] && charge_key.include?('unknown')
                             "#{s.mode_of_transport} Freight: "
                           elsif charge_key == 'cargo' && !scope['fine_fee_detail']
-                            "#{'%.2f' % sub_charges.sum{|c| c['total']['value']}}&nbsp;#{currency_key}"
+                            "#{'%.2f' % sub_charges.sum{|c| c['total']['value']}} #{currency_key}"
                           else
-                            "#{'%.2f' % sub_charges.sum{|c| c['value']}}&nbsp;#{currency_key}"
+                            "#{'%.2f' % sub_charges.sum{|c| c['value']}} #{currency_key}"
                           end
                           %>
                       </h3>

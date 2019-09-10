@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'pdfkit'
+require 'open-uri'
 class PdfHandler # rubocop:disable Metrics/ClassLength
   include ApplicationHelper
   BreezyError = Class.new(StandardError)
@@ -238,7 +240,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
   end
 
   def generate
-    doc_erb = ErbTemplate.new(
+    pdf_html = ActionController::Base.new.render_to_string(
       layout: @layout,
       template: @template,
       locals: {
@@ -261,15 +263,10 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       }
     )
 
-    response = BreezyPDFLite::RenderRequest.new(
-      doc_erb.render
-    ).submit
-
-    raise BreezyError, response.body if response.code.to_i != 201
-
-    response.body
+    pdf = PDFKit.new(pdf_html)
+    pdf.to_pdf
   end
-  
+
   def ensure_chargeable_weight_and_quantity(cargo:)
     cargo.set_chargeable_weight! unless cargo[:chargeable_weight]
     cargo[:chargeable_weight] = cargo.calc_chargeable_weight('ocean') unless cargo[:chargeable_weight]
