@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 PDFKit.configure do |config|
+  config.wkhtmltopdf = '/opt/rubies/ruby-2.5.3/bin/wkhtmltopdf' if Rails.env.production?
   config.default_options = {
     page_size: 'A4',
     print_media_type: true,
