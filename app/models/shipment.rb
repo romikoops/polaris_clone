@@ -442,11 +442,9 @@ class Shipment < Legacy::Shipment
   end
 
   def route_notes
-    [itinerary&.notes,
-     origin_hub&.notes,
-     destination_hub&.notes,
-     Note.where(trucking_pricing_id: trucking.dig('on_carriage', 'address_id')),
-     Note.where(trucking_pricing_id: trucking.dig('pre_carriage', 'address_id'))].flatten.uniq.compact
+    return [] unless itinerary
+    
+    Note.where(target: itinerary&.pricings)
   end
 
   def as_index_json(options = {})
