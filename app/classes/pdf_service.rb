@@ -12,19 +12,28 @@ class PdfService
     @sandbox = sandbox
   end
 
-  def generate_pdf(shipment:, quotation:, shipments:, quotes:)
+  def generate_pdf(
+    template:,
+    name:,
+    shipment: nil,
+    shipments: nil,
+    quotes: nil,
+    quotation: nil,
+    load_type: nil
+  )
     logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
     pdf = PdfHandler.new(
       layout: 'pdfs/simple.pdf.html.erb',
-      template: 'shipments/pdfs/quotations.pdf.erb',
       margin: { top: 10, bottom: 5, left: 8, right: 8 },
+      logo: logo,
+      remarks: Remark.where(tenant_id: tenant.id, sandbox: sandbox).order(order: :asc),
+      template: template,
+      name: name,
       shipment: shipment,
       shipments: shipments,
       quotes: quotes,
-      logo: logo,
       quotation: quotation,
-      name: 'quotation',
-      remarks: Remark.where(tenant_id: tenant.id, sandbox: sandbox).order(order: :asc)
+      load_type: load_type
     )
     pdf.generate
   rescue Errno::ECONNRESET => e
@@ -32,6 +41,27 @@ class PdfService
     nil
   rescue PdfHandler::BreezyError
     nil
+  end
+
+  def generate_shipment_pdf(shipment:, load_type:)
+    generate_pdf(
+      template: 'shipments/pdfs/shipment_recap.pdf.html.erb',
+      shipment: shipment,
+      shipments: [shipment],
+      load_type: load_type,
+      name: 'shipment_recap'
+    )
+  end
+
+  def generate_quote_pdf(shipment:, shipments:, quotes:, quotation:)
+    generate_pdf(
+      template: 'shipments/pdfs/quotations.pdf.erb',
+      shipment: shipment,
+      shipments: shipments,
+      quotes: quotes,
+      quotation: quotation,
+      name: 'quotation'
+    )
   end
 
   def quotes_with_trip_id(quotation, shipments)
@@ -54,7 +84,7 @@ class PdfService
     shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
     quotation = quotation
     quotes = quotes_with_trip_id(quotation, shipments)
-    file = generate_pdf(
+    file = generate_quote_pdf(
       shipment: shipment,
       shipments: shipments,
       quotes: quotes,
@@ -83,14 +113,14 @@ class PdfService
 
     quotes = quotation.shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
     shipment = Shipment.find(quotation.original_shipment_id)
-    file = generate_pdf(
+    file = generate_quote_pdf(
       shipment: shipment,
       shipments: quotation.shipments,
       quotes: quotes,
       quotation: quotation
     )
     return nil if file.nil?
-    
+
     Document.create!(
       quotation: quotation,
       text: "quotation_#{quotation.shipments.pluck(:imc_reference).join(',')}",
@@ -101,6 +131,43 @@ class PdfService
       file: {
         io: StringIO.new(file),
         filename: "quotation_#{quotation.shipments.pluck(:imc_reference).join(',')}.pdf",
+        content_type: 'application/pdf'
+      }
+    )
+  end
+
+  def shipment_pdf(shipment:)
+    existing_document = Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'shipment_recap', sandbox: sandbox)
+    return existing_document if existing_document&.file.present?
+
+    cargo_count = shipment.cargo_units.count
+    load_type = ''
+    if shipment.load_type == 'cargo_item' && cargo_count > 1
+      load_type = 'Cargo Items'
+    elsif shipment.load_type == 'cargo_item' && cargo_count == 1
+      load_type = 'Cargo Item'
+    elsif shipment.load_type == 'container' && cargo_count > 1
+      load_type = 'Containers'
+    elsif shipment.load_type == 'container' && cargo_count == 1
+      load_type = 'Container'
+    end
+
+    file = generate_shipment_pdf(
+      shipment: shipment,
+      load_type: load_type
+    )
+    return nil if file.nil?
+
+    Document.create!(
+      shipment: shipment,
+      text: "shipment_#{shipment.imc_reference}",
+      doc_type: 'shipment_recap',
+      user: user,
+      tenant: tenant,
+      sandbox: sandbox,
+      file: {
+        io: StringIO.new(file),
+        filename: "shipment_#{shipment.imc_reference}.pdf",
         content_type: 'application/pdf'
       }
     )

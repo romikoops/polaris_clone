@@ -137,8 +137,7 @@
   </div>
 
   <div class="padding-top contacts-row">
-    <div class="display-flex">
-
+    <div class="display-flex contact-box">
       <div>
         <div class="basic-info">
           <div class="display-flex-center">
@@ -172,7 +171,7 @@
       <i class="fa fa-arrow-right"></i>
     </div>
 
-    <div class="display-flex">
+    <div class="display-flex contact-box">
       <div>
         <div class="basic-info">
           <div class="display-flex-center">
@@ -200,23 +199,23 @@
           <%= consignee.address.zip_code %> <%= consignee.address.city %>
         </h3>
       </div>
-
     </div>
   </div>
-
+  <% additional_services = scope['has_customs'] || scope['has_insurance']%>
+  <% service_css = additional_services ? "services-box" : "services-box wide" %>
   <div class="padding-top-double">
     <div class="border-box display-flex-center margin-bottom">
-      <div class="services-box">
+      <div class="<%= service_css %>">
         <div>
           <h3>Freight, Duties & Carriage:</h3>
             <div>
 
-              <div class="display-flex-center">
-                <div class="display-flex flex-grow margin-bottom">
+              <div class="display-flex-center whole">
+                <div class="display-flex half margin-bottom">
                   <i class="fa fa-truck" style="color: <%= shipment.has_pre_carriage ? primary_color : '#E0E0E0' %>"></i>
                   <p>Pick-up</p>
                 </div>
-                <div class="display-flex flex-grow margin-bottom">
+                <div class="display-flex half margin-bottom">
                   <i
                     class="fa fa-truck flip"
                     style="color: <%= shipment.has_on_carriage ? primary_color : '#E0E0E0' %>"
@@ -225,8 +224,8 @@
                 </div>
               </div>
 
-              <div class="display-flex-center">
-                <div class="display-flex flex-grow margin-bottom">
+              <div class="display-flex-center whole">
+                <div class="display-flex half margin-bottom">
                   <i
                     class="fa fa-file-o"
                     style="color: <%= shipment.selected_offer["export"] ? primary_color : '#E0E0E0' %>"
@@ -236,7 +235,7 @@
                 Local Charges
                   </p>
                 </div>
-                <div class="display-flex flex-grow margin-bottom">
+                <div class="display-flex half margin-bottom">
                   <i
                     class="fa fa-file"
                     style="color: <%= shipment.selected_offer["import"] ? primary_color : '#E0E0E0' %>">
@@ -248,7 +247,7 @@
                 </div>
               </div>
 
-              <div class="display-flex flex-grow margin-bottom">
+              <div class="display-flex margin-bottom whole">
                   <i
                     class="fa fa-ship" style="color: <%= primary_color %>"></i>
                 <p><%="#{shipment.mode_of_transport.capitalize} Freight" %></p>
@@ -339,8 +338,8 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="table-title"><p><%= cargo_data[:chargeable_weight][shipment.id][cargo.id.to_s][:total_title] %></p></td>
-                  <td class="table-value"><span><%= cargo_data[:chargeable_weight][shipment.id][cargo.id.to_s][:total_value] %></span></td>
+                  <td class="table-title"><p><%== cargo_data[:chargeable_weight][shipment.id][cargo.id.to_s][:total_title] %></p></td>
+                  <td class="table-value"><span><%== cargo_data[:chargeable_weight][shipment.id][cargo.id.to_s][:total_value] %></span></td>
                 </tr>
               </table>
             </div>
@@ -411,7 +410,7 @@
 
       <div class="notes-row">
         <div class="column-info display-flex border-bottom notes-upper">
-          <div class="display-flex">
+          <div class="display-flex third">
             <span>Total Value of Goods:</span>
             <p class="info-values">
                 <% if shipment.total_goods_value.is_a? Integer %>
@@ -424,7 +423,7 @@
             </p>
           </div>
 
-          <div class="display-flex">
+          <div class="display-flex third">
             <span>EORI number:</span>
             <p class="info-values">
               <% if shipment.eori %>
@@ -435,7 +434,7 @@
             </p>
           </div>
 
-          <div class="display-flex">
+          <div class="display-flex third">
             <span>Incoterm:</span>
             <p class="hyphens">
               <% if shipment.incoterm_text %>

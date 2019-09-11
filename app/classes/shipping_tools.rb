@@ -174,30 +174,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   end
 
   def self.generate_shipment_pdf(shipment:, sandbox: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    cargo_count = shipment.cargo_units.count
-    load_type = ''
-    if shipment.load_type == 'cargo_item' && cargo_count > 1
-      load_type = 'Cargo Items'
-    elsif shipment.load_type == 'cargo_item' && cargo_count == 1
-      load_type = 'Cargo Item'
-    elsif shipment.load_type == 'container' && cargo_count > 1
-      load_type = 'Containers'
-    elsif shipment.load_type == 'container' && cargo_count == 1
-      load_type = 'Container'
-    end
-
-    shipment_recap = PdfHandler.new(
-      layout: 'pdfs/simple.pdf.html.erb',
-      template: 'shipments/pdfs/shipment_recap.pdf.html.erb',
-      margin: { top: 10, bottom: 5, left: 8, right: 8 },
-      shipment: shipment,
-      shipments: [shipment],
-      load_type: load_type,
-      name: 'shipment_recap',
-      remarks: Remark.where(sandbox: sandbox, tenant_id: shipment.tenant_id).order(order: :asc)
-    )
-
-    shipment_recap.generate
+    document = PdfService.new(user: shipment.user, tenant: shipment.tenant).shipment_pdf(shipment: shipment)
+    document.attachment
   end
 
   def self.update_shipment(params, current_user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength

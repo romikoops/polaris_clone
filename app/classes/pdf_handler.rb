@@ -264,6 +264,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     )
 
     pdf = PDFKit.new(pdf_html)
+
     pdf.to_pdf
   end
 

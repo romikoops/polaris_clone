@@ -9,7 +9,7 @@
 }
 
 .refrow {
- display: flex;
+ display: -webkit-box;
  justify-content: space-between;
  .ref {
    width: 45%;
@@ -126,11 +126,15 @@ br{
 }
 .dates {
   align-items: center;
-  display: flex;
+  display: -webkit-box;
   justify-content: space-between;
   border-bottom: 3px solid #f5f5f5;
   padding-top: 10px;
+  width: 100%;
   padding-bottom: 10px;
+  div {
+    width: 25%;
+  }
   h4 {
     font-size: 12px;
     font-weight: bold;
@@ -395,9 +399,12 @@ br{
   margin: 14px 0 !important;
 }
 .main-title-shipment {
-  display: flex;
+  display: -webkit-box;
   justify-content: space-between;
   align-items: center;
+  div {
+    width: 50%;
+  }
 }
 .border-right {
   border-right: 2px solid #f5f5f5;
@@ -429,10 +436,10 @@ br{
   margin-left: -130px;
 }
 .display-flex {
-  display: flex;
+  display: -webkit-box;
 }
 .display-flex-center {
-  display: flex;
+  display: -webkit-box;
   justify-content: space-between;
   align-items: center;
   &.border-box {
@@ -440,7 +447,7 @@ br{
   }
 }
 .contacts-row {
-  display: flex;
+  display: -webkit-box;
   justify-content: space-between;
   align-items: center;
   h3 {
@@ -449,6 +456,10 @@ br{
   }
   p, h1, h2, h3 {
     margin: 0 auto;
+  }
+  .contact-box {
+    margin: 2.5%;
+    width: 40%;
   }
   .basic-info {
     i {
@@ -483,6 +494,7 @@ br{
     }
   }
   .arrow-circle {
+    width: 10%;
     font-size: 45px;
     color: #EAEAEA;
   }
@@ -507,6 +519,7 @@ br{
 }
 .border-box {
   border: 3px solid #f5f5f5;
+  overflow-x: none;
 }
 .border-bottom {
   border-bottom: 2px solid #f5f5f5;
@@ -550,9 +563,10 @@ br{
   margin-bottom: 17px;
 }
 .services-box {
-  flex: 0 0 260px;
-  padding-left: 30px;
+  padding-left: 5%;
   hyphens: auto;
+  width: 50%;
+  overflow-x: none;
   p {
     margin:0;
     font-size: 10px;
@@ -578,6 +592,18 @@ br{
     font-weight: bold;
   }
 }
+.services-box.wide {
+  width: 70%;
+}
+.third {
+  width: 33%;
+}
+.half {
+  width: 50%;
+}
+.whole {
+  width: 100%;
+}
 .flex-grow {
   flex-grow: 1;
 }
@@ -596,8 +622,10 @@ br{
     padding-right: 10px;
     font-size: 16px !important;
   }
+  width: 20%;
 }
 .total-section {
+  width: 19%;
   text-align: center;
   background: #f5f5f5;
   padding-left: 40px;
