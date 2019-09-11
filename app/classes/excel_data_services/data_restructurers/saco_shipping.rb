@@ -4,6 +4,7 @@ module ExcelDataServices
   module DataRestructurers
     class SacoShipping < Base # rubocop:disable Metrics/ClassLength
       TREAT_AS_NOTE_COLUMNS = %i(
+        terminal
         transshipment_via
         remarks
       ).freeze
@@ -44,6 +45,8 @@ module ExcelDataServices
         'fcl_20' => %w(fcl_20),
         'fcl_40' => %w(fcl_40 fcl_40_hq)
       }.freeze
+
+      OCEAN_FREIGHT_COLUMNS = %w(20dc 40dc 40hq).freeze
 
       STANDARD_OCEAN_FREIGHT_FEE_CODE = 'BAS'
 
@@ -210,7 +213,7 @@ module ExcelDataServices
 
       def determine_fee_identifiers(fee_column_key, preliminary_load_type, fee_is_included)
         col_name = fee_column_key.to_s
-        fee_type = col_name.match?(%r{loch/}) ? 'LocalCharges' : 'Pricing'
+        fee_type = OCEAN_FREIGHT_COLUMNS.include?(col_name) ? 'Pricing' : 'LocalCharges'
         fee_code = fee_code_by_fee_type(fee_type, preliminary_load_type, col_name)
         fee_name = fee_code.titleize
 
@@ -227,7 +230,7 @@ module ExcelDataServices
         when 'Pricing'
           preliminary_load_type ? STANDARD_OCEAN_FREIGHT_FEE_CODE : col_name.upcase
         when 'LocalCharges'
-          col_name.match(%r{loch/(\d{2,}(dc|hq)*/)*([^\d/]+.*)})[3].upcase
+          col_name.match(%r{(\D*/)*(\d{2,}(dc|hq)*/)*(.+)})[4].upcase
         end
       end
 
