@@ -25,7 +25,9 @@ variable `GOOGLE_CLOUD_KEYFILE` to pointing correct filename.
 
 After this, simply run rake task:
 
-    $ bin/rake db:drop db:import
+    $ bin/rake db:reload
+    
+Additionally you can add `:slim` or `:full` to this task to download a limited or full database seed.
 
 #### Overcommit
 
