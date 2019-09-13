@@ -37,10 +37,20 @@ class AdminRangeFeeTable extends PureComponent {
     const { sorted, innerSorted } = this.state
     const fees = row.original.data
     if (!fees) return ''
-
+    
+    const localChargeKeys = []
     const data = Object.keys(fees).map((k) => {
       const tempFee = fees[k]
       tempFee.feeCode = k
+      if (isLocalCharge) {
+        Object.keys(tempFee)
+          .filter(k => !['currency', 'feeCode', 'name', 'key', 'rate_basis'].includes(k))
+          .forEach((k) => {
+            if (!localChargeKeys.includes(k)) {
+              localChargeKeys.push(k)
+            }
+          })
+      }
 
       return tempFee
     })
