@@ -50,15 +50,32 @@ module OfferCalculatorService
 
     private
 
+    def dynamic_mandatory_charge_check(schedule:)
+      export = schedule.origin_hub.local_charges
+                       .exists?(direction: 'export', counterpart_hub_id: schedule.destination_hub_id) ||
+               schedule.origin_hub.local_charges
+                       .exists?(direction: 'export', counterpart_hub_id: nil)
+      import = schedule.destination_hub.local_charges
+                       .exists?(direction: 'export', counterpart_hub_id: schedule.origin_hub_id) ||
+               schedule.destination_hub.local_charges
+                       .exists?(direction: 'export', counterpart_hub_id: nil)
+
+      {
+        export: export && schedule.origin_hub.mandatory_charge.export_charges,
+        import: import && schedule.destination_hub.mandatory_charge.import_charges
+      }
+    end
+
     def sort_by_local_charge_periods(periods) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       export_periods = periods[:export] || {}
       import_periods = periods[:import] || {}
       schedules_by_charges = @schedules.map do |sched|
         start_date = sched.etd || Date.today + 4.days
+        check = dynamic_mandatory_charge_check(schedule: sched)
         export_key = export_periods.keys.select { |exk| start_date < exk[:expiration_date] && start_date > exk[:effective_date] }.first
         import_key = import_periods.keys.select { |imk| start_date < imk[:expiration_date] && start_date > imk[:effective_date] }.first
-        next if import_key.nil? && (@shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.import_charges)
-        next if export_key.nil? && (@shipment.has_pre_carriage || @schedule.origin_hub.mandatory_charge.export_charges)
+        next if import_key.nil? && (@shipment.has_on_carriage || check[:import])
+        next if export_key.nil? && (@shipment.has_pre_carriage || check[:export])
 
         {
           schedule: sched,
