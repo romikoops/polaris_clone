@@ -13,6 +13,8 @@ module ExcelDataServices
           old_is_covered_by_new?
         ).freeze
 
+        DATE_FORMAT = '%Y-%m-%d %H:%M'
+
         def initialize(old_obj, new_obj)
           @old_obj = old_obj
           @new_obj = new_obj
@@ -64,15 +66,11 @@ module ExcelDataServices
         end
 
         def old_effective_period
-          "#{old_effective_date.strftime(date_format)} - #{old_expiration_date.strftime(date_format)}"
+          "#{old_effective_date.strftime(DATE_FORMAT)} - #{old_expiration_date.strftime(DATE_FORMAT)}"
         end
 
         def new_effective_period
-          "#{new_effective_date.strftime(date_format)} - #{new_expiration_date.strftime(date_format)}"
-        end
-
-        def date_format
-          @date_format ||= '%Y-%m-%d %H:%M'
+          "#{new_effective_date.strftime(DATE_FORMAT)} - #{new_expiration_date.strftime(DATE_FORMAT)}"
         end
 
         private

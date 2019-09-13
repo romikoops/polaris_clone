@@ -75,6 +75,7 @@ module ExcelDataServices
           restructured_data.partition { |row_data| row_data.delete(:klass_identifier) == 'Pricing' }
         restructured_data_pricings = add_hub_names(restructured_data_pricings)
         restructured_data_pricings = group_by_params(restructured_data_pricings, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS)
+        restructured_data_local_charges = adapt_for_direction(restructured_data_local_charges)
         restructured_data_local_charges = pricings_format_to_local_charges_format(restructured_data_local_charges)
 
         { 'Pricing' => restructured_data_pricings,
@@ -352,6 +353,33 @@ module ExcelDataServices
         when 'PER_CONTAINER'
           { value: single_data[:fee] }
         end
+      end
+
+      def adapt_for_direction(rows_data)
+        rows_data.each do |row_data|
+          next row_data[:direction] = 'export' unless row_data[:fee_code].downcase.starts_with?('dest/')
+
+          row_data[:direction] = 'import'
+          remove_dest_keyword(row_data)
+          swap_origin_destination_and_remove_locodes(row_data)
+        end
+      end
+
+      def remove_dest_keyword(row_data)
+        row_data[:fee_code] = row_data[:fee_code].remove(%r{^dest/}i)
+        row_data[:fee_name] = row_data[:fee_code].titleize
+      end
+
+      def swap_origin_destination_and_remove_locodes(row_data)
+        temp = row_data[:origin]
+        row_data[:origin] = row_data[:destination]
+        row_data[:destination] = temp
+
+        temp = row_data[:country_origin]
+        row_data[:country_origin] = row_data[:country_destination]
+        row_data[:country_destination] = temp
+
+        row_data[:destination_locode] = nil
       end
     end
   end

@@ -112,8 +112,7 @@ module ExcelDataServices
             :hub_id,
             :counterpart_hub_id,
             :mode_of_transport,
-            :tenant_vehicle_id,
-            :direction
+            :tenant_vehicle_id
           ).merge(
             effective_date: Date.parse(params[:effective_date].to_s).beginning_of_day,
             expiration_date: Date.parse(params[:expiration_date].to_s).end_of_day.change(usec: 0),

@@ -31,12 +31,16 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
     [create(:hub, tenant: tenant, name: 'Gothenburg Port', hub_type: 'ocean'),
      create(:hub, tenant: tenant, name: 'Shanghai Port', hub_type: 'ocean')]
   end
-  let!(:itineraries) do
+  let(:itineraries) do
     [create(:itinerary, tenant: tenant)]
   end
+  let!(:stops) do
+    [create(:stop, hub: hubs.first, index: 0, itinerary: itineraries.first),
+     create(:stop, hub: hubs.second, index: 1, itinerary: itineraries.first)]
+  end
   let!(:transport_categories) do
-    [create(:transport_category, load_type: 'cargo_item', cargo_class: 'lcl')] + 
-      Container::CARGO_CLASSES.map {|cc| create(:transport_category, load_type: 'container', cargo_class: cc)}
+    [create(:transport_category, load_type: 'cargo_item', cargo_class: 'lcl')] +
+      Container::CARGO_CLASSES.map { |cc| create(:transport_category, load_type: 'container', cargo_class: cc) }
   end
   let(:tenant_vehicle) do
     create(:tenant_vehicle, tenant: tenant)
@@ -51,7 +55,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
           pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
           pricings: { number_created: 17, number_deleted: 1, number_updated: 0 },
-          stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
+          stops: { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
@@ -89,7 +93,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
           pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
           pricings: { number_created: 17, number_deleted: 1, number_updated: 1 },
-          stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
+          stops: { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
@@ -130,7 +134,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
           pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
           pricings: { number_created: 17, number_deleted: 1, number_updated: 0 },
-          stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
+          stops: { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
@@ -173,7 +177,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
           pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
           pricings: { number_created: 18, number_deleted: 1, number_updated: 2 },
-          stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
+          stops: { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
@@ -218,7 +222,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
           pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
           pricings: { number_created: 17, number_deleted: 1, number_updated: 1 },
-          stops: { number_created: 2, number_deleted: 0, number_updated: 0 } }
+          stops: { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [

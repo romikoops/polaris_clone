@@ -39,7 +39,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::LocalCharges do
     end
     let(:expected_partial_db_data) do
       [['ocean', 'lcl', 'export', { 'DOC' => { 'key' => 'DOC', 'max' => nil, 'min' => nil, 'name' => 'Documentation', 'value' => 20, 'currency' => 'EUR', 'rate_basis' => 'PER_BILL' } }],
-       ['ocean', 'lcl', 'export', { 'DOC' => { 'key' => 'DOC', 'max' => nil, 'min' => nil, 'name' => 'Documentation', 'range' => [{ 'currency' => 'EUR', 'max' => 100, 'min' => 0, 'value' => 20 }], 'currency' => 'EUR', 'rate_basis' => 'PER_BILL' } }],
+       ['ocean', 'lcl', 'export', { 'DOC' => { 'key' => 'DOC', 'max' => nil, 'min' => nil, 'name' => 'Documentation', 'range' => [{ 'max' => 100, 'min' => 0, 'value' => 20, 'currency' => 'EUR' }], 'currency' => 'EUR', 'rate_basis' => 'PER_BILL' } }],
        ['ocean', 'lcl', 'export', { 'DOC' => { 'key' => 'DOC', 'max' => nil, 'min' => nil, 'name' => 'Documentation', 'value' => 20, 'currency' => 'EUR', 'rate_basis' => 'PER_BILL' } }]]
     end
 
