@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
+import Fuse from 'fuse.js'
 import { withNamespaces } from 'react-i18next'
-import { camelCase } from 'lodash'
+import { camelCase, uniq } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -214,27 +215,55 @@ class Autocomplete extends PureComponent {
   handleInputChange (input) {
     const { countries } = this.props
     const options = { input }
+    const countryArrays = [[]]
     if (countries.length > 0) {
-      options.componentRestrictions = { country: countries }
+      let start = 0
+      while (start < countries.length) {
+        countryArrays.push(countries.slice(start, start + 5))
+        start += 5
+      }
     }
 
-    this.setState({ queryingGoogle: true }, () => {
-      this.addressService.getPlacePredictions(options, (results, status) => {
-        if (['ZERO_RESULTS', 'OK'].includes(status)) {
-          const filteredResults = Autocomplete.filterResults(results, {})
-          this.setState({
-            hasGoogleErrors: false,
-            addressResults: filteredResults,
-            hideResults: false,
-            queryingGoogle: false,
-            noResults: status === 'ZERO_RESULTS'
-          }, () => {
-            this.initKeyboardListener()
-            this.showResultsTimer()
-          })
-        } else {
-          this.autocompleteErrors(status)
-        }
+    countryArrays.filter(arr => arr.length > 0).forEach((countryArray) => {
+      if (countryArray.length > 0) {
+        options.componentRestrictions = { country: countryArray }
+      }
+      const sameQuery = input.includes(this.state.prevInput)
+      this.setState({ queryingGoogle: true, prevInput: input }, () => {
+        this.addressService.getPlacePredictions(options, (results, status) => {
+          if (['ZERO_RESULTS', 'OK'].includes(status)) {
+            const filteredResults = Autocomplete.filterResults(results, {})
+            this.setState((prevState) => {
+              const { addressResults } = prevState
+
+              const mergedAddressResults = sameQuery ? uniq([...addressResults, ...filteredResults]) : filteredResults
+              const fuseOptions = {
+                shouldSort: true,
+                threshold: 0.6,
+                location: 0,
+                distance: 100,
+                maxPatternLength: 32,
+                minMatchCharLength: 1,
+                keys: ['description']
+              }
+              const fuse = new Fuse(mergedAddressResults, fuseOptions)
+              const realResults = fuse.search(input)
+
+              return {
+                hasGoogleErrors: false,
+                addressResults: realResults,
+                hideResults: false,
+                queryingGoogle: false,
+                noResults: status === 'ZERO_RESULTS'
+              }
+            }, () => {
+              this.initKeyboardListener()
+              this.showResultsTimer()
+            })
+          } else {
+            this.autocompleteErrors(status)
+          }
+        })
       })
     })
   }
@@ -271,9 +300,9 @@ class Autocomplete extends PureComponent {
       listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
 
       const { target, onAutocompleteTrigger } = this.props
-  
+
       onAutocompleteTrigger(target, addressFromLocation(location))
-  
+
       this.setState({ hideResults: true, listenerSet: false })
     }
   }
@@ -319,7 +348,7 @@ class Autocomplete extends PureComponent {
       hasGoogleErrors,
       noResults
     } = this.state
-    const hasAddressResults = addressResults.length > 0 
+    const hasAddressResults = addressResults.length > 0
     const showArea = !scope.require_full_address
     const hasAreaResults = !scope.require_full_address && areaResults.length > 0
     const hasResults = hasAddressResults || hasAreaResults
