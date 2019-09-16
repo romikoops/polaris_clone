@@ -3,13 +3,6 @@
 module ExcelDataServices
   module DataRestructurers
     class LocalCharges < Base # rubocop:disable Metrics/ClassLength
-      COLS_TO_TITLEIZE = %i(
-        hub
-        country
-        counterpart_hub
-        counterpart_country
-      ).freeze
-
       COLS_CONTAINING_ALL = %i(
         counterpart_hub
         counterpart_country
@@ -43,10 +36,6 @@ module ExcelDataServices
 
       def correct_capitalization(rows_data)
         rows_data.map do |row_data|
-          COLS_TO_TITLEIZE.each do |col_name|
-            row_data[col_name] = row_data[col_name]&.titleize
-          end
-
           COLS_CONTAINING_ALL.each do |col_name|
             row_data[col_name].downcase! if row_data[col_name]&.casecmp('all')&.zero?
           end
@@ -170,7 +159,7 @@ module ExcelDataServices
         charges_data.each do |params|
           hub_name = append_hub_suffix(params[:hub], params[:mot])
           if params[:counterpart_hub] && !params[:counterpart_hub].casecmp('all').zero?
-            counterpart_hub_name = append_hub_suffix(params[:counterpart_hub], params[:mot]) if params[:counterpart_hub]
+            counterpart_hub_name = append_hub_suffix(params[:counterpart_hub], params[:mot])
           end
           params[:hub_name] = hub_name
           params[:counterpart_hub_name] = counterpart_hub_name
