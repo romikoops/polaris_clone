@@ -29,11 +29,11 @@ class NotesController < ApplicationController
     return unless note
 
     nt = note.as_json
-    nt['itineraryTitle'] = note.target.name if note.target_type.include?('Itinerary')
-    nt['itineraryTitle'] = note.target.itinerary.name if note.target_type.include?('Pricing')
-    nt['mode_of_transport'] = note.target.mode_of_transport if note.target_type.include?('Itinerary')
-    nt['mode_of_transport'] = note.target.itinerary.mode_of_transport if note.target_type.include?('Pricing')
-    nt['service'] = note.target.tenant_vehicle.full_name if note.target_type.include?('Pricing')
+    nt['itineraryTitle'] = note.target&.name if note.target_type.include?('Itinerary')
+    nt['itineraryTitle'] = note.target&.itinerary&.name if note.target_type.include?('Pricing')
+    nt['mode_of_transport'] = note.target&.mode_of_transport if note.target_type.include?('Itinerary')
+    nt['mode_of_transport'] = note.target&.itinerary&.mode_of_transport if note.target_type.include?('Pricing')
+    nt['service'] = note.target&.tenant_vehicle&.full_name if note.target_type.include?('Pricing')
     nt
   end
 end
