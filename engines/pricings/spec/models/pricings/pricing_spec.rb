@@ -13,22 +13,25 @@ module Pricings
       let!(:fcl_20_pricing) { FactoryBot.create(:fcl_20_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
       let!(:fcl_40_pricing) { FactoryBot.create(:fcl_40_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
       let!(:fcl_40_hq_pricing) { FactoryBot.create(:fcl_40_hq_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
+
       describe '.for_cargo_classes' do
         it 'returns the lcl pricings only' do
           expect(::Pricings::Pricing.for_cargo_classes(['lcl'])).to eq([lcl_pricing])
         end
         it 'returns the fcl_20 & fcl_40 pricings only' do
-          expect(::Pricings::Pricing.for_cargo_classes(%w(fcl_20 fcl_40))).to eq([fcl_20_pricing, fcl_40_pricing])
+          expect(::Pricings::Pricing.for_cargo_classes(%w(fcl_20 fcl_40)).sort).to eq([fcl_20_pricing, fcl_40_pricing].sort)
         end
       end
+
       describe '.for_load_type' do
         it 'returns the lcl pricings only' do
-          expect(::Pricings::Pricing.for_load_type('cargo_item')).to eq([lcl_pricing])
+          expect(::Pricings::Pricing.for_load_type('cargo_item').sort).to eq([lcl_pricing].sort)
         end
         it 'returns the fcl_20 & fcl_40 pricings only' do
-          expect(::Pricings::Pricing.for_load_type('container')).to eq([fcl_20_pricing, fcl_40_pricing, fcl_40_hq_pricing])
+          expect(::Pricings::Pricing.for_load_type('container').sort).to eq([fcl_20_pricing, fcl_40_pricing, fcl_40_hq_pricing].sort)
         end
       end
+
       describe '.for_load_type' do
         it 'returns the lcl pricings only' do
           expect(::Pricings::Pricing.for_load_type('cargo_item')).to eq([lcl_pricing])
@@ -39,6 +42,7 @@ module Pricings
           )
         end
       end
+
       describe '.for_dates' do
         it 'returns the lcl pricings only' do
           expect(::Pricings::Pricing.for_dates(Date.today, Date.today + 2.weeks)).to eq([lcl_pricing, fcl_20_pricing, fcl_40_pricing, fcl_40_hq_pricing])
