@@ -156,6 +156,7 @@ class App extends Component {
                 loggedIn={loggedIn}
                 theme={theme}
               />
+              <Route render={props => <Redirect to="/" />} />
 
             </Switch>
           </GenericError>
