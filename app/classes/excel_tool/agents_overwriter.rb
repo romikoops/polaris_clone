@@ -7,7 +7,7 @@ module ExcelTool
     def post_initialize(args)
       @agency_sheet = xlsx.sheet('Agencies').dup
       @agent_sheet = xlsx.sheet('Agents').dup
-      @user = args[:_user]
+      @user = args[:user]
       @manager_role = Role.find_by_name('agency_manager')
       @agent_role = Role.find_by_name('agent')
     end
@@ -50,7 +50,7 @@ module ExcelTool
         last_name: 'LAST_NAME',
         email: 'EMAIL',
         phone: 'PHONE',
-        company_name: 'AGENCY_NAME',
+        company_name: 'COMPANY_NAME',
         vat_number: 'VAT_NUMBER',
         external_id: 'EXTERNAL_ID',
         address: 'ADDRESS',

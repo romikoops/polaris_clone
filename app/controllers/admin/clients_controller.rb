@@ -47,13 +47,16 @@ class Admin::ClientsController < Admin::AdminBaseController
   end
 
   def agents
+    scope = ::Tenants::ScopeService.new(target: current_user).fetch
     file = upload_params[:file].tempfile
-
-    options = { tenant: current_tenant,
-                file_or_path: file,
-                options: { sandbox: @sandbox, user: current_user } }
-    uploader = ExcelDataServices::Loaders::Uploader.new(options)
-
+    uploader = if scope[:base_pricing]
+                 options = { tenant: current_tenant,
+                             file_or_path: file,
+                             options: { sandbox: @sandbox, user: current_user } }
+                 ExcelDataServices::Loaders::Uploader.new(options)
+               else
+                 ExcelTool::AgentsOverwriter.new(user: current_user, params: { xlsx: file })
+               end
     insertion_stats_or_errors = uploader.perform
     response_handler(insertion_stats_or_errors)
   end
