@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import Fuse from 'fuse.js'
 import { withNamespaces } from 'react-i18next'
-import { camelCase, uniq } from 'lodash'
+import { camelCase, uniqBy } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -236,7 +236,7 @@ class Autocomplete extends PureComponent {
             this.setState((prevState) => {
               const { addressResults } = prevState
 
-              const mergedAddressResults = sameQuery ? uniq([...addressResults, ...filteredResults]) : filteredResults
+              const mergedAddressResults = sameQuery ? uniqBy([...addressResults, ...filteredResults], 'id') : filteredResults
               const fuseOptions = {
                 shouldSort: true,
                 threshold: 0.6,
