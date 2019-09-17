@@ -132,7 +132,7 @@ withPipeline(timeout: 120) {
     withStage('Deploy Review') {
       milestone()
 
-      env.REVIEW_NAME = trimName(env.CI_COMMIT_REF_SLUG, 43)
+      env.REVIEW_NAME = trimName(env.CI_COMMIT_REF_SLUG, 40)
       env.REVIEW_NAMESPACE = trimName(env.CI_COMMIT_REF_SLUG, 63)
 
       lock(label: "${env.GIT_BRANCH}-deploy", inversePrecedence: true) {

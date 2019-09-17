@@ -56,7 +56,11 @@ module OfferCalculatorService
 
     def validate_data_for_hubs(data)
       data.each_with_object({}) do |(hub_id, trucking_data), valid_data|
-        valid_data[hub_id] = trucking_data unless trucking_data[:trucking_charge_data].has_value?(nil)
+        no_fees = trucking_data[:trucking_charge_data].values.map do |cc_value|
+          (cc_value['stackable'].keys | cc_value['non_stackable'].keys).empty?
+        end
+        valid = trucking_data[:trucking_charge_data].has_value?(nil) || no_fees.include?(true)
+        valid_data[hub_id] = trucking_data unless valid
       end
     end
 
