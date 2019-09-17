@@ -15,7 +15,6 @@ module AdmiraltyReports
       def perform
         quotations = uniq_quotations_by_original_shipments
         shipments = shipments_for_quotations(quotations)
-
         quot_ship_bundle = quotations.zip(shipments)
         quot_ship_bundle_groups = group_by_date(quot_ship_bundle)
 
@@ -50,14 +49,7 @@ module AdmiraltyReports
       end
 
       def excluded_emails
-        # TODO: Don't hardcode
-
-        @excluded_emails ||= [
-          'agent@itsmycargo.com',
-          'testing@fivestar-services.de',
-          'testing@gatewaycargo.de',
-          'test@gatewaycargo.de'
-        ]
+        Tenant.find_by(legacy_id: tenant.id).scope.content['blacklisted_emails']
       end
 
       def group_by_date(bundle)

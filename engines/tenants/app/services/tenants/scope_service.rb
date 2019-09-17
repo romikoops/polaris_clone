@@ -126,7 +126,8 @@ module Tenants
         agent: %w(dashboard shipments profile),
         admin: %w(dashboard shipments hubs pricing schedules clients routes currencies settings),
         shipper: %w(dashboard shipments profile contacts)
-      }
+      },
+      blacklisted_emails: []
     }.freeze
 
     def initialize(target: nil, tenant: nil, sandbox: nil)

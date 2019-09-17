@@ -24,7 +24,7 @@ module AdmiraltyReports
     attr_reader :tenant
 
     def quotation_tool?(tenant)
-      tenant.legacy.scope.select { |k, _v| k.to_s.include?('quotation_tool') }.values.any?
+      tenant.scope.content['closed_quotation_tool'] || tenant.scope.content['open_quotation_tool']
     end
   end
 end
