@@ -31,7 +31,7 @@ module RmsExport
           route_line_services: create_csv_file(data: @route_line_services.uniq, key: 'route_line_services'),
           routes: create_csv_file(data: @routes.uniq, key: 'routes'),
           transit_times: create_csv_file(data: @transit_times.uniq, key: 'transit_times'),
-          tenant_connections: create_csv_file(data: @tenant_connections.uniq, key: 'tenant_connections')         
+          tenant_carriage_connections: create_csv_file(data: @tenant_connections.uniq, key: 'tenant_connections')         
         }
       end
 
@@ -51,10 +51,11 @@ module RmsExport
       end
 
       def handle_target_ids(cell)
-        @hub = Legacy::Hub.find_by(tenant: @tenant.legacy, name: cell.value)
+        @hub = Legacy::Hub.find_by(tenant: @tenant.legacy, name: cell.value, hub_type: 'ocean')
         @hub_loc = Routing::Location.find_by(name: @hub.nexus.name)
-        @origin_ids = Routing::Route.where(origin: hub_loc).ids
-        @destination_ids = Routing::Route.where(destination: hub_loc).ids
+        @hub_terminal = @hub_loc.terminals.find_by(mode_of_transport: @hub.hub_type)
+        @origin_ids = Routing::Route.where(origin: hub_loc, origin_terminal: hub_terminal).ids
+        @destination_ids = Routing::Route.where(destination: hub_loc, destination_terminal: hub_terminal).ids
       end
 
       def handle_carriers
@@ -91,6 +92,7 @@ module RmsExport
           @transit_times << {
             line_service: metadata['service_level'] || 'standard',
             carrier_name: metadata['courier_name'] || '',
+            mode_of_transport: 5,
             days: 1
           }.merge(loc_info)
         end
@@ -121,7 +123,7 @@ module RmsExport
         }
       end
 
-      attr_reader :sheet, :row, :headers, :carrier, :line_service, :route, :metadata, :hub_loc
+      attr_reader :sheet, :row, :headers, :carrier, :line_service, :route, :metadata, :hub_loc, :hub_terminal
     end
   end
 end

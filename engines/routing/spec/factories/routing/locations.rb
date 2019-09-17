@@ -2,12 +2,27 @@
 
 FactoryBot.define do
   factory :routing_location, class: 'Routing::Location' do
-    locode { 'DEHAM' }
+    locode { }
     name { 'Hamburg' }
     country_code { 'de' }
     bounds { FactoryBot.build(:bounds, lat: 53.558572, lng: 9.9278215, delta: 0.4) }
     center { FactoryBot.build(:point, lat: 53.558572, lng: 9.9278215) }
 
+    transient do
+      all_mots { false }
+    end
+
+    after(:build) do |location, evaluator|
+      if evaluator.all_mots
+        (1..4).each do |mot|
+          location.terminals << FactoryBot.build(:routing_terminal, center: location.center, location: location, mode_of_transport: mot)
+        end
+      end
+    end
+    before(:create) do |location|
+      existing_locode = Routing::Location.find_by(locode: location.locode)
+      existing_locode
+    end
     trait :hamburg do
       locode { 'DEHAM' }
       name { 'Hamburg' }

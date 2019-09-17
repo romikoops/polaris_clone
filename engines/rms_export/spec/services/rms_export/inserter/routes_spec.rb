@@ -14,7 +14,6 @@ RSpec.describe ::RmsExport::Inserter::Routes do
                         carrier: FactoryBot.build(:legacy_carrier, name: 'MSC'))
     ]
   end
-  let!(:carrier) { FactoryBot.create(:routing_carrier) }
   let!(:currency) { FactoryBot.create(:legacy_currency) }
   let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
   let!(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant, mode_of_transport: 'air')}
@@ -55,6 +54,7 @@ RSpec.describe ::RmsExport::Inserter::Routes do
       RmsSync::Routes.new(tenant_id: tenants_tenant.id, sheet_type: :routes).perform
       data = RmsExport::Parser::Routes.new(tenant_id: tenants_tenant.id).perform
       RmsExport::Inserter::Routes.new(tenant_id: tenants_tenant.id, data: data).perform
+
       expect(TenantRouting::Connection.count).to eq(6)
       expect(Routing::LineService.count).to eq(2)
       expect(Routing::RouteLineService.count).to eq(12)

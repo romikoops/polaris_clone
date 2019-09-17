@@ -11,8 +11,12 @@ RSpec.describe Helmsman::Validator do
       let(:user) { Tenants::User.find_by(legacy_id: legacy_user.id) }
       let!(:hub_locations) do
         %w(Gothenburg Shanghai Ningbo Hamburg Rotterdam Veracruz).map do |name|
-          FactoryBot.create("#{name.downcase}_location".to_sym)
+          FactoryBot.create("#{name.downcase}_location".to_sym, all_mots: true)
         end
+      end
+
+      let!(:hub_terminals) do
+        hub_locations.flat_map { |loc| loc.terminals }
       end
 
       let!(:de_trucking_locations) do
@@ -64,11 +68,13 @@ RSpec.describe Helmsman::Validator do
       end
 
       let!(:routes) do
-        hub_locations.permutation(2).each do |loc_array|
-          %i(air ocean truck rail).each do |mot|
+        hub_locations.permutation(2).flat_map do |loc_array|
+          %w(air truck rail ocean).flat_map do |mot|
             FactoryBot.create(:routing_route,
                               origin: loc_array.first,
                               destination: loc_array.last,
+                              origin_terminal: hub_terminals.find{|ter| ter.location_id == loc_array.first.id && ter.mode_of_transport == mot},
+                              destination_terminal: hub_terminals.find{|ter| ter.location_id == loc_array.last.id && ter.mode_of_transport == mot},
                               mode_of_transport: mot)
           end
         end
@@ -76,17 +82,17 @@ RSpec.describe Helmsman::Validator do
 
       let!(:de_trucking_routes) do
         hamburg = hub_locations.find { |loc| loc.locode == 'DEHAM' }
-        de_trucking_locations.map do |tl|
-          FactoryBot.create(:routing_route, origin: hamburg, destination: tl, mode_of_transport: :carriage)
-          FactoryBot.create(:routing_route, origin: tl, destination: hamburg, mode_of_transport: :carriage)
+        de_trucking_locations.flat_map do |tl|
+          [FactoryBot.create(:routing_route, origin: hamburg, destination: tl, mode_of_transport: :carriage),
+          FactoryBot.create(:routing_route, origin: tl, destination: hamburg, mode_of_transport: :carriage)]
         end
       end
 
       let!(:cn_trucking_routes) do
         shanghai = hub_locations.find { |loc| loc.locode == 'CNSHA' }
-        cn_trucking_locations.map do |tl|
-          FactoryBot.create(:routing_route, origin: shanghai, destination: tl, mode_of_transport: :carriage)
-          FactoryBot.create(:routing_route, origin: tl, destination: shanghai, mode_of_transport: :carriage)
+        cn_trucking_locations.flat_map do |tl|
+          [FactoryBot.create(:routing_route, origin: shanghai, destination: tl, mode_of_transport: :carriage),
+          FactoryBot.create(:routing_route, origin: tl, destination: shanghai, mode_of_transport: :carriage)]
         end
       end
       let!(:hamburg) { hub_locations.find { |loc| loc.locode == 'DEHAM' } }
@@ -95,10 +101,10 @@ RSpec.describe Helmsman::Validator do
       let!(:cn_trucking_location) { Routing::Location.find_by(name: '盐都区 (Yandu)') }
       let!(:de_trucking_route) { Routing::Route.find_by(origin: de_trucking_location, destination: hamburg) }
       let!(:cn_trucking_route) { Routing::Route.find_by(origin: cn_trucking_location, destination: shanghai) }
-      let!(:ocean_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: :ocean) }
-      let!(:air_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: :air) }
-      let!(:truck_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: :truck) }
-      let!(:rail_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: :rail) }
+      let!(:ocean_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: 'ocean') }
+      let!(:air_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: 'air') }
+      let!(:truck_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: 'truck') }
+      let!(:rail_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: 'rail') }
       let!(:ocean_connections) do
         [nil, ocean_route, ocean_route, nil].each_cons(2).map do |route_arr|
           FactoryBot.create(:tenant_routing_connection,

@@ -2,6 +2,7 @@
 
 module Routing
   class Location < ApplicationRecord
+    has_many :terminals, class_name: 'Routing::Terminal'
   end
 end
 

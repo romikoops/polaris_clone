@@ -1043,6 +1043,7 @@ ActiveRecord::Schema.define(version: 2019_09_12_104953) do
     t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name", "code", "abbreviated_name"], name: "routing_carriers_index", unique: true
   end
 
   create_table "routing_line_services", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1085,7 +1086,9 @@ ActiveRecord::Schema.define(version: 2019_09_12_104953) do
     t.decimal "time_factor"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["origin_id", "destination_id", "mode_of_transport"], name: "routing_routes_index", unique: true
+    t.uuid "origin_terminal_id"
+    t.uuid "destination_terminal_id"
+    t.index ["origin_id", "destination_id", "origin_terminal_id", "destination_terminal_id", "mode_of_transport"], name: "routing_routes_index", unique: true
   end
 
   create_table "routing_terminals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1095,6 +1098,7 @@ ActiveRecord::Schema.define(version: 2019_09_12_104953) do
     t.boolean "default", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "mode_of_transport", default: 0
     t.index ["center"], name: "index_routing_terminals_on_center"
   end
 

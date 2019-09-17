@@ -2,7 +2,8 @@ module Routing
   class RouteLineService < ApplicationRecord
     belongs_to :route, class_name: 'Routing::Route'
     belongs_to :line_service, class_name: 'Routing::LineService'
-    validates :route_id, presence: true, uniqueness: { scope: %i(line_service_id) }
+    validates :route_id,  presence: true, uniqueness: { scope: %i(line_service_id) }
+    validates :line_service_id,  presence: true
   end
 end
 

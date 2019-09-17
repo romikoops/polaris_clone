@@ -22,7 +22,7 @@ RSpec.describe ::RmsSync::Carriage do
   end
   let!(:routes) do
     [
-      FactoryBot.create(:hamburg_shanghai_route)
+      FactoryBot.create(:routing_route, origin_location: :hamburg, destination_location: :shanghai)
     ]
   end
 
