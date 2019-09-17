@@ -34,8 +34,17 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def generate_schedules_from_sheet
-    file = upload_params[:file].tempfile
+    # TODO: Method should be called `upload`
 
+    Document.create!(
+      text: '',
+      doc_type: 'schedules',
+      sandbox: @sandbox,
+      tenant: current_tenant,
+      file: upload_params[:file]
+    )
+
+    file = upload_params[:file].tempfile
     options = { tenant: current_tenant,
                 file_or_path: file,
                 options: {

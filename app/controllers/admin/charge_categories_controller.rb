@@ -2,8 +2,15 @@
 
 class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:disable # Style/ClassAndModuleChildren
   def upload
-    file = upload_params[:file].tempfile
+    Document.create!(
+      text: "",
+      doc_type: 'charge_categories',
+      sandbox: @sandbox,
+      tenant: current_tenant,
+      file: upload_params[:file]
+    )
 
+    file = upload_params[:file].tempfile
     options = { tenant: current_tenant,
                 file_or_path: file,
                 options: { sandbox: @sandbox, user: current_user } }

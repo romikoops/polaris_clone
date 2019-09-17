@@ -53,6 +53,14 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def overwrite_zonal_trucking_by_hub
     if params[:file]
+      Document.create!(
+        text: '',
+        doc_type: 'truckings',
+        sandbox: @sandbox,
+        tenant: current_tenant,
+        file: upload_params[:file]
+      )
+
       args = {
         params: { 'xlsx' => params[:file] },
         hub_id: params[:id],

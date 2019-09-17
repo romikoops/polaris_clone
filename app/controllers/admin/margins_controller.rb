@@ -139,15 +139,15 @@ class Admin::MarginsController < ApplicationController
   end
 
   def upload
+    Document.create!(
+      text: "target_id:#{upload_params[:target_id]},target_type:#{upload_params[:target_type]}",
+      doc_type: 'margins',
+      sandbox: @sandbox,
+      tenant: current_tenant,
+      file: upload_params[:file]
+    )
+
     applicable = get_target(type: upload_params[:target_type], id: upload_params[:target_id])
-    case upload_params[:target_type]
-    when 'group'
-      Tenants::Group.find_by(id: upload_params[:target_id], sandbox: @sandbox)
-    when 'company'
-      Tenants::Company.find_by(id: upload_params[:target_id], sandbox: @sandbox)
-    when 'user'
-      Tenants::User.find_by(legacy_id: upload_params[:target_id])
-    end
     file = upload_params[:file].tempfile
 
     options = { tenant: current_tenant,

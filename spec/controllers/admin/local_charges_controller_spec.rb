@@ -28,6 +28,7 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
                                                                                                             company: nil,
                                                                                                             agency: nil,
                                                                                                             sandbox: nil))
+        expect(Document).to receive(:create!)
         expect_any_instance_of(ExcelDataServices::Loaders::Uploader).to receive(:perform).and_return(error)
       end
 

@@ -65,8 +65,15 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
   end
 
   def upload
-    file = upload_params[:file].tempfile
+    Document.create!(
+      text: "group_id:#{upload_params[:group_id] || 'all'}",
+      doc_type: 'local_charges',
+      sandbox: @sandbox,
+      tenant: current_tenant,
+      file: upload_params[:file]
+    )
 
+    file = upload_params[:file].tempfile
     options = { tenant: current_tenant,
                 file_or_path: file,
                 options: { sandbox: @sandbox, user: current_user, group_id: upload_params[:group_id] } }
