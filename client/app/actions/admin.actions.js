@@ -1373,7 +1373,7 @@ function deleteClient (id, redirect) {
         if (redirect) {
           dispatch(push(`/admin/clients`))
         }
-        dispatch(success(data))
+        dispatch(clientsActions.removeClient(id))
       },
       (error) => {
         dispatch(failure(error))

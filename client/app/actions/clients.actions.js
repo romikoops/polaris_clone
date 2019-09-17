@@ -659,6 +659,13 @@ function newMarginFromGroup (id) {
     dispatch(push('/admin/clients/margincreator'))
   }
 }
+
+function removeClient (id) {
+  return (dispatch) => {
+    dispatch({ type: clientsConstants.REMOVE_CLIENT_DATA, payload: id })
+  }
+}
+
 function goTo (path) {
   return (dispatch) => {
     dispatch(push(path))
@@ -697,6 +704,7 @@ export const clientsActions = {
   logOut,
   deleteGroup,
   deleteCompany,
+  removeClient,
   getLocalChargesForList,
   removeLocalCharge
 }

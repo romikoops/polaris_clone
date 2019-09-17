@@ -37,6 +37,12 @@ export default function clients (state = {}, action) {
         localCharges
       }
     }
+    case 'REMOVE_CLIENT_DATA': {
+      const newState = { ...state }
+      delete newState.client
+      
+      return newState
+    }
     case 'GET_GROUPS_LIST_SUCCESS': {
       return {
         ...state,

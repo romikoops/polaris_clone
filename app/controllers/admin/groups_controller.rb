@@ -16,7 +16,7 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
 
   def create
     tenant = ::Tenants::User.find_by(legacy_id: current_user.id, sandbox: @sandbox)&.tenant
-    group = ::Tenants::Group.create(name: params[:name], tenant_id: tenant.id, sandbox: @sandbox)
+    group = ::Tenants::Group.create(name: params[:name], tenant_id: tenant&.id, sandbox: @sandbox)
     params[:addedMembers].keys.each do |type|
       params[:addedMembers][type].each do |new_member|
         create_member_from_type(group: group, type: type, member: new_member)
@@ -26,8 +26,8 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
   end
 
   def edit_members # rubocop:disable Metrics/AbcSize
-    tenant = ::Tenants::User.find_by(legacy_id: current_user.id)&.tenant
-    group = ::Tenants::Group.find_by(id: params[:id], tenant_id: tenant.id)
+    tenant = ::Tenants::User.find_by(legacy_id: current_user.id, sandbox: @sandbox)&.tenant
+    group = ::Tenants::Group.find_by(id: params[:id], tenant_id: tenant.id, sandbox: @sandbox)
 
     params[:addedMembers].keys.each do |type|
       params[:addedMembers][type].each do |new_member|
@@ -37,9 +37,9 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
     params_members_ids = params[:addedMembers].values.flatten.map { |param| param[:id].to_s }
     group.memberships.each do |membership|
       if membership.member.is_a?(Tenants::User)
-        membership.destroy unless params_members_ids.include?(membership.member.legacy_id.to_s)
+        membership.destroy unless params_members_ids.include?(membership.member&.legacy_id&.to_s)
       else
-        membership.destroy unless params_members_ids.include?(membership.member.id)
+        membership.destroy unless params_members_ids.include?(membership.member&.id)
       end
     end
     response_handler(for_show_json(group))
@@ -110,7 +110,7 @@ class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/
                      .where(tenants_memberships: { member_type: 'Tenants::Group', member_id: search_params[:target_id] })
       when 'user'
         tenant_user = Tenants::User.find_by(legacy_id: search_params[:target_id], sandbox: @sandbox)
-        group_ids = tenant_user.all_groups.ids
+        group_ids = tenant_user&.all_groups&.ids
         query = query.where(id: group_ids)
       end
     end

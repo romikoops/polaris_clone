@@ -232,15 +232,15 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   end
 
   def groups
-    ::Tenants::User.find_by(legacy_id: id).groups
+    ::Tenants::User.find_by(legacy_id: id)&.groups || []
   end
 
   def company_title
-    tenants_user.company&.name
+    tenants_user&.company&.name
   end
 
   def group_count
-    groups.count
+    groups&.count
   end
 
   def user_margins
