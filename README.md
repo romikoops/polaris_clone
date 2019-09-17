@@ -61,3 +61,8 @@ This allows us to quickly look through our git history and see relevant changes 
   * `CHORE:` - The commit is a quick chore or task and does not directly relate to any ticket (such as README cleanups etc)
 
 All prefixes are case insensitive.
+
+##### Master Key
+
+When developing you may run into an error saying `client_secret is missing` on certain parts of the site ie. `localhost:3000/admiralty`.
+Ask another member of dev team to get the master key.
