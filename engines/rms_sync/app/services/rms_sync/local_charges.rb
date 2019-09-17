@@ -2,6 +2,12 @@
 
 module RmsSync
   class LocalCharges < RmsSync::Base
+
+    def initialize(tenant_id:, sheet_type: :local_charges, sandbox: nil)
+      super
+      @book = RmsData::Book.find_or_create_by(tenant: @tenant, sheet_type: sheet_type)
+    end
+
     def perform
       prepare_purge
       sync_data

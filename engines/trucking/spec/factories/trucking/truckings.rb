@@ -132,5 +132,79 @@ FactoryBot.define do
     truck_type { 'default' }
     carriage { 'pre' }
     association :courier, factory: :trucking_courier
+
+    trait :with_fees do
+      fees do
+        {
+          'AFEE' => {
+            'key' => 'AFEE',
+            'name' => 'Pickup Fee',
+            'value' => 250.0,
+            'currency' => 'CNY',
+            'rate_basis' => 'PER_SHIPMENT'
+          },
+          'BFEE' => {
+            'key' => 'BFEE',
+            'name' => 'Pickup Fee',
+            'value' => 250.0,
+            'currency' => 'CNY',
+            'rate_basis' => 'PER_CONTAINER'
+          },
+          'CFEE' => {
+            'key' => 'CFEE',
+            'name' => 'Pickup Fee',
+            'value' => 250.0,
+            'currency' => 'CNY',
+            'rate_basis' => 'PER_BILL'
+          },
+          'DFEE' => {
+            'key' => 'DFEE',
+            'name' => 'Pickup Fee',
+            'ton' => 25.0,
+            'cbm' => 15.0,
+            'min' => 35.0,
+            'currency' => 'CNY',
+            'rate_basis' => 'PER_CBM_TON'
+          },
+          'EFEE' => {
+            'key' => 'EFEE',
+            'name' => 'Pickup Fee',
+            'kg' => 25.0,
+            'cbm' => 15.0,
+            'min' => 35.0,
+            'currency' => 'CNY',
+            'rate_basis' => 'PER_CBM_KG'
+          },
+          'FFEE' => {
+            'key' => 'FFEE',
+            'name' => 'Pickup Fee',
+            'value' => 25.0,
+            'currency' => 'CNY',
+            'rate_basis' => 'PER_WM'
+          },
+          'GFEE' => {
+            'key' => 'GFEE',
+            'name' => 'Pickup Fee',
+            'value' => 25.0,
+            'currency' => 'CNY',
+            'rate_basis' => 'PERCENTAGE'
+          },
+          'HFEE' => {
+            'key' => 'GFEE',
+            'name' => 'Pickup Fee',
+            'value' => 25.0,
+            'currency' => 'CNY',
+            'rate_basis' => 'PER_ITEM'
+          }
+        }.freeze
+      end
+    end
+
+    trait :return_distance do
+      identifier_modifier { 'return' }
+    end
+
+    factory :trucking_with_fees, traits: [:with_fees]
+    factory :trucking_with_return, traits: [:return_distance]
   end
 end

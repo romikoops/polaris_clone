@@ -29,5 +29,7 @@ FactoryBot.define do
     end
 
     country_code { 'SE' }
+
+    factory :city_location, traits: [:with_location]
   end
 end

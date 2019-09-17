@@ -5,16 +5,20 @@ module RmsSync
     def initialize(tenant_id:, sheet_type:, sandbox: nil)
       @tenant = Tenants::Tenant.find_by(id: tenant_id)
       @sandbox = sandbox
-      @book = RmsData::Book.find_or_create_by(tenant: @tenant, sheet_type: sheet_type)
+      @sheet_type = sheet_type
       @cells = []
     end
 
     def prepare_purge
-      @purge_ids = @book.sheets.ids
+      @purge_ids = if @sheet_type == :trucking
+                     RmsData::Book.where(tenant: @tenant, sheet_type: @sheet_type).map { |b| b.sheets.ids }.flatten
+                   else
+                     @book.sheets.ids
+                   end
     end
 
     def purge
-      @book.sheets.where(id: @purge_ids).destroy_all
+      RmsData::Sheet.where(id: @purge_ids).destroy_all
     end
 
     def hub_name(hub)
@@ -33,4 +37,5 @@ module RmsSync
       }
     end
   end
+  attr_accessor :tenant, :sheet_type, :book
 end

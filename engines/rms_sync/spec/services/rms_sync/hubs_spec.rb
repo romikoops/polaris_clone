@@ -17,33 +17,35 @@ RSpec.describe RmsSync::Hubs do
       expect(RmsData::Cell.where(sheet_id: sheet.id).length).to eq(42)
       expect(sheet.rows.length).to eq(3)
       expect(sheet.header_values).to eq(%w(STATUS
-                                     TYPE
-                                     NAME
-                                     CODE
-                                     LATITUDE
-                                     LONGITUDE
-                                     COUNTRY
-                                     FULL_ADDRESS
-                                     PHOTO
-                                     IMPORT_CHARGES
-                                     EXPORT_CHARGES
-                                     PRE_CARRIAGE
-                                     ON_CARRIAGE
-                                     ALTERNATIVE_NAMES))
-      expect(sheet.row_values(1)).to eq(['active',
-                                  'ocean',
-                                  'Gothenburg',
-                                  'GOO1',
-                                  '57.694253',
-                                  '11.854048',
-                                  'Sweden',
-                                  '438 80 Landvetter, Sweden',
-                                  nil,
-                                  nil,
-                                  nil,
-                                  nil,
-                                  nil,
-                                  nil])
+                                           TYPE
+                                           NAME
+                                           CODE
+                                           LATITUDE
+                                           LONGITUDE
+                                           COUNTRY
+                                           FULL_ADDRESS
+                                           PHOTO
+                                           IMPORT_CHARGES
+                                           EXPORT_CHARGES
+                                           PRE_CARRIAGE
+                                           ON_CARRIAGE
+                                           ALTERNATIVE_NAMES))
+
+      gothenburg_row = sheet.rows_values.min_by { |row| row[2] }
+      expect(gothenburg_row).to eq(['active',
+                                    'ocean',
+                                    'Gothenburg',
+                                    'GOO1',
+                                    '57.694253',
+                                    '11.854048',
+                                    'Sweden',
+                                    '438 80 Landvetter, Sweden',
+                                    nil,
+                                    nil,
+                                    nil,
+                                    nil,
+                                    nil,
+                                    nil])
     end
   end
 end

@@ -5,6 +5,7 @@ module RmsSync
 
     def initialize(tenant_id:, sheet_type: :carriage, sandbox: nil)
       super
+      @book = RmsData::Book.find_or_create_by(tenant: @tenant, sheet_type: sheet_type)
       @hash = Hash.new { |h, k| h[k] = {} }
     end
 
@@ -45,7 +46,7 @@ module RmsSync
       sheet_index = 0
       @hash.each do |country_code, courier_data|
         courier_data.each do |courier_id, data|
-          courier = Trucking::Courier.find(courier_id)
+          courier = ::Trucking::Courier.find(courier_id)
           @sheet = create_sheet(
             index: sheet_index,
             name: courier&.name,
@@ -75,7 +76,7 @@ module RmsSync
 
     def prep_data
       hubs_by_country.each do |country_code, hubs|
-        truckings = Trucking::Trucking.where(hub_id: hubs.map(&:id)).distinct
+        truckings = ::Trucking::Trucking.where(hub: hubs).distinct
         next if truckings.empty?
 
         courier_ids = truckings.pluck(:courier_id).uniq
@@ -84,7 +85,7 @@ module RmsSync
           courier_truckings = truckings.where(courier_id: courier_id)
           next if courier_truckings.empty?
 
-          locations = Trucking::Location.where(id: courier_truckings.pluck(:location_id)).distinct
+          locations = ::Trucking::Location.where(id: courier_truckings.pluck(:location_id)).distinct
           modifier =  if locations.first.zipcode
             'zipcode'
           elsif locations.first.distance

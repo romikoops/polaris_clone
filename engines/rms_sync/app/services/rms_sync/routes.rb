@@ -2,8 +2,9 @@
 
 module RmsSync
     class Routes < RmsSync::Base
-      def initialize(tenant_id:, sheet_type: 'routes', sandbox: nil)
+      def initialize(tenant_id:, sheet_type: :routes, sandbox: nil)
         super
+        @book = RmsData::Book.find_or_create_by(tenant: @tenant, sheet_type: sheet_type)
       end
 
       def perform
@@ -104,8 +105,6 @@ module RmsSync
                   cargo_classes.any? { |cc| cc.include?('fcl') }.to_s
                 when 'REEFER'
                   cargo_classes.any? { |cc| cc.include?('_rf') }.to_s
-                else
-                  ''
                 end
 
         obj[:value] = value.present? ? value : nil

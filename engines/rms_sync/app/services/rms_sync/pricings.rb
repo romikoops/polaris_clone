@@ -2,6 +2,12 @@
 
 module RmsSync
   class Pricings < RmsSync::Base
+
+    def initialize(tenant_id:, sheet_type: :pricings, sandbox: nil)
+      super
+      @book = RmsData::Book.find_or_create_by(tenant: @tenant, sheet_type: sheet_type)
+    end
+
     def perform
       prepare_purge
       sync_data

@@ -38,7 +38,6 @@ module RmsData
                                 sheet: sheet)
             end
           end
-        
           expect(sheet.rows).to eq(results)
         end
       end

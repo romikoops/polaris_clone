@@ -45,7 +45,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::LocalCharges do
 
     it 'inserts correctly and returns correct stats' do
       stats = described_class.insert(options)
-      expect(LocalCharge.all.map { |lc| lc.slice(:mode_of_transport, :load_type, :direction, :fees).values }).to eq(expected_partial_db_data)
+      expect(LocalCharge.all.map { |lc| lc.slice(:mode_of_transport, :load_type, :direction, :fees).values }).to match_array(expected_partial_db_data)
       expect(stats).to eq(expected_stats)
     end
   end
