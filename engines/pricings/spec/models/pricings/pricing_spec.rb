@@ -16,7 +16,7 @@ module Pricings
 
       describe '.for_cargo_classes' do
         it 'returns the lcl pricings only' do
-          expect(::Pricings::Pricing.for_cargo_classes(['lcl'])).to eq([lcl_pricing])
+          expect(::Pricings::Pricing.for_cargo_classes(['lcl']).ids).to eq([lcl_pricing.id])
         end
         it 'returns the fcl_20 & fcl_40 pricings only' do
           expect(::Pricings::Pricing.for_cargo_classes(%w(fcl_20 fcl_40)).sort).to eq([fcl_20_pricing, fcl_40_pricing].sort)
@@ -37,15 +37,19 @@ module Pricings
           expect(::Pricings::Pricing.for_load_type('cargo_item')).to eq([lcl_pricing])
         end
         it 'returns the fcl_20 & fcl_40 pricings only' do
-          expect(::Pricings::Pricing.for_load_type('container')).to eq(
-            [fcl_20_pricing, fcl_40_pricing, fcl_40_hq_pricing].sort_by(&:cargo_class)
+          expect(::Pricings::Pricing.for_load_type('container').ids.sort).to eq(
+            [fcl_20_pricing.id, fcl_40_pricing.id, fcl_40_hq_pricing.id].sort
           )
         end
       end
 
       describe '.for_dates' do
         it 'returns the lcl pricings only' do
-          expect(::Pricings::Pricing.for_dates(Date.today, Date.today + 2.weeks)).to eq([lcl_pricing, fcl_20_pricing, fcl_40_pricing, fcl_40_hq_pricing])
+          expect(
+            ::Pricings::Pricing.for_dates(Date.today, Date.today + 2.weeks).ids.sort
+          ).to eq(
+            [lcl_pricing.id, fcl_20_pricing.id, fcl_40_pricing.id, fcl_40_hq_pricing.id].sort
+          )
         end
       end
     end

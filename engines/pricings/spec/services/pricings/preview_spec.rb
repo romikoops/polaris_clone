@@ -110,16 +110,18 @@ RSpec.describe Pricings::Preview do
                                          application_order: 1,
                                          value: 0.15)
       results = described_class.new(target: group_1, itinerary_id: itinerary_1.id).perform
+      lcl_index = results.index {|r| r.first['id'] == lcl_pricing.id}
+      fcl_index = results.index {|r| r.first['id'] === fcl_20_pricing.id}
       expect(results.length).to eq(2)
-      expect(results.dig(0, 0, 'id')).to eq(lcl_pricing.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 0, 'margin', 'id')).to eq(user_margin_1.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 0, 'fees', 'BAS', 'rate')).to eq(27.5)
-      expect(results.dig(0, 0, 'manipulation_steps', 1, 'margin', 'id')).to eq(group_margin_1.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 1, 'fees', 'BAS', 'rate')).to eq(28.875)
-      expect(results.dig(0, 0, 'manipulation_steps', 2, 'margin', 'id')).to eq(group_margin_2.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 2, 'fees', 'BAS', 'rate')).to eq(33.20625)
-      expect(results.dig(1, 0, 'id')).to eq(fcl_20_pricing.id)
-      expect(results.dig(1, 0, 'manipulation_steps', 0, 'margin', 'id')).to eq(user_margin_2.id)
+      expect(results.dig(lcl_index, 0, 'id')).to eq(lcl_pricing.id)
+      expect(results.dig(lcl_index, 0, 'manipulation_steps', 0, 'margin', 'id')).to eq(user_margin_1.id)
+      expect(results.dig(lcl_index, 0, 'manipulation_steps', 0, 'fees', 'BAS', 'rate')).to eq(27.5)
+      expect(results.dig(lcl_index, 0, 'manipulation_steps', 1, 'margin', 'id')).to eq(group_margin_1.id)
+      expect(results.dig(lcl_index, 0, 'manipulation_steps', 1, 'fees', 'BAS', 'rate')).to eq(28.875)
+      expect(results.dig(lcl_index, 0, 'manipulation_steps', 2, 'margin', 'id')).to eq(group_margin_2.id)
+      expect(results.dig(lcl_index, 0, 'manipulation_steps', 2, 'fees', 'BAS', 'rate')).to eq(33.20625)
+      expect(results.dig(fcl_index, 0, 'id')).to eq(fcl_20_pricing.id)
+      expect(results.dig(fcl_index, 0, 'manipulation_steps', 0, 'margin', 'id')).to eq(user_margin_2.id)
     end
   end
 end
