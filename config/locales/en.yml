@@ -110,6 +110,10 @@ en:
       http_code: 400
       code: 1017
       message: "Please check the sheet to make sure each column has a modifer key above it"
+    not_logged_in:
+      http_code: 400
+      code: 1018
+      message: "Please sign in to continue with your booking request."
     
 
     # Authentication Errors

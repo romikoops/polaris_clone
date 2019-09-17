@@ -49,6 +49,9 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   end
 
   def self.create_shipment(details, current_user, sandbox = nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Metrics/MethodLength
+    scope = Tenants::ScopeService.new(target: current_user).fetch
+    raise ApplicationError::NotLoggedIn if scope[:closed_shop] && current_user.guest
+
     tenant = current_user.tenant
     load_type = details['loadType'].underscore
     direction = details['direction']
@@ -61,7 +64,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       sandbox: sandbox
     )
     shipment.save!
-    scope = Tenants::ScopeService.new(target: current_user).fetch
+
     tenant_itineraries = current_user.tenant.itineraries.where(sandbox: sandbox)
     if scope['base_pricing']
       if scope[:display_itineraries_with_rates]
@@ -138,6 +141,9 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   end
 
   def self.get_offers(params, current_user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+    scope = Tenants::ScopeService.new(target: current_user).fetch
+    raise ApplicationError::NotLoggedIn if scope[:closed_after_map] && current_user.guest
+
     shipment = Shipment.where(sandbox: sandbox).find(params[:shipment_id])
     offer_calculator = OfferCalculator.new(shipment: shipment, params: params, user: current_user, sandbox: sandbox)
 
@@ -453,6 +459,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   end
 
   def self.choose_offer(params, current_user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+    raise ApplicationError::NotLoggedIn if current_user.guest
+
     shipment = Shipment.find_by(id: params[:shipment_id], sandbox: sandbox)
     shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
     shipment.user_id = current_user.id
