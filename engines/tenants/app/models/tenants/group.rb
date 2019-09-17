@@ -2,7 +2,7 @@
 
 module Tenants
   class Group < ApplicationRecord
-    include PgSearch
+    include PgSearch::Model
 
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_one :scope, as: :target, class_name: 'Tenants::Scope'

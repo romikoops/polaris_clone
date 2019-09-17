@@ -2,7 +2,7 @@
 
 class Location < ApplicationRecord
   has_many :location_names
-  include PgSearch
+  include PgSearch::Model
 
   validates :postal_code, uniqueness: {
     scope: %i(neighbourhood city province country),

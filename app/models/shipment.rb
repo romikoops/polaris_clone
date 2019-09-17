@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Shipment < Legacy::Shipment
-  include PgSearch
+  include PgSearch::Model
   extend ShippingTools
 
   STATUSES = %w(

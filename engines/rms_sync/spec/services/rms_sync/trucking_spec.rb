@@ -89,7 +89,7 @@ RSpec.describe ::RmsSync::Trucking do
 
   let!(:routes) do
     [
-      FactoryBot.create(:hamburg_shanghai_route)
+      FactoryBot.create(:hamburg_shanghai_itinerary)
     ]
   end
 

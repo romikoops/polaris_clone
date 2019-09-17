@@ -56,7 +56,7 @@ gem 'rgeo', git: 'https://github.com/rgeo/rgeo.git', tag: 'v2.0.0'
 gem 'rgeo-geojson'
 
 # Full Text Search
-gem 'pg_search'
+gem 'pg_search', '~> 2.3.0'
 
 # Refactoring critical components
 gem 'scientist'

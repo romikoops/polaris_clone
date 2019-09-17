@@ -2,7 +2,7 @@
 
 class User < Legacy::User # rubocop:disable Metrics/ClassLength
   # Include default devise modules.
-  include PgSearch
+  include PgSearch::Model
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable # , :omniauthable

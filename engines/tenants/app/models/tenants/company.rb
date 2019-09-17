@@ -2,7 +2,7 @@
 
 module Tenants
   class Company < ApplicationRecord
-    include PgSearch
+    include PgSearch::Model
 
     acts_as_paranoid
     

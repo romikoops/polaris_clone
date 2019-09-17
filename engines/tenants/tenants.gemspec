@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'mailers'
 
   s.add_dependency 'paranoia'
-  s.add_dependency 'pg_search'
+  s.add_dependency 'pg_search', '~> 2.3.0'
   s.add_dependency 'sorcery', '~> 0.13.0'
 
   s.add_development_dependency 'factory_bot_rails'

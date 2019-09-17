@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Hub < Legacy::Hub
-  include PgSearch
+  include PgSearch::Model
   belongs_to :tenant
   belongs_to :nexus
   belongs_to :address
