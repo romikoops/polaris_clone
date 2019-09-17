@@ -6,6 +6,7 @@ module Legacy
 
     has_many :users
     has_many :shipments
+    has_many :itineraries, class_name: 'Legacy::Itinerary'
 
     has_many :margins, as: :applicable
     has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy

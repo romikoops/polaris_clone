@@ -904,7 +904,7 @@ export default function admin (state = {}, action) {
     case adminConstants.DISABLE_PRICING_SUCCESS: {
       const pricings = get(state, ['pricings', 'show', action.payload.itinerary_id, 'pricings'], false)
       if (!pricings) { return state }
-      const index = pricings.indexOf(p => p.id !== action.payload.id)
+      const index = pricings.findIndex(p => p.id === action.payload.id)
       pricings[index] = action.payload
       
       return {

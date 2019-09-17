@@ -68,7 +68,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       tenant_id: params[:tenant_id],
       sandbox: @sandbox
     )
-    pricing.update(disabled: params[:action] == 'disable')
+    pricing.update(internal: params[:action] == 'disable')
     response_handler(pricing.for_table_json)
   end
 

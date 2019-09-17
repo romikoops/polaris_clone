@@ -45,7 +45,7 @@ module Legacy
       new_options = options.reverse_merge(
         methods: %i(data exceptions load_type cargo_class carrier service_level),
         only: %i(
-          effective_date expiration_date wm_rate itinerary_id
+          effective_date expiration_date wm_rate itinerary_id internal
           tenant_id transport_category_id id currency_name tenant_vehicle_id user_id
         )
       )
@@ -56,7 +56,7 @@ module Legacy
       new_options = options.reverse_merge(
         methods: %i(data exceptions load_type cargo_class carrier service_level user_email),
         only: %i(
-          effective_date expiration_date wm_rate itinerary_id
+          effective_date expiration_date wm_rate itinerary_id internal
           tenant_id transport_category_id id currency_name tenant_vehicle_id user_id
         )
       )

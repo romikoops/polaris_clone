@@ -208,7 +208,8 @@
     "value": "Value",
     "ton": "Ton",
     "kg": "Kg",
-    "cbm": "CBM"
+    "cbm": "CBM",
+    "enabled": "Enabled"
   },
   "admin": {
       "savePricings": "Save Pricings",

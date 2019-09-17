@@ -43,7 +43,7 @@ module Pricings
         methods: %i(data carrier service_level),
         only: %i(
           effective_date expiration_date wm_rate itinerary_id load_type cargo_class
-          tenant_id id tenant_vehicle_id disabled
+          tenant_id id tenant_vehicle_id internal
         )
       )
       super(new_options)
@@ -54,7 +54,7 @@ module Pricings
         methods: %i(data load_type cargo_class carrier service_level itinerary_name mode_of_transport),
         only: %i(
           effective_date expiration_date wm_rate itinerary_id
-          tenant_id id tenant_vehicle_id disabled
+          tenant_id id tenant_vehicle_id internal
         )
       )
       as_json(new_options)
