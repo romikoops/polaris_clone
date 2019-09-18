@@ -20,7 +20,8 @@ module Tenants
         },
         trucking: {
           calculation: false,
-          load_meterage_only: false
+          load_meterage_only: false,
+          comparative: false
         }
       },
       has_insurance: false,
@@ -49,6 +50,10 @@ module Tenants
           cargo_item: true
         },
         ocean: {
+          container: true,
+          cargo_item: true
+        },
+        truck: {
           container: true,
           cargo_item: true
         }
@@ -85,7 +90,10 @@ module Tenants
       send_email_on_quote_download: false,
       cargo_overview_only: false,
       no_aggregated_cargo: false,
-      mandatory_form_fields: false,
+      mandatory_form_fields: {
+        total_value_goods: false,
+        description_of_goods: false
+      },
       translation_overrides: false,
       offer_disclaimers: false,
       closed_after_map: false,

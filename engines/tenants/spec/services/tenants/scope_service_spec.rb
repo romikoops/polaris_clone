@@ -21,7 +21,17 @@ RSpec.describe Tenants::ScopeService do
           closed_registration: false,
           closed_shop: false,
           condense_local_fees_pdf: false,
-          consolidation: { cargo: { backend: false, frontend: false }, trucking: { calculation: false, load_meterage_only: false } },
+          consolidation: {
+            cargo: {
+              backend: false,
+              frontend: false
+            },
+            trucking: {
+              calculation: false,
+              comparative: false,
+              load_meterage_only: false
+            }
+          },
           continuous_rounding: false,
           currency_conversion: true,
           customs_export_paper: false,
@@ -47,8 +57,16 @@ RSpec.describe Tenants::ScopeService do
           hide_sub_totals: false,
           incoterm_info_level: 'text',
           links: { about: '', legal: '' },
-          mandatory_form_fields: false,
-          modes_of_transport: { air: { cargo_item: true, container: true }, ocean: { cargo_item: true, container: true }, rail: { cargo_item: true, container: true } },
+          mandatory_form_fields: {
+            total_value_goods: false,
+            description_of_goods: false
+          },
+          modes_of_transport: { 
+            air: { cargo_item: true, container: true },
+            ocean: { cargo_item: true, container: true },
+            rail: { cargo_item: true, container: true }, 
+            truck: { container: true, cargo_item: true }
+          },
           no_aggregated_cargo: false,
           non_stackable_goods: true,
           offer_disclaimers: false,
