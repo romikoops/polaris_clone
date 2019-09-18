@@ -37,7 +37,7 @@ module ExcelDataServices
       private
 
       def find_or_initialize_itinerary(row)
-        Itinerary.find_or_initialize_by(
+        Legacy::Itinerary.find_or_initialize_by(
           tenant: tenant,
           name: row.itinerary_name,
           mode_of_transport: row.mot,
@@ -47,9 +47,9 @@ module ExcelDataServices
 
       def find_or_initialize_stops(hub_names, itinerary)
         hub_names.map.with_index do |hub_name, i|
-          hub = Hub.find_by(tenant: tenant, name: hub_name, sandbox: @sandbox)
+          hub = Legacy::Hub.find_by(tenant: tenant, name: hub_name, sandbox: @sandbox)
           stop = itinerary.stops.find_by(hub_id: hub.id, index: i, sandbox: @sandbox)
-          stop ||= Stop.new(hub_id: hub.id, index: i, sandbox: @sandbox)
+          stop ||= Legacy::Stop.new(hub_id: hub.id, index: i, sandbox: @sandbox)
           add_stats(stop)
 
           stop
@@ -57,9 +57,9 @@ module ExcelDataServices
       end
 
       def find_or_create_tenant_vehicle(row)
-        carrier = Carrier.find_or_create_by(name: row.carrier) unless row.carrier.blank?
+        carrier = Legacy::Carrier.find_or_create_by(name: row.carrier) unless row.carrier.blank?
 
-        tenant_vehicle = TenantVehicle.find_by(
+        tenant_vehicle = Legacy::TenantVehicle.find_by(
           tenant: tenant,
           name: row.service_level,
           mode_of_transport: row.mot,
@@ -68,7 +68,7 @@ module ExcelDataServices
         )
 
         # TODO: fix!! `Vehicle` shouldn't be creating a `TenantVehicle`!:
-        tenant_vehicle || Vehicle.create_from_name(
+        tenant_vehicle || Legacy::Vehicle.create_from_name(
           name: row.service_level,
           mot: row.mot,
           tenant_id: tenant.id,
@@ -120,13 +120,13 @@ module ExcelDataServices
           end
         else
           pricing_params =
-            { tenant: tenant,
-              transport_category: transport_category,
-              tenant_vehicle: tenant_vehicle,
-              sandbox: @sandbox,
-              user: User.find_by(tenant_id: tenant.id, email: row.customer_email),
-              effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
-              expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
+          { tenant: tenant,
+            transport_category: transport_category,
+            tenant_vehicle: tenant_vehicle,
+            sandbox: @sandbox,
+            user: Legacy::User.find_by(tenant_id: tenant.id, email: row.customer_email),
+            effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
+            expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
           new_pricing = itinerary.pricings.new(pricing_params)
           old_pricings = itinerary.pricings.where(pricing_params.except(:effective_date, :expiration_date))
@@ -203,7 +203,7 @@ module ExcelDataServices
 
           fee_code = row.fee_code.upcase
 
-          charge_category = ChargeCategory.from_code(
+          charge_category = Legacy::ChargeCategory.from_code(
             tenant_id: tenant.id,
             code: fee_code,
             name: row.fee_name || fee_code,

@@ -52,10 +52,10 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
 
     context 'with overlap case: no_old_record' do
       let!(:expected_stats) do
-        { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
-          pricings: { number_created: 17, number_deleted: 1, number_updated: 0 },
-          stops: { number_created: 0, number_deleted: 0, number_updated: 0 } }
+        { :"legacy/itineraries" => { number_created: 0, number_deleted: 0, number_updated: 0 },
+          :"legacy/pricing_details" => { number_created: 18, number_deleted: 1, number_updated: 0 },
+          :"legacy/pricings" => { number_created: 17, number_deleted: 1, number_updated: 0 },
+          :"legacy/stops" => { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
@@ -90,10 +90,10 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         ]
       end
       let!(:expected_stats) do
-        { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
-          pricings: { number_created: 17, number_deleted: 1, number_updated: 1 },
-          stops: { number_created: 0, number_deleted: 0, number_updated: 0 } }
+        { :"legacy/itineraries" => { number_created: 0, number_deleted: 0, number_updated: 0 },
+          :"legacy/pricing_details" => { number_created: 18, number_deleted: 1, number_updated: 0 },
+          :"legacy/pricings" => { number_created: 17, number_deleted: 1, number_updated: 1 },
+          :"legacy/stops" => { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
@@ -131,10 +131,10 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         ]
       end
       let!(:expected_stats) do
-        { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
-          pricings: { number_created: 17, number_deleted: 1, number_updated: 0 },
-          stops: { number_created: 0, number_deleted: 0, number_updated: 0 } }
+        { :"legacy/itineraries" => { number_created: 0, number_deleted: 0, number_updated: 0 },
+          :"legacy/pricing_details" => { number_created: 18, number_deleted: 1, number_updated: 0 },
+          :"legacy/pricings" => { number_created: 17, number_deleted: 1, number_updated: 0 },
+          :"legacy/stops" => { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
@@ -174,10 +174,10 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         ]
       end
       let!(:expected_stats) do
-        { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
-          pricings: { number_created: 18, number_deleted: 1, number_updated: 2 },
-          stops: { number_created: 0, number_deleted: 0, number_updated: 0 } }
+        { :"legacy/itineraries" => { number_created: 0, number_deleted: 0, number_updated: 0 },
+          :"legacy/pricing_details" => { number_created: 18, number_deleted: 1, number_updated: 0 },
+          :"legacy/pricings" => { number_created: 18, number_deleted: 1, number_updated: 2 },
+          :"legacy/stops" => { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
@@ -219,10 +219,10 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         ]
       end
       let!(:expected_stats) do
-        { itineraries: { number_created: 0, number_deleted: 0, number_updated: 0 },
-          pricing_details: { number_created: 18, number_deleted: 1, number_updated: 0 },
-          pricings: { number_created: 17, number_deleted: 1, number_updated: 1 },
-          stops: { number_created: 0, number_deleted: 0, number_updated: 0 } }
+        { :"legacy/itineraries" => { number_created: 0, number_deleted: 0, number_updated: 0 },
+          :"legacy/pricing_details" => { number_created: 18, number_deleted: 1, number_updated: 0 },
+          :"legacy/pricings" => { number_created: 17, number_deleted: 1, number_updated: 1 },
+          :"legacy/stops" => { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [

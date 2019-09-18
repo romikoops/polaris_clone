@@ -24,5 +24,11 @@ module Legacy
         expect(cargo.calc_chargeable_weight('ocean')).to eq(200)
       end
     end
+
+    describe '.calc_chargeable_weight_from_values' do
+      it 'calcs the volume from inputs' do
+        expect(Legacy::CargoItem.calc_chargeable_weight_from_values(1.5, 1000, 'ocean')).to eq(1500)
+      end
+    end
   end
 end

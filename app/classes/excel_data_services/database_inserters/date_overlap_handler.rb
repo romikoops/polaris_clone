@@ -62,7 +62,7 @@ module ExcelDataServices
         after_new_obj = old_obj.dup
 
         case old_obj.class.name
-        when 'Pricing'
+        when 'Legacy::Pricing', 'Pricing'
           after_new_obj.pricing_details << old_obj.pricing_details.map(&:dup)
           after_new_obj.pricing_details << old_obj.pricing_exceptions.map(&:dup)
           after_new_obj.pricing_details << old_obj.pricing_requests.map(&:dup)
