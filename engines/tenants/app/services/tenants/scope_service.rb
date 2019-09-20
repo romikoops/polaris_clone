@@ -42,20 +42,20 @@ module Tenants
       total_dimensions: true,
       modes_of_transport: {
         air: {
-          container: true,
+          container: false,
           cargo_item: true
         },
         rail: {
-          container: true,
-          cargo_item: true
+          container: false,
+          cargo_item: false
         },
         ocean: {
           container: true,
           cargo_item: true
         },
         truck: {
-          container: true,
-          cargo_item: true
+          container: false,
+          cargo_item: false
         }
       },
       closed_registration: false,
