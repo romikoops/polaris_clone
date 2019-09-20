@@ -61,11 +61,11 @@ RSpec.describe Tenants::ScopeService do
             total_value_goods: false,
             description_of_goods: false
           },
-          modes_of_transport: { 
-            air: { cargo_item: true, container: true },
+          modes_of_transport: {
+            air: { cargo_item: true, container: false },
             ocean: { cargo_item: true, container: true },
-            rail: { cargo_item: true, container: true }, 
-            truck: { container: true, cargo_item: true }
+            rail: { cargo_item: false, container: false },
+            truck: { container: false, cargo_item: false }
           },
           no_aggregated_cargo: false,
           non_stackable_goods: true,
