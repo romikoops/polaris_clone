@@ -162,7 +162,7 @@ class Landing extends Component {
                   style={{ backgroundImage: imageUrlRender }}
                 />
                 <div className={`${styles.btm_promo_text} flex-55 layout-row layout-align-start-start`}>
-                  <div className="flex-90 layout-column layout-align-start-start height_100">
+                  <div className="flex-90 layout-column height_100">
                     <div className="flex-20 layout-column layout-align-center-start">
                       {bulletTitlesToRender}
                     </div>
