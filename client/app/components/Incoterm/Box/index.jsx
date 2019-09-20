@@ -124,15 +124,15 @@ function IncotermBox ({
   `
   const textDisplay = (
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
-      <div className="flex-40 layout-row layout-align-end-center">
-        <div className="flex-none" style={{ paddingRight: '15px' }}>
+      <div className="flex-60 layout-row layout-align-end-center">
+        <div className="flex-50">
           <TextHeading theme={theme} text={`${t('shipment:serviceLevel')}:`} size={3} />
         </div>
-        <div className="flex-none layout-row layout-align-center-center">
+        <div className="flex-10 layout-row layout-align-center-center">
           <i className="fa fa-chain flex-none" style={{ color: '#E0E0E0', paddingRight: '8px' }} />
         </div>
         <div className="flex-5" />
-        <div className="flex-none layout-row layout-align-center-center">
+        <div className="flex-35 layout-row layout-align-center-center">
           <p className="flex-none no_m">{textSwitch()}</p>
         </div>
       </div>

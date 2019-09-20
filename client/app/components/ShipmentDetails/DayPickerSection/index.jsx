@@ -65,15 +65,15 @@ class DayPickerSection extends React.PureComponent {
       <div className={`${styles.date_sec} layout-row flex-100 layout-wrap layout-align-center-center`}>
         <div className="content_width_booking layout-row flex-none layout-align-start-center">
           <div className="layout-row flex-70 layout-align-start-center layout-wrap">
-            <div className="flex-none layout-row layout-align-start-center" style={{ paddingRight: '15px' }}>
-              <div className="flex-none layout-align-space-between-end">
+            <div className="flex-50 layout-row layout-align-start-center">
+              <div className="flex-100 layout-align-space-between-end">
                 <TextHeading theme={theme} text={`${dayPickerText}:`} size={3} />
               </div>
               <Tooltip theme={theme} text={dayPickerToolip} icon="fa-info-circle" />
             </div>
             <div
               name="dayPicker"
-              className={`flex-none layout-row ${styles.dpb}`}
+              className={`flex-50 layout-row ${styles.dpb}`}
             >
               <div className={`flex-none layout-row layout-align-center-center ${styles.dpb_icon}`}>
                 <i className="flex-none fa fa-calendar" />

@@ -193,15 +193,10 @@ exports[`incoterm_info_level render is text 1`] = `
     className="flex-100 layout-row layout-align-end-center layout-wrap"
   >
     <div
-      className="flex-40 layout-row layout-align-end-center"
+      className="flex-60 layout-row layout-align-end-center"
     >
       <div
-        className="flex-none"
-        style={
-          Object {
-            "paddingRight": "15px",
-          }
-        }
+        className="flex-50"
       >
         <TextHeading
           color=""
@@ -218,7 +213,7 @@ exports[`incoterm_info_level render is text 1`] = `
         />
       </div>
       <div
-        className="flex-none layout-row layout-align-center-center"
+        className="flex-10 layout-row layout-align-center-center"
       >
         <i
           className="fa fa-chain flex-none"
@@ -234,7 +229,7 @@ exports[`incoterm_info_level render is text 1`] = `
         className="flex-5"
       />
       <div
-        className="flex-none layout-row layout-align-center-center"
+        className="flex-35 layout-row layout-align-center-center"
       >
         <p
           className="flex-none no_m"

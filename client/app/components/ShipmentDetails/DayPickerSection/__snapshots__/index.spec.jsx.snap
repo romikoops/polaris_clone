@@ -11,15 +11,10 @@ exports[`pre carriage is true 1`] = `
       className="layout-row flex-70 layout-align-start-center layout-wrap"
     >
       <div
-        className="flex-none layout-row layout-align-start-center"
-        style={
-          Object {
-            "paddingRight": "15px",
-          }
-        }
+        className="flex-50 layout-row layout-align-start-center"
       >
         <div
-          className="flex-none layout-align-space-between-end"
+          className="flex-100 layout-align-space-between-end"
         >
           <TextHeading
             color=""
@@ -65,7 +60,7 @@ exports[`pre carriage is true 1`] = `
         />
       </div>
       <div
-        className="flex-none layout-row dpb"
+        className="flex-50 layout-row dpb"
         name="dayPicker"
       >
         <div
@@ -221,15 +216,10 @@ exports[`renders correctly 1`] = `
       className="layout-row flex-70 layout-align-start-center layout-wrap"
     >
       <div
-        className="flex-none layout-row layout-align-start-center"
-        style={
-          Object {
-            "paddingRight": "15px",
-          }
-        }
+        className="flex-50 layout-row layout-align-start-center"
       >
         <div
-          className="flex-none layout-align-space-between-end"
+          className="flex-100 layout-align-space-between-end"
         >
           <TextHeading
             color=""
@@ -275,7 +265,7 @@ exports[`renders correctly 1`] = `
         />
       </div>
       <div
-        className="flex-none layout-row dpb"
+        className="flex-50 layout-row dpb"
         name="dayPicker"
       >
         <div
@@ -431,15 +421,10 @@ exports[`selected day is falsy 1`] = `
       className="layout-row flex-70 layout-align-start-center layout-wrap"
     >
       <div
-        className="flex-none layout-row layout-align-start-center"
-        style={
-          Object {
-            "paddingRight": "15px",
-          }
-        }
+        className="flex-50 layout-row layout-align-start-center"
       >
         <div
-          className="flex-none layout-align-space-between-end"
+          className="flex-100 layout-align-space-between-end"
         >
           <TextHeading
             color=""
@@ -485,7 +470,7 @@ exports[`selected day is falsy 1`] = `
         />
       </div>
       <div
-        className="flex-none layout-row dpb"
+        className="flex-50 layout-row dpb"
         name="dayPicker"
       >
         <div
