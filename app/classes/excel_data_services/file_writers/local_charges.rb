@@ -105,7 +105,7 @@ module ExcelDataServices
             'PER_UNIT_TON_CBM_RANGE' => per_unit_ton_cbm_range_value(range) }
 
         unless lookup.has_key?(rate_basis)
-          raise ExcelDataServices::DataValidators::WritingError::UnknownRateBasisError,
+          raise ExcelDataServices::DataValidators::ValidationErrors::WritingError::UnknownRateBasisError,
                 "RATE_BASIS \"#{rate_basis}\" not found!"
         end
 
@@ -114,7 +114,7 @@ module ExcelDataServices
 
       def per_unit_ton_cbm_range_value(range)
         if range[:cbm] && range[:ton]
-          raise ExcelDataServices::DataValidators::WritingError::PerUnitTonCbmRangeError,
+          raise ExcelDataServices::DataValidators::ValidationErrors::WritingError::PerUnitTonCbmRangeError,
                 "There should only be one value for rate_basis 'PER_UNIT_TON_CBM_RANGE'."
         end
 

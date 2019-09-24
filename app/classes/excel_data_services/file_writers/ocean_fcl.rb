@@ -86,7 +86,7 @@ module ExcelDataServices
         when 'With Ranges'
           HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES
         else
-          raise ExcelDataServices::DataValidators::WritingError::UnknownSheetNameError,
+          raise ExcelDataServices::DataValidators::ValidationErrors::WritingError::UnknownSheetNameError,
                 "Unknown sheet name \"#{sheet_name}\"!"
         end
       end
