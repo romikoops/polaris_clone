@@ -33,7 +33,9 @@ withPipeline(timeout: 120) {
         stash(name: 'backend', excludes: 'client/**/*,qa/**/*')
         stash(name: 'frontend', includes: 'client/**/*')
         stash(name: 'qa', includes: 'qa/**/*')
-        stash(name: 'chart', includes: 'chart/**/*')
+        if (fileExists("chart/Chart.yaml")) {
+          stash(name: 'chart', includes: 'chart/**/*')
+        }
       }
 
       withStage('Prepare') {
@@ -133,16 +135,9 @@ withPipeline(timeout: 120) {
       milestone()
 
       env.REVIEW_NAME = trimName(env.CI_COMMIT_REF_SLUG, 40)
-      env.REVIEW_NAMESPACE = trimName(env.CI_COMMIT_REF_SLUG, 63)
 
       lock(label: "${env.GIT_BRANCH}-deploy", inversePrecedence: true) {
-        inPod { label ->
-          withNode(label) {
-            githubDeploy(environment: env.REVIEW_NAMESPACE, url: "https://${env.REVIEW_NAME}.${env.REVIEW_DOMAIN}") {
-              deployReview(env.REVIEW_NAMESPACE, env.REVIEW_NAME)
-            }
-          }
-        }
+        deployReview()
 
         milestone()
       }
@@ -229,63 +224,6 @@ void appRunner(String name) {
   withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}", "LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby"]) {
     catchError(buildResult: null, stageResult: 'FAILURE') {
       sh(label: 'Test', script: "scripts/ci-test ${name}")
-    }
-  }
-}
-
-void deployReview(String namespace, String name) {
-  def secretTemplate = """\
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: registry-default
-    type: kubernetes.io/dockerconfigjson
-    data:
-    {{- range \\\$key, \\\$value := .data }}
-      {{ \\\$key }}: {{ \\\$value }}
-    {{- end }}
-  """.stripIndent()
-
-  inPod(
-    containers: [
-      containerTemplate(name: 'deploy', image: 'eu.gcr.io/itsmycargo-main/deploy:latest', ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '100m', resourceLimitCpu: '100m',
-        resourceRequestMemory: '100Mi', resourceLimitMemory: '100Mi'
-      )
-    ]
-  ) { label ->
-    withNode("${label}") {
-      unstash(name: 'chart')
-
-      container('deploy') {
-        sh(label: 'Create Namespace',
-        script: """
-          kubectl get namespace -oname | grep -q 'namespace/${namespace}\$' || kubectl create namespace ${namespace}
-          kubectl annotate --overwrite namespace ${namespace} itsmycargo.tech/change-id=${env.CHANGE_ID}
-          kubectl annotate --overwrite namespace ${namespace} itsmycargo.tech/change-repo=${jobShortName()}
-          kubectl get secrets -n default registry-default -ogo-template="${secretTemplate}" | kubectl apply -n ${namespace} -f -
-        """)
-
-        sh(label: 'Destroy failed deployment',
-          script: """
-            if [[ -n "\$(helm ls --failed -q "^${name}\$")" ]]; then
-              helm delete --purge "${name}" || true
-            fi
-          """
-        )
-
-        sh(label: 'Helm Deploy',
-          script: """
-            helm upgrade --install \
-              --timeout 600 \
-              --set image.tag="${env.GIT_COMMIT}" \
-              --set ingress.domain="${env.REVIEW_DOMAIN}" \
-              --namespace=${namespace} \
-              "${name}" \
-              chart/
-          """
-        )
-      }
     }
   }
 }
