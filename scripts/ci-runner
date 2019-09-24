@@ -22,7 +22,7 @@ export SEED CI DISABLE_PROFILE COVERAGE COVERAGE_DIR DISABLE_PROFILE RAILS_ENV S
 
 (
   cd "$2"
-  bin/rspec || bin/rspec --only-failures
+  bin/rspec
 )
 
 exit $?
