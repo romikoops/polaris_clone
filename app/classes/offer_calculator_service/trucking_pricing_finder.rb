@@ -35,23 +35,20 @@ module OfferCalculatorService
         group_ids.unshift(nil)
         group_ids.each do |group_id|
           grouped_results.each do |cargo_class, truckings_by_cargo_class|
-            trucking = truckings_by_cargo_class.reject(&:user_id)
-                                               .select { |r| r.group_id == group_id || r.group_id.nil? }
-                                               .sort_by { |r| r.group_id || '' }
-                                               .reverse
-                                               .first
-            truckings[cargo_class] = trucking
+            trucking = truckings_by_cargo_class
+                       .select { |trp| trp.user_id.nil? && [group_id, nil].include?(trp.group_id) }
+                       .max_by { |trp| trp.group_id.to_i }
+            truckings[cargo_class] = trucking if trucking
           end
         end
       else
         results.group_by(&:cargo_class)
                .each do |cargo_class, truckings_by_cargo_class|
-          trucking = truckings_by_cargo_class.reject(&:group_id)
-                                             .select { |r| r.user_id == @user&.id || r.user_id.nil? }
-                                             .sort_by { |r| r.user_id || 0 }
-                                             .reverse
-                                             .first
-          truckings[cargo_class] = trucking
+          trucking = truckings_by_cargo_class
+                        .select { |trp| trp.group_id.nil? && [@user&.id, nil].include?(trp.user_id) }
+                        .max_by { |trp| trp.user_id.to_i }
+
+          truckings[cargo_class] = trucking if trucking
         end
       end
 
