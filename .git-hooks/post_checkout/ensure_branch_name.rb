@@ -3,7 +3,7 @@
 module Overcommit::Hook::PostCheckout
   class EnsureBranchName < Base
     def run
-      return :pass if Overcommit::GitRepo.current_branch =~ /\A[a-z0-9_\/-]+\z/
+      return :pass if Overcommit::GitRepo.current_branch =~ /\A[a-z0-9_.\/-]+\z/
       return :pass if Overcommit::GitRepo.current_branch.empty?
 
       [:fail,
