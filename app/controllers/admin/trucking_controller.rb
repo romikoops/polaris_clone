@@ -52,7 +52,7 @@ class Admin::TruckingController < Admin::AdminBaseController
   end
 
   def overwrite_zonal_trucking_by_hub
-    if params[:file]
+    if upload_params[:file]
       Document.create!(
         text: '',
         doc_type: 'truckings',
@@ -62,10 +62,10 @@ class Admin::TruckingController < Admin::AdminBaseController
       )
 
       args = {
-        params: { 'xlsx' => params[:file] },
-        hub_id: params[:id],
+        params: { 'xlsx' => upload_params[:file] },
+        hub_id: upload_params[:id],
         user: current_user,
-        group: params[:group] == 'all' ? nil : params[:group],
+        group: upload_params[:group] == 'all' ? nil : upload_params[:group],
         sandbox: @sandbox
       }
 
@@ -83,5 +83,9 @@ class Admin::TruckingController < Admin::AdminBaseController
     options[:group_id] = options[:target] == 'all' ? nil : options[:target]
     url = DocumentService::TruckingWriter.new(options).perform
     response_handler(url: url, key: 'trucking')
+  end
+
+  def upload_params
+    params.permit(:file, :group, :id)
   end
 end
