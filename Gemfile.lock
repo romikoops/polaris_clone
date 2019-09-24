@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rgeo/rgeo.git
-  revision: 43b35866c1bdd8e87bb08bde9fa4d6aab422190e
-  tag: v2.0.0
+  revision: 9c68a35e8d59f6ed3cf2d3d7b86450f0572adab2
+  tag: v2.0.1
   specs:
-    rgeo (2.0.0)
+    rgeo (2.0.1)
 
 PATH
   remote: engines/admiralty_assets

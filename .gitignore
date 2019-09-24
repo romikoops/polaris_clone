@@ -25,6 +25,7 @@ Gemfile.local.lock
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+/.build/
 
 # Ignore uploaded files in development
 /storage/*

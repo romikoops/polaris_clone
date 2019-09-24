@@ -52,7 +52,7 @@ gem 'pdfkit'
 gem 'wkhtmltopdf-binary'
 
 # Used to ensure rgeo is rebuilt on deploy
-gem 'rgeo', git: 'https://github.com/rgeo/rgeo.git', tag: 'v2.0.0'
+gem 'rgeo', git: 'https://github.com/rgeo/rgeo.git', tag: 'v2.0.1'
 gem 'rgeo-geojson'
 
 # Full Text Search

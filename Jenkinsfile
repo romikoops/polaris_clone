@@ -98,7 +98,13 @@ withPipeline(timeout: 120) {
   }
   prepareJobs['images/backend'] = {
     withRetry {
-      dockerBuild(dir: '.', image: "${jobName()}/backend", memory: 1500, stash: 'backend')
+      dockerBuild(
+        dir: '.',
+        image: "${jobName()}/backend",
+        memory: 1500,
+        stash: 'backend',
+        pre_script: "scripts/docker-prepare.sh"
+      )
     }
   }
   prepareJobs['images/frontend'] = {

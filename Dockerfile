@@ -24,6 +24,9 @@ RUN DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
 
 ENV LC_ALL C.UTF-8
 
+# Add user
+RUN groupadd -r app && useradd -r -d /app/tmp -s /sbin/nologin -g app app
+
 # Install Node
 ARG NODE_VERSION=node_10.x
 RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
@@ -36,7 +39,8 @@ RUN npm install -g 'mjml@4.3.1'
 
 WORKDIR /app
 
-COPY . ./
+COPY --chown=app:app Gemfile Gemfile.lock .build/docker/ .
+
 RUN bundle config --global frozen 1 \
     && bundle install -j4 --retry 3 \
     # Remove unneeded files (cached *.gem, *.o, *.c)
@@ -44,12 +48,13 @@ RUN bundle config --global frozen 1 \
     && find /usr/local/bundle/gems/ -name "*.c" -delete \
     && find /usr/local/bundle/gems/ -name "*.o" -delete
 
+RUN chown -R app:app /app/
+
 ARG RELEASE=""
 RUN echo "$RELEASE" > ./REVISION
 
-# Add user
-RUN groupadd -r app && useradd -r -d /app/tmp -s /sbin/nologin -g app app
-RUN chown -R app:app /app/
+COPY --chown=app:app . ./
+
 USER app
 
 RUN RAILS_ENV=production bin/rails assets:precompile
@@ -62,11 +67,6 @@ RUN RAILS_ENV=production bin/rails assets:precompile
 #
 FROM ruby:2.6-slim AS app
 LABEL maintainer="development@itsmycargo.com"
-
-# Add Tini
-ENV TINI_VERSION v0.18.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
 
 ENV MALLOC_ARENA_MAX 2
 
