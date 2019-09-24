@@ -38,8 +38,8 @@ export const SHIPMENT_STAGES = [
   },
   {
     step: 5,
-    text: 'Booking Confirmation',
-    header: 'Booking Confirmation',
+    text: 'Complete Booking Request',
+    header: 'Complete Booking Request',
     url: '/finish_booking'
   }
 ]

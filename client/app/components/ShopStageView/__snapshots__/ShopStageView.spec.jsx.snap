@@ -843,7 +843,7 @@ exports[`tenant.scope is falsy 1`] = `
           <p
             className="flex-none stage_text"
           >
-            Booking Confirmation
+            Complete Booking Request
           </p>
         </div>
       </div>
