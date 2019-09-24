@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
+import { withNamespaces } from 'react-i18next'
+import { connect } from 'react-redux'
 import FormsyInput from '../../FormsyInput/FormsyInput'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import styles from './AdminSettings.scss'
 import CircleCompletion from '../../CircleCompletion/CircleCompletion'
-import { withNamespaces } from 'react-i18next'
 import { capitalize } from '../../../helpers'
 
 class AdminEmailForm extends Component {
@@ -35,7 +36,7 @@ class AdminEmailForm extends Component {
   componentWillReceiveProps (nextProps) {
     const { tenantDispatch } = this.props
 
-    if (nextProps.tenant.savedEmailSuccess) {
+    if (nextProps.tenantProps && nextProps.tenantProps.savedEmailSuccess) {
       setTimeout(() => {
         tenantDispatch.updateReduxStore({ savedEmailSuccess: false })
       }, 2000)
@@ -60,14 +61,21 @@ class AdminEmailForm extends Component {
   }
 
   render () {
-    const { t, tenant, theme } = this.props
-    const emails = tenant.emails
+    const {
+      t, tenant, theme, tenantProps
+    } = this.props
+    const { emails } = tenant
 
     const emailKeys = Object.keys(tenant.emails)
 
     const emailInputs = emailKeys.map(key => (
       <div>
-        <h3>{capitalize(key)} {t('user:emails')}:</h3>
+        <h3>
+          {capitalize(key)}
+          {' '}
+          {t('user:emails')}
+:
+        </h3>
 
         <div className={`${styles.email_settings} flex-100 layout-row layout-row layout-align-center-start`}>
           <div className={`flex-100 layout-align-center-center padding_right layout-gt-sm-row layout-column ${styles.input_box} input`}>
@@ -122,11 +130,11 @@ class AdminEmailForm extends Component {
           <div className="flex-100 flex-gt-md-75 layout-row layout-wrap layout-align-start-center">
             {emailInputs}
           </div>
-          <div className="flex-100 flex-gt-md-25 layout-column layout-align-end-center padding_right padding_top" >
+          <div className="flex-100 flex-gt-md-25 layout-column layout-align-end-center padding_right padding_top">
             <CircleCompletion
               icon="fa fa-check"
               iconColor={theme.colors.primary || 'green'}
-              animated={tenant.savedEmailSuccess}
+              animated={tenantProps.savedEmailSuccess}
               optionalText={t('admin:accountEmailsUpdated')}
             />
             <RoundButton
@@ -158,4 +166,12 @@ AdminEmailForm.defaultProps = {
   theme: {},
   savedEmailSuccess: false
 }
-export default withNamespaces(['admin', 'common', 'user', 'errors'])(AdminEmailForm)
+
+function mapStateToProps (state) {
+  return {
+    tenantProps: state.tenant
+  }
+}
+
+
+export default connect(mapStateToProps, {})(withNamespaces(['admin', 'common', 'user', 'errors'])(AdminEmailForm))

@@ -4,7 +4,9 @@ export const tenant = (
   state = {
     isFetching: false,
     didInvalidate: false,
-    data: {}
+    data: {
+      savedEmailSuccess: false
+    }
   },
   action
 ) => {
@@ -46,7 +48,10 @@ export const tenant = (
       }
     }
     case tenantConstants.UPDATE_EMAILS_REQUEST:
-      return state
+      return {
+        ...state,
+        savedEmailSuccess: false
+      }
     case tenantConstants.UPDATE_EMAILS_SUCCESS: {
       return {
         ...state,
