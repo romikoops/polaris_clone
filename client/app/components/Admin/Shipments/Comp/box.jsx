@@ -116,23 +116,29 @@ export class AdminShipmentsBox extends Component {
           <div
             className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${parseInt(page, 10) === 1 ? styles.disabled : ''}
+                      ${styles.navigation_button} ${parseInt(page, 10) > 1 ? '' : styles.disabled}
                     `}
             onClick={parseInt(page, 10) > 1 ? prevPage : null}
           >
             <i className="fa fa-chevron-left" />
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
+            <p>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              {t('common:prev')}
+            </p>
           </div>
           {}
-          <p>{page}</p>
+          {shipments.length > 0 && <p>{page}</p>}
           <div
             className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${parseInt(page, 10) < numPages ? '' : styles.disabled}
+                      ${styles.navigation_button} ${parseInt(page, 10) < numPages && shipments.length > 0 ? '' : styles.disabled}
                     `}
-            onClick={parseInt(page, 10) < numPages ? nextPage : null}
+            onClick={parseInt(page, 10) < numPages && shipments.length > 0 ? nextPage : null}
           >
-            <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <p>
+              {t('common:next')}
+              &nbsp;&nbsp;&nbsp;&nbsp;
+            </p>
             <i className="fa fa-chevron-right" />
           </div>
         </div>

@@ -226,6 +226,7 @@ function newContact (data) {
 function getShipments (_pages, perPage, params, redirect) {
   const pages = _pages || {
     open: 1,
+    quoted: 1,
     requested: 1,
     archived: 1,
     rejected: 1,

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`page > 10 1`] = `
+exports[`last page 1`] = `
 <div
   className="layout-row flex-100
          layout-wrap layout-align-start-center searchable"
@@ -20,24 +20,27 @@ exports[`page > 10 1`] = `
       />
     </div>
   </div>
-  <div
-    className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center margin_bottom"
-  >
-    <div
-      className="flex-100 layout-row layout-align-space-between-center sec_subheader"
-    >
-      <p
-        className=" sec_subheader_text flex-none"
-      >
-         No Shipments yet
-      </p>
-    </div>
-    <p
-      className="flex-none"
-    >
-       As shipments are requested, they will appear here
-    </p>
-  </div>
+  <ShipmentOverviewCard
+    admin={true}
+    confirmShipmentData={Object {}}
+    hubs={Object {}}
+    noTitle={true}
+    paginate={false}
+    shipments={
+      Array [
+        Object {},
+      ]
+    }
+    t={[Function]}
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
   <div
     className="flex-95 layout-row layout-align-center-center margin_bottom"
   >
@@ -53,11 +56,11 @@ exports[`page > 10 1`] = `
       />
       <p>
             
-        Back
+        Prev
       </p>
     </div>
     <p>
-      11
+      6
     </p>
     <div
       className="
@@ -131,12 +134,9 @@ exports[`shallow render 1`] = `
       />
       <p>
             
-        Back
+        Prev
       </p>
     </div>
-    <p>
-      1
-    </p>
     <div
       className="
                       flex-15 layout-row layout-align-center-center pointy
@@ -212,7 +212,7 @@ exports[`shipments is truthy 1`] = `
       />
       <p>
             
-        Back
+        Prev
       </p>
     </div>
     <p>

@@ -22,10 +22,12 @@ test('shallow render', () => {
   expect(shallow(<AdminShipmentsBox {...propsBase} />)).toMatchSnapshot()
 })
 
-test('page > 10', () => {
+test('last page', () => {
   const props = {
     ...propsBase,
-    page: 11
+    shipments: [{}],
+    page: 6,
+    numPages: 6
   }
   expect(shallow(<AdminShipmentsBox {...props} />)).toMatchSnapshot()
 })
