@@ -26,7 +26,8 @@ class RouteSection extends React.PureComponent {
         origin: null,
         destination: null
       },
-      carriageOptions: props.scope.carriage_options
+      carriageOptions: props.scope.carriage_options,
+      newRoute: false
     }
 
     this.handleCarriageChange = this.handleCarriageChange.bind(this)
@@ -83,6 +84,7 @@ class RouteSection extends React.PureComponent {
     ) {
       let originIndeces = [...Array(routes.length).keys()]
       let destinationIndeces = [...Array(routes.length).keys()]
+      nextState.newRoute = true
 
       // update origins (for react state)
       if (!onCarriage && destination.nexusId) {
@@ -153,6 +155,12 @@ class RouteSection extends React.PureComponent {
         const country = preCarriage ? availableRoutes[0].origin.country : origin.country
         shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })
       }
+    }
+    if (origin === prevState.origin &&
+      destination === prevState.destination &&
+      preCarriage === prevState.preCarriage &&
+      onCarriage === prevState.onCarriage) {
+      nextState.newRoute = false
     }
     if (addressErrors.origin) {
       nextState.collapsedAddressFields.origin = false
@@ -254,7 +262,6 @@ class RouteSection extends React.PureComponent {
       setMarker(target, { lat, lng })
     } else {
       bookingProcessDispatch.updateShipment(target, {})
-
       setMarker(target, null)
     }
   }
@@ -352,7 +359,7 @@ class RouteSection extends React.PureComponent {
     } = shipment
 
     const {
-      origins, destinations, truckTypes, collapsedAddressFields, truckingAvailability
+      origins, destinations, truckTypes, collapsedAddressFields, truckingAvailability, newRoute
     } = this.state
 
     return (
@@ -445,7 +452,7 @@ class RouteSection extends React.PureComponent {
                       requiresFullAddress={requiresFullAddress}
                     />
                   </div>
-                  <OfferError availableMots={availableMots} componentName="RouteSection" />
+                  <OfferError availableMots={availableMots} newRoute={newRoute} componentName="RouteSection" />
                 </React.Fragment>
               )
             }

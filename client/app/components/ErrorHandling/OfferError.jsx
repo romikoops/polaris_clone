@@ -8,6 +8,14 @@ import styles from './errors.scss'
 import CircleCompletion from '../CircleCompletion/CircleCompletion'
 
 class OfferError extends PureComponent {
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.newRoute && !prevState.newRoute) {
+      return { newRoute: true }
+    }
+
+    return { newRoute: false }
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -16,7 +24,8 @@ class OfferError extends PureComponent {
         code: '',
         title: '',
         addtionalInfo: ''
-      }
+      },
+      newRoute: false
     }
   }
 
@@ -113,8 +122,12 @@ class OfferError extends PureComponent {
       t,
       componentName
     } = this.props
-    const { defaultError } = this.state
+    const { defaultError, newRoute } = this.state
     const wrapperStyle = has(error, [componentName, 'code']) ? styles.show_error_drawer : styles.hide_error_drawer
+
+    if (newRoute) {
+      this.closeDrawer()
+    }
 
     const {
       code, side
