@@ -18,15 +18,15 @@ class QuoteMailer < ApplicationMailer
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipments.first.mode_of_transport}.png"
     ).read
-    
+
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
     document = PdfService.new(user: @user, tenant: @user.tenant).quotation_pdf(quotation: @quotation)&.attachment
     attachments[pdf_name] = document if document.present?
     attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
-   
+
     mail(
-      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: @user.tenant_id).default_domain}")
+      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: @user.tenant_id).slug}.itsmycargo.shop")
                          .tap { |a| a.display_name = @user.tenant.name }.format,
       reply_to: @user.tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, email),
@@ -64,7 +64,7 @@ class QuoteMailer < ApplicationMailer
     }
 
     mail(
-      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: @user.tenant_id).default_domain}")
+      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: @user.tenant_id).slug}.itsmycargo.shop")
                          .tap { |a| a.display_name = 'ItsMyCargo Quotation Tool' }.format,
       reply_to: Settings.emails.support,
       to: mail_target_interceptor(@user, @user.tenant.email_for(:sales, @shipment.mode_of_transport)),

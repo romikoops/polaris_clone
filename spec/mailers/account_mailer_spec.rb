@@ -21,7 +21,7 @@ RSpec.describe AccountMailer, type: :mailer do
     end
 
     it 'renders the correct sender' do
-      expect(mail.from).to eq(['no-reply@demo.itsmycargo.com'])
+      expect(mail.from).to eq(['no-reply@demo.itsmycargo.shop'])
       expect(mail.reply_to).to eq(['support@demo.com'])
     end
 
@@ -44,7 +44,7 @@ RSpec.describe AccountMailer, type: :mailer do
     end
 
     it 'renders the correct sender' do
-      expect(mail.from).to eq(['no-reply@demo.itsmycargo.com'])
+      expect(mail.from).to eq(['no-reply@demo.itsmycargo.shop'])
       expect(mail.reply_to).to eq(['support@demo.com'])
     end
 

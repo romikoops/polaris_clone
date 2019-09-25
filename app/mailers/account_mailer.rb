@@ -10,7 +10,7 @@ class AccountMailer < Devise::Mailer
     tenant = record.tenant
     @primary_color = tenant.theme.dig('colors', 'primary')
 
-    opts[:from] = Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}")
+    opts[:from] = Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).slug}.itsmycargo.shop")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
     attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read)
@@ -28,7 +28,7 @@ class AccountMailer < Devise::Mailer
     tenant = record.tenant
     @primary_color = tenant.theme.dig('colors', 'primary')
     attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read) if tenant.theme['emailLogo']
-    opts[:from] = Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}")
+    opts[:from] = Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).slug}.itsmycargo.shop")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
     @scope = ::Tenants::ScopeService.new(target: record).fetch

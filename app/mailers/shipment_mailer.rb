@@ -27,7 +27,7 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {
-      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}")
+      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).slug}.itsmycargo.shop")
                          .tap { |a| a.display_name = 'ItsMyCargo Bookings' }.format,
       reply_to: 'support@itsmycargo.com',
       to: mail_target_interceptor(@user, tenant.email_for(:sales, shipment.mode_of_transport)),
@@ -54,7 +54,7 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['icon.png'] = @mot_icon
 
     mail_options = {
-      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}")
+      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).slug}.itsmycargo.shop")
                          .tap { |a| a.display_name = tenant.name }.format,
       reply_to: tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, @user.email.blank? ? 'itsmycargodev@gmail.com' : @user.email),
@@ -80,7 +80,7 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {
-      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}")
+      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).slug}.itsmycargo.shop")
                          .tap { |a| a.display_name = @user.tenant.name }.format,
       reply_to: @user.tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, user.email.blank? ? 'itsmycargodev@gmail.com' : user.email),
