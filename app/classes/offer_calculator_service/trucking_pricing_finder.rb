@@ -38,17 +38,15 @@ module OfferCalculatorService
             trucking = truckings_by_cargo_class
                        .select { |trp| trp.user_id.nil? && [group_id, nil].include?(trp.group_id) }
                        .max_by { |trp| trp.group_id.to_i }
-            truckings[cargo_class] = trucking if trucking
+            truckings[cargo_class] = trucking if trucking.present?
           end
         end
       else
-        results.group_by(&:cargo_class)
-               .each do |cargo_class, truckings_by_cargo_class|
+        grouped_results.each do |cargo_class, truckings_by_cargo_class|
           trucking = truckings_by_cargo_class
-                        .select { |trp| trp.group_id.nil? && [@user&.id, nil].include?(trp.user_id) }
-                        .max_by { |trp| trp.user_id.to_i }
-
-          truckings[cargo_class] = trucking if trucking
+                     .select { |trp| trp.group_id.nil? && [@user&.id, nil].include?(trp.user_id) }
+                     .max_by { |trp| trp.user_id.to_i }
+          truckings[cargo_class] = trucking if trucking.present?
         end
       end
 
