@@ -389,7 +389,7 @@ class SideNav extends Component {
         }`}
       >
         <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
-        <div className="flex layout-row layout-align-center-start layout-wrap">{navLinks}</div>
+        <div className={`flex layout-row layout-align-center-start layout-wrap ${styles.links_container}`}>{navLinks}</div>
       </div>
     )
   }
