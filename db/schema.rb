@@ -999,10 +999,10 @@ ActiveRecord::Schema.define(version: 2019_09_12_104953) do
     t.uuid "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "metadata", default: {}
     t.string "target_type"
     t.uuid "target_id"
     t.integer "book_type", default: 0, null: false
-    t.jsonb "metadata", default: {}
     t.index ["sheet_type"], name: "index_rms_data_books_on_sheet_type"
     t.index ["target_type", "target_id"], name: "index_rms_data_books_on_target_type_and_target_id"
     t.index ["tenant_id"], name: "index_rms_data_books_on_tenant_id"

@@ -11,17 +11,19 @@ RSpec.shared_examples 'Pricing .insert' do
     pricings = Pricing.all
     expect(stats).to eq(expected_stats)
     dates = pricings.pluck(:effective_date, :expiration_date)
-    expect(dates.sort).to eq(expected_dates.sort)
+    expect(dates).to match_array(expected_dates)
     pricing_details_values =
       PricingDetail.where(priceable: pricings)
-                   .pluck(:rate,
-                          :rate_basis,
-                          :min,
-                          :shipping_type,
-                          :range,
-                          :currency_name,
-                          :priceable_type)
-    expect(pricing_details_values - pricing_details_values).to be_empty
+                   .pluck(
+                     :rate,
+                     :rate_basis,
+                     :min,
+                     :shipping_type,
+                     :range,
+                     :currency_name,
+                     :priceable_type
+                   )
+    expect(pricing_details_values).to match_array(expected_pricing_details_values)
   end
 end
 
@@ -46,36 +48,77 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
     create(:tenant_vehicle, tenant: tenant)
   end
   let(:options) { { tenant: tenant, data: input_data, options: {} } }
-  let!(:static_expected_dates) { [[Time.zone.parse('2018-03-15').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]] * 15 }
+
   describe '.insert' do
     let(:input_data) { build(:excel_data_restructured_correct_pricings_one_fee_col_and_ranges) }
 
     context 'with overlap case: no_old_record' do
       let!(:expected_stats) do
-        { :"legacy/itineraries" => { number_created: 0, number_deleted: 0, number_updated: 0 },
-          :"legacy/pricing_details" => { number_created: 18, number_deleted: 1, number_updated: 0 },
-          :"legacy/pricings" => { number_created: 17, number_deleted: 1, number_updated: 0 },
-          :"legacy/stops" => { number_created: 0, number_deleted: 0, number_updated: 0 } }
+        { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
+          "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
+          "legacy/pricings": { number_created: 20, number_updated: 4, number_deleted: 0 },
+          "legacy/pricing_details": { number_created: 27, number_updated: 0, number_deleted: 0 } }
       end
       let!(:expected_dates) do
         [
-          [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]
-        ] + static_expected_dates
+          [Date.parse('2018-03-11').beginning_of_day, Date.parse('2018-03-14').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2018-11-14').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-11-15').beginning_of_day, Date.parse('2018-11-29').end_of_day.change(usec: 0)],
+          [Date.parse('2018-11-30').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2019-03-18').beginning_of_day, Date.parse('2019-03-28').end_of_day.change(usec: 0)]
+        ]
       end
       let!(:expected_pricing_details_values) do
         [
-          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing']
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e1, 'PER_WM', 0.2e1, 'WAR', [], 'USD', 'Legacy::Pricing'],
+          [0.5e3, 'PER_WM', 0.5e3, 'ABC', [], 'USD', 'Legacy::Pricing'],
+          [0.2e1, 'PER_WM', 0.2e1, 'WAR', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.5e3, 'PER_WM', 0.5e3, 'ABC', [], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing']
         ]
       end
 
       include_examples 'Pricing .insert'
     end
 
-    context 'with overlap case: new_starts_after_old_and_extends_beyond' do
+    context 'with overlap case: new_starts_after_old_and_stops_at_or_after_old' do
       let!(:pricings) do
         [
           create(:pricing,
@@ -90,25 +133,66 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         ]
       end
       let!(:expected_stats) do
-        { :"legacy/itineraries" => { number_created: 0, number_deleted: 0, number_updated: 0 },
-          :"legacy/pricing_details" => { number_created: 18, number_deleted: 1, number_updated: 0 },
-          :"legacy/pricings" => { number_created: 17, number_deleted: 1, number_updated: 1 },
-          :"legacy/stops" => { number_created: 0, number_deleted: 0, number_updated: 0 } }
+        { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
+          "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
+          "legacy/pricings": { number_created: 20, number_deleted: 0, number_updated: 5 },
+          "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
-          [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-01').beginning_of_day, Time.zone.parse('2018-03-14').end_of_day.change(usec: 0)]
-        ] + static_expected_dates
+          [Date.parse('2018-03-01').beginning_of_day, Date.parse('2018-03-14').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-11').beginning_of_day, Date.parse('2018-03-14').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2018-11-14').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-11-15').beginning_of_day, Date.parse('2018-11-29').end_of_day.change(usec: 0)],
+          [Date.parse('2018-11-30').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2019-03-18').beginning_of_day, Date.parse('2019-03-28').end_of_day.change(usec: 0)]
+        ]
       end
       let!(:expected_pricing_details_values) do
         [
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing'],
-          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing']
+          [0.1111e4, 'PER_CONTAINER', nil, 'BAS', [], 'EUR', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e1, 'PER_WM', 0.2e1, 'WAR', [], 'USD', 'Legacy::Pricing'],
+          [0.5e3, 'PER_WM', 0.5e3, 'ABC', [], 'USD', 'Legacy::Pricing'],
+          [0.2e1, 'PER_WM', 0.2e1, 'WAR', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.5e3, 'PER_WM', 0.5e3, 'ABC', [], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing']
         ]
       end
 
@@ -131,27 +215,66 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         ]
       end
       let!(:expected_stats) do
-        { :"legacy/itineraries" => { number_created: 0, number_deleted: 0, number_updated: 0 },
-          :"legacy/pricing_details" => { number_created: 18, number_deleted: 1, number_updated: 0 },
-          :"legacy/pricings" => { number_created: 17, number_deleted: 1, number_updated: 0 },
-          :"legacy/stops" => { number_created: 0, number_deleted: 0, number_updated: 0 } }
+        { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
+          "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
+          "legacy/pricings": { number_created: 20, number_deleted: 0, number_updated: 4 },
+          "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
-          [Time.zone.parse('2019-06-20').beginning_of_day, Time.zone.parse('2019-07-20').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]
-        ] + static_expected_dates
+          [Date.parse('2018-03-11').beginning_of_day, Date.parse('2018-03-14').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2018-11-14').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-11-15').beginning_of_day, Date.parse('2018-11-29').end_of_day.change(usec: 0)],
+          [Date.parse('2018-11-30').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2019-03-18').beginning_of_day, Date.parse('2019-03-28').end_of_day.change(usec: 0)],
+          [Date.parse('2019-06-20').beginning_of_day, Date.parse('2019-07-20').end_of_day.change(usec: 0)]
+        ]
       end
       let!(:expected_pricing_details_values) do
         [
-          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing']
+          [0.11e2, 'PER_WM', nil, 'BAS', [], 'EUR', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e1, 'PER_WM', 0.2e1, 'WAR', [], 'USD', 'Legacy::Pricing'],
+          [0.5e3, 'PER_WM', 0.5e3, 'ABC', [], 'USD', 'Legacy::Pricing'],
+          [0.2e1, 'PER_WM', 0.2e1, 'WAR', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.5e3, 'PER_WM', 0.5e3, 'ABC', [], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing']
         ]
       end
 
@@ -174,29 +297,68 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         ]
       end
       let!(:expected_stats) do
-        { :"legacy/itineraries" => { number_created: 0, number_deleted: 0, number_updated: 0 },
-          :"legacy/pricing_details" => { number_created: 18, number_deleted: 1, number_updated: 0 },
-          :"legacy/pricings" => { number_created: 18, number_deleted: 1, number_updated: 2 },
-          :"legacy/stops" => { number_created: 0, number_deleted: 0, number_updated: 0 } }
+        { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
+          "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
+          "legacy/pricings": { number_created: 21, number_deleted: 0, number_updated: 6 },
+          "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
-          [Time.zone.parse('2019-03-18').beginning_of_day, Time.zone.parse('2019-07-20').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2017-06-01').beginning_of_day, Time.zone.parse('2018-03-10').end_of_day.change(usec: 0)]
-        ] + static_expected_dates
+          [Date.parse('2017-06-01').beginning_of_day, Date.parse('2018-03-10').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-11').beginning_of_day, Date.parse('2018-03-14').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2018-11-14').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-11-15').beginning_of_day, Date.parse('2018-11-29').end_of_day.change(usec: 0)],
+          [Date.parse('2018-11-30').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2019-03-18').beginning_of_day, Date.parse('2019-03-28').end_of_day.change(usec: 0)],
+          [Date.parse('2019-03-29').beginning_of_day, Date.parse('2019-07-20').end_of_day.change(usec: 0)]
+        ]
       end
       let!(:expected_pricing_details_values) do
         [
-          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing']
+          [0.11e2, 'PER_WM', nil, 'BAS', [], 'EUR', 'Legacy::Pricing'],
+          [0.11e2, 'PER_WM', nil, 'BAS', [], 'EUR', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.2e1, 'PER_WM', 0.2e1, 'WAR', [], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.5e3, 'PER_WM', 0.5e3, 'ABC', [], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.5e3, 'PER_WM', 0.5e3, 'ABC', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.2e1, 'PER_WM', 0.2e1, 'WAR', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing']
         ]
       end
 
@@ -219,27 +381,64 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
         ]
       end
       let!(:expected_stats) do
-        { :"legacy/itineraries" => { number_created: 0, number_deleted: 0, number_updated: 0 },
-          :"legacy/pricing_details" => { number_created: 18, number_deleted: 1, number_updated: 0 },
-          :"legacy/pricings" => { number_created: 17, number_deleted: 1, number_updated: 1 },
-          :"legacy/stops" => { number_created: 0, number_deleted: 0, number_updated: 0 } }
+        { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
+          "legacy/pricing_details": { number_created: 27, number_deleted: 1, number_updated: 0 },
+          "legacy/pricings": { number_created: 20, number_deleted: 1, number_updated: 5 },
+          "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
       let!(:expected_dates) do
         [
-          [Time.zone.parse('2019-03-18').beginning_of_day, Time.zone.parse('2019-03-20').end_of_day.change(usec: 0)],
-          [Time.zone.parse('2018-03-11').beginning_of_day, Time.zone.parse('2019-03-17').end_of_day.change(usec: 0)]
-        ] + static_expected_dates
+          [Date.parse('2018-03-11').beginning_of_day, Date.parse('2018-03-14').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2018-11-14').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-03-15').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2018-11-15').beginning_of_day, Date.parse('2018-11-29').end_of_day.change(usec: 0)],
+          [Date.parse('2018-11-30').beginning_of_day, Date.parse('2019-03-17').end_of_day.change(usec: 0)],
+          [Date.parse('2019-03-18').beginning_of_day, Date.parse('2019-03-28').end_of_day.change(usec: 0)]
+        ]
       end
       let!(:expected_pricing_details_values) do
         [
-          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Pricing'],
-          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing'],
-          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Pricing']
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.2e1, 'PER_WM', 0.2e1, 'WAR', [], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.5e3, 'PER_WM', 0.5e3, 'ABC', [], 'USD', 'Legacy::Pricing'],
+          [0.17e2, 'PER_WM', 0.17e2, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.5e3, 'PER_WM', 0.5e3, 'ABC', [], 'USD', 'Legacy::Pricing'],
+          [0.2e2, 'PER_WM', 0.2e2, 'HAS', [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD', 'Legacy::Pricing'],
+          [0.2e1, 'PER_WM', 0.2e1, 'WAR', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, 'BAS', [], 'USD', 'Legacy::Pricing']
         ]
       end
 

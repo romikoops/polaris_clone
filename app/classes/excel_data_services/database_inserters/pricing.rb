@@ -87,7 +87,7 @@ module ExcelDataServices
       end
 
       def create_pricing_with_pricing_details(group_of_row_data, row, transport_category, tenant_vehicle, itinerary, notes) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/ParameterLists
-        if @scope['base_pricing']
+        if scope['base_pricing']
           load_type = row.load_type == 'lcl' ? 'cargo_item' : 'container'
           pricing_params =
             { tenant: tenant,
@@ -137,7 +137,7 @@ module ExcelDataServices
 
           new_pricing_detail_params_arr = build_pricing_detail_params_for_pricing(group_of_row_data)
           new_pricing_detail_params_arr.each do |pricing_detail_params|
-            range_data = pricing_detail_params.delete(:range) if pricing_detail_params[:range]
+            range_data = pricing_detail_params.delete(:range)
 
             pricings_for_new_pricing_details.each do |pricing|
               new_pricing_detail = pricing.pricing_details.new(pricing_detail_params)

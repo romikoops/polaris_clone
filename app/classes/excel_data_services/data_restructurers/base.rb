@@ -45,7 +45,6 @@ module ExcelDataServices
 
       def initialize(tenant:, data:)
         @tenant = tenant
-        @scope = Tenants::Tenant.find_by(legacy_id: @tenant.id)&.scope&.content || {}
         @data = data
       end
 
@@ -107,6 +106,46 @@ module ExcelDataServices
       def determine_location_name_from_locode(locode)
         # Just a hardcoded lookup for now, will be done properly in Phoenix
         LOCODE_TO_NAME_LOOKUP[locode.delete(' ')]
+      end
+
+      def expand_based_on_date_overlaps(rows_data)
+        grouped = group_by_params(rows_data, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i(effective_date expiration_date))
+        result = grouped.map do |group|
+          sorted_group = group.sort_by { |row_data| row_data.values_at(:effective_date, :expiration_date) }
+          sorted_group.map.with_index do |b, i|
+            expanded_rest = sorted_group[0...i].map do |a|
+              next if no_overlap_or_exact_match?(a, b)
+
+              if b[:expiration_date] <= a[:expiration_date]
+                [copy_of_a_as_long_as_b(a, b)]
+              else
+                copies_of_a_and_b_with_matching_dates(a, b)
+              end
+            end
+
+            [b] + expanded_rest
+          end
+        end
+
+        result.flatten.uniq.compact
+      end
+
+      def no_overlap_or_exact_match?(row_data_a, row_data_b)
+        (row_data_b[:effective_date] > row_data_a[:expiration_date] ||
+          row_data_a.values_at(:effective_date, :expiration_date) ==
+          row_data_b.values_at(:effective_date, :expiration_date))
+      end
+
+      def copy_of_a_as_long_as_b(row_a, row_b)
+        row_a.dup.tap do |el|
+          el[:effective_date] = row_b[:effective_date]
+          el[:expiration_date] = row_b[:expiration_date]
+        end
+      end
+
+      def copies_of_a_and_b_with_matching_dates(row_a, row_b)
+        [row_a.dup.tap { |el| el[:effective_date] = row_b[:effective_date] },
+         row_b.dup.tap { |el| el[:expiration_date] = row_a[:expiration_date] }]
       end
 
       def group_by_params(rows_data, params)
