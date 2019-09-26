@@ -658,7 +658,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     if existing_contact
       return existing_contact
     else
-      current_user.contacts.create(contact_params(resource, contact_address.id).merge(sandbox: sandbox))
+      current_user.contacts.create(contact_params.merge(sandbox: sandbox))
     end
   end
 
