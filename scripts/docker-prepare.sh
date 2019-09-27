@@ -1,8 +1,6 @@
 #!/bin/sh
 
-set -x
-
-if [[ -d .build/docker ]];
+if [ -d .build/docker ];
 then
   rm -rf .build/docker
 fi
@@ -10,7 +8,7 @@ fi
 mkdir -p .build/docker
 
 # Find all gemspecs
-if [[ -n "$(which rsync)" ]];
+if [ -n "$(command -v rsync)" ];
 then
   rsync -zarvm --include='*/' --include='*.gemspec' --exclude='*' . .build/docker
 else

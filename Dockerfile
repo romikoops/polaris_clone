@@ -74,8 +74,14 @@ ENV MALLOC_ARENA_MAX 2
 RUN apt-get update && apt-get install -y \
   apt-transport-https \
   gnupg \
+  fonts-noto \
+  libfontconfig1 \
+  libfreetype6 \
   libgeos-c1v5 \
   libpq5 \
+  libx11-6 \
+  libxext6 \
+  libxrender1 \
   locales \
   tzdata \
   && rm -rf /var/lib/apt/lists/*
