@@ -489,9 +489,14 @@ export default function shipment (state = {}, action) {
       return state
     case shipmentConstants.SHIPMENT_UPDATE_CONTACT_SUCCESS: {
       const contactData = action.payload
-
       const { contacts } = state
+
+      if (!contacts) {
+        return state
+      }
+
       const idx = contacts.findIndex(contact => contact.contact.id === contactData.id)
+
       contacts[idx] = {
         contact: {
           firstName: contactData.first_name,
