@@ -1,10 +1,10 @@
-# frozen_string_literal: true
+# frozen_string_literal: true 
 namespace :content do
   task update: :environment do
     custom_content = {
       "normanglobal": [
         {
-          "text": '<img src="https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo_white.png" alt="" class="flex-none landing_logo_large"/>',
+          "text": '<img src="https://assets.itsmycargo.com/assets/tenants/normanglobal/nquote.gif" alt="" class="flex-none landing_logo_large"/>',
           "component": 'LandingTop',
           "section": 'welcome',
           "index": 0
@@ -278,7 +278,6 @@ namespace :content do
           "index": 4
         },
         {
-          # "text": '<div className="flex btm_promo_img_tag"><img src="https://assets.itsmycargo.com/assets/tenants/unsworth/cargocost_services.png"/></div>',
           "image": "assets/tenants/unsworth/cargocost_services.png",
           "component": 'Landing',
           "section": 'bulletImage',
