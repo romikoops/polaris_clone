@@ -18,6 +18,7 @@ Sentry.init({
   release: window.keel.release || process.env.RELEASE
 })
 
+window.dataLayer = window.dataLayer || [];
 const store = configureStore()
 
 render(
