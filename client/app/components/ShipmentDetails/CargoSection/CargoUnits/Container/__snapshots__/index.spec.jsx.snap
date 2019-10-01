@@ -80,15 +80,15 @@ exports[`renders correctly 1`] = `
             options={
               Array [
                 Object {
-                  "label": "20‘ Dry Container",
+                  "label": "Dry Container 20'",
                   "value": "fcl_20",
                 },
                 Object {
-                  "label": "40‘ Dry Container",
+                  "label": "Dry Container 40'",
                   "value": "fcl_40",
                 },
                 Object {
-                  "label": "40‘ High Cube",
+                  "label": "High Cube 40'",
                   "value": "fcl_40_hq",
                 },
               ]

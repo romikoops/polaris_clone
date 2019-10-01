@@ -2,18 +2,40 @@ export const CONTAINER_TARE_WEIGHTS = {
   // '20_dc': 2370,
   // '40_dc': 3750,
   // '40_hq': 4000,
-  // '45_hq': 4800,
   // '45_pw': 4860
   fcl_20: 2370,
   fcl_40: 3750,
-  fcl_40_hq: 4000
+  fcl_40_hq: 4000,
+  fcl_45_hq: 4800,
+  fcl_20_ot: 2500,
+  fcl_40_ot: 4000,
 }
 
 export const CONTAINER_DESCRIPTIONS = {
-  fcl_20: '20‘ Dry Container',
-  fcl_40: '40‘ Dry Container',
-  fcl_40_hq: '40‘ High Cube',
-  lcl: 'LCL'
-  // '45_hq': '45‘ High Cube',
-  // '45_pw': '45‘ Pallet Wide'
+  //flc_10: "Dry Container 10'",
+  fcl_20: "Dry Container 20'",
+  fcl_40: "Dry Container 40'",
+  // fcl_45: "Dry Container 45'",
+  fcl_40_hq: "High Cube 40'",
+  fcl_45_hq: "High Cube 45'",
+  //: "Hardtop 20'",
+  //: "Hardtop 40'",
+  //: "Hardtop High Cube 40'",
+  fcl_20_ot: "Open Top 20'",
+  fcl_40_ot: "Open Top 40'",
+  //: "Flat 20'",
+  //: "Flat High Cube 40'",
+  //: "Flat Platform 20' ",
+  //: "Flat Platform 40'",
+  //: "Ventilated 20'",
+  //: "Ventilated 40'",
+  //: "Insulated 20'",
+  //: "Insulated 40'",
+  //: "Bulk Container 20'",
+  //: "Refrigerated 20'",
+  //: "Refrigerated 40'",
+  //: "High Cube Refrigerated 40'",
+  //: "Tank 20'",
+  //: "Flexitank",
+  lcl: 'LCL',
 }
