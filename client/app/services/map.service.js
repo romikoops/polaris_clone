@@ -1,6 +1,6 @@
 import { Promise } from 'es6-promise-promise'
 import { getTenantApiUrl } from '../constants/api.constants'
-import { authHeader } from '../helpers'
+import { authHeader, toQueryString } from '../helpers'
 
 const { fetch } = window
 
@@ -22,6 +22,17 @@ function getMapData (id) {
 
   return fetch(`${getTenantApiUrl()}/admin/maps/geojsons?id=${id}`, requestOptions).then(handleResponse)
 }
+
+function getEditorMapData (args) {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader() }
+  }
+  const queryString = toQueryString(args, true)
+
+  return fetch(`${getTenantApiUrl()}/admin/maps/editor_map_data?${queryString}`, requestOptions).then(handleResponse)
+}
+
 function getGeoJson (id) {
   const requestOptions = {
     method: 'GET',
@@ -33,7 +44,8 @@ function getGeoJson (id) {
 
 const mapService = {
   getMapData,
-  getGeoJson
+  getGeoJson,
+  getEditorMapData
 }
 
 export default mapService

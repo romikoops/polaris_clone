@@ -25,6 +25,30 @@ function getMapData (id) {
     )
   }
 }
+function getEditorMapData (args) {
+  function request (mapData) {
+    return { type: mapConstants.GET_EDITOR_MAP_DATA_REQUEST, payload: mapData }
+  }
+  function success (mapData) {
+    return { type: mapConstants.GET_EDITOR_MAP_DATA_SUCCESS, payload: mapData.data }
+  }
+  function failure (error) {
+    return { type: mapConstants.GET_EDITOR_MAP_DATA_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    mapService.getEditorMapData(args).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+      }
+    )
+  }
+}
 function getGeoJson (id) {
   function request (mapData) {
     return { type: mapConstants.GET_GEOJSON_REQUEST, payload: mapData }
@@ -52,6 +76,7 @@ function getGeoJson (id) {
 
 const mapActions = {
   getMapData,
-  getGeoJson
+  getGeoJson,
+  getEditorMapData
 }
 export default mapActions

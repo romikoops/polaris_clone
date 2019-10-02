@@ -19,6 +19,23 @@ export default function map (state = {}, action) {
 
       return err
     }
+    case mapConstants.GET_EDITOR_MAP_DATA_REQUEST: {
+      return { ...state, fetching: true }
+    }
+    case mapConstants.GET_EDITOR_MAP_DATA_SUCCESS: {
+      return {
+        ...state,
+        editor: action.payload,
+        fetching: false
+      }
+    }
+    case mapConstants.GET_EDITOR_MAP_DATA_ERROR: {
+      return {
+        ...state,
+        error: action.payload,
+        fetching: false
+      }
+    }
     case mapConstants.GET_GEOJSON_REQUEST: {
       return state
     }

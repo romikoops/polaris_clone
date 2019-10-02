@@ -135,6 +135,7 @@ exports[`shallow render 1`] = `
             groups={Array []}
             setTargetTruckingId={[Function]}
             t={[Function]}
+            toggleEditor={[Function]}
           />
         </GreyBox>
       </div>

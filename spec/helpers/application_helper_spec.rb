@@ -13,11 +13,6 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe ApplicationHelper do
-  describe '.asset_data_base64' do
-    it 'successfully' do
-      expect(Digest::SHA256.hexdigest(helper.asset_data_base64('application.css'))).to eq '20d8d9b76e12dbf52bd3039371cb07ba8cfebffd1bf927b70a35619831c99a89'
-    end
-  end
 
   describe '.format_to_price' do
     it 'with hash' do

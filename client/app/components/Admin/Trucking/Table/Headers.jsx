@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-import { get } from 'lodash'
+import { get, has } from 'lodash'
 import TruckingTableFees from './Fees'
 import TruckingTableRateHeaders from './RateHeaders'
 import TruckingTableLoadMeterage from './LoadMeterage'
@@ -65,11 +65,13 @@ class TruckingTableHeaders extends PureComponent {
   }
 
   render () {
-    const { t, rowData } = this.props
-
+    const {
+      t, rowData, toggleEditor, back
+    } = this.props
     const {
       data, targetKey
     } = this.state
+
     const columns = [
       {
         columns: [
@@ -107,17 +109,24 @@ class TruckingTableHeaders extends PureComponent {
         showPaginationBottom={false}
       />
     )
+    const hideEdit = has(rowData, ['zipCode'])
     const backBtn = targetKey ? '' : (
       <div className="flex-100 layout-row layout-align-start-center">
         <div
           className={`flex-none layout-row layout-align-start-center ${styles.back_btn}`}
-          onClick={this.props.back}
+          onClick={back}
         >
           <i className="fa fa-chevron-left" />
           <p className="flex-none">{t('common:basicBack')}</p>
         </div>
         <div className={`flex-none layout-row layout-align-center-center ${styles.breadcrumb}`}>
           <p className="flex-none">{determineDestinationAccessor(rowData)}</p>
+        </div>
+        <div
+          className={`flex layout-row layout-align-end-center pointy ${styles.breadcrumb}`}
+          onClick={hideEdit ? null : () => toggleEditor()}
+        >
+          {hideEdit ? '' : <p className="flex-none">{t('admin:edit')}</p>}
         </div>
       </div>
     )

@@ -605,7 +605,10 @@
       "saveCompany": "Save Company",
       "confirmDeleteLocalChargeImmediately": "Are you sure you want to delete this Local Charge? It will be immediately removed from the system.",
       "carrier": "Carrier",
-      "internal": "Internal"
+      "internal": "Internal",
+      "originalArea": "Original Area",
+      "selectedAreas": "Selected Areas",
+      "selectAdminLevel": "Select Admin Level"
   },
   "itbox": {
     "component": "IncotermBox",

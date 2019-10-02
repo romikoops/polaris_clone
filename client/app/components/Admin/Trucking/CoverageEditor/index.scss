@@ -1,0 +1,48 @@
+:local {
+  .place_map {
+    height: 470px;
+    position: relative;
+  }
+  
+  .input {
+    height: 36px;
+    width: 195px;
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    padding: 0 10px;
+  }
+  
+  .section {
+    min-height: 150px;
+  }
+  .map_box {
+    position: relative;
+  }
+  .loc_map{
+    position: relative;
+  }
+  .editor_box {
+    padding: 5px;
+    .editor_section {
+      h3 {
+        text-decoration: underline;
+        font-size: 16px;
+        margin: 5px;
+      }
+    }
+  }
+  .wrapper {
+    position: relative;
+  }
+  .loading {
+    position: absolute;
+    top: 0;
+    z-index: 200;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(237, 234, 234, 0.5);
+  }
+}

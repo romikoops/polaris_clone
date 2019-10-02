@@ -9,6 +9,7 @@ import {
   history
 } from '../../../helpers'
 import TruckingCoverage from './Coverage'
+import TruckingCoverageEditor from './CoverageEditor'
 import TruckingTable from './Table'
 import { documentActions } from '../../../actions'
 import AdminUploadsSuccess from '../Uploads/Success'
@@ -24,10 +25,12 @@ export class AdminTruckingView extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      targetTruckingPricing: false
+      targetTruckingPricing: false,
+      coverageEditor: false
     }
     this.setTargetTruckingId = this.setTargetTruckingId.bind(this)
     this.handleUpload = this.handleUpload.bind(this)
+    this.toggleEditor = this.toggleEditor.bind(this)
   }
 
   componentDidMount () {
@@ -50,6 +53,10 @@ export class AdminTruckingView extends Component {
     documentDispatch.closeViewer()
   }
 
+  toggleEditor () {
+    this.setState(prevState => ({ coverageEditor: !prevState.coverageEditor }))
+  }
+
   render () {
     const {
       t, theme, truckingDetail, document, scope
@@ -59,7 +66,7 @@ export class AdminTruckingView extends Component {
     }
 
     const {
-      targetTruckingPricing
+      targetTruckingPricing, coverageEditor
     } = this.state
 
     const uploadStatus = document.viewer ? (
@@ -72,6 +79,24 @@ export class AdminTruckingView extends Component {
       ''
     )
     const { hub, groups } = truckingDetail
+
+    const editorView = (
+      <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
+        <GreyBox
+          wrapperClassName="flex layout-row layout-align-start-start layout-wrap margin_10"
+          contentClassName="flex-100 layout-row layout-align-start-start layout-wrap"
+        > 
+          <GmapsWrapper
+            location={hub}
+            back={() => this.toggleEditor()}
+            targetId={targetTruckingPricing}
+            component={TruckingCoverageEditor}
+          />
+        </GreyBox>
+      </div>
+    
+    )
+    
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
         background:
@@ -92,6 +117,34 @@ export class AdminTruckingView extends Component {
         groupOptions.push({ label: g.name, value: g.id })
       })
     }
+    const viewBoxes = [
+      (<div className="flex-40 layout-row layout-align-space-around-start layout-wrap">
+        <GreyBox
+          wrapperClassName="flex layout-row layout-align-start-start layout-wrap margin_10"
+          contentClassName="flex-100 layout-row layout-align-start-start layout-wrap"
+        >
+          <GmapsWrapper
+            onMapClick={this.setCurrentTruckingPricing}
+            location={hub}
+            targetId={targetTruckingPricing}
+            component={TruckingCoverage}
+          />
+        </GreyBox>
+      </div>)
+      , (
+        <div className="flex-60 layout-row layout-align-space-around-start layout-wrap">
+          <GreyBox
+            wrapperClassName="flex layout-row layout-align-start-start layout-wrap margin_10"
+            contentClassName="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <TruckingTable
+              setTargetTruckingId={this.setTargetTruckingId}
+              toggleEditor={() => this.toggleEditor()}
+            />
+          </GreyBox>
+        </div>)
+    ]
+    const renderView = coverageEditor ? editorView : viewBoxes
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
@@ -108,28 +161,7 @@ export class AdminTruckingView extends Component {
                 <LegacyFileHandlers handleUpload={this.handleUpload} hub={hub} theme={theme} />)
               }
             </GreyBox>
-            <div className="flex-40 layout-row layout-align-space-around-start layout-wrap">
-              <GreyBox
-                wrapperClassName="flex layout-row layout-align-start-start layout-wrap margin_10"
-                contentClassName="flex-100 layout-row layout-align-start-start layout-wrap"
-              >
-                <GmapsWrapper
-                  onMapClick={this.setCurrentTruckingPricing}
-                  location={hub}
-                  targetId={targetTruckingPricing}
-                  component={TruckingCoverage}
-                />
-              </GreyBox>
-            </div>
-
-            <div className="flex-60 layout-row layout-align-space-around-start layout-wrap">
-              <GreyBox
-                wrapperClassName="flex layout-row layout-align-start-start layout-wrap margin_10"
-                contentClassName="flex-100 layout-row layout-align-start-start layout-wrap"
-              >
-                <TruckingTable setTargetTruckingId={this.setTargetTruckingId} />
-              </GreyBox>
-            </div>
+            {renderView}
 
           </div>
           {styleTagJSX}

@@ -8,6 +8,7 @@ import { get } from 'lodash'
 import TruckingTableHeaders from './Headers'
 import { adminActions, appActions, clientsActions } from '../../../../actions'
 import { cargoClassOptions } from '../../../../constants'
+import TruckingCoverageEditor from '../CoverageEditor'
 import styles from './index.scss'
 import { determineSortingCaret } from '../../../../helpers/sortingCaret'
 import { determineDestinationAccessor } from '../../../../helpers'
@@ -51,9 +52,10 @@ class TruckingTable extends Component {
     })
   }
 
+
   render () {
     const {
-      t, truckingPricings, pages, groups, scope, groupId
+      t, truckingPricings, pages, groups, scope, groupId, toggleEditor
     } = this.props
     if (!truckingPricings) return ''
     const {
@@ -245,7 +247,7 @@ class TruckingTable extends Component {
             desc: true
           }
         ]}
-        sorted={this.state.sorted}
+        sorted={sorted}
         onSortedChange={newSorted => this.setState({ sorted: newSorted })}
         defaultPageSize={10}
         filterable
@@ -258,8 +260,10 @@ class TruckingTable extends Component {
       <TruckingTableHeaders
         rowData={selectedTruckingPricing}
         back={() => this.viewPricing(false)}
+        toggleEditor={() => toggleEditor()}
       />
     )
+   
 
     const truckingView = selectedTruckingPricing
       ? pricingView

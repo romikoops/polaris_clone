@@ -84,6 +84,7 @@ Rails.application.routes.draw do
       post 'margins/update/multiple', to: 'margins#update_multiple'
       get 'memberships/membership_data', to: 'memberships#membership_data'
       post 'memberships/bulk_edit', to: 'memberships#bulk_edit'
+      get 'maps/editor_map_data', to: 'maps#editor_map_data'
       get 'maps/geojsons', to: 'maps#geojsons'
       get 'maps/geojson', to: 'maps#geojson'
       post 'maps/country_overlay', to: 'maps#country_overlay'

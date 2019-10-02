@@ -94,14 +94,21 @@ class TruckingCoverage extends PureComponent {
   }
   setActiveGeoJson (props) {
     const { map, activeGeoJsons } = this.state
-    const { geojson, onMapClick, gMaps } = props || this.props
-    const bounds = new gMaps.LatLngBounds()
+    const { geojson, location, gMaps } = props || this.props
+    let bounds
+    if ((!geojson || !geojson.geojson) && (!activeGeoJsons || activeGeoJsons.length === 0)) {
+      return
+    }
     if (activeGeoJsons) {
       activeGeoJsons.forEach(activeGeoJson => {
-        map.data.remove(activeGeoJson)
+        if (activeGeoJson.setMap) {
+          activeGeoJson.setMap(null)
+        } else {
+          map.data.remove(activeGeoJson)
+        }
       })
     }
-    if (geojson) {
+    if (geojson && !geojson.distance) {
  
       const features = map.data.addGeoJson(geojson.geojson)
         
@@ -115,13 +122,31 @@ class TruckingCoverage extends PureComponent {
         })
       })
       
-
+      bounds = new gMaps.LatLngBounds()
       features.forEach((feature) => {
         feature.getGeometry().forEachLatLng((latlng) => {
           bounds.extend(latlng)
         })
       })
       this.setState({ geoJson: geojson, activeGeoJsons: features  })
+    }
+    if (geojson && geojson.distance) {
+      const circle = new google.maps.Circle({
+        strokeColor: 'green',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: 'green',
+        fillOpacity: 0.35,
+        map: map,
+        center: {
+          lat: location.latitude,
+          lng: location.longitude
+        },
+        radius: geojson.distance * 1000
+      })    
+
+      bounds = circle.getBounds()
+      this.setState({ geoJson: geojson, activeGeoJsons: [circle]  })
     }
     
     map.fitBounds(bounds)
