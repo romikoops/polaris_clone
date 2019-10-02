@@ -14,7 +14,7 @@ end
 #
 # Table name: documents
 #
-#  id               :bigint(8)        not null, primary key
+#  id               :bigint           not null, primary key
 #  user_id          :integer
 #  shipment_id      :integer
 #  doc_type         :string

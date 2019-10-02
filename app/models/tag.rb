@@ -7,7 +7,7 @@ end
 #
 # Table name: tags
 #
-#  id         :bigint(8)        not null, primary key
+#  id         :bigint           not null, primary key
 #  tag_type   :string
 #  name       :string
 #  model      :string

@@ -90,11 +90,11 @@ end
 #  wm_rate           :decimal(, )
 #  effective_date    :datetime
 #  expiration_date   :datetime
-#  tenant_id         :bigint(8)
+#  tenant_id         :bigint
 #  cargo_class       :string
 #  load_type         :string
-#  user_id           :bigint(8)
-#  itinerary_id      :bigint(8)
+#  user_id           :bigint
+#  itinerary_id      :bigint
 #  tenant_vehicle_id :integer
 #  legacy_id         :integer
 #  created_at        :datetime         not null

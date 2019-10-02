@@ -18,7 +18,7 @@ end
 #
 # Table name: containers
 #
-#  id              :bigint(8)        not null, primary key
+#  id              :bigint           not null, primary key
 #  shipment_id     :integer
 #  size_class      :string
 #  weight_class    :string

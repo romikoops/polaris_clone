@@ -9,7 +9,7 @@ end
 #
 # Table name: trucking_pricing_scopes
 #
-#  id          :bigint(8)        not null, primary key
+#  id          :bigint           not null, primary key
 #  load_type   :string
 #  cargo_class :string
 #  carriage    :string

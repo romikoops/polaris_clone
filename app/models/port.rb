@@ -10,7 +10,7 @@ end
 #
 # Table name: ports
 #
-#  id         :bigint(8)        not null, primary key
+#  id         :bigint           not null, primary key
 #  country_id :integer
 #  name       :string
 #  latitude   :decimal(, )

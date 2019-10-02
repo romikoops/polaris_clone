@@ -20,7 +20,7 @@ end
 #
 # Table name: map_data
 #
-#  id           :bigint(8)        not null, primary key
+#  id           :bigint           not null, primary key
 #  line         :jsonb
 #  geo_json     :jsonb
 #  origin       :decimal(, )      default([]), is an Array

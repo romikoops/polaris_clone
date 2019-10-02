@@ -20,7 +20,7 @@ end
 #
 # Table name: cargo_items
 #
-#  id                 :bigint(8)        not null, primary key
+#  id                 :bigint           not null, primary key
 #  shipment_id        :integer
 #  payload_in_kg      :decimal(, )
 #  dimension_x        :decimal(, )

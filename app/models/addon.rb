@@ -97,7 +97,7 @@ end
 #
 # Table name: addons
 #
-#  id                   :bigint(8)        not null, primary key
+#  id                   :bigint           not null, primary key
 #  title                :string
 #  text                 :jsonb            is an Array
 #  tenant_id            :integer

@@ -18,7 +18,7 @@ end
 #
 # Table name: tenant_vehicles
 #
-#  id                :bigint(8)        not null, primary key
+#  id                :bigint           not null, primary key
 #  vehicle_id        :integer
 #  tenant_id         :integer
 #  is_default        :boolean

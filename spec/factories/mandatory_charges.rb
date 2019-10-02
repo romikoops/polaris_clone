@@ -13,7 +13,7 @@ end
 #
 # Table name: mandatory_charges
 #
-#  id             :bigint(8)        not null, primary key
+#  id             :bigint           not null, primary key
 #  pre_carriage   :boolean
 #  on_carriage    :boolean
 #  import_charges :boolean

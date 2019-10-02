@@ -11,7 +11,7 @@ end
 #
 # Table name: rate_bases
 #
-#  id            :bigint(8)        not null, primary key
+#  id            :bigint           not null, primary key
 #  external_code :string
 #  internal_code :string
 #  created_at    :datetime         not null

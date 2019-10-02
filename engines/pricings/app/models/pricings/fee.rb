@@ -75,9 +75,9 @@ end
 #  charge_category_id :integer
 #  range              :jsonb
 #  currency_name      :string
-#  currency_id        :bigint(8)
+#  currency_id        :bigint
 #  pricing_id         :uuid
-#  tenant_id          :bigint(8)
+#  tenant_id          :bigint
 #  legacy_id          :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null

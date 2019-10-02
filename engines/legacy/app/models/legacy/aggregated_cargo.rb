@@ -27,7 +27,7 @@ end
 #
 # Table name: aggregated_cargos
 #
-#  id                :bigint(8)        not null, primary key
+#  id                :bigint           not null, primary key
 #  weight            :decimal(, )
 #  volume            :decimal(, )
 #  chargeable_weight :decimal(, )

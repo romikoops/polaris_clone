@@ -12,7 +12,7 @@ end
 #
 # Table name: notes
 #
-#  id                  :bigint(8)        not null, primary key
+#  id                  :bigint           not null, primary key
 #  itinerary_id        :integer
 #  hub_id              :integer
 #  trucking_pricing_id :integer

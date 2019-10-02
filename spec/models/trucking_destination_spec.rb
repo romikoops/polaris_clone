@@ -45,7 +45,7 @@ end
 #
 # Table name: trucking_destinations
 #
-#  id           :bigint(8)        not null, primary key
+#  id           :bigint           not null, primary key
 #  zipcode      :string
 #  country_code :string
 #  city_name    :string

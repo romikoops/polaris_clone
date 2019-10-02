@@ -9,7 +9,7 @@ end
 #
 # Table name: conversations
 #
-#  id           :bigint(8)        not null, primary key
+#  id           :bigint           not null, primary key
 #  shipment_id  :integer
 #  tenant_id    :integer
 #  user_id      :integer

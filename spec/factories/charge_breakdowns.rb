@@ -32,7 +32,7 @@ end
 #
 # Table name: charge_breakdowns
 #
-#  id          :bigint(8)        not null, primary key
+#  id          :bigint           not null, primary key
 #  shipment_id :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null

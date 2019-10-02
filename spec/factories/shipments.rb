@@ -43,7 +43,7 @@ end
 #
 # Table name: shipments
 #
-#  id                                  :bigint(8)        not null, primary key
+#  id                                  :bigint           not null, primary key
 #  user_id                             :integer
 #  uuid                                :string
 #  imc_reference                       :string
@@ -71,7 +71,7 @@ end
 #  booking_placed_at                   :datetime
 #  insurance                           :jsonb
 #  customs                             :jsonb
-#  transport_category_id               :bigint(8)
+#  transport_category_id               :bigint
 #  incoterm_id                         :integer
 #  closing_date                        :datetime
 #  incoterm_text                       :string

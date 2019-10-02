@@ -14,7 +14,7 @@ end
 #
 # Table name: incoterm_scopes
 #
-#  id                :bigint(8)        not null, primary key
+#  id                :bigint           not null, primary key
 #  pre_carriage      :boolean
 #  on_carriage       :boolean
 #  created_at        :datetime         not null

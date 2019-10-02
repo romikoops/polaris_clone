@@ -9,7 +9,7 @@ end
 #
 # Table name: hub_truck_type_availabilities
 #
-#  id                         :bigint(8)        not null, primary key
+#  id                         :bigint           not null, primary key
 #  hub_id                     :integer
 #  truck_type_availability_id :integer
 #  created_at                 :datetime         not null

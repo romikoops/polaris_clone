@@ -59,7 +59,7 @@ end
 #
 # Table name: tenants
 #
-#  id          :bigint(8)        not null, primary key
+#  id          :bigint           not null, primary key
 #  theme       :jsonb
 #  emails      :jsonb
 #  subdomain   :string

@@ -26,7 +26,7 @@ end
 #
 # Table name: local_charges
 #
-#  id                 :bigint(8)        not null, primary key
+#  id                 :bigint           not null, primary key
 #  mode_of_transport  :string
 #  load_type          :string
 #  hub_id             :integer

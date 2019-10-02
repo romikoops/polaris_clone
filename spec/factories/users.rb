@@ -18,7 +18,7 @@ end
 #
 # Table name: users
 #
-#  id                     :bigint(8)        not null, primary key
+#  id                     :bigint           not null, primary key
 #  provider               :string           default("tenant_email"), not null
 #  uid                    :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
@@ -45,7 +45,7 @@ end
 #  tokens                 :json
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  role_id                :bigint(8)
+#  role_id                :bigint
 #  guest                  :boolean          default(FALSE)
 #  currency               :string           default("EUR")
 #  vat_number             :string

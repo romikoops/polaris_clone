@@ -212,7 +212,7 @@ end
 #
 # Table name: hubs
 #
-#  id                  :bigint(8)        not null, primary key
+#  id                  :bigint           not null, primary key
 #  tenant_id           :integer
 #  address_id          :integer
 #  name                :string

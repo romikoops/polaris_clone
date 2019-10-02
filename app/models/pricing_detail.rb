@@ -46,7 +46,7 @@ end
 #
 # Table name: pricing_details
 #
-#  id             :bigint(8)        not null, primary key
+#  id             :bigint           not null, primary key
 #  rate           :decimal(, )
 #  rate_basis     :string
 #  min            :decimal(, )
@@ -55,10 +55,10 @@ end
 #  shipping_type  :string
 #  range          :jsonb
 #  currency_name  :string
-#  currency_id    :bigint(8)
+#  currency_id    :bigint
 #  priceable_type :string
-#  priceable_id   :bigint(8)
-#  tenant_id      :bigint(8)
+#  priceable_id   :bigint
+#  tenant_id      :bigint
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  sandbox_id     :uuid

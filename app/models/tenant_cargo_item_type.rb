@@ -16,9 +16,9 @@ end
 #
 # Table name: tenant_cargo_item_types
 #
-#  id                 :bigint(8)        not null, primary key
-#  tenant_id          :bigint(8)
-#  cargo_item_type_id :bigint(8)
+#  id                 :bigint           not null, primary key
+#  tenant_id          :bigint
+#  cargo_item_type_id :bigint
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  sandbox_id         :uuid

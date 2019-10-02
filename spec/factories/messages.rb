@@ -9,7 +9,7 @@ end
 #
 # Table name: messages
 #
-#  id              :bigint(8)        not null, primary key
+#  id              :bigint           not null, primary key
 #  title           :string
 #  message         :string
 #  conversation_id :integer

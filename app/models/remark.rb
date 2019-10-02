@@ -9,8 +9,8 @@ end
 #
 # Table name: remarks
 #
-#  id          :bigint(8)        not null, primary key
-#  tenant_id   :bigint(8)
+#  id          :bigint           not null, primary key
+#  tenant_id   :bigint
 #  category    :string
 #  subcategory :string
 #  body        :string

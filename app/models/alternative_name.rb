@@ -7,7 +7,7 @@ end
 #
 # Table name: alternative_names
 #
-#  id         :bigint(8)        not null, primary key
+#  id         :bigint           not null, primary key
 #  model      :string
 #  model_id   :string
 #  name       :string

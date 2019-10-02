@@ -112,7 +112,7 @@ end
 #
 # Table name: trucking_pricings
 #
-#  id                        :bigint(8)        not null, primary key
+#  id                        :bigint           not null, primary key
 #  load_meterage             :jsonb
 #  cbm_ratio                 :integer
 #  modifier                  :string

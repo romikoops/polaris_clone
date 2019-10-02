@@ -7,7 +7,7 @@ end
 #
 # Table name: user_managers
 #
-#  id         :bigint(8)        not null, primary key
+#  id         :bigint           not null, primary key
 #  manager_id :integer
 #  user_id    :integer
 #  section    :string

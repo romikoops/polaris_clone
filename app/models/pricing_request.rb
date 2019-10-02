@@ -10,7 +10,7 @@ end
 #
 # Table name: pricing_requests
 #
-#  id         :bigint(8)        not null, primary key
+#  id         :bigint           not null, primary key
 #  pricing_id :integer
 #  user_id    :integer
 #  tenant_id  :integer

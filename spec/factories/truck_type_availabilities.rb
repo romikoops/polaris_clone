@@ -12,7 +12,7 @@ end
 #
 # Table name: truck_type_availabilities
 #
-#  id         :bigint(8)        not null, primary key
+#  id         :bigint           not null, primary key
 #  load_type  :string
 #  carriage   :string
 #  truck_type :string

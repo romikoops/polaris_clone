@@ -11,7 +11,7 @@ end
 #
 # Table name: quotations
 #
-#  id                   :bigint(8)        not null, primary key
+#  id                   :bigint           not null, primary key
 #  target_email         :string
 #  user_id              :integer
 #  name                 :string

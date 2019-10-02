@@ -45,7 +45,7 @@ end
 #
 # Table name: charges
 #
-#  id                          :bigint(8)        not null, primary key
+#  id                          :bigint           not null, primary key
 #  parent_id                   :integer
 #  price_id                    :integer
 #  charge_category_id          :integer
