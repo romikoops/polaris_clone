@@ -64,7 +64,7 @@ class App extends Component {
     } = this.props
 
     if (!tenant) {
-      return <Loading theme={defaultTheme} text="loading..." />
+      return null; // Wait until tenant is fetched
     }
 
     const { theme } = tenant
@@ -90,7 +90,7 @@ class App extends Component {
         />
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}
-          {loading ? <Loading theme={theme} text="loading..." /> : ''}
+          {loading ? <Loading tenant={tenant} tenant={tenant} text="loading..." /> : ''}
           {user &&
           user.id &&
           tenant &&

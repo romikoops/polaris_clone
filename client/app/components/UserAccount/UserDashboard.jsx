@@ -90,7 +90,7 @@ class UserDashboard extends Component {
       t
     } = this.props
     if (!user || !dashboard) {
-      return <Loading theme={theme} text={t('bookconf:loading')} />
+      return <Loading tenant={tenant} text={t('bookconf:loading')} />
     }
     const { perPage } = this.state
     const {

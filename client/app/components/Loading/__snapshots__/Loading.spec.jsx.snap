@@ -59,61 +59,6 @@ exports[`happy path 1`] = `
 </div>
 `;
 
-exports[`theme is falsy 1`] = `
-<div
-  class="layout-row layout-align-center-center ccb_loading loader_box"
->
-  <div
-    class="cube preload"
-  >
-    <div
-      class="cube_face cube_face_front"
-    >
-      <i
-        class="fa fa-plane clip"
-        style="color:#E0E0E0"
-      />
-    </div>
-    <div
-      class="cube_face cube_face_back"
-    >
-      <i
-        class="fa fa-anchor clip"
-        style="color:#E0E0E0"
-      />
-    </div>
-    <div
-      class="cube_face cube_face_left"
-    >
-      <i
-        class="fa fa-truck clip"
-        style="color:#E0E0E0"
-      />
-    </div>
-    <div
-      class="cube_face cube_face_right"
-    >
-      <i
-        class="fa fa-truck clip"
-        style="color:#E0E0E0"
-      />
-    </div>
-    <div
-      class="cube_face cube_face_bottom"
-    >
-      <i
-        class="fa fa-anchor clip"
-        style="color:#E0E0E0"
-      />
-    </div>
-    <div
-      class="cube_face cube_face_top"
-    >
-      <i
-        class="fa fa-plane clip"
-        style="color:#E0E0E0"
-      />
-    </div>
-  </div>
-</div>
-`;
+exports[`tenant is falsy 1`] = `""`;
+
+exports[`theme is falsy 1`] = `""`;

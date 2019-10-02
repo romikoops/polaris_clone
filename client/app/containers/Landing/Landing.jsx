@@ -63,7 +63,7 @@ class Landing extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
 
-    const loadingScreen = this.props.loading ? <Loading theme={theme} /> : ''
+    const loadingScreen = this.props.loading ? <Loading tenant={tenant} /> : ''
     const defaultBulletContent = [
       (<div className="flex layout-row layout-align-start-center">
         <i className="fa fa-check" />

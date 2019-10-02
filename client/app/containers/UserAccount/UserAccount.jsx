@@ -163,13 +163,13 @@ class UserAccount extends Component {
       remarkDispatch
     } = this.props
     if (!users || !user) {
-      return <Loading theme={theme} text="loading..." />
+      return <Loading tenant={tenant} text="loading..." />
     }
     const {
       shipments, hubs, shipment, dashboard, loading
     } = users
     if (!dashboard) {
-      return <Loading theme={theme} text="loading..." />
+      return <Loading tenant={tenant} text="loading..." />
     }
 
     const hubHash = {}
@@ -179,7 +179,7 @@ class UserAccount extends Component {
       })
     }
 
-    const loadingScreen = loading ? <Loading theme={theme} /> : ''
+    const loadingScreen = loading ? <Loading tenant={tenant} /> : ''
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} currentUrl={this.state.currentUrl} />
 
     return (

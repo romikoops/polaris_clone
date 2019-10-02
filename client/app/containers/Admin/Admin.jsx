@@ -69,7 +69,7 @@ class Admin extends Component {
         hubHash[hub.data.id] = hub
       })
     }
-    const loadingScreen = loading || documentLoading ? <Loading theme={theme} /> : ''
+    const loadingScreen = loading || documentLoading ? <Loading tenant={tenant} /> : ''
     const menu = (
       <FloatingMenu
         Comp={SideNav}

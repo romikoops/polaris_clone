@@ -114,6 +114,7 @@ RSpec.describe Tenants::ScopeService do
             admin: %w(dashboard shipments hubs pricing schedules clients routes currencies settings),
             shipper: %w(dashboard shipments profile contacts)
           },
+          loading_image: nil,
           blacklisted_emails: []
         }
       end

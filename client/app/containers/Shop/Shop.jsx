@@ -203,7 +203,7 @@ class Shop extends Component {
     const {
       request, response, error, reusedShipment, contacts, originalSelectedDay
     } = bookingData
-    const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
+    const loadingScreen = loading || fakeLoading ? <Loading tenant={tenant} /> : ''
     const { showRegistration } = this.state
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
 

@@ -30,12 +30,26 @@ class Loading extends Component {
   }
 
   render () {
+
+    if (!this.props.tenant || !this.props.tenant.theme){
+      return null;
+    }
+    
     const { showClose } = this.state
-    const { theme } = this.props
+    const { theme } = this.props.tenant
+
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: '#E0E0E0' }
+
+    if (this.props.tenant && this.props.tenant.scope && this.props.tenant.scope.loading_image){
+      return (
+        <div className={`layout-row layout-align-center-center ccb_loading ${styles.loader_box}`}>
+          <img src={this.props.tenant.scope.loading_image} className="loading-image" />
+        </div>
+      );
+    }
 
     return (
       <div className={`layout-row layout-align-center-center ccb_loading ${styles.loader_box}`}>
@@ -74,7 +88,7 @@ class Loading extends Component {
 }
 
 Loading.defaultProps = {
-  theme: null
+  tenant: null
 }
 
 function mapStateToProps () {
