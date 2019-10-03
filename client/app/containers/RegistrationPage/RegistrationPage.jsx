@@ -147,7 +147,13 @@ class RegistrationPage extends React.PureComponent {
               validationErrors={{ matchRegexp: 'Invalid email' }}
               {...sharedProps}
             />
-
+            {tenant.scope.mandatory_form_fields.phone_for_signup && (
+              <RegistrationFormGroup
+                field="phone"
+                minLength="2"
+                {...sharedProps}
+              />
+            )}
             <RegistrationFormGroup
               field="password"
               minLength="8"

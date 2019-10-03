@@ -92,7 +92,8 @@ module Tenants
       no_aggregated_cargo: false,
       mandatory_form_fields: {
         total_value_goods: false,
-        description_of_goods: false
+        description_of_goods: false,
+        phone_for_signup: false
       },
       translation_overrides: false,
       offer_disclaimers: false,

@@ -59,7 +59,8 @@ RSpec.describe Tenants::ScopeService do
           links: { about: '', legal: '' },
           mandatory_form_fields: {
             total_value_goods: false,
-            description_of_goods: false
+            description_of_goods: false,
+            phone_for_signup: false
           },
           modes_of_transport: {
             air: { cargo_item: true, container: false },
