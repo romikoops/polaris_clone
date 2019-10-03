@@ -8,7 +8,7 @@ module ExcelDataServices
       attr_reader :mode_of_transport
 
       def load_and_prepare_data
-        charge_categories = ChargeCategory.where(tenant_id: tenant.id, sandbox: @sandbox)
+        charge_categories = ChargeCategory.where(tenant_id: tenant.id, cargo_unit_id: nil, sandbox: @sandbox)
         rows_data = charge_categories&.map do |charge_category|
           build_row_data(charge_category)
         end

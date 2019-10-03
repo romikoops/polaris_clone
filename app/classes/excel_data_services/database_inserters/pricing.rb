@@ -86,7 +86,7 @@ module ExcelDataServices
         )
       end
 
-      def create_pricing_with_pricing_details(group_of_row_data, row, transport_category, tenant_vehicle, itinerary, notes) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/ParameterLists
+      def create_pricing_with_pricing_details(group_of_row_data, row, transport_category, tenant_vehicle, itinerary, notes) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/ParameterLists
         if scope['base_pricing']
           load_type = row.load_type == 'lcl' ? 'cargo_item' : 'container'
           pricing_params =
@@ -120,13 +120,13 @@ module ExcelDataServices
           end
         else
           pricing_params =
-          { tenant: tenant,
-            transport_category: transport_category,
-            tenant_vehicle: tenant_vehicle,
-            sandbox: @sandbox,
-            user: Legacy::User.find_by(tenant_id: tenant.id, email: row.customer_email),
-            effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
-            expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
+            { tenant: tenant,
+              transport_category: transport_category,
+              tenant_vehicle: tenant_vehicle,
+              sandbox: @sandbox,
+              user: Legacy::User.find_by(tenant_id: tenant.id, email: row.customer_email),
+              effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
+              expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
           new_pricing = itinerary.pricings.new(pricing_params)
           old_pricings = itinerary.pricings.where(pricing_params.except(:effective_date, :expiration_date))
@@ -183,7 +183,7 @@ module ExcelDataServices
             pricing.save!
 
             update_notes_params(notes, pricing.id)
-            Note.import(notes)
+            Note.import!(notes)
           end
         end
 
@@ -192,8 +192,12 @@ module ExcelDataServices
 
       def update_notes_params(notes, pricing_id)
         notes.each do |note|
-          note[:target_id] = pricing_id
-          note[:target_type] = @scope['base_pricing'] ? 'Pricings::Pricing' : 'Legacy::Pricing'
+          if scope['base_pricing']
+            note[:pricings_pricing_id] = pricing_id
+          else
+            note[:target_id] = pricing_id
+            note[:target_type] = 'Legacy::Pricing'
+          end
         end
       end
 
