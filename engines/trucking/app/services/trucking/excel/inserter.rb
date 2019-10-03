@@ -283,11 +283,11 @@ module Trucking
               stats[:trucking_locations][:number_created] += 1
               geo_name = geometry&.name
               sub_ident_str = if identifier_modifier == 'locode' && geo_name
-                                [idents_and_country[:ident].upcase, geo_name].join(' - ')
+                                [idents_and_country[:ident]&.upcase, geo_name].join(' - ')
                               elsif identifier_modifier == 'locode' && !geo_name
-                                idents_and_country[:ident].upcase
+                                idents_and_country[:ident]&.upcase
                               elsif identifier_type == 'location_id' && identifier_modifier.nil?
-                                "#{geo_name} - #{idents_and_country[:sub_ident].capitalize}"
+                                [geo_name, idents_and_country[:sub_ident]&.capitalize].compact.join(' - ')
                               else
                                 geo_name
                               end
