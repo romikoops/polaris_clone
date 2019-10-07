@@ -73,7 +73,7 @@ module OfferCalculatorService
 
     def meta(schedule:, shipment:, pricing_ids:, user:) # rubocop:disable /MethodLength, Metrics AbcSize
       chargeable_weight = if shipment.lcl? && shipment.aggregated_cargo
-                            shipment.aggregated_cargo.chargeable_weight
+                            shipment.aggregated_cargo.calc_chargeable_weight(schedule.mode_of_transport)
                           elsif shipment.lcl? && !shipment.aggregated_cargo
                             shipment.cargo_items.reduce(0) do |acc, c|
                               acc + c.calc_chargeable_weight(schedule.mode_of_transport) * c.quantity

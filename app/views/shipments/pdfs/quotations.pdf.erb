@@ -217,12 +217,12 @@
                 <tr>
                   <td class="table-title">
                     <p>
-                      <%= cargo_data[:chargeable_weight][s.id][s.aggregated_cargo.id.to_s][:total_title] %>
+                      <%== cargo_data[:chargeable_weight][s.id][s.aggregated_cargo.id.to_s][:total_title] %>
                     </p>
                   </td>
                   <td class="table-value">
                     <span>
-                      <%= cargo_data[:chargeable_weight][s.id][s.aggregated_cargo.id.to_s][:total_value] %>
+                      <%== cargo_data[:chargeable_weight][s.id][s.aggregated_cargo.id.to_s][:total_value] %>
                     </span>
                   </td>
                 </tr>
@@ -357,7 +357,7 @@
                       <h3>
                         <%=
                           if scope['hide_sub_totals'] && charge_key.include?('unknown')
-                            "#{s.mode_of_transport} Freight: "
+                            "#{s.mode_of_transport.capitalize} Freight: "
                           elsif charge_key == 'cargo' && !scope['fine_fee_detail']
                             "#{'%.2f' % sub_charges.sum{|c| c['total']['value']}} #{currency_key}"
                           else

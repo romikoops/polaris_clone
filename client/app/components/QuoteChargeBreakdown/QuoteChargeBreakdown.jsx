@@ -431,7 +431,7 @@ class QuoteChargeBreakdown extends Component {
         value = trucking[target].chargeable_weight
         break
       case 'cargo':
-        if (meta) {
+        if (get(meta, ['ocean_chargeable_weight'], false)) {
           return `(${fixedWeightChargeableString(cargo, get(meta, ['ocean_chargeable_weight'], 0), t, scope)})`
         }
 
