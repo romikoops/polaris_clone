@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import styles from './LandingTop.scss'
 import Header from '../Header/Header'
 import ButtonSection from './ButtonSection'
+import LandingVideo from './LandingVideo'
 import { isQuote, contentToHtml } from '../../helpers'
 import withContent from '../../hocs/withContent'
 
@@ -22,7 +23,7 @@ const StyledTop = styled.div`
 function LandingTop ({
   theme, user, tenant, bookNow, t, content
 }) {
-  const backgroundImage =
+  let backgroundImage =
     theme && theme.background
       ? theme.background
       : 'https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg'
@@ -86,9 +87,14 @@ function LandingTop ({
   ]
 
   const contentToRender = content && content.welcome ? contentToHtml(content.welcome) : defaultContent
+  let landingVideoUrl = tenant.scope.landing_page_video ? tenant.scope.landing_page_video : false;
+  
+  const ContentWrapperComponent = landingVideoUrl ? 
+    LandingVideo
+    : StyledTop;
 
   return (
-    <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage} tenant={tenant}>
+    <ContentWrapperComponent className="layout-row flex-100 layout-align-center" bg={backgroundImage} tenant={tenant} url={landingVideoUrl}>
       <div className="layout-row flex-100 layout-wrap">
         <div className="flex-100 layout-row">
           <Header user={user} theme={theme} isLanding scrollable invert noMessages />
@@ -105,7 +111,7 @@ function LandingTop ({
           <ButtonSection {...buttonSectionProps} className="hide_h_gt_xxs" />
         </div>
       </div>
-    </StyledTop>
+    </ContentWrapperComponent>
   )
 }
 
@@ -115,6 +121,7 @@ LandingTop.defaultProps = {
   tenant: null,
   bookNow: null
 }
+
 export const translatedLandingTop = withNamespaces(['common', 'landing'])(LandingTop)
 const contentLandingTop = withContent(translatedLandingTop, 'LandingTop')
 export default contentLandingTop

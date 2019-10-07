@@ -136,6 +136,7 @@ module Tenants
         admin: %w(dashboard shipments hubs pricing schedules clients routes currencies settings),
         shipper: %w(dashboard shipments profile contacts)
       },
+      landing_page_video: nil,
       loading_image: nil,
       blacklisted_emails: []
     }.freeze

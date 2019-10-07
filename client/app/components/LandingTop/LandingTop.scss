@@ -83,4 +83,20 @@
     opacity: 0.7;
     z-index: 0;
   }
+
+  .landing_video {
+    position: absolute;
+  }
+
+  .landing_video_content {
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+  }
+
+  // Device = Desktops, Screen = 1281px to higher resolution desktops
+  @media (min-width: 1281px) {
+    .landing_video { width: 100%; }
+  }
+
 }
