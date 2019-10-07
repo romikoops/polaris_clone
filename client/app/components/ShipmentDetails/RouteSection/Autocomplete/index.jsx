@@ -269,14 +269,18 @@ class Autocomplete extends PureComponent {
   }
 
   handleAreaInputChange (input) {
-    const timestamp = moment().format('x')
-    this.setState({ queryingLocations: true, queryTimeStamp: timestamp }, () => searchLocations(input, this.props.countries, timestamp, (results, returnedTimestamp) => {
-      if (this.state.queryTimeStamp > returnedTimestamp) return
-      this.setState({ areaResults: results, hideResults: false, queryingLocations: false }, () => {
-        this.initKeyboardListener()
-        this.showResultsTimer()
-      })
-    }))
+    const countries = this.props.countries.filter(cc => cc !== 'nl')
+    if (countries.length > 0) {
+      const timestamp = moment().format('x')
+      this.setState({ queryingLocations: true, queryTimeStamp: timestamp }, () => searchLocations(input, countries, timestamp, (results, returnedTimestamp) => {
+        if (this.state.queryTimeStamp > returnedTimestamp) return
+        this.setState({ areaResults: results, hideResults: false, queryingLocations: false }, () => {
+          this.initKeyboardListener()
+          this.showResultsTimer()
+        })
+      }))
+    }
+    
   }
 
   handleAddress (result) {
