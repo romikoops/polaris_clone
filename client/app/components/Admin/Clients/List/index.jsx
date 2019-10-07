@@ -84,7 +84,7 @@ class AdminClientList extends Component {
       {
         id: 'companyName',
         Header: t('user:companyName'),
-        accessor: 'companyTitle',
+        accessor: 'companyName',
         Cell: rowData => (
           <div
             className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
