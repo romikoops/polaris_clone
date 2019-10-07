@@ -355,7 +355,7 @@ export class AdminShipmentContent extends Component {
                           <div className="layout-row flex-100">
                             <i
                               className="fa fa-file-text clip flex-none layout-align-center-center"
-                              style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
+                              style={feeHash.export ? selectedStyle : deselectedStyle}
                             />
                             <p>
                               {t('shipment:originLocalCharges')}
@@ -404,7 +404,7 @@ export class AdminShipmentContent extends Component {
                           <div className="flex-100 layout-row">
                             <i
                               className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                              style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
+                              style={feeHash.import ? selectedStyle : deselectedStyle}
                             />
                             <p>
                               {t('shipment:destinationLocalCharges')}
