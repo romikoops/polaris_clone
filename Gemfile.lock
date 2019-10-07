@@ -79,6 +79,14 @@ PATH
       core
 
 PATH
+  remote: engines/cargo
+  specs:
+    cargo (9999.1.0.0)
+      bitfields
+      core
+      tenants
+
+PATH
   remote: engines/core
   specs:
     core (9999.1.0.0)
@@ -794,6 +802,7 @@ DEPENDENCIES
   bootsnap (>= 1.1.0)
   breezy_pdf_lite
   byebug
+  cargo!
   chronic
   core!
   debase

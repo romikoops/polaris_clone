@@ -111,6 +111,25 @@ ActiveRecord::Schema.define(version: 2019_10_02_153904) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "cargo_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.uuid "tenant_id"
+    t.decimal "weight"
+    t.decimal "dimension_x"
+    t.decimal "dimension_y"
+    t.decimal "dimension_z"
+    t.integer "quantity"
+    t.bigint "cargo_class", default: 0
+    t.bigint "cargo_type", default: 0
+    t.boolean "stackable"
+    t.boolean "dangerous_goods"
+    t.uuid "load_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cargo_class"], name: "index_cargo_groups_on_cargo_class"
+    t.index ["cargo_type"], name: "index_cargo_groups_on_cargo_type"
+  end
+
   create_table "cargo_item_types", force: :cascade do |t|
     t.string "area"
     t.string "category"
@@ -140,6 +159,20 @@ ActiveRecord::Schema.define(version: 2019_10_02_153904) do
     t.jsonb "unit_price"
     t.datetime "updated_at", null: false
     t.index ["sandbox_id"], name: "index_cargo_items_on_sandbox_id"
+  end
+
+  create_table "cargo_loads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.uuid "tenant_id"
+    t.decimal "weight"
+    t.integer "quantity"
+    t.decimal "volume"
+    t.bigint "cargo_class", default: 0
+    t.bigint "cargo_type", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cargo_class"], name: "index_cargo_loads_on_cargo_class"
+    t.index ["cargo_type"], name: "index_cargo_loads_on_cargo_type"
   end
 
   create_table "carriers", force: :cascade do |t|
