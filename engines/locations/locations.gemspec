@@ -18,10 +18,10 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'core'
 
-  s.add_dependency 'elasticsearch', '~> 6.2.0'
+  s.add_dependency 'elasticsearch', '~> 7.3.0'
   s.add_dependency 'rgeo'
   s.add_dependency 'rgeo-geojson'
-  s.add_dependency 'searchkick', '~> 4.0.2'
+  s.add_dependency 'searchkick', '~> 4.1.0'
 
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'ffaker'

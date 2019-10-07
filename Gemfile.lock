@@ -112,10 +112,10 @@ PATH
   specs:
     locations (0.0.1)
       core
-      elasticsearch (~> 6.2.0)
+      elasticsearch (~> 7.3.0)
       rgeo
       rgeo-geojson
-      searchkick (~> 4.0.2)
+      searchkick (~> 4.1.0)
 
 PATH
   remote: engines/mailers
@@ -385,12 +385,12 @@ GEM
       dry-types (~> 0.13.1)
     easymon (1.4.2)
       redis
-    elasticsearch (6.2.0)
-      elasticsearch-api (= 6.2.0)
-      elasticsearch-transport (= 6.2.0)
-    elasticsearch-api (6.2.0)
+    elasticsearch (7.3.0)
+      elasticsearch-api (= 7.3.0)
+      elasticsearch-transport (= 7.3.0)
+    elasticsearch-api (7.3.0)
       multi_json
-    elasticsearch-transport (6.2.0)
+    elasticsearch-transport (7.3.0)
       faraday
       multi_json
     erubi (1.8.0)
@@ -681,7 +681,7 @@ GEM
       sprockets-rails
       tilt
     scientist (1.4.0)
-    searchkick (4.0.2)
+    searchkick (4.1.0)
       activemodel (>= 5)
       elasticsearch (>= 6)
       hashie
