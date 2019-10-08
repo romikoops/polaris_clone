@@ -1139,7 +1139,7 @@ export default function admin (state = {}, action) {
     case adminConstants.GET_CLIENTS_SUCCESS:
       return {
         ...state,
-        clients: action.payload.data.clients,
+        clients: action.payload.data.clientData,
         managers: action.payload.data.managers,
         loading: false
       }
@@ -1157,6 +1157,7 @@ export default function admin (state = {}, action) {
         ...state,
         loading: true
       }
+
     case adminConstants.NEW_CLIENT_SUCCESS: {
       const { clients } = state
       clients.push(action.payload)
