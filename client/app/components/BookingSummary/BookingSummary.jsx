@@ -26,7 +26,7 @@ function BookingSummary (props) {
 
   return (
     <div className={`${styles.booking_summary} hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row`}>
-      <div className={`${styles.route_sec} flex-40 layout-column layout-align-stretch`}>
+      <div className={`${styles.route_sec} flex-70 layout-column layout-align-stretch`}>
         <div className="flex-none layout-row layout-align-center">
           <div className={`flex-none ${styles.connection_graphics}`}>
             <i className={`fa fa-map-marker ${styles.map_marker}`} />
@@ -79,7 +79,7 @@ function BookingSummary (props) {
           </div>
         </div>
       </div>
-      <div className="flex flex-sm-40 layout-column layout-align-stretch">
+      <div className="flex flex-sm-30 layout-column layout-align-stretch">
         <h4 className="flex-50 layout-row layout-align-center-center">{t('cargo:totalWeight')}</h4>
         <p className="flex-50 layout-row layout-align-center-start">
           { numberSpacing(totalWeight, 2) }
