@@ -151,12 +151,12 @@ class Shop extends Component {
   }
 
   chooseOffer (obj) {
-    const { shipmentDispatch, bookingSummaryDispatch, bookingData, user } = this.props
+    const { shipmentDispatch, bookingSummaryDispatch, bookingData, user, activeShipment } = this.props
     const { schedule, total, meta } = obj
     // eslint-disable-next-line camelcase
     const { id, user_id, customs_credit } = bookingData.response.stage2.shipment
     const req = {
-      id,
+      id: id || activeShipment,
       schedule,
       total,
       user_id,
@@ -390,7 +390,7 @@ function mapStateToProps (state) {
     user, loggedIn, loggingIn, registering
   } = authentication
   const { currencies, tenant } = app
-  const { loading, modal } = bookingData
+  const { loading, modal, activeShipment } = bookingData
 
   return {
     user,
@@ -402,7 +402,8 @@ function mapStateToProps (state) {
     loggingIn,
     registering,
     loading,
-    currencies
+    currencies,
+    activeShipment
   }
 }
 

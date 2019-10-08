@@ -62,7 +62,7 @@ class ApplicationController < ActionController::API
       ip: request.remote_ip
     )
     Raven.tags_context(
-      agency: current_user&.agency_id&.present?,
+      agency: current_user&.agency_id.present?,
       namespace: ENV['REVIEW_APP_NAME'],
       tenant: current_tenant && ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)&.slug
     )

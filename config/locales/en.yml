@@ -114,6 +114,10 @@ en:
       http_code: 400
       code: 1018
       message: "Please sign in to continue with your booking request."
+    shipment_not_found:
+      http_code: 404
+      code: 1019
+      message: "Shipment not found!"
     
 
     # Authentication Errors

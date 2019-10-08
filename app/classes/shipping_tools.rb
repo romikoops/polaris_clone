@@ -7,6 +7,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   include NotificationTools
   extend NotificationTools
   InternalError = Class.new(StandardError)
+  ShipmentNotFound = Class.new(StandardError)
 
   def self.create_shipments_from_quotation(shipment, results, sandbox = nil)
     main_quote = ShippingTools.handle_existing_quote(shipment, results, sandbox)
@@ -461,7 +462,9 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   def self.choose_offer(params, current_user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
     raise ApplicationError::NotLoggedIn if current_user.guest
 
-    shipment = Shipment.find_by(id: params[:shipment_id], sandbox: sandbox)
+    shipment = Shipment.find_by(id: params[:shipment_id] || params[:id], sandbox: sandbox)
+    raise ApplicationError::ShipmentNotFound unless shipment.present?
+
     shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
     shipment.user_id = current_user.id
     shipment.customs_credit = params[:customs_credit]
