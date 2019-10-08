@@ -92,7 +92,7 @@ exports[`shallow render 1`] = `
             autosize={true}
             backspaceRemoves={true}
             backspaceToRemoveMessage="Press backspace to remove {label}"
-            className="flex-100 sc-bdVaJa kuuNwx"
+            className="flex-100 sc-bdVaJa eSpyhL"
             classes="select"
             clearAllText="Clear all"
             clearRenderer={[Function]}
@@ -165,7 +165,7 @@ exports[`shallow render 1`] = `
             valueKey="value"
           >
             <div
-              className="Select flex-100 sc-bdVaJa kuuNwx has-value is-clearable is-searchable Select--single"
+              className="Select flex-100 sc-bdVaJa eSpyhL has-value is-clearable is-searchable Select--single"
             >
               <div
                 className="Select-control"

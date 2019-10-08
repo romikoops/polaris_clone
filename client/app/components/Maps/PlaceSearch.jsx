@@ -186,16 +186,6 @@ class PlaceSearch extends Component {
   }
 }
 
-PlaceSearch.propTypes = {
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  handlePlaceChange: PropTypes.func.isRequired,
-  gMaps: PropTypes.gMaps.isRequired,
-  hideMap: PropTypes.bool,
-  inputStyles: PropTypes.objectOf(PropTypes.string),
-  options: PropTypes.objectOf(PropTypes.any),
-  address: PropTypes.objectOf(PropTypes.any)
-}
 
 PlaceSearch.defaultProps = {
   theme: null,

@@ -32,7 +32,6 @@ export class NamedAsync extends Component {
         z-index: 25 !important;
       }
       .Select-value {
-        background-color: #f9f9f9;
         border: 1px solid #f2f2f2;
       }
       .Select-option {

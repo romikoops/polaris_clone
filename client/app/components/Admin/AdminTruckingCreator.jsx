@@ -11,10 +11,8 @@ import { countries } from '../../constants'
 import {
   TruckingCitySetter,
   TruckingDistanceSetter,
-  // TruckingZipPanel,
   TruckingZipSetter,
   TruckingFeeSetter,
-  // TruckingDistancePanel,
   TruckingStepSetter,
   TruckingPanel
 } from './AdminAuxilliaries'
@@ -619,13 +617,7 @@ export class AdminTruckingCreator extends Component {
     )
   }
 }
-AdminTruckingCreator.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  closeForm: PropTypes.func.isRequired,
-  hub: PropTypes.hub
-}
+
 AdminTruckingCreator.defaultProps = {
   theme: {},
   hub: {}

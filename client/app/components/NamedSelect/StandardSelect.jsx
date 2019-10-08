@@ -18,7 +18,6 @@ const StyledSelect = styled(Select)`
     border: 1px solid #F2F2F2;
   }
   .Select-value {
-    background: #F9F9F9;
     border: 1px solid #F2F2F2;
   }
   .Select-option {

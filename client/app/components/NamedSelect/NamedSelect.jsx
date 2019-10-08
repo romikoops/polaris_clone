@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types';
 import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 import styled from 'styled-components'
-import PropTypes from '../../prop-types'
 
 const StyledSelect = styled(Select)`
   .Select-control {
@@ -20,7 +18,6 @@ const StyledSelect = styled(Select)`
     border: 1px solid #F2F2F2;
   }
   .Select-value {
-    background: #F9F9F9;
     border: 1px solid #F2F2F2;
   }
   .Select-option {
