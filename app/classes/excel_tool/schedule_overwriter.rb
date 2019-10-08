@@ -34,11 +34,11 @@ module ExcelTool
 
     def create_tenant_vehicle(row, itinerary)
       service_level = row[:service_level] || 'standard'
-      Vehicle.create_from_name(
+      Legacy::Vehicle.create_from_name(
         name: service_level,
         mot: itinerary.mode_of_transport,
         tenant_id: @user.tenant_id,
-        carrier: row[:carrier],
+        carrier_name: row[:carrier],
         sandbox: @sandbox
       )
     end
@@ -82,7 +82,7 @@ module ExcelTool
     def find_itinerary(row)
       itinerary_from = row[:from].split(' ').map(&:capitalize).join(' ')
       itinerary_to = row[:to].split(' ').map(&:capitalize).join(' ')
-      Itinerary.find_by(
+      Legacy::Itinerary.find_by(
         name: "#{itinerary_from} - #{itinerary_to}",
         mode_of_transport: mot,
         tenant_id: @user.tenant_id,
@@ -97,24 +97,24 @@ module ExcelTool
 
     def find_tenant_vehicle(row, itinerary)
       service_level = row[:service_level] || 'standard'
-      tv = TenantVehicle.find_by(
+      tv = Legacy::TenantVehicle.find_by(
         tenant_id: @user.tenant_id,
         mode_of_transport: itinerary.mode_of_transport,
         name: row[:service_level],
         carrier: Carrier.find_by(name: row[:carrier]),
         sandbox: @sandbox
       )
-      tv ||= TenantVehicle.find_by(
+      tv ||= Legacy::TenantVehicle.find_by(
         tenant_id: @user.tenant_id,
         mode_of_transport: itinerary.mode_of_transport,
         name: row[:service_level],
         sandbox: @sandbox
       )
-      tv ||= Vehicle.create_from_name(
+      tv ||= Legacy::Vehicle.create_from_name(
         name: service_level,
         mot: itinerary.mode_of_transport,
         tenant_id: @user.tenant_id,
-        carrier: row[:carrier],
+        carrier_name: row[:carrier],
         sandbox: @sandbox
       )
 
