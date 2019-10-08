@@ -227,7 +227,7 @@ function getServiceCharges () {
 
   return fetch(`${getTenantApiUrl()}/admin/local_charges`, requestOptions).then(handleResponse)
 }
-function getShipments (_pages, perPage, params, redirect) {
+function getShipments (_pages, perPage, params) {
   const pages = _pages || {
     open: 1,
     requested: 1,

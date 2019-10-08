@@ -200,8 +200,7 @@ export class ShipmentsCompAdmin extends Component {
     const statusKeys = Object.keys(pages)
     const mergedShipments = {}
     statusKeys.forEach((status) => {
-      mergedShipments[status] = filters.sortByDate(shipments[status], 'booking_placed_at')
-        .map(sh => ShipmentsCompAdmin.prepShipment(sh, clientHash, hubHash))
+      mergedShipments[status] = shipments[status].map(sh => ShipmentsCompAdmin.prepShipment(sh, clientHash, hubHash))
     })
     const keysToRender = statusKeys.includes('quoted')
       ? statusKeys : ['requested', 'open', 'finished', 'rejected', 'archived']

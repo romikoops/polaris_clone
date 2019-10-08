@@ -478,8 +478,6 @@ export default function admin (state = {}, action) {
           ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
           : []
       const open = state.shipments && state.shipments.open ? state.shipments.open.filter(x => x.id !== action.payload.id) : []
-      req.push(action.payload)
-      dashReq.push(action.payload)
       const shipment = state.shipment && state.shipment.shipment ? {
         ...state.shipment.shipment,
         ...action.payload
@@ -565,8 +563,6 @@ export default function admin (state = {}, action) {
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.finished
           ? state.dashboard.shipments.finished
           : []
-      finished.push(action.payload)
-      dashFinished.push(action.payload)
       const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {}
       if (shipment) {
         shipment.status = 'finished'
@@ -617,8 +613,6 @@ export default function admin (state = {}, action) {
           ? state.dashboard.shipments.rejected
           : []
 
-      rejected.push(action.payload)
-      dashRejected.push(action.payload)
       const newState = {
         ...state,
         showSpinner: false,
@@ -657,7 +651,6 @@ export default function admin (state = {}, action) {
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.archived
           ? state.dashboard.shipments.archived
           : []
-      dashArchived.push(action.payload)
 
       const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {}
       if (shipment) {

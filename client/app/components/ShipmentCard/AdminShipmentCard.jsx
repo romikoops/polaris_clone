@@ -104,7 +104,28 @@ class AdminShipmentCard extends Component {
     const plannedDate =
     shipment.has_pre_carriage ? shipment.planned_pickup_date : shipment.planned_origin_drop_off_date
 
-    const requestedLinks = ['requested', 'requested_by_unconfirmed_account'].includes(shipment.status) ? (
+    const requestedLinks = ['confirmed'].includes(shipment.status) ? (
+      <div className={`layout-row layout-align-center-center ${styles.topRight}`}>
+        <div className={`${styles.edit} layout-row layout-align-center-center pointy`} onClick={() => this.handleEdit()}>
+          <i className="flex-none fa fa-eye" />
+          &nbsp;
+          <p>{t('common:modify')}</p>
+        </div>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <div className={`${styles.check} layout-row layout-align-center-center pointy`} onClick={() => this.handleFinished()}>
+          <i className="flex-none fa fa-check" />
+          &nbsp;
+          <p>{t('common:finish')}</p>
+        </div>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <div className={`${styles.trash} layout-row layout-align-center-center pointy`} onClick={() => this.confirmDelete()}>
+          <i className="flex-none fa fa-trash" />
+          &nbsp;
+          <p>{t('common:reject')}</p>
+        </div>
+      </div>
+    ) : ''
+    const openLinks = ['requested', 'requested_by_unconfirmed_account'].includes(shipment.status) ? (
       <div className={`layout-row layout-align-center-center ${styles.topRight}`}>
         <div className={`${styles.edit} layout-row layout-align-center-center pointy`} onClick={() => this.handleEdit()}>
           <i className="flex-none fa fa-eye" />
@@ -213,6 +234,7 @@ class AdminShipmentCard extends Component {
         <div className={adminStyles.card_link} onClick={() => this.handleView()} />
 
         {requestedLinks}
+        {openLinks}
 
         <div
           className={`layout-row flex-100 layout-align-space-between-stretch ${styles.top_box}`}

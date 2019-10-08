@@ -1018,6 +1018,8 @@ function confirmShipment (id, action, redirect) {
 
         if (redirect) {
           dispatch(getShipment(id, true))
+        } else {
+          dispatch(getShipments(false, 6))
         }
       },
       (error) => {

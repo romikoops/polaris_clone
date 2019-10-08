@@ -25,7 +25,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       shipment_association = archived_shipments
     end
     per_page = params.fetch(:per_page, 4).to_f
-    shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
+    shipments = shipment_association.order(updated_at: :desc).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
       shipments: shipments.map(&:with_address_index_json),
@@ -174,11 +174,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def get_booking_index
     response = Rails.cache.fetch("#{requested_shipments.cache_key}/shipment_index", expires_in: 12.hours) do
       per_page = params.fetch(:per_page, 4).to_f
-      r_shipments = requested_shipments.order(booking_placed_at: :desc).paginate(page: params[:requested_page], per_page: per_page)
-      o_shipments = open_shipments.order(booking_placed_at: :desc).paginate(page: params[:open_page], per_page: per_page)
-      f_shipments = finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
-      rj_shipments = rejected_shipments.order(booking_placed_at: :desc).paginate(page: params[:rejected_page], per_page: per_page)
-      a_shipments = archived_shipments.order(booking_placed_at: :desc).paginate(page: params[:archived_page], per_page: per_page)
+      r_shipments = requested_shipments.order(updated_at: :desc).paginate(page: params[:requested_page], per_page: per_page)
+      o_shipments = open_shipments.order(updated_at: :desc).paginate(page: params[:open_page], per_page: per_page)
+      f_shipments = finished_shipments.order(updated_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
+      rj_shipments = rejected_shipments.order(updated_at: :desc).paginate(page: params[:rejected_page], per_page: per_page)
+      a_shipments = archived_shipments.order(updated_at: :desc).paginate(page: params[:archived_page], per_page: per_page)
       num_pages = {
         finished: f_shipments.total_pages,
         requested: r_shipments.total_pages,
