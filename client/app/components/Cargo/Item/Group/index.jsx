@@ -53,7 +53,7 @@ class CargoItemGroup extends Component {
       (<tr className={styles.data_table_row}>
         <td className={styles.table_title}>
           <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>
-            {`${group.items[0].dimension_x}cm x ${group.items[0].dimension_y}cm x ${group.items[0].dimension_y}cm`}
+            {`${group.items[0].dimension_x}cm x ${group.items[0].dimension_y}cm x ${group.items[0].dimension_z}cm`}
           </p>
         </td>
         <td className={styles.table_value}>
