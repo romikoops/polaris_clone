@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -8,10 +8,9 @@ import { clientsActions } from '../../../../actions'
 import styles from '../index.scss'
 import { AdminClientMargins } from '..'
 import Checkbox from '../../../Checkbox/Checkbox'
-import NamedSelect from '../../../NamedSelect/NamedSelect'
 import AdminPromptConfirm from '../../Prompt/Confirm'
 
-class AdminClientGroups extends PureComponent {
+class AdminClientGroups extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -26,6 +25,15 @@ class AdminClientGroups extends PureComponent {
     clientsDispatch.getGroupsForList({
       page: 1, pageSize: 10, targetId, targetType
     })
+  }
+
+  componentDidUpdate (prevProps) {
+    const { clientsDispatch, targetId, targetType } = this.props
+    if (targetId !== prevProps.targetId) {
+      clientsDispatch.getGroupsForList({
+        page: 1, pageSize: 10, targetId, targetType
+      })
+    }
   }
 
   handleClick (id) {
