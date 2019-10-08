@@ -3,7 +3,7 @@
 module Locations
   class Autocomplete
     def self.search(term:, country_codes: [], lang: 'en')
-      query = Locations::Name
+      query = Locations::Name.where.not(point: nil)
       query = if country_codes.empty?
                 query.search(
                   term,
