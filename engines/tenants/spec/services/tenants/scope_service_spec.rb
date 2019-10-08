@@ -117,7 +117,8 @@ RSpec.describe Tenants::ScopeService do
           },
           landing_page_video: nil,
           loading_image: nil,
-          blacklisted_emails: []
+          blacklisted_emails: [],
+          validity_logic: 'vatos'
         }
       end
 

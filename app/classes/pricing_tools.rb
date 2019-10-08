@@ -42,10 +42,15 @@ class PricingTools # rubocop:disable Metrics/ClassLength
 
   def find_local_charge(schedules, cargos, direction, user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     hub = direction == 'export' ? schedules.first.origin_hub : schedules.last.destination_hub
-    start_date = direction == 'export' ? schedules.first.etd : schedules.first.eta
-    end_date = direction == 'export' ? schedules.last.etd : schedules.last.eta
-    start_date = Date.today + 5.days if start_date.nil?
-    end_date = Date.today + 25.days if end_date.nil?
+    validity_service = ValidityService.new(
+      logic: scope.fetch('validity_logic'),
+      schedules: schedules,
+      direction: direction,
+      booking_date: shipment.desired_start_date
+    )
+    start_date = validity_service.start_date
+    end_date = validity_service.end_date
+
     counterpart_hub_id = direction == 'export' ? schedules.last.destination_hub.id : schedules.first.origin_hub.id
     effective_local_charges = hub
                               .local_charges

@@ -138,7 +138,8 @@ module Tenants
       },
       landing_page_video: nil,
       loading_image: nil,
-      blacklisted_emails: []
+      blacklisted_emails: [],
+      validity_logic: 'vatos'
     }.freeze
 
     def initialize(target: nil, tenant: nil, sandbox: nil)
