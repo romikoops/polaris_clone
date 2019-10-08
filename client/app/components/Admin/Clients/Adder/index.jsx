@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { find } from 'lodash'
 import { clientsActions } from '../../../../actions'
 import styles from '../index.scss'
 import AdminClientGroups from '../Groups'
@@ -54,19 +55,19 @@ class AdminClientAdder extends Component {
   getClientFromId (id) {
     const { clientData } = this.props
 
-    return clientData.filter(c => c.id === id)[0]
+    return find(clientData, { id })
   }
 
   getCompanyFromId (id) {
     const { companiesData } = this.props
 
-    return companiesData.filter(c => c.id === id)[0]
+    return find(companiesData, { id })
   }
 
   getGroupFromId (id) {
     const { groupData } = this.props
-
-    return groupData.filter(c => c.id === id)[0]
+    
+    return find(groupData, { id }) 
   }
 
   handleNameChange (e) {
