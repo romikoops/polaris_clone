@@ -38,12 +38,12 @@ export class AdminHubsComp extends Component {
 
   componentDidMount () {
     const {
-      hubs, adminDispatch, loading, countries, appDispatch, tenant
+      adminDispatch, loading, countries, appDispatch, tenant
     } = this.props
     if (tenant) {
       this.setHubTypes()
     }
-    if (!hubs && !loading) {
+    if (!loading) {
       adminDispatch.getHubs(false)
     }
     if (!countries.length) {
