@@ -7,22 +7,19 @@ module Trucking
     class Inserter < ::Trucking::Excel::Base # rubocop:disable Metrics/ClassLength
       attr_reader :defaults, :trucking_rate_by_zone, :sheets, :zone_sheet,
                   :fees_sheet, :num_rows, :zip_char_length, :identifier_type, :identifier_modifier, :zones,
-                  :all_ident_values_and_countries, :charges, :locations
+                  :all_ident_values_and_countries, :charges, :locations, :valid_postal_codes, :xlsx
 
       MissingModifierKeys = Class.new(StandardError)
+      InvalidSheet = Class.new(StandardError)
 
       def initialize(_args)
         super
+        raise InvalidSheet unless xlsx&.sheets.present?
 
         @defaults = {}
         @trucking_rate_by_zone = {}
         @tenant = @hub.tenant
-        @sheets = @xlsx.sheets.clone
-        @zone_sheet = @xlsx.sheet(sheets[0]).clone
-        @fees_sheet = @xlsx.sheet(sheets[1]).clone
-        @num_rows = @zone_sheet.last_row
         @zip_char_length = nil
-        @identifier_type, @identifier_modifier = determine_identifier_type_and_modifier(@zone_sheet.row(1)[1])
         @zones = {}
         @all_ident_values_and_countries = {}
         @charges = {}
@@ -35,6 +32,10 @@ module Trucking
 
       def perform
         start_time = DateTime.now
+        @zone_sheet = xlsx.sheet(sheets[0]).clone
+        @fees_sheet = xlsx.sheet(sheets[1]).clone
+        @num_rows = @zone_sheet&.last_row
+        @identifier_type, @identifier_modifier = determine_identifier_type_and_modifier(@zone_sheet.row(1)[1])
         load_zones
         load_ident_values_and_countries
         load_fees_and_charges
@@ -46,8 +47,6 @@ module Trucking
         puts "Time elapsed: #{diff}"
         { results: results, stats: stats }
       end
-
-      private
 
       def create_coverage
         if ::Trucking::Coverage.exists?(hub_id: @hub.id)
@@ -229,7 +228,7 @@ module Trucking
                                     country: row_data[3].strip
                                   }
                                 else
-                                  { min: range[0].to_i, max: range[1].to_i, country: row_data[3].strip }
+                                  { min: range[0], max: range[1], country: row_data[3].strip }
                                 end
 
           elsif row_data[1] && row_data[2]
@@ -242,56 +241,92 @@ module Trucking
         end
       end
 
-      def load_ident_values_and_countries # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+      def extract_number(string:)
+        string.tr('^0-9', '').to_i
+      end
+
+      def alphanumeric_range(min:, max:, country:)
+        alpha = min.tr('^A-Z', '')
+        numeric_min =  extract_number(string: min)
+        numeric_max =  extract_number(string: max)
+        (numeric_min..numeric_max).map do |numeric|
+          alphanumeric = [alpha, numeric].join('')
+
+          { ident: alphanumeric, country: country }
+        end
+      end
+
+      def determine_sub_ident(string:, location_data:)
+        if identifier_modifier == 'locode' && string
+          [location_data[:ident].upcase, string].join(' - ')
+        elsif identifier_modifier == 'locode' && !string
+          location_data[:ident].upcase
+        elsif identifier_type == 'location_id' && identifier_modifier.nil?
+          "#{string} - #{location_data[:sub_ident].capitalize}"
+        else
+          string
+        end
+      end
+
+      def postal_code_range(postal_codes_data:)
+        if postal_codes_data[:min][/[a-zA-Z]/].present?
+          alphanumeric_range(
+            min: postal_codes_data[:min], max: postal_codes_data[:max], country: postal_codes_data[:country]
+          ).map do |alphanumeric_data|
+            postal_code_range_data(ident_and_country: alphanumeric_data)
+          end
+        else
+          (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
+            ident_value = if identifier_type == 'zipcode'
+                            ident.to_s.rjust(zip_char_length, '0')
+                          else
+                            ident
+                          end
+
+            postal_code_range_data(ident_and_country: { ident: ident_value, country: idents_and_country[:country] })
+          end
+        end
+      end
+
+      def postal_code_range_data(ident_and_country:)
+        return nil if valid_postal_codes&.exclude?(alphanumeric)
+
+        if identifier_type == 'location_id'
+          find_and_prep_geometry(geometry_data: ident_and_country)
+        else
+          ident_and_country
+        end
+      end
+
+      def find_and_prep_geometry(geometry_data:)
+        geometry = find_geometry(geometry_data)
+        if geometry.nil?
+          @missing_locations << geometry_data.values.join(', ')
+          return nil
+        end
+        geo_name = geometry&.name
+        sub_ident_str = determine_sub_ident(str: geo_name, idents: geometry_data)
+        { ident: geometry&.id, country: geometry_data[:country], sub_ident: sub_ident_str }
+      end
+
+      def load_ident_values_and_countries
         current_country = { name: nil, code: nil }
-       
-        zones.each do |zone_name, idents_and_countries| # rubocop:disable Metrics/BlockLength
-          current_country = {
-            name: Legacy::Country.find_by_code(idents_and_countries.first[:country]).name,
-            code: idents_and_countries.first[:country]
-          }
-          valid_postal_codes = ::Trucking::PostalCodes.for(country_code: idents_and_countries.first[:country])
-          all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country| # rubocop:disable Metrics/BlockLength
+
+        zones.each do |zone_name, idents_and_countries|
+          current_country = {}
+          all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
             if current_country[:code] != idents_and_country[:country]
               current_country = {
                 name: Legacy::Country.find_by_code(idents_and_country[:country]).name,
                 code: idents_and_country[:country]
               }
+              @valid_postal_codes = ::Trucking::PostalCodes.for(country_code: idents_and_country[:country])
             end
             if idents_and_country[:min] && idents_and_country[:max]
-              (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
-                stats[:trucking_locations][:number_created] += 1
-                ident_value = nil
-                if identifier_type == 'zipcode'
-                  ident_length = ident.to_s.length
-                  ident_value = '0' * (zip_char_length - ident_length) + ident.to_s
-                else
-                  ident_value = ident
-                end
-                next if valid_postal_codes.present? && !valid_postal_codes.include?(ident_value)
-
-                { ident: ident_value, country: idents_and_country[:country] }
-              end
+              postal_code_range(data: idents_and_country).compact
             elsif identifier_type == 'location_id'
-              geometry = find_geometry(idents_and_country)
-
-              if geometry.nil?
-
-                @missing_locations << idents_and_country.values.join(', ')
-                next
-              end
-              stats[:trucking_locations][:number_created] += 1
-              geo_name = geometry&.name
-              sub_ident_str = if identifier_modifier == 'locode' && geo_name
-                                [idents_and_country[:ident]&.upcase, geo_name].join(' - ')
-                              elsif identifier_modifier == 'locode' && !geo_name
-                                idents_and_country[:ident]&.upcase
-                              elsif identifier_type == 'location_id' && identifier_modifier.nil?
-                                [geo_name, idents_and_country[:sub_ident]&.capitalize].compact.join(' - ')
-                              else
-                                geo_name
-                              end
-              { ident: geometry&.id, country: idents_and_country[:country], sub_ident: sub_ident_str }
+              resp = find_and_prep_geometry(data: idents_and_country)
+              next unless resp
             else
               idents_and_country
             end

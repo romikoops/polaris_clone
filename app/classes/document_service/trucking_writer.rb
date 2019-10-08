@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 module DocumentService
-  class TruckingWriter # rubocop:disable Metrics/ClassLength
+  class TruckingWriter
     include AwsConfig
     include WritingTool
     attr_reader :options, :tenant, :hub, :target_load_type, :filename, :directory, :header_values,
-                :workbook, :unfiltered_results, :carriage_reducer, :results_by_truck_type, :dir_fees,
-                :zone_sheet, :fees_sheet, :header_format, :pages, :zones, :identifier
+                :workbook, :trucking_pricings,:results_by_truck_type, :dir_fees,
+                :zone_sheet, :fees_sheet, :header_format, :pages, :zones
 
-    def initialize(options) # rubocop:disable Metrics/MethodLength
+    def initialize(options)
       @options = options
       @tenant = tenant_finder(options[:tenant_id])
       @hub = Hub.find(options[:hub_id])
@@ -16,7 +16,7 @@ module DocumentService
       @filename = _filename
       @directory = "tmp/#{@filename}"
       @workbook = create_workbook(@directory)
-      @unfiltered_results = Trucking::Trucking.find_by_hub_id(
+      @trucking_pricings = Trucking::Trucking.find_by_hub_id(
         hub_id: options[:hub_id],
         options: {
           group_id: options[:group_id],
@@ -25,8 +25,7 @@ module DocumentService
           },
           paginate: false
         }
-      ).uniq.map(&:as_index_result)
-      @carriage_reducer = {}
+      )
       @results_by_truck_type = {}
       @dir_fees = {}
       @header_format = @workbook.add_format
@@ -35,64 +34,60 @@ module DocumentService
       @fees_sheet = add_sheet('Fees')
       @pages = {}
       @zones = Hash.new { |h, k| h[k] = [] }
-      @identifier = @unfiltered_results.first.except('truckingPricing', 'countryCode').keys.first
     end
 
     def perform
-      if unfiltered_results.present?
+      if trucking_pricings.present?
         prep_results
         write_zone_to_sheet
         write_fees_to_sheet
         write_rates_to_sheet
       end
       workbook.close
-      write_to_aws(directory, tenant, filename, 'schedules_sheet') if unfiltered_results.present?
+      write_to_aws(directory, tenant, filename, 'schedules_sheet') if trucking_pricings.present?
     end
 
-    private
+    def load_trucking_locations(pricings)
+      query = trucking_pricings.where(pricings.first.slice(:carriage, :truck_type, :cargo_class, :load_type))
+      locations = Trucking::Location.where(id: pricings.pluck(:location_id)).order(:city_name)
+      separated_locations = locations.slice_when do |a, b|
+        query.find_by(location_id: a.id)&.parent_id != query.find_by(location_id: b.id)&.parent_id
+      end
 
-    def prep_results # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      page_groupings = unfiltered_results.group_by do |ufr|
+      separated_locations.each do |loc_arr|
+        parent_id = query.find_by(location_id: loc_arr.first.id)&.parent_id
+        values = loc_arr.map { |loc| loc.slice(:city_name, :country_code) }
+        result = case identifier
+                 when 'location_id' && identifier_modifier != 'postal_code'
+                   values
+                 else
+                   consecutive_arrays(values)
+                  end
+
+        zones[parent_id] |= result
+      end
+    end
+
+    def prep_results
+      page_groupings = trucking_pricings.group_by do |trucking_pricing|
         [
-          ufr.dig('truckingPricing', 'truck_type'),
-          ufr.dig('truckingPricing', 'cargo_class'),
-          ufr.dig('truckingPricing', 'load_type'),
-          ufr.dig('truckingPricing', 'direction')
-        ].join('_')
+          trucking_pricing.truck_type,
+          trucking_pricing.cargo_class,
+          trucking_pricing.load_type,
+          trucking_pricing.carriage
+        ]
       end
 
       page_groupings.values.each do |page_values|
-        grouped_results = page_values.group_by { |ufr| ufr['truckingPricing']['parent_id'] }
-        grouped_results.values.each do |values|
-          trucking = values.first['truckingPricing']
-          next if trucking['rates'].empty?
-          meta = _meta(values.first)
-          identifiers = values.map do |v|
-            if trucking['identifier_modifier'] == 'locode'
-              v[identifier].split(' - ').first
-            elsif identifier == 'city' && v[identifier].include?(' - ') && trucking['identifier_modifier'] != 'locode'
-              v[identifier].split(' - ')
-            else
-              v[identifier]
-            end
-          end
-          zone_identifiers = if %w(zipCode distance).include?(identifier)
-                               consecutive_arrays(identifiers)
-                             else
-                               identifiers
-                             end
-          zone_key = zone_identifiers.first
-          update_pages(meta, values.first, zone_key)
-          update_dir_fees(meta, values.first)
-          zone_identifiers.each do |ident|
-          
-            zone_obj = if ident.is_a?(Array)
-              { idents: ident.first, sub_ident: ident.last, country_code: values.first['countryCode'] }
-            else
-              { idents: ident, country_code: values.first['countryCode'] }
-            end
-            zones[zone_key] << zone_obj
-          end
+        grouped_results = page_values.group_by(&:parent_id)
+        load_trucking_locations(page_values)
+        grouped_results.each do |parent_id, values|
+          trucking = values.first
+          next if trucking.rates.empty? || trucking.rates.values.flatten.all?(&:nil?)
+       
+          meta = build_meta(trucking)
+          update_pages(meta, trucking, parent_id)
+          update_dir_fees(meta, trucking)
         end
       end
     end
@@ -105,39 +100,28 @@ module DocumentService
       "#{hub.name}_#{target_load_type}_trucking_#{formated_date}.xlsx"
     end
 
-    def _identifier
-      ident = ''
-      if unfiltered_results.first&.dig(['distance'])
-        ident = 'distance'
-      elsif unfiltered_results.first&.dig(['zipCode'])
-        ident = 'zipCode'
-      elsif unfiltered_results.first&.dig(['city'])
-        ident = 'city'
-      end
-      ident
-    end
-
-    def _meta(ufr) # rubocop:disable Metrics/AbcSize
+    def build_meta(trucking_pricing)
+      rate = ::Trucking::TruckingPricingDecorator.new(trucking_pricing)
       {
         city: hub.nexus.name,
-        currency: ufr['truckingPricing']['rates'].first[1][0]['rate']['currency'],
-        load_meterage_ratio: ufr['truckingPricing']['load_meterage']['ratio'],
-        load_meterage_limit: ufr['truckingPricing']['load_meterage']['height_limit'],
-        load_meterage_area: ufr['truckingPricing']['load_meterage']['area_limit'],
-        cbm_ratio: ufr['truckingPricing']['cbm_ratio'],
-        scale: ufr['truckingPricing']['modifier'],
-        rate_basis: ufr['truckingPricing']['rates'].first[1][0]['rate']['rate_basis'],
-        base: ufr['truckingPricing']['rates'].first[1][0]['rate']['base'] || 1,
-        truck_type: ufr['truckingPricing']['truck_type'],
-        load_type: ufr['truckingPricing']['load_type'],
-        cargo_class: ufr['truckingPricing']['cargo_class'],
-        direction: ufr['truckingPricing']['carriage'] == 'pre' ? 'export' : 'import',
-        courier: Trucking::Courier.find(ufr['truckingPricing']['courier_id'])&.name
+        currency: rate.currency,
+        load_meterage_ratio: trucking_pricing.load_meterage['ratio'],
+        load_meterage_limit: trucking_pricing.load_meterage['height_limit'],
+        load_meterage_area: trucking_pricing.load_meterage['area_limit'],
+        cbm_ratio: trucking_pricing.cbm_ratio,
+        scale: trucking_pricing.modifier,
+        rate_basis: rate.rate_basis,
+        base: rate.base || 1,
+        truck_type: trucking_pricing.truck_type,
+        load_type: trucking_pricing.load_type,
+        cargo_class: trucking_pricing.cargo_class,
+        direction: trucking_pricing.carriage == 'pre' ? 'export' : 'import',
+        courier: Trucking::Courier.find(trucking_pricing['courier_id'])&.name
       }
     end
 
     def write_zone_to_sheet
-      header_values = ['ZONE', identifier_to_write.upcase, 'RANGE', 'COUNTRY_CODE']
+      header_values = ['ZONE', *identifiers_to_write, 'COUNTRY_CODE']
       header_values.each_with_index { |hv, i| zone_sheet.write(0, i, hv, header_format) }
       zone_row = 1
       zones.values.each_with_index do |zone_array, zone|
@@ -148,26 +132,30 @@ module DocumentService
       end
     end
 
-    def identifier_to_write
-      if unfiltered_results.first['truckingPricing']['identifier_modifier']
-        "#{identifier}_#{unfiltered_results.first['truckingPricing']['identifier_modifier']}"
+    def identifiers_to_write
+      case trucking_pricings.first['identifier_modifier']
+      when 'postal_code'
+        [trucking_pricings.first['identifier_modifier'].upcase, 'RANGE']
+      when 'location_id'
+        %w(CITY PROVINCE)
+      when nil, 'f'
+        [identifier.upcase, 'RANGE']
       else
-        identifier
+        ["#{identifier}_#{trucking_pricings.first['identifier_modifier']}".upcase, 'RANGE']
       end
     end
 
-    def write_zone_data(zone_row, zone, zone_data) # rubocop:disable Metrics/AbcSize
+    def write_zone_data(zone_row, zone, zone_data)
       zone_sheet.write(zone_row, 0, zone)
-      if zone_data[:idents].include?(' - ')
-        start_num, end_num = zone_data[:idents].split(' - ')
-        if identifier_to_write.include?('return')
-          zone_1 = start_num.to_f.positive? ? ((start_num.to_f * 2) - 1).to_i : 0
-          zone_sheet.write(zone_row, 2, "#{zone_1} - #{(end_num.to_f * 2)}")
-        else
-          zone_sheet.write(zone_row, 2, "#{start_num} - #{end_num}")
-        end
+
+      if zone_data[:city_name].include?('-') && identifier == 'location_id' && identifier_modifier != 'postal_code'
+        city, province = zone_data[:city_name].split('-').map(&:strip)
+        zone_sheet.write(zone_row, 1, city)
+        zone_sheet.write(zone_row, 2, province)
+      elsif zone_data[:city_name].include?('-') && (identifier != 'location_id' || identifier_modifier == 'postal_code')
+        zone_sheet.write(zone_row, 2, zone_data[:city_name])
       else
-        zone_sheet.write(zone_row, 1, zone_data[:idents])
+        zone_sheet.write(zone_row, 1, zone_data[:city_name])
       end
       zone_sheet.write(zone_row, 3, zone_data[:country_code])
     end
@@ -177,7 +165,7 @@ module DocumentService
          ITEM SHIPMENT BILL CONTAINER MINIMUM WM PERCENTAGE)
     end
 
-    def update_pages(meta, ufr, zone)
+    def update_pages(meta, trucking_pricing, zone)
       page_key = "#{meta[:truck_type]}_#{meta[:cargo_class]}_#{meta[:load_type]}_#{meta[:direction]}"
       unless pages[page_key]
         pages[page_key] = {
@@ -185,30 +173,29 @@ module DocumentService
           pricings: {}
         }
       end
-      pages[page_key][:pricings][zone.to_s] = ufr
+      pages[page_key][:pricings][zone.to_s] = trucking_pricing
     end
 
-    def update_dir_fees(meta, ufr)
+    def update_dir_fees(meta, trucking_pricing)
       dir_fees[meta[:direction]] = {} unless dir_fees[meta[:direction]]
-
       unless dir_fees[meta[:direction]][meta[:truck_type]]
-        dir_fees[meta[:direction]][meta[:truck_type]] = ufr['truckingPricing']['fees']
+        dir_fees[meta[:direction]][meta[:truck_type]] = trucking_pricing['fees']
       end
     end
 
-    def update_zones(ufr)
-      return unless zones.include?(idents: ufr[identifier], country_code: ufr['countryCode'])
+    def update_zones(trucking_pricing)
+      return unless zones.include?(idents: trucking_pricing[identifier], country_code: trucking_pricing['countryCode'])
 
-      zones.push(idents: ufr[identifier], country_code: ufr['countryCode'])
+      zones.push(idents: trucking_pricing[identifier], country_code: trucking_pricing['countryCode'])
     end
 
-    def write_fees_to_sheet # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+    def write_fees_to_sheet
       row = 1
       fee_header_values.each_with_index { |hv, i| fees_sheet.write(0, i, hv, header_format) }
       dir_fees.deep_symbolize_keys!
-      dir_fees.each do |carriage_dir, truck_type_and_fees| # rubocop:disable Metrics/BlockLength
-        truck_type_and_fees.each do |truck_type, fees| # rubocop:disable Metrics/BlockLength
-          fees.each do |key, fee| # rubocop:disable Metrics/BlockLength
+      dir_fees.each do |carriage_dir, truck_type_and_fees|
+        truck_type_and_fees.each do |truck_type, fees| 
+          fees.each do |key, fee| 
             fees_sheet.write(row, 0, fee[:name])
             fees_sheet.write(row, 1, hub.hub_type)
             fees_sheet.write(row, 2, key)
@@ -244,8 +231,8 @@ module DocumentService
       end
     end
 
-    def write_rates_to_sheet # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      pages.values.each_with_index do |page, i| # rubocop:disable Metrics/BlockLength
+    def write_rates_to_sheet 
+      pages.values.each_with_index do |page, i| 
         rates_sheet = workbook.add_worksheet(i.to_s)
         rates_sheet.write(3, 0, 'ZONE')
         rates_sheet.write(3, 1, 'MIN')
@@ -260,7 +247,7 @@ module DocumentService
           meta_x += 1
         end
 
-        page[:pricings].values.first['truckingPricing']['rates'].each do |key, rates_array|
+        page[:pricings].values.first['rates'].each do |key, rates_array|
           rates_array.each do |rate|
             next unless rate
 
@@ -271,10 +258,10 @@ module DocumentService
         end
         page[:pricings].values.each_with_index do |result, pi|
           rates_sheet.write(row, 0, pi)
-          rates_sheet.write(row, 1, result['truckingPricing']['rates'].first[1][0]['min_value'])
-          minimums[pi] = result['truckingPricing']['rates'].first[1][0]['min_value']
+          rates_sheet.write(row, 1, result['rates'].first[1][0]['min_value'])
+          minimums[pi] = result['rates'].first[1][0]['min_value']
           x = 2
-          result['truckingPricing']['rates'].each do |_key, rates_array|
+          result['rates'].each do |_key, rates_array|
             rates_array.each do |rate|
               next unless rate
 
@@ -292,14 +279,60 @@ module DocumentService
       end
     end
 
-    def consecutive_arrays(ary)
-      ary.sort.slice_when { |x, y| (x.to_i + 1) != y.to_i }.map do |c_ary|
-        if c_ary.length == 1
-          "#{c_ary.first} - #{c_ary.first}"
-        else
-          "#{c_ary.first} - #{c_ary.last}"
+    def extract_number_array(array: ,alpha: nil, numeric: nil)
+      if alpha.present? && numeric.present?
+        array.map do |s|
+          {
+            city_name: s[:city_name].gsub(alpha, ''),
+            country_code: s[:country_code]
+          }
         end
+      else
+        array
       end
     end
+
+    def consecutive_arrays(list_of_postal_codes)
+      alpha_groups = list_of_postal_codes.group_by { |s| { alpha: s[:city_name].tr('^A-Z', ''), country: s[:country_code] } }
+      alpha_groups.flat_map do |alpha_and_country, array|
+        numeric = array.all? { |s| s[:city_name].tr('^0-9', '').present? }
+        next list_of_postal_codes if alpha_and_country[:alpha].present? && numeric.blank?
+
+        num_array = extract_number_array(array: array ,alpha: alpha_and_country[:alpha], numeric: numeric)
+
+        city_name = [
+          "#{alpha_and_country[:alpha]}#{num_array.first[:city_name]}",
+          "#{alpha_and_country[:alpha]}#{num_array.last[:city_name]}"
+        ].join(' - ')
+
+        {
+          city_name: city_name,
+          country_code: num_array.first[:country_code]
+        }
+      end
+    end
+
+    private
+
+    def identifier
+      location = trucking_pricings.find(&:location)&.location
+      @identifier ||=   if location&.zipcode.present?
+                          'zipcode'
+                        elsif location&.distance.present?
+                          'distance'
+                        elsif location&.location_id.present?
+                          'location_id'
+                        else
+                          nil
+                        end
+    end
+
+    def identifier_modifier
+      @identifier_modifier ||=  unless trucking_pricings.first.identifier_modifier == 'f'
+                                  trucking_pricings.first.identifier_modifier
+                                end
+    end
+
+
   end
 end

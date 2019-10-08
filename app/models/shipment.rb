@@ -331,10 +331,6 @@ class Shipment < Legacy::Shipment
     update_carriage_properties!
   end
 
-  def mode_of_transport
-    itinerary.try(:mode_of_transport)
-  end
-
   def has_on_carriage=(_value)
     raise 'This property is read only. Please write to the trucking property instead.'
   end

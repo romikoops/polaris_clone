@@ -16,8 +16,7 @@ module Trucking
       end
 
       def perform
-        query = @klass.where(hub_id: @hub_ids)
-        query = @klass.where(group_id: @group_id) if @group_id
+        query = @klass.where(hub_id: @hub_ids, group_id: @group_id)
         query = @klass.where(sandbox: @sandbox) if @sandbox
         query = query.where(cargo_class: @filters[:cargo_class]) if @filters[:cargo_class]
         query = query.where(load_type: @filters[:load_type]) if @filters[:load_type]

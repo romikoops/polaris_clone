@@ -3,26 +3,20 @@ module Legacy
     self.table_name = 'shipments'
     LOAD_TYPES = %w(cargo_item container).freeze
     belongs_to :user, class_name: 'Legacy::User'
-    # belongs_to :quotation, optional: true
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :tenant, class_name: 'Legacy::Tenant'
-    # has_many :documents
-    # has_many :shipment_contacts
-    # has_many :contacts, through: :shipment_contacts
     belongs_to :origin_nexus, class_name: 'Legacy::Nexus', optional: true
     belongs_to :destination_nexus, class_name: 'Legacy::Nexus', optional: true
     belongs_to :origin_hub, class_name: 'Legacy::Hub', optional: true
     belongs_to :destination_hub, class_name: 'Legacy::Hub', optional: true
-    # belongs_to :route, optional: true
     belongs_to :itinerary, optional: true, class_name: 'Legacy::Shipment'
     belongs_to :trip, optional: true, class_name: 'Legacy::Trip'
-    # belongs_to :transport_category, optional: true
     has_many :containers, class_name: 'Legacy::Container'
     has_many :cargo_items, class_name: 'Legacy::CargoItem'
     has_many :cargo_item_types, through: :cargo_items, class_name: 'Legacy::CargoItemType'
     has_one :aggregated_cargo, class_name: 'Legacy::AggregatedCargo'
-    # has_many :conversations
-    # has_many :messages, through: :conversations
+
+    delegate :mode_of_transport, to: :itinerary, allow_nil: true
   end
 end
 
