@@ -81,6 +81,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
             sandbox: sandbox,
             itinerary_id: id,
             load_type: load_type,
+            group_id: current_user.all_groups,
             internal: false
           ).empty?
           no_margins = if no_general_margins
