@@ -18,7 +18,7 @@ module Pricings
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     validates :itinerary_id, uniqueness: {
-      scope: %i(tenant_id user_id tenant_vehicle_id effective_date expiration_date cargo_class load_type legacy_id)
+      scope: %i(tenant_id user_id tenant_vehicle_id effective_date expiration_date cargo_class load_type legacy_id group_id)
     }
 
     scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot.downcase }) }
