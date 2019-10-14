@@ -15,8 +15,8 @@ class Admin::CompaniesController < ApplicationController
   end
 
   def show
-    employees = Tenants::User.where(company_id: params[:id], sandbox: @sandbox).map(&:legacy)
-    groups = company.groups.map { |g| group_index_json(g) }
+    employees = company&.employees&.map(&:legacy) || []
+    groups = company&.groups&.map { |g| group_index_json(g) } || []
 
     response_handler(groups: groups, employees: employees, data: company)
   end
