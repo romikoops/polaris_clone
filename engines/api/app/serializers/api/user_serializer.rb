@@ -2,7 +2,7 @@
 
 module Api
   class UserSerializer < ActiveModel::Serializer
-    attributes :id, :email, :state
+    attributes :id, :email, :state, :tenant_id
 
     def state
       object.activation_state
