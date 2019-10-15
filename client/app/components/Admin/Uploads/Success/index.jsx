@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './index.scss'
-import { documentGlossary } from '../../../../constants'
 import { history } from '../../../../helpers'
 import TextHeading from '../../../TextHeading/TextHeading'
 import { RoundButton } from '../../../RoundButton/RoundButton'
@@ -28,17 +27,26 @@ export class AdminUploadsSuccess extends Component {
     return shipment
   }
 
+  static sanitizeStatKey (statKey) {
+    if (statKey.includes('/')) {
+      return statKey.split('/')[1]
+    }
+
+    return statKey
+  }
+
   render () {
     const {
       t, theme, data, closeDialog
     } = this.props
     const stats = data
+
     const statView = stats ? Object.keys(stats).filter(k => !['has_errors', 'errors'].includes(k))
       .map(statKey => (
         <div className={`${styles.stat_row} flex-100 layout-row layout-align-space-between-center`}>
           <div className="flex-25 layout-row layout-align-start-center">
             <p className="flex-none">
-              <strong>{documentGlossary[statKey]}</strong>
+              <strong>{t(`uploads:${AdminUploadsSuccess.sanitizeStatKey(statKey)}`)}</strong>
             </p>
           </div>
           <div className="flex-25 layout-row layout-align-start-center">
@@ -135,4 +143,4 @@ AdminUploadsSuccess.defaultProps = {
   data: {}
 }
 
-export default withNamespaces(['admin', 'common'])(AdminUploadsSuccess)
+export default withNamespaces(['admin', 'common', 'uploads'])(AdminUploadsSuccess)

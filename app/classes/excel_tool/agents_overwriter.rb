@@ -10,17 +10,7 @@ module ExcelTool
       @user = args[:user]
       @manager_role = Role.find_by_name('agency_manager')
       @agent_role = Role.find_by_name('agent')
-    end
-
-    def perform
-      overwrite_agents
-    end
-
-    private
-
-    def _stats
-      {
-        type: 'agents',
+      @stats = {
         agents: {
           number_updated: 0,
           number_created: 0
@@ -35,6 +25,12 @@ module ExcelTool
         }
       }
     end
+
+    def perform
+      overwrite_agents
+    end
+
+    private
 
     def _results
       {
@@ -95,11 +91,11 @@ module ExcelTool
       if @agency
         update_agency
         results[:agencies] << @agency
-        stats[:agencies][:number_updated] += 1
+        @stats[:agencies][:number_updated] += 1
       else
         @agency = create_agency
         results[:agencies] << @agency
-        stats[:agencies][:number_created] += 1
+        @stats[:agencies][:number_created] += 1
       end
     end
 
@@ -149,12 +145,12 @@ module ExcelTool
         update_agency_manager
         update_agency_with_manager
         results[:agency_managers] << @agency_manager
-        stats[:agency_managers][:number_updated] += 1
+        @stats[:agency_managers][:number_updated] += 1
       else
         @agency_manager = create_agency_manager
         update_agency_with_manager
         results[:agency_managers] << @agency_manager
-        stats[:agency_managers][:number_created] += 1
+        @stats[:agency_managers][:number_created] += 1
       end
     end
 
@@ -226,7 +222,7 @@ module ExcelTool
         agent
         update_or_create_agent
       end
-      { stats: stats, results: results }
+      @stats
     end
   end
 end

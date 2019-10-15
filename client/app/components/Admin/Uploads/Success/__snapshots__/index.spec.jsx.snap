@@ -61,7 +61,9 @@ exports[`shallow render 1`] = `
             <p
               className="flex-none"
             >
-              <strong />
+              <strong>
+                NO_TRANSLATION | key "uploads:stats"
+              </strong>
             </p>
           </div>
           <div
@@ -101,7 +103,9 @@ exports[`shallow render 1`] = `
             <p
               className="flex-none"
             >
-              <strong />
+              <strong>
+                NO_TRANSLATION | key "uploads:result"
+              </strong>
             </p>
           </div>
           <div

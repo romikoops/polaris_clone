@@ -1182,5 +1182,29 @@
     "fivestarAsPerFreight": "Freight charge as per your agreement with your freight provider",
     "fivestarAsPerCarrier": "Freight charge as per your agreement with {{carrier}}"
   },
-  "scopes": {}
+  "scopes": {},
+  "uploads": {
+    "itineraries": "Itineraries",
+    "layovers": "Layovers",
+    "trips": "Trips",
+    "stops": "Stops",
+    "pricings": "Pricings",
+    "pricing_details": "Pricing Details",
+    "local_charges": "Local Charges",
+    "number_updated": "Number Updated",
+    "number_created": "Number Created",
+    "itineraryPricings": "Itinerary Pricings",
+    "userPricings": "User Pricings",
+    "userAffected": "Users Affected",
+    "hubs": "Hubs",
+    "nexuses": "Nexuses",
+    "trucking_locations": "Trucking Locations",
+    "trucking_pricings": "Trucking Pricings",
+    "customs": "Customs Fees",
+    "agencies": "Agencies",
+    "agents": "Agents",
+    "agency_managers": "Agency Managers",
+    "companies": "Companies",
+    "users": "Users"
+  }
 }
