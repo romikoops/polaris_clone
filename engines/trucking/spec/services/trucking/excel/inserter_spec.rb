@@ -11,7 +11,7 @@ RSpec.describe Trucking::Excel::Inserter do
         double('Roo:Xlsx', sheets: ['SHeet1'])
       )
     end
-    
+
     describe '.alphanumeric_range' do
       it 'returns the correct alphanumeric range' do
         data = { min: 'AB12', max: 'AB16', country: 'GB' }

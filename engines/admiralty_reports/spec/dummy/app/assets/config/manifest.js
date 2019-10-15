@@ -1,3 +1,2 @@
-//= link_tree ../images
-//= link_directory ../stylesheets .css
-//= link admiralty_reports_manifest.js
+//= link admiralty_reports/application.js
+//= link admiralty_reports/application.css

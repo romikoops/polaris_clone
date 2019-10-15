@@ -31,13 +31,13 @@ module AdmiraltyReports
       attr_reader :tenant
 
       def uniq_quotations_by_original_shipments
-        Quotation.where(original_shipment_id: original_shipments.ids)
+        ::Legacy::Quotation.where(original_shipment_id: original_shipments.ids)
                  .order(updated_at: :asc)
                  .uniq(&:original_shipment_id)
       end
 
       def original_shipments
-        Shipment.where(tenant_id: tenant.id)
+        ::Legacy::Shipment.where(tenant_id: tenant.id)
                 .joins(:user)
                 .where(users: { internal: false })
                 .where.not(users: { email: excluded_emails })
@@ -45,7 +45,7 @@ module AdmiraltyReports
       end
 
       def shipments_for_quotations(quotations)
-        Shipment.where(id: quotations.pluck(:original_shipment_id).uniq)
+        ::Legacy::Shipment.where(id: quotations.pluck(:original_shipment_id).uniq)
       end
 
       def excluded_emails

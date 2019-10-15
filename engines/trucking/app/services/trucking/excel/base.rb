@@ -12,7 +12,7 @@ module Trucking
         @results = _results
         if args[:hub_id]
           @hub_id = args[:hub_id]
-          @hub = Hub.find(@hub_id)
+          @hub = ::Legacy::Hub.find(@hub_id)
         end
         @group_id = args[:group] if args[:group]
         @user = args[:user] if args[:user]

@@ -124,15 +124,13 @@ withPipeline(timeout: 120) {
 
   if (env.CHANGE_ID || env.GIT_BRANCH == 'master') {
     withStage('Docker Build') {
-      lock(label: "${env.GIT_BRANCH}-build", inversePrecedence: true) {
-        inPod { label ->
-          withNode(label) {
-            parallel(prepareJobs)
-          }
+      inPod { label ->
+        withNode(label) {
+          parallel(prepareJobs)
         }
-
-        milestone()
       }
+
+      milestone()
     }
   }
 
@@ -142,7 +140,7 @@ withPipeline(timeout: 120) {
 
       env.REVIEW_NAME = trimName(env.CI_COMMIT_REF_SLUG, 40)
 
-      lock(label: "${env.GIT_BRANCH}-deploy", inversePrecedence: true) {
+      lock(resource: "deploy/${env.GIT_BRANCH}", inversePrecedence: true) {
         deployReview()
 
         milestone()

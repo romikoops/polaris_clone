@@ -18,19 +18,19 @@ module AdmiraltyAssets
 
     describe 'controller_classes' do
       it 'returns controller specific CSS class names' do
-        expect(controller_classes).to eq('application application application_')
+        expect(controller_classes).to eq('admiralty_assets admiralty_assets_application admiralty_assets_application_')
       end
     end
 
     describe 'controller_class' do
       it 'returns namespaces class' do
-        expect(controller_class).to eq('application')
+        expect(controller_class).to eq('admiralty_assets_application')
       end
     end
 
     describe 'controller_action_class' do
       it 'returns controller class with action' do
-        expect(controller_action_class).to eq('application_')
+        expect(controller_action_class).to eq('admiralty_assets_application_')
       end
     end
   end

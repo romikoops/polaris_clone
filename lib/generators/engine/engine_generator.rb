@@ -3,16 +3,20 @@
 class EngineGenerator < Rails::Generators::NamedBase
   source_root File.expand_path('template', __dir__)
 
+  desc 'This generators creates new CBRA engines'
+  class_option :type, aliases: ['-t'], type: :string, required: true,
+                      desc: 'Engine type (options: view/service/data)'
+
   def create_engine # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize
-    engine_name = name.downcase
+    @engine_name = name.downcase
+    @engine_type = options['type']
+    @engine_dest = "engines/#{@engine_name}"
 
-    # Define engine destination
-    engine = "engines/#{engine_name}"
-
-    raise 'Invalid Engine Name' unless engine_name[/\A[a-zA-Z_]+\z/]
+    raise 'Invalid Engine Name' unless @engine_name[/\A[a-z_]+\z/]
+    raise 'Invalid Engine Type' unless %w(view service data).include?(@engine_type)
 
     # Create engine template
-    template_dir = Rails.root.join('tmp', '._template')
+    template_dir = Rails.root.join('tmp', Time.now.to_i.to_s)
     template_engine = template_dir.join('engine')
 
     # Copy our template as new engine
@@ -23,27 +27,31 @@ class EngineGenerator < Rails::Generators::NamedBase
       Dir['**/*'].each do |item|
         next unless File.file?(item)
 
-        gsub_file item, /(engine_template|EngineTemplate|GITUSER_NAME|GITUSER_EMAIL)/, verbose: false do |m|
+        gsub_file item, /(engine_template|EngineTemplate|engine_type|GITUSER_NAME|GITUSER_EMAIL)/, verbose: false do |m|
           case m
-          when 'engine_template' then engine_name
-          when 'EngineTemplate'  then engine_name.camelize
+          when 'engine_template' then @engine_name
+          when 'EngineTemplate'  then @engine_name.camelize
+          when 'engine_type'     then @engine_type
           when 'GITUSER_NAME'    then `git config user.name`.strip
           when 'GITUSER_EMAIL'   then `git config user.email`.strip
           end
         end
       end
 
-      Dir['**/*engine_template*'].each do |item|
-        run "mv #{Shellwords.escape(item)} #{Shellwords.escape(item.gsub(/engine_template/, engine_name))}", verbose: false
-      end
+      remove_dir 'app/controllers', verbose: false unless @engine_type == 'view'
+      remove_dir 'config', verbose: false unless @engine_type == 'view'
+      remove_dir 'app/models', verbose: false unless @engine_type == 'data'
+      remove_dir 'app/services', verbose: false unless @engine_type == 'service'
 
-      Dir['bin/*'].each { |bin| chmod bin, 0o0755, verbose: false }
+      Dir['**/*engine_template*'].each do |item|
+        run "mv #{Shellwords.escape(item)} #{Shellwords.escape(item.gsub(/engine_template/, @engine_name))}", verbose: false
+      end
     end
 
     source_paths.unshift(template_dir)
 
-    directory 'engine', engine
-    inside engine do
+    directory 'engine', @engine_dest
+    inside @engine_dest do
       Dir['bin/*'].each { |bin| chmod bin, 0o0755, verbose: false }
     end
   ensure
