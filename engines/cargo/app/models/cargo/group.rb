@@ -55,15 +55,15 @@ end
 #  id              :uuid             not null, primary key
 #  user_id         :uuid
 #  tenant_id       :uuid
-#  weight          :decimal(, )
-#  dimension_x     :decimal(, )
-#  dimension_y     :decimal(, )
-#  dimension_z     :decimal(, )
-#  quantity        :integer
+#  weight          :decimal(, )      default(0.0)
+#  dimension_x     :decimal(, )      default(0.0)
+#  dimension_y     :decimal(, )      default(0.0)
+#  dimension_z     :decimal(, )      default(0.0)
+#  quantity        :integer          default(0)
 #  cargo_class     :bigint           default(0)
 #  cargo_type      :bigint           default(0)
-#  stackable       :boolean
-#  dangerous_goods :boolean
+#  stackable       :boolean          default(FALSE)
+#  dangerous_goods :boolean          default(FALSE)
 #  load_id         :uuid
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null

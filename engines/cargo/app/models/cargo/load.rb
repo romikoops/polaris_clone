@@ -48,9 +48,9 @@ end
 #  id          :uuid             not null, primary key
 #  user_id     :uuid
 #  tenant_id   :uuid
-#  weight      :decimal(, )
-#  quantity    :integer
-#  volume      :decimal(, )
+#  weight      :decimal(, )      default(0.0)
+#  quantity    :integer          default(0)
+#  volume      :decimal(, )      default(0.0)
 #  cargo_class :bigint           default(0)
 #  cargo_type  :bigint           default(0)
 #  created_at  :datetime         not null

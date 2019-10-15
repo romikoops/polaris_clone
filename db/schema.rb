@@ -112,22 +112,24 @@ ActiveRecord::Schema.define(version: 2019_10_02_153904) do
   end
 
   create_table "cargo_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id"
-    t.uuid "tenant_id"
-    t.decimal "weight"
-    t.decimal "dimension_x"
-    t.decimal "dimension_y"
-    t.decimal "dimension_z"
-    t.integer "quantity"
     t.bigint "cargo_class", default: 0
     t.bigint "cargo_type", default: 0
-    t.boolean "stackable"
-    t.boolean "dangerous_goods"
-    t.uuid "load_id"
     t.datetime "created_at", null: false
+    t.boolean "dangerous_goods", default: false
+    t.decimal "dimension_x", default: "0.0"
+    t.decimal "dimension_y", default: "0.0"
+    t.decimal "dimension_z", default: "0.0"
+    t.uuid "load_id"
+    t.integer "quantity", default: 0
+    t.boolean "stackable", default: false
+    t.uuid "tenant_id"
     t.datetime "updated_at", null: false
+    t.uuid "user_id"
+    t.decimal "weight", default: "0.0"
     t.index ["cargo_class"], name: "index_cargo_groups_on_cargo_class"
     t.index ["cargo_type"], name: "index_cargo_groups_on_cargo_type"
+    t.index ["tenant_id"], name: "index_cargo_groups_on_tenant_id"
+    t.index ["user_id"], name: "index_cargo_groups_on_user_id"
   end
 
   create_table "cargo_item_types", force: :cascade do |t|
@@ -162,17 +164,19 @@ ActiveRecord::Schema.define(version: 2019_10_02_153904) do
   end
 
   create_table "cargo_loads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id"
-    t.uuid "tenant_id"
-    t.decimal "weight"
-    t.integer "quantity"
-    t.decimal "volume"
     t.bigint "cargo_class", default: 0
     t.bigint "cargo_type", default: 0
     t.datetime "created_at", null: false
+    t.integer "quantity", default: 0
+    t.uuid "tenant_id"
     t.datetime "updated_at", null: false
+    t.uuid "user_id"
+    t.decimal "volume", default: "0.0"
+    t.decimal "weight", default: "0.0"
     t.index ["cargo_class"], name: "index_cargo_loads_on_cargo_class"
     t.index ["cargo_type"], name: "index_cargo_loads_on_cargo_type"
+    t.index ["tenant_id"], name: "index_cargo_loads_on_tenant_id"
+    t.index ["user_id"], name: "index_cargo_loads_on_user_id"
   end
 
   create_table "carriers", force: :cascade do |t|
