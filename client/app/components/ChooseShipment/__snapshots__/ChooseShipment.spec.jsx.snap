@@ -14,7 +14,8 @@ exports[`messages.length === 0 1`] = `
         className="flex-100 layout-row layout-align-start-center"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={4}
           text="Are you importing or exporting?"
           theme={
@@ -131,7 +132,8 @@ exports[`shallow render 1`] = `
         className="flex-100 layout-row layout-align-start-center"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={4}
           text="Are you importing or exporting?"
           theme={
@@ -248,7 +250,8 @@ exports[`showCargoTypes and direction are truthy 1`] = `
         className="flex-100 layout-row layout-align-start-center"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={4}
           text="Are you importing or exporting?"
           theme={
@@ -307,7 +310,8 @@ exports[`showCargoTypes and direction are truthy 1`] = `
         className="flex-100 layout-row layout-align-start-center"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={4}
           text="Are you shipping cargo items or containers?"
           theme={
@@ -430,7 +434,8 @@ exports[`state.direction && state.loadType 1`] = `
         className="flex-100 layout-row layout-align-start-center"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={4}
           text="Are you importing or exporting?"
           theme={
@@ -555,7 +560,8 @@ exports[`state.direction === export 1`] = `
         className="flex-100 layout-row layout-align-start-center"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={4}
           text="Are you importing or exporting?"
           theme={
@@ -680,7 +686,8 @@ exports[`state.showCargoTypes is true 1`] = `
         className="flex-100 layout-row layout-align-start-center"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={4}
           text="Are you importing or exporting?"
           theme={
@@ -731,7 +738,8 @@ exports[`state.showCargoTypes is true 1`] = `
         className="flex-100 layout-row layout-align-start-center"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={4}
           text="Are you shipping cargo items or containers?"
           theme={
@@ -854,7 +862,8 @@ exports[`theme is falsy 1`] = `
         className="flex-100 layout-row layout-align-start-center"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={4}
           text="Are you importing or exporting?"
           theme={null}

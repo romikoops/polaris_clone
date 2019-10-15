@@ -25,7 +25,8 @@ exports[`shallow rendering 1`] = `
           className="flex-none layput-row layout-align-start-center"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={2}
             text="Available Routes"
             theme={

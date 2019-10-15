@@ -22,7 +22,8 @@ exports[`document.viewer is falsy 1`] = `
         className="flex-100 layout-row layout-align-space-between-center sec_title"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={1}
           text="Schedules: undefined"
           theme={
@@ -470,7 +471,8 @@ exports[`shallow render 1`] = `
         className="flex-100 layout-row layout-align-space-between-center sec_title"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={1}
           text="Schedules: undefined"
           theme={
@@ -916,7 +918,8 @@ exports[`state.showList is false 1`] = `
         className="flex-100 layout-row layout-align-space-between-center sec_title"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={1}
           text="Schedules: undefined"
           theme={

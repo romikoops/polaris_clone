@@ -250,7 +250,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
         children_charge_category: ChargeCategory.from_code(code: 'insurance', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
-        price: Price.create(currency: shipment.user.currency, value: shipment_data[:insurance][:value]),
+        price: Price.create(currency: shipment.user.currency, value: shipment_data[:insurance][:val]),
         parent: charge_breakdown.charge('grand_total'),
         sandbox: sandbox
       )

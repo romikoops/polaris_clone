@@ -22,7 +22,8 @@ exports[`!dnrKeys.includes(chargeKey) 1`] = `
           className="flex-50 layout-row layout-align-start-center"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={4}
             theme={
               Object {
@@ -182,7 +183,8 @@ exports[`chargeKey === currency 1`] = `
           className="flex-50 layout-row layout-align-start-center"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={4}
             theme={
               Object {
@@ -328,7 +330,8 @@ exports[`chargeKey === expiration_date 1`] = `
           className="flex-50 layout-row layout-align-start-center"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={4}
             theme={
               Object {
@@ -487,7 +490,8 @@ exports[`chargeKey === rate_basis 1`] = `
           className="flex-50 layout-row layout-align-start-center"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={4}
             theme={
               Object {
@@ -647,7 +651,8 @@ exports[`state.directionBool is true 1`] = `
           className="flex-50 layout-row layout-align-start-center"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={4}
             theme={
               Object {
@@ -794,7 +799,8 @@ exports[`state.edit is true 1`] = `
           className="flex-50 layout-row layout-align-start-center"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={4}
             theme={
               Object {

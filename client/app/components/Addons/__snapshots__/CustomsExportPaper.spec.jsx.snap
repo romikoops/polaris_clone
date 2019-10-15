@@ -14,7 +14,8 @@ exports[`shallow render 1`] = `
         className="flex-none layout-row layout-align-space-around-center"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={2}
           text="Export Customs Paper (MRN)"
           theme={

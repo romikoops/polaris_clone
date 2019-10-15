@@ -20,7 +20,8 @@ exports[`shallow render 1`] = `
             className="flex-none"
           >
             <TextHeading
-              color=""
+              color="black"
+              fontWeight="normal"
               size={1}
               text="Trucking Cities"
               theme={
@@ -105,7 +106,8 @@ exports[`when icon is empty string 1`] = `
             className="flex-none"
           >
             <TextHeading
-              color=""
+              color="black"
+              fontWeight="normal"
               size={1}
               text="Trucking Cities"
               theme={
@@ -176,7 +178,8 @@ exports[`when showTooltip is false 1`] = `
             className="flex-none"
           >
             <TextHeading
-              color=""
+              color="black"
+              fontWeight="normal"
               size={1}
               text="Trucking Cities"
               theme={
@@ -261,7 +264,8 @@ exports[`when truckings.length < 3 1`] = `
             className="flex-none"
           >
             <TextHeading
-              color=""
+              color="black"
+              fontWeight="normal"
               size={1}
               text="Trucking Cities"
               theme={
@@ -362,7 +366,8 @@ exports[`when truckings.length > 3 1`] = `
             className="flex-none"
           >
             <TextHeading
-              color=""
+              color="black"
+              fontWeight="normal"
               size={1}
               text="Trucking Cities"
               theme={

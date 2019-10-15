@@ -21,7 +21,8 @@ exports[`shallow render 1`] = `
       className="flex-100 layout-row layout-align-start-center"
     >
       <TextHeading
-        color=""
+        color="black"
+        fontWeight="normal"
         size={3}
         text="Currency Center"
       />
@@ -373,7 +374,8 @@ exports[`state.editBool is true 1`] = `
       className="flex-100 layout-row layout-align-start-center"
     >
       <TextHeading
-        color=""
+        color="black"
+        fontWeight="normal"
         size={3}
         text="Currency Center"
       />
@@ -734,7 +736,8 @@ exports[`state.rateBool is false 1`] = `
       className="flex-100 layout-row layout-align-start-center"
     >
       <TextHeading
-        color=""
+        color="black"
+        fontWeight="normal"
         size={3}
         text="Currency Center"
       />

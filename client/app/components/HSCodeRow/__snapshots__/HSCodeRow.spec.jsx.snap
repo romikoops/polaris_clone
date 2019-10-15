@@ -17,7 +17,8 @@ exports[`cargoItems is falsy 1`] = `
           className="flex-none"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={2}
             text="HS Codes"
             theme={
@@ -295,7 +296,8 @@ exports[`containers is falsy 1`] = `
           className="flex-none"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={2}
             text="HS Codes"
             theme={
@@ -508,7 +510,8 @@ exports[`dangerousGoods is true 1`] = `
           className="flex-none"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={2}
             text="HS Codes"
             theme={
@@ -833,7 +836,8 @@ exports[`shallow render 1`] = `
           className="flex-none"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={2}
             text="HS Codes"
             theme={
@@ -1270,7 +1274,8 @@ exports[`state.showPaste is true 1`] = `
           className="flex-none"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={2}
             text="HS Codes"
             theme={
@@ -1608,7 +1613,8 @@ exports[`textInputBool is false 1`] = `
           className="flex-none"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={2}
             text="HS Codes"
             theme={
@@ -2067,7 +2073,8 @@ exports[`theme is falsy 1`] = `
           className="flex-none"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={2}
             text="HS Codes"
             theme={null}

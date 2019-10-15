@@ -75,7 +75,6 @@ export class BookingDetails extends Component {
         }
       }
     }
-    this.calcInsurance = this.calcInsurance.bind(this)
     this.deleteCode = this.deleteCode.bind(this)
     this.handleCargoInput = this.handleCargoInput.bind(this)
     this.handleHsTextChange = this.handleHsTextChange.bind(this)
@@ -215,7 +214,7 @@ export class BookingDetails extends Component {
 
     this.setState((prevState) => {
       const newTarget = !prevState.addons[target] ? charge : false
-      
+
       return ({
         addons: {
           ...prevState.addons,
@@ -226,21 +225,14 @@ export class BookingDetails extends Component {
   }
 
   handleInsurance (bool) {
-    if (bool) {
-      return this.calcInsurance(false, true)
-    }
-    this.setState({ insurance: { bool: false, val: 0 } })
-  }
+    const { totalGoodsValue, insurance } = this.state
+    const { tenant } = this.props
+    const insuranceValue = totalGoodsValue.value * tenant.scope.transport_insurance_rate
 
-  calcInsurance (val, bool) {
-    const gVal = val || parseInt(this.state.totalGoodsValue.value, 10)
-    const { shipmentData } = this.props
-    const parsed = parseFloat(totalPrice(shipmentData.shipment).value, 10)
-    const iVal = (gVal * 1.1 + parsed) * 0.0017
     if (bool) {
-      return this.setState({ insurance: { bool, val: iVal } })
+      return this.setState({ insurance: { bool, val: insuranceValue } })
     }
-    this.setState({ insurance: { ...this.state.insurance, val: iVal } })
+    this.setState({ insurance: { ...insurance, val: insuranceValue } })
   }
 
   removeNotifyee (i) {
@@ -385,7 +377,7 @@ export class BookingDetails extends Component {
     } = this.state
     const { scope } = tenant
     const maybeRouteHubBox = shipment && theme && hubs
-      ? <RouteHubBox shipment={shipment} theme={theme} addresses={addresses} scope={scope}/>
+      ? <RouteHubBox shipment={shipment} theme={theme} addresses={addresses} scope={scope} />
       : ''
 
     const ContactSetterComponent = (

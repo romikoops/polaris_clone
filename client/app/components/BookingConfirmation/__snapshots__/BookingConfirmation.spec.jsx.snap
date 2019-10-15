@@ -320,6 +320,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={
@@ -459,6 +460,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Additional Services: "
                   theme={
@@ -1331,7 +1333,8 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
                     className="flex-100 layout-row layout-align-start-center"
                   >
                     <TextHeading
-                      color=""
+                      color="black"
+                      fontWeight="normal"
                       size={4}
                       text="By checking this box"
                       theme={
@@ -1764,6 +1767,7 @@ exports[`shallow render 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={
@@ -1903,6 +1907,7 @@ exports[`shallow render 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Additional Services: "
                   theme={
@@ -2761,7 +2766,8 @@ exports[`shallow render 1`] = `
                     className="flex-100 layout-row layout-align-start-center"
                   >
                     <TextHeading
-                      color=""
+                      color="black"
+                      fontWeight="normal"
                       size={4}
                       text="By checking this box"
                       theme={
@@ -3194,6 +3200,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={
@@ -3333,6 +3340,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Additional Services: "
                   theme={
@@ -4175,7 +4183,8 @@ exports[`shipment.cargo_notes is falsy 1`] = `
                     className="flex-100 layout-row layout-align-start-center"
                   >
                     <TextHeading
-                      color=""
+                      color="black"
+                      fontWeight="normal"
                       size={4}
                       text="By checking this box"
                       theme={
@@ -4608,6 +4617,7 @@ exports[`shipment.eori is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={
@@ -4747,6 +4757,7 @@ exports[`shipment.eori is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Additional Services: "
                   theme={
@@ -5589,7 +5600,8 @@ exports[`shipment.eori is falsy 1`] = `
                     className="flex-100 layout-row layout-align-start-center"
                   >
                     <TextHeading
-                      color=""
+                      color="black"
+                      fontWeight="normal"
                       size={4}
                       text="By checking this box"
                       theme={
@@ -6022,6 +6034,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={
@@ -6161,6 +6174,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Additional Services: "
                   theme={
@@ -7003,7 +7017,8 @@ exports[`shipment.incoterm_text is falsy 1`] = `
                     className="flex-100 layout-row layout-align-start-center"
                   >
                     <TextHeading
-                      color=""
+                      color="black"
+                      fontWeight="normal"
                       size={4}
                       text="By checking this box"
                       theme={
@@ -7436,6 +7451,7 @@ exports[`shipment.notes is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={
@@ -7575,6 +7591,7 @@ exports[`shipment.notes is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Additional Services: "
                   theme={
@@ -8417,7 +8434,8 @@ exports[`shipment.notes is falsy 1`] = `
                     className="flex-100 layout-row layout-align-start-center"
                   >
                     <TextHeading
-                      color=""
+                      color="black"
+                      fontWeight="normal"
                       size={4}
                       text="By checking this box"
                       theme={
@@ -8847,6 +8865,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={
@@ -8986,6 +9005,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Additional Services: "
                   theme={
@@ -9825,7 +9845,8 @@ exports[`shipment.total_goods_value is falsy 1`] = `
                     className="flex-100 layout-row layout-align-start-center"
                   >
                     <TextHeading
-                      color=""
+                      color="black"
+                      fontWeight="normal"
                       size={4}
                       text="By checking this box"
                       theme={
@@ -10264,6 +10285,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={
@@ -10403,6 +10425,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Additional Services: "
                   theme={
@@ -11123,7 +11146,8 @@ exports[`shipmentData.notifyees is falsy 1`] = `
                     className="flex-100 layout-row layout-align-start-center"
                   >
                     <TextHeading
-                      color=""
+                      color="black"
+                      fontWeight="normal"
                       size={4}
                       text="By checking this box"
                       theme={
@@ -11562,6 +11586,7 @@ exports[`state.acceptTerms is true 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={
@@ -11701,6 +11726,7 @@ exports[`state.acceptTerms is true 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Additional Services: "
                   theme={
@@ -12559,7 +12585,8 @@ exports[`state.acceptTerms is true 1`] = `
                     className="flex-100 layout-row layout-align-start-center"
                   >
                     <TextHeading
-                      color=""
+                      color="black"
+                      fontWeight="normal"
                       size={4}
                       text="By checking this box"
                       theme={
@@ -12989,6 +13016,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={
@@ -13125,6 +13153,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Additional Services: "
                   theme={
@@ -13980,7 +14009,8 @@ exports[`tenant.scope.terms.length is 0 1`] = `
                     className="flex-100 layout-row layout-align-start-center"
                   >
                     <TextHeading
-                      color=""
+                      color="black"
+                      fontWeight="normal"
                       size={4}
                       text="By checking this box"
                       theme={
@@ -14412,6 +14442,7 @@ exports[`theme is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Freight, Duties & Carriage: "
                   theme={null}
@@ -14537,6 +14568,7 @@ exports[`theme is falsy 1`] = `
               >
                 <TextHeading
                   color="white"
+                  fontWeight="normal"
                   size={4}
                   text="Additional Services: "
                   theme={null}
@@ -15374,7 +15406,8 @@ exports[`theme is falsy 1`] = `
                     className="flex-100 layout-row layout-align-start-center"
                   >
                     <TextHeading
-                      color=""
+                      color="black"
+                      fontWeight="normal"
                       size={4}
                       text="By checking this box"
                       theme={null}

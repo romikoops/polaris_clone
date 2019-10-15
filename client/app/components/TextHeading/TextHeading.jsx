@@ -8,49 +8,59 @@ class TextHeading extends Component {
     super(props)
     this.state = {}
   }
+
   render () {
     const {
-      text, size, color, Comp
+      text, size, color, fontWeight, Comp
     } = this.props
     let returnVal
-    const styling = color ? {
-      color: { color }
+    const styling = {
+      color,
+      fontWeight
     }
-      : { color: 'black' }
     if (size) {
       switch (size) {
         case 1:
           returnVal = (
 
             <h1 className={`${styles.text_style} flex`} style={styling}>
-              {text}{' '}{Comp}
+              {text}
+              {' '}
+              {Comp}
             </h1>
           )
           break
         case 2:
           returnVal = (
             <h2 className={`${styles.text_style} flex`} style={styling}>
-              {text}{' '}{Comp}
+              {text}
+              {' '}
+              {Comp}
             </h2>
           )
           break
         case 3:
           returnVal = (
             <h3 className={`${styles.text_style} flex`} style={styling}>
-              {text}{' '}{Comp}
+              {text}
+              {' '}
+              {Comp}
             </h3>
           )
           break
         case 4:
           returnVal = (
             <h4 className={`${styles.text_style} flex`} style={styling}>
-              {text}{' '}{Comp}
+              {text}
+              {' '}
+              {Comp}
             </h4>
           )
           break
         default: break
       }
     }
+
     return (
       <div className="flex-100 layout-row layout-align-start">
         {returnVal}
@@ -63,10 +73,12 @@ TextHeading.propTypes = {
   text: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
   color: PropTypes.string,
+  fontWeight: PropTypes.string,
   Comp: PropTypes.func
 }
 TextHeading.defaultProps = {
-  color: '',
+  color: 'black',
+  fontWeight: 'normal',
   Comp: undefined
 }
 export default TextHeading

@@ -22,25 +22,22 @@ function IncotermExtras ({
     feeHash && feeHash.insurance ? selectedStyle : deselectedStyle
   const exportPaperStyle =
     feeHash && feeHash.addons && feeHash.addons.customs_export_paper ? selectedStyle : deselectedStyle
-  const insuranceFeesValue = feeHash ? (
+  const insuranceFeesValue = feeHash && (
     <div
       className={`${
         styles.fee_value
       } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
     >
-      {feeHash.insurance && feeHash.insurance.val ? (
+      {feeHash.insurance && feeHash.insurance.value && (
         <p className="flex-none no_m center">{feeHash.insurance.currency}</p>
-      ) : (
-        ''
       )}
+      <p>&nbsp;</p>
       <p className="flex-none no_m center">
-        {feeHash.insurance && feeHash.insurance.val
-          ? `${parseFloat(feeHash.insurance.val).toFixed(2)}`
+        {feeHash.insurance && feeHash.insurance.value
+          ? `${parseFloat(feeHash.insurance.value).toFixed(2)}`
           : t('common:none')}
       </p>
     </div>
-  ) : (
-    ''
   )
 
   const requested = (

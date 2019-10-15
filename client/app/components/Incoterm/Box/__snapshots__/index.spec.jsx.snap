@@ -14,7 +14,8 @@ exports[`incoterm_info_level is simple 1`] = `
         className="flex-none"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={3}
           text="Select Incoterm:"
           theme={
@@ -95,7 +96,8 @@ exports[`incoterm_info_level render is full 1`] = `
         className="flex-none"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={3}
           text="Select Incoterm:"
           theme={
@@ -199,7 +201,8 @@ exports[`incoterm_info_level render is text 1`] = `
         className="flex-50"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={3}
           text="Service Level:"
           theme={
@@ -256,7 +259,8 @@ exports[`onCarriage is true 1`] = `
         className="flex-none"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={3}
           text="Select Incoterm:"
           theme={
@@ -337,7 +341,8 @@ exports[`preCarriage is true 1`] = `
         className="flex-none"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={3}
           text="Select Incoterm:"
           theme={
@@ -418,7 +423,8 @@ exports[`preCarriage&&onCarriage is true 1`] = `
         className="flex-none"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={3}
           text="Select Incoterm:"
           theme={
@@ -505,7 +511,8 @@ exports[`theme is falsy 1`] = `
         className="flex-none"
       >
         <TextHeading
-          color=""
+          color="black"
+          fontWeight="normal"
           size={3}
           text="Select Incoterm:"
           theme={null}

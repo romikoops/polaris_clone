@@ -15,7 +15,8 @@ exports[`shallow render) 1`] = `
       className="flex-100 layout-row layout-wrap layout-align-center-center"
     >
       <TextHeading
-        color=""
+        color="black"
+        fontWeight="normal"
         size={3}
         text="HEADING"
         theme={

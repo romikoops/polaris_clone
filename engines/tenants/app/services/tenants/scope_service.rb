@@ -139,7 +139,9 @@ module Tenants
       landing_page_video: nil,
       loading_image: nil,
       blacklisted_emails: [],
-      validity_logic: 'vatos'
+      validity_logic: 'vatos',
+      transport_insurance_rate: 0,
+      hs_fee: 0
     }.freeze
 
     def initialize(target: nil, tenant: nil, sandbox: nil)

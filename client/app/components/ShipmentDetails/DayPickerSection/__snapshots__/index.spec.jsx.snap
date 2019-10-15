@@ -17,7 +17,8 @@ exports[`pre carriage is true 1`] = `
           className="flex-100 layout-align-space-between-end"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={3}
             text="Cargo Ready Date:"
             theme={
@@ -222,7 +223,8 @@ exports[`renders correctly 1`] = `
           className="flex-100 layout-align-space-between-end"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={3}
             text="Available at appointed terminal:"
             theme={
@@ -427,7 +429,8 @@ exports[`selected day is falsy 1`] = `
           className="flex-100 layout-align-space-between-end"
         >
           <TextHeading
-            color=""
+            color="black"
+            fontWeight="normal"
             size={3}
             text="Available at appointed terminal:"
             theme={

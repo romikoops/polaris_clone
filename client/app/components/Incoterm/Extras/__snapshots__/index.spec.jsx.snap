@@ -162,15 +162,13 @@ exports[`shallow render 1`] = `
       <div
         className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
       >
-        <p
-          className="flex-none no_m center"
-        >
-          EUR
+        <p>
+           
         </p>
         <p
           className="flex-none no_m center"
         >
-          20.00
+          None
         </p>
       </div>
     </div>

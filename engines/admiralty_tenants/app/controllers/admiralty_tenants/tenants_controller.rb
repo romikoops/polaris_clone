@@ -7,7 +7,7 @@ module AdmiraltyTenants
     before_action :set_tenant, except: :index
 
     def index
-      @tenants = Tenant.order(:subdomain).all
+      @tenants = ::AdmiraltyTenants::Tenant.order(:subdomain).all
     end
 
     def show

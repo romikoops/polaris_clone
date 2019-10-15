@@ -11,7 +11,8 @@ exports[`availableMotKeys is empty object 1`] = `
       classNmae="flex-100 layout-row"
     >
       <TextHeading
-        color=""
+        color="black"
+        fontWeight="normal"
         size={4}
         text="Cargo Ready Date"
         theme={
@@ -152,7 +153,8 @@ exports[`pickup is false 1`] = `
       classNmae="flex-100 layout-row"
     >
       <TextHeading
-        color=""
+        color="black"
+        fontWeight="normal"
         size={4}
         text="Available at appointed terminal"
         theme={
@@ -215,7 +217,8 @@ exports[`pickup is false 1`] = `
   >
     <div>
       <TextHeading
-        color=""
+        color="black"
+        fontWeight="normal"
         size={4}
         text="Mode of Transport"
         theme={
@@ -373,7 +376,8 @@ exports[`shallow rendering 1`] = `
       classNmae="flex-100 layout-row"
     >
       <TextHeading
-        color=""
+        color="black"
+        fontWeight="normal"
         size={4}
         text="Cargo Ready Date"
         theme={
@@ -436,7 +440,8 @@ exports[`shallow rendering 1`] = `
   >
     <div>
       <TextHeading
-        color=""
+        color="black"
+        fontWeight="normal"
         size={4}
         text="Mode of Transport"
         theme={

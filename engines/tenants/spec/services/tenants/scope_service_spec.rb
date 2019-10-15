@@ -118,6 +118,8 @@ RSpec.describe Tenants::ScopeService do
           landing_page_video: nil,
           loading_image: nil,
           blacklisted_emails: [],
+          transport_insurance_rate: 0,
+          hs_fee: 0,
           validity_logic: 'vatos'
         }
       end
