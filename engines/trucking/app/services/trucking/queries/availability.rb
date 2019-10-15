@@ -25,6 +25,7 @@ module Trucking
         @hub_ids      = args[:hub_ids]
         @distance     = args[:distance]
         @sandbox = args[:sandbox]
+        @order_by = args[:order_by]
         @locations_locations = []
         @trucking_locations = []
         @trucking_truckings = []
@@ -65,6 +66,7 @@ module Trucking
                               .where(hubs_condition)
                               .where(truck_type_condition)
                               .where(nexuses_condition)
+                              .order("#{@order_by} DESC NULLS LAST")
       end
 
       def truck_type_condition

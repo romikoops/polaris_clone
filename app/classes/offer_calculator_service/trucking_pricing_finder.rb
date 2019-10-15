@@ -22,31 +22,31 @@ module OfferCalculatorService
         carriage: @carriage,
         hub_ids: [hub_id],
         distance: distance.round,
-        sandbox: @sandbox
+        sandbox: @sandbox,
+        order_by: @scope['base_pricing'] ? 'group_id' : 'user_id'
       }
 
       results = Trucking::Queries::Availability.new(args).perform | Trucking::Queries::Distance.new(args).perform
+
       return [] if results.empty?
 
       truckings = @shipment.cargo_classes.each_with_object({}) { |cargo_class, h| h[cargo_class] = nil }
       grouped_results = results.group_by(&:cargo_class)
       if @scope['base_pricing']
-        group_ids = @user&.all_groups&.ids || []
+        group_ids = @user&.all_groups&.ids&.reverse || []
         group_ids.unshift(nil)
         group_ids.each do |group_id|
           grouped_results.each do |cargo_class, truckings_by_cargo_class|
-            trucking = truckings_by_cargo_class
-                       .select { |trp| trp.user_id.nil? && [group_id, nil].include?(trp.group_id) }
-                       .max_by { |trp| trp.group_id.to_i }
+            trucking = truckings_by_cargo_class.find { |trp| trp.user_id.nil? && group_id == trp.group_id }
             truckings[cargo_class] = trucking if trucking.present?
           end
         end
       else
-        grouped_results.each do |cargo_class, truckings_by_cargo_class|
-          trucking = truckings_by_cargo_class
-                     .select { |trp| trp.group_id.nil? && [@user&.id, nil].include?(trp.user_id) }
-                     .max_by { |trp| trp.user_id.to_i }
-          truckings[cargo_class] = trucking if trucking.present?
+        [nil, @user&.pricing_id].each do |user_id|
+          grouped_results.each do |cargo_class, truckings_by_cargo_class|
+            trucking = truckings_by_cargo_class.find { |trp| trp.group_id.nil? && user_id == trp.user_id }
+            truckings[cargo_class] = trucking if trucking.present?
+          end
         end
       end
 

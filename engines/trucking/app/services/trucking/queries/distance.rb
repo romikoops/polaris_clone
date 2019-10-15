@@ -25,6 +25,7 @@ module Trucking
         @hub_ids      = args[:hub_ids]
         @distance     = args[:distance]
         @sandbox = args[:sandbox]
+        @order_by = args[:order_by]
       end
 
       def perform
@@ -48,11 +49,12 @@ module Trucking
           tenant_id: @tenant_id,
           sandbox_id: @sandbox&.id
         )
-              .where(cargo_class_condition)
-              .where(truck_type_condition)
-              .where(nexuses_condition)
-              .joins(%i(location hub))
-              .where(trucking_location_where_statement, trucking_location_conditions_binds)
+        .where(cargo_class_condition)
+        .where(truck_type_condition)
+        .where(nexuses_condition)
+        .joins(%i(location hub))
+        .where(trucking_location_where_statement, trucking_location_conditions_binds)
+        .order("#{@order_by} DESC NULLS LAST")
       end
 
       def trucking_location_where_statement

@@ -20,7 +20,7 @@ module OfferCalculatorService
 
     def trucking_hub_ids(carriage)
       trucking_details = @shipment.trucking["#{carriage}_carriage"]
-
+      base_pricing_enabled = Tenants::ScopeService.new(target: @shipment.user).fetch(:base_pricing)
       args = {
         address: Address.find(trucking_details['address_id']),
         load_type: @shipment.load_type,
@@ -28,7 +28,8 @@ module OfferCalculatorService
         truck_type: trucking_details['truck_type'],
         carriage: carriage,
         cargo_classes: @shipment.cargo_classes,
-        sandbox: @sandbox
+        sandbox: @sandbox,
+        order_by: base_pricing_enabled ? 'group_id' : 'user_id'
       }
       results = Trucking::Queries::Availability.new(args).perform | Trucking::Queries::Distance.new(args).perform
       results.map(&:hub_id)
