@@ -60,8 +60,8 @@ module AdmiraltyReports
 
       def quotations_per_agent(bundle)
         bundle.tally_by do |quotation, _shipment|
-          user = User.find(quotation.user_id)
-          agency = Agency.find_by(id: user.agency_id)
+          user = User.with_deleted.find_by(id: quotation.user_id)
+          agency = Agency.find_by(id: user.agency_id) if user
           [user&.email, agency&.name]
         end
       end
