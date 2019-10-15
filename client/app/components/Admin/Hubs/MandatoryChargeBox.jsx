@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
@@ -6,7 +6,7 @@ import AdminPromptConfirm from '../Prompt/Confirm'
 import Checkbox from '../../Checkbox/Checkbox'
 import { gradientTextGenerator } from '../../../helpers'
 
-class MandatoryChargeBox extends PureComponent {
+class MandatoryChargeBox extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -14,7 +14,7 @@ class MandatoryChargeBox extends PureComponent {
     }
   }
   componentWillReceiveProps (nextProps) {
-    if (nextProps.mandatoryCharge && !this.state.mandatoryCharge.id) {
+    if (nextProps.mandatoryCharge && nextProps.mandatoryCharge.id !== this.state.mandatoryCharge.id) {
       this.setState({ mandatoryCharge: nextProps.mandatoryCharge })
     }
   }

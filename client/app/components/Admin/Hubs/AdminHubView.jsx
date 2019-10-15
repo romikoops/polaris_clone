@@ -63,10 +63,10 @@ export class AdminHubView extends Component {
         this.checkAndSetCharges(nextProps)
       }
       if (
-        !this.state.mandatoryCharge || (nextProps.hubData.mandatoryCharges !== this.state.mandatoryCharge)
+        !this.state.mandatoryCharge || (nextProps.hubData.mandatoryCharge !== this.state.mandatoryCharge)
       ) {
-        const { mandatoryCharges } = nextProps.hubData
-        this.setState({ mandatoryCharge: mandatoryCharges })
+        const { mandatoryCharge } = nextProps.hubData
+        this.setState({ mandatoryCharge: mandatoryCharge })
       }
     }
   }

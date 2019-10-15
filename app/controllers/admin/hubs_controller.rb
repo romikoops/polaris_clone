@@ -40,8 +40,9 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def update_mandatory_charges
+    hub = create_hub_mandatory_charge
     response_handler(
-      hub: create_hub_mandatory_charge.as_options_json,
+      hub: hub.as_options_json,
       mandatoryCharge: hub.mandatory_charge
     )
   end
@@ -54,7 +55,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
       relatedHubs: hub.nexus.hubs.where(sandbox: @sandbox),
       schedules: hub.layovers.limit(20),
       address: hub.address,
-      mandatoryCharges: hub.mandatory_charge
+      mandatoryCharge: hub.mandatory_charge
     }
     response_handler(resp)
   end
