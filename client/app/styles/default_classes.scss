@@ -678,4 +678,73 @@
     background-size: cover !important;
     background-image: url('https://assets.itsmycargo.com/assets/default_images/container_ship_sm.jpg');
   }
+  .connetwork7_title {
+    color: black;
+    text-align: start;
+    margin-top: 15px;
+    font-size: 40px !important;
+
+      @media (max-width: 1440px), (max-height: 1024px)  {
+        font-size: 35px !important;
+        margin: 28px 0;
+      }
+      @media (max-width: 1024px), (max-height: 850px)  {
+        font-size: 30px !important;
+        margin: 28px 0;
+      }
+      @media (max-width: 960px), (max-height: 600px) {
+        font-size: 25px !important;
+        margin: 20px 0;
+      }
+      @media (max-width: 600px), (max-height: 400px) {
+        font-size: 20px !important;
+        margin: 15px 0;
+      }
+  
+      font-weight: bold !important;
+  }
+  .connetwork7_subtitle {
+    color: black;
+    text-align: start;
+    margin-top: 15px;
+    font-size: 20px !important;
+
+      @media (max-width: 1024px), (max-height: 850px)  {
+        font-size: 16px !important;
+        margin: 28px 0;
+      }
+      @media (max-width: 960px), (max-height: 600px) {
+        font-size: 14px !important;
+        margin: 20px 0;
+      }
+      @media (max-width: 600px), (max-height: 400px) {
+        font-size: 12px !important;
+        margin: 15px 0;
+      }
+      line-height: 1.5em;
+      font-weight: normal !important;
+  }
+  .landing_logo_large_7conn {
+    width: 400px;
+    margin-top: 130px;
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      margin-top: 100px;
+    }
+    @media (max-width: 1440px), (max-height: 1024px)  {
+      margin-top: 100px;
+      width: 350px;
+    }
+    @media (max-width: 1024px), (max-height: 850px)  {
+      margin-top: 100px;
+      width: 300px;
+    }
+    @media (max-width: 960px), (max-height: 600px) {
+      margin-top: 60px;
+      width: 250px;
+    }
+    @media (max-width: 600px), (max-height: 400px) {
+      margin-top: 40px;
+      width: 225px;
+    }
+  }
 }

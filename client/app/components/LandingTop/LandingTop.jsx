@@ -99,7 +99,7 @@ function LandingTop ({
         <div className="flex-100 layout-row">
           <Header user={user} theme={theme} isLanding scrollable invert noMessages />
         </div>
-        <div className="flex-50 layout-row layout-align-center layout-wrap">
+        <div className="flex-60 layout-row layout-align-center layout-wrap">
           <div className={`${styles.content_wrapper} flex-100 layout-row layout-wrap layout-align-center-center`}>
             <div className="flex-75 banner_text">
               { contentToRender }
@@ -107,7 +107,7 @@ function LandingTop ({
             <ButtonSection {...buttonSectionProps} className="hide_h_xxs" />
           </div>
         </div>
-        <div className="flex-50 layout-row layout-align-center layout-wrap">
+        <div className="flex-40 layout-row layout-align-center layout-wrap">
           <ButtonSection {...buttonSectionProps} className="hide_h_gt_xxs" />
         </div>
       </div>

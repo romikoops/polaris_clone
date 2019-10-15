@@ -127,7 +127,7 @@ exports[`shallow render 1`] = `
       />
     </div>
     <div
-      className="flex-50 layout-row layout-align-center layout-wrap"
+      className="flex-60 layout-row layout-align-center layout-wrap"
     >
       <div
         className="content_wrapper flex-100 layout-row layout-wrap layout-align-center-center"
@@ -277,7 +277,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-center layout-wrap"
+      className="flex-40 layout-row layout-align-center layout-wrap"
     >
       <ButtonSection
         bookNow={[Function]}
@@ -515,7 +515,7 @@ exports[`theme has truthy properties 1`] = `
       />
     </div>
     <div
-      className="flex-50 layout-row layout-align-center layout-wrap"
+      className="flex-60 layout-row layout-align-center layout-wrap"
     >
       <div
         className="content_wrapper flex-100 layout-row layout-wrap layout-align-center-center"
@@ -669,7 +669,7 @@ exports[`theme has truthy properties 1`] = `
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-center layout-wrap"
+      className="flex-40 layout-row layout-align-center layout-wrap"
     >
       <ButtonSection
         bookNow={[Function]}

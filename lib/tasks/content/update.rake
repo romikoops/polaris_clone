@@ -283,6 +283,26 @@ namespace :content do
           "section": 'bulletImage',
           "index": 4
         }
+      ],
+      "7connetwork": [
+        {
+          "text": '<img src="https://assets.itsmycargo.com/assets/tenants/7connetwork/7connetwork__logo.png" alt="" class="flex-none landing_logo_large_7conn"/>',
+          "component": 'LandingTop',
+          "section": 'welcome',
+          "index": 0
+        },
+        {
+          "text": '<h2 class="connetwork7_title">THE EXPERT\'S BOOKING SYSTEM<br>FOR DELIVERY ON 7 CONTINENTS</h2>',
+          "component": 'LandingTop',
+          "section": 'welcome',
+          "index": 1
+        },
+        {
+          "text": '<h3 class="connetwork7_subtitle">Enjoy the most advanced and easy to use booking system in the market.<br>Finally, shipping as simple as it should be.</h3>',
+          "component": 'LandingTop',
+          "section": 'welcome',
+          "index": 2
+        }
       ]
     }
     s3 = Aws::S3::Client.new
