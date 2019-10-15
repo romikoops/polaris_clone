@@ -32,6 +32,7 @@ module Trucking
 
       def perform
         start_time = DateTime.now
+        @sheets = xlsx.sheets.clone
         @zone_sheet = xlsx.sheet(sheets[0]).clone
         @fees_sheet = xlsx.sheet(sheets[1]).clone
         @num_rows = @zone_sheet&.last_row
@@ -276,14 +277,14 @@ module Trucking
             postal_code_range_data(ident_and_country: alphanumeric_data)
           end
         else
-          (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
+          (postal_codes_data[:min].to_i..postal_codes_data[:max].to_i).map do |ident|
             ident_value = if identifier_type == 'zipcode'
                             ident.to_s.rjust(zip_char_length, '0')
                           else
                             ident
                           end
 
-            postal_code_range_data(ident_and_country: { ident: ident_value, country: idents_and_country[:country] })
+            postal_code_range_data(ident_and_country: { ident: ident_value, country: postal_codes_data[:country] })
           end
         end
       end
@@ -323,7 +324,7 @@ module Trucking
               @valid_postal_codes = ::Trucking::PostalCodes.for(country_code: idents_and_country[:country])
             end
             if idents_and_country[:min] && idents_and_country[:max]
-              postal_code_range(data: idents_and_country).compact
+              postal_code_range(postal_codes_data: idents_and_country).compact
             elsif identifier_type == 'location_id'
               resp = find_and_prep_geometry(data: idents_and_country)
               next unless resp
