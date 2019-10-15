@@ -130,6 +130,7 @@ module OfferCalculatorService
             obj['value'] += pricing_hash[key]['rate']
             obj['currency'] ||= pricing_hash[key]['currency']
           end
+          pricing_hash['valid_until'] = pricing.expiration_date
           hash[pricing.cargo_class] = pricing_hash
         end
       else
@@ -146,6 +147,7 @@ module OfferCalculatorService
             internal: false
           )
         end
+
         pricings.for_dates(etd, eta)
                 .for_load_type(load_type)
                 .each_with_object({}) do |pricing, hash|
@@ -154,6 +156,7 @@ module OfferCalculatorService
             obj['value'] += pricing_hash[key]['rate']
             obj['currency'] ||= pricing_hash[key]['currency']
           end
+          pricing_hash['valid_until'] = pricing.expiration_date
           hash[pricing.cargo_class] = pricing_hash
         end
       end

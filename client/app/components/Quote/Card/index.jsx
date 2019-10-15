@@ -18,6 +18,7 @@ import CollapsingContent from '../../CollapsingBar/Content'
 import QuoteCardScheduleList from './ScheduleList'
 import RatesOverview from './Rates'
 import UnitsWeight from '../../Units/Weight'
+import { formatDate } from 'react-day-picker/moment'
 
 class QuoteCard extends PureComponent {
   constructor (props) {
@@ -181,7 +182,8 @@ class QuoteCard extends PureComponent {
       aggregatedCargo,
       onClickAdd,
       t,
-      shipment
+      shipment,
+      validUntil
     } = this.props
     const { scope } = tenant
     const {
@@ -282,30 +284,31 @@ class QuoteCard extends PureComponent {
           </div>
         </div>
         <div className="flex-100 layout-row layout-align-start-center" style={{ paddingBottom: '18px' }}>
-
-          { voyageInfo.carrier && result.meta.carrier_name ? (
-            <div className="flex-50 layout-row layout-align-center-center">
-              {switchIcon(result.meta.mode_of_transport)}
-              <p
-                className="layout-row layout-align-end-center margin_5"
-                style={{ paddingLeft: '7px' }}
-              >
-                {t('quote:carrier', { carrierName: result.meta.carrier_name })}
-              </p>
-            </div>
-          ) : '' }
-          {
-            voyageInfo.service_level && result.meta.service_level
-              ? (
-                <div className="flex-50 layout-row layout-align-center-center">
-                  <i className="flex-none fa fa-bell-o" style={{ paddingRight: '7px' }} />
-                  <p className="layout-row layout-align-end-center margin_5">
-                    {t('quote:service', { serviceLevel: capitalize(result.meta.service_level) })}
-                  </p>
+          <div className={`flex-100 layout-row ${styles.details}`}>
+            <div className={`flex-50 ${styles.details_itens}`} >
+              {voyageInfo.carrier && result.meta.carrier_name && (
+                <div>
+                  {switchIcon(result.meta.mode_of_transport)}
+                  {t("quote:carrier", {
+                    carrierName: result.meta.carrier_name
+                  })}
                 </div>
-              )
-              : ''
-          }
+              )}
+              {voyageInfo.service_level && result.meta.service_level && (
+                <div>
+                  <i className="flex-none fa fa-bell-o" />
+                  {t("quote:service", {
+                    serviceLevel: capitalize(result.meta.service_level)
+                  })}
+                </div>
+              )}
+            </div>
+            { validUntil &&
+              <div className={`flex-50 ${styles.valid_until}`}>
+                { t("quote:validUntil", { date: formatDate(validUntil)}) }
+              </div>
+            }
+          </div>
         </div>
         { scope.show_rate_overview ? (<RatesOverview ratesObject={result.meta.pricing_rate_data} />) : '' }
         <CollapsingContent collapsed={!showSchedules}>
@@ -390,7 +393,8 @@ QuoteCard.defaultProps = {
   onClickAdd: null,
   pickup: false,
   isChecked: false,
-  aggregatedCargo: {}
+  aggregatedCargo: {},
+  validUntil: null
 }
 
 export default withNamespaces(['common', 'cargo', 'acronym', 'shipment', 'quote', 'disclaimers'])(QuoteCard)

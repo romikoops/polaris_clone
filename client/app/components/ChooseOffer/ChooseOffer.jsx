@@ -2,7 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { v4 } from 'uuid'
 import { withNamespaces } from 'react-i18next'
-import { get } from 'lodash'
+import
+{
+  flow,
+  get,
+  minBy,
+  values
+} from 'lodash'
 import RouteFilterBox from '../RouteFilterBox/RouteFilterBox'
 import { moment } from '../../constants'
 import styles from './ChooseOffer.scss'
@@ -203,6 +209,21 @@ class ChooseOffer extends Component {
     return results.filter(result => motKeys.includes(result.meta.mode_of_transport))
   }
 
+  getValidUntil (quote) {
+    if (!quote || !quote.meta || !quote.meta.pricing_rate_data) {
+      return null;
+    }
+
+    const minQuoteValues = values(quote.meta.pricing_rate_data)
+    const minQuote = minBy(minQuoteValues, x => moment(x.valid_until))
+
+    if (!minQuote) {
+      return null;
+    }
+
+    return minQuote.valid_until;
+  }
+
   render () {
     const {
       shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay, lastAvailableDate, t
@@ -248,6 +269,7 @@ class ChooseOffer extends Component {
             aggregatedCargo={aggregatedCargo}
             onScheduleRequest={this.handleScheduleRequest}
             truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
+            validUntil={this.getValidUntil(s)}
           />
         </div>
       ))

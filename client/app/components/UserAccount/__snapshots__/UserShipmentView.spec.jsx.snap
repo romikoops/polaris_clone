@@ -413,6 +413,50 @@ exports[`shallow render 1`] = `
                 "origin_hub": Object {
                   "name": "Gothenburg",
                 },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
               },
@@ -1121,6 +1165,50 @@ exports[`shipmentData.cargoItems is falsy 1`] = `
                 "mode_of_transport": "air",
                 "origin_hub": Object {
                   "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,

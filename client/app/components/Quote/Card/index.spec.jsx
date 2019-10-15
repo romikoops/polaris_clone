@@ -25,6 +25,11 @@ const propsBase = {
       },
       destination_hub: {
         name: 'Shanghai'
+      },
+      pricing_range_data: {
+        fcl_20: {
+          valid_until: '2019-12-31T00:00:00.000Z'
+        },
       }
     },
     quote: selectedOffer,
@@ -133,3 +138,14 @@ test('show schedule options working', () => {
   expect(newShallow).toMatchSnapshot()
 })
 
+test('validUntil is truthy', () => {
+  const wrapper = shallow(<QuoteCard {...propsBase} />)
+  
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('validUntil is falsy', () => {
+  const props = change(propsBase, 'results.meta.pricing_rate_data', null)
+  
+  expect(shallow(<QuoteCard {...props} />)).toMatchSnapshot()
+})

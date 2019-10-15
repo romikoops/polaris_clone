@@ -9,6 +9,50 @@ export const firstResult = {
     },
     destination_hub: {
       name: 'Shanghai'
+    },
+    pricing_range_data: {
+      fcl_20: {
+        BAS: {
+          rate: '750.0',
+          rate_basis: 'PER_CONTAINER',
+          currency: 'USD',
+          min: '750.0',
+          range: []
+        },
+        total: {
+          value: '750.0',
+          currency: 'USD'
+        },
+        valid_until: '2019-12-31T00:00:00.000Z'
+      },
+      fcl_40: {
+        BAS: {
+          rate: '1400.0',
+          rate_basis: 'PER_CONTAINER',
+          currency: 'USD',
+          min: '1400.0',
+          range: []
+        },
+        total: {
+          value: '1400.0',
+          currency: 'USD'
+        },
+        valid_until: '2019-12-31T00:00:00.000Z'
+      },
+      fcl_40_hq: {
+        BAS: {
+          rate: '1400.0',
+          rate_basis: 'PER_CONTAINER',
+          currency: 'USD',
+          min: '1400.0',
+          range: []
+        },
+        total: {
+          value: '1400.0',
+          currency: 'USD'
+        },
+        valid_until: '2019-12-31T00:00:00.000Z'
+      }
     }
   },
   quote: {

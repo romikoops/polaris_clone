@@ -1,5 +1,6 @@
 import '../../mocks/libraries/react-redux'
 import * as React from 'react'
+import * as _ from 'lodash'
 import { shallow } from 'enzyme'
 import {
   change,
@@ -43,6 +44,7 @@ test('shipmentData is falsy', () => {
     ...propsBase,
     shipmentData: null
   }
+
   expect(shallow(<ChooseOffer {...props} />)).toMatchSnapshot()
 })
 
@@ -77,4 +79,17 @@ test('state.showModal is true', () => {
   const wrapper = shallow(<ChooseOffer {...propsBase} />)
   wrapper.setState({ showModal: true })
   expect(wrapper).toMatchSnapshot()
+})
+
+test('shipmentData.results[].meta.pricing_rate_data is truthy', () => {
+  const wrapper = shallow(<ChooseOffer {...propsBase} />)
+  
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('shipmentData.results[].meta.pricing_rate_data is falsy', () => {
+  let props = _.clone(propsBase);
+  props.shipmentData.results[0].meta.pricing_rate_data = null;
+  
+  expect(shallow(<ChooseOffer {...props} />)).toMatchSnapshot()
 })

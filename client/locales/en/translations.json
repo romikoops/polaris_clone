@@ -1171,7 +1171,8 @@
     "viewSchedules": "View Schedules",
     "carrier": "Carrier: {{carrierName}}",
     "service": "Service: {{serviceLevel}}",
-    "estimatedTT": "Estimated T/T"
+    "estimatedTT": "Estimated T/T",
+    "validUntil": "Validity Date: {{date}}"
   },
   "overrides": {
     "fivestarExport": "Total Local Charges",
