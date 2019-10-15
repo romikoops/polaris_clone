@@ -94,7 +94,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
                        else
                          no_general_margins
                        end
-          no_pricings || no_margins
+          no_pricings && no_margins
         end
       else
         itinerary_ids = tenant_itineraries.ids.reject do |id|
