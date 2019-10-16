@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
+import { without } from 'lodash'
 import styles from './AdminHubTile.scss'
 import { gradientGenerator, switchIcon, capitalizeCities, gradientBorderGenerator } from '../../../helpers'
 import GradientBorder from '../../GradientBorder'
@@ -11,6 +12,7 @@ export class AdminHubTile extends Component {
     super(props)
     this.handleLink = this.handleLink.bind(this)
     this.handleClick = this.handleClick.bind(this)
+    this.cleanupHubName = this.cleanupHubName.bind(this)
   }
   handleLink () {
     const { target, navFn } = this.props
@@ -22,6 +24,12 @@ export class AdminHubTile extends Component {
       handleClick(hub.data)
     }
   }
+
+  cleanupHubName (hubName, hubType) {
+    const splited = hubName.toLowerCase().split(' ')
+    return without(splited, hubType.toLowerCase()).join(' ')
+  }
+
   render () {
     const {
       theme, hub, tooltip, showTooltip
@@ -55,8 +63,9 @@ export class AdminHubTile extends Component {
       default:
         break
     }
-    const str = hub.data.name.replace(hubType, '')
-    const hubName = str.substring(0, str.length - 1)
+
+    const hubName = this.cleanupHubName(hub.data.name, hubType)
+
     const tooltipId = v4()
     const gradientBorderStyle =
       theme && theme.colors

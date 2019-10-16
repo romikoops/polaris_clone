@@ -18,7 +18,7 @@ exports[`hub is falsy 1`] = `
             className="flex-100"
           >
              
-            Nam
+            Name
              
           </h1>
         </div>
@@ -72,7 +72,7 @@ exports[`hub.data.hub_type is falsy 1`] = `
             className="flex-100"
           >
              
-            Nam
+            Name
              
           </h1>
         </div>
@@ -126,7 +126,7 @@ exports[`hub.data.photo is truthy 1`] = `
             className="flex-100"
           >
              
-            Nam
+            Name
              
           </h1>
         </div>
@@ -180,7 +180,7 @@ exports[`shallow render 1`] = `
             className="flex-100"
           >
              
-            Nam
+            Name
              
           </h1>
         </div>
@@ -247,7 +247,7 @@ exports[`showIcon is truthy 1`] = `
             className="flex-100"
           >
              
-            Nam
+            Name
              
           </h1>
         </div>
@@ -301,7 +301,7 @@ exports[`showTooltip is truthy 1`] = `
             className="flex-100"
           >
              
-            Nam
+            Name
              
           </h1>
         </div>
