@@ -24,6 +24,8 @@ module Legacy
     has_many :rates, -> { distinct }, through: :truckings
     belongs_to :mandatory_charge, optional: true
 
+    delegate :locode, to: :nexus
+
     def point_wkt
       "Point (#{address.longitude} #{address.latitude})"
     end

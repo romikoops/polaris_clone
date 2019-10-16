@@ -12,13 +12,13 @@ module ExcelTool
 
     def perform
       overwrite_hubs
+      stats
     end
 
     private
 
     def _stats
       {
-        type: 'hubs',
         hubs: {
           number_updated: 0,
           number_created: 0
@@ -42,7 +42,7 @@ module ExcelTool
         hub_status: 'STATUS',
         hub_type: 'TYPE',
         hub_name: 'NAME',
-        hub_code: 'CODE',
+        locode: 'LOCODE',
         latitude: 'LATITUDE',
         longitude: 'LONGITUDE',
         country: 'COUNTRY',
@@ -87,7 +87,7 @@ module ExcelTool
       )
     end
 
-    def _nexus_create
+    def nexus_create
       Nexus.create!(
         name: hub_row[:hub_name],
         latitude: hub_row[:latitude],
@@ -99,11 +99,12 @@ module ExcelTool
       )
     end
 
-    def _nexus_update
+    def nexus_update
       @nexus.update!(
         latitude: hub_row[:latitude],
         longitude: hub_row[:longitude],
-        photo: hub_row[:photo]
+        photo: hub_row[:photo],
+        locode: hub_row[:locode]
       )
     end
 
@@ -148,7 +149,8 @@ module ExcelTool
         longitude: hub_row[:longitude],
         name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
         photo: hub_row[:photo],
-        mandatory_charge: @mandatory_charge
+        mandatory_charge: @mandatory_charge,
+        hub_code: hub_row[:locode]
       )
     end
 
@@ -176,7 +178,8 @@ module ExcelTool
         name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
         photo: hub_row[:photo],
         mandatory_charge: @mandatory_charge,
-        sandbox: @sandbox
+        sandbox: @sandbox,
+        hub_code: hub_row[:locode]
       )
     end
 
@@ -228,9 +231,9 @@ module ExcelTool
 
         @nexus = _nexus
         if @nexus
-          _nexus_update
+          nexus_update
         else
-          @nexus = _nexus_create
+          @nexus = nexus_create
         end
         @address = find_or_create_address
         update_address_geocode
@@ -238,10 +241,8 @@ module ExcelTool
         results[:nexuses] << nexus
         stats[:nexuses][:number_updated] += 1
         create_alternative_names
-        hub.generate_hub_code!(user.tenant_id) unless hub.hub_code
         hub
       end
-      { stats: stats, results: results }
     end
   end
 end
