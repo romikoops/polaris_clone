@@ -68,7 +68,9 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
   end
 
   def prep_notes(shipment)
-    hubs = [shipment.origin_hub, shipment.destination_hub]
+    hubs = [shipment.origin_hub, shipment.destination_hub].compact
+    return hubs if hubs.empty?
+
     nexii = hubs.map(&:nexus)
     countries = nexii.map(&:country)
     legacy_pricings = shipment.itinerary&.pricings&.for_cargo_classes(shipment.cargo_classes)
