@@ -39,9 +39,31 @@ class QuoteMailer < ApplicationMailer
 
   def quotes_with_trip_id(quotation, shipments)
     if quotation
-      shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
+      shipments.map do |shipment| 
+        trip = Trip.find(shipment.trip_id)
+        shipment.selected_offer.merge(
+          trip_id: shipment.trip_id,
+          origin: trip.itinerary.first_stop.hub.name,
+          destination: trip.itinerary.last_stop.hub.name,
+          pickup_address: shipment.pickup_address&.full_address,
+          delivery_address: shipment.delivery_address&.full_address,
+          mode_of_transport: trip.itinerary.mode_of_transport
+        ).deep_stringify_keys
+      end
     else
-      shipments.first.charge_breakdowns.map { |cb| cb.to_nested_hash.merge(trip_id: cb.trip_id).deep_stringify_keys }
+      shipments.flat_map do |shipment|
+        shipment.charge_breakdowns.map do |charge_breakdown| 
+          trip = Trip.find(charge_breakdown.trip_id)
+          charge_breakdown.to_nested_hash.merge(
+            trip_id: charge_breakdown.trip_id,
+            origin: trip.itinerary.first_stop.hub.name,
+            destination: trip.itinerary.last_stop.hub.name,
+            pickup_address: shipment.pickup_address&.full_address,
+            delivery_address: shipment.delivery_address&.full_address,
+            mode_of_transport: trip.itinerary.mode_of_transport
+          ).deep_stringify_keys
+        end
+      end
     end
   end
 
@@ -58,10 +80,6 @@ class QuoteMailer < ApplicationMailer
     document = PdfService.new(user: @user, tenant: @user.tenant).admin_quotation(quotation: @quotation, shipment: shipment)&.attachment
     attachments[pdf_name] = document if document.present?
     attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
-    @hub_names = {
-      origin: Trip.find(@quotes.first['trip_id']).itinerary.first_stop.hub.name,
-      destination: Trip.find(@quotes.first['trip_id']).itinerary.last_stop.hub.name
-    }
 
     mail(
       from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: @user.tenant_id).slug}.itsmycargo.shop")

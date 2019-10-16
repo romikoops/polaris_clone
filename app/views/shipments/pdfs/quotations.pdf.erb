@@ -278,7 +278,7 @@
           end %>
         <% next if !charge%>
         <% charge_name =  if charge_key == 'cargo' && charge['name'] == 'Freight'
-                            "#{s.mode_of_transport.capitalize} Freight"
+                            "#{s.mode_of_transport&.capitalize} Freight"
                           else
                             charge["name"]
                           end
@@ -433,7 +433,7 @@
         </div>
       <% end %>
     </div>
-    <% unless notes[s.id].empty? %>
+    <% if notes[s.id].present? %>
       <div class="remarks">
         <h4>Notes: </h4>
         <ul> <% notes[s.id].each do |note| %>

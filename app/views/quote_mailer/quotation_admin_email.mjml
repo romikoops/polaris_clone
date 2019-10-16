@@ -62,14 +62,14 @@
     </mj-column>
   </mj-section>
 
-  <% @shipments.each do |shipment| %>
+  <% @quotes.each do |quote| %>
     <mj-section full-width="full-width" background-color="#f3f3f3">
       <mj-group>
         <mj-column width="130px">
-          <% if shipment.mode_of_transport == "ocean" %>
+          <% if quote['mode_of_transport'] == "ocean" %>
           <% mot_link = "https://assets.itsmycargo.com/assets/icons/anchor-solid-1.png" %>
           <% end %>
-          <% if shipment.mode_of_transport == "air" %>
+          <% if quote['mode_of_transport'] == "air" %>
           <% mot_link = "https://assets.itsmycargo.com/assets/icons/plane-solid-1.png" %>
           <% end %>
           <mj-image padding-top="20px" padding-bottom="20px" padding-left="0" padding-right="0" width="30px" src="<%= mot_link %>"></mj-image>
@@ -78,10 +78,10 @@
         <mj-column width="300px" padding-left="30px">
           <mj-text line-height="16px" padding="0" font-size="16px">
             <p>From: <strong>
-                <%= shipment.origin_hub&.name || @hub_names[:origin] %></strong>
+                <%= quote['origin'] %></strong>
             </p>
-            <% if shipment.has_pre_carriage %>
-              <p> <strong>Pickup from: </strong><%=  shipment.pickup_address.full_address %> </p>
+            <% if quote['has_pre_carriage'].present? %>
+              <p> <strong>Pickup from: </strong><%=  quote['pickup_address'] %> </p>
             <% end %>
           </mj-text>
         </mj-column>
@@ -89,10 +89,10 @@
         <mj-column width="300px" padding-left="30px">
           <mj-text line-height="16px" padding="0" font-size="16px">
             <p>To: <strong>
-                <%= shipment.destination_hub&.name || @hub_names[:destination] %></strong>
+                <%= quote['destination'] %></strong>
             </p>
-            <% if shipment.has_on_carriage %>
-              <p> <strong>Delivery to: </strong><%=  shipment.delivery_address.full_address%></p> 
+            <% if quote['has_on_carriage'].present? %>
+              <p> <strong>Delivery to: </strong><%=  quote['delivery_address'] %></p> 
             <% end %>
           </mj-text>
         </mj-column>
@@ -104,10 +104,9 @@
       <mj-group>
         <mj-column padding-left="30px">
           <mj-text line-height="16px" font-size="18px">
-            <% selected_offer = shipment.selected_offer%>
             <p> <strong>Total: </strong>
-              <%= '%.2f' % selected_offer["total"]["value"].to_f %>
-              &nbsp;<%= selected_offer["total"]["currency"] %>
+              <%= '%.2f' % quote["total"]["value"].to_f %>
+              &nbsp;<%= quote["total"]["currency"] %>
             </p>
             </mj-text>
         </mj-column>
