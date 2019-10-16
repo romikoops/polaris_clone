@@ -456,7 +456,7 @@
           <% unless notes.empty? %>
            <div class="remarks">
             <h4>Notes: </h4>
-            <ul> <% notes.each do |note| %>
+            <ul> <% notes[shipment.id].each do |note| %>
               <li class="note-header"> <%= note.header %></li>
               <li>
                 <p class="hyphens">

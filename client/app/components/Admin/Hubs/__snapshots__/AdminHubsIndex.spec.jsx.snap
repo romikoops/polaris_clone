@@ -214,7 +214,7 @@ exports[`user.internal is truthy 1`] = `
                       <p
                         className="flex-100 center"
                       >
-                        NO_TRANSLATION | key "admin:uploadNotes"
+                        Upload Terms & Restrictions
                       </p>
                       <FileUploader
                         dispatchFn={null}
