@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MaxDimensionsBundle < ApplicationRecord
+class MaxDimensionsBundle < Legacy::MaxDimensionsBundle
   belongs_to :tenant
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   validates :mode_of_transport, presence: true, uniqueness: {

@@ -1,0 +1,24 @@
+<% @max_dimensions.each do |md| %>
+  <%= fields_for 'max_dimensions[]', md do |field| %>
+      <dl class="row">
+        <dt class="col-sm-12">Max <%= md.aggregate ? 'Aggregated' : ''%>
+                              dimensions for <%=md.mode_of_transport.capitalize %>
+                              Bookings
+        </dt>
+        <dt class="col-sm-5">Max Dimension Length</dt>
+        <dd class="col-sm-7"><%= field.text_field :dimension_x %> cm</dd>
+
+        <dt class="col-sm-5">Max Dimension Width</dt>
+        <dd class="col-sm-7"><%= field.text_field :dimension_y %> cm</dd>
+
+        <dt class="col-sm-5">Max Dimension Height</dt>
+        <dd class="col-sm-7"><%= field.text_field :dimension_z %> cm</dd>
+
+        <dt class="col-sm-5">Max Dimension Weight</dt>
+        <dd class="col-sm-7"><%= field.text_field :payload_in_kg %> kg</dd>
+
+        <dt class="col-sm-5">Chargeable Weight</dt>
+        <dd class="col-sm-7"><%= field.text_field :chargeable_weight %> kg</dd>
+      </dl>
+    <% end %>
+  <% end%>

@@ -20,6 +20,7 @@ module AdmiraltyTenants
       @tenant.update(slug: tenant_params[:slug])
       @tenant.legacy.update(name: tenant_params[:name])
       @scope.update(content: remove_default_values)
+      update_max_dimensions
 
       redirect_to tenant_path(@tenant)
     end
@@ -30,10 +31,24 @@ module AdmiraltyTenants
       @tenant = Tenant.find(params[:id])
       @scope = @tenant.scope || {}
       @render_scope = ::Tenants::ScopeService.new(tenant: @tenant).fetch
+      @max_dimensions = ::Legacy::MaxDimensionsBundle.where(tenant_id: @tenant.legacy_id).order(:id)
+    end
+
+    def update_max_dimensions
+      @max_dimensions.each do |md|
+        md_params_id = params[:max_dimensions][md.id.to_s]
+        @max_dimensions.find(md.id).update(
+          dimension_x: md_params_id[:dimension_x],
+          dimension_y: md_params_id[:dimension_y],
+          dimension_z: md_params_id[:dimension_z],
+          payload_in_kg: md_params_id[:payload_in_kg],
+          chargeable_weight: md_params_id[:chargeable_weight]
+        )
+      end
     end
 
     def tenant_params
-      params.require(:tenant).permit(:name, :slug, :scope)
+      params.require(:tenant).permit(:name, :slug, :scope, :max_dimensions_bundle)
     end
 
     def remove_default_values
