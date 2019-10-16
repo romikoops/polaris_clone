@@ -357,7 +357,7 @@ module ExcelDataServices
 
       def adapt_for_direction(rows_data)
         rows_data.each do |row_data|
-          next row_data[:direction] = 'export' unless row_data[:fee_code].downcase.starts_with?('dest/')
+          next row_data[:direction] = 'export' unless row_data[:fee_code].downcase.match?(%r{^(included_)?dest/})
 
           row_data[:direction] = 'import'
           remove_dest_keyword(row_data)
@@ -366,7 +366,7 @@ module ExcelDataServices
       end
 
       def remove_dest_keyword(row_data)
-        row_data[:fee_code] = row_data[:fee_code].remove(%r{^dest/}i)
+        row_data[:fee_code] = row_data[:fee_code].remove(%r{dest/}i)
         row_data[:fee_name] = row_data[:fee_code].titleize
       end
 
