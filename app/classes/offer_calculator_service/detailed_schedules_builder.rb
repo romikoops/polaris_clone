@@ -35,6 +35,11 @@ module OfferCalculatorService
               shipment: @shipment,
               pricing_ids: current_result[:pricing_ids],
               user: user
+            ),
+            notes: grab_notes(
+              schedule: grand_total_charge[:schedules].first,
+              shipment: @shipment,
+              pricing_ids: current_result[:pricing_ids]
             )
           }
         end
@@ -358,6 +363,15 @@ module OfferCalculatorService
       quote.dig(:total, :value).blank? ||
         quote.dig(:total, :value).to_i.zero? ||
         !quote.dig(:cargo, :value).nil?
+    end
+
+    def grab_notes(pricing_ids: , shipment:, schedule:)
+      hubs = [schedule.origin_hub, schedule.destination_hub]
+      nexii = hubs.map(&:nexus)
+      countries = nexii.map(&:country)
+      legacy_pricings = Legacy::Pricing.where(id: pricing_ids.values.flatten)
+      pricings = Pricings::Pricing.where(id: pricing_ids.values.flatten)
+      Note.where(target: hubs | nexii | countries | pricings | legacy_pricings, tenant_id: shipment.tenant_id)
     end
   end
 end

@@ -226,6 +226,19 @@ function downloadTrucking (options) {
   return fetch(`${getTenantApiUrl()}/admin/trucking/download`, requestOptions).then(handleResponse)
 }
 
+
+function uploadNotes (file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/notes/upload`, requestOptions).then(handleResponse)
+}
+
 export const documentService = {
   uploadPricings,
   uploadHubs,
@@ -245,7 +258,8 @@ export const documentService = {
   uploadGeneratorSheet,
   uploadMargins,
   downloadQuote,
-  uploadGroupPricings
+  uploadGroupPricings,
+  uploadNotes
 }
 
 export default documentService

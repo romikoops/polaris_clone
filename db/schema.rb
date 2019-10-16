@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_02_153904) do
+ActiveRecord::Schema.define(version: 2019_10_14_145847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -736,15 +736,18 @@ ActiveRecord::Schema.define(version: 2019_10_02_153904) do
 
   create_table "notes", force: :cascade do |t|
     t.string "body", comment: "MASKED WITH literal:"
+    t.boolean "contains_html"
     t.datetime "created_at", null: false
     t.string "header", comment: "MASKED WITH literal:"
     t.integer "hub_id"
     t.integer "itinerary_id"
     t.string "level"
+    t.integer "original_id"
     t.uuid "pricings_pricing_id"
     t.uuid "sandbox_id"
     t.integer "target_id"
     t.string "target_type"
+    t.integer "tenant_id"
     t.integer "trucking_pricing_id"
     t.datetime "updated_at", null: false
     t.index ["pricings_pricing_id"], name: "index_notes_on_pricings_pricing_id"

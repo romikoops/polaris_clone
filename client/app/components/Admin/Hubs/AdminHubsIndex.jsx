@@ -140,6 +140,20 @@ export class AdminHubsIndex extends Component {
                       dispatchFn={documentDispatch.uploadChargeCategories}
                     />
                   </div>
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    <p className="flex-100 center">{t('admin:uploadNotes')}</p>
+                    <FileUploader
+                      theme={theme}
+                      url={hubUrl}
+                      type="xlsx"
+                      text={t('admin:notesExcel')}
+                      dispatchFn={documentDispatch.uploadNotes}
+                    />
+                  </div>
                   {motBasedUploadButtons}
                 </div>
               )}

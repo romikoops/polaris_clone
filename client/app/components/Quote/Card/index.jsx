@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { get } from 'lodash'
 import { withNamespaces } from 'react-i18next'
+import { formatDate } from 'react-day-picker/moment'
 import styles from './index.scss'
 import {
   switchIcon,
@@ -17,8 +18,9 @@ import { RoundButton } from '../../RoundButton/RoundButton'
 import CollapsingContent from '../../CollapsingBar/Content'
 import QuoteCardScheduleList from './ScheduleList'
 import RatesOverview from './Rates'
+import NoteReader from '../Notes'
 import UnitsWeight from '../../Units/Weight'
-import { formatDate } from 'react-day-picker/moment'
+import Modal from '../../Modal/Modal'
 
 class QuoteCard extends PureComponent {
   constructor (props) {
@@ -33,6 +35,7 @@ class QuoteCard extends PureComponent {
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
     this.handleSelectSchedule = this.handleSelectSchedule.bind(this)
+    this.toggleNotesModal = this.toggleNotesModal.bind(this)
   }
 
   componentDidMount () {
@@ -173,6 +176,10 @@ class QuoteCard extends PureComponent {
     return ''
   }
 
+  toggleNotesModal () {
+    this.setState(prevState => ({ showNotesModal: !prevState.showNotesModal }))
+  }
+
   render () {
     const {
       theme,
@@ -190,10 +197,12 @@ class QuoteCard extends PureComponent {
       quote,
       meta,
       schedules,
-      finalResults
+      finalResults,
+      notes
     } = result
     const {
-      showSchedules
+      showSchedules,
+      showNotesModal
     } = this.state
     const originHub = result.meta.origin_hub
     const destinationHub = result.meta.destination_hub
@@ -214,6 +223,18 @@ class QuoteCard extends PureComponent {
     const responsiveFlex = isQuote(tenant) ? 'flex-lg-80 offset-lg-20' : ''
     const hideGrandTotal = this.shouldHideGrandTotal()
     const voyageInfo = get(scope, ['voyage_info'], {})
+    const hasNotes = notes.length > 0
+
+    const notesModal = (
+      <Modal
+        component={(
+          <NoteReader notes={notes} t={t} closeModal={this.toggleNotesModal} />
+        )}
+        verticalPadding="30px"
+        horizontalPadding="40px"
+        parentToggle={this.toggleNotesModal}
+      />
+    )
 
     return (
       <div className={`
@@ -221,6 +242,7 @@ class QuoteCard extends PureComponent {
         ${styles.wrapper} ${isQuote(tenant) && this.state.isChecked ? styles.wrapper_selected : ''}
       `}
       >
+        { showNotesModal && notesModal }
         {isQuote(tenant) && this.state.isChecked ? (
           <div className={`${styles.wrapper_gradient}`}>
             <div className={`${styles.gradient}`} style={gradientStyle} />
@@ -310,6 +332,17 @@ class QuoteCard extends PureComponent {
             }
           </div>
         </div>
+        {
+          hasNotes && (
+            <div
+              className={`flex-100 layout-row layout-align-space-between-center pointy ${styles.notes_bar_button}`}
+              onClick={this.toggleNotesModal}
+            >
+              <span>{t('common:notesAndInfo')}</span>
+              <i className="flex-none fa fa-question-circle" />
+            </div>
+          )
+        }
         { scope.show_rate_overview ? (<RatesOverview ratesObject={result.meta.pricing_rate_data} />) : '' }
         <CollapsingContent collapsed={!showSchedules}>
           <QuoteCardScheduleList
@@ -336,7 +369,7 @@ class QuoteCard extends PureComponent {
           <div className={`flex-100 layout-row layout-align-space-between-stretch layout-wrap ${styles.total_row}`}>
             { isQuote(tenant)
               ? '' : (
-                <div className="flex-30 layout-row layout-align-start-center" >
+                <div className="flex-30 layout-row layout-align-start-center">
                   {this.buttonToDisplay()}
                 </div>
               ) }
@@ -386,7 +419,9 @@ QuoteCard.defaultProps = {
   theme: null,
   truckingTime: 0,
   tenant: {},
-  result: {},
+  result: {
+    notes: []
+  },
   cargo: [],
   selectResult: null,
   onScheduleRequest: null,

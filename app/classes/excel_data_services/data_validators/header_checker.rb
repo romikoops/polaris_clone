@@ -145,6 +145,12 @@ module ExcelDataServices
           external_id
           address
         ).freeze
+
+        NOTES = %i(
+          country
+          unlocode
+          note
+        ).freeze
       end
 
       attr_reader :data_restructurer_name, :errors

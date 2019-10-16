@@ -33,7 +33,8 @@ const propsBase = {
       }
     },
     quote: selectedOffer,
-    schedules: [{ eta: '10-8-2018', closing_date: '10-8-2018', etd: '10-8-2018' }]
+    schedules: [{ eta: '10-8-2018', closing_date: '10-8-2018', etd: '10-8-2018' }],
+    notes: []
   },
   shipment,
   cargo: [],

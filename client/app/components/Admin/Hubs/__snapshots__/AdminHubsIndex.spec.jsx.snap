@@ -208,6 +208,35 @@ exports[`user.internal is truthy 1`] = `
                         url="/admin/hubs/process_csv"
                       />
                     </div>
+                    <div
+                      className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                    >
+                      <p
+                        className="flex-100 center"
+                      >
+                        NO_TRANSLATION | key "admin:uploadNotes"
+                      </p>
+                      <FileUploader
+                        dispatchFn={null}
+                        formClasses=""
+                        size="small"
+                        square={false}
+                        t={[Function]}
+                        text="NO_TRANSLATION | key \\"admin:notesExcel\\""
+                        theme={
+                          Object {
+                            "colors": Object {
+                              "primary": "#333",
+                              "secondary": "#fafafa",
+                            },
+                          }
+                        }
+                        tooltip=""
+                        type="xlsx"
+                        uploadFn={null}
+                        url="/admin/hubs/process_csv"
+                      />
+                    </div>
                     <div>
                       <div
                         className="action_section flex-100 layout-row layout-align-center-center layout-wrap"

@@ -278,7 +278,7 @@
           end %>
         <% next if !charge%>
         <% charge_name =  if charge_key == 'cargo' && charge['name'] == 'Freight'
-                            "#{s.mode_of_transport} Freight"
+                            "#{s.mode_of_transport.capitalize} Freight"
                           else
                             charge["name"]
                           end
@@ -433,41 +433,48 @@
         </div>
       <% end %>
     </div>
-  <% end %>
-  <% unless remarks.empty? %>
-    <div class="remarks">
-      <h4>Remarks:</h4>
-      <ul>
-        <% remarks.each do  |remark|%>
-          <li>
-            <p class="hyphens">
-              <%= simple_format(remark.body) %>
-            </p>
+    <% unless notes[s.id].empty? %>
+      <div class="remarks">
+        <h4>Notes: </h4>
+        <ul> <% notes[s.id].each do |note| %>
+          <li class="note-header"> <%= note.header %></li>
+          <li class="note-body">
+            <% if note.contains_html %>
+              <p class="hyphens">
+                <%= simple_format(note.body)  %>
+              </p>
+            <% else %>
+              <%== note.body %>
+            <% end %>
           </li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-  <% unless notes.empty? %>
-    <div class="remarks">
-      <h4>Notes: </h4>
-      <ul> <% notes.each do |note| %>
-        <li class="note-header"> <%= note.header %></li>
-        <li>
-          <p class="hyphens">
-            <%= simple_format(note.body)  %>
-          </p>
-        </li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-  <% unless content['disclaimer'].nil? %>
-    <div class="remarks">
-      <ul> <% content['disclaimer'].each do |section| %>
-        <li class="note-header"> <%= section['text'] %></li>
-        <% end %>
-      </ul>
-    </div>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+    <% unless remarks.empty? %>
+      <div class="remarks">
+        <h4>Remarks:</h4>
+        <ul>
+          <% remarks.each do  |remark|%>
+            <li>
+              <p class="hyphens">
+                <%= simple_format(remark.body) %>
+              </p>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    
+    <% unless content['disclaimer'].nil? %>
+      <div class="remarks">
+        <ul> <% content['disclaimer'].each do |section| %>
+          <li class="note-header"> <%= section['text'] %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="page-break"></div>
   <% end %>
 </div>

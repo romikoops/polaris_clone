@@ -4,7 +4,7 @@ class Nexus < Legacy::Nexus
   has_many :hubs
   has_many :shipments
   belongs_to :tenant
-  belongs_to :country
+  belongs_to :country, class_name: 'Legacy::Country'
   geocoded_by :geocoded_address
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
@@ -150,4 +150,5 @@ end
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  sandbox_id :uuid
+#  locode     :string
 #

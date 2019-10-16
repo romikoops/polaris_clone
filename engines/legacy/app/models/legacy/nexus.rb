@@ -24,4 +24,5 @@ end
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  sandbox_id :uuid
+#  locode     :string
 #

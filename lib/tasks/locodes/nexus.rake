@@ -10,7 +10,3 @@ namespace :locodes do
     end
   end
 end
-
-Rake::Task['db:migrate'].enhance do
-  Rake::Task['locodes:nexus'].invoke
-end

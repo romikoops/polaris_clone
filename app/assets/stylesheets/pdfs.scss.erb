@@ -168,6 +168,7 @@ br{
   margin-top: 35px;
   padding: 10px 15px;
   border-bottom: none;
+  page-break-inside: avoid;
 }
 .disclaimer {
   margin-top: 35px;
@@ -183,6 +184,10 @@ br{
 }
 .note-header {
   font-weight: bold;
+  font-size: 16px;
+}
+.note-body {
+  padding-left: 20px
 }
 .info {
   padding: 20px 35px;
@@ -788,3 +793,4 @@ br{
     padding: 5px;
   }
 }
+.page-break { display:block; clear:both; page-break-after:always; }

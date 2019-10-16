@@ -211,7 +211,8 @@
     "ton": "Ton",
     "kg": "Kg",
     "cbm": "CBM",
-    "enabled": "Enabled"
+    "enabled": "Enabled",
+    "notesAndInfo": "Terms & Restrictions"
   },
   "admin": {
       "savePricings": "Save Pricings",
@@ -609,7 +610,8 @@
       "internal": "Internal",
       "originalArea": "Original Area",
       "selectedAreas": "Selected Areas",
-      "selectAdminLevel": "Select Admin Level"
+      "selectAdminLevel": "Select Admin Level",
+      "uploadNotes": "Upload Terms & Restrictions"
   },
   "itbox": {
     "component": "IncotermBox",

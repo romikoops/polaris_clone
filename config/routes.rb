@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       resources :itineraries, only: %i(index show create destroy) do
         resources :notes, only: :delete
       end
+      post 'notes/upload', to: 'notes#upload'
       post 'itineraries/:id/edit_notes', to: 'itineraries#edit_notes'
 
       resources :pricings, only: %i(index destroy) do

@@ -28,6 +28,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @hide_grand_total = {}
     @has_legacy_charges = {}
     @hub_names = {}
+    @notes = {}
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
     @scope = ::Tenants::ScopeService.new(target: @shipment.user, tenant: tenants_tenant).fetch
     @pricing_data = {}
@@ -43,6 +44,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @shipments.each do |s|
       calculate_cargo_data(s)
       calculate_pricing_data(s)
+      prep_notes(s)
       @hide_grand_total[s.id] = hide_grand_total?(s)
     end
     @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
@@ -63,6 +65,18 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         destination: Trip.find(quote['trip_id']).itinerary.last_stop.hub.name
       }
     end
+  end
+
+  def prep_notes(shipment)
+    hubs = [shipment.origin_hub, shipment.destination_hub]
+    nexii = hubs.map(&:nexus)
+    countries = nexii.map(&:country)
+    legacy_pricings = shipment.itinerary&.pricings&.for_cargo_classes(shipment.cargo_classes)
+    pricings = shipment.itinerary&.rates&.for_cargo_classes(shipment.cargo_classes)
+    @notes[shipment.id] = Note.where(
+      target: hubs | nexii | countries | pricings | legacy_pricings,
+      tenant_id: shipment.tenant_id
+    )
   end
 
   def hide_grand_total?(shipment) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -252,7 +266,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         remarks: @remarks,
         tenant: @shipment.tenant,
         cargo_data: @cargo_data,
-        notes: @shipment.route_notes,
+        notes: @notes,
         hide_cargo_sub_totals: @hide_cargo_sub_totals,
         content: @content,
         hide_grand_total: @hide_grand_total,

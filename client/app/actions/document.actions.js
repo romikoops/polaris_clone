@@ -488,6 +488,32 @@ function uploadLocalCharges (file, mot, groupId) {
   }
 }
 
+function uploadNotes (file) {
+  function request (uploadData) {
+    return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
+  }
+  function success (uploadData) {
+    return { type: documentConstants.UPLOAD_SUCCESS, payload: uploadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.UPLOAD_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.uploadNotes(file).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function setStats (stats) {
   return { type: documentConstants.UPLOAD_SUCCESS, payload: stats }
 }
@@ -520,7 +546,8 @@ export const documentActions = {
   uploadGeneratorSheet,
   uploadMargins,
   downloadQuote,
-  uploadGroupPricings
+  uploadGroupPricings,
+  uploadNotes
 }
 
 export default documentActions
