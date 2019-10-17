@@ -459,7 +459,7 @@ class CargoDetails extends Component {
               <InsuranceSelection
                 theme={theme}
                 tenant={tenant}
-                insuranceBool={insurance.bool}
+                insuranceBool={insurance.isSelected}
                 insuranceView={insuranceView}
                 handleInsurance={handleInsurance}
                 t={t}

@@ -301,7 +301,7 @@ exports[`shallow render 1`] = `
       incotermText=""
       insurance={
         Object {
-          "bool": null,
+          "isSelected": null,
           "val": 0,
         }
       }
@@ -1004,7 +1004,7 @@ exports[`theme is falsy 1`] = `
       incotermText=""
       insurance={
         Object {
-          "bool": null,
+          "isSelected": null,
           "val": 0,
         }
       }

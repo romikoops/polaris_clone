@@ -245,7 +245,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     existing_addons_charge&.destroy
 
     # TBD - Adjust for itinerary logic
-    if shipment_data[:insurance][:bool]
+    if shipment_data[:insurance][:isSelected]
       @insurance_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code(code: 'insurance', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,

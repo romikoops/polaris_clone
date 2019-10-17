@@ -58,7 +58,7 @@ export class BookingDetails extends Component {
       shipper: {},
       totalGoodsValue: { value: 0, currency: 'EUR' },
       insurance: {
-        bool: null,
+        isSelected: null,
         val: 0
       },
       customs: {
@@ -225,14 +225,11 @@ export class BookingDetails extends Component {
   }
 
   handleInsurance (bool) {
-    const { totalGoodsValue, insurance } = this.state
+    const { totalGoodsValue } = this.state
     const { tenant } = this.props
     const insuranceValue = totalGoodsValue.value * tenant.scope.transport_insurance_rate
 
-    if (bool) {
-      return this.setState({ insurance: { bool, val: insuranceValue } })
-    }
-    this.setState({ insurance: { ...insurance, val: insuranceValue } })
+    this.setState({ insurance: { isSelected: bool, val: insuranceValue } })
   }
 
   removeNotifyee (i) {
@@ -252,6 +249,7 @@ export class BookingDetails extends Component {
 
   handleCargoInput (event) {
     const { name, value } = event.target
+    const { insurance } = this.state
     if (name === 'totalGoodsValue') {
       const gVal = parseInt(value, 10)
       this.setState({
@@ -261,7 +259,7 @@ export class BookingDetails extends Component {
         }
       })
 
-      return this.calcInsurance(gVal, false)
+      return this.handleInsurance(insurance.isSelected)
     }
     this.setState({ [name]: value })
   }

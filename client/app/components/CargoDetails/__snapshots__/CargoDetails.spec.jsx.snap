@@ -798,7 +798,6 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
     />
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={true}
       insuranceView={null}
       t={[Function]}
       tenant={
@@ -1675,7 +1674,6 @@ exports[`customsData[target].unknown 1`] = `
     />
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={true}
       insuranceView={null}
       t={[Function]}
       tenant={
@@ -3092,7 +3090,6 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
     />
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={null}
       insuranceView={null}
       t={[Function]}
       tenant={
@@ -3975,7 +3972,6 @@ exports[`shallow render 1`] = `
     />
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={true}
       insuranceView={null}
       t={[Function]}
       tenant={
@@ -4858,7 +4854,6 @@ exports[`shipment.has_pre_carriage ? 1`] = `
     />
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={true}
       insuranceView={null}
       t={[Function]}
       tenant={
@@ -5771,7 +5766,6 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
     />
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={true}
       insuranceView={null}
       t={[Function]}
       tenant={
@@ -6654,7 +6648,6 @@ exports[`state.customsView is true 1`] = `
     />
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={true}
       insuranceView={null}
       t={[Function]}
       tenant={
@@ -7537,7 +7530,6 @@ exports[`state.insuranceView is false 1`] = `
     />
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={true}
       insuranceView={true}
       t={[Function]}
       tenant={
@@ -8714,7 +8706,6 @@ exports[`state.showModal is true 1`] = `
     />
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={true}
       insuranceView={null}
       t={[Function]}
       tenant={
@@ -9597,7 +9588,6 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
     />
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={true}
       insuranceView={null}
       t={[Function]}
       tenant={
@@ -10220,7 +10210,6 @@ exports[`tenant.scope.has_customs is false 1`] = `
   >
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={true}
       insuranceView={null}
       t={[Function]}
       tenant={
@@ -11901,7 +11890,6 @@ exports[`totalGoodsValue.value > 20000 1`] = `
     />
     <InsuranceSelection
       handleInsurance={[Function]}
-      insuranceBool={true}
       insuranceView={null}
       t={[Function]}
       tenant={
