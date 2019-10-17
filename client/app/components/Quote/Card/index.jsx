@@ -223,7 +223,7 @@ class QuoteCard extends PureComponent {
     const responsiveFlex = isQuote(tenant) ? 'flex-lg-80 offset-lg-20' : ''
     const hideGrandTotal = this.shouldHideGrandTotal()
     const voyageInfo = get(scope, ['voyage_info'], {})
-    const hasNotes = notes.length > 0
+    const hasNotes = notes && notes.length > 0
 
     const notesModal = (
       <Modal
