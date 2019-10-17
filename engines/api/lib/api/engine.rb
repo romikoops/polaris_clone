@@ -2,6 +2,8 @@
 
 require 'api_auth'
 require 'core'
+require 'tenants'
+require 'trucking'
 
 require 'active_model_serializers'
 

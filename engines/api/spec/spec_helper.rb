@@ -2,6 +2,7 @@
 
 require 'factory_bot_rails'
 require 'simplecov'
+require 'geocoder'
 
 SimpleCov.start 'rails' do
   minimum_coverage 98 unless ENV['SKIP_COVERAGE']
@@ -96,3 +97,6 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 end
+
+# Geocoder mocking
+Geocoder.configure(lookup: :test)

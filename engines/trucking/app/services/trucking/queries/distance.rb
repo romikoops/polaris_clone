@@ -36,7 +36,7 @@ module Trucking
       private
 
       def find_relevant_hubs
-        @relevant_hubs = Hub.where(hubs_condition)
+        @relevant_hubs = ::Legacy::Hub.where(hubs_condition)
                             .joins(trucking_hub_availabilities: :type_availability)
                             .where(trucking_type_availabilities: { query_method: 1 })
                             .uniq

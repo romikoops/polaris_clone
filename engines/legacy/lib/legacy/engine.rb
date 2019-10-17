@@ -1,6 +1,7 @@
 # frozen_string_literal: true
-require 'geocoder'
+require 'core'
 require 'pg_search'
+require 'geocoder'
 
 module Legacy
   class Engine < ::Rails::Engine

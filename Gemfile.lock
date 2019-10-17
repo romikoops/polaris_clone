@@ -77,6 +77,8 @@ PATH
       active_model_serializers (~> 0.10, >= 0.10.8)
       api_auth
       core
+      tenants
+      trucking
 
 PATH
   remote: engines/cargo
