@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Address < Legacy::Address
+  has_many :user_addresses
+  has_many :users, through: :user_addresses, dependent: :destroy
+  has_many :shipments
   has_many :contacts
   has_many :ports, foreign_key: :nexus_id
   has_many :ports
@@ -66,6 +69,14 @@ class Address < Legacy::Address
     address.reverse_geocode if address.country.nil?
     address.save!
     address
+  end
+
+  def primary_for?(user)
+    user_address = user_addresses.find_by(user: user)
+
+    raise "This 'Location' object is not associated with a user!" unless user_address.present?
+
+    user_address.primary
   end
 
   def city_country

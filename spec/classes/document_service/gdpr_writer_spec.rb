@@ -11,7 +11,7 @@ RSpec.describe DocumentService::GdprWriter do
     let!(:shipment) { create(:shipment, user: user, with_breakdown: true) }
 
     it 'creates file' do
-      expect(subject).to receive(:write_to_aws).with('tmp/Max_Muster_GDPR.xlsx', Legacy::Tenant.find(user.tenant_id), 'Max_Muster_GDPR.xlsx', 'gdpr').and_return('http://AWS')
+      expect(subject).to receive(:write_to_aws).with('tmp/Max_Muster_GDPR.xlsx', user.tenant, 'Max_Muster_GDPR.xlsx', 'gdpr').and_return('http://AWS')
 
       expect(subject.perform).to eq('http://AWS')
     end

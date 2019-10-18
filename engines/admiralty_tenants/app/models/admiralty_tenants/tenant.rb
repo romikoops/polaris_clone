@@ -2,10 +2,8 @@
 
 module AdmiraltyTenants
   class Tenant < ::Tenants::Tenant
-    accepts_nested_attributes_for :theme
-
     def name
-      legacy&.name
+      legacy.name
     end
   end
 end

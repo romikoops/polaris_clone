@@ -1,10 +1,7 @@
 # frozen_string_literal: true
-
 require 'core'
-require 'devise_token_auth'
-require 'geocoder'
 require 'pg_search'
-require 'paranoia'
+require 'geocoder'
 
 module Legacy
   class Engine < ::Rails::Engine

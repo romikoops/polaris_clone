@@ -4,7 +4,7 @@ require_dependency 'admiralty_tenants/application_controller'
 
 module AdmiraltyTenants
   class TenantsController < ApplicationController
-    before_action :set_tenant, except: %i(index new create)
+    before_action :set_tenant, except: :index
 
     def index
       @tenants = ::AdmiraltyTenants::Tenant.order(:subdomain).all
@@ -14,18 +14,6 @@ module AdmiraltyTenants
     end
 
     def edit
-    end
-
-    def create
-      tenant = Tenants::CreatorService.new(params: tenant_params).perform
-      redirect_to tenant_path(tenant)
-    end
-
-    def new
-      @tenant = Tenant.new
-      @render_scope = Tenants::ScopeService::DEFAULT_SCOPE
-      @theme = Tenants::Theme.new(tenant: @tenant)
-      @max_dimensions = ::Legacy::MaxDimensionsBundle.where(tenant_id: @tenant.legacy_id).order(:id)
     end
 
     def update
@@ -44,7 +32,6 @@ module AdmiraltyTenants
       @scope = @tenant.scope || {}
       @render_scope = ::Tenants::ScopeService.new(tenant: @tenant).fetch
       @max_dimensions = ::Legacy::MaxDimensionsBundle.where(tenant_id: @tenant.legacy_id).order(:id)
-      @theme = @tenant.theme
     end
 
     def update_max_dimensions
@@ -61,17 +48,7 @@ module AdmiraltyTenants
     end
 
     def tenant_params
-      params.require(:tenant)
-            .permit(
-              :name,
-              :slug,
-              :scope,
-              :max_dimensions_bundle,
-              theme_attributes: [
-                :primary_color, :secondary_color, :bright_primary_color, :bright_secondary_color,
-                :background, :small_logo, :large_logo, :email_logo, :white_logo, :wide_logo, :booking_process_image
-              ]
-            )
+      params.require(:tenant).permit(:name, :slug, :scope, :max_dimensions_bundle)
     end
 
     def remove_default_values

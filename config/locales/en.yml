@@ -118,10 +118,6 @@ en:
       http_code: 404
       code: 1019
       message: "Shipment not found!"
-    tenant_slug_taken:
-      http_code: 409
-      code: 1020
-      message: "The subdomain (slug) has already been taken"
     
 
     # Authentication Errors

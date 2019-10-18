@@ -48,15 +48,6 @@ module AdmiraltyTenants
       end
     end
 
-    describe 'GET #new' do
-      it 'renders page' do
-        get :new
-
-        expect(response).to be_successful
-        expect(response.body).to match(/class="new_tenant"/im)
-      end
-    end
-
     describe 'GET #show' do
       it 'renders page' do
         get :show, params: { id: tenant.id }
@@ -84,29 +75,6 @@ module AdmiraltyTenants
         expect(response).to redirect_to("/tenants/#{tenant.id}")
         expect(::Tenants::Tenant.find(tenant.id).legacy.tenants_scope).to eq('foo' => true)
         expect(::Legacy::MaxDimensionsBundle.find(max_bundle.id).dimension_x).to eq(10)
-      end
-    end
-
-    describe 'POST #create' do
-      let(:tenant_params) { 
-        {
-          name: 'Test',
-          slug: 'tester',
-          theme_attributes: {
-            primary_color: '#000001',
-            secondary_color: '#000002',
-            bright_primary_color: '#000003',
-            bright_secondary_color: '#000004'
-          },
-          scope: {
-            base_pricing: true
-          }.to_json.to_s
-        }
-       }
-
-      it 'renders page' do
-        post :create, params: { tenant: tenant_params }
-        expect(::Tenants::Tenant.find_by(slug: 'tester').legacy.tenants_scope).to eq('base_pricing' => true)
       end
     end
   end
