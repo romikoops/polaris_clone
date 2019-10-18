@@ -1,64 +1,6 @@
 # frozen_string_literal: true
 
 class User < Legacy::User # rubocop:disable Metrics/ClassLength
-  # Include default devise modules.
-  include PgSearch::Model
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable,
-         :confirmable # , :omniauthable
-
-  include DeviseTokenAuth::Concerns::User
-  before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
-  before_create :set_default_currency
-  before_validation :set_default_optin_status, on: :create
-
-  validates :tenant_id, presence: true
-  validates :email, presence: true, uniqueness: { scope: :tenant_id }
-  pg_search_scope :search, against: %i(first_name last_name company_name email phone), using: {
-    tsearch: { prefix: true }
-  }
-  pg_search_scope :email_search, against: %i(email), using: {
-    tsearch: { prefix: true }
-  }
-  pg_search_scope :first_name_search, against: %i(first_name), using: {
-    tsearch: { prefix: true }
-  }
-  pg_search_scope :last_name_search, against: %i(last_name), using: {
-    tsearch: { prefix: true }
-  }
-
-  acts_as_paranoid
-
-  # Basic associations
-  belongs_to :tenant
-  belongs_to :role
-  belongs_to :optin_status
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-  has_many :shipments
-  has_many :documents
-  has_many :conversations
-  has_many :user_addresses, dependent: :destroy
-  has_many :addresses, through: :user_addresses
-
-  has_many :receivable_shipments, foreign_key: 'consignee_id'
-
-  has_many :user_route_discounts
-  has_many :routes, foreign_key: :customer_id
-
-  has_many :contacts
-  has_many :consignees, through: :contacts
-  has_many :notifyees, through: :contacts
-
-  has_many :user_managers
-  has_many :pricings
-  has_many :rates, class_name: 'Pricings::Pricing'
-  has_one :tenants_user, class_name: 'Tenants::User', foreign_key: 'legacy_id'
-
-  belongs_to :agency, optional: true
-
-  %i(admin shipper super_admin sub_admin agent agency_manager).each do |role_name|
-    scope role_name, -> { joins(:role).where("roles.name": role_name) }
-  end
 
   PERMITTED_PARAMS = %i(
     email password
@@ -278,13 +220,6 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
     shipments.requested_by_unconfirmed_account.each do |shipment|
       shipment.status = 'requested'
       shipment.save
-    end
-  end
-
-  def set_default_optin_status
-    unless optin_status_id
-      optin_status = OptinStatus.find_by(tenant: false, cookies: false, itsmycargo: false)
-      self.optin_status = optin_status
     end
   end
 

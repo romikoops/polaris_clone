@@ -114,7 +114,9 @@ PATH
   specs:
     legacy (9999.1.0.0)
       core
+      devise_token_auth (~> 0.1.43)
       geocoder
+      paranoia (~> 2.2)
       pg_search (~> 2.3.0)
 
 PATH

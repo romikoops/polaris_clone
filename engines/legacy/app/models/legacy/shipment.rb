@@ -17,6 +17,14 @@ module Legacy
     has_one :aggregated_cargo, class_name: 'Legacy::AggregatedCargo'
 
     delegate :mode_of_transport, to: :itinerary, allow_nil: true
+    
+    def total_price
+      return nil if trip_id.nil?
+  
+      price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').price
+  
+      { value: price.value, currency: price.currency }
+    end
   end
 end
 

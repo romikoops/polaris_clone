@@ -163,14 +163,6 @@ class Shipment < Legacy::Shipment
 
   # Instance methods
 
-  def total_price
-    return nil if trip_id.nil?
-
-    price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').price
-
-    { value: price.value, currency: price.currency }
-  end
-
   def edited_total
     return nil if trip_id.nil?
 

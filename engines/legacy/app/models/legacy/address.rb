@@ -8,6 +8,9 @@ module Legacy
     geocoded_by :geocoded_address
     before_validation :sanitize_zip_code!
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+    has_many :user_addresses
+    has_many :users, class_name: 'Legacy::User', through: :user_addresses, dependent: :destroy
+    has_many :shipments
 
     reverse_geocoded_by :latitude, :longitude do |address, results|
       if geo = results.first
@@ -67,6 +70,14 @@ module Legacy
         custom_hash[attribute] = self[attribute]
       end
       custom_hash
+    end
+
+    def primary_for?(user)
+      user_address = user_addresses.find_by(user: user)
+  
+      raise "This 'Location' object is not associated with a user!" unless user_address.present?
+  
+      user_address.primary
     end
   end
 end
