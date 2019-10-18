@@ -23,6 +23,7 @@ module Pricings
       @closing_end_date = dates[:closing_end_date]
       @cargo_classes = cargo_classes
       @user = ::Tenants::User.find_by(legacy_id: user_pricing_id)
+      @hierarchy = ::Tenants::HierarchyService.new(target: @user).fetch.select {|target| target.is_a?(Tenants::Group)}
       @sandbox = sandbox
     end
 
@@ -66,8 +67,8 @@ module Pricings
         sandbox: @sandbox
       )
 
-      @user.group_ids.each do |group_id|
-        group_result = query.where(group_id: group_id)
+      @hierarchy.reverse_each do |group|
+        group_result = query.where(group_id: group.id)
         return group_result unless group_result.empty?
       end
 
