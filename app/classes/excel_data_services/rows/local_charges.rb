@@ -14,6 +14,10 @@ module ExcelDataServices
       def hub_name
         @hub_name ||= data[:hub_name]
       end
+
+      def internal
+        @internal ||= data[:internal]
+      end
     end
   end
 end

@@ -29,6 +29,7 @@ module ExcelDataServices
       ).freeze
 
       LOCAL_CHARGES_GROUPING_KEYS = %i(
+        internal
         carrier
         effective_date
         expiration_date
@@ -236,7 +237,7 @@ module ExcelDataServices
       end
 
       def determine_currency_and_fee(fee_is_included, fee_column_value)
-        return [nil, 0] if fee_is_included
+        return ['EUR', 0] if fee_is_included
         return [nil, fee_column_value] unless fee_column_value.respond_to?(:currency)
 
         [fee_column_value.currency.to_s, fee_column_value.to_d]
@@ -288,6 +289,7 @@ module ExcelDataServices
             { header: header, body: val }
           end
         end
+
         notes.compact
       end
 

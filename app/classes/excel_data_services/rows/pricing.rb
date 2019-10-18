@@ -19,6 +19,10 @@ module ExcelDataServices
         @hw_threshold ||= data[:hw_threshold]
       end
 
+      def internal
+        @internal ||= data[:internal]
+      end
+
       def notes
         @notes ||= data[:notes]
       end

@@ -99,12 +99,13 @@ module ExcelDataServices
         [tenant_vehicle]
       end
 
-      def find_or_create_local_charges(params, tenant_vehicle)
+      def find_or_create_local_charges(params, tenant_vehicle) # rubocop:disable Metrics/MethodLength
         params[:mode_of_transport] = params[:mot]
         params[:tenant_vehicle_id] = tenant_vehicle.id
 
         local_charge_params =
           params.slice(
+            :internal,
             :load_type,
             :direction,
             :dangerous,
@@ -122,7 +123,7 @@ module ExcelDataServices
 
         new_local_charge = tenant.local_charges.new(local_charge_params)
         old_local_charges = tenant.local_charges.where(
-          local_charge_params.except(:fees, :effective_date, :expiration_date)
+          local_charge_params.except(:fees, :effective_date, :expiration_date, :internal)
         )
         overlap_handler = ExcelDataServices::DatabaseInserters::DateOverlapHandler
                           .new(old_local_charges, new_local_charge)

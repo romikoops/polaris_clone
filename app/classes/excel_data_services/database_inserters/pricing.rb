@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DatabaseInserters
     class Pricing < Base # rubocop:disable Metrics/ClassLength
-      def perform
+      def perform # rubocop:disable Metrics/AbcSize
         data.each do |group_of_row_data|
           row = ExcelDataServices::Rows::Base.get(klass_identifier).new(
             row_data: group_of_row_data.first, tenant: tenant
@@ -86,11 +86,12 @@ module ExcelDataServices
         )
       end
 
-      def create_pricing_with_pricing_details(group_of_row_data, row, transport_category, tenant_vehicle, itinerary, notes) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/ParameterLists
+      def create_pricing_with_pricing_details(group_of_row_data, row, transport_category, tenant_vehicle, itinerary, notes) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/ParameterLists, Metrics/LineLength
         if scope['base_pricing']
           load_type = row.load_type == 'lcl' ? 'cargo_item' : 'container'
           pricing_params =
             { tenant: tenant,
+              internal: row.internal,
               cargo_class: row.load_type,
               load_type: load_type,
               tenant_vehicle: tenant_vehicle,
@@ -100,7 +101,7 @@ module ExcelDataServices
               expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
           new_pricing = itinerary.rates.new(pricing_params)
-          old_pricings = itinerary.rates.where(pricing_params.except(:effective_date, :expiration_date))
+          old_pricings = itinerary.rates.where(pricing_params.except(:effective_date, :expiration_date, :internal))
           overlap_handler = ExcelDataServices::DatabaseInserters::DateOverlapHandler.new(old_pricings, new_pricing)
           pricings_with_actions = overlap_handler.perform
 
@@ -108,7 +109,7 @@ module ExcelDataServices
 
           new_pricing_detail_params_arr = build_pricing_detail_params_for_pricing(group_of_row_data)
           new_pricing_detail_params_arr.each do |pricing_detail_params|
-            range_data = pricing_detail_params.delete(:range) if pricing_detail_params[:range]
+            range_data = pricing_detail_params.delete(:range)
 
             pricings_for_new_pricing_details.each do |pricing|
               new_pricing_detail = pricing.fees.new(pricing_detail_params)
@@ -121,6 +122,7 @@ module ExcelDataServices
         else
           pricing_params =
             { tenant: tenant,
+              internal: row.internal,
               transport_category: transport_category,
               tenant_vehicle: tenant_vehicle,
               sandbox: @sandbox,
@@ -129,7 +131,7 @@ module ExcelDataServices
               expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
           new_pricing = itinerary.pricings.new(pricing_params)
-          old_pricings = itinerary.pricings.where(pricing_params.except(:effective_date, :expiration_date))
+          old_pricings = itinerary.pricings.where(pricing_params.except(:effective_date, :expiration_date, :internal))
           overlap_handler = ExcelDataServices::DatabaseInserters::DateOverlapHandler.new(old_pricings, new_pricing)
           pricings_with_actions = overlap_handler.perform
 
@@ -150,7 +152,7 @@ module ExcelDataServices
         end
       end
 
-      def act_on_overlapping_pricings(pricings_with_actions, notes)
+      def act_on_overlapping_pricings(pricings_with_actions, notes) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         new_pricings = []
         if scope['base_pricing']
           pricings_with_actions.slice(:destroy).values.each do |pricings|
@@ -207,60 +209,41 @@ module ExcelDataServices
 
           fee_code = row.fee_code.upcase
 
-          charge_category = Legacy::ChargeCategory.from_code(
-            tenant_id: tenant.id,
-            code: fee_code,
-            name: row.fee_name || fee_code,
-            sandbox: @sandbox
-          )
+          pricing_detail_params =
+            { tenant_id: tenant.id,
+              rate_basis: row.rate_basis,
+              currency_name: row.currency&.upcase,
+              currency_id: nil,
+              sandbox: @sandbox,
+              hw_rate_basis: row.hw_rate_basis,
+              hw_threshold: row.hw_threshold }
+
           if scope['base_pricing']
-            rate_basis = Pricings::RateBasis.create_from_external_key(row.rate_basis)
-            hw_rate_basis = Pricings::RateBasis.create_from_external_key(row.hw_rate_basis)
-            pricing_detail_params =
-              { tenant_id: tenant.id,
-                rate_basis: rate_basis,
-                charge_category: charge_category,
-                currency_name: row.currency&.upcase,
-                currency_id: nil,
-                sandbox: @sandbox,
-                hw_threshold: row.hw_threshold,
-                hw_rate_basis: hw_rate_basis }
+            charge_category = Legacy::ChargeCategory.from_code(
+              tenant_id: tenant.id,
+              code: fee_code,
+              name: row.fee_name || fee_code,
+              sandbox: @sandbox
+            )
 
-            if row.range.blank?
-              pricing_detail_params[:rate] = row.fee
-              pricing_detail_params[:min] = row.fee_min.blank? ? row.fee : row.fee_min
-            else
-              min_rate_in_range = row.range.map { |r| r['rate'] }.min
-              min_rate = row.fee_min.blank? ? min_rate_in_range : row.fee_min
-              pricing_detail_params.merge!(
-                rate: min_rate_in_range,
-                min: min_rate,
-                range: row.range
-              )
-            end
+            pricing_detail_params[:rate_basis] = Pricings::RateBasis.create_from_external_key(row.rate_basis)
+            pricing_detail_params[:hw_rate_basis] = Pricings::RateBasis.create_from_external_key(row.hw_rate_basis)
+            pricing_detail_params[:charge_category] = charge_category
           else
-            pricing_detail_params =
-              { tenant_id: tenant.id,
-                rate_basis: row.rate_basis,
-                shipping_type: fee_code,
-                currency_name: row.currency&.upcase,
-                currency_id: nil,
-                sandbox: @sandbox,
-                hw_threshold: row.hw_threshold,
-                hw_rate_basis: row.hw_rate_basis }
+            pricing_detail_params[:shipping_type] = fee_code
+          end
 
-            if row.range.blank?
-              pricing_detail_params[:rate] = row.fee
-              pricing_detail_params[:min] = row.fee_min.blank? ? row.fee : row.fee_min
-            else
-              min_rate_in_range = row.range.map { |r| r['rate'] }.min
-              min_rate = row.fee_min.blank? ? min_rate_in_range : row.fee_min
-              pricing_detail_params.merge!(
-                rate: min_rate_in_range,
-                min: min_rate,
-                range: row.range
-              )
-            end
+          if row.range.blank?
+            pricing_detail_params[:rate] = row.fee
+            pricing_detail_params[:min] = row.fee_min.blank? ? row.fee : row.fee_min
+          else
+            min_rate_in_range = row.range.map { |r| r['rate'] }.min
+            min_rate = row.fee_min.blank? ? min_rate_in_range : row.fee_min
+            pricing_detail_params.merge!(
+              rate: min_rate_in_range,
+              min: min_rate,
+              range: row.range
+            )
           end
 
           pricing_detail_params
