@@ -16,7 +16,6 @@ ActiveRecord::Schema.define(version: 2019_10_14_145847) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "postgis"
-  enable_extension "tablefunc"
   enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -1014,6 +1013,51 @@ ActiveRecord::Schema.define(version: 2019_10_14_145847) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.index ["sandbox_id"], name: "index_quotations_on_sandbox_id"
+  end
+
+  create_table "quotations_line_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "tender_id"
+    t.bigint "charge_category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "amount_cents"
+    t.string "amount_currency"
+    t.index ["charge_category_id"], name: "index_quotations_line_items_on_charge_category_id"
+    t.index ["tender_id"], name: "index_quotations_line_items_on_tender_id"
+  end
+
+  create_table "quotations_quotations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id"
+    t.uuid "tenant_id"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
+    t.datetime "selected_date"
+    t.bigint "sandbox_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["destination_nexus_id"], name: "index_quotations_quotations_on_destination_nexus_id"
+    t.index ["origin_nexus_id"], name: "index_quotations_quotations_on_origin_nexus_id"
+    t.index ["sandbox_id"], name: "index_quotations_quotations_on_sandbox_id"
+    t.index ["tenant_id"], name: "index_quotations_quotations_on_tenant_id"
+    t.index ["user_id"], name: "index_quotations_quotations_on_user_id"
+  end
+
+  create_table "quotations_tenders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "quotation_id"
+    t.bigint "tenant_vehicle_id"
+    t.integer "origin_hub_id"
+    t.integer "destination_hub_id"
+    t.string "carrier_name"
+    t.string "name"
+    t.string "load_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "amount_cents"
+    t.string "amount_currency"
+    t.index ["destination_hub_id"], name: "index_quotations_tenders_on_destination_hub_id"
+    t.index ["origin_hub_id"], name: "index_quotations_tenders_on_origin_hub_id"
+    t.index ["quotation_id"], name: "index_quotations_tenders_on_quotation_id"
+    t.index ["tenant_vehicle_id"], name: "index_quotations_tenders_on_tenant_vehicle_id"
   end
 
   create_table "rate_bases", force: :cascade do |t|
