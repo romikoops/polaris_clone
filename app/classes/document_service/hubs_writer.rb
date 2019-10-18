@@ -32,7 +32,7 @@ module DocumentService
       worksheet.write(row, 0, hub.hub_status)
       worksheet.write(row, 1, hub.hub_type)
       worksheet.write(row, 2, hub.nexus&.name)
-      worksheet.write(row, 3, hub.hub_code)
+      worksheet.write(row, 3, hub.hub_code || hub.nexus&.locode)
       worksheet.write(row, 4, hub.address&.latitude)
       worksheet.write(row, 5, hub.address&.longitude)
       worksheet.write(row, 6, hub.address&.country&.name)
@@ -45,7 +45,8 @@ module DocumentService
     end
 
     def header_values
-      %w(STATUS TYPE NAME CODE LATITUDE LONGITUDE COUNTRY FULL_ADDRESS IMPORT_CHARGES EXPORT_CHARGES PRE_CARRIAGE ON_CARRIAGE PHOTO ALTERNATIVE_NAMES)
+      %w(STATUS TYPE NAME LOCODE LATITUDE LONGITUDE COUNTRY FULL_ADDRESS IMPORT_CHARGES EXPORT_CHARGES PRE_CARRIAGE 
+        ON_CARRIAGE PHOTO ALTERNATIVE_NAMES)
     end
   end
 end
