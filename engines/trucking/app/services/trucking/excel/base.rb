@@ -35,9 +35,7 @@ module Trucking
       end
 
       def _stats
-        {
-          type: 'trucking'
-        }.merge(local_stats)
+        local_stats
       end
 
       def local_stats

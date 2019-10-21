@@ -46,7 +46,8 @@ module Trucking
         diff = (end_time - start_time) / 86_400
         puts @missing_locations
         puts "Time elapsed: #{diff}"
-        { results: results, stats: stats }
+        
+        stats
       end
 
       def create_coverage
@@ -290,7 +291,7 @@ module Trucking
       end
 
       def postal_code_range_data(ident_and_country:)
-        return nil if valid_postal_codes&.exclude?(alphanumeric)
+        return nil if valid_postal_codes&.exclude?(ident_and_country[:ident])
 
         if identifier_type == 'location_id'
           find_and_prep_geometry(geometry_data: ident_and_country)
@@ -306,7 +307,7 @@ module Trucking
           return nil
         end
         geo_name = geometry&.name
-        sub_ident_str = determine_sub_ident(str: geo_name, idents: geometry_data)
+        sub_ident_str = determine_sub_ident(string: geo_name, location_data: geometry_data)
         { ident: geometry&.id, country: geometry_data[:country], sub_ident: sub_ident_str }
       end
 
@@ -326,7 +327,7 @@ module Trucking
             if idents_and_country[:min] && idents_and_country[:max]
               postal_code_range(postal_codes_data: idents_and_country).compact
             elsif identifier_type == 'location_id'
-              resp = find_and_prep_geometry(data: idents_and_country)
+              resp = find_and_prep_geometry(geometry_data: idents_and_country)
               next unless resp
             else
               idents_and_country

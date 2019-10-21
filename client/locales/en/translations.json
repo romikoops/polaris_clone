@@ -1208,6 +1208,7 @@
     "agents": "Agents",
     "agency_managers": "Agency Managers",
     "companies": "Companies",
-    "users": "Users"
+    "users": "Users",
+    "trucking_rates": "Trucking Pricings"
   }
 }
