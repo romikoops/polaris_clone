@@ -18,12 +18,12 @@ end
 # Table name: quotations_quotations
 #
 #  id                   :uuid             not null, primary key
-#  user_id              :bigint(8)
-#  tenant_id               :uuid
+#  user_id              :bigint
+#  tenant_id            :uuid
 #  origin_nexus_id      :integer
 #  destination_nexus_id :integer
 #  selected_date        :datetime
-#  sandbox_id           :bigint(8)
+#  sandbox_id           :bigint
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #

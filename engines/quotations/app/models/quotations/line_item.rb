@@ -15,9 +15,9 @@ end
 #
 #  id                 :uuid             not null, primary key
 #  tender_id          :uuid
-#  charge_category_id :bigint(8)
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
+#  charge_category_id :bigint
 #  amount_cents       :integer
 #  amount_currency    :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #

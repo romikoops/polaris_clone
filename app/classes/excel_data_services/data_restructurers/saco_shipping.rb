@@ -67,7 +67,6 @@ module ExcelDataServices
         treat_some_columns_as_notes
         ignore_data_with_int_prefix
         replace_nil_equivalents_with_nil(restructured_data) # TODO: change method to use instance variable
-        replace_true_equivalents_with_true(restructured_data) # TODO: change method to use instance variable
         replace_blank_with_false_for_internal_flag
         clean_html_format_artifacts(restructured_data) # TODO: change method to use instance variable
         @restructured_data = expand_to_multiple
@@ -281,16 +280,17 @@ module ExcelDataServices
       end
 
       def extract_notes(row_data, note_keys)
-        notes = row_data.slice(*note_keys).map do |key, val|
-          header = key.to_s.remove(%r{^note/}).titleize
-          if val == true
-            { header: header, body: nil }
-          elsif val.is_a?(String)
-            { header: header, body: val }
-          end
-        end
+        row_data.slice(*note_keys).each_with_object([]) do |(key, val), notes|
+          next if val.blank?
 
-        notes.compact
+          header = key.to_s.remove(%r{^note/}).titleize
+
+          notes << {
+            header: header,
+            body: val.downcase.strip == 'x' ? nil : val,
+            transshipment: header == 'Transshipment Via'
+          }
+        end
       end
 
       def add_notes_to_pricings(multiple_objs, notes)

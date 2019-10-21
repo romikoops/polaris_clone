@@ -203,7 +203,7 @@ module ExcelDataServices
         end
       end
 
-      def build_pricing_detail_params_for_pricing(group_of_row_data) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def build_pricing_detail_params_for_pricing(group_of_row_data) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
         group_of_row_data.map do |row_data| # rubocop:disable Metrics/BlockLength
           row = ExcelDataServices::Rows::Base.get(klass_identifier).new(row_data: row_data, tenant: tenant)
 
@@ -211,11 +211,9 @@ module ExcelDataServices
 
           pricing_detail_params =
             { tenant_id: tenant.id,
-              rate_basis: row.rate_basis,
               currency_name: row.currency&.upcase,
               currency_id: nil,
               sandbox: @sandbox,
-              hw_rate_basis: row.hw_rate_basis,
               hw_threshold: row.hw_threshold }
 
           if scope['base_pricing']
@@ -230,6 +228,8 @@ module ExcelDataServices
             pricing_detail_params[:hw_rate_basis] = Pricings::RateBasis.create_from_external_key(row.hw_rate_basis)
             pricing_detail_params[:charge_category] = charge_category
           else
+            pricing_detail_params[:rate_basis] = row.rate_basis
+            pricing_detail_params[:hw_rate_basis] = row.hw_rate_basis
             pricing_detail_params[:shipping_type] = fee_code
           end
 

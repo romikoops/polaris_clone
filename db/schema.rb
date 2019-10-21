@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_14_145847) do
+ActiveRecord::Schema.define(version: 2019_10_21_091328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "postgis"
+  enable_extension "tablefunc"
   enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -723,6 +724,7 @@ ActiveRecord::Schema.define(version: 2019_10_14_145847) do
     t.integer "country_id"
     t.datetime "created_at", null: false
     t.float "latitude"
+    t.string "locode"
     t.float "longitude"
     t.string "name"
     t.string "photo"
@@ -741,17 +743,18 @@ ActiveRecord::Schema.define(version: 2019_10_14_145847) do
     t.integer "hub_id"
     t.integer "itinerary_id"
     t.string "level"
-    t.integer "original_id"
     t.uuid "pricings_pricing_id"
     t.uuid "sandbox_id"
     t.integer "target_id"
     t.string "target_type"
     t.integer "tenant_id"
+    t.boolean "transshipment", default: false, null: false
     t.integer "trucking_pricing_id"
     t.datetime "updated_at", null: false
     t.index ["pricings_pricing_id"], name: "index_notes_on_pricings_pricing_id"
     t.index ["sandbox_id"], name: "index_notes_on_sandbox_id"
     t.index ["target_type", "target_id"], name: "index_notes_on_target_type_and_target_id"
+    t.index ["transshipment"], name: "index_notes_on_transshipment"
   end
 
   create_table "oauth_access_grants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1016,25 +1019,25 @@ ActiveRecord::Schema.define(version: 2019_10_14_145847) do
   end
 
   create_table "quotations_line_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "tender_id"
-    t.bigint "charge_category_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "amount_cents"
     t.string "amount_currency"
+    t.bigint "charge_category_id"
+    t.datetime "created_at", null: false
+    t.uuid "tender_id"
+    t.datetime "updated_at", null: false
     t.index ["charge_category_id"], name: "index_quotations_line_items_on_charge_category_id"
     t.index ["tender_id"], name: "index_quotations_line_items_on_tender_id"
   end
 
   create_table "quotations_quotations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "user_id"
-    t.uuid "tenant_id"
-    t.integer "origin_nexus_id"
-    t.integer "destination_nexus_id"
-    t.datetime "selected_date"
-    t.bigint "sandbox_id"
     t.datetime "created_at", null: false
+    t.integer "destination_nexus_id"
+    t.integer "origin_nexus_id"
+    t.bigint "sandbox_id"
+    t.datetime "selected_date"
+    t.uuid "tenant_id"
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["destination_nexus_id"], name: "index_quotations_quotations_on_destination_nexus_id"
     t.index ["origin_nexus_id"], name: "index_quotations_quotations_on_origin_nexus_id"
     t.index ["sandbox_id"], name: "index_quotations_quotations_on_sandbox_id"
@@ -1043,17 +1046,17 @@ ActiveRecord::Schema.define(version: 2019_10_14_145847) do
   end
 
   create_table "quotations_tenders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "quotation_id"
-    t.bigint "tenant_vehicle_id"
-    t.integer "origin_hub_id"
-    t.integer "destination_hub_id"
-    t.string "carrier_name"
-    t.string "name"
-    t.string "load_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "amount_cents"
     t.string "amount_currency"
+    t.string "carrier_name"
+    t.datetime "created_at", null: false
+    t.integer "destination_hub_id"
+    t.string "load_type"
+    t.string "name"
+    t.integer "origin_hub_id"
+    t.bigint "quotation_id"
+    t.bigint "tenant_vehicle_id"
+    t.datetime "updated_at", null: false
     t.index ["destination_hub_id"], name: "index_quotations_tenders_on_destination_hub_id"
     t.index ["origin_hub_id"], name: "index_quotations_tenders_on_origin_hub_id"
     t.index ["quotation_id"], name: "index_quotations_tenders_on_quotation_id"

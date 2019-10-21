@@ -64,14 +64,6 @@ module ExcelDataServices
         end
       end
 
-      def replace_true_equivalents_with_true(rows_data)
-        rows_data.each do |row_data|
-          row_data.each do |k, v|
-            row_data[k] = true if v.to_s.strip.match?(/^x$|^true$/i) # 'x', 'true'
-          end
-        end
-      end
-
       def clean_html_format_artifacts(rows_data)
         rows_data.each do |row_data|
           row_data.keys.each do |key|

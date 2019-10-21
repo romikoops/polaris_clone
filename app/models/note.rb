@@ -31,4 +31,5 @@ end
 #  pricings_pricing_id :uuid
 #  tenant_id           :integer
 #  contains_html       :boolean
+#  transshipment       :boolean          default(FALSE), not null
 #

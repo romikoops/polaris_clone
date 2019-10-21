@@ -18,15 +18,15 @@ end
 # Table name: quotations_tenders
 #
 #  id                 :uuid             not null, primary key
-#  quotation_id       :bigint(8)
-#  tenant_vehicle_id  :bigint(8)
+#  quotation_id       :bigint
+#  tenant_vehicle_id  :bigint
 #  origin_hub_id      :integer
 #  destination_hub_id :integer
 #  carrier_name       :string
 #  name               :string
 #  load_type          :string
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
 #  amount_cents       :integer
 #  amount_currency    :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #
