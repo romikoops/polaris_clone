@@ -4,7 +4,6 @@ module ExcelDataServices
   module DataRestructurers
     class SacoShipping < Base # rubocop:disable Metrics/ClassLength
       TREAT_AS_NOTE_COLUMNS = %i(
-        terminal
         transshipment_via
         remarks
       ).freeze
@@ -67,8 +66,10 @@ module ExcelDataServices
         treat_some_columns_as_notes
         ignore_data_with_int_prefix
         replace_nil_equivalents_with_nil(restructured_data) # TODO: change method to use instance variable
+        correctly_mark_internal_row_data
         replace_blank_with_false_for_internal_flag
         clean_html_format_artifacts(restructured_data) # TODO: change method to use instance variable
+        combine_terminal_and_destination
         @restructured_data = expand_to_multiple
 
         restructured_data_pricings, restructured_data_local_charges =
@@ -124,6 +125,18 @@ module ExcelDataServices
           add_notes_to_pricings(multiple_objs, notes)
           adapt_origin_destination(multiple_objs)
           multiple_objs.uniq
+        end
+      end
+
+      def combine_terminal_and_destination
+        restructured_data.each do |row_data|
+          row_data[:destination_hub] = [row_data[:destination_hub], row_data.delete(:terminal)].compact.join(' - ')
+        end
+      end
+
+      def correctly_mark_internal_row_data
+        restructured_data.each do |row_data|
+          row_data[:internal] = row_data[:internal].to_s.casecmp('x').zero?
         end
       end
 
@@ -287,7 +300,7 @@ module ExcelDataServices
 
           notes << {
             header: header,
-            body: val.downcase.strip == 'x' ? nil : val,
+            body: val.casecmp('x').zero? ? nil : val,
             transshipment: header == 'Transshipment Via'
           }
         end
@@ -333,19 +346,16 @@ module ExcelDataServices
         group.each_with_object({}) do |row_data, fees_hsh|
           fee_code = row_data[:fee_code]
           rate_basis = RateBasis.get_internal_key(row_data[:rate_basis].upcase)
-          fee = {
-            fee_code => {
-              currency: row_data[:currency],
-              key: fee_code,
-              min: row_data[:fee_min],
-              max: nil,
-              name: row_data[:fee_name],
-              rate_basis: rate_basis,
-              **specific_charge_params(rate_basis, row_data)
-            }
-          }
 
-          fees_hsh.merge!(fee)
+          fees_hsh[fee_code] = {
+            currency: row_data[:currency],
+            key: fee_code,
+            min: row_data[:fee_min],
+            max: nil,
+            name: row_data[:fee_name],
+            rate_basis: rate_basis,
+            **specific_charge_params(rate_basis, row_data)
+          }
         end
       end
 

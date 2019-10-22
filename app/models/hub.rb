@@ -119,16 +119,6 @@ class Hub < Legacy::Hub
     truck_type_availabilities.pluck(:load_type).uniq
   end
 
-  def generate_hub_code!(tenant_id)
-    existing_hubs = nexus.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
-    num = existing_hubs.length
-    letters = name[0..1].upcase
-    type_letter = hub_type[0].upcase
-    code = letters + type_letter + num.to_s
-    self.hub_code = code
-    save
-  end
-
   def lat_lng_string
     "#{address.latitude},#{address.longitude}"
   end
