@@ -81,7 +81,7 @@ module ExcelDataServices
 
       def valid_excel?(path)
         # Try binary first, then file extension
-        mime_subtype = MimeMagic.by_magic(File.open(path)).subtype
+        mime_subtype = MimeMagic.by_magic(File.open(path))&.subtype
         mime_subtype = MimeMagic.by_path(path).subtype if mime_subtype == 'zip'
 
         return false unless mime_subtype
