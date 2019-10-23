@@ -145,7 +145,7 @@ module ExcelDataServices
       end
 
       def append_hub_suffix(name, mot)
-        name + ' ' + MOT_HUB_NAME_LOOKUP[mot]
+        name + ' ' + MOT_HUB_NAME_LOOKUP[mot.downcase]
       end
 
       def add_hub_names(rows_data)

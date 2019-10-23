@@ -2,16 +2,16 @@
 
 module ExcelDataServices
   module FileWriters
-    class OceanFcl < Base
+    class RailFcl < Base
       private
 
       def load_and_prepare_data
         pricing_association = if scope['base_pricing']
-                                tenant.rates.where(sandbox: @sandbox, group_id: @group_id)
+                                tenant.rates.where(sandbox: @sandbox, group_id: @group_id)    
                               else
                                 tenant.pricings.where(sandbox: @sandbox)
                               end
-        pricings = pricing_association.for_mode_of_transport('ocean').for_cargo_classes(Container::CARGO_CLASSES)
+        pricings = pricing_association.for_mode_of_transport('rail').for_cargo_classes(Container::CARGO_CLASSES)
         raw_pricing_rows = PricingRowDataBuilder.build_raw_pricing_rows(pricings, scope)
         dynamic_headers = build_dynamic_headers(raw_pricing_rows)
         data_with_dynamic_headers, data_static_fee_col = raw_pricing_rows.group_by { |row| row[:range].blank? }.values
