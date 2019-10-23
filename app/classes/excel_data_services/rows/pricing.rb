@@ -20,7 +20,7 @@ module ExcelDataServices
       end
 
       def internal
-        @internal ||= data[:internal]
+        @internal ||= data[:internal].to_s.casecmp('x').zero?
       end
 
       def notes
