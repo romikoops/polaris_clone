@@ -109,13 +109,14 @@ module ExcelTool
     end
 
     def find_or_create_address
+      address_string = hub_row[:geocoded_address] || [hub_row[:hub_name], country&.name].join(', ')
       Address.find_or_create_by(
         name: hub_row[:hub_name],
         latitude: hub_row[:latitude],
         longitude: hub_row[:longitude],
         country: country,
         city: hub_row[:hub_name],
-        geocoded_address: hub_row[:geocoded_address],
+        geocoded_address: address_string,
         sandbox: @sandbox
       )
     end
@@ -145,8 +146,8 @@ module ExcelTool
         tenant_id: user.tenant_id,
         hub_type: hub_row[:hub_type],
         trucking_type: hub_row[:trucking_type],
-        latitude: hub_row[:latitude],
-        longitude: hub_row[:longitude],
+        latitude: hub_row[:latitude] || address.latitude,
+        longitude: hub_row[:longitude] || address.longitude,
         name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
         photo: hub_row[:photo],
         mandatory_charge: @mandatory_charge,
@@ -173,8 +174,8 @@ module ExcelTool
         tenant_id: user.tenant_id,
         hub_type: hub_row[:hub_type],
         trucking_type: hub_row[:trucking_type],
-        latitude: hub_row[:latitude],
-        longitude: hub_row[:longitude],
+        latitude: hub_row[:latitude] || address.latitude,
+        longitude: hub_row[:longitude] || address.longitude,
         name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
         photo: hub_row[:photo],
         mandatory_charge: @mandatory_charge,
@@ -198,6 +199,11 @@ module ExcelTool
     def update_address_geocode
       unless address.street_number
         address.reverse_geocode
+        address.save!
+      end
+
+      unless address.latitude.present? && address.longitude.present?
+        address.geocode
         address.save!
       end
     end
