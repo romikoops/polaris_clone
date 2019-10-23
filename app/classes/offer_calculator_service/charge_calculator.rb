@@ -210,7 +210,7 @@ module OfferCalculatorService
         charge_result = if @scope['base_pricing']
                           ::Pricings::Calculator.new(
                             cargo: cargo_unit,
-                            pricing: @data[:pricing_ids][cargo_class],
+                            pricing: @data[:pricing_ids_by_cargo_class][cargo_class],
                             user: @user,
                             mode_of_transport: @schedule.mode_of_transport,
                             date: @shipment.planned_pickup_date
@@ -218,7 +218,7 @@ module OfferCalculatorService
                         else
                           @pricing_tools.send("determine_#{@shipment.load_type}_price",
                                               cargo_unit,
-                                              @data[:pricing_ids][cargo_class],
+                                              @data[:pricing_ids_by_cargo_class][cargo_class],
                                               @user,
                                               total_units,
                                               @shipment.planned_pickup_date,

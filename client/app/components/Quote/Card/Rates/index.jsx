@@ -7,12 +7,12 @@ import styles from '../index.scss'
 
 class RatesOverview extends Component {
   static keyToRender (key) {
-    let str = key
-    if (key.includes('included_')) {
-      str = key.replace('included_', '').toUpperCase()
+    let str = key.toLowerCase()
+    if (str.includes('included_')) {
+      str = str.replace('included_', '').toUpperCase()
     }
-    if (key.includes('unknown_')) {
-      str = key.replace('unknown_', '').toUpperCase()
+    if (str.includes('unknown_')) {
+      str = str.replace('unknown_', '').toUpperCase()
     }
 
     return str.replace('_', '').toUpperCase()
@@ -21,7 +21,7 @@ class RatesOverview extends Component {
   valueToRender (key, value) {
     const { t } = this.props
 
-    if (key.includes('included_')) {
+    if (key.toLowerCase().includes('included_')) {
       return t('shipment:included')
     }
     if (!value) {
@@ -38,7 +38,7 @@ class RatesOverview extends Component {
     const currencyToDisplay = Object.values(ratesObject)[0].total.currency
     const cargoClasses = Object.keys(ratesObject).sort()
     cargoClasses.forEach((cargoClass) => {
-      Object.keys(ratesObject[cargoClass]).filter(k => k !== 'total').forEach((key) => {
+      Object.keys(ratesObject[cargoClass]).filter(key => !['total', 'valid_until'].includes(key)).forEach((key) => {
         if (!valuesByFees[key]) { valuesByFees[key] = {} }
         valuesByFees[key][cargoClass] = ratesObject[cargoClass][key].rate
         if (!currencyByFees[key]) { currencyByFees[key] = {} }

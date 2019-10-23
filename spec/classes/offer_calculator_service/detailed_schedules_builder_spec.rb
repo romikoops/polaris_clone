@@ -108,8 +108,8 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
                                           user: user)
 
       expect(results.length).to eq(2)
-      expect(results.any? { |r| r.dig(:pricing_ids, 'lcl').nil? }).to eq(false)
-      expect(results.map { |r| r.dig(:pricing_ids, 'lcl') }.uniq.length).to eq(2)
+      expect(results.any? { |r| r.dig(:pricing_ids_by_cargo_class, 'lcl').nil? }).to eq(false)
+      expect(results.map { |r| r.dig(:pricing_ids_by_cargo_class, 'lcl') }.uniq.length).to eq(2)
     end
   end
 

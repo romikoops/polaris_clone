@@ -77,6 +77,9 @@ exports[`aggregatedCargo is empty object 1`] = `
       <div
         className="flex-50 details_itens"
       />
+      <div
+        className="flex-50 valid_until"
+      />
     </div>
   </div>
   <CollapsingContent
@@ -468,6 +471,9 @@ exports[`detailed billing working properly 1`] = `
       <div
         className="flex-50 details_itens"
       />
+      <div
+        className="flex-50 valid_until"
+      />
     </div>
   </div>
   <CollapsingContent
@@ -833,6 +839,9 @@ exports[`shallow rendering 1`] = `
     >
       <div
         className="flex-50 details_itens"
+      />
+      <div
+        className="flex-50 valid_until"
       />
     </div>
   </div>
@@ -1225,6 +1234,9 @@ exports[`show schedule options working 1`] = `
       <div
         className="flex-50 details_itens"
       />
+      <div
+        className="flex-50 valid_until"
+      />
     </div>
   </div>
   <CollapsingContent
@@ -1591,6 +1603,9 @@ exports[`single result rendering removes add button 1`] = `
       <div
         className="flex-50 details_itens"
       />
+      <div
+        className="flex-50 valid_until"
+      />
     </div>
   </div>
   <CollapsingContent
@@ -1956,6 +1971,9 @@ exports[`tenant.scope is empty object 1`] = `
       <div
         className="flex-50 details_itens"
       />
+      <div
+        className="flex-50 valid_until"
+      />
     </div>
   </div>
   <CollapsingContent
@@ -2285,6 +2303,9 @@ exports[`validUntil is falsy 1`] = `
     >
       <div
         className="flex-50 details_itens"
+      />
+      <div
+        className="flex-50 valid_until"
       />
     </div>
   </div>
@@ -2676,6 +2697,9 @@ exports[`validUntil is truthy 1`] = `
     >
       <div
         className="flex-50 details_itens"
+      />
+      <div
+        className="flex-50 valid_until"
       />
     </div>
   </div>

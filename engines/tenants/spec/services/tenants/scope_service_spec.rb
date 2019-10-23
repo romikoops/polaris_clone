@@ -108,7 +108,8 @@ RSpec.describe Tenants::ScopeService do
             carrier: true,
             voyage_code: true,
             vessel: true,
-            service_level: true
+            service_level: true,
+            transshipmentVia: true
           },
           side_nav: {
             agent: %w(dashboard shipments profile),

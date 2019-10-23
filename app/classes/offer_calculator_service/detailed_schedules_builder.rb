@@ -33,13 +33,13 @@ module OfferCalculatorService
             meta: meta(
               schedule: grand_total_charge[:schedules].first,
               shipment: @shipment,
-              pricing_ids: current_result[:pricing_ids],
+              pricing_ids_by_cargo_class: current_result[:pricing_ids_by_cargo_class],
               user: user
             ),
             notes: grab_notes(
               schedule: grand_total_charge[:schedules].first,
-              shipment: @shipment,
-              pricing_ids: current_result[:pricing_ids]
+              tenant_id: @shipment.tenant_id,
+              pricing_ids: current_result[:pricing_ids_by_cargo_class].values.flatten
             )
           }
         end
@@ -76,7 +76,7 @@ module OfferCalculatorService
       filtered_detailed_schedules
     end
 
-    def meta(schedule:, shipment:, pricing_ids:, user:) # rubocop:disable /MethodLength, Metrics AbcSize
+    def meta(schedule:, shipment:, pricing_ids_by_cargo_class:, user:) # rubocop:disable /MethodLength, Metrics AbcSize
       chargeable_weight = if shipment.lcl? && shipment.aggregated_cargo
                             shipment.aggregated_cargo.calc_chargeable_weight(schedule.mode_of_transport)
                           elsif shipment.lcl? && !shipment.aggregated_cargo
@@ -99,17 +99,17 @@ module OfferCalculatorService
         destination_hub: schedule.destination_hub,
         charge_trip_id: schedule.trip_id,
         ocean_chargeable_weight: chargeable_weight,
-        pricing_ids: pricing_ids,
+        pricing_ids_by_cargo_class: pricing_ids_by_cargo_class,
+        transshipmentVia: grab_transshipment(pricing_ids: pricing_ids_by_cargo_class.values.flatten, tenant_id: shipment.tenant_id),
         pricing_rate_data: grab_pricing_rates(
           schedule: schedule,
           load_type: shipment.load_type,
-          pricing_ids: pricing_ids,
           user: user
         )
       }
     end
 
-    def grab_pricing_rates(schedule:, load_type:, pricing_ids:, user:) # rubocop:disable /MethodLength, Metrics AbcSize
+    def grab_pricing_rates(schedule:, load_type:, user:) # rubocop:disable /MethodLength, Metrics AbcSize
       # Used to create data for rate overview
       tenant_vehicle_id = schedule.trip.tenant_vehicle_id
       itinerary = schedule.trip.itinerary
@@ -217,7 +217,7 @@ module OfferCalculatorService
               end
               cargo_class_key = pricing[:cargo_class]
               obj = {
-                pricing_ids: {
+                pricing_ids_by_cargo_class: {
                   cargo_class_key => pricing
                 },
                 schedules: schedules_for_obj
@@ -227,21 +227,21 @@ module OfferCalculatorService
                 other_cargo_class_key = other_pricing[:cargo_class]
                 if other_pricing[:effective_date] < dates[:start_date] &&
                    other_pricing[:expiration_date] > dates[:end_date]
-                  obj[:pricing_ids][other_cargo_class_key] =
+                  obj[:pricing_ids_by_cargo_class][other_cargo_class_key] =
                     other_pricing
                 end
                 if dates[:start_date] && dates[:end_date] &&
-                   obj[:pricing_ids][other_cargo_class_key].nil? &&
+                   obj[:pricing_ids_by_cargo_class][other_cargo_class_key].nil? &&
                    other_pricing[:effective_date] < dates[:start_date] &&
                    other_pricing[:expiration_date] > dates[:end_date]
-                  obj[:pricing_ids][other_cargo_class_key] =
+                  obj[:pricing_ids_by_cargo_class][other_cargo_class_key] =
                     other_pricing
                 end
-                next unless obj[:pricing_ids][other_cargo_class_key].nil? &&
+                next unless obj[:pricing_ids_by_cargo_class][other_cargo_class_key].nil? &&
                             other_pricing[:effective_date] < obj[:schedules].first.closing_date &&
                             other_pricing[:expiration_date] > obj[:schedules].last.closing_date
 
-                obj[:pricing_ids][other_cargo_class_key] = other_pricing
+                obj[:pricing_ids_by_cargo_class][other_cargo_class_key] = other_pricing
               end
               result_to_return << obj
             end
@@ -261,7 +261,7 @@ module OfferCalculatorService
               end
               cargo_class_key = pricing.try(:cargo_class) || pricing.transport_category.cargo_class.to_s
               obj = {
-                pricing_ids: {
+                pricing_ids_by_cargo_class: {
                   cargo_class_key => pricing.id
                 },
                 schedules: schedules_for_obj
@@ -271,21 +271,21 @@ module OfferCalculatorService
                 other_cargo_class_key = other_pricing.try(:cargo_class) || other_pricing.transport_category.cargo_class.to_s
                 if other_pricing.effective_date < dates[:start_date] &&
                    other_pricing.expiration_date > dates[:end_date]
-                  obj[:pricing_ids][other_cargo_class_key] =
+                  obj[:pricing_ids_by_cargo_class][other_cargo_class_key] =
                     other_pricing.id
                 end
                 if dates[:start_date] && dates[:end_date] &&
-                   obj[:pricing_ids][other_cargo_class_key].nil? &&
+                   obj[:pricing_ids_by_cargo_class][other_cargo_class_key].nil? &&
                    other_pricing.effective_date < dates[:start_date] &&
                    other_pricing.expiration_date > dates[:end_date]
-                  obj[:pricing_ids][other_cargo_class_key] =
+                  obj[:pricing_ids_by_cargo_class][other_cargo_class_key] =
                     other_pricing.id
                 end
-                next unless obj[:pricing_ids][other_cargo_class_key].nil? &&
+                next unless obj[:pricing_ids_by_cargo_class][other_cargo_class_key].nil? &&
                             other_pricing.effective_date < obj[:schedules].first.closing_date &&
                             other_pricing.expiration_date > obj[:schedules].last.closing_date
 
-                obj[:pricing_ids][other_cargo_class_key] = other_pricing.id
+                obj[:pricing_ids_by_cargo_class][other_cargo_class_key] = other_pricing.id
               end
               result_to_return << obj
             end
@@ -365,13 +365,23 @@ module OfferCalculatorService
         !quote.dig(:cargo, :value).nil?
     end
 
-    def grab_notes(pricing_ids: , shipment:, schedule:)
+    def grab_notes(pricing_ids:, tenant_id:, schedule:)
       hubs = [schedule.origin_hub, schedule.destination_hub]
       nexii = hubs.map(&:nexus)
       countries = nexii.map(&:country)
-      legacy_pricings = Legacy::Pricing.where(id: pricing_ids.values.flatten)
-      pricings = Pricings::Pricing.where(id: pricing_ids.values.flatten)
-      Note.where(target: hubs | nexii | countries | pricings | legacy_pricings, tenant_id: shipment.tenant_id)
+      legacy_pricings = Legacy::Pricing.where(id: pricing_ids)
+      pricings = Pricings::Pricing.where(id: pricing_ids)
+      regular_notes = Note.where(transshipment: false, tenant_id: tenant_id)
+      regular_notes.where(target: hubs | nexii | countries | legacy_pricings)
+                   .or(regular_notes.where(pricings_pricing_id: pricings.ids))
+    end
+
+    def grab_transshipment(pricing_ids:, tenant_id:)
+      legacy_pricings = Legacy::Pricing.where(id: pricing_ids)
+      pricings = Pricings::Pricing.where(id: pricing_ids)
+      transshipment_notes = Note.where(transshipment: true, tenant_id: tenant_id)
+      transshipment_notes.where(target: legacy_pricings)
+                         .or(transshipment_notes.where(pricings_pricing_id: pricings.ids)).first&.body
     end
   end
 end

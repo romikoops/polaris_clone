@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { get } from 'lodash'
 import { withNamespaces } from 'react-i18next'
-import { formatDate } from 'react-day-picker/moment'
+import { moment } from '../../../constants'
 import styles from './index.scss'
 import {
   switchIcon,
@@ -325,11 +325,21 @@ class QuoteCard extends PureComponent {
                 </div>
               )}
             </div>
-            { validUntil &&
-              <div className={`flex-50 ${styles.valid_until}`}>
-                { t("quote:validUntil", { date: formatDate(validUntil)}) }
-              </div>
-            }
+            
+            <div className={`flex-50 ${styles.valid_until}`}>
+              {validUntil && (
+                <div>
+                  <i className="flex-none fa fa-clock-o" />
+                  {t("quote:validUntil", { date: moment(validUntil).utc().format('DD/MM/YYYY')}) }
+                </div>
+              )}
+              {voyageInfo.transshipmentVia && result.meta.transshipmentVia && (
+                <div>
+                  <i className="flex-none fa fa-exchange" />
+                  {t("quote:transshipmentVia", { transshipment: result.meta.transshipmentVia })}
+                </div>
+              )}
+            </div>
           </div>
         </div>
         {

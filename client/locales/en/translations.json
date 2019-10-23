@@ -1174,7 +1174,8 @@
     "carrier": "Carrier: {{carrierName}}",
     "service": "Service: {{serviceLevel}}",
     "estimatedTT": "Estimated T/T",
-    "validUntil": "Validity Date: {{date}}"
+    "validUntil": "Valid Until: {{date}}",
+    "transshipmentVia": "Transshipment Via: {{transshipment}}"
   },
   "overrides": {
     "fivestarExport": "Total Local Charges",

@@ -220,6 +220,9 @@
 
   .valid_until {
     text-align: right;
+    :first-child {
+      margin-bottom: 10px;
+    }
   }
   
   .notes_bar_button {
