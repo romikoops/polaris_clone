@@ -56,6 +56,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     tenant = current_user.tenant
     load_type = details['loadType'].underscore
     direction = details['direction']
+
     shipment = Shipment.new(
       user_id: current_user.id,
       status: 'booking_process_started',

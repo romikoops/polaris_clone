@@ -10,6 +10,23 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
+const optimizationsDevelopment = {
+  splitChunks: {
+    chunks: 'all'
+  }
+}
+
+const optimizationsProduction = {
+  minimizer: [
+    new UglifyJsPlugin({
+      cache: true,
+      parallel: true,
+      sourceMap: true
+    }),
+    new OptimizeCSSAssetsPlugin({})
+  ]
+}
+
 module.exports = (env, options) => ({
   entry: './app/index.jsx',
 
@@ -26,16 +43,7 @@ module.exports = (env, options) => ({
     contentBase: path.resolve(__dirname, './dist')
   },
 
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true
-      }),
-      new OptimizeCSSAssetsPlugin({})
-    ]
-  },
+  optimization: options.mode === 'production' ? optimizationsProduction : optimizationsDevelopment,
 
   module: {
     rules: [

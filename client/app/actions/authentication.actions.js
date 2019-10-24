@@ -101,6 +101,12 @@ function login (data) {
   }
 }
 
+function registerGuestOrAuthenticate(tenant, target = '') {
+  return (tenant.scope.closed_shop)
+    ? showLogin(target)
+    : registerGuest(tenant, target)
+}
+
 function register (user, target) {
   function request (userRequest) {
     return { type: authenticationConstants.REGISTRATION_REQUEST, user: userRequest, target }
@@ -133,6 +139,26 @@ function register (user, target) {
     )
   }
 }
+
+function registerGuest (tenant, target = '/') {
+  const unixTimeStamp = new Date().getTime().toString()
+  const randNum = Math.floor(Math.random() * 100).toString()
+  const randSuffix = unixTimeStamp + randNum
+  const email = `guest${randSuffix}@${tenant.slug}.itsmycargo.shop`
+
+  const guestUser = {
+    email,
+    password: 'guestpassword',
+    password_confirmation: 'guestpassword',
+    first_name: 'Guest',
+    last_name: '',
+    tenant_id: tenant.id,
+    guest: true
+  }
+
+  return register(guestUser, target)
+}
+
 function setUser (user) {
   window.localStorage.setItem(cookieKey, JSON.stringify(user.data))
 
@@ -204,7 +230,6 @@ function changePassword (email, redirect) {
   }
 }
 
-
 function toggleSandbox (id) {
   function request () {
     return { type: authenticationConstants.TOGGLE_SANDBOX_REQUEST }
@@ -232,7 +257,6 @@ function toggleSandbox (id) {
   }
 }
 
-
 function updateReduxStore (payload) {
   return dispatch => dispatch({ type: 'GENERAL_UPDATE', payload })
 }
@@ -248,7 +272,9 @@ export const authenticationActions = {
   closeLogin,
   changePassword,
   updateReduxStore,
-  toggleSandbox
+  toggleSandbox,
+  registerGuest,
+  registerGuestOrAuthenticate
 }
 
 export default authenticationActions

@@ -113,6 +113,7 @@ export default function bookingProcess (state = initialState, action) {
       }
     case 'GET_BOOKING_CONTACTS_REQUEST':
       return state
+
     case 'GET_BOOKING_CONTACTS_SUCCESS':
       return {
         ...state,
@@ -124,6 +125,19 @@ export default function bookingProcess (state = initialState, action) {
 
     case 'GET_BOOKING_CONTACTS_CLEAR':
       return state
+
+    case 'NEW_SHIPMENT_AHOY_REQUEST':
+      return state
+
+    case 'NEW_SHIPMENT_AHOY_SUCCESS':
+      return {
+        ...state,
+        ...action.payload
+        }
+
+    case 'NEW_SHIPMENT_AHOY_FAILURE':
+      return state
+
     default:
       return state
   }

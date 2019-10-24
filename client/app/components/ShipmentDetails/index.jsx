@@ -3,7 +3,7 @@ import Formsy from 'formsy-react'
 import { connect } from 'react-redux'
 import * as Scroll from 'react-scroll'
 import { bindActionCreators } from 'redux'
-import { get } from 'lodash'
+import { delay, get } from 'lodash'
 import { withNamespaces } from 'react-i18next'
 import moment from 'moment'
 import getModals from './getModals'
@@ -38,13 +38,22 @@ class ShipmentDetails extends React.PureComponent {
     )
 
     if (props.shipment.id && props.shipment.id !== props.shipmentId) {
-      const { loadType, direction } = props.shipment
+      const { loadType, direction, origin, destination } = props.shipment
+
       props.bookingProcessDispatch.resetStore()
       props.bookingProcessDispatch.updateShipment('loadType', loadType)
       props.bookingProcessDispatch.updateShipment('direction', direction)
+      props.bookingProcessDispatch.updateShipment('origin', origin)
+      props.bookingProcessDispatch.updateShipment('destination', destination)
     }
 
     props.bookingProcessDispatch.updateShipment('id', props.shipmentId)
+  }
+
+  componentDidMount() {
+    if (this.props.shipment.ahoyRequest) {
+      delay(() => scrollTo('dayPicker'), 1000)
+    }
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -188,8 +197,8 @@ function mapStateToProps (state) {
   const maxAggregateDimensions = get(response, 'stage1.maxAggregateDimensions')
 
   return {
- ...bookingProcess, shipmentId, maxAggregateDimensions, scope 
-}
+    ...bookingProcess, shipmentId, maxAggregateDimensions, scope
+  }
 }
 
 function mapDispatchToProps (dispatch) {

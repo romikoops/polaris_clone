@@ -53,7 +53,52 @@ export default function shipment (state = {}, action) {
         },
         loading: false
       }
+    case shipmentConstants.SHIPMENT_NEW_AHOY: {
+      return {
+        ...state,
+        ahoyRequest: true,
+        ahoyParams: action.payload
+      }
+    }
+    case shipmentConstants.SHIPMENT_NEW_AHOY_REQUEST: {
+      const newState = {
+        ...state,
+        request: {
+          stage1: action.shipmentData
+        },
+        loading: true,
+        currentStage: 'stage1',
+        ahoyRequest: false,
+        error: {}
+      }
+      if (!action.isReused) {
+        newState.reusedShipment = false
+      }
 
+      return newState
+    }
+    case shipmentConstants.SHIPMENT_NEW_AHOY_SUCCESS:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage1: action.shipmentData
+        },
+        currentStage: 'stage2',
+        activeShipment: action.shipmentData.shipment.id,
+        loading: false,
+        ahoyParams: null
+      }
+    case shipmentConstants.SHIPMENT_NEW_AHOY_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.errors,
+          stage1: [action.error]
+        },
+        loading: false,
+        ahoyParams: null
+      }
     case shipmentConstants.GET_SHIPMENT_REQUEST:
       return {
         ...state,
@@ -356,7 +401,7 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST:
       return state
     case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS: {
-      
+
       const stage4Docs = get(state, ['response', 'stage4', 'documents'], {})
       const stage3Docs = get(state, ['response', 'stage3', 'documents'], {})
       const docArray = [stage3Docs, stage4Docs]

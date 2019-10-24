@@ -15,9 +15,9 @@ import { SignOut } from '../../components/SignOut/SignOut'
 import Loading from '../../components/Loading/Loading'
 import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
 import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
-import { appActions, authenticationActions, userActions } from '../../actions'
-import { defaultTheme, moment } from '../../constants'
-import { PrivateRoute, AdminPrivateRoute, NonAdminPrivateRoute } from '../../routes/index'
+import { appActions, authenticationActions, shipmentActions, userActions } from '../../actions'
+import { moment } from '../../constants'
+import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import MessageCenter from '../MessageCenter/MessageCenter'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
@@ -30,9 +30,11 @@ class App extends Component {
   }
 
   componentWillMount () {
-    const { appDispatch } = this.props
+    const { appDispatch, shipmentDispatch, location } = this.props
+
     appDispatch.getTenantId()
     appDispatch.setTenants()
+    shipmentDispatch.checkAhoyShipment(location)
   }
 
   componentDidMount () {
@@ -90,7 +92,7 @@ class App extends Component {
         />
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}
-          {loading ? <Loading tenant={tenant} tenant={tenant} text="loading..." /> : ''}
+          {loading ? <Loading tenant={tenant} text="loading..." /> : ''}
           {user &&
           user.id &&
           tenant &&
@@ -124,7 +126,7 @@ class App extends Component {
                 render={props => <ResetPasswordForm user={user} theme={theme} {...props} />}
               />
 
-              <NonAdminPrivateRoute
+              <Route
                 path="/booking"
                 component={Shop}
                 user={user}
@@ -218,7 +220,8 @@ function mapDispatchToProps (dispatch) {
   return {
     appDispatch: bindActionCreators(appActions, dispatch),
     authDispatch: bindActionCreators(authenticationActions, dispatch),
-    userDispatch: bindActionCreators(userActions, dispatch)
+    userDispatch: bindActionCreators(userActions, dispatch),
+    shipmentDispatch: bindActionCreators(shipmentActions, dispatch)
   }
 }
 

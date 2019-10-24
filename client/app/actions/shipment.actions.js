@@ -1,9 +1,10 @@
 import { Promise } from 'es6-promise-promise'
 import { push } from 'react-router-redux'
+import { find } from 'lodash'
 import { shipmentConstants } from '../constants'
 import { shipmentService } from '../services'
-import { deepSnakefyKeys } from '../helpers'
-import { alertActions, userActions, appActions, errorActions } from './'
+import { deepSnakefyKeys, queryStringToObj } from '../helpers'
+import { alertActions, userActions, appActions, errorActions, bookingProcessActions } from '.'
 
 function newShipment (type, redirect, reused) {
   function request (shipmentData, isReused) {
@@ -34,6 +35,73 @@ function newShipment (type, redirect, reused) {
     )
   }
 }
+
+function newAhoyShipment (params) {
+  const { loadType, direction, itinerary } = params
+
+  function request (shipmentData, isReused = false) {
+    return { type: shipmentConstants.SHIPMENT_NEW_AHOY_REQUEST, shipmentData, isReused }
+  }
+
+  function success (shipmentData) {
+    return { type: shipmentConstants.SHIPMENT_NEW_AHOY_SUCCESS, shipmentData }
+  }
+
+  function failure (error) {
+    return { type: shipmentConstants.SHIPMENT_NEW_AHOY_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request(params))
+
+    shipmentService.newShipment(params).then(
+      (resp) => {
+        const shipmentData = resp.data
+
+        const itineraryId = parseInt(itinerary, 10)
+        const itineraryData = find(shipmentData.routes, { itineraryId })
+
+        if (itineraryData) {
+          shipmentData.shipment.origin = itineraryData.origin
+          shipmentData.shipment.destination = itineraryData.destination
+        }
+
+        dispatch(success(shipmentData))
+        dispatch(bookingProcessActions.updateShipment('loadType', loadType))
+        dispatch(bookingProcessActions.updateShipment('direction', direction))
+        dispatch(bookingProcessActions.updateShipment('origin', shipmentData.shipment.origin))
+        dispatch(bookingProcessActions.updateShipment('destination', shipmentData.shipment.destination))
+        dispatch(bookingProcessActions.updateShipment('ahoyRequest', true))
+
+        dispatch(push(`/booking/${shipmentData.shipment.id}/shipment_details`))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+
+function checkAhoyShipment (routerLocation) {
+  if (!routerLocation || routerLocation.pathname !== '/ahoy') {
+    return { type: shipmentConstants.SHIPMENT_CHECK_AHOY, payload: {} }
+  }
+
+  const queryString = queryStringToObj(routerLocation.search.substring(1))
+  const { loadType, direction, itinerary } = queryString
+
+  if (!loadType || !direction || !itinerary) {
+    return { type: shipmentConstants.SHIPMENT_CHECK_AHOY, payload: {} }
+  }
+
+  return (dispatch) => {
+    dispatch({ type: shipmentConstants.SHIPMENT_NEW_AHOY, payload: { loadType, direction, itinerary } })
+    dispatch(push('/booking/'))
+  }
+}
+
 function reuseShipment (shipment) {
   function request (shipmentData) {
     return { type: shipmentConstants.REUSE_SHIPMENT_REQUEST, payload: shipmentData }
@@ -637,7 +705,9 @@ export const shipmentActions = {
   delete: _delete,
   setError,
   getSchedulesForResult,
-  getLastAvailableDate
+  getLastAvailableDate,
+  checkAhoyShipment,
+  newAhoyShipment
 }
 
 export default shipmentActions

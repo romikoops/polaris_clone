@@ -13,7 +13,7 @@ import ChooseOffer from '../../components/ChooseOffer/ChooseOffer'
 import Loading from '../../components/Loading/Loading'
 import BookingDetails from '../../components/BookingDetails/BookingDetails'
 import BookingConfirmation from '../../components/BookingConfirmation/BookingConfirmation'
-import { shipmentActions, authenticationActions, userActions } from '../../actions'
+import { authenticationActions, shipmentActions, userActions } from '../../actions'
 import bookingSummaryActions from '../../actions/bookingSummary.actions'
 import ShipmentThankYou from '../../components/ShipmentThankYou/ShipmentThankYou'
 import BookingSummary from '../../components/BookingSummary/BookingSummary'
@@ -55,6 +55,14 @@ class Shop extends Component {
     props.bookingSummaryDispatch.update()
   }
 
+  componentWillMount () {
+    const { authenticationDispatch, tenant, user } = this.props
+
+    if (!user) {
+      authenticationDispatch.registerGuestOrAuthenticate(tenant, '/booking')
+    }
+  }
+
   componentWillReceiveProps (nextProps) {
     if (Shop.statusRequested(nextProps) && !Shop.statusRequested(this.props)) {
       this.setState({ fakeLoading: true })
@@ -66,6 +74,15 @@ class Shop extends Component {
     const { loggingIn, registering, loading } = nextProps
 
     return loading || !(loggingIn || registering)
+  }
+
+  componentDidUpdate () {
+    const { bookingData, user, shipmentDispatch } = this.props
+    const { ahoyRequest, ahoyParams } = bookingData
+
+    if (ahoyRequest && user) {
+      shipmentDispatch.newAhoyShipment(ahoyParams)
+    }
   }
 
   getShipment (loadType) {
@@ -201,9 +218,9 @@ class Shop extends Component {
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant
     const {
-      request, response, error, reusedShipment, contacts, originalSelectedDay
+      request, response, error, reusedShipment, contacts, originalSelectedDay, ahoyRequest
     } = bookingData
-    const loadingScreen = loading || fakeLoading ? <Loading tenant={tenant} /> : ''
+    const loadingScreen = (loading || fakeLoading || ahoyRequest) ? <Loading tenant={tenant} /> : ''
     const { showRegistration } = this.state
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
 
@@ -409,9 +426,9 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
+    authenticationDispatch: bindActionCreators(authenticationActions, dispatch),
     userDispatch: bindActionCreators(userActions, dispatch),
     shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
-    authenticationDispatch: bindActionCreators(authenticationActions, dispatch),
     bookingSummaryDispatch: bindActionCreators(bookingSummaryActions, dispatch)
   }
 }
