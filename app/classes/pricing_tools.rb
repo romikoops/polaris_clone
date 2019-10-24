@@ -423,6 +423,13 @@ class PricingTools # rubocop:disable Metrics/ClassLength
       value = fee_range.nil? ? 0 : fee_range['rate'].to_d * weight_kg
 
       res = [value, min].max
+    when 'PER_CBM_RANGE'
+      fee_range = fee['range'].find do |range|
+        (range['min']..range['max']).cover?(volume)
+      end || fee['range'].max_by { |x| x['max'] }
+      value = fee_range.nil? ? 0 : fee_range['rate'] * (weight_kg / 1000)
+
+      res = [value, min].max
     when 'PER_UNIT_TON_CBM_RANGE'
       ratio = volume / (weight_kg / 1000)
       fee_range = fee['range'].find do |range|

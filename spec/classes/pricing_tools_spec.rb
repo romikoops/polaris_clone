@@ -72,7 +72,7 @@ RSpec.describe PricingTools do
    { 'key' => 'FILL', 'max' => nil, 'min' => nil, 'name' => 'Filling Charges', 'value' => 35, 'currency' => 'EUR', 'rate_basis' => 'PER_ITEM', 'effective_date' => '2018-04-16', 'expiration_date' => '2018-05-15' },
       'ISPS' => { 'key' => 'ISPS', 'max' => nil, 'min' => nil, 'name' => 'ISPS', 'value' => 25, 'currency' => 'EUR', 'rate_basis' => 'PER_ITEM', 'effective_date' => '2018-04-16', 'expiration_date' => '2018-05-15' } }
   end
-  let!(:local_charge_margin) { create(:export_margin, tenant: tenants_tenant, origin_hub: origin_hub)}
+  let!(:local_charge_margin) { create(:export_margin, tenant: tenants_tenant, origin_hub: origin_hub) }
   let!(:lcl_local_charge) do
     create(:local_charge,
            tenant: tenant,
@@ -171,7 +171,7 @@ RSpec.describe PricingTools do
 
     it 'returns the correct number of charges for single cargo classes (LCL & BASE PRICING)' do
       lcl = create(:cargo_item, shipment_id: shipment.id)
-      scope = create(:tenants_scope, target: tenants_user, content: {base_pricing: true})
+      scope = create(:tenants_scope, target: tenants_user, content: { base_pricing: true })
       create(:export_margin, applicable: tenants_tenant, tenant: tenants_tenant)
       local_charges_data = described_class.new(user: user, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user)
       expect(local_charges_data.values.first.length).to eq(2)
@@ -186,34 +186,34 @@ RSpec.describe PricingTools do
       group_2 = create(:tenants_group, tenant: tenants_tenant, name: 'TEST2')
       create(:tenants_membership, group: group_2, member: tenants_user_mg)
       group_local_charge_1 = create(:local_charge,
-        tenant: tenant,
-        hub: origin_hub,
-        mode_of_transport: 'ocean',
-        load_type: 'lcl',
-        direction: 'export',
-        tenant_vehicle: tenant_vehicle_1,
-        fees: lcl_local_charge_fees,
-        effective_date: Date.today,
-        expiration_date: Date.today + 3.months,
-        group_id: group_1.id)
+                                    tenant: tenant,
+                                    hub: origin_hub,
+                                    mode_of_transport: 'ocean',
+                                    load_type: 'lcl',
+                                    direction: 'export',
+                                    tenant_vehicle: tenant_vehicle_1,
+                                    fees: lcl_local_charge_fees,
+                                    effective_date: Date.today,
+                                    expiration_date: Date.today + 3.months,
+                                    group_id: group_1.id)
       create(:local_charge,
-        tenant: tenant,
-        hub: origin_hub,
-        mode_of_transport: 'ocean',
-        load_type: 'lcl',
-        direction: 'export',
-        tenant_vehicle: tenant_vehicle_1,
-        fees: lcl_local_charge_fees,
-        effective_date: Date.today,
-        expiration_date: Date.today + 3.months,
-        group_id: group_2.id)
+             tenant: tenant,
+             hub: origin_hub,
+             mode_of_transport: 'ocean',
+             load_type: 'lcl',
+             direction: 'export',
+             tenant_vehicle: tenant_vehicle_1,
+             fees: lcl_local_charge_fees,
+             effective_date: Date.today,
+             expiration_date: Date.today + 3.months,
+             group_id: group_2.id)
       lcl = create(:cargo_item, shipment_id: shipment.id)
-      scope = create(:tenants_scope, target: tenants_user_mg, content: {base_pricing: true})
+      scope = create(:tenants_scope, target: tenants_user_mg, content: { base_pricing: true })
       create(:export_margin, applicable: tenants_tenant, tenant: tenants_tenant)
       local_charges_data = described_class.new(user: user_mg, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user_mg)
       expect(local_charges_data.values.first.length).to eq(2)
       expect(local_charges_data.values.length).to eq(1)
-      expect(local_charges_data.values.dig(0,0,0)['id']).to eq(group_local_charge_1.id)
+      expect(local_charges_data.values.dig(0, 0, 0)['id']).to eq(group_local_charge_1.id)
     end
 
     it 'returns the correct number of charges for single cargo classes (LCL)' do
@@ -231,7 +231,7 @@ RSpec.describe PricingTools do
         fcl_40 = create(:container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
         fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
         cargos = [fcl_20, fcl_40, fcl_40_hq]
-        klass= described_class.new(user: user, shipment: shipment)
+        klass = described_class.new(user: user, shipment: shipment)
         consolidated_hash = klass.consolidated_cargo_hash(cargos)
         scope = { cargo: { backend: true } }.with_indifferent_access
         cargo_objects = klass.cargo_hash_for_local_charges(cargos, consolidated_hash, scope)
@@ -245,11 +245,37 @@ RSpec.describe PricingTools do
         fcl_40 = create(:container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
         fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
         cargos = [fcl_20, fcl_40, fcl_40_hq]
-        klass= described_class.new(user: user, shipment: shipment)
+        klass = described_class.new(user: user, shipment: shipment)
         consolidated_hash = klass.consolidated_cargo_hash(cargos)
         scope = { cargo: { backend: false } }.with_indifferent_access
         cargo_objects = klass.cargo_hash_for_local_charges(cargos, consolidated_hash, scope)
         expect(cargo_objects.length).to eq(3)
+      end
+    end
+  end
+
+  describe '.handle_range_fee' do
+    let(:fee) do 
+      {
+        'rate' => 0.5e1,
+        'rate_basis' => 'PER_CBM_RANGE',
+        'currency' => 'EUR',
+        'min' => 0.5e1,
+        'range' => [{ 'max' => 10.0, 'min' => 0.0, 'rate' => 5.0 }, { 'max' => 100.0, 'min' => 10.0, 'rate' => 10.0 }]
+      }
+    end
+    subject { described_class.new(user: user, shipment: shipment) }
+    context 'PER_CBM_RANGE' do
+      it 'returns the correct fee_range for the larger volume' do
+        cargo_hash = { volume: 11, weight: 11000, quantity: 9 }
+        value = subject.handle_range_fee(fee, cargo_hash)
+        expect(value).to eq(110)
+      end
+
+      it 'returns the correct fee_range for the smaller volume' do
+        cargo_hash = { volume: 4, weight: 4000, quantity: 9 }
+        value = subject.handle_range_fee(fee, cargo_hash)
+        expect(value).to eq(20)
       end
     end
   end

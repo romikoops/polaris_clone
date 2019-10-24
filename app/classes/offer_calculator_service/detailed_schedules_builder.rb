@@ -8,6 +8,7 @@ module OfferCalculatorService
       schedules_by_pricings = grouped_schedules(schedules: schedules,
                                                 shipment: @shipment,
                                                 user: user).compact
+
       raise ApplicationError::NoValidPricings if schedules_by_pricings.empty?
 
       detailed_schedules = schedules_by_pricings.map do |grouped_result|
