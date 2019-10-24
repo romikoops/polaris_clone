@@ -111,7 +111,7 @@ withPipeline(timeout: 120) {
     withRetry {
       dockerBuild(
         dir: 'client/',
-        image: "${jobName()}/frontend",
+        image: "${jobName()}/client",
         memory: 2000,
         args: [
           RELEASE: env.COMMIT_SHA,
@@ -147,22 +147,22 @@ withPipeline(timeout: 120) {
       }
     }
 
-    withStage('QA') {
-      milestone()
+    // withStage('QA') {
+    //   milestone()
 
-      build(
-        job: 'Voyage/imc-react-api',
-        parameters: [
-          string(name: 'APP_NAME', value: 'imc-app'),
-          string(name: 'ENVIRONMENT', value: 'review'),
-          string(name: 'NAMESPACE', value: 'review'),
-          string(name: 'RELEASE', value: env.REVIEW_NAME),
-          string(name: 'REPOSITORY', value: jobBaseName()),
-          string(name: 'REVISION', value: env.GIT_COMMIT),
-        ],
-        wait: false
-      )
-    }
+    //   build(
+    //     job: 'Voyage/imc-react-api',
+    //     parameters: [
+    //       string(name: 'APP_NAME', value: 'imc-app'),
+    //       string(name: 'ENVIRONMENT', value: 'review'),
+    //       string(name: 'NAMESPACE', value: 'review'),
+    //       string(name: 'RELEASE', value: env.REVIEW_NAME),
+    //       string(name: 'REPOSITORY', value: jobBaseName()),
+    //       string(name: 'REVISION', value: env.GIT_COMMIT),
+    //     ],
+    //     wait: false
+    //   )
+    // }
   }
 }
 
