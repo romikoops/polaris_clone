@@ -78,7 +78,7 @@ class PdfService
                         else
                           Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'quotation', sandbox: sandbox)
     end
-    return existing_document if existing_document&.file.present?
+    return existing_document if needs_update?(object: quotation || shipment, document: existing_document)
 
     shipments = quotation ? quotation.shipments : [shipment]
     shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
@@ -107,9 +107,13 @@ class PdfService
     )
   end
 
+  def needs_update?(object: , document:)
+    document.present? && (object.updated_at < document.updated_at && document.file.present?)
+  end
+
   def quotation_pdf(quotation:)
     existing_document = Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox: sandbox)
-    return existing_document if existing_document&.file.present?
+    return existing_document if needs_update?(object: quotation, document: existing_document)
 
     quotes = quotation.shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
     shipment = Shipment.find(quotation.original_shipment_id)

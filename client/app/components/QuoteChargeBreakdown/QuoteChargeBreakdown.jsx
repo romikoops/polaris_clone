@@ -309,9 +309,9 @@ class QuoteChargeBreakdown extends Component {
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>
-                  {numberSpacing(price[1].value || price[1].total.value, 2)}
+                  {numberSpacing(price[1].value || get(price,[1, 'total', 'value']), 2)}
                   &nbsp;
-                  {(price[1].currency || price[1].total.currency)}
+                  {(price[1].currency || get(price, [1, 'total', 'currency']))}
                 </p>
               </div>
             </div>
@@ -350,9 +350,9 @@ class QuoteChargeBreakdown extends Component {
             <div className="flex-25 layout-row layout-align-end-center">
               {price[0].includes('unknown') || price[0].includes('included') ? '' : (
                 <p>
-                  {numberSpacing(price[1].value || price[1].total.value, 2)}
+                  {numberSpacing(price[1].value || get(price,[1, 'total', 'value']), 2)}
                     &nbsp;
-                  {(price[1].currency || price[1].total.currency)}
+                  {(price[1].currency || get(price, [1, 'total', 'currency']))}
                 </p>
               )}
             </div>
@@ -382,9 +382,9 @@ class QuoteChargeBreakdown extends Component {
             <div className="flex-25 layout-row layout-align-end-center">
               {price[0].includes('unknown') || price[0].includes('included') ? '' : (
                 <p>
-                  {numberSpacing(price[1].value || price[1].total.value, 2)}
+                  {numberSpacing(price[1].value || get(price,[1, 'total', 'value']), 2)}
                     &nbsp;
-                  {(price[1].currency || price[1].total.currency)}
+                  {(price[1].currency || get(price, [1, 'total', 'currency']))}
                 </p>
               )}
             </div>

@@ -366,7 +366,7 @@ exports[`aggregatedCargo is empty object 1`] = `
           />
         </div>
         <p
-          className="flex"
+          className="flex-none"
           style={
             Object {
               "textAlign": "right",
@@ -731,7 +731,7 @@ exports[`detailed billing working properly 1`] = `
           />
         </div>
         <p
-          className="flex"
+          className="flex-none"
           style={
             Object {
               "textAlign": "right",
@@ -1129,7 +1129,7 @@ exports[`shallow rendering 1`] = `
           />
         </div>
         <p
-          className="flex"
+          className="flex-none"
           style={
             Object {
               "textAlign": "right",
@@ -1494,7 +1494,7 @@ exports[`show schedule options working 1`] = `
           />
         </div>
         <p
-          className="flex"
+          className="flex-none"
           style={
             Object {
               "textAlign": "right",
@@ -1866,7 +1866,7 @@ exports[`single result rendering removes add button 1`] = `
         className="flex-100  layout-row layout-align-end-center"
       >
         <p
-          className="flex"
+          className="flex-none"
           style={
             Object {
               "textAlign": "right",
@@ -2195,7 +2195,7 @@ exports[`tenant.scope is empty object 1`] = `
         className="flex  layout-row layout-align-end-center"
       >
         <p
-          className="flex"
+          className="flex-none"
           style={
             Object {
               "textAlign": "right",
@@ -2593,7 +2593,7 @@ exports[`validUntil is falsy 1`] = `
           />
         </div>
         <p
-          className="flex"
+          className="flex-none"
           style={
             Object {
               "textAlign": "right",
@@ -2987,7 +2987,7 @@ exports[`validUntil is truthy 1`] = `
           />
         </div>
         <p
-          className="flex"
+          className="flex-none"
           style={
             Object {
               "textAlign": "right",

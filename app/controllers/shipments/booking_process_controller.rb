@@ -30,24 +30,8 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def download_quotations
-    @document = Document.create!(
-      shipment: shipment,
-      # quotation: quotation, # TODO: Implement proper quotation tools
-      text: "quotation_#{shipment.imc_reference}",
-      doc_type: 'quotation',
-      user: current_user,
-      tenant: current_user.tenant,
-      sandbox: @sandbox,
-      file: {
-        io: StringIO.new(
-          ShippingTools.save_pdf_quotes(shipment, current_user.tenant, result_params[:quotes].map(&:to_h), @sandbox)
-        ),
-        filename: "quotation_#{shipment.imc_reference}.pdf",
-        content_type: 'application/pdf'
-      }
-    )
-
-    response_handler(key: 'quotations', url: rails_blob_url(@document.file, disposition: 'attachment'))
+    document = ShippingTools.save_pdf_quotes(shipment, current_user.tenant, result_params[:quotes].map(&:to_h), @sandbox)
+    response_handler(key: 'quotations', url: rails_blob_url(document.file, disposition: 'attachment'))
   end
 
   def download_shipment

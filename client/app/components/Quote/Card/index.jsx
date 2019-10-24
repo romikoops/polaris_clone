@@ -398,7 +398,7 @@ class QuoteCard extends PureComponent {
                   />
                 </div>
               ) : ''}
-              <p className="flex" style={{ textAlign: 'right' }}>{hideGrandTotal ? '' : t('common:total')}</p>
+              <p className="flex-none" style={{ textAlign: 'right' }}>{hideGrandTotal ? '' : t('common:total')}</p>
               <p
                 style={{ paddingRight: '18px' }}
                 className="flex"
