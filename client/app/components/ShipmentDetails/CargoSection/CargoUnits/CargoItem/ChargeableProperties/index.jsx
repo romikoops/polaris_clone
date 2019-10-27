@@ -4,7 +4,7 @@ import uuid from 'uuid'
 import styles from './index.scss'
 import {
   volume, 
-  weight,
+  weightDynamicScale,
   switchIcon,
   chargeableWeight,
   chargeableWeightTon,
@@ -18,20 +18,6 @@ import TotalProperty from './TotalProperty'
 import UnitSpan from '../../../../../UnitSpan'
 
 class ChargeableProperties extends React.PureComponent {
-  static getUnitSpan (option) {
-    return {
-      weight: <UnitSpan unit="kg" />,
-      volume: <UnitSpan unit="m" />,
-      both: (
-        <React.Fragment>
-          <UnitSpan unit="t" />
-          |
-          <UnitSpan unit="m" />
-        </React.Fragment>
-      )
-    }[option]
-  }
-
   constructor (props) {
     super(props)
 
@@ -52,12 +38,32 @@ class ChargeableProperties extends React.PureComponent {
     return showVolume ? 'volume' : 'weight'
   }
 
-  getValue (mot, option) {
-    const { cargoItem } = this.props
-    const convertedItem = convertCargoItemAttributes(cargoItem)
+  getUnitSpan (option) {
+    const { scope } = this.props
+    const { values } = scope
+    const { unit } = values.weight
 
     return {
-      weight: chargeableWeight(convertedItem, mot),
+      weight: <UnitSpan unit={unit} />,
+      volume: <UnitSpan unit="m" />,
+      both: (
+        <React.Fragment>
+          <UnitSpan unit="t" />
+          |
+          <UnitSpan unit="m" />
+        </React.Fragment>
+      )
+    }[option]
+  }
+
+  getValue (mot, option) {
+    const { cargoItem, scope } = this.props
+    const convertedItem = convertCargoItemAttributes(cargoItem)
+    const { values } = scope
+    const { unit } = values.weight
+
+    return {
+      weight: unit === 'kg' ? chargeableWeight(convertedItem, mot) : chargeableWeightTon(convertedItem, mot),
       volume: chargeableWeightTon(convertedItem, mot),
       both: chargeableWeightTon(convertedItem, mot)
     }[option]
@@ -92,7 +98,9 @@ class ChargeableProperties extends React.PureComponent {
   }
 
   render () {
-    const { allMots, cargoItem } = this.props
+    const { allMots, cargoItem, scope } = this.props
+    const { values } = scope
+    const { unit, decimals } = values.weight
     const convertedItem = convertCargoItemAttributes(cargoItem)
 
     return (
@@ -107,8 +115,8 @@ class ChargeableProperties extends React.PureComponent {
           </div>
           <div className="flex offset-5 layout-wrap layout-row">
             <TotalProperty
-              value={weight(convertedItem)}
-              unit={<UnitSpan unit="kg" />}
+              value={weightDynamicScale(convertedItem, unit, decimals)}
+              unit={<UnitSpan unit={unit} />}
               property="weight"
             />
           </div>
@@ -132,7 +140,7 @@ class ChargeableProperties extends React.PureComponent {
                   <ChargeableProperty
                     key={uuid.v4()}
                     value={this.getValue(mot, option)}
-                    unit={ChargeableProperties.getUnitSpan(option)}
+                    unit={this.getUnitSpan(option)}
                     available={this.isAvailableMot(mot)}
                     icon={switchIcon(mot)}
                   />

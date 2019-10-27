@@ -10,7 +10,7 @@ import { getTareWeight, getSizeClassOptions } from '../../../../../helpers'
 
 function Container ({
   container, i, onChangeCargoUnitSelect, onDeleteUnit, theme, scope, t,
-  onChangeCargoUnitCheckbox, onChangeCargoUnitInput, toggleModal, ShipmentDetails
+  onChangeCargoUnitCheckbox, onChangeCargoUnitInput, toggleModal, ShipmentDetails, getPropValue, getPropStep
 }) {
   // TODO: implement dynamic maxPayloadInKg for each Tenant
   const tareWeight = getTareWeight(container) || 2370
@@ -21,6 +21,9 @@ function Container ({
       if (!cargoClasses.includes(cc)) cargoClasses.push(cc)
     })
   })
+  const { values } = scope
+  const { weight } = values
+  const { unit } = weight
 
   return (
     <CargoUnitBox
@@ -37,7 +40,7 @@ function Container ({
             labelText={t('cargo:cargoGrossWeight')}
             name={`${i}-payloadInKg`}
             onBlur={onChangeCargoUnitInput}
-            unit="kg"
+            unit={unit}
             onExcessDimensionsRequest={() => toggleModal('maxDimensions')}
             maxDimension={maxPayloadInKg}
             maxDimensionsErrorText={t('errors:maxWeight')}
@@ -45,7 +48,8 @@ function Container ({
               top: '3px',
               left: '235px'
             }}
-            value={container.payloadInKg}
+            value={getPropValue('payloadInKg', container)}
+            step={getPropStep('payloadInKg')}
           />
         </div>
         <div className="flex-100 layout-row" />

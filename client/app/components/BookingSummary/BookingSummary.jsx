@@ -9,9 +9,10 @@ import { dashedGradient, switchIcon, numberSpacing } from '../../helpers'
 
 function BookingSummary (props) {
   const {
-    theme, totalWeight, totalVolume, cities, nexuses, trucking, modeOfTransport, loadType, t
+    theme, totalWeight, totalVolume, cities, nexuses, trucking, modeOfTransport, loadType, t, scope
   } = props
-
+  const { values } = scope
+  const { weight } = values
   const dashedLineStyles = {
     marginTop: '6px',
     height: '2px',
@@ -23,6 +24,7 @@ function BookingSummary (props) {
     backgroundSize: '16px 2px, 100% 2px'
   }
   const icon = modeOfTransport ? switchIcon(modeOfTransport) : ' '
+  const weightToRender = weight.unit === 'kg' ? totalWeight : (totalWeight / 1000)
 
   return (
     <div className={`${styles.booking_summary} hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row`}>
@@ -82,9 +84,9 @@ function BookingSummary (props) {
       <div className="flex flex-sm-30 layout-column layout-align-stretch">
         <h4 className="flex-50 layout-row layout-align-center-center">{t('cargo:totalWeight')}</h4>
         <p className="flex-50 layout-row layout-align-center-start">
-          { numberSpacing(totalWeight, 2) }
+          { numberSpacing(weightToRender, weight.decimals) }
           {' '}
-          kg
+          {weight.unit}
         </p>
       </div>
       {

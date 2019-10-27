@@ -6,7 +6,7 @@ import styles from './index.scss'
 function CargoUnitNumberInput ({
   value, name, onChange, onBlur, onExcessDimensionsRequest,
   maxDimension, maxDimensionsErrorText, labelText, validations,
-  className, unit, image, tooltip, errorMessageStyles, t
+  className, unit, image, tooltip, errorMessageStyles, t, step
 }) {
   return (
     <div className={`layout-row layout-wrap layout-align-start-center ${styles.cargo_unit_number_input} ${className}`}>
@@ -20,6 +20,7 @@ function CargoUnitNumberInput ({
           name={name}
           value={value}
           type="number"
+          step={step}
           placeholder="0"
           onBlur={onBlur}
           onChange={onChange}
@@ -61,6 +62,7 @@ CargoUnitNumberInput.defaultProps = {
   tooltip: '',
   errorMessageStyles: {
     top: '32px'
-  }
+  },
+  step: '1'
 }
 export default withNamespaces('common')(CargoUnitNumberInput)

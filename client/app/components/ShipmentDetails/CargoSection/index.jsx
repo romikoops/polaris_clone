@@ -19,6 +19,8 @@ class CargoSection extends React.PureComponent {
     this.handleChangeCargoUnitSelect = this.handleChangeCargoUnitSelect.bind(this)
 
     this.handleChangeCargoUnitInput = this.handleChangeCargoUnitInput.bind(this)
+    this.getPropValue = this.getPropValue.bind(this)
+    this.getPropStep = this.getPropStep.bind(this)
     this.handleChangeCargoUnitCheckbox = debounce(
       this.handleChangeCargoUnitCheckbox.bind(this),
       200,
@@ -83,13 +85,30 @@ class CargoSection extends React.PureComponent {
     }
   }
 
+  handleUnitWeightManipulation (value) {
+    const { scope } = this.props
+    const { values } = scope
+    const { weight } = values
+    const { unit, decimals } = weight
+    const newValue = Number(value)
+
+    return unit === 'kg' ? newValue : (newValue * 1000).toFixed(decimals)
+  }
+
   handleChangeCargoUnitInput (e) {
     const { scope } = this.props
     const { target } = e
     const { name, value } = target
 
     const [index, prop] = name.split('-')
-    const newValue = Number(value)
+
+    let newValue
+    if (['collectiveWeight', 'payloadInKg', 'totalWeight'].includes(prop)) {
+      newValue = this.handleUnitWeightManipulation(value) 
+    } else {
+      newValue = Number(value)
+    }
+    
     if (['collectiveWeight', 'quantity'].includes(prop) && get(scope, ['consolidation', 'cargo', 'frontend'], false)) {
       this.handleChangeCollectiveWeight(index, prop, newValue)
     }
@@ -129,6 +148,30 @@ class CargoSection extends React.PureComponent {
     )
   }
 
+  getPropValue (prop, cargoUnit) {
+    const { scope } = this.props
+    if (!['collectiveWeight', 'payloadInKg', 'totalWeight'].includes(prop)) {
+      return cargoUnit[prop]
+    }
+    const { values } = scope
+    const { weight } = values
+    const { unit, decimals } = weight
+    
+    return unit === 'kg' ? cargoUnit[prop] : (cargoUnit[prop] / 1000).toFixed(decimals)
+  }
+
+  getPropStep (prop) {
+    const { scope } = this.props
+    if (!['collectiveWeight', 'payloadInKg', 'totalWeight'].includes(prop)) {
+      return '1'
+    }
+    const { values } = scope
+    const { weight } = values
+    const { unit, decimals } = weight
+
+    return unit === 'kg' ? '1' : String(1 * (10 ** -decimals))
+  }
+
   render () {
     const {
       theme, scope, cargoItemTypes, maxDimensions, maxAggregateDimensions, shipment, ShipmentDetails, toggleModal, totalShipmentErrors
@@ -157,6 +200,8 @@ class CargoSection extends React.PureComponent {
             onChangeCargoUnitInput={this.handleChangeCargoUnitInput}
             onChangeCargoUnitSelect={this.handleChangeCargoUnitSelect}
             onDeleteUnit={this.handleDeleteUnit}
+            getPropValue={this.getPropValue}
+            getPropStep={this.getPropStep}
             scope={scope}
             theme={theme}
             totalShipmentErrors={totalShipmentErrors}

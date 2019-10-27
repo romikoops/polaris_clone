@@ -26,7 +26,7 @@ class FormsyInput extends Component {
     const {
       getErrorMessage, isValid, getValue, wrapperClassName,
       type, name, disabled, className, onFocus, onBlur, placeholder, id,
-      errorMessageStyles, validatePristine, isPristine
+      errorMessageStyles, validatePristine, isPristine, step
     } = this.props
 
     // An error message is returned only if the component is invalid
@@ -51,6 +51,7 @@ class FormsyInput extends Component {
           style={inputStyles}
           onChange={this.changeValue}
           type={type}
+          step={step}
           value={value}
           name={name}
           disabled={disabled}
@@ -78,7 +79,8 @@ FormsyInput.defaultProps = {
   onChange: null,
   wrapperClassName: '',
   className: '',
-  validatePristine: false
+  validatePristine: false,
+  step: '1'
 }
 
 export default withFormsy(FormsyInput)

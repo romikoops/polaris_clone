@@ -2,8 +2,9 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import ChargeableProperties from '.'
 import {
-  t, scope, availableMots, allMots, cargoItem, maxDimensionsToApply
+  t, availableMots, allMots, cargoItem, maxDimensionsToApply
 } from '../../../../mocks'
+import { scope } from '../../../../../../mocks/index'
 
 const propsBase = {
   t,

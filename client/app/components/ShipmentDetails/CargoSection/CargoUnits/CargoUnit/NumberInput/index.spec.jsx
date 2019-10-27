@@ -2,6 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import CargoUnitBox from '.'
 import { maxDimensionsToApply } from '../../../../mocks'
+import { scope } from '../../../../../../mocks/index'
 
 const propsBase = {
   value: 11,
@@ -15,7 +16,8 @@ const propsBase = {
   className: 'flex-85-mock',
   unit: 'sm',
   image: <img id="mock" src="mock" />,
-  tooltip: <div id="tooltip" />
+  tooltip: <div id="tooltip" />,
+  scope
 }
 
 test('with empty props', () => {

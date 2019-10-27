@@ -231,7 +231,7 @@ class Shop extends Component {
         <GenericError theme={theme}>
           <Header
             theme={this.props.theme}
-            component={<BookingSummary theme={theme} shipmentData={shipmentData} />}
+            component={<BookingSummary theme={theme} scope={scope} shipmentData={shipmentData} />}
             showMessages={this.toggleShowMessages}
             showRegistration={this.state.showRegistration}
             noMessages

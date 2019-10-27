@@ -14,6 +14,7 @@ function CargoUnits ({
 }) {
   const sharedProps = {
     onDeleteUnit: cargoUnits.length > 1 && onDeleteUnit,
+    scope,
     ...otherProps
   }
 
@@ -23,7 +24,6 @@ function CargoUnits ({
         cargoItem={cargoItem}
         uniqKey={uuid.v4()}
         i={i}
-        scope={scope}
         {...sharedProps}
       />
     ))
@@ -39,7 +39,6 @@ function CargoUnits ({
       <Container
         container={container}
         i={i}
-        scope={scope}
         {...sharedProps}
       />
     ))

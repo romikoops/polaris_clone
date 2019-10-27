@@ -249,6 +249,12 @@ exports[`shallow render 1`] = `
                     "Demo is to discuss the validity of the presented prices with the product owners.",
                   ],
                   "total_dimensions": true,
+                  "values": Object {
+                    "weight": Object {
+                      "decimals": 2,
+                      "unit": "kg",
+                    },
+                  },
                 }
               }
               style={

@@ -172,6 +172,8 @@ exports[`cargoUnits is empty 1`] = `
         ]
       }
       cargoUnits={Array []}
+      getPropStep={[Function]}
+      getPropValue={[Function]}
       maxDimensions={
         Object {
           "air": Object {
@@ -486,6 +488,8 @@ exports[`renders correctly 1`] = `
           },
         ]
       }
+      getPropStep={[Function]}
+      getPropValue={[Function]}
       maxDimensions={
         Object {
           "air": Object {

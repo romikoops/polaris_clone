@@ -24,5 +24,11 @@ export const scope = {
   customs_export_paper: false,
   fixed_exchange_rates: false,
   require_full_address: true,
-  closed_quotation_tool: false
+  closed_quotation_tool: false,
+  values: {
+    weight: {
+      unit: 'kg',
+      decimals: 2
+    }
+  }
 }

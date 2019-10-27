@@ -89,7 +89,9 @@ class CargoItem extends React.PureComponent {
       i,
       onChangeCargoUnitInput,
       cargoItem,
-      toggleModal
+      toggleModal,
+      getPropValue,
+      getPropStep
     } = this.props
     const maxDimension = Number(
       this.getMaxDimensionsToApply()[prop === 'collectiveWeight' ? 'payloadInKg' : prop]
@@ -103,7 +105,8 @@ class CargoItem extends React.PureComponent {
       name: `${i}-${prop}`,
       onBlur: onChangeCargoUnitInput,
       onExcessDimensionsRequest: () => toggleModal('maxDimensions'),
-      value: cargoItem[prop]
+      value: getPropValue(prop, cargoItem),
+      step: getPropStep(prop)
     }
   }
 
@@ -135,6 +138,10 @@ class CargoItem extends React.PureComponent {
       theme,
       cargoItem
     }
+
+    const { values } = scope
+    const { weight } = values
+    const { unit } = weight
 
     return (
       <CargoUnitBox
@@ -203,7 +210,7 @@ class CargoItem extends React.PureComponent {
                     labelText={t('common:grossWeight')}
                     maxDimensionsErrorText={t('errors:maxWeight')}
                     tooltip={<Tooltip color={theme.colors.primary} icon="fa-info-circle" text="payload_in_kg" />}
-                    unit="kg"
+                    unit={unit}
                     {...this.getSharedProps('collectiveWeight')}
                   />
                 )
@@ -222,7 +229,7 @@ class CargoItem extends React.PureComponent {
                     }
                     labelText={t('common:grossWeightPerItem')}
                     maxDimensionsErrorText={t('errors:maxWeight')}
-                    unit="kg"
+                    unit={unit}
                     {...this.getSharedProps('payloadInKg')}
                   />
                 )

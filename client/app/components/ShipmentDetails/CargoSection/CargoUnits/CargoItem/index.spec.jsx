@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import CargoItem from '.'
-import { cargoUnitProps, cargoItem, cargoItemTypes } from '../../../mocks'
+import { scope } from '../../../../../mocks/index'
+import { cargoItemTypes, cargoUnitProps, cargoItem } from '../../../mocks'
 
 test('with empty props', () => {
   expect(() => shallow(<CargoItem />)).toThrow()
@@ -11,7 +12,10 @@ test('renders correcly', () => {
   const props = {
     ...cargoUnitProps,
     i: 0,
-    cargoItem
+    cargoItem,
+    scope,
+    getPropValue: (prop, cargoItem) => cargoItem[prop],
+    getPropStep: (prop) => 2
   }
   expect(shallow(<CargoItem {...props} />)).toMatchSnapshot()
 })

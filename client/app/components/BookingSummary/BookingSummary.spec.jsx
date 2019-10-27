@@ -3,7 +3,7 @@ import '../../mocks/libraries/react-router-dom'
 
 import * as React from 'react'
 import { render } from 'enzyme'
-import { theme } from '../../mocks/index'
+import { theme, scope } from '../../mocks/index'
 
 import BookingSummary from './BookingSummary'
 
@@ -27,7 +27,8 @@ const propsBase = {
   trucking: {
     onCarriage: { truckType: 'FOO_ON_CARRIAGE' },
     preCarriage: { truckType: 'FOO_PRE_CARRIAGE' }
-  }
+  },
+  scope
 }
 
 test('render render', () => {

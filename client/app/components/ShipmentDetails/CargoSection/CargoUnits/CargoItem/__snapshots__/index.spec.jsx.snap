@@ -73,6 +73,7 @@ exports[`renders correcly 1`] = `
         onBlur={[Function]}
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
+        step={2}
         t={[Function]}
         tooltip=""
         unit="cm"
@@ -120,6 +121,7 @@ exports[`renders correcly 1`] = `
         onBlur={[Function]}
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
+        step={2}
         t={[Function]}
         tooltip=""
         unit="cm"
@@ -167,6 +169,7 @@ exports[`renders correcly 1`] = `
         onBlur={[Function]}
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
+        step={2}
         t={[Function]}
         tooltip=""
         unit="cm"
@@ -214,6 +217,7 @@ exports[`renders correcly 1`] = `
         onBlur={[Function]}
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
+        step={2}
         t={[Function]}
         tooltip=""
         unit="kg"
@@ -504,6 +508,12 @@ exports[`renders correcly 1`] = `
             "Demo is to discuss the validity of the presented prices with the product owners.",
           ],
           "total_dimensions": true,
+          "values": Object {
+            "weight": Object {
+              "decimals": 2,
+              "unit": "kg",
+            },
+          },
         }
       }
       t={[Function]}

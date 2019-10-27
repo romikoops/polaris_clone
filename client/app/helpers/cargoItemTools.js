@@ -187,6 +187,15 @@ export function weight (cargoItem) {
   return numberSpacing((cargoItem.payload_in_kg * cargoItem.quantity), 1)
 }
 
+export function weightDynamicScale (cargoItem, scale, decimals = 1) {
+  if (!cargoItem) return undefined
+  if (scale === 'kg') {
+    return numberSpacing((cargoItem.payload_in_kg * cargoItem.quantity), decimals)
+  }
+
+  return numberSpacing(((cargoItem.payload_in_kg * cargoItem.quantity) / 1000), decimals)
+}
+
 export function rawWeight (cargoItem) {
   if (!cargoItem) return undefined
 
