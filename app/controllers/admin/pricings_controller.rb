@@ -4,34 +4,25 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   include ExcelTools
   include ItineraryTools
 
-  def index # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    tenant = current_user.tenant
-    @itineraries = tenant.itineraries.where(sandbox: @sandbox)
-    response = Rails.cache.fetch("#{@itineraries.cache_key}/pricings_index", expires_in: 12.hours) do
-      @transports = TransportCategory.all.where(sandbox: @sandbox).uniq
-      @scope = ::Tenants::ScopeService.new(target: current_user).fetch
-      mots = @scope['modes_of_transport'].keys.reject do |key|
-        !@scope['modes_of_transport'][key]['container'] &&
-          !@scope['modes_of_transport'][key]['cargo_item']
-      end
-      detailed_itineraries = {}
-      mot_page_counts = {}
-      mots.each do |mot|
-        mot_itineraries = @itineraries
-                          .where(mode_of_transport: mot, sandbox: @sandbox)
-                          .paginate(page: params[mot] || 1)
-        detailed_itineraries[mot] = mot_itineraries.map { |it| it.as_pricing_json(sandbox: @sandbox) }
-        mot_page_counts[mot] = mot_itineraries.total_pages
-      end
-      last_updated = @itineraries.first ? @itineraries.first.updated_at : DateTime.now
-      {
-        detailedItineraries: detailed_itineraries,
-        numItineraryPages: mot_page_counts,
-        transportCategories: @transports,
-        lastUpdate: last_updated
-      }
+  ITINERARY_RESULT_MODIFIER =
+    {
+      name: ->(itineraries, param) { itineraries.list_search(param) },
+      name_desc: ->(itineraries, param) { itineraries.ordered_by(:name, param) },
+      mot: ->(itineraries, param) { param == 'all' ? itineraries : itineraries.where(mode_of_transport: param) },
+      mot_desc: ->(itineraries, param) { itineraries.ordered_by(:mode_of_transport, param) }
+    }.freeze
+
+  def index
+    paginated_pricing_itineraries = handle_search.paginate(pagination_options)
+    response_pricing_itineraries = paginated_pricing_itineraries.map do |itinerary|
+      for_table_json(itinerary).deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
-    response_handler(response)
+    response_handler(
+      pagination_options.merge(
+        pricingData: response_pricing_itineraries,
+        numPages: paginated_pricing_itineraries.total_pages
+      )
+    )
   end
 
   def client
@@ -319,5 +310,50 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
   def itinerary_pricing_exists?(args)
     Itinerary.find_by(args).nil?
+  end
+
+  def handle_search
+    itineraries = ::Legacy::Itinerary.where(tenant_id: current_tenant.id, sandbox: @sandbox)
+
+    ITINERARY_RESULT_MODIFIER.each do |key, lambd|
+      itineraries = lambd.call(itineraries, search_params[key]) if search_params[key]
+    end
+
+    itineraries
+  end
+
+  def pagination_options
+    {
+      page: current_page,
+      per_page: (params[:page_size] || params[:per_page])&.to_f
+    }.compact
+  end
+
+  def for_table_json(itinerary)
+    new_options = {
+      methods: [:pricing_count],
+      last_expiry: last_expiry(itinerary)
+    }
+    itinerary.as_json(new_options)
+  end
+
+  def last_expiry(itinerary)
+    itinerary.pricings.order(:expiration_date).first&.expiration_date
+  end
+
+  def current_page
+    params[:page]&.to_i || 1
+  end
+
+  def search_params
+    params.permit(
+      :mot,
+      :mot_desc,
+      :last_expiry_desc,
+      :name,
+      :name_desc,
+      :page_size,
+      :per_page
+    )
   end
 end

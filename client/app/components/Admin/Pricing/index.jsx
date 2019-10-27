@@ -4,111 +4,132 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { get } from 'lodash'
 import { adminActions, appActions } from '../../../actions'
-import AdminPricesTable from './PricesTable'
-import shouldBlur from '../../Pricing/pricing_helpers'
 import styles from './index.scss'
-import { determineSortingCaret } from '../../../helpers/sortingCaret'
 import { capitalize } from '../../../helpers'
+import { moment } from '../../../constants'
 
 class AdminPricingList extends PureComponent {
   constructor (props) {
     super(props)
-    this.state = {
-      expanded: {},
-      sorted: []
-    }
+    this.state = {}
+    this.fetchData = this.fetchData.bind(this)
   }
 
-  componentDidMount () {
-    const { pricings, adminDispatch } = this.props
-    if (!pricings || (pricings && pricings.index && pricings.index.itineraries.length === 0)) {
-      adminDispatch.getPricings(false)
-    }
+  fetchData (tableState) {
+    const { adminDispatch } = this.props
+
+    adminDispatch.getPricings({
+      page: tableState.page + 1,
+      filters: tableState.filtered,
+      sorted: tableState.sorted,
+      pageSize: tableState.pageSize
+    })
+
+    this.setState({ filters: tableState.filtered })
   }
 
   render () {
-    const { t, pricings } = this.props
-    if (!pricings) return ''
-    const { index } = pricings
-    const { itineraries } = index
-    const { expanded, sorted } = this.state
-    const expandedIndexes = Object.keys(expanded).filter(ex => !!expanded[ex])
+    const {
+      t, itineraries, numPages, viewPricings
+    } = this.props
+    const motOptions = ['air', 'ocean', 'rail', 'truck'].map(mot => ({ label: capitalize(t(`common:${mot}`)), value: mot }))
     const columns = [
       {
-        Header: (<div className="flex layout-row layout-align-space-around-center">
-          <p className="flex-none">{t('common:routing')}</p>
-        </div>),
         columns: [
           {
             Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('origin_name', sorted)}
-              <p className="flex-none">{t('shipment:origin')}</p>
+              <p className="flex-none">{t('admin:itinerary')}</p>
             </div>),
-            id: 'origin_name',
-            accessor: d => d.stops[0].hub.nexus.name,
-            Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
-              <p className="flex-none"> {row.row.origin_name}</p>
-            </div>)
+            id: 'name',
+            accessor: d => d.name,
+            Cell: rowData => (
+              <div 
+                className={`pointy flex layout-row layout-align-start-center ${styles.pricing_cell}`}
+                onClick={() => viewPricings(rowData.original)}
+              >
+                <p className="flex-none">
+                  {' '}
+                  {rowData.row.name}
+                </p>
+              </div>
+            )
           },
           {
             Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('destination_name', sorted)}
-              <p className="flex-none">{t('shipment:destination')}</p>
-            </div>),
-            id: 'destination_name',
-            accessor: d => d.stops[1].hub.nexus.name,
-            Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
-              <p className="flex-none"> {row.row.destination_name}</p>
-            </div>)
-          },
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('mode_of_transport', sorted)}
               <p className="flex-none">{t('common:modeOfTransport')}</p>
             </div>),
-            id: 'mode_of_transport',
-            accessor: d => d.mode_of_transport,
-            Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
-              <p className="flex-none">{capitalize(row.row.mode_of_transport)} </p>
-            </div>)
-          }
-        ]
-      },
-      {
-        Header: t('account:pricing'),
-        columns: [
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('pricing_count', sorted)}
-              <p className="flex-none">{t('account:openPricingCount')}</p>
-            </div>),
-            accessor: 'open_pricings_count',
-            Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
-              <p className="flex-none">{row.row.open_pricings_count} </p>
-            </div>)
+            id: 'mot',
+            accessor: d => d.modeOfTransport,
+            Cell: rowData => (
+              <div 
+                className={`pointy flex layout-row layout-align-start-center ${styles.pricing_cell}`}
+                onClick={() => viewPricings(rowData.original)}
+              >
+                <p className="flex-none">
+                  {capitalize(rowData.row.mot)}
+                  {' '}
+                </p>
+              </div>
+            ),
+            Filter: ({ filter, onChange }) => (
+              <select
+                onChange={event => onChange(event.target.value)}
+                style={{ width: '100%' }}
+                value={filter ? filter.value : 'all'}
+              >
+                <option value="all">All</option>
+                {motOptions.map(cc => <option value={cc.value}>{cc.label}</option>)}
+
+              </select>
+            )
           },
           {
             Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('has_user_pricing', sorted)}
-              <p className="flex-none">{t('account:dedicatedPricingCount')}</p>
+              <p className="flex-none">{t('admin:pricingsSC')}</p>
             </div>),
-            id: 'dedicated_pricings_count',
-            accessor: d => d.dedicated_pricings_count,
-            Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
-              <p className="flex-none"> {row.row.dedicated_pricings_count}</p>
-            </div>)
+            maxWidth: 150,
+            accessor: 'pricingCount',
+            Cell: rowData => (
+              <div 
+                className={`pointy flex layout-row layout-align-start-center ${styles.pricing_cell}`}
+                onClick={() => viewPricings(rowData.original)}
+              >
+                <p className="flex-none">
+                  {rowData.row.pricingCount}
+                  {' '}
+                </p>
+              </div>
+            ),
+            Filter: () => false
+          },
+          {
+            Header: (<div className="flex layout-row layout-center-center">
+              <p className="flex-none">{t('admin:nextExpiry')}</p>
+            </div>),
+            id: 'lastExpiry',
+            accessor: d => d.lastExpiry,
+            Cell: rowData => (
+              <div 
+                className={`pointy flex layout-row layout-align-start-center ${styles.pricing_cell}`}
+                onClick={() => viewPricings(rowData.original)}
+              >
+                <p className="flex-none">
+                  {' '}
+                  {moment(rowData.row.lastExpiry).utc().format('DD/MM/YYYY')}
+                </p>
+              </div>
+            ),
+            Filter: () => false
           }
         ]
       }
     ]
 
     return (
-      <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-        <div className="flex-100 layout-row layout-align-start-center greyBg margin_top">
-          <span><b>{t('common:pricings')}</b></span>
-        </div>
-        <div className="flex-100 layout-row layout-align-start-center">
+      <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+        <div className="flex-90 layout-row layout-align-center-center">
           <ReactTable
             className="flex-100 height_100"
             data={itineraries}
@@ -119,15 +140,14 @@ class AdminPricingList extends PureComponent {
                 desc: true
               }
             ]}
-            expanded={this.state.expanded}
-            onExpandedChange={newExpanded => this.setState({ expanded: newExpanded })}
-            sorted={this.state.sorted}
-            onSortedChange={newSorted => this.setState({ sorted: newSorted })}
             defaultPageSize={15}
-            SubComponent={d => (
-              <div className={styles.nested_table}>
-                <AdminPricesTable row={d} />
-              </div>)}
+            filterable
+            sortable={false}
+            pageSizeOptions={[5,10,15,20,25,50]}
+            pages={numPages}
+            manual
+            onFetchData={this.fetchData}
+
           />
         </div>
 
@@ -146,13 +166,16 @@ function mapStateToProps (state) {
   const {
     pricings
   } = admin
+  const { pricingData, numPages, page } = get(pricings, ['index'], {})
 
   return {
     user,
     tenant,
     loggedIn,
     theme,
-    pricings
+    itineraries: pricingData,
+    numPages,
+    page
   }
 }
 function mapDispatchToProps (dispatch) {
@@ -162,4 +185,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withNamespaces(['common', 'shipment', 'account'])(connect(mapStateToProps, mapDispatchToProps)(AdminPricingList))
+export default withNamespaces(['common', 'shipment', 'admin'])(connect(mapStateToProps, mapDispatchToProps)(AdminPricingList))

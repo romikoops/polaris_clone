@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, client } from '../../mock'
+import { theme, identity, client, user } from '../../mock'
 import AdminPricingsIndex from './AdminPricingsIndex'
 
 const propsBase = {
@@ -10,6 +10,7 @@ const propsBase = {
     getClientPricings: identity,
     getRoutePricings: identity
   },
+  user: user,
   documentDispatch: {
     closeViewer: identity,
     uploadPricings: identity

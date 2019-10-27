@@ -64,7 +64,7 @@ exports[`disabled is true 1`] = `
            
         </strong>
          
-        pricings
+        Pricing Count
       </p>
     </div>
   </div>
@@ -197,7 +197,7 @@ exports[`shallow render 1`] = `
            
         </strong>
          
-        pricings
+        Pricing Count
       </p>
     </div>
   </div>
@@ -268,7 +268,7 @@ exports[`theme is falsy 1`] = `
            
         </strong>
          
-        pricings
+        Pricing Count
       </p>
     </div>
   </div>
@@ -330,7 +330,7 @@ exports[`users_with_pricing is falsy 1`] = `
            
         </strong>
          
-        pricings
+        Pricing Count
       </p>
     </div>
   </div>

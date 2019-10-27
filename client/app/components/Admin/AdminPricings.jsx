@@ -93,7 +93,6 @@ class AdminPricings extends Component {
     ) : (
       ''
     )
-    const { nexuses } = trucking
 
     return (
       <GenericError theme={theme}>
@@ -111,10 +110,6 @@ class AdminPricings extends Component {
                   scope={tenant.scope}
                   hubs={hubs}
                   user={user}
-                  hubHash={hubHash}
-                  
-                  pricingData={pricingData}
-                  itineraries={itineraries}
                   {...props}
                   adminDispatch={adminDispatch}
                   documentDispatch={documentDispatch}
@@ -143,7 +138,6 @@ class AdminPricings extends Component {
               render={props => (
                 <AdminTruckingView
                   theme={theme}
-                  nexuses={nexuses}
                   truckingDetail={truckingDetail}
                   loading={loading}
                   adminDispatch={adminDispatch}

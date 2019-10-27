@@ -16,12 +16,14 @@ module Legacy
     has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
     has_many :hubs,      through: :stops
     has_many :map_data,  dependent: :destroy
-
     scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
     scope :for_tenant, ->(tenant_id) { where(tenant_id: tenant_id) }
 
     validate :must_have_stops
     pg_search_scope :list_search, against: %i(name), using: {
+      tsearch: { prefix: true }
+    }
+    pg_search_scope :mot_search, against: %i(mode_of_transport), using: {
       tsearch: { prefix: true }
     }
     def generate_schedules_from_sheet(stops:, # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists

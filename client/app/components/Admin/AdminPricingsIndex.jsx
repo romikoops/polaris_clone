@@ -1,157 +1,219 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from 'prop-types'
-import { Redirect } from 'react-router'
-import { AdminPriceCreator } from '.'
-import CardPricingIndex from './CardPricingIndex'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
 import AdminTrucking from './AdminTrucking'
-import { capitalize } from '../../helpers'
+import AdminPricingList from './Pricing/index'
+import { adminPricing as priceTip, moTOptions } from '../../constants'
+import { capitalize, camelToSnakeCase } from '../../helpers'
+import styles from './Admin.scss'
+import FileUploader from '../FileUploader/FileUploader'
+import DocumentsDownloader from '../Documents/Downloader'
+import SideOptionsBox from './SideOptions/SideOptionsBox'
+import CollapsingBar from '../CollapsingBar/CollapsingBar'
 
 export class AdminPricingsIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      redirectRoutes: false,
-      redirectClients: false,
-      newPricing: {}
+      expander: {}
     }
-    this.viewAllRoutes = this.viewAllRoutes.bind(this)
-    this.viewAllClients = this.viewAllClients.bind(this)
-    this.viewClient = this.viewClient.bind(this)
-    this.viewRoute = this.viewRoute.bind(this)
-    this.toggleCreator = this.toggleCreator.bind(this)
+    this.viewPricings = this.viewPricings.bind(this)
   }
 
   componentDidMount () {
     window.scrollTo(0, 0)
   }
 
-  getInitialPricingPage () {
-    const { adminDispatch, scope } = this.props
-    const pages = {}
-    Object.keys(scope.modes_of_transport).forEach((mot) => {
-      if (Object.values(scope.modes_of_transport[mot]) > 0) {
-        pages[mot] = 1
+  viewPricings (itinerary) {
+    const { adminDispatch } = this.props
+    adminDispatch.getItineraryPricings(itinerary.id, null, true)
+  }
+
+  pricingUpload (file, mot, loadType, isOpen) {
+    const { documentDispatch } = this.props
+    documentDispatch.uploadPricings(file, mot, loadType, isOpen)
+  }
+
+  toggleExpander (key) {
+    this.setState({
+      expander: {
+        ...this.state.expander,
+        [key]: !this.state.expander[key]
       }
     })
-    adminDispatch.getPricings(false, pages)
-  }
-
-  toggleCreator (mot) {
-    this.setState(prevState => ({
-      newPricing: {
-        ...prevState.newPricing,
-        [mot]: !this.state.newPricing[mot]
-      }
-    }))
-  }
-
-  viewAllRoutes () {
-    this.setState({ redirectRoutes: true })
-  }
-
-  viewAllClients () {
-    this.setState({ redirectClients: true })
-  }
-
-  viewClient (client) {
-    const { adminDispatch } = this.props
-    adminDispatch.getClientPricings(client.id, true)
-  }
-
-  viewRoute (route) {
-    const { adminDispatch } = this.props
-    adminDispatch.getItineraryPricings(route.id, null, true)
-  }
-
-  lclUpload (file) {
-    const { documentDispatch } = this.props
-    documentDispatch.uploadPricings(file, 'lcl', false)
-  }
-
-  fclUpload (file) {
-    const { documentDispatch } = this.props
-    documentDispatch.uploadPricings(file, 'fcl', false)
   }
 
   render () {
     const {
-      t, theme, pricingData, adminDispatch, scope, hubHash, user
+      t, theme, documentDispatch, user, scope
     } = this.props
-    const { newPricing } = this.state
-    if (!pricingData) {
-      return ''
-    }
+    const { expander } = this.state
 
-    if (this.state.redirectRoutes) {
-      return <Redirect push to="/admin/pricings/routes" />
+    const loadTypeOptions = {
+      air: { cargoItem: 'LCL' },
+      ocean: { cargoItem: 'LCL', container: 'FCL' },
+      rail: { cargoItem: 'LCL', container: 'FCL' },
+      truck: { cargoItem: 'LTL', container: 'FTL' }
     }
-    if (this.state.redirectClients) {
-      return <Redirect push to="/admin/pricings/clients" />
-    }
+    const uploadButtons = []
+    const downloadButtons = []
+    moTOptions.forEach((mot) => {
+      uploadButtons.push(
+        <div
+          className={`${styles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
+        >
+          {Object.keys(loadTypeOptions[mot]).map((loadType) => {
+            const uploadPricingText = (loadType
+              ? t('admin:uploadPricingWithLoadType', { mot: capitalize(mot), loadType: loadTypeOptions[mot][loadType].toUpperCase() })
+              : t('admin:uploadPricing', { mot: capitalize(mot) })
+            )
 
-    const {
-      itineraries, detailedItineraries, transportCategories, lastUpdate, numItineraryPages
-    } = pricingData
-    const modesOfTransport = scope.modes_of_transport
-    const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName => Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
+            const options = { mot }
+            if (loadType) options.load_type = camelToSnakeCase(loadType)
 
-    const motTabs = modeOfTransportNames.sort().map(mot => (
+            return (
+              [(<div
+                className={`${
+                  styles.action_section
+                } flex-100 layout-row layout-wrap layout-align-center-center`}
+              >
+                <p className="flex-100">{uploadPricingText}</p>
+                <FileUploader
+                  theme={theme}
+                  dispatchFn={file => this.pricingUpload(file, mot, camelToSnakeCase(loadType), false)}
+                  tooltip={priceTip.upload_lcl}
+                  type="xlsx"
+                  size="full"
+                  text={t('admin:dedicatedPricing')}
+                />
+              </div>),
+              (<div
+                className={`${
+                  styles.action_section
+                } flex-100 layout-row layout-align-center-center layout-wrap`}
+              >
+                <p className="flex-100 center">{t('admin:uploadChargeCategories')}</p>
+                <FileUploader
+                  theme={theme}
+                  type="xlsx"
+                  text={t('admin:chargeCategoriesExcel')}
+                  dispatchFn={documentDispatch.uploadChargeCategories}
+                />
+              </div>)]
+            )
+          })}
+        </div>
+      )
+
+      downloadButtons.push(
+        <div
+          className={`${styles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
+        >
+          {Object.keys(loadTypeOptions[mot]).map((loadType) => {
+            const downloadPricingText = (loadType
+              ? t('admin:downloadPricingWithLoadType', { mot: capitalize(mot), loadType: loadTypeOptions[mot][loadType].toUpperCase() })
+              : t('admin:downloadPricing', { mot: capitalize(mot) })
+            )
+            const options = { mot }
+            if (loadType) options.load_type = camelToSnakeCase(loadType)
+
+            return (
+              [(<div
+                className={`${
+                  styles.action_section
+                } flex-100 layout-row layout-wrap layout-align-center-center`}
+              >
+                <p className="flex-100">{downloadPricingText}</p>
+                <DocumentsDownloader
+                  theme={theme}
+                  target={`pricing_${camelToSnakeCase(loadType)}`}
+                  options={options}
+                  size="full"
+                />
+              </div>),
+              (<div
+                className={`${
+                  styles.action_section
+                } flex-100 layout-row layout-wrap layout-align-center-center`}
+              >
+                <p className="flex-100 center">{t('admin:downloadChargeCategories')}</p>
+                <DocumentsDownloader theme={theme} target="charge_categories" />
+              </div>)]
+            )
+          })}
+        </div>
+      )
+    })
+    const tabs = [(
       <Tab
-        tabTitle={capitalize(mot)}
+        tabTitle={t('admin:freight')}
         theme={theme}
-        mot={mot}
+        mot="ocean"
       >
-        <CardPricingIndex
-          itineraries={detailedItineraries[mot]}
-          numPages={numItineraryPages}
-          theme={theme}
-          scope={scope}
-          mot={mot}
-          user={user}
-          adminDispatch={adminDispatch}
-          toggleCreator={() => this.toggleCreator(mot)}
-          documentDispatch={this.props.documentDispatch}
-          lastUpdate={lastUpdate}
-        />
-        {newPricing[mot] ? (
-          <AdminPriceCreator
-            theme={theme}
-            itineraries={itineraries}
-            adminDispatch={adminDispatch}
-            detailedItineraries={detailedItineraries}
-            transportCategories={transportCategories}
-            closeForm={this.toggleCreator}
-          />
-        ) : (
-          ''
-        )}
+        <div className="flex-100 layout-row">
+          <div className="flex-80 layout-row layout-align-center-start">
+            <AdminPricingList viewPricings={this.viewPricings} />
+          </div>
+          <div className="flex-20 layout-row layout-align-end-start">
+            <div className="hide-sm hide-xs layout-row layout-wrap  flex-100">
+              <SideOptionsBox
+                header={t('admin:dataManager')}
+                flexOptions="flex-100"
+                content={(
+                  <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                    { user.internal || scope.feature_uploaders ? (
+                      <CollapsingBar
+                        showArrow
+                        collapsed={!expander.upload}
+                        theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                        handleCollapser={() => this.toggleExpander('upload')}
+                        text={t('admin:uploadData')}
+                        faClass="fa fa-cloud-upload"
+                        content={uploadButtons}
+                      />
+                    ) : '' }
+                    <CollapsingBar
+                      showArrow
+                      collapsed={!expander.download}
+                      theme={theme}
+                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                      handleCollapser={() => this.toggleExpander('download')}
+                      text={t('admin:downloadData')}
+                      faClass="fa fa-cloud-download"
+                      content={downloadButtons}
+                    />
+                  </div>
+                )}
+              />
+              <p className={`flex-100 ${styles.tip}`}>{t('admin:pricingsTip')}</p>
+            </div>
+          </div>
+        </div>
+        
       </Tab>
-    ))
-    motTabs.push(<Tab
+    )]
+    tabs.push(<Tab
       tabTitle={t('admin:trucking')}
       theme={theme}
       mot="truck"
     >
       <AdminTrucking
         theme={theme}
-        hubHash={hubHash}
       />
     </Tab>)
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
-
-        <Tabs
-          wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80 margin_bottom"
-          paddingFixes
-        >
-          {motTabs}
-
-        </Tabs>
-
+      <div className="flex-100 layout-row layout-align-end-start">
+        <div className="flex-95 layout-row layout-align-center-start">
+          <Tabs
+            wrapperTabs="layout-row flex-90 margin_bottom"
+            paddingFixes
+          >
+            {tabs}
+          </Tabs>
+        </div>
       </div>
     )
   }

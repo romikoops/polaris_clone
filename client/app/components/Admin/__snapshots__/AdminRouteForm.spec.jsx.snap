@@ -42,18 +42,10 @@ exports[`hubs if falsy 1`] = `
           onChange={[Function]}
           options={
             Array [
-              Object {
-                "label": "Rail",
-                "value": "rail_default",
-              },
-              Object {
-                "label": "Air",
-                "value": "air_default",
-              },
-              Object {
-                "label": "Ocean",
-                "value": "ocean_default",
-              },
+              "air",
+              "rail",
+              "ocean",
+              "truck",
             ]
           }
           placeholder="Mode of Transport"
@@ -240,18 +232,10 @@ exports[`shallow render 1`] = `
           onChange={[Function]}
           options={
             Array [
-              Object {
-                "label": "Rail",
-                "value": "rail_default",
-              },
-              Object {
-                "label": "Air",
-                "value": "air_default",
-              },
-              Object {
-                "label": "Ocean",
-                "value": "ocean_default",
-              },
+              "air",
+              "rail",
+              "ocean",
+              "truck",
             ]
           }
           placeholder="Mode of Transport"
@@ -452,18 +436,10 @@ exports[`theme if falsy 1`] = `
           onChange={[Function]}
           options={
             Array [
-              Object {
-                "label": "Rail",
-                "value": "rail_default",
-              },
-              Object {
-                "label": "Air",
-                "value": "air_default",
-              },
-              Object {
-                "label": "Ocean",
-                "value": "ocean_default",
-              },
+              "air",
+              "rail",
+              "ocean",
+              "truck",
             ]
           }
           placeholder="Mode of Transport"

@@ -346,7 +346,7 @@ function getServiceCharges (redirect) {
     )
   }
 }
-function getPricings (redirect, pages) {
+function getPricings (args) {
   function request (prData) {
     return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData }
   }
@@ -360,11 +360,8 @@ function getPricings (redirect, pages) {
   return (dispatch) => {
     dispatch(request())
     dispatch(getTrucking())
-    adminService.getPricings(pages).then(
+    adminService.getPricings(args).then(
       (response) => {
-        if (redirect) {
-          dispatch(push('/admin/pricings'))
-        }
         dispatch(success(response.data))
       },
       (error) => {
@@ -481,7 +478,6 @@ function getClientPricings (id, redirect) {
     return { type: adminConstants.GET_CLIENT_PRICINGS_REQUEST, payload: prData }
   }
   function success (prData) {
-    // ;
     return { type: adminConstants.GET_CLIENT_PRICINGS_SUCCESS, payload: prData }
   }
   function failure (error) {
@@ -519,7 +515,6 @@ function getItineraryPricings (id, groupId, redirect) {
 
   return (dispatch) => {
     dispatch(request())
-    dispatch(getTrucking())
     adminService.getItineraryPricings(id, groupId).then(
       (response) => {
         if (redirect) {

@@ -931,7 +931,10 @@ export default function admin (state = {}, action) {
     case adminConstants.GET_PRICINGS_SUCCESS: {
       return {
         ...state,
-        pricingData: action.payload,
+        pricings: {
+          ...state.pricings,
+          index: action.payload
+        },
         loading: false
       }
     }

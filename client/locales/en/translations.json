@@ -445,7 +445,7 @@
       "downloadChargeCategories": "Download Charge Definitions Sheet",
       "hubs": "Hubs",
       "pricings": "Pricings",
-      "pricingsSC": "pricings",
+      "pricingsSC": "Pricing Count",
       "uploadOpen": "Upload Open Pricings Sheet",
       "uploadClient": "Upload Client Pricings Sheet",
       "uploadService": "Upload Service Charge Sheet",
@@ -612,7 +612,8 @@
       "originalArea": "Original Area",
       "selectedAreas": "Selected Areas",
       "selectAdminLevel": "Select Admin Level",
-      "uploadNotes": "Upload Terms & Restrictions"
+      "uploadNotes": "Upload Terms & Restrictions",
+      "nextExpiry": "Next Expiry Date"
   },
   "itbox": {
     "component": "IncotermBox",

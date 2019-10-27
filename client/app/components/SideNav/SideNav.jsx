@@ -218,13 +218,7 @@ class SideNav extends Component {
         adminDispatch.getServiceCharges(true)
         break
       case 'pricing': {
-        const pages = {}
-        Object.keys(scope.modes_of_transport).forEach((mot) => {
-          if (Object.values(scope.modes_of_transport[mot]) > 0) {
-            pages[mot] = 1
-          }
-        })
-        adminDispatch.getPricings(true, pages)
+        adminDispatch.goTo('/admin/pricings')
         break }
       case 'schedules':
         adminDispatch.getSchedules(true)

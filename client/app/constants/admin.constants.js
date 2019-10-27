@@ -343,11 +343,7 @@ export const cargoClassOptions = [
   { value: 'fcl_45_rf', label: 'FCL 45 Reefer' }
 ]
 
-export const moTOptions = [
-  { value: 'rail_default', label: 'Rail' },
-  { value: 'air_default', label: 'Air' },
-  { value: 'ocean_default', label: 'Ocean' }
-]
+export const moTOptions = ['air', 'rail', 'ocean', 'truck']
 
 export const cargoOptions = [
   { value: 'any', label: 'Any' },

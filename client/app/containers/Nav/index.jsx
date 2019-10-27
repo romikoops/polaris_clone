@@ -60,6 +60,7 @@ class NavBar extends Component {
 
   cellSwitchAdmin (categories) {
     const { admin } = this.props
+
     switch (categories[1]) {
       case 'clients': {
         const clientName1 = this.extractClientsData(categories)
@@ -163,7 +164,7 @@ class NavBar extends Component {
         const clientName =
           admin.clientPricings && admin.clientPricings.client
             ? `${capitalize(admin.clientPricings.client.first_name)}  ${capitalize(admin.clientPricings.client.last_name)}`
-            : categories[categories.length - 1]
+            : capitalize(categories[categories.length - 1])
 
         return (
           <div

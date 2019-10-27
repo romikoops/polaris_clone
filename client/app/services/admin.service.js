@@ -1,6 +1,6 @@
 import { Promise } from 'es6-promise-promise'
 import { getTenantApiUrl } from '../constants/api.constants'
-import { authHeader, toQueryString } from '../helpers'
+import { authHeader, toQueryString, toSnakeQueryString } from '../helpers'
 
 const { fetch, FormData } = window
 
@@ -32,6 +32,7 @@ function getHubs (page, hubType, countryId, status) {
   return fetch(`${getTenantApiUrl()}/admin/hubs?page=${page || 1}${query}`, requestOptions)
     .then(handleResponse)
 }
+
 function getAllHubs () {
   const requestOptions = {
     method: 'GET',
@@ -314,20 +315,27 @@ function confirmShipment (id, action) {
   return fetch(url, requestOptions).then(handleResponse)
 }
 
-function getPricings (pages) {
+function getPricings (args) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
-  let pageQuery = ''
-  if (pages) {
-    Object.keys(pages).forEach((key) => {
-      pageQuery += `${key}=${pages[key]}&`
+  const queryObj = args
+
+  if (args.filters) {
+    args.filters.forEach((filter) => {
+      queryObj[filter.id] = filter.value
     })
-    pageQuery = pageQuery.slice(0, -1)
+  }
+  if (args.sorted) {
+    args.sorted.forEach((filter) => {
+      queryObj[`${filter.id}_desc`] = filter.desc
+    })
   }
 
-  return fetch(`${getTenantApiUrl()}/admin/pricings?${pageQuery}`, requestOptions)
+  const query = toSnakeQueryString(queryObj, true)
+
+  return fetch(`${getTenantApiUrl()}/admin/pricings?${query}`, requestOptions)
     .then(handleResponse)
 }
 

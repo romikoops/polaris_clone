@@ -43,7 +43,8 @@ export function toQueryString (obj, connect) {
 }
 
 export function toSnakeQueryString (obj, connect) {
-  return Object.keys(obj).filter(k => !!obj[k]).map(key => `${connect ? '&' : ''}${camelToSnakeCase(key)}=${obj[key]}`).join('&')
+  return Object.keys(obj).filter(k => typeof obj[k] !== 'undefined')
+    .map(key => `${connect ? '&' : ''}${camelToSnakeCase(key)}=${obj[key]}`).join('&')
 }
 
 export function deepSnakefyKeys (obj) {
