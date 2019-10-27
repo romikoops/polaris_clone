@@ -34,13 +34,13 @@ module OfferCalculatorService
             meta: meta(
               schedule: grand_total_charge[:schedules].first,
               shipment: @shipment,
-              pricing_ids_by_cargo_class: current_result[:pricing_ids_by_cargo_class],
+              pricings_by_cargo_class: current_result[:pricings_by_cargo_class],
               user: user
             ),
             notes: grab_notes(
               schedule: grand_total_charge[:schedules].first,
               tenant_id: @shipment.tenant_id,
-              pricing_ids: current_result[:pricing_ids_by_cargo_class].values.flatten
+              pricing_ids: current_result[:pricings_by_cargo_class].values.flatten
             )
           }
         end
@@ -77,7 +77,7 @@ module OfferCalculatorService
       filtered_detailed_schedules
     end
 
-    def meta(schedule:, shipment:, pricing_ids_by_cargo_class:, user:) # rubocop:disable /MethodLength, Metrics AbcSize
+    def meta(schedule:, shipment:, pricings_by_cargo_class:, user:) # rubocop:disable /MethodLength, Metrics AbcSize
       chargeable_weight = if shipment.lcl? && shipment.aggregated_cargo
                             shipment.aggregated_cargo.calc_chargeable_weight(schedule.mode_of_transport)
                           elsif shipment.lcl? && !shipment.aggregated_cargo
@@ -100,8 +100,11 @@ module OfferCalculatorService
         destination_hub: schedule.destination_hub,
         charge_trip_id: schedule.trip_id,
         ocean_chargeable_weight: chargeable_weight,
-        pricing_ids_by_cargo_class: pricing_ids_by_cargo_class,
-        transshipmentVia: grab_transshipment(pricing_ids: pricing_ids_by_cargo_class.values.flatten, tenant_id: shipment.tenant_id),
+        pricings_by_cargo_class: pricings_by_cargo_class,
+        transshipmentVia: grab_transshipment(
+          pricing_ids: pricings_by_cargo_class.values.flat_map { |pricing| pricing['id'] },
+          tenant_id: shipment.tenant_id
+        ),
         pricing_rate_data: grab_pricing_rates(
           schedule: schedule,
           load_type: shipment.load_type,
@@ -218,7 +221,7 @@ module OfferCalculatorService
               end
               cargo_class_key = pricing[:cargo_class]
               obj = {
-                pricing_ids_by_cargo_class: {
+                pricings_by_cargo_class: {
                   cargo_class_key => pricing
                 },
                 schedules: schedules_for_obj
@@ -228,21 +231,21 @@ module OfferCalculatorService
                 other_cargo_class_key = other_pricing[:cargo_class]
                 if other_pricing[:effective_date] < dates[:start_date] &&
                    other_pricing[:expiration_date] > dates[:end_date]
-                  obj[:pricing_ids_by_cargo_class][other_cargo_class_key] =
+                  obj[:pricings_by_cargo_class][other_cargo_class_key] =
                     other_pricing
                 end
                 if dates[:start_date] && dates[:end_date] &&
-                   obj[:pricing_ids_by_cargo_class][other_cargo_class_key].nil? &&
+                   obj[:pricings_by_cargo_class][other_cargo_class_key].nil? &&
                    other_pricing[:effective_date] < dates[:start_date] &&
                    other_pricing[:expiration_date] > dates[:end_date]
-                  obj[:pricing_ids_by_cargo_class][other_cargo_class_key] =
+                  obj[:pricings_by_cargo_class][other_cargo_class_key] =
                     other_pricing
                 end
-                next unless obj[:pricing_ids_by_cargo_class][other_cargo_class_key].nil? &&
+                next unless obj[:pricings_by_cargo_class][other_cargo_class_key].nil? &&
                             other_pricing[:effective_date] < obj[:schedules].first.closing_date &&
                             other_pricing[:expiration_date] > obj[:schedules].last.closing_date
 
-                obj[:pricing_ids_by_cargo_class][other_cargo_class_key] = other_pricing
+                obj[:pricings_by_cargo_class][other_cargo_class_key] = other_pricing
               end
               result_to_return << obj
             end
@@ -251,19 +254,20 @@ module OfferCalculatorService
               schedules_for_obj = schedules_array.dup
               unless dates[:is_quote]
                 schedules_for_obj.select! do |sched|
-                  sched.etd < pricing.expiration_date && sched.etd > pricing.effective_date
+                  sched.etd < pricing[:expiration_date] && sched.etd > pricing[:effective_date]
                 end
                 if schedules_for_obj.empty?
                   schedules_for_obj = schedules_array.select do |sched|
-                    sched.closing_date < pricing.expiration_date &&
-                      sched.closing_date > pricing.effective_date
+                    sched.closing_date < pricing[:expiration_date] &&
+                      sched.closing_date > pricing[:effective_date]
                   end
                 end
               end
-              cargo_class_key = pricing.try(:cargo_class) || pricing.transport_category.cargo_class.to_s
+
+              cargo_class_key = pricing[:cargo_class] || TransportCategory.find(pricing[:transport_category_id])&.cargo_class.to_s
               obj = {
-                pricing_ids_by_cargo_class: {
-                  cargo_class_key => pricing.id
+                pricings_by_cargo_class: {
+                  cargo_class_key => pricing
                 },
                 schedules: schedules_for_obj
               }
@@ -272,21 +276,21 @@ module OfferCalculatorService
                 other_cargo_class_key = other_pricing.try(:cargo_class) || other_pricing.transport_category.cargo_class.to_s
                 if other_pricing.effective_date < dates[:start_date] &&
                    other_pricing.expiration_date > dates[:end_date]
-                  obj[:pricing_ids_by_cargo_class][other_cargo_class_key] =
-                    other_pricing.id
+                  obj[:pricings_by_cargo_class][other_cargo_class_key] =
+                    other_pricing
                 end
                 if dates[:start_date] && dates[:end_date] &&
-                   obj[:pricing_ids_by_cargo_class][other_cargo_class_key].nil? &&
+                   obj[:pricings_by_cargo_class][other_cargo_class_key].nil? &&
                    other_pricing.effective_date < dates[:start_date] &&
                    other_pricing.expiration_date > dates[:end_date]
-                  obj[:pricing_ids_by_cargo_class][other_cargo_class_key] =
-                    other_pricing.id
+                  obj[:pricings_by_cargo_class][other_cargo_class_key] =
+                    other_pricing
                 end
-                next unless obj[:pricing_ids_by_cargo_class][other_cargo_class_key].nil? &&
+                next unless obj[:pricings_by_cargo_class][other_cargo_class_key].nil? &&
                             other_pricing.effective_date < obj[:schedules].first.closing_date &&
                             other_pricing.expiration_date > obj[:schedules].last.closing_date
 
-                obj[:pricing_ids_by_cargo_class][other_cargo_class_key] = other_pricing.id
+                obj[:pricings_by_cargo_class][other_cargo_class_key] = other_pricing
               end
               result_to_return << obj
             end
@@ -342,7 +346,9 @@ module OfferCalculatorService
         pricings_by_cargo_class_and_dates_and_user = pricings_by_cargo_class_and_dates
                                                      .select { |pricing| pricing.user_id.nil? }
       end
-      pricings_by_cargo_class_and_dates_and_user.group_by { |pricing| pricing.transport_category_id.to_s }
+      pricings_by_cargo_class_and_dates_and_user
+        .map{ |pricing| pricing.as_json.with_indifferent_access }
+        .group_by { |pricing| pricing['transport_category_id'] }
     end
 
     def extract_dates_and_quote(schedules)

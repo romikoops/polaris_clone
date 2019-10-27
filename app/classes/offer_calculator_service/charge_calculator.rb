@@ -6,10 +6,10 @@ module OfferCalculatorService
       @data = args.fetch(:data)
       @trucking_data = args.fetch(:trucking_data)
       @schedules = @data.fetch(:schedules)
-      @schedule      = @data.fetch(:schedules)&.first
-      @user          = args.fetch(:user)
-      @sandbox       = args.fetch(:sandbox)
-      @shipment      = args.fetch(:shipment)
+      @schedule = @data.fetch(:schedules)&.first
+      @user = args.fetch(:user)
+      @sandbox = args.fetch(:sandbox)
+      @shipment = args.fetch(:shipment)
       super(shipment: @shipment, sandbox: @sandbox)
     end
 
@@ -210,7 +210,7 @@ module OfferCalculatorService
         charge_result = if @scope['base_pricing']
                           ::Pricings::Calculator.new(
                             cargo: cargo_unit,
-                            pricing: @data[:pricing_ids_by_cargo_class][cargo_class],
+                            pricing: @data.dig(:pricings_by_cargo_class, cargo_class),
                             user: @user,
                             mode_of_transport: @schedule.mode_of_transport,
                             date: @shipment.planned_pickup_date
@@ -218,7 +218,7 @@ module OfferCalculatorService
                         else
                           @pricing_tools.send("determine_#{@shipment.load_type}_price",
                                               cargo_unit,
-                                              @data[:pricing_ids_by_cargo_class][cargo_class],
+                                              @data.dig(:pricings_by_cargo_class, cargo_class, 'data'),
                                               @user,
                                               total_units,
                                               @shipment.planned_pickup_date,

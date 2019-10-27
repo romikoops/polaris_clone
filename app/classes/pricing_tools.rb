@@ -295,11 +295,7 @@ class PricingTools # rubocop:disable Metrics/ClassLength
     totals
   end
 
-  def determine_cargo_item_price(cargo, pricing_id, user, _quantity, shipment_date, mot) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
-    return nil if pricing_id.nil?
-
-    pricing = get_user_price(pricing_id, shipment_date)
-
+  def determine_cargo_item_price(cargo, pricing, user, _quantity, shipment_date, mot) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
     return nil if pricing.nil?
 
     totals = { 'total' => {} }
@@ -329,11 +325,7 @@ class PricingTools # rubocop:disable Metrics/ClassLength
     totals
   end
 
-  def determine_container_price(container, pricing_id, user, _quantity, shipment_date, mot) # rubocop:disable Metrics/ParameterLists
-    return nil if pricing_id.nil?
-
-    pricing = get_user_price(pricing_id, shipment_date)
-
+  def determine_container_price(container, pricing, user, _quantity, shipment_date, mot) # rubocop:disable Metrics/ParameterLists
     return nil if pricing.nil?
 
     totals = { 'total' => {} }
