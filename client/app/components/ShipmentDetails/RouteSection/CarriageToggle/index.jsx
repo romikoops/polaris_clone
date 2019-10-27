@@ -6,12 +6,18 @@ import styles from './index.scss'
 function CarriageToggle ({
   carriage, checked, onChange, t, theme, labelOnly
 }) {
+  let labelString
+  if (checked) {
+    labelString = carriage === 'pre' ? t('shipment:pickUp') : t('shipment:delivery')
+  } else {
+    labelString = carriage === 'pre' ? t('shipment:portOfLoading') : t('shipment:portOfDischarge')
+  }
   const label = (
     <label
       htmlFor={`${carriage}Carriage`}
       className={`flex-100 layout-row layout-align-end-start layout-wrap ${styles.carriage_label}`}
     >
-      <p style={{ marginRight: '15px' }}>{ carriage === 'pre' ? t('shipment:pickUp') : t('shipment:delivery') }</p>
+      <p>{ labelString }</p>
     </label>
   )
 

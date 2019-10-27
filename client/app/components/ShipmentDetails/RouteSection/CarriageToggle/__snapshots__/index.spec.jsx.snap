@@ -8,13 +8,7 @@ exports[`carriage is on 1`] = `
     className="flex-100 layout-row layout-align-end-start layout-wrap carriage_label"
     htmlFor="onCarriage"
   >
-    <p
-      style={
-        Object {
-          "marginRight": "15px",
-        }
-      }
-    >
+    <p>
       Delivery
     </p>
   </label>
@@ -57,13 +51,7 @@ exports[`renders correctly 1`] = `
     className="flex-100 layout-row layout-align-end-start layout-wrap carriage_label"
     htmlFor="preCarriage"
   >
-    <p
-      style={
-        Object {
-          "marginRight": "15px",
-        }
-      }
-    >
+    <p>
       Pick-up
     </p>
   </label>
@@ -106,14 +94,8 @@ exports[`with empty props 1`] = `
     className="flex-100 layout-row layout-align-end-start layout-wrap carriage_label"
     htmlFor="undefinedCarriage"
   >
-    <p
-      style={
-        Object {
-          "marginRight": "15px",
-        }
-      }
-    >
-      Delivery
+    <p>
+      Port of Discharge
     </p>
   </label>
   <Toggle

@@ -989,7 +989,9 @@
     "ftl": "FTL",
     "ltl": "LTL",
     "truckingAvailable": "Trucking Available",
-    "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date."
+    "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date.",
+    "portOfLoading": "Port of Loading",
+    "portOfDischarge": "Port of Discharge"
   },
   "user": {
     "companyName": "Company Name",
