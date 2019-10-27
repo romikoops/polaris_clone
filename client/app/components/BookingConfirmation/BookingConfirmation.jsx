@@ -43,6 +43,8 @@ import {
 import CargoContainerGroup from '../Cargo/Container/Group'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import GreyBox from '../GreyBox/GreyBox'
+import ScrollTracking from '../Addons/ScrollTracking'
+import { trackingConstants } from '../../constants/tracking.constants'
 
 const AFTER_CONTAINER =
   `${WRAP_ROW('NONE')} ${ALIGN_CENTER_START} content_width_booking`
@@ -553,6 +555,7 @@ export class BookingConfirmation extends Component {
               />
             </div>
           </div>
+          <ScrollTracking type={trackingConstants.COMPLETE_BOOKING_SCROLL} />
         </div>
       </div>
     )

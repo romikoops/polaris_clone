@@ -1443,6 +1443,9 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
         />
       </div>
     </div>
+    <Connect(ScrollTracking)
+      type="COMPLETE_BOOKING_SCROLL"
+    />
   </div>
 </div>
 `;
@@ -2876,6 +2879,9 @@ exports[`shallow render 1`] = `
         />
       </div>
     </div>
+    <Connect(ScrollTracking)
+      type="COMPLETE_BOOKING_SCROLL"
+    />
   </div>
 </div>
 `;
@@ -4293,6 +4299,9 @@ exports[`shipment.cargo_notes is falsy 1`] = `
         />
       </div>
     </div>
+    <Connect(ScrollTracking)
+      type="COMPLETE_BOOKING_SCROLL"
+    />
   </div>
 </div>
 `;
@@ -5710,6 +5719,9 @@ exports[`shipment.eori is falsy 1`] = `
         />
       </div>
     </div>
+    <Connect(ScrollTracking)
+      type="COMPLETE_BOOKING_SCROLL"
+    />
   </div>
 </div>
 `;
@@ -7127,6 +7139,9 @@ exports[`shipment.incoterm_text is falsy 1`] = `
         />
       </div>
     </div>
+    <Connect(ScrollTracking)
+      type="COMPLETE_BOOKING_SCROLL"
+    />
   </div>
 </div>
 `;
@@ -8544,6 +8559,9 @@ exports[`shipment.notes is falsy 1`] = `
         />
       </div>
     </div>
+    <Connect(ScrollTracking)
+      type="COMPLETE_BOOKING_SCROLL"
+    />
   </div>
 </div>
 `;
@@ -9955,6 +9973,9 @@ exports[`shipment.total_goods_value is falsy 1`] = `
         />
       </div>
     </div>
+    <Connect(ScrollTracking)
+      type="COMPLETE_BOOKING_SCROLL"
+    />
   </div>
 </div>
 `;
@@ -11256,6 +11277,9 @@ exports[`shipmentData.notifyees is falsy 1`] = `
         />
       </div>
     </div>
+    <Connect(ScrollTracking)
+      type="COMPLETE_BOOKING_SCROLL"
+    />
   </div>
 </div>
 `;
@@ -12695,6 +12719,9 @@ exports[`state.acceptTerms is true 1`] = `
         />
       </div>
     </div>
+    <Connect(ScrollTracking)
+      type="COMPLETE_BOOKING_SCROLL"
+    />
   </div>
 </div>
 `;
@@ -14125,6 +14152,9 @@ exports[`tenant.scope.terms.length is 0 1`] = `
         />
       </div>
     </div>
+    <Connect(ScrollTracking)
+      type="COMPLETE_BOOKING_SCROLL"
+    />
   </div>
 </div>
 `;
@@ -15495,6 +15525,9 @@ exports[`theme is falsy 1`] = `
         />
       </div>
     </div>
+    <Connect(ScrollTracking)
+      type="COMPLETE_BOOKING_SCROLL"
+    />
   </div>
 </div>
 `;

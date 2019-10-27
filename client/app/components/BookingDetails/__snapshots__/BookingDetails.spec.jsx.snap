@@ -894,6 +894,9 @@ exports[`shallow render 1`] = `
       </div>
     </div>
   </Formsy>
+  <Connect(ScrollTracking)
+    type="FINAL_DETAILS_SCROLL"
+  />
 </div>
 `;
 
@@ -1576,5 +1579,8 @@ exports[`theme is falsy 1`] = `
       </div>
     </div>
   </Formsy>
+  <Connect(ScrollTracking)
+    type="FINAL_DETAILS_SCROLL"
+  />
 </div>
 `;

@@ -18,16 +18,12 @@ Sentry.init({
   release: window.keel.release || process.env.RELEASE
 })
 
-window.dataLayer = window.dataLayer || [];
+window.dataLayer = window.dataLayer || []
 const store = configureStore()
 
 render(
   <I18nextProvider i18n={i18n}>
-    <GTM
-      gtm={{
-        id: getConfig().gtmId
-      }}
-    >
+    <GTM gtm={{ id: getConfig().gtmId }}>
       <Root store={store} history={history} />
     </GTM>
   </I18nextProvider>,

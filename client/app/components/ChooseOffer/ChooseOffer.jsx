@@ -17,6 +17,8 @@ import DocumentsDownloader from '../Documents/Downloader'
 import { RoundButton } from '../RoundButton/RoundButton'
 import QuoteCard from '../Quote/Card'
 import { Modal } from '../Modal/Modal'
+import ScrollTracking from '../Addons/ScrollTracking'
+import { trackingConstants } from '../../constants/tracking.constants'
 
 class ChooseOffer extends Component {
   static dynamicSort (property) {
@@ -413,6 +415,9 @@ class ChooseOffer extends Component {
             </div>
           </div>
         )}
+        <div className="flex-none content_width_booking layout-row">
+          <ScrollTracking type={trackingConstants.CHOOSE_OFFER_SCROLL} />
+        </div>
       </div>
     )
   }

@@ -8,6 +8,8 @@ import ButtonWrapper from './ButtonWrapper'
 import { isQuote } from '../../../helpers'
 import styles from './index.scss'
 import ErrorMessage from './ErrorMessage';
+import ScrollTracking from "../../Addons/ScrollTracking";
+import { trackingConstants } from "../../../constants/tracking.constants";
 
 class GetOffersSection extends React.PureComponent {
   constructor (props) {
@@ -176,6 +178,9 @@ class GetOffersSection extends React.PureComponent {
                 subTexts={subTexts}
               />
             </div>
+
+            <ScrollTracking type={trackingConstants.SHIPMENTS_DETAILS_SCROLL }/>
+            
           </div>
         </div>
       </div>

@@ -107,6 +107,9 @@ exports[`renders correctly 1`] = `
           }
         />
       </div>
+      <ScrollTracking
+        type="SHIPMENTS_DETAILS_SCROLL"
+      />
     </div>
   </div>
 </div>

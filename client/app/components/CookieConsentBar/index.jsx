@@ -1,12 +1,12 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
-import { withGTM } from 'react-tag-manager'
 import PropTypes from '../../prop-types'
 import styles from './CookieConsentBar.scss'
 import { ROW, trim, COLUMN } from '../../classNames'
 import setCookie from './_modules/setCookie'
 import getCookie from './_modules/getCookie'
+import { trackingConstants } from "../../constants/tracking.constants";
 
 const sampleData = {
   title: 'This site use cookies',
@@ -77,6 +77,11 @@ class PureCookieConsentBar extends React.PureComponent {
     this.toggleMarketing = this.toggleMarketing.bind(this)
     this.toggleAnalytics = this.toggleAnalytics.bind(this)
     this.accept = this.accept.bind(this)
+    this.pushEvents = this.pushEvents.bind(this)
+
+    if (accepted) {
+      this.pushEvents()
+    }
   }
 
   toggleAnalytics () {
@@ -106,11 +111,10 @@ class PureCookieConsentBar extends React.PureComponent {
   }
 
   pushEvents () {
-    const { GTM } = this.props
+    const { onChange } = this.props
+    const { consent } = this.state
 
-    if (this.state.consent.mandatory) { GTM.api.trigger({ event: 'consent_mandatory', consent_mandatory: '1' }) }
-    if (this.state.consent.analytics) { GTM.api.trigger({ event: 'consent_analytics', consent_analytics: '1' }) }
-    if (this.state.consent.marketing) { GTM.api.trigger({ event: 'consent_marketing', consent_marketing: '1' }) }
+    onChange({ type: trackingConstants.TRACKING_CONSENT, ...consent })
   }
 
   render () {
@@ -223,19 +227,24 @@ class PureCookieConsentBar extends React.PureComponent {
 
 PureCookieConsentBar.propTypes = {
   t: PropTypes.func.isRequired,
-  tenant: PropTypes.tenant
+  tenant: PropTypes.tenant,
+  onChange: PropTypes.func
 }
 
 PureCookieConsentBar.defaultProps = {
-  tenant: null
+  tenant: null,
+  onChange: () => {}
 }
 
 function mapStateToProps (state) {
   return state.cookie
 }
 
-@withGTM
-@connect(mapStateToProps)
+const mapDispatchToProps = dispatch => ({
+  onChange: (type, consent) => dispatch(type, consent)
+})
+
+@connect(mapStateToProps, mapDispatchToProps)
 class CookieConsentBar extends PureCookieConsentBar {}
 
 export const TPureCookieConsentBar = withNamespaces()(PureCookieConsentBar)

@@ -2,7 +2,7 @@ let config = {}
 
 export default function getConfig () {
   const googleTagManagerId = {
-    development: '',
+    development: 'GTM-P29HCHV',
     test: '',
     review: 'GTM-P29HCHV',
     production: 'GTM-KTST893'

@@ -36,6 +36,12 @@ module Legacy
       all_groups.ids
     end
 
+    def company_name
+      return self[:company_name] unless self[:company_name].nil?
+
+      agency.try(:name)
+    end
+
     private
 
     def set_default_role

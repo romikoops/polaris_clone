@@ -21,6 +21,8 @@ import {
   WRAP_ROW
 } from '../../classNames'
 import { totalPrice } from '../../helpers'
+import ScrollTracking from '../Addons/ScrollTracking'
+import { trackingConstants } from '../../constants/tracking.constants'
 
 const CONTAINER = `BOOKING_DETAILS ${WRAP_ROW(100)} ${ALIGN_CENTER_START}`
 
@@ -483,6 +485,7 @@ export class BookingDetails extends Component {
           <hr className={`${styles.sec_break} flex-100`} />
           {BackButtonComponent}
         </Formsy>
+        <ScrollTracking type={trackingConstants.FINAL_DETAILS_SCROLL} />
       </div>
     )
   }
