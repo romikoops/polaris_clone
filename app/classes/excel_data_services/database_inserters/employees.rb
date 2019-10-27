@@ -23,6 +23,7 @@ module ExcelDataServices
           email: params[:email],
           phone: params[:phone],
           vat_number: params[:vat_number],
+          company_number: params[:company_number],
           role_id: Role.find_by(name: 'shipper'),
           sandbox: @sandbox
         )

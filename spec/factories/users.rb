@@ -57,4 +57,5 @@ end
 #  internal               :boolean          default(FALSE)
 #  deleted_at             :datetime
 #  sandbox_id             :uuid
+#  company_number         :string
 #

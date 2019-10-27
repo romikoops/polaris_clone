@@ -21,7 +21,7 @@ function mergeMinLengthValidations (minLength, validations, validationErrors) {
 
 export default function RegistrationFormGroup (props) {
   const {
-    field, flex, offset, minLength, type, required, theme, handleFocus, focus, submitAttempted
+    field, flex, offset, minLength, type, required, theme, handleFocus, focus, submitAttempted, name
   } = props
   const focusStyles = {
     borderColor: theme && theme.colors ? theme.colors.primary : 'black',
@@ -42,7 +42,7 @@ export default function RegistrationFormGroup (props) {
         className={styles.registration_form_label}
         htmlFor={field}
       >
-        {humanizeSnakeCase(field)}
+        {humanizeSnakeCase(name || field)}
       </label>
       <FormsyInput
         type={type || 'text'}
@@ -68,6 +68,7 @@ export default function RegistrationFormGroup (props) {
 RegistrationFormGroup.propTypes = {
   field: PropTypes.string.isRequired,
   flex: PropTypes.string,
+  name: PropTypes.string,
   offset: PropTypes.string,
   minLength: PropTypes.string,
   type: PropTypes.string,
@@ -83,6 +84,7 @@ RegistrationFormGroup.propTypes = {
 RegistrationFormGroup.defaultProps = {
   flex: '',
   offset: '',
+  name: '',
   minLength: '',
   type: '',
   required: true,

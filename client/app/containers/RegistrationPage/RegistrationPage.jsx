@@ -15,7 +15,6 @@ class RegistrationPage extends React.PureComponent {
     Object.keys(inputs).forEach((inputName) => {
       model[inputName] = inputs[inputName]
     })
-
     return model
   }
 
@@ -107,6 +106,9 @@ class RegistrationPage extends React.PureComponent {
       registering, theme, tenant, authenticationDispatch
     } = this.props
 
+    const { scope } = tenant
+    const { mandatory_form_fields } = scope 
+
     const sharedProps = {
       handleFocus: e => this.handleFocus(e),
       focus: this.state.focus,
@@ -141,19 +143,25 @@ class RegistrationPage extends React.PureComponent {
               {...sharedProps}
             />
             <RegistrationFormGroup
+              field="company_number"
+              validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
+              {...sharedProps}
+              required={mandatory_form_fields.company_id_for_signup}
+            />
+            <RegistrationFormGroup
               field="email"
               minLength="2"
               validations={{ matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i }}
               validationErrors={{ matchRegexp: 'Invalid email' }}
               {...sharedProps}
             />
-            {tenant.scope.mandatory_form_fields.phone_for_signup && (
-              <RegistrationFormGroup
-                field="phone"
-                minLength="2"
-                {...sharedProps}
-              />
-            )}
+            <RegistrationFormGroup
+              field="phone"
+              minLength="2"
+              {...sharedProps}
+              validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
+              required={mandatory_form_fields.phone_for_signup}
+            />
             <RegistrationFormGroup
               field="password"
               minLength="8"

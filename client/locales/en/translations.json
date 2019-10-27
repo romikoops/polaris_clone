@@ -999,6 +999,7 @@
     "phone": "Phone",
     "street": "Street",
     "vatNo": "VAT Number",
+    "companyNumber": "Company Identification Number",
     "fullName": "Full Name",
     "number": "Number",
     "streetNumber": "Street Number",

@@ -93,7 +93,8 @@ module Tenants
       mandatory_form_fields: {
         total_value_goods: false,
         description_of_goods: false,
-        phone_for_signup: false
+        phone_for_signup: false,
+        company_id_for_signup: true
       },
       translation_overrides: false,
       offer_disclaimers: false,

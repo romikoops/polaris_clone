@@ -64,7 +64,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
     email password
     guest tenant_id confirm_password password_confirmation
     company_name vat_number VAT_number first_name last_name phone
-    optin_status_id cookies
+    optin_status_id cookies company_number
   ).freeze
 
   # Filterrific
@@ -338,4 +338,5 @@ end
 #  internal               :boolean          default(FALSE)
 #  deleted_at             :datetime
 #  sandbox_id             :uuid
+#  company_number         :string
 #

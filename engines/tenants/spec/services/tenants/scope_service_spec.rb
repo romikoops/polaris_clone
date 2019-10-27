@@ -60,7 +60,8 @@ RSpec.describe Tenants::ScopeService do
           mandatory_form_fields: {
             total_value_goods: false,
             description_of_goods: false,
-            phone_for_signup: false
+            phone_for_signup: false,
+            company_id_for_signup: true
           },
           modes_of_transport: {
             air: { cargo_item: true, container: false },

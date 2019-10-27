@@ -95,7 +95,8 @@ class UsersController < ApplicationController
   def user_params
     return_params = params.require(:update).permit(
       :guest, :tenant_id, :email, :password, :confirm_password, :password_confirmation,
-      :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone, :cookies
+      :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone, :cookies,
+      :company_number
     ).to_h
 
     unless return_params[:confirm_password].nil?

@@ -1696,6 +1696,7 @@ ActiveRecord::Schema.define(version: 2019_10_23_140931) do
     t.integer "agency_id"
     t.boolean "allow_password_change", default: false, null: false
     t.string "company_name"
+    t.string "company_number"
     t.datetime "confirmation_sent_at"
     t.string "confirmation_token"
     t.datetime "confirmed_at"
