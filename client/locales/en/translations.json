@@ -212,7 +212,8 @@
     "kg": "Kg",
     "cbm": "CBM",
     "enabled": "Enabled",
-    "notesAndInfo": "Terms & Restrictions"
+    "notesAndInfo": "Terms & Restrictions",
+    "freeOut": "Free Out"
   },
   "admin": {
       "savePricings": "Save Pricings",

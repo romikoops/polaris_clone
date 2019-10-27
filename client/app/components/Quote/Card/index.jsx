@@ -235,6 +235,7 @@ class QuoteCard extends PureComponent {
         parentToggle={this.toggleNotesModal}
       />
     )
+    const freeOutLabel = (<small>({t('common:freeOut')})</small>)
 
     return (
       <div className={`
@@ -256,12 +257,18 @@ class QuoteCard extends PureComponent {
             <div className="layout-column layout-align-center-start flex-100">
               <p>
                 {`${t('common:from')}: `}
-                <span>{originHub.name}</span>
+                <span>
+                  {originHub.name}
+                  {originHub.free_out && freeOutLabel}
+                </span>
 
               </p>
               <p>
                 {`${t('common:to')}: `}
-                <span>{destinationHub.name}</span>
+                <span>
+                  {destinationHub.name}
+                  {destinationHub.free_out && freeOutLabel}
+                </span>
               </p>
             </div>
           </div>

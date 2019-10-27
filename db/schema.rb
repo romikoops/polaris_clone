@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_21_091328) do
+ActiveRecord::Schema.define(version: 2019_10_23_140931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -369,6 +369,7 @@ ActiveRecord::Schema.define(version: 2019_10_21_091328) do
   create_table "hubs", force: :cascade do |t|
     t.integer "address_id"
     t.datetime "created_at", null: false
+    t.boolean "free_out", default: false
     t.string "hub_code"
     t.string "hub_status", default: "active"
     t.string "hub_type"

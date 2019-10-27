@@ -48,6 +48,7 @@ module ExcelTool
         country: 'COUNTRY',
         geocoded_address: 'FULL_ADDRESS',
         photo: 'PHOTO',
+        free_out: 'FREE_OUT',
         import_charges: 'IMPORT_CHARGES',
         export_charges: 'EXPORT_CHARGES',
         pre_carriage: 'PRE_CARRIAGE',
@@ -151,7 +152,8 @@ module ExcelTool
         name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
         photo: hub_row[:photo],
         mandatory_charge: @mandatory_charge,
-        hub_code: hub_row[:locode]
+        hub_code: hub_row[:locode],
+        free_out: hub_row[:pre_carriage] || false
       )
     end
 

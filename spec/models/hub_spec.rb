@@ -71,4 +71,5 @@ end
 #  nexus_id            :integer
 #  mandatory_charge_id :integer
 #  sandbox_id          :uuid
+#  free_out            :boolean          default(FALSE)
 #

@@ -35,8 +35,24 @@
           <% end %>
           <i class="fa fa-<%= mot %> mot-icon" style="color: <%= primary_color %>"></i>
           <div class="shipment-info">
-            <p>From:&nbsp;<span><%= shipment.origin_hub.name %></span></p>
-            <p>To:&nbsp;<span><%= shipment.destination_hub.name %></span></p>
+             <p>
+              From:&nbsp;
+              <span>
+                <%= shipment.origin_hub&.name %>
+                <% if shipment.origin_hub&.free_out %>
+                  (Free Out)
+                <% end %>
+              </span>
+            </p>
+            <p>
+              To:&nbsp;
+              <span>
+                <%= shipment.destination_hub&.name%>
+                <% if shipment.destination_hub&.free_out %>
+                  (Free Out)
+                <% end %> 
+              </span>
+            </p>
           </div>
           <div class="text-right cargo-info">
             <div class="charge-icons">

@@ -37,15 +37,16 @@ module DocumentService
       worksheet.write(row, 5, hub.address&.longitude)
       worksheet.write(row, 6, hub.address&.country&.name)
       worksheet.write(row, 7, hub.address&.geocoded_address)
-      worksheet.write(row, 8, @mandatory_charges[hub.id]&.import_charges&.to_s)
-      worksheet.write(row, 9, @mandatory_charges[hub.id]&.export_charges&.to_s)
-      worksheet.write(row, 10, @mandatory_charges[hub.id]&.pre_carriage&.to_s)
-      worksheet.write(row, 11, @mandatory_charges[hub.id]&.on_carriage&.to_s)
-      worksheet.write(row, 12, hub.photo)
+      worksheet.write(row, 8, hub.free_out.to_s)
+      worksheet.write(row, 9, @mandatory_charges[hub.id]&.import_charges&.to_s )
+      worksheet.write(row, 10, @mandatory_charges[hub.id]&.export_charges&.to_s)
+      worksheet.write(row, 11, @mandatory_charges[hub.id]&.pre_carriage&.to_s)
+      worksheet.write(row, 12, @mandatory_charges[hub.id]&.on_carriage&.to_s)
+      worksheet.write(row, 13, hub.photo)
     end
 
     def header_values
-      %w(STATUS TYPE NAME LOCODE LATITUDE LONGITUDE COUNTRY FULL_ADDRESS IMPORT_CHARGES EXPORT_CHARGES PRE_CARRIAGE 
+      %w(STATUS TYPE NAME LOCODE LATITUDE LONGITUDE COUNTRY FULL_ADDRESS FREE_OUT IMPORT_CHARGES EXPORT_CHARGES PRE_CARRIAGE 
         ON_CARRIAGE PHOTO ALTERNATIVE_NAMES)
     end
   end
