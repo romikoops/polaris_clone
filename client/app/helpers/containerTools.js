@@ -1,20 +1,18 @@
-import { CONTAINER_DESCRIPTIONS, CONTAINER_TARE_WEIGHTS } from '../constants'
+import { sortBy } from 'lodash'
+import {
+  CONTAINER_TYPES,
+  CONTAINER_TARE_WEIGHTS
+} from '../constants'
 
 export function getSizeClassOptions (validKeys) {
-  let sizesToRender
-  if (validKeys) {
-    const limitedContainers = {}
-    validKeys.forEach((k) => {
-      limitedContainers[k] = CONTAINER_DESCRIPTIONS[k]
-    })
-    sizesToRender = Object.entries(limitedContainers)
-  } else {
-    sizesToRender = Object.entries(CONTAINER_DESCRIPTIONS)
-  }
+  let sizesToRender = CONTAINER_TYPES.filter(x =>
+    x.type !== 'lcl' && (!validKeys || validKeys.indexOf(x.type) > -1)
+  )
 
-  return sizesToRender.reduce((options, [value, label]) => (
-    value === 'lcl' ? options : [...options, { value, label }]
-  ), [])
+  sizesToRender = sortBy(sizesToRender, 'order')
+    .map(x => ({ label: x.label, value: x.type }))
+
+  return sizesToRender
 }
 
 export function getTareWeight (container) {
