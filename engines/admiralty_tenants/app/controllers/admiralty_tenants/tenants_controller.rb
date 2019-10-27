@@ -52,10 +52,9 @@ module AdmiraltyTenants
     end
 
     def remove_default_values
-      default_scope = ::Tenants::ScopeService::DEFAULT_SCOPE
-      edited_scope = JSON.parse(tenant_params[:scope]).deep_symbolize_keys
+      edited_scope = JSON.parse(tenant_params[:scope])
       edited_scope.keys.each_with_object({}) do |key, hash|
-        hash[key] = edited_scope[key] if edited_scope[key] != default_scope[key]
+        hash[key] = edited_scope[key] if edited_scope[key] != ::Tenants::ScopeService::DEFAULT_SCOPE.with_indifferent_access[key]
       end
     end
   end
