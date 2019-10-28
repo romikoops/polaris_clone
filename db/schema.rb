@@ -1055,7 +1055,7 @@ ActiveRecord::Schema.define(version: 2019_10_23_140931) do
     t.string "load_type"
     t.string "name"
     t.integer "origin_hub_id"
-    t.bigint "quotation_id"
+    t.uuid "quotation_id"
     t.bigint "tenant_vehicle_id"
     t.datetime "updated_at", null: false
     t.index ["destination_hub_id"], name: "index_quotations_tenders_on_destination_hub_id"
@@ -1774,6 +1774,7 @@ ActiveRecord::Schema.define(version: 2019_10_23_140931) do
 
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "quotations_tenders", "quotations_quotations", column: "quotation_id"
   add_foreign_key "remarks", "tenants"
   add_foreign_key "shipments", "transport_categories"
   add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
