@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidators
     module InsertableChecks
-      class Base < parent::Base
+      class Base < ExcelDataServices::DataValidators::Base
         alias chunked_data data
 
         def perform
@@ -30,6 +30,17 @@ module ExcelDataServices
             type: :error,
             row_nr: row.nr,
             reason: 'Effective date must lie before before expiration date!',
+            exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks
+          )
+        end
+
+        def check_individual_hub(hub, info, row)
+          return if hub
+
+          add_to_errors(
+            type: :error,
+            row_nr: row.nr,
+            reason: "Hub \"#{info}\" (#{row.mot.capitalize}) not found!",
             exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks
           )
         end

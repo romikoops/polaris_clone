@@ -2,20 +2,7 @@
 
 module ExcelDataServices
   module DataRestructurers
-    class Base
-      MOT_HUB_NAME_LOOKUP =
-        { 'ocean' => 'Port',
-          'air' => 'Airport',
-          'rail' => 'Railyard',
-          'truck' => 'Depot' }.freeze
-
-      LOCODE_TO_NAME_LOOKUP =
-        { 'DEHAM' => 'Hamburg',
-          'DEWVN' => 'Wilhelmshaven',
-          'BEANR' => 'Antwerp',
-          'DEBRV' => 'Bremerhaven',
-          'NLRTM' => 'Rotterdam' }.freeze
-
+    class Base < ExcelDataServices::Base # rubocop:disable Metrics/ClassLength
       ROWS_BY_PRICING_PARAMS_GROUPING_KEYS = %i(
         effective_date
         expiration_date
@@ -91,13 +78,8 @@ module ExcelDataServices
             params.dup.tap { |pms| pms[:load_type] = fcl_size }
           end
         end
-        rows_data = rows_data.reject { |params| params[:load_type] == 'fcl' }
+        rows_data.reject! { |params| params[:load_type] == 'fcl' }
         rows_data + expanded_local_charges_params
-      end
-
-      def determine_location_name_from_locode(locode)
-        # Just a hardcoded lookup for now, will be done properly in Phoenix
-        LOCODE_TO_NAME_LOOKUP[locode.delete(' ')]
       end
 
       def expand_based_on_date_overlaps(rows_data)
@@ -142,10 +124,6 @@ module ExcelDataServices
 
       def group_by_params(rows_data, params)
         rows_data.group_by { |row| row.slice(*params) }.values
-      end
-
-      def append_hub_suffix(name, mot)
-        name + ' ' + MOT_HUB_NAME_LOOKUP[mot.downcase]
       end
 
       def add_hub_names(rows_data)

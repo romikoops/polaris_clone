@@ -4,7 +4,7 @@ require './lib/roo/excelx_money'
 
 module ExcelDataServices
   module Loaders
-    class Uploader < Base
+    class Uploader < ExcelDataServices::Loaders::Base
       VALID_EXCEL_MIME_SUBTYPES = ['x-ole-storage',
                                    'vnd.ms-excel',
                                    'vnd.openxmlformats-officedocument.spreadsheetml.sheet'].freeze

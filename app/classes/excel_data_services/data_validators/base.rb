@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module DataValidators
-    class Base
+    class Base < ExcelDataServices::Base
       def self.get(flavor, klass_identifier)
         "#{parent}::#{flavor.titleize.delete(' ')}::#{klass_identifier}".constantize
       end

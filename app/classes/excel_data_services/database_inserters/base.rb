@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module DatabaseInserters
-    class Base
+    class Base < ExcelDataServices::Base
       def self.get(klass_identifier)
         "#{parent}::#{klass_identifier.titleize.delete(' ')}".constantize
       end

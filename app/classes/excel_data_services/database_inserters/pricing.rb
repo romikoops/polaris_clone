@@ -11,8 +11,17 @@ module ExcelDataServices
 
           itinerary = find_or_initialize_itinerary(row)
 
-          hub_names = [row.origin_name, row.destination_name]
-          stops = find_or_initialize_stops(hub_names, itinerary)
+          origin_hub, = find_hub_by_name_or_locode_with_info(
+            raw_name: row.origin,
+            mot: row.mot,
+            locode: row.origin_locode
+          )
+          destination_hub, = find_hub_by_name_or_locode_with_info(
+            raw_name: row.destination,
+            mot: row.mot,
+            locode: row.destination_locode
+          )
+          stops = find_or_initialize_stops([origin_hub, destination_hub], itinerary)
           itinerary.stops << stops - itinerary.stops
 
           add_stats(itinerary)
@@ -45,11 +54,10 @@ module ExcelDataServices
         )
       end
 
-      def find_or_initialize_stops(hub_names, itinerary)
-        hub_names.map.with_index do |hub_name, i|
-          hub = Legacy::Hub.find_by(tenant: tenant, name: hub_name, sandbox: @sandbox)
+      def find_or_initialize_stops(hubs, itinerary)
+        hubs.map.with_index do |hub, i|
           stop = itinerary.stops.find_by(hub_id: hub.id, index: i, sandbox: @sandbox)
-          stop ||= Legacy::Stop.new(hub_id: hub.id, index: i, sandbox: @sandbox)
+          stop ||= ::Legacy::Stop.new(hub_id: hub.id, index: i, sandbox: @sandbox)
           add_stats(stop)
 
           stop

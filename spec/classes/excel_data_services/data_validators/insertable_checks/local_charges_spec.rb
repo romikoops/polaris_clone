@@ -48,13 +48,14 @@ RSpec.describe ExcelDataServices::DataValidators::InsertableChecks::LocalCharges
       it 'logs the errors' do
         validator = described_class.new(options)
         validator.perform
+
         expect(validator.errors).to eq(
           [{ exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks,
              reason: "Overlapping effective period.\n (Old is covered by new: [2019-01-24 00:00 - 2020-01-24 23:59] <-> [2019-01-24 00:00 - 2020-01-24 23:59]).",
              row_nr: '2',
              type: :warning },
            { exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks,
-             reason: 'Hub with name "BremerERRORhaven Port" not found!',
+             reason: 'Hub "BremerERRORhaven" (Ocean) not found!',
              row_nr: '3',
              type: :error }]
         )

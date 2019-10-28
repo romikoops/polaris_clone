@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidators
     module MissingValues
-      class Base < parent::Base
+      class Base < ExcelDataServices::DataValidators::Base
         alias chunked_data data
 
         def perform

@@ -3,8 +3,12 @@
 module ExcelDataServices
   module Rows
     class Pricing < Base
-      def destination_name
-        @destination_name ||= data[:destination_name]
+      def destination
+        @destination ||= data[:destination]
+      end
+
+      def destination_locode
+        @destination_locode ||= data[:destination_locode]
       end
 
       def itinerary_name
@@ -27,8 +31,12 @@ module ExcelDataServices
         @notes ||= data[:notes]
       end
 
-      def origin_name
-        @origin_name ||= data[:origin_name]
+      def origin
+        @origin ||= data[:origin]
+      end
+
+      def origin_locode
+        @origin_locode ||= data[:origin_locode]
       end
     end
   end

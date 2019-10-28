@@ -7,20 +7,36 @@ module ExcelDataServices
         private
 
         def check_single_data(row)
-          return unless check_all_hubs_exist(row)
-
           check_correct_individual_effective_period(row)
-          check_overlapping_effective_periods(row)
+
+          origin_hub, origin_hub_info = find_hub_by_name_or_locode_with_info(
+            raw_name: row.hub,
+            mot: row.mot,
+            locode: row.hub_locode
+          )
+          check_individual_hub(origin_hub, origin_hub_info, row)
+
+          return unless origin_hub
+
+          if row.counterpart_hub || row.counterpart_hub_locode
+            counterpart_hub, counterpart_hub_info = find_hub_by_name_or_locode_with_info(
+              raw_name: row.counterpart_hub,
+              mot: row.mot,
+              locode: row.counterpart_hub_locode
+            )
+            check_individual_hub(counterpart_hub, counterpart_hub_info, row)
+          end
+
+          check_overlapping_effective_periods(row, origin_hub, counterpart_hub)
         end
 
-        def check_overlapping_effective_periods(row)
-          hub = Hub.find_by(tenant: tenant, name: row.hub_name, hub_type: row.mot)
-          counterpart_hub = Hub.find_by(tenant: tenant, name: row.counterpart_hub_name, hub_type: row.mot)
-          local_charges = hub.local_charges
-                             .where(tenant_vehicle: find_tenant_vehicle(row), counterpart_hub_id: counterpart_hub&.id)
-                             .for_mode_of_transport(row.mot)
-                             .for_load_type(row.load_type) # in `Pricing` this is called cargo_class!!!
-                             .for_dates(row.effective_date, row.expiration_date)
+        def check_overlapping_effective_periods(row, origin_hub, counterpart_hub)
+          local_charges = origin_hub.local_charges
+                                    .where(tenant_vehicle: find_tenant_vehicle(row),
+                                           counterpart_hub_id: counterpart_hub&.id)
+                                    .for_mode_of_transport(row.mot)
+                                    .for_load_type(row.load_type) # in `Pricing` this is called cargo_class!!!
+                                    .for_dates(row.effective_date, row.expiration_date)
 
           local_charges.each do |old_local_charge|
             overlap_checker = DateOverlapChecker.new(old_local_charge, row)
@@ -46,27 +62,6 @@ module ExcelDataServices
             mode_of_transport: row.mot,
             carrier: carrier
           )
-        end
-
-        def check_all_hubs_exist(row)
-          all_hubs_exist = true
-          hub_names = [row.hub_name, row.counterpart_hub_name].compact # counterpart hub can be nil
-
-          hub_names.each do |hub_name|
-            hub = Hub.find_by(tenant: tenant, name: hub_name)
-
-            next if hub
-
-            add_to_errors(
-              type: :error,
-              row_nr: row.nr,
-              reason: "Hub with name \"#{hub_name}\" not found!",
-              exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks
-            )
-            all_hubs_exist = false
-          end
-
-          all_hubs_exist
         end
       end
     end

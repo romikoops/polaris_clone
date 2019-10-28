@@ -11,8 +11,6 @@ class LocalCharge < Legacy::LocalCharge
 
   before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
 
-  scope :for_load_type, ->(load_type) { where(load_type: load_type.downcase) }
-  scope :for_mode_of_transport, ->(mot) { where(mode_of_transport: mot.downcase) }
   scope :for_dates, (lambda do |start_date, end_date|
     where(Arel::Nodes::InfixOperation.new(
             'OVERLAPS',

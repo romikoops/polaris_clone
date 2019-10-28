@@ -57,7 +57,7 @@ RSpec.describe ExcelDataServices::DataValidators::InsertableChecks::Pricing do
              row_nr: 2,
              type: :error },
            { exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks,
-             reason: 'Hub with name "GothenERRORburg Port" not found!',
+             reason: 'Hub "GothenERRORburg" (Ocean) not found!',
              row_nr: 2,
              type: :error },
            { exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks,

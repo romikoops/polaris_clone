@@ -15,6 +15,7 @@ module ExcelDataServices
         destination_country
         destination_hub
         destination_locode
+        origin_hub
         origin_locode
         carrier
       ).freeze
@@ -35,8 +36,10 @@ module ExcelDataServices
         mot
         load_type
         hub
+        hub_locode
         country
         counterpart_hub
+        counterpart_hub_locode
         counterpart_country
         direction
       ).freeze
@@ -74,7 +77,6 @@ module ExcelDataServices
 
         restructured_data_pricings, restructured_data_local_charges =
           restructured_data.partition { |row_data| row_data.delete(:klass_identifier) == 'Pricing' }
-        restructured_data_pricings = add_hub_names(restructured_data_pricings)
         restructured_data_pricings = group_by_params(restructured_data_pricings, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS)
         restructured_data_local_charges = adapt_for_direction(restructured_data_local_charges)
         restructured_data_local_charges = pricings_format_to_local_charges_format(restructured_data_local_charges)
@@ -261,9 +263,8 @@ module ExcelDataServices
 
       def adapt_origin_destination(multiple_objs)
         multiple_objs.each do |row_data|
-          origin_locode = row_data.delete(:origin_locode)
-          row_data[:origin] = determine_location_name_from_locode(origin_locode)
-          row_data[:country_origin] = nil
+          row_data[:origin] = row_data.delete(:origin_hub)
+          row_data[:country_origin] = row_data.delete(:origin_country)
           row_data[:destination] = row_data.delete(:destination_hub)
           row_data[:country_destination] = row_data.delete(:destination_country)
         end
@@ -320,8 +321,6 @@ module ExcelDataServices
           same_for_all_in_group = group.first.slice(
             *LOCAL_CHARGES_GROUPING_KEYS,
             :service_level,
-            :hub_name,
-            :counterpart_hub_name
           )
           row_nrs = group.map { |row_data| row_data[:row_nr] }.join(', ')
 
@@ -334,10 +333,10 @@ module ExcelDataServices
           row_data[:service_level] = 'standard'
           row_data[:load_type] = row_data[:load_type]
           row_data[:hub] = row_data.delete(:origin)
-          row_data[:hub_name] = append_hub_suffix(row_data[:hub], row_data[:mot])
+          row_data[:hub_locode] = row_data.delete(:origin_locode)
           row_data[:country] = row_data.delete(:country_origin)
           row_data[:counterpart_hub] = row_data.delete(:destination)
-          row_data[:counterpart_hub_name] = append_hub_suffix(row_data[:counterpart_hub], row_data[:mot])
+          row_data[:counterpart_hub_locode] = row_data.delete(:destination_locode)
           row_data[:counterpart_country] = row_data.delete(:country_destination)
         end
       end
@@ -373,7 +372,7 @@ module ExcelDataServices
 
           row_data[:direction] = 'import'
           remove_dest_keyword(row_data)
-          swap_origin_destination_and_remove_locodes(row_data)
+          swap_origin_destination(row_data)
         end
       end
 
@@ -382,7 +381,7 @@ module ExcelDataServices
         row_data[:fee_name] = row_data[:fee_code].titleize
       end
 
-      def swap_origin_destination_and_remove_locodes(row_data)
+      def swap_origin_destination(row_data)
         temp = row_data[:origin]
         row_data[:origin] = row_data[:destination]
         row_data[:destination] = temp
@@ -391,7 +390,9 @@ module ExcelDataServices
         row_data[:country_origin] = row_data[:country_destination]
         row_data[:country_destination] = temp
 
-        row_data[:destination_locode] = nil
+        temp = row_data[:origin_locode]
+        row_data[:origin_locode] = row_data[:destination_locode]
+        row_data[:destination_locode] = temp
       end
     end
   end

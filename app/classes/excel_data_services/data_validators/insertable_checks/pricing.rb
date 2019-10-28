@@ -39,7 +39,7 @@ module ExcelDataServices
           check_customer_email(row, user)
           check_correct_individual_effective_period(row)
           check_overlapping_effective_periods(row, user, itinerary)
-          check_hub_existence(row)
+          check_existence_of_hubs(row)
         end
 
         def get_user(row)
@@ -94,21 +94,20 @@ module ExcelDataServices
           )
         end
 
-        def check_hub_existence(row)
-          hub_names = [row.origin_name, row.destination_name]
+        def check_existence_of_hubs(row)
+          origin_hub, origin_hub_info = find_hub_by_name_or_locode_with_info(
+            raw_name: row.origin,
+            mot: row.mot,
+            locode: row.origin_locode
+          )
+          destination_hub, destination_hub_info = find_hub_by_name_or_locode_with_info(
+            raw_name: row.destination,
+            mot: row.mot,
+            locode: row.destination_locode
+          )
 
-          hub_names.each do |hub_name|
-            hub = Hub.find_by(tenant: tenant, name: hub_name)
-
-            next if hub
-
-            add_to_errors(
-              type: :error,
-              row_nr: row.nr,
-              reason: "Hub with name \"#{hub_name}\" not found!",
-              exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks
-            )
-          end
+          check_individual_hub(origin_hub, origin_hub_info, row)
+          check_individual_hub(destination_hub, destination_hub_info, row)
         end
       end
     end
