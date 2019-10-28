@@ -50,6 +50,47 @@ module AdmiraltyReports
         end
       end
 
+      context 'filtered results ' do
+        let!(:tenant) { tenants.first }
+        let!(:agency) { FactoryBot.create(:legacy_agency) }
+        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: tenants.first.id, company_name: nil, agency: agency) }
+        let!(:shipments) do
+          [
+            FactoryBot.create(:legacy_shipment,
+                              user_id: user.id,
+                              tenant_id: tenants.first.id,
+                              updated_at: DateTime.new(2019, 2, 3),
+                              created_at: DateTime.new(2019, 2, 2)),
+            FactoryBot.create(:legacy_shipment,
+                              user_id: user.id,
+                              tenant_id: tenants.first.id,
+                              updated_at: DateTime.new(2019, 2, 5),
+                              created_at: DateTime.new(2019, 2, 4))
+          ]
+        end
+        let!(:quotations) do
+          [
+            FactoryBot.create(:legacy_quotation,
+                              original_shipment_id: shipments.first.id,
+                              user_id: user.id,
+                              updated_at: DateTime.new(2019, 2, 3),
+                              created_at: DateTime.new(2019, 2, 2)),
+            FactoryBot.create(:legacy_quotation,
+                              original_shipment_id: shipments.last.id,
+                              user_id: user.id,
+                              updated_at: DateTime.new(2019, 2, 5),
+                              created_at: DateTime.new(2019, 2, 4))
+          ]
+        end
+
+        it 'renders page' do
+          get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id, month: '2', year: '2019' }
+
+          expect(response).to be_successful
+          expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
+        end
+      end
+
       context 'booking tool' do
         let!(:tenant) { tenants.second }
 

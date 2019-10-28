@@ -115,6 +115,7 @@ PATH
     legacy (9999.1.0.0)
       core
       geocoder
+      paranoia
       pg_search (~> 2.3.0)
 
 PATH

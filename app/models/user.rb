@@ -27,8 +27,6 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
     tsearch: { prefix: true }
   }
 
-  acts_as_paranoid
-
   # Basic associations
   belongs_to :tenant
   belongs_to :role

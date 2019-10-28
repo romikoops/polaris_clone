@@ -1,7 +1,10 @@
 # frozen_string_literal: true
+
 require 'core'
 require 'pg_search'
 require 'geocoder'
+require 'paranoia'
+
 
 module Legacy
   class Engine < ::Rails::Engine

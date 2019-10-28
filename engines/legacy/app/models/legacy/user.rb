@@ -12,6 +12,8 @@ module Legacy
     has_one :tenants_user
     delegate :company, to: :tenants_user
 
+    acts_as_paranoid
+
     def tenant_scope
       ::Tenants::ScopeService.new(target: self, tenant: tenants_user&.tenant).fetch
     end

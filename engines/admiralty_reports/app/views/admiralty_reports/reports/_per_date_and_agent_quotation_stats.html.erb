@@ -1,6 +1,6 @@
 <% per_date_and_agent_quotation_stats.second.values_at(:data_per_agent).flatten.each do |data| %>
   <tr>
-    <td><%= per_date_and_agent_quotation_stats.first %></td>
+    <td><%= per_date_and_agent_quotation_stats.first.strftime('%B %e, %Y') %></td>
     <td><%= data[:email] %></td>
     <td><%= data[:agency_name] %></td>
     <td><%= data[:count] %></td>
