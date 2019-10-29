@@ -101,8 +101,8 @@ RSpec.describe Tenants::ScopeService do
           translation_overrides: false,
           values: {
             weight: {
-              unit: 't',
-              decimals: 3
+              unit: 'kg',
+              decimals: 2
             }
           },
           voyage_info: {
