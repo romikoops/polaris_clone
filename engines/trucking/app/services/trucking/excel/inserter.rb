@@ -46,7 +46,7 @@ module Trucking
         diff = (end_time - start_time) / 86_400
         puts @missing_locations
         puts "Time elapsed: #{diff}"
-        
+
         stats
       end
 
@@ -191,6 +191,7 @@ module Trucking
           trucking.parent_id ||= trucking_rate[:parent_id]
           @all_trucking_truckings << trucking
         end
+
         ::Trucking::Trucking.import(
           @all_trucking_truckings,
           on_duplicate_key_update: :all,
@@ -328,7 +329,9 @@ module Trucking
               postal_code_range(postal_codes_data: idents_and_country).compact
             elsif identifier_type == 'location_id'
               resp = find_and_prep_geometry(geometry_data: idents_and_country)
-              next unless resp
+              next unless resp.present?
+
+              resp
             else
               idents_and_country
             end
