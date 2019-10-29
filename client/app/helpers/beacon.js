@@ -123,9 +123,10 @@ const loginEvents = {
       event_action: 'Login Succeed',
       event_label: 'Login Succeed',
       event_value: 1,
-      user_id: user.id,
+      user_id: user.uuid,
       user_email: user.email,
-      user_name: `${user.first_name} ${user.last_name}`,
+      user_first_name: user.first_name,
+      user_last_name: user.last_name,
       user_company: user.company_name,
       user_role: role.name
     }
@@ -140,7 +141,8 @@ const loginEvents = {
     event_value: 1,
     user_id: null,
     user_email: null,
-    user_name: null,
+    user_first_name: null,
+    user_last_name: null,
     user_company: null,
     user_role: null
   })

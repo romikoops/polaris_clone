@@ -181,8 +181,9 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
       except: %i(tokens encrypted_password created_at updated_at optin_status_id role_id),
       include: {
         optin_status: { except: %i(created_at updated_at) },
-        role: { except: %i(created_at updated_at) }
-      }
+        role: { except: %i(created_at updated_at) },
+      },
+      methods: [:uuid]
     )
   end
 
@@ -224,7 +225,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
         optin_status: { except: %i(created_at updated_at) },
         role: { except: %i(created_at updated_at) }
       },
-      methods: %i(has_pricings group_count user_margin_count company_title)
+      methods: %i(has_pricings group_count user_margin_count company_title uuid)
     )
     as_json(new_options)
   end
@@ -235,6 +236,10 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
 
   def company_title
     tenants_user&.company&.name
+  end
+
+  def uuid
+    tenants_user&.id
   end
 
   def group_count
