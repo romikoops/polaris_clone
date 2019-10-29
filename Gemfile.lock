@@ -190,6 +190,12 @@ PATH
       rgeo-geojson
 
 PATH
+  remote: engines/sequential
+  specs:
+    sequential (9999.1.0.0)
+      core
+
+PATH
   remote: engines/tenant_routing
   specs:
     tenant_routing (9999.1.0.0)
@@ -885,6 +891,7 @@ DEPENDENCIES
   sass-rails
   scientist
   sentry-raven
+  sequential!
   shoryuken (~> 5.0.1)
   shoulda-matchers
   signet

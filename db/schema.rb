@@ -1215,6 +1215,13 @@ ActiveRecord::Schema.define(version: 2019_10_23_140931) do
     t.index ["version"], name: "index_schema_migration_details_on_version"
   end
 
+  create_table "sequential_sequences", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "name"
+    t.datetime "updated_at", null: false
+    t.bigint "value", default: 0
+  end
+
   create_table "shipment_contacts", force: :cascade do |t|
     t.integer "contact_id"
     t.string "contact_type"
