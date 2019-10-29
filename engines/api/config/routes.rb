@@ -6,6 +6,10 @@ Api::Engine.routes.draw do
     resources :clients, only: %i(index show)
     resource :dashboard, controller: :dashboard, only: %i(show)
     resources :trucking_availability, controller: :trucking_availability, only: %i(index)
-    resources :itineraries, only: :index
+    resources :itineraries, only: %i(index) do
+      collection do
+        get 'ports/:tenant_uuid', action: :ports
+      end
+    end
   end
 end

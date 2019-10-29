@@ -8,7 +8,7 @@ RSpec.resource 'Itineraries' do
   header 'Authorization', :token_header
 
   let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.create(legacy: legacy_tenant) }
+  let(:tenant) { Tenants::Tenant.find_by(legacy: legacy_tenant) }
   let(:user) { FactoryBot.create(:tenants_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', tenant: tenant) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
@@ -28,6 +28,43 @@ RSpec.resource 'Itineraries' do
     example_request 'Returns list of itineraries belonging to a tenant' do
       explanation <<-DOC
         Use this endpoint to return a list of itineraries for a specific tenant
+      DOC
+      expect(status).to eq 200
+    end
+  end
+
+  get '/v1/itineraries/ports/:tenant_uuid' do
+    parameter :tenant_uuid, 'The Tenant UUID'
+    let(:tenant_uuid) { tenant.id }
+
+    response_field :id, 'Itinerary Id', Type: Integer
+    response_field :type, 'Api response Type', Type: String
+    response_field :data, 'Array of origins and destinations', Type: :array, items: {
+      'type': :object,
+      'title': :data,
+      'properties': {
+        origin_id: {
+          type: Integer,
+          description: 'Origin Id'
+        },
+        origin: {
+          type: Integer,
+          description: 'Origin Name'
+        },
+        destination_id: {
+          type: Integer,
+          description: 'Destination Id'
+        },
+        destination: {
+          type: Integer,
+          description: 'Destination Name'
+        }
+      }
+    }
+
+    example_request 'Returns list of ports belonging to a tenant' do
+      explanation <<-DOC
+        Use this endpoint to return a list of ports for a specific tenant
       DOC
       expect(status).to eq 200
     end
