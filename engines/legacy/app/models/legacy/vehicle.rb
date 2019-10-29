@@ -7,16 +7,20 @@ module Legacy
     has_many :itineraries
     has_many :tenant_vehicles
 
+    VEHICLE_NAMES = %w(ocean_default rail_default air_default truck_default).freeze
+    TRANSPORT_CATEGORY_NAMES = %w(dry_goods liquid_bulk gas_bulk any).freeze
+    CARGO_CLASSES = (%w(lcl) + Container::CARGO_CLASSES).freeze
+
     def self.create_from_name(name:, mot:, tenant_id:, carrier_name: nil, sandbox: nil)
       vehicle = Vehicle.find_or_create_by!(name: name, mode_of_transport: mot)
-  
+
       if carrier_name
         carrier = Carrier.find_or_create_by!(name: carrier_name)
         tv = carrier.tenant_vehicles.find_or_create_by(name: name, mode_of_transport: mot, vehicle_id: vehicle.id, tenant_id: tenant_id)
       else
         tv = TenantVehicle.find_or_create_by(name: name, mode_of_transport: mot, vehicle_id: vehicle.id, tenant_id: tenant_id)
       end
-  
+
       if vehicle.transport_categories.none?
         CARGO_CLASSES.each do |cargo_class|
           this_class = cargo_class.clone
@@ -31,7 +35,7 @@ module Legacy
           end
         end
       end
-  
+
       tv
     end
   end

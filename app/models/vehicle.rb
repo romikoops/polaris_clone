@@ -12,10 +12,6 @@ class Vehicle < Legacy::Vehicle
               message: ->(obj, _) { "'#{obj.name}' taken for mode of transport '#{obj.mode_of_transport}'" }
             }
 
-  VEHICLE_NAMES = %w(ocean_default rail_default air_default truck_default).freeze
-  TRANSPORT_CATEGORY_NAMES = %w(dry_goods liquid_bulk gas_bulk any).freeze
-  CARGO_CLASSES = (%w(lcl) + Container::CARGO_CLASSES).freeze
-
   def create_all_transport_categories
     [true, false].each do |sandbox|
       CARGO_CLASSES.each do |cargo_class|
