@@ -61,6 +61,29 @@ ActiveRecord::Schema.define(version: 2019_10_23_140931) do
     t.index ["tenant_id"], name: "index_addons_on_tenant_id"
   end
 
+  create_table "address_book_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "city"
+    t.string "company_name"
+    t.string "country_code"
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "first_name"
+    t.string "geocoded_address"
+    t.string "last_name"
+    t.string "phone"
+    t.geometry "point", limit: {:srid=>0, :type=>"geometry"}
+    t.string "postal_code"
+    t.string "premise"
+    t.string "province"
+    t.uuid "sandbox_id"
+    t.string "street"
+    t.string "street_number"
+    t.datetime "updated_at", null: false
+    t.uuid "user_id"
+    t.index ["sandbox_id"], name: "index_address_book_contacts_on_sandbox_id"
+    t.index ["user_id"], name: "index_address_book_contacts_on_user_id"
+  end
+
   create_table "addresses", force: :cascade do |t|
     t.string "city"
     t.integer "country_id"
@@ -1779,6 +1802,8 @@ ActiveRecord::Schema.define(version: 2019_10_23_140931) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "address_book_contacts", "tenants_sandboxes", column: "sandbox_id"
+  add_foreign_key "address_book_contacts", "tenants_users", column: "user_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "quotations_tenders", "quotations_quotations", column: "quotation_id"

@@ -6,6 +6,15 @@ GIT
     rgeo (2.0.1)
 
 PATH
+  remote: engines/address_book
+  specs:
+    address_book (9999.1.0.0)
+      core
+      geocoder
+      pg_search
+      tenants
+
+PATH
   remote: engines/admiralty_assets
   specs:
     admiralty_assets (9999.1.0.0)
@@ -807,6 +816,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-import
   activerecord-postgis-adapter (~> 5.2.2)
+  address_book!
   admiralty!
   admiralty_assets!
   admiralty_auth!
