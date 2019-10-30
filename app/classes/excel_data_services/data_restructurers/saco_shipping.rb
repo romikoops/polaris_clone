@@ -320,7 +320,7 @@ module ExcelDataServices
         grouped_data.map do |group|
           same_for_all_in_group = group.first.slice(
             *LOCAL_CHARGES_GROUPING_KEYS,
-            :service_level,
+            :service_level
           )
           row_nrs = group.map { |row_data| row_data[:row_nr] }.join(', ')
 

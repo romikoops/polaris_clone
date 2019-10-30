@@ -7,7 +7,7 @@ module ExcelDataServices
 
       def load_and_prepare_data
         pricing_association = if scope['base_pricing']
-                                tenant.rates.where(sandbox: @sandbox, group_id: @group_id)    
+                                tenant.rates.where(sandbox: @sandbox, group_id: @group_id)
                               else
                                 tenant.pricings.where(sandbox: @sandbox)
                               end

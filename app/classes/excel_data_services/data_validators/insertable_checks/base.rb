@@ -34,7 +34,7 @@ module ExcelDataServices
           )
         end
 
-        def check_individual_hub(hub, info, row)
+        def check_hub_existence(hub, info, row)
           return if hub
 
           add_to_errors(

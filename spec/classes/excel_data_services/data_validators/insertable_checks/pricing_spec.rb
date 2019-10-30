@@ -29,8 +29,16 @@ RSpec.describe ExcelDataServices::DataValidators::InsertableChecks::Pricing do
     ]
   end
   let(:hubs) do
-    [create(:hub, tenant: tenant, name: 'Gothenburg Port', hub_type: 'ocean'),
-     create(:hub, tenant: tenant, name: 'Shanghai Port', hub_type: 'ocean')]
+    [
+      create(:hub, tenant: tenant, name: 'Gothenburg Port', hub_type: 'ocean', nexus: nexuses.first),
+      create(:hub, tenant: tenant, name: 'Shanghai Port', hub_type: 'ocean', nexus: nexuses.second)
+    ]
+  end
+  let(:nexuses) do
+    [
+      create(:nexus, tenant: tenant, name: 'Gothenburg'),
+      create(:nexus, tenant: tenant, name: 'Shanghai')
+    ]
   end
   let(:cargo_transport_category) do
     create(:transport_category, cargo_class: 'lcl', load_type: 'cargo_item')
@@ -51,6 +59,7 @@ RSpec.describe ExcelDataServices::DataValidators::InsertableChecks::Pricing do
       it 'logs the errors' do
         validator = described_class.new(options)
         validator.perform
+
         expect(validator.errors).to eq(
           [{ exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks,
              reason: 'Effective date must lie before before expiration date!',
@@ -61,7 +70,7 @@ RSpec.describe ExcelDataServices::DataValidators::InsertableChecks::Pricing do
              row_nr: 2,
              type: :error },
            { exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks,
-             reason: 'There exists no user with email: Non.Existent@email.address.',
+             reason: 'A user with email "Non.Existent@email.address" does not exist.',
              row_nr: 3,
              type: :error },
            { exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks,

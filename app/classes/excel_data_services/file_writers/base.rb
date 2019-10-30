@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileWriters
-    class Base # rubocop:disable Metrics/ClassLength
+    class Base < ExcelDataServices::Base # rubocop:disable Metrics/ClassLength
       # Expected data structure:
       # {
       #   Sheet1: [

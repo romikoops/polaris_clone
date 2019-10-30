@@ -14,7 +14,7 @@ module ExcelDataServices
             mot: row.mot,
             locode: row.hub_locode
           )
-          check_individual_hub(origin_hub, origin_hub_info, row)
+          check_hub_existence(origin_hub, origin_hub_info, row)
 
           return unless origin_hub
 
@@ -24,7 +24,7 @@ module ExcelDataServices
               mot: row.mot,
               locode: row.counterpart_hub_locode
             )
-            check_individual_hub(counterpart_hub, counterpart_hub_info, row)
+            check_hub_existence(counterpart_hub, counterpart_hub_info, row)
           end
 
           check_overlapping_effective_periods(row, origin_hub, counterpart_hub)

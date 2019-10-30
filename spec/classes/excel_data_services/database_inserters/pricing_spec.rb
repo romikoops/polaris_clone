@@ -30,8 +30,20 @@ end
 RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
   let(:tenant) { create(:tenant) }
   let!(:hubs) do
-    [create(:hub, tenant: tenant, name: 'Gothenburg Port', hub_type: 'ocean'),
-     create(:hub, tenant: tenant, name: 'Shanghai Port', hub_type: 'ocean')]
+    [
+      create(:hub,
+        tenant: tenant,
+        name: 'Gothenburg Port',
+        hub_type: 'ocean',
+        nexus: create(:nexus, name: 'Gothenburg')
+      ),
+      create(:hub,
+        tenant: tenant,
+        name: 'Shanghai Port',
+        hub_type: 'ocean',
+        nexus: create(:nexus, name: 'Shanghai')
+      )
+   ]
   end
   let(:itineraries) do
     [create(:itinerary, tenant: tenant)]

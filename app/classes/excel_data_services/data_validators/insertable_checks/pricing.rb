@@ -34,12 +34,34 @@ module ExcelDataServices
         end
 
         def check_single_data(row)
-          user = get_user(row)
-          itinerary = Itinerary.find_by(name: row.itinerary_name, tenant: tenant)
-          check_customer_email(row, user)
           check_correct_individual_effective_period(row)
+
+          user = get_user(row)
+          check_customer_email(row, user)
+
+          origin_hub, origin_hub_info = find_hub_by_name_or_locode_with_info(
+            raw_name: row.origin,
+            mot: row.mot,
+            locode: row.origin_locode
+          )
+          destination_hub, destination_hub_info = find_hub_by_name_or_locode_with_info(
+            raw_name: row.destination,
+            mot: row.mot,
+            locode: row.destination_locode
+          )
+
+          check_hub_existence(origin_hub, origin_hub_info, row)
+          check_hub_existence(destination_hub, destination_hub_info, row)
+
+          return unless origin_hub && destination_hub
+
+          itinerary = Itinerary.find_by(
+            name: "#{origin_hub.nexus.name} - #{destination_hub.nexus.name}",
+            mode_of_transport: row.mot,
+            tenant: tenant
+          )
+
           check_overlapping_effective_periods(row, user, itinerary)
-          check_existence_of_hubs(row)
         end
 
         def get_user(row)
@@ -53,7 +75,7 @@ module ExcelDataServices
             add_to_errors(
               type: :error,
               row_nr: row.nr,
-              reason: "There exists no user with email: #{row.customer_email}.",
+              reason: "A user with email \"#{row.customer_email}\" does not exist.",
               exception_class: ExcelDataServices::DataValidators::ValidationErrors::InsertableChecks
             )
           end
@@ -92,22 +114,6 @@ module ExcelDataServices
             mode_of_transport: row.mot,
             carrier: carrier
           )
-        end
-
-        def check_existence_of_hubs(row)
-          origin_hub, origin_hub_info = find_hub_by_name_or_locode_with_info(
-            raw_name: row.origin,
-            mot: row.mot,
-            locode: row.origin_locode
-          )
-          destination_hub, destination_hub_info = find_hub_by_name_or_locode_with_info(
-            raw_name: row.destination,
-            mot: row.mot,
-            locode: row.destination_locode
-          )
-
-          check_individual_hub(origin_hub, origin_hub_info, row)
-          check_individual_hub(destination_hub, destination_hub_info, row)
         end
       end
     end

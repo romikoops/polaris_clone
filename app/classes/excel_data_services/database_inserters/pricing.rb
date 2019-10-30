@@ -9,8 +9,6 @@ module ExcelDataServices
             row_data: group_of_row_data.first, tenant: tenant
           )
 
-          itinerary = find_or_initialize_itinerary(row)
-
           origin_hub, = find_hub_by_name_or_locode_with_info(
             raw_name: row.origin,
             mot: row.mot,
@@ -21,6 +19,9 @@ module ExcelDataServices
             mot: row.mot,
             locode: row.destination_locode
           )
+
+          itinerary = find_or_initialize_itinerary(origin_hub, destination_hub, row)
+
           stops = find_or_initialize_stops([origin_hub, destination_hub], itinerary)
           itinerary.stops << stops - itinerary.stops
 
@@ -32,12 +33,14 @@ module ExcelDataServices
 
           notes = row.notes&.uniq || []
 
-          create_pricing_with_pricing_details(group_of_row_data,
-                                              row,
-                                              transport_category,
-                                              tenant_vehicle,
-                                              itinerary,
-                                              notes)
+          create_pricing_with_pricing_details(
+            group_of_row_data,
+            row,
+            transport_category,
+            tenant_vehicle,
+            itinerary,
+            notes
+          )
         end
 
         stats
@@ -45,10 +48,10 @@ module ExcelDataServices
 
       private
 
-      def find_or_initialize_itinerary(row)
+      def find_or_initialize_itinerary(origin_hub, destination_hub, row)
         Legacy::Itinerary.find_or_initialize_by(
           tenant: tenant,
-          name: row.itinerary_name,
+          name: "#{origin_hub.nexus.name} - #{destination_hub.nexus.name}",
           mode_of_transport: row.mot,
           sandbox: @sandbox
         )

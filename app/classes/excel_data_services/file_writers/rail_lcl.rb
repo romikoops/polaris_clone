@@ -11,7 +11,7 @@ module ExcelDataServices
                               else
                                 tenant.pricings.where(sandbox: @sandbox)
                               end
-        pricings = pricing_assocation.for_mode_of_transport('rail').for_cargo_classes(['lcl'])
+        pricings = pricing_association.for_mode_of_transport('rail').for_cargo_classes(['lcl'])
         raw_pricing_rows = PricingRowDataBuilder.build_raw_pricing_rows(pricings, scope)
         rows_data_static_fee_col = PricingRowDataBuilder.build_rows_data_with_static_fee_col(raw_pricing_rows)
 

@@ -27,7 +27,7 @@ module ExcelDataServices
           phone: params[:phone],
           email: params[:email],
           address_id: params[:address_id]&.id,
-          sandbox: @sandbox 
+          sandbox: @sandbox
         )
       end
     end

@@ -25,7 +25,7 @@ module ExcelDataServices
         raw_pricing_rows
       end
 
-      def self.build_pricing_only_row_data(pricing, scope = {}) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def self.build_pricing_only_row_data(pricing) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         pricing_attributes = pricing.attributes.with_indifferent_access.except(
           :id,
           :created_at,
@@ -71,10 +71,7 @@ module ExcelDataServices
       end
 
       def self.remove_hub_suffix(name, mot)
-        str_to_remove = { 'ocean' => 'Port',
-                          'air' => 'Airport',
-                          'rail' => 'Railyard',
-                          'truck' => 'Depot' }[mot]
+        str_to_remove = MOT_HUB_NAME_LOOKUP[mot]
 
         name.remove(/ #{str_to_remove}$/)
       end

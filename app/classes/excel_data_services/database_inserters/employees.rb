@@ -30,7 +30,6 @@ module ExcelDataServices
         tenants_user = Tenants::User.find_by(legacy_id: legacy_user)
         tenants_user.update(company: params[:company])
         add_stats(tenants_user)
-
       end
     end
   end
