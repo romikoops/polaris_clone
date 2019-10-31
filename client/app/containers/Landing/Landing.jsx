@@ -6,7 +6,7 @@ import LandingTop from '../../components/LandingTop/LandingTop'
 import styles from './Landing.scss'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
-import { appActions } from '../../actions'
+import { appActions, authenticationActions } from '../../actions'
 import { gradientTextGenerator, isQuote, contentToHtml } from '../../helpers'
 import withContent from '../../hocs/withContent'
 import Footer from '../../components/Footer/Footer'
@@ -25,8 +25,15 @@ class Landing extends Component {
   }
 
   bookNow () {
-    const { appDispatch } = this.props
-    appDispatch.goTo('/booking')
+    const { appDispatch, authenticationDispatch, loggingIn } = this.props
+    const redirectUrl = '/booking'
+
+    if (!loggingIn) {
+      authenticationDispatch.showLogin({ redirectUrl })
+
+      return
+    }
+    appDispatch.goTo(redirectUrl)
   }
 
   render () {
@@ -179,7 +186,8 @@ Landing.defaultProps = {
 
 function mapDispatchToProps (dispatch) {
   return {
-    appDispatch: bindActionCreators(appActions, dispatch)
+    appDispatch: bindActionCreators(appActions, dispatch),
+    authenticationDispatch: bindActionCreators(authenticationActions, dispatch)
   }
 }
 function mapStateToProps (state) {

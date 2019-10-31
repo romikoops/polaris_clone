@@ -26,13 +26,14 @@ class LoginPage extends React.Component {
   handleSubmit (model) {
     const { email, password } = model
     const {
-      dispatch, req, noRedirect
+      dispatch, req, noRedirect, redirectUrl
     } = this.props
     dispatch(authenticationActions.login({
       email,
       password,
       req,
-      noRedirect
+      noRedirect,
+      redirectUrl
     }))
   }
   handleInvalidSubmit () {
@@ -117,7 +118,7 @@ class LoginPage extends React.Component {
 function mapStateToProps (state) {
   const { authentication } = state
   const {
-    loggingIn, loginAttempt, user, noRedirect, req
+    loggingIn, loginAttempt, user, noRedirect, req, redirectUrl
   } = authentication
 
   return {
@@ -125,7 +126,8 @@ function mapStateToProps (state) {
     loginAttempt,
     user,
     noRedirect,
-    req
+    req,
+    redirectUrl
   }
 }
 

@@ -64,6 +64,12 @@ function login (data) {
         const shipmentReq = data.req
         dispatch(success(response.data))
 
+        if (data.redirectUrl) {
+          dispatch(appActions.goTo(data.redirectUrl))
+
+          return
+        }
+
         if (shipmentReq) {
           if (['shipper', 'agent'].includes(response.data.role.name)) {
             shipmentReq.user_id = response.data.id
