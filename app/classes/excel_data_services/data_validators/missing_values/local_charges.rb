@@ -24,35 +24,54 @@ module ExcelDataServices
           PER_SHIPMENT_TON
         ).freeze
 
+        USER_FRIENDLY_FEE_COMP_LOOKUP = {
+          key: 'FEE_CODE',
+          currency: 'CURRENCY'
+        }.freeze
+
         private
 
         def check_single_data(row)
-          check_rate_bases(row)
-        end
-
-        def check_rate_bases(row)
           row.fees.values.each do |fee_hsh|
             fee_hsh = fee_hsh.with_indifferent_access
-            rate_basis = RateBasis.get_internal_key(fee_hsh[:rate_basis]&.upcase)
+            check_fee_comps_except_rate_basis(row.nr, fee_hsh)
+            check_rate_basis(row.nr, fee_hsh)
+          end
+        end
 
-            unless VALID_RATE_BASES.include?(rate_basis)
-              add_to_errors(
-                type: :error,
-                row_nr: row.nr,
-                reason: "The rate basis \"#{rate_basis}\" is unknown.",
-                exception_class: ExcelDataServices::DataValidators::ValidationErrors::MissingValues::UnknownRateBasis
-              )
-            end
-
-            next unless missing_fee_values_for_rate_basis?(rate_basis, fee_hsh)
+        def check_fee_comps_except_rate_basis(row_nr, fee_hsh)
+          %i(key currency).each do |fee_comp_key|
+            next if fee_hsh[fee_comp_key]
 
             add_to_errors(
               type: :error,
-              row_nr: row.nr,
-              reason: "Missing value for #{rate_basis}.",
+              row_nr: row_nr,
+              reason: "Missing value for #{USER_FRIENDLY_FEE_COMP_LOOKUP[fee_comp_key]}.",
               exception_class: ExcelDataServices::DataValidators::ValidationErrors::MissingValues::UnknownRateBasis
             )
           end
+        end
+
+        def check_rate_basis(row_nr, fee_hsh)
+          rate_basis = RateBasis.get_internal_key(fee_hsh[:rate_basis]&.upcase)
+
+          unless VALID_RATE_BASES.include?(rate_basis)
+            add_to_errors(
+              type: :error,
+              row_nr: row_nr,
+              reason: "The rate basis \"#{rate_basis}\" is unknown.",
+              exception_class: ExcelDataServices::DataValidators::ValidationErrors::MissingValues::UnknownRateBasis
+            )
+          end
+
+          return unless missing_fee_values_for_rate_basis?(rate_basis, fee_hsh)
+
+          add_to_errors(
+            type: :error,
+            row_nr: row_nr,
+            reason: "Missing value for #{rate_basis}.",
+            exception_class: ExcelDataServices::DataValidators::ValidationErrors::MissingValues::UnknownRateBasis
+          )
         end
 
         def missing_fee_values_for_rate_basis?(rate_basis, fee_hsh) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
