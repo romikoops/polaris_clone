@@ -16,11 +16,27 @@ module ExcelDataServices
         direction
       ).freeze
 
+      ROW_IDENTIFIERS = %i(
+        hub
+        country
+        effective_date
+        expiration_date
+        counterpart_hub
+        counterpart_country
+        service_level
+        carrier
+        mot
+        load_type
+        direction
+        dangerous
+      )
+
       def perform
         rows_data = replace_nil_equivalents_with_nil(data[:rows_data])
         rows_data = correct_capitalization(rows_data)
         rows_data = expand_fcl_to_all_sizes(rows_data)
-        rows_chunked_by_identifier = rows_data.group_by { |row| row_identifier(row) }.values
+        rows_data = expand_based_on_date_overlaps(rows_data, ROW_IDENTIFIERS - %i(effective_date expiration_date))
+        rows_chunked_by_identifier = rows_data.group_by { |row| row.slice(*ROW_IDENTIFIERS) }.values
         rows_chunked_by_identifier_and_sorted_ranges = rows_chunked_by_identifier.map do |rows|
           rows_chunked_by_ranges = rows.group_by { |row| range_identifier(row) }.values
           sort_chunks_by_range_min(rows_chunked_by_ranges)
@@ -48,23 +64,6 @@ module ExcelDataServices
         end
       end
 
-      def row_identifier(row)
-        row.slice(
-          :hub,
-          :country,
-          :effective_date,
-          :expiration_date,
-          :counterpart_hub,
-          :counterpart_country,
-          :service_level,
-          :carrier,
-          :mot,
-          :load_type,
-          :direction,
-          :dangerous
-        )
-      end
-
       def range_identifier(row)
         { rate_basis: row[:rate_basis].upcase, fee_code: row[:fee_code].upcase }
       end
@@ -75,7 +74,7 @@ module ExcelDataServices
 
       def build_charges_data(chunked_raw_data)
         chunked_raw_data.map do |data_per_identifier|
-          data_without_fees = row_identifier(data_per_identifier.dig(0, 0))
+          data_without_fees = data_per_identifier.dig(0, 0).slice(*ROW_IDENTIFIERS)
           data_with_fees = data_without_fees.merge(fees: {})
 
           data_per_identifier.each do |data_per_ranges|

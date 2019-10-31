@@ -82,8 +82,8 @@ module ExcelDataServices
         rows_data + expanded_local_charges_params
       end
 
-      def expand_based_on_date_overlaps(rows_data)
-        grouped = group_by_params(rows_data, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i(effective_date expiration_date))
+      def expand_based_on_date_overlaps(rows_data, grouping_keys)
+        grouped = group_by_params(rows_data, grouping_keys)
         result = grouped.map do |group|
           sorted_group = group.sort_by { |row_data| row_data.values_at(:effective_date, :expiration_date) }
           sorted_group.map.with_index do |b, i|
