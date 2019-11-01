@@ -302,7 +302,8 @@ module ExcelDataServices
           notes << {
             header: header,
             body: val.casecmp('x').zero? ? nil : val,
-            transshipment: header == 'Transshipment Via'
+            transshipment: header == 'Transshipment Via',
+            remarks: header == 'Remarks'
           }
         end
       end

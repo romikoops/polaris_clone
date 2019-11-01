@@ -32,4 +32,5 @@ end
 #  tenant_id           :integer
 #  contains_html       :boolean
 #  transshipment       :boolean          default(FALSE), not null
+#  remarks             :boolean          default(FALSE), not null
 #

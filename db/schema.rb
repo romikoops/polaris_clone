@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_23_140931) do
+ActiveRecord::Schema.define(version: 2019_11_01_110339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -768,6 +768,7 @@ ActiveRecord::Schema.define(version: 2019_10_23_140931) do
     t.integer "itinerary_id"
     t.string "level"
     t.uuid "pricings_pricing_id"
+    t.boolean "remarks", default: false, null: false
     t.uuid "sandbox_id"
     t.integer "target_id"
     t.string "target_type"
@@ -776,6 +777,7 @@ ActiveRecord::Schema.define(version: 2019_10_23_140931) do
     t.integer "trucking_pricing_id"
     t.datetime "updated_at", null: false
     t.index ["pricings_pricing_id"], name: "index_notes_on_pricings_pricing_id"
+    t.index ["remarks"], name: "index_notes_on_remarks"
     t.index ["sandbox_id"], name: "index_notes_on_sandbox_id"
     t.index ["target_type", "target_id"], name: "index_notes_on_target_type_and_target_id"
     t.index ["transshipment"], name: "index_notes_on_transshipment"
