@@ -66,7 +66,7 @@ module ExcelDataServices
 
       def all_carriers_of_tenant
         @all_carriers_of_tenant ||= Carrier.where(
-          id: tenant.tenant_vehicles.where(sandbox: @sandbox).pluck(:carrier_id).compact.uniq
+          id: TenantVehicle.where(tenant_id: tenant.id, sandbox: @sandbox).pluck(:carrier_id).compact.uniq
         )
       end
 
@@ -117,14 +117,15 @@ module ExcelDataServices
             :mode_of_transport,
             :tenant_vehicle_id
           ).merge(
+            tenant_id: tenant.id,
             effective_date: Date.parse(params[:effective_date].to_s).beginning_of_day,
             expiration_date: Date.parse(params[:expiration_date].to_s).end_of_day.change(usec: 0),
             sandbox: @sandbox,
             group_id: @group_id
           )
 
-        new_local_charge = tenant.local_charges.new(local_charge_params)
-        old_local_charges = tenant.local_charges.where(
+        new_local_charge = LocalCharge.new(local_charge_params)
+        old_local_charges = LocalCharge.where(
           local_charge_params.except(:fees, :effective_date, :expiration_date, :internal)
         )
         overlap_handler = ExcelDataServices::DatabaseInserters::DateOverlapHandler
