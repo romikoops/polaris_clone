@@ -23,6 +23,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @logo                  = args[:logo]
     @load_type             = args[:load_type]
     @remarks               = args[:remarks]
+    @note_remarks          = args[:note_remarks]
     @hide_cargo_sub_totals = false
     @content               = {}
     @hide_grand_total = {}
@@ -275,7 +276,8 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         has_legacy_charges: @has_legacy_charges,
         pricing_data: @pricing_data,
         scope: @scope,
-        hub_names: @hub_names
+        hub_names: @hub_names,
+        note_remarks: @note_remarks
       }
     )
 

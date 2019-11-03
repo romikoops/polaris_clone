@@ -63,7 +63,7 @@
                 <%= s.destination_hub&.name || hub_names[q['trip_id']][:destination] %>
                 <% if s.destination_hub&.free_out %>
                   (Free Out)
-                <% end %> 
+                <% end %>
               </span>
             </p>
             <p>Ref:&nbsp;<span><%= s.imc_reference %></span></p>
@@ -149,7 +149,7 @@
                     <td class="table-title"><p>Gross&nbsp;Weight&nbsp;per&nbsp;Item</p></td>
                     <td class="table-value">
                       <% gw_value = weight_units['unit'] == 'kg' ? cargo.payload_in_kg : (cargo.payload_in_kg / 1000) %>
-                      <span><%="#{"%.#{weight_units['decimals']}f" % gw_value} #{weight_units['unit']}" %></span>  
+                      <span><%="#{"%.#{weight_units['decimals']}f" % gw_value} #{weight_units['unit']}" %></span>
                     </td>
                   </tr>
                 <% end %>
@@ -441,6 +441,11 @@
           </p>
         </div>
       <% end %>
+      <div class="note-remarks-row">
+        <% note_remarks.each do |note_remark| %>
+          <%= note_remark %>
+        <% end %>
+      </div>
       <% if scope["quote_notes"] %>
         <div class="tenant-notes-row">
           <p class="">
@@ -467,7 +472,7 @@
         </ul>
       </div>
     <% end %>
-  
+
     <% unless remarks.empty? %>
       <div class="remarks">
         <h4>Remarks:</h4>
@@ -482,7 +487,7 @@
         </ul>
       </div>
     <% end %>
-    
+
     <% unless content['disclaimer'].nil? %>
       <div class="remarks">
         <ul> <% content['disclaimer'].each do |section| %>

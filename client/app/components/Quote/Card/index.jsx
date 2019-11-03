@@ -332,7 +332,7 @@ class QuoteCard extends PureComponent {
                 </div>
               )}
             </div>
-            
+
             <div className={`flex-50 ${styles.valid_until}`}>
               {validUntil && (
                 <div>
@@ -415,6 +415,11 @@ class QuoteCard extends PureComponent {
                   : `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`}
               </p>
             </div>
+            {result.meta.remarkNote && (
+              <div className={`flex-100 layout-row layout-align-end-center ${styles.remark_note}`}>
+                {result.meta.remarkNote}
+              </div>
+            )}
             <div className="flex-100 layout-row layout-align-end-center">
 
               <div className="flex-60 layout-row layout-align-end-center layout-wrap">

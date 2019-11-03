@@ -112,7 +112,7 @@
     }
   }
   .sub_price_row_wrapper {
-    border-bottom: 1px solid #E0E0E0; 
+    border-bottom: 1px solid #E0E0E0;
   }
   .total_row {
     background: #F8F8F8;
@@ -214,7 +214,7 @@
     padding: 0 30px;
     i { margin-right: 5px; }
   }
-  
+
   .details_itens {
     :first-child {
       margin-bottom: 10px;
@@ -227,7 +227,7 @@
       margin-bottom: 10px;
     }
   }
-  
+
   .notes_bar_button {
     border-top: 1px solid rgb(224, 224, 224);
     min-height: 50px;
@@ -239,5 +239,12 @@
       font-size: 20px;
       padding-right: 16px
     }
+  }
+
+  .remark_note {
+    padding: 5px 20px;
+    margin-bottom: 9px;
+    font-weight: bold;
+    font-size: 11px;
   }
 }

@@ -19,7 +19,8 @@ class PdfService
     shipments: nil,
     quotes: nil,
     quotation: nil,
-    load_type: nil
+    load_type: nil,
+    note_remarks: nil
   )
     logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
     pdf = PdfHandler.new(
@@ -33,7 +34,8 @@ class PdfService
       shipments: shipments,
       quotes: quotes,
       quotation: quotation,
-      load_type: load_type
+      load_type: load_type,
+      note_remarks: note_remarks
     )
     pdf.generate
   rescue Errno::ECONNRESET => e
@@ -53,14 +55,15 @@ class PdfService
     )
   end
 
-  def generate_quote_pdf(shipment:, shipments:, quotes:, quotation:)
+  def generate_quote_pdf(shipment:, shipments:, quotes:, quotation:, note_remarks:)
     generate_pdf(
       template: 'shipments/pdfs/quotations.pdf.erb',
       shipment: shipment,
       shipments: shipments,
       quotes: quotes,
       quotation: quotation,
-      name: 'quotation'
+      name: 'quotation',
+      note_remarks: note_remarks
     )
   end
 
@@ -116,12 +119,16 @@ class PdfService
     return existing_document if needs_update?(object: quotation, document: existing_document)
 
     quotes = quotation.shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
+
     shipment = Shipment.find(quotation.original_shipment_id)
+    note_remarks = get_note_remarks(quotes.first['trip_id'])
+
     file = generate_quote_pdf(
       shipment: shipment,
       shipments: quotation.shipments,
       quotes: quotes,
-      quotation: quotation
+      quotation: quotation,
+      note_remarks: note_remarks
     )
     return nil if file.nil?
 
@@ -175,5 +182,15 @@ class PdfService
         content_type: 'application/pdf'
       }
     )
+  end
+
+  private
+
+  def get_note_remarks(trip_id)
+    pricing_ids = Trip.find(trip_id).itinerary.rates.pluck(:id)
+    Note.where(tenant: tenant.id, pricings_pricing_id: pricing_ids, remarks: true)
+        .select(:body)
+        .distinct
+        .pluck(:body)
   end
 end

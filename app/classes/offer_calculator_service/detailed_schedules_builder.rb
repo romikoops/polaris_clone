@@ -78,15 +78,24 @@ module OfferCalculatorService
     end
 
     def meta(schedule:, shipment:, pricings_by_cargo_class:, user:) # rubocop:disable /MethodLength, Metrics AbcSize
-      chargeable_weight = if shipment.lcl? && shipment.aggregated_cargo
-                            shipment.aggregated_cargo.calc_chargeable_weight(schedule.mode_of_transport)
-                          elsif shipment.lcl? && !shipment.aggregated_cargo
-                            shipment.cargo_items.reduce(0) do |acc, c|
-                              acc + c.calc_chargeable_weight(schedule.mode_of_transport) * c.quantity
-                            end
-                          else
-                            0
-                          end
+      chargeable_weight = 0
+
+      if shipment.lcl? && shipment.aggregated_cargo
+        chargeable_weight = shipment.aggregated_cargo.calc_chargeable_weight(schedule.mode_of_transport)
+      elsif shipment.lcl? && !shipment.aggregated_cargo
+        chargeable_weight = shipment.cargo_items.reduce(0) do |acc, c|
+          acc + c.calc_chargeable_weight(schedule.mode_of_transport) * c.quantity
+        end
+      end
+
+      pricing_ids = pricings_by_cargo_class.values.flat_map { |pricing| pricing['id'] }
+      transshipment_notes = grab_transshipments_notes(pricing_ids: pricing_ids, tenant_id: shipment.tenant_id)
+      transshipment_via = transshipment_notes.first&.body
+
+      remark_note = Note.where(tenant_id: shipment.tenant_id,
+                               remarks: true,
+                               pricings_pricing_id: pricing_ids)
+                        .first&.body
 
       {
         load_type: shipment.load_type,
@@ -101,10 +110,8 @@ module OfferCalculatorService
         charge_trip_id: schedule.trip_id,
         ocean_chargeable_weight: chargeable_weight,
         pricings_by_cargo_class: pricings_by_cargo_class,
-        transshipmentVia: grab_transshipment(
-          pricing_ids: pricings_by_cargo_class.values.flat_map { |pricing| pricing['id'] },
-          tenant_id: shipment.tenant_id
-        ),
+        transshipmentVia: transshipment_via,
+        remarkNote: remark_note,
         pricing_rate_data: grab_pricing_rates(
           schedule: schedule,
           load_type: shipment.load_type,
@@ -347,7 +354,7 @@ module OfferCalculatorService
                                                      .select { |pricing| pricing.user_id.nil? }
       end
       pricings_by_cargo_class_and_dates_and_user
-        .map{ |pricing| pricing.as_json.with_indifferent_access }
+        .map { |pricing| pricing.as_json.with_indifferent_access }
         .group_by { |pricing| pricing['transport_category_id'] }
     end
 
@@ -383,12 +390,14 @@ module OfferCalculatorService
                    .or(regular_notes.where(pricings_pricing_id: pricings.ids))
     end
 
-    def grab_transshipment(pricing_ids:, tenant_id:)
+    def grab_transshipments_notes(pricing_ids:, tenant_id:)
       legacy_pricings = Legacy::Pricing.where(id: pricing_ids)
       pricings = Pricings::Pricing.where(id: pricing_ids)
       transshipment_notes = Note.where(transshipment: true, tenant_id: tenant_id)
+
       transshipment_notes.where(target: legacy_pricings)
-                         .or(transshipment_notes.where(pricings_pricing_id: pricings.ids)).first&.body
+                         .or(transshipment_notes.where(pricings_pricing_id: pricings.ids))
+                         .select(:id, :body)
     end
   end
 end
