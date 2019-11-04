@@ -77,6 +77,10 @@ module ExcelDataServices
 
         restructured_data_pricings, restructured_data_local_charges =
           restructured_data.partition { |row_data| row_data.delete(:klass_identifier) == 'Pricing' }
+        restructured_data_pricings = expand_based_on_date_overlaps(
+          restructured_data_pricings,
+          ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i(effective_date expiration_date)
+        )
         restructured_data_pricings = group_by_params(restructured_data_pricings, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS)
         restructured_data_local_charges = adapt_for_direction(restructured_data_local_charges)
         restructured_data_local_charges = expand_based_on_date_overlaps(
@@ -141,9 +145,7 @@ module ExcelDataServices
       end
 
       def correctly_mark_internal_row_data
-        restructured_data.each do |row_data|
-          row_data[:internal] = row_data[:internal].to_s.casecmp('x').zero?
-        end
+        restructured_data.each { |row_data| row_data[:internal] = row_data[:internal].to_s.casecmp('x').zero? }
       end
 
       def expand_based_on_fee_containing_column(row_data)

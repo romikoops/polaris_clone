@@ -115,7 +115,6 @@ module ExcelDataServices
           old_pricings = itinerary.rates.where(pricing_params.except(:effective_date, :expiration_date, :internal))
           overlap_handler = ExcelDataServices::DatabaseInserters::DateOverlapHandler.new(old_pricings, new_pricing)
           pricings_with_actions = overlap_handler.perform
-
           pricings_for_new_pricing_details = act_on_overlapping_pricings(pricings_with_actions, notes)
 
           new_pricing_detail_params_arr = build_pricing_detail_params_for_pricing(group_of_row_data)

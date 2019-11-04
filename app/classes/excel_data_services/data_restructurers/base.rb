@@ -4,18 +4,20 @@ module ExcelDataServices
   module DataRestructurers
     class Base < ExcelDataServices::Base # rubocop:disable Metrics/ClassLength
       ROWS_BY_PRICING_PARAMS_GROUPING_KEYS = %i(
+        carrier
+        country_destination
+        country_origin
+        customer_email
+        destination
+        destination_locode
         effective_date
         expiration_date
-        customer_email
-        origin
-        country_origin
-        destination
-        country_destination
-        mot
-        carrier
-        service_level
         load_type
+        mot
+        origin
+        origin_locode
         rate_basis
+        service_level
       ).freeze
 
       ROWS_BY_MARGIN_PARAMS_GROUPING_KEYS = ROWS_BY_PRICING_PARAMS_GROUPING_KEYS.without(:customer_email).freeze
