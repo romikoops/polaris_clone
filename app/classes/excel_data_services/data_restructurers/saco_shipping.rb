@@ -4,8 +4,8 @@ module ExcelDataServices
   module DataRestructurers
     class SacoShipping < Base # rubocop:disable Metrics/ClassLength
       TREAT_AS_NOTE_COLUMNS = %i(
-        transshipment_via
         remarks
+        transshipment_via
       ).freeze
 
       ROW_IDENTIFIER_KEYS = %i(
@@ -30,18 +30,18 @@ module ExcelDataServices
 
       LOCAL_CHARGES_GROUPING_KEYS = %i(
         internal
+        direction
+        mot
+        load_type
         carrier
         effective_date
         expiration_date
-        mot
-        load_type
+        country
         hub
         hub_locode
-        country
+        counterpart_country
         counterpart_hub
         counterpart_hub_locode
-        counterpart_country
-        direction
       ).freeze
 
       CONTAINER_CLASSES_LOOKUP = {
@@ -79,6 +79,10 @@ module ExcelDataServices
           restructured_data.partition { |row_data| row_data.delete(:klass_identifier) == 'Pricing' }
         restructured_data_pricings = group_by_params(restructured_data_pricings, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS)
         restructured_data_local_charges = adapt_for_direction(restructured_data_local_charges)
+        restructured_data_local_charges = expand_based_on_date_overlaps(
+          restructured_data_local_charges,
+          LOCAL_CHARGES_GROUPING_KEYS - %i(effective_date expiration_date)
+        )
         restructured_data_local_charges = pricings_format_to_local_charges_format(restructured_data_local_charges)
 
         { 'Pricing' => restructured_data_pricings,
@@ -302,8 +306,8 @@ module ExcelDataServices
           notes << {
             header: header,
             body: val.casecmp('x').zero? ? nil : val,
-            transshipment: header == 'Transshipment Via',
-            remarks: header == 'Remarks'
+            remarks: header == 'Remarks',
+            transshipment: header == 'Transshipment Via'
           }
         end
       end

@@ -29,7 +29,7 @@ module ExcelDataServices
         load_type
         direction
         dangerous
-      )
+      ).freeze
 
       def perform
         rows_data = replace_nil_equivalents_with_nil(data[:rows_data])
