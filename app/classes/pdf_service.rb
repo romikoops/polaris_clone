@@ -134,7 +134,13 @@ class PdfService
           valid_until: shipment.valid_until(trip),
           imc_reference: shipment.imc_reference,
           shipment_id: shipment.id,
-          load_type: shipment.load_type
+          load_type: shipment.load_type,
+          carrier: trip.tenant_vehicle.carrier&.name,
+          service_level: trip.tenant_vehicle.name,
+          transshipment: Note.find_by(
+            transshipment: true,
+            pricings_pricing_id: trip.itinerary.rates.where(tenant_vehicle_id: trip.tenant_vehicle_id).ids
+          )&.body
         ).deep_stringify_keys
       end
     end

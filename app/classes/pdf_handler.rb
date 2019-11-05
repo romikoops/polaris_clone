@@ -67,7 +67,9 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     pricings = shipment.itinerary&.rates&.for_cargo_classes(shipment.cargo_classes)
     @notes[shipment.id] = Note.where(
       target: hubs | nexii | countries | pricings | legacy_pricings,
-      tenant_id: shipment.tenant_id
+      tenant_id: shipment.tenant_id,
+      transshipment: false,
+      remarks: false
     )
   end
 

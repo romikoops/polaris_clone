@@ -68,28 +68,48 @@
             <p>Ref:&nbsp;<span><%= quote['imc_reference'] %></span></p>
           </div>
           <div class="text-right cargo-info">
-            <div class="charge-icons">
-              <i class="fa fa-truck" style="color: <%= precarriage_color %>"></i>
-              <i class="fa fa-file" style="color: <%= origin_fee_color %>"></i>
-              <i class="fa fa-anchor" style="color: <%= primary_color %>"></i>
-              <i class="fa fa-file" style="color: <%= destination_fee_color %>"></i>
-              <i class="fa fa-truck flip" style="color: <%= oncarriage_color %>"></i>
-            </div>
-            <p>
+            <% if scope.dig('quote_card', 'sections', 'charge_icons') %>
+              <div class="charge-icons">
+                <i class="fa fa-truck" style="color: <%= precarriage_color %>"></i>
+                <i class="fa fa-file" style="color: <%= origin_fee_color %>"></i>
+                <i class="fa fa-anchor" style="color: <%= primary_color %>"></i>
+                <i class="fa fa-file" style="color: <%= destination_fee_color %>"></i>
+                <i class="fa fa-truck flip" style="color: <%= oncarriage_color %>"></i>
+              </div>
+            <% end %>
+            <p class="voyage-info">
               <strong>Weight:</strong>
               <% w_value = weight_units['unit'] == 'kg' ? cargo_data[:kg][quote['shipment_id']] : cargo_data[:kg][quote['shipment_id']] / 1000 %>
               <%="#{"%.#{weight_units['decimals']}f" % w_value} #{weight_units['unit']}" %>&nbsp;
             </p>
             <% if quote['load_type'] != 'container'%>
-              <p>
+              <p class="voyage-info">
                 <strong>Volume:</strong>
                 <%= '%.3f' % cargo_data[:vol][quote['shipment_id']] %>&nbsp;m<sup>3</sup>
               </p>
             <% end %>
             <% if shipment.vessel_name %>
-              <p>
+              <p class="voyage-info">
                 <strong>Vessel:</strong>
                 <%= shipment.vessel_name %>
+              </p>
+            <% end %>
+            <% if quote['transshipment'].present? %>
+              <p class="voyage-info">
+                <strong>Transshipment Via:</strong>
+                <%= quote['transshipment'] %>
+              </p>
+            <% end %>
+            <% if quote['carrier'].present? && scope.dig('voyage_info', 'carrier').present? %>
+              <p class="voyage-info">
+                <strong>Carrier:</strong>
+                <%= quote['carrier'] %>
+              </p>
+            <% end %>
+            <% if quote['service_level'].present? && scope.dig('voyage_info', 'service_level').present? %>
+              <p class="voyage-info">
+                <strong>Service:</strong>
+                <%= quote['service_level'] %>
               </p>
             <% end %>
           </div>

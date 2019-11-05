@@ -274,16 +274,22 @@ class Shipment < Legacy::Shipment
   def valid_until(target_trip)
     return nil if target_trip.nil? || target_trip.itinerary.nil?
 
+    base_pricing_enabled = user.tenant_scope['base_pricing']
     cargo_classes = cargo_units.pluck(:cargo_class)
     start_date = planned_etd || desired_start_date
     end_date = planned_eta || desired_start_date
-    pricing_association = target_trip.itinerary.pricings
+    target_itinerary = target_trip.itinerary
+    pricing_association = base_pricing_enabled ? target_itinerary.rates : target_itinerary.pricings
                        .for_cargo_classes(cargo_classes)
                        .for_dates(start_date, end_date)
                        .where(
                          tenant_vehicle_id: target_trip.tenant_vehicle_id
                        )
-    dedicated = pricing_association.where(user_id: user.pricing_id)
+    dedicated = if base_pricing_enabled
+      pricing_association.where(group_id: user.all_groups.ids)
+    else
+      pricing_association.where(user_id: user.pricing_id)
+    end
     if dedicated.present?
       dedicated.order(expiration_date: :asc).first&.expiration_date
     else
