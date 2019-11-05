@@ -17,6 +17,14 @@ module Legacy
     has_one :aggregated_cargo, class_name: 'Legacy::AggregatedCargo'
 
     delegate :mode_of_transport, to: :itinerary, allow_nil: true
+
+    def cargo_units
+      send("#{load_type}s")
+    end
+  
+    def cargo_units=(value)
+      send("#{load_type}s=", value)
+    end
   end
 end
 

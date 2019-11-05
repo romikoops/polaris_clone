@@ -15,7 +15,7 @@ module OfferCalculatorService
         itinerary = ::Legacy::Itinerary.find(route.itinerary_id)
         pricings = @scope['base_pricing'] ? itinerary.rates : itinerary.pricings
         tenant_vehicle_ids = pricings.pluck(:tenant_vehicle_id).uniq
-        tenant_vehicle_ids.each do |tv_id| 
+        tenant_vehicle_ids.each do |tv_id|
           schedules << Legacy::Schedule.new(attributes(route, itinerary, tv_id).merge(id: SecureRandom.uuid))
         end
       end
@@ -31,8 +31,8 @@ module OfferCalculatorService
         destination_hub_id: destination_hub.id,
         origin_hub_name: origin_hub.name,
         destination_hub_name: destination_hub.name,
-        eta: Date.tomorrow + 30.days,
-        etd: Date.tomorrow + 4.days,
+        eta: Legacy::Schedule::QUOTE_TRIP_END_DATE,
+        etd: Legacy::Schedule::QUOTE_TRIP_START_DATE,
         closing_date: Date.tomorrow,
         trip_id: faux_trip.id,
         mode_of_transport: route.mode_of_transport,

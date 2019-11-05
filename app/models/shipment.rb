@@ -255,14 +255,6 @@ class Shipment < Legacy::Shipment
     find_contacts('notifyee')
   end
 
-  def cargo_units
-    send("#{load_type}s")
-  end
-
-  def cargo_units=(value)
-    send("#{load_type}s=", value)
-  end
-
   def cargo_count
     if aggregated_cargo
       1
@@ -279,23 +271,23 @@ class Shipment < Legacy::Shipment
     end
   end
 
-  def valid_until
+  def valid_until(target_trip)
+    return nil if target_trip.nil? || target_trip.itinerary.nil?
+
     cargo_classes = cargo_units.pluck(:cargo_class)
     start_date = planned_etd || desired_start_date
     end_date = planned_eta || desired_start_date
-    return nil if itinerary.nil?
-    
-    query = self&.itinerary&.pricings
-                .for_cargo_classes(cargo_classes)
-                .for_dates(start_date, end_date)
-                .where(
-                  tenant_vehicle_id: trip.tenant_vehicle_id
-                )
-    dedicated = query.where(user_id: user.pricing_id)
+    pricing_association = target_trip.itinerary.pricings
+                       .for_cargo_classes(cargo_classes)
+                       .for_dates(start_date, end_date)
+                       .where(
+                         tenant_vehicle_id: target_trip.tenant_vehicle_id
+                       )
+    dedicated = pricing_association.where(user_id: user.pricing_id)
     if dedicated.present?
       dedicated.order(expiration_date: :asc).first&.expiration_date
     else
-      query.where(user_id: nil).order(expiration_date: :asc).first&.expiration_date
+      pricing_association.where(user_id: nil).order(expiration_date: :asc).first&.expiration_date
     end
   end
 
@@ -439,7 +431,7 @@ class Shipment < Legacy::Shipment
 
   def route_notes
     return [] unless itinerary
-    
+
     Note.where(target: itinerary&.pricings)
   end
 

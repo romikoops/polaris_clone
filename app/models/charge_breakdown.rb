@@ -42,7 +42,7 @@ class ChargeBreakdown < ApplicationRecord
   end
 
   def to_nested_hash
-    grand_total.deconstruct_tree_into_schedule_charge.deep_stringify_keys
+    grand_total.deconstruct_tree_into_schedule_charge.merge(trip_id: trip_id).deep_stringify_keys
   end
 
   def dup_charges(charge_breakdown:)

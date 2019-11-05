@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :quotation do
+    association :user
     transient do
       shipment_count { 1 }
     end
@@ -10,7 +11,11 @@ FactoryBot.define do
     name { 'NAME' }
 
     after(:build) do |quotation, evaluator|
-      quotation.shipments = build_list(:shipment, evaluator.shipment_count)
+      quotation.shipments = create_list(:shipment, evaluator.shipment_count, 
+        user: quotation.user, 
+        tenant: quotation.user.tenant,
+        with_breakdown: true
+      )
     end
   end
 end

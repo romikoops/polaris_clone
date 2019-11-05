@@ -20,6 +20,7 @@ class PdfService
     quotes: nil,
     quotation: nil,
     load_type: nil,
+    cargo_units: {},
     note_remarks: nil
   )
     logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
@@ -35,7 +36,8 @@ class PdfService
       quotes: quotes,
       quotation: quotation,
       load_type: load_type,
-      note_remarks: note_remarks
+      note_remarks: note_remarks,
+      cargo_units: cargo_units
     )
     pdf.generate
   rescue Errno::ECONNRESET => e
@@ -51,7 +53,8 @@ class PdfService
       shipment: shipment,
       shipments: [shipment],
       load_type: load_type,
-      name: 'shipment_recap'
+      name: 'shipment_recap',
+      cargo_units: { shipment.id => shipment.cargo_units }
     )
   end
 
@@ -63,16 +66,11 @@ class PdfService
       quotes: quotes,
       quotation: quotation,
       name: 'quotation',
-      note_remarks: note_remarks
+      note_remarks: note_remarks,
+      cargo_units: shipments.each_with_object({}) do |ship, hash|
+        hash[ship.id] = ship.cargo_units
+      end
     )
-  end
-
-  def quotes_with_trip_id(quotation, shipments)
-    if quotation
-      shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
-    else
-      shipments.first.charge_breakdowns.map { |cb| cb.to_nested_hash.merge(trip_id: cb.trip_id).deep_stringify_keys }
-    end
   end
 
   def admin_quotation(quotation: nil, shipment: nil)
@@ -87,11 +85,13 @@ class PdfService
     shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
     quotation = quotation
     quotes = quotes_with_trip_id(quotation, shipments)
+    note_remarks = get_note_remarks(quotes.first['trip_id'])
     file = generate_quote_pdf(
       shipment: shipment,
       shipments: shipments,
       quotes: quotes,
-      quotation: quotation
+      quotation: quotation,
+      note_remarks: note_remarks
     )
     return nil if file.nil?
 
@@ -114,12 +114,37 @@ class PdfService
     document.present? && (object.updated_at < document.updated_at && document.file.present?)
   end
 
+  def quotes_with_trip_id(quotation, shipments)
+    shipments.flat_map do |shipment|
+      trip = shipment.trip
+      offers = quotation.present? ? [shipment.selected_offer] : shipment.charge_breakdowns.map(&:to_nested_hash)
+      offers.map do |offer|
+        trip = Trip.find(offer['trip_id']) if trip.nil?
+        origin_hub = trip.itinerary.first_stop.hub
+        destination_hub = trip.itinerary.last_stop.hub
+        offer.merge(
+          trip_id: trip.id,
+          origin: origin_hub.name,
+          destination: destination_hub.name,
+          origin_free_out: origin_hub.free_out,
+          destination_free_out: destination_hub.free_out,
+          pickup_address: shipment.pickup_address&.full_address,
+          delivery_address: shipment.delivery_address&.full_address,
+          mode_of_transport: trip.itinerary.mode_of_transport,
+          valid_until: shipment.valid_until(trip),
+          imc_reference: shipment.imc_reference,
+          shipment_id: shipment.id,
+          load_type: shipment.load_type
+        ).deep_stringify_keys
+      end
+    end
+  end
+
   def quotation_pdf(quotation:)
     existing_document = Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox: sandbox)
     return existing_document if needs_update?(object: quotation, document: existing_document)
 
-    quotes = quotation.shipments.map { |s| s.selected_offer.merge(trip_id: s.trip_id).deep_stringify_keys }
-
+    quotes = quotes_with_trip_id(quotation, quotation.shipments)
     shipment = Shipment.find(quotation.original_shipment_id)
     note_remarks = get_note_remarks(quotes.first['trip_id'])
 
@@ -187,7 +212,13 @@ class PdfService
   private
 
   def get_note_remarks(trip_id)
-    pricing_ids = Trip.find(trip_id).itinerary.rates.pluck(:id)
+    trip = Trip.find(trip_id)
+    start_date = trip.start_date || Legacy::Schedule::QUOTE_TRIP_START_DATE
+    end_date = trip.end_date || Legacy::Schedule::QUOTE_TRIP_END_DATE
+    pricing_ids = Pricings::Pricing.where(
+      itinerary_id: trip.itinerary_id,
+      tenant_vehicle_id: trip.tenant_vehicle_id
+    ).for_dates(start_date, end_date).ids
     Note.where(tenant: tenant.id, pricings_pricing_id: pricing_ids, remarks: true)
         .select(:body)
         .distinct

@@ -23,12 +23,12 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @logo                  = args[:logo]
     @load_type             = args[:load_type]
     @remarks               = args[:remarks]
+    @cargo_units           = args[:cargo_units]
     @note_remarks          = args[:note_remarks]
     @hide_cargo_sub_totals = false
     @content               = {}
     @hide_grand_total = {}
     @has_legacy_charges = {}
-    @hub_names = {}
     @notes = {}
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
     @scope = ::Tenants::ScopeService.new(target: @shipment.user, tenant: tenants_tenant).fetch
@@ -40,7 +40,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       chargeable_weight: {},
       item_strings: {}
     }
-    prep_hub_data if @quotes
+
     @shipments << @shipment if @shipments.empty?
     @shipments.each do |s|
       calculate_cargo_data(s)
@@ -55,17 +55,6 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
 
   def calculate_pricing_data(shipment)
     @pricing_data[shipment.id] = shipment.meta['pricing_rate_data']
-  end
-
-  def prep_hub_data
-    @quotes.each do |quote|
-      next unless quote['trip_id']
-
-      @hub_names[quote['trip_id']] = {
-        origin: Trip.find(quote['trip_id']).itinerary.first_stop.hub.name,
-        destination: Trip.find(quote['trip_id']).itinerary.last_stop.hub.name
-      }
-    end
   end
 
   def prep_notes(shipment)
@@ -89,7 +78,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     currencies = []
     result = shipment
              .selected_offer
-             .except('total', 'edited_total', 'name')
+             .except('total', 'edited_total', 'name', 'trip_id')
              .find do |charge_key, charge|
                charge_keys = charge
                              .except('total', 'edited_total', 'name')
@@ -276,6 +265,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         has_legacy_charges: @has_legacy_charges,
         pricing_data: @pricing_data,
         scope: @scope,
+        cargo_units: @cargo_units,
         hub_names: @hub_names,
         note_remarks: @note_remarks
       }

@@ -31,6 +31,7 @@ FactoryBot.define do
 
       shipment.shipment_contacts << build(:shipment_contact, shipment: shipment, contact_type: :shipper)
       shipment.shipment_contacts << build(:shipment_contact, shipment: shipment, contact_type: :consignee)
+      shipment.cargo_units << create(shipment.load_type.to_sym, shipment: shipment)
 
       if evaluator.with_breakdown
         shipment.charge_breakdowns << create(:charge_breakdown, trip: shipment.trip, shipment: shipment)

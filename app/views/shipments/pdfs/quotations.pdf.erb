@@ -26,22 +26,21 @@
     </div>
   </div>
 
-
-  <% quotes.map do |q| %>
-    <% s = shipments.find { |shipment| shipment.trip_id === q['trip_id'] } || shipment %>
-    <% selected_offer = s.trip_id ? s.selected_offer : q %>
-    <% origin_fee_color = selected_offer["export"] ? primary_color : neutral_color %>
-    <% destination_fee_color = selected_offer["import"] ? primary_color : neutral_color %>
+  <% quotes.each do |quote| %>
+    <% origin_fee_color = quote["export"] ? primary_color : neutral_color %>
+    <% destination_fee_color = quote["import"] ? primary_color : neutral_color %>
     <div class="all-row">
       <div class="main-container">
-        <div class="validity">
-          <p><b>Price valid until:</b></p>
-          <p class="text-right"><%= s&.valid_until&.strftime('%d.%m.%Y') %></p>
-        </div>
+        <% if quote['valid_until'].present? %>
+          <div class="validity">
+            <p><b>Price valid until:</b></p>
+            <p class="text-right"><%= quote['valid_until']&.strftime('%d.%m.%Y') %></p>
+          </div>
+        <% end %>
         <div class="info">
-          <% if s.mode_of_transport == "ocean" %>
+          <% if quote['mode_of_transport'] == "ocean" %>
             <% mot = "anchor" %>
-          <% elsif s.mode_of_transport == "air" %>
+          <% elsif quote['mode_of_transport'] == "air" %>
             <% mot = "plane" %>
           <% else %>
             <% mot = "truck" %>
@@ -51,8 +50,8 @@
             <p>
               From:&nbsp;
               <span>
-                <%= s.origin_hub&.name || hub_names[q['trip_id']][:origin] %>
-                <% if s.origin_hub&.free_out %>
+                <%= quote['origin'] %>
+                <% if quote['origin_free_out'] %>
                   (Free Out)
                 <% end %>
               </span>
@@ -60,13 +59,13 @@
             <p>
               To:&nbsp;
               <span>
-                <%= s.destination_hub&.name || hub_names[q['trip_id']][:destination] %>
-                <% if s.destination_hub&.free_out %>
+                <%= quote['destination'] %>
+                <% if quote['destination_free_out'] %>
                   (Free Out)
                 <% end %>
               </span>
             </p>
-            <p>Ref:&nbsp;<span><%= s.imc_reference %></span></p>
+            <p>Ref:&nbsp;<span><%= quote['imc_reference'] %></span></p>
           </div>
           <div class="text-right cargo-info">
             <div class="charge-icons">
@@ -78,13 +77,13 @@
             </div>
             <p>
               <strong>Weight:</strong>
-              <% w_value = weight_units['unit'] == 'kg' ? cargo_data[:kg][s.id] : cargo_data[:kg][s.id] / 1000 %>
+              <% w_value = weight_units['unit'] == 'kg' ? cargo_data[:kg][quote['shipment_id']] : cargo_data[:kg][quote['shipment_id']] / 1000 %>
               <%="#{"%.#{weight_units['decimals']}f" % w_value} #{weight_units['unit']}" %>&nbsp;
             </p>
-            <% if s.load_type != 'container'%>
+            <% if quote['load_type'] != 'container'%>
               <p>
                 <strong>Volume:</strong>
-                <%= '%.3f' % cargo_data[:vol][s.id] %>&nbsp;m<sup>3</sup>
+                <%= '%.3f' % cargo_data[:vol][quote['shipment_id']] %>&nbsp;m<sup>3</sup>
               </p>
             <% end %>
             <% if shipment.vessel_name %>
@@ -95,11 +94,11 @@
             <% end %>
           </div>
         </div>
-        <% if s.has_pre_carriage || s.has_on_carriage %>
+        <% if quote['pickup_address'] || quote['delivery_address'] %>
           <div class="delivery-info">
             <div class="cargo-info">
-              <% if s.has_pre_carriage %> <p> <b> Pickup from</b>: <%=  s.pickup_address.full_address %> </p> <% end %>
-              <% if s.has_on_carriage %> <p> <b> Delivery to</b>: <%=  s.delivery_address.full_address  %></p>  <% end %>
+              <% if quote['pickup_address'].present? %> <p> <b> Pickup from</b>: <%=  quote['pickup_address'] %> </p> <% end %>
+              <% if quote['delivery_address'].present? %> <p> <b> Delivery to</b>: <%=  quote['delivery_address']  %></p>  <% end %>
             </div>
           </div>
         <% end %>
@@ -111,12 +110,12 @@
             </div>
             <div class="rate_section">
               <p class="rate_header">Currency</p>
-              <p class="rate_value"><%= pricing_data[s.id].values.first.dig('total', 'currency')%></p>
+              <p class="rate_value"><%= pricing_data[quote['shipment_id']].values.first.dig('total', 'currency')%></p>
             </div>
-            <% pricing_data[s.id].keys.sort.each do |cargo_class| %>
+            <% pricing_data[quote['shipment_id']].keys.sort.each do |cargo_class| %>
               <div class="rate_section">
                 <p class="rate_header"><%= cargo_class.humanize.upcase %></p>
-                <p class="rate_value"><%= pricing_data[s.id].dig(cargo_class, 'total', 'value')%></p>
+                <p class="rate_value"><%= pricing_data[quote['shipment_id']].dig(cargo_class, 'total', 'value')%></p>
               </div>
               <% end %>
           </div>
@@ -127,7 +126,7 @@
           <div class="total-price-single">
             <h4>Cargo Details</h4>
           </div>
-          <% s.cargo_items.each_with_index do |cargo, i| %>
+          <% cargo_units[quote['shipment_id']]&.select {|cargo| cargo.is_a?(Legacy::CargoItem) }.each_with_index do |cargo, i| %>
             <div class="no_page_break item-group">
               <div class="title_row">
                 <p class=""><strong><%= cargo.quantity %>&nbsp;x</strong> <%= cargo.cargo_item_type.description %></p>
@@ -169,14 +168,14 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="table-title"><p><%== cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_title] %></p></td>
-                  <td class="table-value"><span><%== cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_value] %></span></td>
+                  <td class="table-title"><p><%== cargo_data[:chargeable_weight][quote['shipment_id']][cargo.id.to_s][:total_title] %></p></td>
+                  <td class="table-value"><span><%== cargo_data[:chargeable_weight][quote['shipment_id']][cargo.id.to_s][:total_value] %></span></td>
                 </tr>
               </table>
             </div>
 
           <% end %>
-          <% s.containers.each_with_index do |container, i| %>
+          <% cargo_units[quote['shipment_id']]&.select {|cargo| cargo.is_a?(Legacy::Container) }.each_with_index do |container, i| %>
             <div class="no_page_break item-group">
               <div class="title_row">
                 <p class=""><strong><%= container.quantity %>&nbsp;x</strong> <%= container.size_class.humanize.upcase %></p>
@@ -213,7 +212,7 @@
             </div>
 
           <% end %>
-          <% if  s.aggregated_cargo %>
+          <% if  cargo_units.all? {|cargo| cargo.is_a?(Legacy::AggregatedCargo) } %>
             <div class="no_page_break item-group">
               <div class="title_row">
                 <p class=""><strong>Aggregated Cargo</strong></p>
@@ -222,23 +221,24 @@
                 <tr>
                   <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
                   <td class="table-value">
-                     <% agc_value = weight_units['unit'] == 'kg' ? s.aggregated_cargo.weight : s.aggregated_cargo.weight / 1000 %>
-                    <span><%="#{"%.#{weight_units['decimals']}f" % agc_value} #{weight_units['unit']}" %></span>
+                    <span>
+                    <%="#{"%.#{weight_units['decimals']}f" % weight_units['unit'] == 'kg' ? cargo_units.first.weight : cargo_units.first.weight / 1000 }
+                     #{weight_units['unit']}" %></span>
                   </td>
                 </tr>
                 <tr>
                   <td class="table-title"><p>Total Volume</p></td>
-                  <td class="table-value"><span><%= '%.3f' % (s.aggregated_cargo.volume) %>&nbsp;m<sup>3</span></sup></td>
+                  <td class="table-value"><span><%= '%.3f' % (cargo_units.first.volume) %>&nbsp;m<sup>3</span></sup></td>
                 </tr>
                 <tr>
                   <td class="table-title">
                     <p>
-                      <%== cargo_data[:chargeable_weight][s.id][s.aggregated_cargo.id.to_s][:total_title] %>
+                      <%== cargo_data[:chargeable_weight][quote['shipment_id']][cargo_units.first.id.to_s][:total_title] %>
                     </p>
                   </td>
                   <td class="table-value">
                     <span>
-                      <%== cargo_data[:chargeable_weight][s.id][s.aggregated_cargo.id.to_s][:total_value] %>
+                      <%== cargo_data[:chargeable_weight][quote['shipment_id']][cargo_units.first.id.to_s][:total_value] %>
                     </span>
                   </td>
                 </tr>
@@ -250,7 +250,7 @@
       </div>
       <% ['trucking_pre', 'export', 'cargo', 'import', 'trucking_on' ].each do |charge_key| %>
         <% if scope['freight_in_original_currency']  && charge_key == 'cargo'
-            original_charge = selected_offer[charge_key]
+            original_charge = quote[charge_key]
             charge = {
               "total" => {
                 "value" => 0.0,
@@ -276,25 +276,23 @@
               end
               charge['name'] = original_charge['name']
           elsif %w(import export).include?(charge_key) && scope['condense_local_fees_pdf']
-            tmp_charge = selected_offer[charge_key]
+            tmp_charge = quote[charge_key]
             next unless tmp_charge
             charge = tmp_charge.slice('name', 'total', 'edited_total')
-
-            dummy_key = s.lcl? ? 'cargo_item' : 'container'
-            charge[dummy_key] = { "total" => { "currency" => '', "value" => 0.00}}
+            charge[quote['load_type']] = { "total" => { "currency" => '', "value" => 0.00}}
             tmp_charge.except('name', 'total', 'edited_total').keys.each do |k|
               tmp_charge[k].except('name', 'total', 'edited_total').keys.each do |fk|
-                charge[dummy_key][fk] = tmp_charge[k][fk]
-                charge[dummy_key]['total']['value'] += tmp_charge.dig(k, 'total', 'value') || 0.00
-                charge[dummy_key]['total']['currency'] = tmp_charge.dig(k, 'total', 'currency') || tmp_charge.dig('total', 'currency')
+                charge[quote['load_type']][fk] = tmp_charge[k][fk]
+                charge[quote['load_type']]['total']['value'] += tmp_charge.dig(k, 'total', 'value') || 0.00
+                charge[quote['load_type']]['total']['currency'] = tmp_charge.dig(k, 'total', 'currency') || tmp_charge.dig('total', 'currency')
               end
             end
           else
-            charge = selected_offer[charge_key]
+            charge = quote[charge_key]
           end %>
         <% next if !charge%>
         <% charge_name =  if charge_key == 'cargo' && charge['name'] == 'Freight'
-                            "#{s.mode_of_transport&.capitalize} Freight"
+                            "#{quote['mode_of_transport']&.capitalize} Freight"
                           else
                             charge["name"]
                           end
@@ -304,7 +302,7 @@
             <h4>
                 <%= charge_name %>
                 <% if scope['show_chargeable_weight'] && !['import', 'export'].include?(charge_key) %>
-                  <%== cargo_data[:chargeable_weight][s.id][charge_key.to_sym] %>
+                  <%== cargo_data[:chargeable_weight][quote['shipment_id']][charge_key.to_sym] %>
                  <% end %>
             </h4>
              <% if charge_key == 'cargo'
@@ -352,8 +350,8 @@
                   if scope['condense_local_fees_pdf']
                     desc = false
                   elsif unit_id.present? && unit_id[%r{\A-?\d+(\.\d*)?\z}]
-                    unit = s.cargo_units.find_by(id: unit_id.to_i)
-                    desc = s.lcl? ? unit&.cargo_item_type&.description : unit.size_class.humanize.upcase
+                    unit = cargo_units[quote['shipment_id']].find_by(id: unit_id.to_i)
+                    desc = quote['load_type'] == 'cargo_item' ? unit&.cargo_item_type&.description : unit&.size_class.humanize.upcase
                   elsif unit_id == 'shipment'
                     desc = 'Shipment Fees'
                   elsif %w(cargo_item container).include?(unit_id)
@@ -373,7 +371,7 @@
                       <h3>
                         <%=
                           if scope['hide_sub_totals'] && charge_key.include?('unknown')
-                            "#{s.mode_of_transport.capitalize} Freight: "
+                            "#{quote['mode_of_transport']&.capitalize} Freight: "
                           elsif charge_key == 'cargo' && !scope['fine_fee_detail']
                             "#{'%.2f' % sub_charges.sum{|c| c['total']['value']}} #{currency_key}"
                           else
@@ -390,11 +388,11 @@
                             sub_charge_name = if 'cargo' == charge_key && scope['consolidated_cargo']
                               "Consolidated Freight Rate"
                             elsif 'cargo' == charge_key && scope['fine_fee_detail'] && sub_charge['key'].include?('unknown')
-                              "#{s.mode_of_transport.capitalize} Freight: #{sub_charge['name']}"
+                              "#{quote['mode_of_transport']&.capitalize} Freight: #{sub_charge['name']}"
                             elsif 'cargo' == charge_key && scope['fine_fee_detail'] && sub_charge['key'].include?('included')
                               "#{sub_charge['key'].delete('included_')}: #{sub_charge['name']}"
                             elsif 'cargo' == charge_key && !scope['fine_fee_detail']
-                              "#{s.mode_of_transport.capitalize} Freight Rate #{i + 1}"
+                              "#{quote['mode_of_transport']&.capitalize} Freight Rate #{i + 1}"
                             elsif ['trucking_on', 'trucking_pre'].include?(charge_key)
                               'Trucking Rate'
                             else
@@ -412,7 +410,7 @@
                         <td class="table-quantity">
                           <% if 'cargo' == charge_key && scope['fine_fee_detail'] %>
 
-                            <p><%= cargo_data[:item_strings][s.id][sub_charge['item_id']] %></p>
+                            <p><%= cargo_data[:item_strings][quote['shipment_id']][sub_charge['item_id']] %></p>
                           <% end %>
                         </td>
                         <% if sub_charge["key"].include?('unknown') %>
@@ -433,11 +431,11 @@
           </div>
         </div>
       <% end %>
-      <% unless hide_grand_total[s.id] %>
+      <% unless hide_grand_total[quote['shipment_id']] %>
         <div class="total-row">
           <h4>Total</h4>
-          <p class="quote"><%= '%.2f' % selected_offer["total"]["value"].to_f %>
-            &nbsp;<%= selected_offer["total"]["currency"] %>
+          <p class="quote"><%= '%.2f' % quote["total"]["value"].to_f %>
+            &nbsp;<%= quote["total"]["currency"] %>
           </p>
         </div>
       <% end %>
@@ -454,10 +452,10 @@
         </div>
       <% end %>
     </div>
-    <% if notes[s.id].present? %>
+    <% if notes[quote['shipment_id']].present? %>
       <div class="remarks">
         <h4>Notes: </h4>
-        <ul> <% notes[s.id].each do |note| %>
+        <ul> <% notes[quote['shipment_id']].each do |note| %>
           <li class="note-header"> <%= note.header %></li>
           <li class="note-body">
             <% if note.contains_html %>

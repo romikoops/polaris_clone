@@ -9,8 +9,9 @@ class QuoteMailer < ApplicationMailer
     @shipments = shipments
     @shipment = shipment
     @quotation = quotation
-    @quotes = quotes_with_trip_id(@quotation, @shipments)
     @user = @shipment.user
+    pdf_service = PdfService.new(user: @user, tenant: @user.tenant)
+    @quotes = pdf_service.quotes_with_trip_id(@quotation, @shipments)
     @theme = @user.tenant.theme
     @email = email[/[^@]+/]
     @content = Content.get_component('QuotePdf', @user.tenant.id)
@@ -20,7 +21,7 @@ class QuoteMailer < ApplicationMailer
     ).read
 
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
-    document = PdfService.new(user: @user, tenant: @user.tenant).quotation_pdf(quotation: @quotation)&.attachment
+    document = pdf_service.quotation_pdf(quotation: @quotation)&.attachment
     attachments[pdf_name] = document if document.present?
     attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
@@ -30,49 +31,24 @@ class QuoteMailer < ApplicationMailer
                          .tap { |a| a.display_name = @user.tenant.name }.format,
       reply_to: @user.tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, email),
-      subject: "#{sandbox ? '[SANDBOX] - ' : ''} Quotation for #{@shipments.pluck(:imc_reference).join(',')}"
+      subject: subject_line(shipments: @shipments, sandbox: sandbox)
     ) do |format|
       format.html
       format.mjml
     end
   end
 
-  def quotes_with_trip_id(quotation, shipments)
-    if quotation
-      shipments.map do |shipment| 
-        trip = Trip.find(shipment.trip_id)
-        shipment.selected_offer.merge(
-          trip_id: shipment.trip_id,
-          origin: trip.itinerary.first_stop.hub.name,
-          destination: trip.itinerary.last_stop.hub.name,
-          pickup_address: shipment.pickup_address&.full_address,
-          delivery_address: shipment.delivery_address&.full_address,
-          mode_of_transport: trip.itinerary.mode_of_transport
-        ).deep_stringify_keys
-      end
-    else
-      shipments.flat_map do |shipment|
-        shipment.charge_breakdowns.map do |charge_breakdown| 
-          trip = Trip.find(charge_breakdown.trip_id)
-          charge_breakdown.to_nested_hash.merge(
-            trip_id: charge_breakdown.trip_id,
-            origin: trip.itinerary.first_stop.hub.name,
-            destination: trip.itinerary.last_stop.hub.name,
-            pickup_address: shipment.pickup_address&.full_address,
-            delivery_address: shipment.delivery_address&.full_address,
-            mode_of_transport: trip.itinerary.mode_of_transport
-          ).deep_stringify_keys
-        end
-      end
-    end
+  def subject_line(shipments:, sandbox: false)
+    "#{sandbox ? '[SANDBOX] - ' : ''}Quotation for #{shipments.pluck(:imc_reference).join(',').truncate(100)}"
   end
 
   def quotation_admin_email(quotation, shipment = nil, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     @shipments = quotation ? quotation.shipments : [shipment]
     @shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
     @quotation = quotation
-    @quotes = quotes_with_trip_id(@quotation, @shipments)
     @user = (quotation&.user || shipment&.user)
+    pdf_service = PdfService.new(user: @user, tenant: @user.tenant)
+    @quotes = pdf_service.quotes_with_trip_id(@quotation, @shipments)
     @theme = @user.tenant.theme
     @content = Content.get_component('QuotePdf', @user.tenant.id)
     @scope = ::Tenants::ScopeService.new(target: @user).fetch
@@ -86,7 +62,7 @@ class QuoteMailer < ApplicationMailer
                          .tap { |a| a.display_name = 'ItsMyCargo Quotation Tool' }.format,
       reply_to: Settings.emails.support,
       to: mail_target_interceptor(@user, @user.tenant.email_for(:sales, @shipment.mode_of_transport)),
-      subject: "#{sandbox ? '[SANDBOX] - ' : ''} Quotation for #{@shipments.pluck(:imc_reference).join(',')}"
+      subject: subject_line(shipments: @shipments, sandbox: sandbox)
     ) do |format|
       format.html
       format.mjml

@@ -4,6 +4,9 @@ module Legacy
   class Schedule # rubocop:disable Metrics/ClassLength
     include ActiveModel::Model
 
+    QUOTE_TRIP_START_DATE = 5.days.from_now
+    QUOTE_TRIP_END_DATE = 31.days.from_now
+    
     attr_accessor :id, :origin_hub_id, :destination_hub_id,
                   :origin_hub_name, :destination_hub_name, :mode_of_transport,
                   :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,

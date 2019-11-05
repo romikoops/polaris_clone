@@ -29,9 +29,7 @@ FactoryBot.define do
 
       shipment.origin_nexus = shipment.origin_hub.nexus
       shipment.destination_nexus = shipment.destination_hub.nexus
-
-      # shipment.shipment_contacts << build(:shipment_contact, shipment: shipment, contact_type: :shipper)
-      # shipment.shipment_contacts << build(:shipment_contact, shipment: shipment, contact_type: :consignee)
+      shipment.cargo_units << create("legacy_#{shipment.load_type}".to_sym, shipment: shipment)
 
       if evaluator.with_breakdown
         shipment.charge_breakdowns << create(:charge_breakdown, trip: shipment.trip, shipment: shipment)

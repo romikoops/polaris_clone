@@ -8,21 +8,55 @@ FactoryBot.define do
       charge_breakdown.update!(trip_id: charge_breakdown.shipment.trip_id) if charge_breakdown.trip_id.nil?
 
       if charge_breakdown.charges.empty?
-        charge_breakdown.charges << build(
-          :charge,
-          charge_breakdown: charge_breakdown,
-          charge_category: ChargeCategory.grand_total,
-          children_charge_category: build(:charge_category,
-                                          name: 'cargo',
-                                          code: 'cargo',
-                                          tenant_id: charge_breakdown.shipment.tenant_id),
-          parent: build(
+        cargo_charge_category = ChargeCategory.find_by(
+          name: 'Cargo',
+          code: 'cargo',
+          tenant_id: charge_breakdown.shipment.tenant_id
+        ) || create(:charge_category,
+          name: 'Cargo',
+          code: 'cargo',
+          tenant_id: charge_breakdown.shipment.tenant_id)
+        charge_breakdown.shipment.cargo_units. each do |cargo_unit|
+
+          cargo_unit_charge_category = create(:charge_category,
+            name: cargo_unit.class.name.humanize,
+            code: cargo_unit.class.name.underscore.downcase,
+            cargo_unit_id: cargo_unit[:id],
+            tenant_id: charge_breakdown.shipment.tenant_id)
+          base_charge = build(
             :charge,
             charge_breakdown: charge_breakdown,
             charge_category: ChargeCategory.base_node,
             children_charge_category: ChargeCategory.grand_total
           )
-        )
+          grand_total_charge = build(
+            :charge,
+            charge_breakdown: charge_breakdown,
+            charge_category: ChargeCategory.grand_total,
+            children_charge_category: cargo_charge_category,
+            parent: base_charge
+          )
+          cargo_charge = build(
+            :charge,
+            charge_breakdown: charge_breakdown,
+            charge_category: cargo_charge_category,
+            children_charge_category: cargo_unit_charge_category,
+            parent: grand_total_charge
+          )
+          cargo_unit_charge = build(
+            :charge,
+            charge_breakdown: charge_breakdown,
+            charge_category: cargo_unit_charge_category,
+            parent: cargo_charge
+          )
+
+          charge_breakdown.charges << base_charge
+          charge_breakdown.charges << grand_total_charge
+          charge_breakdown.charges << cargo_charge
+          charge_breakdown.charges << cargo_unit_charge
+
+        end
+
       end
     end
   end
