@@ -94,6 +94,7 @@ module ExcelTool
         latitude: hub_row[:latitude],
         longitude: hub_row[:longitude],
         photo: hub_row[:photo],
+        locode: hub_row[:locode],
         country: country,
         tenant_id: @user.tenant_id,
         sandbox: @sandbox
