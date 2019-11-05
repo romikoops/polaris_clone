@@ -16,7 +16,7 @@ module ExcelDataServices
       end
 
       def internal
-        @internal ||= data[:internal].to_s.casecmp('x').zero?
+        @internal ||= data[:internal]
       end
 
       def hub

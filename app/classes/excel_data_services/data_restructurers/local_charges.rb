@@ -53,7 +53,7 @@ module ExcelDataServices
       def correct_capitalization(rows_data)
         rows_data.map do |row_data|
           COLS_CONTAINING_ALL.each do |col_name|
-            row_data[col_name].downcase! if row_data[col_name]&.casecmp('all')&.zero?
+            row_data[col_name].downcase! if row_data[col_name]&.casecmp?('all')
           end
 
           COLS_TO_DOWNCASE.each do |col_name|
@@ -121,14 +121,12 @@ module ExcelDataServices
       end
 
       def standard_charge_params(charge_data)
-        rate_basis = charge_data[:rate_basis].upcase
-
         { currency: charge_data[:currency],
           key: charge_data[:fee_code],
           min: charge_data[:minimum],
           max: charge_data[:maximum],
           name: charge_data[:fee],
-          rate_basis: rate_basis }
+          rate_basis: charge_data[:rate_basis].upcase }
       end
 
       def specific_charge_params(rate_basis, single_data) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -157,7 +155,7 @@ module ExcelDataServices
       def add_hub_names(charges_data)
         charges_data.each do |params|
           hub_name = append_hub_suffix(params[:hub], params[:mot])
-          if params[:counterpart_hub] && !params[:counterpart_hub].casecmp('all').zero?
+          if params[:counterpart_hub] && !params[:counterpart_hub].casecmp?('all')
             counterpart_hub_name = append_hub_suffix(params[:counterpart_hub], params[:mot])
           end
           params[:hub_name] = hub_name

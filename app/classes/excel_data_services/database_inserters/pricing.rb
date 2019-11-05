@@ -78,7 +78,7 @@ module ExcelDataServices
           sandbox: @sandbox
         )
 
-        # TODO: fix!! `Vehicle` shouldn't be creating a `TenantVehicle`!:
+        # FIX: `Vehicle` shouldn't be creating a `TenantVehicle`!:
         tenant_vehicle || Legacy::Vehicle.create_from_name(
           name: row.service_level,
           mot: row.mot,
@@ -89,7 +89,7 @@ module ExcelDataServices
       end
 
       def find_transport_category(tenant_vehicle, cargo_class)
-        # TODO: what is called 'load_type' in the excel file is actually a cargo_class!
+        # FIX: what is called 'load_type' in the excel file is actually a cargo_class!
         tenant_vehicle.vehicle.transport_categories.find_by(
           name: 'any',
           cargo_class: cargo_class.downcase,

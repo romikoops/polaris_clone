@@ -145,7 +145,7 @@ module ExcelDataServices
       end
 
       def correctly_mark_internal_row_data
-        restructured_data.each { |row_data| row_data[:internal] = row_data[:internal].to_s.casecmp('x').zero? }
+        restructured_data.each { |row_data| row_data[:internal] = row_data[:internal].to_s.casecmp?('x') }
       end
 
       def expand_based_on_fee_containing_column(row_data)
@@ -307,7 +307,7 @@ module ExcelDataServices
 
           notes << {
             header: header,
-            body: val.casecmp('x').zero? ? nil : val,
+            body: val.casecmp?('x') ? nil : val,
             remarks: header == 'Remarks',
             transshipment: header == 'Transshipment Via'
           }

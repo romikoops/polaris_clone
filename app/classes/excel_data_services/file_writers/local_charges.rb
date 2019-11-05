@@ -15,7 +15,7 @@ module ExcelDataServices
       def load_and_prepare_data
         rows_data = []
         all_local_charges = tenant.local_charges.where(sandbox: @sandbox, group_id: @group_id)
-        local_charges = if mode_of_transport.nil? || mode_of_transport == 'all'
+        local_charges = if mode_of_transport.nil? || mode_of_transport.casecmp?('all')
                           all_local_charges
                         else
                           all_local_charges.for_mode_of_transport(mode_of_transport)
