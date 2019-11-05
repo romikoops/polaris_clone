@@ -25,6 +25,9 @@ module ExcelDataServices
 
         restructured_data = add_hub_names(restructured_data)
         restructured_data = downcase_load_types(restructured_data)
+        restructured_data.each do |row_data|
+          row_data[:internal] ||= false
+        end
         restructured_data = expand_based_on_date_overlaps(
           restructured_data,
           ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i(effective_date expiration_date)

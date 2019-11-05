@@ -16,10 +16,10 @@ module ExcelDataServices
         restructured_data = replace_nil_equivalents_with_nil(data[:rows_data])
         restructured_data = downcase_load_types(restructured_data)
         restructured_data.reject! { |row_data| row_data[:fee].blank? }
-
-        restructured_data = restructured_data.map do |row_data|
-          { sheet_name: sheet_name,
-            data_restructurer_name: data_restructurer_name }.merge(row_data)
+        restructured_data.each do |row_data|
+          row_data.reverse_merge!(sheet_name: sheet_name,
+                                  data_restructurer_name: data_restructurer_name)
+          row_data[:internal] ||= false
         end
 
         grouped_data = group_by_connected_ranges(restructured_data)
