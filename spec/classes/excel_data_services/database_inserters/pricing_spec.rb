@@ -68,8 +68,7 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       let!(:expected_stats) do
         { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
           "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-          "legacy/pricings": { number_created: 20, number_updated: 4, number_deleted: 0 },
-          "legacy/pricing_details": { number_created: 27, number_updated: 0, number_deleted: 0 } }
+          "legacy/pricings": { number_created: 20, number_updated: 4, number_deleted: 0 } }
       end
       let!(:expected_dates) do
         [
@@ -146,7 +145,6 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-          "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
           "legacy/pricings": { number_created: 20, number_deleted: 0, number_updated: 5 },
           "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
@@ -228,7 +226,6 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-          "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
           "legacy/pricings": { number_created: 20, number_deleted: 0, number_updated: 4 },
           "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
@@ -310,7 +307,6 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-          "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
           "legacy/pricings": { number_created: 21, number_deleted: 0, number_updated: 6 },
           "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end
@@ -394,7 +390,6 @@ RSpec.describe ExcelDataServices::DatabaseInserters::Pricing do
       end
       let!(:expected_stats) do
         { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-          "legacy/pricing_details": { number_created: 27, number_deleted: 1, number_updated: 0 },
           "legacy/pricings": { number_created: 20, number_deleted: 1, number_updated: 5 },
           "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
       end

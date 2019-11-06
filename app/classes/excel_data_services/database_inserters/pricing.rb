@@ -154,42 +154,23 @@ module ExcelDataServices
             pricings_for_new_pricing_details.each do |pricing|
               new_pricing_detail = pricing.pricing_details.new(pricing_detail_params)
               new_pricing_detail.range = range_data if range_data
-
-              add_stats(new_pricing_detail)
               new_pricing_detail.save!
             end
           end
         end
       end
 
-      def act_on_overlapping_pricings(pricings_with_actions, notes) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def act_on_overlapping_pricings(pricings_with_actions, notes)
         new_pricings = []
-        if scope['base_pricing']
-          pricings_with_actions.slice(:destroy).values.each do |pricings|
-            pricings.each do |pricing|
-              pricing.fees.each do |pricing_detail|
-                pricing_detail.destroy
-                add_stats(pricing_detail)
-              end
-              pricing.destroy
-              add_stats(pricing)
-            end
-          end
-        else
-          pricings_with_actions.slice(:destroy).values.each do |pricings|
-            pricings.each do |pricing|
-              pricing.pricing_details.each do |pricing_detail|
-                pricing_detail.destroy
-                add_stats(pricing_detail)
-              end
-              pricing.destroy
-              add_stats(pricing)
-            end
+        pricings_with_actions.slice(:destroy).values.each do |pricings|
+          pricings.each do |pricing|
+            pricing.destroy
+            add_stats(pricing)
           end
         end
 
         pricings_with_actions.slice(:save).values.each do |pricings|
-          pricings.map do |pricing|
+          pricings.each do |pricing|
             new_pricings << pricing if pricing.new_record? && !pricing.transient_marked_as_old
             add_stats(pricing)
             pricing.save!
