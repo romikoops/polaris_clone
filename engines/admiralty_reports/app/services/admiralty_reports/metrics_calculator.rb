@@ -43,10 +43,10 @@ module AdmiraltyReports
     end
 
     def average_shipments(field)
-      total_active = total_active(field)
+      total_active = total_active(field).to_f
       return 0 if total_active.zero?
 
-      total_shipments / total_active
+      (total_shipments / total_active).round(2)
     end
 
     def start_month
