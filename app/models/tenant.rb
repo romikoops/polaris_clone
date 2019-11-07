@@ -5,7 +5,6 @@ class Tenant < Legacy::Tenant
   include DataValidator
 
   has_many :shipments, dependent: :destroy
-  has_many :hubs, dependent: :destroy
   has_many :nexuses, dependent: :destroy
   has_many :users, dependent: :destroy
   has_many :tenant_vehicles, dependent: :destroy
