@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-require 'bitfields'
+require 'measured-rails'
+require 'cargo/measured_units'
+
 require 'tenants'
 
 module Cargo

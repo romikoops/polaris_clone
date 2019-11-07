@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_01_110339) do
+ActiveRecord::Schema.define(version: 2019_11_04_123443) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -134,25 +134,13 @@ ActiveRecord::Schema.define(version: 2019_11_01_110339) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "cargo_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "cargo_class", default: 0
-    t.bigint "cargo_type", default: 0
+  create_table "cargo_cargos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.boolean "dangerous_goods", default: false
-    t.decimal "dimension_x", default: "0.0"
-    t.decimal "dimension_y", default: "0.0"
-    t.decimal "dimension_z", default: "0.0"
-    t.uuid "load_id"
-    t.integer "quantity", default: 0
-    t.boolean "stackable", default: false
+    t.uuid "quotation_id"
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
-    t.uuid "user_id"
-    t.decimal "weight", default: "0.0"
-    t.index ["cargo_class"], name: "index_cargo_groups_on_cargo_class"
-    t.index ["cargo_type"], name: "index_cargo_groups_on_cargo_type"
-    t.index ["tenant_id"], name: "index_cargo_groups_on_tenant_id"
-    t.index ["user_id"], name: "index_cargo_groups_on_user_id"
+    t.index ["quotation_id"], name: "index_cargo_cargos_on_quotation_id"
+    t.index ["tenant_id"], name: "index_cargo_cargos_on_tenant_id"
   end
 
   create_table "cargo_item_types", force: :cascade do |t|
@@ -186,20 +174,30 @@ ActiveRecord::Schema.define(version: 2019_11_01_110339) do
     t.index ["sandbox_id"], name: "index_cargo_items_on_sandbox_id"
   end
 
-  create_table "cargo_loads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "cargo_units", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "cargo_class", default: 0
+    t.uuid "cargo_id"
     t.bigint "cargo_type", default: 0
     t.datetime "created_at", null: false
+    t.boolean "dangerous_goods", default: false
+    t.string "height_unit", default: "m"
+    t.decimal "height_value", precision: 100, scale: 4, default: "0.0"
+    t.string "length_unit", default: "m"
+    t.decimal "length_value", precision: 100, scale: 4, default: "0.0"
     t.integer "quantity", default: 0
+    t.boolean "stackable", default: false
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
-    t.uuid "user_id"
-    t.decimal "volume", default: "0.0"
-    t.decimal "weight", default: "0.0"
-    t.index ["cargo_class"], name: "index_cargo_loads_on_cargo_class"
-    t.index ["cargo_type"], name: "index_cargo_loads_on_cargo_type"
-    t.index ["tenant_id"], name: "index_cargo_loads_on_tenant_id"
-    t.index ["user_id"], name: "index_cargo_loads_on_user_id"
+    t.string "volume_unit", default: "m3"
+    t.decimal "volume_value", precision: 100, scale: 6, default: "0.0"
+    t.string "weight_unit", default: "kg"
+    t.decimal "weight_value", precision: 100, scale: 3, default: "0.0"
+    t.string "width_unit", default: "m"
+    t.decimal "width_value", precision: 100, scale: 4, default: "0.0"
+    t.index ["cargo_class"], name: "index_cargo_units_on_cargo_class"
+    t.index ["cargo_id"], name: "index_cargo_units_on_cargo_id"
+    t.index ["cargo_type"], name: "index_cargo_units_on_cargo_type"
+    t.index ["tenant_id"], name: "index_cargo_units_on_tenant_id"
   end
 
   create_table "carriers", force: :cascade do |t|
@@ -1818,6 +1816,7 @@ ActiveRecord::Schema.define(version: 2019_11_01_110339) do
 
   add_foreign_key "address_book_contacts", "tenants_sandboxes", column: "sandbox_id"
   add_foreign_key "address_book_contacts", "tenants_users", column: "user_id"
+  add_foreign_key "cargo_units", "cargo_cargos", column: "cargo_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "quotations_tenders", "quotations_quotations", column: "quotation_id"

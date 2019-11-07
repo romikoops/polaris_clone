@@ -16,7 +16,10 @@ Gem::Specification.new do |s|
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
-  s.add_dependency 'bitfields'
+  # External Gems
+  s.add_dependency 'measured-rails'
+
+  # Internal Engines
   s.add_dependency 'core'
   s.add_dependency 'tenants'
 
