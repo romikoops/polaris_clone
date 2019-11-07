@@ -47,144 +47,33 @@ module Pricings
     def apply_hierarchy(hierarchy) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Metrics/MethodLength
       # Dynamically generates the arguments for the margin finder based on the inputs handed to the Manipulator.
       # Required due to the differing data points for freight v local_charge v trucking
-      default_args = []
+      itinerary_targets = [@itinerary&.id, nil]
+      origin_hub_targets = [@origin_hub_id, nil]
+      destination_hub_targets = [@destination_hub_id, nil]
+      tenant_vehicle_targets = [@tenant_vehicle_id, nil]
+      cargo_class_targets = [@cargo_class, nil]
+
+      default_args = itinerary_targets.product(
+        origin_hub_targets,
+        destination_hub_targets,
+        tenant_vehicle_targets,
+        cargo_class_targets
+      ).map do |product|
+        {
+          tenant_id: @tenant.id,
+          origin_hub_id: product[1],
+          destination_hub_id: product[2],
+          itinerary_id: product[0],
+          cargo_class: product[4],
+          tenant_vehicle_id: product[3]
+        }
+      end
+
       if @pricing
         default_args.push(
           tenant_id: @tenant.id,
           pricing: @pricing
         )
-      end
-      if @itinerary && @cargo_class && @tenant_vehicle_id
-        default_args << {
-          tenant_id: @tenant.id,
-          itinerary_id: @itinerary.id,
-          tenant_vehicle_id: @tenant_vehicle_id,
-          cargo_class: @cargo_class
-        }
-      end
-      if @origin_hub_id && @tenant_vehicle_id && @cargo_class
-        default_args << {
-          tenant_id: @tenant.id,
-          origin_hub_id: @origin_hub_id,
-          tenant_vehicle_id: @tenant_vehicle_id,
-          cargo_class: @cargo_class
-        }
-      end
-      if @destination_hub_id && @tenant_vehicle_id && @cargo_class
-        default_args << {
-          tenant_id: @tenant.id,
-          destination_hub_id: @destination_hub_id,
-          tenant_vehicle_id: @tenant_vehicle_id,
-          cargo_class: @cargo_class
-        }
-      end
-      if @tenant_vehicle_id && @cargo_class
-        default_args << {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: nil,
-          tenant_vehicle_id: @tenant_vehicle_id,
-          cargo_class: @cargo_class
-        }
-      end
-      if @itinerary
-        default_args << {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: @itinerary.id,
-          cargo_class: nil,
-          tenant_vehicle_id: nil
-        }
-      end
-      if @origin_hub_id && @destination_hub_id
-        default_args << {
-          tenant_id: @tenant.id,
-          origin_hub_id: @origin_hub_id,
-          destination_hub_id: @destination_hub_id,
-          itinerary_id: nil,
-          cargo_class: nil,
-          tenant_vehicle_id: nil
-        }
-      end
-      if @destination_hub_id && @cargo_class
-        default_args << {
-          tenant_id: @tenant.id,
-          destination_hub_id: @destination_hub_id,
-          itinerary_id: nil,
-          cargo_class: @cargo_class,
-          tenant_vehicle_id: nil
-        }
-      end
-      if @origin_hub_id && @cargo_class
-        default_args << {
-          tenant_id: @tenant.id,
-          origin_hub_id: @origin_hub_id,
-          itinerary_id: nil,
-          cargo_class: @cargo_class,
-          tenant_vehicle_id: nil
-        }
-      end
-      if @destination_hub_id
-        default_args << {
-          tenant_id: @tenant.id,
-          destination_hub_id: @destination_hub_id,
-          itinerary_id: nil,
-          cargo_class: nil,
-          tenant_vehicle_id: nil
-        }
-      end
-      if @origin_hub_id
-        default_args << {
-          tenant_id: @tenant.id,
-          origin_hub_id: @origin_hub_id,
-          itinerary_id: nil,
-          cargo_class: nil,
-          tenant_vehicle_id: nil
-        }
-      end
-      if @tenant_vehicle_id
-        default_args << {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: nil,
-          cargo_class: nil,
-          tenant_vehicle_id: @tenant_vehicle_id
-        }
-      end
-      if @cargo_class
-        default_args << {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: nil,
-          tenant_vehicle_id: nil,
-          cargo_class: @cargo_class
-        }
-      end
-      if @itinerary
-        default_args << {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: nil,
-          tenant_vehicle_id: nil,
-          cargo_class: nil,
-          default_for: @itinerary&.mode_of_transport
-        }
-      end
-      if @itinerary.nil?
-        default_args << {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: nil,
-          tenant_vehicle_id: nil,
-          cargo_class: nil,
-          default_for: @type.to_s.include?('trucking') ? 'trucking' : 'local_charge'
-        }
       end
       default_args << {
         tenant_id: @tenant.id,
@@ -193,7 +82,7 @@ module Pricings
         itinerary_id: nil,
         tenant_vehicle_id: nil,
         cargo_class: nil,
-        default_for: nil
+        default_for: @type.to_s.include?('trucking') ? 'trucking' : 'local_charge'
       }
       all_margins = []
       all_margin_ids = []

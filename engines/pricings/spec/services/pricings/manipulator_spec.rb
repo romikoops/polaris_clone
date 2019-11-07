@@ -555,6 +555,44 @@ RSpec.describe Pricings::Manipulator do
         expect(manipulated_pricings.first.dig('data', 'BAS', 'rate')).to eq(27.5)
         expect(manipulated_pricings.first.dig('data', 'BAS', 'rate_basis')).to eq('PER_WM')
       end
+
+      it 'returns the manipulated freight pricing attached to hub and cargo class' do
+        group_pricing = FactoryBot.create(:lcl_pricing,
+                                          tenant_vehicle: tenant_vehicle_1,
+                                          tenant: tenant,
+                                          itinerary: FactoryBot.create(:default_itinerary, tenant: tenant))
+        trips = [1, 3].map do |num|
+          base_date = num.days.from_now
+          FactoryBot.create(:legacy_trip,
+                            itinerary: group_pricing.itinerary,
+                            tenant_vehicle: group_pricing.tenant_vehicle,
+                            closing_date: base_date - 4.days,
+                            start_date: base_date,
+                            end_date: base_date + 30.days)
+        end
+        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
+        FactoryBot.create(:freight_margin,
+                          tenant: tenants_tenant,
+                          origin_hub: group_pricing.itinerary.hubs.first,
+                          cargo_class: group_pricing.cargo_class,
+                          applicable: tenants_tenant)
+        manipulated_pricings = described_class.new(
+          user: tenants_user,
+          type: :freight_margin,
+          args: {
+            sandbox: nil,
+            itinerary_id: group_pricing.itinerary_id,
+            tenant_vehicle_id: group_pricing.tenant_vehicle_id,
+            cargo_class: group_pricing.cargo_class,
+            schedules: schedules,
+            shipment: lcl_shipment
+          }
+        ).perform
+        expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
+        expect(manipulated_pricings.first['data'].keys).to eq(['BAS'])
+        expect(manipulated_pricings.first.dig('data', 'BAS', 'rate')).to eq(27.5)
+        expect(manipulated_pricings.first.dig('data', 'BAS', 'rate_basis')).to eq('PER_WM')
+      end
     end
   end
 
