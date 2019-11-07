@@ -4,16 +4,17 @@ require 'rails_helper'
 
 module Legacy
   RSpec.describe User, type: :model do
+    let(:user) { FactoryBot.build(:legacy_user) }
+    let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: user.tenant_id)}
+    let(:scope) { FactoryBot.create(:tenants_scope, content: { base_pricing: true })}
     describe '.full_name' do
       it 'returns the first and last name of the user' do
-        user = FactoryBot.build(:legacy_user)
         expect(user.full_name).to eq('John Smith')
       end
     end
 
     describe '.full_name_and_company' do
       it 'returns the first and last name of the user' do
-        user = FactoryBot.build(:legacy_user)
         expect(user.full_name_and_company).to eq('John Smith, ItsMyCargo')
       end
     end

@@ -21,7 +21,7 @@ module Legacy
     def cargo_units
       send("#{load_type}s")
     end
-  
+
     def cargo_units=(value)
       send("#{load_type}s=", value)
     end

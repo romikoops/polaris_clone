@@ -39,6 +39,7 @@ class TenantsController < ApplicationController
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
     scope = ::Tenants::ScopeService.new(target: current_user, tenant: tenants_tenant).fetch
     tenant_json = tenant.as_json
+    tenant_json['theme'] = ::Tenants::ThemeDecorator.new(tenants_tenant.theme).legacy_format
     tenant_json['scope'] = scope
     tenant_json['subdomain'] = tenants_tenant.slug
     tenant_json['slug'] = tenants_tenant.slug

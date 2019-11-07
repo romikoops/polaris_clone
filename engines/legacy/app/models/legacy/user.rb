@@ -3,14 +3,19 @@
 module Legacy
   class User < ApplicationRecord
     self.table_name = 'users'
-    has_paper_trail
+
+    devise :database_authenticatable, :registerable,
+    :recoverable, :rememberable, :trackable, :validatable,
+    :confirmable
+
+    include DeviseTokenAuth::Concerns::User
+
     before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
-    belongs_to :tenant
     belongs_to :role, optional: true, class_name: 'Legacy::Role'
-    belongs_to :agency, optional: true
+    belongs_to :tenant
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-    has_one :tenants_user
-    delegate :company, to: :tenants_user
+
+    belongs_to :agency, class_name: 'Legacy::Agency', optional: true
 
     acts_as_paranoid
 
@@ -48,10 +53,6 @@ module Legacy
 
     def set_default_role
       self.role ||= Legacy::Role.find_by_name('shipper')
-    end
-
-    def set_default_currency
-      self.currency = tenant.currency
     end
 
     def clear_tokens_if_empty
