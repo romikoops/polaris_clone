@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 module AdmiraltyTenants
-  class TenantDecorator < AdmiraltyTenants::ApplicationDecorator
-    delegate_all
-
+  class Tenant < ::Tenants::Tenant
     def name
-      legacy&.name
+      legacy.name
     end
   end
 end

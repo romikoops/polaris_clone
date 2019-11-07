@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
 class User < Legacy::User # rubocop:disable Metrics/ClassLength
+  # Include default devise modules.
   include PgSearch::Model
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable,
+         :confirmable # , :omniauthable
 
-  PERMITTED_PARAMS = %i(
-    email password guest tenant_id confirm_password password_confirmation
-    company_name vat_number VAT_number first_name last_name phone
-    optin_status_id cookies company_number
-  ).freeze
+  include DeviseTokenAuth::Concerns::User
+  before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
+  before_create :set_default_currency
+  before_validation :set_default_optin_status, on: :create
 
   validates :tenant_id, presence: true
   validates :email, presence: true, uniqueness: { scope: :tenant_id }
@@ -24,9 +27,11 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
     tsearch: { prefix: true }
   }
 
-  acts_as_paranoid
-
   # Basic associations
+  belongs_to :tenant
+  belongs_to :role
+  belongs_to :optin_status
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   has_many :shipments
   has_many :documents
   has_many :conversations
@@ -35,6 +40,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
 
   has_many :receivable_shipments, foreign_key: 'consignee_id'
 
+  has_many :user_route_discounts
   has_many :routes, foreign_key: :customer_id
 
   has_many :contacts
@@ -46,13 +52,18 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   has_many :rates, class_name: 'Pricings::Pricing'
   has_one :tenants_user, class_name: 'Tenants::User', foreign_key: 'legacy_id'
 
+  belongs_to :agency, optional: true
+
   %i(admin shipper super_admin sub_admin agent agency_manager).each do |role_name|
     scope role_name, -> { joins(:role).where("roles.name": role_name) }
   end
 
-  has_paper_trail
-
-  delegate :company, to: :tenants_user
+  PERMITTED_PARAMS = %i(
+    email password
+    guest tenant_id confirm_password password_confirmation
+    company_name vat_number VAT_number first_name last_name phone
+    optin_status_id cookies company_number
+  ).freeze
 
   # Filterrific
   filterrific default_filter_params: { sorted_by: 'created_at_asc' },
@@ -169,6 +180,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
     as_json(
       except: %i(tokens encrypted_password created_at updated_at optin_status_id role_id),
       include: {
+        optin_status: { except: %i(created_at updated_at) },
         role: { except: %i(created_at updated_at) },
       },
       methods: [:uuid]
@@ -210,6 +222,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
     new_options = options.reverse_merge(
       except: %i(tokens encrypted_password created_at updated_at optin_status_id role_id),
       include: {
+        optin_status: { except: %i(created_at updated_at) },
         role: { except: %i(created_at updated_at) }
       },
       methods: %i(has_pricings group_count user_margin_count company_title uuid)
@@ -268,6 +281,13 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
     shipments.requested_by_unconfirmed_account.each do |shipment|
       shipment.status = 'requested'
       shipment.save
+    end
+  end
+
+  def set_default_optin_status
+    unless optin_status_id
+      optin_status = OptinStatus.find_by(tenant: false, cookies: false, itsmycargo: false)
+      self.optin_status = optin_status
     end
   end
 
