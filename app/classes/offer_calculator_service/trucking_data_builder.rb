@@ -83,7 +83,7 @@ module OfferCalculatorService
       return { error: e }
     rescue TruckingTools::LoadMeterageExceeded => e
       return { error: e }
-    rescue StandardError => e
+    rescue StandardError
       raise ApplicationError::MissingTruckingData
     end
 

@@ -101,47 +101,33 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
 
   def fare_calculator(key, fee, cargo, kms, scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
     fee = fee.with_indifferent_access
+    value = (fee['value'] || fee['rate'] || 0).to_d
+    min = (fee[:min_value] || 0).to_d
     fare = case fee[:rate_basis]
            when 'PER_KG'
-
-             val = cargo['weight'] * fee[:value]
-             min = fee[:min_value] || 0
-             [val, min].max
-
+             cargo['weight'] * value
            when 'PER_X_KG'
-             val = (cargo['weight'] / fee[:base]) * fee[:value]
-             min = fee[:min_value] || 0
-             [val, min].max
-
+             (cargo['weight'] / fee[:base]) * value
            when 'PER_X_KM'
-             val = ((kms / fee[:x_base]) * fee[:rate]) + fee[:base_value]
-             min = fee[:min_value] || 0
-             [val, min].max
+             ((kms / fee[:x_base]) * value) + fee[:base_value]
            when 'PER_X_TON'
-             val = ((cargo['weight'] / 1000) / fee[:base]) * fee[:value]
-             min = fee[:min_value] || 0
-             [val, min].max
+             ((cargo['weight'] / 1000) / fee[:base]) * value
            when 'PER_SHIPMENT'
              fee.except(:rate_basis, :currency, :base).values.max
            when 'PER_BILL'
-             fee[:value]
+             value
            when 'PER_ITEM'
-             fee[:value] * cargo['number_of_items']
+             value * cargo['number_of_items']
            when 'PER_CONTAINER'
-             fee[:value] * cargo['number_of_items']
+             value * cargo['number_of_items']
            when 'PER_CONTAINER_KM'
-             value = ((fee[:km] * kms) + fee[:unit]) * cargo['number_of_items']
-             min = fee[:min_value] || 0
-             [min, value].max
+             ((fee[:km] * kms) + fee[:unit]) * cargo['number_of_items']
            when 'PER_UNIT_KG'
-             value = (fee[:kg]) + ((fee[:kgr] || 0)  * cargo['weight'])
-             min = fee[:min_value] || 0
-             [min, value].max
+             (fee[:kg]) + ((fee[:kgr] || 0)  * cargo['weight'])
            when 'PER_CBM_TON'
-             cbm_value = cargo['volume'] * fee[:cbm]
-             ton_value = (cargo['weight'] / 1000) * fee[:ton]
-             min = fee[:min_value] || 0
-             [ton_value, cbm_value, min].max
+             cbm = cargo['volume'] * fee[:cbm]
+             tonne = (cargo['weight'] / 1000) * fee[:ton]
+             [tonne, cbm].max
            when 'PER_KG_CBM_SPECIAL'
              kg_sub = fee.dig(:kg_sub, :rate, :value).to_d
              kg_base = fee.dig(:kg_base, :rate, :value).to_d
@@ -156,16 +142,10 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
 
              [kg_value, cbm_value, cbm_min, kg_min].max
            when 'PER_CBM'
-             cbm_value = cargo['volume'] * (fee[:value] || fee[:cbm])
-             min = fee[:min_value] || 0
-             [cbm_value, min].max
-
+             cargo['volume'] * (value || fee[:cbm])
            when 'PER_WM'
              wm = [cargo['weight'] / 1000, cargo['volume']].max
-             value = wm * fee[:value]
-             min = fee[:min_value] || 0
-             [value, min].max
-
+             wm * fee_value
            when 'PER_CBM_KG'
              cbm_value = cargo['volume'] * fee[:cbm]
              kg_value = cargo['weight'] * fee[:kg]
@@ -215,15 +195,15 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
       end
 
       trucking_pricing['rates']['kg'].each do |rate|
-        if cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
-          rate['rate']['min_value'] = rate['min_value']
-          return { rate: rate['rate'], fees: trucking_pricing['fees'] }
-        end
+        next unless Range.new(rate['min_kg'].to_i, rate['max_kg'].to_i).cover?(cargo_values['weight'].to_i)
+
+        rate['rate']['min_value'] = rate['min_value']
+        return { rate: rate['rate'], fees: trucking_pricing['fees'] }
       end
 
     when 'cbm'
       trucking_pricing['rates']['cbm'].each do |rate|
-        next unless cargo_values['volume'] <= rate['max_cbm'].to_i && cargo_values['volume'] >= rate['min_cbm'].to_i
+        next unless Range.new(rate['min_cbm'].to_i, rate['max_cbm'].to_i).cover?(cargo_values['volume'].to_i)
 
         rate['rate']['min_value'] = rate['min_value']
         return { rate: rate['rate'], fees: trucking_pricing['fees'] }
@@ -236,7 +216,7 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
     when 'cbm_kg'
       result = {}
       trucking_pricing['rates']['kg'].each do |rate|
-        next unless cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
+        next unless Range.new(rate['min_kg'].to_i, rate['max_kg'].to_i).cover?(cargo_values['weight'].to_i)
 
         result['kg'] = rate['rate']['value']
         result['rate_basis'] = rate['rate']['rate_basis']
@@ -244,7 +224,7 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
         result['currency'] = rate['rate']['currency']
       end
       trucking_pricing['rates']['cbm'].each do |rate|
-        next unless cargo_values['volume'] <= rate['max_cbm'].to_i && cargo_values['volume'] >= rate['min_cbm'].to_i
+        next unless Range.new(rate['min_cbm'].to_i, rate['max_cbm'].to_i).cover?(cargo_values['volume'].to_i)
 
         result['rate_basis'] = rate['rate']['rate_basis']
         result['cbm'] = rate['rate']['value']
@@ -267,7 +247,7 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
       return { rate: trucking_pricing['rates']['unit'][0]['rate'], fees: trucking_pricing['fees'] }
     when 'kg_cbm_special'
       result = { rate_basis: 'PER_KG_CBM_SPECIAL' }
-      %w(kg	kg_base	kg_sub cbm cbm_base cbm_sub).each do |sym|
+      %w(kg kg_base kg_sub cbm cbm_base cbm_sub).each do |sym|
         result[sym] = trucking_pricing['rates'][sym].first
       end
 
@@ -295,16 +275,16 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
       end
 
       trucking_pricing['rates']['kg'].each do |rate|
-        if cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
-          rate['rate']['min_value'] = rate['min_value']
-          result[:kg] = rate['rate']['value']
-        end
+        next unless Range.new(rate['min_kg'].to_i, rate['max_kg'].to_i).cover?(cargo_values['weight'].to_i)
+
+        rate['rate']['min_value'] = rate['min_value']
+        result[:kg] = rate['rate']['value']
       end
       trucking_pricing['rates']['unit_in_kg'].each do |rate|
-        if cargo_values['weight'].to_i <= rate['max_unit_in_kg'].to_i && cargo_values['weight'].to_i >= rate['min_unit_in_kg'].to_i
-          rate['rate']['min_value'] = rate['min_value']
-          result[:kgr] = rate['rate']['value']
-        end
+        next unless Range.new(rate['min_unit_in_kg'].to_i, rate['max_unit_in_kg'].to_i).cover?(cargo_values['weight'].to_i)
+
+        rate['rate']['min_value'] = rate['min_value']
+        result[:kgr] = rate['rate']['value']
       end
 
       return { rate: result, fees: trucking_pricing['fees'] }

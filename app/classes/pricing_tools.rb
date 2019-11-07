@@ -295,7 +295,7 @@ class PricingTools # rubocop:disable Metrics/ClassLength
     totals
   end
 
-  def determine_cargo_item_price(cargo, pricing, user, _quantity, shipment_date, mot) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
+  def determine_cargo_item_price(cargo, pricing, user, _quantity, _shipment_date, mot) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
     return nil if pricing.nil?
 
     totals = { 'total' => {} }
@@ -325,7 +325,7 @@ class PricingTools # rubocop:disable Metrics/ClassLength
     totals
   end
 
-  def determine_container_price(container, pricing, user, _quantity, shipment_date, mot) # rubocop:disable Metrics/ParameterLists
+  def determine_container_price(container, pricing, user, _quantity, _shipment_date, mot) # rubocop:disable Metrics/ParameterLists
     return nil if pricing.nil?
 
     totals = { 'total' => {} }
@@ -404,62 +404,56 @@ class PricingTools # rubocop:disable Metrics/ClassLength
   def handle_range_fee(fee, cargo_hash) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
     weight_kg = cargo_hash.fetch(:weight)
     volume = cargo_hash.fetch(:volume)
-    min = fee['min'] || 0
-    max = fee['max'] || DEFAULT_MAX
+    min = (fee['min'] || 0).to_d
+    max = (fee['max'] || DEFAULT_MAX).to_d
+
     rate_basis = RateBasis.get_internal_key(fee['rate_basis'])
-    case rate_basis
-    when 'PER_KG_RANGE'
-      fee_range = fee['range'].find do |range|
-        (range['min']..range['max']).cover?(weight_kg)
-      end || fee['range'].max_by { |x| x['max'] }
-      value = fee_range.nil? ? 0 : fee_range['rate'].to_d * weight_kg
+    result = case rate_basis
+             when 'PER_KG_RANGE'
+               fee_range = fee['range'].find do |range|
+                 (range['min']..range['max']).cover?(weight_kg)
+               end
+               fee_range ||= fee['range'].max_by { |x| x['max'] }
+               fee_range.nil? ? 0 : fee_range['rate'].to_d * weight_kg
+             when 'PER_CBM_RANGE'
+               fee_range = fee['range'].find do |range|
+                 (range['min']..range['max']).cover?(volume)
+               end
+               fee_range ||= fee['range'].max_by { |x| x['max'] }
+               fee_range.nil? ? 0 : fee_range['rate'] * (weight_kg / 1000)
+             when 'PER_UNIT_TON_CBM_RANGE'
+               ratio = volume / (weight_kg / 1000)
+               fee_range = fee['range'].find do |range|
+                 (range['min']..range['max']).cover?(ratio)
+               end
+               if fee_range.nil?
+                 0
+               elsif fee_range['ton']
+                 fee_range['ton'].to_d * weight_kg / 1000
+               elsif fee_range['cbm']
+                 fee_range['cbm'].to_d * volume
+               end
+             when 'PER_CONTAINER_RANGE'
+               if fee_range.nil?
+                 0
+               else
+                 fee_range = fee['range'].find do |range|
+                   (range['min']..range['max']).cover?(weight_kg)
+                 end
+                 fee_range['rate'].to_d
+               end
+             when 'PER_UNIT_RANGE'
+               if fee_range.nil?
+                 0
+               else
+                 fee_range = fee['range'].find do |range|
+                   (range['min']..range['max']).cover?(weight_kg)
+                 end
+                 fee_range['rate'].to_d
+               end
+            end
 
-      res = [value, min].max
-    when 'PER_CBM_RANGE'
-      fee_range = fee['range'].find do |range|
-        (range['min']..range['max']).cover?(volume)
-      end || fee['range'].max_by { |x| x['max'] }
-      value = fee_range.nil? ? 0 : fee_range['rate'] * (weight_kg / 1000)
-
-      res = [value, min].max
-    when 'PER_UNIT_TON_CBM_RANGE'
-      ratio = volume / (weight_kg / 1000)
-      fee_range = fee['range'].find do |range|
-        (range['min']..range['max']).cover?(ratio)
-      end
-      value = 0 if fee_range.nil?
-      unless fee_range.nil?
-        value = if fee_range['ton']
-                  fee_range['ton'].to_d * weight_kg / 1000
-                elsif fee_range['cbm']
-                  fee_range['cbm'].to_d * volume
-                end
-      end
-
-      res = [value, min].max
-    when 'PER_CONTAINER_RANGE'
-      value = 0 if fee_range.nil?
-      unless fee_range.nil?
-        fee_range = fee['range'].find do |range|
-          (range['min']..range['max']).cover?(weight_kg)
-        end
-        value = fee_range['rate'].to_d
-      end
-
-      res = [value, min].max
-    when 'PER_UNIT_RANGE'
-      value = 0 if fee_range.nil?
-      unless fee_range.nil?
-        fee_range = fee['range'].find do |range|
-          (range['min']..range['max']).cover?(weight_kg)
-        end
-        value = fee_range['rate'].to_d
-      end
-      res = [value, min].max
-
-    end
-
-    [res, max].min
+    [result, max].min
   end
 
   def round_fee(result, should_round)
@@ -498,65 +492,38 @@ class PricingTools # rubocop:disable Metrics/ClassLength
 
   def fee_value(fee:, cargo:, consolidated: {}, rounding: false) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     rate_basis = RateBasis.get_internal_key(fee['rate_basis'])
-    fee_value = fee['value'] || fee['rate']
+    value = (fee['value'] || fee['rate'] || 0).to_d
+    max = (fee['max'] || DEFAULT_MAX).to_d
+    min = (fee['min'] || 0).to_d
     result = case rate_basis
              when 'PER_SHIPMENT', 'PER_BILL'
-               fee_value.to_d
+               value
              when 'PER_ITEM', 'PER_CONTAINER'
-               fee_value.to_d * cargo[:quantity]
+               value * cargo[:quantity]
              when 'PER_CBM'
-               min = fee['min'] || 0
-               max = fee['max'] || DEFAULT_MAX
-               val = fee_value
-               cbm = val.to_d * cargo[:volume]
-               res = [cbm, min].max
-               [res, max].min
+               value * cargo[:volume]
              when 'PER_KG'
-               max = fee['max'] || DEFAULT_MAX
-               val = fee_value.to_d * cargo[:weight]
-               min = fee['min'] || 0
-               res = [val, min].max
-               [res, max].min
+               value * cargo[:weight]
              when 'PER_X_KG_FLAT'
-               max = fee['max'] || DEFAULT_MAX
                base = fee['base'].to_d
-               val = fee_value * (cargo[:weight].round(2) / base).ceil * base
-               min = fee['min'] || 0
-               res = [val, min].max
-               [res, max].min
+               value * (cargo[:weight].round(2) / base).ceil * base
              when 'PER_CBM_TON'
-               max = fee['max'] || DEFAULT_MAX
-               cbm = cargo[:volume] * fee['cbm']
-               ton = (cargo[:weight] / 1000) * fee['ton']
-               min = fee['min'] || 0
-
-               res = [cbm, ton, min].max
-               [res, max].min
+               cbm = cargo[:volume] * fee['cbm'].to_d
+               tonne = (cargo[:weight] / 1000) * fee['ton'].to_d
+               [cbm, tonne].max
              when 'PER_TON'
-               max = fee['max'] || DEFAULT_MAX
-               ton = (cargo[:weight] / 1000) * fee['ton']
-               min = fee['min'] || 0
-               res = [ton, min].max
-               [res, max].min
+               (cargo[:weight] / 1000) * fee['ton'].to_d
              when 'PER_SHIPMENT_TON'
-               max = fee['max'] || DEFAULT_MAX
-               ton = (consolidated[:weight] / 1000) * fee['value']
-               min = fee['min'] || 0
-               res = [ton, min].max
-               [res, max].min
+               (consolidated[:weight] / 1000) * value
              when 'PER_WM'
-               max = fee['max'] || DEFAULT_MAX
-               cbm = cargo[:volume] * fee_value
-               ton = (cargo[:weight] / 1000) * fee_value
-               min = fee['min'] || 0
-               res = [cbm, ton, min].max
-
-               [res, max].min
+               cbm = cargo[:volume] * value
+               tonne = (cargo[:weight] / 1000) * value
+               [cbm, tonne].max
              when /RANGE/
                handle_range_fee(fee, cargo)
              end
 
-    round_fee(result, rounding)
+    round_fee(result.clamp(min, max), rounding)
   end
 
   def get_cargo_hash(cargo, mot)
