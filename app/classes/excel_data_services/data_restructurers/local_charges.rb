@@ -34,6 +34,7 @@ module ExcelDataServices
       def perform
         rows_data = replace_nil_equivalents_with_nil(data[:rows_data])
         rows_data = correct_capitalization(rows_data)
+        sanitize_service_level!(rows_data)
         rows_data = expand_fcl_to_all_sizes(rows_data)
         rows_data = expand_based_on_date_overlaps(rows_data, ROW_IDENTIFIERS - %i(effective_date expiration_date))
         rows_chunked_by_identifier = rows_data.group_by { |row| row.slice(*ROW_IDENTIFIERS) }.values
@@ -61,6 +62,12 @@ module ExcelDataServices
           end
 
           row_data
+        end
+      end
+
+      def sanitize_service_level!(rows_data)
+        rows_data.each do |row_data|
+          row_data[:service_level] ||= 'standard'
         end
       end
 
