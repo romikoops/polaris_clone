@@ -1,6 +1,7 @@
 import { Promise } from 'es6-promise-promise'
 import { push } from 'react-router-redux'
 import { find } from 'lodash'
+import { Base64decode } from '../helpers/Base64'
 import { shipmentConstants } from '../constants'
 import { shipmentService } from '../services'
 import { deepSnakefyKeys, queryStringToObj } from '../helpers'
@@ -89,7 +90,9 @@ function checkAhoyShipment (routerLocation) {
     return { type: shipmentConstants.SHIPMENT_CHECK_AHOY, payload: {} }
   }
 
-  const queryString = queryStringToObj(routerLocation.search.substring(1))
+  const params = Base64decode(routerLocation.search.substring(1))
+  const queryString = queryStringToObj(params)
+
   const { loadType, direction, itinerary } = queryString
 
   if (!loadType || !direction || !itinerary) {
