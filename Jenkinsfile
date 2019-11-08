@@ -11,7 +11,7 @@ withPipeline(timeout: 120) {
           envVar(key: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test'),
         ]
       ),
-      containerTemplate(name: 'client', image: 'node:lts-slim', ttyEnabled: true, command: 'cat',
+      containerTemplate(name: 'client', image: 'node:12-slim', ttyEnabled: true, command: 'cat',
         resourceRequestCpu: '1000m', resourceLimitCpu: '1000m',
         resourceRequestMemory: '1500Mi', resourceLimitMemory: '1500Mi',
       ),
@@ -186,7 +186,7 @@ void appPrepare() {
             /usr/sbin/update-locale LANG=C.UTF-8
 
         curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
-          && echo "deb https://deb.nodesource.com/node_10.x stretch main" | tee /etc/apt/sources.list.d/nodesource.list \
+          && echo "deb https://deb.nodesource.com/node_12.x stretch main" | tee /etc/apt/sources.list.d/nodesource.list \
           && apt-get update && apt-get install -y \
             nodejs
 
