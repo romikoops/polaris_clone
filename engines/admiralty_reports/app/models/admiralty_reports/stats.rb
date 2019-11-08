@@ -15,7 +15,7 @@ module AdmiraltyReports
     end
 
     def overview
-      shipment_type = quotation_tool? ? uniq_quotations_by_original_shipments : uniq_bookings_by_original_shipments
+      shipment_type = quotation_tool? ? uniq_quotations_by_original_shipments : uniq_shipments_by_original_shipments
       shipments = shipments_for(shipment_type)
       ship_bundle = shipment_type.zip(shipments)
       ship_bundle_groups = group_by_date(ship_bundle)
@@ -36,8 +36,8 @@ module AdmiraltyReports
       return {} if month.zero?
 
       @metrics ||= MetricsCalculator.calculate(overview: overview,
-                                               month: @month,
-                                               year: @year)
+                                               start_date: start_date,
+                                               end_date: end_date)
     end
 
     def quotation_tool?
@@ -56,23 +56,31 @@ module AdmiraltyReports
 
     def uniq_quotations_by_original_shipments
       quotation = ::Legacy::Quotation.where(original_shipment_id: original_shipments.ids)
-      quotation = filtered(quotation) unless start_month.nil?
+      quotation = filtered(quotation) unless start_date.nil?
       quotation.order(updated_at: :desc).uniq(&:original_shipment_id)
     end
 
-    def uniq_bookings_by_original_shipments
-      booking = ::Legacy::Shipment.where(id: original_shipments.ids)
-      booking = filtered(booking) unless start_month.nil?
-      booking.order(updated_at: :desc).uniq(&:id)
+    def uniq_shipments_by_original_shipments
+      shipments = ::Legacy::Shipment.where(id: original_shipments.ids)
+      shipments = filtered(shipments) unless start_date.nil?
+      shipments.order(updated_at: :desc).uniq(&:id)
     end
 
-    def filtered(shipment)
-      filtered = shipment.where(created_at: start_month..start_month.end_of_month)
-      filtered.empty? ? shipment : filtered
+    def filtered(shipments)
+      filtered = shipments.where(created_at: start_date..end_date)
+      filtered.empty? ? shipments : filtered
     end
 
-    def start_month
-      Date.new(year, month, 1) unless month.zero?
+    def start_date
+      @start_date ||= DateTime.new(year, month, 1) unless month.zero?
+    end
+
+    def end_date
+      if month == Time.now.month && year == Time.now.year
+        DateTime.now
+      else
+        start_date.end_of_month
+      end
     end
 
     def shipments_for(shipment_type)

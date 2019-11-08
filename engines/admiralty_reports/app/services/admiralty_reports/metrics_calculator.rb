@@ -4,14 +4,14 @@ require 'core_ext/array_refinements'
 
 module AdmiraltyReports
   class MetricsCalculator
-    def self.calculate(overview:, month:, year:)
-      new(overview: overview, month: month, year: year).result
+    def self.calculate(overview:, start_date:, end_date:)
+      new(overview: overview, start_date: start_date, end_date: end_date).result
     end
 
-    def initialize(overview:, month:, year:)
+    def initialize(overview:, start_date:, end_date:)
       @overview = overview
-      @month = month.to_i
-      @year = year.to_i
+      @start_date = start_date
+      @end_date = end_date
     end
 
     def result
@@ -32,7 +32,7 @@ module AdmiraltyReports
 
     private
 
-    attr_reader :year, :month, :overview
+    attr_reader :end_date, :start_date, :overview
 
     def total_shipments
       @total_shipments ||= overview.inject(0) { |sum, stat| sum + stat.second[:combined_data][:n_shipments] }
@@ -47,10 +47,6 @@ module AdmiraltyReports
       return 0 if total_active.zero?
 
       (total_shipments / total_active).round(2)
-    end
-
-    def start_month
-      Date.new(year, month, 1) unless month.zero?
     end
 
     def data_per_month
@@ -86,13 +82,13 @@ module AdmiraltyReports
     end
 
     def weekdays
-      (start_month..start_month.end_of_month).count(&:on_weekday?)
+      (start_date..end_date).count(&:on_weekday?)
     end
 
     def weekdays_without_activity
-      return if start_month.nil?
+      return if start_date.nil?
 
-      (start_month..start_month.end_of_month).count do |day|
+      (start_date..end_date).count do |day|
         !overview.has_key?(day.to_date) && day.to_date.on_weekday?
       end
     end
