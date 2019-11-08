@@ -439,7 +439,7 @@
       "downloadData": "Download Data",
       "downloadPricing": "Download {{mot}} Pricings Sheet",
       "downloadPricingWithLoadType": "Download {{mot}} {{loadType}} Pricings Sheet",
-      "createNewPricing": "Create New Pricing",      
+      "createNewPricing": "Create New Pricing",
       "uploadHubs": "Upload Hubs Sheet",
       "uploadChargeCategories": "Upload Charge Definitions Sheet",
       "downloadChargeCategories": "Download Charge Definitions Sheet",
@@ -613,7 +613,11 @@
       "selectedAreas": "Selected Areas",
       "selectAdminLevel": "Select Admin Level",
       "uploadNotes": "Upload Terms & Restrictions",
-      "nextExpiry": "Next Expiry Date"
+      "nextExpiry": "Next Expiry Date",
+      "mot" : "MOT",
+      "localChargesExpiring": "Local Charges Expiring at",
+      "noLocalCharges": "No Local Charges",
+      "locode": "LOCODE"
   },
   "itbox": {
     "component": "IncotermBox",

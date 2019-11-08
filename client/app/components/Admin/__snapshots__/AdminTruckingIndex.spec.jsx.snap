@@ -2,10 +2,11 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-align-space-between-start"
+  className="flex-100 layout-row layout-align-center-start"
 >
   <Connect(AdminHubsComp)
     handleClick={[Function]}
+    showLocalExpiry={false}
     t={[Function]}
   />
 </div>

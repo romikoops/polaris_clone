@@ -165,25 +165,10 @@ exports[`isQuote(tenant) is true 1`] = `
       <div
         className="flex-gt-md-60 flex-100"
       >
-        <AdminHubCard
-          adminDispatch={
-            Object {
-              "confirmShipment": [Function],
-              "getDashboard": [Function],
-              "getHub": [Function],
-              "getShipment": [Function],
-            }
-          }
-          hubs={Object {}}
+        <Connect(AdminHubsComp)
+          perPage={10}
+          showLocalExpiry={false}
           t={[Function]}
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
         />
         <div
           className="layout-row flex-100 layout-align-center-center space"
@@ -454,25 +439,10 @@ exports[`shallow render 1`] = `
       <div
         className="flex-gt-md-60 flex-100"
       >
-        <AdminHubCard
-          adminDispatch={
-            Object {
-              "confirmShipment": [Function],
-              "getDashboard": [Function],
-              "getHub": [Function],
-              "getShipment": [Function],
-            }
-          }
-          hubs={Object {}}
+        <Connect(AdminHubsComp)
+          perPage={10}
+          showLocalExpiry={false}
           t={[Function]}
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
         />
         <div
           className="layout-row flex-100 layout-align-center-center space"
@@ -743,25 +713,10 @@ exports[`tenant is falsy 1`] = `
       <div
         className="flex-gt-md-60 flex-100"
       >
-        <AdminHubCard
-          adminDispatch={
-            Object {
-              "confirmShipment": [Function],
-              "getDashboard": [Function],
-              "getHub": [Function],
-              "getShipment": [Function],
-            }
-          }
-          hubs={Object {}}
+        <Connect(AdminHubsComp)
+          perPage={10}
+          showLocalExpiry={false}
           t={[Function]}
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
         />
         <div
           className="layout-row flex-100 layout-align-center-center space"
@@ -1004,18 +959,10 @@ exports[`theme is falsy 1`] = `
       <div
         className="flex-gt-md-60 flex-100"
       >
-        <AdminHubCard
-          adminDispatch={
-            Object {
-              "confirmShipment": [Function],
-              "getDashboard": [Function],
-              "getHub": [Function],
-              "getShipment": [Function],
-            }
-          }
-          hubs={Object {}}
+        <Connect(AdminHubsComp)
+          perPage={10}
+          showLocalExpiry={false}
           t={[Function]}
-          theme={null}
         />
         <div
           className="layout-row flex-100 layout-align-center-center space"

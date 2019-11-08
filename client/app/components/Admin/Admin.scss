@@ -373,7 +373,7 @@
     }
     transition: all 0.3s ease;
     opacity: 0.9;
-    
+
     &:hover {
       opacity: 1;
       i {
@@ -1040,7 +1040,7 @@
   .set_height {
     min-height: 400px;
   }
-  
+
   .header_margin_buffer{
     margin: 0 15px;
   }
@@ -1119,7 +1119,7 @@
       margin-bottom: 25px;
     }
   }
-  .grey_section_head { 
+  .grey_section_head {
     background-color: #E0E0E0;
     h1,h2,h3,h4 {
       margin: 5px;
@@ -1139,5 +1139,8 @@
       font-size: 14px;
       text-align: center;
     }
+  }
+  .pager_button {
+    padding: 5px 10px;
   }
 }

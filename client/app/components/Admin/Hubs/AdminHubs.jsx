@@ -3,11 +3,11 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from '../../../prop-types'
-import { AdminHubsIndex, AdminHubView, AdminHubForm } from '../'
+import { AdminHubsIndex, AdminHubView, AdminHubForm } from '..'
 import AdminUploadsSuccess from '../Uploads/Success'
 import { adminActions, documentActions, appActions } from '../../../actions'
 import { Modal } from '../../Modal/Modal'
-import GenericError from '../../../components/ErrorHandling/Generic'
+import GenericError from '../../ErrorHandling/Generic'
 
 class AdminHubs extends Component {
   constructor (props) {
@@ -16,56 +16,35 @@ class AdminHubs extends Component {
       newHub: false
     }
     this.viewHub = this.viewHub.bind(this)
-    this.backToIndex = this.backToIndex.bind(this)
     this.toggleNewHub = this.toggleNewHub.bind(this)
     this.saveNewHub = this.saveNewHub.bind(this)
     this.closeModal = this.closeModal.bind(this)
     this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
-    this.getHubsFromPage = this.getHubsFromPage.bind(this)
-    this.searchHubsFromPage = this.searchHubsFromPage.bind(this)
   }
+
   componentDidMount () {
-    const {
-      hubs, adminDispatch, loading, countries, appDispatch, match
-    } = this.props
-    if (!hubs && !loading) {
-      adminDispatch.getHubs(false)
-    }
-    if (!countries.length) {
-      appDispatch.fetchCountries()
-    }
-    this.props.setCurrentUrl(match.url)
+    const { match, setCurrentUrl } = this.props
+    setCurrentUrl(match.url)
   }
-  getHubsFromPage (page, hubType, country, status) {
-    const { adminDispatch } = this.props
-    adminDispatch.getHubs(false, page, hubType, country, status)
-  }
-  searchHubsFromPage (text, page, hubType, country, status) {
-    const { adminDispatch } = this.props
-    adminDispatch.searchHubs(text, page, hubType, country, status)
-  }
-  fetchCountries () {
-    const { appDispatch } = this.props
-    appDispatch.fetchCountries()
-  }
+
   viewHub (hub) {
     const { adminDispatch } = this.props
     adminDispatch.getHub(hub.id, true)
   }
+
   closeSuccessDialog () {
     const { documentDispatch } = this.props
     documentDispatch.closeViewer()
   }
-  backToIndex () {
-    const { adminDispatch } = this.props
-    adminDispatch.goTo('/admin/hubs')
-  }
+
   toggleNewHub () {
     this.setState({ newHub: !this.state.newHub })
   }
+
   closeModal () {
     this.setState({ newHub: false })
   }
+
   saveNewHub (hub, address) {
     const { adminDispatch } = this.props
     adminDispatch.saveNewHub(hub, address)
@@ -75,13 +54,11 @@ class AdminHubs extends Component {
     const {
       theme,
       hubs,
-      countries,
       hub,
       hubHash,
       adminDispatch,
       document,
       documentDispatch,
-      numHubPages,
       tenant,
       user
     } = this.props
@@ -121,18 +98,13 @@ class AdminHubs extends Component {
               render={props => (
                 <AdminHubsIndex
                   theme={theme}
-                  hubs={hubs}
-                  countries={countries}
                   adminDispatch={adminDispatch}
                   {...props}
                   user={user}
                   toggleNewHub={this.toggleNewHub}
                   viewHub={this.viewHub}
                   scope={scope}
-                  numHubPages={numHubPages}
                   documentDispatch={documentDispatch}
-                  getHubsFromPage={this.getHubsFromPage}
-                  searchHubsFromPage={this.searchHubsFromPage}
                 />
               )}
             />
@@ -141,7 +113,6 @@ class AdminHubs extends Component {
               path="/admin/hubs/:id"
               render={props => (
                 <AdminHubView
-                  setView={this.setView}
                   theme={theme}
                   hubs={hubs}
                   hubHash={hubHash}

@@ -13,6 +13,7 @@ module Tenants
     has_many :groups, through: :memberships
     belongs_to :address, class_name: 'Legacy::Address', optional: true
     belongs_to :tenant
+    has_one :company, through: :address, class_name: 'Legacy::Country'
 
     pg_search_scope :name_search, against: %i(name), using: {
       tsearch: { prefix: true }

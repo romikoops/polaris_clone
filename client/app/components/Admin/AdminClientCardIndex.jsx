@@ -25,7 +25,7 @@ function listClients (clients, theme, viewClient, t) {
               <i className="fa fa-user clip" style={gradientFontStyle} />
             </div>
             <div>
-              <h4>{client.first_name} {client.last_name}</h4>
+              <h4>{client.firstName} {client.lastName}</h4>
             </div>
           </div>
           <div className="layout-row flex-50 layout-align-start-center">
@@ -33,7 +33,7 @@ function listClients (clients, theme, viewClient, t) {
               <i className="fa fa-building clip" style={gradientFontStyle} />
             </span>
             <span className={`flex-80 layout-row layout-align-start-center ${styles.grey}`}>
-              <p>{client.company_name}</p>
+              <p>{client.companyName}</p>
             </span>
           </div>
         </div>

@@ -158,8 +158,7 @@ export default function admin (state = {}, action) {
     case adminConstants.GET_HUBS_SUCCESS:
       return {
         ...state,
-        num_hub_pages: action.payload.data.num_pages,
-        hubs: action.payload.data.hubs,
+        hubs: action.payload,
         loading: false
       }
     case adminConstants.GET_HUBS_FAILURE: {

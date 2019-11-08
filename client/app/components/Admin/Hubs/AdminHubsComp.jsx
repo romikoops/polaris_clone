@@ -1,368 +1,195 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import { v4 } from 'uuid'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import PropTypes from '../../../prop-types'
+import { get } from 'lodash'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
 import styles from '../Admin.scss'
-import { adminClicked as clickTip } from '../../../constants'
-import Checkbox from '../../Checkbox/Checkbox'
+import { adminClicked as clickTip, moment } from '../../../constants'
 import { capitalize } from '../../../helpers'
-import { AdminHubTile } from './AdminHubTile'
-import SideOptionsBox from '../SideOptions/SideOptionsBox'
-import CollapsingBar from '../../CollapsingBar/CollapsingBar'
-import { NamedSelect } from '../../NamedSelect/NamedSelect'
 import { adminActions, appActions } from '../../../actions'
 
 export class AdminHubsComp extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      searchFilters: {
-        hubType: {
-        },
-        status: {
-          active: true,
-          inactive: false
-        },
-        countries: []
-      },
       page: 1,
+      filters: {}
     }
-    this.nextPage = this.nextPage.bind(this)
-    this.handleFilters = this.handleFilters.bind(this)
-    this.handlePage = this.handlePage.bind(this)
-    this.prevPage = this.prevPage.bind(this)
-    this.handleInput = this.handleInput.bind(this)
+
+    this.fetchData = this.fetchData.bind(this)
   }
 
-  componentDidMount () {
-    const {
-      adminDispatch, loading, countries, appDispatch, tenant
-    } = this.props
-    if (tenant) {
-      this.setHubTypes()
-    }
-    if (!loading) {
-      adminDispatch.getHubs(false)
-    }
-    if (!countries.length) {
-      appDispatch.fetchCountries()
-    }
-  }
 
-  getHubsFromPage (page, hubType, country, status) {
+  fetchData (tableState) {
     const { adminDispatch } = this.props
-    adminDispatch.getHubs(false, page, hubType, country, status)
-  }
+    adminDispatch.getHubs(
+      tableState.page + 1,
+      tableState.filtered,
+      tableState.sorted,
+      tableState.pageSize
+    )
 
-  setHubTypes () {
-    const { tenant } = this.props
-    const { scope } = tenant
-    const newTypeObj = {}
-    Object.keys(scope.modes_of_transport).forEach((mot) => {
-      const boolSum = Object.values(scope.modes_of_transport[mot]).reduce((a, b) => a + b, 0)
-      if (boolSum > 0) {
-        newTypeObj[mot] = true
-      }
-    })
-    this.setState(prevState => ({
-      searchFilters: {
-        ...prevState.searchFilters,
-        hubType: newTypeObj
-      }
-    }))
-  }
-
-  searchHubsFromPage (text, page, hubType, country, status) {
-    const { adminDispatch } = this.props
-    adminDispatch.searchHubs(text, page, hubType, country, status)
-  }
-
-  fetchCountries () {
-    const { appDispatch } = this.props
-    appDispatch.fetchCountries()
-  }
-
-  toggleFilterValue (target, key) {
-    this.setState({
-      searchFilters: {
-        ...this.state.searchFilters,
-        [target]: {
-          ...this.state.searchFilters[target],
-          [key]: !this.state.searchFilters[target][key]
-        }
-      }
-    }, () => this.handleFilters())
-  }
-
-  handleInput (selection) {
-    const { name, ...others } = selection
-
-    this.setState(prevState => ({
-      searchFilters: {
-        ...prevState.searchFilters,
-        [name]: Object.values(others)
-      }
-    }), () => this.handleFilters())
-  }
-
-  handlePage (direction, hubType, country, status) {
-    if (!hubType && !country && !status) {
-      this.setState((prevState) => {
-        const nextPage = prevState.page + (1 * direction)
-        this.getHubsFromPage(nextPage > 0 ? nextPage : 1)
-
-        return { page: prevState.page + (1 * direction) }
-      }, () => this.handleFilters())
-    } else {
-      this.handleFilters()
-    }
-  }
-
-  handleFilters () {
-    const { searchFilters } = this.state
-
-    const hubFilterKeys =
-      Object.keys(searchFilters.hubType).filter(key => searchFilters.hubType[key])
-    const countryKeys =
-      searchFilters.countries.map(selection => selection.value)
-    const statusFilterKeys =
-      Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
-    this.setState((prevState) => {
-      this.getHubsFromPage(prevState.page, hubFilterKeys, countryKeys, statusFilterKeys)
-
-      return { page: prevState.page }
-    })
-  }
-
-  nextPage () {
-    this.handlePage(1)
-  }
-
-  prevPage () {
-    this.handlePage(-1)
-  }
-
-  doNothing () {
-    console.log(this.state.page)
-  }
-
-  handleSearchQuery (e) {
-    const { value } = e.target
-    const { searchFilters } = this.state
-
-    const hubFilterKeys =
-      Object.keys(searchFilters.hubType).filter(key => searchFilters.hubType[key])
-    const countryKeys =
-      searchFilters.countries.map(selection => selection.value)
-    const statusFilterKeys =
-      Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
-    this.setState((prevState) => {
-      this.searchHubsFromPage(value, 1, hubFilterKeys, countryKeys, statusFilterKeys)
-
-      return { page: 1 }
-    })
+    this.setState({ filters: tableState.filtered })
   }
 
   render () {
-    const { searchFilters } = this.state
     const {
       t,
-      theme,
       actionNodes,
       hubs,
-      countries,
-      numHubPages,
-      handleClick
+      numPages,
+      handleClick,
+      showLocalExpiry,
+      perPage
     } = this.props
 
-    if (!this.props.hubs) {
-      return ''
-    }
-    const typeFilters = Object.keys(searchFilters.hubType).map((hubType) => {
-      const typeNames = {
-        ocean: t('admin:port'), air: t('admin:airport'), rail: t('admin:railyard'), truck: t('admin:depot')
+    const motOptions = ['air', 'ocean', 'rail', 'truck'].map(mot => ({ label: capitalize(t(`common:${mot}`)), value: mot }))
+    const columns = [
+      {
+        id: 'name',
+        Header: t('admin:name'),
+        accessor: d => get(d, ['name']),
+        Cell: rowData => (
+          <div
+            className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
+            onClick={() => handleClick(rowData.original)}
+          >
+            <p className="flex-none">
+              {' '}
+              {rowData.row.name}
+            </p>
+          </div>
+        )
+      },
+      {
+        id: 'locode',
+        Header: t('admin:locode'),
+        accessor: d => get(d, ['hub_code']),
+        maxWidth: 100,
+        Cell: rowData => (
+          <div
+            className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
+            onClick={() => handleClick(rowData.original)}
+          >
+            <p className="flex-none">
+              {' '}
+              {rowData.row.locode}
+            </p>
+          </div>
+        )
+      },
+      {
+        id: 'type',
+        Header: t('admin:mot'),
+        accessor: d => get(d, ['hub_type']),
+        maxWidth: 100,
+        Cell: rowData => (
+          <div
+            className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
+            onClick={() => handleClick(rowData.original)}
+          >
+            <p className="flex-none">
+              {' '}
+              {capitalize(rowData.row.type)}
+            </p>
+          </div>
+        ),
+        Filter: ({ filter, onChange }) => (
+          <select
+            onChange={event => onChange(event.target.value)}
+            style={{ width: '100%' }}
+            value={filter ? filter.value : 'all'}
+          >
+            <option value="all">All</option>
+            {motOptions.map(cc => <option value={cc.value}>{cc.label}</option>)}
+
+          </select>
+        )
+      },
+      {
+        Header: t('admin:country'),
+        id: 'country',
+        accessor: d => get(d, ['address', 'country', 'name']),
+        Cell: rowData => (
+          <div
+            className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
+            onClick={() => handleClick(rowData.original)}
+          >
+            <p className="flex-none">
+              {' '}
+              {capitalize(rowData.row.country)}
+            </p>
+          </div>
+        )
       }
-
-      return (
-        <div className={`${styles.action_section} flex-100 layout-row layout-align-center-center layout-wrap`}>
-          <label htmlFor={hubType} className="pointy">
-            <p>{typeNames[hubType]}</p>
-          </label>
-          <Checkbox
-            id={hubType}
-            onChange={() => this.toggleFilterValue('hubType', hubType)}
-            checked={searchFilters.hubType[hubType]}
-            theme={theme}
-          />
-        </div>
-      )
-    })
-    const statusFilters = Object.keys(searchFilters.status).map(status => (
-      <div className={`${styles.action_section} flex-100 layout-row layout-align-center-center layout-wrap`}>
-        <label htmlFor={status} className="pointy">
-          <p>{capitalize(status)}</p>
-        </label>
-
-        <Checkbox
-          id={status}
-          onChange={() => this.toggleFilterValue('status', status)}
-          checked={searchFilters.status[status]}
-          theme={theme}
-        />
-      </div>
-    ))
-    const loadCountries = countries ? countries.map(country => ({
-      label: country.name,
-      value: country.id
-    })) : []
-
-    const namedCountries = (
-      <div style={{ height: '200px' }}>
-        <NamedSelect
-          multi
-          name="countries"
-          value={searchFilters.countries}
-          autoload={false}
-          options={loadCountries}
-          onChange={e => this.handleInput(e)}
-        />
-      </div>
-    )
-
-    const hubsArr = hubs.map(hub => (
-      <AdminHubTile
-        key={v4()}
-        hub={hub}
-        theme={theme}
-        handleClick={handleClick}
-        tooltip={clickTip.related}
-        showTooltip
-      />
-    ))
+    ]
+    if (showLocalExpiry) {
+      columns.push({
+        Header: t('admin:localChargesExpiring'),
+        id: 'earliest_expiration',
+        accessor: d => get(d, ['earliest_expiration']),
+        Cell: rowData => (
+          <div
+            className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
+            onClick={() => handleClick(rowData.original)}
+          >
+            <p className="flex-none">
+              {' '}
+              {rowData.row.earliest_expiration ? moment(rowData.row.earliest_expiration).format('ll') : t('admin:noLocalCharges') }
+            </p>
+          </div>
+        ),
+        Filter: () => (
+          <div />
+        )
+      })
+    }
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-space-between-start">
-          <div className="layout-row flex-80 flex-md-75 flex-sm-100">
-            <div className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap">
-              <div className="layout-row flex-95 layout-wrap card_margin_right" style={{ minHeight: '450px' }}>
-                {hubsArr}
-              </div>
-
-              <div className="flex-95 layout-row layout-align-center-center margin_bottom">
-                <div
-                  className={`
-                      flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${this.state.page === 1 ? styles.disabled : ''}
-                    `}
-                  onClick={this.state.page > 1 ? this.prevPage : null}
-                >
-                  <i className="fa fa-chevron-left" />
-                  <p>
-                    {'\u00A0\u00A0\u00A0\u00A0'}
-                    {t('common:basicBack')}
-                  </p>
-                </div>
-                {}
-                <p>{this.state.page}</p>
-                <div
-                  className={`
-                      flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${this.state.page < numHubPages ? '' : styles.disabled}
-                    `}
-                  onClick={this.state.page < numHubPages ? this.nextPage : null}
-                >
-                  <p>
-                    {t('common:next')}
-                    {'\u00A0\u00A0\u00A0\u00A0'}
-                  </p>
-                  <i className="fa fa-chevron-right" />
-                </div>
-              </div>
+          <div className="layout-row flex flex-sm-100">
+            <div className="layout-row flex-100 layout-align-start-center layout-wrap">
+              <ReactTable
+                className="flex-95 height_100"
+                data={hubs}
+                columns={columns}
+                defaultSorted={[
+                  {
+                    id: 'name',
+                    desc: false
+                  }
+                ]}
+                defaultPageSize={perPage}
+                pageSize={perPage}
+                filterable
+                sortable
+                pages={numPages}
+                manual
+                onFetchData={this.fetchData}
+              />
 
             </div>
           </div>
-          <div className="flex-20 flex-md-25 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
-            <div className={`${styles.position_fixed_right} flex`}>
-
-              <div className={`${styles.filter_panel} flex layout-row`}>
-                <SideOptionsBox
-                  header={t('admin:filters')}
-                  flexOptions="flex"
-                  content={(
-                    <div>
-                      <div
-                        className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-                      >
-                        <input
-                          type="text"
-                          className="flex-100"
-                          value={searchFilters.query}
-                          placeholder={t('admin:search')}
-                          onChange={e => this.handleSearchQuery(e)}
-                        />
-                      </div>
-                      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                        <CollapsingBar
-                          startCollapsed
-                          theme={theme}
-                          text={t('admin:hubType')}
-                          faClass="fa fa-ship"
-                          showArrow
-                          content={typeFilters}
-                        />
-                        <CollapsingBar
-                          startCollapsed
-                          theme={theme}
-                          text={t('common:status')}
-                          faClass="fa fa-ship"
-                          showArrow
-                          content={statusFilters}
-                        />
-                        <CollapsingBar
-                          startCollapsed
-                          theme={theme}
-                          text={t('user:country')}
-                          faClass="fa fa-flag"
-                          showArrow
-                          content={namedCountries}
-                        />
-                      </div>
-                    </div>
-                  )}
-                />
+          {
+            actionNodes.length > 0 &&
+            (
+              <div className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
+                <div className={`${styles.position_fixed_right} flex`}>
+                  <div className="flex layout-row margin_bottom">
+                    {actionNodes}
+                  </div>
+                </div>
               </div>
-              <div className="flex layout-row margin_bottom">
-                {actionNodes}
-              </div>
-            </div>
-          </div>
+            )
+          }
         </div>
       </div>
 
     )
   }
-}
-
-AdminHubsComp.propTypes = {
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
-  numHubPages: PropTypes.number.isRequired,
-  countries: PropTypes.arrayOf(PropTypes.any),
-  actionNodes: PropTypes.arrayOf(PropTypes.node),
-  handleClick: PropTypes.func,
-  tenant: PropTypes.tenant,
-  loading: PropTypes.bool,
-  appDispatch: PropTypes.shape({
-    fetchCountries: PropTypes.func
-  }).isRequired,
-  adminDispatch: PropTypes.shape({
-    getHubs: PropTypes.func,
-    saveNewHub: PropTypes.func
-  }).isRequired
 }
 
 AdminHubsComp.defaultProps = {
@@ -372,30 +199,31 @@ AdminHubsComp.defaultProps = {
   actionNodes: [],
   handleClick: null,
   tenant: {},
-  loading: false
+  loading: false,
+  showLocalExpiry: true,
+  perPage: 15
 }
 
 function mapStateToProps (state) {
   const {
     authentication, admin, document, app
   } = state
-  const { countries, tenant } = app
+  const { tenant } = app
   const { theme } = tenant
   const { user, loggedIn } = authentication
   const {
-    clients, hubs, hub, num_hub_pages // eslint-disable-line
+    hubs, hub // eslint-disable-line
   } = admin
+  const { hubsData, numPages } = hubs || {}
 
   return {
     user,
     tenant,
     loggedIn,
-    hubs,
+    hubs: hubsData,
     theme,
     hub,
-    numHubPages: num_hub_pages,
-    countries,
-    clients,
+    numPages,
     document
   }
 }

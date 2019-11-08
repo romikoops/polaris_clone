@@ -46,9 +46,7 @@ exports[`clients is truthy 1`] = `
                 </div>
                 <div>
                   <h4>
-                    Sebastian
                      
-                    Muller
                   </h4>
                 </div>
               </div>
@@ -70,9 +68,7 @@ exports[`clients is truthy 1`] = `
                 <span
                   className="flex-80 layout-row layout-align-start-center grey"
                 >
-                  <p>
-                    Mehristweniger
-                  </p>
+                  <p />
                 </span>
               </div>
             </div>

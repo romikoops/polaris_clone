@@ -13,23 +13,31 @@ function handleResponse (response) {
   return response.json()
 }
 
-function getHubs (page, hubType, countryId, status) {
+function getHubs (page, filters, sorted, pageSize) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
-  let query = ''
-  if (hubType) {
-    query += `&hub_type=${hubType}`
-  }
-  if (status) {
-    query += `&status=${status}`
-  }
-  if (countryId && countryId.length) {
-    query += `&country_ids=${countryId}`
+  const queryObj = {
+    page,
+    pageSize
   }
 
-  return fetch(`${getTenantApiUrl()}/admin/hubs?page=${page || 1}${query}`, requestOptions)
+  if (filters) {
+    filters.forEach((filter) => {
+      queryObj[filter.id] = filter.value
+    })
+  }
+
+  if (sorted) {
+    sorted.forEach((filter) => {
+      queryObj[`${filter.id}_desc`] = filter.desc
+    })
+  }
+
+  const query = toSnakeQueryString(queryObj, true)
+
+  return fetch(`${getTenantApiUrl()}/admin/hubs?${query}`, requestOptions)
     .then(handleResponse)
 }
 

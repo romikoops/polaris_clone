@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
@@ -37,7 +36,6 @@ class Admin extends Component {
   componentDidMount () {
     const { adminDispatch } = this.props
     adminDispatch.getClients(false)
-    adminDispatch.getHubs(false)
   }
 
   setCurrentUrl (url) {
@@ -63,12 +61,6 @@ class Admin extends Component {
       allHubs
     } = adminData
 
-    const hubHash = {}
-    if (hubs) {
-      hubs.forEach((hub) => {
-        hubHash[hub.data.id] = hub
-      })
-    }
     const loadingScreen = loading || documentLoading ? <Loading tenant={tenant} /> : ''
     const menu = (
       <FloatingMenu
@@ -117,7 +109,6 @@ class Admin extends Component {
                       confirmShipmentData={confirmShipmentData}
                       shipments={shipments}
                       hubs={hubs}
-                      hubHash={hubHash}
                       dashData={dashboard}
                       adminDispatch={adminDispatch}
                     />
@@ -131,7 +122,6 @@ class Admin extends Component {
                       setCurrentUrl={this.setCurrentUrl}
                       theme={theme}
                       {...props}
-                      hubHash={hubHash}
                       hubs={hubs}
                       icon="fa-info-circle"
                       tooltip={hubsTip.manage}
@@ -190,7 +180,7 @@ class Admin extends Component {
                       theme={theme}
                       setCurrentUrl={this.setCurrentUrl}
                       {...props}
-                      hubs={hubHash}
+
                       scope={tenant.scope}
                       adminDispatch={adminDispatch}
                       scheduleData={schedules}
@@ -205,7 +195,7 @@ class Admin extends Component {
                     <AdminSchedulesRoute
                       theme={theme}
                       {...props}
-                      hubs={hubHash}
+
                       setCurrentUrl={this.setCurrentUrl}
                       adminDispatch={adminDispatch}
                       scheduleData={itinerarySchedules}
@@ -235,7 +225,6 @@ class Admin extends Component {
                       {...props}
                       hubs={hubs}
                       setCurrentUrl={this.setCurrentUrl}
-                      hubHash={hubHash}
                       shipments={shipments}
                       clients={clients}
                     />
@@ -251,7 +240,6 @@ class Admin extends Component {
                       clients={clients}
                       {...props}
                       hubs={hubs}
-                      hubHash={hubHash}
                     />
                   )}
                 />
@@ -263,7 +251,6 @@ class Admin extends Component {
                       theme={theme}
                       {...props}
                       setCurrentUrl={this.setCurrentUrl}
-                      hubHash={hubHash}
                       clients={clients}
                       allHubs={allHubs}
                       loading={loading}
@@ -278,7 +265,6 @@ class Admin extends Component {
                       theme={theme}
                       setCurrentUrl={this.setCurrentUrl}
                       {...props}
-                      hubHash={hubHash}
                     />
                   )}
                 />
@@ -290,7 +276,6 @@ class Admin extends Component {
                       theme={theme}
                       setCurrentUrl={this.setCurrentUrl}
                       {...props}
-                      hubHash={hubHash}
                     />
                   )}
                 />
@@ -313,43 +298,6 @@ class Admin extends Component {
       </div>
     )
   }
-}
-Admin.propTypes = {
-  theme: PropTypes.theme,
-  // eslint-disable-next-line react/forbid-prop-types
-  user: PropTypes.any,
-  loggedIn: PropTypes.bool,
-  documentLoading: PropTypes.bool,
-  adminData: PropTypes.shape({
-    hubs: PropTypes.array,
-    serviceCharges: PropTypes.any,
-    pricingData: PropTypes.any,
-    schedules: PropTypes.any,
-    shipments: PropTypes.any,
-    clients: PropTypes.any,
-    dashboard: PropTypes.any,
-    loading: PropTypes.bool
-  }).isRequired,
-  tenant: PropTypes.tenant,
-  adminDispatch: PropTypes.shape({
-    getHubs: PropTypes.func,
-    getServiceCharges: PropTypes.func,
-    getPricings: PropTypes.func,
-    getSchedules: PropTypes.func,
-    getTrucking: PropTypes.func,
-    getShipments: PropTypes.func,
-    getClients: PropTypes.func,
-    getDashboard: PropTypes.func,
-    getRoutes: PropTypes.func,
-    goTo: PropTypes.func
-  }).isRequired,
-  tenantDispatch: PropTypes.shape({
-    updateEmails: PropTypes.func
-  }).isRequired,
-  remarkDispatch: PropTypes.shape({
-    addPdfRemark: PropTypes.func,
-    updatePdfRemarks: PropTypes.func
-  }).isRequired
 }
 
 Admin.defaultProps = {

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import FileUploader from '../../FileUploader/FileUploader'
 import { RoundButton } from '../../RoundButton/RoundButton'
@@ -214,7 +213,7 @@ export class AdminHubsIndex extends Component {
     />]
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left padding_top">
         <AdminHubsComp
           actionNodes={actionNodes}
           handleClick={viewHub}

@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from 'prop-types'
 import GreyBox from '../GreyBox/GreyBox'
 import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
-import AdminHubCard from './AdminHubCard'
+import AdminHubsComp from './Hubs/AdminHubsComp'
 import AdminClientCardIndex from './AdminClientCardIndex'
 import AdminRouteList from './RouteList'
 import { WorldMap } from './DashboardMap/WorldMap'
@@ -41,7 +40,7 @@ export class AdminDashboard extends Component {
 
   handleViewHubs () {
     const { adminDispatch } = this.props
-    adminDispatch.getHubs(true)
+    adminDispatch.goTo('/admin/hubs')
   }
 
   handleViewClients () {
@@ -80,7 +79,6 @@ export class AdminDashboard extends Component {
       user,
       clients,
       shipments,
-      hubHash,
       dashData,
       confirmShipmentData,
       adminDispatch,
@@ -163,7 +161,6 @@ export class AdminDashboard extends Component {
             dispatches={adminDispatch}
             shipments={preppedShipments}
             theme={theme}
-            hubs={hubHash}
             handleAction={this.handleShipmentAction}
           />
           <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
@@ -178,11 +175,7 @@ export class AdminDashboard extends Component {
           </div>
           <div className="layout-row layout-wrap flex-100 layout-align-space-between-stretch">
             <div className="flex-gt-md-60 flex-100">
-              <AdminHubCard
-                hubs={hubHash}
-                adminDispatch={adminDispatch}
-                theme={theme}
-              />
+              <AdminHubsComp showLocalExpiry={false} perPage={10} />
               <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
                 <span className="flex-15" onClick={() => this.handleViewHubs()}><u><b>{t('admin:seeMore')}</b></u></span>
                 <div className={`flex-85 ${styles.separator}`} />
@@ -204,33 +197,6 @@ export class AdminDashboard extends Component {
       </GenericError>
     )
   }
-}
-
-AdminDashboard.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  user: PropTypes.any,
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  tenant: PropTypes.tenant.isRequired,
-  dashData: PropTypes.shape({
-    schedules: PropTypes.array
-  }),
-  confirmShipmentData: PropTypes.objectOf(PropTypes.any),
-  handleClick: PropTypes.func,
-  setCurrentUrl: PropTypes.func.isRequired,
-  clients: PropTypes.arrayOf(PropTypes.client),
-  shipments: PropTypes.shape({
-    open: PropTypes.arrayOf(PropTypes.shipment),
-    requested: PropTypes.arrayOf(PropTypes.shipment),
-    finished: PropTypes.arrayOf(PropTypes.shipment)
-  }),
-  hubHash: PropTypes.objectOf(PropTypes.hub),
-  adminDispatch: PropTypes.shape({
-    getDashboard: PropTypes.func,
-    getShipment: PropTypes.func,
-    getHub: PropTypes.func,
-    confirmShipment: PropTypes.func
-  }).isRequired
 }
 
 AdminDashboard.defaultProps = {

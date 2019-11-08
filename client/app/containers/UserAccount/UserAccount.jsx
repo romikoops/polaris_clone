@@ -54,9 +54,6 @@ class UserAccount extends Component {
     if (user && users && !users.loading && !users.dashboard) {
       userDispatch.getDashboard(user.id, false)
     }
-    if (user && users && !users.hubs) {
-      userDispatch.getHubs(false)
-    }
     if (shipments && !shipments.requested) {
       userDispatch.getShipments(false)
     }
@@ -172,13 +169,6 @@ class UserAccount extends Component {
       return <Loading tenant={tenant} text="loading..." />
     }
 
-    const hubHash = {}
-    if (hubs) {
-      hubs.forEach((hub) => {
-        hubHash[hub.data.id] = hub
-      })
-    }
-
     const loadingScreen = loading ? <Loading tenant={tenant} /> : ''
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} currentUrl={this.state.currentUrl} />
 
@@ -218,7 +208,6 @@ class UserAccount extends Component {
                         scope={tenant.scope}
                         setCurrentUrl={this.setCurrentUrl}
                         dashboard={dashboard}
-                        hubs={hubHash}
                         navFn={this.setUrl}
                         userDispatch={userDispatch}
                       />
@@ -312,7 +301,6 @@ class UserAccount extends Component {
                         setNav={this.setNavLink}
                         setCurrentUrl={this.setCurrentUrl}
                         theme={theme}
-                        hubs={hubHash}
                         tenant={tenant}
                         user={user}
                         {...props}

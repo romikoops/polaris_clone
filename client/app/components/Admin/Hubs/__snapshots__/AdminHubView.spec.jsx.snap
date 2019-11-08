@@ -62,183 +62,173 @@ exports[`hubData.hub.hub_status is inactive 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch buffer_10"
+      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
     >
-      <GradientBorder
-        className="flex-100 layout-row"
-        content={
-          <div
-            className="flex-none layout-row layout-align-space-between-center hub_title_content"
-          >
+      <div
+        className="flex-50 layout-row layout-wrap layout-align-space-between-stretch"
+      >
+        <GradientBorder
+          className="flex-100 layout-row"
+          content={
             <div
-              className="flex-70 layout-row layout-align-start-center"
-            >
-              <h3
-                className="flex-none"
-              >
-                 
-                HUB_NEXUS_NAME
-              </h3>
-            </div>
-            <div
-              className="flex-30 layout-row layout-align-end-center"
+              className="flex-none layout-row layout-align-space-between-center hub_title_content"
             >
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex-70 layout-row layout-align-start-center"
               >
-                <h4
+                <h3
                   className="flex-none"
                 >
                    
-                  
-                </h4>
+                  HUB_NEXUS_NAME
+                </h3>
               </div>
               <div
-                className="flex-none layout-row layout-align-center-center"
-                style={
-                  Object {
-                    "color": "#333",
-                  }
-                }
+                className="flex-30 layout-row layout-align-end-center"
               >
-                <i
-                  className="fa fa-anchor  "
-                  style={Object {}}
-                />
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                >
+                  <h4
+                    className="flex-none"
+                  >
+                     
+                    
+                  </h4>
+                </div>
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                  style={
+                    Object {
+                      "color": "#333",
+                    }
+                  }
+                >
+                  <i
+                    className="fa fa-anchor  "
+                    style={Object {}}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        }
-        gradient={
-          Object {
-            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
           }
-        }
-        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
-      />
-      <div
-        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
-      >
+          gradient={
+            Object {
+              "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+            }
+          }
+          wrapperClassName="flex-100 layout-row layout-align-space-between-stretch"
+        />
         <div
-          className="flex-55 layout-row address_box"
+          className="flex-100 layout-row address_data_box"
         >
           <div
-            className="flex-none layout-column layout-align-start-center address_icon"
+            className="flex-55 layout-row address_box"
           >
-            <i
-              className="flex-none fa fa-map-marker clip"
-              style={
-                Object {
-                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            <div
+              className="flex-none layout-column layout-align-start-center address_icon"
+            >
+              <i
+                className="flex-none fa fa-map-marker clip"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
                 }
-              }
+              />
+            </div>
+            <div
+              className="flex layout-align-space-around-start"
+            >
+              <div
+                className="flex-none layout-row layout-wrap "
+              >
+                <p
+                  className="flex-100  address_part_1"
+                >
+                  579 FOO_STREET, 22456
+                  <br />
+                  <strong>
+                    FOO_CITY 
+                  </strong>
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-none address_divider"
             />
           </div>
           <div
-            className="flex layout-align-space-around-start"
+            className="flex-45 layout-row lat_lng_box"
           >
             <div
-              className="flex-none layout-row layout-wrap "
+              className="flex-50 layout-column layout-align-center-center"
             >
               <p
-                className="flex-100  address_part_1"
+                className=" lat_lng"
               >
-                579 FOO_STREET, 22456
-                <br />
-                <strong>
-                  FOO_CITY 
-                </strong>
+                ADDRESS_LATITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Latitude
+              </p>
+            </div>
+            <div
+              className="flex-none lat_lng_divider"
+            />
+            <div
+              className="flex-50 layout-column layout-align-center-center"
+            >
+              <p
+                className=" lat_lng"
+              >
+                ADDRESS_LONGITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Longitude
               </p>
             </div>
           </div>
         </div>
-        <div
-          className="flex-45 layout-row lat_lng_box"
-        >
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LATITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Latitude
-            </p>
-          </div>
-          <div
-            className="flex-none lat_lng_divider"
-          />
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LONGITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Longitude
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-space-between-center buffer_10"
-    >
-      <div
-        className="flex-25 layout-row layout-align-center-center hub_photo"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      >
-        <div
-          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
-        >
-          <img
-            alt=""
-            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
-          />
-        </div>
       </div>
       <div
-        className="flex layout-row map_box"
+        className="flex-45 layout-row layout-align-center-center buffer_10"
       >
-        <GmapsWrapper
-          address={
-            Object {
-              "city": "FOO_CITY",
-              "country": "Germany",
-              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-              "id": 246,
-              "primary": true,
-              "street": "FOO_STREET",
-              "streetNumber": 579,
-              "street_number": 579,
-              "zipCode": "22456",
-              "zip_code": "22456",
+        <div
+          className="flex layout-row map_box"
+        >
+          <GmapsWrapper
+            address={
+              Object {
+                "city": "FOO_CITY",
+                "country": "Germany",
+                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                "id": 246,
+                "primary": true,
+                "street": "FOO_STREET",
+                "streetNumber": 579,
+                "street_number": 579,
+                "zipCode": "22456",
+                "zip_code": "22456",
+              }
             }
-          }
-          component={[Function]}
-          height="170px"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
+            component={[Function]}
+            height="170px"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
             }
-          }
-          zoom={12}
-        />
+            zoom={12}
+          />
+        </div>
       </div>
     </div>
     <div
@@ -404,183 +394,173 @@ exports[`hubData.relatedHubs is truthy 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch buffer_10"
+      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
     >
-      <GradientBorder
-        className="flex-100 layout-row"
-        content={
-          <div
-            className="flex-none layout-row layout-align-space-between-center hub_title_content"
-          >
+      <div
+        className="flex-50 layout-row layout-wrap layout-align-space-between-stretch"
+      >
+        <GradientBorder
+          className="flex-100 layout-row"
+          content={
             <div
-              className="flex-70 layout-row layout-align-start-center"
-            >
-              <h3
-                className="flex-none"
-              >
-                 
-                HUB_NEXUS_NAME
-              </h3>
-            </div>
-            <div
-              className="flex-30 layout-row layout-align-end-center"
+              className="flex-none layout-row layout-align-space-between-center hub_title_content"
             >
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex-70 layout-row layout-align-start-center"
               >
-                <h4
+                <h3
                   className="flex-none"
                 >
                    
-                  
-                </h4>
+                  HUB_NEXUS_NAME
+                </h3>
               </div>
               <div
-                className="flex-none layout-row layout-align-center-center"
-                style={
-                  Object {
-                    "color": "#333",
-                  }
-                }
+                className="flex-30 layout-row layout-align-end-center"
               >
-                <i
-                  className="fa fa-anchor  "
-                  style={Object {}}
-                />
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                >
+                  <h4
+                    className="flex-none"
+                  >
+                     
+                    
+                  </h4>
+                </div>
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                  style={
+                    Object {
+                      "color": "#333",
+                    }
+                  }
+                >
+                  <i
+                    className="fa fa-anchor  "
+                    style={Object {}}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        }
-        gradient={
-          Object {
-            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
           }
-        }
-        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
-      />
-      <div
-        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
-      >
+          gradient={
+            Object {
+              "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+            }
+          }
+          wrapperClassName="flex-100 layout-row layout-align-space-between-stretch"
+        />
         <div
-          className="flex-55 layout-row address_box"
+          className="flex-100 layout-row address_data_box"
         >
           <div
-            className="flex-none layout-column layout-align-start-center address_icon"
+            className="flex-55 layout-row address_box"
           >
-            <i
-              className="flex-none fa fa-map-marker clip"
-              style={
-                Object {
-                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            <div
+              className="flex-none layout-column layout-align-start-center address_icon"
+            >
+              <i
+                className="flex-none fa fa-map-marker clip"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
                 }
-              }
+              />
+            </div>
+            <div
+              className="flex layout-align-space-around-start"
+            >
+              <div
+                className="flex-none layout-row layout-wrap "
+              >
+                <p
+                  className="flex-100  address_part_1"
+                >
+                  579 FOO_STREET, 22456
+                  <br />
+                  <strong>
+                    FOO_CITY 
+                  </strong>
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-none address_divider"
             />
           </div>
           <div
-            className="flex layout-align-space-around-start"
+            className="flex-45 layout-row lat_lng_box"
           >
             <div
-              className="flex-none layout-row layout-wrap "
+              className="flex-50 layout-column layout-align-center-center"
             >
               <p
-                className="flex-100  address_part_1"
+                className=" lat_lng"
               >
-                579 FOO_STREET, 22456
-                <br />
-                <strong>
-                  FOO_CITY 
-                </strong>
+                ADDRESS_LATITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Latitude
+              </p>
+            </div>
+            <div
+              className="flex-none lat_lng_divider"
+            />
+            <div
+              className="flex-50 layout-column layout-align-center-center"
+            >
+              <p
+                className=" lat_lng"
+              >
+                ADDRESS_LONGITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Longitude
               </p>
             </div>
           </div>
         </div>
-        <div
-          className="flex-45 layout-row lat_lng_box"
-        >
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LATITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Latitude
-            </p>
-          </div>
-          <div
-            className="flex-none lat_lng_divider"
-          />
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LONGITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Longitude
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-space-between-center buffer_10"
-    >
-      <div
-        className="flex-25 layout-row layout-align-center-center hub_photo"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      >
-        <div
-          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
-        >
-          <img
-            alt=""
-            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
-          />
-        </div>
       </div>
       <div
-        className="flex layout-row map_box"
+        className="flex-45 layout-row layout-align-center-center buffer_10"
       >
-        <GmapsWrapper
-          address={
-            Object {
-              "city": "FOO_CITY",
-              "country": "Germany",
-              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-              "id": 246,
-              "primary": true,
-              "street": "FOO_STREET",
-              "streetNumber": 579,
-              "street_number": 579,
-              "zipCode": "22456",
-              "zip_code": "22456",
+        <div
+          className="flex layout-row map_box"
+        >
+          <GmapsWrapper
+            address={
+              Object {
+                "city": "FOO_CITY",
+                "country": "Germany",
+                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                "id": 246,
+                "primary": true,
+                "street": "FOO_STREET",
+                "streetNumber": 579,
+                "street_number": 579,
+                "zipCode": "22456",
+                "zip_code": "22456",
+              }
             }
-          }
-          component={[Function]}
-          height="170px"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
+            component={[Function]}
+            height="170px"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
             }
-          }
-          zoom={12}
-        />
+            zoom={12}
+          />
+        </div>
       </div>
     </div>
     <div
@@ -746,183 +726,173 @@ exports[`hubData.routes is truthy 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch buffer_10"
+      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
     >
-      <GradientBorder
-        className="flex-100 layout-row"
-        content={
-          <div
-            className="flex-none layout-row layout-align-space-between-center hub_title_content"
-          >
+      <div
+        className="flex-50 layout-row layout-wrap layout-align-space-between-stretch"
+      >
+        <GradientBorder
+          className="flex-100 layout-row"
+          content={
             <div
-              className="flex-70 layout-row layout-align-start-center"
-            >
-              <h3
-                className="flex-none"
-              >
-                 
-                HUB_NEXUS_NAME
-              </h3>
-            </div>
-            <div
-              className="flex-30 layout-row layout-align-end-center"
+              className="flex-none layout-row layout-align-space-between-center hub_title_content"
             >
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex-70 layout-row layout-align-start-center"
               >
-                <h4
+                <h3
                   className="flex-none"
                 >
                    
-                  
-                </h4>
+                  HUB_NEXUS_NAME
+                </h3>
               </div>
               <div
-                className="flex-none layout-row layout-align-center-center"
-                style={
-                  Object {
-                    "color": "#333",
-                  }
-                }
+                className="flex-30 layout-row layout-align-end-center"
               >
-                <i
-                  className="fa fa-anchor  "
-                  style={Object {}}
-                />
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                >
+                  <h4
+                    className="flex-none"
+                  >
+                     
+                    
+                  </h4>
+                </div>
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                  style={
+                    Object {
+                      "color": "#333",
+                    }
+                  }
+                >
+                  <i
+                    className="fa fa-anchor  "
+                    style={Object {}}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        }
-        gradient={
-          Object {
-            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
           }
-        }
-        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
-      />
-      <div
-        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
-      >
+          gradient={
+            Object {
+              "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+            }
+          }
+          wrapperClassName="flex-100 layout-row layout-align-space-between-stretch"
+        />
         <div
-          className="flex-55 layout-row address_box"
+          className="flex-100 layout-row address_data_box"
         >
           <div
-            className="flex-none layout-column layout-align-start-center address_icon"
+            className="flex-55 layout-row address_box"
           >
-            <i
-              className="flex-none fa fa-map-marker clip"
-              style={
-                Object {
-                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            <div
+              className="flex-none layout-column layout-align-start-center address_icon"
+            >
+              <i
+                className="flex-none fa fa-map-marker clip"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
                 }
-              }
+              />
+            </div>
+            <div
+              className="flex layout-align-space-around-start"
+            >
+              <div
+                className="flex-none layout-row layout-wrap "
+              >
+                <p
+                  className="flex-100  address_part_1"
+                >
+                  579 FOO_STREET, 22456
+                  <br />
+                  <strong>
+                    FOO_CITY 
+                  </strong>
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-none address_divider"
             />
           </div>
           <div
-            className="flex layout-align-space-around-start"
+            className="flex-45 layout-row lat_lng_box"
           >
             <div
-              className="flex-none layout-row layout-wrap "
+              className="flex-50 layout-column layout-align-center-center"
             >
               <p
-                className="flex-100  address_part_1"
+                className=" lat_lng"
               >
-                579 FOO_STREET, 22456
-                <br />
-                <strong>
-                  FOO_CITY 
-                </strong>
+                ADDRESS_LATITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Latitude
+              </p>
+            </div>
+            <div
+              className="flex-none lat_lng_divider"
+            />
+            <div
+              className="flex-50 layout-column layout-align-center-center"
+            >
+              <p
+                className=" lat_lng"
+              >
+                ADDRESS_LONGITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Longitude
               </p>
             </div>
           </div>
         </div>
-        <div
-          className="flex-45 layout-row lat_lng_box"
-        >
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LATITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Latitude
-            </p>
-          </div>
-          <div
-            className="flex-none lat_lng_divider"
-          />
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LONGITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Longitude
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-space-between-center buffer_10"
-    >
-      <div
-        className="flex-25 layout-row layout-align-center-center hub_photo"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      >
-        <div
-          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
-        >
-          <img
-            alt=""
-            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
-          />
-        </div>
       </div>
       <div
-        className="flex layout-row map_box"
+        className="flex-45 layout-row layout-align-center-center buffer_10"
       >
-        <GmapsWrapper
-          address={
-            Object {
-              "city": "FOO_CITY",
-              "country": "Germany",
-              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-              "id": 246,
-              "primary": true,
-              "street": "FOO_STREET",
-              "streetNumber": 579,
-              "street_number": 579,
-              "zipCode": "22456",
-              "zip_code": "22456",
+        <div
+          className="flex layout-row map_box"
+        >
+          <GmapsWrapper
+            address={
+              Object {
+                "city": "FOO_CITY",
+                "country": "Germany",
+                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                "id": 246,
+                "primary": true,
+                "street": "FOO_STREET",
+                "streetNumber": 579,
+                "street_number": 579,
+                "zipCode": "22456",
+                "zip_code": "22456",
+              }
             }
-          }
-          component={[Function]}
-          height="170px"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
+            component={[Function]}
+            height="170px"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
             }
-          }
-          zoom={12}
-        />
+            zoom={12}
+          />
+        </div>
       </div>
     </div>
     <div
@@ -1142,183 +1112,173 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch buffer_10"
+      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
     >
-      <GradientBorder
-        className="flex-100 layout-row"
-        content={
-          <div
-            className="flex-none layout-row layout-align-space-between-center hub_title_content"
-          >
+      <div
+        className="flex-50 layout-row layout-wrap layout-align-space-between-stretch"
+      >
+        <GradientBorder
+          className="flex-100 layout-row"
+          content={
             <div
-              className="flex-70 layout-row layout-align-start-center"
-            >
-              <h3
-                className="flex-none"
-              >
-                 
-                HUB_NEXUS_NAME
-              </h3>
-            </div>
-            <div
-              className="flex-30 layout-row layout-align-end-center"
+              className="flex-none layout-row layout-align-space-between-center hub_title_content"
             >
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex-70 layout-row layout-align-start-center"
               >
-                <h4
+                <h3
                   className="flex-none"
                 >
                    
-                  
-                </h4>
+                  HUB_NEXUS_NAME
+                </h3>
               </div>
               <div
-                className="flex-none layout-row layout-align-center-center"
-                style={
-                  Object {
-                    "color": "#333",
-                  }
-                }
+                className="flex-30 layout-row layout-align-end-center"
               >
-                <i
-                  className="fa fa-anchor  "
-                  style={Object {}}
-                />
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                >
+                  <h4
+                    className="flex-none"
+                  >
+                     
+                    
+                  </h4>
+                </div>
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                  style={
+                    Object {
+                      "color": "#333",
+                    }
+                  }
+                >
+                  <i
+                    className="fa fa-anchor  "
+                    style={Object {}}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        }
-        gradient={
-          Object {
-            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
           }
-        }
-        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
-      />
-      <div
-        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
-      >
+          gradient={
+            Object {
+              "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+            }
+          }
+          wrapperClassName="flex-100 layout-row layout-align-space-between-stretch"
+        />
         <div
-          className="flex-55 layout-row address_box"
+          className="flex-100 layout-row address_data_box"
         >
           <div
-            className="flex-none layout-column layout-align-start-center address_icon"
+            className="flex-55 layout-row address_box"
           >
-            <i
-              className="flex-none fa fa-map-marker clip"
-              style={
-                Object {
-                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            <div
+              className="flex-none layout-column layout-align-start-center address_icon"
+            >
+              <i
+                className="flex-none fa fa-map-marker clip"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
                 }
-              }
+              />
+            </div>
+            <div
+              className="flex layout-align-space-around-start"
+            >
+              <div
+                className="flex-none layout-row layout-wrap "
+              >
+                <p
+                  className="flex-100  address_part_1"
+                >
+                  579 FOO_STREET, 22456
+                  <br />
+                  <strong>
+                    FOO_CITY 
+                  </strong>
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-none address_divider"
             />
           </div>
           <div
-            className="flex layout-align-space-around-start"
+            className="flex-45 layout-row lat_lng_box"
           >
             <div
-              className="flex-none layout-row layout-wrap "
+              className="flex-50 layout-column layout-align-center-center"
             >
               <p
-                className="flex-100  address_part_1"
+                className=" lat_lng"
               >
-                579 FOO_STREET, 22456
-                <br />
-                <strong>
-                  FOO_CITY 
-                </strong>
+                ADDRESS_LATITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Latitude
+              </p>
+            </div>
+            <div
+              className="flex-none lat_lng_divider"
+            />
+            <div
+              className="flex-50 layout-column layout-align-center-center"
+            >
+              <p
+                className=" lat_lng"
+              >
+                ADDRESS_LONGITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Longitude
               </p>
             </div>
           </div>
         </div>
-        <div
-          className="flex-45 layout-row lat_lng_box"
-        >
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LATITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Latitude
-            </p>
-          </div>
-          <div
-            className="flex-none lat_lng_divider"
-          />
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LONGITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Longitude
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-space-between-center buffer_10"
-    >
-      <div
-        className="flex-25 layout-row layout-align-center-center hub_photo"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      >
-        <div
-          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
-        >
-          <img
-            alt=""
-            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
-          />
-        </div>
       </div>
       <div
-        className="flex layout-row map_box"
+        className="flex-45 layout-row layout-align-center-center buffer_10"
       >
-        <GmapsWrapper
-          address={
-            Object {
-              "city": "FOO_CITY",
-              "country": "Germany",
-              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-              "id": 246,
-              "primary": true,
-              "street": "FOO_STREET",
-              "streetNumber": 579,
-              "street_number": 579,
-              "zipCode": "22456",
-              "zip_code": "22456",
+        <div
+          className="flex layout-row map_box"
+        >
+          <GmapsWrapper
+            address={
+              Object {
+                "city": "FOO_CITY",
+                "country": "Germany",
+                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                "id": 246,
+                "primary": true,
+                "street": "FOO_STREET",
+                "streetNumber": 579,
+                "street_number": 579,
+                "zipCode": "22456",
+                "zip_code": "22456",
+              }
             }
-          }
-          component={[Function]}
-          height="170px"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
+            component={[Function]}
+            height="170px"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
             }
-          }
-          zoom={12}
-        />
+            zoom={12}
+          />
+        </div>
       </div>
     </div>
     <div
@@ -1484,183 +1444,173 @@ exports[`state.confirm is truthy 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch buffer_10"
+      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
     >
-      <GradientBorder
-        className="flex-100 layout-row"
-        content={
-          <div
-            className="flex-none layout-row layout-align-space-between-center hub_title_content"
-          >
+      <div
+        className="flex-50 layout-row layout-wrap layout-align-space-between-stretch"
+      >
+        <GradientBorder
+          className="flex-100 layout-row"
+          content={
             <div
-              className="flex-70 layout-row layout-align-start-center"
-            >
-              <h3
-                className="flex-none"
-              >
-                 
-                HUB_NEXUS_NAME
-              </h3>
-            </div>
-            <div
-              className="flex-30 layout-row layout-align-end-center"
+              className="flex-none layout-row layout-align-space-between-center hub_title_content"
             >
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex-70 layout-row layout-align-start-center"
               >
-                <h4
+                <h3
                   className="flex-none"
                 >
                    
-                  
-                </h4>
+                  HUB_NEXUS_NAME
+                </h3>
               </div>
               <div
-                className="flex-none layout-row layout-align-center-center"
-                style={
-                  Object {
-                    "color": "#333",
-                  }
-                }
+                className="flex-30 layout-row layout-align-end-center"
               >
-                <i
-                  className="fa fa-anchor  "
-                  style={Object {}}
-                />
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                >
+                  <h4
+                    className="flex-none"
+                  >
+                     
+                    
+                  </h4>
+                </div>
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                  style={
+                    Object {
+                      "color": "#333",
+                    }
+                  }
+                >
+                  <i
+                    className="fa fa-anchor  "
+                    style={Object {}}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        }
-        gradient={
-          Object {
-            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
           }
-        }
-        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
-      />
-      <div
-        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
-      >
+          gradient={
+            Object {
+              "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+            }
+          }
+          wrapperClassName="flex-100 layout-row layout-align-space-between-stretch"
+        />
         <div
-          className="flex-55 layout-row address_box"
+          className="flex-100 layout-row address_data_box"
         >
           <div
-            className="flex-none layout-column layout-align-start-center address_icon"
+            className="flex-55 layout-row address_box"
           >
-            <i
-              className="flex-none fa fa-map-marker clip"
-              style={
-                Object {
-                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            <div
+              className="flex-none layout-column layout-align-start-center address_icon"
+            >
+              <i
+                className="flex-none fa fa-map-marker clip"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
                 }
-              }
+              />
+            </div>
+            <div
+              className="flex layout-align-space-around-start"
+            >
+              <div
+                className="flex-none layout-row layout-wrap "
+              >
+                <p
+                  className="flex-100  address_part_1"
+                >
+                  579 FOO_STREET, 22456
+                  <br />
+                  <strong>
+                    FOO_CITY 
+                  </strong>
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-none address_divider"
             />
           </div>
           <div
-            className="flex layout-align-space-around-start"
+            className="flex-45 layout-row lat_lng_box"
           >
             <div
-              className="flex-none layout-row layout-wrap "
+              className="flex-50 layout-column layout-align-center-center"
             >
               <p
-                className="flex-100  address_part_1"
+                className=" lat_lng"
               >
-                579 FOO_STREET, 22456
-                <br />
-                <strong>
-                  FOO_CITY 
-                </strong>
+                ADDRESS_LATITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Latitude
+              </p>
+            </div>
+            <div
+              className="flex-none lat_lng_divider"
+            />
+            <div
+              className="flex-50 layout-column layout-align-center-center"
+            >
+              <p
+                className=" lat_lng"
+              >
+                ADDRESS_LONGITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Longitude
               </p>
             </div>
           </div>
         </div>
-        <div
-          className="flex-45 layout-row lat_lng_box"
-        >
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LATITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Latitude
-            </p>
-          </div>
-          <div
-            className="flex-none lat_lng_divider"
-          />
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LONGITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Longitude
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-space-between-center buffer_10"
-    >
-      <div
-        className="flex-25 layout-row layout-align-center-center hub_photo"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      >
-        <div
-          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
-        >
-          <img
-            alt=""
-            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
-          />
-        </div>
       </div>
       <div
-        className="flex layout-row map_box"
+        className="flex-45 layout-row layout-align-center-center buffer_10"
       >
-        <GmapsWrapper
-          address={
-            Object {
-              "city": "FOO_CITY",
-              "country": "Germany",
-              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-              "id": 246,
-              "primary": true,
-              "street": "FOO_STREET",
-              "streetNumber": 579,
-              "street_number": 579,
-              "zipCode": "22456",
-              "zip_code": "22456",
+        <div
+          className="flex layout-row map_box"
+        >
+          <GmapsWrapper
+            address={
+              Object {
+                "city": "FOO_CITY",
+                "country": "Germany",
+                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                "id": 246,
+                "primary": true,
+                "street": "FOO_STREET",
+                "streetNumber": 579,
+                "street_number": 579,
+                "zipCode": "22456",
+                "zip_code": "22456",
+              }
             }
-          }
-          component={[Function]}
-          height="170px"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
+            component={[Function]}
+            height="170px"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
             }
-          }
-          zoom={12}
-        />
+            zoom={12}
+          />
+        </div>
       </div>
     </div>
     <div
@@ -1881,183 +1831,173 @@ exports[`state.editView is truthy 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch buffer_10"
+      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
     >
-      <GradientBorder
-        className="flex-100 layout-row"
-        content={
-          <div
-            className="flex-none layout-row layout-align-space-between-center hub_title_content"
-          >
+      <div
+        className="flex-50 layout-row layout-wrap layout-align-space-between-stretch"
+      >
+        <GradientBorder
+          className="flex-100 layout-row"
+          content={
             <div
-              className="flex-70 layout-row layout-align-start-center"
-            >
-              <h3
-                className="flex-none"
-              >
-                 
-                HUB_NEXUS_NAME
-              </h3>
-            </div>
-            <div
-              className="flex-30 layout-row layout-align-end-center"
+              className="flex-none layout-row layout-align-space-between-center hub_title_content"
             >
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex-70 layout-row layout-align-start-center"
               >
-                <h4
+                <h3
                   className="flex-none"
                 >
                    
-                  
-                </h4>
+                  HUB_NEXUS_NAME
+                </h3>
               </div>
               <div
-                className="flex-none layout-row layout-align-center-center"
-                style={
-                  Object {
-                    "color": "#333",
-                  }
-                }
+                className="flex-30 layout-row layout-align-end-center"
               >
-                <i
-                  className="fa fa-anchor  "
-                  style={Object {}}
-                />
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                >
+                  <h4
+                    className="flex-none"
+                  >
+                     
+                    
+                  </h4>
+                </div>
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                  style={
+                    Object {
+                      "color": "#333",
+                    }
+                  }
+                >
+                  <i
+                    className="fa fa-anchor  "
+                    style={Object {}}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        }
-        gradient={
-          Object {
-            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
           }
-        }
-        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
-      />
-      <div
-        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
-      >
+          gradient={
+            Object {
+              "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+            }
+          }
+          wrapperClassName="flex-100 layout-row layout-align-space-between-stretch"
+        />
         <div
-          className="flex-55 layout-row address_box"
+          className="flex-100 layout-row address_data_box"
         >
           <div
-            className="flex-none layout-column layout-align-start-center address_icon"
+            className="flex-55 layout-row address_box"
           >
-            <i
-              className="flex-none fa fa-map-marker clip"
-              style={
-                Object {
-                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            <div
+              className="flex-none layout-column layout-align-start-center address_icon"
+            >
+              <i
+                className="flex-none fa fa-map-marker clip"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
                 }
-              }
+              />
+            </div>
+            <div
+              className="flex layout-align-space-around-start"
+            >
+              <div
+                className="flex-none layout-row layout-wrap "
+              >
+                <p
+                  className="flex-100  address_part_1"
+                >
+                  579 FOO_STREET, 22456
+                  <br />
+                  <strong>
+                    FOO_CITY 
+                  </strong>
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-none address_divider"
             />
           </div>
           <div
-            className="flex layout-align-space-around-start"
+            className="flex-45 layout-row lat_lng_box"
           >
             <div
-              className="flex-none layout-row layout-wrap "
+              className="flex-50 layout-column layout-align-center-center"
             >
               <p
-                className="flex-100  address_part_1"
+                className=" lat_lng"
               >
-                579 FOO_STREET, 22456
-                <br />
-                <strong>
-                  FOO_CITY 
-                </strong>
+                ADDRESS_LATITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Latitude
+              </p>
+            </div>
+            <div
+              className="flex-none lat_lng_divider"
+            />
+            <div
+              className="flex-50 layout-column layout-align-center-center"
+            >
+              <p
+                className=" lat_lng"
+              >
+                ADDRESS_LONGITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Longitude
               </p>
             </div>
           </div>
         </div>
-        <div
-          className="flex-45 layout-row lat_lng_box"
-        >
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LATITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Latitude
-            </p>
-          </div>
-          <div
-            className="flex-none lat_lng_divider"
-          />
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LONGITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Longitude
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-space-between-center buffer_10"
-    >
-      <div
-        className="flex-25 layout-row layout-align-center-center hub_photo"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      >
-        <div
-          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
-        >
-          <img
-            alt=""
-            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
-          />
-        </div>
       </div>
       <div
-        className="flex layout-row map_box"
+        className="flex-45 layout-row layout-align-center-center buffer_10"
       >
-        <GmapsWrapper
-          address={
-            Object {
-              "city": "FOO_CITY",
-              "country": "Germany",
-              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-              "id": 246,
-              "primary": true,
-              "street": "FOO_STREET",
-              "streetNumber": 579,
-              "street_number": 579,
-              "zipCode": "22456",
-              "zip_code": "22456",
+        <div
+          className="flex layout-row map_box"
+        >
+          <GmapsWrapper
+            address={
+              Object {
+                "city": "FOO_CITY",
+                "country": "Germany",
+                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                "id": 246,
+                "primary": true,
+                "street": "FOO_STREET",
+                "streetNumber": 579,
+                "street_number": 579,
+                "zipCode": "22456",
+                "zip_code": "22456",
+              }
             }
-          }
-          component={[Function]}
-          height="170px"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
+            component={[Function]}
+            height="170px"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
             }
-          }
-          zoom={12}
-        />
+            zoom={12}
+          />
+        </div>
       </div>
     </div>
     <div
@@ -2223,183 +2163,173 @@ exports[`state.page > 1 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch buffer_10"
+      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
     >
-      <GradientBorder
-        className="flex-100 layout-row"
-        content={
-          <div
-            className="flex-none layout-row layout-align-space-between-center hub_title_content"
-          >
+      <div
+        className="flex-50 layout-row layout-wrap layout-align-space-between-stretch"
+      >
+        <GradientBorder
+          className="flex-100 layout-row"
+          content={
             <div
-              className="flex-70 layout-row layout-align-start-center"
-            >
-              <h3
-                className="flex-none"
-              >
-                 
-                HUB_NEXUS_NAME
-              </h3>
-            </div>
-            <div
-              className="flex-30 layout-row layout-align-end-center"
+              className="flex-none layout-row layout-align-space-between-center hub_title_content"
             >
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex-70 layout-row layout-align-start-center"
               >
-                <h4
+                <h3
                   className="flex-none"
                 >
                    
-                  
-                </h4>
+                  HUB_NEXUS_NAME
+                </h3>
               </div>
               <div
-                className="flex-none layout-row layout-align-center-center"
-                style={
-                  Object {
-                    "color": "#333",
-                  }
-                }
+                className="flex-30 layout-row layout-align-end-center"
               >
-                <i
-                  className="fa fa-anchor  "
-                  style={Object {}}
-                />
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                >
+                  <h4
+                    className="flex-none"
+                  >
+                     
+                    
+                  </h4>
+                </div>
+                <div
+                  className="flex-none layout-row layout-align-center-center"
+                  style={
+                    Object {
+                      "color": "#333",
+                    }
+                  }
+                >
+                  <i
+                    className="fa fa-anchor  "
+                    style={Object {}}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        }
-        gradient={
-          Object {
-            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
           }
-        }
-        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
-      />
-      <div
-        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
-      >
+          gradient={
+            Object {
+              "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+            }
+          }
+          wrapperClassName="flex-100 layout-row layout-align-space-between-stretch"
+        />
         <div
-          className="flex-55 layout-row address_box"
+          className="flex-100 layout-row address_data_box"
         >
           <div
-            className="flex-none layout-column layout-align-start-center address_icon"
+            className="flex-55 layout-row address_box"
           >
-            <i
-              className="flex-none fa fa-map-marker clip"
-              style={
-                Object {
-                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            <div
+              className="flex-none layout-column layout-align-start-center address_icon"
+            >
+              <i
+                className="flex-none fa fa-map-marker clip"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
                 }
-              }
+              />
+            </div>
+            <div
+              className="flex layout-align-space-around-start"
+            >
+              <div
+                className="flex-none layout-row layout-wrap "
+              >
+                <p
+                  className="flex-100  address_part_1"
+                >
+                  579 FOO_STREET, 22456
+                  <br />
+                  <strong>
+                    FOO_CITY 
+                  </strong>
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-none address_divider"
             />
           </div>
           <div
-            className="flex layout-align-space-around-start"
+            className="flex-45 layout-row lat_lng_box"
           >
             <div
-              className="flex-none layout-row layout-wrap "
+              className="flex-50 layout-column layout-align-center-center"
             >
               <p
-                className="flex-100  address_part_1"
+                className=" lat_lng"
               >
-                579 FOO_STREET, 22456
-                <br />
-                <strong>
-                  FOO_CITY 
-                </strong>
+                ADDRESS_LATITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Latitude
+              </p>
+            </div>
+            <div
+              className="flex-none lat_lng_divider"
+            />
+            <div
+              className="flex-50 layout-column layout-align-center-center"
+            >
+              <p
+                className=" lat_lng"
+              >
+                ADDRESS_LONGITUDE
+              </p>
+              <p
+                className=" lat_lng"
+              >
+                Longitude
               </p>
             </div>
           </div>
         </div>
-        <div
-          className="flex-45 layout-row lat_lng_box"
-        >
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LATITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Latitude
-            </p>
-          </div>
-          <div
-            className="flex-none lat_lng_divider"
-          />
-          <div
-            className="flex-50 layout-column layout-align-center-center"
-          >
-            <p
-              className=" lat_lng"
-            >
-              ADDRESS_LONGITUDE
-            </p>
-            <p
-              className=" lat_lng"
-            >
-              Longitude
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-space-between-center buffer_10"
-    >
-      <div
-        className="flex-25 layout-row layout-align-center-center hub_photo"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      >
-        <div
-          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
-        >
-          <img
-            alt=""
-            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
-          />
-        </div>
       </div>
       <div
-        className="flex layout-row map_box"
+        className="flex-45 layout-row layout-align-center-center buffer_10"
       >
-        <GmapsWrapper
-          address={
-            Object {
-              "city": "FOO_CITY",
-              "country": "Germany",
-              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-              "id": 246,
-              "primary": true,
-              "street": "FOO_STREET",
-              "streetNumber": 579,
-              "street_number": 579,
-              "zipCode": "22456",
-              "zip_code": "22456",
+        <div
+          className="flex layout-row map_box"
+        >
+          <GmapsWrapper
+            address={
+              Object {
+                "city": "FOO_CITY",
+                "country": "Germany",
+                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                "id": 246,
+                "primary": true,
+                "street": "FOO_STREET",
+                "streetNumber": 579,
+                "street_number": 579,
+                "zipCode": "22456",
+                "zip_code": "22456",
+              }
             }
-          }
-          component={[Function]}
-          height="170px"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
+            component={[Function]}
+            height="170px"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
             }
-          }
-          zoom={12}
-        />
+            zoom={12}
+          />
+        </div>
       </div>
     </div>
     <div

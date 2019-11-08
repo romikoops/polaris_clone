@@ -97,7 +97,7 @@ class AdminClientCompanies extends PureComponent {
           >
             <p className="flex-none">
               {' '}
-              {rowData.row.lastName}
+              {rowData.row.vat_number}
             </p>
           </div>
         )

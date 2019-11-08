@@ -3,9 +3,11 @@
 module Legacy
   class Hub < ApplicationRecord
     self.table_name = 'hubs'
+    include PgSearch::Model
+    LOCAL_CHARGE_DATE_RANGE = (Date.today...2.days.from_now)
     has_paper_trail
     belongs_to :tenant, class_name: 'Legacy::Tenant'
-    belongs_to :nexus
+    belongs_to :nexus, class_name: 'Legacy::Nexus'
     belongs_to :address, class_name: 'Legacy::Address'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
@@ -23,11 +25,37 @@ module Legacy
     has_many :truckings, class_name: 'Trucking::Trucking'
     has_many :rates, -> { distinct }, through: :truckings
     belongs_to :mandatory_charge, optional: true
+    has_one :country, through: :address, class_name: 'Legacy::Country'
 
     delegate :locode, to: :nexus
+    pg_search_scope :name_search, against: %i(name), using: {
+      tsearch: { prefix: true }
+    }
+    pg_search_scope :locode_search, against: %i(hub_code),
+                                    associated_against: {
+                                      nexus: %i(locode)
+                                    },
+                                    using: {
+                                      tsearch: { prefix: true }
+                                    }
+
+    pg_search_scope :country_search,
+                    associated_against: {
+                      country: %i(name code)
+                    },
+                    using: {
+                      tsearch: { prefix: true }
+                    }
+    scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
 
     def point_wkt
       "Point (#{address.longitude} #{address.latitude})"
+    end
+
+    def earliest_expiration
+      Legacy::LocalCharge.where(hub_id: id)
+                         .for_dates(LOCAL_CHARGE_DATE_RANGE.first, LOCAL_CHARGE_DATE_RANGE.last)
+                         .order(expiration_date: :asc).first&.expiration_date
     end
   end
 end

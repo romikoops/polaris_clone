@@ -67,11 +67,8 @@ class AdminScheduleGenerator extends Component {
   }
 
   componentDidMount () {
-    const { hubs, adminDispatch, itinerary } = this.props
+    const { adminDispatch, itinerary } = this.props
     adminDispatch.getVehicleTypes(itinerary.id)
-    if (!hubs) {
-      adminDispatch.getHubs(false)
-    }
   }
 
   setItinerary (ev) {
@@ -456,19 +453,6 @@ class AdminScheduleGenerator extends Component {
       </div>
     )
   }
-}
-AdminScheduleGenerator.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
-  adminDispatch: PropTypes.shape({
-    getVehicleTypes: PropTypes.func,
-    getHubs: PropTypes.func
-  }).isRequired,
-  itinerary: PropTypes.objectOf(PropTypes.any),
-  toggleNew: PropTypes.func.isRequired,
-  itineraries: PropTypes.arrayOf(PropTypes.any),
-  vehicleTypes: PropTypes.arrayOf(PropTypes.vehicleType)
 }
 
 AdminScheduleGenerator.defaultProps = {

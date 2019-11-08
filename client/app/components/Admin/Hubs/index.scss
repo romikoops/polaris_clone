@@ -42,7 +42,6 @@
     font-size: 12px;
     text-align: center;
     letter-spacing: 0.06em;
-    // padding: 3px;
   }
   .inactive_inner {
     background: white;
@@ -111,13 +110,19 @@
     padding: 10px;
   }
   .address_box {
-
     width: 240px;
     height: 80px;
-    border-right: 1px solid #4F4F4F;
     box-sizing: border-box;
     position: relative;
     padding: 10px;
+  }
+  .address_divider {
+    position: absolute;
+    right: 0;
+    width: 2px;
+    height: 80%;
+    top: 10%;
+    background: #BDBDBD;
   }
   .lat_lng {
     font-style: normal;

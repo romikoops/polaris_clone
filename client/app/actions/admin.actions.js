@@ -3,30 +3,27 @@ import { adminConstants } from '../constants/admin.constants'
 import { adminService } from '../services/admin.service'
 import { alertActions, documentActions, clientsActions } from './'
 
-function getHubs (redirect, page, hubType, country, status) {
-  function request (hubData) {
-    return { type: adminConstants.GET_HUBS_REQUEST, payload: hubData }
+function getHubs (page, filters, sorted, pageSize) {
+  function request () {
+    return { type: adminConstants.GET_HUBS_REQUEST }
   }
-  function success (hubData) {
-    return { type: adminConstants.GET_HUBS_SUCCESS, payload: hubData }
+  function success (payload) {
+    return { type: adminConstants.GET_HUBS_SUCCESS, payload }
   }
   function failure (error) {
     return { type: adminConstants.GET_HUBS_FAILURE, error }
   }
 
   return (dispatch) => {
-    dispatch(request())
-
-    adminService.getHubs(page, hubType, country, status).then(
-      (data) => {
-        if (redirect) {
-          dispatch(push('/admin/hubs'))
-        }
-        dispatch(success(data))
+    dispatch(request)
+    adminService.getHubs(page, filters, sorted, pageSize).then(
+      (resp) => {
+        dispatch(success(resp.data))
       },
       (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
       }
     )
   }

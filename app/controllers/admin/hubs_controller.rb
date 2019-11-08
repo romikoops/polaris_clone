@@ -9,26 +9,18 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   before_action :for_create, only: :create
   before_action :permitted_params, only: :index
 
-  def index # rubocop:disable Metrics/AbcSize
-    query = {
-      tenant_id: current_user.tenant_id
-    }
-    query[:hub_type] = params[:hub_type].split(',') if params[:hub_type]
-
-    query[:name] = params[:name] if params[:name]
-    query[:sandbox] = @sandbox
-
-    query[:hub_status] = params[:hub_status].split(',') if params[:hub_status]
-    if params[:country_ids]
-      hubs = Hub.where(query).joins(:address).where('addresses.country_id IN (?)', params[:country_ids].split(',').map(&:to_i))
-    else
-      hubs = Hub.where(query).order('name ASC')
+  def index
+    paginated_hubs = handle_search.paginate(pagination_options)
+    response_hubs = paginated_hubs.map do |hub|
+      for_table(hub)
     end
 
-    paginated_hub_hashes = hubs.paginate(page: params[:page]).map do |hub|
-      { data: hub, address: hub.address.to_custom_hash }
-    end
-    response_handler(hubs: paginated_hub_hashes, num_pages: (hubs.count / 9.0).ceil)
+    response_handler(
+      pagination_options.merge(
+        hubsData: response_hubs,
+        numPages: paginated_hubs.total_pages
+      )
+    )
   end
 
   def permitted_params
@@ -117,32 +109,6 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     end
   end
 
-  def search # rubocop:disable Metrics/AbcSize
-    query = {
-      tenant_id: current_user.tenant_id
-    }
-    query[:hub_type] = params[:hub_type].split(',') if params[:hub_type]
-
-    query[:name] = params[:name] if params[:name]
-    query[:sandbox] = @sandbox
-
-    query[:hub_status] = params[:hub_status].split(',') if params[:hub_status]
-    hubs = if params[:country_ids]
-             Hub.where(query)
-                .joins(:address)
-                .where('addresses.country_id IN (?)', params[:country_ids].split(',')
-                       .map(&:to_i))
-           else
-             Hub.where(query).order('name ASC')
-           end
-    hub_results = hubs.where('name ILIKE ?', "%#{params[:text]}%")
-
-    paginated_hub_hashes = hub_results.paginate(page: params[:page]).map do |hub|
-      { data: hub, address: hub.address.to_custom_hash }
-    end
-    response_handler(hubs: paginated_hub_hashes, num_pages: hubs.count / 12)
-  end
-
   def all_hubs
     processed_hubs = current_user.tenant.hubs.where(sandbox: @sandbox).map do |hub|
       { data: hub, address: hub.address.to_custom_hash }
@@ -151,6 +117,67 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   private
+
+  def handle_search
+    hubs = ::Legacy::Hub.where(tenant_id: current_tenant.id, sandbox: @sandbox)
+    {
+      country: ->(hubs, param) { hubs.country_search(param) },
+      name: ->(hubs, param) { hubs.name_search(param) },
+      name_desc: ->(hubs, param) { hubs.ordered_by(:name, param) },
+      locode: ->(hubs, param) { hubs.locode_search(param) },
+      locode_desc: ->(hubs, param) { hubs.ordered_by(:hub_code, param) },
+      type: ->(hubs, param) { param == 'all' ? hubs : hubs.where(hub_type: param) },
+      type_desc: ->(hubs, param) { hubs.ordered_by(:hub_type, param) },
+      country_desc: lambda do |hubs, param|
+                      hubs.left_joins(:country)
+                          .order("countries.name #{param.to_s == 'true' ? 'DESC' : 'ASC'}")
+                    end
+    }.each do |key, lambd|
+      hubs = lambd.call(hubs, search_params[key]) if search_params[key]
+    end
+
+    hubs
+  end
+
+  def for_table(hub)
+    hub.as_json(
+      include: {
+        nexus: { only: %i(id name) },
+        address: {
+          include: {
+            country: { only: %i(name) }
+          }
+        }
+      },
+      methods: %i(earliest_expiration)
+    )
+  end
+
+  def pagination_options
+    {
+      page: current_page,
+      per_page: (params[:page_size] || params[:per_page])&.to_i
+    }.compact
+  end
+
+  def current_page
+    params[:page]&.to_i || 1
+  end
+
+  def search_params
+    params.permit(
+      :type,
+      :type_desc,
+      :name_desc,
+      :country_desc,
+      :country,
+      :locode_desc,
+      :locode,
+      :name,
+      :page_size,
+      :per_page
+    )
+  end
 
   def for_create
     @new_loc = geo_address

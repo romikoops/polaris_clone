@@ -8,22 +8,104 @@ exports[`countries is truthy 1`] = `
     className="flex-100 layout-row layout-align-space-between-start"
   >
     <div
-      className="layout-row flex-80 flex-md-75 flex-sm-100"
+      className="layout-row flex flex-sm-100"
     >
       <div
-        className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap"
+        className="layout-row flex-100 layout-align-start-center layout-wrap"
       >
-        <div
-          className="layout-row flex-95 layout-wrap card_margin_right"
-          style={
+        <ReactTable
+          AggregatedComponent={[Function]}
+          ExpanderComponent={[Function]}
+          FilterComponent={[Function]}
+          LoadingComponent={[Function]}
+          NoDataComponent={[Function]}
+          PadRowComponent={[Function]}
+          PaginationComponent={[Function]}
+          PivotValueComponent={[Function]}
+          ResizerComponent={[Function]}
+          TableComponent={[Function]}
+          TbodyComponent={[Function]}
+          TdComponent={[Function]}
+          TfootComponent={[Function]}
+          ThComponent={[Function]}
+          TheadComponent={[Function]}
+          TrComponent={[Function]}
+          TrGroupComponent={[Function]}
+          aggregatedKey="_aggregated"
+          className="flex-95 height_100"
+          collapseOnDataChange={true}
+          collapseOnPageChange={true}
+          collapseOnSortingChange={true}
+          column={
             Object {
-              "minHeight": "450px",
+              "Aggregated": undefined,
+              "Cell": undefined,
+              "Expander": undefined,
+              "Filter": undefined,
+              "Footer": undefined,
+              "Header": undefined,
+              "Pivot": undefined,
+              "PivotValue": undefined,
+              "aggregate": undefined,
+              "className": "",
+              "filterAll": false,
+              "filterMethod": undefined,
+              "filterable": undefined,
+              "footerClassName": "",
+              "footerStyle": Object {},
+              "getFooterProps": [Function],
+              "getHeaderProps": [Function],
+              "getProps": [Function],
+              "headerClassName": "",
+              "headerStyle": Object {},
+              "minWidth": 100,
+              "resizable": undefined,
+              "show": true,
+              "sortMethod": undefined,
+              "sortable": undefined,
+              "style": Object {},
             }
           }
-        >
-          <AdminHubTile
-            handleClick={[Function]}
-            hub={
+          columns={
+            Array [
+              Object {
+                "Cell": [Function],
+                "Header": "Name",
+                "accessor": [Function],
+                "id": "name",
+              },
+              Object {
+                "Cell": [Function],
+                "Header": "LOCODE",
+                "accessor": [Function],
+                "id": "locode",
+                "maxWidth": 100,
+              },
+              Object {
+                "Cell": [Function],
+                "Filter": [Function],
+                "Header": "MOT",
+                "accessor": [Function],
+                "id": "type",
+                "maxWidth": 100,
+              },
+              Object {
+                "Cell": [Function],
+                "Header": "Country",
+                "accessor": [Function],
+                "id": "country",
+              },
+              Object {
+                "Cell": [Function],
+                "Filter": [Function],
+                "Header": "Local Charges Expiring at",
+                "accessor": [Function],
+                "id": "earliest_expiration",
+              },
+            ]
+          }
+          data={
+            Array [
               Object {
                 "address": Object {
                   "city": "FOO_CITY",
@@ -38,292 +120,104 @@ exports[`countries is truthy 1`] = `
                   "zip_code": "22456",
                 },
                 "name": "FOO_HUB_NAME",
-              }
-            }
-            key="RANDOM_KEY_3"
-            showIcon={false}
-            showTooltip={true}
-            theme={
+              },
+            ]
+          }
+          defaultExpanded={Object {}}
+          defaultFilterMethod={[Function]}
+          defaultFiltered={Array []}
+          defaultPageSize={15}
+          defaultResized={Array []}
+          defaultSortDesc={false}
+          defaultSortMethod={[Function]}
+          defaultSorted={
+            Array [
               Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
+                "desc": false,
+                "id": "name",
+              },
+            ]
+          }
+          expanderDefaults={
+            Object {
+              "filterable": false,
+              "resizable": false,
+              "sortable": false,
+              "width": 35,
             }
-            tooltip="A glance of all the Hubs that are related to the chosen Hub"
-          />
-        </div>
-        <div
-          className="flex-95 layout-row layout-align-center-center margin_bottom"
-        >
-          <div
-            className="
-                      flex-15 layout-row layout-align-center-center pointy
-                      navigation_button disabled
-                    "
-            onClick={null}
-          >
-            <i
-              className="fa fa-chevron-left"
-            />
-            <p>
-                  
-              Back
-            </p>
-          </div>
-          <p>
-            1
-          </p>
-          <div
-            className="
-                      flex-15 layout-row layout-align-center-center pointy
-                      navigation_button disabled
-                    "
-            onClick={null}
-          >
-            <p>
-              Next
-                  
-            </p>
-            <i
-              className="fa fa-chevron-right"
-            />
-          </div>
-        </div>
+          }
+          filterable={true}
+          freezeWhenExpanded={false}
+          getLoadingProps={[Function]}
+          getNoDataProps={[Function]}
+          getPaginationProps={[Function]}
+          getProps={[Function]}
+          getResizerProps={[Function]}
+          getTableProps={[Function]}
+          getTbodyProps={[Function]}
+          getTdProps={[Function]}
+          getTfootProps={[Function]}
+          getTfootTdProps={[Function]}
+          getTfootTrProps={[Function]}
+          getTheadFilterProps={[Function]}
+          getTheadFilterThProps={[Function]}
+          getTheadFilterTrProps={[Function]}
+          getTheadGroupProps={[Function]}
+          getTheadGroupThProps={[Function]}
+          getTheadGroupTrProps={[Function]}
+          getTheadProps={[Function]}
+          getTheadThProps={[Function]}
+          getTheadTrProps={[Function]}
+          getTrGroupProps={[Function]}
+          getTrProps={[Function]}
+          groupedByPivotKey="_groupedByPivot"
+          indexKey="_index"
+          loading={false}
+          loadingText="Loading..."
+          manual={true}
+          multiSort={true}
+          nestingLevelKey="_nestingLevel"
+          nextText="Next"
+          noDataText="No rows found"
+          ofText="of"
+          onFetchData={[Function]}
+          originalKey="_original"
+          pageSize={15}
+          pageSizeOptions={
+            Array [
+              5,
+              10,
+              20,
+              25,
+              50,
+              100,
+            ]
+          }
+          pageText="Page"
+          pivotDefaults={Object {}}
+          pivotIDKey="_pivotID"
+          pivotValKey="_pivotVal"
+          previousText="Previous"
+          resizable={true}
+          resolveData={[Function]}
+          rowsText="rows"
+          showPageJump={true}
+          showPageSizeOptions={true}
+          showPagination={true}
+          showPaginationBottom={true}
+          showPaginationTop={false}
+          sortable={true}
+          style={Object {}}
+          subRowsKey="_subRows"
+        />
       </div>
     </div>
     <div
-      className="flex-20 flex-md-25 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
+      className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
     >
       <div
         className="position_fixed_right flex"
       >
-        <div
-          className="filter_panel flex layout-row"
-        >
-          <SideOptionsBox
-            content={
-              <div>
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-                >
-                  <input
-                    className="flex-100"
-                    onChange={[Function]}
-                    placeholder="Search..."
-                    type="text"
-                  />
-                </div>
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-start"
-                >
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      Array [
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="ocean"
-                          >
-                            <p>
-                              Port
-                            </p>
-                          </label>
-                          <Checkbox
-                            checked={true}
-                            className=""
-                            disabled={false}
-                            id="ocean"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                      ]
-                    }
-                    contentHeader=""
-                    faClass="fa fa-ship"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Hub Type"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      Array [
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="active"
-                          >
-                            <p>
-                              Active
-                            </p>
-                          </label>
-                          <Checkbox
-                            checked={true}
-                            className=""
-                            disabled={false}
-                            id="active"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="inactive"
-                          >
-                            <p>
-                              Inactive
-                            </p>
-                          </label>
-                          <Checkbox
-                            checked={false}
-                            className=""
-                            disabled={false}
-                            id="inactive"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                      ]
-                    }
-                    contentHeader=""
-                    faClass="fa fa-ship"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Status"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      <div
-                        style={
-                          Object {
-                            "height": "200px",
-                          }
-                        }
-                      >
-                        <NamedSelect
-                          autoload={false}
-                          multi={true}
-                          name="countries"
-                          onChange={[Function]}
-                          options={
-                            Array [
-                              Object {
-                                "label": "Germany",
-                                "value": 0,
-                              },
-                              Object {
-                                "label": "China",
-                                "value": 3,
-                              },
-                            ]
-                          }
-                          value={Array []}
-                        />
-                      </div>
-                    }
-                    contentHeader=""
-                    faClass="fa fa-flag"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Country"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                </div>
-              </div>
-            }
-            flexOptions="flex"
-            header="Filters"
-          />
-        </div>
         <div
           className="flex layout-row margin_bottom"
         >
@@ -340,7 +234,221 @@ exports[`countries is truthy 1`] = `
 </div>
 `;
 
-exports[`hubs is falsy 1`] = `""`;
+exports[`hubs is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-start"
+  >
+    <div
+      className="layout-row flex flex-sm-100"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center layout-wrap"
+      >
+        <ReactTable
+          AggregatedComponent={[Function]}
+          ExpanderComponent={[Function]}
+          FilterComponent={[Function]}
+          LoadingComponent={[Function]}
+          NoDataComponent={[Function]}
+          PadRowComponent={[Function]}
+          PaginationComponent={[Function]}
+          PivotValueComponent={[Function]}
+          ResizerComponent={[Function]}
+          TableComponent={[Function]}
+          TbodyComponent={[Function]}
+          TdComponent={[Function]}
+          TfootComponent={[Function]}
+          ThComponent={[Function]}
+          TheadComponent={[Function]}
+          TrComponent={[Function]}
+          TrGroupComponent={[Function]}
+          aggregatedKey="_aggregated"
+          className="flex-95 height_100"
+          collapseOnDataChange={true}
+          collapseOnPageChange={true}
+          collapseOnSortingChange={true}
+          column={
+            Object {
+              "Aggregated": undefined,
+              "Cell": undefined,
+              "Expander": undefined,
+              "Filter": undefined,
+              "Footer": undefined,
+              "Header": undefined,
+              "Pivot": undefined,
+              "PivotValue": undefined,
+              "aggregate": undefined,
+              "className": "",
+              "filterAll": false,
+              "filterMethod": undefined,
+              "filterable": undefined,
+              "footerClassName": "",
+              "footerStyle": Object {},
+              "getFooterProps": [Function],
+              "getHeaderProps": [Function],
+              "getProps": [Function],
+              "headerClassName": "",
+              "headerStyle": Object {},
+              "minWidth": 100,
+              "resizable": undefined,
+              "show": true,
+              "sortMethod": undefined,
+              "sortable": undefined,
+              "style": Object {},
+            }
+          }
+          columns={
+            Array [
+              Object {
+                "Cell": [Function],
+                "Header": "Name",
+                "accessor": [Function],
+                "id": "name",
+              },
+              Object {
+                "Cell": [Function],
+                "Header": "LOCODE",
+                "accessor": [Function],
+                "id": "locode",
+                "maxWidth": 100,
+              },
+              Object {
+                "Cell": [Function],
+                "Filter": [Function],
+                "Header": "MOT",
+                "accessor": [Function],
+                "id": "type",
+                "maxWidth": 100,
+              },
+              Object {
+                "Cell": [Function],
+                "Header": "Country",
+                "accessor": [Function],
+                "id": "country",
+              },
+              Object {
+                "Cell": [Function],
+                "Filter": [Function],
+                "Header": "Local Charges Expiring at",
+                "accessor": [Function],
+                "id": "earliest_expiration",
+              },
+            ]
+          }
+          data={null}
+          defaultExpanded={Object {}}
+          defaultFilterMethod={[Function]}
+          defaultFiltered={Array []}
+          defaultPageSize={15}
+          defaultResized={Array []}
+          defaultSortDesc={false}
+          defaultSortMethod={[Function]}
+          defaultSorted={
+            Array [
+              Object {
+                "desc": false,
+                "id": "name",
+              },
+            ]
+          }
+          expanderDefaults={
+            Object {
+              "filterable": false,
+              "resizable": false,
+              "sortable": false,
+              "width": 35,
+            }
+          }
+          filterable={true}
+          freezeWhenExpanded={false}
+          getLoadingProps={[Function]}
+          getNoDataProps={[Function]}
+          getPaginationProps={[Function]}
+          getProps={[Function]}
+          getResizerProps={[Function]}
+          getTableProps={[Function]}
+          getTbodyProps={[Function]}
+          getTdProps={[Function]}
+          getTfootProps={[Function]}
+          getTfootTdProps={[Function]}
+          getTfootTrProps={[Function]}
+          getTheadFilterProps={[Function]}
+          getTheadFilterThProps={[Function]}
+          getTheadFilterTrProps={[Function]}
+          getTheadGroupProps={[Function]}
+          getTheadGroupThProps={[Function]}
+          getTheadGroupTrProps={[Function]}
+          getTheadProps={[Function]}
+          getTheadThProps={[Function]}
+          getTheadTrProps={[Function]}
+          getTrGroupProps={[Function]}
+          getTrProps={[Function]}
+          groupedByPivotKey="_groupedByPivot"
+          indexKey="_index"
+          loading={false}
+          loadingText="Loading..."
+          manual={true}
+          multiSort={true}
+          nestingLevelKey="_nestingLevel"
+          nextText="Next"
+          noDataText="No rows found"
+          ofText="of"
+          onFetchData={[Function]}
+          originalKey="_original"
+          pageSize={15}
+          pageSizeOptions={
+            Array [
+              5,
+              10,
+              20,
+              25,
+              50,
+              100,
+            ]
+          }
+          pageText="Page"
+          pivotDefaults={Object {}}
+          pivotIDKey="_pivotID"
+          pivotValKey="_pivotVal"
+          previousText="Previous"
+          resizable={true}
+          resolveData={[Function]}
+          rowsText="rows"
+          showPageJump={true}
+          showPageSizeOptions={true}
+          showPagination={true}
+          showPaginationBottom={true}
+          showPaginationTop={false}
+          sortable={true}
+          style={Object {}}
+          subRowsKey="_subRows"
+        />
+      </div>
+    </div>
+    <div
+      className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
+    >
+      <div
+        className="position_fixed_right flex"
+      >
+        <div
+          className="flex layout-row margin_bottom"
+        >
+          <div>
+            a
+          </div>
+          <div>
+            b
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
 
 exports[`shallow render 1`] = `
 <div
@@ -350,22 +458,104 @@ exports[`shallow render 1`] = `
     className="flex-100 layout-row layout-align-space-between-start"
   >
     <div
-      className="layout-row flex-80 flex-md-75 flex-sm-100"
+      className="layout-row flex flex-sm-100"
     >
       <div
-        className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap"
+        className="layout-row flex-100 layout-align-start-center layout-wrap"
       >
-        <div
-          className="layout-row flex-95 layout-wrap card_margin_right"
-          style={
+        <ReactTable
+          AggregatedComponent={[Function]}
+          ExpanderComponent={[Function]}
+          FilterComponent={[Function]}
+          LoadingComponent={[Function]}
+          NoDataComponent={[Function]}
+          PadRowComponent={[Function]}
+          PaginationComponent={[Function]}
+          PivotValueComponent={[Function]}
+          ResizerComponent={[Function]}
+          TableComponent={[Function]}
+          TbodyComponent={[Function]}
+          TdComponent={[Function]}
+          TfootComponent={[Function]}
+          ThComponent={[Function]}
+          TheadComponent={[Function]}
+          TrComponent={[Function]}
+          TrGroupComponent={[Function]}
+          aggregatedKey="_aggregated"
+          className="flex-95 height_100"
+          collapseOnDataChange={true}
+          collapseOnPageChange={true}
+          collapseOnSortingChange={true}
+          column={
             Object {
-              "minHeight": "450px",
+              "Aggregated": undefined,
+              "Cell": undefined,
+              "Expander": undefined,
+              "Filter": undefined,
+              "Footer": undefined,
+              "Header": undefined,
+              "Pivot": undefined,
+              "PivotValue": undefined,
+              "aggregate": undefined,
+              "className": "",
+              "filterAll": false,
+              "filterMethod": undefined,
+              "filterable": undefined,
+              "footerClassName": "",
+              "footerStyle": Object {},
+              "getFooterProps": [Function],
+              "getHeaderProps": [Function],
+              "getProps": [Function],
+              "headerClassName": "",
+              "headerStyle": Object {},
+              "minWidth": 100,
+              "resizable": undefined,
+              "show": true,
+              "sortMethod": undefined,
+              "sortable": undefined,
+              "style": Object {},
             }
           }
-        >
-          <AdminHubTile
-            handleClick={[Function]}
-            hub={
+          columns={
+            Array [
+              Object {
+                "Cell": [Function],
+                "Header": "Name",
+                "accessor": [Function],
+                "id": "name",
+              },
+              Object {
+                "Cell": [Function],
+                "Header": "LOCODE",
+                "accessor": [Function],
+                "id": "locode",
+                "maxWidth": 100,
+              },
+              Object {
+                "Cell": [Function],
+                "Filter": [Function],
+                "Header": "MOT",
+                "accessor": [Function],
+                "id": "type",
+                "maxWidth": 100,
+              },
+              Object {
+                "Cell": [Function],
+                "Header": "Country",
+                "accessor": [Function],
+                "id": "country",
+              },
+              Object {
+                "Cell": [Function],
+                "Filter": [Function],
+                "Header": "Local Charges Expiring at",
+                "accessor": [Function],
+                "id": "earliest_expiration",
+              },
+            ]
+          }
+          data={
+            Array [
               Object {
                 "address": Object {
                   "city": "FOO_CITY",
@@ -380,281 +570,104 @@ exports[`shallow render 1`] = `
                   "zip_code": "22456",
                 },
                 "name": "FOO_HUB_NAME",
-              }
-            }
-            key="RANDOM_KEY_1"
-            showIcon={false}
-            showTooltip={true}
-            theme={
+              },
+            ]
+          }
+          defaultExpanded={Object {}}
+          defaultFilterMethod={[Function]}
+          defaultFiltered={Array []}
+          defaultPageSize={15}
+          defaultResized={Array []}
+          defaultSortDesc={false}
+          defaultSortMethod={[Function]}
+          defaultSorted={
+            Array [
               Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
+                "desc": false,
+                "id": "name",
+              },
+            ]
+          }
+          expanderDefaults={
+            Object {
+              "filterable": false,
+              "resizable": false,
+              "sortable": false,
+              "width": 35,
             }
-            tooltip="A glance of all the Hubs that are related to the chosen Hub"
-          />
-        </div>
-        <div
-          className="flex-95 layout-row layout-align-center-center margin_bottom"
-        >
-          <div
-            className="
-                      flex-15 layout-row layout-align-center-center pointy
-                      navigation_button disabled
-                    "
-            onClick={null}
-          >
-            <i
-              className="fa fa-chevron-left"
-            />
-            <p>
-                  
-              Back
-            </p>
-          </div>
-          <p>
-            1
-          </p>
-          <div
-            className="
-                      flex-15 layout-row layout-align-center-center pointy
-                      navigation_button disabled
-                    "
-            onClick={null}
-          >
-            <p>
-              Next
-                  
-            </p>
-            <i
-              className="fa fa-chevron-right"
-            />
-          </div>
-        </div>
+          }
+          filterable={true}
+          freezeWhenExpanded={false}
+          getLoadingProps={[Function]}
+          getNoDataProps={[Function]}
+          getPaginationProps={[Function]}
+          getProps={[Function]}
+          getResizerProps={[Function]}
+          getTableProps={[Function]}
+          getTbodyProps={[Function]}
+          getTdProps={[Function]}
+          getTfootProps={[Function]}
+          getTfootTdProps={[Function]}
+          getTfootTrProps={[Function]}
+          getTheadFilterProps={[Function]}
+          getTheadFilterThProps={[Function]}
+          getTheadFilterTrProps={[Function]}
+          getTheadGroupProps={[Function]}
+          getTheadGroupThProps={[Function]}
+          getTheadGroupTrProps={[Function]}
+          getTheadProps={[Function]}
+          getTheadThProps={[Function]}
+          getTheadTrProps={[Function]}
+          getTrGroupProps={[Function]}
+          getTrProps={[Function]}
+          groupedByPivotKey="_groupedByPivot"
+          indexKey="_index"
+          loading={false}
+          loadingText="Loading..."
+          manual={true}
+          multiSort={true}
+          nestingLevelKey="_nestingLevel"
+          nextText="Next"
+          noDataText="No rows found"
+          ofText="of"
+          onFetchData={[Function]}
+          originalKey="_original"
+          pageSize={15}
+          pageSizeOptions={
+            Array [
+              5,
+              10,
+              20,
+              25,
+              50,
+              100,
+            ]
+          }
+          pageText="Page"
+          pivotDefaults={Object {}}
+          pivotIDKey="_pivotID"
+          pivotValKey="_pivotVal"
+          previousText="Previous"
+          resizable={true}
+          resolveData={[Function]}
+          rowsText="rows"
+          showPageJump={true}
+          showPageSizeOptions={true}
+          showPagination={true}
+          showPaginationBottom={true}
+          showPaginationTop={false}
+          sortable={true}
+          style={Object {}}
+          subRowsKey="_subRows"
+        />
       </div>
     </div>
     <div
-      className="flex-20 flex-md-25 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
+      className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
     >
       <div
         className="position_fixed_right flex"
       >
-        <div
-          className="filter_panel flex layout-row"
-        >
-          <SideOptionsBox
-            content={
-              <div>
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-                >
-                  <input
-                    className="flex-100"
-                    onChange={[Function]}
-                    placeholder="Search..."
-                    type="text"
-                  />
-                </div>
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-start"
-                >
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      Array [
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="ocean"
-                          >
-                            <p>
-                              Port
-                            </p>
-                          </label>
-                          <Checkbox
-                            checked={true}
-                            className=""
-                            disabled={false}
-                            id="ocean"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                      ]
-                    }
-                    contentHeader=""
-                    faClass="fa fa-ship"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Hub Type"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      Array [
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="active"
-                          >
-                            <p>
-                              Active
-                            </p>
-                          </label>
-                          <Checkbox
-                            checked={true}
-                            className=""
-                            disabled={false}
-                            id="active"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="inactive"
-                          >
-                            <p>
-                              Inactive
-                            </p>
-                          </label>
-                          <Checkbox
-                            checked={false}
-                            className=""
-                            disabled={false}
-                            id="inactive"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                      ]
-                    }
-                    contentHeader=""
-                    faClass="fa fa-ship"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Status"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      <div
-                        style={
-                          Object {
-                            "height": "200px",
-                          }
-                        }
-                      >
-                        <NamedSelect
-                          autoload={false}
-                          multi={true}
-                          name="countries"
-                          onChange={[Function]}
-                          options={Array []}
-                          value={Array []}
-                        />
-                      </div>
-                    }
-                    contentHeader=""
-                    faClass="fa fa-flag"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Country"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                </div>
-              </div>
-            }
-            flexOptions="flex"
-            header="Filters"
-          />
-        </div>
         <div
           className="flex layout-row margin_bottom"
         >
@@ -679,22 +692,104 @@ exports[`state.page > 0 1`] = `
     className="flex-100 layout-row layout-align-space-between-start"
   >
     <div
-      className="layout-row flex-80 flex-md-75 flex-sm-100"
+      className="layout-row flex flex-sm-100"
     >
       <div
-        className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap"
+        className="layout-row flex-100 layout-align-start-center layout-wrap"
       >
-        <div
-          className="layout-row flex-95 layout-wrap card_margin_right"
-          style={
+        <ReactTable
+          AggregatedComponent={[Function]}
+          ExpanderComponent={[Function]}
+          FilterComponent={[Function]}
+          LoadingComponent={[Function]}
+          NoDataComponent={[Function]}
+          PadRowComponent={[Function]}
+          PaginationComponent={[Function]}
+          PivotValueComponent={[Function]}
+          ResizerComponent={[Function]}
+          TableComponent={[Function]}
+          TbodyComponent={[Function]}
+          TdComponent={[Function]}
+          TfootComponent={[Function]}
+          ThComponent={[Function]}
+          TheadComponent={[Function]}
+          TrComponent={[Function]}
+          TrGroupComponent={[Function]}
+          aggregatedKey="_aggregated"
+          className="flex-95 height_100"
+          collapseOnDataChange={true}
+          collapseOnPageChange={true}
+          collapseOnSortingChange={true}
+          column={
             Object {
-              "minHeight": "450px",
+              "Aggregated": undefined,
+              "Cell": undefined,
+              "Expander": undefined,
+              "Filter": undefined,
+              "Footer": undefined,
+              "Header": undefined,
+              "Pivot": undefined,
+              "PivotValue": undefined,
+              "aggregate": undefined,
+              "className": "",
+              "filterAll": false,
+              "filterMethod": undefined,
+              "filterable": undefined,
+              "footerClassName": "",
+              "footerStyle": Object {},
+              "getFooterProps": [Function],
+              "getHeaderProps": [Function],
+              "getProps": [Function],
+              "headerClassName": "",
+              "headerStyle": Object {},
+              "minWidth": 100,
+              "resizable": undefined,
+              "show": true,
+              "sortMethod": undefined,
+              "sortable": undefined,
+              "style": Object {},
             }
           }
-        >
-          <AdminHubTile
-            handleClick={[Function]}
-            hub={
+          columns={
+            Array [
+              Object {
+                "Cell": [Function],
+                "Header": "Name",
+                "accessor": [Function],
+                "id": "name",
+              },
+              Object {
+                "Cell": [Function],
+                "Header": "LOCODE",
+                "accessor": [Function],
+                "id": "locode",
+                "maxWidth": 100,
+              },
+              Object {
+                "Cell": [Function],
+                "Filter": [Function],
+                "Header": "MOT",
+                "accessor": [Function],
+                "id": "type",
+                "maxWidth": 100,
+              },
+              Object {
+                "Cell": [Function],
+                "Header": "Country",
+                "accessor": [Function],
+                "id": "country",
+              },
+              Object {
+                "Cell": [Function],
+                "Filter": [Function],
+                "Header": "Local Charges Expiring at",
+                "accessor": [Function],
+                "id": "earliest_expiration",
+              },
+            ]
+          }
+          data={
+            Array [
               Object {
                 "address": Object {
                   "city": "FOO_CITY",
@@ -709,281 +804,104 @@ exports[`state.page > 0 1`] = `
                   "zip_code": "22456",
                 },
                 "name": "FOO_HUB_NAME",
-              }
-            }
-            key="RANDOM_KEY_9"
-            showIcon={false}
-            showTooltip={true}
-            theme={
+              },
+            ]
+          }
+          defaultExpanded={Object {}}
+          defaultFilterMethod={[Function]}
+          defaultFiltered={Array []}
+          defaultPageSize={15}
+          defaultResized={Array []}
+          defaultSortDesc={false}
+          defaultSortMethod={[Function]}
+          defaultSorted={
+            Array [
               Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
+                "desc": false,
+                "id": "name",
+              },
+            ]
+          }
+          expanderDefaults={
+            Object {
+              "filterable": false,
+              "resizable": false,
+              "sortable": false,
+              "width": 35,
             }
-            tooltip="A glance of all the Hubs that are related to the chosen Hub"
-          />
-        </div>
-        <div
-          className="flex-95 layout-row layout-align-center-center margin_bottom"
-        >
-          <div
-            className="
-                      flex-15 layout-row layout-align-center-center pointy
-                      navigation_button 
-                    "
-            onClick={[Function]}
-          >
-            <i
-              className="fa fa-chevron-left"
-            />
-            <p>
-                  
-              Back
-            </p>
-          </div>
-          <p>
-            2
-          </p>
-          <div
-            className="
-                      flex-15 layout-row layout-align-center-center pointy
-                      navigation_button disabled
-                    "
-            onClick={null}
-          >
-            <p>
-              Next
-                  
-            </p>
-            <i
-              className="fa fa-chevron-right"
-            />
-          </div>
-        </div>
+          }
+          filterable={true}
+          freezeWhenExpanded={false}
+          getLoadingProps={[Function]}
+          getNoDataProps={[Function]}
+          getPaginationProps={[Function]}
+          getProps={[Function]}
+          getResizerProps={[Function]}
+          getTableProps={[Function]}
+          getTbodyProps={[Function]}
+          getTdProps={[Function]}
+          getTfootProps={[Function]}
+          getTfootTdProps={[Function]}
+          getTfootTrProps={[Function]}
+          getTheadFilterProps={[Function]}
+          getTheadFilterThProps={[Function]}
+          getTheadFilterTrProps={[Function]}
+          getTheadGroupProps={[Function]}
+          getTheadGroupThProps={[Function]}
+          getTheadGroupTrProps={[Function]}
+          getTheadProps={[Function]}
+          getTheadThProps={[Function]}
+          getTheadTrProps={[Function]}
+          getTrGroupProps={[Function]}
+          getTrProps={[Function]}
+          groupedByPivotKey="_groupedByPivot"
+          indexKey="_index"
+          loading={false}
+          loadingText="Loading..."
+          manual={true}
+          multiSort={true}
+          nestingLevelKey="_nestingLevel"
+          nextText="Next"
+          noDataText="No rows found"
+          ofText="of"
+          onFetchData={[Function]}
+          originalKey="_original"
+          pageSize={15}
+          pageSizeOptions={
+            Array [
+              5,
+              10,
+              20,
+              25,
+              50,
+              100,
+            ]
+          }
+          pageText="Page"
+          pivotDefaults={Object {}}
+          pivotIDKey="_pivotID"
+          pivotValKey="_pivotVal"
+          previousText="Previous"
+          resizable={true}
+          resolveData={[Function]}
+          rowsText="rows"
+          showPageJump={true}
+          showPageSizeOptions={true}
+          showPagination={true}
+          showPaginationBottom={true}
+          showPaginationTop={false}
+          sortable={true}
+          style={Object {}}
+          subRowsKey="_subRows"
+        />
       </div>
     </div>
     <div
-      className="flex-20 flex-md-25 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
+      className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
     >
       <div
         className="position_fixed_right flex"
       >
-        <div
-          className="filter_panel flex layout-row"
-        >
-          <SideOptionsBox
-            content={
-              <div>
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-                >
-                  <input
-                    className="flex-100"
-                    onChange={[Function]}
-                    placeholder="Search..."
-                    type="text"
-                  />
-                </div>
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-start"
-                >
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      Array [
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="ocean"
-                          >
-                            <p>
-                              Port
-                            </p>
-                          </label>
-                          <Checkbox
-                            checked={true}
-                            className=""
-                            disabled={false}
-                            id="ocean"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                      ]
-                    }
-                    contentHeader=""
-                    faClass="fa fa-ship"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Hub Type"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      Array [
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="active"
-                          >
-                            <p>
-                              Active
-                            </p>
-                          </label>
-                          <Checkbox
-                            checked={true}
-                            className=""
-                            disabled={false}
-                            id="active"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="inactive"
-                          >
-                            <p>
-                              Inactive
-                            </p>
-                          </label>
-                          <Checkbox
-                            checked={false}
-                            className=""
-                            disabled={false}
-                            id="inactive"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                      ]
-                    }
-                    contentHeader=""
-                    faClass="fa fa-ship"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Status"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      <div
-                        style={
-                          Object {
-                            "height": "200px",
-                          }
-                        }
-                      >
-                        <NamedSelect
-                          autoload={false}
-                          multi={true}
-                          name="countries"
-                          onChange={[Function]}
-                          options={Array []}
-                          value={Array []}
-                        />
-                      </div>
-                    }
-                    contentHeader=""
-                    faClass="fa fa-flag"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Country"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                </div>
-              </div>
-            }
-            flexOptions="flex"
-            header="Filters"
-          />
-        </div>
         <div
           className="flex layout-row margin_bottom"
         >
@@ -1008,22 +926,104 @@ exports[`state.searchFilters.hubType is truthy 1`] = `
     className="flex-100 layout-row layout-align-space-between-start"
   >
     <div
-      className="layout-row flex-80 flex-md-75 flex-sm-100"
+      className="layout-row flex flex-sm-100"
     >
       <div
-        className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap"
+        className="layout-row flex-100 layout-align-start-center layout-wrap"
       >
-        <div
-          className="layout-row flex-95 layout-wrap card_margin_right"
-          style={
+        <ReactTable
+          AggregatedComponent={[Function]}
+          ExpanderComponent={[Function]}
+          FilterComponent={[Function]}
+          LoadingComponent={[Function]}
+          NoDataComponent={[Function]}
+          PadRowComponent={[Function]}
+          PaginationComponent={[Function]}
+          PivotValueComponent={[Function]}
+          ResizerComponent={[Function]}
+          TableComponent={[Function]}
+          TbodyComponent={[Function]}
+          TdComponent={[Function]}
+          TfootComponent={[Function]}
+          ThComponent={[Function]}
+          TheadComponent={[Function]}
+          TrComponent={[Function]}
+          TrGroupComponent={[Function]}
+          aggregatedKey="_aggregated"
+          className="flex-95 height_100"
+          collapseOnDataChange={true}
+          collapseOnPageChange={true}
+          collapseOnSortingChange={true}
+          column={
             Object {
-              "minHeight": "450px",
+              "Aggregated": undefined,
+              "Cell": undefined,
+              "Expander": undefined,
+              "Filter": undefined,
+              "Footer": undefined,
+              "Header": undefined,
+              "Pivot": undefined,
+              "PivotValue": undefined,
+              "aggregate": undefined,
+              "className": "",
+              "filterAll": false,
+              "filterMethod": undefined,
+              "filterable": undefined,
+              "footerClassName": "",
+              "footerStyle": Object {},
+              "getFooterProps": [Function],
+              "getHeaderProps": [Function],
+              "getProps": [Function],
+              "headerClassName": "",
+              "headerStyle": Object {},
+              "minWidth": 100,
+              "resizable": undefined,
+              "show": true,
+              "sortMethod": undefined,
+              "sortable": undefined,
+              "style": Object {},
             }
           }
-        >
-          <AdminHubTile
-            handleClick={[Function]}
-            hub={
+          columns={
+            Array [
+              Object {
+                "Cell": [Function],
+                "Header": "Name",
+                "accessor": [Function],
+                "id": "name",
+              },
+              Object {
+                "Cell": [Function],
+                "Header": "LOCODE",
+                "accessor": [Function],
+                "id": "locode",
+                "maxWidth": 100,
+              },
+              Object {
+                "Cell": [Function],
+                "Filter": [Function],
+                "Header": "MOT",
+                "accessor": [Function],
+                "id": "type",
+                "maxWidth": 100,
+              },
+              Object {
+                "Cell": [Function],
+                "Header": "Country",
+                "accessor": [Function],
+                "id": "country",
+              },
+              Object {
+                "Cell": [Function],
+                "Filter": [Function],
+                "Header": "Local Charges Expiring at",
+                "accessor": [Function],
+                "id": "earliest_expiration",
+              },
+            ]
+          }
+          data={
+            Array [
               Object {
                 "address": Object {
                   "city": "FOO_CITY",
@@ -1038,314 +1038,104 @@ exports[`state.searchFilters.hubType is truthy 1`] = `
                   "zip_code": "22456",
                 },
                 "name": "FOO_HUB_NAME",
-              }
-            }
-            key="RANDOM_KEY_6"
-            showIcon={false}
-            showTooltip={true}
-            theme={
+              },
+            ]
+          }
+          defaultExpanded={Object {}}
+          defaultFilterMethod={[Function]}
+          defaultFiltered={Array []}
+          defaultPageSize={15}
+          defaultResized={Array []}
+          defaultSortDesc={false}
+          defaultSortMethod={[Function]}
+          defaultSorted={
+            Array [
               Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
+                "desc": false,
+                "id": "name",
+              },
+            ]
+          }
+          expanderDefaults={
+            Object {
+              "filterable": false,
+              "resizable": false,
+              "sortable": false,
+              "width": 35,
             }
-            tooltip="A glance of all the Hubs that are related to the chosen Hub"
-          />
-        </div>
-        <div
-          className="flex-95 layout-row layout-align-center-center margin_bottom"
-        >
-          <div
-            className="
-                      flex-15 layout-row layout-align-center-center pointy
-                      navigation_button disabled
-                    "
-            onClick={null}
-          >
-            <i
-              className="fa fa-chevron-left"
-            />
-            <p>
-                  
-              Back
-            </p>
-          </div>
-          <p>
-            1
-          </p>
-          <div
-            className="
-                      flex-15 layout-row layout-align-center-center pointy
-                      navigation_button disabled
-                    "
-            onClick={null}
-          >
-            <p>
-              Next
-                  
-            </p>
-            <i
-              className="fa fa-chevron-right"
-            />
-          </div>
-        </div>
+          }
+          filterable={true}
+          freezeWhenExpanded={false}
+          getLoadingProps={[Function]}
+          getNoDataProps={[Function]}
+          getPaginationProps={[Function]}
+          getProps={[Function]}
+          getResizerProps={[Function]}
+          getTableProps={[Function]}
+          getTbodyProps={[Function]}
+          getTdProps={[Function]}
+          getTfootProps={[Function]}
+          getTfootTdProps={[Function]}
+          getTfootTrProps={[Function]}
+          getTheadFilterProps={[Function]}
+          getTheadFilterThProps={[Function]}
+          getTheadFilterTrProps={[Function]}
+          getTheadGroupProps={[Function]}
+          getTheadGroupThProps={[Function]}
+          getTheadGroupTrProps={[Function]}
+          getTheadProps={[Function]}
+          getTheadThProps={[Function]}
+          getTheadTrProps={[Function]}
+          getTrGroupProps={[Function]}
+          getTrProps={[Function]}
+          groupedByPivotKey="_groupedByPivot"
+          indexKey="_index"
+          loading={false}
+          loadingText="Loading..."
+          manual={true}
+          multiSort={true}
+          nestingLevelKey="_nestingLevel"
+          nextText="Next"
+          noDataText="No rows found"
+          ofText="of"
+          onFetchData={[Function]}
+          originalKey="_original"
+          pageSize={15}
+          pageSizeOptions={
+            Array [
+              5,
+              10,
+              20,
+              25,
+              50,
+              100,
+            ]
+          }
+          pageText="Page"
+          pivotDefaults={Object {}}
+          pivotIDKey="_pivotID"
+          pivotValKey="_pivotVal"
+          previousText="Previous"
+          resizable={true}
+          resolveData={[Function]}
+          rowsText="rows"
+          showPageJump={true}
+          showPageSizeOptions={true}
+          showPagination={true}
+          showPaginationBottom={true}
+          showPaginationTop={false}
+          sortable={true}
+          style={Object {}}
+          subRowsKey="_subRows"
+        />
       </div>
     </div>
     <div
-      className="flex-20 flex-md-25 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
+      className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
     >
       <div
         className="position_fixed_right flex"
       >
-        <div
-          className="filter_panel flex layout-row"
-        >
-          <SideOptionsBox
-            content={
-              <div>
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-                >
-                  <input
-                    className="flex-100"
-                    onChange={[Function]}
-                    placeholder="Search..."
-                    type="text"
-                  />
-                </div>
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-start"
-                >
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      Array [
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="foo"
-                          >
-                            <p />
-                          </label>
-                          <Checkbox
-                            checked={
-                              Object {
-                                "a": 1,
-                              }
-                            }
-                            className=""
-                            disabled={false}
-                            id="foo"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="bar"
-                          >
-                            <p />
-                          </label>
-                          <Checkbox
-                            checked={
-                              Object {
-                                "b": 2,
-                              }
-                            }
-                            className=""
-                            disabled={false}
-                            id="bar"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                      ]
-                    }
-                    contentHeader=""
-                    faClass="fa fa-ship"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Hub Type"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      Array [
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="active"
-                          >
-                            <p>
-                              Active
-                            </p>
-                          </label>
-                          <Checkbox
-                            checked={true}
-                            className=""
-                            disabled={false}
-                            id="active"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                        <div
-                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                        >
-                          <label
-                            className="pointy"
-                            htmlFor="inactive"
-                          >
-                            <p>
-                              Inactive
-                            </p>
-                          </label>
-                          <Checkbox
-                            checked={false}
-                            className=""
-                            disabled={false}
-                            id="inactive"
-                            onChange={[Function]}
-                            onClick={null}
-                            size={null}
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "primary": "#333",
-                                  "secondary": "#fafafa",
-                                },
-                              }
-                            }
-                          />
-                        </div>,
-                      ]
-                    }
-                    contentHeader=""
-                    faClass="fa fa-ship"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Status"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                  <CollapsingBar
-                    collapsed={null}
-                    content={
-                      <div
-                        style={
-                          Object {
-                            "height": "200px",
-                          }
-                        }
-                      >
-                        <NamedSelect
-                          autoload={false}
-                          multi={true}
-                          name="countries"
-                          onChange={[Function]}
-                          options={Array []}
-                          value={Array []}
-                        />
-                      </div>
-                    }
-                    contentHeader=""
-                    faClass="fa fa-flag"
-                    handleCollapser={null}
-                    headerWrapClasses=""
-                    hideIcon={false}
-                    mainWrapperStyle={Object {}}
-                    minHeight=""
-                    overflow={false}
-                    parentClass=""
-                    showArrow={true}
-                    showArrowSpacer={false}
-                    startCollapsed={true}
-                    text="Country"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                    wrapperContentClasses=""
-                  />
-                </div>
-              </div>
-            }
-            flexOptions="flex"
-            header="Filters"
-          />
-        </div>
         <div
           className="flex layout-row margin_bottom"
         >

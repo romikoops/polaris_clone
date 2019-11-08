@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { get } from 'lodash'
 import { v4 } from 'uuid'
@@ -169,7 +168,6 @@ class SideNav extends Component {
     } else {
       links = this.userLinks
     }
-    
 
     const superAdminLink = {
       key: 'super-admin',
@@ -212,7 +210,7 @@ class SideNav extends Component {
     const { scope } = tenant
     switch (target) {
       case 'hubs':
-        adminDispatch.getHubs(true)
+        adminDispatch.goTo('/admin/hubs')
         break
       case 'serviceCharges':
         adminDispatch.getServiceCharges(true)
@@ -387,34 +385,6 @@ class SideNav extends Component {
       </div>
     )
   }
-}
-
-SideNav.propTypes = {
-  theme: PropTypes.theme,
-  tenant: PropTypes.tenant,
-  t: PropTypes.func.isRequired,
-  adminDispatch: PropTypes.shape({
-    getHubs: PropTypes.func,
-    getServiceCharges: PropTypes.func,
-    getPricings: PropTypes.func,
-    getSchedules: PropTypes.func,
-    getTrucking: PropTypes.func,
-    getShipments: PropTypes.func,
-    getClients: PropTypes.func,
-    getDashboard: PropTypes.func,
-    getRoutes: PropTypes.func,
-    goTo: PropTypes.func
-  }).isRequired,
-  user: PropTypes.user.isRequired,
-  userDispatch: PropTypes.shape({
-    getPricings: PropTypes.func,
-    getSchedules: PropTypes.func,
-    goTo: PropTypes.func,
-    getDashboard: PropTypes.func,
-    getLocations: PropTypes.func
-  }).isRequired,
-  expand: PropTypes.bool,
-  currentUrl: PropTypes.string
 }
 
 SideNav.defaultProps = {
