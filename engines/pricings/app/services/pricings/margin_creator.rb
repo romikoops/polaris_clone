@@ -101,6 +101,7 @@ module Pricings
                   origin_hub_id: hub_id,
                   destination_hub_id: @counterpart_hub_id,
                   tenant_vehicle_id: tv_id,
+                  cargo_class: cargo_class,
                   margin_type: :export_margin
                 }
               end
@@ -158,6 +159,7 @@ module Pricings
                   origin_hub_id: hub_id,
                   destination_hub_id: @counterpart_hub_id,
                   tenant_vehicle_id: tv_id,
+                  cargo_class: cargo_class,
                   margin_type: :freight_margin
                 }
               end

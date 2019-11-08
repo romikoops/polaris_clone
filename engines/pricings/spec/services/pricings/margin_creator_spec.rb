@@ -91,7 +91,7 @@ RSpec.describe Pricings::MarginCreator do
           fineFeeValues: [],
           effective_date: "2019-06-21T10:21:24.650Z",
           expiration_date: "2020-06-05T10:00:00.000Z"}
-       
+
         new_margins = described_class.new(args).perform
         expect(new_margins.length).to eq(1)
         expect(new_margins.first.value).to eq(0.10)
@@ -145,7 +145,7 @@ RSpec.describe Pricings::MarginCreator do
           operand: {"label": "percentage", "value": "%"},
           attached_to: "itinerary",
           marginValue: "0",
-          fineFeeValues: 
+          fineFeeValues:
              {"BAS - Basic Ocean Freight": {"operand": {"label": "percentage", "value": "%"}, "value": "10"}, "HAS - Heavy Weight Surcharge": {"operand": {"label": "addition", "value": "+"}, "value": "10"}},
           effective_date: "2019-06-21T10:21:24.650Z",
           expiration_date: "2020-06-05T10:00:00.000Z"}
@@ -193,6 +193,37 @@ RSpec.describe Pricings::MarginCreator do
         expect(new_margins.first.cargo_class).to eq('All')
         expect(new_margins.first.itinerary_id).to eq(nil)
         expect(new_margins.first.destination_hub_id).to eq(nil)
+      end
+      it 'creates a margin for multiple hubs, all service levels and multiple cargo classes' do
+        hub_ids = Legacy::Hub.all.limit(2).ids
+        args = {
+          itinerary_ids: [],
+          hub_ids: hub_ids,
+          cargo_classes: ['fcl_20', 'fcl_40', 'fcl_40_hq'],
+          tenant_vehicle_ids: [],
+          pricing_id: nil,
+          selectedHubDirection: nil,
+          marginType: "freight",
+          tenant_id: tenant.id,
+          groupId: group_1.id,
+          directions: ['export'],
+          operand: {"label": "percentage", "value": "%"},
+          attached_to: "hub",
+          marginValue: "10",
+          fineFeeValues: [],
+          effective_date: "2019-06-21T10:21:24.650Z",
+          expiration_date: "2020-06-05T10:00:00.000Z"
+        }
+        new_margins = described_class.new(args).perform
+        expect(new_margins.length).to eq(6)
+        expect(new_margins.map(&:value).uniq).to eq([0.10])
+        expect(new_margins.map(&:operator).uniq).to eq(['%'])
+        expect(new_margins.map(&:applicable_type).uniq).to eq(['Tenants::Group'])
+        expect(new_margins.map(&:tenant_vehicle_id).uniq).to eq([nil])
+        expect(new_margins.map(&:origin_hub_id).uniq).to eq(hub_ids)
+        expect(new_margins.map(&:cargo_class).uniq).to eq(["fcl_20", "fcl_40", "fcl_40_hq"])
+        expect(new_margins.map(&:itinerary_id).uniq).to eq([nil])
+        expect(new_margins.map(&:destination_hub_id).uniq).to eq([nil])
       end
     end
   end
