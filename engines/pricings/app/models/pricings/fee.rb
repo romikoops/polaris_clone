@@ -13,7 +13,7 @@ module Pricings
 
     def as_json(options = {})
       new_options = options.reverse_merge(
-        methods: fee_code, only: []
+        methods: fee_code, only: [], except: [:metadata]
       )
       super(new_options)
     end
@@ -82,4 +82,5 @@ end
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  sandbox_id         :uuid
+#  metadata           :jsonb
 #

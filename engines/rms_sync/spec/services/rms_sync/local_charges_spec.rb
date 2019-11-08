@@ -79,7 +79,7 @@ RSpec.describe RmsSync::LocalCharges do
                                    'MSC',
                                    'SOLAS',
                                    'SOLAS',
-                                   nil,
+                                   'truck',
                                    'lcl',
                                    'export',
                                    'EUR',

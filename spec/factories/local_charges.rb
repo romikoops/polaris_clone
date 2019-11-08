@@ -32,4 +32,5 @@ end
 #  sandbox_id         :uuid
 #  group_id           :uuid
 #  internal           :boolean          default(FALSE)
+#  metadata           :jsonb
 #

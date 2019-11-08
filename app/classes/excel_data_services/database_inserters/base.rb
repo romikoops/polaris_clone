@@ -27,6 +27,16 @@ module ExcelDataServices
         raise NotImplementedError, "This method must be implemented in #{self.class.name}."
       end
 
+      def metadata(row:)
+        document = options[:document]
+        {
+          row_number: row[:row_nr],
+          sheet_name: row[:sheet_name],
+          file_name: document&.file&.filename&.to_s,
+          document_id: document&.id
+        }
+      end
+
       private
 
       attr_reader :tenant, :data, :klass_identifier, :options, :stats, :scope, :tenants_tenant

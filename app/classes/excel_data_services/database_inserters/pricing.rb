@@ -118,6 +118,7 @@ module ExcelDataServices
           pricings_for_new_pricing_details = act_on_overlapping_pricings(pricings_with_actions, notes)
 
           new_pricing_detail_params_arr = build_pricing_detail_params_for_pricing(group_of_row_data)
+
           new_pricing_detail_params_arr.each do |pricing_detail_params|
             range_data = pricing_detail_params.delete(:range)
 
@@ -220,6 +221,7 @@ module ExcelDataServices
             pricing_detail_params[:rate_basis] = Pricings::RateBasis.create_from_external_key(row.rate_basis)
             pricing_detail_params[:hw_rate_basis] = Pricings::RateBasis.create_from_external_key(row.hw_rate_basis)
             pricing_detail_params[:charge_category] = charge_category
+            pricing_detail_params[:metadata] = metadata(row: row_data)
           else
             pricing_detail_params[:rate_basis] = row.rate_basis
             pricing_detail_params[:hw_rate_basis] = row.hw_rate_basis

@@ -102,4 +102,5 @@ end
 #  parent_id           :uuid
 #  group_id            :uuid
 #  sandbox_id          :uuid
+#  metadata            :jsonb
 #

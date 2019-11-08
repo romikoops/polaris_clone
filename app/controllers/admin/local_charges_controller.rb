@@ -65,7 +65,7 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
   end
 
   def upload
-    Document.create!(
+    document = Document.create!(
       text: "group_id:#{upload_params[:group_id] || 'all'}",
       doc_type: 'local_charges',
       sandbox: @sandbox,
@@ -76,7 +76,12 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
     file = upload_params[:file].tempfile
     options = { tenant: current_tenant,
                 file_or_path: file,
-                options: { sandbox: @sandbox, user: current_user, group_id: upload_params[:group_id] } }
+                options: {
+                  sandbox: @sandbox,
+                  user: current_user,
+                  group_id: upload_params[:group_id],
+                  document: document
+                } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
@@ -121,19 +126,21 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
     params.require(:options).permit(:mot, :group_id)
   end
 
-  def handle_search # rubocop:disable Metrics/CyclomaticComplexity
+  def handle_search
     query = LocalCharge.all
     query = query.where(group_id: search_params[:group_id]) if search_params[:group_id]
     query = query.search(search_params[:query]) if search_params[:query]
-    query = query.joins(:hub).order(hub: { name: search_params[:name_desc] == 'true' ? :desc : :asc} ) if search_params[:name_desc]
+    if search_params[:name_desc]
+      query = query.joins(:hub).order(hub: { name: search_params[:name_desc] == 'true' ? :desc : :asc })
+    end
     query
   end
 
   def search_params
     params.permit(:group_id,
-      :page_size,
-      :per_page,
-      :page)
+                  :page_size,
+                  :per_page,
+                  :page)
   end
 
   def pagination_options

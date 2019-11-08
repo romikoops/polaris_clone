@@ -53,7 +53,7 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def overwrite_zonal_trucking_by_hub
     if upload_params[:file]
-      Document.create!(
+      document = Document.create!(
         text: '',
         doc_type: 'truckings',
         sandbox: @sandbox,
@@ -66,7 +66,8 @@ class Admin::TruckingController < Admin::AdminBaseController
         hub_id: upload_params[:id],
         user: current_user,
         group: upload_params[:group] == 'all' ? nil : upload_params[:group],
-        sandbox: @sandbox
+        sandbox: @sandbox,
+        document: document
       }
 
       resp = Trucking::Excel::Inserter.new(args).perform

@@ -3,11 +3,12 @@
 module Trucking
   module Excel
     class Base
-      attr_reader :results, :stats, :hub, :tenant, :xlsx, :hub_id
+      attr_reader :results, :stats, :hub, :tenant, :xlsx, :hub_id, :document
 
       def initialize(args)
         params = args[:params]
         @sandbox = args[:sandbox]
+        @document = args[:document]
         @stats = _stats
         @results = _results
         if args[:hub_id]

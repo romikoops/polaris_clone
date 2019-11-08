@@ -136,7 +136,7 @@ module Trucking
             single_ident_values_and_country = all_ident_values_and_countries[row_zone_name].compact
             next if single_ident_values_and_country.nil? || single_ident_values_and_country.first.nil?
 
-            trucking = create_trucking(meta)
+            trucking = create_trucking(meta: meta, sheet_name: sheet, row_number: line)
             stats[:trucking_rates][:number_created] += 1
 
             modifier_position_objs.each do |mod_key, mod_indexes|
@@ -521,7 +521,7 @@ module Trucking
         modifier_position_objs
       end
 
-      def create_trucking(meta) # rubocop:disable Metrics/AbcSize
+      def create_trucking(meta:, sheet_name:, row_number:) # rubocop:disable Metrics/AbcSize
         user_id = meta[:user_email] ? User.find_by(tenant_id: @tenant.id, email: meta[:user_email])&.id : nil
         {
           load_meterage: {
@@ -545,7 +545,17 @@ module Trucking
           load_type: meta[:load_type] == 'container' ? 'container' : 'cargo_item',
           courier_id: find_or_create_courier(meta[:courier]).id,
           truck_type: !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type],
-          sandbox: @sandbox
+          sandbox: @sandbox,
+          metadata: metadata(row_number: row_number, sheet_name: sheet_name)
+        }
+      end
+
+      def metadata(row_number:, sheet_name:)
+        {
+          row_number: row_number,
+          sheet_name: sheet_name,
+          file_name: document&.file&.filename&.to_s,
+          document_id: document&.id
         }
       end
 

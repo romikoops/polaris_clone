@@ -167,7 +167,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def upload
-    Document.create!(
+    document = Document.create!(
       text: "group_id:#{upload_params[:group_id] || 'all'}",
       doc_type: 'pricings',
       sandbox: @sandbox,
@@ -178,7 +178,12 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     file = upload_params[:file].tempfile
     options = { tenant: current_tenant,
                 file_or_path: file,
-                options: { sandbox: @sandbox, user: current_user, group_id: upload_params[:group_id] } }
+                options: {
+                  sandbox: @sandbox,
+                  user: current_user,
+                  group_id: upload_params[:group_id],
+                  document: document
+                } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform

@@ -601,6 +601,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_171324) do
     t.integer "hub_id"
     t.boolean "internal", default: false
     t.string "load_type"
+    t.jsonb "metadata", default: {}
     t.string "mode_of_transport"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
@@ -949,6 +950,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_171324) do
     t.uuid "hw_rate_basis_id"
     t.decimal "hw_threshold"
     t.integer "legacy_id"
+    t.jsonb "metadata", default: {}
     t.decimal "min"
     t.uuid "pricing_id"
     t.jsonb "range", default: []
@@ -1676,6 +1678,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_171324) do
     t.jsonb "load_meterage"
     t.string "load_type"
     t.uuid "location_id"
+    t.jsonb "metadata", default: {}
     t.string "modifier"
     t.uuid "parent_id"
     t.uuid "rate_id"
