@@ -4,10 +4,9 @@ module ExcelTool
   class ScheduleOverwriter < ExcelTool::BaseTool
     attr_reader :first_sheet, :mot, :user
     def post_initialize(args)
-      params = args[:params]
       @mot = args[:mot]
       @first_sheet = xlsx.sheet(xlsx.sheets.first)
-      @user = args[:_user]
+      @user = args[:user]
       @sandbox = args[:sandbox]
     end
 
@@ -20,16 +19,12 @@ module ExcelTool
     def overwrite_all_schedules
       schedules.each do |row|
         itinerary = find_itinerary(row)
-
         next unless itinerary
 
-        if itinerary
-          update_results_and_stats_hashes(row, itinerary)
-        else
-          raise 'Route cannot be found!'
-        end
+        update_results_and_stats_hashes(row, itinerary)
       end
-      { results: results, stats: stats }
+
+      stats
     end
 
     def create_tenant_vehicle(row, itinerary)
@@ -45,7 +40,6 @@ module ExcelTool
 
     def _stats
       {
-        type: 'schedules',
         layovers: {
           number_updated: 0,
           number_created: 0
@@ -80,10 +74,8 @@ module ExcelTool
     end
 
     def find_itinerary(row)
-      itinerary_from = row[:from].split(' ').map(&:capitalize).join(' ')
-      itinerary_to = row[:to].split(' ').map(&:capitalize).join(' ')
       Legacy::Itinerary.find_by(
-        name: "#{itinerary_from} - #{itinerary_to}",
+        name: "#{row[:from]} - #{row[:to]}",
         mode_of_transport: mot,
         tenant_id: @user.tenant_id,
         sandbox: @sandbox

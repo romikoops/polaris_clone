@@ -4,7 +4,7 @@ module ExcelTool
   class BaseTool
     attr_reader :results, :stats, :hub, :tenant, :xlsx, :hub_id
     include AwsConfig
-    def initialize(args = { _user: current_user })
+    def initialize(args = { user: current_user })
       params = args[:params].with_indifferent_access
       @stats = _stats
       @results = _results
