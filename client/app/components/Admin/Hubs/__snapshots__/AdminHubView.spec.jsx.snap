@@ -988,8 +988,9 @@ exports[`hubData.routes is truthy 1`] = `
                   <i
                     className="fa fa-chevron-left"
                   />
-                  <p>
-                        
+                  <p
+                    className="pager_button"
+                  >
                     Back
                   </p>
                 </div>
@@ -1003,9 +1004,10 @@ exports[`hubData.routes is truthy 1`] = `
               "
                   onClick={null}
                 >
-                  <p>
+                  <p
+                    className="pager_button"
+                  >
                     Next
-                        
                   </p>
                   <i
                     className="fa fa-chevron-right"

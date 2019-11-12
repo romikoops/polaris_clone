@@ -66,7 +66,7 @@ class MandatoryChargeBox extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : 'black'
-    const editHasOccured = mandatoryCharge.import_charges !== this.props.mandatoryCharge.import_charges ||
+    const editHasOccureed = mandatoryCharge.import_charges !== this.props.mandatoryCharge.import_charges ||
     mandatoryCharge.export_charges !== this.props.mandatoryCharge.export_charges
 
     return (
@@ -95,7 +95,7 @@ class MandatoryChargeBox extends Component {
           </div>
         </div>
         <div className="flex-100 layout-row layout-align-end-center">
-          {editHasOccured ? (
+          {editHasOccureed ? (
             <div className={`${styles.save_icon_btn} flex-none layout-row layout-align-end-center pointy`} onClick={() => this.confirmSave()}>
               <p className="flex-none">{t('admin:save')}</p>
               <div className={`${styles.save_icon_btn} flex-none layout-row pointy`}>

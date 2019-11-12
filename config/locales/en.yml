@@ -97,7 +97,7 @@ en:
     missing_trucking_data:
       http_code: 400
       code: 1014
-      message: "A problem occured calculating trucking for this shipment"
+      message: "A problem occurred calculating trucking for this shipment"
     load_meterage_exceeded:
       http_code: 400
       code: 1015
@@ -122,7 +122,7 @@ en:
       http_code: 409
       code: 1020
       message: "The subdomain (slug) has already been taken"
-    
+
 
     # Authentication Errors
 
@@ -134,7 +134,7 @@ en:
       http_code: 401
       code: 1051
       message: "Invalid email or password."
-    incorrect_token: 
+    incorrect_token:
       http_code: 401
       code: 1052
       message: "Wrong confirmation token provided, please retry"

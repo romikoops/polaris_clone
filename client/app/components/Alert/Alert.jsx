@@ -33,7 +33,7 @@ class Alert extends Component {
 
   getText () {
     const { message, t } = this.props
-    if (typeof message.text === 'object') return t('errors:errorOccured')
+    if (typeof message.text === 'object') return t('errors:errorOccurred')
 
     return message.text
   }

@@ -29,7 +29,7 @@ test('state.mandatoryChange.id is truthy', () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-test('editHasOccured is true', () => {
+test('editHasOccurred is true', () => {
   const wrapper = shallow(<MandatoryChargeBox {...propsBase} />)
 
   wrapper.setState({

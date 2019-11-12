@@ -1066,7 +1066,7 @@
     "emailTaken": "Email has already been taken",
     "adminCreateShipmentAttempt": "Support for booking a shipment with an admin account is currently in development. Please login with a client or agent account.",
     "mustMatchPassword": "Must match password",
-    "errorOccured": "An Error Occured",
+    "errorOccurred": "An Error Occurred",
     "ohNo": "Oh no!",
     "somethingWrong": "Something has gone wrong! A message has been sent to the support team and will be addressed shortly!",
     "pleaseRetry": "Please retry and if this error keeps happening please contact your store representative.",
