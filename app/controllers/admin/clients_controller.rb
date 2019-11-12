@@ -39,9 +39,10 @@ class Admin::ClientsController < Admin::AdminBaseController
       last_name: json['lastName'],
       password: json['password'],
       password_confirmation: json['password_confirmation'],
-      sandbox: @sandbox
+      sandbox: @sandbox,
+      tenant_id: current_tenant.id
     }
-    new_user = current_user.tenant.users.create!(user_data)
+    new_user = User.create(user_data)
 
     response_handler(new_user.token_validation_response)
   end

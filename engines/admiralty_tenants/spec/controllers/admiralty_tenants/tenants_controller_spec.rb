@@ -29,14 +29,14 @@ module AdmiraltyTenants
     let(:tenant) { tenants.sample }
 
     let!(:max_bundle) do
-        Legacy::MaxDimensionsBundle.create(mode_of_transport: 'general',
-                                           tenant_id: tenant.legacy_id,
-                                           aggregate: false,
-                                           dimension_x: 0.59e3,
-                                           dimension_y: 0.2342e3,
-                                           dimension_z: 0.228e3,
-                                           payload_in_kg: 0.2177e5,
-                                           chargeable_weight: 0.2177e5)
+      Legacy::MaxDimensionsBundle.create(mode_of_transport: 'general',
+                                         tenant_id: tenant.legacy_id,
+                                         aggregate: false,
+                                         dimension_x: 0.59e3,
+                                         dimension_y: 0.2342e3,
+                                         dimension_z: 0.228e3,
+                                         payload_in_kg: 0.2177e5,
+                                         chargeable_weight: 0.2177e5)
     end
 
     describe 'GET #index' do
@@ -45,6 +45,15 @@ module AdmiraltyTenants
 
         expect(response).to be_successful
         expect(response.body).to match(/<td>#{tenants.sample.slug}/im)
+      end
+    end
+
+    describe 'GET #new' do
+      it 'renders page' do
+        get :new
+
+        expect(response).to be_successful
+        expect(response.body).to match(/class="new_tenant"/im)
       end
     end
 
@@ -75,6 +84,37 @@ module AdmiraltyTenants
         expect(response).to redirect_to("/tenants/#{tenant.id}")
         expect(::Tenants::Tenant.find(tenant.id).legacy.tenants_scope).to eq('foo' => true)
         expect(::Legacy::MaxDimensionsBundle.find(max_bundle.id).dimension_x).to eq(10)
+      end
+    end
+
+    describe 'POST #create' do
+      let(:tenant_params) {
+        {
+          name: 'Test',
+          slug: 'tester',
+          tenants_theme: {
+            primary_color: '#000001',
+            secondary_color: '#000002',
+            bright_primary_color: '#000003',
+            bright_secondary_color: '#000004'
+          },
+          scope: {
+            base_pricing: true
+          }.to_json.to_s
+        }
+      }
+
+      it 'renders page' do
+        post :create, params: { tenant: tenant_params }
+        expect(::Tenants::Tenant.find_by(slug: 'tester').legacy.tenants_scope).to eq('base_pricing' => true)
+      end
+
+      it 'fails to create tenant' do
+        FactoryBot.create(:tenants_tenant, slug: 'tester')
+        post :create, params: { tenant: tenant_params }
+
+        expect(response).to be_successful
+        expect(response.body).to match(/Slug has already been taken/im)
       end
     end
   end

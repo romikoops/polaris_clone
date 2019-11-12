@@ -8,14 +8,15 @@ class NewUserMailer < ApplicationMailer
   def new_user_email(user_id:) # rubocop:disable Metrics/AbcSize
     @user = User.find(user_id)
     @tenant = Tenant.find(@user.tenant_id)
-    @theme = @tenant.theme
+    @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
+    @theme =::Tenants::ThemeDecorator.new(@tenants_tenant.theme).legacy_format
     @scope = ::Tenants::ScopeService.new(target: @user).fetch
 
     @mot_icon = URI.open(
       'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png'
     ).read
 
-    attachments.inline['logo.png'] = URI.try(:open, @tenant.theme['emailLogo']).try(:read)
+    attachments.inline['logo.png'] = @tenants_tenant.theme.email_logo.attached? ? @tenants_tenant.theme.email_logo&.download : ''
     attachments.inline['icon.png'] = @mot_icon
     email = @tenant.emails.dig('sales', 'general')
 

@@ -9,8 +9,6 @@ class Tenant < Legacy::Tenant
   has_many :users, dependent: :destroy
   has_many :tenant_vehicles, dependent: :destroy
   has_many :vehicles, through: :tenant_vehicles, dependent: :destroy
-  has_many :tenant_cargo_item_types, dependent: :destroy
-  has_many :cargo_item_types, through: :tenant_cargo_item_types, dependent: :destroy
   has_many :itineraries, dependent: :destroy
   has_many :stops, through: :itineraries, dependent: :destroy
   has_many :trips, through: :itineraries, dependent: :destroy
@@ -90,22 +88,10 @@ class Tenant < Legacy::Tenant
     @tenants_scope ||= Tenants::ScopeService.new(tenant: Tenants::Tenant.find_by(legacy_id: id)).fetch
   end
 
-  def quotation_tool?
-    tenants_scope['open_quotation_tool'] || tenants_scope['closed_quotation_tool']
-  end
-
   def mode_of_transport_in_scope?(mode_of_transport, load_type = nil)
     return tenants_scope.dig('modes_of_transport', mode_of_transport.to_s).values.any? if load_type.nil?
 
     tenants_scope.dig('modes_of_transport', mode_of_transport.to_s, load_type.to_s)
-  end
-
-  def max_dimensions
-    max_dimensions_bundles.unit.to_max_dimensions_hash
-  end
-
-  def max_aggregate_dimensions
-    max_dimensions_bundles.aggregate.to_max_dimensions_hash
   end
 
   private

@@ -32,9 +32,8 @@ end
 #
 # Table name: cargo_cargos
 #
-#  id           :uuid             not null, primary key
-#  tenant_id    :uuid
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  quotation_id :uuid
+#  id         :uuid             not null, primary key
+#  tenant_id  :uuid
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #

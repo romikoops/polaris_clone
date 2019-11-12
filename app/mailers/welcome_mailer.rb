@@ -8,11 +8,13 @@ class WelcomeMailer < ApplicationMailer
     return unless Content.exists?(tenant_id: user.tenant_id, component: 'WelcomeMail')
 
     @user = user
-    @tenant = @user.tenant
+    @tenant = Tenant.find(user.tenant_id)
     @theme = @tenant.theme
     @content = Content.get_component('WelcomeMail', @tenant.id)
     @scope = ::Tenants::ScopeService.new(target: @user).fetch
-    attachments.inline['logo.png'] = URI.try(:open, @theme['emailLogo']).try(:read)
+    @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
+    @theme = ::Tenants::ThemeDecorator.new(@tenants_tenant.theme).legacy_format
+    attachments.inline['logo.png'] = @tenants_tenant.theme.email_logo.attached? ? tenants_tenant.theme.email_logo&.download : ''
 
     attachments.inline['ngl_welcome_image.jpg'] = URI.open(
       'https://assets.itsmycargo.com/assets/tenants/normanglobal/ngl_welcome_image.jpg'

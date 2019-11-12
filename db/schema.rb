@@ -1481,6 +1481,18 @@ ActiveRecord::Schema.define(version: 2019_11_07_171324) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "tenants_themes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "bright_primary_color"
+    t.string "bright_secondary_color"
+    t.datetime "created_at", null: false
+    t.string "primary_color"
+    t.string "secondary_color"
+    t.uuid "tenant_id"
+    t.datetime "updated_at", null: false
+    t.string "welcome_text"
+    t.index ["tenant_id"], name: "index_tenants_themes_on_tenant_id"
+  end
+
   create_table "tenants_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "access_count_to_reset_password_page", default: 0
     t.string "activation_state"
