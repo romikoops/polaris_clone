@@ -18,9 +18,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'core'
 
-  s.add_dependency 'devise_token_auth', '~> 0.1.43'
+  s.add_dependency 'paranoia'
   s.add_dependency 'geocoder'
-  s.add_dependency 'paranoia', '~> 2.2'
   s.add_dependency 'pg_search', '~> 2.3.0'
 
   s.add_development_dependency 'factory_bot_rails'

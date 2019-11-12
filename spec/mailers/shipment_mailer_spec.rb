@@ -3,10 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ShipmentMailer, type: :mailer do
-  let(:tenant) { create(:tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:tenants_theme) { FactoryBot.create(:tenants_theme, tenant: tenants_tenant) }
-  let(:user) { create(:user, tenant: tenant) }
+  let(:user) { create(:user) }
   let(:shipment) { create(:shipment, user: user, with_breakdown: true) }
 
   before do

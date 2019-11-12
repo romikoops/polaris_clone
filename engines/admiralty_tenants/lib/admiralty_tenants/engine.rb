@@ -4,7 +4,6 @@ require 'jsoneditor-rails'
 
 require 'admiralty_assets'
 require 'admiralty_auth'
-require 'draper'
 require 'core'
 require 'legacy'
 require 'tenants'

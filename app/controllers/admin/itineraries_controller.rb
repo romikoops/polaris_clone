@@ -4,7 +4,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   include ItineraryTools
 
   def index
-    map_data = MapDatum.where(tenant_id: current_tenant.id, sandbox: @sandbox)
+    map_data = current_user.tenant.map_data.where(sandbox: @sandbox)
     response_handler(mapData: map_data, itineraries: as_json_itineraries)
   end
 

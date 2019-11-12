@@ -6,7 +6,6 @@ module Tenants
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :legacy, class_name: 'Legacy::Tenant', optional: true
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
-    has_one :theme, class_name: 'Tenants::Theme'
     has_many :users
     has_many :margins, as: :applicable
     has_many :memberships, as: :member
@@ -16,8 +15,6 @@ module Tenants
     validates :slug, presence: true, uniqueness: true
 
     after_create :ensure_domain
-
-    accepts_nested_attributes_for :theme
 
     has_paper_trail
 

@@ -6,7 +6,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   include NotificationTools
 
   def index
-    current_tenant.quotation_tool? ? get_quote_index : get_booking_index
+    current_user.tenant.quotation_tool? ? get_quote_index : get_booking_index
   end
 
   def delta_page_handler
@@ -120,7 +120,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, '_'),
         doc_type: params[:type],
         user: @shipment.user,
-        tenant: current_tenant,
+        tenant: current_user.tenant,
         file: params[:file],
         sandbox: @sandbox
       )

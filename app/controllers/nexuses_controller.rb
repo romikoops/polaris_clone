@@ -25,11 +25,11 @@ class NexusesController < ApplicationController
     target    = params[:target]
 
     itinerary_ids = params[:itinerary_ids].split(',').map(&:to_i)
-    itineraries = Itinerary
-                  .where(sandbox: @sandbox, tenant_id: current_tenant.id)
-                  .joins(:stops)
-                  .where(id: itinerary_ids)
-                  .where('stops.hub_id': hub_ids)
+    itineraries = current_user.tenant.itineraries
+                              .where(sandbox: @sandbox)
+                              .joins(:stops)
+                              .where(id: itinerary_ids)
+                              .where('stops.hub_id': hub_ids)
 
     available_hub_ids = itineraries.map do |itinerary|
       if hub_ids.blank?

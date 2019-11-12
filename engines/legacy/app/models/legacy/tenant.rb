@@ -11,9 +11,7 @@ module Legacy
 
     has_many :margins, as: :applicable
     has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
-    has_many :tenant_cargo_item_types, dependent: :destroy
-    has_many :cargo_item_types, through: :tenant_cargo_item_types, dependent: :destroy
-    
+
     has_paper_trail
 
     def subdomain
@@ -31,18 +29,6 @@ module Legacy
 
     def tenants_scope
       Tenants::Scope.find_by(target: Tenants::Tenant.find_by(legacy_id: id))&.content || {}
-    end
-
-    def max_dimensions
-      MaxDimensionsBundle.where(tenant_id: id).unit.to_max_dimensions_hash
-    end
-
-    def max_aggregate_dimensions
-      MaxDimensionsBundle.where(tenant_id: id).aggregate.to_max_dimensions_hash
-    end
-
-    def quotation_tool?
-      tenants_scope['open_quotation_tool'] || tenants_scope['closed_quotation_tool']
     end
   end
 end

@@ -12,7 +12,7 @@ module DocumentService
     def initialize(options)
       @user = User.find(options[:user_id])
       @user_contacts = @user.contacts
-      @user_shipments = Shipment.where(user: @user)
+      @user_shipments = @user.shipments
       @user_messages = @user.conversations
       @user_addresses = @user.user_addresses
       @filename = "#{@user.first_name}_#{@user.last_name}_GDPR.xlsx"

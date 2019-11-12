@@ -6,7 +6,7 @@ class ShipmentsController < ApplicationController
   skip_before_action :require_non_guest_authentication!
 
   def index
-    current_tenant.quotation_tool? ? get_quote_index : get_booking_index
+    current_user.tenant.quotation_tool? ? get_quote_index : get_booking_index
   end
 
   def delta_page_handler
@@ -86,7 +86,7 @@ class ShipmentsController < ApplicationController
         text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, '_'),
         doc_type: params[:type],
         user: current_user,
-        tenant: current_tenant,
+        tenant: current_user.tenant,
         file: params[:file],
         sandbox: @sandbox
       )

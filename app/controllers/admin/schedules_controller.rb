@@ -5,7 +5,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   include ItineraryTools
 
   def index
-    map_data = current_tenant.map_data
+    map_data = current_user.tenant.map_data
     response_handler(
       mapData: map_data,
       itineraries: itinerary_route_json

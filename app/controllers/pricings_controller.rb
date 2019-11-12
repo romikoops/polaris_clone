@@ -4,14 +4,15 @@ class PricingsController < ApplicationController
   before_action :require_login
 
   def index
+    tenant = current_user.tenant
     closed_quotation_tool = ::Tenants::ScopeService.new(target: current_user).fetch(:closed_quotation_tool)
     if closed_quotation_tool
       user_pricing_id = current_user.agency.agency_manager_id
-      @pricings = Pricing.where(user_id: user_pricing_id, sandbox: @sandbox, tenant_id: current_tenant.id)
+      @pricings = tenant.pricings.where(user_id: user_pricing_id, sandbox: @sandbox)
       @itineraries = @pricings.map(&:itinerary)
     else
-      @pricings = Pricing.where(sandbox: @sandbox, tenant_id: current_tenant.id)
-      @itineraries = Itinerary.where(sandbox: @sandbox, tenant_id: current_tenant.id)
+      @pricings = tenant.pricings.where(sandbox: @sandbox)
+      @itineraries = tenant.itineraries.where(sandbox: @sandbox)
     end
     response = Rails.cache.fetch("#{@pricings.cache_key}/pricings_index", expires_in: 12.hours) do
       @transports = TransportCategory.where(sandbox: @sandbox).uniq

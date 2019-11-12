@@ -108,12 +108,12 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
         currency = pricing_detail_data.delete('currency')
         pricing_detail_params = pricing_detail_data.merge(
           shipping_type: shipping_type,
-          tenant: current_tenant
+          tenant: current_user.tenant
         )
         range = pricing_detail_params.delete('range')
         pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
           shipping_type: shipping_type,
-          tenant: current_tenant,
+          tenant: current_user.tenant,
           sandbox: @sandbox
         )
         pricing_detail.update!(pricing_detail_params)
@@ -124,12 +124,12 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
         pricing_details = pricing_exception_data.delete('data')
         pricing_exception = pricing_to_update.pricing_exceptions
                                              .where(pricing_exception_data)
-                                             .first_or_create(pricing_exception_data.merge(tenant: current_tenant))
+                                             .first_or_create(pricing_exception_data.merge(tenant: current_user.tenant))
         pricing_details.each do |shipping_type, pricing_detail_data|
           currency = pricing_detail_data.delete('currency')
           range = pricing_detail_data.delete('range')
           pricing_detail_params = pricing_detail_data
-                                  .merge(shipping_type: shipping_type, tenant: current_tenant)
+                                  .merge(shipping_type: shipping_type, tenant: current_user.tenant)
           pricing_detail = pricing_exception.pricing_details
                                             .where(pricing_detail_params)
                                             .first_or_create!(pricing_detail_params)
@@ -258,11 +258,11 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     sanitized_params['data'].each do |shipping_type, pricing_detail_data|
       currency = pricing_detail_data.delete('currency')
       pricing_detail_params = pricing_detail_data.merge(
-        shipping_type: shipping_type, tenant: current_tenant
+        shipping_type: shipping_type, tenant: current_user.tenant
       )
       range = pricing_detail_params.delete('range')
       pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
-        shipping_type: shipping_type, tenant: current_tenant
+        shipping_type: shipping_type, tenant: current_user.tenant
       )
       pricing_detail.update!(pricing_detail_params)
       pricing_detail.update!(range: range, currency_name: currency)
@@ -275,13 +275,13 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       pricing_exception = pricing_to_update.pricing_exceptions.where(
         pricing_exception_data
       ).first_or_create(pricing_exception_data.merge(
-                          tenant: current_tenant
+                          tenant: current_user.tenant
                         ))
       pricing_details.each do |shipping_type, pricing_detail_data|
         currency = pricing_detail_data.delete('currency')
         range = pricing_detail_data.delete('range')
         pricing_detail_params = pricing_detail_data.merge(
-          shipping_type: shipping_type, tenant: current_tenant
+          shipping_type: shipping_type, tenant: current_user.tenant
         )
         pricing_detail = pricing_exception.pricing_details.where(
           pricing_detail_params

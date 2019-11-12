@@ -30,7 +30,7 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def download_quotations
-    document = ShippingTools.save_pdf_quotes(shipment, current_tenant, result_params[:quotes].map(&:to_h), @sandbox)
+    document = ShippingTools.save_pdf_quotes(shipment, current_user.tenant, result_params[:quotes].map(&:to_h), @sandbox)
     response_handler(key: 'quotations', url: rails_blob_url(document.file, disposition: 'attachment'))
   end
 

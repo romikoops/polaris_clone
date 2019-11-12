@@ -3,10 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe NewUserMailer, type: :mailer do
-  let(:tenant) { create(:tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:tenants_theme) { FactoryBot.create(:tenants_theme, tenant: tenants_tenant) }
-  let(:user) { create(:user, tenant: tenant) }
+  let(:user) { create(:user) }
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})

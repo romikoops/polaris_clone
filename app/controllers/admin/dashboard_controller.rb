@@ -30,16 +30,16 @@ class Admin::DashboardController < Admin::AdminBaseController
     @requested_shipments = requested_shipments
     @quoted_shipments = quoted_shipments
     @detailed_itineraries = detailed_itin_json
-    hubs = Hub.where(sandbox: @sandbox, tenant_id: current_tenant.id)
+    hubs = current_user.tenant.hubs.where(sandbox: @sandbox)
     @hubs = hubs.limit(8).map do |hub|
       { data: hub, address: hub.address.to_custom_hash }
     end
-    @map_data = MapDatum.where(tenant_id: current_tenant.id, sandbox: @sandbox)
+    @map_data = current_user.tenant.map_data.where(sandbox: @sandbox)
     @tenant = Tenant.find(current_user.tenant_id)
   end
 
   def shipments_hash
-    current_tenant.quotation_tool? ?
+    current_user.tenant.quotation_tool? ?
     {
       quoted: @quoted_shipments
     } : {

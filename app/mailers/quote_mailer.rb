@@ -12,9 +12,7 @@ class QuoteMailer < ApplicationMailer
     @user = @shipment.user
     pdf_service = PdfService.new(user: @user, tenant: @user.tenant)
     @quotes = pdf_service.quotes_with_trip_id(@quotation, @shipments)
-    @tenant = Tenant.find(@user.tenant_id)
-    @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
-    @theme = ::Tenants::ThemeDecorator.new(@tenants_tenant.theme).legacy_format
+    @theme = @user.tenant.theme
     @email = email[/[^@]+/]
     @content = Content.get_component('QuotePdf', @user.tenant.id)
     @scope = ::Tenants::ScopeService.new(target: @user, sandbox: sandbox).fetch
@@ -25,13 +23,13 @@ class QuoteMailer < ApplicationMailer
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
     document = pdf_service.quotation_pdf(quotation: @quotation)&.attachment
     attachments[pdf_name] = document if document.present?
-    attachments.inline['logo.png'] =  @tenants_tenant.theme.email_logo.attached? ? @tenants_tenant.theme.email_logo&.download : ''
+    attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
 
     mail(
-      from: Mail::Address.new("no-reply@#{@tenants_tenant.slug}.itsmycargo.shop")
-                         .tap { |a| a.display_name = @tenant.name }.format,
-      reply_to: @tenant.emails.dig('support', 'general'),
+      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: @user.tenant_id).slug}.itsmycargo.shop")
+                         .tap { |a| a.display_name = @user.tenant.name }.format,
+      reply_to: @user.tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, email),
       subject: subject_line(shipments: @shipments, sandbox: sandbox)
     ) do |format|
@@ -48,24 +46,22 @@ class QuoteMailer < ApplicationMailer
     @shipments = quotation ? quotation.shipments : [shipment]
     @shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
     @quotation = quotation
-    @tenant = Tenant.find(@shipment.tenant_id)
-    @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
-    @theme = ::Tenants::ThemeDecorator.new(@tenants_tenant.theme).legacy_format
     @user = (quotation&.user || shipment&.user)
-    pdf_service = PdfService.new(user: @user, tenant: @tenant)
+    pdf_service = PdfService.new(user: @user, tenant: @user.tenant)
     @quotes = pdf_service.quotes_with_trip_id(@quotation, @shipments)
+    @theme = @user.tenant.theme
     @content = Content.get_component('QuotePdf', @user.tenant.id)
     @scope = ::Tenants::ScopeService.new(target: @user).fetch
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
-    document = PdfService.new(user: @user, tenant: @tenant).admin_quotation(quotation: @quotation, shipment: shipment)&.attachment
+    document = PdfService.new(user: @user, tenant: @user.tenant).admin_quotation(quotation: @quotation, shipment: shipment)&.attachment
     attachments[pdf_name] = document if document.present?
-    attachments.inline['logo.png'] = @tenants_tenant.theme.email_logo.attached? ? @tenants_tenant.theme.email_logo&.download : ''
+    attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
 
     mail(
-      from: Mail::Address.new("no-reply@#{@tenants_tenant.slug}.itsmycargo.shop")
+      from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: @user.tenant_id).slug}.itsmycargo.shop")
                          .tap { |a| a.display_name = 'ItsMyCargo Quotation Tool' }.format,
       reply_to: Settings.emails.support,
-      to: mail_target_interceptor(@user, @tenant.email_for(:sales, @shipment.mode_of_transport)),
+      to: mail_target_interceptor(@user, @user.tenant.email_for(:sales, @shipment.mode_of_transport)),
       subject: subject_line(shipments: @shipments, sandbox: sandbox)
     ) do |format|
       format.html
@@ -84,7 +80,7 @@ class QuoteMailer < ApplicationMailer
       shipments: @shipments,
       quotation: @quotation,
       quotes: quotes,
-      color: @theme['colors']['primary'],
+      color: @user.tenant.theme['colors']['primary'],
       name: 'quotation',
       remarks: Remark.where(tenant_id: @user.tenant_id, sandbox: sandbox).order(order: :asc),
       scope: ::Tenants::ScopeService.new(target: @user, sandbox: sandbox).fetch
