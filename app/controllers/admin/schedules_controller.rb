@@ -73,7 +73,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
       req = { 'xlsx' => params[:file], 'itinerary' => itinerary }
       results = ExcelTool::OverwriteSchedulesByItinerary.new(
         params: req,
-        _user: current_user,
+        user: current_user,
         sandbox: @sandbox
       ).perform
       response_handler(results)
@@ -88,7 +88,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
       results = ExcelTool::ScheduleOverwriter.new(
         params: req,
         mot: 'rail',
-        _user: current_user,
+        user: current_user,
         sandbox: @sandbox
       ).perform
       response_handler(results)
@@ -103,7 +103,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
       results = ExcelTool::ScheduleOverwriter.new(
         params: req,
         mot: 'ocean',
-        _user: current_user,
+        user: current_user,
         sandbox: @sandbox
       ).perform
       response_handler(results)
@@ -118,7 +118,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
       results = ExcelTool::ScheduleOverwriter.new(
         params: req,
         mot: 'air',
-        _user: current_user,
+        user: current_user,
         sandbox: @sandbox
       ).perform
       response_handler(results)
