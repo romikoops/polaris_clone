@@ -89,10 +89,33 @@ module AdmiraltyReports
           expect(response).to be_successful
           expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
         end
+
+        it 'renders page if it is current month' do
+          get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id, month: Time.now.month, year: Time.now.year }
+
+          expect(response).to be_successful
+          expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
+        end
       end
 
       context 'booking tool' do
         let!(:tenant) { tenants.second }
+        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: tenants.first.id, company_name: nil) }
+
+        let!(:shipments) do
+          [
+            FactoryBot.create(:legacy_shipment,
+                              user_id: user.id,
+                              tenant_id: tenants.second.id,
+                              updated_at: DateTime.new(2019, 2, 3),
+                              created_at: DateTime.new(2019, 2, 2)),
+            FactoryBot.create(:legacy_shipment,
+                              user_id: user.id,
+                              tenant_id: tenants.second.id,
+                              updated_at: DateTime.new(2019, 2, 5),
+                              created_at: DateTime.new(2019, 2, 4))
+          ]
+        end
 
         it 'renders page' do
           get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id }

@@ -21,12 +21,12 @@ module AdmiraltyReports
         total_active_users: total_active(:email),
         average_shipments_per_agent_company: average_shipments(:agency_name),
         average_shipments_per_user: average_shipments(:email),
-        shipments_per_day_without_weekends: (total_shipments / weekdays),
+        shipments_per_day_without_weekends: (total_shipments / weekdays.length),
         most_active_agent_company: data_per_month[:agencies].first,
         most_active_user: data_per_month[:users].first,
-        weekdays_without_activity: weekdays_without_activity,
-        most_active_day: activity_per_day.last,
-        least_active_day: activity_per_day.first
+        weekdays_without_activity: weekdays_without_activity.length,
+        three_most_active_days: days_sorted_by_activity(order: :asc, days: 3),
+        three_least_active_days: days_sorted_by_activity(order: :desc, days: 3)
       }
     end
 
@@ -82,19 +82,26 @@ module AdmiraltyReports
     end
 
     def weekdays
-      (start_date..end_date).count(&:on_weekday?)
+      @weekdays ||= (start_date..end_date).reject(&:on_weekend?)
     end
 
     def weekdays_without_activity
-      return if start_date.nil?
-
-      (start_date..end_date).count do |day|
-        !overview.has_key?(day.to_date) && day.to_date.on_weekday?
-      end
+      @weekdays_without_activity ||= weekdays.reject { |weekday| overview.has_key?(weekday.to_date) }
     end
 
-    def activity_per_day
-      overview.sort_by { |stat| stat.second[:combined_data][:n_shipments] }.map(&:first)
+    def days_sorted_by_activity(order:, days:)
+      result = {}
+      overview.each do |stat|
+        result[stat.first] = stat.second[:combined_data][:n_shipments]
+      end
+
+      weekdays_without_activity.each do |weekday_without_activity|
+        result[weekday_without_activity.to_date] = 0
+      end
+
+      result = result.sort_by { |_k, v| v }
+      result = order == :asc ? result.last(days) : result.first(days)
+      result.to_h
     end
   end
 end
