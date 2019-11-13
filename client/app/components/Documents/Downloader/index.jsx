@@ -3,7 +3,7 @@ import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { v4 } from 'uuid'
-import PropTypes from '../../../prop-types'
+import { get } from 'lodash'
 import { documentActions } from '../../../actions'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import SquareButton from '../../SquareButton'
@@ -23,10 +23,11 @@ class DocumentsDownloader extends React.Component {
     const { target, documentDispatch, options } = this.props
 
     switch (target) {
-      case 'pricing_cargo_item':
-        documentDispatch.downloadPricings(options)
-        break
-      case 'pricing_container':
+      case 'pricings':
+        if (arg) {
+          options.mot = get(arg, ['value', 'mot'], null)
+          options.load_type = get(arg, ['value', 'load_type'], null)
+        }
         documentDispatch.downloadPricings(options)
         break
       case 'hubs':
@@ -105,6 +106,7 @@ class DocumentsDownloader extends React.Component {
         active={!disabled}
       />
     )
+
     const selectBox = (
       <div className="flex-100 layout-row layout-align-center-center">
         <NamedSelect

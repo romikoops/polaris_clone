@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
+import { get } from 'lodash'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
 import AdminTrucking from './AdminTrucking'
@@ -44,6 +45,20 @@ export class AdminPricingsIndex extends Component {
     })
   }
 
+  downloadTargets () {
+    const { scope, t } = this.props
+    const targets = []
+    Object.keys(scope.modes_of_transport).forEach((mot) => {
+      ['container', 'cargo_item'].forEach((key) => {
+        if (get(scope, ['modes_of_transport', mot, key], false)) {
+          targets.push({ label: `${capitalize(mot)}: ${t(`common:${key}`)}`, value: { mot, load_type: key } })
+        }
+      })
+    })
+
+    return targets
+  }
+
   render () {
     const {
       t, theme, documentDispatch, user, scope
@@ -56,95 +71,69 @@ export class AdminPricingsIndex extends Component {
       rail: { cargoItem: 'LCL', container: 'FCL' },
       truck: { cargoItem: 'LTL', container: 'FTL' }
     }
-    const uploadButtons = []
-    const downloadButtons = []
-    moTOptions.forEach((mot) => {
-      uploadButtons.push(
-        <div
-          className={`${styles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
-        >
-          {Object.keys(loadTypeOptions[mot]).map((loadType) => {
-            const uploadPricingText = (loadType
-              ? t('admin:uploadPricingWithLoadType', { mot: capitalize(mot), loadType: loadTypeOptions[mot][loadType].toUpperCase() })
-              : t('admin:uploadPricing', { mot: capitalize(mot) })
-            )
 
-            const options = { mot }
-            if (loadType) options.load_type = camelToSnakeCase(loadType)
+    const uploadPricingText = t('admin:uploadPricing')
+    const downloadPricingText = t('admin:downloadPricing')
 
-            return (
-              [(<div
-                className={`${
-                  styles.action_section
-                } flex-100 layout-row layout-wrap layout-align-center-center`}
-              >
-                <p className="flex-100">{uploadPricingText}</p>
-                <FileUploader
-                  theme={theme}
-                  dispatchFn={file => this.pricingUpload(file, mot, camelToSnakeCase(loadType), false)}
-                  tooltip={priceTip.upload_lcl}
-                  type="xlsx"
-                  size="full"
-                  text={t('admin:dedicatedPricing')}
-                />
-              </div>),
-              (<div
-                className={`${
-                  styles.action_section
-                } flex-100 layout-row layout-align-center-center layout-wrap`}
-              >
-                <p className="flex-100 center">{t('admin:uploadChargeCategories')}</p>
-                <FileUploader
-                  theme={theme}
-                  type="xlsx"
-                  text={t('admin:chargeCategoriesExcel')}
-                  dispatchFn={documentDispatch.uploadChargeCategories}
-                />
-              </div>)]
-            )
-          })}
-        </div>
-      )
-
-      downloadButtons.push(
-        <div
-          className={`${styles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
-        >
-          {Object.keys(loadTypeOptions[mot]).map((loadType) => {
-            const downloadPricingText = (loadType
-              ? t('admin:downloadPricingWithLoadType', { mot: capitalize(mot), loadType: loadTypeOptions[mot][loadType].toUpperCase() })
-              : t('admin:downloadPricing', { mot: capitalize(mot) })
-            )
-            const options = { mot }
-            if (loadType) options.load_type = camelToSnakeCase(loadType)
-
-            return (
-              [(<div
-                className={`${
-                  styles.action_section
-                } flex-100 layout-row layout-wrap layout-align-center-center`}
-              >
-                <p className="flex-100">{downloadPricingText}</p>
-                <DocumentsDownloader
-                  theme={theme}
-                  target={`pricing_${camelToSnakeCase(loadType)}`}
-                  options={options}
-                  size="full"
-                />
-              </div>),
-              (<div
-                className={`${
-                  styles.action_section
-                } flex-100 layout-row layout-wrap layout-align-center-center`}
-              >
-                <p className="flex-100 center">{t('admin:downloadChargeCategories')}</p>
-                <DocumentsDownloader theme={theme} target="charge_categories" />
-              </div>)]
-            )
-          })}
-        </div>
-      )
-    })
+    const uploadButtons = (<div
+      className={`${styles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
+    >
+      <div
+        className={`${
+          styles.action_section
+        } flex-100 layout-row layout-wrap layout-align-center-center`}
+      >
+        <p className="flex-100">{uploadPricingText}</p>
+        <FileUploader
+          theme={theme}
+          dispatchFn={file => this.pricingUpload(file)}
+          tooltip={priceTip.upload_lcl}
+          type="xlsx"
+          size="full"
+          text={t('admin:dedicatedPricing')}
+        />
+      </div>
+      <div
+        className={`${
+          styles.action_section
+        } flex-100 layout-row layout-align-center-center layout-wrap`}
+      >
+        <p className="flex-100 center">{t('admin:uploadChargeCategories')}</p>
+        <FileUploader
+          theme={theme}
+          type="xlsx"
+          text={t('admin:chargeCategoriesExcel')}
+          dispatchFn={documentDispatch.uploadChargeCategories}
+        />
+      </div>
+    </div>
+    )
+    const downloadButtons = (<div
+      className={`${styles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
+    >
+      <div
+        className={`${
+          styles.action_section
+        } flex-100 layout-row layout-wrap layout-align-center-center`}
+      >
+        <p className="flex-100">{downloadPricingText}</p>
+        <DocumentsDownloader
+          theme={theme}
+          target="pricings"
+          targetOptions={this.downloadTargets()}
+          size="full"
+        />
+      </div>
+      <div
+        className={`${
+          styles.action_section
+        } flex-100 layout-row layout-wrap layout-align-center-center`}
+      >
+        <p className="flex-100 center">{t('admin:downloadChargeCategories')}</p>
+        <DocumentsDownloader theme={theme} target="charge_categories" />
+      </div>
+    </div>
+    )
     const tabs = [(
       <Tab
         tabTitle={t('admin:freight')}
@@ -191,7 +180,7 @@ export class AdminPricingsIndex extends Component {
             </div>
           </div>
         </div>
-        
+
       </Tab>
     )]
     tabs.push(<Tab

@@ -4,7 +4,7 @@ import { documentService } from '../services/document.service'
 import { alertActions, adminActions, clientsActions } from "."
 // import { Promise } from 'es6-promise-promise';
 
-function uploadPricings (file, mot, loadType, open) {
+function uploadPricings (file) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
   }
@@ -18,7 +18,7 @@ function uploadPricings (file, mot, loadType, open) {
   return (dispatch) => {
     dispatch(request())
 
-    documentService.uploadPricings(file, mot, loadType, open).then(
+    documentService.uploadPricings(file).then(
       (data) => {
         dispatch(success(data))
         dispatch(adminActions.getPricings(false))
