@@ -2,11 +2,8 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
-import { AdminHubTile } from '..'
 import styles from '../Admin.scss'
-import { adminClicked as clickTool } from '../../../constants'
 import AdminHubFees from './Fees'
-import AdminPromptConfirm from '../Prompt/Confirm'
 import hubStyles from './index.scss'
 import '../../../styles/react-toggle.scss'
 import {
@@ -184,12 +181,11 @@ export class AdminHubView extends Component {
 
   render () {
     const {
-      theme, hubData, hubHash, adminActions, t
+      theme, hubData, adminActions, t
     } = this.props
     const {
       currentFeeLoadType,
       editView,
-      confirm,
       mandatoryCharge,
       page,
       numPages,
@@ -200,28 +196,16 @@ export class AdminHubView extends Component {
     }
 
     const {
-      hub, relatedHubs, routes, address
+      hub, routes, address
     } = hubData
     if (!hub) {
       return ''
     }
     const { primary, secondary } = theme.colors
-    const textStyle = gradientTextGenerator(primary, secondary)
     const borderStyle = gradientBorderGenerator(primary, secondary)
     const gradientBackground = gradientGenerator(primary, secondary)
     const gradientIcon = gradientTextGenerator(primary, secondary)
 
-    const confimPrompt = confirm ? (
-      <AdminPromptConfirm
-        theme={theme}
-        heading={t('common:areYouSure')}
-        text={t('admin:deleteHub', { name: hub.name })}
-        confirm={() => this.deleteHub(hub.id)}
-        deny={() => this.closeConfirm()}
-      />
-    ) : (
-      ''
-    )
     const activate = (
       <div
         className={`flex-none layout-row pointy layout-align-center-center ${hubStyles.header_bar_inactive_button}`}
@@ -359,9 +343,6 @@ export class AdminHubView extends Component {
               <div className="flex-none layout-row pointy layout-align-center-center" onClick={() => this.toggleEdit()}>
                 <i className={`flex-none fa fa-pencil ${hubStyles.edit_icon}`} />
               </div>
-              <div className="flex-none layout-row pointy layout-align-center-center" onClick={() => this.confirmDelete()}>
-                <i className={`flex-none fa fa-times ${hubStyles.delete_icon}`} />
-              </div>
             </div>
 
           </div>
@@ -469,7 +450,6 @@ export class AdminHubView extends Component {
               />
             </div>
           </div>
-          {confimPrompt}
         </div>
         {styleTagJSX}
       </div>

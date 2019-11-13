@@ -51,14 +51,6 @@ exports[`hubData.hub.hub_status is inactive 1`] = `
             className="flex-none fa fa-pencil edit_icon"
           />
         </div>
-        <div
-          className="flex-none layout-row pointy layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="flex-none fa fa-times delete_icon"
-          />
-        </div>
       </div>
     </div>
     <div
@@ -383,14 +375,6 @@ exports[`hubData.relatedHubs is truthy 1`] = `
             className="flex-none fa fa-pencil edit_icon"
           />
         </div>
-        <div
-          className="flex-none layout-row pointy layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="flex-none fa fa-times delete_icon"
-          />
-        </div>
       </div>
     </div>
     <div
@@ -713,14 +697,6 @@ exports[`hubData.routes is truthy 1`] = `
         >
           <i
             className="flex-none fa fa-pencil edit_icon"
-          />
-        </div>
-        <div
-          className="flex-none layout-row pointy layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="flex-none fa fa-times delete_icon"
           />
         </div>
       </div>
@@ -1103,14 +1079,6 @@ exports[`shallow render 1`] = `
             className="flex-none fa fa-pencil edit_icon"
           />
         </div>
-        <div
-          className="flex-none layout-row pointy layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="flex-none fa fa-times delete_icon"
-          />
-        </div>
       </div>
     </div>
     <div
@@ -1435,14 +1403,6 @@ exports[`state.confirm is truthy 1`] = `
             className="flex-none fa fa-pencil edit_icon"
           />
         </div>
-        <div
-          className="flex-none layout-row pointy layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="flex-none fa fa-times delete_icon"
-          />
-        </div>
       </div>
     </div>
     <div
@@ -1695,21 +1655,6 @@ exports[`state.confirm is truthy 1`] = `
         />
       </div>
     </div>
-    <AdminPromptConfirm
-      confirm={[Function]}
-      deny={[Function]}
-      heading="Are you sure?"
-      t={[Function]}
-      text="This will delete the hub {{name}} and all related data"
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
-      }
-    />
   </div>
   <style>
     
@@ -1820,14 +1765,6 @@ exports[`state.editView is truthy 1`] = `
         >
           <i
             className="flex-none fa fa-pencil edit_icon"
-          />
-        </div>
-        <div
-          className="flex-none layout-row pointy layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="flex-none fa fa-times delete_icon"
           />
         </div>
       </div>
@@ -2152,14 +2089,6 @@ exports[`state.page > 1 1`] = `
         >
           <i
             className="flex-none fa fa-pencil edit_icon"
-          />
-        </div>
-        <div
-          className="flex-none layout-row pointy layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="flex-none fa fa-times delete_icon"
           />
         </div>
       </div>
