@@ -83,7 +83,7 @@ module ExcelDataServices
       def find_or_create_local_charges(params, tenant_vehicle_id)
         local_charge_params = prepare_params(params, tenant_vehicle_id)
         old_local_charges = LocalCharge.where(
-          local_charge_params.except(:fees, :effective_date, :expiration_date, :internal)
+          local_charge_params.except(:fees, :effective_date, :expiration_date, :internal, :metadata)
         )
         new_local_charge = LocalCharge.new(local_charge_params)
 
@@ -110,7 +110,7 @@ module ExcelDataServices
           tenant_vehicle_id: tenant_vehicle_id,
           sandbox: @sandbox,
           group_id: @group_id,
-          metadata: build_metadata(row: params)
+          metadata: metadata(row: params)
         )
       end
 
