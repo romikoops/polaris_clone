@@ -25,10 +25,10 @@ class Landing extends Component {
   }
 
   bookNow () {
-    const { appDispatch, authenticationDispatch, loggingIn } = this.props
+    const { appDispatch, authenticationDispatch, loggedIn } = this.props
     const redirectUrl = '/booking'
 
-    if (!loggingIn) {
+    if (!loggedIn) {
       authenticationDispatch.showLogin({ redirectUrl })
 
       return
