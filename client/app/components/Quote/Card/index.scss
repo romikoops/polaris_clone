@@ -211,20 +211,21 @@
   }
 
   .details {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     padding: 0 30px;
     i { margin-right: 5px; }
-  }
-
-  .details_itens {
-    :first-child {
-      margin-bottom: 10px;
-    }
-  }
-
-  .valid_until {
-    text-align: right;
-    :first-child {
-      margin-bottom: 10px;
+    .details_row {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      > div{
+        padding: 0 5px;
+        flex-shrink: 0;
+        margin-bottom: 15px;
+      }
     }
   }
 

@@ -309,44 +309,36 @@ class QuoteCard extends PureComponent {
                   </div>
                 ) : '' }
             </div>
-
           </div>
         </div>
-        <div className="flex-100 layout-row layout-align-start-center" style={{ paddingBottom: '18px' }}>
-          <div className={`flex-100 layout-row ${styles.details}`}>
-            <div className={`flex-50 ${styles.details_itens}`} >
-              {voyageInfo.carrier && result.meta.carrier_name && (
-                <div>
-                  {switchIcon(result.meta.mode_of_transport)}
-                  {t("quote:carrier", {
-                    carrierName: result.meta.carrier_name
-                  })}
-                </div>
-              )}
-              {voyageInfo.service_level && result.meta.service_level && (
-                <div>
-                  <i className="flex-none fa fa-bell-o" />
-                  {t("quote:service", {
-                    serviceLevel: capitalize(result.meta.service_level)
-                  })}
-                </div>
-              )}
-            </div>
-
-            <div className={`flex-50 ${styles.valid_until}`}>
-              {validUntil && (
-                <div>
-                  <i className="flex-none fa fa-clock-o" />
-                  {t("quote:validUntil", { date: moment(validUntil).utc().format('DD/MM/YYYY')}) }
-                </div>
-              )}
-              {voyageInfo.transshipmentVia && result.meta.transshipmentVia && (
-                <div>
-                  <i className="flex-none fa fa-exchange" />
-                  {t("quote:transshipmentVia", { transshipment: result.meta.transshipmentVia })}
-                </div>
-              )}
-            </div>
+        <div className={styles.details}>
+          <div className={styles.details_row}>
+            {voyageInfo.carrier && result.meta.carrier_name && (
+              <div>
+                {switchIcon(result.meta.mode_of_transport)}
+                {t("quote:carrier", { carrierName: result.meta.carrier_name })}
+              </div>
+            )}
+            {voyageInfo.service_level && result.meta.service_level && (
+              <div>
+                <i className="flex-none fa fa-bell-o" />
+                {t("quote:service", { serviceLevel: capitalize(result.meta.service_level) })}
+              </div>
+            )}
+            {validUntil && (
+              <div>
+                <i className="flex-none fa fa-clock-o" />
+                {t("quote:validUntil", { date: moment(validUntil).utc().format('DD/MM/YYYY')}) }
+              </div>
+            )}
+          </div>
+          <div className={styles.details_row}>
+            {voyageInfo.transshipmentVia && result.meta.transshipmentVia && (
+              <div>
+                <i className="flex-none fa fa-exchange" />
+                {t("quote:transshipmentVia", { transshipment: result.meta.transshipmentVia })}
+              </div>
+            )}
           </div>
         </div>
         {

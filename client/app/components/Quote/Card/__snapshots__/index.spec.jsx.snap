@@ -64,23 +64,14 @@ exports[`aggregatedCargo is empty object 1`] = `
     </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-start-center"
-    style={
-      Object {
-        "paddingBottom": "18px",
-      }
-    }
+    className="details"
   >
     <div
-      className="flex-100 layout-row details"
-    >
-      <div
-        className="flex-50 details_itens"
-      />
-      <div
-        className="flex-50 valid_until"
-      />
-    </div>
+      className="details_row"
+    />
+    <div
+      className="details_row"
+    />
   </div>
   <CollapsingContent
     collapsed={true}
@@ -458,23 +449,14 @@ exports[`detailed billing working properly 1`] = `
     </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-start-center"
-    style={
-      Object {
-        "paddingBottom": "18px",
-      }
-    }
+    className="details"
   >
     <div
-      className="flex-100 layout-row details"
-    >
-      <div
-        className="flex-50 details_itens"
-      />
-      <div
-        className="flex-50 valid_until"
-      />
-    </div>
+      className="details_row"
+    />
+    <div
+      className="details_row"
+    />
   </div>
   <CollapsingContent
     collapsed={true}
@@ -827,23 +809,14 @@ exports[`shallow rendering 1`] = `
     </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-start-center"
-    style={
-      Object {
-        "paddingBottom": "18px",
-      }
-    }
+    className="details"
   >
     <div
-      className="flex-100 layout-row details"
-    >
-      <div
-        className="flex-50 details_itens"
-      />
-      <div
-        className="flex-50 valid_until"
-      />
-    </div>
+      className="details_row"
+    />
+    <div
+      className="details_row"
+    />
   </div>
   <CollapsingContent
     collapsed={true}
@@ -1221,23 +1194,14 @@ exports[`show schedule options working 1`] = `
     </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-start-center"
-    style={
-      Object {
-        "paddingBottom": "18px",
-      }
-    }
+    className="details"
   >
     <div
-      className="flex-100 layout-row details"
-    >
-      <div
-        className="flex-50 details_itens"
-      />
-      <div
-        className="flex-50 valid_until"
-      />
-    </div>
+      className="details_row"
+    />
+    <div
+      className="details_row"
+    />
   </div>
   <CollapsingContent
     collapsed={false}
@@ -1590,23 +1554,14 @@ exports[`single result rendering removes add button 1`] = `
     </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-start-center"
-    style={
-      Object {
-        "paddingBottom": "18px",
-      }
-    }
+    className="details"
   >
     <div
-      className="flex-100 layout-row details"
-    >
-      <div
-        className="flex-50 details_itens"
-      />
-      <div
-        className="flex-50 valid_until"
-      />
-    </div>
+      className="details_row"
+    />
+    <div
+      className="details_row"
+    />
   </div>
   <CollapsingContent
     collapsed={true}
@@ -1958,23 +1913,14 @@ exports[`tenant.scope is empty object 1`] = `
     </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-start-center"
-    style={
-      Object {
-        "paddingBottom": "18px",
-      }
-    }
+    className="details"
   >
     <div
-      className="flex-100 layout-row details"
-    >
-      <div
-        className="flex-50 details_itens"
-      />
-      <div
-        className="flex-50 valid_until"
-      />
-    </div>
+      className="details_row"
+    />
+    <div
+      className="details_row"
+    />
   </div>
   <CollapsingContent
     collapsed={false}
@@ -2291,23 +2237,14 @@ exports[`validUntil is falsy 1`] = `
     </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-start-center"
-    style={
-      Object {
-        "paddingBottom": "18px",
-      }
-    }
+    className="details"
   >
     <div
-      className="flex-100 layout-row details"
-    >
-      <div
-        className="flex-50 details_itens"
-      />
-      <div
-        className="flex-50 valid_until"
-      />
-    </div>
+      className="details_row"
+    />
+    <div
+      className="details_row"
+    />
   </div>
   <CollapsingContent
     collapsed={true}
@@ -2685,23 +2622,14 @@ exports[`validUntil is truthy 1`] = `
     </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-start-center"
-    style={
-      Object {
-        "paddingBottom": "18px",
-      }
-    }
+    className="details"
   >
     <div
-      className="flex-100 layout-row details"
-    >
-      <div
-        className="flex-50 details_itens"
-      />
-      <div
-        className="flex-50 valid_until"
-      />
-    </div>
+      className="details_row"
+    />
+    <div
+      className="details_row"
+    />
   </div>
   <CollapsingContent
     collapsed={true}
