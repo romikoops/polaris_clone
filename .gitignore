@@ -149,3 +149,6 @@ engines/*/spec/dummy/tmp/*
 # Ignore uploaded files in development
 engines/*/spec/dummy/storage/*
 !engines/*/spec/dummy/storage/.keep
+
+# Ignore VS Code files
+.vscode
