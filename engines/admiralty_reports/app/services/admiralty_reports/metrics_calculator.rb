@@ -4,18 +4,19 @@ require 'core_ext/array_refinements'
 
 module AdmiraltyReports
   class MetricsCalculator
-    def self.calculate(overview:, start_date:, end_date:)
-      new(overview: overview, start_date: start_date, end_date: end_date).result
+    def self.calculate(overview:, start_date:, end_date:, quotation_tool:)
+      new(overview: overview, start_date: start_date, end_date: end_date, quotation_tool: quotation_tool).result
     end
 
-    def initialize(overview:, start_date:, end_date:)
+    def initialize(overview:, start_date:, end_date:, quotation_tool:)
       @overview = overview
       @start_date = start_date
       @end_date = end_date
+      @quotation_tool = quotation_tool
     end
 
     def result
-      {
+      alter_result_keys(
         total_shipments: total_shipments,
         total_active_agents_companies: total_active(:agency_name),
         total_active_users: total_active(:email),
@@ -27,12 +28,12 @@ module AdmiraltyReports
         weekdays_without_activity: weekdays_without_activity.length,
         three_most_active_days: days_sorted_by_activity(order: :asc, days: 3),
         three_least_active_days: days_sorted_by_activity(order: :desc, days: 3)
-      }
+        )
     end
 
     private
 
-    attr_reader :end_date, :start_date, :overview
+    attr_reader :end_date, :start_date, :overview, :quotation_tool
 
     def total_shipments
       @total_shipments ||= overview.inject(0) { |sum, stat| sum + stat.second[:combined_data][:n_shipments] }
@@ -102,6 +103,18 @@ module AdmiraltyReports
       result = result.sort_by { |_k, v| v }
       result = order == :asc ? result.last(days) : result.first(days)
       result.to_h
+    end
+
+    def alter_result_keys(result)
+      return result unless @quotation_tool
+
+      quotation_result = {}
+      result.each do |k, v|
+        quotation_result[k] = v unless k.to_s.include?('shipment')
+        quotation_key = k.to_s.gsub('shipment', 'quotation').to_sym
+        quotation_result[quotation_key] = v
+      end
+      quotation_result
     end
   end
 end

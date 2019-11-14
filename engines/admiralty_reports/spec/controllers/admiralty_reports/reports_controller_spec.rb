@@ -88,6 +88,7 @@ module AdmiraltyReports
 
           expect(response).to be_successful
           expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
+          expect(response.body).to include('Total Quotations')
         end
 
         it 'renders page if it is current month' do
@@ -119,7 +120,6 @@ module AdmiraltyReports
 
         it 'renders page' do
           get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id }
-
           expect(response).to be_successful
           expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
         end

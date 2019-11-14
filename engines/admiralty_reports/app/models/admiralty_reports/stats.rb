@@ -37,7 +37,8 @@ module AdmiraltyReports
 
       @metrics ||= MetricsCalculator.calculate(overview: overview,
                                                start_date: start_date,
-                                               end_date: end_date)
+                                               end_date: end_date,
+                                               quotation_tool: @quotation_tool)
     end
 
     def quotation_tool?
