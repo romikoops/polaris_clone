@@ -26,8 +26,8 @@ module OfferCalculatorService
       origin_hub = ::Legacy::Stop.find_by(id: route.origin_stop_id, sandbox: @sandbox).hub
       destination_hub = ::Legacy::Stop.find_by(id: route.destination_stop_id, sandbox: @sandbox).hub
       faux_trip = itinerary.trips.find_or_create_by!(tenant_vehicle_id: tenant_vehicle_id,
-                                                     start_date: Legacy::Schedule::QUOTE_TRIP_END_DATE,
-                                                     end_date: Legacy::Schedule::QUOTE_TRIP_START_DATE,
+                                                     start_date: Legacy::Schedule::QUOTE_TRIP_START_DATE,
+                                                     end_date: Legacy::Schedule::QUOTE_TRIP_END_DATE,
                                                      sandbox: @sandbox)
       {
         origin_hub_id: origin_hub.id,
