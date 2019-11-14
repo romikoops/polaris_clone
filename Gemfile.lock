@@ -205,6 +205,20 @@ PATH
       core
 
 PATH
+  remote: engines/shipments
+  specs:
+    shipments (9999.1.0.0)
+      aasm
+      address_book
+      cargo
+      core
+      money-rails (~> 1.12)
+      quotations
+      routing
+      sequential
+      tenants
+
+PATH
   remote: engines/tenant_routing
   specs:
     tenant_routing (9999.1.0.0)
@@ -247,6 +261,8 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    aasm (5.0.6)
+      concurrent-ruby (~> 1.0)
     actioncable (5.2.2)
       actionpack (= 5.2.2)
       nio4r (~> 2.0)
@@ -909,6 +925,7 @@ DEPENDENCIES
   scientist
   sentry-raven
   sequential!
+  shipments!
   shoryuken (~> 5.0.1)
   shoulda-matchers
   signet

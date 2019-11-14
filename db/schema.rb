@@ -136,10 +136,8 @@ ActiveRecord::Schema.define(version: 2019_11_07_171324) do
 
   create_table "cargo_cargos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.uuid "quotation_id"
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
-    t.index ["quotation_id"], name: "index_cargo_cargos_on_quotation_id"
     t.index ["tenant_id"], name: "index_cargo_cargos_on_tenant_id"
   end
 
@@ -1303,6 +1301,159 @@ ActiveRecord::Schema.define(version: 2019_11_07_171324) do
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
+  create_table "shipments_cargos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "sandbox_id"
+    t.uuid "shipment_id"
+    t.uuid "tenant_id"
+    t.integer "total_goods_value_cents", default: 0, null: false
+    t.string "total_goods_value_currency", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sandbox_id"], name: "index_shipments_cargos_on_sandbox_id"
+    t.index ["shipment_id"], name: "index_shipments_cargos_on_shipment_id"
+    t.index ["tenant_id"], name: "index_shipments_cargos_on_tenant_id"
+  end
+
+  create_table "shipments_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "city"
+    t.string "company_name"
+    t.integer "contact_type"
+    t.string "country_code"
+    t.string "country_name"
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "first_name"
+    t.string "geocoded_address"
+    t.string "last_name"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "phone"
+    t.string "post_code"
+    t.string "premise"
+    t.string "province"
+    t.uuid "sandbox_id"
+    t.uuid "shipment_id", null: false
+    t.string "street"
+    t.string "street_number"
+    t.datetime "updated_at", null: false
+    t.index ["sandbox_id"], name: "index_shipments_contacts_on_sandbox_id"
+    t.index ["shipment_id"], name: "index_shipments_contacts_on_shipment_id"
+  end
+
+  create_table "shipments_documents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "attachable_id", null: false
+    t.string "attachable_type", null: false
+    t.datetime "created_at", null: false
+    t.integer "doc_type"
+    t.string "file_name"
+    t.uuid "sandbox_id"
+    t.datetime "updated_at", null: false
+    t.index ["attachable_type", "attachable_id"], name: "index_shipments_documents_on_attachable_type_and_attachable_id"
+    t.index ["sandbox_id"], name: "index_shipments_documents_on_sandbox_id"
+  end
+
+  create_table "shipments_invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "amount_cents", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.bigint "invoice_number"
+    t.uuid "sandbox_id"
+    t.uuid "shipment_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sandbox_id"], name: "index_shipments_invoices_on_sandbox_id"
+    t.index ["shipment_id"], name: "index_shipments_invoices_on_shipment_id"
+  end
+
+  create_table "shipments_line_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "amount_cents", default: 0, null: false
+    t.string "amount_currency", null: false
+    t.uuid "cargo_id"
+    t.datetime "created_at", null: false
+    t.string "fee_code"
+    t.uuid "invoice_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cargo_id"], name: "index_shipments_line_items_on_cargo_id"
+    t.index ["invoice_id"], name: "index_shipments_line_items_on_invoice_id"
+  end
+
+  create_table "shipments_shipment_request_contacts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "contact_id", null: false
+    t.datetime "created_at", null: false
+    t.uuid "shipment_request_id", null: false
+    t.string "type"
+    t.datetime "updated_at", null: false
+    t.index ["contact_id"], name: "index_shipment_request_contacts_on_contact_id"
+    t.index ["shipment_request_id"], name: "index_shipment_request_contacts_on_shipment_request_id"
+  end
+
+  create_table "shipments_shipment_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "cargo_notes"
+    t.datetime "created_at", null: false
+    t.string "eori"
+    t.datetime "eta"
+    t.datetime "etd"
+    t.string "incoterm_text"
+    t.string "notes"
+    t.string "ref_number", null: false
+    t.uuid "sandbox_id"
+    t.string "status"
+    t.datetime "submitted_at"
+    t.uuid "tenant_id", null: false
+    t.uuid "tender_id", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id", null: false
+    t.index ["sandbox_id"], name: "index_shipments_shipment_requests_on_sandbox_id"
+    t.index ["tenant_id"], name: "index_shipments_shipment_requests_on_tenant_id"
+    t.index ["tender_id"], name: "index_shipments_shipment_requests_on_tender_id"
+    t.index ["user_id"], name: "index_shipments_shipment_requests_on_user_id"
+  end
+
+  create_table "shipments_shipments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "destination_id", null: false
+    t.string "eori"
+    t.string "incoterm_text"
+    t.string "notes"
+    t.uuid "origin_id", null: false
+    t.uuid "sandbox_id"
+    t.uuid "shipment_request_id"
+    t.string "status"
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id", null: false
+    t.index ["destination_id"], name: "index_shipments_shipments_on_destination_id"
+    t.index ["origin_id"], name: "index_shipments_shipments_on_origin_id"
+    t.index ["sandbox_id"], name: "index_shipments_shipments_on_sandbox_id"
+    t.index ["shipment_request_id"], name: "index_shipments_shipments_on_shipment_request_id"
+    t.index ["tenant_id"], name: "index_shipments_shipments_on_tenant_id"
+    t.index ["user_id"], name: "index_shipments_shipments_on_user_id"
+  end
+
+  create_table "shipments_units", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "cargo_class"
+    t.uuid "cargo_id", null: false
+    t.bigint "cargo_type"
+    t.datetime "created_at", null: false
+    t.integer "dangerous_goods", default: 0
+    t.integer "goods_value_cents", default: 0, null: false
+    t.string "goods_value_currency", null: false
+    t.string "height_unit", default: "m"
+    t.decimal "height_value", precision: 100, scale: 4
+    t.string "length_unit", default: "m"
+    t.decimal "length_value", precision: 100, scale: 4
+    t.integer "quantity", null: false
+    t.uuid "sandbox_id"
+    t.boolean "stackable"
+    t.datetime "updated_at", null: false
+    t.string "volume_unit", default: "m3"
+    t.decimal "volume_value", precision: 100, scale: 6
+    t.string "weight_unit", default: "kg"
+    t.decimal "weight_value", precision: 100, scale: 3
+    t.string "width_unit", default: "m"
+    t.decimal "width_value", precision: 100, scale: 4
+    t.index ["cargo_id"], name: "index_shipments_units_on_cargo_id"
+    t.index ["sandbox_id"], name: "index_shipments_units_on_sandbox_id"
+  end
+
   create_table "stops", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "hub_id"
@@ -1813,6 +1964,22 @@ ActiveRecord::Schema.define(version: 2019_11_07_171324) do
   add_foreign_key "quotations_tenders", "quotations_quotations", column: "quotation_id"
   add_foreign_key "remarks", "tenants"
   add_foreign_key "shipments", "transport_categories"
+  add_foreign_key "shipments_cargos", "tenants_sandboxes", column: "sandbox_id"
+  add_foreign_key "shipments_cargos", "tenants_tenants", column: "tenant_id"
+  add_foreign_key "shipments_contacts", "tenants_sandboxes", column: "sandbox_id"
+  add_foreign_key "shipments_documents", "tenants_sandboxes", column: "sandbox_id"
+  add_foreign_key "shipments_invoices", "tenants_sandboxes", column: "sandbox_id"
+  add_foreign_key "shipments_shipment_request_contacts", "address_book_contacts", column: "contact_id"
+  add_foreign_key "shipments_shipment_requests", "quotations_tenders", column: "tender_id"
+  add_foreign_key "shipments_shipment_requests", "tenants_sandboxes", column: "sandbox_id"
+  add_foreign_key "shipments_shipment_requests", "tenants_tenants", column: "tenant_id"
+  add_foreign_key "shipments_shipment_requests", "tenants_users", column: "user_id"
+  add_foreign_key "shipments_shipments", "routing_terminals", column: "destination_id"
+  add_foreign_key "shipments_shipments", "routing_terminals", column: "origin_id"
+  add_foreign_key "shipments_shipments", "tenants_sandboxes", column: "sandbox_id"
+  add_foreign_key "shipments_shipments", "tenants_tenants", column: "tenant_id"
+  add_foreign_key "shipments_shipments", "tenants_users", column: "user_id"
+  add_foreign_key "shipments_units", "tenants_sandboxes", column: "sandbox_id"
   add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
   add_foreign_key "tenant_cargo_item_types", "tenants"
   add_foreign_key "users", "roles"
