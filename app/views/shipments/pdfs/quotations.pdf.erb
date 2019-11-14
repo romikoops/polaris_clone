@@ -418,7 +418,7 @@
                             else
                               case scope['fee_detail']
                                 when 'key'
-                                  sub_charge['key'].upcase
+                                  sub_charge['key'].gsub('_', ' ').upcase
                                 when 'key_and_name'
                                   "#{sub_charge['key'].upcase} - #{sub_charge['name']}"
                                 when 'name'
