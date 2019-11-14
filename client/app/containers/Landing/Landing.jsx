@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
+import { get } from 'http'
 import LandingTop from '../../components/LandingTop/LandingTop'
 import styles from './Landing.scss'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
@@ -25,15 +26,35 @@ class Landing extends Component {
   }
 
   bookNow () {
-    const { appDispatch, authenticationDispatch, loggedIn } = this.props
+    const { appDispatch, authenticationDispatch } = this.props
     const redirectUrl = '/booking'
 
-    if (!loggedIn) {
+    if (this.shouldShowLogin()) {
       authenticationDispatch.showLogin({ redirectUrl })
 
       return
     }
     appDispatch.goTo(redirectUrl)
+  }
+
+  shouldShowLogin () {
+    const { loggedIn, tenant, user } = this.props
+    const { scope } = tenant
+    const isClosedShop = scope.closed_shop || scope.closed_quotation_tool
+    if ((user && !user.guest) || loggedIn) {
+      return false
+    }
+    if (loggedIn && get(user, ['guest'], false) && isClosedShop) {
+      return true
+    }
+    if (!loggedIn && isClosedShop) {
+      return true
+    }
+    if (!loggedIn && !isClosedShop) {
+      return false
+    }
+
+    return true
   }
 
   render () {
@@ -211,5 +232,5 @@ function mapStateToProps (state) {
     showModal
   }
 }
-
-export default withContent(withRouter(connect(mapStateToProps, mapDispatchToProps)(Landing)), 'Landing')
+export const BasicLanding = Landing
+export default withContent(withRouter(connect(mapStateToProps, mapDispatchToProps)(BasicLanding)), 'Landing')
