@@ -254,7 +254,7 @@ module Pricings
         fee_snapshots = data.map do |mdata|
           margin = mdata[:margin]
           fees.each do |fee|
-            fee_json = fee.as_json
+            fee_json = fee.to_fee_hash
             effective_margin = (margin.details.find_by(charge_category_id: fee.charge_category_id) || margin)
             effective_value = if effective_margin.operator == '+' && effective_margin == margin
                                 effective_margin.value / fees.size

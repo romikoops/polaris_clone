@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TransportCategory < ApplicationRecord
+class TransportCategory < Legacy::TransportCategory
   LOAD_TYPE_CARGO_CLASSES = {
     'container' => Container::CARGO_CLASSES,
     'cargo_item' => %w(

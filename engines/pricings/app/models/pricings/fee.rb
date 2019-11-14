@@ -11,23 +11,20 @@ module Pricings
     belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
-    def as_json(options = {})
-      new_options = options.reverse_merge(
-        methods: fee_code, only: [], except: [:metadata]
-      )
-      super(new_options)
-    end
+    def to_fee_hash
+      return unless charge_category.present?
 
-    def to_fee
       {
-        rate: rate,
-        base: base,
-        rate_basis: rate_basis&.internal_code,
-        currency: currency_name,
-        hw_threshold: hw_threshold,
-        hw_rate_basis: hw_rate_basis&.internal_code,
-        min: min,
-        range: range
+        fee_code => {
+          rate: rate,
+          base: base,
+          rate_basis: rate_basis&.internal_code,
+          currency: currency_name,
+          hw_threshold: hw_threshold,
+          hw_rate_basis: hw_rate_basis&.internal_code,
+          min: min,
+          range: range
+        }
       }.compact.with_indifferent_access
     end
 
@@ -41,22 +38,6 @@ module Pricings
 
     def fee_name_and_code
       "#{charge_category&.code} - #{charge_category&.name}"
-    end
-
-    def method_missing(method_name, *args)
-      if method_name == fee_code.to_sym
-        to_fee
-      else
-        super
-      end
-    end
-
-    def respond_to_missing?(method_name, *args)
-      if method_name == fee_code.to_sym
-        true
-      else
-        super
-      end
     end
   end
 end

@@ -13,7 +13,6 @@ module Legacy
     belongs_to :tenant_vehicle
     belongs_to :user, optional: true
     has_many :pricing_details, as: :priceable, dependent: :destroy
-    has_many :pricing_exceptions, dependent: :destroy
     has_many :pricing_requests, dependent: :destroy
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
@@ -40,10 +39,9 @@ module Legacy
             ))
     end)
 
-
     def as_json(options = {})
       new_options = options.reverse_merge(
-        methods: %i(data exceptions load_type cargo_class carrier service_level),
+        methods: %i(data load_type cargo_class carrier service_level),
         only: %i(
           effective_date expiration_date wm_rate itinerary_id internal
           tenant_id transport_category_id id currency_name tenant_vehicle_id user_id
@@ -54,7 +52,7 @@ module Legacy
 
     def for_table_json(options = {})
       new_options = options.reverse_merge(
-        methods: %i(data exceptions load_type cargo_class carrier service_level user_email),
+        methods: %i(data load_type cargo_class carrier service_level user_email),
         only: %i(
           effective_date expiration_date wm_rate itinerary_id internal
           tenant_id transport_category_id id currency_name tenant_vehicle_id user_id
@@ -64,11 +62,7 @@ module Legacy
     end
 
     def data
-      pricing_details.map(&:as_json).reduce({}) { |hash, merged_hash| merged_hash.deep_merge(hash) }
-    end
-
-    def exceptions
-      pricing_exceptions.map(&:as_json)
+      pricing_details.map(&:to_fee_hash).reduce({}) { |hash, merged_hash| merged_hash.deep_merge(hash) }
     end
 
     def user_email
@@ -81,44 +75,6 @@ module Legacy
 
     def service_level
       tenant_vehicle&.name
-    end
-
-    def has_requests(user_id)
-      pricing_requests.exists?(user_id: user_id)
-    end
-
-    def duplicate_for_user(user_id)
-      pricing_to_update = Pricing.new
-      new_pricing_data = as_json
-      new_pricing_data.delete('controller')
-      new_pricing_data.delete('subdomain_id')
-      new_pricing_data.delete('action')
-      new_pricing_data.delete('id')
-      new_pricing_data.delete('created_at')
-      new_pricing_data.delete('updated_at')
-      new_pricing_data.delete('load_type')
-      new_pricing_data.delete('cargo_class')
-      new_pricing_data.delete('exceptions')
-      new_pricing_data.delete('carrier')
-      new_pricing_data.delete('service_level')
-      new_pricing_data['user_id'] = user_id
-      pricing_details = new_pricing_data.delete('data')
-
-      pricing_to_update.update(new_pricing_data)
-      pricing_details.each do |shipping_type, pricing_detail_data|
-        currency = pricing_detail_data.delete('currency')
-        pricing_detail_params = pricing_detail_data.merge(
-          shipping_type: shipping_type,
-          tenant: tenant
-        )
-        range = pricing_detail_params.delete('range')
-        pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
-          shipping_type: shipping_type,
-          tenant: tenant
-        )
-        pricing_detail.update!(pricing_detail_params)
-        pricing_detail.update!(range: range, currency_name: currency)
-      end
     end
   end
 end

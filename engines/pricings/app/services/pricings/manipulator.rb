@@ -186,7 +186,7 @@ module Pricings
         fee_count = fees.select { |f| f.fee_code&.include?('unknown') || f.fee_code&.include?('included') }.size
         fee_count = 1 if fee_count.zero?
         fee_hash = fees.each_with_object({}) do |fee, hash|
-          fee_json = fee.as_json
+          fee_json = fee.to_fee_hash
           fee_code = fee.fee_code
           next if fee_code.nil?
 

@@ -69,7 +69,7 @@ module Pricings
     end
 
     def data
-      fees.map(&:as_json).reduce({}) { |hash, merged_hash| merged_hash.deep_merge(hash) }
+      fees.map(&:to_fee_hash).reduce({}) { |hash, merged_hash| merged_hash.deep_merge(hash) }
     end
 
     def carrier
