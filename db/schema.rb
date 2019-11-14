@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_07_171324) do
+ActiveRecord::Schema.define(version: 2019_11_11_121459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1958,6 +1958,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_171324) do
 
   add_foreign_key "address_book_contacts", "tenants_sandboxes", column: "sandbox_id"
   add_foreign_key "address_book_contacts", "tenants_users", column: "user_id"
+  add_foreign_key "cargo_cargos", "quotations_quotations", column: "quotation_id"
   add_foreign_key "cargo_units", "cargo_cargos", column: "cargo_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
