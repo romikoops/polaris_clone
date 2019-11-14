@@ -1,8 +1,9 @@
 import { push } from 'react-router-redux'
+import { get } from 'lodash'
 import { appConstants } from '../constants'
-import { getApiHost } from '../constants/api.constants'
 import { appService } from '../services'
-
+import { getApiHost } from '../constants/api.constants'
+import { authHeader } from '../helpers'
 import {
   shipmentActions,
   userActions,
@@ -13,6 +14,59 @@ import {
 } from '.'
 
 const { fetch } = window
+
+const requestOptions = {
+  method: 'GET',
+  headers: authHeader()
+}
+
+// New Format (Action only)
+
+function getTenantId () {
+  const { localStorage } = window
+
+  function request () {
+    return { type: appConstants.SET_TENANT_ID_REQUEST }
+  }
+
+  function success (payload) {
+    return { type: appConstants.SET_TENANT_ID_SUCCESS, payload }
+  }
+
+  function failure (error) {
+    return { type: appConstants.SET_TENANT_ID_ERROR, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    const tenantId = localStorage.getItem('tenantId')
+
+    if (tenantId && tenantId !== 'null') {
+      dispatch(success(tenantId))
+
+      return dispatch(getTenant())
+    }
+
+    return fetch(`${getApiHost()}/tenants/current`, requestOptions)
+      .then(resp => resp.json())
+      .then((res) => {
+        const newTenantId = get(res, ['data', 'tenant_id'], false)
+        if (newTenantId) {
+          localStorage.setItem('tenantId', newTenantId)
+          dispatch(success(newTenantId))
+          dispatch(getTenant())
+        } else {
+          dispatch(failure({ text: 'Null Id' }))
+        }
+      })
+      .catch((_error) => {
+        dispatch(failure({ text: 'Invalid Response' }))
+      })
+  }
+}
+
+// Legacy Format (Action + Service)
 
 function setTenants () {
   function request () {
@@ -52,47 +106,6 @@ function overrideTenant (tenantId) {
     dispatch(success(tenantId))
 
     dispatch(getTenant())
-  }
-}
-
-function getTenantId () {
-  const { localStorage } = window
-
-  function request () {
-    return { type: appConstants.SET_TENANT_ID_REQUEST }
-  }
-
-  function success (payload) {
-    return { type: appConstants.SET_TENANT_ID_SUCCESS, payload }
-  }
-
-  function failure (error) {
-    return { type: appConstants.SET_TENANT_ID_ERROR, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request)
-
-    const tenantId = localStorage.getItem('tenantId')
-
-    if (tenantId) {
-      dispatch(success(tenantId))
-      dispatch(getTenant())
-    } else {
-      appService.getTenantId().then(
-        (resp) => {
-          localStorage.setItem('tenantId', resp.data.tenant_id)
-
-          dispatch(success(resp.data.tenant_id))
-          dispatch(getTenant())
-        },
-        (error) => {
-          error.then((data) => {
-            dispatch(failure({ type: 'error', text: data.message }))
-          })
-        }
-      )
-    }
   }
 }
 

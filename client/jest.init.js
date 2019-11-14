@@ -43,3 +43,4 @@ class LocalStorageMock {
 }
 
 global.localStorage = new LocalStorageMock()
+global.fetch = require('jest-fetch-mock')

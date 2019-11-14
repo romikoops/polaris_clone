@@ -14,7 +14,8 @@ jest.mock('../../../helpers', () => ({
   nameToDisplay: x => x,
   switchIcon: x => x,
   gradientGenerator: x => x,
-  renderHubType: x => x
+  renderHubType: x => x,
+  authHeader: () => {}
 }))
 jest.mock('uuid', () => {
   let counter = -1

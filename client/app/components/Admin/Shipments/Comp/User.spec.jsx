@@ -12,7 +12,8 @@ jest.mock('../../../../helpers', () => ({
   capitalize: x => x,
   loadOriginNexus: x => x,
   loadDestinationNexus: x => x,
-  loadMot: x => x
+  loadMot: x => x,
+  authHeader: () => {}
 }))
 
 const propsBase = {

@@ -26,6 +26,12 @@
     "react",
     "redux"
   ],
+  "jest": {
+    "automock": true,
+    "setupFiles": [
+      "./jest.init.js"
+    ]
+  },
   "author": "ItsMyCargo Gmbh",
   "license": "SEE LICENSE IN LICENSE",
   "private": true,
@@ -125,19 +131,20 @@
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
+    "@itsmycargo/eslint-config": "^0.1.5",
     "@types/react-tooltip": "^3.3.5",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^23.4.2",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.4.2",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
     "enzyme-to-json": "^3.3.0",
     "eslint": "^5.9.0",
-    "@itsmycargo/eslint-config": "^0.1.5",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.0.0",
     "jest-enzyme": "^7.0.1",
+    "jest-fetch-mock": "^2.1.2",
     "jest-junit": "^6.0.0",
     "jest-tobetype": "^1.1.0",
     "moment-timezone": "^0.5.23",
@@ -145,6 +152,7 @@
     "react-addons-test-utils": "^15.0.2",
     "react-json-tree": "^0.11.0",
     "react-test-renderer": "^16.6.3",
+    "redux-mock-store": "^1.5.3",
     "typescript": "^3.1.4",
     "webpack-dev-server": "^3.9.0"
   }

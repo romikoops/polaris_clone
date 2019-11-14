@@ -8,7 +8,8 @@ import AdminSchedules from './AdminSchedules'
 
 jest.mock('../../helpers', () => ({
   filters: x => x,
-  capitalize: x => x
+  capitalize: x => x,
+  authHeader: () => {}
 }))
 jest.mock('react-redux', () => ({
   connect: (mapStateToProps, mapDispatchToProps) => Component => Component
