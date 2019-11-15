@@ -25,7 +25,7 @@ FactoryBot.define do
 
     trait :aggregated do
       volume_value { 1.3 }
-      height_value { Cargo::Specification::DEFAULT_HEIGHT }
+      height_value { ::Cargo::Specification::DEFAULT_HEIGHT }
       cargo_class { '00' }
       cargo_type { 'AGR' }
       stackable { true }

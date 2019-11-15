@@ -8,8 +8,8 @@ module Shipments
     measured_volume :volume
     measured_length :width, :length, :height
 
-    enum cargo_class: Cargo::Specification::CLASS_ENUM, _prefix: true
-    enum cargo_type: Cargo::Specification::TYPE_ENUM, _prefix: true
+    enum cargo_class: ::Cargo::Specification::CLASS_ENUM, _prefix: true
+    enum cargo_type: ::Cargo::Specification::TYPE_ENUM, _prefix: true
     enum dangerous_goods: {
       unspecified: 0
     }
