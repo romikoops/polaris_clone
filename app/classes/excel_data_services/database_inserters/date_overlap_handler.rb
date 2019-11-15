@@ -64,8 +64,6 @@ module ExcelDataServices
         case old_obj.class.name
         when 'Legacy::Pricing', 'Pricing'
           after_new_obj.pricing_details << old_obj.pricing_details.map(&:dup)
-          after_new_obj.pricing_details << old_obj.pricing_exceptions.map(&:dup)
-          after_new_obj.pricing_details << old_obj.pricing_requests.map(&:dup)
           after_new_obj.uuid = SecureRandom.uuid
           # Although after_new_obj is a new object, its data reflects the old object.
           # It should therefore be marked, such that no new pricing_details will be added

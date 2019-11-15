@@ -93,7 +93,7 @@ module ExcelDataServices
         tenant_vehicle.vehicle.transport_categories.find_by(
           name: 'any',
           cargo_class: cargo_class.downcase,
-          sandbox: @sandbox
+          sandbox_id: @sandbox&.id
         )
       end
 
