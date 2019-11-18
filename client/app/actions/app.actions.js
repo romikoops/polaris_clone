@@ -3,7 +3,7 @@ import { get } from 'lodash'
 import { appConstants } from '../constants'
 import { appService } from '../services'
 import { getApiHost } from '../constants/api.constants'
-import { authHeader } from '../helpers'
+import { requestOptions } from '../helpers'
 import {
   shipmentActions,
   userActions,
@@ -14,11 +14,6 @@ import {
 } from '.'
 
 const { fetch } = window
-
-const requestOptions = {
-  method: 'GET',
-  headers: authHeader()
-}
 
 // New Format (Action only)
 
@@ -48,7 +43,7 @@ function getTenantId () {
       return dispatch(getTenant())
     }
 
-    return fetch(`${getApiHost()}/tenants/current`, requestOptions)
+    return fetch(`${getApiHost()}/tenants/current`, requestOptions('get'))
       .then(resp => resp.json())
       .then((res) => {
         const newTenantId = get(res, ['data', 'tenant_id'], false)

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
-import { get } from 'http'
+import { get } from 'lodash'
 import LandingTop from '../../components/LandingTop/LandingTop'
 import styles from './Landing.scss'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
@@ -41,7 +41,7 @@ class Landing extends Component {
     const { loggedIn, tenant, user } = this.props
     const { scope } = tenant
     const isClosedShop = scope.closed_shop || scope.closed_quotation_tool
-    if ((user && !user.guest) || loggedIn) {
+    if (((user && !user.guest) || loggedIn) && !isClosedShop) {
       return false
     }
     if (loggedIn && get(user, ['guest'], false) && isClosedShop) {

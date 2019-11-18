@@ -1,7 +1,41 @@
 import { push } from 'react-router-redux'
 import { adminConstants } from '../constants/admin.constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 import { adminService } from '../services/admin.service'
-import { alertActions, documentActions, clientsActions } from './'
+import { alertActions, documentActions, clientsActions } from '.'
+import { requestOptions } from '../helpers'
+
+const { fetch } = window
+
+// New Format (Action only)
+
+function deletePricing (pricing, fromGroup = false) {
+  function request (payload) {
+    return { type: adminConstants.DELETE_PRICING_REQUEST, payload }
+  }
+  function success (payload) {
+    return { type: adminConstants.DELETE_PRICING_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_PRICING_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    return fetch(`${getTenantApiUrl()}/admin/pricings/${pricing.id}`, requestOptions('DELETE'))
+      .then(resp => resp.json())
+      .then(() => {
+        dispatch(success({ pricing, fromGroup }))
+      })
+      .catch((error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      })
+  }
+}
+
+// Legacy Format (Action + Service)
 
 function getHubs (page, filters, sorted, pageSize) {
   function request () {
@@ -420,30 +454,7 @@ function getPricingsTest (req) {
     )
   }
 }
-function deletePricing (pricingId) {
-  function request (payload) {
-    return { type: adminConstants.DELETE_PRICING_REQUEST, payload }
-  }
-  function success (payload) {
-    return { type: adminConstants.DELETE_PRICING_SUCCESS, payload }
-  }
-  function failure (error) {
-    return { type: adminConstants.DELETE_PRICING_FAILURE, error }
-  }
 
-  return (dispatch) => {
-    dispatch(request(pricingId))
-    adminService.deletePricing(pricingId).then(
-      () => {
-        dispatch(success(pricingId))
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
 function deleteLocalCharge (localChargeId) {
   function request (payload) {
     return { type: adminConstants.DELETE_LOCAL_CHARGE_REQUEST, payload }

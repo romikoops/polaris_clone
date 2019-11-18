@@ -358,16 +358,6 @@ function searchPricings (text, page, mot) {
     .then(handleResponse)
 }
 
-function deletePricing (pricing) {
-  const requestOptions = {
-    method: 'DELETE',
-    headers: authHeader()
-  }
-
-  return fetch(`${getTenantApiUrl()}/admin/pricings/${pricing.id}`, requestOptions)
-    .then(handleResponse)
-}
-
 function deleteLocalCharge (localChargeId) {
   const requestOptions = {
     method: 'DELETE',
@@ -818,7 +808,6 @@ export const adminService = {
   editShipmentTime,
   editLocalCharges,
   deleteHub,
-  deletePricing,
   editHub,
   deleteClient,
   editCustomsFees,

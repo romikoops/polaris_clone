@@ -874,8 +874,8 @@ export default function admin (state = {}, action) {
         ...state,
         pricings: {
           ...state.pricings,
-          groups: {
-            ...state.pricings.groups,
+          show: {
+            ...state.pricings.show,
             [action.payload.group_id]: action.payload
           }
         },
@@ -1003,9 +1003,9 @@ export default function admin (state = {}, action) {
     }
     case adminConstants.DELETE_PRICING_SUCCESS: {
       const { show } = state.pricings
-      // eslint-disable-next-line no-underscore-dangle
-      const itineraryId = action.payload.itinerary_id
-      const pricings = show[itineraryId].pricings.filter(x => x.id !== action.payload.id)
+      const { pricing, fromGroup } = action.payload
+      const targetId = fromGroup ? pricing.group_id : pricing.itinerary_id
+      const pricings = show[targetId].pricings.filter(x => x.id !== pricing.id)
 
       return {
         ...state,
@@ -1013,8 +1013,8 @@ export default function admin (state = {}, action) {
           ...state.pricings,
           show: {
             ...state.pricings.show,
-            [itineraryId]: {
-              ...state.pricings.show[itineraryId],
+            [targetId]: {
+              ...state.pricings.show[targetId],
               pricings
             }
           }

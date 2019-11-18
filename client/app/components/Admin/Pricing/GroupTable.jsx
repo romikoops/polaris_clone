@@ -46,17 +46,8 @@ class AdminPricesGroupTable extends PureComponent {
   }
 
   componentDidMount () {
-    const { pricings, adminDispatch, groupId } = this.props
-    // if (!has(pricings, `groups.${groupId}`)) {
+    const { adminDispatch, groupId } = this.props
     adminDispatch.getGroupPricings(groupId)
-    // }
-  }
-
-  deletePricing () {
-    const { adminDispatch } = this.props
-    const { pricingToDelete } = this.state
-    adminDispatch.deletePricing(pricingToDelete)
-    this.closeConfirm()
   }
 
   onConfirm () {
@@ -72,6 +63,13 @@ class AdminPricesGroupTable extends PureComponent {
       default:
         break
     }
+  }
+
+  deletePricing () {
+    const { adminDispatch } = this.props
+    const { pricingToDelete } = this.state
+    adminDispatch.deletePricing(pricingToDelete, true)
+    this.closeConfirm()
   }
 
   confirmDialog (action, pricing) {
@@ -114,7 +112,7 @@ class AdminPricesGroupTable extends PureComponent {
     } = this.props
     const { sorted, confirm, confirmAction } = this.state
 
-    const data = get(pricings, ['groups', groupId], false)
+    const data = get(pricings, ['show', groupId], false)
     if (!data) return ''
     const columns = [
       {

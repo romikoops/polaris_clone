@@ -20,6 +20,7 @@ const propsBase = {
   }
 }
 
+
 test('shallow render', () => {
   expect(shallow(<Landing {...propsBase} />)).toMatchSnapshot()
 })
