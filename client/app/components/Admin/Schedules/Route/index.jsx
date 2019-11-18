@@ -9,11 +9,10 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 
 import { documentActions } from '../../../../actions'
-import AdminUploadsSuccess from './../../Uploads/Success'
+import AdminUploadsSuccess from "../../Uploads/Success"
 import FileUploader from '../../../FileUploader/FileUploader'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 import styles from '../../Admin.scss'
-import { AdminTripPanel } from '../../AdminTripPanel'
 import AdminScheduleGenerator from '../../AdminScheduleGenerator'
 import TextHeading from '../../../TextHeading/TextHeading'
 import DocumentsDownloader from '../../../Documents/Downloader'
@@ -40,6 +39,7 @@ class AdminSchedulesRoute extends Component {
       return result1 * sortOrder
     }
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -53,6 +53,7 @@ class AdminSchedulesRoute extends Component {
     this.getItinerariesForHub = this.getItinerariesForHub.bind(this)
     this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
   }
+
   componentWillMount () {
     if (
       this.props.scheduleData &&
@@ -63,6 +64,7 @@ class AdminSchedulesRoute extends Component {
     }
     this.props.setCurrentUrl('/admin/schedules')
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
   }
@@ -70,6 +72,7 @@ class AdminSchedulesRoute extends Component {
   getItinerary (sched) {
     return this.props.scheduleData.itineraries.filter(x => x.id === sched.itinerary_id)[0]
   }
+
   getItinerariesForHub (hub) {
     const filteredItineraries = this.props.scheduleData.detailedItineraries.filter((itinerary) => {
       if (!itinerary) {
@@ -81,13 +84,16 @@ class AdminSchedulesRoute extends Component {
 
     return filteredItineraries.map(x => x.id)
   }
+
   toggleView () {
     this.setState({ showList: !this.state.showList })
   }
+
   closeSuccessDialog () {
     const { documentDispatch } = this.props
     documentDispatch.closeViewer()
   }
+
   toggleShowPanel (id) {
     if (!this.state.panelViewer[id]) {
       this.props.adminDispatch.getLayovers(id, 'schedules')
@@ -99,6 +105,7 @@ class AdminSchedulesRoute extends Component {
       }
     })
   }
+
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -107,6 +114,7 @@ class AdminSchedulesRoute extends Component {
       }
     })
   }
+
   toggleFilterValue (key) {
     const sort = {
       start_date: false,
@@ -121,6 +129,7 @@ class AdminSchedulesRoute extends Component {
       }
     })
   }
+
   prepFilters () {
     const { schedules } = this.props.scheduleData
     const tmpFilters = {
@@ -136,6 +145,7 @@ class AdminSchedulesRoute extends Component {
       searchResults: schedules
     })
   }
+
   handleSearchQuery (e) {
     const { value } = e.target
     this.setState({
@@ -145,6 +155,7 @@ class AdminSchedulesRoute extends Component {
       }
     })
   }
+
   applyFilters (array) {
     const { searchFilters } = this.state
     const sortKey = Object.keys(searchFilters.sort).filter(key => searchFilters.sort[key])[0]
@@ -160,6 +171,7 @@ class AdminSchedulesRoute extends Component {
 
     return filter2
   }
+
   render () {
     const {
       t,
@@ -209,6 +221,14 @@ class AdminSchedulesRoute extends Component {
         )
       },
       {
+        Header: t('admin:serviceLevel'),
+        accessor: 'service_level'
+      },
+      {
+        Header: t('admin:carrier'),
+        accessor: 'carrier'
+      },
+      {
         Header: t('admin:voyageCode'),
         accessor: 'voyage_code'
       },
@@ -218,26 +238,7 @@ class AdminSchedulesRoute extends Component {
       }
     ]
     const { itinerary, itineraryLayovers, schedules } = scheduleData
-    const tripArr = []
-    const slimit = limit || 100
 
-    const results = this.applyFilters(searchResults)
-    results.forEach((trip, i) => {
-      if (i < slimit) {
-        tripArr.push(<AdminTripPanel
-          key={v4()}
-          trip={trip}
-          showPanel={panelViewer[trip.id]}
-          toggleShowPanel={this.toggleShowPanel}
-          layovers={itineraryLayovers}
-          adminDispatch={adminDispatch}
-          itinerary={itinerary}
-          hubs={hubs}
-          theme={theme}
-        />)
-      }
-    })
-    // const uploadUrl = `/admin/schedules/overwrite/${itinerary.id}`
     const genView = (
       <div className="layout-row flex-95 layout-wrap layout-align-start-center">
         <AdminScheduleGenerator theme={theme} itinerary={itinerary} />
@@ -343,8 +344,7 @@ class AdminSchedulesRoute extends Component {
                           <p className="flex-80">{`Upload ${itinerary.name} Schedules Sheet`}</p>
                           <FileUploader
                             theme={theme}
-                            dispatchFn={file =>
-                              documentDispatch.uploadItinerarySchedules(file, itinerary.id)
+                            dispatchFn={file => documentDispatch.uploadItinerarySchedules(file, itinerary.id)
                             }
                             type="xlsx"
                             text="Train Schedules .xlsx"

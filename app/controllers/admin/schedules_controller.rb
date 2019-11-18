@@ -14,7 +14,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def show
     itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
-    schedules = itinerary.trips.lastday_today.limit(100).order(:start_date)
+    schedules = trips_for_table(itinerary: itinerary, limit: 100)
     response_handler(schedules: schedules, itinerary: itinerary.as_options_json)
   end
 
@@ -184,6 +184,17 @@ class Admin::SchedulesController < Admin::AdminBaseController
     trip.layovers.order(:stop_index).map do |layover|
       { layover: layover, stop: layover.stop, hub: layover.stop.hub }
     end
+  end
+
+  def trips_for_table(itinerary:, limit:)
+    itinerary
+      .trips
+      .lastday_today
+      .joins(tenant_vehicle: :carrier)
+      .select('trips.*, tenant_vehicles.name AS service_level, carriers.name AS carrier')
+      .order(:start_date)
+      .limit(limit)
+      .map(&:attributes)
   end
 
   def trip

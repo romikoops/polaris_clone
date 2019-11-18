@@ -110,6 +110,14 @@ exports[`document.viewer is falsy 1`] = `
                 "accessor": "end_date",
               },
               Object {
+                "Header": "Service Level",
+                "accessor": "service_level",
+              },
+              Object {
+                "Header": "Carrier",
+                "accessor": "carrier",
+              },
+              Object {
                 "Header": "Voyage Code",
                 "accessor": "voyage_code",
               },
@@ -557,6 +565,14 @@ exports[`shallow render 1`] = `
                 "Cell": [Function],
                 "Header": "ETA",
                 "accessor": "end_date",
+              },
+              Object {
+                "Header": "Service Level",
+                "accessor": "service_level",
+              },
+              Object {
+                "Header": "Carrier",
+                "accessor": "carrier",
               },
               Object {
                 "Header": "Voyage Code",
