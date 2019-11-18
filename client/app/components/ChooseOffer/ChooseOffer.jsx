@@ -4,7 +4,7 @@ import { v4 } from 'uuid'
 import { withNamespaces } from 'react-i18next'
 import
 {
-  flow,
+  has,
   get,
   minBy,
   values
@@ -37,6 +37,23 @@ class ChooseOffer extends Component {
 
       return result2 * sortOrder
     }
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    const quoteTool = isQuote(nextProps.tenant)
+    const nextState = { ...prevState }
+    const { defaultTriggered, selectedOffers } = prevState
+    const shouldUpdateOffers = selectedOffers.length === 0 && !defaultTriggered
+    if (has(nextProps, ['shipmentData', 'results']) && quoteTool && shouldUpdateOffers) {
+      nextState.selectedOffers = nextProps.shipmentData.results
+      nextState.isChecked = {}
+      nextState.selectedOffers.forEach((offer) => {
+        nextState.isChecked[offer.meta.charge_trip_id] = true
+      })
+      nextState.defaultTriggered = true
+    }
+
+    return nextState
   }
 
   constructor (props) {
@@ -213,17 +230,17 @@ class ChooseOffer extends Component {
 
   getValidUntil (quote) {
     if (!quote || !quote.meta || !quote.meta.pricing_rate_data) {
-      return null;
+      return null
     }
 
     const minQuoteValues = values(quote.meta.pricing_rate_data)
     const minQuote = minBy(minQuoteValues, x => moment(x.valid_until))
 
     if (!minQuote) {
-      return null;
+      return null
     }
 
-    return minQuote.valid_until;
+    return minQuote.valid_until
   }
 
   render () {
