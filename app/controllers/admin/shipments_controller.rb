@@ -126,7 +126,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       )
 
       @doc.as_json.merge(
-        signed_url: rails_blob_url(@doc.file, disposition: 'attachment')
+        signed_url: Rails.application.routes.url_helpers.rails_blob_url(@doc.file, disposition: 'attachment')
       )
     end
 
@@ -143,7 +143,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @user = @document.user
     decide_document_action
 
-    signed_url = @document.file.attached? && rails_blob_url(@document.file, disposition: 'attachment')
+    signed_url = @document.file.attached? && Rails.application.routes.url_helpers.rails_blob_url(@document.file, disposition: 'attachment')
     response_handler(@document.as_json.merge(signed_url: signed_url))
   end
 
@@ -394,7 +394,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def populate_documents
     @documents = @shipment.documents.where(sandbox: @sandbox).select { |doc| doc.file.attached? }.map do |doc|
-      doc.as_json.merge(signed_url: rails_blob_url(doc.file, disposition: 'attachment'))
+      doc.as_json.merge(signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: 'attachment'))
     end
   end
 

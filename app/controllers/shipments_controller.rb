@@ -92,7 +92,7 @@ class ShipmentsController < ApplicationController
       )
 
       @doc.as_json.merge(
-        signed_url: rails_blob_url(@doc.file, disposition: 'attachment')
+        signed_url: Rails.application.routes.url_helpers.rails_blob_url(@doc.file, disposition: 'attachment')
       )
     end
 

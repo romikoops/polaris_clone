@@ -208,7 +208,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     document = downloader.perform
 
     # TODO: When timing out, file will not be downloaded!!!
-    response_handler(key: key, url: rails_blob_url(document.file, disposition: 'attachment'))
+    response_handler(key: key, url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment'))
   end
 
   def test

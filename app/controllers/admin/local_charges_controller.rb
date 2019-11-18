@@ -106,7 +106,7 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
     document = downloader.perform
 
     # TODO: When timing out, file will not be downloaded!!!
-    response_handler(key: key, url: rails_blob_url(document.file, disposition: 'attachment'))
+    response_handler(key: key, url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment'))
   end
 
   private

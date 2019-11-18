@@ -4,7 +4,7 @@ class DocumentsController < ApplicationController
   skip_before_action :require_authentication!
 
   def download_redirect
-    redirect_to rails_blob_url(
+    redirect_to Rails.application.routes.url_helpers.rails_blob_url(
       Document.find_by(id: params[:document_id], sandbox: @sandbox).file,
       disposition: 'attachment'
     )
