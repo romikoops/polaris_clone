@@ -1,0 +1,272 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-center-center layout-wrap"
+>
+  <ReactTable
+    AggregatedComponent={[Function]}
+    ExpanderComponent={[Function]}
+    FilterComponent={[Function]}
+    LoadingComponent={[Function]}
+    NoDataComponent={[Function]}
+    PadRowComponent={[Function]}
+    PaginationComponent={[Function]}
+    PivotValueComponent={[Function]}
+    ResizerComponent={[Function]}
+    SubComponent={[Function]}
+    TableComponent={[Function]}
+    TbodyComponent={[Function]}
+    TdComponent={[Function]}
+    TfootComponent={[Function]}
+    ThComponent={[Function]}
+    TheadComponent={[Function]}
+    TrComponent={[Function]}
+    TrGroupComponent={[Function]}
+    aggregatedKey="_aggregated"
+    className="flex"
+    collapseOnDataChange={true}
+    collapseOnPageChange={true}
+    collapseOnSortingChange={true}
+    column={
+      Object {
+        "Aggregated": undefined,
+        "Cell": undefined,
+        "Expander": undefined,
+        "Filter": undefined,
+        "Footer": undefined,
+        "Header": undefined,
+        "Pivot": undefined,
+        "PivotValue": undefined,
+        "aggregate": undefined,
+        "className": "",
+        "filterAll": false,
+        "filterMethod": undefined,
+        "filterable": undefined,
+        "footerClassName": "",
+        "footerStyle": Object {},
+        "getFooterProps": [Function],
+        "getHeaderProps": [Function],
+        "getProps": [Function],
+        "headerClassName": "",
+        "headerStyle": Object {},
+        "minWidth": 100,
+        "resizable": undefined,
+        "show": true,
+        "sortMethod": undefined,
+        "sortable": undefined,
+        "style": Object {},
+      }
+    }
+    columns={
+      Array [
+        Object {
+          "Cell": [Function],
+          "Filter": [Function],
+          "Header": "Margin Type",
+          "accessor": [Function],
+          "id": "marginType",
+          "maxWidth": 100,
+        },
+        Object {
+          "Cell": [Function],
+          "Header": "Valid From",
+          "accessor": [Function],
+          "id": "effectiveDate",
+        },
+        Object {
+          "Cell": [Function],
+          "Header": "Valid To",
+          "accessor": [Function],
+          "id": "expirationDate",
+        },
+        Object {
+          "Cell": [Function],
+          "Header": "Itinerary",
+          "accessor": [Function],
+          "id": "itineraryName",
+        },
+        Object {
+          "Cell": [Function],
+          "Header": "Service Level",
+          "accessor": [Function],
+          "id": "serviceLevel",
+          "maxWidth": 100,
+        },
+        Object {
+          "Cell": [Function],
+          "Header": "Cargo Class: ",
+          "accessor": [Function],
+          "id": "cargoClass",
+          "maxWidth": 100,
+        },
+        Object {
+          "Cell": [Function],
+          "Header": "Mode of Transport",
+          "accessor": [Function],
+          "id": "mot",
+          "maxWidth": 100,
+        },
+        Object {
+          "Cell": [Function],
+          "Header": "Margin",
+          "accessor": [Function],
+          "id": "value",
+          "maxWidth": 75,
+        },
+        Object {
+          "Cell": [Function],
+          "Header": "Operator",
+          "accessor": [Function],
+          "id": "operator",
+          "maxWidth": 75,
+        },
+      ]
+    }
+    data={Array []}
+    defaultExpanded={Object {}}
+    defaultFilterMethod={[Function]}
+    defaultFiltered={Array []}
+    defaultPageSize={10}
+    defaultResized={Array []}
+    defaultSortDesc={false}
+    defaultSortMethod={[Function]}
+    defaultSorted={
+      Array [
+        Object {
+          "desc": false,
+          "id": "applicationOrder",
+        },
+      ]
+    }
+    expanded={Object {}}
+    expanderDefaults={
+      Object {
+        "filterable": false,
+        "resizable": false,
+        "sortable": false,
+        "width": 35,
+      }
+    }
+    filterable={true}
+    freezeWhenExpanded={false}
+    getLoadingProps={[Function]}
+    getNoDataProps={[Function]}
+    getPaginationProps={[Function]}
+    getProps={[Function]}
+    getResizerProps={[Function]}
+    getTableProps={[Function]}
+    getTbodyProps={[Function]}
+    getTdProps={[Function]}
+    getTfootProps={[Function]}
+    getTfootTdProps={[Function]}
+    getTfootTrProps={[Function]}
+    getTheadFilterProps={[Function]}
+    getTheadFilterThProps={[Function]}
+    getTheadFilterTrProps={[Function]}
+    getTheadGroupProps={[Function]}
+    getTheadGroupThProps={[Function]}
+    getTheadGroupTrProps={[Function]}
+    getTheadProps={[Function]}
+    getTheadThProps={[Function]}
+    getTheadTrProps={[Function]}
+    getTrGroupProps={[Function]}
+    getTrProps={[Function]}
+    groupedByPivotKey="_groupedByPivot"
+    indexKey="_index"
+    loading={false}
+    loadingText="Loading..."
+    multiSort={true}
+    nestingLevelKey="_nestingLevel"
+    nextText="Next"
+    noDataText="No rows found"
+    ofText="of"
+    onExpandedChange={[Function]}
+    onFetchData={[Function]}
+    originalKey="_original"
+    pageSizeOptions={
+      Array [
+        5,
+        10,
+        20,
+        25,
+        50,
+        100,
+      ]
+    }
+    pageText="Page"
+    pivotDefaults={Object {}}
+    pivotIDKey="_pivotID"
+    pivotValKey="_pivotVal"
+    previousText="Previous"
+    resizable={true}
+    resolveData={[Function]}
+    rowsText="rows"
+    showPageJump={true}
+    showPageSizeOptions={true}
+    showPagination={true}
+    showPaginationBottom={true}
+    showPaginationTop={false}
+    sortable={true}
+    style={Object {}}
+    subRowsKey="_subRows"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between-center padd_20 
+            hidden"
+  >
+    <div
+      className="flex-33 layout-row layout-align-center-center"
+    >
+      <RoundButton
+        active={false}
+        back={false}
+        classNames=""
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass=""
+        inverse={false}
+        size="full"
+        text="NO_TRANSLATION | key \\"common:cancel\\""
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-33 layout-row layout-align-center-center"
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        classNames=""
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass=""
+        inverse={false}
+        size="full"
+        text="Save"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;

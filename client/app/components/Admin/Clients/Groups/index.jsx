@@ -98,7 +98,7 @@ class AdminClientGroups extends Component {
 
   render () {
     const {
-      groupData, t, page, numPages, isPage, addedMembers, theme, targetId
+      groupData, t, withMargins, numPages, isPage, addedMembers, theme, targetId
     } = this.props
     const { confirm } = this.state
 
@@ -212,6 +212,15 @@ class AdminClientGroups extends Component {
         manual
         onFetchData={this.fetchData}
         expanded={this.state.expanded}
+        getTrProps={(state, rowInfo, column) => {
+          if (rowInfo === undefined) {
+            return {}
+          }
+
+          return {
+            'data-qnt': withMargins ? 1 : 0
+          }
+        }}
         onExpandedChange={newExpanded => this.setState({ expanded: newExpanded })}
         SubComponent={subRow => this.determineSubTable(subRow)}
       />

@@ -6,6 +6,7 @@ exports[`clientData is falsy 1`] = `
   clientData={null}
   clientsDispatch={
     Object {
+      "clearMarginsList": [Function],
       "createCompany": [Function],
       "createGroup": [Function],
       "createMargin": [Function],
@@ -137,6 +138,7 @@ exports[`clientData.managerAssignments is falsy 1`] = `
   }
   clientsDispatch={
     Object {
+      "clearMarginsList": [Function],
       "createCompany": [Function],
       "createGroup": [Function],
       "createMargin": [Function],
@@ -273,6 +275,7 @@ exports[`managerAssignments is truthy 1`] = `
   }
   clientsDispatch={
     Object {
+      "clearMarginsList": [Function],
       "createCompany": [Function],
       "createGroup": [Function],
       "createMargin": [Function],
@@ -404,6 +407,7 @@ exports[`managers is falsy 1`] = `
   }
   clientsDispatch={
     Object {
+      "clearMarginsList": [Function],
       "createCompany": [Function],
       "createGroup": [Function],
       "createMargin": [Function],
@@ -526,6 +530,7 @@ exports[`shallow render 1`] = `
   }
   clientsDispatch={
     Object {
+      "clearMarginsList": [Function],
       "createCompany": [Function],
       "createGroup": [Function],
       "createMargin": [Function],
@@ -657,6 +662,7 @@ exports[`state.confirm is true 1`] = `
   }
   clientsDispatch={
     Object {
+      "clearMarginsList": [Function],
       "createCompany": [Function],
       "createGroup": [Function],
       "createMargin": [Function],
@@ -793,6 +799,7 @@ exports[`state.showAddManager is true 1`] = `
   }
   clientsDispatch={
     Object {
+      "clearMarginsList": [Function],
       "createCompany": [Function],
       "createGroup": [Function],
       "createMargin": [Function],
@@ -924,6 +931,7 @@ exports[`theme is falsy 1`] = `
   }
   clientsDispatch={
     Object {
+      "clearMarginsList": [Function],
       "createCompany": [Function],
       "createGroup": [Function],
       "createMargin": [Function],

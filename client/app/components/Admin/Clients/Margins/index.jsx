@@ -44,6 +44,11 @@ class AdminClientMargins extends Component {
     }
   }
 
+  componentWillUnmount () {
+    const { clientsDispatch } = this.props
+    clientsDispatch.clearMarginsList()
+  }
+
   saveChanges () {
     const { margins } = this.state
     const { clientsDispatch, toggleEdit } = this.props
@@ -116,7 +121,7 @@ class AdminClientMargins extends Component {
           <div
             className={`${styles.table_cell} flex layout-row layout-align-start-center center`}
             dangerouslySetInnerHTML={{
-              __html: moment(margins[cellInfo.index][cellInfo.column.id]).format('DD/MM/YY')
+              __html: moment(margins[cellInfo.index][cellInfo.column.id]).utc().format('DD/MM/YY')
             }}
           />
         )
@@ -304,6 +309,7 @@ class AdminClientMargins extends Component {
     } else {
       value = '-'
     }
+
     return (
       <div
         style={{ backgroundColor: '#fafafa', textAlign: 'center' }}
@@ -436,7 +442,7 @@ class AdminClientMargins extends Component {
       {
         id: 'value',
         Header: t('admin:margin'),
-        accessor: d => d.operator === '%' ? `${parseFloat(d.value) * 100}` : d.value,
+        accessor: d => (d.operator === '%' ? `${parseFloat(d.value) * 100}` : d.value),
         Cell: this.renderEditable,
         maxWidth: 75
       },
@@ -477,6 +483,14 @@ class AdminClientMargins extends Component {
               desc: false
             }
           ]}
+          getTrProps={(state, rowInfo, column) => {
+            if (rowInfo === undefined) {
+                return {}
+            }
+            return {
+                'data-qnt': rowInfo.original.marginDetails.length
+            }
+          }}
           filterable
           defaultPageSize={compact ? margins.length : 10}
           expanded={this.state.expanded}

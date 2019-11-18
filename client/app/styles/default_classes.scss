@@ -747,4 +747,7 @@
       width: 225px;
     }
   }
+  .rt-tr[data-qnt="0"] > .rt-expandable {
+    visibility: hidden;
+  }
 }

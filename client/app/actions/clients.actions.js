@@ -666,6 +666,10 @@ function removeClient (id) {
   }
 }
 
+function clearMarginsList () {
+  return { type: clientsConstants.CLEAR_MARGINS_LIST }
+}
+
 function goTo (path) {
   return (dispatch) => {
     dispatch(push(path))
@@ -706,7 +710,9 @@ export const clientsActions = {
   deleteCompany,
   removeClient,
   getLocalChargesForList,
-  removeLocalCharge
+  removeLocalCharge,
+  clearMarginsList
+
 }
 
 export default clientsActions

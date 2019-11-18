@@ -23,6 +23,12 @@ export default function clients (state = {}, action) {
         margins: action.payload
       }
     }
+    case 'CLEAR_MARGINS_LIST': {
+      return {
+        ...state,
+        margins: {}
+      }
+    }
     case 'GET_LOCAL_CHARGES_LIST_SUCCESS': {
       return {
         ...state,
