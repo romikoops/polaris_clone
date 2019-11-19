@@ -13,16 +13,14 @@ FactoryBot.define do
     after(:build) do |itinerary, evaluator|
       next if itinerary.stops.length >= 2
 
-      evaluator.num_stops.times do
-        index = 0
+      evaluator.num_stops.times do |i|
         itinerary.stops << build(:stop,
                                  itinerary: itinerary,
-                                 index: index,
+                                 index: i,
                                  hub: build(:hub,
                                             tenant: itinerary.tenant,
                                             nexus: build(:nexus,
                                                          tenant: itinerary.tenant)))
-        index += 1
       end
     end
 

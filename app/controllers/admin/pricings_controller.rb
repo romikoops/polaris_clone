@@ -4,19 +4,12 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   include ExcelTools
   include ItineraryTools
 
-  ITINERARY_RESULT_MODIFIER =
-    {
-      name: ->(itineraries, param) { itineraries.list_search(param) },
-      name_desc: ->(itineraries, param) { itineraries.ordered_by(:name, param) },
-      mot: ->(itineraries, param) { param == 'all' ? itineraries : itineraries.where(mode_of_transport: param) },
-      mot_desc: ->(itineraries, param) { itineraries.ordered_by(:mode_of_transport, param) }
-    }.freeze
-
   def index
     paginated_pricing_itineraries = handle_search.paginate(pagination_options)
     response_pricing_itineraries = paginated_pricing_itineraries.map do |itinerary|
       for_table_json(itinerary).deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
+
     response_handler(
       pagination_options.merge(
         pricingData: response_pricing_itineraries,
@@ -44,6 +37,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     @transports = TransportCategory.all.where(sandbox: @sandbox).uniq
     detailed_itineraries = itinerary_results.paginate(page: params[:page])
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
+
     response_handler(
       detailedItineraries: detailed_itineraries.map(&:as_pricing_json),
       numItineraryPages: detailed_itineraries.total_pages,
@@ -60,18 +54,20 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       sandbox: @sandbox
     )
     pricing.update(internal: params[:action] == 'disable')
+
     response_handler(pricing.for_table_json)
   end
 
   def route
     itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
-    scope = current_user.tenant_scope
-    if scope['base_pricing']
-      pricings = itinerary.rates.where(sandbox: @sandbox)
-    else
-      pricings = itinerary.pricings.where(sandbox: @sandbox)
-      pricings = pricings.reject { |pricing| pricing&.user&.internal } unless current_user.internal
+
+    pricings = pricings_based_on_scope(itinerary)
+    unless current_user.internal
+      # Filter out all pricings that have a user with `internal == true`, but keep the ones that don't have a user
+      pricings = pricings.left_outer_joins(:user)
+                         .where(users: { internal: [nil, false] })
     end
+
     response_handler(
       pricings: pricings.map(&:for_table_json),
       itinerary: itinerary,
@@ -81,6 +77,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
   def group
     pricings = Pricings::Pricing.where(sandbox: @sandbox, group_id: params[:id])
+
     response_handler(
       pricings: pricings.map(&:for_table_json),
       group_id: params[:id]
@@ -92,28 +89,32 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       itinerary_id = params[:pricing][:itinerary_id]
       ex_pricing = Pricing.where(user_id: client_id, itinerary_id: itinerary_id, sandbox: @sandbox).first
       pricing_to_update = ex_pricing || Pricing.new
+
       new_pricing_data = params[:pricing].as_json
-      new_pricing_data.delete('controller')
-      new_pricing_data.delete('subdomain_id')
-      new_pricing_data.delete('action')
-      new_pricing_data.delete('id')
-      new_pricing_data.delete('created_at')
-      new_pricing_data.delete('updated_at')
-      new_pricing_data.delete('load_type')
-      new_pricing_data['user_id'] = client_id.to_i
+      new_pricing_data.except!(
+        'action',
+        'controller',
+        'created_at',
+        'id',
+        'load_type',
+        'subdomain_id',
+        'updated_at'
+      )
       pricing_details = new_pricing_data.delete('data')
       pricing_exceptions = new_pricing_data.delete('exceptions')
+      new_pricing_data['user_id'] = client_id.to_i
       pricing_to_update.update(new_pricing_data)
+
       pricing_details.each do |shipping_type, pricing_detail_data|
         currency = pricing_detail_data.delete('currency')
         pricing_detail_params = pricing_detail_data.merge(
           shipping_type: shipping_type,
-          tenant: current_user.tenant
+          tenant: current_tenant
         )
         range = pricing_detail_params.delete('range')
         pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
           shipping_type: shipping_type,
-          tenant: current_user.tenant,
+          tenant: current_tenant,
           sandbox: @sandbox
         )
         pricing_detail.update!(pricing_detail_params)
@@ -122,14 +123,16 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
       pricing_exceptions.each do |pricing_exception_data|
         pricing_details = pricing_exception_data.delete('data')
-        pricing_exception = pricing_to_update.pricing_exceptions
-                                             .where(pricing_exception_data)
-                                             .first_or_create(pricing_exception_data.merge(tenant: current_user.tenant))
+        pricing_exception = pricing_to_update
+                            .pricing_exceptions
+                            .where(pricing_exception_data)
+                            .first_or_create(pricing_exception_data.merge(tenant: current_tenant))
+
         pricing_details.each do |shipping_type, pricing_detail_data|
           currency = pricing_detail_data.delete('currency')
           range = pricing_detail_data.delete('range')
-          pricing_detail_params = pricing_detail_data
-                                  .merge(shipping_type: shipping_type, tenant: current_user.tenant)
+          pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type,
+                                                            tenant: current_tenant)
           pricing_detail = pricing_exception.pricing_details
                                             .where(pricing_detail_params)
                                             .first_or_create!(pricing_detail_params)
@@ -143,6 +146,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
         user_id: client_id.to_i
       }
     end
+
     response_handler(new_pricings)
   end
 
@@ -163,6 +167,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
   def destroy
     Pricing.find_by(tenant_id: current_tenant.id, id: params[:id], sandbox: @sandbox)&.destroy
+
     response_handler({})
   end
 
@@ -186,15 +191,14 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
                 } }
     uploader = ExcelDataServices::Loaders::Uploader.new(options)
 
-    insertion_stats_or_errors = uploader.perform
-    response_handler(insertion_stats_or_errors)
+    response_handler(uploader.perform)
   end
 
   def download
     mot = download_params[:mot]
     load_type = download_params[:load_type]
     group_id = download_params[:group_id]
-    key = "pricings"
+    key = 'pricings'
     new_load_type = load_type_renamed(load_type)
     file_name = "#{::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug}__pricing_#{mot.downcase}_#{new_load_type.downcase}"
 
@@ -204,16 +208,10 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
                 sandbox: @sandbox,
                 group_id: group_id }
     downloader = ExcelDataServices::Loaders::Downloader.new(options)
-
     document = downloader.perform
 
     # TODO: When timing out, file will not be downloaded!!!
     response_handler(key: key, url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment'))
-  end
-
-  def test
-    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
-    itinerary.test_pricings(params[:data], current_user)
   end
 
   private
@@ -227,43 +225,18 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     end
   end
 
-  def itineraries_array(prices, itin)
-    results = []
-    prices.each do |_k, v|
-      splits = v.split('_')
-      hub_1 = splits[0].to_i
-      hub_2 = splits[1].to_i
-      results.push(itin) if itin['first_stop_id'] == hub_1 && itin['destination_stop_id'] == hub_2
-    end
-    results
-  end
-
-  def ordinary_pricings(itinerary)
-    if current_tenant.quotation_tool?
-      itinerary.pricings.where(sandbox: @sandbox).map(&:as_json)
-    else
-      itinerary.pricings.where(sandbox: @sandbox, user_id: nil).map(&:as_json)
-    end
-  end
-
-  def user_pricing(itinerary)
-    itinerary.pricings.where(sandbox: @sandbox).where.not(user_id: nil).map do |pricing|
-      { pricing: pricing,
-        transport_category: pricing.transport_category,
-        user_id: pricing.user_id }
-    end
-  end
-
   def update_pricing_details(pricing_to_update)
     sanitized_params['data'].each do |shipping_type, pricing_detail_data|
       currency = pricing_detail_data.delete('currency')
       pricing_detail_params = pricing_detail_data.merge(
-        shipping_type: shipping_type, tenant: current_user.tenant
+        shipping_type: shipping_type, tenant: current_tenant
       )
+
       range = pricing_detail_params.delete('range')
       pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
-        shipping_type: shipping_type, tenant: current_user.tenant
+        shipping_type: shipping_type, tenant: current_tenant
       )
+
       pricing_detail.update!(pricing_detail_params)
       pricing_detail.update!(range: range, currency_name: currency)
     end
@@ -274,18 +247,20 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       pricing_details = pricing_exception_data.delete('data')
       pricing_exception = pricing_to_update.pricing_exceptions.where(
         pricing_exception_data
-      ).first_or_create(pricing_exception_data.merge(
-                          tenant: current_user.tenant
-                        ))
+      ).first_or_create(pricing_exception_data.merge(tenant: current_tenant))
+
       pricing_details.each do |shipping_type, pricing_detail_data|
         currency = pricing_detail_data.delete('currency')
         range = pricing_detail_data.delete('range')
+
         pricing_detail_params = pricing_detail_data.merge(
-          shipping_type: shipping_type, tenant: current_user.tenant
+          shipping_type: shipping_type, tenant: current_tenant
         )
+
         pricing_detail = pricing_exception.pricing_details.where(
           pricing_detail_params
         ).first_or_create!(pricing_detail_params)
+
         pricing_detail.update!(range: range, currency_name: currency)
       end
     end
@@ -318,13 +293,20 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def handle_search
-    itineraries = ::Legacy::Itinerary.where(tenant_id: current_tenant.id, sandbox: @sandbox)
+    itinerary_relation = ::Legacy::Itinerary.where(tenant_id: current_tenant.id, sandbox: @sandbox)
 
-    ITINERARY_RESULT_MODIFIER.each do |key, lambd|
-      itineraries = lambd.call(itineraries, search_params[key]) if search_params[key]
+    relation_modifiers = {
+      name: ->(query, param) { query.list_search(param) },
+      name_desc: ->(query, param) { query.ordered_by(:name, param) },
+      mot: ->(query, param) { param == 'all' ? query : query.where(mode_of_transport: param) },
+      mot_desc: ->(query, param) { query.ordered_by(:mode_of_transport, param) }
+    }
+
+    relation_modifiers.each do |key, lambd|
+      itinerary_relation = lambd.call(itinerary_relation, search_params[key]) if search_params[key]
     end
 
-    itineraries
+    itinerary_relation
   end
 
   def pagination_options
@@ -335,15 +317,14 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def for_table_json(itinerary)
-    new_options = {
-      methods: [:pricing_count],
-      last_expiry: last_expiry(itinerary)
-    }
-    itinerary.as_json(new_options)
+    itinerary.as_json(methods: [:pricing_count]).merge('last_expiry' => last_expiry(itinerary))
   end
 
   def last_expiry(itinerary)
-    itinerary.pricings.order(:expiration_date).first&.expiration_date
+    pricings_based_on_scope(itinerary)
+      .where('expiration_date > ?', DateTime.now)
+      .order(:expiration_date)
+      .first&.expiration_date
   end
 
   def current_page
@@ -360,5 +341,10 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       :page_size,
       :per_page
     )
+  end
+
+  def pricings_based_on_scope(itinerary)
+    pricings = current_user.tenant_scope['base_pricing'] ? itinerary.rates : itinerary.pricings
+    pricings.where(sandbox: @sandbox)
   end
 end

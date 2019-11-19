@@ -125,7 +125,7 @@ class AdminPricesTable extends PureComponent {
         id: 'effectiveDate',
         filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['effectiveDate'] }),
         filterAll: true,
-        accessor: d => moment(d.effective_date).format('ll'),
+        accessor: d => moment(d.effective_date).utc().format('ll'),
         Cell: rowData => (
           <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
             <p className="flex-none">
@@ -143,7 +143,7 @@ class AdminPricesTable extends PureComponent {
         id: 'expirationDate',
         filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['expirationDate'] }),
         filterAll: true,
-        accessor: d => moment(d.expiration_date).format('ll'),
+        accessor: d => moment(d.expiration_date).utc().format('ll'),
         Cell: rowData => (
           <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
             <p className="flex-none">

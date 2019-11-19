@@ -39,8 +39,6 @@ class Pricing < Legacy::Pricing # rubocop:disable Metrics/ClassLength
   end)
 
   self.per_page = 12
-
-  
 end
 
 # == Schema Information
