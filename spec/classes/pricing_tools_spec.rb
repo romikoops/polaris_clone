@@ -7,6 +7,7 @@ RSpec.describe PricingTools do
   let(:direction) { 'export' }
   let(:tenant) { create(:tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let!(:tenants_scope) { create(:tenants_scope, target: tenants_tenant) }
   let(:cargo_transport_category) do
     create(:transport_category, cargo_class: 'lcl', load_type: 'cargo_item')
   end
@@ -157,6 +158,17 @@ RSpec.describe PricingTools do
       Legacy::Schedule.from_trip(trip)
     end
   end
+  let!(:default_margins) do
+    %w(ocean air rail truck trucking local_charge).flat_map do |mot|
+      [
+        FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:trucking_on_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:trucking_pre_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:import_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:export_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+      ]
+    end
+  end
 
   describe '.find_local_charges' do
     it 'returns the correct number of charges for multiple cargo classes (FCL)' do
@@ -255,7 +267,7 @@ RSpec.describe PricingTools do
   end
 
   describe '.handle_range_fee' do
-    let(:fee) do 
+    let(:fee) do
       {
         'rate' => 0.5e1,
         'rate_basis' => 'PER_CBM_RANGE',

@@ -6,7 +6,8 @@ RSpec.describe Pricings::Finder do
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let!(:scope) { FactoryBot.create(:tenants_scope, content: {}, target: tenants_tenant)}
   let(:vehicle) do
     FactoryBot.create(:vehicle,
                       tenant_vehicles: [tenant_vehicle_1])
