@@ -107,7 +107,14 @@ class RegistrationPage extends React.PureComponent {
     } = this.props
 
     const { scope } = tenant
-    const { mandatory_form_fields } = scope 
+    const { signup_form_fields, mandatory_form_fields } = scope 
+
+    const { first_name,
+      last_name,
+      company_name,
+      company_id,
+      phone,
+      password } = signup_form_fields
 
     const sharedProps = {
       handleFocus: e => this.handleFocus(e),
@@ -130,24 +137,32 @@ class RegistrationPage extends React.PureComponent {
           </div>
           <div className="flex-100 layout-row layout-align-space-between-center">
             <div className="flex-45 layout-row layout-align-center-center">
-              <RegistrationFormGroup field="first_name" minLength="2" {...sharedProps} />
+              {first_name &&
+                <RegistrationFormGroup field="first_name" minLength="2" {...sharedProps} />
+              }
             </div>
             <div className="flex-45 layout-row layout-align-center-center">
-              <RegistrationFormGroup field="last_name" minLength="2" {...sharedProps} />
+              {last_name &&
+                <RegistrationFormGroup field="last_name" minLength="2" {...sharedProps} />
+              }
             </div>
           </div>
           <div className="flex-100">
-            <RegistrationFormGroup
-              field="company_name"
-              minLength="2"
-              {...sharedProps}
-            />
-            <RegistrationFormGroup
-              field="company_number"
-              validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
-              {...sharedProps}
-              required={mandatory_form_fields.company_id_for_signup}
-            />
+            {company_name &&
+              <RegistrationFormGroup
+                field="company_name"
+                minLength="2"
+                {...sharedProps}
+              />
+            }
+            {company_id &&
+              <RegistrationFormGroup
+                field="company_number"
+                validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
+                {...sharedProps}
+                required={mandatory_form_fields.company_id_for_signup}
+              />
+            }
             <RegistrationFormGroup
               field="email"
               minLength="2"
@@ -155,27 +170,33 @@ class RegistrationPage extends React.PureComponent {
               validationErrors={{ matchRegexp: 'Invalid email' }}
               {...sharedProps}
             />
-            <RegistrationFormGroup
-              field="phone"
-              minLength="2"
-              {...sharedProps}
-              validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
-              required={mandatory_form_fields.phone_for_signup}
-            />
-            <RegistrationFormGroup
-              field="password"
-              minLength="8"
-              type="password"
-              {...sharedProps}
-            />
-            <RegistrationFormGroup
-              field="confirm_password"
-              validations={{ equalsField: 'password' }}
-              validationErrors={{ equalsField: 'Must match password' }}
-              type="password"
-              required={false}
-              {...sharedProps}
-            />
+            {phone &&
+              <RegistrationFormGroup
+                field="phone"
+                minLength="2"
+                {...sharedProps}
+                validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
+                required={mandatory_form_fields.phone_for_signup}
+              />
+            }
+            {password &&
+              <RegistrationFormGroup
+                field="password"
+                minLength="8"
+                type="password"
+                {...sharedProps}
+              />
+            }
+            {password &&
+              <RegistrationFormGroup
+                field="confirm_password"
+                validations={{ equalsField: 'password' }}
+                validationErrors={{ equalsField: 'Must match password' }}
+                type="password"
+                required={false}
+                {...sharedProps}
+              />
+            }
           </div>
         </div>
         <TermsAndConditionsSummary

@@ -96,6 +96,14 @@ module Tenants
         phone_for_signup: false,
         company_id_for_signup: true
       },
+      signup_form_fields: {
+        first_name: true,
+        last_name: true,
+        company_name: true,
+        company_id: true,
+        phone: true,
+        password: true
+      },
       translation_overrides: false,
       offer_disclaimers: false,
       closed_after_map: false,

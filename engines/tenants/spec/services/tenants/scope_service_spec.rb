@@ -63,6 +63,14 @@ RSpec.describe Tenants::ScopeService do
             phone_for_signup: false,
             company_id_for_signup: true
           },
+          signup_form_fields: {
+            first_name: true,
+            last_name: true,
+            company_name: true,
+            company_id: true,
+            phone: true,
+            password: true
+          },
           modes_of_transport: {
             air: { cargo_item: true, container: false },
             ocean: { cargo_item: true, container: true },

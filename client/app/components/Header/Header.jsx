@@ -132,7 +132,11 @@ class Header extends Component {
     } = this.props
     const { isTop } = this.state
     const scope = tenant && tenant.id ? tenant.scope : {}
-    const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
+    let dropDownText = ''
+    if (user) {
+      if (user.first_name && user.last_name) dropDownText = `${user.first_name} ${user.last_name}`
+      dropDownText = dropDownText || user.email
+    }
     const sandbox = get(user, ['sandbox'], false)
     const accountLinks = user && user.role && user.role.name.includes('admin')
       ? [
@@ -200,11 +204,12 @@ class Header extends Component {
     const loginComponent = (scope.closed_registration || !tenant.id) ? (
       <LoginPage
         theme={theme}
+        tenant={tenant}
         req={req}
       />
     ) : (
       <LoginRegistrationWrapper
-        LoginPageProps={{ theme, req }}
+        LoginPageProps={{ theme, req, tenant }}
         RegistrationPageProps={{
           theme,
           tenant,

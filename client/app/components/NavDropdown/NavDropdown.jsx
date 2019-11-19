@@ -48,7 +48,7 @@ export function NavDropdown ({
 
   return (
     <div className={`${styles.dropdown}`}>
-      {user && user.first_name && !user.guest ? (
+      {user && !user.guest ? (
         <div className="layout-row layout-align-center-center">
           <div className={`${styles.dropbtn} layout-row layout-align-center-center`}>
             <div className={styles.wrapper_profile_icon}>
