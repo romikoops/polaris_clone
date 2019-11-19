@@ -17,7 +17,6 @@ class Admin::CompaniesController < ApplicationController
   def show
     employees = company&.employees&.map(&:legacy) || []
     groups = company&.groups&.map { |g| group_index_json(g) } || []
-
     response_handler(groups: groups, employees: employees, data: company)
   end
 
@@ -46,7 +45,8 @@ class Admin::CompaniesController < ApplicationController
         tenants_user.save!
       end
     end
-    response_handler(company)
+
+    response_handler(new_company)
   end
 
   def company
@@ -77,7 +77,7 @@ class Admin::CompaniesController < ApplicationController
 
   private
 
-  def handle_search(params)
+  def handle_search
     user = ::Tenants::User.find_by(legacy_id: current_user.id, sandbox: @sandbox)
     query = ::Tenants::Company.where(tenant_id: user.tenant_id, sandbox: @sandbox)
     query = query.country_search(search_params[:country]) if search_params[:country].present?
@@ -93,7 +93,7 @@ class Admin::CompaniesController < ApplicationController
     end
     if search_params[:country_desc].present?
       query.left_joins(:address).left_joins(address: :country)
-           .order(countries: { name: search_params[:address_desc] == 'true' ? 'DESC' : 'ASC'})
+           .order(countries: { name: search_params[:address_desc] == 'true' ? 'DESC' : 'ASC' })
     end
     if search_params[:employee_count_desc].present?
       query = query.left_joins(:users).group(:id)

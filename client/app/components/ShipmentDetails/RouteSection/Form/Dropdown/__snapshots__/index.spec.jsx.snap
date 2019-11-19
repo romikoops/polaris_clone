@@ -30,7 +30,7 @@ exports[`renders correctly 1`] = `
     options={
       Array [
         Object {
-          "label": "Gothenburg",
+          "label": "Gothenburg, SE",
           "value": Object {
             "country": "SE",
             "id": 597,
@@ -40,7 +40,7 @@ exports[`renders correctly 1`] = `
           },
         },
         Object {
-          "label": "Southampton",
+          "label": "Southampton, GB",
           "value": Object {
             "country": "GB",
             "id": 3282,

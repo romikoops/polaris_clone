@@ -56,17 +56,18 @@ class AdminClientGroup extends Component {
 
   viewMember (row) {
     const { original } = row
-    const { id, human_type } = original
+    const { original_member_id, human_type } = original
     const { clientsDispatch } = this.props
+
     switch (human_type) {
-      case 'user':
-        clientsDispatch.goTo(`/admin/clients/client/${id}`)
+      case 'client':
+        clientsDispatch.goTo(`/admin/clients/client/${original_member_id}`)
         break
       case 'company':
-        clientsDispatch.goTo(`/admin/clients/companies/${id}`)
+        clientsDispatch.goTo(`/admin/clients/companies/${original_member_id}`)
         break
       case 'group':
-        clientsDispatch.goTo(`/admin/clients/groups/${id}`)
+        clientsDispatch.goTo(`/admin/clients/groups/${original_member_id}`)
         break
 
       default:
@@ -127,10 +128,10 @@ class AdminClientGroup extends Component {
 
   render () {
     const {
-      member_list, t, name, id, margins_list, theme
+      member_list, t, name, id, theme
     } = this.props
 
-    const { editUsers, currentView, editMargins } = this.state
+    const { editUsers, editMargins } = this.state
     const userColumns = [
       {
         id: 'member_name',
@@ -198,8 +199,6 @@ class AdminClientGroup extends Component {
         />
       </div>
     )
-
-    const statBoxes = groupBy(member_list, m => m.human_type)
 
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap ">
