@@ -2,8 +2,8 @@
 
 module Legacy
   class Hub < ApplicationRecord
-    self.table_name = 'hubs'
     include PgSearch::Model
+    self.table_name = 'hubs'
     LOCAL_CHARGE_DATE_RANGE = (Date.today...2.days.from_now)
     has_paper_trail
     belongs_to :tenant, class_name: 'Legacy::Tenant'
@@ -28,6 +28,7 @@ module Legacy
     has_one :country, through: :address, class_name: 'Legacy::Country'
 
     delegate :locode, to: :nexus
+
     pg_search_scope :name_search, against: %i(name), using: {
       tsearch: { prefix: true }
     }

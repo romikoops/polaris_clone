@@ -35,29 +35,34 @@ RSpec.resource 'Itineraries' do
 
   get '/v1/itineraries/ports/:tenant_uuid' do
     parameter :tenant_uuid, 'The Tenant UUID'
-    let(:tenant_uuid) { tenant.id }
+    parameter :location_type, 'Location Id Type of request origin/destination'
+    parameter :location_id, 'Id of selected location'
+    parameter :query, 'Text input for query'
 
-    response_field :id, 'Itinerary Id', Type: Integer
-    response_field :type, 'Api response Type', Type: String
-    response_field :data, 'Array of origins and destinations', Type: :array, items: {
+    let(:tenant_uuid) { tenant.id }
+    let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: legacy_tenant) }
+    let(:location_type) { 'origin' }
+    let(:location_id) { nil }
+    let(:query) { itinerary.stops.first.hub[:name] }
+
+    response_field response_field :data, 'Matched results', Type: :array, items: {
       'type': :object,
       'title': :data,
       'properties': {
-        origin_id: {
+        id: {
           type: Integer,
-          description: 'Origin Id'
+          description: 'Hub Id'
         },
-        origin: {
-          type: Integer,
-          description: 'Origin Name'
+        type: {
+          type: String,
+          description: 'Return type'
         },
-        destination_id: {
-          type: Integer,
-          description: 'Destination Id'
-        },
-        destination: {
-          type: Integer,
-          description: 'Destination Name'
+        attributes: {
+          type: :object,
+          properties: {
+            type: String,
+            description: 'Hub / Location name'
+          }
         }
       }
     }

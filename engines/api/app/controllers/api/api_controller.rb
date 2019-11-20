@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-require_dependency 'api/application_controller'
-
 module Api
   class ApiController < ApplicationController
+    include ErrorHandler
+
+    rescue_from ActiveRecord::RecordNotFound, ActionController::ParameterMissing, with: :error_handler
+
     before_action :doorkeeper_authorize!
     before_action :set_sandbox
     helper_method :current_user
