@@ -50,7 +50,9 @@ module OfferCalculatorService
 
       raise ApplicationError::NoSchedulesCharges if compacted_detailed_schedules.empty?
 
-      detailed_schedules_with_service_level_count(detailed_schedules: compacted_detailed_schedules)
+      detailed_schedules_with_service_level_count(detailed_schedules: compacted_detailed_schedules).tap do |filtered_detailed_schedules|
+        Quotations::Creator.new(schedules: filtered_detailed_schedules, user: user).perform
+      end
     end
 
     def detailed_schedules_with_service_level_count(detailed_schedules:)
