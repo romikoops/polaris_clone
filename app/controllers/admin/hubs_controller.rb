@@ -119,24 +119,25 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   private
 
   def handle_search
-    hubs = ::Legacy::Hub.where(tenant_id: current_tenant.id, sandbox: @sandbox)
+    hubs_relation = ::Legacy::Hub.where(tenant_id: current_tenant.id, sandbox: @sandbox)
+
     {
-      country: ->(hubs, param) { hubs.country_search(param) },
-      name: ->(hubs, param) { hubs.name_search(param) },
-      name_desc: ->(hubs, param) { hubs.ordered_by(:name, param) },
-      locode: ->(hubs, param) { hubs.locode_search(param) },
-      locode_desc: ->(hubs, param) { hubs.ordered_by(:hub_code, param) },
-      type: ->(hubs, param) { param == 'all' ? hubs : hubs.where(hub_type: param) },
-      type_desc: ->(hubs, param) { hubs.ordered_by(:hub_type, param) },
-      country_desc: lambda do |hubs, param|
-                      hubs.left_joins(:country)
-                          .order("countries.name #{param.to_s == 'true' ? 'DESC' : 'ASC'}")
+      country: ->(query, param) { query.country_search(param) },
+      name: ->(query, param) { query.name_search(param) },
+      name_desc: ->(query, param) { query.ordered_by(:name, param) },
+      locode: ->(query, param) { query.locode_search(param) },
+      locode_desc: ->(query, param) { query.ordered_by(:hub_code, param) },
+      type: ->(query, param) { param == 'all' ? query : query.where(hub_type: param) },
+      type_desc: ->(query, param) { query.ordered_by(:hub_type, param) },
+      country_desc: lambda do |query, param|
+                      query.left_joins(:country)
+                           .order("countries.name #{param.to_s == 'true' ? 'DESC' : 'ASC'}")
                     end
     }.each do |key, lambd|
-      hubs = lambd.call(hubs, search_params[key]) if search_params[key]
+      hubs_relation = lambd.call(hubs_relation, search_params[key]) if search_params[key]
     end
 
-    hubs
+    hubs_relation
   end
 
   def for_table(hub)
