@@ -57,17 +57,19 @@ module AdmiraltyReports
 
     def uniq_quotations_by_original_shipments
       quotation = ::Legacy::Quotation.where(original_shipment_id: original_shipments.ids)
-      quotation = filtered(quotation) unless start_date.nil?
+      quotation = filtered(quotation)
       quotation.order(updated_at: :desc).uniq(&:original_shipment_id)
     end
 
     def uniq_shipments_by_original_shipments
-      shipments = ::Legacy::Shipment.where(id: original_shipments.ids)
-      shipments = filtered(shipments) unless start_date.nil?
+      shipments = original_shipments.where.not(status: 'booking_process_started')
+      shipments = filtered(shipments)
       shipments.order(updated_at: :desc).uniq(&:id)
     end
 
     def filtered(shipments)
+      return shipments if start_date.nil?
+
       filtered = shipments.where(created_at: start_date..end_date)
       filtered.empty? ? shipments : filtered
     end
