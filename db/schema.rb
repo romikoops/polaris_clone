@@ -136,8 +136,10 @@ ActiveRecord::Schema.define(version: 2019_11_11_121459) do
 
   create_table "cargo_cargos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.uuid "quotation_id"
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["quotation_id"], name: "index_cargo_cargos_on_quotation_id"
     t.index ["tenant_id"], name: "index_cargo_cargos_on_tenant_id"
   end
 
