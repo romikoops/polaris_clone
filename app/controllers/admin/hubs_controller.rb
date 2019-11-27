@@ -120,7 +120,11 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
 
   def handle_search
     hubs_relation = ::Legacy::Hub.where(tenant_id: current_tenant.id, sandbox: @sandbox)
-
+    country_table_ref = if search_params[:country].present? && search_params[:country_desc].present?
+                          'countries_hubs'
+                        else
+                          'countries'
+                        end
     {
       country: ->(query, param) { query.country_search(param) },
       name: ->(query, param) { query.name_search(param) },
@@ -130,8 +134,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
       type: ->(query, param) { param == 'all' ? query : query.where(hub_type: param) },
       type_desc: ->(query, param) { query.ordered_by(:hub_type, param) },
       country_desc: lambda do |query, param|
-                      query.left_joins(:country)
-                           .order("countries.name #{param.to_s == 'true' ? 'DESC' : 'ASC'}")
+                      query.left_joins(:country).order("#{country_table_ref}.name #{param.to_s == 'true' ? 'DESC' : 'ASC'}")
                     end
     }.each do |key, lambd|
       hubs_relation = lambd.call(hubs_relation, search_params[key]) if search_params[key]
