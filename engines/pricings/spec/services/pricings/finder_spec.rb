@@ -47,6 +47,7 @@ RSpec.describe Pricings::Finder do
       quantity: 1
     }
   end
+  let!(:default_margin) { FactoryBot.create(:freight_margin, default_for: 'ocean', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)}
   let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
   let(:itinerary_2) { FactoryBot.create(:default_itinerary, tenant: tenant) }
 
