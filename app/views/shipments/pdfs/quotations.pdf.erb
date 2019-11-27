@@ -461,7 +461,7 @@
       <% end %>
       <div class="note-remarks-row">
         <% note_remarks.each do |note_remark| %>
-          <%= note_remark %>
+          <p class="note-remark-text"><%= note_remark %></p>
         <% end %>
       </div>
       <% if scope["quote_notes"] %>

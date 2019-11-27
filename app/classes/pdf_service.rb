@@ -225,9 +225,11 @@ class PdfService
       itinerary_id: trip.itinerary_id,
       tenant_vehicle_id: trip.tenant_vehicle_id
     ).for_dates(start_date, end_date).ids
-    Note.where(tenant: tenant.id, pricings_pricing_id: pricing_ids, remarks: true)
-        .select(:body)
-        .distinct
-        .pluck(:body)
+    note_association = Note.where(tenant_id: tenant.id, remarks: true)
+    note_association.where(pricings_pricing_id: pricing_ids)
+                    .or(note_association.where(target: tenant))
+                    .distinct
+                    .pluck(:body)
+
   end
 end

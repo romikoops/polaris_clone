@@ -407,9 +407,9 @@ class QuoteCard extends PureComponent {
                   : `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`}
               </p>
             </div>
-            {result.meta.remarkNote && (
-              <div className={`flex-100 layout-row layout-align-end-center ${styles.remark_note}`}>
-                {result.meta.remarkNote}
+            {result.meta.remarkNotes && (
+              <div className={`flex-100 layout-row layout-wrap layout-align-end-center ${styles.remark_note}`}>
+                {result.meta.remarkNotes.map(str => <p className={`flex-100 ${styles.remark}`} > {str} </p>)}
               </div>
             )}
             <div className="flex-100 layout-row layout-align-end-center">

@@ -94,10 +94,10 @@ module OfferCalculatorService
       transshipment_notes = grab_transshipments_notes(pricing_ids: pricing_ids, tenant_id: shipment.tenant_id)
       transshipment_via = transshipment_notes.first&.body
 
-      remark_note = Note.where(tenant_id: shipment.tenant_id,
-                               remarks: true,
-                               pricings_pricing_id: pricing_ids)
-                        .first&.body
+      note_association = Note.where(tenant_id: shipment.tenant_id, remarks: true)
+      remark_notes = note_association.where(pricings_pricing_id: pricing_ids)
+                                     .or(note_association.where(target: shipment.tenant))
+                                     .pluck(:body)
 
       {
         load_type: shipment.load_type,
@@ -113,7 +113,7 @@ module OfferCalculatorService
         ocean_chargeable_weight: chargeable_weight,
         pricings_by_cargo_class: pricings_by_cargo_class,
         transshipmentVia: transshipment_via,
-        remarkNote: remark_note,
+        remarkNotes: remark_notes,
         pricing_rate_data: grab_pricing_rates(
           schedule: schedule,
           load_type: shipment.load_type,
