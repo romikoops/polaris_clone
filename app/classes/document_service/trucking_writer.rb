@@ -84,7 +84,7 @@ module DocumentService
         grouped_results.each do |parent_id, values|
           trucking = values.first
           next if trucking.rates.empty? || trucking.rates.values.flatten.all?(&:nil?)
-       
+
           meta = build_meta(trucking)
           update_pages(meta, trucking, parent_id)
           update_dir_fees(meta, trucking)
@@ -133,15 +133,14 @@ module DocumentService
     end
 
     def identifiers_to_write
-      case trucking_pricings.first['identifier_modifier']
-      when 'postal_code'
-        [trucking_pricings.first['identifier_modifier'].upcase, 'RANGE']
-      when 'location_id'
+      if identifier == 'location_id' && identifier_modifier == 'postal_code'
+        [identifier_modifier.upcase, 'RANGE']
+      elsif identifier == 'location_id' && [nil, 'f'].include?(identifier_modifier)
         %w(CITY PROVINCE)
-      when nil, 'f'
-        [identifier.upcase, 'RANGE']
+      elsif identifier == 'distance' && ![nil, 'f'].include?(identifier_modifier)
+        ["#{identifier}_#{identifier_modifier}".upcase, 'RANGE']
       else
-        ["#{identifier}_#{trucking_pricings.first['identifier_modifier']}".upcase, 'RANGE']
+        [identifier.upcase, 'RANGE']
       end
     end
 
@@ -194,8 +193,8 @@ module DocumentService
       fee_header_values.each_with_index { |hv, i| fees_sheet.write(0, i, hv, header_format) }
       dir_fees.deep_symbolize_keys!
       dir_fees.each do |carriage_dir, truck_type_and_fees|
-        truck_type_and_fees.each do |truck_type, fees| 
-          fees.each do |key, fee| 
+        truck_type_and_fees.each do |truck_type, fees|
+          fees.each do |key, fee|
             fees_sheet.write(row, 0, fee[:name])
             fees_sheet.write(row, 1, hub.hub_type)
             fees_sheet.write(row, 2, key)
@@ -231,8 +230,8 @@ module DocumentService
       end
     end
 
-    def write_rates_to_sheet 
-      pages.values.each_with_index do |page, i| 
+    def write_rates_to_sheet
+      pages.values.each_with_index do |page, i|
         rates_sheet = workbook.add_worksheet(i.to_s)
         rates_sheet.write(3, 0, 'ZONE')
         rates_sheet.write(3, 1, 'MIN')
