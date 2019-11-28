@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Trucking::Queries::FindTrucking do
+RSpec.describe Trucking::Queries::Availability do
   context 'class methods' do
     describe '.perform' do
       let(:tenant) { FactoryBot.create(:legacy_tenant) }
@@ -67,6 +67,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
       context 'zipcode identifier' do
         let!(:trucking_trucking_zipcode) do
           FactoryBot.create(:trucking_trucking,
+                            tenant: tenant,
                             hub: hub,
                             location: trucking_location_zipcode)
         end
@@ -75,7 +76,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            zipcode: zipcode
+            zipcode: zipcode, order_by: 'user_id'
           ).perform
 
           expect(trucking_rates).to match([trucking_trucking_zipcode])
@@ -85,7 +86,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address
+            address: address, order_by: 'user_id'
           ).perform
 
           expect(trucking_rates).to match([trucking_trucking_zipcode])
@@ -95,7 +96,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address, cargo_classes: ['lcl']
+            address: address, cargo_classes: ['lcl'], order_by: 'user_id'
           ).perform
 
           expect(trucking_rates).to match([trucking_trucking_zipcode])
@@ -105,17 +106,47 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address, cargo_classes: ['some_string']
+            address: address, cargo_classes: ['some_string'], order_by: 'user_id'
           ).perform
 
           expect(trucking_rates).to match([])
         end
       end
 
+      context 'NL postal code identifier' do
+        let!(:nl_trucking_trucking_zipcode) do
+          FactoryBot.create(:trucking_trucking,
+                            tenant: tenant,
+                            hub: hub,
+                            location: FactoryBot.create(:trucking_location, country_code: 'NL', zipcode: '1802'))
+        end
+        let(:nl_address) { FactoryBot.create(:legacy_address, zip_code: '1802 PT', country: FactoryBot.create(:legacy_country, code: 'NL')) }
+        it 'finds the correct trucking_rate with avulsed address filters' do
+          trucking_rates = described_class.new(
+            klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
+            carriage: carriage, country_code: 'NL',
+            zipcode: '1802 PT', order_by: 'user_id'
+          ).perform
+
+          expect(trucking_rates).to match([nl_trucking_trucking_zipcode])
+        end
+
+        it 'finds the correct trucking_rate with address' do
+          trucking_rates = described_class.new(
+            klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
+            carriage: carriage, address: nl_address, order_by: 'user_id'
+          ).perform
+
+          expect(trucking_rates).to match([nl_trucking_trucking_zipcode])
+        end
+
+      end
+
       context 'geometry identifier' do
         let!(:trucking_trucking_geometry) do
           FactoryBot.create(:trucking_trucking,
                             hub: hub,
+                            tenant: tenant,
                             location: trucking_location_geometry)
         end
 
@@ -123,7 +154,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
-            latitude: latitude,   longitude: longitude
+            latitude: latitude,   longitude: longitude, order_by: 'user_id'
           ).perform
 
           expect(trucking_rates).to match([trucking_trucking_geometry])
@@ -133,7 +164,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address
+            address: address, order_by: 'user_id'
           ).perform
 
           expect(trucking_rates).to match([trucking_trucking_geometry])
@@ -143,7 +174,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address, cargo_classes: ['lcl']
+            address: address, cargo_classes: ['lcl'], order_by: 'user_id'
           ).perform
 
           expect(trucking_rates).to match([trucking_trucking_geometry])
@@ -153,25 +184,7 @@ RSpec.describe Trucking::Queries::FindTrucking do
           trucking_rates = described_class.new(
             klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
-            address: address, cargo_classes: ['some_string']
-          ).perform
-
-          expect(trucking_rates).to match([])
-        end
-      end
-
-      context 'distance identifier' do
-        let!(:trucking_trucking_distance) do
-          FactoryBot.create(:trucking_trucking,
-                            hub: hub,
-                            location: trucking_location_distance)
-        end
-
-        it 'return empty collection if cargo_class filter does not match any item in db' do
-          trucking_rates = described_class.new(
-            klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
-            carriage: carriage, country_code: country_code,
-            address: address, cargo_classes: ['some_string']
+            address: address, cargo_classes: ['some_string'], order_by: 'user_id'
           ).perform
 
           expect(trucking_rates).to match([])

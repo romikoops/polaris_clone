@@ -12,7 +12,7 @@ module Trucking
 
         @latitude     = args[:latitude]     || args[:address].try(:latitude)  || 0
         @longitude    = args[:longitude]    || args[:address].try(:longitude) || 0
-        @zipcode      = args[:zipcode]      || args[:address].try(:get_zip_code)
+        @zipcode      = sanitized_postal_code(args: args)
         @city_name    = args[:city_name]    || args[:address].try(:city)
         @country_code = args[:country_code] || args[:address].try(:country).try(:code)
 
@@ -21,9 +21,9 @@ module Trucking
         @carriage     = args[:carriage]
         @truck_type   = args[:truck_type]
         @cargo_classes = args[:cargo_classes]
-        @nexus_ids    = args[:nexus_ids]
-        @hub_ids      = args[:hub_ids]
-        @distance     = args[:distance]
+        @nexus_ids = args[:nexus_ids]
+        @hub_ids = args[:hub_ids]
+        @distance = args[:distance]
         @sandbox = args[:sandbox]
         @order_by = args[:order_by]
         @locations_locations = []
@@ -85,6 +85,17 @@ module Trucking
         @hub_ids ? { 'hub_id': @hub_ids } : {}
       end
 
+      def sanitized_postal_code(args:)
+        postal_code = args[:zipcode]&.tr(' ', '') || args[:address].try(:get_zip_code)
+        country_code = args[:country_code] || args[:address]&.country&.code
+
+        case country_code
+        when 'NL'
+          postal_code[0..-3]
+        else
+          postal_code
+        end
+      end
       # Argument Errors
 
       def argument_errors(args)

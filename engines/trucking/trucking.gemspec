@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'core'
   s.add_dependency 'legacy'
   s.add_dependency 'locations'
+  s.add_dependency 'tenants'
 
   s.add_dependency 'geocoder'
   s.add_dependency 'paper_trail'
