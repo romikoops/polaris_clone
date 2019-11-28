@@ -60,9 +60,9 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   def options_search
     list_options = current_tenant.hubs
                                  .where(sandbox: @sandbox)
-                                 .list_search(params[:query])
+                                 .name_search(params[:query])
                                  .limit(30).map do |it|
-      { label: it.name, value: it.as_options_json }
+      { label: it.name, value: for_table(it) }
     end
     response_handler(list_options)
   end
