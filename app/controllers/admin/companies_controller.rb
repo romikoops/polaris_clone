@@ -2,7 +2,7 @@
 
 class Admin::CompaniesController < ApplicationController
   def index
-    paginated_companies = handle_search(params).paginate(pagination_options)
+    paginated_companies = handle_search.paginate(pagination_options)
     response_companies = paginated_companies.map do |company|
       company.for_table_json.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
