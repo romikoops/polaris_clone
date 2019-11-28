@@ -43,6 +43,10 @@ module Locations
     let(:target_result_zh) { location_names.last }
     let(:english_string) { 'Baoshun, China' }
     let(:chinese_string) { '宝山城市工业园区, 中国' }
+    
+    before(:each) do
+      Locations::Name.reindex
+    end
 
     context '.search' do
       it 'returns results including the desired object (en) with country codes' do
