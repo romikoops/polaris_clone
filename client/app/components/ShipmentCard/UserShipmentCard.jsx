@@ -3,6 +3,7 @@ import { withNamespaces } from 'react-i18next'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
+import { get } from 'lodash'
 import styles from './ShipmentCard.scss'
 import adminStyles from '../Admin/Admin.scss'
 import {
@@ -42,8 +43,8 @@ class UserShipmentCard extends Component {
     const plannedDate =
     shipment.has_pre_carriage ? shipment.planned_pickup_date : shipment.planned_origin_drop_off_date
 
-    const destinationHubObj = splitName(shipment.destination_hub.name)
-    const originHubObj = splitName(shipment.origin_hub.name)
+    const destinationHubObj = splitName(get(shipment, 'destination_hub.name'))
+    const originHubObj = splitName(get(shipment, 'origin_hub.name'))
     const timeRow = !!plannedDate && !!shipment.planned_etd && !!shipment.planned_eta
       ? (<div className={`layout-row flex-100 layout-align-start-center
     ${styles.middle_bottom_box} ${styles.smallText}`}
