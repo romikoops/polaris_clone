@@ -38,7 +38,8 @@ function newShipment (type, redirect, reused) {
 }
 
 function newAhoyShipment (params) {
-  const { loadType, direction, itinerary } = params
+  const { loadType, direction } = params
+  let { originId, destinationId } = params
 
   function request (shipmentData, isReused = false) {
     return { type: shipmentConstants.SHIPMENT_NEW_AHOY_REQUEST, shipmentData, isReused }
@@ -59,8 +60,12 @@ function newAhoyShipment (params) {
       (resp) => {
         const shipmentData = resp.data
 
-        const itineraryId = parseInt(itinerary, 10)
-        const itineraryData = find(shipmentData.routes, { itineraryId })
+        originId = parseInt(originId, 10)
+        destinationId = parseInt(destinationId, 10)
+
+        const itineraryData = find(shipmentData.routes, route =>
+          route.origin.hubId === originId && route.destination.hubId === destinationId
+        )
 
         if (itineraryData) {
           shipmentData.shipment.origin = itineraryData.origin
@@ -93,14 +98,25 @@ function checkAhoyShipment (routerLocation) {
   const params = Base64decode(routerLocation.search.substring(1))
   const queryString = queryStringToObj(params)
 
-  const { loadType, direction, itinerary } = queryString
+  const {
+    direction,
+    originId,
+    destinationId
+  } = queryString
 
-  if (!loadType || !direction || !itinerary) {
+  const loadType = queryString.loadType === 'fcl' ? 'container' : 'cargo_item'
+
+  if (!loadType || !direction || !originId || !destinationId) {
     return { type: shipmentConstants.SHIPMENT_CHECK_AHOY, payload: {} }
   }
 
   return (dispatch) => {
-    dispatch({ type: shipmentConstants.SHIPMENT_NEW_AHOY, payload: { loadType, direction, itinerary } })
+    dispatch({
+      type: shipmentConstants.SHIPMENT_NEW_AHOY,
+      payload: {
+        loadType, direction, originId, destinationId
+      }
+    })
     dispatch(push('/booking/'))
   }
 }
