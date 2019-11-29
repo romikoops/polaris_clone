@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'timecop'
+
 RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
   it 'is valid with valid attributes' do
     expect(FactoryBot.create(:trucking_trucking)).to be_valid

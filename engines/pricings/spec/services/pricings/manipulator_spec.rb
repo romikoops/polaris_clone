@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'timecop'
+
 RSpec.describe Pricings::Manipulator do
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }

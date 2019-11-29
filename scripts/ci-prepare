@@ -2,7 +2,7 @@
 
 set -e
 
-trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM
+trap 'trap - SIGTERM && kill -- -$$' SIGINT SIGTERM
 
 # Helpers
 fail () {
@@ -17,10 +17,10 @@ warn () {
 
 bundler () {
   warn "=== Install Dependencies"
-  if [[ -n "$(which nproc)" ]];
+  if [[ -n "$(command -v nproc)" ]];
   then
     BUNDLE_JOBS="--jobs=$(nproc)"
-  elif [[ -n "$(which sysctl)" ]];
+  elif [[ -n "$(command -v sysctl)" ]];
   then
     BUNDLE_JOBS="--jobs=$(sysctl -n hw.ncpu)"
   fi
@@ -30,8 +30,8 @@ bundler () {
   for dir in . $PATHS
   do
     (
-      cd $dir
-      bundle check || bundle --retry=2 $BUNDLE_JOBS
+      cd "${dir}"
+      bundle check || bundle --retry=2 "${BUNDLE_JOBS}"
     )
   done
 }
@@ -40,8 +40,8 @@ database () {
   warn "=== Prepare Test Database"
   (
     cd "$ROOTDIR"
-    RAILS_ENV=test bin/rails db:test:prepare
-    RAILS_ENV=test bin/rails db:migrate
+    RAILS_ENV="test" bin/rails db:test:prepare
+    RAILS_ENV="test" bin/rails db:migrate
   )
 }
 

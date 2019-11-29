@@ -9,19 +9,19 @@ fi
 ROOTDIR="$(cd "$( dirname "${BASH_SOURCE[0]}/" )/../" >/dev/null 2>&1 && pwd )"
 
 # Setup Environment
-: ${SEED:=$(((RANDOM % 0xFFFF) + 1))}
-: ${CI:=1}
-: ${DISABLE_PROFILE:=$CI}
-: ${COVERAGE:=1}
-: ${COVERAGE_DIR:="${ROOTDIR}/coverage"}
-: ${DISABLE_PROFILE:=1}
-: ${RAILS_ENV:=test}
-: ${SPEC_OPTS:="--order rand:${SEED} --format progress --color --format RspecJunitFormatter --out junit.xml"}
+: "${CI:=1}"
+: "${COVERAGE:=1}"
+: "${COVERAGE_DIR:="${ROOTDIR}/coverage"}"
+: "${DISABLE_PROFILE:=1}"
+: "${RAILS_ENV:=test}"
+: "${SEED:=$(((RANDOM % 0xFFFF) + 1))}"
+: "${SPEC_OPTS:="--order rand:${SEED} --format progress --color --format RspecJunitFormatter --out junit.xml"}"
+: "${WORKSPACE_ROOT:="${ROOTDIR}"}"
 
-export SEED CI DISABLE_PROFILE COVERAGE COVERAGE_DIR DISABLE_PROFILE RAILS_ENV SPEC_OPTS
+export CI COVERAGE COVERAGE_DIR DISABLE_PROFILE RAILS_ENV SEED SPEC_OPTS WORKSPACE_ROOT
 
 (
-  cd "$2"
+  cd "$2" || exit 2
   bin/rspec
 )
 

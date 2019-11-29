@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'timecop'
 
 RSpec.describe Trucking::Queries::FindByHubIds do
   context 'class methods' do

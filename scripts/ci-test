@@ -1,6 +1,6 @@
 #!/bin/bash
 
-trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM
+trap 'trap - SIGTERM && kill -- -$$' SIGINT SIGTERM
 
 # Helpers
 fail () {
@@ -15,15 +15,8 @@ warn () {
 
 ci-runner () {
   warn "--- Running tests for $1 ---"
-  $SCRIPTDIR/ci-runner $1 $2
+  "${SCRIPTDIR}/ci-runner" "$1" "$2"
   ret=$?
-
-  if [[ -n "$(which lockfile)" ]]
-  then
-    lockfile "$RESULTFILE.lock"
-  fi
-  echo "$1:$ret" >> $RESULTFILE
-  rm -f "$RESULTFILE.lock"
 
   if [[ $ret -eq 0 ]];
   then
@@ -36,17 +29,17 @@ ci-runner () {
 }
 
 ci-app () {
-  ci-runner app $ROOTDIR
+  ci-runner app "${ROOTDIR}"
   return $?
 }
 
 ci-engines () {
   exitcode=0
 
-  for engine in $($SCRIPTDIR/ci-finder);
+  for engine in $("${SCRIPTDIR}/ci-finder");
   do
-    ci-runner $engine engines/$engine
-    exitcode=$(($exitcode|$?))
+    ci-runner "${engine}" "engines/${engine}"
+    exitcode=$((exitcode|$?))
   done
 
   return $exitcode
@@ -55,32 +48,31 @@ ci-engines () {
 ROOTDIR="$(cd "$( dirname "${BASH_SOURCE[0]}/" )/../" >/dev/null 2>&1 && pwd )"
 SCRIPTDIR="$ROOTDIR/scripts"
 REPORTSDIR="$ROOTDIR/reports"
-RESULTFILE="$ROOTDIR/.results"
 
 # Set Environment
-: ${SEED:=$(((RANDOM % 0xFFFF) + 1))}
+: "${SEED:=$(((RANDOM % 0xFFFF) + 1))}"
 export SEED
 
-mkdir -p $REPORTSDIR
+mkdir -p "${REPORTSDIR}"
 
 exitcode=0
 
-for run in $*;
+for run in "$@";
 do
   case "$run" in
     all )
       ci-app
-      exitcode=$(($exitcode | $?))
+      exitcode=$((exitcode | $?))
       ci-engines
-      exitcode=$(($exitcode | $?))
+      exitcode=$((exitcode | $?))
       ;;
     app )
       ci-app
-      exitcode=$(($exitcode | $?))
+      exitcode=$((exitcode | $?))
       ;;
     engines )
       ci-engines
-      exitcode=$(($exitcode | $?))
+      exitcode=$((exitcode | $?))
       ;;
     * )
       echo "Usage: $0 [all|app|engines]"
@@ -88,10 +80,5 @@ do
       ;;
   esac
 done
-
-if [[ -z "$CI" ]];
-then
-  $SCRIPTDIR/ci-results
-fi
 
 exit $exitcode

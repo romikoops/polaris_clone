@@ -1,198 +1,249 @@
 #!groovy
 
-withPipeline(timeout: 120) {
-  inPod(
-    containers: [
-      containerTemplate(name: 'app', image: 'ruby:2.5', ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '1000m', resourceLimitCpu: '1000m',
-        resourceRequestMemory: '1500Mi', resourceLimitMemory: '1500Mi',
-        envVars: [
-          envVar(key: 'POSTGRES_DB', value: 'imcr_test'),
-          envVar(key: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test'),
-        ]
-      ),
-      containerTemplate(name: 'client', image: 'node:12-slim', ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '1000m', resourceLimitCpu: '1000m',
-        resourceRequestMemory: '1500Mi', resourceLimitMemory: '1500Mi',
-      ),
-      containerTemplate(name: 'postgis', image: 'mdillon/postgis',
-        resourceRequestCpu: '250m', resourceLimitCpu: '250m',
-        resourceRequestMemory: '500Mi', resourceLimitMemory: '500Mi',
-      ),
-      containerTemplate(name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:6.7.2',
-        resourceRequestCpu: '250m', resourceLimitCpu: '250m',
-        resourceRequestMemory: '1500Mi', resourceLimitMemory: '1500Mi',
-      )
-    ]
-  ) { label ->
-    withNode(label) {
-      withStage('Checkout') {
-        checkoutScm()
+def reviewApp
 
-        // Stash for docker
-        stash(name: 'backend', excludes: 'client/**/*,qa/**/*')
-        stash(name: 'frontend', includes: 'client/**/*')
-        stash(name: 'qa', includes: 'qa/**/*')
-        if (fileExists("chart/Chart.yaml")) {
-          stash(name: 'chart', includes: 'chart/**/*')
-        }
-      }
+if (env.CHANGE_ID) {
+  def project = currentBuild.rawBuild.project
+  project.displayName = "PR-${env.CHANGE_ID} – ${env.CHANGE_TITLE}"
+}
 
-      withStage('Prepare') {
-        milestone()
+pipeline {
+  agent none
 
-        parallel(
-          app: { container('app') { appPrepare() } },
-          client: { container('client') { clientPrepare() } }
-        )
-      }
+  options {
+    ansiColor('xterm')
+    buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '10'))
+    podTemplate(inheritFrom: 'default')
+    skipDefaultCheckout()
+    timeout(120)
+  }
 
-      withStage('Test') {
-        milestone()
+  stages {
+    stage('Test') {
+      failFast true
 
-        parallel(
-          app: { container('app') { appRunner('app') } },
-          engines: { container('app') { appRunner('engines') } },
+      parallel {
+        stage('App') {
+          agent {
+            kubernetes {
+              yaml podSpec(
+                containers: [
+                  [
+                    name: 'ruby', image: 'ruby:2.6', interactive: true, requests: [ memory: '500Mi', cpu: '500m' ],
+                    env: [ [ name: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test' ] ]
+                  ],
+                  [ name: 'postgis', image: 'mdillon/postgis', requests: [ memory: '500Mi', cpu: '250m' ] ]
+                ]
+              )
+            }
+          }
 
-          client: {
-            container('client') {
-              dir('client') {
-                catchError(buildResult: null, stageResult: 'FAILURE') {
-                  sh(label: 'Run Tests', script: 'npm run test:ci')
+          stages {
+            stage('Setup') {
+              steps {
+                defaultCheckout()
+                container('ruby') { appSetup() }
+              }
+            }
+
+            stage('Prepare') {
+              steps {
+                container('ruby') { appPrepare() }
+              }
+            }
+
+            stage('RSpec') {
+              steps {
+                defaultCheckout()
+                container('ruby') { appRunner('app') }
+              }
+
+              post {
+                always {
+                  junit allowEmptyResults: true, testResults: '**/junit.xml'
+                  stash(name: 'app-lcov', includes: 'coverage/lcov/*.lcov')
+                }
+
+                success {
+                  publishCoverage adapters: [
+                    istanbulCoberturaAdapter(mergeToOneReport: true, path: 'coverage/coverage.xml')
+                  ]
                 }
               }
             }
           }
-        )
-      }
-
-      withStage('Report', retry: false) {
-        milestone()
-
-        def ret = 0
-
-        container('app') {
-          ret = sh(label: 'Result Reporter', script: 'scripts/ci-results', returnStatus: true)
         }
 
-        junit allowEmptyResults: false, testResults: "**/junit.xml"
+        stage('Engines') {
+          agent {
+            kubernetes {
+              yaml podSpec(
+                containers: [
+                  [
+                    name: 'ruby', image: 'ruby:2.6', interactive: true,
+                    requests: [ memory: '1500Mi', cpu: '1000m' ],
+                    env: [
+                      [ name: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test' ],
+                      [ name: 'ELASTICSEARCH_URL', value: 'localhost:9200']
+                    ]
+                  ],
+                  [ name: 'postgis', image: 'mdillon/postgis',
+                    requests: [ memory: '500Mi', cpu: '250m' ]
+                  ],
+                  [ name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:7.1.1',
+                    requests: [ memory: '1500Mi', cpu: '250m' ],
+                    env: [ [ name: "discovery.type", value: "single-node" ] ]
+                  ]
+                ]
+              )
+            }
+          }
 
-        if (env.BRANCH_NAME == 'master') {
-          publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
+          stages {
+            stage('Setup') {
+              steps {
+                defaultCheckout()
+                container('ruby') { appSetup() }
+              }
+            }
+
+            stage('Prepare') {
+              steps {
+                container('ruby') { appPrepare() }
+              }
+            }
+
+            stage('RSpec') {
+              steps {
+                container('ruby') { appRunner('engines') }
+              }
+
+              post {
+                always {
+                  junit allowEmptyResults: true, testResults: '**/junit.xml'
+                  stash(name: 'engines-lcov', includes: 'coverage/lcov/*.lcov', allowEmpty: true)
+                }
+
+                success {
+                  publishCoverage adapters: [
+                    istanbulCoberturaAdapter(mergeToOneReport: true, path: 'coverage/coverage.xml')
+                  ]
+                }
+              }
+            }
+          }
         }
 
-        if (currentBuild.result != null || ret != 0) {
-          error("Failed Tests")
+        stage('Client') {
+          agent {
+            kubernetes {
+              yaml podSpec(
+                containers: [
+                  [ name: 'node', image: 'node:12-slim', command: 'cat', tty: true,
+                    requests: [ memory: '1500Mi', cpu: '500m' ],
+                  ]
+                ]
+              )
+            }
+          }
+
+          stages {
+            stage('Setup') {
+              steps {
+                defaultCheckout()
+                container('node') {
+                  sh(label: 'Install Dependencies', script: """
+                    apt-get update && apt-get install -y build-essential gifsicle libgl1-mesa-glx \
+                      libjpeg62-turbo-dev liblcms2-dev libpng-dev libwebp-dev libxi6 optipng \
+                      pngquant
+                  """)
+                }
+              }
+            }
+
+            stage('Prepare') {
+              steps {
+                container('node') {
+                  withCache(['client/node_modules=client/package-lock.json']) {
+                    dir('client') {
+                      sh(label: 'NPM Install', script: "npm install --no-progress")
+                    }
+                  }
+                }
+              }
+            }
+
+            stage('Jest') {
+              steps {
+                container('node') {
+                  dir('client') {
+                    sh(label: 'Run Tests', script: 'npm run test:ci')
+                  }
+                }
+              }
+
+              post {
+                always {
+                  junit 'client/**/junit.xml'
+                }
+
+                success {
+                  publishCoverage adapters: [istanbulCoberturaAdapter(mergeToOneReport: true, path: '**/cobertura-coverage.xml')]
+                }
+              }
+            }
+          }
         }
+
+      } // parallel
+    } // Test
+
+    stage('Report') {
+      when { changeRequest() }
+
+      steps {
+        underCover(stashes: ['app-lcov', 'engines-lcov'])
       }
-    }
-  }
-
-  def prepareJobs = [:]
-
-  // Always build images
-  prepareJobs['images/qa'] = {
-    withRetry {
-      dockerBuild(dir: 'qa/', image: "${jobName()}/qa", memory: 1500, stash: 'qa')
-    }
-  }
-  prepareJobs['images/backend'] = {
-    withRetry {
-      dockerBuild(
-        dir: '.',
-        image: "${jobName()}/backend",
-        memory: 1500,
-        stash: 'backend',
-        pre_script: "scripts/docker-prepare.sh"
-      )
-    }
-  }
-  prepareJobs['images/frontend'] = {
-    withRetry {
-      dockerBuild(
-        dir: 'client/',
-        image: "${jobName()}/client",
-        memory: 2000,
-        args: [
-          RELEASE: env.COMMIT_SHA,
-          SENTRY_AUTH_TOKEN: '099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95'
-        ],
-        stash: 'frontend'
-      )
-    }
-  }
-
-  if (env.CHANGE_ID || env.GIT_BRANCH == 'master') {
-    withStage('Docker Build') {
-      inPod { label ->
-        withNode(label) {
-          parallel(prepareJobs)
-        }
-      }
-
-      milestone()
-    }
-  }
-
-  if (env.CHANGE_ID) {
-    withStage('Deploy Review') {
-      milestone()
-
-      env.REVIEW_NAME = trimName(env.CI_COMMIT_REF_SLUG, 40)
-
-      lock(resource: "deploy/${env.GIT_BRANCH}", inversePrecedence: true) {
-        deployReview()
-
-        milestone()
-      }
-    }
-
-    // withStage('QA') {
-    //   milestone()
-
-    //   build(
-    //     job: 'Voyage/imc-react-api',
-    //     parameters: [
-    //       string(name: 'APP_NAME', value: 'imc-app'),
-    //       string(name: 'ENVIRONMENT', value: 'review'),
-    //       string(name: 'NAMESPACE', value: 'review'),
-    //       string(name: 'RELEASE', value: env.REVIEW_NAME),
-    //       string(name: 'REPOSITORY', value: jobBaseName()),
-    //       string(name: 'REVISION', value: env.GIT_COMMIT),
-    //     ],
-    //     wait: false
-    //   )
-    // }
+    } // Report
   }
 }
 
+void appSetup() {
+  sh(label: 'Install Dependencies', script: """
+    apt-get update && apt-get install -y \
+      apt-transport-https \
+      automake \
+      build-essential \
+      cmake \
+      git \
+      libgeos-dev \
+      libpq-dev \
+      libssl-dev \
+      locales \
+      tzdata \
+      wkhtmltopdf
+
+    DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
+        locale-gen C.UTF-8 && \
+        /usr/sbin/update-locale LANG=C.UTF-8
+
+    curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+      && echo "deb https://deb.nodesource.com/node_12.x stretch main" | tee /etc/apt/sources.list.d/nodesource.list \
+      && apt-get update && apt-get install -y \
+        nodejs
+
+    npm install -g 'mjml@4.3.1'
+  """)
+}
+
 void appPrepare() {
-  timeout(15) {
-    withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}", "LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby"]) {
-      sh(label: 'Install Dependencies', script: """
-        apt-get update && apt-get install -y \
-          apt-transport-https \
-          automake \
-          build-essential \
-          cmake \
-          git \
-          libgeos-dev \
-          libpq-dev \
-          locales \
-          tzdata
-
-        DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
-            locale-gen C.UTF-8 && \
-            /usr/sbin/update-locale LANG=C.UTF-8
-
-        curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
-          && echo "deb https://deb.nodesource.com/node_12.x stretch main" | tee /etc/apt/sources.list.d/nodesource.list \
-          && apt-get update && apt-get install -y \
-            nodejs
-
-        npm install -g 'mjml@4.3.1'
-      """)
-
+  withSecrets {
+    withEnv([
+      "BUNDLE_BUILD__SASSC=--disable-march-tune-native",
+      "BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}",
+      "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby",
+      "LC_ALL=C.UTF-8",
+    ]) {
       withCache(['vendor/ruby=Gemfile.lock']) {
         sh(label: 'Install Gems', script: "scripts/ci-prepare")
       }
@@ -200,34 +251,9 @@ void appPrepare() {
   }
 }
 
-void clientPrepare() {
-  timeout(15) {
-    sh(label: 'Install Dependencies', script: """
-      apt-get update && apt-get install -y \
-        build-essential \
-        gifsicle \
-        libgl1-mesa-glx \
-        libjpeg62-turbo-dev \
-        liblcms2-dev \
-        libpng-dev \
-        libwebp-dev \
-        libxi6 \
-        optipng \
-        pngquant
-    """)
-
-    withCache(['client/node_modules=client/package-lock.json']) {
-      dir('client') {
-        sh(label: 'NPM Install', script: "npm install --no-progress")
-      }
-    }
-  }
-}
 
 void appRunner(String name) {
   withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}", "LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby"]) {
-    catchError(buildResult: null, stageResult: 'FAILURE') {
-      sh(label: 'Test', script: "scripts/ci-test ${name}")
-    }
+    sh(label: 'Test', script: "scripts/ci-test ${name}")
   }
 }

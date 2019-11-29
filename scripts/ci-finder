@@ -86,7 +86,7 @@ class BuildFinder
 
   def dirty_libraries
     @dirty_libraries ||= begin
-      return all_libraries if ENV['GIT_BRANCH'] == 'master'
+      return all_libraries if ENV['GIT_BRANCH'] == 'master' || ENV['CHANGE_ID']
 
       changed_files = `git diff $(git merge-base #{change_target} HEAD) --name-only`.split("\n")
       raise 'failed to get changed files' unless $?.success?

@@ -176,9 +176,8 @@ group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'simplecov-cobertura', require: false
-  gem 'simplecov-lcov', require: false
+  gem 'simplecov-workspace-lcov', require: false
   gem 'timecop'
-  gem 'undercover'
   gem 'webmock'
 end
 

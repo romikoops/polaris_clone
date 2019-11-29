@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 $LOAD_PATH.push File.expand_path('lib', __dir__)
+require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
@@ -27,14 +28,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'roo-xls'
   s.add_dependency 'will_paginate'
 
-  s.add_development_dependency 'factory_bot_rails'
-  s.add_development_dependency 'ffaker'
-  s.add_development_dependency 'fuubar'
-  s.add_development_dependency 'pry'
-  s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'rspec_junit_formatter'
-  s.add_development_dependency 'simplecov'
-  s.add_development_dependency 'simplecov-cobertura'
-  s.add_development_dependency 'simplecov-lcov'
-  s.add_development_dependency 'timecop'
+  Gemhelper.common_gems(s)
 end

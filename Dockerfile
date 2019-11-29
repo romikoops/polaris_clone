@@ -14,8 +14,10 @@ RUN apt-get update && apt-get install -y \
   git \
   libgeos-dev \
   libpq-dev \
+  libssl-dev \
   locales \
   tzdata \
+  wkhtmltopdf \
   && rm -rf /var/lib/apt/lists/*
 
 RUN DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
@@ -73,17 +75,19 @@ ENV MALLOC_ARENA_MAX 2
 # Minimal requirements to run a Rails app
 RUN apt-get update && apt-get install -y \
   apt-transport-https \
-  gnupg \
   fonts-noto \
+  gnupg \
   libfontconfig1 \
   libfreetype6 \
   libgeos-c1v5 \
   libpq5 \
+  libssl1.1 \
   libx11-6 \
   libxext6 \
   libxrender1 \
   locales \
   tzdata \
+  wkhtmltopdf \
   && rm -rf /var/lib/apt/lists/*
 
 ARG NODE_VERSION=node_10.x
