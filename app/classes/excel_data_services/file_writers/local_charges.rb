@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileWriters
-    class LocalCharges < Base # rubocop:disable Metrics/ClassLength
+    class LocalCharges < ExcelDataServices::FileWriters::Base # rubocop:disable Metrics/ClassLength
       def initialize(tenant:, file_name:, mode_of_transport: nil, sandbox: nil)
         super(tenant: tenant, file_name: file_name)
         @mode_of_transport = mode_of_transport

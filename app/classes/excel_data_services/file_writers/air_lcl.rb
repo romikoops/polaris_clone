@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileWriters
-    class AirLcl < Base
+    class AirLcl < ExcelDataServices::FileWriters::Base
       private
 
       def load_and_prepare_data

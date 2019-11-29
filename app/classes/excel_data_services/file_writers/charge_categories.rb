@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileWriters
-    class ChargeCategories < Base
+    class ChargeCategories < ExcelDataServices::FileWriters::Base
       private
 
       attr_reader :mode_of_transport

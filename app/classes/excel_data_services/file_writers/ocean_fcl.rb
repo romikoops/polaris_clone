@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileWriters
-    class OceanFcl < Base
+    class OceanFcl < ExcelDataServices::FileWriters::Base
       private
 
       def load_and_prepare_data

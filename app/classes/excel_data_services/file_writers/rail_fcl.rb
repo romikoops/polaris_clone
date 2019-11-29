@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileWriters
-    class RailFcl < Base
+    class RailFcl < ExcelDataServices::FileWriters::Base
       private
 
       def load_and_prepare_data
