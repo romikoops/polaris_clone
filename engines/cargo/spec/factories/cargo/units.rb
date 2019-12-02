@@ -5,6 +5,8 @@ FactoryBot.define do
     quantity { 2 }
     weight_value { 3000 }
     cargo_class { '00' }
+    goods_value_cents { 1_000 }
+    goods_value_currency { :usd }
     association :tenant, factory: :tenants_tenant
     association :cargo, factory: :cargo_cargo
 

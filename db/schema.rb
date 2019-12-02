@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_11_121459) do
+ActiveRecord::Schema.define(version: 2019_11_12_145526) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -138,6 +138,8 @@ ActiveRecord::Schema.define(version: 2019_11_11_121459) do
     t.datetime "created_at", null: false
     t.uuid "quotation_id"
     t.uuid "tenant_id"
+    t.integer "total_goods_value_cents", default: 0, null: false
+    t.string "total_goods_value_currency", null: false
     t.datetime "updated_at", null: false
     t.index ["quotation_id"], name: "index_cargo_cargos_on_quotation_id"
     t.index ["tenant_id"], name: "index_cargo_cargos_on_tenant_id"
@@ -179,7 +181,9 @@ ActiveRecord::Schema.define(version: 2019_11_11_121459) do
     t.uuid "cargo_id"
     t.bigint "cargo_type", default: 0
     t.datetime "created_at", null: false
-    t.boolean "dangerous_goods", default: false
+    t.integer "dangerous_goods", default: 0
+    t.integer "goods_value_cents", default: 0, null: false
+    t.string "goods_value_currency", null: false
     t.string "height_unit", default: "m"
     t.decimal "height_value", precision: 100, scale: 4, default: "0.0"
     t.string "length_unit", default: "m"

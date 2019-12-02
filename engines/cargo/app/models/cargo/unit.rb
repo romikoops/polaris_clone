@@ -10,6 +10,9 @@ module Cargo
 
     enum cargo_class: Specification::CLASS_ENUM, _prefix: true
     enum cargo_type: Specification::TYPE_ENUM, _prefix: true
+    enum dangerous_goods: {
+      unspecified: 0
+    }
 
     validates :tenant_id, presence: true
     validates :weight, measured: { units: :kg }
@@ -67,24 +70,26 @@ end
 #
 # Table name: cargo_units
 #
-#  id              :uuid             not null, primary key
-#  tenant_id       :uuid
-#  quantity        :integer          default(0)
-#  cargo_class     :bigint           default("00")
-#  cargo_type      :bigint           default("LCL")
-#  stackable       :boolean          default(FALSE)
-#  dangerous_goods :boolean          default(FALSE)
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  weight_value    :decimal(100, 3)  default(0.0)
-#  width_value     :decimal(100, 4)  default(0.0)
-#  length_value    :decimal(100, 4)  default(0.0)
-#  height_value    :decimal(100, 4)  default(0.0)
-#  volume_value    :decimal(100, 6)  default(0.0)
-#  volume_unit     :string           default("m3")
-#  weight_unit     :string           default("kg")
-#  width_unit      :string           default("m")
-#  length_unit     :string           default("m")
-#  height_unit     :string           default("m")
-#  cargo_id        :uuid
+#  id                   :uuid             not null, primary key
+#  tenant_id            :uuid
+#  quantity             :integer          default(0)
+#  cargo_class          :bigint           default("00")
+#  cargo_type           :bigint           default("LCL")
+#  stackable            :boolean          default(FALSE)
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  weight_value         :decimal(100, 3)  default(0.0)
+#  width_value          :decimal(100, 4)  default(0.0)
+#  length_value         :decimal(100, 4)  default(0.0)
+#  height_value         :decimal(100, 4)  default(0.0)
+#  volume_value         :decimal(100, 6)  default(0.0)
+#  volume_unit          :string           default("m3")
+#  weight_unit          :string           default("kg")
+#  width_unit           :string           default("m")
+#  length_unit          :string           default("m")
+#  height_unit          :string           default("m")
+#  cargo_id             :uuid
+#  dangerous_goods      :integer          default("unspecified")
+#  goods_value_cents    :integer          default(0), not null
+#  goods_value_currency :string           not null
 #
