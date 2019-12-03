@@ -16,6 +16,10 @@ pipeline {
     podTemplate(inheritFrom: 'default')
     skipDefaultCheckout()
     timeout(120)
+    timestamps()
+
+    retry(2)
+    preserveStashes()
   }
 
   stages {
@@ -29,7 +33,7 @@ pipeline {
               yaml podSpec(
                 containers: [
                   [
-                    name: 'ruby', image: 'ruby:2.6', interactive: true, requests: [ memory: '500Mi', cpu: '500m' ],
+                    name: 'ruby', image: 'itsmycargo/builder:ruby-2.6', interactive: true, requests: [ memory: '500Mi', cpu: '500m' ],
                     env: [ [ name: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test' ] ]
                   ],
                   [ name: 'postgis', image: 'mdillon/postgis', requests: [ memory: '500Mi', cpu: '250m' ] ]
@@ -39,10 +43,9 @@ pipeline {
           }
 
           stages {
-            stage('Setup') {
+            stage('Checkout') {
               steps {
                 defaultCheckout()
-                container('ruby') { appSetup() }
               }
             }
 
@@ -80,7 +83,7 @@ pipeline {
               yaml podSpec(
                 containers: [
                   [
-                    name: 'ruby', image: 'ruby:2.6', interactive: true,
+                    name: 'ruby', image: 'itsmycargo/builder:ruby-2.6', interactive: true,
                     requests: [ memory: '1500Mi', cpu: '1000m' ],
                     env: [
                       [ name: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test' ],
@@ -100,10 +103,9 @@ pipeline {
           }
 
           stages {
-            stage('Setup') {
+            stage('Checkout') {
               steps {
                 defaultCheckout()
-                container('ruby') { appSetup() }
               }
             }
 
@@ -139,7 +141,7 @@ pipeline {
             kubernetes {
               yaml podSpec(
                 containers: [
-                  [ name: 'node', image: 'node:12-slim', command: 'cat', tty: true,
+                  [ name: 'node', image: 'itsmycargo/builder:node-12', command: 'cat', tty: true,
                     requests: [ memory: '1500Mi', cpu: '500m' ],
                   ]
                 ]
@@ -148,16 +150,9 @@ pipeline {
           }
 
           stages {
-            stage('Setup') {
+            stage('Checkout') {
               steps {
                 defaultCheckout()
-                container('node') {
-                  sh(label: 'Install Dependencies', script: """
-                    apt-get update && apt-get install -y build-essential gifsicle libgl1-mesa-glx \
-                      libjpeg62-turbo-dev liblcms2-dev libpng-dev libwebp-dev libxi6 optipng \
-                      pngquant
-                  """)
-                }
               }
             }
 
@@ -208,34 +203,6 @@ pipeline {
   }
 }
 
-void appSetup() {
-  sh(label: 'Install Dependencies', script: """
-    apt-get update && apt-get install -y \
-      apt-transport-https \
-      automake \
-      build-essential \
-      cmake \
-      git \
-      libgeos-dev \
-      libpq-dev \
-      libssl-dev \
-      locales \
-      tzdata \
-      wkhtmltopdf
-
-    DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
-        locale-gen C.UTF-8 && \
-        /usr/sbin/update-locale LANG=C.UTF-8
-
-    curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
-      && echo "deb https://deb.nodesource.com/node_12.x stretch main" | tee /etc/apt/sources.list.d/nodesource.list \
-      && apt-get update && apt-get install -y \
-        nodejs
-
-    npm install -g 'mjml@4.3.1'
-  """)
-}
-
 void appPrepare() {
   withSecrets {
     withEnv([
@@ -250,7 +217,6 @@ void appPrepare() {
     }
   }
 }
-
 
 void appRunner(String name) {
   withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}", "LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby"]) {
