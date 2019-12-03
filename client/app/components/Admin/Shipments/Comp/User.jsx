@@ -351,7 +351,7 @@ function mapStateToProps (state) {
     shipments,
     getShipmentsRequest
   } = users
-  const { num_shipment_pages } = shipments ? shipments : {shipments: {}}  // eslint-disable-line
+  const { num_shipment_pages } = shipments || {}  // eslint-disable-line
 
   return {
     user,

@@ -327,7 +327,7 @@ function mapStateToProps (state) {
   const {
     clients, shipments, confirmShipmentData, getShipmentsRequest
   } = admin
-  const { num_shipment_pages } = shipments  // eslint-disable-line
+  const { num_shipment_pages } = shipments || {}  // eslint-disable-line
 
   return {
     user,
