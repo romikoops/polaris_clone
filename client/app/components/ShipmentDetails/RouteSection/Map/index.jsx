@@ -78,7 +78,7 @@ class RouteSectionMapContent extends React.PureComponent {
     const newMarker = this.getMarker(target, address)
 
     if (!newMarker) return null
-    
+
     this.setState(
       prevState => ({
         markers: {
@@ -187,7 +187,7 @@ class RouteSectionMapContent extends React.PureComponent {
     const { gMaps } = this.props
 
     const bounds = new gMaps.LatLngBounds()
-    Object.values(markers).forEach(marker => marker && bounds.extend(marker.getPosition()))
+    Object.values(markers).forEach(marker => marker !== null && bounds.extend(marker.getPosition()))
 
     if (Object.values(markers).every(marker => marker == null)) {
       this.map.setCenter({
