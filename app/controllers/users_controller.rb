@@ -39,15 +39,16 @@ class UsersController < ApplicationController
   def update
     @user = current_user
     updating_guest_to_regular_user = current_user.guest
-    @user.update_attributes(user_params)
+    @user.update(user_params)
 
-    if @user.valid? && !@user.guest && params[:update][:address]
+    if @user.valid? && !@user.guest && updating_guest_to_regular_user
+      @user.send_confirmation_instructions
+    end
+
+    if params[:update][:address]
       address = Address.create_from_raw_params!(address_params.merge(sandbox: @sandbox))
       address.geocode_from_address_fields!
       @user.addresses << address unless address.nil?
-      @user.optin_status = OptinStatus.find_by(tenant: true, itsmycargo: true, cookies: @user.optin_status.cookies)
-      @user.send_confirmation_instructions if updating_guest_to_regular_user
-      @user.save
     end
 
     headers = @user.create_new_auth_token
