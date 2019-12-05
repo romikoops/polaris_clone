@@ -12,7 +12,6 @@ module Shipments
                      customs_value_declaration: 5 }
 
     belongs_to :attachable, polymorphic: true
-    belongs_to :user, class_name: 'Tenants::User'
 
     has_one_attached :file
 

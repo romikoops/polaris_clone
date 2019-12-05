@@ -11,6 +11,7 @@ module Legacy
     belongs_to :destination_hub, class_name: 'Legacy::Hub', optional: true
     belongs_to :itinerary, optional: true, class_name: 'Legacy::Shipment'
     belongs_to :trip, optional: true, class_name: 'Legacy::Trip'
+    has_many :shipment_contacts, class_name: 'Legacy::ShipmentContact'
     has_many :containers, class_name: 'Legacy::Container'
     has_many :cargo_items, class_name: 'Legacy::CargoItem'
     has_many :cargo_item_types, through: :cargo_items, class_name: 'Legacy::CargoItemType'

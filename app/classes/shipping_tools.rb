@@ -8,6 +8,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   extend NotificationTools
   InternalError = Class.new(StandardError)
   ShipmentNotFound = Class.new(StandardError)
+  DataMappingError = Class.new(StandardError)
 
   def self.create_shipments_from_quotation(shipment, results, sandbox = nil)
     main_quote = ShippingTools.handle_existing_quote(shipment, results, sandbox)
@@ -422,6 +423,21 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     shipment.status = current_user.confirmed? ? 'requested' : 'requested_by_unconfirmed_account'
     shipment.booking_placed_at = DateTime.now
     shipment.save!
+
+    cargo_creator = Cargo::Creator.new(legacy_shipment: shipment)
+    cargo_creator.perform
+
+    raise ApplicationError::DataMappingError if cargo_creator.errors.any?
+
+    shipment_request_creator = Shipments::ShipmentRequestCreator.new(legacy_shipment: shipment, user: current_user, sandbox: sandbox)
+    shipment_request_creator.create
+
+    raise ApplicationError::DataMappingError if shipment_request_creator.errors.any?
+
+    shipment_request = shipment_request_creator.shipment_request
+
+    Integrations::Processor.process(shipment_request_id: shipment_request.id, tenant_id: shipment_request.tenant_id)
+
     message = build_request_shipment_message(current_user, shipment)
     add_message_to_convo(current_user, message, true)
     shipment
@@ -468,6 +484,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     raise ApplicationError::ShipmentNotFound unless shipment.present?
 
     shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
+    shipment.meta['tender_id'] = params[:meta][:tender_id]
+
     shipment.user_id = current_user.id
     shipment.customs_credit = params[:customs_credit]
     shipment.trip_id = params[:schedule]['trip_id']

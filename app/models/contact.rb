@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Contact < ApplicationRecord
+class Contact < Legacy::Contact
   include PgSearch::Model
   has_paper_trail
   pg_search_scope :contact_search, against: %i(first_name last_name company_name email phone), using: {

@@ -151,7 +151,13 @@ module Tenants
       blacklisted_emails: [],
       validity_logic: 'vatos',
       transport_insurance_rate: 0,
-      hs_fee: 0
+      hs_fee: 0,
+      integrations: {
+        chainio: {
+          flow_id: '',
+          api_key: ''
+        }
+      }
     }.freeze
 
     def initialize(target: nil, tenant: nil, sandbox: nil)

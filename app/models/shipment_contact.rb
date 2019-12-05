@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ShipmentContact < ApplicationRecord
+class ShipmentContact < Legacy::ShipmentContact
   CONTACT_TYPES = %w(shipper consignee notifyee).freeze
 
   belongs_to :shipment

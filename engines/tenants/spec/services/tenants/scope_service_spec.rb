@@ -56,6 +56,7 @@ RSpec.describe Tenants::ScopeService do
           hide_grand_total: false,
           hide_sub_totals: false,
           incoterm_info_level: 'text',
+          integrations: { chainio: { api_key: '', flow_id: '' } },
           links: { about: '', legal: '' },
           mandatory_form_fields: {
             total_value_goods: false,

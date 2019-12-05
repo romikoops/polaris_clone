@@ -7,9 +7,8 @@ module Quotations
     belongs_to :origin_nexus, class_name: 'Legacy::Nexus'
     belongs_to :destination_nexus, class_name: 'Legacy::Nexus'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-
     has_many :tenders, inverse_of: :quotation
-
+    has_one :cargo, class_name: 'Cargo::Cargo'
   end
 end
 

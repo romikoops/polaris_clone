@@ -142,3 +142,8 @@ en:
       http_code: 400
       code: 1020
       message: 'Incorrect data provided. Please check the sheet and try again.'
+    data_mapping_error:
+      http_code: 422
+      code: 1021
+      message: 'There was an error mapping data'
+

@@ -8,11 +8,10 @@ module Cargo
                      RE R0 RT R1 RS R2 HR H0 H1 H2 HI H5 H6 UT U0 U1 U2 U3 U4 U5 PL P0 PF
                      P1 P2 PC P3 P4 PS P5 TN T0 T1 T2 TD T3 T4 T5 T6 TG T7 T8 T9 AO).freeze
 
-    CLASS_ENUM = CARGO_LENGTH.product(CARGO_HEIGHT)
-                             .each_with_index
-                             .each_with_object({}) do |(product, i), hash|
-      hash[product.join] = i
-    end.freeze
+    CLASS_ENUM = CARGO_LENGTH
+                 .product(CARGO_HEIGHT)
+                 .each_with_index
+                 .each_with_object({}) { |(product, i), hash| hash[product.join] = i }.freeze
 
     TYPE_ENUM = CARGO_TYPES.each_with_index.each_with_object({}) { |(type, i), hash| hash[type] = i }.freeze
 

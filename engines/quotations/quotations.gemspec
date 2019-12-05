@@ -17,10 +17,11 @@ Gem::Specification.new do |s|
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
+  s.add_dependency 'cargo'
   s.add_dependency 'core'
   s.add_dependency 'legacy'
-  s.add_dependency 'money-rails'
   s.add_dependency 'tenants'
 
+  s.add_dependency 'money-rails'
   Gemhelper.common_gems(s)
 end

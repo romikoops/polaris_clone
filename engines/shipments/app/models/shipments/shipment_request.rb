@@ -9,7 +9,7 @@ module Shipments
     belongs_to :tender, class_name: 'Quotations::Tender'
     belongs_to :tenant, class_name: 'Tenants::Tenant'
     belongs_to :user, class_name: 'Tenants::User'
-
+    belongs_to :tender, class_name: 'Quotations::Tender'
     has_many   :documents, as: :attachable
     has_many   :notifyees, class_name: 'ShipmentRequestContacts::Notifyee'
     has_one    :consignee, class_name: 'ShipmentRequestContacts::Consignee'

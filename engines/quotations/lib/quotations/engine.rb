@@ -1,8 +1,11 @@
 # frozen_string_literal: true
+
+require 'cargo'
 require 'core'
 require 'legacy'
-require 'money-rails'
 require 'tenants'
+
+require 'money-rails'
 
 module Quotations
   class Engine < ::Rails::Engine

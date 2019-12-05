@@ -119,6 +119,13 @@ PATH
       tenants
 
 PATH
+  remote: engines/integrations
+  specs:
+    integrations (9999.1.0.0)
+      core
+      shipments
+
+PATH
   remote: engines/legacy
   specs:
     legacy (9999.1.0.0)
@@ -156,6 +163,7 @@ PATH
   remote: engines/quotations
   specs:
     quotations (9999.1.0.0)
+      cargo
       core
       legacy
       money-rails
@@ -871,6 +879,7 @@ DEPENDENCIES
   googleauth
   helmsman!
   holidays
+  integrations!
   legacy!
   letter_opener (~> 1.6)
   listen (>= 3.0.5, < 3.2)

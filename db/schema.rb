@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_12_145526) do
+ActiveRecord::Schema.define(version: 2019_11_21_162434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 2019_11_12_145526) do
     t.uuid "sandbox_id"
     t.string "street"
     t.string "street_number"
+    t.string "tms_id"
     t.datetime "updated_at", null: false
     t.uuid "user_id"
     t.index ["sandbox_id"], name: "index_address_book_contacts_on_sandbox_id"

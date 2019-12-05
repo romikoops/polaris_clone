@@ -2,8 +2,6 @@
 
 module Shipments
   class ShipmentRequestContact < ApplicationRecord
-    has_paper_trail unless: proc { |t| t.sandbox_id.present? }
-
     belongs_to :shipment_request
     belongs_to :contact, class_name: 'AddressBook::Contact'
   end
