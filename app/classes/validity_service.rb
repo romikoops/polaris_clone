@@ -28,6 +28,12 @@ class ValidityService
     @end_date = end_value if end_value.present?
   end
 
+  def parse_schedule(schedule:, direction:)
+    @schedules = [schedule]
+    @direction = direction
+    parse_schedules
+  end
+
   def handle_vatos_schedules
     @start_value = schedules.first.etd
     @end_value = schedules.last.etd

@@ -77,4 +77,46 @@ RSpec.describe ValidityService do
       expect(validity_service.end_date.beginning_of_minute).to eq(25.days.from_now.beginning_of_minute)
     end
   end
+
+  describe '.parse_schedule' do
+    let(:schedule) { schedules.first }
+
+    it 'returns the correct dates for one schedule V.A.T.O.S export' do
+      validity_service = described_class.new(logic: 'vatos', schedules: [], direction: '', booking_date: booking_date)
+      validity_service.parse_schedule(schedule: schedule, direction: 'export')
+      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(schedule.etd.beginning_of_minute)
+    end
+
+    it 'returns the correct dates for one schedule V.A.T.O.A export' do
+      validity_service = described_class.new(logic: 'vatoa', schedules: [], direction: '', booking_date: booking_date)
+      validity_service.parse_schedule(schedule: schedule, direction: 'export')
+      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(schedule.etd.beginning_of_minute) 
+    end
+
+    it 'returns the correct dates for one schedule V.A.T.O.B export' do
+      validity_service = described_class.new(logic: 'vatob', schedules: [], direction: '', booking_date: booking_date)
+      validity_service.parse_schedule(schedule: schedule, direction: 'export')
+      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(booking_date.beginning_of_minute)
+    end
+
+    it 'returns the correct dates for one schedule V.A.T.O.S import' do
+      validity_service = described_class.new(logic: 'vatos', schedules: [], direction: '', booking_date: booking_date)
+      validity_service.parse_schedule(schedule: schedule, direction: 'import')
+      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(schedule.etd.beginning_of_minute)
+    end
+
+    it 'returns the correct dates for one schedule V.A.T.O.A import' do
+      validity_service = described_class.new(logic: 'vatoa', schedules: [], direction: '', booking_date: booking_date)
+      validity_service.parse_schedule(schedule: schedule, direction: 'import')
+      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(schedule.eta.beginning_of_minute) 
+    end
+
+    it 'returns the correct dates for one schedule V.A.T.O.B import' do
+      validity_service = described_class.new(logic: 'vatob', schedules: [], direction: '', booking_date: booking_date)
+      validity_service.parse_schedule(schedule: schedule, direction: 'import')
+      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(booking_date.beginning_of_minute)
+    end
+
+
+  end
 end

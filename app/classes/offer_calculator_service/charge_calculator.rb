@@ -69,11 +69,23 @@ module OfferCalculatorService
     def sort_by_local_charge_periods(periods) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       export_periods = periods[:export] || {}
       import_periods = periods[:import] || {}
+
+      validity = ValidityService.new(
+        logic: @scope.fetch('validity_logic'),
+        direction: '',
+        booking_date: @shipment.desired_start_date,
+        schedules: []
+      )
+
       schedules_by_charges = @schedules.map do |sched|
-        start_date = sched.etd || Date.today + 4.days
         check = dynamic_mandatory_charge_check(schedule: sched)
-        export_key = export_periods.keys.select { |exk| start_date < exk[:expiration_date] && start_date > exk[:effective_date] }.first
-        import_key = import_periods.keys.select { |imk| start_date < imk[:expiration_date] && start_date > imk[:effective_date] }.first
+
+        validity.parse_schedule(schedule: sched, direction: @shipment.direction)
+        sched_validable_date = validity.start_date
+
+        export_key = export_periods.keys.find { |exk| sched_validable_date < exk[:expiration_date] && sched_validable_date > exk[:effective_date] }
+        import_key = import_periods.keys.find { |imk| sched_validable_date < imk[:expiration_date] && sched_validable_date > imk[:effective_date] }
+
         next if import_key.nil? && (@shipment.has_on_carriage || check[:import])
         next if export_key.nil? && (@shipment.has_pre_carriage || check[:export])
 
