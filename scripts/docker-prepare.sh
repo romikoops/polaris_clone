@@ -12,6 +12,6 @@ if [ -n "$(command -v rsync)" ];
 then
   rsync -zarvm --include='*/' --include='*.gemspec' --include='lib/engines/gemhelper.rb' --exclude='*' . .build/docker
 else
+  cp --parents lib/engines/gemhelper.rb .build/docker/
   find . -name "*.gemspec" -exec cp --parents {} .build/docker/ \;
-  find . -name "lib/engines/gemhelper.rb" -exec cp --parents {} .build/docker/ \;
 fi

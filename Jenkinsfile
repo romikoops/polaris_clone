@@ -1,7 +1,5 @@
 #!groovy
 
-def reviewApp
-
 if (env.CHANGE_ID) {
   def project = currentBuild.rawBuild.project
   project.displayName = "PR-${env.CHANGE_ID} – ${env.CHANGE_TITLE}"
@@ -15,10 +13,8 @@ pipeline {
     buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '10'))
     podTemplate(inheritFrom: 'default')
     skipDefaultCheckout()
-    timeout(120)
-    timestamps()
+    timeout(90)
 
-    retry(2)
     preserveStashes()
   }
 
@@ -33,10 +29,11 @@ pipeline {
               yaml podSpec(
                 containers: [
                   [
-                    name: 'ruby', image: 'itsmycargo/builder:ruby-2.6', interactive: true, requests: [ memory: '500Mi', cpu: '500m' ],
+                    name: 'ruby', image: 'itsmycargo/builder:ruby-2.6', interactive: true,
+                    requests: [ memory: '1500Mi', cpu: '1000m' ],
                     env: [ [ name: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test' ] ]
                   ],
-                  [ name: 'postgis', image: 'mdillon/postgis', requests: [ memory: '500Mi', cpu: '250m' ] ]
+                  [ name: 'postgis', image: 'mdillon/postgis', requests: [ memory: '500Mi', cpu: '500m' ] ]
                 ]
               )
             }
@@ -44,18 +41,26 @@ pipeline {
 
           stages {
             stage('Checkout') {
+              options { timeout(5) }
+
               steps {
                 defaultCheckout()
+
+                stash(name: 'backend', excludes: 'client/**/*,qa/**/*')
               }
             }
 
             stage('Prepare') {
+              options { timeout(10) }
+
               steps {
                 container('ruby') { appPrepare() }
               }
             }
 
             stage('RSpec') {
+              options { timeout(15) }
+
               steps {
                 defaultCheckout()
                 container('ruby') { appRunner('app') }
@@ -104,18 +109,24 @@ pipeline {
 
           stages {
             stage('Checkout') {
+              options { timeout(5) }
+
               steps {
                 defaultCheckout()
               }
             }
 
             stage('Prepare') {
+              options { timeout(15) }
+
               steps {
                 container('ruby') { appPrepare() }
               }
             }
 
             stage('RSpec') {
+              options { timeout(15) }
+
               steps {
                 container('ruby') { appRunner('engines') }
               }
@@ -142,7 +153,7 @@ pipeline {
               yaml podSpec(
                 containers: [
                   [ name: 'node', image: 'itsmycargo/builder:node-12', command: 'cat', tty: true,
-                    requests: [ memory: '1500Mi', cpu: '500m' ],
+                    requests: [ memory: '1500Mi', cpu: '1000m' ],
                   ]
                 ]
               )
@@ -151,12 +162,19 @@ pipeline {
 
           stages {
             stage('Checkout') {
+              options { timeout(5) }
+
               steps {
                 defaultCheckout()
+
+                stash(name: 'frontend', includes: 'client/**/*')
+                stash(name: 'qa', includes: 'qa/**/*')
               }
             }
 
             stage('Prepare') {
+              options { timeout(15) }
+
               steps {
                 container('node') {
                   withCache(['client/node_modules=client/package-lock.json']) {
@@ -169,6 +187,8 @@ pipeline {
             }
 
             stage('Jest') {
+              options { timeout(15) }
+
               steps {
                 container('node') {
                   dir('client') {
@@ -194,12 +214,62 @@ pipeline {
     } // Test
 
     stage('Report') {
+      options { timeout(10) }
       when { changeRequest() }
 
       steps {
         underCover(stashes: ['app-lcov', 'engines-lcov'])
       }
     } // Report
+
+    stage('Build') {
+      parallel {
+        stage('API') {
+          options { timeout(20) }
+
+          steps {
+            dockerBuild(
+              dir: '.',
+              image: "${jobName()}/backend",
+              memory: 1500,
+              stash: 'backend',
+              pre_script: "scripts/docker-prepare.sh"
+            )
+          }
+        }
+
+        stage('Client') {
+          options { timeout(15) }
+
+          steps {
+            dockerBuild(
+              dir: 'client/',
+              image: "${jobName()}/client",
+              memory: 2000,
+              args: [
+                RELEASE: env.GIT_COMMIT,
+                SENTRY_AUTH_TOKEN: "env:SENTRY_AUTH_TOKEN"
+              ],
+              stash: 'frontend'
+            )
+          }
+        }
+
+        stage('QA') {
+          options { timeout(15) }
+
+          steps {
+            dockerBuild(dir: 'qa/', image: "${jobName()}/qa", stash: 'qa')
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      jiraBuildInfo(site: 'itsmycargo.atlassian.net', issues: env.BUILD_ISSUES)
+    }
   }
 }
 
