@@ -37,6 +37,7 @@ gem "paranoia", "~> 2.2"
 
 gem 'sass-rails'
 gem 'sprockets-rails', require: 'sprockets/railtie'
+gem 'sprockets', '~> 3.7.2'
 
 # AWS SDK
 gem 'aws-sdk-cloudfront', '~> 1.11.0'
@@ -168,8 +169,8 @@ group :development, :test do
   gem 'ruby-debug-ide'
 
   gem 'rubocop'
-  gem 'rubocop-rspec'
   gem 'rubocop-performance'
+  gem 'rubocop-rspec'
 end
 
 group :test do
