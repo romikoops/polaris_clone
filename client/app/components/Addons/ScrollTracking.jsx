@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import 'intersection-observer'
 
 class ScrollTracking extends Component {
   constructor (props) {
