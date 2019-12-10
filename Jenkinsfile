@@ -224,7 +224,7 @@ pipeline {
 
     stage('Build') {
       parallel {
-        stage('API') {
+        stage('Backend') {
           options { timeout(20) }
 
           steps {
@@ -238,13 +238,13 @@ pipeline {
           }
         }
 
-        stage('Client') {
+        stage('Frontend') {
           options { timeout(15) }
 
           steps {
             dockerBuild(
               dir: 'client/',
-              image: "${jobName()}/client",
+              image: "${jobName()}/frontend",
               memory: 2000,
               args: [
                 RELEASE: env.GIT_COMMIT,
@@ -252,14 +252,6 @@ pipeline {
               ],
               stash: 'frontend'
             )
-          }
-        }
-
-        stage('QA') {
-          options { timeout(15) }
-
-          steps {
-            dockerBuild(dir: 'qa/', image: "${jobName()}/qa", stash: 'qa')
           }
         }
       }
