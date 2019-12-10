@@ -28,6 +28,11 @@ module AdmiraltyReports
       end
     end
 
+    def raw_data
+      shipment_type = quotation_tool? ? uniq_quotations_by_original_shipments : uniq_shipments_by_original_shipments
+      shipments_for(shipment_type)
+    end
+
     def find_years
       @find_years ||= original_shipments.pluck(:created_at).map(&:year).uniq
     end
@@ -70,8 +75,7 @@ module AdmiraltyReports
     def filtered(shipments)
       return shipments if start_date.nil?
 
-      filtered = shipments.where(created_at: start_date..end_date)
-      filtered.empty? ? shipments : filtered
+      shipments.where(created_at: start_date..end_date)
     end
 
     def start_date

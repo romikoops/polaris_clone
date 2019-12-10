@@ -6,6 +6,12 @@
       <th>Name</th>
       <th></th>
   </thead>
+  <%= form_tag download_stats_path, method: 'get' do %>
+    <%= select_tag :month, options_for_select(AdmiraltyReports::ReportsController::MONTH_LOOKUP, selected: params[:month]) %>
+    <%= select_tag :year, options_for_select(@possible_years, selected: params[:year]) %>
+    <%= submit_tag 'XLSX'%>
+  <% end %>
+
 
   <tbody>
     <%= render @tenants %>

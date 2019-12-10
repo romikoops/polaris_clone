@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-require 'admiralty_assets'
 require 'admiralty_auth'
 require 'core'
 require 'tenants'
+
+require 'axlsx'
+require 'axlsx_rails'
 
 module AdmiraltyReports
   class Engine < ::Rails::Engine

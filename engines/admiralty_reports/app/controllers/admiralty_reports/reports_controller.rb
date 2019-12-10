@@ -8,6 +8,8 @@ module AdmiraltyReports
 
     def index
       @tenants = Tenant.order(:subdomain).all
+      first_year = Legacy::Shipment.order(:created_at).first&.created_at&.year || Time.now.year
+      @possible_years = (first_year..Time.now.year).to_a
     end
 
     def show
