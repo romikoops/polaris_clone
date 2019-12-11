@@ -1,7 +1,7 @@
 module Legacy
   class Document < ApplicationRecord
     self.table_name = 'documents'
-    
+
     has_one_attached :file
     belongs_to :shipment, optional: true
     belongs_to :user, optional: true

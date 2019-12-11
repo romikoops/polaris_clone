@@ -9,7 +9,7 @@ module Legacy
     has_paper_trail
     belongs_to :itinerary
     belongs_to :tenant
-    belongs_to :transport_category
+    belongs_to :transport_category, class_name: 'Legacy::TransportCategory'
     belongs_to :tenant_vehicle
     belongs_to :user, optional: true
     has_many :pricing_details, as: :priceable, dependent: :destroy

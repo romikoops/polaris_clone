@@ -3,9 +3,7 @@
 require 'bigdecimal'
 require 'net/http'
 
-module ShippingTools # rubocop:disable Metrics/ModuleLength
-  include NotificationTools
-  extend NotificationTools
+class ShippingTools # rubocop:disable Metrics/ModuleLength
   InternalError = Class.new(StandardError)
   ShipmentNotFound = Class.new(StandardError)
   DataMappingError = Class.new(StandardError)
@@ -32,6 +30,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
       original_shipment_id: shipment.id,
       sandbox: sandbox
     )
+
     trip_ids = results.map { |r| r['meta']['charge_trip_id'] }
     if existing_quote && shipment.updated_at < existing_quote.updated_at
       main_quote = existing_quote
@@ -46,6 +45,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
         sandbox: sandbox
       )
     end
+
     main_quote.touch
     main_quote
   end
@@ -438,30 +438,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
 
     Integrations::Processor.process(shipment_request_id: shipment_request.id, tenant_id: shipment_request.tenant_id)
 
-    message = build_request_shipment_message(current_user, shipment)
-    add_message_to_convo(current_user, message, true)
     shipment
-  end
-
-  def self.build_request_shipment_message(current_user, shipment)
-    message = "
-      Thank you for making your booking through #{current_user.tenant.name}.
-      You will be notified upon confirmation of the order.
-    "
-    unless current_user.confirmed?
-      message += "\n
-        Please note that your order is pending Email Confirmation.
-        #{current_user.tenant.name} will not confirm your order until the
-        email associated with this account is validated.
-        To confirm your email, please follow the link sent to your email.
-      "
-    end
-
-    {
-      title: 'Booking Received',
-      message: message,
-      shipmentRef: shipment.imc_reference
-    }
   end
 
   def self.contact_address_params(resource)
@@ -736,7 +713,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
 
   def self.save_pdf_quotes(shipment, tenant, schedules, sandbox = nil)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules, sandbox)
-    send_on_download = ::Tenants::ScopeService.new(target: @user).fetch(:send_email_on_quote_download)
+    send_on_download = ::Tenants::ScopeService.new(target: shipment.user).fetch(:send_email_on_quote_download)
     QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_download
     PdfService.new(user: shipment.user, tenant: tenant).quotation_pdf(quotation: main_quote)
   end
@@ -744,7 +721,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   def self.save_and_send_quotes(shipment, schedules, email, sandbox = nil)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules, sandbox)
     QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote, sandbox).deliver_later
-    send_on_quote = ::Tenants::ScopeService.new(target: @user, sandbox: sandbox).fetch(:send_email_on_quote_email)
+    send_on_quote = ::Tenants::ScopeService.new(target: shipment.user, sandbox: sandbox).fetch(:send_email_on_quote_email)
     QuoteMailer.quotation_admin_email(main_quote, sandbox).deliver_later if send_on_quote
   end
 

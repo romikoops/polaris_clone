@@ -2,7 +2,6 @@
 
 class Shipment < Legacy::Shipment
   include PgSearch::Model
-  extend ShippingTools
 
   STATUSES = %w(
     booking_process_started

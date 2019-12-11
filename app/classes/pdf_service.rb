@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'active_storage'
 
 class PdfService
   include ApplicationHelper
@@ -28,7 +29,7 @@ class PdfService
       layout: 'pdfs/simple.pdf.html.erb',
       margin: { top: 10, bottom: 5, left: 8, right: 8 },
       logo: logo,
-      remarks: Remark.where(tenant_id: tenant.id, sandbox: sandbox).order(order: :asc),
+      remarks: Remark.where(tenant_id: tenant.id, sandbox_id: sandbox&.id).order(order: :asc),
       template: template,
       name: name,
       shipment: shipment,
@@ -75,9 +76,9 @@ class PdfService
 
   def admin_quotation(quotation: nil, shipment: nil)
     existing_document = if quotation.present?
-                          Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox: sandbox)
+                          Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox_id: sandbox&.id)
                         else
-                          Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'quotation', sandbox: sandbox)
+                          Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'quotation', sandbox_id: sandbox&.id)
     end
     return existing_document if needs_update?(object: quotation || shipment, document: existing_document)
 
@@ -101,7 +102,7 @@ class PdfService
       doc_type: 'quotation',
       user: user,
       tenant: tenant,
-      sandbox: sandbox,
+      sandbox_id: sandbox&.id,
       file: {
         io: StringIO.new(file),
         filename: "quotation_#{shipments.pluck(:imc_reference).join(',')}.pdf",
@@ -139,7 +140,7 @@ class PdfService
           service_level: trip.tenant_vehicle.name,
           transshipment: Note.find_by(
             transshipment: true,
-            pricings_pricing_id: trip.itinerary.rates.where(tenant_vehicle_id: trip.tenant_vehicle_id).ids
+            pricings_pricing_id: ::Pricings::Pricing.where(itinerary_id: trip.itinerary_id, tenant_vehicle_id: trip.tenant_vehicle_id).ids
           )&.body
         ).deep_stringify_keys
       end
@@ -147,7 +148,7 @@ class PdfService
   end
 
   def quotation_pdf(quotation:)
-    existing_document = Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox: sandbox)
+    existing_document = Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox_id: sandbox&.id)
     return existing_document if needs_update?(object: quotation, document: existing_document)
 
     quotes = quotes_with_trip_id(quotation, quotation.shipments)
@@ -169,7 +170,7 @@ class PdfService
       doc_type: 'quotation',
       user: user,
       tenant: tenant,
-      sandbox: sandbox,
+      sandbox_id: sandbox&.id,
       file: {
         io: StringIO.new(file),
         filename: "quotation_#{quotation.shipments.pluck(:imc_reference).join(',')}.pdf",
@@ -179,7 +180,7 @@ class PdfService
   end
 
   def shipment_pdf(shipment:)
-    existing_document = Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'shipment_recap', sandbox: sandbox)
+    existing_document = Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'shipment_recap', sandbox_id: sandbox&.id)
     return existing_document if existing_document&.file.present?
 
     cargo_count = shipment.cargo_units.count
@@ -206,7 +207,7 @@ class PdfService
       doc_type: 'shipment_recap',
       user: user,
       tenant: tenant,
-      sandbox: sandbox,
+      sandbox_id: sandbox&.id,
       file: {
         io: StringIO.new(file),
         filename: "shipment_#{shipment.imc_reference}.pdf",
