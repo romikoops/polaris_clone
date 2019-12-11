@@ -219,3 +219,6 @@ export const adminRoutesClickedTooltips = {
   // 3. Schedules:
   3: 'Relevant overview of sailing schedules of the chosen route'
 }
+
+export const defaultTablePageSizes = [5, 10, 15, 20, 25, 50]
+export const defaultTablePageSize = 15

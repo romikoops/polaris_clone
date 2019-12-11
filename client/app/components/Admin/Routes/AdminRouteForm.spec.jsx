@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, hub } from '../../mock'
+import { theme, identity, hub } from '../../../mock'
 
 import AdminRouteForm from './AdminRouteForm'
 

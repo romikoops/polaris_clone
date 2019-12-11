@@ -26,6 +26,8 @@ module Legacy
     pg_search_scope :mot_search, against: %i(mode_of_transport), using: {
       tsearch: { prefix: true }
     }
+    scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
+
     def generate_schedules_from_sheet(stops:, # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
                                       start_date:,
                                       end_date:,

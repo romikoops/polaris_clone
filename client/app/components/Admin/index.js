@@ -31,10 +31,10 @@ export { default as AdminTruckingCreator } from './AdminTruckingCreator'
 
 export { default as AdminTruckingIndex } from './AdminTruckingIndex'
 
-export { default as AdminRouteForm } from './AdminRouteForm'
+export { default as AdminRouteForm } from './Routes/AdminRouteForm'
 
-export { default as AdminRouteView } from './AdminRouteView'
-export { default as AdminRoutesIndex } from './AdminRoutesIndex'
+export { default as AdminRouteView } from './Routes/AdminRouteView'
+export { default as AdminRoutesIndex } from './Routes/AdminRoutesIndex'
 
 export { default as AdminClientTile } from './AdminClientTile'
 export { default as AdminClients } from './AdminClients'

@@ -503,6 +503,7 @@
       "pricingsTip": "To edit pricings we recommend downloading the pricing sheet and editing the values there. This allows us to ensure the correct pricings get updated and new ones created where necessary.",
       "clientGroups": "Client Groups",
       "groupName": "Group Name",
+      "groupNameVar": "Group: {{groupName}}",
       "clientCount": "No. of Clients",
       "companyCount": "No. of Companies",
       "userCount": "No. of Users",
@@ -617,7 +618,15 @@
       "mot" : "MOT",
       "localChargesExpiring": "Local Charges Expiring at",
       "noLocalCharges": "No Local Charges",
-      "locode": "LOCODE"
+      "locode": "LOCODE",
+      "expired": "Expired",
+      "status": "Status",
+      "no_data": "No Data",
+      "expiring_soon": "Expiring Soon",
+      "good": "Ok",
+      "origin_local_charges": "Origin Local Charges",
+      "destination_local_charges": "Destination Local Charges",
+      "validationResults": "Validation Results"
   },
   "itbox": {
     "component": "IncotermBox",

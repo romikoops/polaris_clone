@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, hub } from '../../mock'
+import { theme, identity, hub } from '../../../mock'
 
 import AdminRouteView from './AdminRouteView'
 
@@ -14,11 +14,11 @@ jest.mock('uuid', () => {
 
   return { v4 }
 })
-jest.mock('../../helpers', () => ({
+jest.mock('../../../helpers', () => ({
   gradientTextGenerator: x => x,
   authHeader: () => {}
 }))
-jest.mock('../../constants', () => {
+jest.mock('../../../constants', () => {
   const format = () => 19
   const subtract = () => ({ format })
   const add = () => ({ format })
@@ -38,7 +38,8 @@ const propsBase = {
   adminDispatch: {
     getHub: identity,
     getLayovers: identity,
-    deleteItineraryNote: identity
+    deleteItineraryNote: identity,
+    getItinerary: identity
   },
   itineraryData: {
     hubs: [hub],
@@ -46,6 +47,11 @@ const propsBase = {
     notes: {},
     itinerary: {
       name: 'NAME'
+    }
+  },
+  match: {
+    params: {
+      id: 1
     }
   }
 }

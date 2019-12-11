@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MandatoryCharge < ApplicationRecord
+class MandatoryCharge < Legacy::MandatoryCharge
   has_paper_trail
   has_many :hubs
 

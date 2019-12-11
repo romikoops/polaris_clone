@@ -1,9 +1,11 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, tenant } from '../../mock'
+import { theme, identity, tenant } from '../../../mock'
 
 import AdminRoutesIndex from './AdminRoutesIndex'
-
+jest.mock('react-redux', () => ({
+  connect: (mapStateToProps, mapDispatchToProps) => Component => Component
+}))
 const propsBase = {
   theme,
   loading: false,

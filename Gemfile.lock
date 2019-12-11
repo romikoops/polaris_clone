@@ -270,6 +270,16 @@ PATH
       core
       sorcery
 
+PATH
+  remote: engines/validator
+  specs:
+    validator (9999.1.0.0)
+      core
+      legacy
+      pricings
+      tenants
+      trucking
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -966,6 +976,7 @@ DEPENDENCIES
   trucking!
   tzinfo-data
   users!
+  validator!
   webmock
   will_paginate (~> 3.1.5)
   wkhtmltopdf-binary

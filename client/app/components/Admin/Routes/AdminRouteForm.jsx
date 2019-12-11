@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import styled from 'styled-components'
-import PropTypes from '../../prop-types'
-import styles from './Admin.scss'
-import { NamedSelect } from '../NamedSelect/NamedSelect'
-import '../../styles/select-css-custom.scss'
-import { RoundButton } from '../RoundButton/RoundButton'
-import { moTOptions } from '../../constants'
+import PropTypes from '../../../prop-types'
+import styles from '../Admin.scss'
+import { NamedSelect } from '../../NamedSelect/NamedSelect'
+import '../../../styles/select-css-custom.scss'
+import { RoundButton } from '../../RoundButton/RoundButton'
+import { moTOptions } from '../../../constants'
 
 export class AdminRouteForm extends Component {
   constructor (props) {

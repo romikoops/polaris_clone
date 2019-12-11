@@ -4,8 +4,14 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   include ItineraryTools
 
   def index
-    map_data = current_user.tenant.map_data.where(sandbox: @sandbox)
-    response_handler(mapData: map_data, itineraries: as_json_itineraries)
+    paginated_itineraries = handle_search.paginate(pagination_options)
+
+    response_handler(
+      pagination_options.merge(
+        itinerariesData: paginated_itineraries,
+        numPages: paginated_itineraries.total_pages
+      )
+    )
   end
 
   def create
@@ -32,16 +38,51 @@ class Admin::ItinerariesController < Admin::AdminBaseController
 
   def show
     itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
-    resp = { hubs: itinerary.hubs.where(sandbox: @sandbox),
+    resp = {
              itinerary: itinerary,
-             hubItinerarys: itinerary.as_options_json,
-             schedules: itinerary.prep_schedules(10),
-             stops: itinerary.stops.where(sandbox: @sandbox).order(:index),
+             validationResult: Validator::Itinerary.new(user: current_user, itinerary: itinerary).perform,
              notes: itinerary.notes }
     response_handler(resp)
   end
 
   private
+
+  def handle_search
+    itinerary_relation = ::Legacy::Itinerary.where(tenant_id: current_tenant.id, sandbox: @sandbox)
+
+    {
+      name: ->(query, param) { query.list_search(param) },
+      name_desc: ->(query, param) { query.ordered_by(:name, param) },
+      mot: ->(query, param) { query.where(mode_of_transport: param) },
+      mot_desc: ->(query, param) { query.ordered_by(:mode_of_transport, param) },
+    }.each do |key, lambd|
+      itinerary_relation = lambd.call(itinerary_relation, search_params[key]) if search_params[key]
+    end
+
+    itinerary_relation
+  end
+
+  def pagination_options
+    {
+      page: current_page,
+      per_page: (params[:page_size] || params[:per_page] || 1).to_i
+    }.compact
+  end
+
+  def current_page
+    params[:page]&.to_i || 1
+  end
+
+  def search_params
+    params.permit(
+      :mot,
+      :mot_desc,
+      :name_desc,
+      :name,
+      :page_size,
+      :per_page
+    )
+  end
 
   def hub_address(current_hub_type, el)
     Address.find_by(address_type: "hub_#{current_hub_type.downcase}", hub_name: el, sandbox: @sandbox)

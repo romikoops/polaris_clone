@@ -1,5 +1,4 @@
 import React from 'react'
-import Proptypes from '../../../prop-types'
 import styles from './CollapsingContent.scss'
 
 export default class CollapsingContent extends React.PureComponent {

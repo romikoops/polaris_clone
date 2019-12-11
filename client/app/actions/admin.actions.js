@@ -3,7 +3,7 @@ import { adminConstants } from '../constants/admin.constants'
 import { getTenantApiUrl } from '../constants/api.constants'
 import { adminService } from '../services/admin.service'
 import { alertActions, documentActions, clientsActions } from '.'
-import { requestOptions } from '../helpers'
+import { requestOptions, tableQueryStringBuilder } from '../helpers'
 
 const { fetch } = window
 
@@ -27,6 +27,34 @@ function deletePricing (pricing, fromGroup = false) {
       .then(resp => resp.json())
       .then(() => {
         dispatch(success({ pricing, fromGroup }))
+      })
+      .catch((error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      })
+  }
+}
+
+function getItineraries (page, filters, sorted, pageSize) {
+  function request (routeData) {
+    return { type: adminConstants.GET_ROUTES_REQUEST, payload: routeData }
+  }
+  function success (routeData) {
+    return { type: adminConstants.GET_ROUTES_SUCCESS, payload: routeData }
+  }
+  function failure (error) {
+    return { type: adminConstants.GET_ROUTES_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    const query = tableQueryStringBuilder(page, filters, sorted, pageSize)
+
+    return fetch(`${getTenantApiUrl()}/admin/itineraries?${query}`, requestOptions('GET'))
+      .then(resp => resp.json())
+      .then((response) => {
+        dispatch(success(response.data))
       })
       .catch((error) => {
         dispatch(failure(error))
@@ -1029,34 +1057,6 @@ function confirmShipment (id, action, redirect) {
         error.then((data) => {
           dispatch(failure({ type: 'error', text: data.message }))
         })
-      }
-    )
-  }
-}
-function getItineraries (redirect) {
-  function request (routeData) {
-    return { type: adminConstants.GET_ROUTES_REQUEST, payload: routeData }
-  }
-  function success (routeData) {
-    return { type: adminConstants.GET_ROUTES_SUCCESS, payload: routeData }
-  }
-  function failure (error) {
-    return { type: adminConstants.GET_ROUTES_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request())
-
-    adminService.getItineraries().then(
-      (data) => {
-        dispatch(success(data))
-        if (redirect) {
-          dispatch(push('/admin/routes'))
-        }
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
       }
     )
   }

@@ -14,6 +14,7 @@ FactoryBot.define do
     association :tenant, factory: :legacy_tenant
     association :address, factory: :legacy_address
     association :nexus, factory: :legacy_nexus
+    association :mandatory_charge, factory: :legacy_mandatory_charge
 
     trait :gothenburg do
       name { 'Gothenburg Port' }

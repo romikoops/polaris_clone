@@ -1,0 +1,539 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`itineraryData is falsy 1`] = `""`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left"
+>
+  <div
+    className="flex-95 layout-row layout-align-space-between-center sec_title"
+  >
+    <p
+      className=" sec_title_text flex-none"
+      style="#333"
+    >
+      NAME
+    </p>
+    <div
+      className="flex-40 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-40 layout-row layout-align-end-center"
+      >
+        <NamedSelect
+          className="flex-100"
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Pricings",
+                "value": "pricings",
+              },
+              Object {
+                "label": "Schedules",
+                "value": "schedules",
+              },
+            ]
+          }
+          placeholder="Jump To..."
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-55 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={false}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-trash"
+          inverse={false}
+          size="small"
+          text="Delete"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
+        Validation Results
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(ValidatorResultsViewer)
+        t={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
+        Margins
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(AdminClientMargins)
+        editable={false}
+        targetType="itinerary"
+        toggleEdit={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
+        Schedules
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(AdminSchedulesList)
+        t={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="flex-95 layout-row layout-align-space-between-center layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row"
+    >
+      <NotesRow
+        adminDispatch={
+          Object {
+            "deleteItineraryNote": [Function],
+            "getHub": [Function],
+            "getItinerary": [Function],
+            "getLayovers": [Function],
+          }
+        }
+        itinerary={
+          Object {
+            "name": "NAME",
+          }
+        }
+        notes={Object {}}
+        t={[Function]}
+        textStyle="#333"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        toggleNotesEdit={[Function]}
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.confirm is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left"
+>
+  <AdminPromptConfirm
+    confirm={[Function]}
+    deny={[Function]}
+    heading="Are you sure?"
+    t={[Function]}
+    text="This will delete the route and all related data (pricings, schedules etc)"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <div
+    className="flex-95 layout-row layout-align-space-between-center sec_title"
+  >
+    <p
+      className=" sec_title_text flex-none"
+      style="#333"
+    >
+      NAME
+    </p>
+    <div
+      className="flex-40 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-40 layout-row layout-align-end-center"
+      >
+        <NamedSelect
+          className="flex-100"
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Pricings",
+                "value": "pricings",
+              },
+              Object {
+                "label": "Schedules",
+                "value": "schedules",
+              },
+            ]
+          }
+          placeholder="Jump To..."
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-55 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={false}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-trash"
+          inverse={false}
+          size="small"
+          text="Delete"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
+        Validation Results
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(ValidatorResultsViewer)
+        t={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
+        Margins
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(AdminClientMargins)
+        editable={false}
+        targetType="itinerary"
+        toggleEdit={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
+        Schedules
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(AdminSchedulesList)
+        t={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="flex-95 layout-row layout-align-space-between-center layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row"
+    >
+      <NotesRow
+        adminDispatch={
+          Object {
+            "deleteItineraryNote": [Function],
+            "getHub": [Function],
+            "getItinerary": [Function],
+            "getLayovers": [Function],
+          }
+        }
+        itinerary={
+          Object {
+            "name": "NAME",
+          }
+        }
+        notes={Object {}}
+        t={[Function]}
+        textStyle="#333"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        toggleNotesEdit={[Function]}
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.editNotes is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left"
+>
+  <div
+    className="flex-95 layout-row layout-align-space-between-center sec_title"
+  >
+    <p
+      className=" sec_title_text flex-none"
+      style="#333"
+    >
+      NAME
+    </p>
+    <div
+      className="flex-40 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-40 layout-row layout-align-end-center"
+      >
+        <NamedSelect
+          className="flex-100"
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Pricings",
+                "value": "pricings",
+              },
+              Object {
+                "label": "Schedules",
+                "value": "schedules",
+              },
+            ]
+          }
+          placeholder="Jump To..."
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-55 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={false}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-trash"
+          inverse={false}
+          size="small"
+          text="Delete"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
+        Validation Results
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(ValidatorResultsViewer)
+        t={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
+        Margins
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(AdminClientMargins)
+        editable={false}
+        targetType="itinerary"
+        toggleEdit={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-95 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         
+        Schedules
+         
+      </p>
+    </div>
+    <div
+      className="layout-row flex-95 layout-wrap layout-align-start-center"
+    >
+      <Connect(AdminSchedulesList)
+        t={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="flex-95 layout-row layout-align-space-between-center layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row"
+    >
+      <withRouter(Connect(NotesWriter))
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        toggleView={[Function]}
+      />
+    </div>
+  </div>
+</div>
+`;

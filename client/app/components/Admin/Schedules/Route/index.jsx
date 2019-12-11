@@ -2,12 +2,8 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
-import { v4 } from 'uuid'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import ReactTable from 'react-table'
-import 'react-table/react-table.css'
-
 import { documentActions } from '../../../../actions'
 import AdminUploadsSuccess from "../../Uploads/Success"
 import FileUploader from '../../../FileUploader/FileUploader'
@@ -21,6 +17,7 @@ import { moment } from '../../../../constants'
 import SideOptionsBox from '../../SideOptions/SideOptionsBox'
 import CollapsingBar from '../../../CollapsingBar/CollapsingBar'
 import GenericError from '../../../ErrorHandling/Generic'
+import AdminSchedulesList from '../List'
 
 class AdminSchedulesRoute extends Component {
   static dynamicSort (property) {
@@ -246,20 +243,7 @@ class AdminSchedulesRoute extends Component {
     )
 
     const listView = (
-      <div className="layout-row flex-95 layout-wrap layout-align-start-center">
-        <ReactTable
-          className="flex-100 height_100"
-          data={schedules}
-          columns={columns}
-          defaultSorted={[
-            {
-              id: 'closing_date',
-              desc: true
-            }
-          ]}
-          defaultPageSize={20}
-        />
-      </div>
+      <AdminSchedulesList itineraryId={itinerary.id}/>
     )
     const backButton = (
       <RoundButton

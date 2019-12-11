@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import { AdminRoutesIndex, AdminRouteView, AdminRouteForm } from '.'
-import { adminActions } from '../../actions'
-import { Modal } from '../Modal/Modal'
-import GenericError from '../ErrorHandling/Generic'
+import { AdminRoutesIndex, AdminRouteView } from '..'
+import { adminActions } from '../../../actions'
+import GenericError from '../../ErrorHandling/Generic'
 
 class AdminRoutes extends Component {
   constructor (props) {
@@ -13,7 +12,6 @@ class AdminRoutes extends Component {
     this.state = {
       newRoute: false
     }
-    this.viewItinerary = this.viewItinerary.bind(this)
     this.backToIndex = this.backToIndex.bind(this)
     this.toggleNewRoute = this.toggleNewRoute.bind(this)
     this.closeModal = this.closeModal.bind(this)
@@ -28,11 +26,6 @@ class AdminRoutes extends Component {
       adminDispatch.getAllHubs()
     }
     this.props.setCurrentUrl(match.url)
-  }
-
-  viewItinerary (itinerary) {
-    const { adminDispatch } = this.props
-    adminDispatch.getItinerary(itinerary.id, true)
   }
 
   toggleNewRoute () {
@@ -70,25 +63,6 @@ class AdminRoutes extends Component {
     return (
       <GenericError theme={theme}>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-          {this.state.newRoute ? (
-            <Modal
-              component={(
-                <AdminRouteForm
-                  theme={theme}
-                  close={this.closeModal}
-                  hubs={allHubs}
-                  saveRoute={this.saveNewRoute}
-                  adminDispatch={adminDispatch}
-                />
-              )}
-              verticalPadding="30px"
-              horizontalPadding="40px"
-              parentToggle={this.closeModal}
-            />
-
-          ) : (
-            ''
-          )}
           <Switch className="flex">
             <Route
               exact
@@ -100,7 +74,6 @@ class AdminRoutes extends Component {
                   itineraries={itineraries}
                   adminDispatch={adminDispatch}
                   {...props}
-                  viewItinerary={this.viewItinerary}
                   loading={loading}
                   tenant={tenant}
                   mapData={mapData}
