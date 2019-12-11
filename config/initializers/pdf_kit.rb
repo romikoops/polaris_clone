@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 PDFKit.configure do |config|
-  config.wkhtmltopdf = if Rails.env.production?
-    '/opt/rubies/ruby-2.5.3/bin/wkhtmltopdf'
-  else
-    '/usr/bin/wkhtmltopdf'
-  end
+  PATHS = ['/usr/bin/wkhtmltopdf', '/opt/rubies/ruby-2.5.3/bin/wkhtmltopdf'].freeze
+  WKHTMLTOPDF_PATH = PATHS.find { |path| File.exist?(path) }
+  config.wkhtmltopdf = WKHTMLTOPDF_PATH if WKHTMLTOPDF_PATH
 
   config.default_options = {
     page_size: 'A4',
@@ -13,6 +11,4 @@ PDFKit.configure do |config|
     dpi: 300,
     zoom: 1
   }
-  # Use only if your external hostname is unavailable on the server.
-  config.verbose = Rails.env.development?
 end

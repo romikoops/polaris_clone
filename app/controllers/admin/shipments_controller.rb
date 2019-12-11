@@ -2,7 +2,6 @@
 
 class Admin::ShipmentsController < Admin::AdminBaseController
   before_action :do_for_show, only: :show
-  include ShippingTools
   include NotificationTools
 
   def index

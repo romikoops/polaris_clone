@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class ShipmentsController < ApplicationController
-  include ShippingTools
-
   skip_before_action :require_non_guest_authentication!
 
   def index
