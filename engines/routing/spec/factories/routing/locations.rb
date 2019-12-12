@@ -18,11 +18,10 @@ FactoryBot.define do
           location.terminals << FactoryBot.build(:routing_terminal, center: location.center, location: location, mode_of_transport: mot)
         end
       end
-    end
-    before(:create) do |location|
       existing_locode = Routing::Location.find_by(locode: location.locode)
       existing_locode
     end
+
     trait :hamburg do
       locode { 'DEHAM' }
       name { 'Hamburg' }

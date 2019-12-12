@@ -25,12 +25,12 @@ RSpec.describe ::RmsSync::Routes do
   let!(:itinerary_6) { FactoryBot.create(:shanghai_hamburg_itinerary, tenant: tenant)}
 
   let!(:routes) do
-    FactoryBot.create(:routing_route, origin_location: :gothenburg, destination_location: :shanghai)
-    FactoryBot.create(:routing_route, origin_location: :shanghai, destination_location: :gothenburg)
-    FactoryBot.create(:routing_route, origin_location: :felixstowe, destination_location: :shanghai)
-    FactoryBot.create(:routing_route, origin_location: :shanghai, destination_location: :felixstowe)
-    FactoryBot.create(:routing_route, origin_location: :hamburg, destination_location: :shanghai)
-    FactoryBot.create(:routing_route, origin_location: :shanghai, destination_location: :hamburg)
+    FactoryBot.create(:freight_route, origin_location: :gothenburg, destination_location: :shanghai)
+    FactoryBot.create(:freight_route, origin_location: :shanghai, destination_location: :gothenburg)
+    FactoryBot.create(:freight_route, origin_location: :felixstowe, destination_location: :shanghai)
+    FactoryBot.create(:freight_route, origin_location: :shanghai, destination_location: :felixstowe)
+    FactoryBot.create(:freight_route, origin_location: :hamburg, destination_location: :shanghai)
+    FactoryBot.create(:freight_route, origin_location: :shanghai, destination_location: :hamburg)
   end
   describe '.perform' do
     it 'creates the routes' do

@@ -3,8 +3,8 @@
 module TenantRouting
   class Connection < ApplicationRecord
     belongs_to :tenant, class_name: 'Tenants::Tenant'
-    belongs_to :inbound, class_name: 'Routing::Route', optional: true
-    belongs_to :outbound, class_name: 'Routing::Route', optional: true
+    belongs_to :inbound, class_name: 'Routing::RouteLineService', optional: true
+    belongs_to :outbound, class_name: 'Routing::RouteLineService', optional: true
   end
 end
 

@@ -16,7 +16,10 @@ RSpec.describe Helmsman::Validator do
       end
 
       let!(:hub_terminals) do
-        hub_locations.flat_map { |loc| loc.terminals }
+        hub_locations.flat_map(&:terminals)
+      end
+      before(:each) do
+        expect_any_instance_of(Federation::Members).to receive(:list).and_return(Tenants::Tenant.all)
       end
 
       let!(:de_trucking_locations) do
@@ -73,8 +76,8 @@ RSpec.describe Helmsman::Validator do
             FactoryBot.create(:routing_route,
                               origin: loc_array.first,
                               destination: loc_array.last,
-                              origin_terminal: hub_terminals.find{|ter| ter.location_id == loc_array.first.id && ter.mode_of_transport == mot},
-                              destination_terminal: hub_terminals.find{|ter| ter.location_id == loc_array.last.id && ter.mode_of_transport == mot},
+                              origin_terminal: hub_terminals.find { |ter| ter.location_id == loc_array.first.id && ter.mode_of_transport == mot },
+                              destination_terminal: hub_terminals.find { |ter| ter.location_id == loc_array.last.id && ter.mode_of_transport == mot },
                               mode_of_transport: mot)
           end
         end
@@ -83,18 +86,30 @@ RSpec.describe Helmsman::Validator do
       let!(:de_trucking_routes) do
         hamburg = hub_locations.find { |loc| loc.locode == 'DEHAM' }
         de_trucking_locations.flat_map do |tl|
-          [FactoryBot.create(:routing_route, origin: hamburg, destination: tl, mode_of_transport: :carriage),
-          FactoryBot.create(:routing_route, origin: tl, destination: hamburg, mode_of_transport: :carriage)]
+          [
+            FactoryBot.create(:routing_route, origin: hamburg, destination: tl, mode_of_transport: :carriage),
+            FactoryBot.create(:routing_route, origin: tl, destination: hamburg, mode_of_transport: :carriage)
+          ]
         end
       end
 
       let!(:cn_trucking_routes) do
         shanghai = hub_locations.find { |loc| loc.locode == 'CNSHA' }
         cn_trucking_locations.flat_map do |tl|
-          [FactoryBot.create(:routing_route, origin: shanghai, destination: tl, mode_of_transport: :carriage),
-          FactoryBot.create(:routing_route, origin: tl, destination: shanghai, mode_of_transport: :carriage)]
+          [
+            FactoryBot.create(:routing_route, origin: shanghai, destination: tl, mode_of_transport: :carriage),
+            FactoryBot.create(:routing_route, origin: tl, destination: shanghai, mode_of_transport: :carriage)
+          ]
         end
       end
+      let(:ocean_carrier) { FactoryBot.create(:routing_carrier, name: 'TEST1') }
+      let(:air_carrier) { FactoryBot.create(:routing_carrier, name: 'TEST2') }
+      let(:carriage_carrier) { FactoryBot.create(:routing_carrier, name: 'TEST3') }
+      let!(:ocean_line_service) { FactoryBot.create(:routing_line_service, name: 'OCEAN - line 1', carrier: ocean_carrier) }
+      let!(:ocean_line_service_2) { FactoryBot.create(:routing_line_service, name: 'OCEAN - line 2', carrier: ocean_carrier) }
+      let!(:air_line_service) { FactoryBot.create(:routing_line_service, name: 'AIR - line 1', carrier: air_carrier) }
+      let!(:carriage_line_service) { FactoryBot.create(:routing_line_service, name: 'CARRIAGE - line 1', carrier: carriage_carrier) }
+
       let!(:hamburg) { hub_locations.find { |loc| loc.locode == 'DEHAM' } }
       let!(:shanghai) { hub_locations.find { |loc| loc.locode == 'CNSHA' } }
       let!(:de_trucking_location) { Routing::Location.find_by(name: '26759') }
@@ -103,10 +118,14 @@ RSpec.describe Helmsman::Validator do
       let!(:cn_trucking_route) { Routing::Route.find_by(origin: cn_trucking_location, destination: shanghai) }
       let!(:ocean_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: 'ocean') }
       let!(:air_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: 'air') }
+      let!(:ocean_route_line_service) { FactoryBot.create(:routing_route_line_service, route: ocean_route, line_service: ocean_line_service) }
+      let!(:air_route_line_service) { FactoryBot.create(:routing_route_line_service, route: air_route, line_service: air_line_service) }
+      let!(:de_carriage_route_line_service) { FactoryBot.create(:routing_route_line_service, route: de_trucking_route, line_service: carriage_line_service)  }
+      let!(:cn_carriage_route_line_service) { FactoryBot.create(:routing_route_line_service, route: cn_trucking_route, line_service: carriage_line_service)  }
       let!(:truck_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: 'truck') }
       let!(:rail_route) { Routing::Route.find_by(origin: hamburg, destination: shanghai, mode_of_transport: 'rail') }
       let!(:ocean_connections) do
-        [nil, ocean_route, ocean_route, nil].each_cons(2).map do |route_arr|
+        [nil, ocean_route_line_service, ocean_route_line_service, nil].each_cons(2).map do |route_arr|
           FactoryBot.create(:tenant_routing_connection,
                             inbound: route_arr.first,
                             outbound: route_arr.last,
@@ -115,13 +134,25 @@ RSpec.describe Helmsman::Validator do
       end
       let(:valid_freight_ids) { [ocean_route.id, air_route] }
       let!(:air_connections) do
-        [nil, air_route, air_route, nil].each_cons(2).map do |route_arr|
+        [nil, air_route_line_service, air_route_line_service, nil].each_cons(2).map do |route_arr|
           FactoryBot.create(:tenant_routing_connection,
                             inbound: route_arr.first,
                             outbound: route_arr.last,
                             tenant: tenant)
         end
       end
+
+      let!(:rates) do
+        [
+          ocean_route_line_service,
+          air_route_line_service,
+          de_carriage_route_line_service,
+          cn_carriage_route_line_service
+        ].map do |rls|
+          FactoryBot.create(:lcl_rate, target: rls, tenant: tenant)
+        end
+      end
+
       let!(:valid_target_ids) do
         [
           [de_trucking_route.id, ocean_route.id, cn_trucking_route.id],
@@ -131,6 +162,18 @@ RSpec.describe Helmsman::Validator do
       let!(:vis_valid_target_ids) do
         [
           [de_trucking_route.id, ocean_route.id, cn_trucking_route.id]
+        ]
+      end
+      let!(:valid_results) do
+        [
+          [de_carriage_route_line_service.id, ocean_route_line_service.id, cn_carriage_route_line_service.id],
+          [de_carriage_route_line_service.id, air_route_line_service.id, cn_carriage_route_line_service.id]
+        ]
+      end
+
+      let!(:vis_valid_results) do
+        [
+          [de_carriage_route_line_service.id, ocean_route_line_service.id, cn_carriage_route_line_service.id]
         ]
       end
       let!(:compass_results) do
@@ -148,8 +191,21 @@ RSpec.describe Helmsman::Validator do
         ] | valid_target_ids
       end
       it 'finds two valid routes' do
-        results = described_class.new(tenant_id: tenant.id, routes: compass_results, user: user).filter
-        expect(results).to eq(valid_target_ids)
+        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
+        expect(results).to eq(valid_results)
+      end
+
+      it 'finds four valid routes' do
+        ocean_route_line_service_2 = FactoryBot.create(:routing_route_line_service, route: ocean_route, line_service: ocean_line_service_2)
+        multi_rls_valid_results =
+          [
+            [de_carriage_route_line_service, ocean_route_line_service, cn_carriage_route_line_service],
+            [de_carriage_route_line_service, ocean_route_line_service_2, cn_carriage_route_line_service]
+          ]
+
+        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
+
+        expect(results).to eq(valid_results)
       end
 
       it 'finds one valid route with user visibility' do
@@ -157,9 +213,9 @@ RSpec.describe Helmsman::Validator do
           FactoryBot.create(:tenant_routing_visibility, target: user, connection: conn)
         end
 
-        results = described_class.new(tenant_id: tenant.id, routes: compass_results, user: user).filter
+        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
 
-        expect(results).to eq(vis_valid_target_ids)
+        expect(results).to eq(vis_valid_results)
       end
 
       it 'finds one valid route with group visibility' do
@@ -168,9 +224,9 @@ RSpec.describe Helmsman::Validator do
         ocean_connections.each do |conn|
           FactoryBot.create(:tenant_routing_visibility, target: group, connection: conn)
         end
-        results = described_class.new(tenant_id: tenant.id, routes: compass_results, user: user).filter
+        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
 
-        expect(results).to eq(vis_valid_target_ids)
+        expect(results).to eq(vis_valid_results)
       end
 
       it 'finds one valid route with company visibility' do
@@ -179,9 +235,9 @@ RSpec.describe Helmsman::Validator do
         ocean_connections.each do |conn|
           FactoryBot.create(:tenant_routing_visibility, target: company, connection: conn)
         end
-        results = described_class.new(tenant_id: tenant.id, routes: compass_results, user: user).filter
+        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
 
-        expect(results).to eq(vis_valid_target_ids)
+        expect(results).to eq(vis_valid_results)
       end
 
       it 'finds one valid route with company group visibility' do
@@ -192,9 +248,9 @@ RSpec.describe Helmsman::Validator do
         ocean_connections.each do |conn|
           FactoryBot.create(:tenant_routing_visibility, target: group, connection: conn)
         end
-        results = described_class.new(tenant_id: tenant.id, routes: compass_results, user: user).filter
+        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
 
-        expect(results).to eq(vis_valid_target_ids)
+        expect(results).to eq(vis_valid_results)
       end
     end
   end

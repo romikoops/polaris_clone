@@ -504,6 +504,76 @@ ActiveRecord::Schema.define(version: 2019_11_21_162434) do
     t.index ["stop_id"], name: "index_layovers_on_stop_id"
   end
 
+  create_table "ledger_delta", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "amount_cents", default: 0, null: false
+    t.string "amount_currency", null: false
+    t.numrange "cbm_range"
+    t.datetime "created_at", null: false
+    t.uuid "fee_id"
+    t.numrange "kg_range"
+    t.numrange "km_range"
+    t.integer "level", default: 0, null: false
+    t.bigint "max_amount_cents", default: 0, null: false
+    t.string "max_amount_currency", null: false
+    t.bigint "min_amount_cents", default: 0, null: false
+    t.string "min_amount_currency", null: false
+    t.integer "operator", default: 0, null: false
+    t.integer "rate_basis", default: 0, null: false
+    t.numrange "stowage_range"
+    t.uuid "target_id"
+    t.string "target_type"
+    t.numrange "unit_range"
+    t.datetime "updated_at", null: false
+    t.daterange "validity"
+    t.numrange "wm_range"
+    t.decimal "wm_ratio", default: "1000.0"
+    t.index ["cbm_range"], name: "index_ledger_delta_on_cbm_range", using: :gist
+    t.index ["fee_id"], name: "index_ledger_delta_on_fee_id"
+    t.index ["kg_range"], name: "index_ledger_delta_on_kg_range", using: :gist
+    t.index ["km_range"], name: "index_ledger_delta_on_km_range", using: :gist
+    t.index ["stowage_range"], name: "index_ledger_delta_on_stowage_range", using: :gist
+    t.index ["target_type", "target_id"], name: "ledger_delta_target_index"
+    t.index ["unit_range"], name: "index_ledger_delta_on_unit_range", using: :gist
+    t.index ["validity"], name: "index_ledger_delta_on_validity", using: :gist
+    t.index ["wm_range"], name: "index_ledger_delta_on_wm_range", using: :gist
+  end
+
+  create_table "ledger_fees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "action", default: 0
+    t.integer "applicable", default: 0
+    t.decimal "base", default: "0.000001"
+    t.bigint "cargo_class", default: 0
+    t.bigint "cargo_type", default: 0
+    t.integer "category", default: 0
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.decimal "load_meterage_limit", default: "0.0"
+    t.integer "load_meterage_logic", default: 0
+    t.decimal "load_meterage_ratio", default: "0.0"
+    t.integer "load_meterage_type", default: 0
+    t.integer "order", default: 0
+    t.uuid "rate_id"
+    t.datetime "updated_at", null: false
+    t.index ["cargo_class"], name: "index_ledger_fees_on_cargo_class"
+    t.index ["cargo_type"], name: "index_ledger_fees_on_cargo_type"
+    t.index ["category"], name: "index_ledger_fees_on_category"
+    t.index ["rate_id"], name: "index_ledger_fees_on_rate_id"
+  end
+
+  create_table "ledger_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "location_id"
+    t.uuid "target_id"
+    t.string "target_type"
+    t.uuid "tenant_id"
+    t.uuid "terminal_id"
+    t.datetime "updated_at", null: false
+    t.index ["location_id"], name: "index_ledger_rates_on_location_id"
+    t.index ["target_type", "target_id"], name: "ledger_rate_target_index"
+    t.index ["tenant_id"], name: "index_ledger_rates_on_tenant_id"
+    t.index ["terminal_id"], name: "index_ledger_rates_on_terminal_id"
+  end
+
   create_table "legacy_addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

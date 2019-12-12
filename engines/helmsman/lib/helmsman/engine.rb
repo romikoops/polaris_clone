@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'federation'
+require 'ledger'
 require 'routing'
 require 'tenants'
 require 'tenant_routing'

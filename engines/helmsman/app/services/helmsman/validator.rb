@@ -2,41 +2,73 @@
 
 module Helmsman
   class Validator
-    def initialize(tenant_id:, routes:, user:)
+    attr_reader :route_line_services, :carriage_ids, :tenant_connections
+    
+    def initialize(tenant_id:, paths:, user:)
       @tenant = Tenants::Tenant.find(tenant_id)
+      federated_targets = Federation::Members.new(tenant: @tenant).list
       route_targets = Tenants::HierarchyService.new(target: user, tenant: @tenant).fetch
       @visibilities = TenantRouting::Visibility.where(target: route_targets)
-      @tenant_connection = TenantRouting::Connection.where(tenant_id: tenant_id)
-
-      @tenant_connection = @tenant_connection.where(id: @visibilities.pluck(:connection_id)) unless @visibilities.empty?
-      @routes = routes
+      @tenant_connections = TenantRouting::Connection.where(tenant_id: federated_targets)
+      @route_line_services = Routing::RouteLineService.where(route_id: paths.flatten)
+      @carriage_ids = Routing::RouteLineService.joins(:route)
+                                               .where(
+                                                 routing_routes: {
+                                                   mode_of_transport: Routing::Route.mode_of_transports[:carriage]
+                                                 }
+                                               ).ids
+      unless @visibilities.empty?
+        @tenant_connections = tenant_connections.where(id: @visibilities.select(:connection_id))
+      end
+      @paths = paths
     end
 
     def filter
-      @routes.each_with_object([]) do |route_ids, arr|
-        carriage_routes = Routing::Route.where(id: route_ids, mode_of_transport: :carriage)
+      expand_paths.each_with_object([]) do |route_line_service_ids, accumulator|
         matches = []
-        adj_route_ids = route_ids.map { |id| carriage_routes.ids.include?(id) ? nil : id }
+        adj_route_ids = route_line_service_ids.map do |route_line_service_id|
+          carriage_ids.include?(route_line_service_id) ? nil : route_line_service_id
+        end
+        # Replaces carriage route line service ids with nil for TenantConnection validation
+        grouped_route_line_services = adj_route_ids.slice_when { |x, y| x.nil? || y.nil? }.to_a
 
-        grouped_routes = adj_route_ids.slice_when { |x, y| x.nil? || y.nil? }.to_a
-        freight_group_index = grouped_routes.index { |g_arr| g_arr.compact.present? }
-        if grouped_routes[freight_group_index].length == 1
-          grouped_routes[freight_group_index] = [
-            grouped_routes[freight_group_index].first,
-            grouped_routes[freight_group_index].first
-          ]
+        # Breaks array into consecutive pairs for the TenantConnection checker
+        freight_group_index = grouped_route_line_services.index { |group| group.compact.present? }
+        if grouped_route_line_services[freight_group_index].length == 1
+          # If there is only one freight route, we double it up as inbound and outbound
+          grouped_route_line_services[freight_group_index] = [grouped_route_line_services[freight_group_index].first] * 2
         end
 
-        grouped_routes.flatten.each_cons(2).each do |route_arr|
-          matches << @tenant_connection.exists?(inbound: route_arr.first, outbound: route_arr.last)
+        # Take each consecutive adjusted pair (ie. with nil values) and run valid?
+        grouped_route_line_services.flatten.each_cons(2).each do |route_arr|
+          matches << valid?(route_arr)
         end
-        next if matches.none?(&:present?)
+        # Reject if any of the section fails the valid? call
+        next unless matches.all?
 
-        arr << route_ids
+        accumulator << route_line_service_ids
       end
     end
 
-    attr_reader :routes
+    def expand_paths
+      paths.flat_map do |route_id_arr|
+        values = route_id_arr.map do |route_id|
+          route_line_services.where(route_id: route_id).ids
+        end
+
+        values.shift.product(*values)
+      end
+    end
+
+    def valid?(route_ids)
+      # Checks to see that a TenantConnection exists and that the RouteLineService has Rates
+      return false if route_ids.empty?
+
+      tenant_connections.exists?(inbound_id: route_ids.first, outbound_id: route_ids.last) &&
+        Ledger::Rate.exists?(target_id: route_ids)
+    end
+
+    attr_reader :paths
   end
 
   # Expected format of routes:
