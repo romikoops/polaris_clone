@@ -19,7 +19,10 @@ module Integrations
         request = Net::HTTP::Post.new(uri, header)
 
         request.body = @body.to_json
-        http.request(request)
+
+        response = http.request(request)
+
+        Rails.logger.info "Chain.io response: #{response.body}"
       end
 
       private

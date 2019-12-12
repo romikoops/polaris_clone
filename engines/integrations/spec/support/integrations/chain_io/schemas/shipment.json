@@ -1,178 +1,189 @@
 {
   "type": "object",
   "properties": {
-    "arrival_port": {
-      "type": "object",
-      "properties": {
-        "unlocode": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        }
-      }
-    },
-    "arrival_port_estimated": {
-      "type": "date-time"
-    },
-    "lading_port": {
-      "type": "object",
-      "properties": {
-        "unlocode": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        }
-      }
-    },
-    "departure_estimated": {
-      "type": "date-time"
-    },
-    "freight_payment_terms": {
+    "version": {
       "type": "string"
     },
-    "inco_term": {
+    "doc_type": {
       "type": "string"
     },
-    "consignee": {
-      "type": "object",
-      "properties": {
-        "source_party_id": {
-          "type": "string"
-        },
-        "target_party_id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "address_1": {
-          "type": "string"
-        },
-        "address_2": {
-          "type": "string"
-        },
-        "city": {
-          "type": "string"
-        },
-        "state": {
-          "type": "string"
-        },
-        "state_name": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        },
-        "country_name": {
-          "type": "string"
-        },
-        "postal_code": {
-          "type": "string"
-        },
-        "phone_number": {
-          "type": "string"
-        },
-        "unlocode": {
-          "type": "string"
-        }
-      }
-    },
-    "consignor": {
-      "type": "object",
-      "properties": {
-        "source_party_id": {
-          "type": "string"
-        },
-        "target_party_id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "address_1": {
-          "type": "string"
-        },
-        "address_2": {
-          "type": "string"
-        },
-        "city": {
-          "type": "string"
-        },
-        "state": {
-          "type": "string"
-        },
-        "state_name": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        },
-        "country_name": {
-          "type": "string"
-        },
-        "postal_code": {
-          "type": "string"
-        },
-        "phone_number": {
-          "type": "string"
-        },
-        "unlocode": {
-          "type": "string"
-        }
-      }
-    },
-    "containerization_type": {
-      "type": "string"
-    },
-    "containers": {
+    "shipments": {
       "type": "array",
       "items": {
-        "size_code": {
+        "arrival_port": {
+          "type": "object",
+          "properties": {
+            "unlocode": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "arrival_port_estimated": {
+          "type": "date-time"
+        },
+        "lading_port": {
+          "type": "object",
+          "properties": {
+            "unlocode": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "departure_estimated": {
+          "type": "date-time"
+        },
+        "freight_payment_terms": {
           "type": "string"
         },
-        "type_code": {
+        "inco_term": {
+          "type": "string"
+        },
+        "consignee": {
+          "type": "object",
+          "properties": {
+            "source_party_id": {
+              "type": "string"
+            },
+            "target_party_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "address_1": {
+              "type": "string"
+            },
+            "address_2": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "state_name": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "country_name": {
+              "type": "string"
+            },
+            "postal_code": {
+              "type": "string"
+            },
+            "phone_number": {
+              "type": "string"
+            },
+            "unlocode": {
+              "type": "string"
+            }
+          }
+        },
+        "consignor": {
+          "type": "object",
+          "properties": {
+            "source_party_id": {
+              "type": "string"
+            },
+            "target_party_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "address_1": {
+              "type": "string"
+            },
+            "address_2": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "state_name": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "country_name": {
+              "type": "string"
+            },
+            "postal_code": {
+              "type": "string"
+            },
+            "phone_number": {
+              "type": "string"
+            },
+            "unlocode": {
+              "type": "string"
+            }
+          }
+        },
+        "containerization_type": {
+          "type": "string"
+        },
+        "containers": {
+          "type": "array",
+          "items": {
+            "size_code": {
+              "type": "string"
+            },
+            "type_code": {
+              "type": "string"
+            }
+          }
+        },
+        "created_by": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            }
+          }
+        },
+        "package_group": {
+          "type": "array",
+          "items": {
+            "package_quantity": {
+              "type": "integer"
+            },
+            "description_of_goods": {
+              "type": "string"
+            },
+            "gross_weight_kgs": {
+              "type": "integer"
+            },
+            "volume_cbms": {
+              "type": "integer"
+            }
+          }
+        },
+        "transport_mode": {
           "type": "string"
         }
       }
-    },
-    "created_by": {
-      "type": "object",
-      "properties": {
-        "username": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "first_name": {
-          "type": "string"
-        },
-        "last_name": {
-          "type": "string"
-        }
-      }
-    },
-    "package_group": {
-      "type": "array",
-      "items": {
-        "package_quantity": {
-          "type": "integer"
-        },
-        "description_of_goods": {
-          "type": "string"
-        },
-        "gross_weight_kgs": {
-          "type": "integer"
-        },
-        "volume_cbms": {
-          "type": "integer"
-        }
-      }
-    },
-    "transport_mode": {
-      "type": "string"
     }
   }
 }

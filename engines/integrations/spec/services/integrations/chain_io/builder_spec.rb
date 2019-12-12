@@ -30,8 +30,8 @@ module Integrations
         let(:json_shipment) { data[:shipments].first }
 
         it 'builds a json with the correct schema' do
-          expect(json_shipment).to be_present
-          expect(json_shipment).to match_response_schema('shipment')
+          expect(data).to be_present
+          expect(data).to match_response_schema('shipment')
         end
 
         it 'builds a json with the correct values' do

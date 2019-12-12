@@ -11,7 +11,8 @@ module Integrations
         @shipment_request = ShipmentRequest.find(shipment_request_id)
         @tender = @shipment_request.tender
         @cargo = @tender.quotation.cargo
-        @data = {}
+        @data = { version: '1.6',
+                  doc_type: 'shipment_json' }
       end
 
       def prepare
@@ -30,7 +31,8 @@ module Integrations
           'transport_mode' => transport_mode,
           'package_group' => units[:packages]
         }
-        @data = { shipments: [shipment] }
+        @data[:shipments] = [shipment]
+        @data
       end
 
       def consignee
