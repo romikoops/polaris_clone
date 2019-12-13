@@ -71,9 +71,9 @@ class Shop extends Component {
   }
 
   shouldComponentUpdate (nextProps) {
-    const { loggingIn, registering, loading } = nextProps
+    const { loggingIn, registering, loading, user } = nextProps
 
-    return loading || !(loggingIn || registering)
+    return user && loading || !(loggingIn || registering)
   }
 
   componentDidUpdate () {
@@ -220,14 +220,17 @@ class Shop extends Component {
     const {
       request, response, error, reusedShipment, contacts, originalSelectedDay, ahoyRequest
     } = bookingData
-    const loadingScreen = (loading || fakeLoading || ahoyRequest) ? <Loading tenant={tenant} /> : ''
+
+    if (loading || fakeLoading || ahoyRequest){
+      return <Loading tenant={tenant} />
+    }
+
     const { showRegistration } = this.state
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
 
     return (
       <div className="layout-row flex-100 layout-wrap">
         <div className={styles.pusher_top} />
-        {loadingScreen}
         <GenericError theme={theme}>
           <Header
             theme={theme}
