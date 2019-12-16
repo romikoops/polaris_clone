@@ -168,9 +168,7 @@ group :development, :test do
   gem 'debase'
   gem 'ruby-debug-ide'
 
-  gem 'rubocop'
-  gem 'rubocop-performance'
-  gem 'rubocop-rspec'
+  gem 'rubocop-itsmycargo'
 end
 
 group :test do
