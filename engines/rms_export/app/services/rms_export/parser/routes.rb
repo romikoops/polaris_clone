@@ -36,7 +36,6 @@ module RmsExport
           routes: create_csv_file(data: @routes.uniq, key: 'routes'),
           line_services: create_csv_file(data: @line_services.uniq, key: 'line_services'),
           route_line_services: create_csv_file(data: @route_line_services.uniq, key: 'route_line_services'),
-          transit_times: create_csv_file(data: @transit_times.uniq, key: 'transit_times'),
           tenant_connections: create_csv_file(data: @tenant_connections.uniq, key: 'tenant_connections')
         }
       end
@@ -55,14 +54,7 @@ module RmsExport
           line_service: row[headers.index('SERVICE_LEVEL')],
           carrier_name: row[headers.index('CARRIER')] || 'default',
           mode_of_transport: mode_of_transport_enum(row[headers.index('MOT')]),
-          origin_name: row[headers.index('ORIGIN')],
-          destination_name: row[headers.index('DESTINATION')]
-        }
-        @transit_times << {
-          line_service: row[headers.index('SERVICE_LEVEL')],
-          carrier_name: row[headers.index('CARRIER')] || 'default',
-          mode_of_transport: mode_of_transport_enum(row[headers.index('MOT')]),
-          days: row[headers.index('TRANSIT_TIME')],
+          transit_time: row[headers.index('TRANSIT_TIME')],
           origin_name: row[headers.index('ORIGIN')],
           destination_name: row[headers.index('DESTINATION')]
         }

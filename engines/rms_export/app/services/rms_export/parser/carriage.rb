@@ -30,7 +30,6 @@ module RmsExport
           line_services: create_csv_file(data: @line_services.uniq, key: 'line_services'),
           route_line_services: create_csv_file(data: @route_line_services.uniq, key: 'route_line_services'),
           routes: create_csv_file(data: @routes.uniq, key: 'routes'),
-          transit_times: create_csv_file(data: @transit_times.uniq, key: 'transit_times'),
           tenant_carriage_connections: create_csv_file(data: @tenant_connections.uniq, key: 'tenant_connections')         
         }
       end
@@ -87,13 +86,8 @@ module RmsExport
           @route_line_services << {
             line_service: metadata['service_level'] || 'standard',
             carrier_name: metadata['courier_name'] || '',
-            mode_of_transport: 5
-          }.merge(loc_info)
-          @transit_times << {
-            line_service: metadata['service_level'] || 'standard',
-            carrier_name: metadata['courier_name'] || '',
             mode_of_transport: 5,
-            days: 1
+            transit_time: 1
           }.merge(loc_info)
         end
       end

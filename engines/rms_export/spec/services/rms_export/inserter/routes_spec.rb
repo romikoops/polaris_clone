@@ -58,7 +58,6 @@ RSpec.describe ::RmsExport::Inserter::Routes do
       expect(TenantRouting::Connection.count).to eq(6)
       expect(Routing::LineService.count).to eq(2)
       expect(Routing::RouteLineService.count).to eq(12)
-      expect(Routing::TransitTime.count).to eq(12)
     end
 
   end

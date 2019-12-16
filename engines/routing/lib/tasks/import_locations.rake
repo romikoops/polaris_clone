@@ -19,7 +19,7 @@ namespace :routing do
       }
     end
 
-    Routing::Location.import(hub_locations)
+    Routing::Location.import(hub_locations.uniq)
     mot_hash = { ocean: 1, air: 2, rail: 3, truck: 4, carriage: 5 }
     terminal_locations = []
     ::Legacy::Hub.find_each do |hub|
@@ -36,10 +36,9 @@ namespace :routing do
         mode_of_transport: mot_enum,
         center: "POINT (#{lng_lat})"
       }
-     
     end
 
-    Routing::Terminal.import(terminal_locations)
+    Routing::Terminal.import(terminal_locations.uniq)
 
     trucking_locations = []
     trucking_location_ids = Trucking::Location.where.not(location_id: nil).pluck(:location_id)
@@ -51,6 +50,6 @@ namespace :routing do
         bounds: location.bounds
       }
     end
-    Routing::Location.import(trucking_locations)
+    Routing::Location.import(trucking_locations.uniq)
   end
 end

@@ -3,7 +3,7 @@
 module Helmsman
   class Validator
     attr_reader :route_line_services, :carriage_ids, :tenant_connections
-    
+
     def initialize(tenant_id:, paths:, user:)
       @tenant = Tenants::Tenant.find(tenant_id)
       federated_targets = Federation::Members.new(tenant: @tenant).list
@@ -73,8 +73,9 @@ module Helmsman
 
   # Expected format of routes:
   # An array of arrays containg the route ids for each section of the journey: precarriage, freight, on carriage
-  # (potentially more with transshipments). Each route id is checked against the tenants TenantRouting::Route objects and
-  # results are divided into valid (all ids return a TenantRouting::Route) and partial (some not all have a TenantRouting::Route)
+  # (potentially more with transshipments). Each route id is checked against the tenants TenantRouting::Connection
+  # objects and results are divided into valid (all ids return a TenantRouting::Connection) and partial
+  # (some not all have a TenantRouting::Connection)
   # Door to Door example (3 routes)
   # routes = [
   #   [ precarriage_route_id, freight_route_id, oncarriage_route_id ]

@@ -36,7 +36,6 @@ RSpec.describe ::RmsExport::Inserter::Carriage do
       expect(Routing::LineService.count).to eq(1)
       expect(Routing::Route.where(mode_of_transport: :carriage).count).to eq(6)
       expect(Routing::RouteLineService.count).to eq(6)
-      expect(Routing::TransitTime.count).to eq(6)
     end
 
   end

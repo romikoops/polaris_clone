@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_21_162434) do
+ActiveRecord::Schema.define(version: 2019_12_13_112037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1267,6 +1267,7 @@ ActiveRecord::Schema.define(version: 2019_11_21_162434) do
     t.datetime "created_at", null: false
     t.uuid "line_service_id"
     t.uuid "route_id"
+    t.integer "transit_time"
     t.datetime "updated_at", null: false
     t.index ["route_id", "line_service_id"], name: "route_line_service_index", unique: true
   end
@@ -1296,7 +1297,7 @@ ActiveRecord::Schema.define(version: 2019_11_21_162434) do
     t.index ["center"], name: "index_routing_terminals_on_center"
   end
 
-  create_table "routing_transit_times", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "routing_transit_times_20191213111544", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.decimal "days"
     t.uuid "route_line_service_id"
