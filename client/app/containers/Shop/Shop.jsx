@@ -221,16 +221,14 @@ class Shop extends Component {
       request, response, error, reusedShipment, contacts, originalSelectedDay, ahoyRequest
     } = bookingData
 
-    if (loading || fakeLoading || ahoyRequest){
-      return <Loading tenant={tenant} />
-    }
-
+    const loadingShop = loading || fakeLoading || ahoyRequest
     const { showRegistration } = this.state
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
 
     return (
       <div className="layout-row flex-100 layout-wrap">
         <div className={styles.pusher_top} />
+        { loadingShop && <Loading tenant={tenant} /> }
         <GenericError theme={theme}>
           <Header
             theme={theme}
