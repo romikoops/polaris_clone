@@ -8,7 +8,6 @@ function handleResponse (response) {
   const promise = Promise
   const respJSON = response.json()
   if (!response.ok) {
-    
     return promise.reject(respJSON)
   }
 
@@ -165,6 +164,15 @@ function deleteDocument (documentId) {
   return fetch(`${getTenantApiUrl()}/documents/delete/${documentId}`, requestOptions).then(handleResponse)
 }
 
+function updateShipmentUser (shipmentId) {
+  const requestOptions = {
+    method: 'PATCH',
+    headers: authHeader()
+  }
+
+  return fetch(`${getTenantApiUrl()}/shipments/${shipmentId}/update_user/`, requestOptions)
+}
+
 function updateContact (data) {
   const formData = new FormData()
   formData.append('update', JSON.stringify(data))
@@ -193,7 +201,8 @@ export const shipmentService = {
   updateCurrency,
   getNotes,
   getSchedulesForResult,
-  getLastAvailableDate
+  getLastAvailableDate,
+  updateShipmentUser
 }
 
 export default shipmentService

@@ -199,6 +199,7 @@ Rails.application.routes.draw do
       get 'view_more_schedules', controller:  'shipments/booking_process', action: 'view_more_schedules'
       post 'quotations/download', controller: 'shipments/booking_process', action: 'download_quotations'
       post 'shipment/download', controller: 'shipments/booking_process', action: 'download_shipment'
+      patch 'update_user', on: :member
     end
 
     resources :trucking_availability, only: [:index]

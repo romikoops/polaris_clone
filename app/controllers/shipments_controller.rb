@@ -97,6 +97,10 @@ class ShipmentsController < ApplicationController
     response_handler(@doc)
   end
 
+  def update_user
+    Shipment.find_by(id: update_user_params[:id], sandbox: @sandbox).update(user: current_user)
+  end
+
   def show # rubocop:disable Metrics/AbcSize
     shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
 
@@ -260,5 +264,9 @@ class ShipmentsController < ApplicationController
 
   def finished_shipments
     @finished_shipments ||= filtered_user_shipments.finished
+  end
+
+  def update_user_params
+    params.permit(:id)
   end
 end

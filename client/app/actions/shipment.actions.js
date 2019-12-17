@@ -5,7 +5,9 @@ import { Base64decode } from '../helpers/Base64'
 import { shipmentConstants } from '../constants'
 import { shipmentService } from '../services'
 import { deepSnakefyKeys, queryStringToObj } from '../helpers'
-import { alertActions, userActions, appActions, errorActions, bookingProcessActions } from '.'
+import {
+ alertActions, userActions, appActions, errorActions, bookingProcessActions
+} from '.'
 
 function newShipment (type, redirect, reused) {
   function request (shipmentData, isReused) {
@@ -63,9 +65,7 @@ function newAhoyShipment (params) {
         originId = parseInt(originId, 10)
         destinationId = parseInt(destinationId, 10)
 
-        const itineraryData = find(shipmentData.routes, route =>
-          route.origin.hubId === originId && route.destination.hubId === destinationId
-        )
+        const itineraryData = find(shipmentData.routes, route => route.origin.hubId === originId && route.destination.hubId === destinationId)
 
         if (itineraryData) {
           shipmentData.shipment.origin = itineraryData.origin
@@ -151,6 +151,7 @@ function getOffers (data, redirect) {
   }
   function failure (error) {
     window.scrollTo(0, 0)
+
     return { type: shipmentConstants.GET_OFFERS_FAILURE, error }
   }
 
@@ -697,6 +698,36 @@ function goTo (path) {
   }
 }
 
+function checkLoginOnBookingProcess () {
+  function request (payload) {
+    return { type: shipmentConstants.CHECK_LOGIN_ON_BP_REQUEST, payload }
+  }
+  function success (response) {
+    return { type: shipmentConstants.CHECK_LOGIN_ON_BP_SUCCESS, response }
+  }
+  function failure (payload) {
+    return { type: shipmentConstants.CHECK_LOGIN_ON_BP_FAILURE, payload }
+  }
+
+  return (dispatch, getState) => {
+    const { bookingData } = getState()
+    if (!bookingData || !bookingData.activeShipment) {
+      return;
+    }
+
+    dispatch(request())
+    shipmentService.updateShipmentUser(bookingData.activeShipment).then(
+      (response) => {
+        dispatch(success(response))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 export const shipmentActions = {
   reuseShipment,
   newShipment,
@@ -726,7 +757,8 @@ export const shipmentActions = {
   getSchedulesForResult,
   getLastAvailableDate,
   checkAhoyShipment,
-  newAhoyShipment
+  newAhoyShipment,
+  checkLoginOnBookingProcess
 }
 
 export default shipmentActions
