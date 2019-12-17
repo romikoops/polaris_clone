@@ -9,7 +9,7 @@ import CarriageToggle from './CarriageToggle'
 import OfferError from '../../ErrorHandling/OfferError'
 import TruckingDetails from './TruckingDetails'
 import {
-  camelize, camelToSnakeCase, onlyUnique, isQuote, determineSpecialism
+  camelize, camelToSnakeCase, onlyUnique, isEmpty, isQuote, determineSpecialism
 } from '../../../helpers'
 import getRequests from './getRequests'
 
@@ -151,7 +151,7 @@ class RouteSection extends React.PureComponent {
       bookingProcessDispatch.updatePageData('ShipmentDetails', { availableRoutes, availableMots })
 
       // update lastAvailableDate (backend call -> for redux store)
-      if (!isQuote(tenant) && availableRoutes.length > 0) {
+      if (!isEmpty(origin) && !isEmpty(destination) && !isQuote(tenant) && availableRoutes.length > 0) {
         const country = preCarriage ? availableRoutes[0].origin.country : origin.country
         shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })
       }
@@ -177,7 +177,7 @@ class RouteSection extends React.PureComponent {
     const { carriageOptions } = this.state
     const { scope, shipment } = this.props
     if (carriageOptions === prevState.carriageOptions) return
-  
+
     Object.entries(scope.carriage_options).forEach(([carriage, option]) => {
       if (option[shipment.direction] !== 'mandatory') return
 
