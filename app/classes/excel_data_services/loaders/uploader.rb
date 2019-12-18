@@ -31,7 +31,7 @@ module ExcelDataServices
           next unless first_row
 
           headers = parse_headers(sheet_data.row(first_row))
-          header_validator = ExcelDataServices::DataValidators::HeaderChecker.new(sheet_name, headers)
+          header_validator = ExcelDataServices::Validators::HeaderChecker.new(sheet_name, headers)
           header_validator.perform
           return header_validator.errors_obj unless header_validator.valid?
 
@@ -52,7 +52,7 @@ module ExcelDataServices
 
             # Validate data per insertion type
             VALIDATION_FLAVORS.each do |flavor|
-              validator_klass = ExcelDataServices::DataValidators::Base.get(flavor, insertion_type)
+              validator_klass = ExcelDataServices::Validators::Base.get(flavor, insertion_type)
               validator = validator_klass.new(tenant: tenant, data: data_part)
               validator.perform
               return validator.errors_obj unless validator.valid?
@@ -74,7 +74,7 @@ module ExcelDataServices
       def open_spreadsheet_file(file_or_path)
         path = Pathname(file_or_path).to_s
 
-        raise ExcelDataServices::DataValidators::ValidationErrors::UnsupportedFiletype unless valid_excel?(path)
+        raise ExcelDataServices::Validators::ValidationErrors::UnsupportedFiletype unless valid_excel?(path)
 
         Roo::ExcelxMoney.new(path)
       end
@@ -108,12 +108,12 @@ module ExcelDataServices
       end
 
       def restructure_data(raw_data)
-        restructurer = ExcelDataServices::DataRestructurers::Base
+        restructurer = ExcelDataServices::Restructurers::Base
         restructurer.restructure(tenant: tenant, data: raw_data)
       end
 
       def insert_into_database(insertion_type, data)
-        inserter = ExcelDataServices::DatabaseInserters::Base.get(insertion_type)
+        inserter = ExcelDataServices::Inserters::Base.get(insertion_type)
         inserter.insert(tenant: tenant, data: data, options: options)
       end
 

@@ -22,7 +22,7 @@ module ExcelDataServices
       #   ]
       # }
 
-      HEADER_COLLECTION = ExcelDataServices::DataValidators::HeaderChecker::StaticHeadersForDataRestructurers
+      HEADER_COLLECTION = ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers
 
       PRICING_COMMON_LOOKUP = {
         effective_date: :effective_date,
@@ -219,7 +219,7 @@ module ExcelDataServices
         when 'With Ranges'
           HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES
         else
-          raise ExcelDataServices::DataValidators::ValidationErrors::WritingError::UnknownSheetNameError,
+          raise ExcelDataServices::Validators::ValidationErrors::WritingError::UnknownSheetNameError,
                 "Unknown sheet name \"#{sheet_name}\"!"
         end
       end

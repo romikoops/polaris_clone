@@ -20,17 +20,17 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
     let(:database_inserter_klass) { double('DatabaseInserter') }
 
     it 'reads the excel file in and calls the correct methods.' do
-      expect(ExcelDataServices::DataValidators::HeaderChecker).to receive(:new).exactly(2).times.and_return(header_validator)
+      expect(ExcelDataServices::Validators::HeaderChecker).to receive(:new).exactly(2).times.and_return(header_validator)
       expect(header_validator).to receive(:perform).exactly(2).times
       expect(header_validator).to receive(:valid?).exactly(2).times.and_return(true)
       expect(header_validator).to receive(:data_restructurer_name).exactly(2).times.and_return('')
       expect(ExcelDataServices::FileParser).to receive(:parse).and_return([nil])
-      expect(ExcelDataServices::DataRestructurers::Base).to receive(:restructure).and_return(DummyInsertionType: [])
-      expect(ExcelDataServices::DataValidators::Base).to receive(:get).exactly(3).times.and_return(flavor_based_validator_klass)
+      expect(ExcelDataServices::Restructurers::Base).to receive(:restructure).and_return(DummyInsertionType: [])
+      expect(ExcelDataServices::Validators::Base).to receive(:get).exactly(3).times.and_return(flavor_based_validator_klass)
       expect(flavor_based_validator_klass).to receive(:new).exactly(3).times.and_return(flavor_based_validator)
       expect(flavor_based_validator).to receive(:perform).exactly(3).times
       expect(flavor_based_validator).to receive(:valid?).exactly(3).times.and_return(true)
-      expect(ExcelDataServices::DatabaseInserters::Base).to receive(:get).and_return(database_inserter_klass)
+      expect(ExcelDataServices::Inserters::Base).to receive(:get).and_return(database_inserter_klass)
       expect(database_inserter_klass).to receive(:insert).and_return({})
       uploader.perform
     end

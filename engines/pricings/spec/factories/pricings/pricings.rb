@@ -11,6 +11,20 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     association :itinerary, factory: :default_itinerary
     association :tenant_vehicle, factory: :legacy_tenant_vehicle
 
+    transient do
+      fee_attrs { {} }
+    end
+
+    after :create do |pricing, evaluator|
+      unless evaluator.fee_attrs.empty?
+        fee_options = { pricing: pricing,
+                        tenant: pricing.tenant,
+                        rate_basis: FactoryBot.create(evaluator.fee_attrs[:rate_basis]) }
+        fee_options.merge!(evaluator.fee_attrs.except(:rate_basis))
+        create_list :pricings_fee, 1, **fee_options
+      end
+    end
+
     trait :lcl do
       cargo_class { 'lcl' }
       load_type { 'cargo_item' }

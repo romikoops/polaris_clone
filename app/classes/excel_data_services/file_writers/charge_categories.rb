@@ -33,7 +33,7 @@ module ExcelDataServices
       end
 
       def build_raw_headers(_sheet_name, _rows_data)
-        ExcelDataServices::DataValidators::HeaderChecker::StaticHeadersForDataRestructurers::CHARGE_CATEGORIES
+        ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::CHARGE_CATEGORIES
       end
     end
   end
