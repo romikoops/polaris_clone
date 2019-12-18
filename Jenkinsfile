@@ -13,7 +13,7 @@ pipeline {
     buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '10'))
     podTemplate(inheritFrom: 'default')
     skipDefaultCheckout()
-    timeout(90)
+    timeout(45)
 
     preserveStashes()
   }
@@ -41,8 +41,6 @@ pipeline {
 
           stages {
             stage('Checkout') {
-              options { timeout(5) }
-
               steps {
                 defaultCheckout()
 
@@ -51,16 +49,12 @@ pipeline {
             }
 
             stage('Prepare') {
-              options { timeout(10) }
-
               steps {
                 container('ruby') { appPrepare() }
               }
             }
 
             stage('RSpec') {
-              options { timeout(15) }
-
               steps {
                 defaultCheckout()
                 container('ruby') { appRunner('app') }
@@ -109,24 +103,18 @@ pipeline {
 
           stages {
             stage('Checkout') {
-              options { timeout(5) }
-
               steps {
                 defaultCheckout()
               }
             }
 
             stage('Prepare') {
-              options { timeout(15) }
-
               steps {
                 container('ruby') { appPrepare() }
               }
             }
 
             stage('RSpec') {
-              options { timeout(15) }
-
               steps {
                 container('ruby') { appRunner('engines') }
               }
@@ -162,8 +150,6 @@ pipeline {
 
           stages {
             stage('Checkout') {
-              options { timeout(5) }
-
               steps {
                 defaultCheckout()
 
@@ -173,8 +159,6 @@ pipeline {
             }
 
             stage('Prepare') {
-              options { timeout(15) }
-
               steps {
                 container('node') {
                   withCache(['client/node_modules=client/package-lock.json']) {
@@ -187,8 +171,6 @@ pipeline {
             }
 
             stage('Jest') {
-              options { timeout(15) }
-
               steps {
                 container('node') {
                   dir('client') {
@@ -214,7 +196,6 @@ pipeline {
     } // Test
 
     stage('Report') {
-      options { timeout(10) }
       when { changeRequest() }
 
       steps {
@@ -225,8 +206,6 @@ pipeline {
     stage('Build') {
       parallel {
         stage('Backend') {
-          options { timeout(20) }
-
           steps {
             dockerBuild(
               dir: '.',
@@ -239,8 +218,6 @@ pipeline {
         }
 
         stage('Frontend') {
-          options { timeout(15) }
-
           steps {
             dockerBuild(
               dir: 'client/',
