@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Rows
-    class ChargeCategories < Base
+    class ChargeCategories < ExcelDataServices::Rows::Base
     end
   end
 end

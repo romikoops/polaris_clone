@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Rows
-    class LocalCharges < Base
+    class LocalCharges < ExcelDataServices::Rows::Base
       def counterpart_hub
         @counterpart_hub ||= data[:counterpart_hub]
       end

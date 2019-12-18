@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Rows
-    class Employees < Base
+    class Employees < ExcelDataServices::Rows::Base
     end
   end
 end

@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Rows
-    class Pricing < Base
+    class Pricing < ExcelDataServices::Rows::Base
       def destination
         @destination ||= data[:destination]
       end

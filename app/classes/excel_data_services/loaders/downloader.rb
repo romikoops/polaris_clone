@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Loaders
-    class Downloader < Base
+    class Downloader < ExcelDataServices::Loaders::Base
       def initialize(tenant:, specific_identifier:, file_name:, sandbox:, group_id: nil)
         super(tenant: tenant)
         @specific_identifier = specific_identifier

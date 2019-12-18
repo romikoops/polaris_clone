@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Rows
-    class Companies < Base
+    class Companies < ExcelDataServices::Rows::Base
     end
   end
 end

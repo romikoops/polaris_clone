@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Rows
-    class ScheduleGenerator < Base
+    class ScheduleGenerator < ExcelDataServices::Rows::Base
     end
   end
 end

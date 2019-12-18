@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Validators
-    class HeaderChecker < Base
+    class HeaderChecker < ExcelDataServices::Validators::Base
       HEADER_DIFF_THRESHOLD = 0.14
 
       module StaticHeadersForRestructurers

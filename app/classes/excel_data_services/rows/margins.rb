@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Rows
-    class Margins < Base
+    class Margins < ExcelDataServices::Rows::Base
       def itinerary_name
         @itinerary_name ||= [data[:origin], data[:destination]].join(' - ')
       end
