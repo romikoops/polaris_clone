@@ -11,6 +11,7 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
   TRUCKING_CONTAINER_HEIGHT = 260
 
   attr_accessor :trucking_pricing, :tenant, :user, :cargos, :kms, :carriage
+
   def initialize(trucking_pricing, cargos, kms, carriage, user)
     @tenant = user.tenant
     @trucking_pricing = trucking_pricing
@@ -102,7 +103,6 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
   def fare_calculator(key, fee, cargo, kms, scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
     fee = fee.with_indifferent_access
     value = (fee['value'] || fee['rate'] || 0).to_d
-    min = (fee[:min_value] || 0).to_d
     fare = case fee[:rate_basis]
            when 'PER_KG'
              cargo['weight'] * value
@@ -113,12 +113,10 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
            when 'PER_X_TON'
              ((cargo['weight'] / 1000) / fee[:base]) * value
            when 'PER_SHIPMENT'
-             fee.except(:rate_basis, :currency, :base).values.max
+             fee.except(:key, :name, :rate_basis, :currency, :base).values.max
            when 'PER_BILL'
              value
-           when 'PER_ITEM'
-             value * cargo['number_of_items']
-           when 'PER_CONTAINER'
+           when 'PER_CONTAINER', 'PER_ITEM'
              value * cargo['number_of_items']
            when 'PER_CONTAINER_KM'
              ((fee[:km] * kms) + fee[:unit]) * cargo['number_of_items']
@@ -127,7 +125,7 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
            when 'PER_CBM_TON'
              cbm = cargo['volume'] * fee[:cbm]
              tonne = (cargo['weight'] / 1000) * fee[:ton]
-             [tonne, cbm].max
+             [cbm, tonne].max
            when 'PER_KG_CBM_SPECIAL'
              kg_sub = fee.dig(:kg_sub, :rate, :value).to_d
              kg_base = fee.dig(:kg_base, :rate, :value).to_d
@@ -145,7 +143,7 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
              cargo['volume'] * (value || fee[:cbm])
            when 'PER_WM'
              wm = [cargo['weight'] / 1000, cargo['volume']].max
-             wm * fee_value
+             wm * value
            when 'PER_CBM_KG'
              cbm_value = cargo['volume'] * fee[:cbm]
              kg_value = cargo['weight'] * fee[:kg]

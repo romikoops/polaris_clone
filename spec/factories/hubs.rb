@@ -11,6 +11,7 @@ FactoryBot.define do
     hub_type { 'ocean' }
     hub_status { 'active' }
     hub_code { 'GOO1' }
+
     association :tenant
     association :address
     association :nexus
