@@ -35,7 +35,6 @@ class RatesOverview extends Component {
     const { theme, ratesObject, t } = this.props
     const valuesByFees = {}
     const currencyByFees = {}
-    const currencyToDisplay = Object.values(ratesObject)[0].total.currency
     const cargoClasses = Object.keys(ratesObject).sort()
     cargoClasses.forEach((cargoClass) => {
       Object.keys(ratesObject[cargoClass]).filter(key => !['total', 'valid_until'].includes(key)).forEach((key) => {
@@ -46,6 +45,7 @@ class RatesOverview extends Component {
       })
     })
     const singleCurrency = uniq(compact(Object.values(currencyByFees))).length === 1
+    const currencyToDisplay = singleCurrency ? Object.values(ratesObject)[0].total.currency : null
     const overviewNode = [
       (<div className="flex-20 layout-row layout-wrap layout-align-start-center">
         <p className={`flex-100  ${styles.rates_header}`}>

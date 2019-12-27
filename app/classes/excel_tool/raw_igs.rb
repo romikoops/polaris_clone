@@ -44,7 +44,8 @@ module ExcelTool
                  row[0].to_s
                end
       {
-        row_nr: row_nr,
+        row_nr: row.nr,
+sheet_name: sheet_name,
         postal_code: p_code,
         place_name: hide_name ? '' : row[1],
         harbour: row[3],

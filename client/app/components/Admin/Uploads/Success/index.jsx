@@ -62,10 +62,13 @@ export class AdminUploadsSuccess extends Component {
       )) : ''
     const errorView = stats.has_errors ? stats.errors.map(error => (
       <tr className="flex-100 layout-row">
-        <td className={`flex-50 ${styles.error_reason}`}>
+        <td className={`flex-60 ${styles.error_reason}`}>
           {error.reason}
         </td>
-        <td className={`flex-50 ${styles.error_row}`}>
+        <td className={`flex-20 ${styles.error_row}`}>
+          {error.sheet_name}
+        </td>
+        <td className={`flex-20 ${styles.error_row}`}>
           {error.row_nr}
         </td>
       </tr>
@@ -103,8 +106,9 @@ export class AdminUploadsSuccess extends Component {
                   <tbody className="flex-100 layout-row layout-wrap">
                     <thead className="flex-100 layout-row">
                       <tr className="flex-100 layout-row">
-                        <th className={`flex-50 ${styles.error_reason}`}>{t('admin:reason')}</th>
-                        <th className={`flex-50 ${styles.error_row}`}>{t('admin:rowNo')}</th>
+                        <th className={`flex-60 ${styles.error_reason}`}>{t('admin:reason')}</th>
+                        <th className={`flex-20 ${styles.error_sheet_name}`}>{t('admin:sheet_name')}</th>
+                        <th className={`flex-20 ${styles.error_row}`}>{t('admin:rowNo')}</th>
                       </tr>
                     </thead>
                     {errorView}

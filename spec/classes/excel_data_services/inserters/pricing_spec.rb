@@ -21,7 +21,7 @@ RSpec.shared_examples 'Pricing .insert' do
           'pricings_rate_bases.external_code',
           :min,
           :range,
-          :currency_name,
+          :currency_name
         )
       else
         pricing_details.pluck(
@@ -29,7 +29,7 @@ RSpec.shared_examples 'Pricing .insert' do
           :rate_basis,
           :min,
           :range,
-          :currency_name,
+          :currency_name
         )
       end
     expect(pricing_details_values).to match_array(expected_pricing_details_values)
@@ -93,8 +93,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 16), DateTime.new(2018, 11, 14, 23, 59, 59)],
-          [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 29, 23, 59, 59)],
-          [DateTime.new(2018, 11, 30), DateTime.new(2019, 3, 16, 23, 59, 59)],
+          [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 30, 23, 59, 59)],
+          [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
           [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)]
         ]
       end
@@ -138,7 +138,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 20, number_deleted: 0, number_updated: 4 },
+            "pricings/pricings": { number_created: 20, number_deleted: 0, number_updated: 3 },
             "pricings/fees": { number_created: 27, number_deleted: 0, number_updated: 0 } }
         end
 
@@ -153,7 +153,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "legacy/pricings": { number_created: 20, number_updated: 4, number_deleted: 0 } }
+            "legacy/pricings": { number_created: 20, number_updated: 3, number_deleted: 0 },
+            "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 } }
         end
 
         include_examples 'Pricing .insert'
@@ -181,8 +182,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 16), DateTime.new(2018, 11, 14, 23, 59, 59)],
-          [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 29, 23, 59, 59)],
-          [DateTime.new(2018, 11, 30), DateTime.new(2019, 3, 16, 23, 59, 59)],
+          [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 30, 23, 59, 59)],
+          [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
           [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)]
         ]
       end
@@ -227,8 +228,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    effective_date: DateTime.new(2018, 3, 1),
                    expiration_date: DateTime.new(2019, 3, 16, 23, 59, 59),
                    tenant: tenant,
-                   load_type: "container",
-                   cargo_class: "fcl_20",
+                   load_type: 'container',
+                   cargo_class: 'fcl_20',
                    user_id: nil,
                    itinerary: itineraries.first,
                    tenant_vehicle: tenant_vehicle,
@@ -242,7 +243,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 20, number_deleted: 0, number_updated: 5 },
+            "pricings/pricings": { number_created: 20, number_deleted: 0, number_updated: 4 },
             "pricings/fees": { number_created: 27, number_deleted: 0, number_updated: 0 } }
         end
 
@@ -270,7 +271,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         end
         let!(:expected_stats) do
           { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 20, number_deleted: 0, number_updated: 5 },
+            "legacy/pricings": { number_created: 20, number_deleted: 0, number_updated: 4 },
+            "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
             "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
         end
 
@@ -298,8 +300,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 16), DateTime.new(2018, 11, 14, 23, 59, 59)],
-          [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 29, 23, 59, 59)],
-          [DateTime.new(2018, 11, 30), DateTime.new(2019, 3, 16, 23, 59, 59)],
+          [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 30, 23, 59, 59)],
+          [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
           [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)],
           [DateTime.new(2019, 6, 20), DateTime.new(2019, 7, 20, 23, 59, 59)]
         ]
@@ -345,8 +347,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    effective_date: DateTime.new(2019, 6, 20),
                    expiration_date: DateTime.new(2019, 7, 20, 23, 59, 59),
                    tenant: tenant,
-                   cargo_class: "lcl",
-                   load_type: "cargo_item",
+                   cargo_class: 'lcl',
+                   load_type: 'cargo_item',
                    user_id: nil,
                    itinerary: itineraries.first,
                    tenant_vehicle: tenant_vehicle,
@@ -360,7 +362,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 20, number_deleted: 0, number_updated: 4 },
+            "pricings/pricings": { number_created: 20, number_deleted: 0, number_updated: 3 },
             "pricings/fees": { number_created: 27, number_deleted: 0, number_updated: 0 } }
         end
 
@@ -388,7 +390,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         end
         let!(:expected_stats) do
           { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 20, number_deleted: 0, number_updated: 4 },
+            "legacy/pricings": { number_created: 20, number_deleted: 0, number_updated: 3 },
+            "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
             "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
         end
 
@@ -417,8 +420,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 16), DateTime.new(2018, 11, 14, 23, 59, 59)],
-          [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 29, 23, 59, 59)],
-          [DateTime.new(2018, 11, 30), DateTime.new(2019, 3, 16, 23, 59, 59)],
+          [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 30, 23, 59, 59)],
+          [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
           [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)],
           [DateTime.new(2019, 3, 29), DateTime.new(2019, 7, 20, 23, 59, 59)]
         ]
@@ -465,8 +468,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    effective_date: DateTime.new(2017, 6, 1),
                    expiration_date: DateTime.new(2019, 7, 20, 23, 59, 59),
                    tenant: tenant,
-                   cargo_class: "lcl",
-                   load_type: "cargo_item",
+                   cargo_class: 'lcl',
+                   load_type: 'cargo_item',
                    user_id: nil,
                    itinerary: itineraries.first,
                    tenant_vehicle: tenant_vehicle,
@@ -480,7 +483,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 9 },
+            "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 8 },
             "pricings/fees": { number_created: 27, number_deleted: 0, number_updated: 0 } }
         end
 
@@ -508,7 +511,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         end
         let!(:expected_stats) do
           { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 21, number_deleted: 0, number_updated: 9 },
+            "legacy/pricings": { number_created: 21, number_deleted: 0, number_updated: 8 },
+            "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
             "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
         end
 
@@ -536,8 +540,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 16), DateTime.new(2018, 11, 14, 23, 59, 59)],
-          [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 29, 23, 59, 59)],
-          [DateTime.new(2018, 11, 30), DateTime.new(2019, 3, 16, 23, 59, 59)],
+          [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 30, 23, 59, 59)],
+          [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
           [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)]
         ]
       end
@@ -581,8 +585,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    effective_date: DateTime.new(2018, 3, 16),
                    expiration_date: DateTime.new(2019, 3, 20, 23, 59, 59),
                    tenant: tenant,
-                   cargo_class: "lcl",
-                   load_type: "cargo_item",
+                   cargo_class: 'lcl',
+                   load_type: 'cargo_item',
                    user_id: nil,
                    itinerary: itineraries.first,
                    tenant_vehicle: tenant_vehicle,
@@ -596,8 +600,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 20, number_deleted: 1, number_updated: 7 },
-            "pricings/fees": { number_created: 27, number_deleted: 0, number_updated: 0 } }
+            "pricings/pricings": { number_created: 20, number_deleted: 1, number_updated: 6 },
+            "pricings/fees": { number_created: 27, number_deleted: 1, number_updated: 0 } }
         end
 
         include_examples 'Pricing .insert'
@@ -623,9 +627,10 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                                              content: { 'base_pricing' => false })
         end
         let!(:expected_stats) do
-          { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 20, number_deleted: 1, number_updated: 7 },
-            "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
+          { "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 },
+            "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
+            "legacy/pricings": { number_created: 20, number_deleted: 1, number_updated: 6 },
+            "legacy/pricing_details": { number_created: 27, number_deleted: 1, number_updated: 0 } }
         end
 
         include_examples 'Pricing .insert'

@@ -4,14 +4,14 @@ module ExcelDataServices
   module Validators
     module InsertableChecks
       class DateOverlapChecker < ExcelDataServices::Validators::InsertableChecks::Base
-        PERFORMING_METHODS = %i(
+        PERFORMING_METHODS = %i[
           no_old_record?
           no_overlap?
           new_starts_before_or_at_old_and_stops_before_old_ends?
           new_starts_after_old_and_stops_at_or_after_old?
           new_is_covered_by_old?
           old_is_covered_by_new?
-        ).freeze
+        ].freeze
 
         DATE_FORMAT = '%Y-%m-%d %H:%M'
 

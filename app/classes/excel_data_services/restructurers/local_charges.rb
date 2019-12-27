@@ -3,20 +3,20 @@
 module ExcelDataServices
   module Restructurers
     class LocalCharges < ExcelDataServices::Restructurers::Base # rubocop:disable Metrics/ClassLength
-      COLS_CONTAINING_ALL = %i(
+      COLS_CONTAINING_ALL = %i[
         counterpart_hub
         counterpart_country
         service_level
         carrier
-      ).freeze
+      ].freeze
 
-      COLS_TO_DOWNCASE = %i(
+      COLS_TO_DOWNCASE = %i[
         load_type
         mot
         direction
-      ).freeze
+      ].freeze
 
-      ROW_IDENTIFIERS = %i(
+      ROW_IDENTIFIERS = %i[
         hub
         country
         effective_date
@@ -29,14 +29,14 @@ module ExcelDataServices
         load_type
         direction
         dangerous
-      ).freeze
+      ].freeze
 
       def perform
         rows_data = replace_nil_equivalents_with_nil(data[:rows_data])
         rows_data = correct_capitalization(rows_data)
         sanitize_service_level!(rows_data)
         rows_data = expand_fcl_to_all_sizes(rows_data)
-        rows_data = cut_based_on_date_overlaps(rows_data, ROW_IDENTIFIERS - %i(effective_date expiration_date))
+        rows_data = cut_based_on_date_overlaps(rows_data, ROW_IDENTIFIERS - %i[effective_date expiration_date])
         rows_chunked_by_identifier = rows_data.group_by { |row| row.slice(*ROW_IDENTIFIERS) }.values
         rows_chunked_by_identifier_and_sorted_ranges = rows_chunked_by_identifier.map do |rows|
           rows_chunked_by_ranges = rows.group_by { |row| range_identifier(row) }.values

@@ -34,7 +34,7 @@ module ExcelDataServices
       end
 
       def find_tenant_vehicle(row)
-        carrier = Carrier.find_by(name: row.carrier) unless row.carrier.blank?
+        carrier = Carrier.find_by(name: row.carrier) if row.carrier.present?
 
         TenantVehicle.find_by(
           tenant: tenant,

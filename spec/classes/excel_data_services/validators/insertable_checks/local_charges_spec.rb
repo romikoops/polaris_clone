@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::InsertableChecks::LocalCharges do
   let(:tenant) { create(:tenant) }
-  let(:options) { { tenant: tenant, data: input_data } }
+  let(:options) { { tenant: tenant, sheet_name: 'Sheet1', data: input_data } }
   let!(:hubs) { [create(:hub, name: 'Bremerhaven Port', tenant: tenant)] }
   let!(:local_charges) do
     [
@@ -49,14 +49,16 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::LocalCharges do
         validator = described_class.new(options)
         validator.perform
 
-        expect(validator.errors).to eq(
+        expect(validator.results).to eq(
           [{ exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
              reason: "Overlapping effective period.\n (Old is covered by new: [2019-01-24 00:00 - 2020-01-24 23:59] <-> [2019-01-24 00:00 - 2020-01-24 23:59]).",
              row_nr: '2',
+             sheet_name: 'Sheet1',
              type: :warning },
            { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
              reason: 'Hub "BremerERRORhaven" (Ocean) not found!',
              row_nr: '3',
+             sheet_name: 'Sheet1',
              type: :error }]
         )
       end

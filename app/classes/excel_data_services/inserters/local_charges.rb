@@ -30,21 +30,21 @@ module ExcelDataServices
 
       def assign_correct_hubs(charges_data)
         charges_data.each do |params|
-          origin_hub, = find_hub_by_name_or_locode_with_info(
+          origin_hub_with_info = find_hub_by_name_or_locode_with_info(
             raw_name: params[:hub],
             mot: params[:mot],
             locode: params[:hub_locode]
           )
-          params[:hub_id] = origin_hub.id
+          params[:hub_id] = origin_hub_with_info[:hub].id
           next params[:counterpart_hub_id] = nil unless params[:counterpart_hub] &&
                                                         !params[:counterpart_hub].casecmp?('all')
 
-          counterpart_hub, = find_hub_by_name_or_locode_with_info(
+          counterpart_hub_with_info = find_hub_by_name_or_locode_with_info(
             raw_name: params[:counterpart_hub],
             mot: params[:mot],
             locode: params[:counterpart_hub_locode]
           )
-          params[:counterpart_hub_id] = counterpart_hub.id
+          params[:counterpart_hub_id] = counterpart_hub_with_info[:hub].id
         end
       end
 

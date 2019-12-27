@@ -30,7 +30,7 @@ module ExcelDataServices
         end
         restructured_data = cut_based_on_date_overlaps(
           restructured_data,
-          ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i(effective_date expiration_date)
+          ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i[effective_date expiration_date]
         )
         restructured_data = expand_fcl_to_all_sizes(restructured_data)
         restructured_data = group_by_params(restructured_data, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS)
@@ -42,7 +42,7 @@ module ExcelDataServices
 
       def expand_dynamic_fees_to_individual_fees(standard_part, fee_part, row_nr)
         result = fee_part.map do |fee_key, fee_value|
-          next unless fee_value.present?
+          next if fee_value.blank?
 
           standard_part.merge(
             fee_code: fee_key.to_s.upcase,

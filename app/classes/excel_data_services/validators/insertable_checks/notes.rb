@@ -6,8 +6,7 @@ module ExcelDataServices
       class Notes < ExcelDataServices::Validators::InsertableChecks::Base
         private
 
-        def check_single_data(_row)
-        end
+        def check_single_data(_row); end
       end
     end
   end

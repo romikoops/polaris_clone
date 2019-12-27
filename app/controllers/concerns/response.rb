@@ -2,7 +2,7 @@
 
 module Response
   def json_response(object, status = :ok)
-    render json: object, status: status
+    render json: object.to_json, status: status
   end
 
   def error_handler(e)

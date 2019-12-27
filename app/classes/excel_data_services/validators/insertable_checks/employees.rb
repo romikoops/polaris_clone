@@ -22,6 +22,7 @@ module ExcelDataServices
             add_to_errors(
               type: :error,
               row_nr: row.nr,
+              sheet_name: sheet_name,
               reason: "There exists no company with name: #{row[:company_name]}.",
               exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
             )
@@ -33,6 +34,7 @@ module ExcelDataServices
             add_to_errors(
               type: :error,
               row_nr: row.nr,
+              sheet_name: sheet_name,
               reason: 'The minimum password length is 8 characters.',
               exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
             )

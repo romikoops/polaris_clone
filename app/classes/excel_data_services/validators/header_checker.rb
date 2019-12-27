@@ -8,7 +8,7 @@ module ExcelDataServices
       module StaticHeadersForRestructurers
         # The names of the constants here must exactly match the names of the data restructurers (upcased).
 
-        LOCAL_CHARGES = %i(
+        LOCAL_CHARGES = %i[
           hub
           country
           effective_date
@@ -38,9 +38,9 @@ module ExcelDataServices
           range_min
           range_max
           dangerous
-        ).freeze
+        ].freeze
 
-        PRICING_DYNAMIC_FEE_COLS_NO_RANGES = %i(
+        PRICING_DYNAMIC_FEE_COLS_NO_RANGES = %i[
           effective_date
           expiration_date
           customer_email
@@ -55,9 +55,9 @@ module ExcelDataServices
           rate_basis
           transit_time
           currency
-        ).freeze
+        ].freeze
 
-        PRICING_ONE_COL_FEE_AND_RANGES = %i(
+        PRICING_ONE_COL_FEE_AND_RANGES = %i[
           effective_date
           expiration_date
           customer_email
@@ -77,9 +77,9 @@ module ExcelDataServices
           currency
           fee_min
           fee
-        ).freeze
+        ].freeze
 
-        SACO_SHIPPING = %i(
+        SACO_SHIPPING = %i[
           internal
           destination_country
           destination_locode
@@ -90,9 +90,9 @@ module ExcelDataServices
           origin_locode
           effective_date
           expiration_date
-        ).freeze
+        ].freeze
 
-        MARGINS = %i(
+        MARGINS = %i[
           effective_date
           expiration_date
           origin
@@ -107,9 +107,9 @@ module ExcelDataServices
           fee_code
           operator
           margin
-        ).freeze
+        ].freeze
 
-        SCHEDULE_GENERATOR = %i(
+        SCHEDULE_GENERATOR = %i[
           origin
           destination
           carrier
@@ -117,24 +117,24 @@ module ExcelDataServices
           etd_days
           transit_time
           cargo_class
-        ).freeze
+        ].freeze
 
-        CHARGE_CATEGORIES = %i(
+        CHARGE_CATEGORIES = %i[
           internal_code
           fee_code
           fee_name
-        ).freeze
+        ].freeze
 
-        COMPANIES = %i(
+        COMPANIES = %i[
           name
           email
           phone
           vat_number
           external_id
           address
-        ).freeze
+        ].freeze
 
-        EMPLOYEES = %i(
+        EMPLOYEES = %i[
           company_name
           first_name
           last_name
@@ -144,13 +144,13 @@ module ExcelDataServices
           vat_number
           external_id
           address
-        ).freeze
+        ].freeze
 
-        NOTES = %i(
+        NOTES = %i[
           country
           unlocode
           note
-        ).freeze
+        ].freeze
       end
 
       attr_reader :data_restructurer_name, :errors
@@ -159,7 +159,7 @@ module ExcelDataServices
         @sheet_name = sheet_name
         @parsed_headers = parsed_headers
         @data_restructurer_name = nil
-        @errors = []
+        @errors_and_warnings = []
       end
 
       def perform
@@ -171,10 +171,11 @@ module ExcelDataServices
         diff = result[:diff]
         unrecognized = result[:unrecognized]
 
-        unless diff.blank? # rubocop:disable Style/GuardClause
+        if diff.present? # rubocop:disable Style/GuardClause
           add_to_errors(
             type: :error,
             row_nr: 1,
+            sheet_name: sheet_name,
             reason: "The following headers of sheet \"#{sheet_name}\" are not valid:\n" \
                     "Correct static headers for this sheet are: \"#{correct_headers.map(&:upcase).join(', ')}\",\n" \
                     "Missing static headers are               : \"#{diff.map(&:upcase).join(', ')}\",\n" \
@@ -207,6 +208,7 @@ module ExcelDataServices
         add_to_errors(
           type: :error,
           row_nr: 1,
+          sheet_name: sheet_name,
           reason: 'The type of the data sheet could not be determined. ' \
                   'Please check if the headers of the sheet are correct.',
           exception_class: ExcelDataServices::Validators::ValidationErrors::HeaderChecker

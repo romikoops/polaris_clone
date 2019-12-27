@@ -22,7 +22,7 @@ module OfferCalculatorService
           data: current_result,
           sandbox: @sandbox
         ).perform
-        next if grand_total_charges.nil? || grand_total_charges.empty?
+        next if grand_total_charges.blank?
 
         grand_total_charges.map do |grand_total_charge|
           quote = grand_total_charge[:total].deconstruct_tree_into_schedule_charge.deep_symbolize_keys
@@ -126,8 +126,8 @@ module OfferCalculatorService
       # Used to create data for rate overview
       tenant_vehicle_id = schedule.trip.tenant_vehicle_id
       itinerary = schedule.trip.itinerary
-      eta = schedule.eta || Date.today
-      etd = schedule.etd || Date.today
+      eta = schedule.eta || Time.zone.today
+      etd = schedule.etd || Time.zone.today
       if @scope['base_pricing']
         itinerary.rates
                  .where(tenant_vehicle_id: tenant_vehicle_id, internal: false, sandbox: @sandbox)
@@ -143,6 +143,7 @@ module OfferCalculatorService
               shipment: @shipment
             }
           ).perform
+
           pricing_hash = manipulated_pricing.first.dig('data')
           pricing_hash['total'] = pricing_hash.keys.each_with_object('value' => 0, 'currency' => nil) do |key, obj|
             obj['value'] += pricing_hash[key]['rate']
@@ -217,7 +218,13 @@ module OfferCalculatorService
           if @scope['base_pricing']
             most_diverse_set.each do |pricing| # rubocop:disable Metrics/BlockLength
               schedules_for_obj = schedules_array.dup
-              unless dates[:is_quote]
+              if dates[:is_quote]
+                schedules_for_obj.reject! do |sched|
+                  sched.etd > pricing[:expiration_date]
+                end
+
+                next if schedules_for_obj.empty?
+              else
                 schedules_for_obj.select! do |sched|
                   sched.etd < pricing[:expiration_date] && sched.etd > pricing[:effective_date]
                 end
@@ -261,7 +268,13 @@ module OfferCalculatorService
           else
             most_diverse_set.each do |pricing| # rubocop:disable Metrics/BlockLength
               schedules_for_obj = schedules_array.dup
-              unless dates[:is_quote]
+              if dates[:is_quote]
+                schedules_for_obj.reject! do |sched|
+                  sched.etd > pricing[:expiration_date]
+                end
+
+                next if schedules_for_obj.empty?
+              else
                 schedules_for_obj.select! do |sched|
                   sched.etd < pricing[:expiration_date] && sched.etd > pricing[:effective_date]
                 end

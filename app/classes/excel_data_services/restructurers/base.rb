@@ -3,7 +3,7 @@
 module ExcelDataServices
   module Restructurers
     class Base < ExcelDataServices::Base
-      ROWS_BY_PRICING_PARAMS_GROUPING_KEYS = %i(
+      ROWS_BY_PRICING_PARAMS_GROUPING_KEYS = %i[
         carrier
         country_destination
         country_origin
@@ -19,7 +19,7 @@ module ExcelDataServices
         origin_locode
         rate_basis
         service_level
-      ).freeze
+      ].freeze
 
       ROWS_BY_MARGIN_PARAMS_GROUPING_KEYS = ROWS_BY_PRICING_PARAMS_GROUPING_KEYS.without(:customer_email).freeze
 
@@ -97,12 +97,16 @@ module ExcelDataServices
 
       def cut_into_pieces(row, cut_off_dates)
         applicable_dates = cut_off_dates.select { |date| date.between?(row[:effective_date], row[:expiration_date]) }
-        applicable_dates.each_cons(2).each_with_object([]) do |(a, b), pieces|
-          next if (b - a).to_i <= 1 # skip if dates are back to back
+
+        applicable_dates.each_cons(2).each_with_object([]) do |(effective_date, expiration_date), pieces|
+          effective_date += 1.day if effective_date == effective_date.end_of_month
+          expiration_date -= 1.day if expiration_date == expiration_date.beginning_of_month
+
+          next if (expiration_date - effective_date).to_i <= 1 # skip if dates are back to back
 
           pieces << row.dup.tap do |el|
-            el[:effective_date] = a
-            el[:expiration_date] = b
+            el[:effective_date] = effective_date
+            el[:expiration_date] = expiration_date
           end
         end
       end

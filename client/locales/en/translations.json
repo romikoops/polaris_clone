@@ -498,6 +498,7 @@
       "confirmDeleteRoute": "This will delete the route and all related data (pricings, schedules etc)",
       "conflictingIds": "Conflicting Pricings",
       "reason": "Reason",
+      "sheet_name": "Sheet Name",
       "rowNo": "Row Number",
       "errorTip": "Please check your sheet for the errors contained in the rows listed above",
       "pricingsTip": "To edit pricings we recommend downloading the pricing sheet and editing the values there. This allows us to ensure the correct pricings get updated and new ones created where necessary.",

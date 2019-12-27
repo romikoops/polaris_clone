@@ -13,10 +13,11 @@ module ExcelDataServices
         def check_carrier_exists(row)
           return if row.carrier.nil?
 
-          if Carrier.find_by_name(row.carrier).blank? # rubocop:disable Style/GuardClause
+          if Carrier.find_by(name: row.carrier).blank? # rubocop:disable Style/GuardClause
             add_to_errors(
               type: :error,
               row_nr: row.nr,
+              sheet_name: sheet_name,
               reason: "There exists no carrier called '#{row.carrier}'.",
               exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
             )

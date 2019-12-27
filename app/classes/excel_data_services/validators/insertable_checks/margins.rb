@@ -19,6 +19,7 @@ module ExcelDataServices
           add_to_errors(
             type: :error,
             row_nr: row.nr,
+            sheet_name: sheet_name,
             reason: "No Itinerary can be found with the name #{row.itinerary_name}.",
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
           )
@@ -40,6 +41,7 @@ module ExcelDataServices
             add_to_errors(
               type: :warning,
               row_nr: row.nr,
+              sheet_name: sheet_name,
               reason: "There exist rates (in the system or this file) with an overlapping effective period.\n" \
                       "(#{checker_that_hits.humanize}: " \
                       "[#{overlap_checker.old_effective_period}] <-> [#{overlap_checker.new_effective_period}]).",
@@ -49,7 +51,7 @@ module ExcelDataServices
         end
 
         def find_tenant_vehicle(row)
-          carrier = Carrier.find_by(name: row.carrier) unless row.carrier.blank?
+          carrier = Carrier.find_by(name: row.carrier) if row.carrier.present?
 
           TenantVehicle.find_by(
             tenant: tenant,

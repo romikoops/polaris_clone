@@ -4,7 +4,7 @@ module ExcelDataServices
   module Validators
     module MissingValues
       class LocalCharges < ExcelDataServices::Validators::MissingValues::Base
-        VALID_RATE_BASES = %w(
+        VALID_RATE_BASES = %w[
           PER_SHIPMENT
           PER_CONTAINER
           PER_BILL
@@ -22,7 +22,7 @@ module ExcelDataServices
           PER_X_KG_FLAT
           PER_UNIT_TON_CBM_RANGE
           PER_SHIPMENT_TON
-        ).freeze
+        ].freeze
 
         USER_FRIENDLY_FEE_COMP_LOOKUP = {
           key: 'FEE_CODE',
@@ -40,12 +40,13 @@ module ExcelDataServices
         end
 
         def check_fee_comps_except_rate_basis(row_nr, fee_hsh)
-          %i(key currency).each do |fee_comp_key|
+          %i[key currency].each do |fee_comp_key|
             next if fee_hsh[fee_comp_key]
 
             add_to_errors(
               type: :error,
               row_nr: row_nr,
+              sheet_name: sheet_name,
               reason: "Missing value for #{USER_FRIENDLY_FEE_COMP_LOOKUP[fee_comp_key]}.",
               exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::UnknownRateBasis
             )
@@ -59,6 +60,7 @@ module ExcelDataServices
             add_to_errors(
               type: :error,
               row_nr: row_nr,
+              sheet_name: sheet_name,
               reason: "The rate basis \"#{rate_basis}\" is unknown.",
               exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::UnknownRateBasis
             )
@@ -69,6 +71,7 @@ module ExcelDataServices
           add_to_errors(
             type: :error,
             row_nr: row_nr,
+            sheet_name: sheet_name,
             reason: "Missing value for #{rate_basis}.",
             exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::UnknownRateBasis
           )

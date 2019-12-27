@@ -27,6 +27,10 @@ module ExcelDataServices
         raise NotImplementedError, "This method must be implemented in #{self.class.name}."
       end
 
+      private
+
+      attr_reader :tenant, :data, :klass_identifier, :options, :stats, :scope, :tenants_tenant
+
       def metadata(row:)
         document = options[:document]
         {
@@ -36,10 +40,6 @@ module ExcelDataServices
           document_id: document&.id
         }
       end
-
-      private
-
-      attr_reader :tenant, :data, :klass_identifier, :options, :stats, :scope, :tenants_tenant
 
       def add_stats(data_record, force_new_record = false)
         descriptor = data_record.class.name.underscore.pluralize.to_sym

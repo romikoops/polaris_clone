@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
   let(:tenant) { create(:tenant) }
-  let(:options) { { tenant: tenant, data: input_data } }
+  let(:options) { { tenant: tenant, sheet_name: 'Sheet1', data: input_data } }
   let!(:pricings) do
     [
       create(
@@ -60,22 +60,26 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
         validator = described_class.new(options)
         validator.perform
 
-        expect(validator.errors).to eq(
+        expect(validator.results).to eq(
           [{ exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
              reason: 'Effective date must lie before before expiration date!',
              row_nr: 2,
+             sheet_name: 'Sheet1',
              type: :error },
            { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
              reason: 'Hub "GothenERRORburg" (Ocean) not found!',
              row_nr: 2,
+             sheet_name: 'Sheet1',
              type: :error },
            { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
              reason: 'A user with email "Non.Existent@email.address" does not exist.',
              row_nr: 3,
+             sheet_name: 'Sheet1',
              type: :error },
            { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
              reason: "There exist rates (in the system or this file) with an overlapping effective period.\n(Old is covered by new: [2018-03-15 00:00 - 2019-03-17 23:59] <-> [2018-03-15 00:00 - 2019-03-17 23:59]).",
              row_nr: 3,
+             sheet_name: 'Sheet1',
              type: :warning }]
         )
       end

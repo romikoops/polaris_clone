@@ -4,9 +4,6 @@ module Legacy
   class Schedule # rubocop:disable Metrics/ClassLength
     include ActiveModel::Model
 
-    QUOTE_TRIP_START_DATE = 5.days.from_now
-    QUOTE_TRIP_END_DATE = 31.days.from_now
-    
     attr_accessor :id, :origin_hub_id, :destination_hub_id,
                   :origin_hub_name, :destination_hub_name, :mode_of_transport,
                   :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,
@@ -44,6 +41,18 @@ module Legacy
         vehicle_name: vehicle_name,
         carrier_name: carrier_name,
         trip_id: trip_id
+      }
+    end
+
+    def self.quote_trip_dates
+      closing_date = Time.zone.now + 1.day
+      start_date = closing_date + 4.days
+      end_date = start_date + 26.days
+
+      {
+        closing_date: closing_date,
+        start_date: start_date,
+        end_date: end_date
       }
     end
 
@@ -126,7 +135,7 @@ module Legacy
     private
 
     def detailed_hash_hub_data_for(target)
-      %i(id name).each_with_object({}) do |hub_attribute, obj|
+      %i[id name].each_with_object({}) do |hub_attribute, obj|
         obj[hub_attribute] = send("#{target}_hub_#{hub_attribute}")
       end
     end

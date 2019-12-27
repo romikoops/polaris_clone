@@ -12,7 +12,7 @@ module ExcelDataServices
 
         def check_ranges_overlapping_effective_period(rows_data)
           grouping_keys = ExcelDataServices::Restructurers::Base::ROWS_BY_PRICING_PARAMS_GROUPING_KEYS -
-                          %i(effective_date expiration_date)
+                          %i[effective_date expiration_date]
           grouped_data = rows_data.group_by { |row_data| row_data.slice(grouping_keys) }.values
 
           grouped_data.each do |group|
@@ -39,19 +39,21 @@ module ExcelDataServices
           user = get_user(row)
           check_customer_email(row, user)
 
-          origin_hub, origin_hub_info = find_hub_by_name_or_locode_with_info(
+          origin_hub_with_info = find_hub_by_name_or_locode_with_info(
             raw_name: row.origin,
             mot: row.mot,
             locode: row.origin_locode
           )
-          destination_hub, destination_hub_info = find_hub_by_name_or_locode_with_info(
+          destination_hub_with_info = find_hub_by_name_or_locode_with_info(
             raw_name: row.destination,
             mot: row.mot,
             locode: row.destination_locode
           )
+          origin_hub = origin_hub_with_info[:hub]
+          destination_hub = destination_hub_with_info[:hub]
 
-          check_hub_existence(origin_hub, origin_hub_info, row)
-          check_hub_existence(destination_hub, destination_hub_info, row)
+          check_hub_existence(origin_hub_with_info, row)
+          check_hub_existence(destination_hub_with_info, row)
 
           return unless origin_hub && destination_hub
 
@@ -75,6 +77,7 @@ module ExcelDataServices
             add_to_errors(
               type: :error,
               row_nr: row.nr,
+              sheet_name: sheet_name,
               reason: "A user with email \"#{row.customer_email}\" does not exist.",
               exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
             )
@@ -97,6 +100,7 @@ module ExcelDataServices
             add_to_errors(
               type: :warning,
               row_nr: row.nr,
+              sheet_name: sheet_name,
               reason: "There exist rates (in the system or this file) with an overlapping effective period.\n" \
                       "(#{checker_that_hits.humanize}: " \
                       "[#{overlap_checker.old_effective_period}] <-> [#{overlap_checker.new_effective_period}]).",
@@ -106,7 +110,7 @@ module ExcelDataServices
         end
 
         def find_tenant_vehicle(row)
-          carrier = Carrier.find_by(name: row.carrier) unless row.carrier.blank?
+          carrier = Carrier.find_by(name: row.carrier) if row.carrier.present?
 
           TenantVehicle.find_by(
             tenant: tenant,

@@ -26,6 +26,7 @@ module ExcelDataServices
 
         xlsx = open_spreadsheet_file(file_or_path)
         # Header validation and data restructurer names
+        header_errors = []
         xlsx.each_with_pagename do |sheet_name, sheet_data|
           first_row = sheet_data.first_row
           next unless first_row
@@ -33,32 +34,39 @@ module ExcelDataServices
           headers = parse_headers(sheet_data.row(first_row))
           header_validator = ExcelDataServices::Validators::HeaderChecker.new(sheet_name, headers)
           header_validator.perform
-          return header_validator.errors_obj unless header_validator.valid?
+          header_errors << header_validator.results(filter: :error) unless header_validator.valid?
 
           headers_for_all_sheets[sheet_name] = headers
           data_restructurer_names_for_all_sheets[sheet_name] = header_validator.data_restructurer_name
         end
 
-        # Raw parsing
+        return { has_errors: true, errors: header_errors.flatten } if header_errors.present?
+
         all_sheets_raw_data = parse_data(xlsx, headers_for_all_sheets, data_restructurer_names_for_all_sheets)
 
-        all_sheets_raw_data.each do |per_sheet_raw_data|
-          # Restructure individual sheet data
-          data_by_insertion_type = restructure_data(per_sheet_raw_data)
+        restructured_data =
+          all_sheets_raw_data.each_with_object({}) do |per_sheet_raw_data, hsh|
+            hsh[per_sheet_raw_data[:sheet_name]] = restructure_data(per_sheet_raw_data)
+          end
 
-          # Per sheet there might be different insertion types (e.g. 'Pricing' and 'LocalCharges')
-          data_by_insertion_type.each do |insertion_type, data_part|
-            insertion_type = insertion_type.to_s
-
-            # Validate data per insertion type
+        validation_errors = []
+        restructured_data.each do |sheet_name, data_by_insertion_types|
+          data_by_insertion_types.each do |insertion_type, data_part|
             VALIDATION_FLAVORS.each do |flavor|
-              validator_klass = ExcelDataServices::Validators::Base.get(flavor, insertion_type)
-              validator = validator_klass.new(tenant: tenant, data: data_part)
+              validator_klass = ExcelDataServices::Validators::Base.get(flavor, insertion_type.to_s)
+              validator = validator_klass.new(tenant: tenant,
+                                              sheet_name: sheet_name,
+                                              data: data_part)
               validator.perform
-              return validator.errors_obj unless validator.valid?
+              validation_errors << validator.results(filter: :error) unless validator.valid?
             end
+          end
+        end
 
-            # Insert into database
+        return { has_errors: true, errors: validation_errors.flatten } if validation_errors.present?
+
+        restructured_data.each do |_sheet_name, data_by_insertion_types|
+          data_by_insertion_types.each do |insertion_type, data_part|
             partial_insertion_stats = insert_into_database(insertion_type, data_part)
             result_insertion_stats = combine_stats(result_insertion_stats, partial_insertion_stats)
           end
@@ -74,12 +82,12 @@ module ExcelDataServices
       def open_spreadsheet_file(file_or_path)
         path = Pathname(file_or_path).to_s
 
-        raise ExcelDataServices::Validators::ValidationErrors::UnsupportedFiletype unless valid_excel?(path)
+        raise ExcelDataServices::Validators::ValidationErrors::UnsupportedFiletype unless valid_excel_filetype?(path)
 
         Roo::ExcelxMoney.new(path)
       end
 
-      def valid_excel?(path)
+      def valid_excel_filetype?(path)
         # Try binary first, then file extension
         mime_subtype = MimeMagic.by_magic(File.open(path))&.subtype
         mime_subtype = MimeMagic.by_path(path).subtype if mime_subtype == 'zip'

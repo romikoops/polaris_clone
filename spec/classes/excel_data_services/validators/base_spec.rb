@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ExcelDataServices::Validators::Base do
   let(:tenant) { create(:tenant) }
   let(:data) {}
-  let(:options) { { tenant: tenant, data: data } }
+  let(:options) { { tenant: tenant, sheet_name: 'Sheet1', data: data } }
   let(:base_validator) { described_class.new(options) }
 
   describe '.get' do
@@ -23,24 +23,23 @@ RSpec.describe ExcelDataServices::Validators::Base do
   describe '#valid?' do
     context 'without errors' do
       it 'indicates correctly if no errors exist' do
-        expect(base_validator).to receive(:errors).and_return([])
+        expect(base_validator).to receive(:errors_and_warnings).and_return([])
         expect(base_validator.valid?).to eq(true)
       end
     end
 
     context 'with errors' do
       it 'indicates correctly if errors exist' do
-        expect(base_validator).to receive(:errors).and_return([{ message: '123', type: :error }])
+        expect(base_validator).to receive(:errors_and_warnings).and_return([{ message: '123', type: :error }])
         expect(base_validator.valid?).to eq(false)
       end
     end
   end
 
-  describe '#errors_obj' do
+  describe '#results' do
     it 'return the correct object' do
-      expect(base_validator).to receive(:errors).and_return([{ message: '123', type: :error }])
-      expect(base_validator).to receive(:valid?).and_return(false)
-      expect(base_validator.errors_obj).to eq(has_errors: true, errors: [{ message: '123', type: :error }])
+      expect(base_validator).to receive(:errors_and_warnings).and_return([{ message: '123', type: :error }])
+      expect(base_validator.errors_and_warnings).to eq([{ message: '123', type: :error }])
     end
   end
 end

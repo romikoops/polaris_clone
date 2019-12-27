@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ExcelDataServices::Validators::SmartAssumptions::Base do
   let(:tenant) { create(:tenant) }
   let(:data) { [[nil]] }
-  let(:options) { { tenant: tenant, data: data } }
+  let(:options) { { tenant: tenant, sheet_name: 'Sheet1', data: data } }
 
   describe '.perform' do
     it 'raises a NotImplementedError' do

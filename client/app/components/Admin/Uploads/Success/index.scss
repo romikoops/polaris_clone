@@ -50,11 +50,15 @@
         tr {
           width: 100%;
           .error_reason {
-            width: 45%;
+            width: 60%;
+            text-align: start;
+          }
+          .error_sheet_name {
+            width: 20%;
             text-align: start;
           }
           .error_row {
-            width: 45%;
+            width: 20%;
             text-align: end;
           }
           td {

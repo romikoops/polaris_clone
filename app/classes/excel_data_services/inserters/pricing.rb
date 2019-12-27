@@ -9,16 +9,16 @@ module ExcelDataServices
             row_data: group_of_row_data.first, tenant: tenant
           )
 
-          origin_hub, = find_hub_by_name_or_locode_with_info(
+          origin_hub = find_hub_by_name_or_locode_with_info(
             raw_name: row.origin,
             mot: row.mot,
             locode: row.origin_locode
-          )
-          destination_hub, = find_hub_by_name_or_locode_with_info(
+          )[:hub]
+          destination_hub = find_hub_by_name_or_locode_with_info(
             raw_name: row.destination,
             mot: row.mot,
             locode: row.destination_locode
-          )
+          )[:hub]
 
           itinerary = find_or_initialize_itinerary(origin_hub, destination_hub, row)
 
@@ -68,7 +68,7 @@ module ExcelDataServices
       end
 
       def find_or_create_tenant_vehicle(row)
-        carrier = Legacy::Carrier.find_or_create_by(name: row.carrier) unless row.carrier.blank?
+        carrier = Legacy::Carrier.find_or_create_by(name: row.carrier) if row.carrier.present?
 
         tenant_vehicle = Legacy::TenantVehicle.find_by(
           tenant: tenant,
@@ -155,6 +155,8 @@ module ExcelDataServices
             pricings_for_new_pricing_details.each do |pricing|
               new_pricing_detail = pricing.pricing_details.new(pricing_detail_params)
               new_pricing_detail.range = range_data if range_data
+
+              add_stats(new_pricing_detail)
               new_pricing_detail.save!
             end
           end
@@ -165,6 +167,12 @@ module ExcelDataServices
         new_pricings = []
         pricings_with_actions.slice(:destroy).values.each do |pricings|
           pricings.each do |pricing|
+            pricing_details = scope['base_pricing'] ? pricing.fees : pricing.pricing_details
+            pricing_details.each do |pricing_detail|
+              pricing_detail.destroy
+              add_stats(pricing_detail)
+            end
+
             pricing.destroy
             add_stats(pricing)
           end
@@ -230,10 +238,10 @@ module ExcelDataServices
 
           if row.range.blank?
             pricing_detail_params[:rate] = row.fee
-            pricing_detail_params[:min] = row.fee_min.blank? ? row.fee : row.fee_min
+            pricing_detail_params[:min] = row.fee_min.presence || row.fee
           else
             min_rate_in_range = row.range.map { |r| r['rate'] }.min
-            min_rate = row.fee_min.blank? ? min_rate_in_range : row.fee_min
+            min_rate = row.fee_min.presence || min_rate_in_range
             pricing_detail_params.merge!(
               rate: min_rate_in_range,
               min: min_rate,

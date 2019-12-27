@@ -29,18 +29,20 @@ module ExcelDataServices
           add_to_errors(
             type: :error,
             row_nr: row.nr,
+            sheet_name: sheet_name,
             reason: 'Effective date must lie before before expiration date!',
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
           )
         end
 
-        def check_hub_existence(hub, info, row)
-          return if hub
+        def check_hub_existence(hub_with_info, row)
+          return if hub_with_info[:hub]
 
           add_to_errors(
             type: :error,
             row_nr: row.nr,
-            reason: "Hub \"#{info}\" (#{row.mot.capitalize}) not found!",
+            sheet_name: sheet_name,
+            reason: "Hub \"#{hub_with_info[:found_by_info]}\" (#{row.mot.capitalize}) not found!",
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
           )
         end

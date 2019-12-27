@@ -3,12 +3,11 @@
 module ExcelDataServices
   module Restructurers
     class SacoShipping < ExcelDataServices::Restructurers::Base # rubocop:disable Metrics/ClassLength
-      TREAT_AS_NOTE_COLUMNS = %i(
+      TREAT_AS_NOTE_COLUMNS = %i[
         remarks
         transshipment_via
-      ).freeze
-
-      ROW_IDENTIFIER_KEYS = %i(
+      ].freeze
+      ROW_IDENTIFIER_KEYS = %i[
         sheet_name
         data_restructurer_name
         internal
@@ -18,17 +17,15 @@ module ExcelDataServices
         origin_hub
         origin_locode
         carrier
-      ).freeze
-
-      ADDITIONAL_KEYS_SAME_FOR_ALL = %i(
+      ].freeze
+      ADDITIONAL_KEYS_SAME_FOR_ALL = %i[
         effective_date
         expiration_date
         mot
         rate_basis
         row_nr
-      ).freeze
-
-      LOCAL_CHARGES_GROUPING_KEYS = %i(
+      ].freeze
+      LOCAL_CHARGES_GROUPING_KEYS = %i[
         internal
         direction
         mot
@@ -42,17 +39,18 @@ module ExcelDataServices
         counterpart_country
         counterpart_hub
         counterpart_hub_locode
-      ).freeze
-
-      CONTAINER_CLASSES_LOOKUP = {
-        'fcl_20' => %w(fcl_20),
-        'fcl_40' => %w(fcl_40 fcl_40_hq)
+      ].freeze
+      LOAD_TYPE_LOOKUP = {
+        nil => %w[fcl_20 fcl_40 fcl_40_hq],
+        'fcl_20_dc' => %w[fcl_20],
+        'fcl_20' => %w[fcl_20],
+        'fcl_40_dc' => %w[fcl_40],
+        'fcl_40' => %w[fcl_40 fcl_40_hq],
+        'fcl_40_hq' => %w[fcl_40_hq]
       }.freeze
-
-      OCEAN_FREIGHT_COLUMNS = %w(20dc 40dc 40hq).freeze
-
+      LOCAL_CHARGE_COLUMNS = [].freeze # May be filled in the future, only ocean freight for now
+      STANDARD_OCEAN_COLUMNS = %w[20dc 40dc 40hq].freeze
       STANDARD_OCEAN_FREIGHT_FEE_CODE = 'BAS'
-
       MONTHS_GERMAN_TO_ENGLISH_LOOKUP = {
         'MAI' => 'MAY',
         'OKT' => 'OCT',
@@ -78,13 +76,13 @@ module ExcelDataServices
           restructured_data.partition { |row_data| row_data.delete(:klass_identifier) == 'Pricing' }
         restructured_data_pricings = cut_based_on_date_overlaps(
           restructured_data_pricings,
-          ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i(effective_date expiration_date)
+          ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i[effective_date expiration_date]
         )
         restructured_data_pricings = group_by_params(restructured_data_pricings, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS)
         restructured_data_local_charges = adapt_for_direction(restructured_data_local_charges)
         restructured_data_local_charges = cut_based_on_date_overlaps(
           restructured_data_local_charges,
-          LOCAL_CHARGES_GROUPING_KEYS - %i(effective_date expiration_date)
+          LOCAL_CHARGES_GROUPING_KEYS - %i[effective_date expiration_date]
         )
         restructured_data_local_charges = pricings_format_to_local_charges_format(restructured_data_local_charges)
 
@@ -211,7 +209,7 @@ module ExcelDataServices
 
           preliminary_load_type = determine_preliminary_load_type(fee_column_key)
           fee_type, fee_code, fee_name =
-            determine_fee_identifiers(fee_column_key, preliminary_load_type, fee_is_included)
+            determine_fee_identifiers(fee_column_key, fee_is_included)
 
           currency, fee = determine_currency_and_fee(fee_is_included, fee_column_value)
           same_for_all_fees.merge(
@@ -229,13 +227,13 @@ module ExcelDataServices
       def determine_preliminary_load_type(key)
         pure_size_class = key.to_s.scan(/(20_?(dc)?|40_?(dc|hq)?)/).dig(0, 0)
         pure_size_class = pure_size_class&.sub(/_*(dc|hq)/, '_\1')
-        "fcl_#{pure_size_class.remove('_dc')}" if pure_size_class
+        "fcl_#{pure_size_class}" if pure_size_class
       end
 
-      def determine_fee_identifiers(fee_column_key, preliminary_load_type, fee_is_included)
+      def determine_fee_identifiers(fee_column_key, fee_is_included)
         col_name = fee_column_key.to_s
-        fee_type = OCEAN_FREIGHT_COLUMNS.include?(col_name) ? 'Pricing' : 'LocalCharges'
-        fee_code = fee_code_by_fee_type(fee_type, preliminary_load_type, col_name)
+        fee_type = LOCAL_CHARGE_COLUMNS.any? { |col| col_name.include?(col) } ? 'LocalCharges' : 'Pricing'
+        fee_code = fee_code_from_col_name(col_name, fee_type)
         fee_name = fee_code.titleize
 
         if fee_is_included
@@ -246,13 +244,17 @@ module ExcelDataServices
         [fee_type, fee_code, fee_name]
       end
 
-      def fee_code_by_fee_type(fee_type, preliminary_load_type, col_name)
+      def fee_code_from_col_name(col_name, fee_type)
         case fee_type
         when 'Pricing'
-          preliminary_load_type ? STANDARD_OCEAN_FREIGHT_FEE_CODE : col_name.upcase
+          STANDARD_OCEAN_COLUMNS.include?(col_name) ? STANDARD_OCEAN_FREIGHT_FEE_CODE : extract_fee_code(col_name)
         when 'LocalCharges'
-          col_name.match(%r{(\D*/)*(\d{2,}(dc|hq)*/)*(.+)})[4].upcase
+          extract_fee_code(col_name)
         end
+      end
+
+      def extract_fee_code(col_name)
+        col_name.match(%r{(\D*/)*(\d{2,}(dc|hq)*/)*(.+)})[4].upcase
       end
 
       def determine_currency_and_fee(fee_is_included, fee_column_value)
@@ -278,24 +280,15 @@ module ExcelDataServices
       def expand_based_on_preliminary_load_type(multiple_objs)
         multiple_objs.flat_map do |row_data|
           preliminary_load_type = row_data.delete(:preliminary_load_type)
-
-          actual_load_types = determine_actual_load_types(preliminary_load_type, row_data[:klass_identifier])
-          actual_load_types.map do |load_type|
-            row_data.merge(load_type: load_type)
-          end
+          actual_load_types = determine_actual_load_types(preliminary_load_type)
+          actual_load_types.map { |load_type| row_data.merge(load_type: load_type) }
         end
       end
 
-      def determine_actual_load_types(preliminary_load_type, fee_type)
+      def determine_actual_load_types(preliminary_load_type)
         # `Container::CARGO_CLASSES` is explicitly not used, as SACO operates with a subset of containers types
         # If no container type was explicitly specified in the header, all container classes are returned
-        return CONTAINER_CLASSES_LOOKUP.values.flatten unless preliminary_load_type
-
-        if fee_type == 'LocalCharges' && preliminary_load_type.match?(/40$/)
-          CONTAINER_CLASSES_LOOKUP[preliminary_load_type]
-        else
-          [preliminary_load_type]
-        end
+        LOAD_TYPE_LOOKUP[preliminary_load_type]
       end
 
       def extract_notes(row_data, note_keys)

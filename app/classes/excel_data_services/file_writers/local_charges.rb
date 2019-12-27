@@ -104,7 +104,7 @@ module ExcelDataServices
             'PER_X_KG_FLAT' => { kg: data[:value], base: data[:base] },
             'PER_UNIT_TON_CBM_RANGE' => per_unit_ton_cbm_range_value(range) }
 
-        unless lookup.has_key?(rate_basis)
+        unless lookup.key?(rate_basis)
           raise ExcelDataServices::Validators::ValidationErrors::WritingError::UnknownRateBasisError,
                 "RATE_BASIS \"#{rate_basis}\" not found!"
         end

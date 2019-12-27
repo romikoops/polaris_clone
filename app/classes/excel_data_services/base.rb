@@ -20,7 +20,7 @@ module ExcelDataServices
         found_by_info = locode
       end
 
-      [hub, found_by_info]
+      { hub: hub, found_by_info: found_by_info }
     end
 
     def append_hub_suffix(raw_name, mot)

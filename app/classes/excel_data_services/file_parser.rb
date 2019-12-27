@@ -56,7 +56,7 @@ module ExcelDataServices
     end
 
     def parse_dates(row_data)
-      %i(effective_date expiration_date).each do |date|
+      %i[effective_date expiration_date].each do |date|
         row_data[date] = Date.parse(row_data[date].to_s) if row_data[date].present?
       end
 
