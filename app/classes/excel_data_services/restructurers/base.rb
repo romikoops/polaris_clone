@@ -17,7 +17,6 @@ module ExcelDataServices
         mot
         origin
         origin_locode
-        rate_basis
         service_level
       ].freeze
 
