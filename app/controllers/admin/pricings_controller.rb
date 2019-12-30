@@ -166,7 +166,12 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def destroy
-    Pricing.find_by(tenant_id: current_tenant.id, id: params[:id], sandbox: @sandbox)&.destroy
+    association = current_scope[:base_pricing] ? Pricings::Pricing : Legacy::Pricing
+    association.find_by(
+      tenant_id: current_tenant.id,
+      id: params[:id],
+      sandbox: @sandbox
+    )&.destroy
 
     response_handler({})
   end
