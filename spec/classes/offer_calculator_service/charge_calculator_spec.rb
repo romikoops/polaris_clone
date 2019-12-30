@@ -30,11 +30,19 @@ RSpec.describe OfferCalculatorService::ChargeCalculator do
   let(:schedules) do
     trips.map { |trip| Legacy::Schedule.from_trip(trip) }.sort_by(&:etd)
   end
+  let(:lcl_pricing) { create(:legacy_pricing, tenant: tenant) }
 
   let(:import_shipment) { build(:shipment, direction: 'import', user: user, tenant: tenant) }
-
+  let(:data) do
+    {
+      schedules: schedules,
+      pricings_by_cargo_class: {
+        lcl: lcl_pricing.as_json
+      }
+    }
+  end
   let(:calculator) {
-    described_class.new(data: { schedules: schedules },
+    described_class.new(data: data,
                         trucking_data: {},
                         shipment: import_shipment,
                         user: user,
@@ -173,6 +181,25 @@ RSpec.describe OfferCalculatorService::ChargeCalculator do
         expect(schedules_by_charges.dig(expected_period_groups[7], :schedules)).to match(schedules.select { |sched| (day_35...day_40).cover? sched.etd })
         expect(schedules_by_charges.dig(expected_period_groups[8], :schedules)).to match(schedules.select { |sched| sched.etd == day_40 })
       end
+    end
+  end
+
+  describe '.valid_until' do
+    it 'returns the earliest of the expiry dates w/o local charges' do
+      periods = {}
+      valid_until_date = calculator.send(:valid_until, periods)
+      expect(valid_until_date).to eq(lcl_pricing.expiration_date.beginning_of_day)
+    end
+
+    it 'returns the earliest of the expiry dates w local charges' do
+      export_key = { expiration_date: 4.days.from_now.end_of_day }.with_indifferent_access
+      periods = {
+        export: {
+          export_key => {}
+        }
+      }
+      valid_until_date = calculator.send(:valid_until, periods)
+      expect(valid_until_date).to eq(4.days.from_now.beginning_of_day)
     end
   end
 end

@@ -1,30 +1,28 @@
-module Legacy
-  class Shipment < ApplicationRecord
-    self.table_name = 'shipments'
-    LOAD_TYPES = %w(cargo_item container).freeze
-    belongs_to :user, class_name: 'Legacy::User'
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-    belongs_to :tenant, class_name: 'Legacy::Tenant'
-    belongs_to :origin_nexus, class_name: 'Legacy::Nexus', optional: true
-    belongs_to :destination_nexus, class_name: 'Legacy::Nexus', optional: true
-    belongs_to :origin_hub, class_name: 'Legacy::Hub', optional: true
-    belongs_to :destination_hub, class_name: 'Legacy::Hub', optional: true
-    belongs_to :itinerary, optional: true, class_name: 'Legacy::Shipment'
-    belongs_to :trip, optional: true, class_name: 'Legacy::Trip'
-    has_many :shipment_contacts, class_name: 'Legacy::ShipmentContact'
-    has_many :containers, class_name: 'Legacy::Container'
-    has_many :cargo_items, class_name: 'Legacy::CargoItem'
-    has_many :cargo_item_types, through: :cargo_items, class_name: 'Legacy::CargoItemType'
-    has_one :aggregated_cargo, class_name: 'Legacy::AggregatedCargo'
+# frozen_string_literal: true
 
-    delegate :mode_of_transport, to: :itinerary, allow_nil: true
+require 'rails_helper'
 
-    def cargo_units
-      send("#{load_type}s")
+RSpec.describe Shipment, type: :model do
+  context 'Shipment with Charge breakdown' do
+    let(:tenant) { build(:tenant) }
+    let(:shipment) { create(:shipment, tenant: tenant, with_breakdown: true) }
+    let(:other_trip) { create(:trip) }
+    let!(:other_charge_breakdown) do
+      create(:charge_breakdown,
+             shipment: shipment,
+             trip: other_trip,
+             valid_until: 10.days.from_now.beginning_of_day,
+             charge_category_name: 'Cargo1')
     end
 
-    def cargo_units=(value)
-      send("#{load_type}s=", value)
+    describe '.valid_until' do
+      it 'returns the Charge Breakdown valid_until value for the shipment trip' do
+        expect(shipment.valid_until(shipment.trip)).to eq(4.days.from_now.beginning_of_day)
+      end
+
+      it 'returns the Charge Breakdown valid_until value a different trip' do
+        expect(shipment.valid_until(other_trip)).to eq(10.days.from_now.beginning_of_day)
+      end
     end
   end
 end

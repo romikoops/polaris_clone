@@ -15,7 +15,7 @@ module Legacy
     acts_as_paranoid
 
     def tenant_scope
-      ::Tenants::ScopeService.new(target: self, tenant: tenants_user&.tenant).fetch
+      ::Tenants::ScopeService.new(target: self, tenant: Tenants::Tenant.find_by(legacy_id: tenant_id)).fetch
     end
 
     def full_name

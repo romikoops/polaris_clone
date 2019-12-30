@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_13_112037) do
+ActiveRecord::Schema.define(version: 2019_12_30_095040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -219,6 +219,7 @@ ActiveRecord::Schema.define(version: 2019_12_13_112037) do
     t.integer "shipment_id"
     t.integer "trip_id"
     t.datetime "updated_at", null: false
+    t.datetime "valid_until"
     t.index ["sandbox_id"], name: "index_charge_breakdowns_on_sandbox_id"
   end
 

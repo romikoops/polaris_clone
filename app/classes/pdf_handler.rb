@@ -80,7 +80,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     currencies = []
     result = shipment
              .selected_offer
-             .except('total', 'edited_total', 'name', 'trip_id')
+             .except('total', 'edited_total', 'name', 'trip_id', 'valid_until')
              .find do |charge_key, charge|
                charge_keys = charge
                              .except('total', 'edited_total', 'name')

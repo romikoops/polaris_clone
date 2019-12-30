@@ -189,8 +189,7 @@ class QuoteCard extends PureComponent {
       aggregatedCargo,
       onClickAdd,
       t,
-      shipment,
-      validUntil
+      shipment
     } = this.props
     const { scope } = tenant
     const {
@@ -325,10 +324,10 @@ class QuoteCard extends PureComponent {
                 {t("quote:service", { serviceLevel: capitalize(result.meta.service_level) })}
               </div>
             )}
-            {validUntil && (
+            {meta.validUntil && (
               <div>
                 <i className="flex-none fa fa-clock-o" />
-                {t("quote:validUntil", { date: moment(validUntil).utc().format('DD/MM/YYYY')}) }
+                {t("quote:validUntil", { date: moment(meta.validUntil).utc().format('DD/MM/YYYY')}) }
               </div>
             )}
           </div>

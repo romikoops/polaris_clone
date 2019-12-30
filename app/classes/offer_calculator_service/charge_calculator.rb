@@ -25,7 +25,8 @@ module OfferCalculatorService
         @charge_breakdown = ChargeBreakdown.create!(
           shipment: @shipment,
           trip_id: charge_obj[:schedules].first.trip_id,
-          sandbox: @sandbox
+          sandbox: @sandbox,
+          valid_until: valid_until(periods)
         )
         @grand_total_charge = Charge.create(
           children_charge_category: ChargeCategory.grand_total,
@@ -333,6 +334,13 @@ module OfferCalculatorService
       results << !!@trucking_data.dig('on', @schedule.destination_hub_id) if @shipment.has_on_carriage?
 
       results.all?(true)
+    end
+
+    def valid_until(periods)
+      export_date_limit = periods[:export].keys.pluck('expiration_date').min if periods[:export].present?
+      freight_date_limit = @data[:pricings_by_cargo_class].values.pluck('expiration_date').max
+
+      [export_date_limit, freight_date_limit].compact.min.beginning_of_day
     end
   end
 end

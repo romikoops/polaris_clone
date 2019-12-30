@@ -68,7 +68,14 @@ exports[`aggregatedCargo is empty object 1`] = `
   >
     <div
       className="details_row"
-    />
+    >
+      <div>
+        <i
+          className="flex-none fa fa-clock-o"
+        />
+        Valid Until: {{date}}
+      </div>
+    </div>
     <div
       className="details_row"
     />
@@ -134,6 +141,7 @@ exports[`aggregatedCargo is empty object 1`] = `
               "valid_until": "2019-12-31T00:00:00.000Z",
             },
           },
+          "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
       quote={
@@ -453,7 +461,14 @@ exports[`detailed billing working properly 1`] = `
   >
     <div
       className="details_row"
-    />
+    >
+      <div>
+        <i
+          className="flex-none fa fa-clock-o"
+        />
+        Valid Until: {{date}}
+      </div>
+    </div>
     <div
       className="details_row"
     />
@@ -519,6 +534,7 @@ exports[`detailed billing working properly 1`] = `
               "valid_until": "2019-12-31T00:00:00.000Z",
             },
           },
+          "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
       quote={
@@ -813,7 +829,14 @@ exports[`shallow rendering 1`] = `
   >
     <div
       className="details_row"
-    />
+    >
+      <div>
+        <i
+          className="flex-none fa fa-clock-o"
+        />
+        Valid Until: {{date}}
+      </div>
+    </div>
     <div
       className="details_row"
     />
@@ -879,6 +902,7 @@ exports[`shallow rendering 1`] = `
               "valid_until": "2019-12-31T00:00:00.000Z",
             },
           },
+          "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
       quote={
@@ -1198,7 +1222,14 @@ exports[`show schedule options working 1`] = `
   >
     <div
       className="details_row"
-    />
+    >
+      <div>
+        <i
+          className="flex-none fa fa-clock-o"
+        />
+        Valid Until: {{date}}
+      </div>
+    </div>
     <div
       className="details_row"
     />
@@ -1264,6 +1295,7 @@ exports[`show schedule options working 1`] = `
               "valid_until": "2019-12-31T00:00:00.000Z",
             },
           },
+          "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
       quote={
@@ -1558,7 +1590,14 @@ exports[`single result rendering removes add button 1`] = `
   >
     <div
       className="details_row"
-    />
+    >
+      <div>
+        <i
+          className="flex-none fa fa-clock-o"
+        />
+        Valid Until: {{date}}
+      </div>
+    </div>
     <div
       className="details_row"
     />
@@ -1624,6 +1663,7 @@ exports[`single result rendering removes add button 1`] = `
               "valid_until": "2019-12-31T00:00:00.000Z",
             },
           },
+          "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
       quote={
@@ -1917,7 +1957,14 @@ exports[`tenant.scope is empty object 1`] = `
   >
     <div
       className="details_row"
-    />
+    >
+      <div>
+        <i
+          className="flex-none fa fa-clock-o"
+        />
+        Valid Until: {{date}}
+      </div>
+    </div>
     <div
       className="details_row"
     />
@@ -1983,6 +2030,7 @@ exports[`tenant.scope is empty object 1`] = `
               "valid_until": "2019-12-31T00:00:00.000Z",
             },
           },
+          "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
       quote={
@@ -2241,7 +2289,14 @@ exports[`validUntil is falsy 1`] = `
   >
     <div
       className="details_row"
-    />
+    >
+      <div>
+        <i
+          className="flex-none fa fa-clock-o"
+        />
+        Valid Until: {{date}}
+      </div>
+    </div>
     <div
       className="details_row"
     />
@@ -2307,6 +2362,7 @@ exports[`validUntil is falsy 1`] = `
               "valid_until": "2019-12-31T00:00:00.000Z",
             },
           },
+          "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
       quote={
@@ -2626,7 +2682,14 @@ exports[`validUntil is truthy 1`] = `
   >
     <div
       className="details_row"
-    />
+    >
+      <div>
+        <i
+          className="flex-none fa fa-clock-o"
+        />
+        Valid Until: {{date}}
+      </div>
+    </div>
     <div
       className="details_row"
     />
@@ -2692,6 +2755,7 @@ exports[`validUntil is truthy 1`] = `
               "valid_until": "2019-12-31T00:00:00.000Z",
             },
           },
+          "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
       quote={

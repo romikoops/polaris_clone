@@ -113,6 +113,7 @@ module OfferCalculatorService
         ocean_chargeable_weight: chargeable_weight,
         pricings_by_cargo_class: pricings_by_cargo_class,
         transshipmentVia: transshipment_via,
+        validUntil: shipment.valid_until(schedule.trip),
         remarkNotes: remark_notes,
         pricing_rate_data: grab_pricing_rates(
           schedule: schedule,

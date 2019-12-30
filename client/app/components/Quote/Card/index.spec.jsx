@@ -30,7 +30,8 @@ const propsBase = {
         fcl_20: {
           valid_until: '2019-12-31T00:00:00.000Z'
         },
-      }
+      },
+      validUntil: '2019-12-31T00:00:00.000Z'
     },
     quote: selectedOffer,
     schedules: [{ eta: '10-8-2018', closing_date: '10-8-2018', etd: '10-8-2018' }],
