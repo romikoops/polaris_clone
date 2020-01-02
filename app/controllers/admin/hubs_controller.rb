@@ -18,7 +18,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     response_handler(
       pagination_options.merge(
         hubsData: response_hubs,
-        numPages: paginated_hubs.total_pages
+        numPages: paginated_hubs.total_pages.zero? ? 1 : paginated_hubs.total_pages
       )
     )
   end
