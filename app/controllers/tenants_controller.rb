@@ -29,7 +29,7 @@ class TenantsController < ApplicationController
   def fetch_scope
     tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : (params[:tenant_id] || params[:id]))
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant&.id)
-    scope = ::Tenants::ScopeService.new(target: current_user, tenant: tenants_tenant).fetch
+    scope = current_scope
 
     response_handler(scope)
   end
@@ -37,7 +37,7 @@ class TenantsController < ApplicationController
   def show
     tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : (params[:tenant_id] || params[:id]))
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
-    scope = ::Tenants::ScopeService.new(target: current_user, tenant: tenants_tenant).fetch
+    scope = current_scope
     tenant_json = tenant.as_json
     tenant_json['scope'] = scope
     tenant_json['subdomain'] = tenants_tenant.slug

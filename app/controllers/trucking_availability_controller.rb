@@ -6,7 +6,7 @@ class TruckingAvailabilityController < ApplicationController
   skip_before_action :require_non_guest_authentication!
 
   def index
-    @base_pricing_enabled = Tenants::ScopeService.new(target: current_user, tenant: current_tenant).fetch(:base_pricing)
+    @base_pricing_enabled = current_scope.fetch(:base_pricing)
     trucking_pricings = find_trucking_pricings
     truck_type_object = Hash.new { |h, k| h[k] = [] }
     hub_ids = []

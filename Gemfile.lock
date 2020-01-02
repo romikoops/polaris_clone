@@ -154,6 +154,7 @@ PATH
   specs:
     legacy (9999.1.0.0)
       core
+      fixer_currency (~> 3.4)
       geocoder
       paranoia
       pg_search (~> 2.3.0)
@@ -510,6 +511,8 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.11.3)
     filterrific (5.2.1)
+    fixer_currency (3.4.3)
+      money (~> 6.7)
     font-awesome-rails (4.7.0.5)
       railties (>= 3.2, < 6.1)
     fuubar (2.4.1)

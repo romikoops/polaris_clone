@@ -57,10 +57,9 @@ class Admin::ClientsController < Admin::AdminBaseController
       file: upload_params[:file]
     )
 
-    scope = ::Tenants::ScopeService.new(target: current_user).fetch
     file = upload_params[:file].tempfile
     uploader =
-      if scope[:base_pricing]
+      if current_scope[:base_pricing]
         options = { tenant: current_tenant,
                     file_or_path: file,
                     options: { sandbox: @sandbox, user: current_user } }

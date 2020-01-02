@@ -30,7 +30,7 @@ module UsersDeviseTokenAuth
     end
 
     def quotation_tool?(resource)
-      scope = ::Tenants::ScopeService.new(target: resource).fetch
+      scope = ::Tenants::ScopeService.new(target: ::Tenants::User.find_by(legacy_id: resource.id)).fetch
       @quotation_tool ||= scope.values_at('closed_quotation_tool', 'open_quotation_tool').all?
     end
 

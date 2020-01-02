@@ -8,7 +8,10 @@ module Pricings
       @type = type
       @user = user
       @tenant = @user.tenant
-      @scope = @tenant.scope
+      @scope = Tenants::ScopeService.new(
+        target: ::Tenants::User.find_by(legacy_id: user.id),
+        tenant: ::Tenants::Tenant.find_by(legacy_id: @tenant.id)
+      ).fetch
       @shipment = args[:shipment]
       @sandbox = args[:sandbox]
       @meta = @shipment.meta

@@ -23,17 +23,6 @@ module Legacy
       self['subdomain']
     end
 
-    def scope_for(user:)
-      ::Tenants::ScopeService.new(target: user).fetch
-    end
-
-    def tenants_scope
-      Tenants::Scope.find_by(target: Tenants::Tenant.find_by(legacy_id: id))&.content || {}
-    end
-
-    def groups
-      Tenants::Group.where(id: Tenants::Membership.where(member: self).pluck(:group_id))
-    end
   end
 end
 

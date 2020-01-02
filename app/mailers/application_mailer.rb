@@ -4,6 +4,14 @@ class ApplicationMailer < ActionMailer::Base
   default from: 'no-reply@itsmycargo.tech'
   layout 'mailer'
 
+  def scope_for(record:, sandbox: nil)
+    ::Tenants::ScopeService.new(
+      target: ::Tenants::User.find_by(legacy_id: record.id),
+      tenant: ::Tenants::Tenant.find_by(legacy_id: record.tenant_id),
+      sandbox: sandbox
+    ).fetch
+  end
+
   def mail_target_interceptor(user, email)
     if user.internal?
       Settings.emails.booking

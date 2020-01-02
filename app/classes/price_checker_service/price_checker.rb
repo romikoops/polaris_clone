@@ -15,7 +15,9 @@ module PriceCheckerService
       @schedules = shipment_data[:schedules]
       @cargo_units = cargo_unit_const.extract(@shipment_data[:cargo_units])
       tenants_tenant = Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
-      @scope         = ::Tenants::ScopeService.new(target: @user, tenant: tenants_tenant).fetch
+      @scope         = ::Tenants::ScopeService.new(
+        target: ::Tenants::User.find_by(legacy_id: @user.id),
+        tenant: tenants_tenant).fetch
       @pricing_tools = PricingTools.new(shipment: @shipment, user: @user)
     end
 
@@ -34,7 +36,7 @@ module PriceCheckerService
         calc_local_charges
         create_trucking_charges
         calc_cargo_charges
-        @grand_total_charge.update_quote_price!(@itinerary.tenant_id)
+        @grand_total_charge.update_price!
         @grand_total_charge.save
         { quote: @grand_total_charge, service_level: @schedule.trip.tenant_vehicle }
       end
@@ -105,7 +107,7 @@ module PriceCheckerService
           create_charges_from_fees_data!(charge.except('key'), children_charge_category, charge_category, parent_charge)
         end
 
-        parent_charge.update_quote_price!(@shipment_data[:shipment].tenant_id)
+        parent_charge.update_price!
       end
 
       if @shipment_data[:has_on_carriage] || @shipment_data[:import] || @destination_hub.mandatory_charge.import_charges
@@ -135,7 +137,7 @@ module PriceCheckerService
           )
           create_charges_from_fees_data!(charge.except('key'), children_charge_category, charge_category, parent_charge)
         end
-        parent_charge.update_quote_price!(@shipment_data[:shipment].tenant_id)
+        parent_charge.update_price!
       end
     end
 
@@ -159,7 +161,7 @@ module PriceCheckerService
             trucking_charges, children_charge_category, charge_category, parent_charge
           )
         end
-        parent_charge.update_quote_price!(@itinerary.tenant_id)
+        parent_charge.update_price!
       end
     end
 
@@ -210,7 +212,7 @@ module PriceCheckerService
         create_charges_from_fees_data!(charge_result, children_charge_category, charge_category, parent_charge)
       end
 
-      parent_charge.update_quote_price!(@itinerary.tenant_id)
+      parent_charge.update_price!
     end
 
     def create_parent_charge(children_charge_category)

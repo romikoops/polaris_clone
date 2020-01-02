@@ -20,7 +20,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
       expect_any_instance_of(described_class).to receive(:require_non_guest_authentication!).and_return(true)
       expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
       expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(user_double)
-      expect(user_double).to receive(:tenant_scope).and_return('base_pricing' => true)
+      expect_any_instance_of(described_class).to receive(:current_scope).at_least(:once).and_return('base_pricing' => true)
     end
 
     let(:tenant) { FactoryBot.create(:legacy_tenant) }
@@ -118,23 +118,21 @@ RSpec.describe Admin::PricingsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-
+    let(:tenant) { create(:tenant) }
     before do
       expect_any_instance_of(described_class).to receive(:require_authentication!).and_return(true)
       expect_any_instance_of(described_class).to receive(:require_non_guest_authentication!).and_return(true)
       expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
       expect_any_instance_of(described_class).to receive(:current_tenant).at_least(:once).and_return(tenant)
       expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(double('User', guest: false, email: 'test@test.com', id: 1, agency_id: nil, agency: nil, tenant: tenant, groups: nil, company: nil, scope: nil, sandbox: nil))
+
     end
 
     context 'base_pricing' do
       before do
-        expect_any_instance_of(described_class).to receive(:current_scope).at_least(:once).and_return(scope.content.with_indifferent_access)
+        expect_any_instance_of(described_class).to receive(:current_scope).at_least(:once).and_return({ base_pricing: true }.with_indifferent_access)
       end
       let(:base_pricing) { create(:pricings_pricing, tenant: tenant) }
-      let!(:scope) { create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true }) }
 
       it 'deletes the Pricings::Pricing' do
         delete :destroy, params: { 'id' => base_pricing.id, tenant_id: tenant.id }
@@ -145,7 +143,9 @@ RSpec.describe Admin::PricingsController, type: :controller do
 
     context 'legacy_pricing' do
       let(:legacy_pricing) { create(:legacy_pricing, tenant: tenant) }
-
+      before do
+        expect_any_instance_of(described_class).to receive(:current_scope).at_least(:once).and_return({ base_pricing: false }.with_indifferent_access)
+      end
       it 'deletes the Pricings::Pricing' do
         delete :destroy, params: { 'id' => legacy_pricing.id, tenant_id: tenant.id }
         expect(response).to have_http_status(:success)

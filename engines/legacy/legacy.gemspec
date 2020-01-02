@@ -19,8 +19,9 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'core'
 
-  s.add_dependency 'paranoia'
+  s.add_dependency 'fixer_currency', '~> 3.4'
   s.add_dependency 'geocoder'
+  s.add_dependency 'paranoia'
   s.add_dependency 'pg_search', '~> 2.3.0'
 
   Gemhelper.common_gems(s)

@@ -12,7 +12,10 @@ class BackfillChargeBreakdownValidUntil < ActiveRecord::Migration[5.2]
       trip = shipment.trip
       next if trip.blank?
 
-      base_pricing_enabled = user.tenant_scope['base_pricing']
+      base_pricing_enabled = Tenants::ScopeService.new(
+        target: Tenants::User.find_by(legacy_id: user.id),
+        tenant: Tenants::Tenant.find_by(legacy_id: user.tenant_id)
+      ).fetch(:base_pricing)
       cargo_classes = shipment.cargo_units.pluck(:cargo_class)
       start_date = shipment.planned_etd || shipment.desired_start_date || shipment.booking_placed_at
       end_date = shipment.planned_eta || shipment.desired_start_date || shipment.booking_placed_at

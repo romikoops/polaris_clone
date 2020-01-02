@@ -73,7 +73,7 @@ module AdmiraltyTenants
         patch :update, params: { id: tenant.id, tenant: tenant_params, max_dimensions: updated_max_bundle }
 
         expect(response).to redirect_to("/tenants/#{tenant.id}")
-        expect(::Tenants::Tenant.find(tenant.id).legacy.tenants_scope).to eq('foo' => true)
+        expect(::Tenants::Tenant.find(tenant.id).scope.content).to eq('foo' => true)
         expect(::Legacy::MaxDimensionsBundle.find(max_bundle.id).dimension_x).to eq(10)
       end
     end

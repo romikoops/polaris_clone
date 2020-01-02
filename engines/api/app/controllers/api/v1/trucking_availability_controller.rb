@@ -54,7 +54,10 @@ module Api
       end
 
       def base_pricing_enabled
-        Tenants::ScopeService.new(target: current_user, tenant: current_tenant).fetch(:base_pricing)
+        Tenants::ScopeService.new(
+          target: current_user,
+          tenant: current_tenant
+        ).fetch(:base_pricing)
       end
 
       def address

@@ -7,7 +7,7 @@ module Integrations
     RSpec.describe Sender do
       describe 'Sending the json  chain.io' do
         let(:tenant) { FactoryBot.create(:legacy_tenant) }
-        let(:tenants_tenant) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
+        let(:tenants_tenant) { Tenants::Tenant.find_by(legacy: tenant) }
         let!(:scope) {
           FactoryBot.create(:tenants_scope, target: tenants_tenant,
                                             content: {

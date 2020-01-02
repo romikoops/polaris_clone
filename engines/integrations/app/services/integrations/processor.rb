@@ -9,7 +9,9 @@ module Integrations
     end
 
     def self.chainio_integration_enabled?(tenant_id:)
-      Tenants::ScopeService.new(tenant: tenant_id).fetch(:integrations).dig(:chainio, :api_key).present?
+      Tenants::ScopeService.new(
+        tenant: Tenants::Tenant.find(tenant_id)
+      ).fetch(:integrations).dig(:chainio, :api_key).present?
     end
   end
 end

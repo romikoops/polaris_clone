@@ -15,7 +15,7 @@ class QuoteMailer < ApplicationMailer
     @theme = @user.tenant.theme
     @email = email[/[^@]+/]
     @content = Content.get_component('QuotePdf', @user.tenant.id)
-    @scope = ::Tenants::ScopeService.new(target: @user, sandbox: sandbox).fetch
+    @scope = scope_for(record: @user, sandbox: sandbox)
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipments.first.mode_of_transport}.png"
     ).read
@@ -51,7 +51,7 @@ class QuoteMailer < ApplicationMailer
     @quotes = pdf_service.quotes_with_trip_id(@quotation, @shipments)
     @theme = @user.tenant.theme
     @content = Content.get_component('QuotePdf', @user.tenant.id)
-    @scope = ::Tenants::ScopeService.new(target: @user).fetch
+    @scope = scope_for(record: @user, sandbox: sandbox)
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
     document = PdfService.new(user: @user, tenant: @user.tenant).admin_quotation(quotation: @quotation, shipment: shipment)&.attachment
     attachments[pdf_name] = document if document.present?
@@ -83,7 +83,7 @@ class QuoteMailer < ApplicationMailer
       color: @user.tenant.theme['colors']['primary'],
       name: 'quotation',
       remarks: Remark.where(tenant_id: @user.tenant_id, sandbox: sandbox).order(order: :asc),
-      scope: ::Tenants::ScopeService.new(target: @user, sandbox: sandbox).fetch
+      scope: scope_for(record: @user, sandbox: sandbox)
     )
     quotation.generate
   end

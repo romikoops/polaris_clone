@@ -7,7 +7,9 @@ module Integrations
 
       def initialize(data:, tenant_id:)
         @body = data
-        @chainio_configs = Tenants::ScopeService.new(tenant: tenant_id).fetch(:integrations).dig(:chainio)
+        @chainio_configs = Tenants::ScopeService.new(
+          tenant: Tenants::Tenant.find(tenant_id)
+        ).fetch(:integrations).dig(:chainio)
       end
 
       def send_shipment

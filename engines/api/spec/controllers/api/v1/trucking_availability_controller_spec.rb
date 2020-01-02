@@ -6,7 +6,7 @@ module Api
   RSpec.describe V1::TruckingAvailabilityController, type: :controller do
     routes { Engine.routes }
     let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenant) { Tenants::Tenant.create(legacy: legacy_tenant) }
+    let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
     let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: legacy_tenant) }
 
     let(:user) { FactoryBot.create(:tenants_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', tenant: tenant) }
@@ -31,6 +31,9 @@ module Api
                                           'country_code' => 'SE',
                                           'postal_code' => '43813'
                                         ])
+
+        expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(user)
+        expect_any_instance_of(described_class).to receive(:current_tenant).at_least(:once).and_return(tenant)
       end
 
       context 'when trucking is available' do

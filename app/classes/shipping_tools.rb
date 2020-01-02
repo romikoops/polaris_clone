@@ -51,7 +51,11 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
   end
 
   def self.create_shipment(details, current_user, sandbox = nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Metrics/MethodLength
-    scope = Tenants::ScopeService.new(target: current_user).fetch
+    scope = Tenants::ScopeService.new(
+      target: ::Tenants::User.find_by(legacy_id: current_user.id),
+      tenant: ::Tenants::Tenant.find_by(legacy_id: current_tenant.id),
+      sandbox: sandbox
+    ).fetch
     raise ApplicationError::NotLoggedIn if scope[:closed_shop] && current_user.guest
 
     tenant = current_user.tenant
@@ -145,7 +149,10 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
   end
 
   def self.get_offers(params, current_user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
-    scope = Tenants::ScopeService.new(target: current_user).fetch
+    scope = Tenants::ScopeService.new(
+      target: ::Tenants::User.find_by(legacy_id: current_user.id),
+      tenant: ::Tenants::Tenant.find_by(legacy_id: current_user.tenant_id)
+    ).fetch
     raise ApplicationError::NotLoggedIn if scope[:closed_after_map] && current_user.guest
 
     shipment = Shipment.where(sandbox: sandbox).find(params[:shipment_id])
@@ -167,7 +174,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
         offer_calculator.detailed_schedules.map(&:deep_stringify_keys!)
       )
     end
-    if ::Tenants::ScopeService.new(target: current_user).fetch(:email_all_quotes)
+    if scope.fetch(:email_all_quotes)
       QuoteMailer.quotation_admin_email(quote, offer_calculator.shipment).deliver_later
     end
 
@@ -713,7 +720,9 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
 
   def self.save_pdf_quotes(shipment, tenant, schedules, sandbox = nil)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules, sandbox)
-    send_on_download = ::Tenants::ScopeService.new(target: shipment.user).fetch(:send_email_on_quote_download)
+    send_on_download = ::Tenants::ScopeService.new(
+      target: ::Tenants::User.find_by(legacy_id: shipment.user.id)
+    ).fetch(:send_email_on_quote_download)
     QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_download
     PdfService.new(user: shipment.user, tenant: tenant).quotation_pdf(quotation: main_quote)
   end
@@ -721,7 +730,10 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
   def self.save_and_send_quotes(shipment, schedules, email, sandbox = nil)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules, sandbox)
     QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote, sandbox).deliver_later
-    send_on_quote = ::Tenants::ScopeService.new(target: shipment.user, sandbox: sandbox).fetch(:send_email_on_quote_email)
+    send_on_quote = ::Tenants::ScopeService.new(
+      target: ::Tenants::User.find_by(legacy_id: shipment.user.id),
+      sandbox: sandbox
+    ).fetch(:send_email_on_quote_email)
     QuoteMailer.quotation_admin_email(main_quote, sandbox).deliver_later if send_on_quote
   end
 

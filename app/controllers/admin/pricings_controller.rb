@@ -349,7 +349,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def pricings_based_on_scope(itinerary)
-    pricings = current_user.tenant_scope['base_pricing'] ? itinerary.rates : itinerary.pricings
+    pricings = current_scope['base_pricing'] ? itinerary.rates : itinerary.pricings
     pricings.where(sandbox: @sandbox)
   end
 end

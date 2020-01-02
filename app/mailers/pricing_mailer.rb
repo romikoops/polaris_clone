@@ -11,7 +11,7 @@ class PricingMailer < ApplicationMailer
     @itinerary = @pricing.itinerary
     @tenant = Tenant.find(tenant_id)
     @theme = @tenant.theme
-    @scope = ::Tenants::ScopeService.new(target: @user).fetch
+    @scope = scope_for(record: @user)
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@itinerary.mode_of_transport}.png"
     ).read

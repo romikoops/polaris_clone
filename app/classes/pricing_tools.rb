@@ -7,7 +7,10 @@ class PricingTools # rubocop:disable Metrics/ClassLength
   def initialize(user:, shipment: nil, sandbox: nil)
     @user = user
     @shipment = shipment
-    @scope = @user.tenant_scope
+    @scope = Tenants::ScopeService.new(
+      target: Tenants::User.find_by(legacy_id: @user.id),
+      tenant: Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
+    ).fetch
     @sandbox = sandbox
   end
 

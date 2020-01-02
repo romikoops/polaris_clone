@@ -31,7 +31,10 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @has_legacy_charges = {}
     @notes = {}
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
-    @scope = ::Tenants::ScopeService.new(target: @shipment.user, tenant: tenants_tenant).fetch
+    @scope = ::Tenants::ScopeService.new(
+      target: ::Tenants::User.find_by(legacy_id: @shipment.user.id),
+      tenant: tenants_tenant
+    ).fetch
     @pricing_data = {}
 
     @cargo_data = {

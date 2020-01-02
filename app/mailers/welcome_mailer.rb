@@ -11,7 +11,7 @@ class WelcomeMailer < ApplicationMailer
     @tenant = @user.tenant
     @theme = @tenant.theme
     @content = Content.get_component('WelcomeMail', @tenant.id)
-    @scope = ::Tenants::ScopeService.new(target: @user).fetch
+    @scope = ::Tenants::ScopeService.new(target: ::Tenants::User.find_by(legacy_id: @user.id)).fetch
     attachments.inline['logo.png'] = URI.try(:open, @theme['emailLogo']).try(:read)
 
     attachments.inline['ngl_welcome_image.jpg'] = URI.open(

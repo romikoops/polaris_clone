@@ -2,8 +2,8 @@
 
 module Validator
   class Itinerary
-    attr_reader :itinerary, :tenant_vehicles, :origin_hub, :destination_hub, :date_range, :tenant_vehicle_lookup, :tenant, :groups,
-                :pricings, :origin_local_charges, :destination_local_charges, :tenant_vehicles, :scope
+    attr_reader :itinerary, :tenant_vehicles, :origin_hub, :destination_hub, :date_range, :tenant_vehicle_lookup,
+                :tenant, :groups, :pricings, :origin_local_charges, :destination_local_charges, :tenant_vehicles, :scope
 
     def initialize(itinerary:, user:)
       @itinerary = itinerary
@@ -11,7 +11,10 @@ module Validator
       @destination_hub = itinerary.hubs.last
       @legacy_tenant = itinerary.tenant
       @tenant = Tenants::Tenant.find_by(legacy_id: @legacy_tenant.id)
-      @scope = Tenants::ScopeService.new(target: user, tenant: itinerary.tenant).fetch
+      @scope = Tenants::ScopeService.new(
+        target: ::Tenants::User.find_by(legacy_id: user),
+        tenant: ::Tenants::Tenant.find_by(legacy_id: itinerary.tenant.id)
+      ).fetch
       @date_range = (Date.today..Date.today + 30.days)
     end
 
@@ -34,9 +37,9 @@ module Validator
 
     def groups
       ids = if scope['dedicated_pricings_only'] || scope['display_itineraries_with_rates']
-        pricings.pluck(:group_id)
-      else
-        pricings.pluck(:group_id) | origin_local_charges.pluck(:group_id) | destination_local_charges.pluck(:group_id)
+              pricings.pluck(:group_id)
+            else
+              pricings.pluck(:group_id) | origin_local_charges.pluck(:group_id) | destination_local_charges.pluck(:group_id)
       end
       @groups ||= Tenants::Group.where(tenant: tenant, id: ids)
     end
@@ -60,7 +63,7 @@ module Validator
       tenant_vehicle_lookup.map do |group_id, tenant_vehicle_and_cargo_classes|
         results = tenant_vehicle_and_cargo_classes.map do |tenant_vehicle_and_cargo_class|
           tenant_vehicle_id, cargo_class = tenant_vehicle_and_cargo_class
-          load_type = %w(cargo_item lcl).include?(cargo_class) ? 'cargo_item' : 'container'
+          load_type = %w[cargo_item lcl].include?(cargo_class) ? 'cargo_item' : 'container'
           {
             cargo_class: cargo_class,
             origin_local_charges: status_result(association: origin_local_charges.where(group_id: group_id, tenant_vehicle_id: tenant_vehicle_id, load_type: cargo_class)),

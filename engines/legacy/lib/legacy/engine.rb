@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require 'core'
-require 'pg_search'
+
 require 'geocoder'
+require 'money'
+require 'money/bank/fixer_currency'
 require 'paranoia'
+require 'pg_search'
 
 
 module Legacy

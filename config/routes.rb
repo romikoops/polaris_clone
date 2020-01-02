@@ -216,7 +216,7 @@ Rails.application.routes.draw do
     get 'contacts/validations/form', to: 'contacts#is_valid'
     post 'contacts/delete_contact_address/:id', to: 'contacts#delete_contact_address'
     post 'shipments/:shipment_id/upload/:type', to: 'shipments#upload_document'
-    post 'search/hscodes', to: 'search#search_hs_codes'
+
     get '/documents/download/:document_id',
         to: 'documents#download_redirect', as: :document_download
     get '/documents/delete/:document_id', to: 'documents#delete', as: :document_delete
@@ -231,7 +231,6 @@ Rails.application.routes.draw do
     get 'currencies/get', to: 'users#currencies'
     post 'currencies/set', to: 'users#set_currency'
 
-    get 'search/hscodes/:query' => 'search#search_hs_codes'
     post 'super_admins/new_demo' => 'super_admins#new_demo_site'
     post 'super_admins/upload_image' => 'super_admins#upload_image'
     get 'messaging/get' => 'notifications#index'

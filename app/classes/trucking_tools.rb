@@ -19,6 +19,10 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
     @cargos = cargos
     @kms = kms
     @carriage = carriage
+    @scope = ::Tenants::ScopeService.new(
+      target: Tenants::User.find_by(legacy_id: user.id),
+      tenant: Tenants::Tenant.find_by(legacy_id: tenant.id)
+    ).fetch
   end
 
   def perform
@@ -30,7 +34,7 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
                    end
 
     trucking_pricings = {}
-    scope = ::Tenants::ScopeService.new(target: user).fetch
+
     return {} if trucking_pricing['rates'].empty?
 
     cargo_object.each do |stackable_type, cargo_values|
@@ -302,7 +306,7 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
         'number_of_items' => 0
       }
     }
-    consolidation = ::Tenants::ScopeService.new(target: cargos.first.shipment.user).fetch(:consolidation)
+    consolidation = scope.fetch(:consolidation)
 
     if consolidation.dig('trucking', 'load_meterage_only')
       consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
@@ -590,4 +594,9 @@ class TruckingTools # rubocop:disable Metrics/ClassLength
       result
     end
   end
+
+  private
+
+  attr_accessor :scope
+
 end
