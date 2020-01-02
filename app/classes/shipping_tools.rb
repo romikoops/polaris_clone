@@ -53,7 +53,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
   def self.create_shipment(details, current_user, sandbox = nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Metrics/MethodLength
     scope = Tenants::ScopeService.new(
       target: ::Tenants::User.find_by(legacy_id: current_user.id),
-      tenant: ::Tenants::Tenant.find_by(legacy_id: current_tenant.id),
+      tenant: ::Tenants::Tenant.find_by(legacy_id: current_user.tenant.id),
       sandbox: sandbox
     ).fetch
     raise ApplicationError::NotLoggedIn if scope[:closed_shop] && current_user.guest
