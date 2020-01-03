@@ -179,8 +179,6 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                currencies += charge_currencies.flatten
                currencies.compact.uniq.count > 1
              end
-
-    return true if result.present? || (currencies.uniq.first != shipment.user.currency)
     result.present?
   end
 

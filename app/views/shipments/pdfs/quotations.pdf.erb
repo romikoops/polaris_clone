@@ -136,7 +136,7 @@
             <% shipment_rate_data.keys.sort.each do |cargo_class| %>
               <div class="rate_section">
                 <p class="rate_header"><%= cargo_class.humanize.upcase %></p>
-                <p class="rate_value"><%= '%.2f' % shipment_rate_data.dig(cargo_class, 'total', 'value').to_d %></p>
+                <p class="rate_value"><%= shipment_rate_data.dig(cargo_class, 'total', 'value').to_d.round(2)%></p>
               </div>
               <% end %>
           </div>
@@ -332,11 +332,10 @@
                                  .values
                                  .flat_map(&:keys).none? {|k| k.include?('unknown')}
               end %>
-
             <% if charge_key != 'cargo' &&
                   no_custom_fees &&
                   charge != "Grand Total" &&
-                  !scope['hide_sub_totals'] || (charge_key == 'cargo' && !hide_cargo_sub_totals && no_custom_fees && !scope['hide_sub_totals'])
+                  !scope['hide_grand_total'] || (charge_key == 'cargo' && !hide_cargo_sub_totals && no_custom_fees)
             %>
               <h3><%= '%.2f' % charge["total"]["value"].to_f %>&nbsp;<%= charge["total"]["currency"] %></h3>
             <% end %>
@@ -427,11 +426,11 @@
                         </td>
                         <% if sub_charge["key"].include?('unknown') %>
                           <td class="table-value"></td>
-                        <% elsif sub_charge["value"] %>
+                        <% elsif sub_charge["value"] && !scope['hide_sub_totals'] %>
                           <td class="table-value"><span> <%= '%.2f' % sub_charge["value"].to_f %>&nbsp;<%= sub_charge["currency"] %></span></td>
-                        <% elsif scope['cargo_price_notes'] && scope['cargo_price_notes'][charge_key] %>
+                        <% elsif scope['hide_sub_totals'] && scope['cargo_price_notes'] && scope['cargo_price_notes'][charge_key] %>
                           <td class="table-value"><span> <%= scope['cargo_price_notes'][charge_key.to_s] %></span></td>
-                        <% elsif (!scope['cargo_price_notes'] || scope['cargo_price_notes'] && !scope['cargo_price_notes'][charge_key]) %>
+                        <% elsif !scope['hide_sub_totals'] && (!scope['cargo_price_notes'] || scope['cargo_price_notes'] && !scope['cargo_price_notes'][charge_key]) %>
                           <td class="table-value"><span> <%= '%.2f' % sub_charge["total"]["value"] %>&nbsp;<%= sub_charge["total"]["currency"] %></span></td>
                         <% end %>
                       </tr>
@@ -494,13 +493,11 @@
           <br>
         <% end %>
       </div>
-      <% if scope["quote_notes"].present? %>
+      <% if scope["quote_notes"] %>
         <div class="tenant-notes-row">
-          <% (scope["quote_notes"] || []).each do |quote_note| %>
-            <p class="">
-              <%= quote_note %>
-            </p>
-          <% end %>
+          <p class="">
+            <%= scope["quote_notes"] || "" %>
+          </p>
         </div>
       <% end %>
     </div>
