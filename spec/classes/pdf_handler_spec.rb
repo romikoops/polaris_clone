@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe PdfHandler do
-  let(:tenant) { create(:tenant) }
-  let(:user) { create(:user, tenant: tenant) }
+  let(:tenant) { create(:tenant, currency: 'USD') }
+  let(:user) { create(:user, tenant: tenant, currency: 'USD') }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let!(:shipment) { create(:shipment, tenant: tenant, user: user, load_type: 'cargo_item') }
   let!(:agg_shipment) { create(:shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_aggregated_cargo: true) }

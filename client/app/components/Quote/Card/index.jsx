@@ -71,9 +71,10 @@ class QuoteCard extends PureComponent {
   }
 
   shouldHideGrandTotal () {
-    const { result, tenant } = this.props
+    const { result, tenant, user } = this.props
     const { quote } = result
     const { scope } = tenant
+
     if (scope.hide_grand_total) return true
     if (scope.hide_converted_grand_total) {
       const topKeys = ['cargo', 'trucking_pre', 'trucking_on', 'import', 'export']
@@ -104,8 +105,9 @@ class QuoteCard extends PureComponent {
           }
         }
       })
-
-      return currencies.filter(val => val).filter(onlyUnique).length > 1
+      const multiCurrency = currencies.filter(val => val).filter(onlyUnique).length > 1
+      
+      return multiCurrency || (!multiCurrency && currencies[0] !== user.currency)
     }
 
     return false
@@ -435,6 +437,7 @@ QuoteCard.defaultProps = {
   result: {
     notes: []
   },
+  user: {},
   cargo: [],
   selectResult: null,
   onScheduleRequest: null,

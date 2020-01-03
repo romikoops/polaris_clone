@@ -265,6 +265,21 @@ exports[`selectedOffers is truthy 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -574,6 +589,21 @@ exports[`selectedOffers is truthy 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -1292,6 +1322,21 @@ exports[`shallow render 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -1601,6 +1646,21 @@ exports[`shallow render 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -2343,6 +2403,21 @@ exports[`shipmentData.results[].meta.pricing_rate_data is falsy 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -2653,6 +2728,21 @@ exports[`shipmentData.results[].meta.pricing_rate_data is falsy 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -3394,6 +3484,21 @@ exports[`shipmentData.results[].meta.pricing_rate_data is truthy 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -3703,6 +3808,21 @@ exports[`shipmentData.results[].meta.pricing_rate_data is truthy 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -4443,6 +4563,21 @@ exports[`shipmentData.schedules is falsy 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -4752,6 +4887,21 @@ exports[`shipmentData.schedules is falsy 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -5603,6 +5753,21 @@ exports[`state.showModal is true 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -5912,6 +6077,21 @@ exports[`state.showModal is true 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -6652,6 +6832,21 @@ exports[`tenant.scope.hide_grand_total is false 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>
@@ -6961,6 +7156,21 @@ exports[`tenant.scope.hide_grand_total is false 1`] = `
               }
             }
             truckingTime={55}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
             validUntil={null}
           />
         </div>

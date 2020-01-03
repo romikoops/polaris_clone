@@ -176,10 +176,11 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                                    else
                                      charge_keys.map { |k| charge[k]['total']['currency'] }
                                    end
-               currencies += charge_currencies.flatten
-               currencies.compact.uniq.count > 1
+               currencies += charge_currencies.flatten.compact
+               currencies.uniq.count > 1
              end
-    result.present?
+
+    return result.present? || (currencies.uniq.first != shipment.user.currency)
   end
 
   def calculate_cargo_data(shipment)
