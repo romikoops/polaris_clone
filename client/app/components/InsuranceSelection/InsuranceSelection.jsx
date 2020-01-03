@@ -22,6 +22,8 @@ class InsuranceSelection extends Component {
       insuranceBool
     } = this.props
 
+    const insurancePercentage = (parseFloat(tenant.scope.transport_insurance_rate) * 100)
+
     return (
       <div className="flex-100">
         <div className="flex-100 layout-row layout-align-center padd_top">
@@ -65,7 +67,7 @@ class InsuranceSelection extends Component {
               <div className="flex-75 layout-row layout-align-start-center">
                 <label htmlFor="yes_insurance" className="pointy">
                   <b>{t('common:yes')}</b>
-                  {t('cargo:quoteInsurance', { tenantRate: tenant.scope.transport_insurance_rate })}
+                  {t('cargo:quoteInsurance', { tenantRate: insurancePercentage })}
                 </label>
               </div>
             </div>
