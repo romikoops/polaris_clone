@@ -16,7 +16,6 @@ module Legacy
     has_many :cargo_items, class_name: 'Legacy::CargoItem'
     has_many :cargo_item_types, through: :cargo_items, class_name: 'Legacy::CargoItemType'
     has_one :aggregated_cargo, class_name: 'Legacy::AggregatedCargo'
-
     delegate :mode_of_transport, to: :itinerary, allow_nil: true
 
     def cargo_units

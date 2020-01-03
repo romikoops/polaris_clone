@@ -36,7 +36,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       tenant: tenants_tenant
     ).fetch
     @pricing_data = {}
-
+    @fee_keys_and_names = {}
     @cargo_data = {
       vol: {},
       kg: {},
@@ -49,6 +49,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       calculate_cargo_data(s)
       calculate_pricing_data(s)
       prep_notes(s)
+      generate_fee_string(s)
       @hide_grand_total[s.id] = hide_grand_total?(s)
     end
     @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
@@ -68,12 +69,78 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     countries = nexii.map(&:country)
     legacy_pricings = shipment.itinerary&.pricings&.for_cargo_classes(shipment.cargo_classes)
     pricings = shipment.itinerary&.rates&.for_cargo_classes(shipment.cargo_classes)
-    @notes[shipment.id] = Note.where(
-      target: hubs | nexii | countries | pricings | legacy_pricings,
+    notes_association = Note.where(
       tenant_id: shipment.tenant_id,
       transshipment: false,
       remarks: false
     )
+    @notes[shipment.id] = notes_association
+                          .where(target: hubs | nexii | countries | legacy_pricings)
+                          .or(notes_association.where(pricings_pricing_id: pricings.ids))
+  end
+
+  def generate_fee_string(shipment)
+    shipment
+      .selected_offer
+      .except('total', 'edited_total', 'name', 'trip_id', 'valid_until')
+      .each do |charge_section_key, charge_section|
+        charge_section_keys = charge_section
+                              .except('total', 'edited_total', 'name')
+                              .keys
+        charge_section_keys.each do |subsection_key|
+          charge_section[subsection_key]
+            .except('total', 'edited_total', 'name')
+            .each do |charge_key, fee_value|
+            adjusted_key = extract_key(
+              section_key: charge_section_key,
+              key: charge_key,
+              mot: shipment.mode_of_transport
+            )
+            adjusted_name = extract_name(
+              section_key: charge_section_key,
+              name: fee_value.fetch('name'),
+              mot: shipment.mode_of_transport
+            )
+            @fee_keys_and_names[charge_key] = determine_render_string(
+              key: adjusted_key,
+              name: adjusted_name
+            )
+        end
+      end
+    end
+  end
+
+  def extract_key(section_key:, key:, mot:)
+    if section_key == 'cargo' && @scope['fine_fee_detail'] && key.include?('unknown')
+      "#{mot.capitalize} Freight"
+    elsif section_key == 'cargo' && @scope['fine_fee_detail'] && key.include?('included')
+      key.sub('included_', '')&.upcase.to_s
+    else
+      key.tr('_', ' ').upcase
+    end
+  end
+
+  def extract_name(section_key:, name:, mot:)
+    if section_key == 'cargo' && @scope['consolidated_cargo']
+      'Consolidated Freight Rate'
+    elsif section_key == 'cargo' && !@scope['fine_fee_detail']
+      "#{mot&.capitalize} Freight Rate"
+    elsif %w[trucking_on trucking_pre].include?(section_key)
+      'Trucking Rate'
+    else
+      name
+    end
+  end
+
+  def determine_render_string(key:, name:)
+    case @scope['fee_detail']
+    when 'key'
+      key.tr('_', ' ').upcase
+    when 'key_and_name'
+      "#{key.upcase} - #{name}"
+    when 'name'
+      name
+    end
   end
 
   def hide_grand_total?(shipment) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -88,7 +155,8 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                charge_keys = charge
                              .except('total', 'edited_total', 'name')
                              .keys
-               charge_currencies = if %w(export import).include?(charge_key)
+
+               charge_currencies = if %w[export import].include?(charge_key)
                                      charge_keys.map { |k| charge[k]['currency'] }
                                    elsif charge_key == 'cargo'
                                      charge_keys
@@ -98,7 +166,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                                            .keys
                                            .reject { |rk| rk.include?('unknown') }
                                            .map do |ck|
-                                             if %w(cargo_item container).include?(k)
+                                             if %w[cargo_item container].include?(k)
                                                charge.dig(k, 'currency')
                                              else
                                                charge.dig(k, ck, 'currency')
@@ -272,7 +340,8 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         scope: @scope,
         cargo_units: @cargo_units,
         hub_names: @hub_names,
-        note_remarks: @note_remarks
+        note_remarks: @note_remarks,
+        fee_keys_and_names: @fee_keys_and_names
       }
     )
 

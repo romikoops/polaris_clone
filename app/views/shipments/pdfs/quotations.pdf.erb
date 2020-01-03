@@ -123,6 +123,7 @@
           </div>
         <% end %>
         <% if scope['show_rate_overview'] %>
+          <% shipment_rate_data = pricing_data[quote['shipment_id']] %>
           <div class="rate_wrapper">
             <div class="rate_section">
               <p class="rate_header">Freight Charges:</p>
@@ -130,12 +131,12 @@
             </div>
             <div class="rate_section">
               <p class="rate_header">Currency</p>
-              <p class="rate_value"><%= pricing_data[quote['shipment_id']].values.first.dig('total', 'currency')%></p>
+              <p class="rate_value"><%= shipment_rate_data.values.first.dig('total', 'currency')%></p>
             </div>
-            <% pricing_data[quote['shipment_id']].keys.sort.each do |cargo_class| %>
+            <% shipment_rate_data.keys.sort.each do |cargo_class| %>
               <div class="rate_section">
                 <p class="rate_header"><%= cargo_class.humanize.upcase %></p>
-                <p class="rate_value"><%= pricing_data[quote['shipment_id']].dig(cargo_class, 'total', 'value')%></p>
+                <p class="rate_value"><%= shipment_rate_data.dig(cargo_class, 'total', 'value').to_d.round(2)%></p>
               </div>
               <% end %>
           </div>
@@ -214,7 +215,7 @@
                   <tr>
                     <td class="table-title"><p>Gross&nbsp;Weight&nbsp;per&nbsp;Container</p></td>
                     <td class="table-value">
-                      <% gw_value = weight_units['unit'] == 'kg' ? container.gross_weight : (container.gross_weight / 1000) %>
+                      <% gw_value = weight_units['unit'] == 'kg' ? container.payload_in_kg : (container.payload_in_kg / 1000) %>
                       <span>
                         <%="#{"%.#{weight_units['decimals']}f" % gw_value} #{weight_units['unit']}" %>
                       </span>
@@ -224,7 +225,7 @@
                 <tr>
                   <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
                   <td class="table-value">
-                    <% tgw_value = weight_units['unit'] == 'kg' ? container.gross_weight * container.quantity : (container.gross_weight * container.quantity / 1000) %>
+                    <% tgw_value = weight_units['unit'] == 'kg' ? container.payload_in_kg * container.quantity : (container.payload_in_kg * container.quantity / 1000) %>
                     <span><%="#{"%.#{weight_units['decimals']}f" % tgw_value} #{weight_units['unit']}" %></span>
                   </td>
                 </tr>
@@ -378,12 +379,24 @@
                     desc = "#{unit_id.titleize} Fees"
                   end
                 %>
-                <% if desc && ['import', 'export'].include?(charge_key) %>
+
                   <div class="cargo_title">
                     <%= unit ? "#{desc} x #{unit.quantity}" : "#{desc}" %>
                   </div>
-                <% end %>
+
                 <% sorted_charges.each do |currency_key, sub_charges| %>
+                  <%
+                    sub_charge_groups = sub_charges.group_by do |sub_charge|
+                      case sub_charge['key']
+                      when /included/
+                        :included
+                      when /unknown/
+                        :unknown
+                      else
+                        :standard
+                      end
+                    end
+                  %>
                   <% if (charge_key != 'cargo' || (charge_key == 'cargo' && !hide_cargo_sub_totals)) &&
                       sub_charges.none?{|c| c['key'].include?('unknown')}%>
                     <div class="subtotal-currency-single">
@@ -402,31 +415,9 @@
                     </div>
                   <% end %>
                   <table class="data-table">
-                    <% sub_charges.each_with_index do |sub_charge, i| %>
+                    <% sub_charge_groups[:standard].each_with_index do |sub_charge, i| %>
                       <tr>
-                        <%
-                            sub_charge_name = if 'cargo' == charge_key && scope['consolidated_cargo']
-                              "Consolidated Freight Rate"
-                            elsif 'cargo' == charge_key && scope['fine_fee_detail'] && sub_charge['key'].include?('unknown')
-                              "#{quote['mode_of_transport']&.capitalize} Freight: #{sub_charge['name']}"
-                            elsif 'cargo' == charge_key && scope['fine_fee_detail'] && sub_charge['key'].include?('included')
-                              "#{sub_charge['key'].delete('included_')}: #{sub_charge['name']}"
-                            elsif 'cargo' == charge_key && !scope['fine_fee_detail']
-                              "#{quote['mode_of_transport']&.capitalize} Freight Rate #{i + 1}"
-                            elsif ['trucking_on', 'trucking_pre'].include?(charge_key)
-                              'Trucking Rate'
-                            else
-                              case scope['fee_detail']
-                                when 'key'
-                                  sub_charge['key'].gsub('_', ' ').upcase
-                                when 'key_and_name'
-                                  "#{sub_charge['key'].upcase} - #{sub_charge['name']}"
-                                when 'name'
-                                  sub_charge['name']
-                                end
-                            end
-                        %>
-                        <td class="table-title"><p><%= sub_charge_name %></p></td>
+                        <td class="table-title"><p><%= fee_keys_and_names[sub_charge['key']] %></p></td>
                         <td class="table-quantity">
                           <% if 'cargo' == charge_key && scope['fine_fee_detail'] %>
 
@@ -445,6 +436,43 @@
                       </tr>
                     <% end %>
                   </table>
+                  <% if sub_charge_groups[:unknown].present? %>
+                    <table class="data-table">
+                      <div class="subtotal-currency-single">
+                        <h4>Excluded Fees:</h4>
+                      </div>
+                      <% sub_charge_groups[:unknown].each_with_index do |sub_charge, i| %>
+                        <tr>
+                          <td class="table-title"><p><%= fee_keys_and_names[sub_charge['key']] %></p></td>
+                          <td class="table-quantity">
+                            <% if 'cargo' == charge_key && scope['fine_fee_detail'] %>
+
+                              <p><%= cargo_data[:item_strings][quote['shipment_id']][sub_charge['item_id']] %></p>
+                            <% end %>
+                          </td>
+                          <td class="table-value"></td>
+                        </tr>
+                      <% end %>
+                    </table>
+                  <% end %>
+                  <% if sub_charge_groups[:included].present? %>
+                    <table class="data-table">
+                      <div class="subtotal-currency-single">
+                        <h4>Included Fees:</h4>
+                      </div>
+                      <% sub_charge_groups[:included].each_with_index do |sub_charge, i| %>
+                        <tr>
+                          <td class="table-title"><p><%= fee_keys_and_names[sub_charge['key']] %></p></td>
+                          <td class="table-quantity">
+                            <% if 'cargo' == charge_key && scope['fine_fee_detail'] %>
+                              <p><%= cargo_data[:item_strings][quote['shipment_id']][sub_charge['item_id']] %></p>
+                            <% end %>
+                          </td>
+                          <td class="table-value"></td>
+                        </tr>
+                      <% end %>
+                    </table>
+                  <% end %>
                 <% end %>
               <% end %>
             <% end %>
@@ -462,6 +490,7 @@
       <div class="note-remarks-row">
         <% note_remarks.each do |note_remark| %>
           <p class="note-remark-text"><%= note_remark %></p>
+          <br>
         <% end %>
       </div>
       <% if scope["quote_notes"] %>
