@@ -11,7 +11,7 @@ module DataValidator
       signed_url = get_file_url(args[:key], 'assets.itsmycargo.com')
       @xlsx = open_file(signed_url)
       @shipment_ids_to_destroy = []
-      @user = args[:user] ||= @tenant.users.shipper.first
+      @user = args[:user] || @tenant.users.shipper.first
       @dummy_data = args[:data]
       @validation_results = {}
       @row_keys = {}
@@ -20,7 +20,10 @@ module DataValidator
       @examples = []
       @sheet_rows = []
       tenants_tenant = Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
-      @scope         = ::Tenants::ScopeService.new(target: @user, tenant: tenants_tenant).fetch
+      @scope         = ::Tenants::ScopeService.new(
+        target: ::Tenants::User.find_by(legacy_id: @user.id),
+        tenant: tenants_tenant
+      ).fetch
     end
 
     def perform
@@ -220,7 +223,7 @@ module DataValidator
       @data_for_price_checker[:has_pre_carriage] = example[:data][:pickup_address]
       @data_for_price_checker[:service_level] = @tenant.tenant_vehicles.find_by(
         name: example[:data][:service_level],
-        carrier: Carrier.find_by_name(example[:data][:carrier]),
+        carrier: Carrier.find_by(name: example[:data][:carrier]),
         mode_of_transport: example[:data][:mode_of_transport]
       )
       @data_for_price_checker[:schedules] = prep_faux_schedules(example)
@@ -251,64 +254,64 @@ module DataValidator
       )
       most_diverse_set = pricings_by_cargo_class.values.max_by(&:length)
       other_pricings = pricings_by_cargo_class
-                      .values
-                      .reject { |pricing_group| pricing_group == most_diverse_set }
-                      .flatten
+                       .values
+                       .reject { |pricing_group| pricing_group == most_diverse_set }
+                       .flatten
       if @scope['base_pricing']
-          # Find the group with the most pricings and create the object to be passed on
+        # Find the group with the most pricings and create the object to be passed on
 
-          if most_diverse_set.nil?
-            result_to_return << nil
-          else
-            most_diverse_set.each do |pricing|
-              schedules_for_obj = schedules.dup
-              unless dates[:is_quote]
-                schedules_for_obj.select! do |sched|
-                  sched.etd < pricing[:expiration_date] && sched.etd > pricing[:effective_date]
-                end
-                if schedules_for_obj.empty?
-                  schedules_for_obj = schedules.select do |sched|
-                    sched.closing_date < pricing[:expiration_date] &&
-                      sched.closing_date > pricing[:effective_date]
-                  end
+        if most_diverse_set.nil?
+          result_to_return << nil
+        else
+          most_diverse_set.each do |pricing|
+            schedules_for_obj = schedules.dup
+            unless dates[:is_quote]
+              schedules_for_obj.select! do |sched|
+                sched.etd < pricing[:expiration_date] && sched.etd > pricing[:effective_date]
+              end
+              if schedules_for_obj.empty?
+                schedules_for_obj = schedules.select do |sched|
+                  sched.closing_date < pricing[:expiration_date] &&
+                    sched.closing_date > pricing[:effective_date]
                 end
               end
-              cargo_class_key = pricing[:cargo_class]
-              obj = {
-                pricing_ids: {
-                  cargo_class_key => pricing
-                },
-                schedules: schedules_for_obj
-              }
-
-              other_pricings.each do |other_pricing|
-                other_cargo_class_key = other_pricing[:cargo_class]
-                if other_pricing[:effective_date] < dates[:start_date] &&
-                  other_pricing[:expiration_date] > dates[:end_date]
-                  obj[:pricing_ids][other_cargo_class_key] =
-                    other_pricing
-                end
-                if dates[:start_date] && dates[:end_date] &&
-                  obj[:pricing_ids][other_cargo_class_key].nil? &&
-                  other_pricing[:effective_date] < dates[:start_date] &&
-                  other_pricing[:expiration_date] > dates[:end_date]
-                  obj[:pricing_ids][other_cargo_class_key] =
-                    other_pricing
-                end
-                next unless obj[:pricing_ids][other_cargo_class_key].nil? &&
-                            other_pricing[:effective_date] < obj[:schedules].first.closing_date &&
-                            other_pricing[:expiration_date] > obj[:schedules].last.closing_date
-
-                obj[:pricing_ids][other_cargo_class_key] = other_pricing
-              end
-              result_to_return << obj
             end
+            cargo_class_key = pricing[:cargo_class]
+            obj = {
+              pricing_ids: {
+                cargo_class_key => pricing
+              },
+              schedules: schedules_for_obj
+            }
+
+            other_pricings.each do |other_pricing|
+              other_cargo_class_key = other_pricing[:cargo_class]
+              if other_pricing[:effective_date] < dates[:start_date] &&
+                 other_pricing[:expiration_date] > dates[:end_date]
+                obj[:pricing_ids][other_cargo_class_key] =
+                  other_pricing
+              end
+              if dates[:start_date] && dates[:end_date] &&
+                 obj[:pricing_ids][other_cargo_class_key].nil? &&
+                 other_pricing[:effective_date] < dates[:start_date] &&
+                 other_pricing[:expiration_date] > dates[:end_date]
+                obj[:pricing_ids][other_cargo_class_key] =
+                  other_pricing
+              end
+              next unless obj[:pricing_ids][other_cargo_class_key].nil? &&
+                          other_pricing[:effective_date] < obj[:schedules].first.closing_date &&
+                          other_pricing[:expiration_date] > obj[:schedules].last.closing_date
+
+              obj[:pricing_ids][other_cargo_class_key] = other_pricing
+            end
+            result_to_return << obj
           end
+        end
       else
         if most_diverse_set.nil?
           result_to_return << nil
         else
-          most_diverse_set.each do |pricing|  # rubocop:disable Metrics/BlockLength
+          most_diverse_set.each do |pricing| # rubocop:disable Metrics/BlockLength
             schedules_for_obj = schedules.dup
             unless dates[:is_quote]
               schedules_for_obj.select! do |sched|
@@ -332,14 +335,14 @@ module DataValidator
             other_pricings.each do |other_pricing|
               other_cargo_class_key = other_pricing.try(:cargo_class) || other_pricing.transport_category.cargo_class.to_s
               if other_pricing.effective_date < dates[:start_date] &&
-                other_pricing.expiration_date > dates[:end_date]
+                 other_pricing.expiration_date > dates[:end_date]
                 obj[:pricing_ids][other_cargo_class_key] =
                   other_pricing.id
               end
               if dates[:start_date] && dates[:end_date] &&
-                obj[:pricing_ids][other_cargo_class_key].nil? &&
-                other_pricing.effective_date < dates[:start_date] &&
-                other_pricing.expiration_date > dates[:end_date]
+                 obj[:pricing_ids][other_cargo_class_key].nil? &&
+                 other_pricing.effective_date < dates[:start_date] &&
+                 other_pricing.expiration_date > dates[:end_date]
                 obj[:pricing_ids][other_cargo_class_key] =
                   other_pricing.id
               end
@@ -360,7 +363,7 @@ module DataValidator
     def prep_cargo_units(example)
       data_to_extract = if example[:data][:load_type] == 'cargo_item'
                           example[:data][:cargo_units].map do |cu|
-                            cu[:cargo_item_type_id] = CargoItemType.find_by_description('Pallet').id
+                            cu[:cargo_item_type_id] = CargoItemType.find_by(description: 'Pallet').id
                             cu
                           end
                         else
@@ -385,8 +388,8 @@ module DataValidator
       else
         unique_trips = [
           example[:data][:itinerary]
-          .trips
-          .find_by(tenant_vehicle_id: @data_for_price_checker[:service_level].id)
+            .trips
+            .find_by(tenant_vehicle_id: @data_for_price_checker[:service_level].id)
         ].compact
       end
       unique_trips.map do |trip|
@@ -496,16 +499,16 @@ module DataValidator
     def legacy_charge_shape(result) # rubocop:disable  Metrics/AbcSize
       new_quote = {}
       quote = result[:quote]
-      quote.keys.reject { |k| %i(import export).include?(k) }.each { |k| new_quote[k] = quote[k] }
-      %i(import export).each do |k|
+      quote.keys.reject { |k| %i[import export].include?(k) }.each { |k| new_quote[k] = quote[k] }
+      %i[import export].each do |k|
         next unless quote[k]
 
         new_quote[k] = { total: { value: 0.0, currency: 'USD' } }
-        quote[k].keys.reject { |uk| %i(total edited_total name).include?(uk) }.each do |k_2|
-          quote[k][k_2].keys.reject { |uk| %i(total edited_total name).include?(uk) }
-                      .each { |k_3| new_quote[k][k_3] = quote[k][k_2][k_3] }
+        quote[k].keys.reject { |uk| %i[total edited_total name].include?(uk) }.each do |k_2|
+          quote[k][k_2].keys.reject { |uk| %i[total edited_total name].include?(uk) }
+                       .each { |k_3| new_quote[k][k_3] = quote[k][k_2][k_3] }
         end
-        quote[k].keys.select { |uk| %i(total edited_total name).include?(uk) }.each do |k_2|
+        quote[k].keys.select { |uk| %i[total edited_total name].include?(uk) }.each do |k_2|
           new_quote[k][k_2] = quote[k][k_2]
         end
       end
@@ -556,7 +559,7 @@ module DataValidator
       @validation_results[sheet_name][example_index] = validate_result(results.first, expected_results, example_index, data)
     end
 
-    def sort_pricings(schedules:, user_pricing_id:, cargo_classes:, dates:, dedicated_pricings_only:)  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def sort_pricings(schedules:, user_pricing_id:, cargo_classes:, dates:, dedicated_pricings_only:) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       if @scope['base_pricing']
         return ::Pricings::Finder.new(
           schedules: schedules,
@@ -566,7 +569,7 @@ module DataValidator
           dedicated_pricings_only: dedicated_pricings_only,
           shipment: @shipment,
           sandbox: nil
-          ).perform
+        ).perform
       end
       tenant_vehicle_id = schedules.first.trip.tenant_vehicle_id
       start_date = dates[:start_date]
@@ -624,6 +627,5 @@ module DataValidator
         closing_end_date: closing_end_date
       }
     end
-
   end
 end

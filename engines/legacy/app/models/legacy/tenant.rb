@@ -22,7 +22,6 @@ module Legacy
     def __subdomain
       self['subdomain']
     end
-
   end
 end
 
