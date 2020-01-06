@@ -174,7 +174,7 @@ exports[`shallow rendering 1`] = `
       className="layout-row flex-65 layout-align-start-center"
     >
       <div
-        className="layout-row flex-10"
+        className="layout-row flex-15"
       >
         <div
           className="layout-row layout-align-center-center"

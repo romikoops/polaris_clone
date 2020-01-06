@@ -194,7 +194,7 @@ class UserShipmentCard extends Component {
             ${styles.bottom_box}`}
         >
           <div className="layout-row flex-65 layout-align-start-center">
-            <div className="layout-row flex-10">
+            <div className="layout-row flex-15">
               <div className="layout-row layout-align-center-center">
                 <span className={`${styles.smallText}`}>
                   <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_count}</span>
