@@ -25,6 +25,8 @@ module ExcelDataServices
 
     def append_hub_suffix(raw_name, mot)
       return if raw_name.blank?
+      
+      return raw_name if mot.blank?
 
       "#{raw_name} #{MOT_HUB_NAME_LOOKUP[mot.downcase]}"
     end

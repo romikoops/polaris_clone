@@ -6,6 +6,7 @@ FactoryBot.define do
     association :tenant_vehicle, factory: :legacy_tenant_vehicle
     direction { 'export' }
     load_type { 'lcl' }
+    mode_of_transport { 'ocean' }
     effective_date { Date.today }
     expiration_date { Date.today + 6.months }
     fees do

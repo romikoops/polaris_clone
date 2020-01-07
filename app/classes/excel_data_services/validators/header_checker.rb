@@ -151,6 +151,24 @@ module ExcelDataServices
           unlocode
           note
         ].freeze
+
+        HUBS = %i[
+          status
+          type
+          name
+          locode
+          latitude
+          longitude
+          country
+          full_address
+          photo
+          free_out
+          import_charges
+          export_charges
+          pre_carriage
+          on_carriage
+          alternative_names
+        ].freeze
       end
 
       attr_reader :data_restructurer_name, :errors

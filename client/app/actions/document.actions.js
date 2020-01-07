@@ -72,7 +72,7 @@ function uploadHubs (file) {
     documentService.uploadHubs(file).then(
       (data) => {
         dispatch(success(data))
-        dispatch(adminActions.getHubs(false))
+        dispatch(adminActions.getHubs(1, {}, {}, 15))
       },
       (error) => {
         dispatch(failure(error))

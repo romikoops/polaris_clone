@@ -10,6 +10,7 @@ FactoryBot.define do
 
     trait :gothenburg do
       name { 'Gothenburg' }
+      locode { 'SEGOT' }
       latitude { '57.694253' }
       longitude { '11.854048' }
       association :country, factory: :country_se

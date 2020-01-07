@@ -52,11 +52,6 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     response_handler(resp)
   end
 
-  def download_hubs
-    url = DocumentService::HubsWriter.new(tenant_id: current_user.tenant_id, sandbox: @sandbox).perform
-    response_handler(url: url, key: 'hubs')
-  end
-
   def options_search
     list_options = current_tenant.hubs
                                  .where(sandbox: @sandbox)
@@ -70,7 +65,9 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   def set_status
     hub = Hub.find_by(id: params[:hub_id], sandbox: @sandbox)
     hub.toggle_hub_status!
-    response_handler(data: hub.as_options_json, address: hub.address.to_custom_hash)
+    response_handler(
+      data: hub.as_options_json, address: hub.address.to_custom_hash
+    )
   end
 
   def delete
@@ -99,16 +96,6 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     response_handler(hub: hub.as_options_json, address: address)
   end
 
-  def overwrite
-    if params[:file]
-      req = { 'xlsx' => params[:file] }
-      resp = ExcelTool::HubsOverwriter.new(params: req, _user: current_user, sandbox: @sandbox).perform
-      response_handler(resp)
-    else
-      response_handler(false)
-    end
-  end
-
   def all_hubs
     processed_hubs = current_user.tenant.hubs.where(sandbox: @sandbox).map do |hub|
       { data: hub, address: hub.address.to_custom_hash }
@@ -116,15 +103,62 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     response_handler(hubs: processed_hubs)
   end
 
+  def upload
+    document = Document.create!(
+      text: "#{current_tenant.subdomain} hubs upload #{Date.today.strftime('%d/%m/%Y')}",
+      doc_type: 'hubs',
+      sandbox: @sandbox,
+      tenant: current_tenant,
+      file: upload_params[:file]
+    )
+
+    file = upload_params[:file].tempfile
+    options = { tenant: current_tenant,
+                file_or_path: file,
+                options: {
+                  sandbox: @sandbox,
+                  user: current_user,
+                  group_id: upload_params[:group_id],
+                  document: document
+                } }
+    uploader = ExcelDataServices::Loaders::Uploader.new(options)
+
+    response_handler(uploader.perform)
+  end
+
+  def download
+    key = 'hubs'
+
+    file_name = [
+      ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug,
+      Date.today.strftime('%d/%m/%Y')
+    ].join('__hubs_')
+
+    options = { tenant: current_tenant,
+                specific_identifier: 'Hubs',
+                file_name: file_name,
+                sandbox: @sandbox }
+    downloader = ExcelDataServices::Loaders::Downloader.new(options)
+    document = downloader.perform
+
+    response_handler(
+      key: key,
+      url: Rails.application.routes.url_helpers.rails_blob_url(
+        document.file, disposition: 'attachment'
+      )
+    )
+  end
+
   private
 
   def handle_search
     hubs_relation = ::Legacy::Hub.where(tenant_id: current_tenant.id, sandbox: @sandbox)
-    country_table_ref = if search_params[:country].present? && search_params[:country_desc].present?
-                          'countries_hubs'
-                        else
-                          'countries'
-                        end
+    country_table_ref =
+      if search_params[:country].present? && search_params[:country_desc].present?
+        'countries_hubs'
+      else
+        'countries'
+      end
     {
       country: ->(query, param) { query.country_search(param) },
       name: ->(query, param) { query.name_search(param) },
@@ -134,7 +168,9 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
       type: ->(query, param) { param == 'all' ? query : query.where(hub_type: param) },
       type_desc: ->(query, param) { query.ordered_by(:hub_type, param) },
       country_desc: lambda do |query, param|
-                      query.left_joins(:country).order("#{country_table_ref}.name #{param.to_s == 'true' ? 'DESC' : 'ASC'}")
+                      query.left_joins(:country).order(
+                        "#{country_table_ref}.name #{param.to_s == 'true' ? 'DESC' : 'ASC'}"
+                      )
                     end
     }.each do |key, lambd|
       hubs_relation = lambd.call(hubs_relation, search_params[key]) if search_params[key]
@@ -233,5 +269,9 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     hub.stops.where(sandbox: @sandbox).map(&:itinerary).map do |itinerary|
       itinerary.as_options_json(methods: :routes)
     end
+  end
+
+  def upload_params
+    params.permit(:file, :mot, :load_type, :group_id)
   end
 end

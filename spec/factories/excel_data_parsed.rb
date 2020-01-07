@@ -419,6 +419,46 @@ FactoryBot.define do
       end
     end
 
+    trait :default_hubs do
+      sheet_name { 'Hubs' }
+      data_restructurer_name { 'hubs' }
+      data do
+        [{ status: 'active',
+           type: 'OCEAN',
+           name: 'Abu Dhabi',
+           locode: 'AEAUH',
+           latitude: nil,
+           longitude: nil,
+           country: 'United Arab Emirates',
+           full_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
+           photo: nil,
+           free_out: 'false',
+           import_charges: 'true',
+           export_charges: 'false',
+           pre_carriage: nil,
+           on_carriage: 'false',
+           alternative_names: nil,
+           row_nr: 2 },
+         { status: 'active',
+           type: 'ocean',
+           name: 'Adelaide',
+           locode: 'auadl',
+           latitude: -34.9284989,
+           longitude: 138.6007456,
+           country: 'Australia',
+           full_address: '202 Victoria Square, Adelaide SA 5000, Australia',
+           photo: nil,
+           free_out: 'false',
+           import_charges: 'true',
+           export_charges: 'false',
+           pre_carriage: 'false',
+           on_carriage: 'false',
+           alternative_names: nil,
+           row_nr: 3 }]
+      end
+    end
+
+    factory :default_hubs_row_data, traits: %i[default_hubs]
     factory :excel_data_parsed_correct_pricings_one_col_fee_and_ranges, traits: %i[pricing_one_col_fee_and_ranges correct_pricings_one_col_fee_and_ranges]
     factory :excel_data_parsed_faulty_pricings_one_col_fee_and_ranges, traits: %i[pricing_one_col_fee_and_ranges faulty_pricings_one_col_fee_and_ranges]
     factory :excel_data_parsed_correct_pricings_dynamic_fee_cols_no_rangs, traits: %i[pricing_dynamic_fee_cols_no_ranges correct_pricings_dynamic_fee_cols_no_rangs]

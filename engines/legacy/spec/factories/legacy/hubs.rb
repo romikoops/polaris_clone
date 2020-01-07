@@ -10,7 +10,8 @@ FactoryBot.define do
     name { 'Gothenburg Port' }
     hub_type { 'ocean' }
     hub_status { 'active' }
-    hub_code { 'GOO1' }
+    hub_code { 'SEGOT' }
+    free_out { false }
     association :tenant, factory: :legacy_tenant
     association :address, factory: :legacy_address
     association :nexus, factory: :legacy_nexus
@@ -20,7 +21,7 @@ FactoryBot.define do
       name { 'Gothenburg Port' }
       hub_type { 'ocean' }
       hub_status { 'active' }
-      hub_code { 'GOO1' }
+      hub_code { 'SEGOT' }
       latitude { '57.694253' }
       longitude { '11.854048' }
       association :address, factory: :gothenburg_address
@@ -31,7 +32,7 @@ FactoryBot.define do
       name { 'Shanghai Port' }
       hub_type { 'ocean' }
       hub_status { 'active' }
-      hub_code { 'SHA1' }
+      hub_code { 'CNSHA' }
       latitude { '31.2231338' }
       longitude { '120.9162975' }
       association :address, factory: :shanghai_address

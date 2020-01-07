@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :excel_data_restructured, class: 'Array' do
     initialize_with { attributes[:data].deep_dup }
+    association :tenant
 
     trait :correct_pricings_one_fee_col_and_ranges do
       data do
@@ -2750,13 +2751,80 @@ FactoryBot.define do
       end
     end
 
-    factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges, traits: %i[correct_pricings_one_fee_col_and_ranges]
-    factory :excel_data_restructured_faulty_pricings_one_fee_col_and_ranges, traits: %i[faulty_pricings_one_fee_col_and_ranges]
-    factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_rangs, traits: %i[correct_pricings_dynamic_fee_cols_no_rangs]
-    factory :excel_data_restructured_correct_margins, traits: %i[correct_margins]
-    factory :excel_data_restructured_correct_local_charges, traits: %i[correct_local_charges]
-    factory :excel_data_restructured_faulty_local_charges, traits: %i[faulty_local_charges]
-    factory :excel_data_restructured_correct_saco_shipping_pricings, traits: %i[correct_saco_shipping_pricings]
-    factory :excel_data_restructured_correct_saco_shipping_local_charges, traits: %i[correct_saco_shipping_local_charges]
+    trait :restructured_hubs_data do
+      sheet_name { 'Hubs' }
+      data_restructurer_name { 'hubs' }
+      data do
+        [{
+           address:
+           { name: 'Abu Dhabi',
+             latitude: 24.806936,
+             longitude: 54.644405,
+             country: { name: 'United Arab Emirates' },
+             city: 'Abu Dhabi',
+             geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
+             sandbox: nil },
+           nexus: { name: 'Abu Dhabi', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, tenant_id: tenant.id, sandbox: nil },
+           mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true },
+           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Abu Dhabi Port', photo: nil, sandbox: nil, hub_code: 'AEAUH' } },
+         {
+           address:
+           { name: 'Adelaide',
+             latitude: -34.9284989,
+             longitude: 138.6007456,
+             country: { name: 'Australia' },
+             city: 'Adelaide',
+             geocoded_address: '202 Victoria Square, Adelaide SA 5000, Australia',
+             sandbox: nil },
+           nexus: { name: 'Adelaide', latitude: -34.9284989, longitude: 138.6007456, photo: nil, locode: 'AUADL', country: { name: 'Australia' }, tenant_id: tenant.id, sandbox: nil },
+           mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
+           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456, name: 'Adelaide Port', photo: nil, sandbox: nil, hub_code: 'AUADL' } }]
+      end
+    end
+
+    trait :restructured_hubs_missing_values do
+      sheet_name { 'Hubs' }
+      data_restructurer_name { 'hubs' }
+      data do
+        [{
+           row_nr: 2,
+           address: {
+             name: 'Abu Dhabi',
+             latitude: 24.806936,
+             longitude: 54.644405,
+             country: { name: 'United Arab Emirates' },
+             city: 'Abu Dhabi',
+             geocoded_address: nil,
+             sandbox: nil
+           },
+           nexus: { name: 'Abu Dhabi', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, tenant_id: tenant.id, sandbox: nil },
+           mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true },
+           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Abu Dhabi Port', photo: nil, sandbox: nil, hub_code: 'AEAUH' } },
+         {
+           row_nr: 3,
+           address: {
+             name: 'Adelaide',
+             latitude: nil,
+             longitude: 138.6007456,
+             country: { name: 'Australia' },
+             city: 'Adelaide',
+             geocoded_address: '202 Victoria Square, Adelaide SA 5000, Australia',
+             sandbox: nil
+           },
+           nexus: { name: 'Adelaide', latitude: nil, longitude: 138.6007456, photo: nil, locode: 'AUADL', country: { name: 'Australia' }, tenant_id: tenant.id, sandbox: nil },
+           mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
+           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456, name: 'Adelaide Port', photo: nil, sandbox: nil, hub_code: nil } }]
+      end
+    end
+
+    factory :missing_values_hubs_row_data, traits: %i(restructured_hubs_missing_values)
+    factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges, traits: %i(correct_pricings_one_fee_col_and_ranges)
+    factory :excel_data_restructured_faulty_pricings_one_fee_col_and_ranges, traits: %i(faulty_pricings_one_fee_col_and_ranges)
+    factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_rangs, traits: %i(correct_pricings_dynamic_fee_cols_no_rangs)
+    factory :excel_data_restructured_correct_margins, traits: %i(correct_margins)
+    factory :excel_data_restructured_correct_local_charges, traits: %i(correct_local_charges)
+    factory :excel_data_restructured_faulty_local_charges, traits: %i(faulty_local_charges)
+    factory :excel_data_restructured_correct_saco_shipping_pricings, traits: %i(correct_saco_shipping_pricings)
+    factory :excel_data_restructured_correct_saco_shipping_local_charges, traits: %i(correct_saco_shipping_local_charges)
   end
 end

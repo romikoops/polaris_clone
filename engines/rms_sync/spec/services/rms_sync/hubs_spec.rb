@@ -35,7 +35,7 @@ RSpec.describe RmsSync::Hubs do
       expect(gothenburg_row).to eq(['active',
                                     'ocean',
                                     'Gothenburg',
-                                    'GOO1',
+                                    'SEGOT',
                                     '57.694253',
                                     '11.854048',
                                     'Sweden',

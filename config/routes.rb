@@ -50,8 +50,8 @@ Rails.application.routes.draw do
       post 'hubs/:id/update_mandatory_charges', to: 'hubs#update_mandatory_charges'
       post 'hubs/:hub_id/delete', to: 'hubs#delete'
       post 'hubs/:hub_id/image', to: 'hubs#update_image'
-      post 'hubs/process_csv', to: 'hubs#overwrite', as: :hubs_overwrite
-      get  'hubs/sheet/download',  to: 'hubs#download_hubs'
+      post 'hubs/process_csv', to: 'hubs#upload', as: :hubs_overwrite
+      get  'hubs/sheet/download',  to: 'hubs#download'
       get 'hubs/search/options', to: 'hubs#options_search'
       post 'user_managers/assign', to: 'user_managers#assign'
       resources :itineraries, only: %i(index show create destroy) do
