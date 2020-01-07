@@ -14,7 +14,10 @@ module ExcelDataServices
       def initialize(tenant:, data:, options:)
         @tenant = tenant
         @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant&.id)
-        @scope = ::Tenants::ScopeService.new(tenant: tenants_tenant, target: options[:user]).fetch
+        @scope = ::Tenants::ScopeService.new(
+          tenant: tenants_tenant,
+          target: ::Tenants::User.find_by(legacy_id: options[:user]&.id)
+        ).fetch
         @data = data
         @klass_identifier = self.class.name.split('::').last
         @options = options
