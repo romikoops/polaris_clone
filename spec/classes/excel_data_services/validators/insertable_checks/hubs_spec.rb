@@ -28,7 +28,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Hubs do
             locode: 'AEAUH',
             latitude: 24.806936,
             longitude: 54.644405,
-            country: 'Jamaica',
+            country: { name: 'Jamaica' },
             full_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
             photo: nil,
             free_out: false,
