@@ -15,7 +15,7 @@ class RatesOverview extends Component {
       str = str.replace('unknown_', '').toUpperCase()
     }
 
-    return str.replace('_', '').toUpperCase()
+    return str.replace(/_/g, ' ').toUpperCase()
   }
 
   valueToRender (key, value) {
