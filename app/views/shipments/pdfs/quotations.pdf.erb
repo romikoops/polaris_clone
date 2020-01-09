@@ -369,22 +369,20 @@
                 <%
                   unit_id = unit_and_sorted_charges.first
                   sorted_charges = unit_and_sorted_charges.second
-                  if scope['condense_local_fees_pdf']
-                    desc = false
-                  elsif unit_id.present? && unit_id[%r{\A-?\d+(\.\d*)?\z}]
+                  if unit_id.present? && unit_id[%r{\A-?\d+(\.\d*)?\z}]
                     unit = cargo_units[quote['shipment_id']].find_by(id: unit_id.to_i)
                     desc = quote['load_type'] == 'cargo_item' ? unit&.cargo_item_type&.description : unit&.size_class.humanize.upcase
                   elsif unit_id == 'shipment'
                     desc = 'Shipment Fees'
-                  elsif %w(cargo_item container).include?(unit_id)
-                    desc = "#{unit_id.titleize} Fees"
+                  else
+                    desc = "#{shipment.load_type.titleize} Fees"
                   end
                 %>
-
+                <% if desc.present? %>
                   <div class="cargo_title">
                     <%= unit ? "#{desc} x #{unit.quantity}" : "#{desc}" %>
                   </div>
-
+                <% end %>
                 <% sorted_charges.each do |currency_key, sub_charges| %>
                   <%
                     sub_charge_groups = sub_charges.group_by do |sub_charge|
