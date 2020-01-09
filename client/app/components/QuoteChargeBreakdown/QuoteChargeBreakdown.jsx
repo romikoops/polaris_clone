@@ -130,20 +130,7 @@ class QuoteChargeBreakdown extends Component {
 
   dynamicSectionTotal (key) {
     const { scope, quote } = this.props
-    if (scope.freight_in_original_currency && key === 'cargo') {
-      const pricesArray = Object.entries(quote[key]).filter(array => !this.unbreakableKeys.includes(array[0]))
-      const feeKeys = Object.keys(pricesArray[0][1]).filter(pKey => !this.unbreakableKeys.includes(pKey))
-      if (feeKeys.length === 1 && feeKeys[0].includes('unknown')) return ''
-      const { currency } = pricesArray[0][1][feeKeys[0]]
-      let value = 0.0
-      pricesArray.forEach((price) => {
-        feeKeys.forEach((fKey) => {
-          value += parseFloat(price[1][fKey].value)
-        })
-      })
 
-      return `${formattedPriceValue(value)} ${currency}`
-    }
     if (scope.hide_sub_totals || !get(scope, ['quote_card', 'sub_totals', key], true)) {
       return ''
     }
