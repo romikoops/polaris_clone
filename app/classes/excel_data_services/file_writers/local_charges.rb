@@ -21,6 +21,8 @@ module ExcelDataServices
                           all_local_charges.for_mode_of_transport(mode_of_transport)
                         end
         local_charges&.each do |local_charge|
+          next unless local_charge.valid?
+
           local_charge[:fees].values.each do |fee_values_h|
             ranges = ranges_in_fee_values(fee_values_h)
 
