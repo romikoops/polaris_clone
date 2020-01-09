@@ -44,12 +44,12 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       item_strings: {}
     }
 
+    @quotes.each { |quote| generate_fee_string(quote) }
     @shipments << @shipment if @shipments.empty?
     @shipments.each do |s|
       calculate_cargo_data(s)
       calculate_pricing_data(s)
       prep_notes(s)
-      generate_fee_string(s)
       @hide_grand_total[s.id] = hide_grand_total?(s)
     end
     @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
@@ -79,35 +79,37 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                           .or(notes_association.where(pricings_pricing_id: pricings.ids))
   end
 
-  def generate_fee_string(shipment)
-    shipment
-      .selected_offer
-      .except('total', 'edited_total', 'name', 'trip_id', 'valid_until')
+  def generate_fee_string(quote)
+    quote
+      .slice('import', 'export', 'cargo', 'trucking_pre', 'trucking_on')
       .each do |charge_section_key, charge_section|
-        charge_section_keys = charge_section
-                              .except('total', 'edited_total', 'name')
-                              .keys
-        charge_section_keys.each do |subsection_key|
-          charge_section[subsection_key]
-            .except('total', 'edited_total', 'name')
-            .each do |charge_key, fee_value|
-            adjusted_key = extract_key(
-              section_key: charge_section_key,
-              key: charge_key,
-              mot: shipment.mode_of_transport
-            )
-            adjusted_name = extract_name(
-              section_key: charge_section_key,
-              name: fee_value.fetch('name'),
-              mot: shipment.mode_of_transport
-            )
-            @fee_keys_and_names[charge_key] = determine_render_string(
-              key: adjusted_key,
-              name: adjusted_name
-            )
+      charge_section_keys = charge_section
+                            .except('total', 'edited_total', 'name')
+                            .keys
+      charge_section_keys.each do |subsection_key|
+        mode_of_transport = quote.fetch('mode_of_transport')
+        charge_section[subsection_key]
+          .except('total', 'edited_total', 'name')
+          .each do |charge_key, fee_value|
+          adjusted_key = extract_key(
+            section_key: charge_section_key,
+            key: charge_key,
+            mot: mode_of_transport
+          )
+          adjusted_name = extract_name(
+            section_key: charge_section_key,
+            name: fee_value.fetch('name'),
+            mot: mode_of_transport
+          )
+          @fee_keys_and_names[charge_key] = determine_render_string(
+            key: adjusted_key,
+            name: adjusted_name
+          )
         end
       end
     end
+
+    @fee_keys_and_names
   end
 
   def extract_key(section_key:, key:, mot:)
@@ -180,7 +182,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                currencies.uniq.count > 1
              end
 
-    return result.present? || (currencies.uniq.first != shipment.user.currency)
+    result.present? || (currencies.uniq.first != shipment.user.currency)
   end
 
   def calculate_cargo_data(shipment)

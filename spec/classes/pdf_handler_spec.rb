@@ -8,10 +8,12 @@ RSpec.describe PdfHandler do
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let!(:shipment) { create(:shipment, tenant: tenant, user: user, load_type: 'cargo_item') }
   let!(:agg_shipment) { create(:shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_aggregated_cargo: true) }
+  let(:pdf_service) { PdfService.new(tenant: tenant, user: user) }
   let(:default_args) do
     {
       shipment: shipment,
-      cargo_units: shipment.cargo_units
+      cargo_units: shipment.cargo_units,
+      quotes: pdf_service.quotes_with_trip_id(nil, [shipment])
     }
   end
   let(:klass) { described_class.new(default_args) }
@@ -28,7 +30,8 @@ RSpec.describe PdfHandler do
     let(:default_args) do
       {
         shipment: fcl_shipment,
-        cargo_units: fcl_shipment.cargo_units
+        cargo_units: fcl_shipment.cargo_units,
+        quotes: pdf_service.quotes_with_trip_id(nil, [fcl_shipment])
       }
     end
     let(:klass) { described_class.new(default_args) }
@@ -113,6 +116,12 @@ RSpec.describe PdfHandler do
     end
 
     describe '.extract_name' do
+      it 'returns Trucking Rate as the name' do
+        scope.update(content: scope.content.merge(consolidated_cargo: false))
+        result = klass.extract_name(section_key: 'trucking_pre', name: 'Basic Trucking Freight', mot: 'ocean')
+        expect(result).to eq('Trucking Rate')
+      end
+
       it 'returns Consolidated Freight Rate as the name' do
         scope.update(content: scope.content.merge(consolidated_cargo: true))
         result = klass.extract_name(section_key: 'cargo', name: 'Basic Ocean Freight', mot: 'ocean')
@@ -166,6 +175,17 @@ RSpec.describe PdfHandler do
         scope.update(content: scope.content.merge(chargeable_weight_view: ''))
         result = klass.calculate_cargo_data(agg_shipment)
         expect(result).to eq(200)
+      end
+    end
+
+    describe '.generate_fee_string' do
+      let(:charge_shipment) { create(:shipment, with_breakdown: true) }
+      let(:quotes) { pdf_service.quotes_with_trip_id(nil, [charge_shipment]) }
+      let(:string_klass) { described_class.new(default_args.merge(quotes: quotes)) }
+
+      it 'returns MOT Freight as key' do
+        result = string_klass.generate_fee_string(quotes.first)
+        expect(result).to eq('grand_total' => 'GRAND TOTAL - Grand Total')
       end
     end
   end

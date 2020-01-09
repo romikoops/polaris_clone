@@ -54,6 +54,7 @@ class PdfService
       shipment: shipment,
       shipments: [shipment],
       load_type: load_type,
+      quotes: quotes_with_trip_id(nil, [shipment]),
       name: 'shipment_recap',
       cargo_units: { shipment.id => shipment.cargo_units }
     )
