@@ -5,7 +5,9 @@ module Legacy
     include PgSearch::Model
     self.table_name = 'hubs'
     LOCAL_CHARGE_DATE_RANGE = (Date.today...2.days.from_now)
+
     has_paper_trail
+
     belongs_to :tenant, class_name: 'Legacy::Tenant'
     belongs_to :nexus, class_name: 'Legacy::Nexus'
     belongs_to :address, class_name: 'Legacy::Address'
@@ -48,6 +50,32 @@ module Legacy
                       tsearch: { prefix: true }
                     }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
+
+    pg_search_scope :list_search, against: %i(name), using: {
+      tsearch: { prefix: true }
+    }
+
+    MOT_HUB_NAME = {
+      'ocean' => 'Port',
+      'air' => 'Airport',
+      'rail' => 'Railway Station'
+    }.freeze
+
+    def lat_lng_string
+      lat_lng_array.join(',')
+    end
+
+    def lat_lng_array
+      [address.latitude, address.longitude]
+    end
+
+    def lng_lat_array
+      lat_lng_array.reverse
+    end
+
+    def distance_to(loc)
+      Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [address.latitude, address.longitude])
+    end
 
     def point_wkt
       "Point (#{address.longitude} #{address.latitude})"

@@ -3,6 +3,7 @@
 module Legacy
   class CargoItem < ApplicationRecord
     self.table_name = 'cargo_items'
+
     EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
       air: 0.167,
       rail: 0.550,
@@ -12,20 +13,26 @@ module Legacy
     }.freeze
 
     DIMENSIONS = %i(dimension_x dimension_y dimension_z payload_in_kg chargeable_weight).freeze
+
     has_paper_trail
+
     belongs_to :shipment, class_name: 'Legacy::Shipment'
     delegate :tenant, to: :shipment
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     belongs_to :cargo_item_type
+
+    before_validation :set_default_cargo_class!, on: :create
+    before_validation :set_chargeable_weight!
+
+    def self.calc_chargeable_weight_from_values(volume, payload_in_kg, mot)
+      [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym] * 1000, payload_in_kg].max
+    end
+
     def self.extract(cargo_items_attributes)
       cargo_items_attributes.map do |cargo_item_attributes|
         new(cargo_item_attributes)
       end
-    end
-
-    def self.calc_chargeable_weight_from_values(volume, payload_in_kg, mot)
-      [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym] * 1000, payload_in_kg].max
     end
 
     # Instance Methods
@@ -65,7 +72,7 @@ module Legacy
 
       # Creates and auxiliary class, cloned from CargoItem, with one aditional
       # validation, which depends on the mode of transport.
-      klass = CustomValidations.cargo_item_max_dimensions(CargoItem.clone, mode_of_transport)
+      klass = ::Legacy::CustomValidations.cargo_item_max_dimensions(CargoItem.clone, mode_of_transport)
       Module.const_set('AuxCargoItem', klass)
 
       # Instantiates the auxiliary class, sets the chargeable weight,

@@ -22,7 +22,7 @@ module Pricings
 
       describe '.fee_code' do
         it 'renders the fee_code ' do
-          expect(margin_detail.fee_code).to eq('BAS')
+          expect(margin_detail.fee_code).to eq('bas')
         end
       end
 

@@ -23,6 +23,7 @@ module Itineraries
         .distinct
         .order(Trip.arel_table[:closing_date].asc)
         .pluck(Trip.arel_table[:closing_date])
+        .compact
     end
 
     def last_available_date

@@ -8,7 +8,7 @@ module Integrations
       def initialize(data:, tenant_id:)
         @body = data
         @chainio_configs = Tenants::ScopeService.new(
-          tenant: Tenants::Tenant.find(tenant_id)
+          tenant: ::Tenants::Tenant.find(tenant_id)
         ).fetch(:integrations).dig(:chainio)
       end
 

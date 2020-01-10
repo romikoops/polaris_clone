@@ -1,10 +1,16 @@
 import { authHeader } from '.'
 
-export function requestOptions (method, headers = {}) {
-  return {
-    method: method.toUpperCase(),
+export function requestOptions (method, headers = {}, body = {}) {
+  const upcaseMethod = method.toUpperCase()
+  const options = {
+    method: upcaseMethod,
     headers: { ...authHeader(), ...headers }
   }
+  if (upcaseMethod === 'POST') {
+    options.body = body
+  }
+
+  return options
 }
 
 export default requestOptions

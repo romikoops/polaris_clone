@@ -55,8 +55,8 @@ module Api
 
       def base_pricing_enabled
         Tenants::ScopeService.new(
-          target: current_user,
-          tenant: current_tenant
+          target: ::Tenants::User.find_by(legacy_id: current_user&.id),
+          tenant: ::Tenants::Tenant.find_by(legacy_id: current_tenant&.id)
         ).fetch(:base_pricing)
       end
 

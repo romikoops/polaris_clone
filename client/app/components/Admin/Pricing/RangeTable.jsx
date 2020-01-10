@@ -23,7 +23,7 @@ class AdminRangeFeeTable extends PureComponent {
     if (!scope) return value
     if (scope.cargo_price_notes && scope.cargo_price_notes.cargo && target === 'rate') {
       return scope.cargo_price_notes.cargo
-    } 
+    }
     if (scope.cargo_price_notes && scope.cargo_price_notes.cargo && target === 'min') {
       return ''
     }
@@ -32,15 +32,12 @@ class AdminRangeFeeTable extends PureComponent {
   }
 
   render () {
-    const { t, row, isLocalCharge } = this.props
-    if (!row || (row && !row.original)) return ''
+    const { t, row, isLocalCharge, classes } = this.props
+    if (!row) return ''
     const { sorted, innerSorted } = this.state
-    const fees = row.original.data
-    if (!fees) return ''
-    
     const localChargeKeys = []
-    const data = Object.keys(fees).map((k) => {
-      const tempFee = fees[k]
+    const data = Object.keys(row).map((k) => {
+      const tempFee = row[k]
       tempFee.feeCode = k
       if (isLocalCharge) {
         Object.keys(tempFee)
@@ -243,6 +240,7 @@ class AdminRangeFeeTable extends PureComponent {
 
     return (
       <ReactTable
+        className={`${styles.no_footer} ${classes}`}
         data={data}
         columns={columns}
         expanded={this.state.expanded}
@@ -289,11 +287,6 @@ class AdminRangeFeeTable extends PureComponent {
   }
 }
 
-AdminRangeFeeTable.propTypes = {
-  t: PropTypes.func.isRequired,
-  row: PropTypes.objectOf(PropTypes.any).isRequired
-}
-
 function mapStateToProps (state) {
   const {
     authentication, app, admin
@@ -318,6 +311,10 @@ function mapDispatchToProps (dispatch) {
     adminDispatch: bindActionCreators(adminActions, dispatch),
     appDispatch: bindActionCreators(appActions, dispatch)
   }
+}
+
+AdminRangeFeeTable.defaultProps = {
+  classes: ''
 }
 
 export default withNamespaces(['common'])(connect(mapStateToProps, mapDispatchToProps)(AdminRangeFeeTable))

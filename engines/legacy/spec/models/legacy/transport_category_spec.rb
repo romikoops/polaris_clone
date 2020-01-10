@@ -28,6 +28,13 @@ module Legacy
         expect(transport_category.cargo_class).to eq('fcl_40_hq')
         expect(transport_category.mode_of_transport).to eq('ocean')
       end
+
+      describe '#humanize' do
+        it 'return the humanized transport category' do
+          transport_category = FactoryBot.create(:ocean_fcl_40_hq)
+          expect(transport_category.humanize).to eq('FCL – 40 – HQ any container')
+        end
+      end
     end
   end
 end

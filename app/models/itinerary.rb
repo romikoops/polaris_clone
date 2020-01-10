@@ -3,8 +3,7 @@
 class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
   extend ItineraryTools
   include ItineraryTools
-  include PriceCheckerService
-
+ 
   belongs_to :tenant
   has_many :stops,     dependent: :destroy
   has_many :layovers,  dependent: :destroy
@@ -215,11 +214,6 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     end
 
     schedules
-  end
-
-  def test_pricings(data, user)
-    results = PriceCheckerService::PriceChecker.new(id, data, user).perform
-    results.map { |charge| { quote: charge[:quote].deconstruct_tree_into_schedule_charge, itinerary: as_options_json, service_level: charge[:service_level] } }
   end
 
   def self.ids_dedicated(user = nil)

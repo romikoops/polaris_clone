@@ -23,14 +23,14 @@ class AdminPricesTable extends PureComponent {
     ) {
       return (
         <div className={styles.nested_table}>
-          <AdminRangeFeeTable row={row} className={styles.nested_table} />
+          <AdminRangeFeeTable row={row.original.data} className={styles.nested_table} />
         </div>
       )
     }
 
     return (
       <div className={styles.nested_table}>
-        <AdminFeeTable row={row} className={styles.nested_table} />
+        <AdminFeeTable row={row.original.data} className={styles.nested_table} />
       </div>
     )
   }
@@ -46,8 +46,8 @@ class AdminPricesTable extends PureComponent {
   }
 
   componentDidMount () {
-    const { pricings, adminDispatch, itineraryId, groupId } = this.props
-    if (!has(pricings, `show.${itineraryId}`)) {
+    const { pricings, adminDispatch, itineraryId, groupId, manual } = this.props
+    if (!has(pricings, `show.${itineraryId}`) && !manual) {
       adminDispatch.getItineraryPricings(itineraryId, groupId)
     }
   }
@@ -110,11 +110,11 @@ class AdminPricesTable extends PureComponent {
 
   render () {
     const {
-      t, pricings, theme, itineraryId, classNames, scope
+      t, pricings, theme, itineraryId, classNames, scope, manual, manualData
     } = this.props
     const { sorted, confirm, confirmAction } = this.state
 
-    const data = get(pricings, ['show', itineraryId], false)
+    const data = manual ? { pricings: manualData } : get(pricings, ['show', itineraryId], false)
     if (!data) return ''
     const columns = [
       {
@@ -206,7 +206,7 @@ class AdminPricesTable extends PureComponent {
           </div>
         )
       },
-      scope.base_pricing ? {
+      scope.base_pricing && !manual ? {
         maxWidth: 75,
         Header: (<div className="flex layout-row layout-center-center">
           <p className="flex-none">{t('common:enabled')}</p>
@@ -228,7 +228,7 @@ class AdminPricesTable extends PureComponent {
           )
  }
       } : false,
-      {
+      !manual ? {
         maxWidth: 75,
         Header: (<div className="flex layout-row layout-center-center">
           <p className="flex-none">{t('common:delete')}</p>
@@ -241,7 +241,7 @@ class AdminPricesTable extends PureComponent {
             <i className="flex-none fa fa-trash" />
           </div>
         )
-      }
+      } : false
     ].filter(x => !!x)
     let confirmText
     switch (confirmAction) {
@@ -318,11 +318,16 @@ function mapStateToProps (state) {
     pricings
   }
 }
+
 function mapDispatchToProps (dispatch) {
   return {
     adminDispatch: bindActionCreators(adminActions, dispatch),
     appDispatch: bindActionCreators(appActions, dispatch)
   }
+}
+
+AdminPricesTable.defaultProps = {
+  manual: false
 }
 
 export default withNamespaces(['common', 'shipment', 'account'])(connect(mapStateToProps, mapDispatchToProps)(AdminPricesTable))

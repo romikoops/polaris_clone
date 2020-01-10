@@ -2,7 +2,6 @@
 
 class Tenant < Legacy::Tenant
   include ImageTools
-  include DataValidator
 
   has_many :shipments, dependent: :destroy
   has_many :nexuses, dependent: :destroy
@@ -47,16 +46,6 @@ class Tenant < Legacy::Tenant
     users.joins(:role).where('roles.name': 'admin').first
   end
 
-  def email_for(branch_raw, mode_of_transport = nil)
-    return nil unless branch_raw.is_a?(String) || branch_raw.is_a?(Symbol)
-
-    branch = branch_raw.to_s
-
-    return Settings.emails.booking if emails[branch].blank?
-
-    emails[branch][mode_of_transport] || emails[branch]['general']
-  end
-
   def self.update_hs_codes
     data = get_all_items('hsCodes')
     data.each do |datum|
@@ -68,36 +57,10 @@ class Tenant < Legacy::Tenant
     end
   end
 
-  def test_pricings(load_type, expected_values, pickup, dropoff, import, export)
-    DataValidator::ItineraryPriceValidator.new(
-      load_type: load_type,
-      expected_values: expected_values,
-      tenant: id,
-      has_pre_carriage: pickup,
-      has_on_carriage: dropoff,
-      import: import,
-      export: export
-    ).perform
-  end
-
   def autogenerate_all_schedules(end_date:, sandbox: nil)
     itineraries.where(sandbox: sandbox).each do |itinerary|
       itinerary.default_generate_schedules(end_date: end_date, sandbox: sandbox)
     end
-  end
-
-  def tenants_scope
-    @tenants_scope ||= Tenants::ScopeService.new(tenant: Tenants::Tenant.find_by(legacy_id: id)).fetch
-  end
-
-  def quotation_tool?
-    tenants_scope['open_quotation_tool'] || tenants_scope['closed_quotation_tool']
-  end
-
-  def mode_of_transport_in_scope?(mode_of_transport, load_type = nil)
-    return tenants_scope.dig('modes_of_transport', mode_of_transport.to_s).values.any? if load_type.nil?
-
-    tenants_scope.dig('modes_of_transport', mode_of_transport.to_s, load_type.to_s)
   end
 
   def max_dimensions

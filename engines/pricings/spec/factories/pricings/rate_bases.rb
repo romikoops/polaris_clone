@@ -80,7 +80,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       external_code { 'PER_UNIT_RANGE' }
     end
 
-    factory :per_wm, traits: [:wm]
+    factory :per_wm_rate_basis, traits: [:wm]
     factory :per_container, traits: [:container]
     factory :per_hbl, traits: [:hbl]
     factory :per_shipment, traits: [:shipment]

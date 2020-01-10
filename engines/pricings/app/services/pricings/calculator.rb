@@ -7,9 +7,12 @@ module Pricings
       @user = user
       @mot = mode_of_transport
       @cargo = cargo
-      @pricing = pricing.with_indifferent_access[:data]
+      @data = pricing.with_indifferent_access
+      @pricing = @data[:data]
+      @margins = @data[:flat_margins] || {}
+      @metadata_id = @data[:metadata_id]
       @converter = Pricings::Conversion.new(base: @user.currency, tenant_id: @user.tenant_id)
-      @totals = Hash.new { |h, k| h[k] = { 'value' => 0, 'currency' => nil } }
+      @totals = Hash.new { |h, k| h[k] = { 'value' => 0, 'currency' => nil } unless k.to_s == 'metadata_id' }
       @date = date
     end
 
@@ -21,7 +24,7 @@ module Pricings
       calculate_fees
       convert_fees
 
-      @totals.with_indifferent_access
+      @totals.with_indifferent_access.merge('metadata_id' => @metadata_id)
     end
 
     def calculate_fees
@@ -35,6 +38,16 @@ module Pricings
             fee_value(fee, get_cargo_hash, @user.tenant.scope)
           end
       end
+
+      apply_margins
+    end
+
+    def apply_margins
+      @margins.each_key do |margin_key|
+        @totals[margin_key]['value'] += @margins[margin_key]
+      end
+
+      @totals
     end
 
     def convert_fees

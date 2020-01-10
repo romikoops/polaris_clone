@@ -206,8 +206,7 @@ Rails.application.routes.draw do
     resources :incoterms, only: [:index]
     resources :locations, only: [:index]
     resources :nexuses, only: [:index]
-    get 'find_nexus', to: 'nexuses#find_nexus'
-    get 'currencies/base/:currency', to: 'currencies#get_currencies_for_base'
+    get 'currencies/base/:currency', to: 'currencies#currencies_for_base'
     get 'countries', to: 'countries#index'
     get 'currencies/refresh/:currency', to: 'currencies#refresh_for_base'
     resources :contacts, only: %i(index show create update)
@@ -216,9 +215,9 @@ Rails.application.routes.draw do
     get 'contacts/validations/form', to: 'contacts#is_valid'
     post 'contacts/delete_contact_address/:id', to: 'contacts#delete_contact_address'
     post 'shipments/:shipment_id/upload/:type', to: 'shipments#upload_document'
-
     get '/documents/download/:document_id',
         to: 'documents#download_redirect', as: :document_download
+    get '/documents/download_url/:document_id', to: 'documents#download_url'
     get '/documents/delete/:document_id', to: 'documents#delete', as: :document_delete
     post '/admin/documents/action/:id', to: 'admin/shipments#document_action'
     delete '/admin/documents/:id', to: 'admin/shipments#document_delete'
@@ -230,7 +229,6 @@ Rails.application.routes.draw do
     get 'quotations/download/:id', to: 'quotations#download_pdf'
     get 'currencies/get', to: 'users#currencies'
     post 'currencies/set', to: 'users#set_currency'
-
     post 'super_admins/new_demo' => 'super_admins#new_demo_site'
     post 'super_admins/upload_image' => 'super_admins#upload_image'
     get 'messaging/get' => 'notifications#index'

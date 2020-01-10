@@ -176,6 +176,19 @@ PATH
       core
 
 PATH
+  remote: engines/offer_calculator
+  specs:
+    offer_calculator (9999.1.0.0)
+      chronic
+      core
+      legacy
+      pricings
+      quotations
+      sentry-raven
+      tenants
+      trucking
+
+PATH
   remote: engines/pricings
   specs:
     pricings (9999.1.0.0)
@@ -956,6 +969,7 @@ DEPENDENCIES
   monetize
   money
   nokogiri
+  offer_calculator!
   omniauth
   os
   paper_trail (~> 10.1, >= 10.1.0)

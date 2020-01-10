@@ -17,7 +17,106 @@
   .result_box {
     margin-top: 10px;
   }
+  .rate_wrapper {
+    min-height: 350px;
+    min-width: 450px;
+  }
+
   .filter_row {
-    background-color: #eae8e8;
+    background-color: darkgrey;
+  }
+  .blocker {
+    position: absolute;
+    background: darkgrey;
+    opacity: 0.75;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 0;
+  }
+  .fee_row {
+    font-size: 12px
+  }
+  .hover {
+    background: darkgrey;
+    color: white;
+  }
+  .back_btn {
+    padding: 15px;
+    color: white;
+  }
+  .route_toggle {
+    padding-bottom: 15px;
+  }
+  .result_wrapper {
+    padding-top: 15px;
+    border: 2px solid darkgrey;
+  }
+  .rate_nav_buttons {
+    padding: 10px;
+    margin: 15px 0px;
+    border: 2px solid darkgrey;
+  }
+  .rate_nav_buttons.hover {
+    border: 2px solid white;
+    color: white;
+    background: darkgrey;
+  }
+  .no_data {
+    div {
+      i {
+        font-size: 72px;
+        color: darkgrey;
+        margin: 50px 0;
+      }
+    }
+
+  }
+  .service_level {
+    text-align: center;
+    background: lightgrey;
+    padding: 15px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .service_level_main {
+    background: darkgrey !important;
+    font-weight: bold;
+  }
+
+  .table_section {
+    margin: 1px;
+    background: white;
+    width: calc(20% - 2px);
+    bottom: 0;
+    top: 0;
+    padding-bottom: 999999em;
+    margin-bottom: -999999em;
+    table{
+      width: 100%;
+      tbody {
+        tr {
+          border-bottom: 1px solid darkgrey;
+        }
+      }
+    }
+    div {
+      p {
+        font-size: 14px;
+        font-weight: bold;
+        margin: 5px 0;
+        border-bottom: 1px solid darkgrey;
+        width: 100%;
+      }
+
+    }
+  }
+  .section_container {
+    background: lightgrey;
+    overflow: hidden;
+  }
+  .back_btn_row {
+    background: darkgrey;
+    padding: 10px;
   }
 }

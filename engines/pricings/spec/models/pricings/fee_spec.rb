@@ -13,11 +13,11 @@ module Pricings
       describe '.to_fee_hash' do
         it 'returns the fee as a hash' do
           result = fee.to_fee_hash
-          expect(result.keys).to eq(['BAS'])
-          expect(result['BAS']['rate']).to eq(1111)
-          expect(result['BAS']['base']).to eq(1)
-          expect(result['BAS']['rate_basis']).to eq('PER_WM')
-          expect(result['BAS']['currency']).to eq('EUR')
+          expect(result.keys).to eq(['bas'])
+          expect(result['bas']['rate']).to eq(1111)
+          expect(result['bas']['base']).to eq(1)
+          expect(result['bas']['rate_basis']).to eq('PER_WM')
+          expect(result['bas']['currency']).to eq('EUR')
         end
       end
 

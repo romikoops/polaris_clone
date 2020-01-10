@@ -8,8 +8,9 @@ module Legacy
     belongs_to :tenant
     belongs_to :role, optional: true, class_name: 'Legacy::Role'
     belongs_to :agency, optional: true
+    has_many :pricings
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-    has_one :tenants_user
+    has_one :tenants_user, class_name: 'Tenants::User', foreign_key: :legacy_id
     delegate :company, to: :tenants_user
 
     acts_as_paranoid
@@ -24,6 +25,10 @@ module Legacy
 
     def full_name_and_company_and_address
       "#{first_name} #{last_name}\n#{company_name}\n#{address.geocoded_address}"
+    end
+
+    def pricing_id
+      role&.name == 'agent' ? agency_pricing_id : id
     end
 
     def all_groups
@@ -57,6 +62,11 @@ module Legacy
     def sync_uid
       self.uid = "#{tenant.id}***#{email}"
     end
+
+    def agency_pricing_id
+      agency&.agency_manager_id
+    end
+
   end
 end
 

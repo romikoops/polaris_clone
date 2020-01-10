@@ -15,17 +15,21 @@ module Pricings
       return unless charge_category.present?
 
       {
-        fee_code => {
-          rate: rate,
-          base: base,
-          rate_basis: rate_basis&.internal_code,
-          currency: currency_name,
-          hw_threshold: hw_threshold,
-          hw_rate_basis: hw_rate_basis&.internal_code,
-          min: min,
-          range: range
-        }
+        fee_code => fee_data
       }.compact.with_indifferent_access
+    end
+
+    def fee_data
+      {
+        rate: rate,
+        base: base,
+        rate_basis: rate_basis&.internal_code,
+        currency: currency_name,
+        hw_threshold: hw_threshold,
+        hw_rate_basis: hw_rate_basis&.internal_code,
+        min: min,
+        range: range
+      }
     end
 
     def fee_code
@@ -37,7 +41,7 @@ module Pricings
     end
 
     def fee_name_and_code
-      "#{charge_category&.code} - #{charge_category&.name}"
+      "#{fee_code&.upcase} - #{fee_name}"
     end
   end
 end

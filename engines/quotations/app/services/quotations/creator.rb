@@ -31,7 +31,7 @@ module Quotations
       @detailed_schedules.each do |quote_object|
         quote_total = quote_object[:quote][:total]
         meta = quote_object[:meta]
-        attributes = meta.slice(*%i(carrier_name load_type tenant_vehicle_id name))
+        attributes = meta.slice(:carrier_name, :load_type, :tenant_vehicle_id, :name)
                          .merge(quotation: @quotation,
                                 origin_hub: meta[:origin_hub],
                                 destination_hub: meta[:destination_hub],

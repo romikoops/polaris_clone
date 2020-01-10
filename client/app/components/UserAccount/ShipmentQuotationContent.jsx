@@ -43,7 +43,8 @@ class ShipmentQuotationContent extends Component {
       t,
       cargoView,
       remark,
-      cargo
+      cargo,
+      pricingBreakdowns
     } = this.props
 
     const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
@@ -52,243 +53,241 @@ class ShipmentQuotationContent extends Component {
       </li>
     )) : ''
 
-  return (
-    <Tabs
-      wrapperTabs="layout-row flex-100 margin_bottom"
-    >
-      <Tab
-        tabTitle={t('common:overview')}
-        theme={theme}
+    return (
+      <Tabs
+        wrapperTabs="layout-row flex-100 margin_bottom"
       >
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-          <div className="layout-row flex-100 margin_bottom">
-            <GradientBorder
-              wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
-              gradient={gradientBorderStyle}
-              className="layout-row flex"
-              content={(
-                <div className="layout-row flex-100">
-                  <ShipmentOverviewShowCard
-                    et={shipment.pickup_address ? estimatedTimes.etdJSX : null}
-                    text={t('common:etd')}
-                    shipment={shipment}
-                    theme={theme}
-                    hub={shipment.origin_hub}
-                    background={background.bg1}
-                  />
-                </div>
-              )}
-            />
-            <div className="layout-row flex-20 layout-align-center-center">
-              <div className={`layout-column flex layout-align-center-center ${styles.font_adjustaments}`}>
-                <div className="layout-align-center-center layout-row" style={gradientStyle}>
-                  {switchIcon(shipment)}
-                </div>
-                {shipment.planned_eta && shipment.planned_etd ? (
-                  <div className="flex-100 layout-align-center-center layout-wrap layout-row">
-                    <p className="flex-100 layout-row layout-align-center-center">{t('shipment:estimatedTimeDelivery')}</p>
-                    <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)} {t('common:days')}</h5>
+        <Tab
+          tabTitle={t('common:overview')}
+          theme={theme}
+        >
+          <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
+            <div className="layout-row flex-100 margin_bottom">
+              <GradientBorder
+                wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+                gradient={gradientBorderStyle}
+                className="layout-row flex"
+                content={(
+                  <div className="layout-row flex-100">
+                    <ShipmentOverviewShowCard
+                      et={shipment.pickup_address ? estimatedTimes.etdJSX : null}
+                      text={t('common:etd')}
+                      shipment={shipment}
+                      theme={theme}
+                      hub={shipment.origin_hub}
+                      background={background.bg1}
+                    />
                   </div>
-                ) : ''}
+                )}
+              />
+              <div className="layout-row flex-20 layout-align-center-center">
+                <div className={`layout-column flex layout-align-center-center ${styles.font_adjustaments}`}>
+                  <div className="layout-align-center-center layout-row" style={gradientStyle}>
+                    {switchIcon(shipment)}
+                  </div>
+                  {shipment.planned_eta && shipment.planned_etd ? (
+                    <div className="flex-100 layout-align-center-center layout-wrap layout-row">
+                      <p className="flex-100 layout-row layout-align-center-center">{t('shipment:estimatedTimeDelivery')}</p>
+                      <h5>
+                                                {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)}
+                                                {' '}
+                                                {t('common:days')}
+                                            </h5>
+                    </div>
+                  ) : ''}
 
-              </div>
-            </div>
-
-            <GradientBorder
-              wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
-              gradient={gradientBorderStyle}
-              className="layout-row flex"
-              content={(
-                <div className="layout-row flex-100">
-                  <ShipmentOverviewShowCard
-                    text={t('common:eta')}
-                    shipment={shipment}
-                    theme={theme}
-                    et={shipment.delivery_address ? estimatedTimes.etaJSX : null}
-                    hub={shipment.destination_hub}
-                    background={background.bg2}
-                  />
                 </div>
-              )}
-            />
+              </div>
+
+              <GradientBorder
+                wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+                gradient={gradientBorderStyle}
+                className="layout-row flex"
+                content={(
+                  <div className="layout-row flex-100">
+                    <ShipmentOverviewShowCard
+                      text={t('common:eta')}
+                      shipment={shipment}
+                      theme={theme}
+                      et={shipment.delivery_address ? estimatedTimes.etaJSX : null}
+                      hub={shipment.destination_hub}
+                      background={background.bg2}
+                    />
+                  </div>
+                )}
+              />
+            </div>
           </div>
-        </div>
-      </Tab>
-      <Tab
-        tabTitle={t('shipment:freight')}
-        theme={theme}
-      >
-        <div className="flex-100 layout-row layout-align-start-start padding_top card_margin_right">
-          <div className={`${adminStyles.border_box} margin_bottom layout-column flex-60`}>
-            <div className={`flex-70 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
-              <div className="layout-column flex-100">
-                <h3>{t('shipment:freightDutiesAndCarriage')}</h3>
-                <div className="layout-wrap layout-row flex">
-                  <div className="flex-45 margin_bottom">
-                    <div className="layout-row flex-100">
-                      <div className="flex-none layout-row">
-                        <i className="fa fa-truck clip flex-none layout-align-center-center" style={feeHash.trucking_pre ? selectedStyle : deselectedStyle} />
-                        <p>{t('shipment:pickUp')}</p>
+        </Tab>
+        <Tab
+          tabTitle={t('shipment:freight')}
+          theme={theme}
+        >
+          <div className="flex-100 layout-row layout-align-start-start padding_top card_margin_right">
+            <div className={`${adminStyles.border_box} margin_bottom layout-column flex-60`}>
+              <div className={`flex-70 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+                <div className="layout-column flex-100">
+                  <h3>{t('shipment:freightDutiesAndCarriage')}</h3>
+                  <div className="layout-wrap layout-row flex">
+                    <div className="flex-45 margin_bottom">
+                      <div className="layout-row flex-100">
+                        <div className="flex-none layout-row">
+                          <i className="fa fa-truck clip flex-none layout-align-center-center" style={feeHash.trucking_pre ? selectedStyle : deselectedStyle} />
+                          <p>{t('shipment:pickUp')}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex-offset-10 flex-45 margin_bottom">
-                    <div className="layout-row flex-100">
-                      <div className="flex-none layout-row">
-                        <i
-                          className="fa fa-truck clip flex-none layout-align-center-center"
-                          style={feeHash.trucking_on ? selectedStyle : deselectedStyle}
-                        />
-                        <p>{t('shipment:delivery')}</p>
+                    <div className="flex-offset-10 flex-45 margin_bottom">
+                      <div className="layout-row flex-100">
+                        <div className="flex-none layout-row">
+                          <i
+                            className="fa fa-truck clip flex-none layout-align-center-center"
+                            style={feeHash.trucking_on ? selectedStyle : deselectedStyle}
+                          />
+                          <p>{t('shipment:delivery')}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex-45 margin_bottom">
-                    <div className="layout-row flex-100">
-                      <div className="layout-row flex-none">
-                        <i
-                          className="fa fa-file-text clip flex-none layout-align-center-center"
-                          style={feeHash.export ? selectedStyle : deselectedStyle}
-                        />
-                        <p>
-                          {t('shipment:originLocalCharges')}
-                        </p>
+                    <div className="flex-45 margin_bottom">
+                      <div className="layout-row flex-100">
+                        <div className="layout-row flex-none">
+                          <i
+                            className="fa fa-file-text clip flex-none layout-align-center-center"
+                            style={feeHash.export ? selectedStyle : deselectedStyle}
+                          />
+                          <p>
+                            {t('shipment:originLocalCharges')}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div
-                    className="flex-offset-10 flex-45 margin_bottom"
-                  >
-                    <div className="layout-row flex-100">
-                      <div className="layout-row flex-none">
-                        <i
-                          className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                          style={feeHash.import ? selectedStyle : deselectedStyle}
-                        />
-                        <p>
-                          {t('shipment:destinationLocalCharges')}
-                        </p>
+                    <div
+                      className="flex-offset-10 flex-45 margin_bottom"
+                    >
+                      <div className="layout-row flex-100">
+                        <div className="layout-row flex-none">
+                          <i
+                            className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                            style={feeHash.import ? selectedStyle : deselectedStyle}
+                          />
+                          <p>
+                            {t('shipment:destinationLocalCharges')}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex-45 margin_bottom">
-                    <div className="layout-row flex-100">
-                      <div className="layout-row flex-none">
-                        <i
-                          className="fa fa-ship clip flex-none layout-align-center-center"
-                          style={selectedStyle}
-                        />
-                        <p>{t('shipment:freight')}</p>
+                    <div className="flex-45 margin_bottom">
+                      <div className="layout-row flex-100">
+                        <div className="layout-row flex-none">
+                          <i
+                            className="fa fa-ship clip flex-none layout-align-center-center"
+                            style={selectedStyle}
+                          />
+                          <p>{t('shipment:freight')}</p>
+                        </div>
                       </div>
-                    </div>
 
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className={`flex-30 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box}`}>
-              <div className="flex-80">
-                <h3>{t('shipment:additionalServices')}</h3>
-                <div className="">
-                  <div className="flex-100 margin_bottom">
-                    <div className="layout-row flex-100">
-                      <div className="layout-row flex-none">
-                        <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                        <p>{t('shipment:customs')}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="layout-column flex-100 margin_bottom">
-                    <div className="layout-row flex-100">
-                      <div className="layout-row flex-none">
-                        <i className="fa fa-umbrella clip flex-none" style={feeHash.insurance ? selectedStyle : deselectedStyle} />
-                        <p>{t('shipment:insurance')}</p>
-                      </div>
-                      {scope.detailed_billing && feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
-                        ? <div className="flex layout-row layout-align-end-center">
-                          <p>{t('shipment:requested')}</p>
-                        </div> : ''}
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            {remarkBody ? (
-              <div>
-                <div className={`flex-100 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+              <div className={`flex-30 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box}`}>
+                <div className="flex-80">
+                  <h3>{t('shipment:additionalServices')}</h3>
+                  <div className="">
+                    <div className="flex-100 margin_bottom">
+                      <div className="layout-row flex-100">
+                        <div className="layout-row flex-none">
+                          <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
+                          <p>{t('shipment:customs')}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="layout-column flex-100 margin_bottom">
+                      <div className="layout-row flex-100">
+                        <div className="layout-row flex-none">
+                          <i className="fa fa-umbrella clip flex-none" style={feeHash.insurance ? selectedStyle : deselectedStyle} />
+                          <p>{t('shipment:insurance')}</p>
+                        </div>
+                        {scope.detailed_billing && feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
+                          ? (
+                                                        <div className="flex layout-row layout-align-end-center">
+                              <p>{t('shipment:requested')}</p>
+                            </div>
+                          ) : ''}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {remarkBody ? (
+                <div>
+                  <div className={`flex-100 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
                     <div className="layout-column flex-100">
-                      <h3
+                    <h3
                         style={{ marginBottom: '0px' }}
                       >
-                        {t('shipment:remarks')}:
-                      </h3>
-                      <ul>
+                        {t('shipment:remarks')}
+:
+                                            </h3>
+                    <ul>
                         {remarkBody}
                       </ul>
-                    </div>
-                </div>
-              </div>
-            ) : ''}
-          </div>
-          <div className="flex-40 layout-row">
-            <div
-              className={`flex-100 layout-row layout-wrap ${quoteStyles.wrapper}`}
-            >
-              <QuoteChargeBreakdown
-                theme={theme}
-                scope={scope}
-                cargo={cargo}
-                shrinkHeaders
-                trucking={shipment.trucking}
-                showBreakdowns
-                quote={shipment.selected_offer}
-                mot={shipment.mode_of_transport}
-              />
-              <div className="flex-100 layout-wrap layout-align-start-stretch">
-                <div className={`flex-100 layout-row layout-align-start-stretch ${quoteStyles.total_row}`}>
-                  <div className="flex-30 layout-row layout-align-start-center">
-                    <span>{t('common:total')}</span>
                   </div>
-                  <div className="flex-70 layout-row layout-align-end-center">
-                    <p className="card_padding_right">{numberSpacing(shipment.selected_offer.total.value, 2)}&nbsp;{shipment.selected_offer.total.currency}</p>
+                  </div>
+                </div>
+              ) : ''}
+            </div>
+            <div className="flex-40 layout-row">
+              <div
+                className={`flex-100 layout-row layout-wrap ${quoteStyles.wrapper}`}
+              >
+                <QuoteChargeBreakdown
+                  theme={theme}
+                  scope={scope}
+                  cargo={cargo}
+                  shrinkHeaders
+                  trucking={shipment.trucking}
+                  showBreakdowns
+                  metadata={shipment.meta}
+                  pricingBreakdowns={pricingBreakdowns}
+                  quote={shipment.selected_offer}
+                  mot={shipment.mode_of_transport}
+                />
+                <div className="flex-100 layout-wrap layout-align-start-stretch">
+                  <div className={`flex-100 layout-row layout-align-start-stretch ${quoteStyles.total_row}`}>
+                    <div className="flex-30 layout-row layout-align-start-center">
+                      <span>{t('common:total')}</span>
+                    </div>
+                    <div className="flex-70 layout-row layout-align-end-center">
+                      <p className="card_padding_right">
+                                                {numberSpacing(shipment.selected_offer.total.value, 2)}
+&nbsp;
+                                                {shipment.selected_offer.total.currency}
+                                            </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </Tab>
-      <Tab
-        tabTitle={t('cargo:cargoDetails')}
-        theme={theme}
-      >
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center padding_top">
-          <GreyBox
-            wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
-            contentClassName="layout-column flex"
-            content={cargoView}
-          />
-          <ShipmentNotes shipment={shipment} />
-        </div>
-      </Tab>
-    </Tabs>
-  )
-                      }
-}
-
-ShipmentQuotationContent.propTypes = {
-  theme: PropTypes.theme,
-  gradientBorderStyle: PropTypes.style,
-  t: PropTypes.func.isRequired,
-  gradientStyle: PropTypes.style,
-  estimatedTimes: PropTypes.objectOf(PropTypes.node),
-  shipment: PropTypes.shipment,
-  background: PropTypes.objectOf(PropTypes.style),
-  selectedStyle: PropTypes.style,
-  deselectedStyle: PropTypes.style,
-  scope: PropTypes.objectOf(PropTypes.any),
-  feeHash: PropTypes.objectOf(PropTypes.any),
-  cargoView: PropTypes.node
+        </Tab>
+        <Tab
+          tabTitle={t('cargo:cargoDetails')}
+          theme={theme}
+        >
+          <div className="flex-100 layout-row layout-wrap layout-align-center-center padding_top">
+            <GreyBox
+              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
+              contentClassName="layout-column flex"
+              content={cargoView}
+            />
+            <ShipmentNotes shipment={shipment} />
+          </div>
+        </Tab>
+      </Tabs>
+    )
+  }
 }
 
 ShipmentQuotationContent.defaultProps = {
@@ -302,7 +301,8 @@ ShipmentQuotationContent.defaultProps = {
   deselectedStyle: {},
   scope: {},
   feeHash: {},
-  cargoView: null
+  cargoView: null,
+  pricingBreakdowns: []
 }
 
 function mapStateToProps (state) {

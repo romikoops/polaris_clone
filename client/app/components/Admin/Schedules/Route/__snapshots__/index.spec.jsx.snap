@@ -144,6 +144,7 @@ exports[`document.viewer is falsy 1`] = `
                       documentDispatch={null}
                       downloadUrls={Object {}}
                       loading={false}
+                      modal={false}
                       options={
                         Object {
                           "itinerary_id": 1,
@@ -429,6 +430,7 @@ exports[`shallow render 1`] = `
                       documentDispatch={null}
                       downloadUrls={Object {}}
                       loading={false}
+                      modal={false}
                       options={
                         Object {
                           "itinerary_id": 1,
@@ -729,6 +731,7 @@ exports[`state.showList is false 1`] = `
                       documentDispatch={null}
                       downloadUrls={Object {}}
                       loading={false}
+                      modal={false}
                       options={
                         Object {
                           "itinerary_id": 1,

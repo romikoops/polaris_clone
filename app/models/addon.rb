@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Addon < ApplicationRecord
+class Addon < Legacy::Addon
   belongs_to :hub
 
   def self.prepare_addons(origin_hub, destination_hub, cargo_class, tenant_vehicle_id, mot, cargos, user)
@@ -67,7 +67,7 @@ class Addon < ApplicationRecord
 
   def self.condense_addons(addons, cargos, user, mot)
     condensed_addons = []
-    pricing_tools = PricingTools.new(shipment: cargos.first.shipment, user: user)
+    pricing_tools = OfferCalculator::PricingTools.new(shipment: cargos.first.shipment, user: user)
     addons[:origin].each do |oao|
       matching_ao = addons[:destination].select { |dao| dao.addon_type === oao.addon_type }
 

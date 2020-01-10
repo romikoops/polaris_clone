@@ -20,8 +20,6 @@ pipeline {
 
   stages {
     stage('Test') {
-      failFast true
-
       parallel {
         stage('App') {
           agent {

@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import { get } from 'lodash'
+import { get, has } from 'lodash'
+import Modal from '../Modal/Modal'
+import AdminMarginPreviewRate from '../Admin/Clients/MarginPreview/Rate'
 import styles from './QuoteChargeBreakdown.scss'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import { CONTAINER_DESCRIPTIONS } from '../../constants'
 import {
   numberSpacing, capitalize, formattedPriceValue, humanizeSnakeCaseUp, fixedWeightChargeableString
 } from '../../helpers'
+import { breakdownExists, previewPrepare } from '../Admin/Clients/MarginPreview/previewPrepare'
 
 class QuoteChargeBreakdown extends Component {
   static shouldShowSubTotal (currencySections) {
@@ -28,20 +31,23 @@ class QuoteChargeBreakdown extends Component {
     }
   }
 
-  toggleExpander (key) {
-    const { scope } = this.props
-    if (get(scope, ['quote_card', 'sections', key], false)) {
-      this.setState({
-        expander: {
-          ...this.state.expander,
-          [key]: !this.state.expander[key]
-        }
-      })
+  getFinalRate (type, key, cargoClass) {
+    const { quote, metadata } = this.props
+    if (type === 'cargo') {
+      return get(metadata, ['pricing_rate_data', cargoClass, key])
     }
+
+    if (['export', 'import'].includes(type)) {
+      const feeKey = Object.keys(quote[type]).find(k => has(quote, [type, k, key]))
+
+      return get(quote, [type, feeKey, key])
+    }
+
+    return get(quote, [type, key])
   }
 
   determineSubKey (charge) {
-    const { scope, mot, t } = this.props
+    const { scope } = this.props
     let effectiveCharge
     if (charge[0].includes('unknown')) {
       effectiveCharge = [charge[0].replace('unknown_', ''), charge[1]]
@@ -196,7 +202,8 @@ class QuoteChargeBreakdown extends Component {
         payload_in_kg: 0,
         quantity: 0,
         cargo_item_type: cargo[0].cargo_item_type,
-        cargo_class: cargo[0].cargo_class
+        cargo_class: cargo[0].cargo_class,
+        id
       }
       cargo.forEach((cargoItem) => {
         consolidatedCargo.dimension_x += parseFloat(cargoItem.dimension_x)
@@ -221,7 +228,7 @@ class QuoteChargeBreakdown extends Component {
   }
 
   generateUnitContent (key) {
-    const { quote, t, scope } = this.props
+    const { quote } = this.props
 
     const unitSections = Object.entries(quote[`${key}`])
       .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
@@ -256,7 +263,15 @@ class QuoteChargeBreakdown extends Component {
       })
       const showSubTotal = QuoteChargeBreakdown.shouldShowSubTotal(currencySections)
 
-      const sections = this.renderContent(key, currencySections, currencyTotals, includedSections, excludedSections, showSubTotal)
+      const sections = this.renderContent(
+        key,
+        currencySections,
+        currencyTotals,
+        includedSections,
+        excludedSections,
+        showSubTotal,
+        cargo
+      )
 
       const description = cargo ? CONTAINER_DESCRIPTIONS[cargo.size_class] || get(cargo, ['cargo_item_type', 'description']) : capitalize(unitArray[0])
 
@@ -281,7 +296,46 @@ class QuoteChargeBreakdown extends Component {
     return capitalize(t(key))
   }
 
-  renderContent (key, currencySections, currencyTotals, includedSections, excludedSections, showSubTotal) {
+  togglePricingBreakdownModal () {
+    this.setState(prevState => ({ showPricingBreakdownModal: !prevState.showPricingBreakdownModal }))
+  }
+
+  toggleExpander (key) {
+    const { scope } = this.props
+    if (get(scope, ['quote_card', 'sections', key], false)) {
+      this.setState({
+        expander: {
+          ...this.state.expander,
+          [key]: !this.state.expander[key]
+        }
+      })
+    }
+  }
+
+  showPricingBreakdown (type, price, cargo) {
+    const key = price[0].toLowerCase()
+    const data = this.pricingBreakdowns(cargo, key)
+
+    this.setState({
+      pricingBreakdownData: data,
+      pricingBreakdownFeeKey: key,
+      pricingBreakdownType: type
+    }, () => this.togglePricingBreakdownModal())
+  }
+
+  pricingBreakdowns (cargo, key) {
+    const { pricingBreakdowns } = this.props
+
+    return previewPrepare(pricingBreakdowns, cargo, key)
+  }
+
+  pricingBreakdownExists (cargo, key) {
+    const { pricingBreakdowns } = this.props
+
+    return breakdownExists(pricingBreakdowns, cargo, key)
+  }
+
+  renderContent (key, currencySections, currencyTotals, includedSections, excludedSections, showSubTotal, cargo) {
     const { t, scope } = this.props
     const feeSections = Object.entries(currencySections).map(currencyFees => (
       <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
@@ -290,13 +344,23 @@ class QuoteChargeBreakdown extends Component {
           const subPrices = (
             <div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
-                <span>
+                {
+                  this.pricingBreakdownExists(cargo, price[0]) &&
+                  (<div
+                    className={`flex-none layout-row layout-align-center-center pointy ${styles.view_breakdown}`}
+                    onClick={() => this.showPricingBreakdown(key, price, cargo)}
+                  >
+                    <i className="fa fa-info-circle" />
+                  </div>
+                  )
+                }
+                <span className={this.pricingBreakdownExists(cargo, price[0]) && styles.padding_adjust}>
                   {this.dynamicSubKey(key, price, i)}
                 </span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>
-                  {numberSpacing(price[1].value || get(price,[1, 'total', 'value']), 2)}
+                  {numberSpacing(price[1].value || get(price, [1, 'total', 'value']), 2)}
                   &nbsp;
                   {(price[1].currency || get(price, [1, 'total', 'currency']))}
                 </p>
@@ -337,7 +401,7 @@ class QuoteChargeBreakdown extends Component {
             <div className="flex-25 layout-row layout-align-end-center">
               {price[0].includes('unknown') || price[0].includes('included') ? '' : (
                 <p>
-                  {numberSpacing(price[1].value || get(price,[1, 'total', 'value']), 2)}
+                  {numberSpacing(price[1].value || get(price, [1, 'total', 'value']), 2)}
                     &nbsp;
                   {(price[1].currency || get(price, [1, 'total', 'currency']))}
                 </p>
@@ -369,7 +433,7 @@ class QuoteChargeBreakdown extends Component {
             <div className="flex-25 layout-row layout-align-end-center">
               {price[0].includes('unknown') || price[0].includes('included') ? '' : (
                 <p>
-                  {numberSpacing(price[1].value || get(price,[1, 'total', 'value']), 2)}
+                  {numberSpacing(price[1].value || get(price, [1, 'total', 'value']), 2)}
                     &nbsp;
                   {(price[1].currency || get(price, [1, 'total', 'currency']))}
                 </p>
@@ -439,50 +503,78 @@ class QuoteChargeBreakdown extends Component {
       scope,
       shrinkHeaders
     } = this.props
+    const {
+      pricingBreakdownData,
+      showPricingBreakdownModal,
+      pricingBreakdownFeeKey,
+      pricingBreakdownType
+    } = this.state
     if (Object.keys(quote).length === 0) return ''
     const headerClass = shrinkHeaders ? styles.small_headers : ''
+    const priceBreakdownComponent = (
+      <AdminMarginPreviewRate
+        rate={pricingBreakdownData}
+        feeKey={pricingBreakdownFeeKey}
+        type={pricingBreakdownType}
+      />
+    )
+    const pricingBreakdownModal = (
+      <Modal
+        parentToggle={() => this.togglePricingBreakdownModal()}
+        component={priceBreakdownComponent}
+        maxWidth="800px"
+        minHeight="300px"
+      />
+    )
 
-    return this.quoteKeys()
-      .map(key => (
-        <CollapsingBar
-          showArrow={get(scope, ['quote_card', 'sections', key], false)}
-          showArrowSpacer={!get(scope, ['quote_card', 'sections', key], false)}
-          collapsed={showBreakdowns ? this.state.expander[`${key}`] : !this.state.expander[`${key}`]}
-          theme={theme}
-          contentStyle={styles.sub_price_row_wrapper}
-          headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
-          handleCollapser={() => this.toggleExpander(`${key}`)}
-          mainWrapperStyle={{ borderTop: '1px solid #E0E0E0', minHeight: '50px' }}
-          contentHeader={(
-            <div
-              className={`flex-100 layout-row layout-align-start-center
+    return [
+      this.quoteKeys()
+        .map(key => (
+          <CollapsingBar
+            showArrow={get(scope, ['quote_card', 'sections', key], false)}
+            showArrowSpacer={!get(scope, ['quote_card', 'sections', key], false)}
+            collapsed={showBreakdowns ? this.state.expander[`${key}`] : !this.state.expander[`${key}`]}
+            theme={theme}
+            contentStyle={styles.sub_price_row_wrapper}
+            headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+            handleCollapser={() => this.toggleExpander(`${key}`)}
+            mainWrapperStyle={{ borderTop: '1px solid #E0E0E0', minHeight: '50px' }}
+            contentHeader={(
+              <div
+                className={`flex-100 layout-row layout-align-start-center
               ${styles.price_row} ${headerClass}`}
-            >
-              <div className="flex layout-row layout-align-start-center">
-                <span>{this.motName(quote[key].name)}</span>
-                {
-                  scope.show_chargeable_weight && !['import', 'export'].includes(key)
-                    ? (
-                      <span
-                        className={styles.chargeable_weight}
-                        dangerouslySetInnerHTML={{ __html: this.renderChargeableWeight(key) }}
-                      />
-                    ) : ''
-                }
-              </div>
-              <div className={`flex-35 layout-row layout-align-end-center ${headerClass}`}>
-                <p>
+              >
+                <div className="flex layout-row layout-align-start-center">
+                  <span>{this.motName(quote[key].name)}</span>
                   {
-                    this.dynamicSectionTotal(key)
+                    scope.show_chargeable_weight && !['import', 'export'].includes(key)
+                      ? (
+                        <span
+                          className={styles.chargeable_weight}
+                          dangerouslySetInnerHTML={{ __html: this.renderChargeableWeight(key) }}
+                        />
+                      ) : ''
                   }
-                </p>
+                </div>
+                <div className={`flex-35 layout-row layout-align-end-center ${headerClass}`}>
+                  <p>
+                    {
+                      this.dynamicSectionTotal(key)
+                    }
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
-          content={this.determineContentToGenerate(key)}
-        />
-      ))
+            )}
+            content={this.determineContentToGenerate(key)}
+          />
+        )),
+      showPricingBreakdownModal ? pricingBreakdownModal : ''
+    ]
   }
+}
+
+QuoteChargeBreakdown.defaultProps = {
+  pricingBreakdowns: []
 }
 
 export default withNamespaces(['shipment', 'cargo', 'overrides'])(QuoteChargeBreakdown)

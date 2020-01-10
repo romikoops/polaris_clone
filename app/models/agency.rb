@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
-class Agency < ApplicationRecord
-  has_paper_trail
-
-  has_many :users
-  belongs_to :agency_manager, class_name: 'User', optional: true
-  belongs_to :tenant
+class Agency < Legacy::Agency
 end
 
 # == Schema Information

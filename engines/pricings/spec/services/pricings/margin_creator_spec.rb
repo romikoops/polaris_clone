@@ -253,10 +253,10 @@ RSpec.describe Pricings::MarginCreator do
         expect(new_margins.first.operator).to eq('%')
         expect(new_margins.first.applicable_type).to eq('Tenants::Group')
         expect(new_margins.first.tenant_vehicle_id).to eq(nil)
-        expect(new_margins.first.origin_hub_id).to eq(hub.id)
+        expect(new_margins.first.destination_hub_id).to eq(hub.id)
         expect(new_margins.first.cargo_class).to eq('All')
         expect(new_margins.first.itinerary_id).to eq(nil)
-        expect(new_margins.first.destination_hub_id).to eq(nil)
+        expect(new_margins.first.origin_hub_id).to eq(nil)
       end
     end
   end

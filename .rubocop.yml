@@ -21,7 +21,7 @@ Metrics/BlockLength:
     - '**/*_spec.rb'
     - '**/*.gemspec'
     - '**/*.rake'
-    - '**/*/factories/*.rb'
+    - '**/*/factories/**/*.rb'
     - config/**/*.rb
     - db/migrate/*.rb
     - engines/*/db/migrate/*.rb
@@ -32,6 +32,7 @@ Metrics/LineLength:
   IgnoreCopDirectives: true
   Exclude:
     - '**/*_spec.rb'
+    - '**/*/factories/**/*.rb'
     - db/custom_seeds/*.rb
     - qa/features/**/*_steps.rb
     - qa/features/**/*.feature

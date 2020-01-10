@@ -10,13 +10,6 @@ class NexusesController < ApplicationController
     response_handler("available#{params[:target].capitalize}Nexuses" => formatted_available_nexuses)
   end
 
-  def find_nexus
-    geocoded_address = Address.new(latitude: params[:lat], longitude: params[:lng])
-    nexus_data = geocoded_address.closest_address_with_distance
-    nexus = nexus_data.first if nexus_data.last <= 200
-    response_handler(nexus: nexus)
-  end
-
   private
 
   def find_available_nexuses

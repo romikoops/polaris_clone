@@ -19,7 +19,7 @@ RSpec.describe Pricings::Conversion do
           'ZAR' => 12_345
         }
         result = described_class.new(base: 'EUR', tenant_id: fixed_tenant.id).sum_and_convert(hash)
-        expect(result).to eq(1014.8223016822642)
+        expect(result).to eq(239.59437870720262)
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe Pricings::Conversion do
         }
         result = described_class.new(base: 'EUR', tenant_id: fixed_tenant.id).sum_and_convert_cargo(hash)
 
-        expect(result).to eq(19.88194299228292)
+        expect(result).to eq(18.924953634865865)
       end
     end
 

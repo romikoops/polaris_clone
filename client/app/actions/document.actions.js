@@ -1,8 +1,6 @@
-// import { push } from 'react-router-redux'
 import { documentConstants } from '../constants/document.constants'
 import { documentService } from '../services/document.service'
-import { alertActions, adminActions, clientsActions } from "."
-// import { Promise } from 'es6-promise-promise';
+import { alertActions, adminActions, clientsActions } from '.'
 
 function uploadPricings (file) {
   function request (uploadData) {
@@ -30,6 +28,7 @@ function uploadPricings (file) {
     )
   }
 }
+
 function uploadGeneratorSheet (file) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
@@ -55,6 +54,7 @@ function uploadGeneratorSheet (file) {
     )
   }
 }
+
 function uploadHubs (file) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
@@ -81,6 +81,7 @@ function uploadHubs (file) {
     )
   }
 }
+
 function uploadMargins (args) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
@@ -159,6 +160,7 @@ function uploadChargeCategories (file) {
     )
   }
 }
+
 function downloadPricings (options) {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -184,6 +186,7 @@ function downloadPricings (options) {
     )
   }
 }
+
 function downloadLocalCharges (options) {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -209,6 +212,7 @@ function downloadLocalCharges (options) {
     )
   }
 }
+
 function downloadSchedules (options) {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -234,6 +238,7 @@ function downloadSchedules (options) {
     )
   }
 }
+
 function downloadQuotations (options) {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -283,6 +288,7 @@ function downloadQuote (options) {
     )
   }
 }
+
 function downloadShipment (options) {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -307,6 +313,7 @@ function downloadShipment (options) {
     )
   }
 }
+
 function downloadTrucking (options) {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -332,6 +339,7 @@ function downloadTrucking (options) {
     )
   }
 }
+
 function downloadHubs () {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -358,6 +366,7 @@ function downloadHubs () {
     )
   }
 }
+
 function downloadChargeCategories () {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -409,6 +418,36 @@ function downloadGdpr (options) {
     )
   }
 }
+
+function downloadDocument (id) {
+  function request (downloadData) {
+    return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
+  }
+  function success (downloadData) {
+    return {
+      type: documentConstants.DOWNLOAD_SUCCESS,
+      payload: { ...downloadData.data, key: 'id' }
+    }
+  }
+  function failure (error) {
+    return { type: documentConstants.DOWNLOAD_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.downloadDocument(id).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function uploadSchedules (file, target) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
@@ -435,6 +474,7 @@ function uploadSchedules (file, target) {
     )
   }
 }
+
 function uploadItinerarySchedules (file, target) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
@@ -461,6 +501,7 @@ function uploadItinerarySchedules (file, target) {
     )
   }
 }
+
 function uploadLocalCharges (file, mot, groupId) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
@@ -547,7 +588,8 @@ export const documentActions = {
   uploadMargins,
   downloadQuote,
   uploadGroupPricings,
-  uploadNotes
+  uploadNotes,
+  downloadDocument
 }
 
 export default documentActions

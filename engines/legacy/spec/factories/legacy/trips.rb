@@ -6,6 +6,7 @@ FactoryBot.define do
     end_date { Date.tomorrow + 20.days }
     closing_date { Date.today + 2.days }
     association :itinerary, factory: :default_itinerary
+    load_type { 'cargo_item' }
     association :tenant_vehicle, factory: :legacy_tenant_vehicle
     trait :with_layovers do
       after(:build) do |trip|
@@ -23,5 +24,7 @@ FactoryBot.define do
                                eta: trip.end_date)
       end
     end
+
+    factory :trip_with_layovers, traits: [:with_layovers]
   end
 end

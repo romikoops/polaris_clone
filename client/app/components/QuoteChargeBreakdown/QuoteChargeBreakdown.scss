@@ -12,7 +12,7 @@
       font-weight: 800;
     }
   }
-  
+
   .sub_price_row {
     background: #F2F2F2;
     border-bottom: 1px solid #E0E0E0;
@@ -29,6 +29,12 @@
       font-size: 13px;
       letter-spacing: 0.02em;
     }
+  }
+  .padding_adjust {
+    padding-left: 10px !important;
+  }
+  .view_breakdown {
+    width: 65px;
   }
   .currency_header {
     background: rgb(243, 243, 243);

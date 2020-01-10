@@ -3,17 +3,32 @@
 require 'rails_helper'
 
 RSpec.describe UsersController do
-  describe 'POST #update' do
-    let(:user) { create(:user, guest: true) }
-    let(:addresses) { create_list(:address, 5) }
+  let(:addresses) { create_list(:address, 5) }
+  let(:user) { create(:user, guest: true) }
+
+  before do
+    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive(:current_user).and_return(user)
+    user.addresses = addresses
+  end
+
+  describe 'GET #home' do
+    let(:user) { create(:user) }
 
     before do
-      user.addresses = addresses
-    end
-
-    it 'returns http success, updates the user and send the email' do
       allow(controller).to receive(:user_signed_in?).and_return(true)
       allow(controller).to receive(:current_user).and_return(user)
+    end
+
+    it 'returns an http status of success' do
+      get :home, params: { tenant_id: user.tenant, user_id: user.id }
+
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'POST #update' do
+    it 'returns http success, updates the user and send the email' do
       allow(user).to receive(:send_confirmation_instructions).and_return(true)
       params = {
         tenant_id: user.tenant_id,
@@ -35,6 +50,74 @@ RSpec.describe UsersController do
       expect(response).to have_http_status(:success)
       expect(user.guest).to eq false
       expect(user).to have_received(:send_confirmation_instructions).once
+    end
+  end
+
+  describe 'GET currencies' do
+    let(:rates) { { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34, USD: 1.3 } } }
+
+    before do
+      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR")
+        .to_return(status: 200, body: rates.to_json, headers: {})
+    end
+
+    it 'returns http success' do
+      get :currencies, params: { tenant_id: user.tenant.id, user_id: user.id }
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'returns the correct currency rate' do
+      get :currencies, params: { tenant_id: user.tenant.id, user_id: user.id }
+      body = JSON.parse(response.body)
+
+      expected = body.dig('data', 1)
+      expect(expected['key']).to eq('AED')
+      expect(expected['rate']).to eq(4.11)
+    end
+
+    it 'if there is no currency for user, it will use EUR' do
+      user = create(:user, currency: nil)
+      get :currencies, params: { tenant_id: user.tenant.id, user_id: user.id }
+
+      body = JSON.parse(response.body)
+
+      expected = body.dig('data', 1)
+      expect(expected['key']).to eq('AED')
+      expect(expected['rate']).to eq(4.11)
+    end
+  end
+
+  describe 'POST currencies' do
+    let(:rates) { { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34, USD: 1.3 } } }
+
+    before do
+      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR")
+        .to_return(status: 200, body: rates.to_json, headers: {})
+
+      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=BRL")
+        .to_return(status: 200, body: rates.to_json, headers: {})
+    end
+
+    it 'returns http success' do
+      post :set_currency, params: { tenant_id: user.tenant.id, user_id: user.id, currency: 'EUR' }
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'changes the user default currency' do
+      post :set_currency, params: { tenant_id: user.tenant.id, user_id: user.id, currency: 'BRL' }
+
+      user.reload
+      expect(user.currency).to eq('BRL')
+    end
+
+    it 'returns the new currency rate' do
+      post :currencies, params: { tenant_id: user.tenant.id, user_id: user.id }
+
+      body = JSON.parse(response.body)
+
+      expected = body.dig('data', 1)
+      expect(expected['key']).to eq('AED')
+      expect(expected['rate']).to eq(4.11)
     end
   end
 end

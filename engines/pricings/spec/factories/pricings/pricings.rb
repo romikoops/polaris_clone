@@ -33,7 +33,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                     1,
                     pricing: pricing,
                     tenant: pricing.tenant,
-                    rate_basis: FactoryBot.create(:per_wm),
+                    rate_basis: FactoryBot.create(:per_wm_rate_basis),
                     rate: 25,
                     charge_category: FactoryBot.create(:bas_charge))
       end

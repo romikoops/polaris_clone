@@ -233,7 +233,7 @@ module SetupHelper
     end
 
     def schedule(shipment)
-      Legacy::Schedule.new(
+      OfferCalculator::Schedule.new(
         origin_hub_id: shipment.origin_hub.id,
         destination_hub_id: shipment.destination_hub.id,
         origin_hub_name: shipment.origin_hub.name,

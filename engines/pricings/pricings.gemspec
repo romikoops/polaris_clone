@@ -21,6 +21,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'legacy'
   s.add_dependency 'tenants'
   s.add_dependency 'trucking'
-
+ 
   Gemhelper.common_gems(s)
 end

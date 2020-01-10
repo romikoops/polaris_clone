@@ -346,4 +346,19 @@ RSpec.describe Pricings::Calculator do
       expect(result.dig('total', 'currency')).to eq('EUR')
     end
   end
+
+  describe '.determine_cargo_item_price with flat_margins' do
+    it 'it calculates the correct price for PER_WM and 100' do
+      wm_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      FactoryBot.create(:fee_per_wm, pricing: wm_pricing)
+      pricing_with_margins = wm_pricing.as_json.merge('flat_margins' => { 'bas' => 100 })
+      result = described_class.new(cargo: lcl_cargo,
+                                   pricing: pricing_with_margins,
+                                   user: user,
+                                   mode_of_transport: 'ocean',
+                                   date: Date.today + 10.days).perform
+      expect(result.dig('total', 'value')).to eq(322.2)
+      expect(result.dig('total', 'currency')).to eq('EUR')
+    end
+  end
 end

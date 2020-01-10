@@ -110,7 +110,7 @@ module MultiTenantTools
         internal: true
       )
     end
-    if tenant.quotation_tool?
+    if quotation_tool?(tenant)
       unless tenant.users.exists?(email: 'manager@itsmycargo.com')
         tenant.users.create!(
           email: 'manager@itsmycargo.com',
@@ -504,4 +504,13 @@ module MultiTenantTools
       }
     )
   end
+
+  def quotation_tool?(tenant)
+    scope = ::Tenants::ScopeService.new(
+      tenant: ::Tenants::Tenant.find_by(legacy_id: tenant&.id)
+    ).fetch
+
+    scope['open_quotation_tool'] || scope['closed_quotation_tool']
+  end
+
 end

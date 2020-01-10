@@ -28,7 +28,6 @@ class Admin::MarginsController < ApplicationController
       pricing_id: params[:pricing_id],
       selectedHubDirection: params[:selectedHubDirection],
       marginType: params[:marginType],
-      pricing_id: params[:pricing_id],
       tenant_id: params[:tenant_id],
       groupId: params[:groupId],
       directions: params[:hub_direction],

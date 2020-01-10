@@ -3,7 +3,6 @@
 class Document < Legacy::Document
   has_one_attached :file
   belongs_to :shipment, optional: true
-  belongs_to :user, optional: true
   belongs_to :tenant
   belongs_to :quotation, optional: true
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true

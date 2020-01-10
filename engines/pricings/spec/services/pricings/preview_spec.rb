@@ -20,7 +20,7 @@ RSpec.describe Pricings::Preview do
       expect(results.length).to eq(1)
       expect(results.dig(0, 0, 'id')).to eq(lcl_pricing.id)
       expect(results.dig(0, 0, 'manipulation_steps', 0, 'margin', 'id')).to eq(user_margin.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 0, 'fees', 'BAS', 'rate')).to eq(27.5)
+      expect(results.dig(0, 0, 'manipulation_steps', 0, 'fees', 'bas', 'rate')).to eq(27.5)
     end
     it 'retruns the examples for a company' do
       company_1 = FactoryBot.create(:tenants_company, tenant: tenants_tenant)
@@ -33,7 +33,7 @@ RSpec.describe Pricings::Preview do
       expect(results.length).to eq(1)
       expect(results.dig(0, 0, 'id')).to eq(lcl_pricing.id)
       expect(results.dig(0, 0, 'manipulation_steps', 0, 'margin', 'id')).to eq(company_margin.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 0, 'fees', 'BAS', 'rate')).to eq(27.5)
+      expect(results.dig(0, 0, 'manipulation_steps', 0, 'fees', 'bas', 'rate')).to eq(27.5)
     end
     it 'retruns the examples for a company through the user' do
       company_1 = FactoryBot.create(:tenants_company, tenant: tenants_tenant)
@@ -46,7 +46,7 @@ RSpec.describe Pricings::Preview do
       expect(results.length).to eq(1)
       expect(results.dig(0, 0, 'id')).to eq(lcl_pricing.id)
       expect(results.dig(0, 0, 'manipulation_steps', 0, 'margin', 'id')).to eq(company_margin.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 0, 'fees', 'BAS', 'rate')).to eq(27.5)
+      expect(results.dig(0, 0, 'manipulation_steps', 0, 'fees', 'bas', 'rate')).to eq(27.5)
     end
     it 'retruns the examples with the steps in correct order' do
       lcl_pricing = FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1)
@@ -58,11 +58,11 @@ RSpec.describe Pricings::Preview do
       expect(results.length).to eq(1)
       expect(results.dig(0, 0, 'id')).to eq(lcl_pricing.id)
       expect(results.dig(0, 0, 'manipulation_steps', 0, 'margin', 'id')).to eq(user_margin_1.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 0, 'fees', 'BAS', 'rate')).to eq(27.5)
+      expect(results.dig(0, 0, 'manipulation_steps', 0, 'fees', 'bas', 'rate')).to eq(27.5)
       expect(results.dig(0, 0, 'manipulation_steps', 1, 'margin', 'id')).to eq(user_margin_2.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 1, 'fees', 'BAS', 'rate')).to eq(30.25)
+      expect(results.dig(0, 0, 'manipulation_steps', 1, 'fees', 'bas', 'rate')).to eq(30.25)
       expect(results.dig(0, 0, 'manipulation_steps', 2, 'margin', 'id')).to eq(user_margin_3.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 2, 'fees', 'BAS', 'rate')).to eq(33.275)
+      expect(results.dig(0, 0, 'manipulation_steps', 2, 'fees', 'bas', 'rate')).to eq(33.275)
     end
     it 'retruns the examples with the steps in correct order with different origins' do
       lcl_pricing = FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1)
@@ -76,11 +76,11 @@ RSpec.describe Pricings::Preview do
       expect(results.length).to eq(1)
       expect(results.dig(0, 0, 'id')).to eq(lcl_pricing.id)
       expect(results.dig(0, 0, 'manipulation_steps', 0, 'margin', 'id')).to eq(user_margin_1.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 0, 'fees', 'BAS', 'rate')).to eq(27.5)
+      expect(results.dig(0, 0, 'manipulation_steps', 0, 'fees', 'bas', 'rate')).to eq(27.5)
       expect(results.dig(0, 0, 'manipulation_steps', 1, 'margin', 'id')).to eq(group_margin_1.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 1, 'fees', 'BAS', 'rate')).to eq(28.875)
+      expect(results.dig(0, 0, 'manipulation_steps', 1, 'fees', 'bas', 'rate')).to eq(28.875)
       expect(results.dig(0, 0, 'manipulation_steps', 2, 'margin', 'id')).to eq(group_margin_2.id)
-      expect(results.dig(0, 0, 'manipulation_steps', 2, 'fees', 'BAS', 'rate')).to eq(33.20625)
+      expect(results.dig(0, 0, 'manipulation_steps', 2, 'fees', 'bas', 'rate')).to eq(33.20625)
     end
     it 'retruns the examples with the steps in correct order with different origins and from group' do
       lcl_pricing = FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1)
@@ -115,11 +115,11 @@ RSpec.describe Pricings::Preview do
       expect(results.length).to eq(2)
       expect(results.dig(lcl_index, 0, 'id')).to eq(lcl_pricing.id)
       expect(results.dig(lcl_index, 0, 'manipulation_steps', 0, 'margin', 'id')).to eq(user_margin_1.id)
-      expect(results.dig(lcl_index, 0, 'manipulation_steps', 0, 'fees', 'BAS', 'rate')).to eq(27.5)
+      expect(results.dig(lcl_index, 0, 'manipulation_steps', 0, 'fees', 'bas', 'rate')).to eq(27.5)
       expect(results.dig(lcl_index, 0, 'manipulation_steps', 1, 'margin', 'id')).to eq(group_margin_1.id)
-      expect(results.dig(lcl_index, 0, 'manipulation_steps', 1, 'fees', 'BAS', 'rate')).to eq(28.875)
+      expect(results.dig(lcl_index, 0, 'manipulation_steps', 1, 'fees', 'bas', 'rate')).to eq(28.875)
       expect(results.dig(lcl_index, 0, 'manipulation_steps', 2, 'margin', 'id')).to eq(group_margin_2.id)
-      expect(results.dig(lcl_index, 0, 'manipulation_steps', 2, 'fees', 'BAS', 'rate')).to eq(33.20625)
+      expect(results.dig(lcl_index, 0, 'manipulation_steps', 2, 'fees', 'bas', 'rate')).to eq(33.20625)
       expect(results.dig(fcl_index, 0, 'id')).to eq(fcl_20_pricing.id)
       expect(results.dig(fcl_index, 0, 'manipulation_steps', 0, 'margin', 'id')).to eq(user_margin_2.id)
     end

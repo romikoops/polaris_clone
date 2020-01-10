@@ -120,15 +120,15 @@ module Pricings
             case direction
             when 'import'
               iterations << {
-                destination_hub_id: hub_id,
-                origin_hub_id: @counterpart_hub_id,
+                origin_hub_id: hub_id,
+                destination_hub_id: @counterpart_hub_id,
                 cargo_class: cargo_class,
                 margin_type: :trucking_on_margin
               }
             when 'export'
               iterations << {
-                origin_hub_id: hub_id,
-                destination_hub_id: @counterpart_hub_id,
+                destination_hub_id: hub_id,
+                origin_hub_id: @counterpart_hub_id,
                 cargo_class: cargo_class,
                 margin_type: :trucking_pre_margin
               }

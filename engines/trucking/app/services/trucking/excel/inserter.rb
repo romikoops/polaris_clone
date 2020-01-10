@@ -551,12 +551,20 @@ module Trucking
       end
 
       def metadata(row_number:, sheet_name:)
-        {
+        meta_data = {
           row_number: row_number,
           sheet_name: sheet_name,
           file_name: document&.file&.filename&.to_s,
           document_id: document&.id
         }
+        return meta_data unless document.present?
+
+        meta_data[:document_id] = document.id
+        return meta_data unless document.file.attached?
+
+        meta_data[:file_name] = document.file.filename.to_s
+
+        meta_data
       end
 
       def trucking_rates(weight_min_row, val, meta, row_min_value, _row_zone_name, m_index, mod_key) # rubocop:disable Metrics/PerceivedComplexity, Metrics/ParameterLists, Metrics/CyclomaticComplexity

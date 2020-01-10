@@ -7,7 +7,7 @@ module AdmiraltyReports
     MONTH_LOOKUP = Date::MONTHNAMES[1..12].zip(1..12).freeze
 
     def index
-      @tenants = Tenant.order(:subdomain).all
+      @tenants = Tenant.order(:slug).all
       first_year = Legacy::Shipment.order(:created_at).first&.created_at&.year || Time.now.year
       @possible_years = (first_year..Time.now.year).to_a
     end

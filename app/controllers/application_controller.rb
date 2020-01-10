@@ -49,6 +49,10 @@ class ApplicationController < ActionController::API
     ).fetch
   end
 
+  def quotation_tool?
+    current_scope['open_quotation_tool'] || current_scope['closed_quotation_tool']
+  end
+
   def append_info_to_payload(payload)
     super
 

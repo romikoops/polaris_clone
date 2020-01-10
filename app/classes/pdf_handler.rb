@@ -195,7 +195,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
          end
     quantity_strings = {}
     shipment.cargo_units.each do |unit|
-      cargo_class = unit.is_a?(CargoItem) ? unit.cargo_item_type.description : unit.size_class.humanize.upcase
+      cargo_class = unit.is_a?(Legacy::CargoItem) ? unit.cargo_item_type.description : unit.size_class.humanize.upcase
       quantity_strings[unit.id.to_s] = "#{unit.quantity} x #{cargo_class}"
     end
     @cargo_data[:item_strings][shipment.id] = quantity_strings

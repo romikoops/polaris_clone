@@ -9,8 +9,10 @@ module Legacy
     has_many :itineraries, class_name: 'Legacy::Itinerary'
     has_many :hubs, dependent: :destroy
 
+    has_many :map_data, dependent: :destroy, class_name: '::MapDatum'
     has_many :margins, as: :applicable
     has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
+    has_many :max_dimensions_bundles, dependent: :destroy, class_name: 'Legacy::MaxDimensionsBundle'
 
     has_paper_trail
 
@@ -22,6 +24,25 @@ module Legacy
     def __subdomain
       self['subdomain']
     end
+
+    def max_dimensions
+      max_dimensions_bundles.unit.to_max_dimensions_hash
+    end
+
+    def max_aggregate_dimensions
+      max_dimensions_bundles.aggregate.to_max_dimensions_hash
+    end
+
+    def email_for(branch_raw, mode_of_transport = nil)
+      return nil unless branch_raw.is_a?(String) || branch_raw.is_a?(Symbol)
+
+      branch = branch_raw.to_s
+
+      return Settings.emails.booking if emails[branch].blank?
+
+      emails[branch][mode_of_transport] || emails[branch]['general']
+    end
+
   end
 end
 

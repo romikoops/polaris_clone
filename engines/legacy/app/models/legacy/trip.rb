@@ -7,6 +7,7 @@ module Legacy
     belongs_to :tenant_vehicle
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :itinerary
+
     scope :for_dates, (lambda do |start_date, end_date|
       where(Arel::Nodes::InfixOperation.new(
               'OVERLAPS',
@@ -14,6 +15,10 @@ module Legacy
               Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
             ))
     end)
+
+    def vehicle
+      tenant_vehicle.vehicle
+    end
   end
 end
 

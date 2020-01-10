@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2020_01_03_144746) do
 
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -1003,6 +1004,26 @@ ActiveRecord::Schema.define(version: 2020_01_03_144746) do
     t.index ["uuid"], name: "index_pricings_on_uuid", unique: true
   end
 
+  create_table "pricings_breakdowns", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "cargo_class"
+    t.bigint "cargo_unit_id"
+    t.string "cargo_unit_type"
+    t.integer "charge_category_id"
+    t.integer "charge_id"
+    t.datetime "created_at", null: false
+    t.jsonb "data"
+    t.uuid "margin_id"
+    t.uuid "metadatum_id", null: false
+    t.integer "order"
+    t.string "pricing_id"
+    t.jsonb "rate_origin", default: {}
+    t.uuid "target_id"
+    t.string "target_type"
+    t.datetime "updated_at", null: false
+    t.index ["cargo_unit_type", "cargo_unit_id"], name: "index_pricings_breakdowns_on_cargo_unit_type_and_cargo_unit_id"
+    t.index ["target_type", "target_id"], name: "index_pricings_breakdowns_on_target_type_and_target_id"
+  end
+
   create_table "pricings_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "charge_category_id"
     t.datetime "created_at", null: false
@@ -1071,6 +1092,15 @@ ActiveRecord::Schema.define(version: 2020_01_03_144746) do
     t.index ["sandbox_id"], name: "index_pricings_margins_on_sandbox_id"
     t.index ["tenant_id"], name: "index_pricings_margins_on_tenant_id"
     t.index ["tenant_vehicle_id"], name: "index_pricings_margins_on_tenant_vehicle_id"
+  end
+
+  create_table "pricings_metadata", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "cargo_unit_id"
+    t.integer "charge_breakdown_id"
+    t.datetime "created_at", null: false
+    t.uuid "pricing_id"
+    t.uuid "tenant_id"
+    t.datetime "updated_at", null: false
   end
 
   create_table "pricings_pricings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

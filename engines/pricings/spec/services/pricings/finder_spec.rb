@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'timecop'
 
 RSpec.describe Pricings::Finder do
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:scope) { FactoryBot.create(:tenants_scope, content: {}, target: tenants_tenant)}
+  let!(:scope) { FactoryBot.create(:tenants_scope, content: {}, target: tenants_tenant) }
   let(:vehicle) do
     FactoryBot.create(:vehicle,
                       tenant_vehicles: [tenant_vehicle_1])
@@ -47,9 +48,10 @@ RSpec.describe Pricings::Finder do
       quantity: 1
     }
   end
-  let!(:default_margin) { FactoryBot.create(:freight_margin, default_for: 'ocean', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)}
+  let!(:default_margin) { FactoryBot.create(:freight_margin, default_for: 'ocean', tenant: tenants_tenant, applicable: tenants_tenant, value: 0) }
   let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
   let(:itinerary_2) { FactoryBot.create(:default_itinerary, tenant: tenant) }
+  let!(:default_margin) { FactoryBot.create(:freight_margin, default_for: 'ocean', tenant: tenants_tenant, applicable: tenants_tenant, value: 0) }
 
   describe '.perform' do
     it 'returns an object containing pricings grouped by transport category (lcl)' do
@@ -89,8 +91,8 @@ RSpec.describe Pricings::Finder do
         shipment: lcl_shipment,
         sandbox: nil
       ).perform
-      expect(results.keys.length).to eq(1)
-      expect(results.values.first.first['id']).to eq(pricing_1.id)
+      expect(results.first.keys.length).to eq(1)
+      expect(results.first.values.first.first['id']).to eq(pricing_1.id)
     end
     it 'returns an object containing group pricings grouped by transport category (lcl)' do
       group_1 = FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'TEST1')
@@ -140,8 +142,8 @@ RSpec.describe Pricings::Finder do
         shipment: lcl_shipment,
         sandbox: nil
       ).perform
-      expect(results.keys.length).to eq(1)
-      expect(results.values.first.first['id']).to eq(pricing_1.id)
+      expect(results.first.keys.length).to eq(1)
+      expect(results.first.values.first.first['id']).to eq(pricing_1.id)
     end
     it 'returns an object containing pricings grouped by transport category (fcl)' do
       pricing_1 = FactoryBot.create(:fcl_20_pricing,
@@ -188,100 +190,102 @@ RSpec.describe Pricings::Finder do
         sandbox: nil
       ).perform
 
-      expect(results.keys.length).to eq(3)
-      expect(results['fcl_40_hq'].first['id']).to eq(pricing_3.id)
-      expect(results['fcl_40'].first['id']).to eq(pricing_2.id)
-      expect(results['fcl_20'].first['id']).to eq(pricing_1.id)
+      expect(results.first.keys.length).to eq(3)
+      expect(results.first['fcl_40_hq'].first['id']).to eq(pricing_3.id)
+      expect(results.first['fcl_40'].first['id']).to eq(pricing_2.id)
+      expect(results.first['fcl_20'].first['id']).to eq(pricing_1.id)
     end
     it 'returns pricings valid for closing_dates if departure dates return nil' do
-      pricing_1 = FactoryBot.create(:lcl_pricing,
-                                    itinerary: itinerary_1,
-                                    tenant_vehicle: tenant_vehicle_1,
-                                    tenant: tenant,
-                                    effective_date: Date.parse('01/01/2019'),
-                                    expiration_date: Date.parse('31/01/2019'))
-      trip = FactoryBot.create(:legacy_trip,
-                               start_date: Date.parse('02/02/2019'),
-                               end_date: Date.parse('28/02/2019'),
-                               closing_date: Date.parse('28/01/2019'),
-                               tenant_vehicle: tenant_vehicle_1,
-                               itinerary: itinerary_1)
-      FactoryBot.create(:pricings_margin,
-                        pricing: pricing_1,
-                        tenant: tenants_tenant,
-                        applicable: tenants_user,
-                        effective_date: Date.parse('01/01/2019'),
-                        expiration_date: Date.parse('28/02/2019'))
+      Timecop.freeze(Date.parse('2019/01/25')) do
+        pricing_1 = FactoryBot.create(:lcl_pricing,
+                                      itinerary: itinerary_1,
+                                      tenant_vehicle: tenant_vehicle_1,
+                                      tenant: tenant,
+                                      effective_date: Date.parse('01/01/2019'),
+                                      expiration_date: Date.parse('31/01/2019'))
+        trip = FactoryBot.create(:legacy_trip,
+                                 start_date: Date.parse('02/02/2019'),
+                                 end_date: Date.parse('28/02/2019'),
+                                 closing_date: Date.parse('28/01/2019'),
+                                 tenant_vehicle: tenant_vehicle_1,
+                                 itinerary: itinerary_1)
+        FactoryBot.create(:pricings_margin,
+                          pricing: pricing_1,
+                          tenant: tenants_tenant,
+                          applicable: tenants_user,
+                          effective_date: Date.today,
+                          expiration_date: Date.today + 32.days)
 
-      schedules = [Legacy::Schedule.from_trip(trip)]
-      dates = {
-        start_date: schedules.first.etd,
-        end_date: schedules.first.etd,
-        closing_start_date: schedules.first.closing_date,
-        closing_end_date: schedules.first.closing_date
-      }
+        schedules = [Legacy::Schedule.from_trip(trip)]
+        dates = {
+          start_date: schedules.first.etd,
+          end_date: schedules.first.etd,
+          closing_start_date: schedules.first.closing_date,
+          closing_end_date: schedules.first.closing_date
+        }
 
-      results = described_class.new(
-        schedules: schedules,
-        user_pricing_id: user.id,
-        cargo_classes: ['lcl'],
-        dates: dates,
-        dedicated_pricings_only: false,
-        shipment: lcl_shipment,
-        sandbox: nil
-      ).perform
-      expect(results.keys.length).to eq(1)
-      expect(results.values.first.first['id']).to eq(pricing_1.id)
-    end
-  end
-
-  describe '.pricings_for_cargo_classes_and_groups' do
-    it 'returns the correct group pricings over the base pricing' do
-      group_1 = FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'TEST1')
-      FactoryBot.create(:tenants_membership, group: group_1, member: tenants_user)
-      pricing_1 = FactoryBot.create(:lcl_pricing,
-                                    tenant: tenant,
-                                    itinerary: itinerary_1,
-                                    tenant_vehicle: tenant_vehicle_1,
-                                    group_id: group_1.id)
-      pricing_2 = FactoryBot.create(:lcl_pricing,
-                                    tenant: tenant,
-                                    itinerary: itinerary_1,
-                                    tenant_vehicle: tenant_vehicle_1)
-      trips = [1, 3].map do |num|
-        base_date = num.days.from_now
-        FactoryBot.create(:legacy_trip,
-                          itinerary: pricing_1.itinerary,
-                          tenant_vehicle: pricing_1.tenant_vehicle,
-                          closing_date: base_date - 4.days,
-                          start_date: base_date,
-                          end_date: base_date + 30.days)
-        FactoryBot.create(:legacy_trip,
-                          itinerary: pricing_2.itinerary,
-                          tenant_vehicle: pricing_2.tenant_vehicle,
-                          closing_date: base_date - 4.days,
-                          start_date: base_date,
-                          end_date: base_date + 30.days)
+        results = described_class.new(
+          schedules: schedules,
+          user_pricing_id: user.id,
+          cargo_classes: ['lcl'],
+          dates: dates,
+          dedicated_pricings_only: false,
+          shipment: lcl_shipment,
+          sandbox: nil
+        ).perform
+        expect(results.first.keys.length).to eq(1)
+        expect(results.first.values.first.first['id']).to eq(pricing_1.id)
       end
-      schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
+    end
 
-      dates = {
-        start_date: schedules.first.etd,
-        end_date: schedules.last.eta,
-        closing_start_date: schedules.first.closing_date,
-        closing_end_date: schedules.last.closing_date
-      }
-      results = described_class.new(
-        schedules: schedules,
-        user_pricing_id: user.id,
-        cargo_classes: ['lcl'],
-        dates: dates,
-        dedicated_pricings_only: false,
-        shipment: lcl_shipment,
-        sandbox: nil
-      ).pricings_for_cargo_classes_and_groups
+    describe '.pricings_for_cargo_classes_and_groups' do
+      it 'returns the correct group pricings over the base pricing' do
+        group_1 = FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'TEST1')
+        FactoryBot.create(:tenants_membership, group: group_1, member: tenants_user)
+        pricing_1 = FactoryBot.create(:lcl_pricing,
+                                      tenant: tenant,
+                                      itinerary: itinerary_1,
+                                      tenant_vehicle: tenant_vehicle_1,
+                                      group_id: group_1.id)
+        pricing_2 = FactoryBot.create(:lcl_pricing,
+                                      tenant: tenant,
+                                      itinerary: itinerary_1,
+                                      tenant_vehicle: tenant_vehicle_1)
+        trips = [1, 3].map do |num|
+          base_date = num.days.from_now
+          FactoryBot.create(:legacy_trip,
+                            itinerary: pricing_1.itinerary,
+                            tenant_vehicle: pricing_1.tenant_vehicle,
+                            closing_date: base_date - 4.days,
+                            start_date: base_date,
+                            end_date: base_date + 30.days)
+          FactoryBot.create(:legacy_trip,
+                            itinerary: pricing_2.itinerary,
+                            tenant_vehicle: pricing_2.tenant_vehicle,
+                            closing_date: base_date - 4.days,
+                            start_date: base_date,
+                            end_date: base_date + 30.days)
+        end
+        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
 
-      expect(results).to match_array([pricing_1])
+        dates = {
+          start_date: schedules.first.etd,
+          end_date: schedules.last.eta,
+          closing_start_date: schedules.first.closing_date,
+          closing_end_date: schedules.last.closing_date
+        }
+        results = described_class.new(
+          schedules: schedules,
+          user_pricing_id: user.id,
+          cargo_classes: ['lcl'],
+          dates: dates,
+          dedicated_pricings_only: false,
+          shipment: lcl_shipment,
+          sandbox: nil
+        ).pricings_for_cargo_classes_and_groups
+
+        expect(results).to match_array([pricing_1])
+      end
     end
   end
 end

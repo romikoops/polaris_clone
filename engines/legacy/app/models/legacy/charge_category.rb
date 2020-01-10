@@ -5,19 +5,26 @@ module Legacy
     self.table_name = 'charge_categories'
     has_many :charges
     belongs_to :tenant, class_name: 'Legacy::Tenant', optional: true
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+
+    def self.grand_total
+      find_or_create_by(code: 'grand_total', name: 'Grand Total')
+    end
+
+    def self.base_node
+      find_or_create_by(code: 'base_node', name: 'Base Node')
+    end
 
     def self.from_code(code:, tenant_id: nil, name: nil, sandbox: nil)
       name ||= code
       code = code.to_s.downcase
-      tenant_charge_category = find_by(code: code, tenant_id: tenant_id, sandbox: sandbox)
+      tenant_charge_category = find_by(code: code, tenant_id: tenant_id, sandbox_id: sandbox&.id)
       return tenant_charge_category unless tenant_charge_category.nil?
-  
+
       find_or_create_by(
         code: code,
         name: name,
         tenant_id: tenant_id,
-        sandbox: sandbox
+        sandbox_id: sandbox&.id
       )
     end
   end

@@ -12,7 +12,7 @@ class Trip < Legacy::Trip
   }
 
   scope :lastday_today, -> { where('closing_date > ?', Date.today) }
- 
+
   def self.update_times
     trips = Trip.all
     trips.each do |t|
@@ -31,10 +31,6 @@ class Trip < Legacy::Trip
         d.destroy if d.id != trip.id
       end
     end
-  end
-
-  def vehicle
-    tenant_vehicle.vehicle
   end
 
   def later_trips(sandbox: nil)

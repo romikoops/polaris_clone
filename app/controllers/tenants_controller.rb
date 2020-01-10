@@ -17,7 +17,7 @@ class TenantsController < ApplicationController
   end
 
   def get_tenant
-    @tenant = Tenant.find_by_subdomain(params[:name])
+    @tenant = Tenant.find_by(subdomain: params[:name])
     if @tenant
       json_response(@tenant, 200)
     else
@@ -27,17 +27,14 @@ class TenantsController < ApplicationController
   deprecate :get_tenant, deprecator: ActiveSupport::Deprecation.new('', Rails.application.railtie_name)
 
   def fetch_scope
-    tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : (params[:tenant_id] || params[:id]))
-    tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant&.id)
-    scope = current_scope
-
-    response_handler(scope)
+    response_handler(current_scope)
   end
 
   def show
     tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : (params[:tenant_id] || params[:id]))
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
     scope = current_scope
+
     tenant_json = tenant.as_json
     tenant_json['scope'] = scope
     tenant_json['subdomain'] = tenants_tenant.slug
@@ -54,10 +51,9 @@ class TenantsController < ApplicationController
 
   def tenant_id
     domains = [
-      URI(request.referrer).host,
+      URI(request.referer).host,
       ENV.fetch('DEFAULT_TENANT', 'demo.local')
     ]
-
     domains.each do |domain|
       tenants_domain = Tenants::Domain.where(':domain ~* domain', domain: domain).first
       return tenants_domain.tenant.legacy_id if tenants_domain

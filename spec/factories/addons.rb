@@ -2,6 +2,29 @@
 
 FactoryBot.define do
   factory :addon do
+    association :tenant
+    text do
+      [
+        {
+          'text' => 'Addon text 1'
+        }
+      ]
+    end
+    read_more { 'Read more..' }
+    cargo_class { 'lcl' }
+    direction { 'export' }
+    addon_type { 'customs_export_paper' }
+    fees do
+      {
+        'ADB' => {
+          'key' => 'ADB',
+          'name' => 'Customs Export Paper',
+          'value' => 75.0,
+          'currency' => 'EUR',
+          'rate_basis' => 'PER_SHIPMENT'
+        }
+      }
+    end
   end
 end
 

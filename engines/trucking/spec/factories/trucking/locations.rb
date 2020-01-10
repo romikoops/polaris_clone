@@ -31,5 +31,6 @@ FactoryBot.define do
     country_code { 'SE' }
 
     factory :city_location, traits: [:with_location]
+    factory :zipcode_location, traits: [:zipcode_sequence]
   end
 end

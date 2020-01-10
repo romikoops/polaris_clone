@@ -57,7 +57,7 @@ class UsersController < ApplicationController
 
   def currencies
     currency = current_user.try(:currency) || 'EUR'
-    results = CurrencyTools.new.get_currency_array(currency, params[:tenant_id])
+    results = Legacy::CurrencyTools.new.get_currency_array(currency, params[:tenant_id])
     response_handler(results)
   end
 
@@ -69,7 +69,7 @@ class UsersController < ApplicationController
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!
-    rates = CurrencyTools.new.get_rates(params[:currency], current_user.tenant_id)
+    rates = Legacy::CurrencyTools.new.get_rates(params[:currency], current_user.tenant_id)
     response_handler(user: current_user.token_validation_response, rates: rates)
   end
 
@@ -115,7 +115,7 @@ class UsersController < ApplicationController
   end
 
   def shipments_hash
-    current_user.tenant.quotation_tool? ?
+    quotation_tool? ?
     {
       quoted: quoted_shipments.order(booking_placed_at: :desc).limit(3)&.map(&:with_address_index_json)
     } : {

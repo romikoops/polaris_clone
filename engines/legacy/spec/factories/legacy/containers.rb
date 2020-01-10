@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :legacy_container, class: 'Legacy::Container' do
-    size_class { 'fcl_20' } # TODO: set right size class
+    size_class { 'fcl_20' }
     weight_class { '14t' }
     payload_in_kg { 10_000 }
     tare_weight { 1000 }

@@ -5,7 +5,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   include NotificationTools
 
   def index
-    current_user.tenant.quotation_tool? ? get_quote_index : get_booking_index
+    quotation_tool? ? get_quote_index : get_booking_index
   end
 
   def delta_page_handler
@@ -35,23 +35,23 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def show
+    prepare_response
     response = Rails.cache.fetch("#{@shipment.cache_key}/view_shipment", expires_in: 12.hours) do
-      prepare_response
-      response_hash = {
-        shipment: shipment_as_json,
-        cargoItems: @cargo_items.map(&:with_cargo_type),
-        containers: @containers,
-        aggregatedCargo: @shipment.aggregated_cargo,
-        contacts: contacts,
-        documents: @documents,
-        addresses: addresses,
-        cargoItemTypes: cargo_item_types,
-        accountHolder: @shipment.user
-      }
+    {
+      shipment: shipment_as_json,
+      cargoItems: @cargo_items.map(&:with_cargo_type),
+      containers: @containers,
+      aggregatedCargo: @shipment.aggregated_cargo,
+      contacts: contacts,
+      documents: @documents,
+      addresses: addresses,
+      cargoItemTypes: cargo_item_types,
+      accountHolder: @shipment.user,
+      pricingBreakdowns: pricing_breakdowns(shipment: @shipment)
+    }.as_json
     end
-    response_handler(
-      response
-    )
+
+    response_handler(response)
   end
 
   def search_shipments
@@ -151,6 +151,20 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @document.destroy
 
     response_handler(id: params[:id])
+  end
+
+  def pricing_breakdowns(shipment:)
+    metadatum = Pricings::Metadatum.find_by(charge_breakdown_id: shipment.charge_breakdowns.selected&.id)
+    return [] unless metadatum
+
+    metadatum.breakdowns.map do |breakdown|
+      breakdown.attributes.merge(
+                code: breakdown.code,
+                target_name: breakdown.target_name,
+                operator: breakdown.margin&.operator,
+                margin_value: breakdown.margin&.value
+              ).with_indifferent_access
+    end
   end
 
   private

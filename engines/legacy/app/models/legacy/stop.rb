@@ -8,21 +8,6 @@ module Legacy
     has_many :layovers, dependent: :destroy
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
-    def as_options_json(options = {})
-      new_options = options.reverse_merge(
-        include: {
-          hub: {
-            methods: %i(available_trucking),
-            include: {
-              nexus: { only: %i(id name) },
-              address: { only: %i(longitude latitude geocoded_address) }
-            },
-            only: %i(id name)
-          }
-        }
-      )
-      as_json(new_options)
-    end
   end
 end
 

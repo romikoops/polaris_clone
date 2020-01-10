@@ -56,13 +56,14 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       tenant: ::Tenants::Tenant.find_by(legacy_id: current_user.tenant.id),
       sandbox: sandbox
     ).fetch
+
     raise ApplicationError::NotLoggedIn if scope[:closed_shop] && current_user.guest
 
     tenant = current_user.tenant
     load_type = details['loadType'].underscore
     direction = details['direction']
 
-    shipment = Shipment.new(
+    shipment = Legacy::Shipment.new(
       user_id: current_user.id,
       status: 'booking_process_started',
       load_type: load_type,
@@ -131,7 +132,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
         end
       end
     end
-    routes_data = Route.detailed_hashes_from_itinerary_ids(
+    routes_data = OfferCalculator::Route.detailed_hashes_from_itinerary_ids(
       itinerary_ids,
       with_truck_types: { load_type: load_type },
       base_pricing: scope['base_pricing']
@@ -155,8 +156,8 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
     ).fetch
     raise ApplicationError::NotLoggedIn if scope[:closed_after_map] && current_user.guest
 
-    shipment = Shipment.where(sandbox: sandbox).find(params[:shipment_id])
-    offer_calculator = OfferCalculator.new(shipment: shipment, params: params, user: current_user, sandbox: sandbox)
+    shipment = Legacy::Shipment.where(sandbox: sandbox).find(params[:shipment_id])
+    offer_calculator = OfferCalculator::Calculator.new(shipment: shipment, params: params, user: current_user, sandbox: sandbox)
 
     offer_calculator.perform
     offer_calculator.shipment.save!
@@ -168,7 +169,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
                     offer_calculator.shipment.cargo_units
                   end
 
-    if current_user.tenant.quotation_tool?
+    if scope['open_quotation_tool'] || scope['closed_quotation_tool']
       quote = ShippingTools.create_shipments_from_quotation(
         offer_calculator.shipment,
         offer_calculator.detailed_schedules.map(&:deep_stringify_keys!)
@@ -186,11 +187,29 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       cargoUnits: cargo_units,
       aggregatedCargo: offer_calculator.shipment.aggregated_cargo
     }
-  rescue ArgumentError => e
-    raise ApplicationError::InternalError
+    rescue OfferCalculator::TruckingTools::LoadMeterageExceeded
+      raise ApplicationError::LoadMeterageExceeded
+    rescue OfferCalculator::Calculator::MissingTruckingData
+      raise ApplicationError::MissingTruckingData
+    rescue OfferCalculator::Calculator::InvalidPickupAddress
+      raise ApplicationError::InvalidPickupAddress
+    rescue OfferCalculator::Calculator::InvalidDeliveryAddress
+      raise ApplicationError::InvalidDeliveryAddress
+    rescue OfferCalculator::Calculator::NoDirectionsFound
+      raise ApplicationError::NoDirectionsFound
+    rescue OfferCalculator::Calculator::NoRoute
+      raise ApplicationError::NoRoute
+    rescue OfferCalculator::Calculator::InvalidRoutes
+      raise ApplicationError::InvalidRoutes
+    rescue OfferCalculator::Calculator::NoValidPricings
+      raise ApplicationError::NoValidPricings
+    rescue OfferCalculator::Calculator::NoSchedulesCharges
+      raise ApplicationError::NoSchedulesCharges
+    rescue ArgumentError
+      raise ApplicationError::InternalError
   end
 
-  def self.generate_shipment_pdf(shipment:, sandbox: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def self.generate_shipment_pdf(shipment:, sandbox: nil)
     document = PdfService.new(user: shipment.user, tenant: shipment.tenant).shipment_pdf(shipment: shipment)
     document.attachment
   end
@@ -394,8 +413,8 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
 
     origin_hub      = shipment.origin_hub
     destination_hub = shipment.destination_hub
-    origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
-    destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
+    origin = shipment.has_pre_carriage ? shipment.pickup_address : shipment.origin_nexus
+    destination = shipment.has_on_carriage ? shipment.delivery_address : shipment.destination_nexus
     options = {
       methods: %i(selected_offer mode_of_transport service_level vessel_name carrier voyage_code),
       include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
@@ -468,6 +487,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
     raise ApplicationError::ShipmentNotFound unless shipment.present?
 
     shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
+    shipment.meta['pricing_breakdown'] = params[:meta][:pricing_breakdown]
     shipment.meta['tender_id'] = params[:meta][:tender_id]
 
     shipment.user_id = current_user.id
@@ -488,7 +508,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       res = shipment.containers.where(dangerous_goods: true)
       @dangerous = true unless res.empty?
     end
-    @origin_hub      = Hub.find_by(id: @schedule['origin_hub']['id'], sandbox: sandbox)
+    @origin_hub = Hub.find_by(id: @schedule['origin_hub']['id'], sandbox: sandbox)
     @destination_hub = Hub.find_by(id: @schedule['destination_hub']['id'], sandbox: sandbox)
     if shipment.has_pre_carriage
       trucking_seconds = shipment.trucking['pre_carriage']['trucking_time_in_seconds'].seconds
@@ -532,8 +552,9 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
                                   .trip
                                   .vehicle
                                   .transport_categories
-                                  .find_by(name: 'any', cargo_class: cargoKey, sandbox: sandbox)
+                                  .find_by(name: 'any', cargo_class: cargoKey, sandbox_id: sandbox&.id)
     shipment.save!
+
     origin_customs_fee = @origin_hub.get_customs(
       customsKey,
       shipment.mode_of_transport,
@@ -557,25 +578,23 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       cargos,
       current_user
     )
-    @pricing_tools = PricingTools.new(shipment: shipment, user: current_user)
+    @pricing_tools = OfferCalculator::PricingTools.new(shipment: shipment, user: current_user)
     import_fees = if destination_customs_fee
-                    @pricing_tools.calc_customs_fees(
-                      destination_customs_fee['fees'],
-                      cargos,
-                      shipment.load_type,
-                      current_user,
-                      shipment.mode_of_transport
+                    @pricing_tools.calc_addon_charges(
+                      charge: destination_customs_fee['fees'],
+                      cargos: cargos,
+                      user: current_user,
+                      mode_of_transport: shipment.mode_of_transport
                     )
                   else
                     { unknown: true }
                   end
     export_fees = if origin_customs_fee
-                    @pricing_tools.calc_customs_fees(
-                      origin_customs_fee['fees'],
-                      cargos,
-                      shipment.load_type,
-                      current_user,
-                      shipment.mode_of_transport
+                    @pricing_tools.calc_addon_charges(
+                      charge: origin_customs_fee['fees'],
+                      cargos: cargos,
+                      user: current_user,
+                      mode_of_transport: shipment.mode_of_transport
                     )
                   else
                     { unknown: true }
@@ -596,8 +615,8 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       methods: %i(selected_offer mode_of_transport service_level vessel_name carrier voyage_code),
       include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
     }
-    origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
-    destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
+    origin = shipment.has_pre_carriage ? shipment.pickup_address : shipment.origin_nexus
+    destination = shipment.has_on_carriage ? shipment.delivery_address : shipment.destination_nexus
     shipment_as_json = shipment.as_json(options).merge(
       pickup_address: shipment.pickup_address_with_country,
       delivery_address: shipment.delivery_address_with_country
@@ -618,45 +637,6 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
         destination: destination.try(:to_custom_hash)
       }
     }
-  end
-
-  def self.reuse_booking_data(id, _user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    old_shipment = Shipment.find_by(id: id, sandbox: sandbox)
-    new_shipment_json = old_shipment.clone.as_json
-    ids_to_remove = %w(has_pre_carriage has_on_carriage id selected_day)
-    ids_to_remove.each do |rid|
-      new_shipment_json.delete(rid)
-    end
-    new_shipment_json['selected_day'] = DateTime.new + 5.days
-    new_shipment_json['sandbox'] = sandbox
-    new_shipment = Shipment.create!(new_shipment_json)
-    if old_shipment.aggregated_cargo
-      reuse_aggregrated_cargo(new_shipment, old_shipment.aggregated_cargo)
-    else
-      reuse_cargo_units(new_shipment, old_shipment.cargo_units)
-    end
-    params = {
-      shipment_id: new_shipment.id,
-      shipment: new_shipment.as_json
-    }
-
-    itinerary_ids = current_user.tenant.itineraries.where(sandbox: sandbox).ids.reject do |it_id|
-      Pricing.where(itinerary_id: it_id, sandbox: sandbox).for_load_type(load_type).empty?
-    end
-
-    routes_data = Route.detailed_hashes_from_itinerary_ids(
-      itinerary_ids,
-      with_truck_types: { load_type: load_type }
-    )
-
-    {
-      shipment: shipment,
-      routes: routes_data[:route_hashes],
-      lookup_tables_for_routes: routes_data[:look_ups],
-      cargo_item_types: tenant.cargo_item_types,
-      max_dimensions: tenant.max_dimensions,
-      max_aggregate_dimensions: tenant.max_aggregate_dimensions
-    }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
   def self.search_contacts(contact_params, current_user, sandbox = nil)
@@ -704,18 +684,11 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
     end
 
     {
-      schedules: Legacy::Schedule.from_trips(trips),
+      schedules: OfferCalculator::Schedule.from_trips(trips),
       itinerary_id: trip.itinerary_id,
       tenant_vehicle_id: trip.tenant_vehicle_id,
       finalResults: final_results
     }
-  end
-
-  def self.reuse_aggregrated_cargo(shipment, aggregated_cargo)
-    aggregated_cargo_json = aggregated_cargo.clone.as_json
-    aggregated_cargo_json.delete('id')
-    aggregated_cargo_json.delete('shipment_id')
-    shipment.aggregated_cargo.create!(aggregated_cargo_json)
   end
 
   def self.save_pdf_quotes(shipment, tenant, schedules, sandbox = nil)
@@ -783,6 +756,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
     trip = Trip.find(schedule['trip_id'])
     on_carriage_hash = (original_shipment.trucking['on_carriage'] if result['quote']['trucking_on'])
     pre_carriage_hash = (original_shipment.trucking['pre_carriage'] if result['quote']['trucking_pre'])
+
     new_shipment = main_quote.shipments.create!(
       status: 'quoted',
       user_id: original_shipment.user_id,
@@ -804,26 +778,35 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       load_type: original_shipment.load_type,
       itinerary_id: trip.itinerary_id,
       desired_start_date: original_shipment.desired_start_date,
-      meta: original_shipment.meta,
+      meta: result['meta'].slice('pricing_rate_data', 'pricing_breakdown'),
       sandbox: sandbox
     )
 
     new_shipment.meta['pricing_rate_data'] = result[:meta][:pricing_rate_data]
     charge_category_map = {}
-    original_shipment.cargo_units.each do |unit|
-      new_unit = unit.dup
-      new_unit.shipment_id = new_shipment.id
-      new_unit.save!
-      charge_category_map[unit.id] = new_unit.id
+
+    if original_shipment.aggregated_cargo.present?
+      new_shipment.aggregated_cargo = original_shipment.aggregated_cargo.dup
+    else
+      original_shipment.cargo_units.each do |unit|
+        new_unit = unit.dup
+        new_unit.shipment_id = new_shipment.id
+        new_unit.save!
+        charge_category_map[unit.id] = new_unit.id
+      end
     end
+
     if new_shipment.lcl? && !new_shipment.aggregated_cargo.nil?
       new_shipment.aggregated_cargo.set_chargeable_weight!
     elsif new_shipment.lcl? && new_shipment.aggregated_cargo.nil?
       new_shipment.cargo_units.map(&:set_chargeable_weight!)
     end
+
     original_shipment.charge_breakdowns.where(trip: trip).each do |charge_breakdown|
       new_charge_breakdown = charge_breakdown.dup
       new_charge_breakdown.update(shipment: new_shipment)
+      metadatum = Pricings::Metadatum.find_by(charge_breakdown_id: charge_breakdown.id)
+      metadatum.update(charge_breakdown_id: new_charge_breakdown.id) if metadatum
       new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
       %w(import export cargo).each do |charge_key|
         next if new_charge_breakdown.charge(charge_key).nil?
@@ -832,24 +815,20 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
           old_charge_category = new_charge&.children_charge_category
           next if old_charge_category&.cargo_unit_id.nil?
 
-          existing_charge_category = ChargeCategory.find_by(
-            cargo_unit_id: charge_category_map[old_charge_category.cargo_unit_id],
-            tenant_id: old_charge_category.tenant_id,
-            code: old_charge_category.code,
-            name: old_charge_category.name
-          )
-          if existing_charge_category
-            new_charge_category = existing_charge_category
-          else
-            new_charge_category = old_charge_category.dup
-            new_charge_category.cargo_unit_id = charge_category_map[old_charge_category.cargo_unit_id]
-            new_charge_category.save!
+          new_charge_category = old_charge_category.dup
+          new_charge_category.cargo_unit_id = charge_category_map[old_charge_category.cargo_unit_id]
+          new_charge_category.save!
+
+          if metadatum
+            metadatum.breakdowns.where(cargo_unit_id: old_charge_category.cargo_unit_id)
+                   .update_all(cargo_unit_id: charge_category_map[old_charge_category.cargo_unit_id])
           end
           new_charge.children_charge_category = new_charge_category
           new_charge.save!
         end
       end
     end
+
     new_shipment.save!
   end
 end

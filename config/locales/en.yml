@@ -122,6 +122,14 @@ en:
       http_code: 409
       code: 1020
       message: "The subdomain (slug) has already been taken"
+    no_directions_found:
+      http_code: 400
+      code: 1021
+      message: "Unable to determine trucking directions. Please check the address and try again."
+    invalid_cargo:
+      http_code: 400
+      code: 1022
+
 
     # Authentication Errors
     not_authenticated:
@@ -146,4 +154,3 @@ en:
       http_code: 422
       code: 1021
       message: 'There was an error mapping data'
-

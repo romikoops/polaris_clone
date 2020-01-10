@@ -1,14 +1,67 @@
 import { Promise } from 'es6-promise-promise'
 import { push } from 'react-router-redux'
-import { find } from 'lodash'
+import { find, get } from 'lodash'
+import { getTenantApiUrl } from '../constants/api.constants'
 import { Base64decode } from '../helpers/Base64'
 import { shipmentConstants } from '../constants'
 import { shipmentService } from '../services'
-import { deepSnakefyKeys, queryStringToObj } from '../helpers'
+import { requestOptions, deepSnakefyKeys, queryStringToObj } from '../helpers'
 import {
- alertActions, userActions, appActions, errorActions, bookingProcessActions
+  alertActions, userActions, appActions, errorActions, bookingProcessActions
 } from '.'
 
+const { fetch } = window
+
+// New Format action only
+function getOffers (data, redirect) {
+  function request (shipmentData) {
+    return {
+      type: shipmentConstants.GET_OFFERS_REQUEST,
+      shipmentData
+    }
+  }
+  function success (shipmentData) {
+    return {
+      type: shipmentConstants.GET_OFFERS_SUCCESS,
+      shipmentData
+    }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.GET_OFFERS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request(data))
+
+    return fetch(
+      `${getTenantApiUrl()}/shipments/${get(data, 'shipment.id')}/get_offers`,
+      requestOptions('POST', { 'Content-Type': 'application/json' }, JSON.stringify(deepSnakefyKeys(data)))
+    )
+      .then(resp => resp.json())
+      .then((resp) => {
+        if (resp.success) {
+          dispatch(success(resp.data))
+          if (redirect) {
+            dispatch(push(`/booking/${get(resp, 'data.shipment.id')}/choose_offer`))
+          }
+        } else {
+          dispatch(failure({
+            type: 'error',
+            text: get(resp, 'data.message') || get(resp, 'data.error')
+          }))
+          const errorToRender = {
+            ...resp,
+            componentName: 'RouteSection',
+            side: 'center'
+          }
+          dispatch(errorActions.setError(errorToRender))
+          if (resp.error) console.error(resp.exception)
+        }
+      })
+  }
+}
+
+// Old format
 function newShipment (type, redirect, reused) {
   function request (shipmentData, isReused) {
     return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData, isReused }
@@ -136,54 +189,6 @@ function reuseShipment (shipment) {
   }
 }
 
-function getOffers (data, redirect) {
-  function request (shipmentData) {
-    return {
-      type: shipmentConstants.GET_OFFERS_REQUEST,
-      shipmentData
-    }
-  }
-  function success (shipmentData) {
-    return {
-      type: shipmentConstants.GET_OFFERS_SUCCESS,
-      shipmentData
-    }
-  }
-  function failure (error) {
-    window.scrollTo(0, 0)
-
-    return { type: shipmentConstants.GET_OFFERS_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request(data))
-
-    shipmentService.getOffers(deepSnakefyKeys(data)).then(
-      (resp) => {
-        const shipmentData = resp.data
-        dispatch(success(shipmentData))
-        if (redirect) {
-          dispatch(push(`/booking/${shipmentData.shipment.id}/choose_offer`))
-        }
-      },
-      (error) => {
-        error.then((newData) => {
-          dispatch(failure({
-            type: 'error',
-            text: newData.message || newData.error
-          }))
-          const errorToRender = {
-            ...newData,
-            componentName: 'RouteSection',
-            side: 'center'
-          }
-          dispatch(errorActions.setError(errorToRender))
-          if (newData.error) console.error(newData.exception)
-        })
-      }
-    )
-  }
-}
 function getOffersForNewDate (data, redirect) {
   function request (shipmentData) {
     return {
@@ -712,7 +717,7 @@ function checkLoginOnBookingProcess () {
   return (dispatch, getState) => {
     const { bookingData } = getState()
     if (!bookingData || !bookingData.activeShipment) {
-      return;
+      return
     }
 
     dispatch(request())

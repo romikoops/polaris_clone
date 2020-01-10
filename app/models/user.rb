@@ -30,7 +30,6 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   # Basic associations
   belongs_to :tenant
   belongs_to :role
-  belongs_to :optin_status
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   has_many :shipments
   has_many :documents
@@ -178,10 +177,9 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   # Devise Token Auth override
   def token_validation_response
     as_json(
-      except: %i(tokens encrypted_password created_at updated_at optin_status_id role_id),
+      except: %i(tokens encrypted_password created_at updated_at role_id),
       include: {
-        optin_status: { except: %i(created_at updated_at) },
-        role: { except: %i(created_at updated_at) },
+        role: { except: %i(created_at updated_at) }
       },
       methods: [:uuid]
     )
@@ -220,9 +218,8 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
 
   def for_admin_json(options = {})
     new_options = options.reverse_merge(
-      except: %i(tokens encrypted_password created_at updated_at optin_status_id role_id),
+      except: %i(tokens encrypted_password created_at updated_at role_id),
       include: {
-        optin_status: { except: %i(created_at updated_at) },
         role: { except: %i(created_at updated_at) }
       },
       methods: %i(has_pricings group_count user_margin_count company_title uuid)

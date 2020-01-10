@@ -4,19 +4,19 @@ FactoryBot.define do
   factory :pricings_fee, class: 'Pricings::Fee' do # rubocop:disable Metrics/BlockLength
     rate { 1111 }
     min { 1 }
-    association :rate_basis, factory: :pricings_rate_bases
+    association :rate_basis, factory: :pricings_rate_basis
     association :charge_category, factory: :legacy_charge_categories
     association :tenant, factory: :legacy_tenant
     currency_name { 'EUR' }
     base { 1 }
 
     trait :per_wm do
-      association :rate_basis, factory: :per_wm
+      association :rate_basis, factory: :per_wm_rate_basis
       association :charge_category, factory: :bas_charge
     end
 
     trait :per_cbm_kg_heavy do
-      association :rate_basis, factory: :per_wm
+      association :rate_basis, factory: :per_wm_rate_basis
       association :hw_rate_basis, factory: :per_kg_per_cbm
       association :charge_category, factory: :has_charge
       hw_threshold { 550 }
@@ -25,7 +25,7 @@ FactoryBot.define do
     end
 
     trait :per_item_heavy do
-      association :rate_basis, factory: :per_wm
+      association :rate_basis, factory: :per_wm_rate_basis
       association :hw_rate_basis, factory: :per_item
       association :charge_category, factory: :has_charge
       hw_threshold { 100 }

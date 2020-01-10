@@ -620,6 +620,7 @@
       "localChargesExpiring": "Local Charges Expiring at",
       "noLocalCharges": "No Local Charges",
       "locode": "LOCODE",
+
       "expired": "Expired",
       "status": "Status",
       "no_data": "No Data",
@@ -627,7 +628,16 @@
       "good": "Ok",
       "origin_local_charges": "Origin Local Charges",
       "destination_local_charges": "Destination Local Charges",
-      "validationResults": "Validation Results"
+      "validationResults": "Validation Results",
+      "sourceFile": "Source File",
+      "rowNumber": "Row Number",
+      "finalAdjustedRate": "Final Adjusted Rate",
+      "downloadOriginalFile": "Download Original File",
+      "pricingChanges": "Pricing Changes",
+      "metadata": "Metadata",
+      "initialRate": "Initial Rate",
+      "noMarginsApplied": "No Margins Applied"
+
   },
   "itbox": {
     "component": "IncotermBox",
@@ -1230,5 +1240,31 @@
     "companies": "Companies",
     "users": "Users",
     "trucking_rates": "Trucking Pricings"
+  },
+  "rates" :{
+    "PER_ITEM": "Per Item",
+    "PER_CONTAINER": "Per Container",
+    "PER_SHIPMENT": "Per Shipment",
+    "PER_CBM_TON": "Per cbm/ton",
+    "PER_BILL": "Per B/L",
+    "PER_CBM": "Per cbm",
+    "PER_WM": "Per W/M",
+    "PER_KG": "Per kg",
+    "PER_KG_RANGE": "Per kg range",
+    "PER_TON": "Per ton",
+    "PERCENTAGE": "Percentage",
+    "trucking_pre": "Pre-Carriage",
+    "trucking_on": "On-Carriage",
+    "freight": "Freight",
+    "import": "Import Charges",
+    "export": "Export Charges",
+    "owner": "Owner",
+    "operator": "Operator",
+    "value": "Value",
+    "fetchRates": "Fetch Rates",
+    "viewMargins": "View Applied Margins",
+    "viewOriginal": "View Original Rate",
+    "viewFinal": "View Final Rate",
+    "noMargins": "No Applied Margins"
   }
 }

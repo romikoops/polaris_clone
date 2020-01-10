@@ -4,7 +4,7 @@ class ShipmentsController < ApplicationController
   skip_before_action :require_non_guest_authentication!
 
   def index
-    current_user.tenant.quotation_tool? ? get_quote_index : get_booking_index
+    quotation_tool? ? get_quote_index : get_booking_index
   end
 
   def delta_page_handler
@@ -103,9 +103,7 @@ class ShipmentsController < ApplicationController
 
   def show # rubocop:disable Metrics/AbcSize
     shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
-
-    cargo_item_types = shipment.cargo_item_types
-                               .each_with_object({}) do |cargo_item_type, return_h|
+    cargo_item_types = shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
       return_h[cargo_item_type.id] = cargo_item_type
     end
 

@@ -222,6 +222,15 @@ function downloadTrucking (options) {
   return fetch(`${getTenantApiUrl()}/admin/trucking/download`, requestOptions).then(handleResponse)
 }
 
+function downloadDocument (id) {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  }
+
+  return fetch(`${getTenantApiUrl()}/documents/download_url/${id}`, requestOptions).then(handleResponse)
+}
+
 
 function uploadNotes (file) {
   const formData = new FormData()
@@ -255,7 +264,8 @@ export const documentService = {
   uploadMargins,
   downloadQuote,
   uploadGroupPricings,
-  uploadNotes
+  uploadNotes,
+  downloadDocument
 }
 
 export default documentService

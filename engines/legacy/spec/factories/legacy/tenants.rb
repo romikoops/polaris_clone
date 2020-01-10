@@ -119,8 +119,16 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       end
     end
 
-    # before(:create) do |tenant|
-    #   MaxDimensionsBundle.create_defaults_for(tenant, all: true) if tenant.max_dimensions.empty?
-    # end
+    transient do
+      no_max_dimensions { false }
+    end
+
+    after(:create) do |tenant, evaluator|
+      unless evaluator.no_max_dimensions || tenant.max_dimensions_bundles.present?
+        tenant.max_dimensions_bundles << build(:legacy_max_dimensions_bundle, tenant: tenant)
+        tenant.max_dimensions_bundles << build(:aggregated_max_dimensions_bundle, tenant: tenant)
+      end
+    end
+
   end
 end

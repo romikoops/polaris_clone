@@ -35,7 +35,7 @@ RSpec.describe ::RmsExport::Excel::Base do
       'PER_WM',
       nil,
       nil,
-      'BAS',
+      'bas',
       'Basic Ocean Freight',
       'EUR',
       '1.0',

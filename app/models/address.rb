@@ -93,15 +93,6 @@ class Address < Legacy::Address
     "#{latitude},#{longitude}"
   end
 
-  def closest_address_with_distance
-    Nexus.all.map do |nexus|
-      Geocoder::Calculations.distance_between(
-        [latitude, longitude],
-        [nexus.latitude, nexus.longitude]
-      )
-    end
-  end
-
   def furthest_hubs(hubs)
     hubs.sort_by do |hub|
       hub.distance_to(self)

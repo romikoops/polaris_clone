@@ -29,10 +29,11 @@ module Api
 
     def find_tradelanes
       user_tradelanes = []
+
       ::Legacy::Shipment.where(user_id: @user.legacy_id).find_each do |s|
         next if s['destination_nexus_id'].nil? || s['origin_nexus_id'].nil?
 
-        user_tradelanes << { 
+        user_tradelanes << {
                              destination: s['destination_nexus_id'],
                              origin: s['origin_nexus_id']
                            }
@@ -60,7 +61,11 @@ module Api
     end
 
     def shipments_hash
-      tenant_scope = ::Legacy::Tenant.find(@user.tenant.legacy_id).scope
+      tenant_scope = ::Tenants::ScopeService.new(
+        target: @user,
+        tenant: @user.tenant
+      ).fetch
+
       if tenant_scope['open_quotation_tool'] || tenant_scope['closed_quotation_tool']
         { quoted: quoted_shipments.order(booking_placed_at: :desc),
           bookings_in_progress: bookings_in_progress.order(booking_placed_at: :desc) }

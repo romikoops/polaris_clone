@@ -352,7 +352,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    user_id: nil,
                    itinerary: itineraries.first,
                    tenant_vehicle: tenant_vehicle,
-                   fee_attrs: { rate_basis: :per_wm, rate: 11, min: nil })
+                   fee_attrs: { rate_basis: :per_wm_rate_basis, rate: 11, min: nil })
           ]
         end
         let!(:scope) do
@@ -473,7 +473,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    user_id: nil,
                    itinerary: itineraries.first,
                    tenant_vehicle: tenant_vehicle,
-                   fee_attrs: { rate_basis: :per_wm, rate: 11, min: nil })
+                   fee_attrs: { rate_basis: :per_wm_rate_basis, rate: 11, min: nil })
           ]
         end
         let!(:scope) do
@@ -590,7 +590,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    user_id: nil,
                    itinerary: itineraries.first,
                    tenant_vehicle: tenant_vehicle,
-                   fee_attrs: { rate_basis: :per_wm, rate: 11, min: nil })
+                   fee_attrs: { rate_basis: :per_wm_rate_basis, rate: 11, min: nil })
           ]
         end
         let!(:scope) do

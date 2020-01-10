@@ -64,6 +64,9 @@ class DocumentsDownloader extends React.Component {
       case 'quote':
         documentDispatch.downloadQuote(options)
         break
+      case 'id':
+        documentDispatch.downloadDocument(options.id)
+        break
       default:
         break
     }
@@ -71,9 +74,11 @@ class DocumentsDownloader extends React.Component {
   }
 
   downloadFile () {
-    const { downloadUrls, target } = this.props
-    if (downloadUrls[target]) {
+    const { downloadUrls, target, modal } = this.props
+    if (downloadUrls[target] && !modal) {
       window.location = downloadUrls[target]
+    } else if (downloadUrls[target] && modal) {
+      window.open(downloadUrls[target], '_blank')
     }
     this.setState({ requested: false })
   }
@@ -177,7 +182,8 @@ DocumentsDownloader.defaultProps = {
   options: {},
   size: 'small',
   disabled: false,
-  targetOptions: []
+  targetOptions: [],
+  modal: false
 }
 
 function mapStateToProps (state) {

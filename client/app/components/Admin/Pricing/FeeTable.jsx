@@ -31,24 +31,22 @@ class AdminFeeTable extends PureComponent {
 
   render () {
     const {
-      t, row, tenant, isLocalCharge
+      t, row, tenant, isLocalCharge, classes
     } = this.props
 
-    if (!row || (row && !row.original)) return ''
+    if (!row) return ''
     const { scope } = tenant
-    const fees = row.original.data
-    if (!fees) return ''
     const { sorted } = this.state
     const localChargeKeys = []
-    const data = Object.keys(fees).map((k) => {
-      const tempFee = fees[k]
+    const data = Object.keys(row).map((k) => {
+      const tempFee = row[k]
       tempFee.feeCode = k
       if (isLocalCharge) {
         Object.keys(tempFee)
-          .filter(k => !['currency', 'feeCode', 'name', 'key', 'rate_basis'].includes(k))
-          .forEach((k) => {
-            if (!localChargeKeys.includes(k)) {
-              localChargeKeys.push(k)
+          .filter(key => !['currency', 'feeCode', 'name', 'key', 'rate_basis'].includes(key))
+          .forEach((key) => {
+            if (!localChargeKeys.includes(key)) {
+              localChargeKeys.push(key)
             }
           })
       }
@@ -168,7 +166,7 @@ class AdminFeeTable extends PureComponent {
 
     return (
       <ReactTable
-        className={styles.no_footer}
+        className={`${styles.no_footer} ${classes}`}
         data={data}
         columns={columns}
         defaultSorted={[
@@ -211,6 +209,10 @@ function mapDispatchToProps (dispatch) {
     adminDispatch: bindActionCreators(adminActions, dispatch),
     appDispatch: bindActionCreators(appActions, dispatch)
   }
+}
+
+AdminFeeTable.defaultProps = {
+  classes: ''
 }
 
 export default withNamespaces(['common'])(connect(mapStateToProps, mapDispatchToProps)(AdminFeeTable))

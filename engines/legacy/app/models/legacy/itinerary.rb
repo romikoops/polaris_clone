@@ -218,17 +218,6 @@ module Legacy
       schedules
     end
 
-    def test_pricings(data, user)
-      results = PriceCheckerService::PriceChecker.new(id, data, user).perform
-      results.map do |charge|
-        {
-          quote: charge[:quote].deconstruct_tree_into_schedule_charge,
-          itinerary: as_options_json,
-          service_level: charge[:service_level]
-        }
-      end
-    end
-
     def self.ids_dedicated(user = nil)
       get_itineraries_with_dedicated_pricings(user.id, user.tenant_id)
     end

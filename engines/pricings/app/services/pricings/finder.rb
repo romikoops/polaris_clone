@@ -6,14 +6,14 @@ module Pricings
                   :closing_start_date, :closing_end_date, :cargo_classes, :user_pricing_id
 
     def initialize( # rubocop:disable Metrics/ParameterLists
-        schedules:,
-        user_pricing_id:,
-        cargo_classes:,
-        dates:,
-        dedicated_pricings_only:,
-        shipment:,
-        sandbox: nil
-      )
+      schedules:,
+      user_pricing_id:,
+      cargo_classes:,
+      dates:,
+      dedicated_pricings_only:,
+      shipment:,
+      sandbox: nil
+    )
       @shipment = shipment
       @schedules = schedules
       @tenant_vehicle_id = schedules.first.trip.tenant_vehicle_id
@@ -23,7 +23,7 @@ module Pricings
       @closing_end_date = dates[:closing_end_date]
       @cargo_classes = cargo_classes
       @user = ::Tenants::User.find_by(legacy_id: user_pricing_id)
-      @hierarchy = ::Tenants::HierarchyService.new(target: @user).fetch.select {|target| target.is_a?(Tenants::Group)}
+      @hierarchy = ::Tenants::HierarchyService.new(target: @user).fetch.select { |target| target.is_a?(Tenants::Group) }
       @sandbox = sandbox
     end
 
@@ -37,7 +37,7 @@ module Pricings
                                             .for_dates(closing_start_date, closing_end_date)
       end
 
-      margin_pricings_by_cargo_class_and_dates = pricings_by_cargo_class_and_dates.map do |pricing|
+      margin_pricings_with_meta_by_cargo_class_and_dates = pricings_by_cargo_class_and_dates.map do |pricing|
         filtered_schedules = schedules_for_pricing(schedules: schedules, pricing: pricing)
         next if filtered_schedules.empty?
 
@@ -53,7 +53,26 @@ module Pricings
         ).perform
       end
 
-      margin_pricings_by_cargo_class_and_dates.flatten.compact.group_by { |pricing| pricing['cargo_class'] }
+      return {} if margin_pricings_with_meta_by_cargo_class_and_dates.compact.empty?
+
+      pricings_to_return, metadata_list = resort_manipulated_pricings_and_schedules(data: margin_pricings_with_meta_by_cargo_class_and_dates.compact)
+
+      [pricings_to_return, metadata_list]
+    end
+
+    def resort_manipulated_pricings_and_schedules(data:)
+      flat_data = data.flatten
+      pricings = flat_data.select { |datum| datum['itinerary_id'].present? }
+      metadata = flat_data.select { |datum| datum[:pricing_id].present? }
+      cargo_classes = pricings.pluck('cargo_class')
+      result_hashes = []
+      current_hash = {}
+
+      pricings_by_cargo_class = cargo_classes.each_with_object(Hash.new { |h, k| h[k] = [] }) do |cargo_class, hash|
+        hash[cargo_class] = pricings.select {|pricing| pricing['cargo_class'] == cargo_class }
+      end
+
+      [pricings_by_cargo_class, metadata]
     end
 
     def pricings_for_cargo_classes_and_groups

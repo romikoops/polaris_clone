@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'active_model_serializers', '~> 0.10', '>= 0.10.8'
 
   s.add_development_dependency 'api_docs'
+  s.add_development_dependency 'legacy'
 
   Gemhelper.common_gems(s)
 

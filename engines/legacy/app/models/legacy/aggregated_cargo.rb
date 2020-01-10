@@ -6,6 +6,8 @@ module Legacy
     belongs_to :shipment, class_name: 'Legacy::Shipment'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     before_validation :set_chargeable_weight!
+    DEFAULT_HEIGHT = 130
+    DIMENSION_NAMES = %i[weight volume chargeable_weight]
 
     def set_chargeable_weight!
       return nil if shipment.itinerary.nil?

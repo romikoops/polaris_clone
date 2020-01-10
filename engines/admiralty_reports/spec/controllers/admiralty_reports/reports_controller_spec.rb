@@ -11,24 +11,17 @@ module AdmiraltyReports
       allow_any_instance_of(AdmiraltyAuth::AuthorizedController).to receive(:authenticate_user!).and_return(true)
     end
 
-    let!(:tenants) do
-      [
-        ::Legacy::Tenant.create(name: 'Demo1', subdomain: 'demo1', scope: { 'open_quotation_tool' => true }),
-        ::Legacy::Tenant.create(name: 'Demo2', subdomain: 'demo2', scope: { 'open_quotation_tool' => false })
-      ]
-    end
-    let!(:tenants_tenants_true) { ::Tenants::Tenant.find_by(slug: 'demo1') }
-    let!(:tenants_tenants_false) { ::Tenants::Tenant.find_by(slug: 'demo2') }
+    let!(:quote_tenant) { FactoryBot.create(:legacy_tenant, name: 'Demo1', subdomain: 'demo1') }
+    let!(:booking_tenant) { FactoryBot.create(:legacy_tenant, name: 'Demo2', subdomain: 'demo2') }
 
-    let!(:scopes) do
-      [
-        ::Tenants::Scope.create(target: tenants_tenants_true, content: { 'open_quotation_tool' => true }),
-        ::Tenants::Scope.create(target: tenants_tenants_false, content: { 'open_quotation_tool' => false })
-      ]
-    end
+    let!(:quote_tenants_tenant) {  Tenants::Tenant.find_by(legacy_id: quote_tenant.id) }
+    let!(:booking_tenants_tenant) { Tenants::Tenant.find_by(legacy_id: booking_tenant.id) }
+
+    let!(:quote_tenants_scope) { FactoryBot.create(:tenants_scope, target: quote_tenants_tenant, content: { open_quotation_tool: true }) }
+    let!(:booking_tenants_scope) { FactoryBot.create(:tenants_scope, target: booking_tenants_tenant, content: { open_quotation_tool: false }) }
 
     describe 'GET #index' do
-      let!(:tenant) { tenants.first }
+      let!(:tenant) { quote_tenant }
 
       it 'renders page' do
         get :index
@@ -40,7 +33,7 @@ module AdmiraltyReports
 
     describe 'GET #show' do
       context 'quotation tool' do
-        let!(:tenant) { tenants.first }
+        let!(:tenant) { quote_tenant }
 
         it 'renders page' do
           get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id }
@@ -51,19 +44,19 @@ module AdmiraltyReports
       end
 
       context 'filtered results ' do
-        let!(:tenant) { tenants.first }
+        let!(:tenant) { quote_tenant }
         let!(:agency) { FactoryBot.create(:legacy_agency) }
-        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: tenants.first.id, company_name: nil, agency: agency) }
+        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id, company_name: nil, agency: agency) }
         let!(:shipments) do
           [
             FactoryBot.create(:legacy_shipment,
                               user_id: user.id,
-                              tenant_id: tenants.first.id,
+                              tenant_id: quote_tenant.id,
                               updated_at: DateTime.new(2019, 2, 3),
                               created_at: DateTime.new(2019, 2, 2)),
             FactoryBot.create(:legacy_shipment,
                               user_id: user.id,
-                              tenant_id: tenants.first.id,
+                              tenant_id: quote_tenant.id,
                               updated_at: DateTime.new(2019, 2, 5),
                               created_at: DateTime.new(2019, 2, 4))
           ]
@@ -100,19 +93,19 @@ module AdmiraltyReports
       end
 
       context 'booking tool' do
-        let!(:tenant) { tenants.second }
-        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: tenants.first.id, company_name: nil) }
+        let!(:tenant) { booking_tenant }
+        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id, company_name: nil) }
 
         let!(:shipments) do
           [
             FactoryBot.create(:legacy_shipment,
                               user_id: user.id,
-                              tenant_id: tenants.second.id,
+                              tenant_id: booking_tenant.id,
                               updated_at: DateTime.new(2019, 2, 3),
                               created_at: DateTime.new(2019, 2, 2)),
             FactoryBot.create(:legacy_shipment,
                               user_id: user.id,
-                              tenant_id: tenants.second.id,
+                              tenant_id: booking_tenant.id,
                               updated_at: DateTime.new(2019, 2, 5),
                               created_at: DateTime.new(2019, 2, 4))
           ]

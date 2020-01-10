@@ -7,33 +7,46 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
 
     trait :bas do
       name { 'Basic Ocean Freight' }
-      code { 'BAS' }
+      code { 'bas' }
     end
 
     trait :solas do
       name { 'SOLAS FEE' }
-      code { 'SOLAS' }
+      code { 'solas' }
     end
 
     trait :baf do
       name { 'Bunker Adjustment Fee' }
-      code { 'BAF' }
+      code { 'baf' }
     end
 
     trait :has do
       name { 'Heavy Weight Freight' }
-      code { 'HAS' }
+      code { 'has' }
     end
 
     trait :puf do
       name { 'Pick Up Fee' }
-      code { 'PUF' }
+      code { 'puf' }
     end
+
+    trait :trucking_pre do
+      name { 'Trucking' }
+      code { 'trucking_pre' }
+    end
+
+    trait :trucking_on do
+      name { 'Trucking' }
+      code { 'trucking_on' }
+    end
+
 
     factory :bas_charge, traits: [:bas]
     factory :solas_charge, traits: [:solas]
     factory :baf_charge, traits: [:baf]
     factory :has_charge, traits: [:has]
     factory :puf_charge, traits: [:puf]
+    factory :trucking_pre_charge, traits: [:trucking_pre]
+    factory :trucking_on_charge, traits: [:trucking_on]
   end
 end

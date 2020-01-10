@@ -144,6 +144,7 @@ exports[`aggregatedCargo is empty object 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
+      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -537,6 +538,7 @@ exports[`detailed billing working properly 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
+      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -905,6 +907,7 @@ exports[`shallow rendering 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
+      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -1298,6 +1301,7 @@ exports[`show schedule options working 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
+      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -1666,6 +1670,7 @@ exports[`single result rendering removes add button 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
+      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -2033,6 +2038,7 @@ exports[`tenant.scope is empty object 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
+      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -2365,6 +2371,7 @@ exports[`validUntil is falsy 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
+      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -2758,6 +2765,7 @@ exports[`validUntil is truthy 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
+      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {

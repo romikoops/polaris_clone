@@ -4,7 +4,13 @@
 namespace :tenant do
   task charge_migration: :environment do
     Tenant.find_each do |tenant|
-      shipment_association = tenant.quotation_tool? ? tenant.shipments.where.not(quotation_id: nil) : tenant.shipments
+
+      scope = Tenants::ScopeService.new(
+        tenant: Tenants::Tenant.find_by(legacy_id: tenant.id)
+      ).fetch
+      quotation_tool = scope['open_quotation_tool'] || scope['closed_quotation_tool']
+
+      shipment_association = quotation_tool ? tenant.shipments.where.not(quotation_id: nil) : tenant.shipments
       shipment_association.each do |shipment|
         shipment.charge_breakdowns.each do |charge_breakdown|
           %w(import export).each do |direction|

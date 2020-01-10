@@ -389,7 +389,8 @@ class AdminShipmentView extends Component {
       shipment,
       cargoItems,
       containers,
-      aggregatedCargo
+      aggregatedCargo,
+      pricingBreakdowns
     } = shipmentData
     const {
       showEditTime, showEditServicePrice, newTimes, newPrices, currentStatus
@@ -822,6 +823,7 @@ class AdminShipmentView extends Component {
               cargo={cargoToRender}
               cargoView={cargoView}
               remarkDispatch={remarkDispatch}
+              pricingBreakdowns={pricingBreakdowns}
             />
           )}
 

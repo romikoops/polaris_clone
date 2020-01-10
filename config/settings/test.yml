@@ -1,7 +1,10 @@
 emails:
-  booking: itsmycargodev@gmail.com  
+  booking: itsmycargodev@gmail.com
   domain: itsmycargo.test
   support: support@itsmycargo.tech
+
+fixer:
+  api_key: FAKEKEY
 
 google:
   api_key: FAKEKEY

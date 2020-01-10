@@ -373,6 +373,7 @@ exports[`shallow render 1`] = `
                   documentDispatch={null}
                   downloadUrls={Object {}}
                   loading={false}
+                  modal={false}
                   options={
                     Object {
                       "userId": undefined,
