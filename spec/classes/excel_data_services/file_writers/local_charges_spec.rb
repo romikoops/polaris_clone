@@ -42,8 +42,8 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
   let!(:local_charge_row) do
     ['Gothenburg',
      'Sweden',
-     '2020-01-09',
-     '2020-07-09',
+     local_charge.effective_date.strftime('%F'),
+     local_charge.expiration_date.strftime('%F'),
      nil,
      nil,
      'standard',
