@@ -221,18 +221,6 @@ class Shipment < Legacy::Shipment
     direction == 'export'
   end
 
-  def shipper
-    find_contacts('shipper').first
-  end
-
-  def consignee
-    find_contacts('consignee').first
-  end
-
-  def notifyees
-    find_contacts('notifyee')
-  end
-
   def cargo_count
     if aggregated_cargo
       1
@@ -320,18 +308,6 @@ class Shipment < Legacy::Shipment
 
   def archive!
     update!(status: 'archived')
-  end
-
-  def etd
-    planned_etd
-  end
-
-  def eta
-    planned_eta
-  end
-
-  def selected_offer
-    charge_breakdowns.selected.to_nested_hash
   end
 
   def view_offers(index)

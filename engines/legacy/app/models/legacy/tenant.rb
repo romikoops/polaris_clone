@@ -5,7 +5,7 @@ module Legacy
     self.table_name = 'tenants'
 
     has_many :users
-    has_many :shipments
+    has_many :shipments, class_name: 'Legacy::Shipment'
     has_many :itineraries, class_name: 'Legacy::Itinerary'
     has_many :hubs, dependent: :destroy
 

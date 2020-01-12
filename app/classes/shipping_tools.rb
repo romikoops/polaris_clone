@@ -25,7 +25,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
   end
 
   def self.handle_existing_quote(shipment, results, sandbox = nil)
-    existing_quote = Quotation.find_by(
+    existing_quote = Legacy::Quotation.find_by(
       user_id: shipment.user_id,
       original_shipment_id: shipment.id,
       sandbox: sandbox
@@ -39,7 +39,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       main_quote = existing_quote
       main_quote.shipments.destroy_all
     elsif !existing_quote
-      main_quote = Quotation.create(
+      main_quote = Legacy::Quotation.create(
         user_id: shipment.user_id,
         original_shipment_id: shipment.id,
         sandbox: sandbox

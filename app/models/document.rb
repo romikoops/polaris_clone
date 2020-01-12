@@ -48,14 +48,6 @@ class Document < Legacy::Document
   def get_signed_url
     @url = get_file_url(url)
   end
-
-  def attachment
-    file&.download
-  end
-
-  def local_file_path
-    ActiveStorage::Blob.service.send(:path_for, file.key)
-  end
 end
 
 # == Schema Information

@@ -58,7 +58,7 @@ FactoryBot.define do
       end
 
       if evaluator.with_breakdown
-        shipment.charge_breakdowns << create(:charge_breakdown, trip: shipment.trip, shipment: shipment)
+        shipment.charge_breakdowns << create(:legacy_charge_breakdown, trip: shipment.trip, shipment: shipment)
       end
     end
 

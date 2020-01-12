@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ShipmentMailer, type: :mailer do
-  let(:user) { create(:user) }
-  let!(:shipment) { create(:complete_shipment, user: user, with_breakdown: true) }
+  let(:user) { create(:legacy_user) }
+  let!(:shipment) { create(:complete_legacy_shipment, user: user, tenant: user.tenant, with_breakdown: true) }
 
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})

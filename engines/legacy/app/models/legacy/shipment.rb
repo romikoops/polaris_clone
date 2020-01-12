@@ -16,7 +16,7 @@ module Legacy
     belongs_to :itinerary, optional: true, class_name: 'Legacy::Itinerary'
     belongs_to :transport_category, optional: true, class_name: 'Legacy::TransportCategory'
     belongs_to :trip, optional: true, class_name: 'Legacy::Trip'
-
+    belongs_to :quotation, optional: true
     has_many :shipment_contacts, class_name: 'Legacy::ShipmentContact'
     has_many :containers, class_name: 'Legacy::Container'
     has_many :cargo_items, class_name: 'Legacy::CargoItem'
@@ -100,6 +100,29 @@ module Legacy
       return_bool
     end
 
+    def selected_offer
+      charge_breakdowns.selected.to_nested_hash
+    end
+
+    def shipper
+      find_contacts('shipper').first
+    end
+
+    def consignee
+      find_contacts('consignee').first
+    end
+
+    def notifyees
+      find_contacts('notifyee')
+    end
+
+    def etd
+      planned_etd
+    end
+
+    def eta
+      planned_eta
+    end
 
     def pickup_address
       Legacy::Address.where(id: trucking.dig('pre_carriage', 'address_id')).first

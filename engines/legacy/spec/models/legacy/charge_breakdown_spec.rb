@@ -57,7 +57,12 @@ module Legacy
       describe '.grand_total' do
         it 'gets grand_total' do
           result = charge_breakdown.grand_total
-          expect(result).to eq(Charge.find_by(children_charge_category: grand_total_category))
+          expect(result).to eq(
+            Charge.find_by(
+              charge_breakdown_id: charge_breakdown.id,
+              children_charge_category: grand_total_category
+            )
+          )
         end
       end
 

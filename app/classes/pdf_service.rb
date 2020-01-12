@@ -77,14 +77,14 @@ class PdfService
 
   def admin_quotation(quotation: nil, shipment: nil)
     existing_document = if quotation.present?
-                          Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox_id: sandbox&.id)
+                          Legacy::Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox_id: sandbox&.id)
                         else
-                          Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'quotation', sandbox_id: sandbox&.id)
+                          Legacy::Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'quotation', sandbox_id: sandbox&.id)
     end
     return existing_document if needs_update?(object: quotation || shipment, document: existing_document)
 
     shipments = quotation ? quotation.shipments : [shipment]
-    shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
+    shipment = quotation ? Legacy::Shipment.find(quotation.original_shipment_id) : shipment
     quotation = quotation
     quotes = quotes_with_trip_id(quotation, shipments)
     note_remarks = get_note_remarks(quotes.first['trip_id'])
@@ -97,7 +97,7 @@ class PdfService
     )
     return nil if file.nil?
 
-    Document.create!(
+    Legacy::Document.create!(
       shipment: shipment,
       text: "quotation_#{shipments.pluck(:imc_reference).join(',')}",
       doc_type: 'quotation',
@@ -149,11 +149,11 @@ class PdfService
   end
 
   def quotation_pdf(quotation:)
-    existing_document = Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox_id: sandbox&.id)
+    existing_document = Legacy::Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox_id: sandbox&.id)
     return existing_document if needs_update?(object: quotation, document: existing_document)
 
     quotes = quotes_with_trip_id(quotation, quotation.shipments)
-    shipment = Shipment.find(quotation.original_shipment_id)
+    shipment = Legacy::Shipment.find(quotation.original_shipment_id)
     note_remarks = get_note_remarks(quotes.first['trip_id'])
 
     file = generate_quote_pdf(
@@ -165,7 +165,7 @@ class PdfService
     )
     return nil if file.nil?
 
-    Document.create!(
+    Legacy::Document.create!(
       quotation: quotation,
       text: "quotation_#{quotation.shipments.pluck(:imc_reference).join(',')}",
       doc_type: 'quotation',
@@ -181,7 +181,7 @@ class PdfService
   end
 
   def shipment_pdf(shipment:)
-    existing_document = Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'shipment_recap', sandbox_id: sandbox&.id)
+    existing_document = Legacy::Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'shipment_recap', sandbox_id: sandbox&.id)
     return existing_document if existing_document&.file.present?
 
     cargo_count = shipment.cargo_units.count
@@ -202,7 +202,7 @@ class PdfService
     )
     return nil if file.nil?
 
-    Document.create!(
+    Legacy::Document.create!(
       shipment: shipment,
       text: "shipment_#{shipment.imc_reference}",
       doc_type: 'shipment_recap',

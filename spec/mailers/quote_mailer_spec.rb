@@ -7,12 +7,12 @@ RSpec.describe QuoteMailer, type: :mailer do
   let(:user) { create(:user, tenant: tenant) }
 
   let(:original_shipment) do
-    create(:shipment, user: user, tenant: tenant, with_breakdown: true).tap do |shipment|
+    create(:legacy_shipment, user: user, tenant: tenant, with_breakdown: true).tap do |shipment|
       shipment.trip_id = nil
     end
   end
   let(:quotation) do
-    create(:quotation, user: user, shipment_count: 1).tap do |quotation|
+    create(:legacy_quotation, user: user, shipment_count: 1).tap do |quotation|
       quotation.original_shipment_id = original_shipment.id
     end
   end
