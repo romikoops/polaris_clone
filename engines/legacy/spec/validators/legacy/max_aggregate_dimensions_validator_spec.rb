@@ -27,6 +27,14 @@ RSpec.describe Legacy::MaxAggregateDimensionsValidator do
   end
 
   it 'passes validation with agg cargo' do
+    expect(Legacy::Shipment.new(args.except(:trip_id, :itinerary_id).merge(aggregated_cargo: agg_cargo))).to be_valid
+  end
+
+  it 'passes validation without a trip set' do
+    expect(Legacy::Shipment.new(args.except(:trip_id, :itinerary_id).merge(cargo_items: valid_cargos))).to be_valid
+  end
+
+  it 'passes validation with agg cargo without a trip set' do
     expect(Legacy::Shipment.new(args.merge(aggregated_cargo: agg_cargo))).to be_valid
   end
 

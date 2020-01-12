@@ -16,8 +16,8 @@ module Legacy
         max_aggregate_dimensions[:general]
       sums = if record.aggregated_cargo.present?
                obj = { payload_in_kg: record.aggregated_cargo.weight }
-               obj[:chargeable_weight] = record.aggregated_cargo.chargeable_weight ||
-                record.aggregated_cargo.calc_chargeable_weight(mode_of_transport)
+               obj[:chargeable_weight] = (record.aggregated_cargo.chargeable_weight ||
+                record.aggregated_cargo.calc_chargeable_weight(mode_of_transport)) if mode_of_transport.present?
                obj
              else
                record.cargo_items.each_with_object(Hash.new(0)) do |cargo_item, return_h|
