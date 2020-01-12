@@ -115,5 +115,28 @@ module Legacy
         expect(shipment.fcl?).to be(true)
       end
     end
+
+    describe 'service_level' do
+      it 'returns the service level from the trip' do
+        expect(shipment.service_level).to be(shipment.trip.tenant_vehicle.name)
+      end
+    end
+
+    describe 'vessel_name' do
+      it 'returns the vessel name from the trip' do
+        expect(shipment.vessel_name).to be(shipment.trip.vessel)
+      end
+    end
+
+    describe 'voyage_code' do
+      it 'returns the voyage code from the trip' do
+        expect(shipment.voyage_code).to be(shipment.trip.voyage_code)
+      end
+    end
+    describe 'carrier' do
+      it 'returns the carrier from the trip' do
+        expect(shipment.carrier).to be(shipment.trip.tenant_vehicle.carrier&.name)
+      end
+    end
   end
 end

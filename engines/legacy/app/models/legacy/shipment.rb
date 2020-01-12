@@ -115,6 +115,22 @@ module Legacy
       charge_breakdowns.find_by(trip_id: target_trip.id)&.valid_until
     end
 
+    def service_level
+      trip&.tenant_vehicle&.name
+    end
+
+    def carrier
+      trip&.tenant_vehicle&.carrier&.name
+    end
+
+    def vessel_name
+      trip&.vessel
+    end
+
+    def voyage_code
+      trip&.voyage_code
+    end
+
     private
 
     def update_carriage_properties!

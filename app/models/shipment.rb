@@ -420,22 +420,6 @@ class Shipment < Legacy::Shipment
     end
   end
 
-  def service_level
-    trip&.tenant_vehicle&.name
-  end
-
-  def carrier
-    trip&.tenant_vehicle&.carrier&.name
-  end
-
-  def vessel_name
-    trip&.vessel
-  end
-
-  def voyage_code
-    trip&.voyage_code
-  end
-
 end
 
 # == Schema Information
