@@ -79,6 +79,11 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       internal_code { 'PER_UNIT_RANGE' }
       external_code { 'PER_UNIT_RANGE' }
     end
+    
+    trait :cbm_range do
+      internal_code { 'PER_CBM_RANGE' }
+      external_code { 'PER_CBM_RANGE' }
+    end
 
     factory :per_wm_rate_basis, traits: [:wm]
     factory :per_container, traits: [:container]
@@ -95,5 +100,6 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     factory :per_unit_ton_cbm_range, traits: [:unit_ton_cbm_range]
     factory :per_container_range, traits: [:container_range]
     factory :per_unit_range, traits: [:unit_range]
+    factory :per_cbm_range, traits: [:cbm_range]
   end
 end

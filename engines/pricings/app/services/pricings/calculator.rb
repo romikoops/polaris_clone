@@ -56,6 +56,14 @@ module Pricings
       @totals['total'] = { value: converted, currency: @user.currency }
     end
 
+    def target_in_range(ranges:, value:, max: false)
+      target = ranges.find do |step|
+        Range.new(step['min'],step['max']).cover?(value)
+      end
+
+      target || (max ? ranges.max_by { |x| x['max'] } : 0)
+    end
+
     def handle_range_fee(fee, cargo_hash) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
       weight_kg = cargo_hash.fetch(:weight)
       raw_weight_kg = cargo_hash.fetch(:raw_weight)
@@ -65,44 +73,36 @@ module Pricings
       rate_basis = Pricings::RateBasis.get_internal_key(fee['rate_basis'])
       case rate_basis
       when 'PER_KG_RANGE'
-        fee_range = fee['range'].find do |range|
-          (range['min']..range['max']).cover?(weight_kg)
-        end || fee['range'].max_by { |x| x['max'] }
-        value = fee_range.nil? ? 0 : fee_range['rate'] * weight_kg
+        target = target_in_range(ranges: fee['range'], value: weight_kg, max: true)
+        value = target['rate'] * weight_kg
 
         res = [value, min].max
+      when 'PER_CBM_RANGE'
+        target = target_in_range(ranges: fee['range'], value: volume, max: true)
+
+        res = target['rate'] * volume
       when 'PER_UNIT_TON_CBM_RANGE'
         ratio = volume / (raw_weight_kg / 1000)
-        fee_range = fee['range'].find do |range|
-          (range['min']..range['max']).cover?(ratio)
-        end
-        value = 0 if fee_range.nil?
-        unless fee_range.nil?
-          value = if fee_range['ton']
-                    fee_range['ton'] * raw_weight_kg / 1000
-                  elsif fee_range['cbm']
-                    fee_range['cbm'] * volume
-                  end
-        end
+        target = target_in_range(ranges: fee['range'], value: ratio, max: false)
+        value = if target == 0
+                  0
+                elsif target['ton']
+                  target['ton'] * raw_weight_kg / 1000
+                elsif target['cbm']
+                  target['cbm'] * volume
+                end
 
         res = [value, min].max
       when 'PER_CONTAINER_RANGE'
-        fee_range = fee['range'].find do |range|
-          (range['min']..range['max']).cover?(weight_kg)
-        end || fee['range'].max_by { |x| x['max'] }
-        value = 0 if fee_range.nil?
-        value = fee_range['rate'] unless fee_range.nil?
+        target = target_in_range(ranges: fee['range'], value: weight_kg, max: true)
+        value = target.nil? ? 0 : target['rate']
 
         res = [value, min].max
       when 'PER_UNIT_RANGE'
-        fee_range = fee['range'].find do |range|
-          (range['min']..range['max']).cover?(weight_kg)
-        end || fee['range'].max_by { |x| x['max'] }
-        value = 0 if fee_range.nil?
-        value = fee_range['rate'] unless fee_range.nil?
+        target = target_in_range(ranges: fee['range'], value: weight_kg, max: true)
+        value = target.nil? ? 0 : target['rate']
 
         res = [value, min].max
-
       end
 
       [res, max].min
