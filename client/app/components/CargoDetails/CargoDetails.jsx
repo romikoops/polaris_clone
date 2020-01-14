@@ -135,7 +135,8 @@ class CargoDetails extends Component {
       totalGoodsValue,
       setAddons,
       insurance,
-      handleInsurance
+      handleInsurance,
+      setCustomsFee
     } = this.props
 
     const { scope } = tenant
@@ -453,6 +454,8 @@ class CargoDetails extends Component {
                 customs={customs}
                 customsData={customsData}
                 handleChange={this.handleChange}
+                setCustomsFee={setCustomsFee}
+                shipmentData={shipmentData}
               />
             )}
             {scope.has_insurance && (

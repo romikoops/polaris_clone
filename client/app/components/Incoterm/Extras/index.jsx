@@ -1,8 +1,9 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
+import { has, get } from 'lodash'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
-import { gradientTextGenerator } from '../../../helpers'
+import { gradientTextGenerator, numberSpacing } from '../../../helpers'
 
 function IncotermExtras ({
   theme, shipment, feeHash, tenant, t
@@ -28,13 +29,13 @@ function IncotermExtras ({
         styles.fee_value
       } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
     >
-      {feeHash.insurance && feeHash.insurance.value && (
-        <p className="flex-none no_m center">{feeHash.insurance.currency}</p>
+      {has(feeHash, ['insurance', 'total', 'currency']) && (
+        <p className="flex-none no_m center">{get(feeHash, ['insurance', 'total', 'currency'])}</p>
       )}
       <p>&nbsp;</p>
       <p className="flex-none no_m center">
-        {feeHash.insurance && feeHash.insurance.value
-          ? `${parseFloat(feeHash.insurance.value).toFixed(2)}`
+        {has(feeHash, ['insurance', 'total', 'value'])
+          ? `${numberSpacing(get(feeHash, ['insurance', 'total', 'value']), 2)}`
           : t('common:none')}
       </p>
     </div>
@@ -71,8 +72,8 @@ function IncotermExtras ({
         ''
       )}
       <p className="flex-none no_m center">
-        {feeHash.customs && feeHash.customs.val
-          ? `${parseFloat(feeHash.customs.val).toFixed(2)}`
+        {has(feeHash, ['customs', 'total', 'value'])
+          ? `${numberSpacing(get(feeHash, ['customs', 'total', 'value']), 2)}`
           : t('common:none')}
       </p>
     </div>
@@ -149,21 +150,13 @@ function IncotermExtras ({
 
   return (
     <div
-      className={`flex-100 layout-row layout-align-space-around-center  ${styles.incoterm_wrapper}`}
+      className={`flex-100 layout-row layout-align-space-around-center layout-wrap ${styles.incoterm_wrapper}`}
     >
       {scope.has_customs ? customsFeesTile : ''}
       {scope.has_insurance ? insuranceFeesTile : '' }
       {scope.customs_export_paper ? exportPaperFeesTile : '' }
     </div>
   )
-}
-
-IncotermExtras.propTypes = {
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  feeHash: PropTypes.objectOf(PropTypes.any),
-  tenant: PropTypes.tenant,
-  shipment: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 IncotermExtras.defaultProps = {

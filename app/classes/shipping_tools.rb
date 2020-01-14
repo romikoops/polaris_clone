@@ -274,15 +274,24 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
 
     # TBD - Adjust for itinerary logic
     if shipment_data[:insurance][:isSelected]
-      @insurance_charge = Charge.create(
+      insurance_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code(code: 'insurance', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
-        price: Price.create(currency: shipment.user.currency, value: shipment_data[:insurance][:val]),
+        price: Price.create(currency: shipment[:total_goods_value]['currency'], value: shipment_data[:insurance][:val]),
         parent: charge_breakdown.charge('grand_total'),
         sandbox: sandbox
       )
+      Charge.create(
+        children_charge_category: ChargeCategory.from_code(code: 'freight_insurance', tenant_id: shipment.tenant_id),
+        charge_category: ChargeCategory.grand_total,
+        charge_breakdown: charge_breakdown,
+        price: Price.create(currency: shipment[:total_goods_value]['currency'], value: shipment_data[:insurance][:val]),
+        parent: insurance_charge,
+        sandbox: sandbox
+      )
     end
+
     if shipment_data[:customs][:total][:val].to_d.positive? || shipment_data[:customs][:total][:hasUnknown]
       @customs_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code(code: 'customs', tenant_id: shipment.tenant_id),
@@ -586,8 +595,6 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
                       user: current_user,
                       mode_of_transport: shipment.mode_of_transport
                     )
-                  else
-                    { unknown: true }
                   end
     export_fees = if origin_customs_fee
                     @pricing_tools.calc_addon_charges(
@@ -596,17 +603,15 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
                       user: current_user,
                       mode_of_transport: shipment.mode_of_transport
                     )
-                  else
-                    { unknown: true }
                   end
     total_fees = { total: { value: 0, currency: current_user.currency } }
-    total_fees[:total][:value] += import_fees['total'][:value] if import_fees['total'] && import_fees['total'][:value]
-    total_fees[:total][:value] += export_fees['total'][:value] if export_fees['total'] && export_fees['total'][:value]
-    customs_fee = {
-      import: destination_customs_fee ? import_fees : { unknown: true },
-      export: origin_customs_fee ? export_fees : { unknown: true },
-      total: total_fees
-    }
+    total_fees[:total][:value] += import_fees.dig('total', 'value') if import_fees
+    total_fees[:total][:value] += export_fees.dig('total', 'value') if export_fees
+
+    customs_fee = { total: total_fees }
+    customs_fee[:import] = import_fees if import_fees.present?
+    customs_fee[:export] = export_fees if export_fees.present?
+
     hubs = {
       startHub: { data: @origin_hub, address: @origin_hub.nexus },
       endHub: { data: @destination_hub, address: @destination_hub.nexus }

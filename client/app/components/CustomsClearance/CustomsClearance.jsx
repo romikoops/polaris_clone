@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import { get } from 'lodash'
+import { get, has } from 'lodash'
 import defaults from '../../styles/default_classes.scss'
 import TextHeading from '../TextHeading/TextHeading'
-import Checkbox from '../Checkbox/Checkbox'
-import { hsCodes } from '../../mocks'
+import CustomsToggle from './CustomsToggle'
+import { numberSpacing } from '../../helpers'
 
 class CustomsClearance extends Component {
   static displayCustomsFee (customsData, target, customs, t) {
@@ -43,25 +43,54 @@ class CustomsClearance extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      customsView: null
+      customsViewImport: null,
+      customsViewExport: null
     }
+
+    this.toggleCustoms = this.toggleCustoms.bind(this)
+    this.toggleTargetCustoms = this.toggleTargetCustoms.bind(this)
   }
 
-  toggleCustoms (bool) {
-    this.setState({ customsView: bool })
+  toggleCustoms (bool, target) {
+    if (target === 'export') {
+      this.setState({ customsViewExport: bool })
+    } else {
+      this.setState({ customsViewImport: bool })
+    }
+    this.toggleTargetCustoms(target)
+  }
+
+  toggleTargetCustoms (target) {
+    const {
+      setCustomsFee,
+      customsData,
+      shipmentData
+    } = this.props
+    const { customs } = shipmentData
+    if (!has(customs, [target, 'total', 'value'])) {
+      return
+    }
+    const resp = customsData[target].bool
+      ? { bool: false, val: 0 }
+      : {
+        bool: true,
+        val: numberSpacing(customs[target].total.value, 2),
+        currency: customs[target].total.currency
+      }
+    setCustomsFee(target, resp)
   }
 
   render () {
     const {
       theme,
       t,
-      tenant
+      tenant,
+      shipmentData
     } = this.props
-
-    const { scope, currency } = tenant
-
+    const { customs } = shipmentData
     const {
-      customsView
+      customsViewImport,
+      customsViewExport
     } = this.state
 
     return (
@@ -87,54 +116,31 @@ class CustomsClearance extends Component {
               {t('cargo:customClearanceDescription')}
             </p>
           </div>
-          <div
-            className="flex-100 layout-wrap layout-row layout-align-space-around-center"
-          >
-            <div className="flex-100 layout-row layout-align-end-center padd_top">
-              <div className="flex-20 layout-row layout-align-end-center">
-                <Checkbox
-                  id="yes_clearance"
-                  className="ccb_yes_clearance padding"
-                  onChange={() => this.toggleCustoms(true)}
-                  checked={customsView}
-                  theme={theme}
-                />
-              </div>
-              <div className="flex-5" />
-              <div className="flex-75 layout-row layout-align-start-center">
-                <label htmlFor="yes_clearance" className="pointy">
-                  <b>{t('common:yes')}</b>
-                  {t('cargo:clearanceYes', {
-                    tenantName: tenant.name,
-                    clearanceFee: scope.customs_clearance_fee,
-                    currency
-                  })}
-                  {(scope.hs_fee > 0) ? t('cargo:plusHS', {
-                    hsFee: scope.hs_fee,
-                    currency
-                  }) : ''}
-                </label>
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-align-end-center">
-              <div className="flex-20 layout-row layout-align-end-center padd_top">
-                <Checkbox
-                  id="no_clearance"
-                  onChange={() => this.toggleCustoms(false)}
-                  className="ccb_no_clearance"
-                  checked={customsView === null ? null : !customsView}
-                  theme={theme}
-                />
-              </div>
-              <div className="flex-5" />
-              <div className="flex-75 layout-row layout-align-start-center padding">
-                <label htmlFor="no_clearance" className="pointy">
-                  <b>{t('common:no')}</b>
-                  {t('cargo:clearanceNo', { tenantName: tenant.name })}
-                </label>
-              </div>
-            </div>
-          </div>
+          {
+            customs.export && (
+              <CustomsToggle
+                t={t}
+                tenant={tenant}
+                toggleCustoms={this.toggleCustoms}
+                customsFee={get(customs, ['export', 'total'])}
+                customsView={customsViewExport}
+                target="export"
+                port={shipmentData.shipment.origin_nexus.name}
+              />
+            )
+          }
+          {
+            customs.import && (
+              <CustomsToggle
+                t={t}
+                tenant={tenant}
+                toggleCustoms={this.toggleCustoms}
+                customsFee={get(customs, ['import', 'total'])}
+                customsView={customsViewImport}
+                target="import"
+                port={shipmentData.shipment.destination_nexus.name}
+              />
+            )}
         </div>
       </div>
     )

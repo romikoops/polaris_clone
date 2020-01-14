@@ -593,6 +593,7 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -708,6 +709,416 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+              "unknown": true,
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+              "unknown": true,
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": false,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
@@ -1469,6 +1880,7 @@ exports[`customsData[target].unknown 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -1584,6 +1996,414 @@ exports[`customsData[target].unknown 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": false,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
@@ -2885,6 +3705,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -3000,6 +3821,414 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": false,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
@@ -3767,6 +4996,7 @@ exports[`shallow render 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -3882,6 +5112,414 @@ exports[`shallow render 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": false,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
@@ -4649,6 +6287,7 @@ exports[`shipment.has_pre_carriage ? 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -4764,6 +6403,414 @@ exports[`shipment.has_pre_carriage ? 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": false,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": true,
+            "has_pre_carriage": true,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
@@ -5561,6 +7608,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -5676,6 +7724,414 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": true,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
@@ -6443,6 +8899,7 @@ exports[`state.customsView is true 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -6558,6 +9015,414 @@ exports[`state.customsView is true 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": false,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
@@ -7325,6 +10190,7 @@ exports[`state.insuranceView is false 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -7440,6 +10306,414 @@ exports[`state.insuranceView is false 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": false,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
@@ -8501,6 +11775,7 @@ exports[`state.showModal is true 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -8616,6 +11891,414 @@ exports[`state.showModal is true 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": false,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
@@ -9383,6 +13066,7 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -9498,6 +13182,414 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": false,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
@@ -10887,6 +14979,7 @@ exports[`tenant.scope.has_insurance is false 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -11002,6 +15095,414 @@ exports[`tenant.scope.has_insurance is false 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": false,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
@@ -11685,6 +16186,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
       }
       eori="EORI"
       handleChange={[Function]}
+      setCustomsFee={[Function]}
       shipment={
         Object {
           "booking_placed_at": "2018-11-01T11:14:33z",
@@ -11800,6 +16302,414 @@ exports[`totalGoodsValue.value > 20000 1`] = `
             },
           },
           "updated_at": "2018-11-01T18:14:33z",
+        }
+      }
+      shipmentData={
+        Object {
+          "addons": Object {
+            "customs_export_paper": true,
+          },
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "aggregatedCargo": Object {
+            "cargo_item_type_id": "foo",
+            "chargeable_weight": 250,
+            "dangerous_goods": false,
+            "description": "FOO_CARGO_ITEM_DESCRIPTION",
+            "dimension_x": 10,
+            "dimension_y": 60,
+            "dimension_z": 40,
+            "gross_weight": 76,
+            "hs_codes": Array [
+              4,
+            ],
+            "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+            "id": 1,
+            "key": "FOO_CARGO_ITEM_KEY",
+            "payload_in_kg": 200,
+            "quantity": 5,
+            "stackable": true,
+            "tare_weight": 20,
+            "volume": 12,
+            "weight": 220,
+          },
+          "cargoItemTypes": Object {
+            "bar": Object {
+              "description": "BAR_TYPE",
+            },
+            "foo": Object {
+              "description": "FOO_TYPE",
+            },
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "chargeable_weight": 250,
+              "dangerous_goods": false,
+              "description": "FOO_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 10,
+              "dimension_y": 60,
+              "dimension_z": 40,
+              "gross_weight": 76,
+              "hs_codes": Array [
+                4,
+              ],
+              "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+              "id": 1,
+              "key": "FOO_CARGO_ITEM_KEY",
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "stackable": true,
+              "tare_weight": 20,
+              "weight": 220,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "chargeable_weight": 150,
+              "description": "BAR_CARGO_ITEM_DESCRIPTION",
+              "dimension_x": 100,
+              "dimension_y": 50,
+              "dimension_z": 70,
+              "hs_codes": Array [],
+              "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+              "id": 2,
+              "key": "BAR_CARGO_ITEM_KEY",
+              "payload_in_kg": 100,
+              "quantity": 7,
+              "stackable": false,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [
+            Object {
+              "cargo_group_id": 4,
+              "customs_text": "FOO_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 130,
+              "hs_codes": Array [],
+              "id": 1,
+              "payload_in_kg": 200,
+              "quantity": 5,
+              "size_class": "FOO_CONTAINER_SIZE_CLASS",
+              "tare_weight": 50,
+            },
+            Object {
+              "cargo_group_id": 5,
+              "customs_text": "BAR_CONTAINER_CUSTOMS_TEXT",
+              "gross_weight": 457,
+              "hs_codes": Array [],
+              "id": 2,
+              "payload_in_kg": 450,
+              "quantity": 7,
+              "size_class": "BAR_CONTAINER_SIZE_CLASS",
+              "tare_weight": 7,
+            },
+          ],
+          "customs": Object {
+            "export": Object {
+              "total": Object {
+                "currency": "EUR",
+                "value": 100,
+              },
+            },
+            "import": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+            "total": Object {
+              "total": Object {
+                "currency": "EUR",
+              },
+            },
+          },
+          "dangerousGoods": false,
+          "documents": Array [
+            Object {
+              "approved": "approved",
+              "created_at": "2018-12-01T18:14:33z",
+              "doc_type": "FOO_DOC_TYPE",
+              "signed_url": "FOO_SIGNED_URL",
+              "text": "FOO_DOCUMENT_TEXT",
+            },
+            Object {
+              "approved": "rejected",
+              "created_at": "2018-12-02T11:14:33z",
+              "doc_type": "BAR_DOC_TYPE",
+              "signed_url": "BAR_SIGNED_URL",
+              "text": "BAR_DOCUMENT_TEXT",
+            },
+          ],
+          "hubs": Object {
+            "endHub": "END_HUB",
+            "startHub": "START_HUB",
+          },
+          "notifyees": Array [
+            Object {
+              "first_name": "John",
+              "last_name": "Doe",
+            },
+            Object {
+              "first_name": "Robert",
+              "last_name": "Plant",
+            },
+            Object {
+              "first_name": "James",
+              "last_name": "Brows",
+            },
+          ],
+          "results": Array [
+            Object {
+              "meta": Object {
+                "carrier_name": "FOO_CARRIER_NAME",
+                "destination_hub": Object {
+                  "name": "Shanghai",
+                },
+                "mode_of_transport": "air",
+                "origin_hub": Object {
+                  "name": "Gothenburg",
+                },
+                "pricing_range_data": Object {
+                  "fcl_20": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "750.0",
+                      "range": Array [],
+                      "rate": "750.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "750.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                  "fcl_40_hq": Object {
+                    "BAS": Object {
+                      "currency": "USD",
+                      "min": "1400.0",
+                      "range": Array [],
+                      "rate": "1400.0",
+                      "rate_basis": "PER_CONTAINER",
+                    },
+                    "total": Object {
+                      "currency": "USD",
+                      "value": "1400.0",
+                    },
+                    "valid_until": "2019-12-31T00:00:00.000Z",
+                  },
+                },
+                "service_level": "FOO_SERVICE_LEVEL",
+                "service_level_count": 1,
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 467,
+                },
+              },
+              "schedules": Array [
+                Object {
+                  "closing_date": "16-09-2018",
+                  "eta": "10-09-2018",
+                  "etd": "15-09-2018",
+                },
+              ],
+            },
+            Object {
+              "meta": Object {
+                "mode_of_transport": "ocean",
+              },
+              "quote": Object {
+                "total": Object {
+                  "value": 309,
+                },
+              },
+            },
+          ],
+          "routes": Array [],
+          "schedule": Object {
+            "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+          },
+          "schedules": Array [
+            Object {
+              "closing_date": "2018-11-01T11:14:33z",
+              "eta": "2018-11-18T11:14:33z",
+              "etd": "2018-11-13T11:14:33z",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "closing_date": "2018-11-05T11:14:33z",
+              "destination_hub": Object {},
+              "eta": "2018-11-22T11:14:33z",
+              "etd": "2018-11-17T11:14:33z",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+              "origin_hub": Object {},
+              "total_price": Object {
+                "currency": "EUR",
+                "value": 112,
+              },
+            },
+            Object {
+              "closing_date": "2018-11-03T11:14:33z",
+              "eta": "2018-11-20T11:14:33z",
+              "etd": "2018-11-15T11:14:33z",
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+            Object {
+              "closing_date": "2018-11-02T11:14:33z",
+              "eta": "2018-11-19T11:14:33z",
+              "etd": "2018-11-14T11:14:33z",
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+          ],
+          "shipment": Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "SHIPMENT_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
+          },
         }
       }
       t={[Function]}
