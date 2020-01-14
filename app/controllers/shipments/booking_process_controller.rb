@@ -35,40 +35,12 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def download_shipment
-    shipment_pdf = shipment.documents.where(doc_type: 'shipment_recap').last
+    document = PdfService.new(tenant: shipment.tenant, user: shipment.user).shipment_pdf(shipment: shipment)
 
-    if shipment_pdf.nil?
-      @document = Document.create!(
-        shipment: shipment,
-        text: "shipment_recap_#{shipment.imc_reference}",
-        doc_type: 'shipment_recap',
-        user: shipment.user,
-        tenant: shipment.user.tenant,
-        sandbox: @sandbox,
-        file: {
-          io: StringIO.new(ShippingTools.generate_shipment_pdf(shipment: shipment, sandbox: @sandbox)),
-          filename: "shipment_recap_#{shipment.imc_reference}.pdf",
-          content_type: 'application/pdf'
-        }
-      )
-    else
-      @document = shipment_pdf
-      @document.update!(
-        shipment: shipment,
-        text: "shipment_recap_#{shipment.imc_reference}",
-        doc_type: 'shipment_recap',
-        user: shipment.user,
-        tenant: shipment.user.tenant,
-        sandbox: @sandbox,
-        file: {
-          io: StringIO.new(ShippingTools.generate_shipment_pdf(shipment: shipment, sandbox: @sandbox)),
-          filename: "shipment_recap_#{shipment.imc_reference}.pdf",
-          content_type: 'application/pdf'
-        }
-      )
-    end
-
-    response_handler(key: 'shipment_recap', url: Rails.application.routes.url_helpers.rails_blob_url(@document.file, disposition: 'attachment'))
+    response_handler(
+      key: 'shipment_recap',
+      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment')
+    )
   end
 
   def view_more_schedules
