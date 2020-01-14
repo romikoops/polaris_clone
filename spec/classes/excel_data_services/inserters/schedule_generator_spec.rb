@@ -38,19 +38,49 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
     let(:tenant_vehicle_2) { create(:tenant_vehicle, name: 'container', tenant: tenant) }
 
     let!(:itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe') }
-    let!(:pricing_lcl) { create(:pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_1, transport_category: cargo_transport_category) }
-    let!(:pricing_fcl_20) { create(:pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2, transport_category: fcl_20_transport_category) }
-    let!(:pricing_fcl_40) { create(:pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2, transport_category: fcl_40_transport_category) }
-    let!(:pricing_fcl_40_hq) { create(:pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2, transport_category: fcl_40_hq_transport_category) }
 
-    it 'creates the trips for the correct itineraries' do
-      stats = Timecop.freeze(Time.utc(2019, 2, 22, 11, 54, 0)) do
-        described_class.insert(tenant: tenant, data: data, options: {})
+    context 'without base pricing' do
+      before do
+        create(:pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_1, transport_category: cargo_transport_category)
+        create(:pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2, transport_category: fcl_20_transport_category)
+        create(:pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2, transport_category: fcl_40_transport_category)
+        create(:pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2, transport_category: fcl_40_hq_transport_category)
       end
-      expect(stats.dig(:trips, :number_created)).to eq(24)
-      expect(itinerary.trips.where(load_type: 'cargo_item').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_1.id])
-      expect(itinerary.trips.where(load_type: 'container').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_2.id])
-      expect(itinerary.trips.pluck(:start_date).map { |d| d.strftime('%^A') }.uniq).to eq(['THURSDAY'])
+
+      it 'creates the trips for the correct itineraries' do
+        stats = Timecop.freeze(Time.utc(2019, 2, 22, 11, 54, 0)) do
+          described_class.insert(tenant: tenant, data: data, options: {})
+        end
+        aggregate_failures do
+          expect(stats.dig(:trips, :number_created)).to eq(24)
+          expect(itinerary.trips.where(load_type: 'cargo_item').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_1.id])
+          expect(itinerary.trips.where(load_type: 'container').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_2.id])
+          expect(itinerary.trips.pluck(:start_date).map { |d| d.strftime('%^A') }.uniq).to eq(['THURSDAY'])
+        end
+      end
+    end
+
+    context 'with base pricing' do
+      before do
+        create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_1)
+        create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2)
+        create(:fcl_40_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2)
+        create(:fcl_40_hq_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2)
+        FactoryBot.create(:tenants_scope, target: Tenants::Tenant.find_by(legacy_id: tenant.id), content: { base_pricing: true })
+      end
+
+      it 'creates the trips for the correct itineraries with base pricing' do
+        stats = Timecop.freeze(Time.utc(2019, 2, 22, 11, 54, 0)) do
+          described_class.insert(tenant: tenant, data: data, options: {})
+        end
+
+        aggregate_failures do
+          expect(stats.dig(:trips, :number_created)).to eq(24)
+          expect(itinerary.trips.where(load_type: 'cargo_item').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_1.id])
+          expect(itinerary.trips.where(load_type: 'container').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_2.id])
+          expect(itinerary.trips.pluck(:start_date).map { |d| d.strftime('%^A') }.uniq).to eq(['THURSDAY'])
+        end
+      end
     end
   end
 end

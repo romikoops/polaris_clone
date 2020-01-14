@@ -43,8 +43,9 @@ module ExcelDataServices
       end
 
       def relevant_tenant_vehicle_ids(itinerary, params)
-        tenant_vehicle_ids = itinerary
-                             .pricings.where(sandbox: @sandbox)
+        pricing_association = @scope[:base_pricing] ? Pricings::Pricing : Legacy::Pricing
+        tenant_vehicle_ids = pricing_association
+                             .where(itinerary_id: itinerary.id, sandbox: @sandbox)
                              .for_load_type(params[:cargo_class].to_s)
                              .pluck(:tenant_vehicle_id)
 
