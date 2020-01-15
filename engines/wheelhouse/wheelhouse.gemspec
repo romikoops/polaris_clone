@@ -5,12 +5,12 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = 'legacy'
+  s.name        = 'wheelhouse'
   s.version     = '9999.1.0.0'
   s.license     = 'PROPRIETARY'
-  s.authors     = ['Mikko Kokkonen']
-  s.email       = ['mikko.kokkonen@itsmycargo.com']
-  s.summary     = 'Summary of Legacy.'
+  s.authors     = ['Hasstrup Ezekiel']
+  s.email       = ['hasstrup.ezekiel@gmail.com']
+  s.summary     = 'This engine houses logic that proxies internal quotations to the offer calculator engine'
 
   # Uncomment line below to mark this component to be directly required by app.
   # s.metadata = { 'type' => 'direct' }
@@ -18,12 +18,9 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'core'
-
-  s.add_dependency 'active_model_serializers'
-  s.add_dependency 'fixer_currency', '~> 3.4'
-  s.add_dependency 'geocoder'
-  s.add_dependency 'paranoia'
-  s.add_dependency 'pg_search', '~> 2.3.0'
+  s.add_dependency 'legacy'
+  s.add_dependency 'offer_calculator'
+  s.add_dependency 'tenants'
 
   Gemhelper.common_gems(s)
 end

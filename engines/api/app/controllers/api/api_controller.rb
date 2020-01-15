@@ -8,6 +8,7 @@ module Api
 
     rescue_from ActiveRecord::RecordNotFound, ActionController::ParameterMissing, with: :error_handler
 
+    skip_before_action :verify_authenticity_token
     before_action :doorkeeper_authorize!
     before_action :set_sandbox
     helper_method :current_user

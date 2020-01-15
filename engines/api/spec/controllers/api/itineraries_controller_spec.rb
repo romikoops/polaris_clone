@@ -31,8 +31,7 @@ module Api
       it 'should return a list of itineraries belonging to the tenant' do
         expect(response).to be_successful
         expect(subject.body).not_to be_empty
-
-        data = JSON.parse(subject.body)
+        data = JSON.parse(subject.body)['data']
         expect(data.length).to eq(5)
       end
     end

@@ -13,7 +13,7 @@ module Api
       def index
         tenant = current_user.tenant.legacy
         itineraries = Legacy::Itinerary.where(tenant_id: tenant.id)
-        render json: itineraries
+        render json: itineraries, each_serializer: Legacy::ItinerarySerializer, key_transform: :unaltered
       end
 
       def ports

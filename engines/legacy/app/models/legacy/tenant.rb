@@ -8,7 +8,8 @@ module Legacy
     has_many :shipments, class_name: 'Legacy::Shipment'
     has_many :itineraries, class_name: 'Legacy::Itinerary'
     has_many :hubs, dependent: :destroy
-
+    has_many :tenant_cargo_item_types, dependent: :destroy, foreign_key: :tenant_id
+    has_many :cargo_item_types, through: :tenant_cargo_item_types, dependent: :destroy
     has_many :map_data, dependent: :destroy, class_name: '::MapDatum'
     has_many :margins, as: :applicable
     has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy

@@ -91,6 +91,7 @@ PATH
       core
       tenants
       trucking
+      wheelhouse
 
 PATH
   remote: engines/cargo
@@ -153,6 +154,7 @@ PATH
   remote: engines/legacy
   specs:
     legacy (9999.1.0.0)
+      active_model_serializers
       core
       fixer_currency (~> 3.4)
       geocoder
@@ -314,6 +316,15 @@ PATH
       pricings
       tenants
       trucking
+
+PATH
+  remote: engines/wheelhouse
+  specs:
+    wheelhouse (9999.1.0.0)
+      core
+      legacy
+      offer_calculator
+      tenants
 
 GEM
   remote: https://rubygems.org/
@@ -1025,6 +1036,7 @@ DEPENDENCIES
   users!
   validator!
   webmock
+  wheelhouse!
   will_paginate (~> 3.1.5)
   wkhtmltopdf-binary
   write_xlsx

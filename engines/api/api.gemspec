@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'core'
   s.add_dependency 'tenants'
   s.add_dependency 'trucking'
+  s.add_dependency 'wheelhouse'
 
   s.add_dependency 'active_model_serializers', '~> 0.10', '>= 0.10.8'
 

@@ -1,18 +1,13 @@
 # frozen_string_literal: true
 
 require 'core'
+require 'legacy'
+require 'offer_calculator'
+require 'tenants'
 
-require 'active_model_serializers'
-require 'geocoder'
-require 'money'
-require 'money/bank/fixer_currency'
-require 'paranoia'
-require 'pg_search'
-
-
-module Legacy
+module Wheelhouse
   class Engine < ::Rails::Engine
-    isolate_namespace Legacy
+    isolate_namespace Wheelhouse
 
     config.autoload_paths << File.expand_path('../../app', __dir__)
 

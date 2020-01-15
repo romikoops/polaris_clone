@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
-class TenantCargoItemType < Legacy::TenantCargoItemType
+module Legacy
+  class TenantCargoItemType < ApplicationRecord
+    self.table_name = 'tenant_cargo_item_types'
+    belongs_to :tenant
+    belongs_to :cargo_item_type
+
+    validates :cargo_item_type, uniqueness: { scope: :tenant }
+  end
 end
 
 # == Schema Information
