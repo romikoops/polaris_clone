@@ -175,6 +175,15 @@ class RouteSection extends React.PureComponent {
     return nextState
   }
 
+  componentDidMount () {
+    const { truckTypes } = this.state
+
+    this.setState({
+      originTrucking: (truckTypes.origin.length > 0),
+      destinationTrucking: truckTypes.destination.length > 0
+    })
+  }
+
   componentDidUpdate (prevProps, prevState) {
     const { carriageOptions } = this.state
     const { scope, shipment } = this.props
@@ -365,7 +374,7 @@ class RouteSection extends React.PureComponent {
     } = shipment
 
     const {
-      origins, destinations, truckTypes, collapsedAddressFields, truckingAvailability, newRoute, hubSelected
+      origins, destinations, truckTypes, collapsedAddressFields, truckingAvailability, newRoute, hubSelected, originTrucking, destinationTrucking
     } = this.state
 
     return (
@@ -427,7 +436,7 @@ class RouteSection extends React.PureComponent {
                       countries={this.countries.origin.filter(onlyUnique)}
                       truckingAvailable={truckingAvailability.origin}
                       requiresFullAddress={requiresFullAddress}
-                      truckTypes={truckTypes.origin}
+                      hasTrucking={originTrucking}
                     />
                   </div>
                   <div name="destinationAuto" className="flex-50 layout-row layout-wrap layout-align-space-around-start">
@@ -463,7 +472,7 @@ class RouteSection extends React.PureComponent {
                       countries={this.countries.destination.filter(onlyUnique)}
                       truckingAvailable={truckingAvailability.destination}
                       requiresFullAddress={requiresFullAddress}
-                      truckTypes={truckTypes.destination}
+                      hasTrucking={destinationTrucking}
                     />
                   </div>
                   <OfferError availableMots={availableMots} newRoute={newRoute} componentName="RouteSection" />
