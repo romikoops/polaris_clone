@@ -26,6 +26,7 @@ module ExcelDataServices
               add_to_errors(
                 type: :error,
                 row_nr: row_data[:row_nr],
+                sheet_name: sheet_name,
                 reason: 'Rows that are connected by a range must have the same effective / expiration dates.',
                 exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
               )
