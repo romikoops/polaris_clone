@@ -34,6 +34,7 @@
     "learnMore": "Learn more",
     "areaPostalCodes": "Area/ Postal Codes",
     "addresses": "Addresses",
+    "ports": "Ports",
     "useCookies": "This website uses cookies to enhance your user experience. ",
     "cookiesPolicy": "cookies policy",
     "ok": "ok, accept",
@@ -1016,7 +1017,8 @@
     "truckingAvailable": "Trucking Available",
     "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date.",
     "portOfLoading": "Port of Loading",
-    "portOfDischarge": "Port of Discharge"
+    "portOfDischarge": "Port of Discharge",
+    "portOrAddress": "Port or Address..."
   },
   "user": {
     "companyName": "Company Name",

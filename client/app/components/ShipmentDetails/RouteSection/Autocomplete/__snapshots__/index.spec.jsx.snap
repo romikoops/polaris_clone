@@ -13,11 +13,12 @@ exports[`renders correctly 1`] = `
     onClick={[Function]}
   >
     <input
-      autoComplete="new-password"
+      autoComplete="UUID_MOCK_KEY_0"
       data-hj-whitelist={true}
-      name="TARGET-fullAddress"
+      name="UUID_MOCK_KEY_1-fullAddress"
       onBlur={[Function]}
       onChange={[Function]}
+      placeholder="Port or Address..."
       type="text"
     />
   </div>
@@ -34,26 +35,28 @@ exports[`renders correctly 1`] = `
         className="flex-100 layout-row layout-wrap layout-align-start-start address
                 results_section hide_results"
       >
-        <div
-          className="flex-100 layout-row layout-align-start-center results_section_header"
-        >
-          <p
-            className="flex-none"
-          >
-             
-            Addresses
-          </p>
-        </div>
-        <div
-          className="flex-100 layout-row layout-align-center-center pointy autocomplete_card"
-          key="UUID_MOCK_KEY_1"
-        >
-          <p
-            className="flex"
-          >
-            No Results Found
-          </p>
-        </div>
+        <ResultsCards
+          areaResults={Array []}
+          combinedResults={Array []}
+          handleAddress={[Function]}
+          highlightIndex={0}
+          t={[Function]}
+          theme={
+            Object {
+              "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+              "colors": Object {
+                "brightPrimary": "#2491FD",
+                "brightSecondary": "#25ED36",
+                "primary": "#0D5BA9",
+                "secondary": "#23802A",
+              },
+              "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+              "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+              "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+              "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+            }
+          }
+        />
       </div>
     </div>
   </div>

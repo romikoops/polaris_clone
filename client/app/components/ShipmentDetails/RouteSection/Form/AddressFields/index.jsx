@@ -5,13 +5,35 @@ import styles from './index.scss'
 import CollapsingBar from '../../../../CollapsingBar/CollapsingBar'
 
 import CollapsableFields from './CollapsableFields'
+import routeOption from '../Dropdown/routeOption'
+
+function getOptions (targets) {
+  const labels = []
+  const options = []
+
+  const guardedTargets = targets || ['origin', 'destination']
+
+  guardedTargets.forEach((target) => {
+    const option = routeOption(target)
+    if (labels.includes(option.label)) return
+
+    labels.push(option.label)
+    options.push(option)
+  })
+
+  return options.sort((a, b) => (a.label > b.label ? 1 : -1))
+}
 
 function AddressFields ({
+  availableTargets,
   map,
   gMaps,
   theme,
   scope,
   target,
+  onDropdownSelect,
+  handleHubSelect,
+  hubSelected,
   onAutocompleteTrigger,
   onInputBlur,
   formData,
@@ -29,12 +51,15 @@ function AddressFields ({
         map={map}
         theme={theme}
         scope={scope}
+        onDropdownSelect={onDropdownSelect}
         hasErrors={false}
         input={formData.fullAddress}
         onAutocompleteTrigger={onAutocompleteTrigger}
         countries={countries}
         errorDispatch={{}}
         target={target}
+        hubOptions={getOptions(availableTargets)}
+        handleHubSelect={handleHubSelect}
       />
       <div
         className={`
@@ -53,14 +78,14 @@ function AddressFields ({
           )}
         >
           <div className={`layout-row layout-align-center-center ${styles.collapsable_fields_wrapper}`}>
-            <CollapsableFields
+            {!hubSelected && <CollapsableFields
               target={target}
               formData={formData}
               onInputBlur={onInputBlur}
               onClickCollapser={onClickCollapser}
               truckingAvailable={truckingAvailable}
               requiresFullAddress={requiresFullAddress}
-            />
+            />}
           </div>
         </CollapsingBar>
       </div>

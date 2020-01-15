@@ -1,23 +1,23 @@
 import React from 'react'
-import Dropdown from './Dropdown'
 import AddressFields from './AddressFields'
+import Dropdown from './Dropdown'
 
 function RouteSectionForm ({
-  carriage,
   ...childProps
 }) {
+  if (childProps.truckTypes.length > 0) {
+    return (
+      <div className="route_section_form flex-gt-md-70 flex-100 flex-layout-row layout-wrap">
+        <AddressFields {...childProps} />
+      </div>
+    )
+  }
+
   return (
-    <div className="route_section_form flex-55 layout-row layout-wrap">
-      {
-        carriage
-          ? (
-            <AddressFields {...childProps} />
-          )
-          : (
-            <Dropdown {...childProps} />
-          )
-      }
+    <div className="route_section_form flex-gt-md-70 flex-100 flex-layout-row layout-wrap">
+      <Dropdown {...childProps} />
     </div>
+
   )
 }
 

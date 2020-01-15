@@ -7,13 +7,13 @@ exports[`renders correctly 1`] = `
   className="flex-100 layout-row trucking_details"
 >
   <div
-    className="carriage_sec flex-100 layout-row layout-align-end-end"
+    className="carriage_sec flex-100 layout-column layout-align-space-between-start"
   >
     <div
       className="
           form_group 
-          flex-100
-          layout-row layout-align-end-end
+          flex-50
+          layout-row
         "
       data-for="UUID_MOCK_KEY_0"
       data-tip="Side Lifter is not available for the given address."
@@ -61,8 +61,8 @@ exports[`renders correctly 1`] = `
     <div
       className="
           form_group 
-          flex-100
-          layout-row layout-align-end-end
+          flex-50
+          layout-row
         "
       data-for="UUID_MOCK_KEY_1"
       data-tip="Chassis is not available for the given address."
@@ -116,13 +116,13 @@ exports[`target truck type is not part of truckTypes 1`] = `
   className="flex-100 layout-row trucking_details"
 >
   <div
-    className="carriage_sec flex-100 layout-row layout-align-end-end"
+    className="carriage_sec flex-100 layout-column layout-align-space-between-start"
   >
     <div
       className="
           form_group disabled
-          flex-100
-          layout-row layout-align-end-end
+          flex-50
+          layout-row
         "
       data-for="UUID_MOCK_KEY_2"
       data-tip="Side Lifter is not available for the given address."
@@ -178,8 +178,8 @@ exports[`target truck type is not part of truckTypes 1`] = `
     <div
       className="
           form_group disabled
-          flex-100
-          layout-row layout-align-end-end
+          flex-50
+          layout-row
         "
       data-for="UUID_MOCK_KEY_3"
       data-tip="Chassis is not available for the given address."

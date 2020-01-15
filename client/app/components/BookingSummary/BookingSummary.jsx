@@ -51,7 +51,7 @@ function BookingSummary (props) {
           <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
             <h4 className="flex-100">
               <TruncateText lines={1}>
-                {trucking.preCarriage.truckType ? cities.origin : nexuses.origin}
+                {cities.origin || nexuses.origin}
               </TruncateText>
             </h4>
             <p className={`${styles.trucking_elem} flex-none`}>
@@ -66,7 +66,7 @@ function BookingSummary (props) {
           <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
             <h4 className="flex-100">
               <TruncateText lines={1}>
-                {trucking.onCarriage.truckType ? cities.destination : nexuses.destination}
+                {cities.destination || nexuses.destination}
               </TruncateText>
             </h4>
             <p className={`${styles.trucking_elem} flex-none`}>

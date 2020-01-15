@@ -8,11 +8,10 @@ import { bindActionCreators } from 'redux'
 import styles from './index.scss'
 import listenerTools from '../../../../helpers/listeners'
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner'
-import { moment } from '../../../../constants'
 import addressFromPlace from './addressFromPlace'
 import addressFromLocation from './addressFromLocation'
-import searchLocations from './searchLocations'
 import { errorActions } from '../../../../actions'
+import ResultsCards from './ResultCards'
 
 class Autocomplete extends PureComponent {
   static filterResults (results, options) {
@@ -33,10 +32,10 @@ class Autocomplete extends PureComponent {
     this.state = {
       input: props.input,
       addressResults: [],
+      hubResults: [],
       areaResults: [],
       hideResults: false,
       highlightIndex: 0,
-      highlightSection: 'area',
       searchTimeout: {}
     }
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -46,20 +45,30 @@ class Autocomplete extends PureComponent {
     this.deltaHighlightIndex = this.deltaHighlightIndex.bind(this)
     this.handleKeyEvent = this.handleKeyEvent.bind(this)
     this.showResultsTimer = this.showResultsTimer.bind(this)
+    this.handleHubFuse = this.handleHubFuse.bind(this)
 
     const { gMaps } = props
     if (gMaps) {
-      this.addressService = new gMaps.places.AutocompleteService({ types: ['address'] })
+      this.addressService = new gMaps.places.AutocompleteService({
+        types: ['address']
+      })
     }
   }
 
   componentWillReceiveProps (nextProps) {
     if (typeof this.addressService === 'undefined') {
       const gMaps = nextProps.gMaps || this.props.gMaps
-      this.addressService = new gMaps.places.AutocompleteService({ types: ['address'] })
+      this.addressService = new gMaps.places.AutocompleteService({
+        types: ['address']
+      })
     }
-    if ((this.props.input === nextProps.input) || (this.state.input === nextProps.input)) return
-    this.setState(() => (nextProps.input === '' ? {} : { input: nextProps.input, setFromProps: true }))
+    if (
+      this.props.input === nextProps.input ||
+      this.state.input === nextProps.input
+    ) { return }
+    this.setState(() => (nextProps.input === ''
+      ? {}
+      : { input: nextProps.input, setFromProps: true }))
   }
 
   componentWillUnmount () {
@@ -74,10 +83,7 @@ class Autocomplete extends PureComponent {
   initKeyboardListener () {
     const { listenerSet } = this.state
     if (listenerSet) return
-    this.setState(
-      { listenerSet: true },
-      () => listenerTools.addHandler(document, 'keydown', this.handleKeyEvent)
-    )
+    this.setState({ listenerSet: true }, () => listenerTools.addHandler(document, 'keydown', this.handleKeyEvent))
   }
 
   handleKeyEvent (event) {
@@ -162,36 +168,71 @@ class Autocomplete extends PureComponent {
   }
 
   handleSelectFromIndex () {
-    const { highlightSection, highlightIndex } = this.state
-    const results = this.state[`${highlightSection}Results`]
+    const { highlightIndex } = this.state
+    const results = this.combinedResults()
+    this.handleAddress(results[highlightIndex])
+  }
 
-    if (highlightSection === 'area') {
-      this.handleArea(results[highlightIndex])
-    } else {
-      this.handleAddress(results[highlightIndex])
+  combinedResults () {
+    const {
+      areaResults, hubResults, addressResults
+    } = this.state
+
+    const { scope } = this.props
+
+    const hasAddressResults = addressResults.length > 0
+    const hasAreaResults = !scope.require_full_address && areaResults.length > 0
+    const numResults = hasAddressResults && hasAreaResults ? 4 : 6
+
+    const { t, target } = this.props
+    const addressSeparator = [{ separator: true, label: target === 'origin' ? t('shipment:preCarriage') : t('shipment:onCarriage') }]
+    const portSeparator = { separator: true, label: t('common:ports') }
+    const addressResultSlice = areaResults.concat(addressResults).slice(0, numResults)
+    const hubsResultsSliced = hubResults.slice(0, numResults)
+
+    if (addressResultSlice.length === 0 && hubsResultsSliced.length === 0) {
+      return []
     }
+
+    const addressResultsWithHeader = addressSeparator.concat(addressResultSlice)
+    if (hubsResultsSliced.length > 0) {
+      return addressResultsWithHeader.concat(portSeparator).concat(hubsResultsSliced)
+    }
+
+    return addressResultsWithHeader
   }
 
   deltaHighlightIndex (delta) {
-    const { highlightIndex, highlightSection } = this.state
-    const altSection = highlightSection === 'area' ? 'address' : 'area'
-    const results = this.state[`${highlightSection}Results`]
-    const altResults = this.state[`${altSection}Results`]
+    const {
+      highlightIndex
+    } = this.state
+
+    const combinedResults = this.combinedResults()
+    const length = combinedResults.length - 1
+
     let newIndex = highlightIndex + delta
-    let newSection = highlightSection
-    if (newIndex > results.length - 1) {
+
+    if (newIndex > length) {
       newIndex = 0
-      newSection = highlightSection === 'area' ? 'address' : 'area'
-    } else if (newIndex < 0) {
-      newIndex = altResults.length - 1
-      newSection = highlightSection === 'address' ? 'area' : 'address'
     }
-    this.setState({ highlightIndex: newIndex, highlightSection: newSection })
+
+    if (combinedResults[newIndex].separator) {
+      newIndex += delta
+    }
+
+    if (newIndex < 0) {
+      newIndex = length
+    }
+
+    if (newIndex > length) {
+      newIndex = 0
+    }
+
+    this.setState({ highlightIndex: newIndex })
   }
 
   shouldTriggerInputChange (event) {
     const { target } = event
-    const { scope } = this.props
 
     this.setState((prevState) => {
       const { value } = target
@@ -201,8 +242,10 @@ class Autocomplete extends PureComponent {
       if (searchTimeout.address) clearTimeout(searchTimeout.address)
       if (searchTimeout.area) clearTimeout(searchTimeout.area)
       if (value) {
-        newTimeout.address = setTimeout(() => this.handleInputChange(value), 750)
-        newTimeout.area = scope.require_full_address ? null : setTimeout(() => this.handleAreaInputChange(value), 750)
+        newTimeout.address = setTimeout(
+          () => this.handleInputChange(value),
+          750
+        )
       }
 
       return {
@@ -223,80 +266,104 @@ class Autocomplete extends PureComponent {
         start += 5
       }
     }
+    const hubResults = this.handleHubFuse(input)
+    countryArrays
+      .filter(arr => arr.length > 0)
+      .forEach((countryArray) => {
+        if (countryArray.length > 0) {
+          options.componentRestrictions = { country: countryArray }
+        }
+        const sameQuery = input.includes(this.state.prevInput)
+        this.setState({ queryingGoogle: true, prevInput: input }, () => {
+          this.addressService.getPlacePredictions(
+            options,
+            (results, status) => {
+              if (['ZERO_RESULTS', 'OK'].includes(status)) {
+                const filteredResults = Autocomplete.filterResults(results, {})
+                this.setState(
+                  (prevState) => {
+                    const { addressResults } = prevState
 
-    countryArrays.filter(arr => arr.length > 0).forEach((countryArray) => {
-      if (countryArray.length > 0) {
-        options.componentRestrictions = { country: countryArray }
-      }
-      const sameQuery = input.includes(this.state.prevInput)
-      this.setState({ queryingGoogle: true, prevInput: input }, () => {
-        this.addressService.getPlacePredictions(options, (results, status) => {
-          if (['ZERO_RESULTS', 'OK'].includes(status)) {
-            const filteredResults = Autocomplete.filterResults(results, {})
-            this.setState((prevState) => {
-              const { addressResults } = prevState
+                    const mergedAddressResults = sameQuery
+                      ? uniqBy([...addressResults, ...filteredResults], 'id')
+                      : filteredResults
+                    const fuseOptions = {
+                      shouldSort: true,
+                      threshold: 0.6,
+                      location: 0,
+                      distance: 100,
+                      maxPatternLength: 32,
+                      minMatchCharLength: 1,
+                      keys: ['description']
+                    }
 
-              const mergedAddressResults = sameQuery ? uniqBy([...addressResults, ...filteredResults], 'id') : filteredResults
-              const fuseOptions = {
-                shouldSort: true,
-                threshold: 0.6,
-                location: 0,
-                distance: 100,
-                maxPatternLength: 32,
-                minMatchCharLength: 1,
-                keys: ['description']
+                    const fuse = new Fuse(mergedAddressResults, fuseOptions)
+                    const truckingResults = fuse.search(input)
+
+                    return {
+                      hasGoogleErrors: false,
+                      addressResults: truckingResults,
+                      hubResults,
+                      hideResults: false,
+                      queryingGoogle: false,
+                      noResults: status === 'ZERO_RESULTS'
+                    }
+                  },
+                  () => {
+                    this.initKeyboardListener()
+                    this.showResultsTimer()
+                  }
+                )
+              } else {
+                this.autocompleteErrors(status)
               }
-              const fuse = new Fuse(mergedAddressResults, fuseOptions)
-              const realResults = fuse.search(input)
-
-              return {
-                hasGoogleErrors: false,
-                addressResults: realResults,
-                hideResults: false,
-                queryingGoogle: false,
-                noResults: status === 'ZERO_RESULTS'
-              }
-            }, () => {
-              this.initKeyboardListener()
-              this.showResultsTimer()
-            })
-          } else {
-            this.autocompleteErrors(status)
-          }
+            }
+          )
         })
       })
-    })
   }
 
-  handleAreaInputChange (input) {
-    const countries = this.props.countries.filter(cc => cc !== 'nl')
-    if (countries.length > 0) {
-      const timestamp = moment().format('x')
-      this.setState({ queryingLocations: true, queryTimeStamp: timestamp }, () => searchLocations(input, countries, timestamp, (results, returnedTimestamp) => {
-        if (this.state.queryTimeStamp > returnedTimestamp) return
-        this.setState({ areaResults: results, hideResults: false, queryingLocations: false }, () => {
-          this.initKeyboardListener()
-          this.showResultsTimer()
-        })
-      }))
+  handleHubFuse (input) {
+    const { hubOptions } = this.props
+
+    const hubFuseOptions = {
+      shouldSort: true,
+      threshold: 0.1,
+      location: 0,
+      distance: 100,
+      maxPatternLength: 32,
+      minMatchCharLength: 1,
+      keys: ['label']
     }
-    
+    const hubFuse = new Fuse(hubOptions, hubFuseOptions)
+
+    return hubFuse.search(input)
   }
 
   handleAddress (result) {
     listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
-
     const {
-      target, onAutocompleteTrigger, gMaps, map
+      target,
+      onAutocompleteTrigger,
+      onDropdownSelect,
+      gMaps,
+      map,
+      handleHubSelect
     } = this.props
 
-    this.getPlace(result.place_id, (place) => {
-      addressFromPlace(place, gMaps, map, (address) => {
-        onAutocompleteTrigger(target, address)
+    if (result.label !== undefined) {
+      onDropdownSelect(target, result)
+      handleHubSelect(true)
+    } else {
+      this.getPlace(result.place_id, (place) => {
+        addressFromPlace(place, gMaps, map, (address) => {
+          onAutocompleteTrigger(target, address)
+        })
       })
-    })
-
-    this.setState({ hideResults: true, listenerSet: false })
+      handleHubSelect(false)
+      this.setState({ hideResults: true, listenerSet: false })
+    }
+    this.setState({ input: result.label || result.description })
   }
 
   handleArea (location) {
@@ -337,90 +404,36 @@ class Autocomplete extends PureComponent {
 
   render () {
     const {
-      t, hasErrors, theme, scope, target
+      t, theme, scope
     } = this.props
     const {
       addressResults,
       areaResults,
       input,
       highlightIndex,
-      highlightSection,
       hideResults,
-      queryingLocations,
       queryingGoogle,
-      errorKey,
-      hasGoogleErrors,
       noResults
     } = this.state
     const hasAddressResults = addressResults.length > 0
-    const showArea = !scope.require_full_address
     const hasAreaResults = !scope.require_full_address && areaResults.length > 0
     const hasResults = hasAddressResults || hasAreaResults
-    const numResults = hasAddressResults && hasAreaResults ? 4 : 6
-    const highlightStyle = {
-      borderBottom: `5px solid ${theme.colors.primary}`
-    }
-    const areaResultCards = hasAreaResults
-      ? areaResults
-        .slice(0, numResults)
-        .map((result, i) => {
-          const isHighlighted = highlightIndex === i && highlightSection === 'area'
-
-          return (
-            <div
-              className={`flex-100 layout-row layout-align-center-center pointy ${styles.autocomplete_card}`}
-              style={isHighlighted ? highlightStyle : {}}
-              onClick={() => this.handleArea(result)}
-              key={uuidv4()}
-            >
-              <p className="flex">{result.description}</p>
-            </div>
-          )
-        })
-      : [
-        <div
-          className={`flex-100 layout-row layout-align-center-center pointy ${styles.autocomplete_card}`}
-          key={uuidv4()}
-        >
-          <p className="flex">{t('common:noAreaResults')}</p>
-        </div>
-      ]
-    const addressResultCards = hasAddressResults
-      ? addressResults
-        .filter(result => !areaResults.some(element => element.description === result.description))
-        .slice(0, numResults)
-        .map((result, i) => {
-          const isHighlighted = highlightIndex === i && highlightSection === 'address'
-
-          return (
-            <div
-              className={`flex-100 layout-row layout-align-center-center
-          ${styles.autocomplete_card} pointy ccb_result`}
-              style={isHighlighted ? highlightStyle : {}}
-              onClick={() => this.handleAddress(result)}
-              key={uuidv4()}
-            >
-              <p className="flex">{result.description}</p>
-            </div>)
-        })
-      : [
-        <div
-          className={`flex-100 layout-row layout-align-center-center pointy ${styles.autocomplete_card}`}
-          key={uuidv4()}
-        >
-          <p className="flex">{t('common:noResults')}</p>
-        </div>
-      ]
 
     return (
       <div
         className={`auto_origin ccb_carriage flex-100 layout-row layout-wrap layout-align-center-center ${styles.autocomplete_container}`}
       >
         <div
-          className={`flex-none ccb_backdrop ${!hideResults && hasResults ? styles.exit_click : styles.hidden}`}
+          className={`flex-none ccb_backdrop ${
+            !hideResults && hasResults ? styles.exit_click : styles.hidden
+          }`}
           onClick={() => {
             this.setState({ hideResults: true, listenerSet: false })
-            listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
+            listenerTools.removeHandler(
+              document,
+              'keydown',
+              this.handleKeyEvent
+            )
           }}
         />
         <div
@@ -429,52 +442,45 @@ class Autocomplete extends PureComponent {
         >
           <input
             type="text"
-            name={`${target}-fullAddress`}
+            autoComplete={uuidv4()}
+            name={`${uuidv4()}-fullAddress`}
             tabIndex={this.props.tabIndex}
             value={input}
+            placeholder={t('shipment:portOrAddress')}
             onChange={this.shouldTriggerInputChange}
             onBlur={this.shouldTriggerInputChange}
             data-hj-whitelist
-            autoComplete="new-password"
           />
-
         </div>
-        <div className={`
+        <div
+          className={`
           flex-100 layout-row layout-wrap results
           ${!hideResults ? styles.show_results : styles.hide_results}
         `}
         >
-          <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.autocomplete_inner}`}>
-            { showArea ? (
-              <div className={`
-              flex-100 layout-row layout-wrap layout-align-start-start area
-              ${styles.results_section} ${!hasAreaResults && !queryingLocations ? styles.hide_results : ''}
-            `}
-              >
-                <div className={`flex-100 layout-row layout-align-start-center ${styles.results_section_header}`}>
-                  <p className="flex-none">{t('common:areaPostalCodes')}</p>
-                </div>
-                {queryingLocations ? <LoadingSpinner size="small" /> : areaResultCards}
-              </div>
-            ) : '' }
-            <div className={`flex-100 layout-row layout-wrap layout-align-start-start address
-                ${styles.results_section} ${!hasAddressResults && !noResults ? styles.hide_results : ''}`}
+          <div
+            className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.autocomplete_inner}`}
+          >
+            <div
+              className={`flex-100 layout-row layout-wrap layout-align-start-start address
+                ${styles.results_section} ${
+        !hasAddressResults && !noResults ? styles.hide_results : ''
+      }`}
             >
-              <div className={`flex-100 layout-row layout-align-start-center ${styles.results_section_header}`}>
-                <p className="flex-none">
-                  {' '}
-                  {t('common:addresses')}
-                </p>
-              </div>
-              {queryingGoogle ? <LoadingSpinner size="small" /> : addressResultCards}
+              {queryingGoogle ? (
+                <LoadingSpinner size="small" />
+              ) : (
+                <ResultsCards
+                  combinedResults={this.combinedResults()}
+                  highlightIndex={highlightIndex}
+                  theme={theme}
+                  handleAddress={this.handleAddress}
+                  t={t}
+                  areaResults={areaResults}
+                />)}
             </div>
-
           </div>
         </div>
-        {/* <span className={hasErrors || hasGoogleErrors ? styles.errors : styles.no_errors} style={{ color: 'white' }}>
-          {hasErrors ? t('errors:noRoutes') : ''}
-          {hasGoogleErrors ? t(errorKey) : ''}
-        </span> */}
       </div>
     )
   }
@@ -486,6 +492,6 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withNamespaces(['common', 'errors'])(
+export default withNamespaces(['common', 'errors', 'shipment'])(
   connect(null, mapDispatchToProps)(Autocomplete)
 )

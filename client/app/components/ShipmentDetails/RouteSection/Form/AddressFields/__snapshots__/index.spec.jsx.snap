@@ -9,6 +9,20 @@ exports[`renders correctly 1`] = `
     errorDispatch={Object {}}
     gMaps={Object {}}
     hasErrors={false}
+    hubOptions={
+      Array [
+        Object {
+          "label": undefined,
+          "value": Object {
+            "country": undefined,
+            "id": undefined,
+            "latitude": undefined,
+            "longitude": undefined,
+            "name": undefined,
+          },
+        },
+      ]
+    }
     map={Object {}}
     onAutocompleteTrigger={null}
     scope={

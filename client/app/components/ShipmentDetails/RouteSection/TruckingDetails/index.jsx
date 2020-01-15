@@ -34,8 +34,8 @@ function TruckingDetails ({
       <div
         className={`
           ${styles.form_group} ${disabledClass}
-          ${carriageType === 'pre' ? 'flex-40' : 'flex-100'}
-          layout-row layout-align-end-end
+          flex-50
+          layout-row
         `}
         data-tip={`${humanizedTruckType} is not available for the given address.`}
         data-for={id}
@@ -62,7 +62,7 @@ function TruckingDetails ({
     const baseTruckTypes = ['side_lifter', 'chassis']
 
     return (
-      <div className={`${styles.carriage_sec} flex-100 layout-row layout-align-end-end`}>
+      <div className={`${styles.carriage_sec} flex-100 layout-column layout-align-space-between-start`}>
         { baseTruckTypes.map(_truckType => formGroup(carriage, _truckType)) }
       </div>
     )

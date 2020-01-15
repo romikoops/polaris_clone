@@ -2,10 +2,11 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { intersection } from 'lodash'
+import { withNamespaces } from 'react-i18next'
 import { bookingProcessActions, shipmentActions, errorActions } from '../../../actions'
 import RouteSectionMap from './Map'
 import RouteSectionForm from './Form'
-import CarriageToggle from './CarriageToggle'
+import styles from './RouteSection.scss'
 import OfferError from '../../ErrorHandling/OfferError'
 import TruckingDetails from './TruckingDetails'
 import {
@@ -27,7 +28,8 @@ class RouteSection extends React.PureComponent {
         destination: null
       },
       carriageOptions: props.scope.carriage_options,
-      newRoute: false
+      newRoute: false,
+      hubSelected: false
     }
 
     this.handleCarriageChange = this.handleCarriageChange.bind(this)
@@ -266,6 +268,10 @@ class RouteSection extends React.PureComponent {
     }
   }
 
+  handleHubSelect (bool) {
+    this.setState({ hubSelected: bool })
+  }
+
   updateTruckingAvailability (target, value) {
     this.setState(prevState => ({
       truckingAvailability: {
@@ -351,7 +357,7 @@ class RouteSection extends React.PureComponent {
 
   render () {
     const {
-      shipment, theme, scope, availableMots, requiresFullAddress
+      shipment, theme, scope, availableMots, requiresFullAddress, t
     } = this.props
 
     const {
@@ -359,7 +365,7 @@ class RouteSection extends React.PureComponent {
     } = shipment
 
     const {
-      origins, destinations, truckTypes, collapsedAddressFields, truckingAvailability, newRoute
+      origins, destinations, truckTypes, collapsedAddressFields, truckingAvailability, newRoute, hubSelected
     } = this.state
 
     return (
@@ -381,29 +387,33 @@ class RouteSection extends React.PureComponent {
                 theme,
                 scope,
                 gMaps,
-                map
+                map,
+                handleHubSelect: (...args) => this.handleHubSelect(...args),
+                hubSelected
               }
 
               return (
                 <React.Fragment>
-                  <div name="originAuto" className="flex layout-row layout-wrap layout-align-start-start">
-                    <div className="flex-45 flex-gt-md-35 layout-row layout-wrap">
-                      <CarriageToggle
-                        carriage="pre"
-                        theme={theme}
-                        checked={preCarriage}
-                        onChange={this.handleCarriageChange}
-                        labelOnly={this.specialty === 'truck' || truckTypes.origin.length === 0}
-                      />
-                      <TruckingDetails
-                        carriageType="pre"
-                        hide={loadType !== 'container' || !preCarriage}
-                        theme={theme}
-                        trucking={trucking}
-                        truckTypes={truckTypes.origin}
-                        target="preCarriage"
-                        onTruckingDetailsChange={this.handleTruckingDetailsChange}
-                      />
+                  <div name="originAuto" className="flex-50 layout-row layout-wrap layout-align-space-around-start">
+                    <div className={`${styles.label} flex-gt-md-30 flex-100 layout-row layout-wrap layout-align-space-between`}>
+                      <div className={`${(loadType !== 'container' || !preCarriage) ? 'flex-100' : 'flex-40'} layout-row layout-align-center-start`}>
+                        <p>
+                          {t('shipment:pickUp')}
+                        </p>
+                      </div>
+                      {(loadType === 'container' || preCarriage) && (
+                        <div className="flex-60 layout-column layout-align-center-center">
+                          <TruckingDetails
+                            carriageType="pre"
+                            hide={loadType !== 'container' || !preCarriage}
+                            theme={theme}
+                            trucking={trucking}
+                            truckTypes={truckTypes.origin}
+                            target="preCarriage"
+                            onTruckingDetailsChange={this.handleTruckingDetailsChange}
+                          />
+                        </div>
+                      )}
                     </div>
                     <RouteSectionForm
                       {...sharedFormProps}
@@ -417,26 +427,29 @@ class RouteSection extends React.PureComponent {
                       countries={this.countries.origin.filter(onlyUnique)}
                       truckingAvailable={truckingAvailability.origin}
                       requiresFullAddress={requiresFullAddress}
+                      truckTypes={truckTypes.origin}
                     />
                   </div>
-                  <div name="destinationAuto" className="flex layout-row layout-wrap layout-align-start-start">
-                    <div className="flex-45 flex-gt-md-35 layout-row layout-wrap layout-align-start">
-                      <CarriageToggle
-                        carriage="on"
-                        theme={theme}
-                        checked={onCarriage}
-                        onChange={this.handleCarriageChange}
-                        labelOnly={this.specialty === 'truck' || truckTypes.destination.length === 0}
-                      />
-                      <TruckingDetails
-                        carriageType="on"
-                        hide={loadType !== 'container' || !onCarriage}
-                        theme={theme}
-                        trucking={trucking}
-                        truckTypes={truckTypes.destination}
-                        target="onCarriage"
-                        onTruckingDetailsChange={this.handleTruckingDetailsChange}
-                      />
+                  <div name="destinationAuto" className="flex-50 layout-row layout-wrap layout-align-space-around-start">
+                    <div className={`${styles.label} flex-gt-md-30 flex-100 layout-row layout-wrap layout-align-space-between`}>
+                      <div className={`${(loadType !== 'container' || !onCarriage) ? 'flex-100' : 'flex-40'} layout-row layout-align-center-start`}>
+                        <p>
+                          {t('shipment:delivery')}
+                        </p>
+                      </div>
+                      {(loadType === 'container' || onCarriage) && (
+                        <div className="flex-60 layout-column layout-align-center-center">
+                          <TruckingDetails
+                            carriageType="on"
+                            hide={loadType !== 'container' || !onCarriage}
+                            theme={theme}
+                            trucking={trucking}
+                            truckTypes={truckTypes.destination}
+                            target="onCarriage"
+                            onTruckingDetailsChange={this.handleTruckingDetailsChange}
+                          />
+                        </div>
+                      )}
                     </div>
                     <RouteSectionForm
                       {...sharedFormProps}
@@ -450,6 +463,7 @@ class RouteSection extends React.PureComponent {
                       countries={this.countries.destination.filter(onlyUnique)}
                       truckingAvailable={truckingAvailability.destination}
                       requiresFullAddress={requiresFullAddress}
+                      truckTypes={truckTypes.destination}
                     />
                   </div>
                   <OfferError availableMots={availableMots} newRoute={newRoute} componentName="RouteSection" />
@@ -484,4 +498,5 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RouteSection)
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(RouteSection)
+export default withNamespaces(['shipment'])(connectedComponent)

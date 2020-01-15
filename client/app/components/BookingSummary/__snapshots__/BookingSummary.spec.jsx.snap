@@ -593,11 +593,11 @@ exports[`trucking.onCarriage is empty object 1`] = `
           class="flex-100"
         >
           <span
-            data-tip="FOO_NEXUSES_DESTINATION"
+            data-tip="FOO_DESTINATION_CITY"
           >
             <span />
             <span>
-              FOO_NEXUSES_DESTINATION
+              FOO_DESTINATION_CITY
             </span>
             <span
               style="position:fixed;visibility:hidden;top:0;left:0"
@@ -691,11 +691,11 @@ exports[`trucking.preCarriage is empty object 1`] = `
           class="flex-100"
         >
           <span
-            data-tip="FOO_NEXUSES_ORIGIN"
+            data-tip="FOO_ORIGIN_CITY"
           >
             <span />
             <span>
-              FOO_NEXUSES_ORIGIN
+              FOO_ORIGIN_CITY
             </span>
             <span
               style="position:fixed;visibility:hidden;top:0;left:0"
