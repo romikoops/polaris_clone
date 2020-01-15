@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
+import { compact } from 'lodash';
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import styles from './index.scss'
@@ -17,7 +18,7 @@ class TruckingTableRates extends PureComponent {
 
   prepData () {
     const { truckingPricing, target } = this.props
-    const data = truckingPricing.rates[target]
+    const data = compact(truckingPricing.rates[target])
     if (!data) { return [] }
 
     return data.map((row) => {
