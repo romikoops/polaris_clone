@@ -12,7 +12,6 @@ exports[`shallow rendering when props.size is small 1`] = `
     isLanding={false}
     loggingIn={false}
     loginAttempt={false}
-    messages={null}
     noMessages={true}
     noRedirect={false}
     registering={false}

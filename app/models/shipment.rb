@@ -43,7 +43,6 @@ class Shipment < Legacy::Shipment
   belongs_to :destination_hub, class_name: 'Hub', optional: true
 
   has_many :contacts, through: :shipment_contacts
-  has_many :conversations
   has_many :documents
   has_many :messages, through: :conversations
   has_many :shipment_contacts

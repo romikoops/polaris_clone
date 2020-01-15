@@ -12,3 +12,22 @@ FactoryBot.define do
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: documents
+#
+#  id               :bigint           not null, primary key
+#  user_id          :integer
+#  shipment_id      :integer
+#  doc_type         :string
+#  url              :string
+#  text             :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  approved         :string
+#  approval_details :jsonb
+#  tenant_id        :integer
+#  quotation_id     :integer
+#  sandbox_id       :uuid
+#

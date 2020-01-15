@@ -10,7 +10,6 @@ import { LoginPage } from '../../containers/LoginPage/LoginPage'
 import { Modal } from '../Modal/Modal'
 import {
   userActions,
-  messagingActions,
   adminActions,
   authenticationActions,
   shipmentActions
@@ -30,7 +29,6 @@ class Header extends Component {
     this.goHome = this.goHome.bind(this)
     this.toggleShowLogin = this.toggleShowLogin.bind(this)
     this.toggleSandbox = this.toggleSandbox.bind(this)
-    this.toggleShowMessages = this.toggleShowMessages.bind(this)
     this.checkIsTop = this.checkIsTop.bind(this)
     this.hideAlert = this.hideAlert.bind(this)
   }
@@ -108,11 +106,6 @@ class Header extends Component {
   toggleSandbox () {
     const { authenticationDispatch, user } = this.props
     authenticationDispatch.toggleSandbox(user.id)
-  }
-
-  toggleShowMessages () {
-    const { messageDispatch } = this.props
-    messageDispatch.showMessageCenter()
   }
 
   render () {
@@ -286,7 +279,6 @@ Header.defaultProps = {
   loggingIn: false,
   invert: false,
   loginAttempt: false,
-  messages: null,
   showRegistration: false,
   req: null,
   scrollable: false,
@@ -298,12 +290,12 @@ Header.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, shipment, app, messaging, bookingData
+    authentication, shipment, app, bookingData
   } = state
   const {
     user, loggedIn, loggingIn, registering, loginAttempt, showModal, registrationAttempt
   } = authentication
-  const { unread, messages } = messaging
+
   const { currencies, tenant, tenants } = app
   const { error, currentStage } = bookingData
 
@@ -318,8 +310,6 @@ function mapStateToProps (state) {
     shipment,
     currencies,
     tenants,
-    unread,
-    messages,
     showModal,
     error,
     currentStage,
@@ -332,8 +322,7 @@ function mapDispatchToProps (dispatch) {
     userDispatch: bindActionCreators(userActions, dispatch),
     authenticationDispatch: bindActionCreators(authenticationActions, dispatch),
     adminDispatch: bindActionCreators(adminActions, dispatch),
-    shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
-    messageDispatch: bindActionCreators(messagingActions, dispatch)
+    shipmentDispatch: bindActionCreators(shipmentActions, dispatch)
   }
 }
 

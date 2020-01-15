@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_03_144746) do
-
+ActiveRecord::Schema.define(version: 2020_01_14_112450) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -295,7 +294,7 @@ ActiveRecord::Schema.define(version: 2020_01_03_144746) do
     t.index ["tenant_id"], name: "index_contents_on_tenant_id"
   end
 
-  create_table "conversations", force: :cascade do |t|
+  create_table "conversations_20200114", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "last_updated"
     t.integer "manager_id"
@@ -304,7 +303,7 @@ ActiveRecord::Schema.define(version: 2020_01_03_144746) do
     t.integer "unreads"
     t.datetime "updated_at", null: false
     t.integer "user_id"
-    t.index ["tenant_id"], name: "index_conversations_on_tenant_id"
+    t.index ["tenant_id"], name: "index_conversations_20200114_on_tenant_id"
   end
 
   create_table "countries", force: :cascade do |t|
@@ -798,7 +797,7 @@ ActiveRecord::Schema.define(version: 2020_01_03_144746) do
     t.index ["tenant_id"], name: "index_max_dimensions_bundles_on_tenant_id"
   end
 
-  create_table "messages", force: :cascade do |t|
+  create_table "messages_20200114", force: :cascade do |t|
     t.integer "conversation_id"
     t.datetime "created_at", null: false
     t.string "message"

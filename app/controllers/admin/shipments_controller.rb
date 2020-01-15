@@ -2,7 +2,6 @@
 
 class Admin::ShipmentsController < Admin::AdminBaseController
   before_action :do_for_show, only: :show
-  include NotificationTools
 
   def index
     quotation_tool? ? get_quote_index : get_booking_index
@@ -81,7 +80,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def edit_price
-    add_message_to_convo(update_shipment.user, price_message, true)
     response_handler(update_shipment.with_address_options_json)
   end
 
@@ -100,7 +98,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def edit_time
-    add_message_to_convo(update_schedule_shipment.user, schedule_message, true)
     response_handler(update_schedule_shipment.with_address_options_json)
   end
 
@@ -175,12 +172,10 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       @document.approved = 'approved'
       @document.save!
       approved_document_message
-      add_message_to_convo(@user, message, true)
     when 'reject'
       @document.approved = 'rejected'
       @document.save!
       rejected_document_message
-      add_message_to_convo(@user, message, true)
     end
   end
 
@@ -294,15 +289,12 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     when 'accept'
       @shipment.confirm!
       ShippingTools.shipper_confirmation_email(@shipment.user, @shipment)
-      add_message_to_convo(@shipment.user, booking_accepted_message, true)
       response_handler(@shipment.with_address_options_json)
     when 'decline'
       @shipment.decline!
-      add_message_to_convo(@shipment.user, booking_declined_message, true)
       response_handler(@shipment.with_address_options_json)
     when 'ignore'
       @shipment.ignore!
-      add_message_to_convo(@shipment.user, booking_declined_message, true)
       response_handler(@shipment.with_address_options_json)
     when 'archive'
       @shipment.archive!

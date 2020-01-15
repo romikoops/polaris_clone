@@ -32,7 +32,6 @@ class Tenant < Legacy::Tenant
   has_many :buyer_incoterm_scopes, through: :incoterms, dependent: :destroy
   has_many :seller_incoterm_charges, through: :incoterms, dependent: :destroy
   has_many :buyer_incoterm_charges, through: :incoterms, dependent: :destroy
-  has_many :conversations, dependent: :destroy
   has_many :max_dimensions_bundles, dependent: :destroy
   has_many :map_data, dependent: :destroy
   has_many :agencies, dependent: :destroy

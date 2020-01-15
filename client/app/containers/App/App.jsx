@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import {
   Switch, Route, Redirect, withRouter
 } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import UserAccount from '../UserAccount/UserAccount'
 import Landing from '../Landing/Landing'
 import Shop from '../Shop/Shop'
@@ -18,7 +17,6 @@ import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails
 import { appActions, authenticationActions, shipmentActions, userActions } from '../../actions'
 import { moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
-import MessageCenter from '../MessageCenter/MessageCenter'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
 import GenericError from '../../components/ErrorHandling/Generic'
@@ -59,8 +57,6 @@ class App extends Component {
       tenants,
       user,
       loggedIn,
-      showMessages,
-      sending,
       appDispatch,
       loading
     } = this.props
@@ -91,7 +87,6 @@ class App extends Component {
           cookieRef={this.cookieRef}
         />
         <div className="flex-100 mc layout-row  layout-align-start">
-          {showMessages || sending ? <MessageCenter /> : ''}
           {loading ? <Loading tenant={tenant} text="loading..." /> : ''}
           {user &&
           user.id &&
@@ -168,34 +163,18 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-
-  tenant: PropTypes.tenant,
-  user: PropTypes.user,
-  loggedIn: PropTypes.bool,
-  appDispatch: PropTypes.shape({
-    setTenant: PropTypes.func
-  }).isRequired,
-  sending: PropTypes.bool,
-  showMessages: PropTypes.bool,
-  authDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  userDispatch: PropTypes.objectOf(PropTypes.func).isRequired
-}
-
 App.defaultProps = {
   tenant: null,
   user: null,
   loggedIn: false,
-  sending: false,
   showMessages: false
 }
 
 function mapStateToProps (state) {
   const {
-    selectedSubdomain, authentication, messaging, admin, users, app
+    selectedSubdomain, authentication, admin, users, app
   } = state
   const { tenant, tenants } = app
-  const { showMessages, sending } = messaging
   const { user, loggedIn, loggingIn } = authentication
   const { isFetching } = tenant || {
     isFetching: true
@@ -210,8 +189,6 @@ function mapStateToProps (state) {
     loggedIn,
     loggingIn,
     isFetching,
-    showMessages,
-    sending,
     loading,
     app
   }
