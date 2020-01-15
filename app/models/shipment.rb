@@ -41,6 +41,7 @@ class Shipment < Legacy::Shipment
   belongs_to :destination_nexus, class_name: 'Nexus', optional: true
   belongs_to :origin_hub, class_name: 'Hub', optional: true
   belongs_to :destination_hub, class_name: 'Hub', optional: true
+  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   has_many :contacts, through: :shipment_contacts
   has_many :documents
@@ -147,14 +148,6 @@ class Shipment < Legacy::Shipment
   # Class methods
 
   # Instance methods
-
-  def total_price
-    return nil if trip_id.nil?
-
-    price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').price
-
-    { value: price.value, currency: price.currency }
-  end
 
   def edited_total
     return nil if trip_id.nil?

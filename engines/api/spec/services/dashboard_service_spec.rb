@@ -4,6 +4,10 @@ require 'rails_helper'
 
 module Api
   RSpec.describe DashboardService, type: :service do
+    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary) }
+    let(:trip) { FactoryBot.create(:legacy_trip, itinerary_id: itinerary.id) }
+    let(:shipment) { FactoryBot.create(:legacy_shipment, itinerary_id: itinerary.id) }
+
     let(:quote_tenant) { FactoryBot.create(:legacy_tenant, name: 'Demo1', subdomain: 'demo1') }
     let(:booking_tenant) { FactoryBot.create(:legacy_tenant, name: 'Demo2', subdomain: 'demo2') }
 
@@ -21,9 +25,9 @@ module Api
     let(:gothenburg) { FactoryBot.create(:gothenburg_hub) }
     let(:felixstowe) { FactoryBot.create(:felixstowe_hub) }
 
-
     describe 'returns Dashboard info for quote shop' do
-      subject { DashboardService.new(user: quote_user) }
+      subject { described_class.new(user: quote_user) }
+
       let!(:shipments) do
         [
           FactoryBot.create(:complete_legacy_shipment,
@@ -35,8 +39,9 @@ module Api
                             origin_nexus_id: shanghai.nexus_id,
                             origin_hub_id: shanghai.id,
                             destination_nexus_id: gothenburg.nexus_id,
-                            destination_hub_id: gothenburg.id
-                          ),
+                            destination_hub_id: gothenburg.id,
+                            with_breakdown: true),
+
           FactoryBot.create(:complete_legacy_shipment,
                             user_id: quote_user.legacy_id,
                             tenant_id: quote_tenant.id,
@@ -46,8 +51,9 @@ module Api
                             origin_nexus_id: shanghai.nexus_id,
                             origin_hub_id: shanghai.id,
                             destination_nexus_id: felixstowe.nexus_id,
-                            destination_hub_id: felixstowe.id
-                          ),
+                            destination_hub_id: felixstowe.id,
+                            with_breakdown: true),
+
           FactoryBot.create(:complete_legacy_shipment,
                             user_id: quote_user.legacy_id,
                             tenant_id: quote_tenant.id,
@@ -57,8 +63,8 @@ module Api
                             origin_nexus_id: shanghai.nexus_id,
                             origin_hub_id: shanghai.id,
                             destination_nexus_id: gothenburg.nexus_id,
-                            destination_hub_id: gothenburg.id
-                          )
+                            destination_hub_id: gothenburg.id,
+                            with_breakdown: true)
         ]
       end
 
@@ -69,7 +75,7 @@ module Api
 
       it 'returns a revenue array' do
         expect(subject.find_revenue[:rev_arr].count).to eq(3)
-        expect(subject.find_revenue[:rev_total]).to eq(4000)
+        expect(subject.find_revenue[:rev_total]).to eq(29.97)
       end
 
       it 'returns a component config' do
@@ -85,8 +91,9 @@ module Api
         expect(subject.data).not_to be_nil
       end
     end
+
     describe 'returns Dashboard info for booking shop' do
-      subject { DashboardService.new(user: booking_user) }
+      subject { described_class.new(user: booking_user) }
 
       let!(:booking_shipments) do
         [
@@ -97,8 +104,7 @@ module Api
                             origin_nexus_id: shanghai.nexus_id,
                             origin_hub_id: shanghai.id,
                             destination_nexus_id: gothenburg.nexus_id,
-                            destination_hub_id: gothenburg.id
-                          )
+                            destination_hub_id: gothenburg.id)
         ]
       end
 

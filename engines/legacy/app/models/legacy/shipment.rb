@@ -154,6 +154,14 @@ module Legacy
       trip&.voyage_code
     end
 
+    def total_price
+      return if trip_id.nil?
+
+      price = charge_breakdowns.find_by(trip_id: trip_id).charge('grand_total').price
+
+      { value: price.value, currency: price.currency }
+    end
+
     private
 
     def update_carriage_properties!
@@ -236,7 +244,6 @@ module Legacy
 
       errors.add(:itinerary, "id does not match the trips's itinerary_id")
     end
-
   end
 end
 

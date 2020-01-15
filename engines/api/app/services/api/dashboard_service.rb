@@ -18,10 +18,11 @@ module Api
     def find_revenue
       rev_arr = []
       rev_total = 0
-      shipments_hash.each_key do |k|
-        shipments_hash[k.to_sym].each do |s|
-          rev_arr << { id: s['id'], total_goods_value: s['total_goods_value'], created_at: s['created_at'] }
-          rev_total += s['total_goods_value']
+      shipments_hash.each_value do |shipments|
+        shipments.each do |shipment|
+          value = shipment.total_price&.fetch(:value) || 0
+          rev_arr << { id: shipment['id'], total_price_value: value, created_at: shipment['created_at'] }
+          rev_total += value
         end
       end
       { rev_arr: rev_arr, rev_total: rev_total }
