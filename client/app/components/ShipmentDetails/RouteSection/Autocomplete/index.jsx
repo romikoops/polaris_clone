@@ -361,6 +361,7 @@ class Autocomplete extends PureComponent {
     if (result.label !== undefined) {
       onDropdownSelect(target, result)
       handleHubSelect(true)
+      this.setState({ hideResults: true, listenerSet: false })
     } else {
       this.getPlace(result.place_id, (place) => {
         addressFromPlace(place, gMaps, map, (address) => {
