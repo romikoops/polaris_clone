@@ -29,7 +29,8 @@ class RouteSection extends React.PureComponent {
       },
       carriageOptions: props.scope.carriage_options,
       newRoute: false,
-      hubSelected: false
+      hubSelected: false,
+      countries: { origin: [], destination: [] }
     }
 
     this.handleCarriageChange = this.handleCarriageChange.bind(this)
@@ -41,16 +42,14 @@ class RouteSection extends React.PureComponent {
     this.updateCollapsedAddressFields = this.updateCollapsedAddressFields.bind(this)
 
     const { routes } = props
-    this.countries = { origin: [], destination: [] }
     routes.forEach((route) => {
       if (route.origin.truckTypes.length > 0) {
-        this.countries.origin.push(route.origin.country.toLowerCase())
+        this.state.countries.origin.push(route.origin.country.toLowerCase())
       }
       if (route.destination.truckTypes.length > 0) {
-        this.countries.destination.push(route.destination.country.toLowerCase())
+        this.state.countries.destination.push(route.destination.country.toLowerCase())
       }
     })
-
     this.truckTypes = {
       container: ['chassis', 'side_lifter'],
       cargo_item: ['default']
@@ -75,7 +74,7 @@ class RouteSection extends React.PureComponent {
       preCarriage, onCarriage, origin, destination
     } = shipment
     const nextState = {
-      preCarriage, onCarriage, origin, destination, collapsedAddressFields
+      preCarriage, onCarriage, origin, destination, collapsedAddressFields, countries: prevState.countries, truckTypes: prevState.truckTypes
     }
 
     if (
@@ -87,6 +86,7 @@ class RouteSection extends React.PureComponent {
       let originIndeces = [...Array(routes.length).keys()]
       let destinationIndeces = [...Array(routes.length).keys()]
       nextState.newRoute = true
+      nextState.countries = { origin: [], destination: [] }
 
       // update origins (for react state)
       if (!onCarriage && destination.nexusId) {
@@ -148,6 +148,15 @@ class RouteSection extends React.PureComponent {
             nextState.truckTypes.destination.push(truckType)
           }
         })
+        const originCountryCode = route.origin.country.toLowerCase()
+        const destinationCountryCode = route.destination.country.toLowerCase()
+        
+        if (route.origin.truckTypes.length > 0 && !nextState.countries.origin.includes(originCountryCode)) {
+          nextState.countries.origin.push(originCountryCode)
+        }
+        if (route.destination.truckTypes.length > 0 && !nextState.countries.destination.includes(destinationCountryCode)) {
+          nextState.countries.destination.push(destinationCountryCode)
+        }
       })
 
       bookingProcessDispatch.updatePageData('ShipmentDetails', { availableRoutes, availableMots })
@@ -170,6 +179,10 @@ class RouteSection extends React.PureComponent {
     if (addressErrors.destination) {
       nextState.collapsedAddressFields.destination = false
     }
+
+    nextState.originTrucking = nextState.truckTypes.origin.length > 0
+    nextState.destinationTrucking = nextState.truckTypes.destination.length > 0
+
     nextState.carriageOptions = scope.carriage_options
 
     return nextState
@@ -374,7 +387,7 @@ class RouteSection extends React.PureComponent {
     } = shipment
 
     const {
-      origins, destinations, truckTypes, collapsedAddressFields, truckingAvailability, newRoute, hubSelected, originTrucking, destinationTrucking
+      origins, destinations, truckTypes, collapsedAddressFields, truckingAvailability, newRoute, hubSelected, originTrucking, destinationTrucking, countries
     } = this.state
 
     return (
@@ -433,7 +446,7 @@ class RouteSection extends React.PureComponent {
                       formData={origin}
                       availableTargets={origins}
                       availableCounterparts={destinations}
-                      countries={this.countries.origin.filter(onlyUnique)}
+                      countries={countries.origin.filter(onlyUnique)}
                       truckingAvailable={truckingAvailability.origin}
                       requiresFullAddress={requiresFullAddress}
                       hasTrucking={originTrucking}
@@ -469,7 +482,7 @@ class RouteSection extends React.PureComponent {
                       formData={destination}
                       availableTargets={destinations}
                       availableCounterparts={origins}
-                      countries={this.countries.destination.filter(onlyUnique)}
+                      countries={countries.destination.filter(onlyUnique)}
                       truckingAvailable={truckingAvailability.destination}
                       requiresFullAddress={requiresFullAddress}
                       hasTrucking={destinationTrucking}
