@@ -12,7 +12,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions, documentActions } from '../../actions'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import GenericError from '../ErrorHandling/Generic'
-import AdminScopesEditor from './Scopes/Editor'
+
 import {
   AdminClientGroupCreator,
   AdminClientGroup,
@@ -520,13 +520,6 @@ class AdminClients extends Component {
               path="/admin/clients/groupcreator"
               render={props => (
                 <AdminClientGroupCreator {...props} />
-              )}
-            />
-            <Route
-              exact
-              path="/admin/clients/scopeeditor/:targetType/:targetId"
-              render={props => (
-                <AdminScopesEditor {...props} />
               )}
             />
             <Route

@@ -65,11 +65,6 @@ export class AdminClientView extends Component {
     this.setState({ showAddManager: !this.state.showAddManager })
   }
 
-  editScope () {
-    const { adminDispatch, client } = this.props
-    adminDispatch.goTo(`/admin/clients/scopeeditor/user/${client.id}`)
-  }
-
   toggleGroupEdit () {
     const { clientsDispatch, client } = this.props
     this.setState((prevState) => {
@@ -376,16 +371,6 @@ export class AdminClientView extends Component {
                 iconClass="fa-trash"
                 classNames="five_m"
               />
-              { user.internal ? (
-                <RoundButton
-                  theme={theme}
-                  size="full"
-                  text={t('common:editScope')}
-                  handleNext={() => this.editScope()}
-                  iconClass="fa-trash"
-                  classNames="five_m"
-                />
-              ) : '' }
             </GreyBox>
           </div>
         </div>

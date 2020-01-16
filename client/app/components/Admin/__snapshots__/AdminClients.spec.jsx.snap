@@ -35,11 +35,6 @@ exports[`shallow render 1`] = `
       />
       <Route
         exact={true}
-        path="/admin/clients/scopeeditor/:targetType/:targetId"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
         path="/admin/clients/margincreator"
         render={[Function]}
       />
@@ -542,11 +537,6 @@ exports[`state.newClient is true 1`] = `
       />
       <Route
         exact={true}
-        path="/admin/clients/scopeeditor/:targetType/:targetId"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
         path="/admin/clients/margincreator"
         render={[Function]}
       />
@@ -1038,11 +1028,6 @@ exports[`state.newClientBool is true 1`] = `
       />
       <Route
         exact={true}
-        path="/admin/clients/scopeeditor/:targetType/:targetId"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
         path="/admin/clients/margincreator"
         render={[Function]}
       />
@@ -1105,11 +1090,6 @@ exports[`theme is falsy 1`] = `
       <Route
         exact={true}
         path="/admin/clients/groupcreator"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
-        path="/admin/clients/scopeeditor/:targetType/:targetId"
         render={[Function]}
       />
       <Route
