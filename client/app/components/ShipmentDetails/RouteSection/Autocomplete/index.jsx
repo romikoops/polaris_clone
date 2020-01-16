@@ -216,6 +216,10 @@ class Autocomplete extends PureComponent {
       newIndex = 0
     }
 
+    if (combinedResults.length === 0) {
+      return
+    }
+
     if (combinedResults[newIndex].separator) {
       newIndex += delta
     }
@@ -351,6 +355,9 @@ class Autocomplete extends PureComponent {
       handleHubSelect
     } = this.props
 
+    if (result === undefined) {
+      return
+    }
     if (result.label !== undefined) {
       onDropdownSelect(target, result)
       handleHubSelect(true)
