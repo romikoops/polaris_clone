@@ -7,6 +7,7 @@ module AdmiraltyReports
     using ArrayRefinements
     include ActionView::Helpers::DateHelper
     attr_reader :year, :month, :tenant
+    NON_LEGACY_QUOTATIONS_DATE = DateTime.new(2019, 11, 25, 14, 31, 47, '+0100')
 
     def initialize(tenant:, year:, month:)
       @tenant = tenant
@@ -60,10 +61,21 @@ module AdmiraltyReports
                         .distinct
     end
 
+    def non_flagged_quotations
+      ::Quotations::Quotation.where(tenant: @tenant)
+                             .joins(:user)
+                             .where(users: { internal: false })
+                             .where.not(users: { email: excluded_emails })
+                             .distinct
+    end
+
     def uniq_quotations_by_original_shipments
-      quotation = ::Legacy::Quotation.where(original_shipment_id: original_shipments.ids)
-      quotation = filtered(quotation)
-      quotation.order(updated_at: :desc).uniq(&:original_shipment_id)
+      legacy_quotations = filtered(::Legacy::Quotation
+                                              .where(original_shipment_id: original_shipments.ids)
+                                              .where('created_at < ?', NON_LEGACY_QUOTATIONS_DATE))
+      non_legacy_quotations = filtered(non_flagged_quotations)
+      quotations = legacy_quotations | non_legacy_quotations
+      quotations.sort_by(&:updated_at).reverse.uniq
     end
 
     def uniq_shipments_by_original_shipments
@@ -83,7 +95,7 @@ module AdmiraltyReports
     end
 
     def end_date
-      if month == Time.now.month && year == Time.now.year
+      if month == Time.zone.now.month && year == Time.zone.now.year
         DateTime.now
       else
         start_date.end_of_month
@@ -126,7 +138,9 @@ module AdmiraltyReports
 
     def avg_time_for_booking_process(bundle)
       times = if quotation_tool?
-                bundle.map { |quotation, shipment| quotation.updated_at - shipment.created_at }
+                bundle.map do |quotation, shipment|
+                  quotation.updated_at - (shipment ? shipment.created_at : quotation.created_at)
+                end
               else
                 bundle.map { |booking, _shipment| booking.updated_at - booking.created_at }
               end

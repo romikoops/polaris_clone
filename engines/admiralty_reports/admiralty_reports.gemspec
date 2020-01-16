@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'core'
   s.add_dependency 'rubyzip'
   s.add_dependency 'tenants'
+  s.add_dependency 'quotations'
 
   s.add_development_dependency 'roo'
   Gemhelper.common_gems(s)

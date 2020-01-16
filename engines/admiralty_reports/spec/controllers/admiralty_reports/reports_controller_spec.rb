@@ -14,7 +14,7 @@ module AdmiraltyReports
     let!(:quote_tenant) { FactoryBot.create(:legacy_tenant, name: 'Demo1', subdomain: 'demo1') }
     let!(:booking_tenant) { FactoryBot.create(:legacy_tenant, name: 'Demo2', subdomain: 'demo2') }
 
-    let!(:quote_tenants_tenant) {  Tenants::Tenant.find_by(legacy_id: quote_tenant.id) }
+    let!(:quote_tenants_tenant) { Tenants::Tenant.find_by(legacy_id: quote_tenant.id) }
     let!(:booking_tenants_tenant) { Tenants::Tenant.find_by(legacy_id: booking_tenant.id) }
 
     let!(:quote_tenants_scope) { FactoryBot.create(:tenants_scope, target: quote_tenants_tenant, content: { open_quotation_tool: true }) }
@@ -68,11 +68,9 @@ module AdmiraltyReports
                               user_id: user.id,
                               updated_at: DateTime.new(2019, 2, 3),
                               created_at: DateTime.new(2019, 2, 2)),
-            FactoryBot.create(:legacy_quotation,
-                              original_shipment_id: shipments.last.id,
-                              user_id: user.id,
-                              updated_at: DateTime.new(2019, 2, 5),
-                              created_at: DateTime.new(2019, 2, 4))
+            ::Quotations::Quotation.create(user_id: user.id,
+                                           updated_at: DateTime.new(2020, 1, 2),
+                                           created_at: DateTime.new(2020, 1, 1))
           ]
         end
 
@@ -85,7 +83,7 @@ module AdmiraltyReports
         end
 
         it 'renders page if it is current month' do
-          get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id, month: Time.now.month, year: Time.now.year }
+          get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id, month: Time.zone.now.month, year: Time.zone.now.year }
 
           expect(response).to be_successful
           expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
