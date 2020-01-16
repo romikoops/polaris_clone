@@ -11,8 +11,7 @@ module Api
       skip_before_action :doorkeeper_authorize!, only: :ports
 
       def index
-        tenant = current_user.tenant.legacy
-        itineraries = Legacy::Itinerary.where(tenant_id: tenant.id)
+        itineraries = Legacy::Itinerary.where(tenant_id: current_tenant.legacy_id)
         render json: itineraries, each_serializer: Legacy::ItinerarySerializer, key_transform: :unaltered
       end
 

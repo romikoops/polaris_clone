@@ -20,7 +20,7 @@ module Api
     end
 
     def current_tenant
-      @current_tenant ||= ::Tenants::Tenant.find_by(id: params[:tenant_id] || params[:id])
+      @current_tenant ||= ::Tenants::Tenant.find_by(id: params[:tenant_id] || params[:id]) || current_user.tenant
     end
 
     def set_sandbox

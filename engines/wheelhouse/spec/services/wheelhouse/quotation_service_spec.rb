@@ -36,7 +36,7 @@ RSpec.describe Wheelhouse::QuotationService do
         route_filter: instance_double(OfferCalculator::Service::RouteFilter, perform: routes),
         schedule_finder: instance_double(OfferCalculator::Service::ScheduleFinder, perform: nil),
         trucking_data_builder: instance_double(OfferCalculator::Service::TruckingDataBuilder, perform: nil),
-        detail_schedules_builder: instance_double(OfferCalculator::Service::DetailedSchedulesBuilder, perform: nil)
+        detail_schedules_builder: instance_double(OfferCalculator::Service::DetailedSchedulesBuilder, perform: [])
       }
     end
 

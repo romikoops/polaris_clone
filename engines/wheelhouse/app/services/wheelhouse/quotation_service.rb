@@ -17,9 +17,7 @@ module Wheelhouse
 
     def results
       @trucking_data = trucking_data_builder.perform(@hubs)
-      detailed_schedules = routes.map do |route|
-        get_detailed_schedules(route)
-      end
+      detailed_schedules = get_detailed_schedules(routes)
       detailed_schedules.flatten
     end
 
@@ -27,8 +25,8 @@ module Wheelhouse
 
     attr_reader :shipment, :shipping_info, :selected_date
 
-    def get_detailed_schedules(route)
-      schedules = schedule_finder.perform([route], @delay, @hubs)
+    def get_detailed_schedules(routes)
+      schedules = schedule_finder.perform(routes, @delay, @hubs)
       detailed_schedule_finder.perform(schedules, @trucking_data, @user)
     end
 

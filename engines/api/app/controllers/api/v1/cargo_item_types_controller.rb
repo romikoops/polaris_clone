@@ -4,7 +4,7 @@ module Api
   module V1
     class CargoItemTypesController < ApiController
       def index
-        tenant = current_user.tenant.legacy
+        tenant = current_tenant.legacy
         render json: tenant.cargo_item_types
       end
     end

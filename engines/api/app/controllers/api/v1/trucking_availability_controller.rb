@@ -42,7 +42,7 @@ module Api
 
       def trucking_args
         {
-          tenant_id: trucking_params[:tenant_id],
+          tenant_id: current_tenant.legacy_id,
           load_type: trucking_params[:load_type],
           address: address,
           hub_ids: trucking_params[:hub_ids].split(',').map(&:to_i),

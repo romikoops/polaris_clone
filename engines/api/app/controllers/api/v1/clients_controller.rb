@@ -3,8 +3,7 @@ module Api
     class ClientsController < ApiController
       def index
         blocked_roles = Legacy::Role.where(name: %w(admin super_admin))
-        current_tenant = current_user.tenant.legacy
-        clients = Legacy::User.where(tenant_id: current_tenant.id)
+        clients = Legacy::User.where(tenant_id: current_tenant.legacy_id)
                               .where(guest: false)
                               .where.not(role: blocked_roles)
                               .order(first_name: :asc)
