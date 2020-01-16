@@ -242,7 +242,7 @@ class Header extends Component {
     return (
       <div className={headerClass} style={{ color: invert ? 'white' : 'black' }}>
         <div className="flex-100 layout-row" style={{ padding: '0 15px' }}>
-          <div className="layout-row flex layout-align-start-center pointy">
+          <div className="hide-sm hide-xs layout-row flex layout-align-start-center pointy">
             <img
               src={logoUrl}
               className={`${logoStyle}`}

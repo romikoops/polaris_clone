@@ -27,7 +27,7 @@ exports[`hasNextStage is true 1`] = `
         className="fa fa-chevron-right fade"
       />
       <p
-        className="flex-70 fade"
+        className="flex-gt-md-70 fade"
       >
          
          
@@ -238,7 +238,7 @@ exports[`shallow rendering 1`] = `
         className="fa fa-chevron-right fade"
       />
       <p
-        className="flex-70 fade"
+        className="flex-gt-md-70 fade"
       >
          
          
@@ -418,7 +418,7 @@ exports[`state.showHelp is true 1`] = `
         className="fa fa-chevron-right fade"
       />
       <p
-        className="flex-70 fade"
+        className="flex-gt-md-70 fade"
       >
          
          
@@ -673,7 +673,7 @@ exports[`tenant.scope is falsy 1`] = `
         className="fa fa-chevron-right fade"
       />
       <p
-        className="flex-70 fade"
+        className="flex-gt-md-70 fade"
       >
          
          
@@ -895,7 +895,7 @@ exports[`theme.bookingProcessImage is truthy 1`] = `
         className="fa fa-chevron-right fade"
       />
       <p
-        className="flex-70 fade"
+        className="flex-gt-md-70 fade"
       >
          
          

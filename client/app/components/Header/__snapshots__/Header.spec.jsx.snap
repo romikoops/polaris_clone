@@ -18,7 +18,7 @@ exports[`error && error[currentStage] 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -114,7 +114,7 @@ exports[`invert is true 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -199,7 +199,7 @@ exports[`noMessages is true 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -284,7 +284,7 @@ exports[`scrollable is true 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -369,7 +369,7 @@ exports[`shallow render 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -454,7 +454,7 @@ exports[`showModal is true 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -729,7 +729,7 @@ exports[`showRegistration is true 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -814,7 +814,7 @@ exports[`tenant is falsy 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -899,7 +899,7 @@ exports[`theme has logoLarge 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -984,7 +984,7 @@ exports[`theme has logoWide 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -1069,7 +1069,7 @@ exports[`unread > 0 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -1154,7 +1154,7 @@ exports[`user && user.role && user.role.name.includes(admin) 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -1239,7 +1239,7 @@ exports[`user is falsy 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""
@@ -1310,7 +1310,7 @@ exports[`user.role_id === 2 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center pointy"
+      className="hide-sm hide-xs layout-row flex layout-align-start-center pointy"
     >
       <img
         alt=""

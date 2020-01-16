@@ -27,7 +27,7 @@ function BookingSummary (props) {
   const weightToRender = weight.unit === 'kg' ? totalWeight : (totalWeight / 1000)
 
   return (
-    <div className={`${styles.booking_summary} hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row`}>
+    <div className={`${styles.booking_summary} flex-70 flex-gt-sm-50 layout-align-center-center layout-align-sm-end-center layout-row`}>
       <div className={`${styles.route_sec} flex-70 layout-column layout-align-stretch`}>
         <div className="flex-none layout-row layout-align-center">
           <div className={`flex-none ${styles.connection_graphics}`}>
@@ -81,7 +81,7 @@ function BookingSummary (props) {
           </div>
         </div>
       </div>
-      <div className="flex flex-sm-30 layout-column layout-align-stretch">
+      <div className="flex hide-sm hide-xs flex-sm-30 layout-column layout-align-stretch">
         <h4 className="flex-50 layout-row layout-align-center-center">{t('cargo:totalWeight')}</h4>
         <p className="flex-50 layout-row layout-align-center-start">
           { numberSpacing(weightToRender, weight.decimals) }
@@ -91,7 +91,7 @@ function BookingSummary (props) {
       </div>
       {
         loadType === 'cargo_item' && (
-          <div className="flex layout-column layout-align-stretch">
+          <div className="flex hide-sm hide-xs layout-column layout-align-stretch">
             <h4 className="flex-50 layout-row layout-align-center-center">{t('cargo:totalVolume')}</h4>
             <p className="flex-50 layout-row layout-align-center-start">
               { numberSpacing(totalVolume, 3) }

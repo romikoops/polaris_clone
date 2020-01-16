@@ -378,7 +378,7 @@ class RouteSection extends React.PureComponent {
     } = this.state
 
     return (
-      <div className="route_section flex-100 content_width_booking margin_top">
+      <div className="route_section flex-100 content_width_booking">
         <RouteSectionMap
           theme={theme}
           origin={origin}
