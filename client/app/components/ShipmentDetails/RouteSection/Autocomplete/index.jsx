@@ -10,7 +10,7 @@ import listenerTools from '../../../../helpers/listeners'
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner'
 import addressFromPlace from './addressFromPlace'
 import addressFromLocation from './addressFromLocation'
-import { errorActions } from '../../../../actions'
+import { errorActions, bookingProcessActions } from '../../../../actions'
 import ResultsCards from './ResultCards'
 
 class Autocomplete extends PureComponent {
@@ -241,7 +241,11 @@ class Autocomplete extends PureComponent {
     this.setState((prevState) => {
       const { value } = target
       const { searchTimeout, input } = prevState
+
       if (value === input) return {}
+      if (value === '') {
+        this.clearAddress()
+      }
       const newTimeout = {}
       if (searchTimeout.address) clearTimeout(searchTimeout.address)
       if (searchTimeout.area) clearTimeout(searchTimeout.area)
@@ -374,6 +378,11 @@ class Autocomplete extends PureComponent {
     this.setState({ input: result.label || result.description })
   }
 
+  clearAddress () {
+    const { bookingProcessDispatch, target } = this.props
+    bookingProcessDispatch.updateShipment(target, {})
+  }
+
   handleArea (location) {
     if (location) {
       listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
@@ -496,7 +505,8 @@ class Autocomplete extends PureComponent {
 
 function mapDispatchToProps (dispatch) {
   return {
-    errorDispatch: bindActionCreators(errorActions, dispatch)
+    errorDispatch: bindActionCreators(errorActions, dispatch),
+    bookingProcessDispatch: bindActionCreators(bookingProcessActions, dispatch)
   }
 }
 
