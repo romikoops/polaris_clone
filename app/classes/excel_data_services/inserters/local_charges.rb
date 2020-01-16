@@ -71,7 +71,7 @@ module ExcelDataServices
         tv_params.delete(:name) if service_level.casecmp?('all')
 
         # FIX: `Vehicle` shouldn't be creating a `TenantVehicle`!
-        TenantVehicle.where(tv_params) ||
+        TenantVehicle.where(tv_params).presence ||
           [Vehicle.create_from_name(
             name: service_level,
             carrier_name: carrier&.name,
