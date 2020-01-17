@@ -29,7 +29,7 @@ class RouteSection extends React.PureComponent {
       },
       carriageOptions: props.scope.carriage_options,
       newRoute: false,
-      hubSelected: false,
+      hubSelected: { origin: false, destination: false },
       countries: { origin: [], destination: [] }
     }
 
@@ -150,7 +150,7 @@ class RouteSection extends React.PureComponent {
         })
         const originCountryCode = route.origin.country.toLowerCase()
         const destinationCountryCode = route.destination.country.toLowerCase()
-        
+
         if (route.origin.truckTypes.length > 0 && !nextState.countries.origin.includes(originCountryCode)) {
           nextState.countries.origin.push(originCountryCode)
         }
@@ -278,7 +278,8 @@ class RouteSection extends React.PureComponent {
         longitude: lng,
         nexusId: value.id,
         nexusName: value.name,
-        country: value.country
+        country: value.country,
+        fullAddress: `${value.name}, ${value.country}`
       }
 
       bookingProcessDispatch.updateShipment(target, targetData)
@@ -290,8 +291,15 @@ class RouteSection extends React.PureComponent {
     }
   }
 
-  handleHubSelect (bool) {
-    this.setState({ hubSelected: bool })
+  handleHubSelect (target, bool) {
+    this.setState(prevState => (
+      {
+        hubSelected: {
+          ...prevState.hubSelected,
+          [target]: bool
+        }
+      }
+    ))
   }
 
   updateTruckingAvailability (target, value) {
@@ -410,8 +418,7 @@ class RouteSection extends React.PureComponent {
                 scope,
                 gMaps,
                 map,
-                handleHubSelect: (...args) => this.handleHubSelect(...args),
-                hubSelected
+                handleHubSelect: (...args) => this.handleHubSelect(...args)
               }
 
               return (
@@ -450,6 +457,7 @@ class RouteSection extends React.PureComponent {
                       truckingAvailable={truckingAvailability.origin}
                       requiresFullAddress={requiresFullAddress}
                       hasTrucking={originTrucking}
+                      hubSelected={hubSelected.origin}
                     />
                   </div>
                   <div name="destinationAuto" className="flex-50 layout-row layout-wrap layout-align-space-around-start">
@@ -486,6 +494,7 @@ class RouteSection extends React.PureComponent {
                       truckingAvailable={truckingAvailability.destination}
                       requiresFullAddress={requiresFullAddress}
                       hasTrucking={destinationTrucking}
+                      hubSelected={hubSelected.destination}
                     />
                   </div>
                   <OfferError availableMots={availableMots} newRoute={newRoute} componentName="RouteSection" />

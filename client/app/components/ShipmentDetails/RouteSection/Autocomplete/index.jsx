@@ -364,7 +364,7 @@ class Autocomplete extends PureComponent {
     }
     if (result.label !== undefined) {
       onDropdownSelect(target, result)
-      handleHubSelect(true)
+      handleHubSelect(target, true)
       this.setState({ hideResults: true, listenerSet: false })
     } else {
       this.getPlace(result.place_id, (place) => {
@@ -372,7 +372,7 @@ class Autocomplete extends PureComponent {
           onAutocompleteTrigger(target, address)
         })
       })
-      handleHubSelect(false)
+      handleHubSelect(target, false)
       this.setState({ hideResults: true, listenerSet: false })
     }
     this.setState({ input: result.label || result.description })
