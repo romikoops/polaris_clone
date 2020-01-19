@@ -36,10 +36,10 @@
 		height: 13px;
 	}
 	.connection_graphics {
-		$w: 250px;
+		$w: 100px;
 	  position: absolute;
 	  left: calc((50% - #{$w}/2));
-	  top: 45px;
+	  top: 20px;
 	  width: $w;
 	  i {
 	    margin: 0 4px;
