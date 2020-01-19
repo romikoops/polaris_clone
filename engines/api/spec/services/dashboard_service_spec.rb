@@ -112,5 +112,21 @@ module Api
         expect(subject.shipments_hash[:open].first).to eq(booking_shipments.first)
       end
     end
+
+    describe '#booking_per_route' do
+      subject { described_class.new(user: booking_user) }
+      before do
+          FactoryBot.create(:complete_legacy_shipment,
+                            user_id: booking_user.legacy_id,
+                            tenant_id: booking_tenant.id,
+                            status: 'requested',
+                            trip_id: trip.id,
+                            itinerary: itinerary)
+      end
+
+      it 'returns a booking per route route hash' do
+        expect(subject.bookings_per_route).to match_array([{ itinerary: itinerary, bookings: 1 }])
+      end
+    end
   end
 end

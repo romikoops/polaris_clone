@@ -77,17 +77,6 @@ class Shipment < Legacy::Shipment
       for_tenant
     )
   )
-  # Scopes
-  scope :has_pre_carriage, -> { where(has_pre_carriage: true) }
-  scope :has_on_carriage,  -> { where(has_on_carriage:  true) }
-  scope :order_booking_desc, -> { order(booking_placed_at: :desc) }
-  scope :requested, -> { where(status: %w(requested requested_by_unconfirmed_account)) }
-  scope :requested_by_unconfirmed_account, -> { where(status: 'requested_by_unconfirmed_account') }
-  scope :open, -> { where(status: %w(in_progress confirmed)) }
-  scope :rejected, -> { where(status: %w(ignored declined)) }
-  scope :archived, -> { where(status: 'archived') }
-  scope :finished, -> { where(status: 'finished') }
-  scope :quoted, -> { where(status: 'quoted') }
 
   pg_search_scope :index_search,
                   against: %i(imc_reference),
@@ -142,8 +131,6 @@ class Shipment < Legacy::Shipment
       result.or(send(mot))
     end
   }
-
-  scope :external_user, -> { joins(:user).where(users: { internal: false }) }
 
   # Class methods
 

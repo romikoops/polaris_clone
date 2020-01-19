@@ -11,7 +11,8 @@ RSpec.resource 'Dashboard' do
   let!(:quote_tenant) { ::Legacy::Tenant.create(name: 'Demo1', subdomain: 'demo1', scope: { open_quotation_tool: true }) }
   let!(:tenant) { FactoryBot.create(:tenants_tenant, legacy_id: quote_tenant.id) }
 
-  let(:user) { FactoryBot.create(:tenants_user, email: email, password: password, tenant_id: tenant.id) }
+  let(:legacy_user) { FactoryBot.create(:legacy_user, tenant: quote_tenant, email: 't@example.com') }
+  let(:user) { Tenants::User.find_by(legacy_id: legacy_user.id) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
 

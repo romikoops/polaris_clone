@@ -4,6 +4,7 @@ module Api
   class DashboardService
     def initialize(user:)
       @user = user
+      @legacy_user = Legacy::User.find(user.legacy_id)
     end
 
     def data
@@ -11,7 +12,8 @@ module Api
         shipments: shipments_hash,
         components: component_configuration,
         revenue: find_revenue,
-        tradelanes: find_tradelanes
+        tradelanes: find_tradelanes,
+        bookings_per_route: bookings_per_route
       }
     end
 
@@ -31,7 +33,7 @@ module Api
     def find_tradelanes
       user_tradelanes = []
 
-      ::Legacy::Shipment.where(user_id: @user.legacy_id).find_each do |s|
+      ::Legacy::Shipment.where(tenant_id: @legacy_user.tenant_id).find_each do |s|
         next if s['destination_nexus_id'].nil? || s['origin_nexus_id'].nil?
 
         user_tradelanes << {
@@ -40,6 +42,19 @@ module Api
                            }
       end
       user_tradelanes.group_by(&:itself).map { |k, v| k.merge(count: v.length) }
+    end
+
+    def bookings_per_route
+      shipments_by_itinerary = Legacy::Shipment.where(tenant_id: @legacy_user.tenant_id)
+                                               .requested
+                                               .joins(:itinerary)
+                                               .group(:itinerary_id).count
+      shipments_by_itinerary.map do |itinerary_id, shipments_count|
+        {
+          itinerary: Legacy::Itinerary.find(itinerary_id),
+          bookings: shipments_count
+        }
+      end
     end
 
     def component_configuration
@@ -81,39 +96,41 @@ module Api
       end
     end
 
+    def tenant_shipments
+      @tenant_shipments ||= Legacy::Shipment.where(tenant_id: @legacy_user.tenant_id, sandbox: @sandbox)
+                                            .where('shipments.created_at > ?', Date.today.beginning_of_month)
+    end
+
+    def shipments
+      @shipments ||= tenant_shipments.external_user
+    end
+
     def requested_shipments
-      @requested_shipments ||= ::Legacy::Shipment.where(user_id: @user.legacy_id)
-                                                 .where(status: %w(requested requested_by_unconfirmed_account))
+      @requested_shipments ||= shipments.requested
     end
 
     def quoted_shipments
-      @quoted_shipments ||= ::Legacy::Shipment.where(user_id: @user.legacy_id)
-                                              .where(status: 'quoted')
+      @quoted_shipments ||= shipments.quoted
     end
 
     def open_shipments
-      @open_shipments ||= ::Legacy::Shipment.where(user_id: @user.legacy_id)
-                                            .where(status: %w(in_progress confirmed))
+      @open_shipments ||= shipments.open
     end
 
     def rejected_shipments
-      @rejected_shipments ||= ::Legacy::Shipment.where(user_id: @user.legacy_id)
-                                                .where(status: %w(ignored declined))
+      @rejected_shipments ||= shipments.rejected
     end
 
     def archived_shipments
-      @archived_shipments ||= ::Legacy::Shipment.where(user_id: @user.legacy_id)
-                                                .where(status: 'archived')
+      @archived_shipments ||= shipments.archived
     end
 
     def finished_shipments
-      @finished_shipments ||= ::Legacy::Shipment.where(user_id: @user.legacy_id)
-                                                .where(status: 'finished')
+      @finished_shipments ||= shipments.finished
     end
 
     def bookings_in_progress
-      @bookings_in_progress || ::Legacy::Shipment.where(user_id: @user.legacy_id)
-                                                 .where(status: 'booking_process_started')
+      @bookings_in_progress || shipments.where(status: 'booking_process_started')
     end
   end
 end
