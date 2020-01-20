@@ -23,6 +23,37 @@ module ExcelDataServices
           raise NotImplementedError, "This method must be implemented in #{self.class.name}."
         end
 
+        def check_group(row)
+          return if row.group_id.nil? && row.group_name.nil?
+
+          check_group_id(row)
+          check_group_name(row)
+        end
+
+        def check_group_id(row)
+          return if row.group_id.present? && UUID.validate(row.group_id)
+
+          add_to_errors(
+            type: :error,
+            row_nr: row.nr,
+            sheet_name: sheet_name,
+            reason: 'Group ID must be a valid UUID string!',
+            exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
+          )
+        end
+
+        def check_group_name(row)
+          return if row.name.present? && Tenants::Group.exists?(tenant_id: @tenants_tenant.id, name: row.name)
+
+          add_to_errors(
+            type: :error,
+            row_nr: row.nr,
+            sheet_name: sheet_name,
+            reason: "The Group #{row.group_name} does not exist!",
+            exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
+          )
+        end
+
         def check_correct_individual_effective_period(row)
           return if row.effective_date < row.expiration_date
 

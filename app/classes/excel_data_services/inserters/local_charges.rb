@@ -109,7 +109,7 @@ module ExcelDataServices
           mode_of_transport: params[:mot],
           tenant_vehicle_id: tenant_vehicle_id,
           sandbox: @sandbox,
-          group_id: @group_id,
+          group_id: @group_id.presence || params[:group_id],
           metadata: metadata(row: params)
         )
       end

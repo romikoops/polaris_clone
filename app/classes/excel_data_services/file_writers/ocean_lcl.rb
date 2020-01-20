@@ -19,7 +19,7 @@ module ExcelDataServices
       end
 
       def build_raw_headers(_sheet_name, _rows_data)
-        HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES
+        ExcelDataServices::Validators::HeaderChecker::VARIABLE | HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES
       end
     end
   end

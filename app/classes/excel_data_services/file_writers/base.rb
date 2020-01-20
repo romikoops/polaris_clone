@@ -25,6 +25,8 @@ module ExcelDataServices
       HEADER_COLLECTION = ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers
 
       PRICING_COMMON_LOOKUP = {
+        group_id: :group_id,
+        group_name: :group_name,
         effective_date: :effective_date,
         expiration_date: :expiration_date,
         customer_email: :customer_email,
@@ -215,9 +217,9 @@ module ExcelDataServices
           dynamic_headers =
             rows_data.flat_map(&:keys).compact.uniq - HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES
 
-          HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES + dynamic_headers
+          ExcelDataServices::Validators::HeaderChecker::VARIABLE + HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES + dynamic_headers
         when 'With Ranges'
-          HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES
+          ExcelDataServices::Validators::HeaderChecker::VARIABLE + HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES
         else
           raise ExcelDataServices::Validators::ValidationErrors::WritingError::UnknownSheetNameError,
                 "Unknown sheet name \"#{sheet_name}\"!"

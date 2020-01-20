@@ -9,6 +9,7 @@ module ExcelDataServices
 
       def initialize(tenant:, sheet_name:, data:)
         @tenant = tenant
+        @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
         @data = data
         @sheet_name = sheet_name
         @klass_identifier = self.class.name.split('::').last

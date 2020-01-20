@@ -14,7 +14,9 @@ module ExcelDataServices
 
       def load_and_prepare_data
         rows_data = []
-        all_local_charges = tenant.local_charges.where(sandbox: @sandbox, group_id: @group_id)
+        all_local_charges = tenant.local_charges.where(sandbox: @sandbox)
+        all_local_charges = all_local_charges.where(group_id: @group_id) if @group_id.present?
+
         local_charges = if mode_of_transport.nil? || mode_of_transport.casecmp?('all')
                           all_local_charges
                         else
@@ -60,7 +62,8 @@ module ExcelDataServices
           range_max = range[:max]
         end
 
-        { uuid: local_charge.uuid,
+        { group_id: local_charge.group_id,
+          group_name: Tenants::Group.find_by(id: local_charge.group_id)&.name,
           hub: hub_name,
           country: country_name,
           effective_date: effective_date,
@@ -155,7 +158,7 @@ module ExcelDataServices
       end
 
       def build_raw_headers(_sheet_name, _rows_data)
-        ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::LOCAL_CHARGES
+        ExcelDataServices::Validators::HeaderChecker::VARIABLE | ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::LOCAL_CHARGES
       end
     end
   end

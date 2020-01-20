@@ -171,6 +171,11 @@ module ExcelDataServices
         ].freeze
       end
 
+      VARIABLE = %i[
+        group_id
+        group_name
+      ]
+
       attr_reader :data_restructurer_name, :errors
 
       def initialize(sheet_name, parsed_headers)
@@ -211,7 +216,7 @@ module ExcelDataServices
         data_restructurer_names.each do |restructurer_name|
           static_headers = headers_from_data_restructurer_name(restructurer_name)
           static_size = static_headers.size
-          parsed_static_part = parsed_headers.slice(0, static_size)
+          parsed_static_part = parsed_headers & static_headers
           diff = static_headers - parsed_static_part
           unrecognized = parsed_static_part - static_headers
 

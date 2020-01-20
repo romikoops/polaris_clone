@@ -103,7 +103,7 @@ function uploadLocalCharges (file, mot, groupId) {
   const formData = new FormData()
   formData.append('file', file)
   formData.append('mot', mot)
-  formData.append('group_id', groupId)
+  if (groupId) formData.append('group_id', groupId)
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader() },

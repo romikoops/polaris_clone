@@ -74,6 +74,7 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
     )
 
     file = upload_params[:file].tempfile
+
     options = { tenant: current_tenant,
                 file_or_path: file,
                 options: {

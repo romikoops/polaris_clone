@@ -77,6 +77,14 @@ module ExcelDataServices
         @service_level ||= data[:service_level] || 'standard'
       end
 
+      def group_id
+        @group_id ||= data[:group_id]
+      end
+
+      def group_name
+        @group_name ||= data[:group_name]
+      end
+
       private
 
       attr_reader :data, :tenant

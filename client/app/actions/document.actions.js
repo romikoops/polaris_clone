@@ -502,7 +502,7 @@ function uploadItinerarySchedules (file, target) {
   }
 }
 
-function uploadLocalCharges (file, mot, groupId) {
+function uploadLocalCharges (file, mot, groupId = null) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
   }

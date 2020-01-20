@@ -44,6 +44,14 @@ module ExcelDataServices
         }
       end
 
+      def find_group_id(row)
+        return @group_id if @group_id.present?
+
+        return row.group_id if row.group_id.present?
+
+        Tenants::Group.find_by(tenant_id: Tenants::Tenant.find_by(legacy_id: tenant.id).id, name: row.group_name)&.id
+      end
+
       def add_stats(data_record, force_new_record = false)
         descriptor = data_record.class.name.underscore.pluralize.to_sym
         @stats[descriptor] ||= {

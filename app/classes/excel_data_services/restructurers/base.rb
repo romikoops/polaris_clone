@@ -34,6 +34,7 @@ module ExcelDataServices
 
       def initialize(tenant:, data:)
         @tenant = tenant
+        @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
         @data = data
       end
 
@@ -118,6 +119,15 @@ module ExcelDataServices
         rows_data.each do |row_data|
           row_data[:origin_name] = append_hub_suffix(row_data[:origin], row_data[:mot])
           row_data[:destination_name] = append_hub_suffix(row_data[:destination], row_data[:mot])
+        end
+      end
+
+      def add_group_ids(raw_data)
+        raw_data.map do |raw_datum|
+          if raw_datum[:group_name].present?
+            raw_datum[:group_id] = Tenants::Group.find_by(tenant_id: @tenants_tenant.id, name: raw_datum[:group_name])&.id
+          end
+          raw_datum
         end
       end
     end
