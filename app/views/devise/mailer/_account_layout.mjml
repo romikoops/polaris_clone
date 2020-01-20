@@ -16,7 +16,9 @@
 <mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
     <mj-text>
-      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.name}", style: "width: 150px; max-height: 150px;" %>
+      <% if attachments['logo.png'] %>
+        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.name}", style: "width: 150px; max-height: 150px;" %>
+      <% end %>
     </mj-text>
   </mj-column>
   <mj-column>
