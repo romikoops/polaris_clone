@@ -1,19 +1,23 @@
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Subdomain</th>
-      <th>Name</th>
-      <th></th>
-  </thead>
-  <%= form_tag download_stats_path, method: 'get' do %>
-    <%= select_tag :month, options_for_select(AdmiraltyReports::ReportsController::MONTH_LOOKUP, selected: params[:month]) %>
-    <%= select_tag :year, options_for_select(@possible_years, selected: params[:year]) %>
-    <%= submit_tag 'XLSX'%>
-  <% end %>
+<div class="row justify-content-center">
+  <div class="col-sm-9">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Subdomain</th>
+          <th scope="col">Name</th>
+          <th scope="col"></th>
+      </thead>
 
+      <%= form_tag download_stats_path, method: 'get' do %>
+        <%= select_tag :month, options_for_select(AdmiraltyReports::ReportsController::MONTH_LOOKUP, selected: params[:month]) %>
+        <%= select_tag :year, options_for_select(@possible_years, selected: params[:year]) %>
+        <%= submit_tag 'XLSX', class: 'btn btn-sm' %>
+      <% end %>
 
-  <tbody>
-    <%= render @tenants %>
-  </tbody>
-</table>
+      <tbody>
+        <%= render @tenants %>
+      </tbody>
+    </table>
+  </div>
+</div>

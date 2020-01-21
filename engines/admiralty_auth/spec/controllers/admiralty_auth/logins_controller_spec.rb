@@ -11,50 +11,49 @@ module AdmiraltyAuth
       it 'renders page' do
         get :new
 
-        expect(response).to be_successful
-        expect(response.body).to match(/Sign in with my Google account/im)
+        aggregate_failures do
+          expect(response).to be_successful
+          expect(response.body).to match(/Sign in with GSuite/im)
+        end
       end
     end
 
     describe 'POST #create' do
-      let(:user) { FactoryBot.create(:users_user, google_id: 'GOOGL') }
       let(:hosted_domain) { 'itsmycargo.com' }
       let(:google_identity) do
-        double('GoogleSignIn::Identity', hosted_domain: hosted_domain, user_id: 'GOOGL', email_address: user.email, name: user.name)
+        instance_double('GoogleSignIn::Identity', hosted_domain: hosted_domain)
       end
 
       before do
         allow_any_instance_of(described_class).to receive(:flash).and_return(google_sign_in_token: 'GOOGL')
-        allow_any_instance_of(described_class).to receive(:session).and_return(return_to_url: '/')
+        session[:return_to_url] = '/'
         allow(GoogleSignIn::Identity).to receive(:new).and_return(google_identity)
       end
 
-      context 'existing user' do
-        it 'logins successfully' do
-          post :create
+      it 'logins successfully' do
+        post :create
 
-          expect(response).to redirect_to('/')
-        end
-
-        it 'fails login' do
-          expect_any_instance_of(described_class).to receive(:authenticate_with_google).and_return(nil)
-
-          post :create
-
-          expect(response).to redirect_to('/login')
-        end
+        expect(response).to redirect_to('/')
       end
 
-      context 'new user' do
-        let(:email) { "#{SecureRandom.hex}@itsmycargo.test" }
-        let(:user) { FactoryBot.build(:users_user, email: email) }
+      it 'fails login' do
+        expect_any_instance_of(described_class).to receive(:authenticate_with_google).and_return(nil)
 
-        it 'logins successfully' do
-          post :create
+        post :create
 
-          expect(response).to redirect_to('/')
-          expect(Users::User).to exist(email: email)
-        end
+        expect(response).to redirect_to('/login')
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      before do
+        session[:last_activity_at] = Time.zone.now
+      end
+
+      it 'signs out successfully' do
+        delete :destroy
+
+        expect(response).to redirect_to('/login')
       end
     end
   end

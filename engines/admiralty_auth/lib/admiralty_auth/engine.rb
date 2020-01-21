@@ -4,7 +4,6 @@ require 'google_sign_in'
 
 require 'admiralty_assets'
 require 'core'
-require 'users'
 
 module AdmiraltyAuth
   class Engine < ::Rails::Engine

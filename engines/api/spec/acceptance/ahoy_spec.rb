@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.resource 'Users' do
+RSpec.resource 'Ahoy' do
   header 'Accept', 'application/json'
   header 'Content-Type', 'application/json'
 

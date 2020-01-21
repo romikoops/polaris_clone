@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'admiralty_assets'
   s.add_dependency 'core'
-  s.add_dependency 'users'
 
   s.add_dependency 'google_sign_in', '~> 1.1.2'
 

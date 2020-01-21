@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'core'
 
-  s.add_dependency 'bootstrap', '~> 4.2.1'
+  s.add_dependency 'bootstrap', '~> 4.4.1'
   s.add_dependency 'jquery-rails'
 
   Gemhelper.common_gems(s)

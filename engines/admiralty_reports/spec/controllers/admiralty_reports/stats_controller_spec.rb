@@ -8,7 +8,7 @@ module AdmiraltyReports
     render_views
 
     before do
-      allow_any_instance_of(AdmiraltyAuth::AuthorizedController).to receive(:authenticate_user!).and_return(true)
+      allow_any_instance_of(AdmiraltyAuth::AuthorizedController).to receive(:authenticate!).and_return(true)
     end
 
     let!(:tenants) do

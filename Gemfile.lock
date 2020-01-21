@@ -18,7 +18,7 @@ PATH
   remote: engines/admiralty_assets
   specs:
     admiralty_assets (9999.1.0.0)
-      bootstrap (~> 4.2.1)
+      bootstrap (~> 4.4.1)
       core
       jquery-rails
 
@@ -29,7 +29,6 @@ PATH
       admiralty_assets
       core
       google_sign_in (~> 1.1.2)
-      users
 
 PATH
   remote: engines/admiralty_reports
@@ -302,13 +301,6 @@ PATH
       will_paginate
 
 PATH
-  remote: engines/users
-  specs:
-    users (9999.1.0.0)
-      core
-      sorcery
-
-PATH
   remote: engines/validator
   specs:
     validator (9999.1.0.0)
@@ -390,7 +382,7 @@ GEM
       rake (>= 10.4, < 13.0)
     arel (9.0.0)
     ast (2.4.0)
-    autoprefixer-rails (9.7.2)
+    autoprefixer-rails (9.7.4)
       execjs
     aws-eventstream (1.0.3)
     aws-partitions (1.218.0)
@@ -435,7 +427,7 @@ GEM
       activerecord (>= 5.1)
     bootsnap (1.4.5)
       msgpack (~> 1.0)
-    bootstrap (4.2.1)
+    bootstrap (4.4.1)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
@@ -692,7 +684,7 @@ GEM
     pg_search (2.3.0)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
-    popper_js (1.14.5)
+    popper_js (1.16.0)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -1034,7 +1026,6 @@ DEPENDENCIES
   traceroute
   trucking!
   tzinfo-data
-  users!
   validator!
   webmock
   wheelhouse!

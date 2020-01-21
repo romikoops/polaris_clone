@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_14_112450) do
+ActiveRecord::Schema.define(version: 2020_01_19_131411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -2044,18 +2044,6 @@ ActiveRecord::Schema.define(version: 2020_01_14_112450) do
     t.index ["sandbox_id"], name: "index_users_on_sandbox_id"
     t.index ["tenant_id"], name: "index_users_on_tenant_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
-  end
-
-  create_table "users_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "email"
-    t.string "google_id"
-    t.datetime "last_activity_at"
-    t.datetime "last_login_at"
-    t.string "last_login_from_ip_address"
-    t.datetime "last_logout_at"
-    t.string "name"
-    t.datetime "updated_at", null: false
   end
 
   create_table "vehicles", force: :cascade do |t|

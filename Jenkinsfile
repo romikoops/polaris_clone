@@ -12,10 +12,10 @@ pipeline {
     ansiColor('xterm')
     buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '10'))
     podTemplate(inheritFrom: 'default')
+    preserveStashes()
+    retry(1)
     skipDefaultCheckout()
     timeout(45)
-
-    preserveStashes()
   }
 
   stages {
@@ -53,6 +53,8 @@ pipeline {
             }
 
             stage('RSpec') {
+              options { retry(1) }
+
               steps {
                 defaultCheckout()
                 container('ruby') { appRunner('app') }
@@ -113,6 +115,8 @@ pipeline {
             }
 
             stage('RSpec') {
+              options { retry(1) }
+
               steps {
                 container('ruby') { appRunner('engines') }
               }
@@ -169,6 +173,8 @@ pipeline {
             }
 
             stage('Jest') {
+              options { retry(1) }
+
               steps {
                 container('node') {
                   dir('client') {
@@ -204,6 +210,8 @@ pipeline {
     stage('Build') {
       parallel {
         stage('Backend') {
+          options { retry(1) }
+
           steps {
             dockerBuild(
               dir: '.',
@@ -216,6 +224,8 @@ pipeline {
         }
 
         stage('Frontend') {
+          options { retry(1) }
+
           steps {
             dockerBuild(
               dir: 'client/',

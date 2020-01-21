@@ -23,6 +23,10 @@ module AdmiraltyAssets
       g.view_specs          false
     end
 
+    initializer :assets do |app|
+      app.config.assets.precompile += %w( admiralty_assets/logo.png )
+    end
+
     initializer :append_migrations do |app|
       config.paths['db/migrate'].expanded.each do |expanded_path|
         app.config.paths['db/migrate'] << expanded_path
