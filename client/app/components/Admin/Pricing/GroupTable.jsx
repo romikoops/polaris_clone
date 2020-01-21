@@ -23,14 +23,14 @@ class AdminPricesGroupTable extends PureComponent {
     ) {
       return (
         <div className={styles.nested_table}>
-          <AdminRangeFeeTable row={row} className={styles.nested_table} />
+          <AdminRangeFeeTable row={row.original.data} className={styles.nested_table} />
         </div>
       )
     }
 
     return (
       <div className={styles.nested_table}>
-        <AdminFeeTable row={row} className={styles.nested_table} />
+        <AdminFeeTable row={row.original.data} className={styles.nested_table} />
       </div>
     )
   }

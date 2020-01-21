@@ -6,7 +6,8 @@ require 'roo'
 RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
   let(:tenant) { FactoryBot.create(:tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-
+  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
+  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
   let!(:hub) { create(:gothenburg_hub, free_out: false, tenant: tenant, mandatory_charge: create(:mandatory_charge), nexus: create(:gothenburg_nexus)) }
   let(:local_charge) { create(:legacy_local_charge, hub: hub, tenant: tenant) }
   let!(:local_charge_headers) do
@@ -79,7 +80,7 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
       nil
     ]
   end
-  let(:result) { described_class.write_document(tenant: tenant, file_name: 'test.xlsx') }
+  let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx') }
   let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
   let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 

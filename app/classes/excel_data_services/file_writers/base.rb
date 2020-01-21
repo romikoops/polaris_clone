@@ -116,10 +116,6 @@ module ExcelDataServices
         raw_headers.map(&:upcase)
       end
 
-      def build_raw_headers(_sheet_name, _rows_data)
-        raise NotImplementedError, "This method must be implemented in #{self.class.name}."
-      end
-
       def header_format
         @header_format ||= xlsx.add_format(bold: 1)
       end

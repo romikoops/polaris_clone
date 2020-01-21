@@ -16,27 +16,20 @@ import AdminPromptConfirm from '../Prompt/Confirm'
 
 class AdminPricesGroupLocalCharges extends PureComponent {
   static determineFeeTable (row) {
-    const adjRow = {
-      ...row,
-      original: {
-        ...row.original,
-        data: row.original.fees
-      }
-    }
     if (
       Object.values(row.original.fees)
         .some(val => val.range && val.range.length > 0)
     ) {
       return (
         <div className={styles.nested_table}>
-          <AdminRangeFeeTable row={adjRow} className={styles.nested_table} isLocalCharge />
+          <AdminRangeFeeTable row={row.original.fees} className={styles.nested_table} isLocalCharge />
         </div>
       )
     }
 
     return (
       <div className={styles.nested_table}>
-        <AdminFeeTable row={adjRow} className={styles.nested_table} isLocalCharge />
+        <AdminFeeTable row={row.original.fees} className={styles.nested_table} isLocalCharge />
       </div>
     )
   }

@@ -7,7 +7,8 @@ RSpec.describe ExcelDataServices::FileWriters::OceanLcl do
   let(:tenant) { FactoryBot.create(:tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:itinerary) { create(:gothenburg_shanghai_itinerary) }
-
+  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
+  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
   let!(:pricing_headers) do
     (ExcelDataServices::Validators::HeaderChecker::VARIABLE | ExcelDataServices::FileWriters::Base::HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES).map(&:upcase).map(&:to_s)
   end
@@ -65,7 +66,7 @@ RSpec.describe ExcelDataServices::FileWriters::OceanLcl do
 
   context 'when all pricings are valid' do
     let!(:pricing) { create(:legacy_lcl_pricing, tenant: tenant, itinerary: itinerary) }
-    let(:result) { described_class.write_document(tenant: tenant, file_name: 'test.xlsx') }
+    let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx') }
     let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
     let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
     describe '.perform' do
@@ -85,7 +86,7 @@ RSpec.describe ExcelDataServices::FileWriters::OceanLcl do
 
     let(:group) { create(:tenants_group, tenant: tenants_tenant, name: 'TEST') }
     let!(:pricing) { create(:lcl_pricing, tenant: tenant, group_id: group.id, itinerary: itinerary) }
-    let(:result) { described_class.write_document(tenant: tenant, file_name: 'test.xlsx') }
+    let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx') }
     let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
     let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
