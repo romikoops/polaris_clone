@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import Fuse from 'fuse.js'
 import { withNamespaces } from 'react-i18next'
-import { camelCase, uniqBy } from 'lodash'
+import { camelCase, uniqBy, values } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -173,6 +173,17 @@ class Autocomplete extends PureComponent {
     this.handleAddress(results[highlightIndex])
   }
 
+  mandatoryTrucking (target) {
+    const { scope } = this.props
+    const { carriage_options } = scope
+
+    if (target === 'origin') {
+      return values(carriage_options.pre_carriage).includes('mandatory')
+    }
+
+    return values(carriage_options.on_carriage).includes('mandatory')
+  }
+
   combinedResults () {
     const {
       areaResults, hubResults, addressResults
@@ -195,7 +206,7 @@ class Autocomplete extends PureComponent {
     }
 
     const addressResultsWithHeader = addressSeparator.concat(addressResultSlice)
-    if (hubsResultsSliced.length > 0) {
+    if (hubsResultsSliced.length > 0 && !this.mandatoryTrucking(target)) {
       return addressResultsWithHeader.concat(portSeparator).concat(hubsResultsSliced)
     }
 
