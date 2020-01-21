@@ -211,7 +211,9 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
                 specific_identifier: "#{mot}_#{new_load_type}".camelcase,
                 file_name: file_name,
                 sandbox: @sandbox,
-                group_id: group_id }
+                group_id: group_id,
+                user: Tenants::User.find_by(legacy_id: current_user.id)
+              }
     downloader = ExcelDataServices::Loaders::Downloader.new(options)
     document = downloader.perform
 

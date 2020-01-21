@@ -59,10 +59,11 @@ module ExcelDataServices
         new(options).perform
       end
 
-      def initialize(tenant:, file_name:, sandbox: nil)
+      def initialize(tenant:, file_name:, user:, sandbox: nil)
         @tenant = tenant
+        @user = user
         @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant&.id)
-        @scope = ::Tenants::ScopeService.new(tenant: tenants_tenant).fetch
+        @scope = ::Tenants::ScopeService.new(tenant: tenants_tenant, target: user).fetch
         @file_name = file_name.remove(/.xlsx$/) + '.xlsx'
         @xlsx = nil
         @sandbox = sandbox
