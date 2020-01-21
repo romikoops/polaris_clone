@@ -390,8 +390,9 @@ class Autocomplete extends PureComponent {
   }
 
   clearAddress () {
-    const { bookingProcessDispatch, target } = this.props
+    const { bookingProcessDispatch, target, clearCarriage } = this.props
     bookingProcessDispatch.updateShipment(target, {})
+    clearCarriage(target)
   }
 
   handleArea (location) {

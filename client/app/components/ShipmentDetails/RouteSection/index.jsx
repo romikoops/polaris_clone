@@ -37,6 +37,7 @@ class RouteSection extends React.PureComponent {
     this.handleInputBlur = this.handleInputBlur.bind(this)
     this.handleDropdownSelect = this.handleDropdownSelect.bind(this)
     this.handleAutocompleteTrigger = this.handleAutocompleteTrigger.bind(this)
+    this.clearCarriage = this.clearCarriage.bind(this)
     this.handleTruckingDetailsChange = this.handleTruckingDetailsChange.bind(this)
     this.handleClickCollapser = this.handleClickCollapser.bind(this)
     this.updateCollapsedAddressFields = this.updateCollapsedAddressFields.bind(this)
@@ -300,6 +301,18 @@ class RouteSection extends React.PureComponent {
         }
       }
     ))
+    this.clearCarriage(target)
+  }
+
+  clearCarriage (target) {
+    const { bookingProcessDispatch, shipment } = this.props
+
+    if (target === 'origin' && shipment.preCarriage) {
+      bookingProcessDispatch.updateShipment('preCarriage', false)
+    }
+    if (target === 'destination' && shipment.onCarriage) {
+      bookingProcessDispatch.updateShipment('onCarriage', false)
+    }
   }
 
   updateTruckingAvailability (target, value) {
@@ -412,6 +425,7 @@ class RouteSection extends React.PureComponent {
                 onInputBlur: this.handleInputBlur,
                 onDropdownSelect: (...args) => this.handleDropdownSelect(...args, setMarker),
                 onAutocompleteTrigger: (...args) => this.handleAutocompleteTrigger(...args, setMarker),
+                clearCarriage: (...args) => this.clearCarriage(...args),
                 origins,
                 destinations,
                 theme,

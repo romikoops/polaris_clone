@@ -37,6 +37,7 @@ function AddressFields ({
   onAutocompleteTrigger,
   onInputBlur,
   formData,
+  clearCarriage,
   t,
   countries,
   collapsed,
@@ -60,6 +61,7 @@ function AddressFields ({
         target={target}
         hubOptions={getOptions(availableTargets)}
         handleHubSelect={handleHubSelect}
+        clearCarriage={clearCarriage}
       />
       <div
         className={`
