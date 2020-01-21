@@ -173,7 +173,7 @@ module ExcelDataServices
       VARIABLE = %i[
         group_id
         group_name
-      ]
+      ].freeze
 
       attr_reader :data_restructurer_name, :errors
 
@@ -212,7 +212,7 @@ module ExcelDataServices
       attr_reader :sheet_name, :parsed_headers
 
       def determine_data_restructurer_name_and_headers
-        data_restructurer_names.each do |restructurer_name|
+        data_restructurer_names.reverse_each do |restructurer_name|
           static_headers = headers_from_data_restructurer_name(restructurer_name)
           static_size = static_headers.size
           parsed_static_part = parsed_headers & static_headers
