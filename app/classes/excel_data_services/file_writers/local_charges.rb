@@ -133,6 +133,7 @@ module ExcelDataServices
       def sort!(data) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         data.sort_by! do |h|
           [
+            h[:group_id] || '',
             h[:mot] || '',
             h[:direction] || '',
             h[:country] || '',
