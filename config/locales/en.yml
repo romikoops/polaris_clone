@@ -154,3 +154,7 @@ en:
       http_code: 422
       code: 1021
       message: 'There was an error mapping data'
+    contacts_redundancy_error:
+      http_code: 422
+      code: 1023
+      message: 'Shipper and Consignee cannot be the same contacts'

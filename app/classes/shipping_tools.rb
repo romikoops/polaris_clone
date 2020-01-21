@@ -7,6 +7,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
   InternalError = Class.new(StandardError)
   ShipmentNotFound = Class.new(StandardError)
   DataMappingError = Class.new(StandardError)
+  ContactsRedundancyError = Class.new(StandardError)
 
   def self.create_shipments_from_quotation(shipment, results, sandbox = nil)
     main_quote = ShippingTools.handle_existing_quote(shipment, results, sandbox)
@@ -244,11 +245,15 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
     contact_address = Address.create_and_geocode(contact_address_params(resource).merge(sandbox: sandbox))
     contact_params = contact_params(resource, contact_address.id)
     contact = search_contacts(contact_params, current_user, sandbox)
-    shipment.shipment_contacts.find_or_create_by!(
+
+    consignee = shipment.shipment_contacts.find_or_create_by(
       contact_id: contact.id,
       contact_type: 'consignee',
       sandbox: sandbox
     )
+
+    raise ApplicationError::ContactsRedundancyError if consignee.invalid?
+
     consignee = { data: contact, address: contact_address.to_custom_hash }
     # NOT CORRECT:UserAddress.create(user: current_user, address: contact_address) if shipment.import?
 

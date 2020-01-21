@@ -322,7 +322,7 @@ export default function shipment (state = {}, action) {
         ...state,
         error: {
           ...state.error,
-          stage3: [action.error]
+          stage4: [action.error]
         },
         loading: false
       }

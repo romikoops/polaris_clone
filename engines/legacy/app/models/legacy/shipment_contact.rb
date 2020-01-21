@@ -8,6 +8,8 @@ module Legacy
 
     belongs_to :shipment
     belongs_to :contact
+
+    validates :contact_id, uniqueness: { scope: :shipment_id }
   end
 end
 

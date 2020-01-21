@@ -61,6 +61,45 @@ function getOffers (data, redirect) {
   }
 }
 
+function setShipmentContacts (data) {
+  function request (shipmentData) {
+    return {
+      type: shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST,
+      shipmentData
+    }
+  }
+  function success (shipmentData) {
+    return {
+      type: shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS,
+      shipmentData
+    }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request(data))
+
+    return fetch(
+      `${getTenantApiUrl()}/shipments/${data.shipment.id}/update_shipment`,
+      requestOptions('POST', { 'Content-Type': 'application/json' }, JSON.stringify(data))
+    )
+      .then(resp => resp.json())
+      .then((resp) => {
+        if (!resp.success) {
+          dispatch(failure(resp.message))
+
+          return
+        }
+
+        const shipmentData = resp.data
+        dispatch(success(shipmentData))
+        dispatch(push(`/booking/${shipmentData.shipment.id}/finish_booking`))
+      })
+  }
+}
+
 // Old format
 function newShipment (type, redirect, reused) {
   function request (shipmentData, isReused) {
@@ -296,39 +335,6 @@ function sendQuotes (data) {
   }
 }
 
-function setShipmentContacts (data) {
-  function request (shipmentData) {
-    return {
-      type: shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST,
-      shipmentData
-    }
-  }
-  function success (shipmentData) {
-    return {
-      type: shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS,
-      shipmentData
-    }
-  }
-  function failure (error) {
-    return { type: shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request(data))
-
-    shipmentService.setShipmentContacts(data).then(
-      (resp) => {
-        const shipmentData = resp.data
-        dispatch(success(shipmentData))
-        dispatch(push(`/booking/${shipmentData.shipment.id}/finish_booking`))
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
 function requestShipment (id) {
   function request (shipmentData) {
     return {

@@ -233,6 +233,7 @@ RSpec.describe ShippingTools do
             "ArgumentError": 'Something has gone wrong!'
           }
         end
+
         it 'rescues errors from the offer calculator service and spews the right messages' do
           offer_calculator_error_map.each do |key, message|
             allow(offer_calculator_double).to receive(:perform).and_raise(key.to_s.constantize)
@@ -319,7 +320,7 @@ RSpec.describe ShippingTools do
     let(:user_params) do
       {
         address: { street: 'Avenyen', streetNumber: '7', zipCode: '', city: 'Gothenburg', country: 'Sweden' },
-        contact: { companyName: 'ItsMyCargo', firstName: 'Test2', lastName: 'shipper', email: 'test@itsmycargo.com', phone: '' }
+        contact: { companyName: 'ItsMyCargo', firstName: 'Test2', lastName: 'shipper', email: 'test@itsmycargo.com', phone: '123' }
       }
     end
     let(:shipment_data) do
@@ -331,7 +332,7 @@ RSpec.describe ShippingTools do
         incotermText: 'This is an incoterm text',
         shipper: ActionController::Parameters.new(
           address: { street: 'Brooktorkai', streetNumber: '7', zipCode: '', city: 'Hamburg', country: 'Germany' },
-          contact: { companyName: 'ItsMyCargo', firstName: 'Test', lastName: 'shipper', email: 'test@itsmycargo.com', phone: '' }
+          contact: { companyName: 'ItsMyCargo', firstName: 'Test', lastName: 'shipper', email: 'shipper_test@itsmycargo.com', phone: '123' }
         ),
         notifyees: [user_params],
         insurance: { isSelected: true },
@@ -339,17 +340,22 @@ RSpec.describe ShippingTools do
         addons: { customs_export_paper: { value: 12, currency: 'USD' } },
         consignee: ActionController::Parameters.new(
           address: { street: 'Avenyen', streetNumber: '7', zipCode: '', city: 'Gothenburg', country: 'Sweden' },
-          contact: { companyName: 'ItsMyCargo', firstName: 'Test2', lastName: 'shipper', email: 'test@itsmycargo.com', phone: '' }
+          contact: { companyName: 'ItsMyCargo', firstName: 'Test2', lastName: 'shipper', email: 'consignee_test@itsmycargo.com', phone: '123' }
         ),
         notes: []
       }
     end
     let(:params) { ActionController::Parameters.new(shipment_id: shipment.id, shipment: shipment_data) }
+    let(:contact_params) do
+      ActionController::Parameters.new(
+        address: { street: 'Brooktorkai', streetNumber: '7', zipCode: '', city: 'Hamburg', country: 'Germany' },
+        contact: { companyName: 'ItsMyCargo', firstName: 'Test', lastName: 'shipper', email: 'shipper_test@itsmycargo.com', phone: '123' }
+      )
+    end
 
     before do
       FactoryBot.create(:charge_breakdown, shipment: shipment, trip: trip)
       allow(Address).to receive(:create_and_geocode).and_return(address)
-      allow(described_class).to receive(:search_contacts).and_return(contact)
       %w[EUR USD].each do |currency|
         stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
           .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26 } }.to_json, headers: {})
@@ -361,6 +367,14 @@ RSpec.describe ShippingTools do
       %i[cargoItems containers aggregatedCargo addresses consignee notifyees shipper documents cargoItemTypes shipment].each do |key|
         expect(result.key?(key)).to be(true)
       end
+    end
+
+    it 'does not allow shipper and consignee to be the same contact' do
+      params = ActionController::Parameters.new(shipment_id: shipment.id, shipment: {
+                                                  shipper: contact_params,
+                                                  consignee: contact_params
+                                                })
+      expect { described_class.update_shipment(params, current_user) }.to raise_error(ApplicationError)
     end
   end
 
@@ -430,8 +444,8 @@ RSpec.describe ShippingTools do
                destination_nexus: destination_hub&.nexus,
                load_type: 'cargo_item',
                trucking: { "pre_carriage": { "truck_type": "default", "trucking_time_in_seconds": 10_000 } }
-              )
-      end
+        )
+     end
 
       let!(:document) { create(:documents, shipment_id: lcl_shipment.id) }
 
@@ -496,12 +510,12 @@ RSpec.describe ShippingTools do
       let(:old_trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
       let(:old_shipment) do
         create(:shipment,
-          trip: old_trip,
-          origin_hub_id: origin_hub.id,
-          destination_hub_id: destination_hub.id,
-          with_breakdown: true,
-          meta: {}
-        )
+               trip: old_trip,
+               origin_hub_id: origin_hub.id,
+               destination_hub_id: destination_hub.id,
+               with_breakdown: true,
+               meta: {}
+              )
       end
       let(:quote) { create(:quotation, original_shipment_id: old_shipment.id) }
       let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
@@ -530,13 +544,13 @@ RSpec.describe ShippingTools do
       let(:old_trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
       let(:old_shipment) do
         create(:shipment,
-          trip: old_trip,
-          origin_hub_id: origin_hub.id,
-          destination_hub_id: destination_hub.id,
-          with_breakdown: true,
-          load_type: 'cargo_item',
-          meta: {}
-        )
+               trip: old_trip,
+               origin_hub_id: origin_hub.id,
+               destination_hub_id: destination_hub.id,
+               with_breakdown: true,
+               load_type: 'cargo_item',
+               meta: {}
+              )
       end
       let!(:metadatum) { create(:pricings_metadatum, tenant: tenants_tenant, charge_breakdown_id: old_shipment.charge_breakdowns.first.id)}
       let(:quote) { create(:quotation, original_shipment_id: old_shipment.id) }
@@ -566,13 +580,13 @@ RSpec.describe ShippingTools do
       let(:old_trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
       let!(:old_shipment) do
         create(:shipment,
-          trip: old_trip,
-          origin_hub_id: origin_hub.id,
-          destination_hub_id: destination_hub.id,
-          load_type: 'cargo_item',
-          meta: {},
-          with_aggregated_cargo: true
-        )
+               trip: old_trip,
+               origin_hub_id: origin_hub.id,
+               destination_hub_id: destination_hub.id,
+               load_type: 'cargo_item',
+               meta: {},
+               with_aggregated_cargo: true
+              )
       end
       let(:charge_breakdown) { create(:charge_breakdown, shipment: old_shipment) }
       let!(:metadatum) { create(:pricings_metadatum, tenant: tenants_tenant, charge_breakdown_id: charge_breakdown.id)}

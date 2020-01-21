@@ -92,16 +92,6 @@ function sendQuotes (data) {
   return fetch(url, requestOptions).then(handleResponse)
 }
 
-function setShipmentContacts (data) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }
-  const url = `${getTenantApiUrl()}/shipments/${data.shipment.id}/update_shipment`
-
-  return fetch(url, requestOptions).then(handleResponse)
-}
 function requestShipment (id) {
   const requestOptions = {
     method: 'POST',
@@ -115,7 +105,7 @@ function getNotes (noteIds) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({itineraries: noteIds})
+    body: JSON.stringify({ itineraries: noteIds })
   }
   const url = `${getTenantApiUrl()}/notes/fetch`
 
@@ -195,7 +185,6 @@ export const shipmentService = {
   deleteDocument,
   getOffers,
   getStoredShipment,
-  setShipmentContacts,
   uploadDocument,
   requestShipment,
   updateCurrency,

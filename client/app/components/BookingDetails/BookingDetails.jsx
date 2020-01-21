@@ -11,6 +11,7 @@ import ContactSetter from '../ContactSetter/ContactSetter'
 import { RoundButton } from '../RoundButton/RoundButton'
 import RouteHubBox from '../RouteHubBox/RouteHubBox'
 import { isEmpty, camelizeKeys } from '../../helpers/objectTools'
+import Alert from '../Alert/Alert'
 
 import {
   trim,
@@ -354,7 +355,8 @@ export class BookingDetails extends Component {
       currencies,
       user,
       t,
-      tenant
+      tenant,
+      messages
     } = this.props
     if (!shipmentData) return ''
 
@@ -465,12 +467,18 @@ export class BookingDetails extends Component {
       </div>
     )
 
+    let errorMessages = null
+    if (messages) {
+      errorMessages = messages.map(message => <Alert message={{ text: message, type: 'error' }} />)
+    }
+
     return (
       <div
         className={CONTAINER}
         style={{ paddingTop: '60px' }}
       >
         {maybeRouteHubBox}
+        { errorMessages }
         <div className={`${styles.wrapper_contact_setter} ${ROW(100)}`}>
           {ContactSetterComponent}
         </div>
