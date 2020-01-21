@@ -24,7 +24,6 @@ RSpec.describe ExcelDataServices::Validators::HeaderChecker do
         service_level
         load_type
         rate_basis
-        transit_time
         currency
         bas
         lss
@@ -53,7 +52,7 @@ RSpec.describe ExcelDataServices::Validators::HeaderChecker do
           validator.perform
           expect(validator.errors_and_warnings).to eq(
             [{ exception_class: ExcelDataServices::Validators::ValidationErrors::HeaderChecker,
-               reason: "The following headers of sheet \"Sheet1\" are not valid:\nCorrect static headers for this sheet are: \"EFFECTIVE_DATE, EXPIRATION_DATE, CUSTOMER_EMAIL, ORIGIN, COUNTRY_ORIGIN, DESTINATION, COUNTRY_DESTINATION, MOT, CARRIER, SERVICE_LEVEL, LOAD_TYPE, RATE_BASIS, TRANSIT_TIME, CURRENCY\",\nMissing static headers are               : \"EFFECTIVE_DATE\",\nUnrecognized static headers are          : \"\"",
+               reason: "The following headers of sheet \"Sheet1\" are not valid:\nCorrect static headers for this sheet are: \"EFFECTIVE_DATE, EXPIRATION_DATE, CUSTOMER_EMAIL, ORIGIN, COUNTRY_ORIGIN, DESTINATION, COUNTRY_DESTINATION, MOT, CARRIER, SERVICE_LEVEL, LOAD_TYPE, RATE_BASIS, CURRENCY\",\nMissing static headers are               : \"EFFECTIVE_DATE\",\nUnrecognized static headers are          : \"\"",
                row_nr: 1,
                sheet_name: 'Sheet1',
                type: :error }]

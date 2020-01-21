@@ -53,7 +53,6 @@ module ExcelDataServices
           service_level
           load_type
           rate_basis
-          transit_time
           currency
         ].freeze
 
