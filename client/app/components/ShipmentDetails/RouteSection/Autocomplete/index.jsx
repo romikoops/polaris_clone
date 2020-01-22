@@ -223,7 +223,7 @@ class Autocomplete extends PureComponent {
 
     let newIndex = highlightIndex + delta
 
-    if (newIndex > length) {
+    if (newIndex > length || combinedResults[newIndex] === undefined) {
       newIndex = 0
     }
 
