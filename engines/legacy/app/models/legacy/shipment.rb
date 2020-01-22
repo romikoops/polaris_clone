@@ -217,13 +217,7 @@ module Legacy
     end
 
     def find_contacts(type)
-      Contact.find_by_sql("
-        SELECT * FROM contacts
-        JOIN  shipment_contacts ON shipment_contacts.contact_id   = contacts.id
-        JOIN  shipments         ON shipments.id                   = shipment_contacts.shipment_id
-        WHERE shipments.id = #{id}
-        AND   shipment_contacts.contact_type = '#{type}'
-      ")
+      Contact.joins(:shipment_contacts).where(shipment_contacts: { contact_type: type, shipment_id: id })
     end
 
     def planned_pickup_date_is_a_datetime?

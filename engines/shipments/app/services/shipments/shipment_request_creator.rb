@@ -58,27 +58,10 @@ module Shipments
     end
 
     def build_contact(legacy_type:, contact_type:)
-      legacy_contact = legacy_shipment.shipment_contacts.find_by(contact_type: legacy_type)
-      legacy_contact_attrs = legacy_contact.contact.attributes
-                                           .merge(legacy_contact.contact.address.attributes)
-                                           .symbolize_keys
-                                           .slice(
-                                             :city, :company_name, :email, :first_name, :geocoded_address, :last_name,
-                                             :phone, :premise, :province, :street, :street_number
-                                           )
-
-      address = legacy_contact.contact.address
-
-      addressbook_contact = AddressBook::Contact.find_or_initialize_by(
-        legacy_contact_attrs.merge(
-          postal_code: address.zip_code,
-          user_id: Tenants::User.find_by(legacy_id: legacy_contact.contact.user.id).id,
-          country_code: address.country&.code || ''
-        )
-      )
+      legacy_shipment_contact = legacy_shipment.shipment_contacts.find_by(contact_type: legacy_type)
 
       shipment_request_contact = ShipmentRequestContact.find_or_initialize_by(
-        contact: addressbook_contact,
+        contact: addressbook_contact(legacy_shipment_contact: legacy_shipment_contact),
         shipment_request: shipment_request,
         type: "Shipments::ShipmentRequestContacts::#{contact_type}"
       )
@@ -92,33 +75,46 @@ module Shipments
     end
 
     def build_notifyees
-      legacy_shipment.shipment_contacts.where(contact_type: 'notifyee').each do |legacy_contact|
-        legacy_contact_attrs = legacy_contact.contact.attributes
-                                             .merge(legacy_contact.contact.address.attributes)
-                                             .symbolize_keys
-                                             .slice(
-                                               :city, :company_name, :email, :first_name, :geocoded_address, :last_name,
-                                               :phone, :premise, :province, :street, :street_number
-                                             )
-
-        address = legacy_contact.contact.address
-
-        addressbook_contact = AddressBook::Contact.find_or_initialize_by(
-          legacy_contact_attrs.merge(
-            postal_code: address.zip_code,
-            user_id: Tenants::User.find_by(legacy_id: legacy_contact.contact.user.id).id,
-            country_code: address.country&.code || ''
-          )
-        )
-
+      legacy_shipment.shipment_contacts.where(contact_type: 'notifyee').find_each do |legacy_shipment_contact|
         shipment_request_contact = ShipmentRequestContact.find_or_initialize_by(
-          contact: addressbook_contact,
+          contact: addressbook_contact(legacy_shipment_contact: legacy_shipment_contact),
           shipment_request: shipment_request,
           type: 'Shipments::ShipmentRequestContacts::Notifyee'
         )
 
         @shipment_request.notifyees << shipment_request_contact
       end
+    end
+
+    def addressbook_contact(legacy_shipment_contact:)
+      legacy_contact = legacy_shipment_contact.contact
+      address = legacy_contact.address
+      user_id = Tenants::User.find_by(legacy_id: legacy_contact.user_id).id
+
+      legacy_contact_attrs = legacy_contact.attributes
+                                           .merge(address.attributes)
+                                           .symbolize_keys
+                                           .slice(
+                                             :city, :company_name, :email, :first_name, :geocoded_address, :last_name,
+                                             :phone, :premise, :province, :street, :street_number
+                                           )
+
+      addressbook_contact = AddressBook::Contact.find_or_initialize_by(
+        legacy_contact_attrs.slice(:first_name, :last_name, :email, :phone)
+        .merge(
+          user_id: user_id
+        )
+      )
+
+      addressbook_contact.update(
+        legacy_contact_attrs
+        .merge(
+          postal_code: address.zip_code,
+          user_id: user_id,
+          country_code: address.country&.code || ''
+        )
+      )
+      addressbook_contact
     end
   end
 end
