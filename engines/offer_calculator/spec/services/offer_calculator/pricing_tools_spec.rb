@@ -214,6 +214,15 @@ RSpec.describe OfferCalculator::PricingTools do
       expect(local_charges_data.values.length).to eq(1)
     end
 
+    it 'returns the correct number of charges for single cargo classes (LCL & BASE PRICING & CONSOLIDATION)' do
+      lcl = FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id)
+      scope = FactoryBot.create(:tenants_scope, target: tenants_user, content: { base_pricing: true, consolidation: { cargo: { backend: true } } })
+      FactoryBot.create(:export_margin, applicable: tenants_tenant, tenant: tenants_tenant)
+      local_charges_data, metadata = described_class.new(user: user, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user)
+      expect(local_charges_data.values.first.length).to eq(2)
+      expect(local_charges_data.values.length).to eq(1)
+    end
+
     it 'returns the correct number of charges for single cargo classes (LCL & BASE PRICING & multiple groups)' do
       user_mg = FactoryBot.create(:legacy_user, tenant: tenant)
       tenants_user_mg = Tenants::User.find_by(legacy_id: user_mg.id)

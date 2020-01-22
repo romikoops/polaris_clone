@@ -816,7 +816,8 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       new_charge_breakdown = charge_breakdown.dup
       new_charge_breakdown.update(shipment: new_shipment)
       metadatum = Pricings::Metadatum.find_by(charge_breakdown_id: charge_breakdown.id)
-      metadatum.update(charge_breakdown_id: new_charge_breakdown.id) if metadatum
+      new_metadatum = metadatum.dup.tap {|meta| meta.charge_breakdown_id = new_charge_breakdown.id; meta.save } if metadatum
+
       new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
       %w(import export cargo).each do |charge_key|
         next if new_charge_breakdown.charge(charge_key).nil?
@@ -829,13 +830,21 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
           new_charge_category.cargo_unit_id = charge_category_map[old_charge_category.cargo_unit_id]
           new_charge_category.save!
 
-          if metadatum
-            metadatum.breakdowns.where(cargo_unit_id: old_charge_category.cargo_unit_id)
-                   .update_all(cargo_unit_id: charge_category_map[old_charge_category.cargo_unit_id])
+          if metadatum && new_metadatum
+            Pricings::Breakdown.where(metadatum_id: metadatum.id, cargo_unit_id: old_charge_category.cargo_unit_id)
+                               .each do |breakdown|
+                                 breakdown.dup.tap do |breakd|
+                                   breakd.update(
+                                     metadatum_id: new_metadatum.id,
+                                     cargo_unit_id: charge_category_map[old_charge_category.cargo_unit_id]
+                                   )
+                                 end
+                               end
           end
           new_charge.children_charge_category = new_charge_category
           new_charge.save!
         end
+
       end
     end
 

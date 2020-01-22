@@ -40,23 +40,32 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
     charges_for_filtering = []
     all_charges_with_metadata = []
-    cargos.each do |cargo|
-      load_type = cargo.is_a?(Legacy::Container) ? cargo.size_class : 'lcl'
+    cargos_for_loop = if @scope.dig(:consolidation, :cargo, :backend) && @shipment.load_type == 'cargo_item'
+                        [{ load_type: 'lcl', cargo_id: 'cargo_item' }]
+                      else
+                        cargos.map do |cargo|
+                          {
+                            load_type: cargo.respond_to?(:size_class) ? cargo.size_class : 'lcl',
+                            cargo_id: cargo.id
+                          }
+                        end
+                      end
+    cargos_for_loop.each do |cargo_data|
       if @scope['base_pricing']
         group_ids = user.group_ids | [nil]
         group_ids.each do |group_id|
           charge = effective_local_charges.find_by(
             group_id: group_id,
-            load_type: load_type,
+            load_type: cargo_data[:load_type],
             counterpart_hub_id: counterpart_hub_id
           )
           charge ||= effective_local_charges.find_by(
             group_id: group_id,
-            load_type: load_type,
+            load_type: cargo_data[:load_type],
             counterpart_hub_id: nil
           )
           charges, local_charge_metadata =
-            get_manipulated_local_charge(charge, cargos.first.shipment, schedules, cargo.id)
+            get_manipulated_local_charge(charge, @shipment, schedules, cargo_data[:cargo_id])
 
           if charges.present?
             charges.each do |charge|
@@ -71,12 +80,12 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
         [user.pricing_id, nil].each do |user_pricing_id|
           charge = effective_local_charges.find_by(
             user_id: user_pricing_id,
-            load_type: load_type,
+            load_type: cargo_data[:load_type],
             counterpart_hub_id: counterpart_hub_id
           )
           charge ||= effective_local_charges.find_by(
             user_id: user_pricing_id,
-            load_type: load_type,
+            load_type: cargo_data[:load_type],
             counterpart_hub_id: nil
           )
 
@@ -90,18 +99,21 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
     local_charge_by_dates = grouped_charges.each_with_object({}) do |(dates, values), hash|
       shipment_charges = {
-          'load_type' => 'shipment',
-          'fees' => {},
-          'flat_margins' => {}
-        }.merge(values.first.slice(:effective_date, :expiration_date, :metadata_id))
+        'load_type' => 'shipment',
+        'fees' => {},
+        'flat_margins' => {}
+      }.merge(values.first.slice(:effective_date, :expiration_date, :metadata_id))
       filtered_charges = values.compact.map do |filter_charge|
-
         next if filter_charge['fees'].empty?
 
         filter_charge['fees'].each do |fk, fee|
-          if %w(PER_SHIPMENT PER_BILL PER_SHIPMENT_TON).include?(Legacy::RateBasis.get_internal_key(fee['rate_basis']))
-            shipment_charges['fees'][fk] = filter_charge['fees'].delete(fk)
-            shipment_charges['flat_margins'][fk] = filter_charge['flat_margins'].delete(fk) if filter_charge.dig(:charge, 'flat_margins', fk).present?
+          unless %w[PER_SHIPMENT PER_BILL PER_SHIPMENT_TON].include?(Legacy::RateBasis.get_internal_key(fee['rate_basis']))
+            next
+          end
+
+          shipment_charges['fees'][fk] = filter_charge['fees'].delete(fk)
+          if filter_charge.dig(:charge, 'flat_margins', fk).present?
+            shipment_charges['flat_margins'][fk] = filter_charge['flat_margins'].delete(fk)
           end
         end
         filter_charge
@@ -152,7 +164,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def local_charge_calculation_block(charge_object, cargo_hash,  user)
+  def local_charge_calculation_block(charge_object, cargo_hash, user)
     totals = { 'total' => {} }
     charge_object.fetch('fees', {}).each do |key, fee|
       totals[key]             ||= { 'value' => 0, 'currency' => fee['currency'] }
@@ -169,7 +181,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
     converted = Legacy::CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     totals['total'] = { value: converted, currency: user.currency }
-    totals['key'] = cargo_hash.has_key?(:id) ?cargo_hash[:id] : charge_object['load_type']
+    totals['key'] = cargo_hash.key?(:id) ? cargo_hash[:id] : charge_object['load_type']
     totals['metadata_id'] = charge_object['metadata_id']
 
     totals
@@ -185,11 +197,10 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       hash[dates] = {} if unit_charges_array.empty?
       next if unit_charges_array.empty?
 
-      null_cargo_hash = { weight: 0, volume: 0, quantity: 0 }
       charge_results = unit_charges_array.map do |charge_object|
         next if charge_object['fees'].empty?
 
-        relevant_cargos = if %w(lcl shipment).include?(charge_object['load_type'])
+        relevant_cargos = if %w[lcl shipment].include?(charge_object['load_type'])
                             cargos
                           else
                             cargos.select { |c| c.size_class == charge_object['load_type'] }
@@ -197,22 +208,22 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
         cargo_hashes = cargo_hash_for_local_charges(relevant_cargos, consolidated_hash, @scope.fetch(:consolidation))
         cargo_hashes.map do |cargo_hash|
           local_charge_calculation_block(
-                      charge_object,
-                      cargo_hash,
-                      user
-                    )
+            charge_object,
+            cargo_hash,
+            user
+          )
         end
       end
       if shipment_charges
         charge_results << local_charge_calculation_block(
-            shipment_charges,
-            consolidated_hash,
-            user
-          )
+          shipment_charges,
+          consolidated_hash,
+          user
+        )
       end
       hash[dates] = charge_results.flatten.compact
     end
-    [ result, local_charge_metadata ]
+    [result, local_charge_metadata]
   end
 
   def calc_addon_charges(charge:, cargos:, user:, mode_of_transport:) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -251,10 +262,10 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     totals
   end
 
-  def determine_cargo_freight_price(cargo:, pricing:, user:, mode_of_transport:) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
+  def determine_cargo_freight_price(cargo:, pricing:, user:, mode_of_transport:)
     return nil if pricing.nil?
 
-    totals = Hash.new{|h, k| h[k] = { 'value' => 0, 'currency' => '' } }
+    totals = Hash.new { |h, k| h[k] = { 'value' => 0, 'currency' => '' } }
 
     pricing.keys.each do |k|
       fee = pricing[k].clone
