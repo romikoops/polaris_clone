@@ -1,0 +1,673 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`editing company is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start layout-wrap section_padding content_details"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-start layout-wrap margin_top margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:company
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-90 input_style"
+        name="company_name"
+        onChange={[Function]}
+        type="text"
+        value="FOO_COMPANY"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:firstName
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="first_name"
+        onChange={[Function]}
+        type="text"
+        value="John"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:lastName
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="last_name"
+        onChange={[Function]}
+        type="text"
+        value="Doe"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:email
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="email"
+        onChange={[Function]}
+        type="text"
+        value="foo@bar.baz"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:phone
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="phone"
+        onChange={[Function]}
+        type="text"
+        value="6345789"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        common:currency
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <NamedSelect
+        className="flex-100"
+        onChange={[Function]}
+        options={Array []}
+        placeholder="common:selectCurrency"
+        value="EUR"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`editing email is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start layout-wrap section_padding content_details"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-start layout-wrap margin_top margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:company
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-90 input_style"
+        name="company_name"
+        onChange={[Function]}
+        type="text"
+        value="FOO_COMPANY"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:firstName
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="first_name"
+        onChange={[Function]}
+        type="text"
+        value="John"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:lastName
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="last_name"
+        onChange={[Function]}
+        type="text"
+        value="Doe"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:vatNo
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="vat_number"
+        onChange={[Function]}
+        type="text"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:companyNumber
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="company_number"
+        onChange={[Function]}
+        type="text"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:phone
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="phone"
+        onChange={[Function]}
+        type="text"
+        value="6345789"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        common:currency
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <NamedSelect
+        className="flex-100"
+        onChange={[Function]}
+        options={Array []}
+        placeholder="common:selectCurrency"
+        value="EUR"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`editing name is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start layout-wrap section_padding content_details"
+>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:vatNo
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="vat_number"
+        onChange={[Function]}
+        type="text"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:companyNumber
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="company_number"
+        onChange={[Function]}
+        type="text"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:email
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="email"
+        onChange={[Function]}
+        type="text"
+        value="foo@bar.baz"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:phone
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="phone"
+        onChange={[Function]}
+        type="text"
+        value="6345789"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        common:currency
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <NamedSelect
+        className="flex-100"
+        onChange={[Function]}
+        options={Array []}
+        placeholder="common:selectCurrency"
+        value="EUR"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start layout-wrap section_padding content_details"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-start layout-wrap margin_top margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:company
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-90 input_style"
+        name="company_name"
+        onChange={[Function]}
+        type="text"
+        value="FOO_COMPANY"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:firstName
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="first_name"
+        onChange={[Function]}
+        type="text"
+        value="John"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:lastName
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="last_name"
+        onChange={[Function]}
+        type="text"
+        value="Doe"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:vatNo
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="vat_number"
+        onChange={[Function]}
+        type="text"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:companyNumber
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="company_number"
+        onChange={[Function]}
+        type="text"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:email
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="email"
+        onChange={[Function]}
+        type="text"
+        value="foo@bar.baz"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        user:phone
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <input
+        className="flex-none input_style"
+        name="phone"
+        onChange={[Function]}
+        type="text"
+        value="6345789"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-50 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start "
+    >
+      <sup
+        className="clip flex-none margin_label"
+        style={Object {}}
+      >
+        common:currency
+      </sup>
+    </div>
+    <div
+      className="input_box flex-100 layout-row layout-align-start-center "
+    >
+      <NamedSelect
+        className="flex-100"
+        onChange={[Function]}
+        options={Array []}
+        placeholder="common:selectCurrency"
+        value="EUR"
+      />
+    </div>
+  </div>
+</div>
+`;

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Formsy from 'formsy-react'
-import PropTypes from '../../prop-types'
+import { get } from 'lodash'
 import { authenticationActions } from '../../actions'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner'
@@ -36,6 +36,7 @@ class LoginPage extends React.Component {
       redirectUrl
     }))
   }
+
   handleInvalidSubmit () {
     if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
   }
@@ -54,13 +55,15 @@ class LoginPage extends React.Component {
   }
 
   render () {
-    const { loggingIn, theme } = this.props
+    const { loggingIn, theme, scope } = this.props
     const focusStyles = {
       borderColor: theme && theme.colors ? theme.colors.primary : 'black',
       borderWidth: '1.5px',
       borderRadius: '2px',
       margin: '-1px 0 29px 0'
     }
+    const allowForgotPassword = !get(scope, 'user_restrictions.profile.password')
+
     if (this.state.forgotPassword) {
       return <ForgotPassword focusStyles={focusStyles} theme={theme} />
     }
@@ -102,9 +105,12 @@ class LoginPage extends React.Component {
             required
           />
           <hr style={this.state.focus.password ? focusStyles : {}} />
-          <a onClick={() => this.renderForgotPassword()} className={styles.forget_password_link}>
+          { allowForgotPassword && (
+            <a onClick={() => this.renderForgotPassword()} className={styles.forget_password_link}>
             forgot password?
-          </a>
+            </a>
+          )
+          }
         </div>
         <div className={`form-group ${styles.form_group_submit_btn}`}>
           <RoundButton classNames="ccb_signin" text="Sign In" theme={theme} active />
@@ -116,10 +122,11 @@ class LoginPage extends React.Component {
 }
 
 function mapStateToProps (state) {
-  const { authentication } = state
+  const { authentication, app } = state
   const {
     loggingIn, loginAttempt, user, noRedirect, req, redirectUrl
   } = authentication
+  const { scope } = app.tenant
 
   return {
     loggingIn,
@@ -127,18 +134,9 @@ function mapStateToProps (state) {
     user,
     noRedirect,
     req,
-    redirectUrl
+    redirectUrl,
+    scope
   }
-}
-
-LoginPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  loggingIn: PropTypes.bool,
-  theme: PropTypes.theme,
-  loginAttempt: PropTypes.bool,
-  noRedirect: PropTypes.bool,
-  // eslint-disable-next-line react/forbid-prop-types
-  req: PropTypes.object
 }
 
 LoginPage.defaultProps = {

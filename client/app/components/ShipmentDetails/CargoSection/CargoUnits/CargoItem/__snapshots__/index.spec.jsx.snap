@@ -508,6 +508,15 @@ exports[`renders correcly 1`] = `
             "Demo is to discuss the validity of the presented prices with the product owners.",
           ],
           "total_dimensions": true,
+          "user_restrictions": Object {
+            "profile": Object {
+              "company": false,
+              "email": false,
+              "name": false,
+              "password": false,
+              "phone": false,
+            },
+          },
           "values": Object {
             "weight": Object {
               "decimals": 2,

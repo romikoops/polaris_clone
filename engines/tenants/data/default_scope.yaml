@@ -150,3 +150,10 @@ integrations:
   chainio:
     flow_id: ''
     api_key: ''
+user_restrictions:
+  profile:
+    password: false
+    name: false
+    email: false
+    company: false
+    currency: false

@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { isEmpty } from 'lodash'
+import {
+  isEmpty, every, values, get
+} from 'lodash'
 import { v4 as uuidV4 } from 'uuid'
 import styles from './UserAccount.scss'
 import ProfileBox from './ProfileBox'
@@ -147,7 +149,7 @@ class UserProfile extends Component {
     const deleteAccountModal = showDeleteAccountModal
       ? <DeleteAccountModal closeModal={this.closeDeleteAccountModal} tenant={tenant} user={user} theme={theme} />
       : ''
-
+    const editable = values(get(scope, ['user_restrictions', 'profile'])).includes(false)
     const editButton = editBool
       ? (
         <div className={`flex-30 layout-row layout-align-end-center layout-wrap ${styles.edit_button}`}>
@@ -205,7 +207,7 @@ class UserProfile extends Component {
           <div className="flex-100 layout-row layout-wrap layout-align-space-between-stretch">
             <GreyBox
               title={t('user:yourProfile')}
-              titleAction={editButton}
+              titleAction={editable && editButton}
               wrapperClassName="flex layout-row layout-align-start-center"
               contentClassName="layout-row layout-wrap flex"
               content={(
@@ -281,35 +283,38 @@ class UserProfile extends Component {
                       />
                     </div>
                   </div>
-                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center layout-wrap">
-                    <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center layout-wrap">
-                      <div className="flex-66 layout-row layout-align-start-center">
-                        <p className="flex-none">
-                          {t('user:changeMyPassword')}
-                        </p>
-                      </div>
-                      <div className="flex-33 layout-row layout-align-start">
-
-                        <RoundButton
-                          theme={theme}
-                          size="full"
-                          active
-                          text={t('user:request')}
-                          handleNext={this.handlePasswordChange}
-                        />
-                      </div>
-                      <div className={`${styles.spinner} flex-50 layout-row layout-align-start-start`}>
-                        { authentication.passwordResetRequested && <LoadingSpinner size="extra_small" /> }
-                        { authentication.passwordResetSent && (
-                          <div className="flex-100 layout-row layout-align-center-start padding_top">
-                            <p>
-                              {t('user:checkForPassword')}
+                  {
+                    !get(scope, 'user_restrictions.profile.password') && (
+                      <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center layout-wrap">
+                        <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center layout-wrap">
+                          <div className="flex-66 layout-row layout-align-start-center">
+                            <p className="flex-none">
+                              {t('user:changeMyPassword')}
                             </p>
                           </div>
-                        )}
+                          <div className="flex-33 layout-row layout-align-start">
+
+                            <RoundButton
+                              theme={theme}
+                              size="full"
+                              active
+                              text={t('user:request')}
+                              handleNext={this.handlePasswordChange}
+                            />
+                          </div>
+                          <div className={`${styles.spinner} flex-50 layout-row layout-align-start-start`}>
+                            { authentication.passwordResetRequested && <LoadingSpinner size="extra_small" /> }
+                            { authentication.passwordResetSent && (
+                              <div className="flex-100 layout-row layout-align-center-start padding_top">
+                                <p>
+                                  {t('user:checkForPassword')}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    )}
                 </div>
               )}
             />

@@ -1,5 +1,409 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`reset passowrd is hidden 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-stretch username_title"
+    >
+      <div
+        className="layout-row flex-none layout-align-center-center"
+      >
+        <i
+          className="fa fa-user clip bigProfile"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+      <div
+        className="layout-align-start-center layout-row flex"
+      >
+        <p>
+          Hello,
+           
+        </p>
+        <h1
+          className="flex-none cli"
+        >
+          John
+           
+          Doe
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section "
+  >
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100"
+          >
+            <EditProfileBox
+              close={[Function]}
+              currencyOptions={
+                Array [
+                  Object {
+                    "label": "EUR",
+                    "value": "EUR",
+                  },
+                  Object {
+                    "label": "AUD",
+                    "value": "AUD",
+                  },
+                  Object {
+                    "label": "BGN",
+                    "value": "BGN",
+                  },
+                  Object {
+                    "label": "BRL",
+                    "value": "BRL",
+                  },
+                  Object {
+                    "label": "CAD",
+                    "value": "CAD",
+                  },
+                  Object {
+                    "label": "CHF",
+                    "value": "CHF",
+                  },
+                  Object {
+                    "label": "CNY",
+                    "value": "CNY",
+                  },
+                  Object {
+                    "label": "CZK",
+                    "value": "CZK",
+                  },
+                  Object {
+                    "label": "DKK",
+                    "value": "DKK",
+                  },
+                  Object {
+                    "label": "GBP",
+                    "value": "GBP",
+                  },
+                  Object {
+                    "label": "HKD",
+                    "value": "HKD",
+                  },
+                  Object {
+                    "label": "HRK",
+                    "value": "HRK",
+                  },
+                  Object {
+                    "label": "HUF",
+                    "value": "HUF",
+                  },
+                  Object {
+                    "label": "IDR",
+                    "value": "IDR",
+                  },
+                  Object {
+                    "label": "ILS",
+                    "value": "ILS",
+                  },
+                  Object {
+                    "label": "INR",
+                    "value": "INR",
+                  },
+                  Object {
+                    "label": "JPY",
+                    "value": "JPY",
+                  },
+                  Object {
+                    "label": "KRW",
+                    "value": "KRW",
+                  },
+                  Object {
+                    "label": "MXN",
+                    "value": "MXN",
+                  },
+                  Object {
+                    "label": "MYR",
+                    "value": "MYR",
+                  },
+                  Object {
+                    "label": "NOK",
+                    "value": "NOK",
+                  },
+                  Object {
+                    "label": "NZD",
+                    "value": "NZD",
+                  },
+                  Object {
+                    "label": "PHP",
+                    "value": "PHP",
+                  },
+                  Object {
+                    "label": "PLN",
+                    "value": "PLN",
+                  },
+                  Object {
+                    "label": "RON",
+                    "value": "RON",
+                  },
+                  Object {
+                    "label": "RUB",
+                    "value": "RUB",
+                  },
+                  Object {
+                    "label": "SEK",
+                    "value": "SEK",
+                  },
+                  Object {
+                    "label": "SGD",
+                    "value": "SGD",
+                  },
+                  Object {
+                    "label": "THB",
+                    "value": "THB",
+                  },
+                  Object {
+                    "label": "TRY",
+                    "value": "TRY",
+                  },
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  },
+                  Object {
+                    "label": "ZAR",
+                    "value": "ZAR",
+                  },
+                ]
+              }
+              currentCurrency={Object {}}
+              handleChange={[Function]}
+              handleCurrencyChange={[Function]}
+              hide={true}
+              onSave={[Function]}
+              scope={
+                Object {
+                  "user_restrictions": Object {
+                    "profile": Object {
+                      "password": true,
+                    },
+                  },
+                }
+              }
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              user={Object {}}
+            />
+            <ProfileBox
+              edit={[Function]}
+              handlePasswordChange={[Function]}
+              hide={false}
+              passwordResetSent={false}
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              user={
+                Object {
+                  "company_name": "FOO_COMPANY",
+                  "currency": "EUR",
+                  "email": "foo@bar.baz",
+                  "first_name": "John",
+                  "guest": false,
+                  "last_name": "Doe",
+                  "phone": "6345789",
+                  "role": Object {
+                    "name": "shipper",
+                  },
+                  "role_id": 1,
+                }
+              }
+            />
+          </div>
+        }
+        contentClassName="layout-row layout-wrap flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        onClick={null}
+        padding={false}
+        style={Object {}}
+        title="Your Profile"
+        titleAction={false}
+        wrapperClassName="flex layout-row layout-align-start-center"
+      />
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="flex-100 layout-row layout-wrap conditions_box"
+          >
+            <div
+              className="flex-100"
+            >
+              <p
+                className="emulate_link blue_link"
+                onClick={[Function]}
+              >
+                More info
+              </p>
+            </div>
+            <div
+              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
+            >
+              <div
+                className="flex-66 layout-row layout-align-start-center"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Download all data from ItsMyCargo
+                </p>
+              </div>
+              <div
+                className="flex-33 layout-row layout-align-start"
+              >
+                <DocumentsDownloader
+                  disabled={false}
+                  documentDispatch={null}
+                  downloadUrls={Object {}}
+                  loading={false}
+                  modal={false}
+                  options={
+                    Object {
+                      "userId": undefined,
+                    }
+                  }
+                  size="full"
+                  square={false}
+                  t={[Function]}
+                  target="gdpr"
+                  targetOptions={Array []}
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                  tooltip=""
+                />
+              </div>
+            </div>
+            <div
+              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
+            >
+              <div
+                className="flex-66 layout-row layout-align-start-center"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Request to delete account
+                </p>
+              </div>
+              <div
+                className="flex-33 layout-row layout-align-start"
+              >
+                <RoundButton
+                  active={false}
+                  back={false}
+                  classNames=""
+                  disabled={false}
+                  flexContainer="100"
+                  handleDisabled={null}
+                  handleNext={[Function]}
+                  icon=""
+                  iconClass=""
+                  inverse={false}
+                  size="full"
+                  text="Request"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        }
+        contentClassName="layout-row layout-wrap flex-100 layout-align-start-start"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        onClick={null}
+        padding={false}
+        style={Object {}}
+        title="Your Data"
+        titleAction={false}
+        wrapperClassName="flex-gt-md-35 offset-gt-md-5 flex-100 layout-row layout-align-stretch"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start margin_md_top"
+  >
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-center"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-100 layout-align-start-center greyBg"
+        >
+          <span>
+            <b>
+              Addresses
+            </b>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`shallow render 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding"
@@ -249,6 +653,15 @@ exports[`shallow render 1`] = `
                     "Demo is to discuss the validity of the presented prices with the product owners.",
                   ],
                   "total_dimensions": true,
+                  "user_restrictions": Object {
+                    "profile": Object {
+                      "company": false,
+                      "email": false,
+                      "name": false,
+                      "password": false,
+                      "phone": false,
+                    },
+                  },
                   "values": Object {
                     "weight": Object {
                       "decimals": 2,
@@ -515,152 +928,6 @@ exports[`shallow render 1`] = `
               Addresses
             </b>
           </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`state.editBool is true 1`] = `
-<div
-  className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding"
->
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding"
-  >
-    <EditNameBox
-      handleChange={[Function]}
-      handlePasswordChange={[Function]}
-      user={Object {}}
-    />
-  </div>
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start-center section "
-  >
-    <div
-      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
-    >
-      <GreyBox
-        borderStyle=""
-        content={
-          <div
-            className="layout-row flex-100"
-          >
-            <EditProfileBox
-              close={[Function]}
-              handleChange={[Function]}
-              hide={false}
-              onSave={[Function]}
-              style={
-                Object {
-                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-                }
-              }
-              t={[Function]}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-              user={Object {}}
-            />
-            <ProfileBox
-              edit={[Function]}
-              handlePasswordChange={[Function]}
-              hide={true}
-              hideEdit={true}
-              passwordResetRequested={false}
-              passwordResetSent={false}
-              style={
-                Object {
-                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-                }
-              }
-              t={[Function]}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-              user={
-                Object {
-                  "company_name": "FOO_COMPANY",
-                  "currency": "EUR",
-                  "email": "foo@bar.baz",
-                  "first_name": "John",
-                  "guest": false,
-                  "last_name": "Doe",
-                  "phone": "6345789",
-                  "role": Object {
-                    "name": "shipper",
-                  },
-                  "role_id": 1,
-                }
-              }
-            />
-          </div>
-        }
-        contentClassName="layout-row flex"
-        flex={0}
-        flexGtLg={0}
-        flexMd={0}
-        fullWidth={false}
-        isBox={false}
-        padding={false}
-        title=""
-        titleAction={false}
-        wrapperClassName="flex layout-row layout-align-start-center"
-      />
-    </div>
-  </div>
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start-start"
-  >
-    <div
-      className="flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding card_padding_right section "
-    >
-      <div
-        className="flex-100 layout-align-start-center greyBg"
-      >
-        <span>
-          <b>
-            Aliases
-          </b>
-        </span>
-      </div>
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
-      >
-        <div
-          className="pointy tile_padding layout-row layout-align-center-stretch flex-45 margin_bottom"
-          key="addNewAliasButton"
-          onClick={[Function]}
-        >
-          <div
-            className="location-box new-address layout-row layout-align-start-center layout-wrap"
-          >
-            <div
-              className="layout-row layout-align-center flex-100"
-            >
-              <div
-                className="plus-icon"
-              />
-            </div>
-            <div
-              className="layout-row layout-align-center flex-100"
-            >
-              <h3>
-                Add Alias
-              </h3>
-            </div>
-          </div>
         </div>
       </div>
     </div>

@@ -40,9 +40,16 @@ test('user is falsy', () => {
   expect(shallow(<UserProfile {...props} />)).toMatchSnapshot()
 })
 
-test.skip('state.editBool is true', () => {
-  const wrapper = shallow(<UserProfile {...propsBase} />)
-  wrapper.setState({ editBool: true })
-
-  expect(wrapper).toMatchSnapshot()
+test('reset passowrd is hidden', () => {
+  const props = {
+    ...propsBase,
+    scope: {
+      user_restrictions: {
+        profile: {
+          password: true
+        }
+      }
+    }
+  }
+  expect(shallow(<UserProfile {...props} />)).toMatchSnapshot()
 })

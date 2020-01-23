@@ -30,5 +30,14 @@ export const scope = {
       unit: 'kg',
       decimals: 2
     }
+  },
+  user_restrictions: {
+    profile: {
+      name: false,
+      email: false,
+      phone: false,
+      company: false,
+      password: false
+    }
   }
 }
