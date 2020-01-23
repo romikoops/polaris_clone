@@ -322,7 +322,11 @@
           <div class="total-price-single">
             <h4>
                 <%= charge_name %>
-                <% if scope['show_chargeable_weight'] && !['import', 'export'].include?(charge_key) %>
+                <% if
+                    scope['show_chargeable_weight'] &&
+                    !['import', 'export'].include?(charge_key) &&
+                    cargo_data.dig(:chargeable_weight, quote['shipment_id'], charge_key.to_sym).present?
+                %>
                   <%== cargo_data[:chargeable_weight][quote['shipment_id']][charge_key.to_sym] %>
                  <% end %>
             </h4>

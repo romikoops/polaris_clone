@@ -5,17 +5,25 @@ FactoryBot.define do
     association :user
     transient do
       shipment_count { 1 }
+      load_type { 'cargo_item' }
     end
 
     target_email { 'john@example.test' }
     name { 'NAME' }
 
     after(:build) do |quotation, evaluator|
-      quotation.shipments = create_list(:shipment, evaluator.shipment_count, 
-        user: quotation.user, 
+      original_shipment = create(:shipment,
+        user: quotation.user,
         tenant: quotation.user.tenant,
+        load_type: evaluator.load_type,
+        with_breakdown: true)
+      quotation.shipments = create_list(:shipment, evaluator.shipment_count,
+        user: quotation.user,
+        tenant: quotation.user.tenant,
+        load_type: evaluator.load_type,
         with_breakdown: true
       )
+      quotation.original_shipment_id = original_shipment.id
     end
   end
 end
