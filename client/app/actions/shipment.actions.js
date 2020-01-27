@@ -48,10 +48,10 @@ function getOffers (data, redirect) {
         } else {
           dispatch(failure({
             type: 'error',
-            text: get(responseData, 'data.message') || get(responseData, 'data.error')
+            text: get(responseData, 'message') || get(responseData, 'error')
           }))
           const errorToRender = {
-            ...responseData,
+            data: responseData,
             componentName: 'RouteSection',
             side: 'center'
           }

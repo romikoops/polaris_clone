@@ -7,7 +7,10 @@ module Legacy
     TARE_WEIGHTS = {
       fcl_20: 2370,
       fcl_40: 3750,
-      fcl_40_hq: 4000
+      fcl_40_hq: 4000,
+      fcl_20_rf: 2370,
+      fcl_40_rf: 3750,
+      fcl_45_rf: 4000
     }.freeze
 
     PRICING_WEIGHT_STEPS = [28.0, 24.0, 18.0, 14.0, 5.0].freeze
