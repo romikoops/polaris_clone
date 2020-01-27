@@ -39,18 +39,19 @@ function getOffers (data, redirect) {
     )
       .then(resp => resp.json())
       .then((resp) => {
+        const responseData = JSON.parse(resp.data)
         if (resp.success) {
-          dispatch(success(resp.data))
+          dispatch(success(responseData))
           if (redirect) {
-            dispatch(push(`/booking/${get(resp, 'data.shipment.id')}/choose_offer`))
+            dispatch(push(`/booking/${get(responseData, 'data.shipment.id')}/choose_offer`))
           }
         } else {
           dispatch(failure({
             type: 'error',
-            text: get(resp, 'data.message') || get(resp, 'data.error')
+            text: get(responseData, 'data.message') || get(responseData, 'data.error')
           }))
           const errorToRender = {
-            ...resp,
+            ...responseData,
             componentName: 'RouteSection',
             side: 'center'
           }
