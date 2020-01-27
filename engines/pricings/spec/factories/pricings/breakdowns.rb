@@ -3,5 +3,6 @@
 FactoryBot.define do
   factory :pricings_breakdown, class: 'Pricings::Breakdown' do
     charge_category_id { FactoryBot.create(:legacy_charge_categories).id }
+    charge_id { FactoryBot.create(:legacy_charge).id }
   end
 end

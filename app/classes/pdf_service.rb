@@ -155,7 +155,6 @@ class PdfService
     quotes = quotes_with_trip_id(quotation, quotation.shipments)
     shipment = Legacy::Shipment.find(quotation.original_shipment_id)
     note_remarks = get_note_remarks(quotes.first['trip_id'])
-
     file = generate_quote_pdf(
       shipment: shipment,
       shipments: quotation.shipments,

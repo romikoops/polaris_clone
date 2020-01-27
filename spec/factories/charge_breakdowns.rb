@@ -44,20 +44,20 @@ FactoryBot.define do
             charge_breakdown: charge_breakdown,
             charge_category: ChargeCategory.grand_total,
             children_charge_category: cargo_charge_category,
-            parent: base_charge
+            parent_id: base_charge.id
           )
           cargo_charge = build(
             :charge,
             charge_breakdown: charge_breakdown,
             charge_category: cargo_charge_category,
             children_charge_category: cargo_unit_charge_category,
-            parent: grand_total_charge
+            parent_id: grand_total_charge.id
           )
           cargo_unit_charge = build(
             :charge,
             charge_breakdown: charge_breakdown,
             charge_category: cargo_unit_charge_category,
-            parent: cargo_charge
+            parent_id: cargo_charge.id
           )
 
           charge_breakdown.charges << base_charge

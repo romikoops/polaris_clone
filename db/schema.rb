@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_19_131411) do
+ActiveRecord::Schema.define(version: 2020_01_22_113222) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1020,6 +1020,10 @@ ActiveRecord::Schema.define(version: 2020_01_19_131411) do
     t.string "target_type"
     t.datetime "updated_at", null: false
     t.index ["cargo_unit_type", "cargo_unit_id"], name: "index_pricings_breakdowns_on_cargo_unit_type_and_cargo_unit_id"
+    t.index ["charge_category_id"], name: "index_pricings_breakdowns_on_charge_category_id"
+    t.index ["charge_id"], name: "index_pricings_breakdowns_on_charge_id"
+    t.index ["margin_id"], name: "index_pricings_breakdowns_on_margin_id"
+    t.index ["metadatum_id"], name: "index_pricings_breakdowns_on_metadatum_id"
     t.index ["target_type", "target_id"], name: "index_pricings_breakdowns_on_target_type_and_target_id"
   end
 
@@ -1100,6 +1104,8 @@ ActiveRecord::Schema.define(version: 2020_01_19_131411) do
     t.uuid "pricing_id"
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["charge_breakdown_id"], name: "index_pricings_metadata_on_charge_breakdown_id"
+    t.index ["tenant_id"], name: "index_pricings_metadata_on_tenant_id"
   end
 
   create_table "pricings_pricings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

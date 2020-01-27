@@ -3,7 +3,7 @@
 require 'bigdecimal'
 require 'net/http'
 
-class ShippingTools # rubocop:disable Metrics/ModuleLength
+class ShippingTools
   InternalError = Class.new(StandardError)
   ShipmentNotFound = Class.new(StandardError)
   DataMappingError = Class.new(StandardError)
@@ -160,7 +160,10 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
     shipment = Legacy::Shipment.where(sandbox: sandbox).find(params[:shipment_id])
     offer_calculator = OfferCalculator::Calculator.new(shipment: shipment, params: params, user: current_user, sandbox: sandbox)
 
-    offer_calculator.perform
+    Skylight.instrument title: 'OfferCalculator Perform' do
+      offer_calculator.perform
+    end
+
     offer_calculator.shipment.save!
     cargo_units = if offer_calculator.shipment.lcl? && !offer_calculator.shipment.aggregated_cargo
                     offer_calculator.shipment.cargo_units.map(&:with_cargo_type)
@@ -170,15 +173,16 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
                     offer_calculator.shipment.cargo_units
                   end
 
-    if scope['open_quotation_tool'] || scope['closed_quotation_tool']
-      quote = ShippingTools.create_shipments_from_quotation(
-        offer_calculator.shipment,
-        offer_calculator.detailed_schedules.map(&:deep_stringify_keys!)
-      )
-    end
-    if scope.fetch(:email_all_quotes)
-      QuoteMailer.quotation_admin_email(quote, offer_calculator.shipment).deliver_later
-    end
+    quote = if scope['open_quotation_tool'] || scope['closed_quotation_tool']
+              Skylight.instrument title: 'Create Shipments From Quote' do
+                ShippingTools.create_shipments_from_quotation(
+                    offer_calculator.shipment,
+                    offer_calculator.detailed_schedules.map(&:deep_stringify_keys!)
+                  )
+              end
+            end
+
+    QuoteMailer.quotation_admin_email(quote, offer_calculator.shipment).deliver_later if scope.fetch(:email_all_quotes)
 
     {
       shipment: offer_calculator.shipment,
@@ -188,26 +192,27 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       cargoUnits: cargo_units,
       aggregatedCargo: offer_calculator.shipment.aggregated_cargo
     }
-    rescue OfferCalculator::TruckingTools::LoadMeterageExceeded
-      raise ApplicationError::LoadMeterageExceeded
-    rescue OfferCalculator::Calculator::MissingTruckingData
-      raise ApplicationError::MissingTruckingData
-    rescue OfferCalculator::Calculator::InvalidPickupAddress
-      raise ApplicationError::InvalidPickupAddress
-    rescue OfferCalculator::Calculator::InvalidDeliveryAddress
-      raise ApplicationError::InvalidDeliveryAddress
-    rescue OfferCalculator::Calculator::NoDirectionsFound
-      raise ApplicationError::NoDirectionsFound
-    rescue OfferCalculator::Calculator::NoRoute
-      raise ApplicationError::NoRoute
-    rescue OfferCalculator::Calculator::InvalidRoutes
-      raise ApplicationError::InvalidRoutes
-    rescue OfferCalculator::Calculator::NoValidPricings
-      raise ApplicationError::NoValidPricings
-    rescue OfferCalculator::Calculator::NoSchedulesCharges
-      raise ApplicationError::NoSchedulesCharges
-    rescue ArgumentError
-      raise ApplicationError::InternalError
+
+  rescue OfferCalculator::TruckingTools::LoadMeterageExceeded
+    raise ApplicationError::LoadMeterageExceeded
+  rescue OfferCalculator::Calculator::MissingTruckingData
+    raise ApplicationError::MissingTruckingData
+  rescue OfferCalculator::Calculator::InvalidPickupAddress
+    raise ApplicationError::InvalidPickupAddress
+  rescue OfferCalculator::Calculator::InvalidDeliveryAddress
+    raise ApplicationError::InvalidDeliveryAddress
+  rescue OfferCalculator::Calculator::NoDirectionsFound
+    raise ApplicationError::NoDirectionsFound
+  rescue OfferCalculator::Calculator::NoRoute
+    raise ApplicationError::NoRoute
+  rescue OfferCalculator::Calculator::InvalidRoutes
+    raise ApplicationError::InvalidRoutes
+  rescue OfferCalculator::Calculator::NoValidPricings
+    raise ApplicationError::NoValidPricings
+  rescue OfferCalculator::Calculator::NoSchedulesCharges
+    raise ApplicationError::NoSchedulesCharges
+  rescue ArgumentError
+    raise ApplicationError::InternalError
   end
 
   def self.generate_shipment_pdf(shipment:, sandbox: nil)
@@ -430,7 +435,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
     origin = shipment.has_pre_carriage ? shipment.pickup_address : shipment.origin_nexus
     destination = shipment.has_on_carriage ? shipment.delivery_address : shipment.destination_nexus
     options = {
-      methods: %i(selected_offer mode_of_transport service_level vessel_name carrier voyage_code),
+      methods: %i[selected_offer mode_of_transport service_level vessel_name carrier voyage_code],
       include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
     }
     shipment_as_json = shipment.as_json(options).merge(
@@ -498,7 +503,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
     raise ApplicationError::NotLoggedIn if current_user.guest
 
     shipment = Shipment.find_by(id: params[:shipment_id] || params[:id], sandbox: sandbox)
-    raise ApplicationError::ShipmentNotFound unless shipment.present?
+    raise ApplicationError::ShipmentNotFound if shipment.blank?
 
     shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
     shipment.meta['pricing_breakdown'] = params[:meta][:pricing_breakdown]
@@ -559,7 +564,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
     else
       cargoKey = 'lcl'
       customsKey = 'lcl'
-      cargos = cargo_items.present? ? cargo_items : [aggregated_cargo]
+      cargos = cargo_items.presence || [aggregated_cargo]
     end
 
     shipment.transport_category = shipment
@@ -622,7 +627,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       endHub: { data: @destination_hub, address: @destination_hub.nexus }
     }
     options = {
-      methods: %i(selected_offer mode_of_transport service_level vessel_name carrier voyage_code),
+      methods: %i[selected_offer mode_of_transport service_level vessel_name carrier voyage_code],
       include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
     }
     origin = shipment.has_pre_carriage ? shipment.pickup_address : shipment.origin_nexus
@@ -652,11 +657,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
   def self.search_contacts(contact_params, current_user, sandbox = nil)
     contact_email = contact_params['email']
     existing_contact = current_user.contacts.where(email: contact_email, sandbox: sandbox).first
-    if existing_contact
-      return existing_contact
-    else
-      current_user.contacts.create(contact_params.merge(sandbox: sandbox))
-    end
+    existing_contact || current_user.contacts.create(contact_params.merge(sandbox: sandbox))
   end
 
   def self.reuse_cargo_units(shipment, cargo_units)
@@ -806,7 +807,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       end
     end
 
-    if new_shipment.lcl? && !new_shipment.aggregated_cargo.nil?
+    if new_shipment.lcl? && new_shipment.aggregated_cargo.present?
       new_shipment.aggregated_cargo.set_chargeable_weight!
     elsif new_shipment.lcl? && new_shipment.aggregated_cargo.nil?
       new_shipment.cargo_units.map(&:set_chargeable_weight!)
@@ -819,7 +820,7 @@ class ShippingTools # rubocop:disable Metrics/ModuleLength
       new_metadatum = metadatum.dup.tap {|meta| meta.charge_breakdown_id = new_charge_breakdown.id; meta.save } if metadatum
 
       new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
-      %w(import export cargo).each do |charge_key|
+      %w[import export cargo].each do |charge_key|
         next if new_charge_breakdown.charge(charge_key).nil?
 
         new_charge_breakdown.charge(charge_key).children.each do |new_charge|

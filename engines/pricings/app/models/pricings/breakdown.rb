@@ -4,6 +4,9 @@ module Pricings
   class Breakdown < ApplicationRecord
     belongs_to :margin, optional: true
     belongs_to :metadatum
+    belongs_to :charge, class_name: 'Legacy::Charge'
+    belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
+    belongs_to :metadatum
     belongs_to :cargo_unit, polymorphic: true, optional: true
     belongs_to :target, polymorphic: true, optional: true
 

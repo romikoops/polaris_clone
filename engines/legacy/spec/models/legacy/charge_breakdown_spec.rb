@@ -87,7 +87,7 @@ module Legacy
             { 'total' => { 'value' => 0.999e1, 'currency' => 'EUR' },
               'edited_total' => nil,
               'name' => 'Legacy::container',
-              'grand_total' => { 'currency' => 'EUR', 'sandbox_id' => nil, 'value' => 0.999e1, 'name' => 'Grand Total' } } },
+              'bas' => { 'currency' => 'EUR', 'sandbox_id' => nil, 'value' => 0.999e1, 'name' => 'Basic Freight' } } },
             'trip_id' => 2107
           }
 

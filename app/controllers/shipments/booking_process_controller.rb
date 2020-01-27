@@ -10,6 +10,9 @@ class Shipments::BookingProcessController < ApplicationController
 
   def get_offers
     resp = ShippingTools.get_offers(params, current_user, @sandbox)
+    Skylight.instrument title: 'Serialize Results' do
+      resp = resp.to_json
+    end
     response_handler(resp)
   end
 

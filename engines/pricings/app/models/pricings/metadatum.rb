@@ -3,7 +3,8 @@
 module Pricings
   class Metadatum < ApplicationRecord
     belongs_to :tenant, class_name: 'Tenants::Tenant'
-    has_many :breakdowns
+    belongs_to :charge_breakdown, class_name: 'Legacy::ChargeBreakdown'
+    has_many :breakdowns, dependent: :destroy
     validates_uniqueness_of :charge_breakdown_id, scope: %(tenant_id)
   end
 end

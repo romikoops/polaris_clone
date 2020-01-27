@@ -47,12 +47,12 @@ RSpec.describe ShippingTools do
     it 'assigns the id of the chosen tender to the meta data of the shipment' do
       create(:charge_breakdown, shipment: shipment)
 
-      expect { described_class.choose_offer(params, user) }.to change { Shipment.find(shipment.id).meta }.from({}).to('pricing_breakdown' => nil, 'pricing_rate_data' => nil, 'tender_id' => "123abc")
+      expect { described_class.choose_offer(params, user) }.to change { Shipment.find(shipment.id).meta }.from({}).to('pricing_breakdown' => nil, 'pricing_rate_data' => nil, 'tender_id' => '123abc')
     end
   end
 
   context 'sending admin emails on quote download/send' do
-    let!(:quotation) { create(:quotation, original_shipment_id: shipment.id) }
+    let!(:quotation) { create(:legacy_quotation, original_shipment_id: shipment.id) }
     let!(:charge_breakdown) { create(:legacy_charge_breakdown, shipment: shipment, trip: trip) }
     let(:results) do
       [
@@ -77,7 +77,7 @@ RSpec.describe ShippingTools do
         expect(described_class).to receive(:handle_existing_quote).once.and_return(quotation)
         expect(QuoteMailer).to receive(:quotation_admin_email).once.and_return(quote_mailer)
         expect(quote_mailer).to receive(:deliver_later).once
-        result = described_class.save_pdf_quotes(shipment, user.tenant, results)
+        described_class.save_pdf_quotes(shipment, user.tenant, results)
       end
     end
 
@@ -88,7 +88,7 @@ RSpec.describe ShippingTools do
         expect(described_class).to receive(:handle_existing_quote).once.and_return(quotation)
         expect(QuoteMailer).to receive(:quotation_admin_email).once.and_return(quote_mailer)
         expect(quote_mailer).to receive(:deliver_later).once
-        result = described_class.save_and_send_quotes(shipment, results, user.email)
+        described_class.save_and_send_quotes(shipment, results, user.email)
       end
     end
   end
@@ -261,7 +261,8 @@ RSpec.describe ShippingTools do
                        eta: Date.today + 40,
                        etd: Date.today,
                        closing_date: Date.today + 20,
-                       vehicle_name: 'standard'
+                       vehicle_name: 'standard',
+                       trip_id: trip.id
                      }
                    ],
                    meta: {
@@ -301,12 +302,27 @@ RSpec.describe ShippingTools do
         allow(mock_offer_calculator).to receive(:perform)
       end
 
-      it 'returns the correct response including the cargo units' do
-        result = described_class.get_offers(params, user)
-        expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
-        expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
-        expect(result[:destinationHubs]).to eq(mock_offer_calculator.hubs[:destination])
-        expect(result[:results]).to eq(mock_offer_calculator.detailed_schedules)
+      context 'with a booking configuration' do
+        it 'returns the correct response including the cargo units' do
+          result = described_class.get_offers(params, user)
+          expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
+          expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
+          expect(result[:destinationHubs]).to eq(mock_offer_calculator.hubs[:destination])
+          expect(result[:results]).to eq(mock_offer_calculator.detailed_schedules)
+        end
+      end
+
+      context 'with a quote configuration' do
+        before do
+          Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true })
+        end
+        it 'returns the correct response including the cargo units' do
+          result = described_class.get_offers(params, user)
+          expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
+          expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
+          expect(result[:destinationHubs]).to eq(mock_offer_calculator.hubs[:destination])
+          expect(result[:results]).to eq(mock_offer_calculator.detailed_schedules)
+        end
       end
     end
   end
@@ -443,9 +459,8 @@ RSpec.describe ShippingTools do
                origin_nexus: origin_hub&.nexus,
                destination_nexus: destination_hub&.nexus,
                load_type: 'cargo_item',
-               trucking: { "pre_carriage": { "truck_type": "default", "trucking_time_in_seconds": 10_000 } }
-        )
-     end
+               trucking: { "pre_carriage": { "truck_type": 'default', "trucking_time_in_seconds": 10_000 } })
+      end
 
       let!(:document) { create(:documents, shipment_id: lcl_shipment.id) }
 
@@ -463,8 +478,8 @@ RSpec.describe ShippingTools do
       end
 
       before do
-        stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR").
-         to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
+        stub_request(:get, 'http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR')
+          .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
 
         FactoryBot.create(:charge_breakdown, shipment: lcl_shipment)
       end
@@ -473,7 +488,6 @@ RSpec.describe ShippingTools do
         result = described_class.choose_offer(params, user)
         expect(result[:shipment]['trip_id']).to eq(trip.id)
       end
-
     end
   end
 
@@ -509,13 +523,12 @@ RSpec.describe ShippingTools do
     context 'create_shipment_from_result (FCL)' do
       let(:old_trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
       let(:old_shipment) do
-        create(:shipment,
+        create(:legacy_shipment,
                trip: old_trip,
                origin_hub_id: origin_hub.id,
                destination_hub_id: destination_hub.id,
                with_breakdown: true,
-               meta: {}
-              )
+               meta: {})
       end
       let(:quote) { create(:quotation, original_shipment_id: old_shipment.id) }
       let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
@@ -543,16 +556,59 @@ RSpec.describe ShippingTools do
     context 'create_shipment_from_result (LCL)' do
       let(:old_trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
       let(:old_shipment) do
-        create(:shipment,
+        create(:legacy_shipment,
                trip: old_trip,
                origin_hub_id: origin_hub.id,
                destination_hub_id: destination_hub.id,
                with_breakdown: true,
                load_type: 'cargo_item',
-               meta: {}
-              )
+               meta: {})
       end
-      let!(:metadatum) { create(:pricings_metadatum, tenant: tenants_tenant, charge_breakdown_id: old_shipment.charge_breakdowns.first.id)}
+      let!(:metadatum) do
+        create(:pricings_metadatum,
+               tenant: tenants_tenant,
+               charge_breakdown_id: old_shipment.charge_breakdowns.first.id)
+      end
+      let(:quote) { create(:quotation, original_shipment_id: old_shipment.id) }
+      let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
+      let(:result) do
+        {
+          quote: old_shipment.charge_breakdowns.first.to_nested_hash,
+          meta: {
+            pricing_rate_data: {},
+            pricing_breakdown: {}
+          },
+          schedules: [new_schedule]
+        }.with_indifferent_access
+      end
+
+      it 'creates quoted shipments from original shipment and results' do
+        new_shipment_saved = described_class.create_shipment_from_result(
+          main_quote: quote,
+          original_shipment: old_shipment,
+          result: result
+        )
+        expect(new_shipment_saved).to be_truthy
+      end
+    end
+
+    context 'create_shipment_from_result (LCL && Aggregated)' do
+      let(:old_trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
+      let(:old_shipment) do
+        create(:legacy_shipment,
+               trip: old_trip,
+               origin_hub_id: origin_hub.id,
+               destination_hub_id: destination_hub.id,
+               with_breakdown: true,
+               load_type: 'cargo_item',
+               meta: {},
+               with_aggregated_cargo: true)
+      end
+      let!(:metadatum) do
+        create(:pricings_metadatum,
+               tenant: tenants_tenant,
+               charge_breakdown_id: old_shipment.charge_breakdowns.first.id)
+      end
       let(:quote) { create(:quotation, original_shipment_id: old_shipment.id) }
       let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
       let(:result) do
@@ -585,11 +641,10 @@ RSpec.describe ShippingTools do
                destination_hub_id: destination_hub.id,
                load_type: 'cargo_item',
                meta: {},
-               with_aggregated_cargo: true
-              )
+               with_aggregated_cargo: true)
       end
       let(:charge_breakdown) { create(:charge_breakdown, shipment: old_shipment) }
-      let!(:metadatum) { create(:pricings_metadatum, tenant: tenants_tenant, charge_breakdown_id: charge_breakdown.id)}
+      let!(:metadatum) { create(:pricings_metadatum, tenant: tenants_tenant, charge_breakdown_id: charge_breakdown.id) }
       let(:quote) { create(:quotation, original_shipment_id: old_shipment.id) }
       let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
       let(:result) do

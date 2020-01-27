@@ -40,7 +40,8 @@ FactoryBot.define do
             charge_breakdown: charge_breakdown,
             charge_category: Legacy::ChargeCategory.grand_total,
             children_charge_category: cargo_charge_category,
-            parent: base_charge
+            parent_id: base_charge.id,
+            detail_level: 1
           )
 
           cargo_charge = create(
@@ -48,14 +49,21 @@ FactoryBot.define do
             charge_breakdown: charge_breakdown,
             charge_category: cargo_charge_category,
             children_charge_category: cargo_unit_charge_category,
-            parent: grand_total_charge
+            parent_id: grand_total_charge.id,
+            detail_level: 2
           )
 
           cargo_unit_charge = create(
             :legacy_charge,
             charge_breakdown: charge_breakdown,
             charge_category: cargo_unit_charge_category,
-            parent: cargo_charge
+            parent_id: cargo_charge.id,
+            detail_level: 3,
+            children_charge_category: create(:legacy_charge_categories,
+                name: 'Basic Freight',
+                code: 'bas',
+                cargo_unit_id: cargo_unit.id,
+                tenant_id: shipment.tenant_id)
           )
 
           charge_breakdown.charges << base_charge

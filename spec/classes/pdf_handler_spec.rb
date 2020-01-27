@@ -6,8 +6,8 @@ RSpec.describe PdfHandler do
   let(:tenant) { create(:tenant, currency: 'USD') }
   let(:user) { create(:user, tenant: tenant, currency: 'USD') }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:shipment) { create(:shipment, tenant: tenant, user: user, load_type: 'cargo_item') }
-  let!(:agg_shipment) { create(:shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_aggregated_cargo: true) }
+  let!(:shipment) { create(:legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item') }
+  let!(:agg_shipment) { create(:legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_aggregated_cargo: true) }
   let(:pdf_service) { PdfService.new(tenant: tenant, user: user) }
   let(:default_args) do
     {
@@ -26,7 +26,7 @@ RSpec.describe PdfHandler do
   end
 
   context 'FCL 20 shipment' do
-    let!(:fcl_shipment) { create(:shipment, tenant: tenant, user: user, load_type: 'container') }
+    let!(:fcl_shipment) { create(:legacy_shipment, tenant: tenant, user: user, load_type: 'container') }
     let(:default_args) do
       {
         shipment: fcl_shipment,
@@ -179,13 +179,13 @@ RSpec.describe PdfHandler do
     end
 
     describe '.generate_fee_string' do
-      let(:charge_shipment) { create(:shipment, with_breakdown: true) }
+      let(:charge_shipment) { create(:legacy_shipment, with_breakdown: true) }
       let(:quotes) { pdf_service.quotes_with_trip_id(nil, [charge_shipment]) }
       let(:string_klass) { described_class.new(default_args.merge(quotes: quotes)) }
 
       it 'returns MOT Freight as key' do
         result = string_klass.generate_fee_string(quotes.first)
-        expect(result).to eq('grand_total' => 'GRAND TOTAL - Grand Total')
+        expect(result).to eq('bas' => 'BAS - Basic Freight')
       end
     end
   end
