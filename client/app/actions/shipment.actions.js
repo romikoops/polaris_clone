@@ -43,7 +43,7 @@ function getOffers (data, redirect) {
         if (resp.success) {
           dispatch(success(responseData))
           if (redirect) {
-            dispatch(push(`/booking/${get(responseData, 'data.shipment.id')}/choose_offer`))
+            dispatch(push(`/booking/${get(responseData, 'shipment.id')}/choose_offer`))
           }
         } else {
           dispatch(failure({
