@@ -109,7 +109,9 @@ export class AdminPricingsIndex extends Component {
     </div>
     )
     const downloadButtons = (<div
-      className={`${styles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
+      className={`${styles.open_filter} 
+                  ${styles.download_section}
+                   flex-100 layout-row layout-wrap layout-align-center-start`}
     >
       <div
         className={`${

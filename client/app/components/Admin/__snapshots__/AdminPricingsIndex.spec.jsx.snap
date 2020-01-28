@@ -58,7 +58,9 @@ exports[`pricingData is falsy 1`] = `
                       collapsed={true}
                       content={
                         <div
-                          className="open_filter flex-100 layout-row layout-wrap layout-align-center-start"
+                          className="open_filter 
+                  download_section
+                   flex-100 layout-row layout-wrap layout-align-center-start"
                         >
                           <div
                             className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
@@ -242,7 +244,9 @@ exports[`scope.modes_of_transport is true 1`] = `
                       collapsed={true}
                       content={
                         <div
-                          className="open_filter flex-100 layout-row layout-wrap layout-align-center-start"
+                          className="open_filter 
+                  download_section
+                   flex-100 layout-row layout-wrap layout-align-center-start"
                         >
                           <div
                             className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
@@ -426,7 +430,9 @@ exports[`shallow render 1`] = `
                       collapsed={true}
                       content={
                         <div
-                          className="open_filter flex-100 layout-row layout-wrap layout-align-center-start"
+                          className="open_filter 
+                  download_section
+                   flex-100 layout-row layout-wrap layout-align-center-start"
                         >
                           <div
                             className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
@@ -610,7 +616,9 @@ exports[`state.state.redirectClients is true 1`] = `
                       collapsed={true}
                       content={
                         <div
-                          className="open_filter flex-100 layout-row layout-wrap layout-align-center-start"
+                          className="open_filter 
+                  download_section
+                   flex-100 layout-row layout-wrap layout-align-center-start"
                         >
                           <div
                             className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
@@ -794,7 +802,9 @@ exports[`state.state.redirectRoutes is true 1`] = `
                       collapsed={true}
                       content={
                         <div
-                          className="open_filter flex-100 layout-row layout-wrap layout-align-center-start"
+                          className="open_filter 
+                  download_section
+                   flex-100 layout-row layout-wrap layout-align-center-start"
                         >
                           <div
                             className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
