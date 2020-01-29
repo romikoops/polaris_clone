@@ -152,7 +152,7 @@ gem 'monetize'
 gem 'mimemagic'
 
 group :development, :test do
-  gem 'annotate'
+  gem 'annotate', '~> 3.0'
   gem 'dotenv-rails', require: 'dotenv/rails-now'
   gem 'factory_bot_rails', '~> 4.0', '< 5'
   gem 'fuubar'

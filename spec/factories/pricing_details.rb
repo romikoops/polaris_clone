@@ -14,19 +14,26 @@ end
 # Table name: pricing_details
 #
 #  id             :bigint           not null, primary key
+#  currency_name  :string
+#  hw_rate_basis  :string
+#  hw_threshold   :decimal(, )
+#  min            :decimal(, )
+#  priceable_type :string
+#  range          :jsonb
 #  rate           :decimal(, )
 #  rate_basis     :string
-#  min            :decimal(, )
-#  hw_threshold   :decimal(, )
-#  hw_rate_basis  :string
 #  shipping_type  :string
-#  range          :jsonb
-#  currency_name  :string
-#  currency_id    :bigint
-#  priceable_type :string
-#  priceable_id   :bigint
-#  tenant_id      :bigint
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  currency_id    :bigint
+#  priceable_id   :bigint
 #  sandbox_id     :uuid
+#  tenant_id      :bigint
+#
+# Indexes
+#
+#  index_pricing_details_on_currency_id                      (currency_id)
+#  index_pricing_details_on_priceable_type_and_priceable_id  (priceable_type,priceable_id)
+#  index_pricing_details_on_sandbox_id                       (sandbox_id)
+#  index_pricing_details_on_tenant_id                        (tenant_id)
 #

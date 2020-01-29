@@ -13,8 +13,13 @@ end
 #
 #  id         :bigint           not null, primary key
 #  name       :string
-#  tenant_id  :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  sandbox_id :uuid
+#  tenant_id  :integer
+#
+# Indexes
+#
+#  index_couriers_on_sandbox_id  (sandbox_id)
+#  index_couriers_on_tenant_id   (tenant_id)
 #

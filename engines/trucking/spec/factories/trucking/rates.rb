@@ -128,3 +128,25 @@ FactoryBot.define do
     association :tenant, factory: :legacy_tenant
   end
 end
+
+# == Schema Information
+#
+# Table name: trucking_rates
+#
+#  id                  :uuid             not null, primary key
+#  cbm_ratio           :integer
+#  fees                :jsonb
+#  identifier_modifier :string
+#  load_meterage       :jsonb
+#  modifier            :string
+#  rates               :jsonb
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  scope_id            :uuid
+#  tenant_id           :integer
+#
+# Indexes
+#
+#  index_trucking_rates_on_tenant_id          (tenant_id)
+#  index_trucking_rates_on_trucking_scope_id  (scope_id)
+#

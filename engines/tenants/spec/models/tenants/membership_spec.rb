@@ -82,3 +82,22 @@ module Tenants
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: tenants_memberships
+#
+#  id          :uuid             not null, primary key
+#  member_type :string
+#  priority    :integer          default(0)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  group_id    :uuid
+#  member_id   :uuid
+#  sandbox_id  :uuid
+#
+# Indexes
+#
+#  index_tenants_memberships_on_member_type_and_member_id  (member_type,member_id)
+#  index_tenants_memberships_on_sandbox_id                 (sandbox_id)
+#

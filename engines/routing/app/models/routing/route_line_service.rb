@@ -14,9 +14,13 @@ end
 # Table name: routing_route_line_services
 #
 #  id              :uuid             not null, primary key
-#  route_id        :uuid
-#  line_service_id :uuid
+#  transit_time    :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  transit_time    :integer
+#  line_service_id :uuid
+#  route_id        :uuid
+#
+# Indexes
+#
+#  route_line_service_index  (route_id,line_service_id) UNIQUE
 #

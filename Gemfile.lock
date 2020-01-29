@@ -377,9 +377,9 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    annotate (2.7.5)
+    annotate (3.0.3)
       activerecord (>= 3.2, < 7.0)
-      rake (>= 10.4, < 13.0)
+      rake (>= 10.4, < 14.0)
     arel (9.0.0)
     ast (2.4.0)
     autoprefixer-rails (9.7.4)
@@ -924,7 +924,7 @@ DEPENDENCIES
   admiralty_auth!
   admiralty_reports!
   admiralty_tenants!
-  annotate
+  annotate (~> 3.0)
   api!
   api_auth!
   api_docs!

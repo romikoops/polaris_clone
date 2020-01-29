@@ -23,11 +23,17 @@ end
 # Table name: locations_locations
 #
 #  id           :uuid             not null, primary key
-#  bounds       :geometry({:srid= geometry, 0
-#  osm_id       :bigint(8)
-#  name         :string
 #  admin_level  :integer
+#  bounds       :geometry({:srid= geometry, 0
 #  country_code :string
+#  name         :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  osm_id       :bigint
+#
+# Indexes
+#
+#  index_locations_locations_on_bounds  (bounds) USING gist
+#  index_locations_locations_on_name    (name)
+#  index_locations_locations_on_osm_id  (osm_id)
 #

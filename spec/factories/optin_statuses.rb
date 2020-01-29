@@ -14,9 +14,13 @@ end
 #
 #  id         :bigint           not null, primary key
 #  cookies    :boolean
-#  tenant     :boolean
 #  itsmycargo :boolean
+#  tenant     :boolean
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  sandbox_id :uuid
+#
+# Indexes
+#
+#  index_optin_statuses_on_sandbox_id  (sandbox_id)
 #

@@ -259,44 +259,54 @@ end
 # Table name: shipments
 #
 #  id                                  :bigint           not null, primary key
-#  user_id                             :integer
-#  uuid                                :string
-#  imc_reference                       :string
-#  status                              :string
-#  load_type                           :string
-#  planned_pickup_date                 :datetime
-#  has_pre_carriage                    :boolean
-#  has_on_carriage                     :boolean
-#  cargo_notes                         :string
-#  created_at                          :datetime         not null
-#  updated_at                          :datetime         not null
-#  tenant_id                           :integer
-#  planned_eta                         :datetime
-#  planned_etd                         :datetime
-#  itinerary_id                        :integer
-#  trucking                            :jsonb
-#  customs_credit                      :boolean          default(FALSE)
-#  total_goods_value                   :jsonb
-#  trip_id                             :integer
-#  eori                                :string
-#  direction                           :string
-#  notes                               :string
-#  origin_hub_id                       :integer
-#  destination_hub_id                  :integer
 #  booking_placed_at                   :datetime
-#  insurance                           :jsonb
-#  customs                             :jsonb
-#  transport_category_id               :bigint
-#  incoterm_id                         :integer
+#  cargo_notes                         :string
 #  closing_date                        :datetime
+#  customs                             :jsonb
+#  customs_credit                      :boolean          default(FALSE)
+#  desired_start_date                  :datetime
+#  direction                           :string
+#  eori                                :string
+#  has_on_carriage                     :boolean
+#  has_pre_carriage                    :boolean
+#  imc_reference                       :string
 #  incoterm_text                       :string
-#  origin_nexus_id                     :integer
-#  destination_nexus_id                :integer
-#  planned_origin_drop_off_date        :datetime
-#  quotation_id                        :integer
+#  insurance                           :jsonb
+#  load_type                           :string
+#  meta                                :jsonb
+#  notes                               :string
 #  planned_delivery_date               :datetime
 #  planned_destination_collection_date :datetime
-#  desired_start_date                  :datetime
-#  meta                                :jsonb
+#  planned_eta                         :datetime
+#  planned_etd                         :datetime
+#  planned_origin_drop_off_date        :datetime
+#  planned_pickup_date                 :datetime
+#  status                              :string
+#  total_goods_value                   :jsonb
+#  trucking                            :jsonb
+#  uuid                                :string
+#  created_at                          :datetime         not null
+#  updated_at                          :datetime         not null
+#  destination_hub_id                  :integer
+#  destination_nexus_id                :integer
+#  incoterm_id                         :integer
+#  itinerary_id                        :integer
+#  origin_hub_id                       :integer
+#  origin_nexus_id                     :integer
+#  quotation_id                        :integer
 #  sandbox_id                          :uuid
+#  tenant_id                           :integer
+#  transport_category_id               :bigint
+#  trip_id                             :integer
+#  user_id                             :integer
+#
+# Indexes
+#
+#  index_shipments_on_sandbox_id             (sandbox_id)
+#  index_shipments_on_tenant_id              (tenant_id)
+#  index_shipments_on_transport_category_id  (transport_category_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (transport_category_id => transport_categories.id)
 #

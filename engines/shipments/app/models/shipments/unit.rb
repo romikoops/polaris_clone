@@ -64,25 +64,34 @@ end
 # Table name: shipments_units
 #
 #  id                   :uuid             not null, primary key
-#  sandbox_id           :uuid
-#  cargo_id             :uuid             not null
-#  goods_value_cents    :integer          default(0), not null
-#  goods_value_currency :string           not null
-#  quantity             :integer          not null
 #  cargo_class          :bigint
 #  cargo_type           :bigint
-#  stackable            :boolean
 #  dangerous_goods      :integer          default("unspecified")
-#  weight_value         :decimal(100, 3)
-#  weight_unit          :string           default("kg")
-#  width_value          :decimal(100, 4)
-#  width_unit           :string           default("m")
-#  length_value         :decimal(100, 4)
-#  length_unit          :string           default("m")
-#  height_value         :decimal(100, 4)
+#  goods_value_cents    :integer          default(0), not null
+#  goods_value_currency :string           not null
 #  height_unit          :string           default("m")
-#  volume_value         :decimal(100, 6)
+#  height_value         :decimal(100, 4)
+#  length_unit          :string           default("m")
+#  length_value         :decimal(100, 4)
+#  quantity             :integer          not null
+#  stackable            :boolean
 #  volume_unit          :string           default("m3")
+#  volume_value         :decimal(100, 6)
+#  weight_unit          :string           default("kg")
+#  weight_value         :decimal(100, 3)
+#  width_unit           :string           default("m")
+#  width_value          :decimal(100, 4)
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  cargo_id             :uuid             not null
+#  sandbox_id           :uuid
+#
+# Indexes
+#
+#  index_shipments_units_on_cargo_id    (cargo_id)
+#  index_shipments_units_on_sandbox_id  (sandbox_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (sandbox_id => tenants_sandboxes.id)
 #

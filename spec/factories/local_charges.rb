@@ -14,23 +14,29 @@ end
 # Table name: local_charges
 #
 #  id                 :bigint           not null, primary key
-#  mode_of_transport  :string
-#  load_type          :string
-#  hub_id             :integer
-#  tenant_id          :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  tenant_vehicle_id  :integer
-#  counterpart_hub_id :integer
-#  direction          :string
-#  fees               :jsonb
 #  dangerous          :boolean          default(FALSE)
+#  direction          :string
 #  effective_date     :datetime
 #  expiration_date    :datetime
-#  user_id            :integer
-#  uuid               :uuid
-#  sandbox_id         :uuid
-#  group_id           :uuid
+#  fees               :jsonb
 #  internal           :boolean          default(FALSE)
+#  load_type          :string
 #  metadata           :jsonb
+#  mode_of_transport  :string
+#  uuid               :uuid
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  counterpart_hub_id :integer
+#  group_id           :uuid
+#  hub_id             :integer
+#  sandbox_id         :uuid
+#  tenant_id          :integer
+#  tenant_vehicle_id  :integer
+#  user_id            :integer
+#
+# Indexes
+#
+#  index_local_charges_on_sandbox_id  (sandbox_id)
+#  index_local_charges_on_tenant_id   (tenant_id)
+#  index_local_charges_on_uuid        (uuid) UNIQUE
 #

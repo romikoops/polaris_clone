@@ -14,10 +14,15 @@ end
 # Table name: pricings_metadata
 #
 #  id                  :uuid             not null, primary key
-#  pricing_id          :uuid
-#  charge_breakdown_id :integer
-#  cargo_unit_id       :integer
-#  tenant_id           :uuid
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  cargo_unit_id       :integer
+#  charge_breakdown_id :integer
+#  pricing_id          :uuid
+#  tenant_id           :uuid
+#
+# Indexes
+#
+#  index_pricings_metadata_on_charge_breakdown_id  (charge_breakdown_id)
+#  index_pricings_metadata_on_tenant_id            (tenant_id)
 #

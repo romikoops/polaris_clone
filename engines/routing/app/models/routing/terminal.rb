@@ -13,11 +13,15 @@ end
 # Table name: routing_terminals
 #
 #  id                :uuid             not null, primary key
-#  location_id       :uuid
 #  center            :geometry({:srid= geometry, 0
-#  terminal_code     :string
 #  default           :boolean          default(FALSE)
+#  mode_of_transport :integer          default(NULL)
+#  terminal_code     :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  mode_of_transport :integer          default(NULL)
+#  location_id       :uuid
+#
+# Indexes
+#
+#  index_routing_terminals_on_center  (center)
 #

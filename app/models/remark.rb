@@ -10,12 +10,21 @@ end
 # Table name: remarks
 #
 #  id          :bigint           not null, primary key
-#  tenant_id   :bigint
-#  category    :string
-#  subcategory :string
 #  body        :string
+#  category    :string
+#  order       :integer
+#  subcategory :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  order       :integer
 #  sandbox_id  :uuid
+#  tenant_id   :bigint
+#
+# Indexes
+#
+#  index_remarks_on_sandbox_id  (sandbox_id)
+#  index_remarks_on_tenant_id   (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (tenant_id => tenants.id)
 #

@@ -10,8 +10,12 @@ end
 # Table name: tenant_incoterms
 #
 #  id          :bigint           not null, primary key
-#  tenant_id   :integer
-#  incoterm_id :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  incoterm_id :integer
+#  tenant_id   :integer
+#
+# Indexes
+#
+#  index_tenant_incoterms_on_tenant_id  (tenant_id)
 #

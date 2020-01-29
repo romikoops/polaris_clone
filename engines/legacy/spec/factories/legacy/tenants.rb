@@ -132,3 +132,22 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
 
   end
 end
+
+# == Schema Information
+#
+# Table name: tenants
+#
+#  id          :bigint           not null, primary key
+#  addresses   :jsonb
+#  currency    :string           default("EUR")
+#  email_links :jsonb
+#  emails      :jsonb
+#  name        :string
+#  phones      :jsonb
+#  scope       :jsonb
+#  subdomain   :string
+#  theme       :jsonb
+#  web         :jsonb
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#

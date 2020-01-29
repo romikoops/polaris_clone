@@ -50,3 +50,22 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     factory :trucking_on_charge, traits: [:trucking_on]
   end
 end
+
+# == Schema Information
+#
+# Table name: charge_categories
+#
+#  id            :bigint           not null, primary key
+#  code          :string
+#  name          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  cargo_unit_id :integer
+#  sandbox_id    :uuid
+#  tenant_id     :integer
+#
+# Indexes
+#
+#  index_charge_categories_on_sandbox_id  (sandbox_id)
+#  index_charge_categories_on_tenant_id   (tenant_id)
+#

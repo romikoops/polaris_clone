@@ -33,26 +33,42 @@ end
 # Table name: locations_names
 #
 #  id                :uuid             not null, primary key
-#  language          :string
-#  location_id       :uuid
-#  osm_id            :bigint(8)
-#  place_rank        :bigint(8)
-#  importance        :bigint(8)
-#  osm_type          :string
-#  street            :string
-#  city              :string
-#  osm_class         :string
-#  name_type         :string
-#  country           :string
-#  county            :string
-#  state             :string
-#  country_code      :string
-#  display_name      :string
 #  alternative_names :string
+#  city              :string
+#  country           :string
+#  country_code      :string
+#  county            :string
+#  display_name      :string
+#  importance        :bigint
+#  language          :string
+#  locode            :string
 #  name              :string
+#  name_type         :string
+#  osm_class         :string
+#  osm_type          :string
+#  place_rank        :bigint
 #  point             :geometry({:srid= geometry, 0
 #  postal_code       :string
+#  state             :string
+#  street            :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  locode            :string
+#  location_id       :uuid
+#  osm_id            :bigint
+#
+# Indexes
+#
+#  index_locations_names_on_locode    (locode)
+#  index_locations_names_on_osm_id    (osm_id)
+#  index_locations_names_on_osm_type  (osm_type)
+#  locations_names_to_tsvector_idx1   (to_tsvector('english'::regconfig, (country)::text)) USING gin
+#  locations_names_to_tsvector_idx10  (to_tsvector('english'::regconfig, (city)::text)) USING gin
+#  locations_names_to_tsvector_idx3   (to_tsvector('english'::regconfig, (language)::text)) USING gin
+#  locations_names_to_tsvector_idx4   (to_tsvector('english'::regconfig, (osm_id)::text)) USING gin
+#  locations_names_to_tsvector_idx5   (to_tsvector('english'::regconfig, (country_code)::text)) USING gin
+#  locations_names_to_tsvector_idx6   (to_tsvector('english'::regconfig, (display_name)::text)) USING gin
+#  locations_names_to_tsvector_idx7   (to_tsvector('english'::regconfig, (name)::text)) USING gin
+#  locations_names_to_tsvector_idx8   (to_tsvector('english'::regconfig, (alternative_names)::text)) USING gin
+#  locations_names_to_tsvector_idx9   (to_tsvector('english'::regconfig, (postal_code)::text)) USING gin
+#  uniq_index_1                       (language,osm_id,street,country,country_code,display_name,name,postal_code) UNIQUE
 #

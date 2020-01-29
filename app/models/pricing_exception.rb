@@ -24,8 +24,13 @@ end
 #  id              :bigint           not null, primary key
 #  effective_date  :datetime
 #  expiration_date :datetime
-#  pricing_id      :bigint
-#  tenant_id       :bigint
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  pricing_id      :bigint
+#  tenant_id       :bigint
+#
+# Indexes
+#
+#  index_pricing_exceptions_on_pricing_id  (pricing_id)
+#  index_pricing_exceptions_on_tenant_id   (tenant_id)
 #

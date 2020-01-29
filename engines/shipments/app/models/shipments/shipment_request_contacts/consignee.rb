@@ -11,9 +11,18 @@ end
 # Table name: shipments_shipment_request_contacts
 #
 #  id                  :uuid             not null, primary key
-#  shipment_request_id :uuid             not null
-#  contact_id          :uuid             not null
 #  type                :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  contact_id          :uuid             not null
+#  shipment_request_id :uuid             not null
+#
+# Indexes
+#
+#  index_shipment_request_contacts_on_contact_id           (contact_id)
+#  index_shipment_request_contacts_on_shipment_request_id  (shipment_request_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (contact_id => address_book_contacts.id)
 #

@@ -96,3 +96,23 @@ FactoryBot.define do
     factory :swedish_postal_location, traits: [:postal_sweden]
   end
 end
+
+# == Schema Information
+#
+# Table name: locations_locations
+#
+#  id           :uuid             not null, primary key
+#  admin_level  :integer
+#  bounds       :geometry({:srid= geometry, 0
+#  country_code :string
+#  name         :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  osm_id       :bigint
+#
+# Indexes
+#
+#  index_locations_locations_on_bounds  (bounds) USING gist
+#  index_locations_locations_on_name    (name)
+#  index_locations_locations_on_osm_id  (osm_id)
+#

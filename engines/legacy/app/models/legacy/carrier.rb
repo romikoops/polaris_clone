@@ -31,3 +31,7 @@ end
 #  updated_at :datetime         not null
 #  sandbox_id :uuid
 #
+# Indexes
+#
+#  index_carriers_on_sandbox_id  (sandbox_id)
+#

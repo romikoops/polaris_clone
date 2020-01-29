@@ -35,11 +35,16 @@ end
 # Table name: charge_categories
 #
 #  id            :bigint           not null, primary key
-#  name          :string
 #  code          :string
-#  cargo_unit_id :integer
+#  name          :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  tenant_id     :integer
+#  cargo_unit_id :integer
 #  sandbox_id    :uuid
+#  tenant_id     :integer
+#
+# Indexes
+#
+#  index_charge_categories_on_sandbox_id  (sandbox_id)
+#  index_charge_categories_on_tenant_id   (tenant_id)
 #

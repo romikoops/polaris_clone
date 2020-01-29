@@ -26,19 +26,26 @@ end
 # Table name: ledger_fees
 #
 #  id                  :uuid             not null, primary key
+#  action              :integer          default("nothing")
+#  applicable          :integer          default("self")
+#  base                :decimal(, )      default(0.000001)
 #  cargo_class         :bigint           default("00")
 #  cargo_type          :bigint           default("LCL")
 #  category            :integer          default(0)
 #  code                :string
-#  rate_id             :uuid
-#  action              :integer          default("nothing")
-#  base                :decimal(, )      default(0.000001)
-#  order               :integer          default(0)
-#  applicable          :integer          default("self")
 #  load_meterage_limit :decimal(, )      default(0.0)
-#  load_meterage_type  :integer          default("height")
 #  load_meterage_logic :integer          default("regular")
 #  load_meterage_ratio :decimal(, )      default(0.0)
+#  load_meterage_type  :integer          default("height")
+#  order               :integer          default(0)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  rate_id             :uuid
+#
+# Indexes
+#
+#  index_ledger_fees_on_cargo_class  (cargo_class)
+#  index_ledger_fees_on_cargo_type   (cargo_type)
+#  index_ledger_fees_on_category     (category)
+#  index_ledger_fees_on_rate_id      (rate_id)
 #

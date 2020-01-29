@@ -27,15 +27,26 @@ end
 # Table name: quotations_tenders
 #
 #  id                 :uuid             not null, primary key
-#  tenant_vehicle_id  :bigint
-#  origin_hub_id      :integer
-#  destination_hub_id :integer
-#  carrier_name       :string
-#  name               :string
-#  load_type          :string
 #  amount_cents       :integer
 #  amount_currency    :string
+#  carrier_name       :string
+#  load_type          :string
+#  name               :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  destination_hub_id :integer
+#  origin_hub_id      :integer
 #  quotation_id       :uuid
+#  tenant_vehicle_id  :bigint
+#
+# Indexes
+#
+#  index_quotations_tenders_on_destination_hub_id  (destination_hub_id)
+#  index_quotations_tenders_on_origin_hub_id       (origin_hub_id)
+#  index_quotations_tenders_on_quotation_id        (quotation_id)
+#  index_quotations_tenders_on_tenant_vehicle_id   (tenant_vehicle_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (quotation_id => quotations_quotations.id)
 #

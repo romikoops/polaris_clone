@@ -87,19 +87,29 @@ end
 # Table name: pricings_pricings
 #
 #  id                :uuid             not null, primary key
-#  wm_rate           :decimal(, )
+#  cargo_class       :string
 #  effective_date    :datetime
 #  expiration_date   :datetime
-#  tenant_id         :bigint
-#  cargo_class       :string
+#  internal          :boolean          default(FALSE)
 #  load_type         :string
-#  user_id           :bigint
-#  itinerary_id      :bigint
-#  tenant_vehicle_id :integer
-#  legacy_id         :integer
+#  wm_rate           :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  sandbox_id        :uuid
-#  internal          :boolean          default(FALSE)
 #  group_id          :uuid
+#  itinerary_id      :bigint
+#  legacy_id         :integer
+#  sandbox_id        :uuid
+#  tenant_id         :bigint
+#  tenant_vehicle_id :integer
+#  user_id           :bigint
+#
+# Indexes
+#
+#  index_pricings_pricings_on_cargo_class        (cargo_class)
+#  index_pricings_pricings_on_itinerary_id       (itinerary_id)
+#  index_pricings_pricings_on_load_type          (load_type)
+#  index_pricings_pricings_on_sandbox_id         (sandbox_id)
+#  index_pricings_pricings_on_tenant_id          (tenant_id)
+#  index_pricings_pricings_on_tenant_vehicle_id  (tenant_vehicle_id)
+#  index_pricings_pricings_on_user_id            (user_id)
 #

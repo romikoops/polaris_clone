@@ -33,10 +33,19 @@ end
 # Table name: cargo_cargos
 #
 #  id                         :uuid             not null, primary key
-#  tenant_id                  :uuid
+#  total_goods_value_cents    :integer          default(0), not null
+#  total_goods_value_currency :string           not null
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
 #  quotation_id               :uuid
-#  total_goods_value_cents    :integer          default(0), not null
-#  total_goods_value_currency :string           not null
+#  tenant_id                  :uuid
+#
+# Indexes
+#
+#  index_cargo_cargos_on_quotation_id  (quotation_id)
+#  index_cargo_cargos_on_tenant_id     (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (quotation_id => quotations_quotations.id)
 #

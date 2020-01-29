@@ -55,3 +55,26 @@ module Legacy
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: max_dimensions_bundles
+#
+#  id                :bigint           not null, primary key
+#  aggregate         :boolean
+#  chargeable_weight :decimal(, )
+#  dimension_x       :decimal(, )
+#  dimension_y       :decimal(, )
+#  dimension_z       :decimal(, )
+#  mode_of_transport :string
+#  payload_in_kg     :decimal(, )
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  sandbox_id        :uuid
+#  tenant_id         :integer
+#
+# Indexes
+#
+#  index_max_dimensions_bundles_on_sandbox_id  (sandbox_id)
+#  index_max_dimensions_bundles_on_tenant_id   (tenant_id)
+#

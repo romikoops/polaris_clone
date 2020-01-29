@@ -36,12 +36,20 @@ end
 # Table name: trucking_destinations
 #
 #  id           :bigint           not null, primary key
-#  zipcode      :string
-#  country_code :string
 #  city_name    :string
+#  country_code :string
 #  distance     :integer
+#  zipcode      :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  location_id  :integer
 #  sandbox_id   :uuid
+#
+# Indexes
+#
+#  index_trucking_destinations_on_city_name     (city_name)
+#  index_trucking_destinations_on_country_code  (country_code)
+#  index_trucking_destinations_on_distance      (distance)
+#  index_trucking_destinations_on_sandbox_id    (sandbox_id)
+#  index_trucking_destinations_on_zipcode       (zipcode)
 #

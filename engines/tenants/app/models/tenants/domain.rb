@@ -14,9 +14,13 @@ end
 # Table name: tenants_domains
 #
 #  id         :uuid             not null, primary key
-#  tenant_id  :uuid
-#  domain     :string
 #  default    :boolean
+#  domain     :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  tenant_id  :uuid
+#
+# Indexes
+#
+#  index_tenants_domains_on_tenant_id  (tenant_id)
 #

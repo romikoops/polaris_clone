@@ -13,11 +13,17 @@ end
 # Table name: routing_locations
 #
 #  id           :uuid             not null, primary key
-#  locode       :string
-#  center       :geometry({:srid= geometry, 0
 #  bounds       :geometry({:srid= geometry, 0
-#  name         :string
+#  center       :geometry({:srid= geometry, 0
 #  country_code :string
+#  locode       :string
+#  name         :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#
+# Indexes
+#
+#  index_routing_locations_on_bounds  (bounds) USING gist
+#  index_routing_locations_on_center  (center)
+#  index_routing_locations_on_locode  (locode)
 #

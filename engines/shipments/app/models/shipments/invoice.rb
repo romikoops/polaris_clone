@@ -25,10 +25,19 @@ end
 # Table name: shipments_invoices
 #
 #  id             :uuid             not null, primary key
-#  sandbox_id     :uuid
-#  shipment_id    :uuid             not null
-#  invoice_number :bigint
 #  amount_cents   :integer          default(0), not null
+#  invoice_number :bigint
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  sandbox_id     :uuid
+#  shipment_id    :uuid             not null
+#
+# Indexes
+#
+#  index_shipments_invoices_on_sandbox_id   (sandbox_id)
+#  index_shipments_invoices_on_shipment_id  (shipment_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (sandbox_id => tenants_sandboxes.id)
 #

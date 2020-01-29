@@ -42,8 +42,13 @@ end
 #
 #  id         :uuid             not null, primary key
 #  name       :string
-#  tenant_id  :uuid
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  sandbox_id :uuid
+#  tenant_id  :uuid
+#
+# Indexes
+#
+#  index_tenants_groups_on_sandbox_id  (sandbox_id)
+#  index_tenants_groups_on_tenant_id   (tenant_id)
 #

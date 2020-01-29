@@ -51,21 +51,26 @@ end
 # Table name: pricings_fees
 #
 #  id                 :uuid             not null, primary key
-#  rate               :decimal(, )
 #  base               :decimal(, )
-#  rate_basis_id      :uuid
-#  min                :decimal(, )
-#  hw_threshold       :decimal(, )
-#  hw_rate_basis_id   :uuid
-#  charge_category_id :integer
-#  range              :jsonb
 #  currency_name      :string
-#  currency_id        :bigint
-#  pricing_id         :uuid
-#  tenant_id          :bigint
-#  legacy_id          :integer
+#  hw_threshold       :decimal(, )
+#  metadata           :jsonb
+#  min                :decimal(, )
+#  range              :jsonb
+#  rate               :decimal(, )
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  charge_category_id :integer
+#  currency_id        :bigint
+#  hw_rate_basis_id   :uuid
+#  legacy_id          :integer
+#  pricing_id         :uuid
+#  rate_basis_id      :uuid
 #  sandbox_id         :uuid
-#  metadata           :jsonb
+#  tenant_id          :bigint
+#
+# Indexes
+#
+#  index_pricings_fees_on_sandbox_id  (sandbox_id)
+#  index_pricings_fees_on_tenant_id   (tenant_id)
 #

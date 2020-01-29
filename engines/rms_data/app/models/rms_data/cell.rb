@@ -11,11 +11,18 @@ end
 # Table name: rms_data_cells
 #
 #  id         :uuid             not null, primary key
-#  tenant_id  :uuid
-#  row        :integer
 #  column     :integer
+#  row        :integer
 #  value      :string
-#  sheet_id   :uuid
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  sheet_id   :uuid
+#  tenant_id  :uuid
+#
+# Indexes
+#
+#  index_rms_data_cells_on_column     (column)
+#  index_rms_data_cells_on_row        (row)
+#  index_rms_data_cells_on_sheet_id   (sheet_id)
+#  index_rms_data_cells_on_tenant_id  (tenant_id)
 #

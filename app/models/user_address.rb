@@ -24,11 +24,15 @@ end
 # Table name: user_addresses
 #
 #  id         :bigint           not null, primary key
-#  user_id    :integer
-#  address_id :integer
 #  category   :string
+#  deleted_at :datetime
 #  primary    :boolean          default(FALSE)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  deleted_at :datetime
+#  address_id :integer
+#  user_id    :integer
+#
+# Indexes
+#
+#  index_user_addresses_on_deleted_at  (deleted_at)
 #

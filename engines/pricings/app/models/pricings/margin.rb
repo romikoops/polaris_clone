@@ -89,23 +89,38 @@ end
 # Table name: pricings_margins
 #
 #  id                 :uuid             not null, primary key
-#  tenant_id          :uuid
-#  pricing_id         :uuid
+#  applicable_type    :string
+#  application_order  :integer          default(0)
+#  cargo_class        :string
 #  default_for        :string
-#  operator           :string
-#  value              :decimal(, )
 #  effective_date     :datetime
 #  expiration_date    :datetime
-#  applicable_type    :string
-#  applicable_id      :uuid
-#  tenant_vehicle_id  :integer
-#  cargo_class        :string
-#  itinerary_id       :integer
-#  origin_hub_id      :integer
-#  destination_hub_id :integer
-#  application_order  :integer          default(0)
+#  margin_type        :integer
+#  operator           :string
+#  value              :decimal(, )
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
-#  margin_type        :integer
+#  applicable_id      :uuid
+#  destination_hub_id :integer
+#  itinerary_id       :integer
+#  origin_hub_id      :integer
+#  pricing_id         :uuid
 #  sandbox_id         :uuid
+#  tenant_id          :uuid
+#  tenant_vehicle_id  :integer
+#
+# Indexes
+#
+#  index_pricings_margins_on_applicable_type_and_applicable_id  (applicable_type,applicable_id)
+#  index_pricings_margins_on_application_order                  (application_order)
+#  index_pricings_margins_on_cargo_class                        (cargo_class)
+#  index_pricings_margins_on_destination_hub_id                 (destination_hub_id)
+#  index_pricings_margins_on_effective_date                     (effective_date)
+#  index_pricings_margins_on_expiration_date                    (expiration_date)
+#  index_pricings_margins_on_itinerary_id                       (itinerary_id)
+#  index_pricings_margins_on_origin_hub_id                      (origin_hub_id)
+#  index_pricings_margins_on_pricing_id                         (pricing_id)
+#  index_pricings_margins_on_sandbox_id                         (sandbox_id)
+#  index_pricings_margins_on_tenant_id                          (tenant_id)
+#  index_pricings_margins_on_tenant_vehicle_id                  (tenant_vehicle_id)
 #

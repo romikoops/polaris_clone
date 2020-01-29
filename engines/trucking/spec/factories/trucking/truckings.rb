@@ -506,3 +506,40 @@ FactoryBot.define do
     factory :trucking_with_kg_cbm_special, traits: [:kg_cbm_special_rates]
   end
 end
+
+# == Schema Information
+#
+# Table name: trucking_truckings
+#
+#  id                  :uuid             not null, primary key
+#  cargo_class         :string
+#  carriage            :string
+#  cbm_ratio           :integer
+#  fees                :jsonb
+#  identifier_modifier :string
+#  load_meterage       :jsonb
+#  load_type           :string
+#  metadata            :jsonb
+#  modifier            :string
+#  rates               :jsonb
+#  truck_type          :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  courier_id          :uuid
+#  group_id            :uuid
+#  hub_id              :integer
+#  location_id         :uuid
+#  parent_id           :uuid
+#  rate_id             :uuid
+#  sandbox_id          :uuid
+#  tenant_id           :integer
+#  user_id             :integer
+#
+# Indexes
+#
+#  index_trucking_truckings_on_hub_id       (hub_id)
+#  index_trucking_truckings_on_location_id  (location_id)
+#  index_trucking_truckings_on_sandbox_id   (sandbox_id)
+#  index_trucking_truckings_on_tenant_id    (tenant_id)
+#  trucking_foreign_keys                    (rate_id,location_id,hub_id) UNIQUE
+#

@@ -18,10 +18,14 @@ end
 # Table name: shipment_contacts
 #
 #  id           :bigint           not null, primary key
-#  shipment_id  :integer
-#  contact_id   :integer
 #  contact_type :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  contact_id   :integer
 #  sandbox_id   :uuid
+#  shipment_id  :integer
+#
+# Indexes
+#
+#  index_shipment_contacts_on_sandbox_id  (sandbox_id)
 #

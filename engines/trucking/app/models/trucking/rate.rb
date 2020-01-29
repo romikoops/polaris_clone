@@ -83,14 +83,19 @@ end
 # Table name: trucking_rates
 #
 #  id                  :uuid             not null, primary key
-#  load_meterage       :jsonb
 #  cbm_ratio           :integer
-#  modifier            :string
-#  tenant_id           :integer
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  rates               :jsonb
 #  fees                :jsonb
 #  identifier_modifier :string
+#  load_meterage       :jsonb
+#  modifier            :string
+#  rates               :jsonb
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
 #  scope_id            :uuid
+#  tenant_id           :integer
+#
+# Indexes
+#
+#  index_trucking_rates_on_tenant_id          (tenant_id)
+#  index_trucking_rates_on_trucking_scope_id  (scope_id)
 #

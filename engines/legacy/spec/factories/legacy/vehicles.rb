@@ -6,3 +6,14 @@ FactoryBot.define do
     mode_of_transport { 'ocean' }
   end
 end
+
+# == Schema Information
+#
+# Table name: vehicles
+#
+#  id                :bigint           not null, primary key
+#  mode_of_transport :string
+#  name              :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#

@@ -12,21 +12,25 @@ end
 # Table name: addons
 #
 #  id                   :bigint           not null, primary key
-#  title                :string
-#  text                 :jsonb            is an Array
-#  tenant_id            :integer
-#  read_more            :string
 #  accept_text          :string
-#  decline_text         :string
 #  additional_info_text :string
-#  cargo_class          :string
-#  hub_id               :integer
-#  counterpart_hub_id   :integer
-#  mode_of_transport    :string
-#  tenant_vehicle_id    :integer
-#  direction            :string
 #  addon_type           :string
+#  cargo_class          :string
+#  decline_text         :string
+#  direction            :string
 #  fees                 :jsonb
+#  mode_of_transport    :string
+#  read_more            :string
+#  text                 :jsonb            is an Array
+#  title                :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  counterpart_hub_id   :integer
+#  hub_id               :integer
+#  tenant_id            :integer
+#  tenant_vehicle_id    :integer
+#
+# Indexes
+#
+#  index_addons_on_tenant_id  (tenant_id)
 #

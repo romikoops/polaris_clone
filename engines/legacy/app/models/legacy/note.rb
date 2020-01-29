@@ -20,21 +20,29 @@ end
 #
 # Table name: notes
 #
-#  id                  :bigint           not null, primary key
-#  itinerary_id        :integer
-#  hub_id              :integer
-#  trucking_pricing_id :integer
-#  body                :string
-#  header              :string
-#  level               :string
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  sandbox_id          :uuid
-#  target_type         :string
-#  target_id           :integer
-#  pricings_pricing_id :uuid
-#  tenant_id           :integer
-#  contains_html       :boolean
-#  transshipment       :boolean          default(FALSE), not null
-#  remarks             :boolean          default(FALSE), not null
+#  id                           :bigint           not null, primary key
+#  body(MASKED WITH literal:)   :string
+#  contains_html                :boolean
+#  header(MASKED WITH literal:) :string
+#  level                        :string
+#  remarks                      :boolean          default(FALSE), not null
+#  target_type                  :string
+#  transshipment                :boolean          default(FALSE), not null
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  hub_id                       :integer
+#  itinerary_id                 :integer
+#  pricings_pricing_id          :uuid
+#  sandbox_id                   :uuid
+#  target_id                    :integer
+#  tenant_id                    :integer
+#  trucking_pricing_id          :integer
+#
+# Indexes
+#
+#  index_notes_on_pricings_pricing_id        (pricings_pricing_id)
+#  index_notes_on_remarks                    (remarks)
+#  index_notes_on_sandbox_id                 (sandbox_id)
+#  index_notes_on_target_type_and_target_id  (target_type,target_id)
+#  index_notes_on_transshipment              (transshipment)
 #

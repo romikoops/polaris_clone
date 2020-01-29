@@ -26,24 +26,33 @@ end
 # Table name: address_book_contacts
 #
 #  id               :uuid             not null, primary key
-#  user_id          :integer
+#  city             :string
 #  company_name     :string
+#  country_code     :string
+#  email            :string
 #  first_name       :string
+#  geocoded_address :string
 #  last_name        :string
 #  phone            :string
-#  email            :string
-#  sandbox_id       :uuid
-#  latitude         :float
-#  longitude        :float
-#  geocoded_address :string
+#  point            :geometry({:srid= geometry, 0
+#  postal_code      :string
+#  premise          :string
+#  province         :string
 #  street           :string
 #  street_number    :string
-#  zip_code         :string
-#  city             :string
-#  province         :string
-#  premise          :string
-#  country_code     :string
-#  country_name     :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  sandbox_id       :uuid
+#  tms_id           :string
+#  user_id          :uuid
+#
+# Indexes
+#
+#  index_address_book_contacts_on_sandbox_id  (sandbox_id)
+#  index_address_book_contacts_on_user_id     (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (sandbox_id => tenants_sandboxes.id)
+#  fk_rails_...  (user_id => tenants_users.id)
 #

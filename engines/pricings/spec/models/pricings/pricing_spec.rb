@@ -77,3 +77,35 @@ module Pricings
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: pricings_pricings
+#
+#  id                :uuid             not null, primary key
+#  cargo_class       :string
+#  effective_date    :datetime
+#  expiration_date   :datetime
+#  internal          :boolean          default(FALSE)
+#  load_type         :string
+#  wm_rate           :decimal(, )
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  group_id          :uuid
+#  itinerary_id      :bigint
+#  legacy_id         :integer
+#  sandbox_id        :uuid
+#  tenant_id         :bigint
+#  tenant_vehicle_id :integer
+#  user_id           :bigint
+#
+# Indexes
+#
+#  index_pricings_pricings_on_cargo_class        (cargo_class)
+#  index_pricings_pricings_on_itinerary_id       (itinerary_id)
+#  index_pricings_pricings_on_load_type          (load_type)
+#  index_pricings_pricings_on_sandbox_id         (sandbox_id)
+#  index_pricings_pricings_on_tenant_id          (tenant_id)
+#  index_pricings_pricings_on_tenant_vehicle_id  (tenant_vehicle_id)
+#  index_pricings_pricings_on_user_id            (user_id)
+#

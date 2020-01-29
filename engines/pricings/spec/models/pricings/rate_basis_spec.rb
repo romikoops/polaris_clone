@@ -30,3 +30,21 @@ module Pricings
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: pricings_rate_bases
+#
+#  id            :uuid             not null, primary key
+#  description   :string
+#  external_code :string
+#  internal_code :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  sandbox_id    :uuid
+#
+# Indexes
+#
+#  index_pricings_rate_bases_on_external_code  (external_code)
+#  index_pricings_rate_bases_on_sandbox_id     (sandbox_id)
+#

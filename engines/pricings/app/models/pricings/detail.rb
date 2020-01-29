@@ -26,12 +26,18 @@ end
 # Table name: pricings_details
 #
 #  id                 :uuid             not null, primary key
-#  tenant_id          :uuid
-#  margin_id          :uuid
-#  value              :decimal(, )
 #  operator           :string
-#  charge_category_id :integer
+#  value              :decimal(, )
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  charge_category_id :integer
+#  margin_id          :uuid
 #  sandbox_id         :uuid
+#  tenant_id          :uuid
+#
+# Indexes
+#
+#  index_pricings_details_on_margin_id   (margin_id)
+#  index_pricings_details_on_sandbox_id  (sandbox_id)
+#  index_pricings_details_on_tenant_id   (tenant_id)
 #

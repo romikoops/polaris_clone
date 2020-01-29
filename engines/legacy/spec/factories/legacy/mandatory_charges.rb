@@ -8,3 +8,16 @@ FactoryBot.define do
     export_charges { false }
   end
 end
+
+# == Schema Information
+#
+# Table name: mandatory_charges
+#
+#  id             :bigint           not null, primary key
+#  export_charges :boolean
+#  import_charges :boolean
+#  on_carriage    :boolean
+#  pre_carriage   :boolean
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#

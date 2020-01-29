@@ -13,8 +13,13 @@ end
 #
 #  id            :uuid             not null, primary key
 #  target_type   :string
-#  target_id     :uuid
-#  connection_id :uuid
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  connection_id :uuid
+#  target_id     :uuid
+#
+# Indexes
+#
+#  visibility_connection_index  (connection_id)
+#  visibility_target_index      (target_type,target_id)
 #

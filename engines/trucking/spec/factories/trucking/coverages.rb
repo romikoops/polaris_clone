@@ -6,3 +6,20 @@ FactoryBot.define do
     association :hub, factory: legacy_hub
   end
 end
+
+# == Schema Information
+#
+# Table name: trucking_coverages
+#
+#  id         :uuid             not null, primary key
+#  bounds     :geometry({:srid= geometry, 0
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  hub_id     :integer
+#  sandbox_id :uuid
+#
+# Indexes
+#
+#  index_trucking_coverages_on_bounds      (bounds) USING gist
+#  index_trucking_coverages_on_sandbox_id  (sandbox_id)
+#

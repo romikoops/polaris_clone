@@ -70,15 +70,22 @@ end
 # Table name: trips
 #
 #  id                :bigint           not null, primary key
-#  itinerary_id      :integer
-#  start_date        :datetime
+#  closing_date      :datetime
 #  end_date          :datetime
+#  load_type         :string
+#  start_date        :datetime
+#  vessel            :string
+#  voyage_code       :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  voyage_code       :string
-#  vessel            :string
-#  tenant_vehicle_id :integer
-#  closing_date      :datetime
-#  load_type         :string
+#  itinerary_id      :integer
 #  sandbox_id        :uuid
+#  tenant_vehicle_id :integer
+#
+# Indexes
+#
+#  index_trips_on_closing_date       (closing_date)
+#  index_trips_on_itinerary_id       (itinerary_id)
+#  index_trips_on_sandbox_id         (sandbox_id)
+#  index_trips_on_tenant_vehicle_id  (tenant_vehicle_id)
 #

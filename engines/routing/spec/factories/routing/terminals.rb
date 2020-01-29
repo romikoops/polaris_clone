@@ -74,3 +74,21 @@ FactoryBot.define do
     factory :veracruz_terminal, traits: [:veracruz]
   end
 end
+
+# == Schema Information
+#
+# Table name: routing_terminals
+#
+#  id                :uuid             not null, primary key
+#  center            :geometry({:srid= geometry, 0
+#  default           :boolean          default(FALSE)
+#  mode_of_transport :integer          default(NULL)
+#  terminal_code     :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  location_id       :uuid
+#
+# Indexes
+#
+#  index_routing_terminals_on_center  (center)
+#

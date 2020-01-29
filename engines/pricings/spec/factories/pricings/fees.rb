@@ -160,3 +160,32 @@ FactoryBot.define do
     factory :fee_per_item_heavy, traits: [:per_item_heavy]
   end
 end
+
+# == Schema Information
+#
+# Table name: pricings_fees
+#
+#  id                 :uuid             not null, primary key
+#  base               :decimal(, )
+#  currency_name      :string
+#  hw_threshold       :decimal(, )
+#  metadata           :jsonb
+#  min                :decimal(, )
+#  range              :jsonb
+#  rate               :decimal(, )
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  charge_category_id :integer
+#  currency_id        :bigint
+#  hw_rate_basis_id   :uuid
+#  legacy_id          :integer
+#  pricing_id         :uuid
+#  rate_basis_id      :uuid
+#  sandbox_id         :uuid
+#  tenant_id          :bigint
+#
+# Indexes
+#
+#  index_pricings_fees_on_sandbox_id  (sandbox_id)
+#  index_pricings_fees_on_tenant_id   (tenant_id)
+#

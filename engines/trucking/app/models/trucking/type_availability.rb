@@ -41,11 +41,15 @@ end
 # Table name: trucking_type_availabilities
 #
 #  id           :uuid             not null, primary key
-#  load_type    :string
 #  carriage     :string
+#  load_type    :string
+#  query_method :integer
 #  truck_type   :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  query_method :integer
 #  sandbox_id   :uuid
+#
+# Indexes
+#
+#  index_trucking_type_availabilities_on_sandbox_id  (sandbox_id)
 #

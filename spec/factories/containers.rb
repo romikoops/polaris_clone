@@ -19,19 +19,23 @@ end
 # Table name: containers
 #
 #  id              :bigint           not null, primary key
-#  shipment_id     :integer
-#  size_class      :string
-#  weight_class    :string
-#  payload_in_kg   :decimal(, )
-#  tare_weight     :decimal(, )
+#  cargo_class     :string
+#  customs_text    :string
+#  dangerous_goods :boolean
 #  gross_weight    :decimal(, )
+#  hs_codes        :string           default([]), is an Array
+#  payload_in_kg   :decimal(, )
+#  quantity        :integer
+#  size_class      :string
+#  tare_weight     :decimal(, )
+#  unit_price      :jsonb
+#  weight_class    :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  dangerous_goods :boolean
-#  cargo_class     :string
-#  hs_codes        :string           default([]), is an Array
-#  customs_text    :string
-#  quantity        :integer
-#  unit_price      :jsonb
 #  sandbox_id      :uuid
+#  shipment_id     :integer
+#
+# Indexes
+#
+#  index_containers_on_sandbox_id  (sandbox_id)
 #

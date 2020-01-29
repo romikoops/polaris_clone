@@ -55,16 +55,21 @@ end
 # Table name: documents
 #
 #  id               :bigint           not null, primary key
-#  user_id          :integer
-#  shipment_id      :integer
+#  approval_details :jsonb
+#  approved         :string
 #  doc_type         :string
-#  url              :string
 #  text             :string
+#  url              :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  approved         :string
-#  approval_details :jsonb
-#  tenant_id        :integer
 #  quotation_id     :integer
 #  sandbox_id       :uuid
+#  shipment_id      :integer
+#  tenant_id        :integer
+#  user_id          :integer
+#
+# Indexes
+#
+#  index_documents_on_sandbox_id  (sandbox_id)
+#  index_documents_on_tenant_id   (tenant_id)
 #

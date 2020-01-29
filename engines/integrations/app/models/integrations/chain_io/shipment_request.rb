@@ -27,19 +27,33 @@ end
 # Table name: shipments_shipment_requests
 #
 #  id            :uuid             not null, primary key
-#  status        :string
 #  cargo_notes   :string
-#  notes         :string
-#  incoterm_text :string
 #  eori          :string
-#  ref_number    :string           not null
-#  submitted_at  :datetime
 #  eta           :datetime
 #  etd           :datetime
-#  sandbox_id    :uuid
-#  user_id       :uuid             not null
-#  tenant_id     :uuid             not null
-#  tender_id     :uuid             not null
+#  incoterm_text :string
+#  notes         :string
+#  ref_number    :string           not null
+#  status        :string
+#  submitted_at  :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  sandbox_id    :uuid
+#  tenant_id     :uuid             not null
+#  tender_id     :uuid             not null
+#  user_id       :uuid             not null
+#
+# Indexes
+#
+#  index_shipments_shipment_requests_on_sandbox_id  (sandbox_id)
+#  index_shipments_shipment_requests_on_tenant_id   (tenant_id)
+#  index_shipments_shipment_requests_on_tender_id   (tender_id)
+#  index_shipments_shipment_requests_on_user_id     (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (sandbox_id => tenants_sandboxes.id)
+#  fk_rails_...  (tenant_id => tenants_tenants.id)
+#  fk_rails_...  (tender_id => quotations_tenders.id)
+#  fk_rails_...  (user_id => tenants_users.id)
 #

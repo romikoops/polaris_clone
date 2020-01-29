@@ -8,8 +8,12 @@ end
 # Table name: tenants_sandboxes
 #
 #  id         :uuid             not null, primary key
-#  tenant_id  :uuid
 #  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  tenant_id  :uuid
+#
+# Indexes
+#
+#  index_tenants_sandboxes_on_tenant_id  (tenant_id)
 #

@@ -84,17 +84,26 @@ end
 # Table name: pricings
 #
 #  id                    :bigint           not null, primary key
-#  wm_rate               :decimal(, )
 #  effective_date        :datetime
 #  expiration_date       :datetime
-#  tenant_id             :bigint
-#  transport_category_id :bigint
-#  user_id               :bigint
-#  itinerary_id          :bigint
+#  internal              :boolean          default(FALSE)
+#  uuid                  :uuid
+#  wm_rate               :decimal(, )
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
-#  tenant_vehicle_id     :integer
-#  uuid                  :uuid
+#  itinerary_id          :bigint
 #  sandbox_id            :uuid
-#  internal              :boolean          default(FALSE)
+#  tenant_id             :bigint
+#  tenant_vehicle_id     :integer
+#  transport_category_id :bigint
+#  user_id               :bigint
+#
+# Indexes
+#
+#  index_pricings_on_itinerary_id           (itinerary_id)
+#  index_pricings_on_sandbox_id             (sandbox_id)
+#  index_pricings_on_tenant_id              (tenant_id)
+#  index_pricings_on_transport_category_id  (transport_category_id)
+#  index_pricings_on_user_id                (user_id)
+#  index_pricings_on_uuid                   (uuid) UNIQUE
 #

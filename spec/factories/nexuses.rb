@@ -15,14 +15,19 @@ end
 # Table name: nexuses
 #
 #  id         :bigint           not null, primary key
-#  name       :string
-#  tenant_id  :integer
 #  latitude   :float
+#  locode     :string
 #  longitude  :float
+#  name       :string
 #  photo      :string
-#  country_id :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  country_id :integer
 #  sandbox_id :uuid
-#  locode     :string
+#  tenant_id  :integer
+#
+# Indexes
+#
+#  index_nexuses_on_sandbox_id  (sandbox_id)
+#  index_nexuses_on_tenant_id   (tenant_id)
 #

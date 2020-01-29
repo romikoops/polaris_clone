@@ -14,10 +14,15 @@ end
 # Table name: quotations_line_items
 #
 #  id                 :uuid             not null, primary key
-#  tender_id          :uuid
-#  charge_category_id :bigint
 #  amount_cents       :integer
 #  amount_currency    :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  charge_category_id :bigint
+#  tender_id          :uuid
+#
+# Indexes
+#
+#  index_quotations_line_items_on_charge_category_id  (charge_category_id)
+#  index_quotations_line_items_on_tender_id           (tender_id)
 #

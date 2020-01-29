@@ -68,3 +68,31 @@ FactoryBot.define do
     # association :mandatory_charge
   end
 end
+
+# == Schema Information
+#
+# Table name: hubs
+#
+#  id                  :bigint           not null, primary key
+#  free_out            :boolean          default(FALSE)
+#  hub_code            :string
+#  hub_status          :string           default("active")
+#  hub_type            :string
+#  latitude            :float
+#  longitude           :float
+#  name                :string
+#  photo               :string
+#  trucking_type       :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  address_id          :integer
+#  mandatory_charge_id :integer
+#  nexus_id            :integer
+#  sandbox_id          :uuid
+#  tenant_id           :integer
+#
+# Indexes
+#
+#  index_hubs_on_sandbox_id  (sandbox_id)
+#  index_hubs_on_tenant_id   (tenant_id)
+#

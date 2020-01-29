@@ -15,9 +15,13 @@ end
 # Table name: prices
 #
 #  id         :bigint           not null, primary key
-#  value      :decimal(, )
 #  currency   :string
+#  value      :decimal(, )
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  sandbox_id :uuid
+#
+# Indexes
+#
+#  index_prices_on_sandbox_id  (sandbox_id)
 #

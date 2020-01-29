@@ -59,15 +59,20 @@ end
 # Table name: tenants_companies
 #
 #  id          :uuid             not null, primary key
-#  name        :string
-#  address_id  :integer
-#  vat_number  :string
+#  deleted_at  :datetime
 #  email       :string
-#  tenant_id   :uuid
+#  name        :string
+#  phone       :string
+#  vat_number  :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  address_id  :integer
 #  external_id :string
-#  phone       :string
 #  sandbox_id  :uuid
-#  deleted_at  :datetime
+#  tenant_id   :uuid
+#
+# Indexes
+#
+#  index_tenants_companies_on_sandbox_id  (sandbox_id)
+#  index_tenants_companies_on_tenant_id   (tenant_id)
 #

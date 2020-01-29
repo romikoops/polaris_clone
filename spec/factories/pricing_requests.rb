@@ -13,10 +13,16 @@ end
 # Table name: pricing_requests
 #
 #  id         :bigint           not null, primary key
-#  pricing_id :integer
-#  user_id    :integer
-#  tenant_id  :integer
 #  status     :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  pricing_id :integer
+#  tenant_id  :integer
+#  user_id    :integer
+#
+# Indexes
+#
+#  index_pricing_requests_on_pricing_id  (pricing_id)
+#  index_pricing_requests_on_tenant_id   (tenant_id)
+#  index_pricing_requests_on_user_id     (user_id)
 #

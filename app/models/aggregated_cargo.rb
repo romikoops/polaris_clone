@@ -25,11 +25,15 @@ end
 # Table name: aggregated_cargos
 #
 #  id                :bigint           not null, primary key
-#  weight            :decimal(, )
-#  volume            :decimal(, )
 #  chargeable_weight :decimal(, )
-#  shipment_id       :integer
+#  volume            :decimal(, )
+#  weight            :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  sandbox_id        :uuid
+#  shipment_id       :integer
+#
+# Indexes
+#
+#  index_aggregated_cargos_on_sandbox_id  (sandbox_id)
 #

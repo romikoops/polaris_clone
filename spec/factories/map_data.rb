@@ -10,13 +10,18 @@ end
 # Table name: map_data
 #
 #  id           :bigint           not null, primary key
-#  line         :jsonb
-#  geo_json     :jsonb
-#  origin       :decimal(, )      default([]), is an Array
 #  destination  :decimal(, )      default([]), is an Array
-#  itinerary_id :string
-#  tenant_id    :integer
+#  geo_json     :jsonb
+#  line         :jsonb
+#  origin       :decimal(, )      default([]), is an Array
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  itinerary_id :string
 #  sandbox_id   :uuid
+#  tenant_id    :integer
+#
+# Indexes
+#
+#  index_map_data_on_sandbox_id  (sandbox_id)
+#  index_map_data_on_tenant_id   (tenant_id)
 #

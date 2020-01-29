@@ -113,14 +113,19 @@ end
 # Table name: trucking_pricings
 #
 #  id                        :bigint           not null, primary key
-#  load_meterage             :jsonb
 #  cbm_ratio                 :integer
-#  modifier                  :string
-#  tenant_id                 :integer
-#  created_at                :datetime
-#  updated_at                :datetime
-#  rates                     :jsonb
 #  fees                      :jsonb
 #  identifier_modifier       :string
+#  load_meterage             :jsonb
+#  modifier                  :string
+#  rates                     :jsonb
+#  created_at                :datetime
+#  updated_at                :datetime
+#  tenant_id                 :integer
 #  trucking_pricing_scope_id :integer
+#
+# Indexes
+#
+#  index_trucking_pricings_on_tenant_id                  (tenant_id)
+#  index_trucking_pricings_on_trucking_pricing_scope_id  (trucking_pricing_scope_id)
 #
