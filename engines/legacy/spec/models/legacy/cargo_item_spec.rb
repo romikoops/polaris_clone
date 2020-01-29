@@ -14,8 +14,24 @@ module Legacy
     end
 
     describe '.calc_chargeable_weight_from_values' do
-      it 'calcs the volume from inputs' do
+      it 'calcs the volume from inputs with air' do
+        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, 'air')).to eq(1000)
+      end
+
+      it 'calcs the volume from inputs with rail' do
+        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, 'rail')).to eq(1000)
+      end
+
+      it 'calcs the volume from inputs with ocean' do
         expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, 'ocean')).to eq(1500)
+      end
+
+      it 'calcs the volume from inputs with trucking' do
+        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, 'trucking')).to eq(1000)
+      end
+
+      it 'calcs the volume from inputs with truck' do
+        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, 'truck')).to eq(1000)
       end
     end
 

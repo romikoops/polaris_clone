@@ -6,7 +6,7 @@ module Legacy
 
     EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
       air: 0.167,
-      rail: 0.550,
+      rail: 0.500,
       ocean: 1.000,
       trucking: 0.333,
       truck: 0.333
