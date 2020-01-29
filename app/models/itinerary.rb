@@ -3,7 +3,7 @@
 class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
   extend ItineraryTools
   include ItineraryTools
- 
+
   belongs_to :tenant
   has_many :stops,     dependent: :destroy
   has_many :layovers,  dependent: :destroy
@@ -75,36 +75,6 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
       'cargo_item'
     else
       'container'
-    end
-  end
-
-  def default_generate_schedules(end_date:, sandbox: nil) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    finish_date = end_date || DateTime.now + 21.days
-    tenant_vehicle_ids = [
-      pricings.where(sandbox: sandbox).pluck(:tenant_vehicle_id).uniq,
-      rates.where(sandbox: sandbox).pluck(:tenant_vehicle_id).uniq
-    ].flatten
-    stops_in_order = stops.where(sandbox: sandbox).order(:index)
-    tenant_vehicle_ids.each do |tv_id|
-      %w(container cargo_item).each do |load_type|
-        existing_trip = trips.where(tenant_vehicle_id: tv_id, load_type: load_type, sandbox: sandbox).first
-        steps_in_order = if existing_trip
-                           (existing_trip.end_date - existing_trip.start_date) / 86_400
-                         else
-                           rand(20..50)
-                         end
-        generate_weekly_schedules(
-          stops_in_order: stops_in_order,
-          steps_in_order: [steps_in_order],
-          start_date: DateTime.now,
-          end_date: finish_date,
-          ordinal_array: [1, 5],
-          tenant_vehicle_id: tv_id,
-          closing_date_buffer: 4,
-          load_type: load_type,
-          sandbox: sandbox
-        )
-      end
     end
   end
 

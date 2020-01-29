@@ -114,6 +114,7 @@ module ExcelDataServices
           carrier
           service_level
           etd_days
+          mot
           transit_time
           cargo_class
         ].freeze

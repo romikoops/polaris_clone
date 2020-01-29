@@ -155,6 +155,7 @@ PATH
   specs:
     legacy (9999.1.0.0)
       active_model_serializers
+      activerecord-import
       core
       fixer_currency (~> 3.4)
       geocoder

@@ -3,6 +3,8 @@
 module ExcelDataServices
   module Inserters
     class ScheduleGenerator < ExcelDataServices::Inserters::Base
+      CLOSING_DATE_BUFFER = 4
+      STANDARD_PERIOD = 3.months
       def perform
         data.each do |params|
           generate_schedules(params)
@@ -14,31 +16,35 @@ module ExcelDataServices
       private
 
       def generate_schedules(params)
-        itinerary = Itinerary.find_by(
+        itineraries = Itinerary.where(
           tenant_id: tenant.id,
           name: "#{params[:origin].titleize} - #{params[:destination].titleize}",
           sandbox: @sandbox
         )
+        itineraries = itineraries.where(mode_of_transport: params[:mot]) if params[:mot]
 
-        return nil unless itinerary
+        return if itineraries.blank?
 
-        tenant_vehicle_ids = relevant_tenant_vehicle_ids(itinerary, params)
-        stops_in_order = itinerary.stops.where(sandbox: @sandbox).order(:index)
-        today = Date.today
-        finish_date = today + 3.months
-        tenant_vehicle_ids.each do |tv_id|
-          trip_results = itinerary.generate_weekly_schedules(
-            stops_in_order: stops_in_order,
-            steps_in_order: [params[:transit_time]],
-            start_date: DateTime.now,
-            end_date: finish_date,
-            ordinal_array: params[:ordinals],
-            tenant_vehicle_id: tv_id,
-            closing_date_buffer: 4,
-            load_type: params[:cargo_class].to_s,
-            sandbox: @sandbox
-          )
-          trip_results.each { |trip| add_stats(trip, true) }
+        itineraries.find_in_batches do |itinerary_batch|
+          itinerary_batch.each do |itinerary|
+            tenant_vehicle_ids = relevant_tenant_vehicle_ids(itinerary, params)
+            stops_in_order = itinerary.stops.where(sandbox: @sandbox).order(:index)
+            finish_date = Date.today + STANDARD_PERIOD
+            tenant_vehicle_ids.each do |tv_id|
+              trip_results = itinerary.generate_weekly_schedules(
+                stops_in_order: stops_in_order,
+                steps_in_order: [params[:transit_time]],
+                start_date: DateTime.now,
+                end_date: finish_date,
+                ordinal_array: params[:ordinals],
+                tenant_vehicle_id: tv_id,
+                closing_date_buffer: CLOSING_DATE_BUFFER,
+                load_type: params[:cargo_class].to_s,
+                sandbox: @sandbox
+              )
+              trip_results.each { |trip| add_stats(trip, true) }
+            end
+          end
         end
       end
 

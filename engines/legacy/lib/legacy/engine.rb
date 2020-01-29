@@ -3,6 +3,7 @@
 require 'core'
 
 require 'active_model_serializers'
+require 'activerecord-import'
 require 'geocoder'
 require 'money'
 require 'money/bank/fixer_currency'
