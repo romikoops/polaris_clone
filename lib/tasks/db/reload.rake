@@ -19,6 +19,12 @@ namespace :db do
       Rake::Task['db:reload:common'].invoke
     end
 
+    desc 'Reloads production database (AUTHORIZED ONLY)'
+    task :production do
+      Rake::Task['db:import:fetch'].invoke('production')
+      Rake::Task['db:reload:common'].invoke
+    end
+
     task :common do
       Rake::Task['db:drop'].invoke
       Rake::Task['db:create'].invoke

@@ -181,8 +181,6 @@ group :test do
 end
 
 group :development do
-  gem 'google-api-client', '~> 0.23.7'
-  gem 'google-cloud-storage'
   gem 'letter_opener', '~> 1.6'
 
   gem 'listen', '>= 3.0.5', '< 3.2'
