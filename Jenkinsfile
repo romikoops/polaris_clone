@@ -1,9 +1,6 @@
 #!groovy
 
-if (env.CHANGE_ID) {
-  def project = currentBuild.rawBuild.project
-  project.displayName = "PR-${env.CHANGE_ID} – ${env.CHANGE_TITLE}"
-}
+prettyBuild()
 
 pipeline {
   agent none
@@ -13,7 +10,7 @@ pipeline {
     buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '10'))
     podTemplate(inheritFrom: 'default')
     preserveStashes()
-    retry(1)
+    retry(2)
     skipDefaultCheckout()
     timeout(45)
   }
@@ -53,7 +50,7 @@ pipeline {
             }
 
             stage('RSpec') {
-              options { retry(1) }
+              options { retry(2) }
 
               steps {
                 defaultCheckout()
@@ -115,7 +112,7 @@ pipeline {
             }
 
             stage('RSpec') {
-              options { retry(1) }
+              options { retry(2) }
 
               steps {
                 container('ruby') { appRunner('engines') }
@@ -143,7 +140,7 @@ pipeline {
               yaml podSpec(
                 containers: [
                   [ name: 'node', image: 'itsmycargo/builder:node-12', command: 'cat', tty: true,
-                    requests: [ memory: '1500Mi', cpu: '1000m' ],
+                    requests: [ memory: '2000Mi', cpu: '1000m' ],
                   ]
                 ]
               )
@@ -173,7 +170,7 @@ pipeline {
             }
 
             stage('Jest') {
-              options { retry(1) }
+              options { retry(2) }
 
               steps {
                 container('node') {
@@ -210,7 +207,7 @@ pipeline {
     stage('Build') {
       parallel {
         stage('Backend') {
-          options { retry(1) }
+          options { retry(2) }
 
           steps {
             dockerBuild(
@@ -224,7 +221,7 @@ pipeline {
         }
 
         stage('Frontend') {
-          options { retry(1) }
+          options { retry(2) }
 
           steps {
             dockerBuild(
