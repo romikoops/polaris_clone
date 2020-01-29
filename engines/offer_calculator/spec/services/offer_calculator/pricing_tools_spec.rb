@@ -171,7 +171,7 @@ RSpec.describe OfferCalculator::PricingTools do
     end
   end
   let!(:default_margins) do
-    %w(ocean air rail truck trucking local_charge).flat_map do |mot|
+    %w[ocean air rail truck trucking local_charge].flat_map do |mot|
       [
         FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
         FactoryBot.create(:trucking_on_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
@@ -335,23 +335,23 @@ RSpec.describe OfferCalculator::PricingTools do
       expect(local_charges_data.values.first.length).to eq(2)
       expect(local_charges_data.values.length).to eq(1)
     end
+
+    context 'with backend consolidation' do
+      before do
+        Tenants::Scope.find_by(target: tenants_tenant).update(content: { consolidation: { cargo: { backend: true } } })
+      end
+
+      let(:cargos) { FactoryBot.create_list(:legacy_cargo_item, 3, shipment_id: shipment.id) }
+
+      it 'returns the correct number of objects for consolidation scope' do
+        local_charges_data, _metadata = described_class.new(user: user, shipment: shipment).determine_local_charges(lcl_schedules, cargos, 'export', user)
+        expect(local_charges_data.values.first.length).to eq(2)
+        expect(local_charges_data.values.length).to eq(1)
+      end
+    end
   end
 
   describe '.cargo_hash_for_local_charges' do
-    context 'with backend consolidation' do
-      it 'returns the correct number of objects for consolidation scope' do
-        fcl_20 = FactoryBot.create(:legacy_container, shipment_id: shipment.id, size_class: 'fcl_20', cargo_class: 'fcl_20')
-        fcl_40 = FactoryBot.create(:legacy_container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
-        fcl_40_hq = FactoryBot.create(:legacy_container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
-        cargos = [fcl_20, fcl_40, fcl_40_hq]
-        klass = described_class.new(user: user, shipment: shipment)
-        consolidated_hash = klass.consolidated_cargo_hash(cargos)
-        scope = { cargo: { backend: true } }.with_indifferent_access
-        cargo_objects = klass.cargo_hash_for_local_charges(cargos, consolidated_hash, scope)
-        expect(cargo_objects.length).to eq(1)
-      end
-    end
-
     context 'without backend consolidation' do
       it 'returns the correct number of objects for consolidation scope = false' do
         fcl_20 = FactoryBot.create(:legacy_container, shipment_id: shipment.id, size_class: 'fcl_20', cargo_class: 'fcl_20')
@@ -359,9 +359,7 @@ RSpec.describe OfferCalculator::PricingTools do
         fcl_40_hq = FactoryBot.create(:legacy_container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
         cargos = [fcl_20, fcl_40, fcl_40_hq]
         klass = described_class.new(user: user, shipment: shipment)
-        consolidated_hash = klass.consolidated_cargo_hash(cargos)
-        scope = { cargo: { backend: false } }.with_indifferent_access
-        cargo_objects = klass.cargo_hash_for_local_charges(cargos, consolidated_hash, scope)
+        cargo_objects = klass.cargo_hash_for_local_charges(cargos: cargos, mot: 'ocean')
         expect(cargo_objects.length).to eq(3)
       end
     end
@@ -377,18 +375,38 @@ RSpec.describe OfferCalculator::PricingTools do
         'range' => [{ 'max' => 10.0, 'min' => 0.0, 'rate' => 5.0 }, { 'max' => 100.0, 'min' => 10.0, 'rate' => 10.0 }]
       }
     end
+
     subject { described_class.new(user: user, shipment: shipment) }
+
     context 'PER_CBM_RANGE' do
       it 'returns the correct fee_range for the larger volume' do
-        cargo_hash = { volume: 11, weight: 11_000, quantity: 9 }
+        cargo_hash = { weight_measure: 11, volume: 11, weight: 11_000, raw_weight: 11_000, quantity: 9 }
         value = subject.handle_range_fee(fee, cargo_hash)
         expect(value).to eq(110)
       end
 
       it 'returns the correct fee_range for the smaller volume' do
-        cargo_hash = { volume: 4, weight: 4000, quantity: 9 }
+        cargo_hash = { weight_measure: 4, volume: 4, raw_weight: 4000, weight: 4000, quantity: 9 }
         value = subject.handle_range_fee(fee, cargo_hash)
         expect(value).to eq(20)
+      end
+    end
+
+    context 'PER_WM_RANGE' do
+      let(:fee) do
+        {
+          'rate' => 0.5e1,
+          'rate_basis' => 'PER_WM_RANGE',
+          'currency' => 'EUR',
+          'min' => 0.5e1,
+          'range' => [{ 'max' => 10.0, 'min' => 0.0, 'rate' => 5.0 }, { 'max' => 100.0, 'min' => 10.0, 'rate' => 10.0 }]
+        }
+      end
+
+      it 'returns the correct fee_range for the weight_measure' do
+        cargo_hash = { weight_measure: 11, volume: 11, weight: 11_000, raw_weight: 11_000, quantity: 9 }
+        value = subject.handle_range_fee(fee, cargo_hash)
+        expect(value).to eq(10)
       end
     end
   end
@@ -648,9 +666,10 @@ RSpec.describe OfferCalculator::PricingTools do
   describe '.get_cargo_weight' do
     let(:agg_cargo) { FactoryBot.create(:legacy_aggregated_cargo, shipment_id: shipment.id) }
     it 'calculates the addon charge' do
-      result = described_class.new(user: user, shipment: shipment)
-                              .get_cargo_weight(agg_cargo)
-      expect(result).to eq(200)
+      weight, chargeable_weight = described_class.new(user: user, shipment: shipment)
+                              .get_cargo_weights(cargo: agg_cargo, mot: 'ocean')
+      expect(weight).to eq(200)
+      expect(chargeable_weight).to eq(1000)
     end
   end
 
@@ -686,7 +705,29 @@ RSpec.describe OfferCalculator::PricingTools do
       }
       cargo_hash = {
         volume: 6,
-        weight: 500
+        weight: 500,
+        raw_weight: 500,
+        weight_measure: 6
+      }
+      result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
+      expect(result).to eq(57)
+    end
+
+    it 'calculates the PER_CBM_TON_RANGE out of range' do
+      fee = {
+        'key' => 'QDF',
+        'max' => nil,
+        'min' => 57,
+        'name' => 'Wharfage / Quay Dues',
+        'range' => [{ 'max' => 5, 'min' => 0, 'ton' => 41, 'currency' => 'EUR' }],
+        'currency' => 'EUR',
+        'rate_basis' => 'PER_UNIT_TON_CBM_RANGE'
+      }
+      cargo_hash = {
+        volume: 6,
+        weight: 500,
+        raw_weight: 500,
+        weight_measure: 6
       }
       result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
       expect(result).to eq(57)
@@ -704,7 +745,8 @@ RSpec.describe OfferCalculator::PricingTools do
       }
       cargo_hash = {
         volume: 2,
-        weight: 2500
+        weight: 2500,
+        weight_measure: 2.5
       }
       result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
       expect(result).to eq(250)
@@ -723,13 +765,14 @@ RSpec.describe OfferCalculator::PricingTools do
       }
       cargo_hash = {
         volume: 2,
-        weight: 2500
+        weight: 2500,
+        weight_measure: 2.5
       }
       result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
       expect(result).to eq(250)
     end
 
-    it 'calculates the PER_CBM_TON in favour of cb,' do
+    it 'calculates the PER_CBM_TON in favour of cbm' do
       fee = {
         'key' => 'THC',
         'max' => nil,
@@ -742,13 +785,14 @@ RSpec.describe OfferCalculator::PricingTools do
       }
       cargo_hash = {
         volume: 3,
-        weight: 2500
+        weight: 2500,
+        weight_measure: 3
       }
       result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
       expect(result).to eq(300)
     end
 
-    it 'calculates the PER_X_KG_FLAT in favour of cb,' do
+    it 'calculates the PER_X_KG_FLAT' do
       fee = {
         'key' => 'THC',
         'max' => nil,
@@ -761,7 +805,8 @@ RSpec.describe OfferCalculator::PricingTools do
       }
       cargo_hash = {
         volume: 3,
-        weight: 2001
+        weight: 2001,
+        weight_measure: 3
       }
       result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
       expect(result).to eq(0.105e6)

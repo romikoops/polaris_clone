@@ -61,13 +61,15 @@ module Pricings
         Range.new(step['min'],step['max']).cover?(value)
       end
 
-      target || (max ? ranges.max_by { |x| x['max'] } : 0)
+      target || (max ? ranges.max_by { |x| x['max'] } : { 'rate' =>  0 })
     end
 
     def handle_range_fee(fee, cargo_hash) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
       weight_kg = cargo_hash.fetch(:weight)
       raw_weight_kg = cargo_hash.fetch(:raw_weight)
       volume = cargo_hash.fetch(:volume)
+      weight_measure = cargo_hash.fetch(:weight_measure)
+      quantity = cargo_hash.fetch(:quantity, 1)
       min = fee['min'] || 0
       max = fee['max'] || DEFAULT_MAX
       rate_basis = Pricings::RateBasis.get_internal_key(fee['rate_basis'])
@@ -81,27 +83,24 @@ module Pricings
         target = target_in_range(ranges: fee['range'], value: volume, max: true)
 
         res = target['rate'] * volume
+      when 'PER_WM_RANGE'
+        target = target_in_range(ranges: fee['range'], value: weight_measure, max: false)
+        res = target.dig('rate')
       when 'PER_UNIT_TON_CBM_RANGE'
         ratio = volume / (raw_weight_kg / 1000)
         target = target_in_range(ranges: fee['range'], value: ratio, max: false)
-        value = if target == 0
-                  0
-                elsif target['ton']
+        value = if target['ton']
                   target['ton'] * raw_weight_kg / 1000
                 elsif target['cbm']
                   target['cbm'] * volume
+                else
+                  target.fetch('rate', 0)
                 end
 
         res = [value, min].max
-      when 'PER_CONTAINER_RANGE'
-        target = target_in_range(ranges: fee['range'], value: weight_kg, max: true)
+      when 'PER_CONTAINER_RANGE', 'PER_UNIT_RANGE'
+        target = target_in_range(ranges: fee['range'], value: quantity, max: true)
         value = target.nil? ? 0 : target['rate']
-
-        res = [value, min].max
-      when 'PER_UNIT_RANGE'
-        target = target_in_range(ranges: fee['range'], value: weight_kg, max: true)
-        value = target.nil? ? 0 : target['rate']
-
         res = [value, min].max
       end
 
@@ -196,12 +195,14 @@ module Pricings
           volume: (@cargo.try(:volume) || 1) * (@cargo.try(:quantity) || 1),
           weight: (@cargo.try(:weight) || @cargo.payload_in_kg) * (@cargo.try(:quantity) || 1),
           raw_weight: (@cargo.try(:weight) || @cargo.payload_in_kg) * (@cargo.try(:quantity) || 1),
+          weight_measure: (@cargo.try(:weight) || @cargo.payload_in_kg) * (@cargo.try(:quantity) || 1) / 1000.0,
           quantity: @cargo.try(:quantity) || 1
         }
       elsif @cargo.is_a?(Hash)
         {
           volume: (@cargo[:volume] || 1),
           weight: @cargo[:chargeable_weight],
+          weight_measure: @cargo[:chargeable_weight] / 1000.0,
           raw_weight: @cargo[:payload_in_kg],
           quantity: @cargo[:num_of_items]
         }
@@ -211,6 +212,7 @@ module Pricings
           volume: (@cargo.try(:volume) || 1) * (@cargo.try(:quantity) || 1),
           weight: (@cargo.try(:weight) || chargeable_weight) * (@cargo.try(:quantity) || 1),
           raw_weight: (@cargo.try(:weight) || @cargo.try(:payload_in_kg)) * (@cargo.try(:quantity) || 1),
+          weight_measure: (@cargo.try(:weight) || chargeable_weight) * (@cargo.try(:quantity) || 1) / 1000.0,
           quantity: @cargo.try(:quantity) || 1
         }
       end

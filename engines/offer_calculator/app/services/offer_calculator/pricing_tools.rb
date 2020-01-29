@@ -10,7 +10,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     @scope = ::Tenants::ScopeService.new(
       target: ::Tenants::User.find_by(legacy_id: @user),
       tenant: ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
-    ).fetch
+    )
     @sandbox = sandbox
   end
 
@@ -40,7 +40,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
     charges_for_filtering = []
     all_charges_with_metadata = []
-    cargos_for_loop = if @scope.dig(:consolidation, :cargo, :backend) && @shipment.load_type == 'cargo_item'
+    cargos_for_loop = if @scope.fetch(:consolidation, :cargo, :backend) && @shipment.load_type == 'cargo_item'
                         [{ load_type: 'lcl', cargo_id: 'cargo_item' }]
                       else
                         cargos.map do |cargo|
@@ -51,7 +51,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
                         end
                       end
     cargos_for_loop.each do |cargo_data|
-      if @scope['base_pricing']
+      if @scope.fetch(:base_pricing)
         group_ids = user.group_ids | [nil]
         group_ids.each do |group_id|
           charge = effective_local_charges.find_by(
@@ -125,61 +125,74 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     [local_charge_by_dates, all_charges_with_metadata]
   end
 
-  def get_cargo_weight(cargo_unit)
-    if cargo_unit.is_a?(Legacy::CargoItem)
-      cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
-    elsif cargo_unit.is_a?(Legacy::AggregatedCargo)
-      cargo_unit.weight * (cargo_unit.try(:quantity) || 1)
+  def get_cargo_weights(cargo:, mot:)
+    if cargo.is_a?(Legacy::CargoItem)
+      [
+        cargo.payload_in_kg * (cargo.try(:quantity) || 1),
+        cargo.calc_chargeable_weight(mot) * (cargo.try(:quantity) || 1)
+      ]
+    elsif cargo.is_a?(Legacy::AggregatedCargo)
+      [
+        cargo.weight * (cargo.try(:quantity) || 1),
+        cargo.calc_chargeable_weight(mot) * (cargo.try(:quantity) || 1)
+      ]
     else
-      cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
+      [
+        cargo.payload_in_kg * (cargo.quantity || 1),
+        cargo.payload_in_kg * (cargo.quantity || 1)
+      ]
     end
   end
 
-  def consolidated_cargo_hash(cargos)
+  def consolidated_cargo_hash(cargos:, mot:)
     cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
-      weight = get_cargo_weight(cargo_unit)
+      weight, chargeable_weight = get_cargo_weights(cargo: cargo_unit, mot: mot)
 
       return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
       return_h[:volume]   += (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
-
-      return_h[:weight]   += (cargo_unit.try(:weight) || weight)
+      return_h[:weight_measure] = chargeable_weight / 1000.0
+      return_h[:weight] += (cargo_unit.try(:weight) || weight)
+      return_h[:raw_weight] += (cargo_unit.try(:weight) || weight)
+      return_h[:weight_measure] += (cargo_unit.try(:weight) || weight)
     end
   end
 
-  def cargo_hash_for_local_charges(cargos, consolidated_hash, consolidation) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    if consolidation.dig('cargo', 'backend')
-      [consolidated_hash]
-    else
-      cargos.map do |cargo_unit|
-        return_h = {}
-        weight = get_cargo_weight(cargo_unit)
+  def cargo_hash_for_local_charges(cargos:, mot:) # rubocop:disable Metrics/CyclomaticComplexity
+    cargos.map do |cargo_unit|
+      return_h = {}
+      weight, chargeable_weight = get_cargo_weights(cargo: cargo_unit, mot: mot)
 
-        return_h[:quantity] = cargo_unit.try(:quantity).nil? ? 1 : cargo_unit.quantity
-        return_h[:volume]   = (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
+      return_h[:quantity] = cargo_unit.try(:quantity).nil? ? 1 : cargo_unit.quantity
+      return_h[:volume]   = (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
 
-        return_h[:weight]   = (cargo_unit.try(:weight) || weight)
-        return_h[:id]       = cargo_unit.id
-        return_h
-      end
+      return_h[:weight_measure] = chargeable_weight / 1000.0
+      return_h[:weight] = (cargo_unit.try(:weight) || weight)
+      return_h[:raw_weight] = (cargo_unit.try(:weight) || weight)
+      return_h[:id] = cargo_unit.id
+      return_h
     end
   end
 
   def local_charge_calculation_block(charge_object, cargo_hash, user)
     totals = { 'total' => {} }
     charge_object.fetch('fees', {}).each do |key, fee|
+      calculated_value = fee_value(
+        fee: fee,
+        cargo: cargo_hash,
+        rounding: @scope.fetch(:continuous_rounding)
+      )
+      next if calculated_value.blank?
+
       totals[key]             ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[key]['currency'] ||= fee['currency']
-      totals[key]['value'] +=
-        fee_value(
-          fee: fee,
-          cargo: cargo_hash,
-          rounding: @scope.fetch(:continuous_rounding)
-        )
+      totals[key]['value'] += calculated_value
 
       totals[key]['value'] += charge_object.dig('flat_margins', key) if charge_object.dig('flat_margins', key).present?
     end
 
     converted = Legacy::CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
+    return nil if converted.zero?
+
     totals['total'] = { value: converted, currency: user.currency }
     totals['key'] = cargo_hash.key?(:id) ? cargo_hash[:id] : charge_object['load_type']
     totals['metadata_id'] = charge_object['metadata_id']
@@ -191,7 +204,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     charges_by_dates, local_charge_metadata = find_local_charge(schedules, cargos, direction, user)
     return {} if charges_by_dates.empty?
 
-    consolidated_hash = consolidated_cargo_hash(cargos)
+    consolidated_hash = consolidated_cargo_hash(cargos: cargos, mot: schedules.first.mode_of_transport)
     result = charges_by_dates.each_with_object({}) do |(dates, values), hash|
       unit_charges_array, shipment_charges = values
       hash[dates] = {} if unit_charges_array.empty?
@@ -205,7 +218,14 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
                           else
                             cargos.select { |c| c.size_class == charge_object['load_type'] }
                           end
-        cargo_hashes = cargo_hash_for_local_charges(relevant_cargos, consolidated_hash, @scope.fetch(:consolidation))
+        cargo_hashes = if @scope.fetch(:consolidation, :cargo, :backend)
+                         [consolidated_hash]
+                       else
+                         cargo_hash_for_local_charges(
+                           cargos: relevant_cargos,
+                           mot: schedules.first.mode_of_transport
+                         )
+          end
         cargo_hashes.map do |cargo_hash|
           local_charge_calculation_block(
             charge_object,
@@ -294,6 +314,8 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
   def handle_range_fee(fee, cargo_hash) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
     weight_kg = cargo_hash.fetch(:weight)
     volume = cargo_hash.fetch(:volume)
+    raw_weight_kg = cargo_hash.fetch(:raw_weight)
+    weight_measure = cargo_hash.fetch(:weight_measure)
     quantity = cargo_hash.fetch(:quantity, 1)
     min = (fee['min'] || 0).to_d
     max = (fee['max'] || DEFAULT_MAX).to_d
@@ -301,39 +323,45 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
     result = case rate_basis
              when 'PER_KG_RANGE'
-               fee_range = fee['range'].find do |range|
-                 (range['min']..range['max']).cover?(weight_kg)
-               end
-               fee_range ||= fee['range'].max_by { |x| x['max'] }
-               fee_range.nil? ? 0 : fee_range['rate'].to_d * weight_kg
+               target = target_in_range(ranges: fee['range'], value: weight_kg, max: true)
+               value = target['rate'] * weight_kg
+
+               [value, min].max
              when 'PER_CBM_RANGE'
-               fee_range = fee['range'].find do |range|
-                 (range['min']..range['max']).cover?(volume)
-               end
-               fee_range ||= fee['range'].max_by { |x| x['max'] }
-               fee_range.nil? ? 0 : fee_range['rate'] * (weight_kg / 1000.to_d)
+               target = target_in_range(ranges: fee['range'], value: volume, max: true)
+
+               target['rate'] * volume
+             when 'PER_WM_RANGE'
+               target = target_in_range(ranges: fee['range'], value: weight_measure, max: false)
+               target.dig('rate')
              when 'PER_UNIT_TON_CBM_RANGE'
-               ratio = volume / (weight_kg / 1000.to_d)
-               fee_range = fee['range'].find do |range|
-                 (range['min']..range['max']).cover?(ratio)
-               end
-               fee_range ||= fee['range'].max_by { |x| x['max'] }
+               ratio = volume / (raw_weight_kg / 1000.0)
+               target = target_in_range(ranges: fee['range'], value: ratio, max: false)
+               value = if target['ton']
+                         target['ton'] * raw_weight_kg / 1000.0
+                       elsif target['cbm']
+                         target['cbm'] * volume
+                       else
+                         target['rate'] || 0
+                       end
 
-               if fee_range['ton']
-                 fee_range['ton'].to_d * (weight_kg / 1000.to_d)
-               elsif fee_range['cbm']
-                 fee_range['cbm'].to_d * volume
-               end
+               [value, min].max
              when 'PER_UNIT_RANGE'
-               fee_range = fee['range'].find do |range|
-                 (range['min']..range['max']).cover?(quantity)
-               end
-               fee_range ||= fee['range'].max_by { |x| x['max'] }
+               target = target_in_range(ranges: fee['range'], value: quantity, max: true)
+               value = target.nil? ? 0 : target['rate']
 
-               fee_range.nil? ? 0 : fee_range['rate'].to_d
-            end
+               [value, min].max
+             end
 
     [result, max].min
+  end
+
+  def target_in_range(ranges:, value:, max: false)
+    target = ranges.find do |step|
+      Range.new(step['min'], step['max']).cover?(value)
+    end
+
+    target || (max ? ranges.max_by { |x| x['max'] } : { 'rate' => 0 })
   end
 
   def round_fee(result, should_round)
@@ -360,14 +388,10 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
                  0
                end
              elsif fee['range']
-               max_fee = fee['range'].max_by { |x| x['max'] }
-               fee_range = max_fee if weight_kg > max_fee['max']
+               target = target_in_range(ranges: fee['range'], value: weight_kg, max: true)
+               value = target.nil? ? 0 : target['rate']
 
-               fee_range ||= fee['range'].find do |range|
-                 (range['min']..range['max']).cover?(weight_kg)
-               end
-
-               fee_range.nil? ? 0 : fee_range['rate'] * quantity
+               [value * quantity, min].max
              end
 
     round_fee(result, continuous_rounding)
@@ -407,6 +431,8 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
                handle_range_fee(fee, cargo)
              end
 
+    return if result.nil?
+
     round_fee(result.clamp(min, max), rounding)
   end
 
@@ -415,12 +441,16 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       {
         volume: (cargo.try(:volume) || 1) * (cargo.try(:quantity) || 1),
         weight: (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1),
+        raw_weight: (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1),
+        weight_measure: (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1),
         quantity: cargo.try(:quantity) || 1
       }
     elsif cargo.is_a?(Hash)
       {
         volume: (cargo[:volume] || 1),
         weight: cargo[:chargeable_weight],
+        raw_weight: cargo[:payload_in_kg],
+        weight_measure: cargo[:chargeable_weight] / 1000.0,
         quantity: cargo[:num_of_items]
       }
     else
@@ -429,6 +459,8 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       {
         volume: (cargo.try(:volume) || 1) * (cargo.try(:quantity) || 1),
         weight: (cargo.try(:weight) || chargeable_weight) * (cargo.try(:quantity) || 1),
+        raw_weight: (cargo.try(:weight) || cargo.try(:payload_in_kg)) * (cargo.try(:quantity) || 1),
+        weight_measure: (cargo.try(:weight) || chargeable_weight) * (cargo.try(:quantity) || 1) / 1000.0,
         quantity: cargo.try(:quantity) || 1
       }
     end

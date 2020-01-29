@@ -11,7 +11,7 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::LocalCharges do
     it 'detects unknown rate basis and missing values rate basis' do
       validator.perform
       expect(validator.valid?).to be(false)
-      expect(validator.results).to eq(
+      expect(validator.results).to match_array(
         [
           { exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::UnknownRateBasis,
             reason: 'Missing value for FEE_CODE.',
@@ -35,6 +35,36 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::LocalCharges do
             type: :error },
           { exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::UnknownRateBasis,
             reason: 'Missing value for PER_BILL.',
+            row_nr: '2',
+            sheet_name: 'Sheet1',
+            type: :error },
+          { exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::UnknownRateBasis,
+            reason: 'Missing value for PER_WM_RANGE.',
+            row_nr: '2',
+            sheet_name: 'Sheet1',
+            type: :error },
+          { exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::UnknownRateBasis,
+            reason: 'Missing value for PER_SHIPMENT_CONTAINER.',
+            row_nr: '2',
+            sheet_name: 'Sheet1',
+            type: :error },
+          { exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::UnknownRateBasis,
+            reason: 'Missing value for PER_CBM_KG.',
+            row_nr: '2',
+            sheet_name: 'Sheet1',
+            type: :error },
+          { exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::UnknownRateBasis,
+            reason: 'Missing value for PER_CBM_TON.',
+            row_nr: '2',
+            sheet_name: 'Sheet1',
+            type: :error },
+          { exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::UnknownRateBasis,
+            reason: 'Missing value for PER_BILL_CONTAINER.',
+            row_nr: '2',
+            sheet_name: 'Sheet1',
+            type: :error },
+          { exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::UnknownRateBasis,
+            reason: 'Missing value for PER_X_KG_FLAT.',
             row_nr: '2',
             sheet_name: 'Sheet1',
             type: :error }

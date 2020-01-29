@@ -205,6 +205,18 @@ RSpec.describe Pricings::Calculator do
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 0.064, 'currency' => 'EUR')
     end
 
+    it 'calculates the correct price for per_wm_range' do
+      wm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      FactoryBot.create(:fee_per_wm_range, pricing: wm_range_pricing)
+      result = described_class.new(cargo: lcl_cargo,
+                                   pricing: wm_range_pricing.as_json,
+                                   user: user,
+                                   mode_of_transport: 'ocean',
+                                   date: Time.zone.today + 10.days).perform
+
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 8, 'currency' => 'EUR')
+    end
+
     it 'calculates the correct price for per_cbm_range above range' do
       overcbm_cargo = FactoryBot.create(:legacy_aggregated_cargo, shipment_id: agg_shipment.id, weight: 1000, volume: 13)
       cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
@@ -226,7 +238,7 @@ RSpec.describe Pricings::Calculator do
                                    mode_of_transport: 'ocean',
                                    date: Time.zone.today + 10.days).perform
 
-      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 60, 'currency' => 'EUR')
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 100, 'currency' => 'EUR')
     end
 
     it 'calculates the correct price for per_container_range above range' do
@@ -238,7 +250,7 @@ RSpec.describe Pricings::Calculator do
                                    user: user,
                                    mode_of_transport: 'ocean',
                                    date: Time.zone.today + 10.days).perform
-      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 60, 'currency' => 'EUR')
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 100, 'currency' => 'EUR')
     end
 
     it 'calculates the correct price for per_unit_range' do
@@ -249,7 +261,7 @@ RSpec.describe Pricings::Calculator do
                                    user: user,
                                    mode_of_transport: 'ocean',
                                    date: Time.zone.today + 10.days).perform
-      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 60, 'currency' => 'EUR')
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 100, 'currency' => 'EUR')
     end
 
     it 'calculates the correct price for per_unit_range above range' do
@@ -261,7 +273,7 @@ RSpec.describe Pricings::Calculator do
                                    user: user,
                                    mode_of_transport: 'ocean',
                                    date: Time.zone.today + 10.days).perform
-      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 60, 'currency' => 'EUR')
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 100, 'currency' => 'EUR')
     end
 
     it 'calculates the correct price for per_unit_ton_cbm_range (CBM)' do

@@ -141,6 +141,17 @@ FactoryBot.define do
       end
     end
 
+    trait :per_wm_range do
+      association :rate_basis, factory: :per_wm_range
+      association :charge_category, factory: :bas_charge
+      range do
+        [
+          { min: 0.0, max: 4.9, rate: 8 },
+          { min: 5.0, max: 10, rate: 12 }
+        ]
+      end
+    end
+
     factory :fee_per_wm, traits: [:per_wm]
     factory :fee_per_container, traits: [:per_container]
     factory :fee_per_hbl, traits: [:per_hbl]
@@ -156,6 +167,7 @@ FactoryBot.define do
     factory :fee_per_container_range, traits: [:per_container_range]
     factory :fee_per_unit_range, traits: [:per_unit_range]
     factory :fee_per_cbm_range, traits: [:per_cbm_range]
+    factory :fee_per_wm_range, traits: [:per_wm_range]
     factory :fee_per_cbm_kg_heavy, traits: [:per_cbm_kg_heavy]
     factory :fee_per_item_heavy, traits: [:per_item_heavy]
   end

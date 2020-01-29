@@ -87,4 +87,8 @@ function AdminClientMarginPreviewResult ({ results, tenant, t }) {
   )
 }
 
+AdminClientMarginPreviewResult.defaultProps = {
+  results: []
+}
+
 export default withNamespaces(['admin', 'common'])(AdminClientMarginPreviewResult)

@@ -47,10 +47,13 @@ module Quotations
       keys = %i(total edited_total name)
       quote_object.except(*keys).values.each do |value|
         value.except(*keys).entries.each do |key, v|
+          next unless v.dig(:total, :value).present?
+
           LineItem.create(charge_category_id: key.to_s.to_i,
                           tender_id: tender.id,
                           amount: v[:total][:value],
                           amount_currency: v[:total][:currency])
+
         end
       end
     end
