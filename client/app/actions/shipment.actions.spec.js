@@ -19,11 +19,11 @@ describe('async actions', () => {
 
   it('creates GET_OFFERS_FAILURE when an error is returned', () => {
     expect.assertions(1)
-    fetch.once(() => new Promise(resolve => setTimeout(() => resolve({ body: JSON.stringify({ success: false, data: JSON.stringify({ message: 'Not Logged in' }) }) }), 10)))
+    fetch.once(() => new Promise(resolve => setTimeout(() => resolve({ body: JSON.stringify({ success: false, message: 'Not Logged in' } ) }), 10)))
     const expectedActions = [
       { type: shipmentConstants.GET_OFFERS_REQUEST, shipmentData: {  shipment: {id: 1} } },
       { type: shipmentConstants.GET_OFFERS_FAILURE, error: { text: 'Not Logged in', type: 'error' } },
-      { type: errorConstants.SET_ERROR, payload: { componentName: 'RouteSection', side: 'center', data: { message: 'Not Logged in' } }}
+      { type: errorConstants.SET_ERROR, payload: { componentName: 'RouteSection', side: 'center', success: false, message: 'Not Logged in' }}
     ]
 
     

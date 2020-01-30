@@ -39,8 +39,8 @@ function getOffers (data, redirect) {
     )
       .then(resp => resp.json())
       .then((resp) => {
-        const responseData = JSON.parse(resp.data)
         if (resp.success) {
+          const responseData = JSON.parse(resp.data)
           dispatch(success(responseData))
           if (redirect) {
             dispatch(push(`/booking/${get(responseData, 'shipment.id')}/choose_offer`))
@@ -48,10 +48,10 @@ function getOffers (data, redirect) {
         } else {
           dispatch(failure({
             type: 'error',
-            text: get(responseData, 'message') || get(responseData, 'error')
+            text: get(resp, 'message') || get(resp, 'error')
           }))
           const errorToRender = {
-            data: responseData,
+            ...resp,
             componentName: 'RouteSection',
             side: 'center'
           }
