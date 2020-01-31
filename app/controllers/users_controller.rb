@@ -29,6 +29,10 @@ class UsersController < ApplicationController
     response_handler(response)
   end
 
+  def show
+    response_handler(current_user.token_validation_response)
+  end
+
   def account
     @user = current_user
     @addresses = @user.addresses.where(sandbox: @sandbox)

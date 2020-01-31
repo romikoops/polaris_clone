@@ -20,6 +20,7 @@ import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
 import GenericError from '../../components/ErrorHandling/Generic'
+import SamlRedirect from '../../components/Redirects/SamlRedirect'
 
 class App extends Component {
   constructor (props) {
@@ -153,6 +154,10 @@ class App extends Component {
                 loggedIn={loggedIn}
                 theme={theme}
               />
+
+              <Route path="/login/saml/success" render={props => <SamlRedirect theme={theme} {...props} />} />
+              <Route path="/login/saml/error" render={props => <SamlRedirect theme={theme} failure {...props} />} />
+
               <Route render={props => <Redirect to="/" />} />
 
             </Switch>

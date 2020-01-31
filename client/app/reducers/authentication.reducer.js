@@ -149,6 +149,13 @@ export default function (state = initialState, action) {
         passwordEmailRequested: false
       }
     }
+    case authenticationConstants.SAML_USER_SUCCESS: {
+      return {
+        ...state,
+        user: action.payload,
+        loggedIn: true
+      }
+    }
     case 'GENERAL_UPDATE': {
       return {
         ...state,

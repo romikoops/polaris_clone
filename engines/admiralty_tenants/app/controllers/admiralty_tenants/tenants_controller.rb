@@ -20,6 +20,7 @@ module AdmiraltyTenants
       @tenant.update(slug: tenant_params[:slug])
       @tenant.legacy.update(name: tenant_params[:name])
       @scope.update(content: remove_default_values)
+      @saml_metadatum.update(content: tenant_params[:saml_metadatum])
       update_max_dimensions
 
       redirect_to tenant_path(@tenant)
@@ -32,6 +33,7 @@ module AdmiraltyTenants
       @scope = @tenant.scope || {}
       @render_scope = ::Tenants::ScopeService.new(tenant: @tenant).fetch
       @max_dimensions = ::Legacy::MaxDimensionsBundle.where(tenant_id: @tenant.legacy_id).order(:id)
+      @saml_metadatum = ::Tenants::SamlMetadatum.find_or_create_by(tenant_id: @tenant.id)
     end
 
     def update_max_dimensions
@@ -48,7 +50,7 @@ module AdmiraltyTenants
     end
 
     def tenant_params
-      params.require(:tenant).permit(:name, :slug, :scope, :max_dimensions_bundle)
+      params.require(:tenant).permit(:name, :slug, :scope, :max_dimensions_bundle, :saml_metadatum)
     end
 
     def remove_default_values

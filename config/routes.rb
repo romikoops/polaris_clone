@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     passwords: 'users_devise_token_auth/passwords'
   }, skip: [:omniauth_callbacks]
 
+  namespace :saml do
+    post 'consume'
+  end
+
   resources :tenants, only: %i(index show) do
     collection do
       get :current
@@ -168,6 +172,7 @@ Rails.application.routes.draw do
 
     resources :users do
       get 'home',    as: :home
+      get 'show',    as: :show
       get 'account', as: :account
       get 'hubs',    as: :hubs
       put 'update',  as: :update

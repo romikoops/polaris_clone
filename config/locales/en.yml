@@ -144,6 +144,10 @@ en:
       http_code: 401
       code: 1052
       message: "Wrong confirmation token provided, please retry"
+    authentication_error:
+      http_code: 401
+      code: 1053
+      message: "An unknown error has occurred while trying to sign you in"
 
     # Data errors
     bad_data:

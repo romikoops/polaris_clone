@@ -27,6 +27,23 @@ RSpec.describe UsersController do
     end
   end
 
+  describe 'GET #show' do
+    let(:user) { create(:user) }
+
+    before do
+      allow(controller).to receive(:user_signed_in?).and_return(true)
+      allow(controller).to receive(:current_user).and_return(user)
+    end
+
+    it 'returns an http status of success' do
+      get :show, params: { tenant_id: user.tenant, user_id: user.id }
+
+      expect(response).to have_http_status(:success)
+      body = JSON.parse(response.body)
+      expect(body.dig('data', 'id')).to eq(user.id)
+    end
+  end
+
   describe 'POST #update' do
     it 'returns http success, updates the user and send the email' do
       allow(user).to receive(:send_confirmation_instructions).and_return(true)
@@ -57,7 +74,7 @@ RSpec.describe UsersController do
     let(:rates) { { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34, USD: 1.3 } } }
 
     before do
-      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR")
+      stub_request(:get, 'http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR')
         .to_return(status: 200, body: rates.to_json, headers: {})
     end
 
@@ -91,10 +108,10 @@ RSpec.describe UsersController do
     let(:rates) { { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34, USD: 1.3 } } }
 
     before do
-      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR")
+      stub_request(:get, 'http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR')
         .to_return(status: 200, body: rates.to_json, headers: {})
 
-      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=BRL")
+      stub_request(:get, 'http://data.fixer.io/latest?access_key=FAKEKEY&base=BRL')
         .to_return(status: 200, body: rates.to_json, headers: {})
     end
 

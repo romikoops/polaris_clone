@@ -1,19 +1,24 @@
 import { push } from 'react-router-redux'
-import * as Sentry from '@sentry/browser'
-import { authenticationConstants } from '../constants'
+import { authenticationConstants, getTenantApiUrl } from '../constants'
 import { authenticationService } from '../services'
 import {
   alertActions, shipmentActions, adminActions, userActions, tenantActions, clientsActions, appActions
 } from '.'
 import getSubdomain from '../helpers/subdomain'
+import { requestOptions } from '../helpers'
 
-const { localStorage } = window
-const subdomainKey = getSubdomain()
-const cookieKey = `${subdomainKey}_user`
+const { localStorage, fetch } = window
+
+function cookieKey () {
+  const tenantId = localStorage.getItem('tenantId')
+
+  return `${tenantId}_user`
+}
+
 function logout (closeWindow) {
   function lo () {
     localStorage.removeItem('state')
-    localStorage.removeItem(cookieKey)
+    localStorage.removeItem(cookieKey())
 
     return { type: authenticationConstants.LOGOUT }
   }
@@ -108,7 +113,7 @@ function login (data) {
   }
 }
 
-function registerGuestOrAuthenticate(tenant, target = '') {
+function registerGuestOrAuthenticate (tenant, target = '') {
   return (tenant.scope.closed_shop)
     ? showLogin(target)
     : registerGuest(tenant, target)
@@ -167,7 +172,7 @@ function registerGuest (tenant, target = '/') {
 }
 
 function setUser (user) {
-  window.localStorage.setItem(cookieKey, JSON.stringify(user.data))
+  localStorage.setItem(cookieKey(), JSON.stringify(user.data))
 
   return { type: authenticationConstants.SET_USER, user: user.data }
 }
@@ -268,6 +273,38 @@ function updateReduxStore (payload) {
   return dispatch => dispatch({ type: 'GENERAL_UPDATE', payload })
 }
 
+function postSamlActions (payload) {
+  function request (userData) {
+    return { type: authenticationConstants.SAML_USER_REQUEST, payload: userData }
+  }
+  function success (userData) {
+    localStorage.setItem(cookieKey(), JSON.stringify(userData))
+
+    return { type: authenticationConstants.SAML_USER_SUCCESS, payload: userData }
+  }
+  function failure (error) {
+    return { type: authenticationConstants.SAML_USER_FAILURE, error }
+  }
+  const { userId, headers, tenantId } = payload
+  localStorage.setItem('authHeader', JSON.stringify(headers))
+  localStorage.setItem('tenantId', tenantId)
+
+  return (dispatch) => {
+    dispatch(request())
+
+    return fetch(`${getTenantApiUrl()}/users/${userId}/show`, requestOptions('GET'))
+      .then(resp => resp.json())
+      .then((response) => {
+        dispatch(success(response.data))
+        dispatch(userActions.getDashboard(userId, true))
+      })
+      .catch((error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      })
+  }
+}
+
 export const authenticationActions = {
   login,
   logout,
@@ -281,7 +318,8 @@ export const authenticationActions = {
   updateReduxStore,
   toggleSandbox,
   registerGuest,
-  registerGuestOrAuthenticate
+  registerGuestOrAuthenticate,
+  postSamlActions
 }
 
 export default authenticationActions

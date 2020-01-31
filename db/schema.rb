@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_22_113222) do
+ActiveRecord::Schema.define(version: 2020_01_29_083327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1717,6 +1717,14 @@ ActiveRecord::Schema.define(version: 2020_01_22_113222) do
     t.datetime "updated_at", null: false
     t.index ["member_type", "member_id"], name: "index_tenants_memberships_on_member_type_and_member_id"
     t.index ["sandbox_id"], name: "index_tenants_memberships_on_sandbox_id"
+  end
+
+  create_table "tenants_saml_metadata", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "content"
+    t.datetime "created_at", null: false
+    t.uuid "tenant_id"
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_tenants_saml_metadata_on_tenant_id"
   end
 
   create_table "tenants_sandboxes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
