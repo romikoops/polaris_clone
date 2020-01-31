@@ -58,6 +58,8 @@ class SamlController < ApplicationController
 
       idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
       settings = idp_metadata_parser.parse(tenant_saml_metadata.content)
+
+      settings.assertion_consumer_service_url = "https://#{request.host}/saml/consume"
       settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
       settings.authn_context = 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'
 

@@ -67,7 +67,7 @@ module AdmiraltyTenants
     end
 
     describe 'PATCH #update' do
-      let(:tenant_params) { tenant.attributes.slice('name', 'slug').merge(scope: { foo: true }.to_json) }
+      let(:tenant_params) { tenant.attributes.slice('name', 'slug').merge(scope: { foo: true }.to_json, saml_metadatum: { content: '' }) }
       let(:updated_max_bundle) { { max_bundle.id => { dimension_x: 10 } } }
       it 'renders page' do
         patch :update, params: { id: tenant.id, tenant: tenant_params, max_dimensions: updated_max_bundle }

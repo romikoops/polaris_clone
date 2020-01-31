@@ -56,7 +56,8 @@ class ApplicationController < ActionController::API
   def append_info_to_payload(payload)
     super
 
-    payload[:tenant] = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)&.slug if current_tenant
+    payload[:tenant] = ::Tenants::Tenant.find_by(legacy_id: current_tenant&.id)&.slug
+    payload[:user_id] = current_user&.id
   end
 
   def set_raven_context

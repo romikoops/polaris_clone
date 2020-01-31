@@ -20,7 +20,7 @@ module AdmiraltyTenants
       @tenant.update(slug: tenant_params[:slug])
       @tenant.legacy.update(name: tenant_params[:name])
       @scope.update(content: remove_default_values)
-      @saml_metadatum.update(content: tenant_params[:saml_metadatum])
+      @saml_metadatum.update(content: tenant_params[:saml_metadatum][:content])
       update_max_dimensions
 
       redirect_to tenant_path(@tenant)
@@ -50,7 +50,7 @@ module AdmiraltyTenants
     end
 
     def tenant_params
-      params.require(:tenant).permit(:name, :slug, :scope, :max_dimensions_bundle, :saml_metadatum)
+      params.require(:tenant).permit(:name, :slug, :scope, :max_dimensions_bundle, saml_metadatum: :content)
     end
 
     def remove_default_values
