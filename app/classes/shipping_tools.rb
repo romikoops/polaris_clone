@@ -508,6 +508,7 @@ class ShippingTools
     shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
     shipment.meta['pricing_breakdown'] = params[:meta][:pricing_breakdown]
     shipment.meta['tender_id'] = params[:meta][:tender_id]
+    shipment.tender_id = params[:meta][:tender_id]
 
     shipment.user_id = current_user.id
     shipment.customs_credit = params[:customs_credit]
@@ -774,8 +775,8 @@ class ShippingTools
       imc_reference: original_shipment.imc_reference,
       origin_hub_id: schedule['origin_hub']['id'],
       destination_hub_id: schedule['destination_hub']['id'],
-      origin_nexus_id: original_shipment.origin_nexus_id || original_shipment&.origin_hub&.nexus_id,
-      destination_nexus_id: original_shipment.destination_nexus_id,
+      origin_nexus_id: original_shipment.origin_nexus_id || result.dig('meta', 'origin_hub')&.nexus_id,
+      destination_nexus_id: original_shipment.destination_nexus_id || result.dig('meta', 'destination_hub')&.nexus_id,
       quotation_id: schedule['id'],
       trip_id: trip.id,
       booking_placed_at: DateTime.now,
@@ -786,10 +787,11 @@ class ShippingTools
         pre_carriage: pre_carriage_hash,
         on_carriage: on_carriage_hash
       },
+      tender_id: result.dig('meta', 'tender_id'),
       load_type: original_shipment.load_type,
       itinerary_id: trip.itinerary_id,
       desired_start_date: original_shipment.desired_start_date,
-      meta: result['meta'].slice('pricing_rate_data', 'pricing_breakdown'),
+      meta: result['meta'].slice('pricing_rate_data', 'pricing_breakdown', 'meta_id'),
       sandbox: sandbox
     )
 

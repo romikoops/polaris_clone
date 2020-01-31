@@ -97,6 +97,7 @@ end
 #  quotation_id                        :integer
 #  sandbox_id                          :uuid
 #  tenant_id                           :integer
+#  tender_id                           :uuid
 #  transport_category_id               :bigint
 #  trip_id                             :integer
 #  user_id                             :integer
@@ -105,6 +106,7 @@ end
 #
 #  index_shipments_on_sandbox_id             (sandbox_id)
 #  index_shipments_on_tenant_id              (tenant_id)
+#  index_shipments_on_tender_id              (tender_id)
 #  index_shipments_on_transport_category_id  (transport_category_id)
 #
 # Foreign Keys

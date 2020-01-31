@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_29_083327) do
+ActiveRecord::Schema.define(version: 2020_01_29_111439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1403,6 +1403,7 @@ ActiveRecord::Schema.define(version: 2020_01_29_083327) do
     t.uuid "sandbox_id"
     t.string "status"
     t.integer "tenant_id"
+    t.uuid "tender_id"
     t.jsonb "total_goods_value"
     t.bigint "transport_category_id"
     t.integer "trip_id"
@@ -1412,6 +1413,7 @@ ActiveRecord::Schema.define(version: 2020_01_29_083327) do
     t.string "uuid"
     t.index ["sandbox_id"], name: "index_shipments_on_sandbox_id"
     t.index ["tenant_id"], name: "index_shipments_on_tenant_id"
+    t.index ["tender_id"], name: "index_shipments_on_tender_id"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 

@@ -31,10 +31,11 @@ RSpec.describe ShippingTools do
   end
   let!(:scope) { create(:tenants_scope, target: tenants_tenant, content: { send_email_on_quote_download: true, send_email_on_quote_email: true, base_pricing: true }) }
   let(:schedules) { [Legacy::Schedule.from_trip(trip)] }
+  let(:tender_id) { SecureRandom.uuid }
   let(:params) do
     {
       shipment_id: shipment.id,
-      meta: { tender_id: '123abc' },
+      meta: { tender_id: tender_id },
       schedule: {
         'trip_id' => trip.id, charge_trip_id: trip.id,
         'origin_hub': origin_hub,
@@ -47,7 +48,7 @@ RSpec.describe ShippingTools do
     it 'assigns the id of the chosen tender to the meta data of the shipment' do
       create(:charge_breakdown, shipment: shipment)
 
-      expect { described_class.choose_offer(params, user) }.to change { Shipment.find(shipment.id).meta }.from({}).to('pricing_breakdown' => nil, 'pricing_rate_data' => nil, 'tender_id' => '123abc')
+      expect { described_class.choose_offer(params, user) }.to change { Shipment.find(shipment.id).tender_id }.from(nil).to(tender_id)
     end
   end
 
