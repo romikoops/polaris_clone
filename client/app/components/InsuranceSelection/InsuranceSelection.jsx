@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
+import Toggle from 'react-toggle'
 import defaults from '../../styles/default_classes.scss'
 import TextHeading from '../TextHeading/TextHeading'
-import Checkbox from '../Checkbox/Checkbox'
 
 class InsuranceSelection extends Component {
   constructor (props) {
@@ -55,10 +55,10 @@ class InsuranceSelection extends Component {
           >
             <div className="flex-100 layout-row layout-wrap layout-align-end-center padd_top">
               <div className="flex-20 layout-row layout-align-end-center">
-                <Checkbox
+                <Toggle
                   id="yes_insurance"
                   className="ccb_yes_insurance"
-                  onChange={() => this.toggleInsurance(true)}
+                  onChange={() => this.toggleInsurance(!insuranceBool)}
                   checked={insuranceBool}
                   theme={theme}
                 />
@@ -68,12 +68,12 @@ class InsuranceSelection extends Component {
                 <label htmlFor="yes_insurance" className="pointy">
                   <b>{t('common:yes')}</b>
                   {t('cargo:quoteInsurance', { tenantRate: insurancePercentage })}
-                </label>
+                </label>       
               </div>
             </div>
             <div className="flex-100 layout-row layout-align-end-center padd_top">
               <div className="flex-20 layout-row layout-align-end-center">
-                <Checkbox
+                <Toggle
                   id="no_insurance"
                   className="ccb_no_insurance"
                   onChange={() => this.toggleInsurance(false)}
