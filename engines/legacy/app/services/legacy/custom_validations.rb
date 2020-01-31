@@ -31,7 +31,7 @@ module Legacy
     end
 
     def self.max_dimension(tenant_id:, mode_of_transport:, dimension:)
-      bundle = MaxDimensionsBundle.find_by(tenant_id: tenant_id, mode_of_transport: mode_of_transport)
+      bundle = MaxDimensionsBundle.find_by(tenant_id: tenant_id, mode_of_transport: mode_of_transport, aggregate: false)
       bundle.present? ? bundle[dimension] : nil
     end
   end

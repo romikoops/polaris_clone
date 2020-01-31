@@ -73,12 +73,11 @@ module Legacy
       # Creates and auxiliary class, cloned from CargoItem, with one aditional
       # validation, which depends on the mode of transport.
       klass = ::Legacy::CustomValidations.cargo_item_max_dimensions(CargoItem.clone, mode_of_transport)
-      Module.const_set('AuxCargoItem', klass)
-
       # Instantiates the auxiliary class, sets the chargeable weight,
       # and checks if the item is still valid, thereby applying the new validation.
-      aux_cargo_item = Module::AuxCargoItem.new(given_attributes)
+      aux_cargo_item = klass.new(given_attributes)
       aux_cargo_item.chargeable_weight = calc_chargeable_weight(mode_of_transport)
+
       aux_cargo_item.valid?
     end
 
