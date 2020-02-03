@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::LocalChargesController < ApplicationController # rubocop:disable Style/ClassAndModuleChildren
+class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disable Style/ClassAndModuleChildren
   include ExcelTools
 
   def hub_charges # rubocop:disable Metrics/AbcSize

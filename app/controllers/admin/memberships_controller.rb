@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::MembershipsController < ApplicationController
+class Admin::MembershipsController < Admin::AdminBaseController
   def bulk_edit # rubocop:disable Metrics/AbcSize
     active_memberships = target_member.memberships.where(sandbox: @sandbox)
     active_memberships.each do |m|

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::NotesController < ApplicationController
+class Admin::NotesController < Admin::AdminBaseController
   def upload
     Document.create!(
       text: "#{current_tenant.subdomain}:notes",

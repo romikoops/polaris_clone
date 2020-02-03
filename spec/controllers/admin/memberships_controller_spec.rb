@@ -40,6 +40,7 @@ RSpec.describe Admin::MembershipsController, type: :controller do
     it 'returns http success' do
       allow(controller).to receive(:user_signed_in?).and_return(true)
       allow(controller).to receive(:current_user).and_return(user)
+      expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
       post :bulk_edit, params: edit_params
       expect(response).to have_http_status(:success)
       json = JSON.parse(response.body)

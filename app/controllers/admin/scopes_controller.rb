@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::ScopesController < ApplicationController
+class Admin::ScopesController < Admin::AdminBaseController
   SCOPE_SELECT_OPTIONS = {
     fee_detail: %w(key name key_and_name),
     cargo_info_level: %w(text hs_code),

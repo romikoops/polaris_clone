@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::CurrenciesController < ApplicationController
+class Admin::CurrenciesController < Admin::AdminBaseController
 
   def toggle_mode
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: current_tenant.id)

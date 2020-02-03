@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::MarginsController < ApplicationController
+class Admin::MarginsController < Admin::AdminBaseController
   def index
     paginated_margins = handle_search(params).paginate(pagination_options)
     response_margins = paginated_margins.map do |margin|

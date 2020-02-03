@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::GroupsController < ApplicationController # rubocop:disable Metrics/ClassLength
+class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Metrics/ClassLength
   def index
     paginated_groups = handle_search(params).paginate(pagination_options)
     response_groups = paginated_groups.map do |group|

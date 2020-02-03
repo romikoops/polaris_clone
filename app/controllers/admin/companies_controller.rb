@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::CompaniesController < ApplicationController
+class Admin::CompaniesController < Admin::AdminBaseController
   def index
     paginated_companies = handle_search.paginate(pagination_options)
     response_companies = paginated_companies.map do |company|
