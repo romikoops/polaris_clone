@@ -7,7 +7,7 @@ namespace :db do
   SEED_FILE = APP_ROOT.join('tmp', 'database.sqlc')
 
   namespace :import do
-    task :fetch, [:profile] do |t, args|
+    task :fetch, [:profile, :date] do |_, args|
       DateHelper = Class.new { include ActionView::Helpers::DateHelper }.new
 
       if File.exist?(SEED_FILE)
@@ -39,7 +39,16 @@ namespace :db do
           break if marker.nil?
         end
 
-        object = seeds.sort.last
+        object = if args[:date]
+                   seeds.find { |s| s.key[/-#{args[:date]}.sqlc$/] }
+                 else
+                   seeds.max_by(&:key)
+                 end
+
+        unless object
+          puts "!!! Cannot find database seed with #{args[:date]} !!!"
+          exit(1)
+        end
 
         # Warn if seed file is out-of-date
         puts ''
@@ -60,7 +69,8 @@ namespace :db do
           client.get_object(
             response_target: SEED_FILE.to_s,
             bucket: bucket,
-            key: object.key)
+            key: object.key
+          )
         end
 
         puts '  Done.'

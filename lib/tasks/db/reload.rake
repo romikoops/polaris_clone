@@ -8,20 +8,20 @@ namespace :db do
 
   namespace :reload do
     desc 'Reloads slim database (truncate and pull latest dump)'
-    task :slim do
-      Rake::Task['db:import:fetch'].invoke('slim')
+    task :slim, [:date] do |_, args|
+      Rake::Task['db:import:fetch'].invoke('slim', args[:date])
       Rake::Task['db:reload:common'].invoke
     end
 
     desc 'Reloads full database (truncate and pull latest dump)'
-    task :full do
-      Rake::Task['db:import:fetch'].invoke('full')
+    task :full, [:date] do |_, args|
+      Rake::Task['db:import:fetch'].invoke('full', args[:date])
       Rake::Task['db:reload:common'].invoke
     end
 
     desc 'Reloads production database (AUTHORIZED ONLY)'
-    task :production do
-      Rake::Task['db:import:fetch'].invoke('production')
+    task :production, [:date] do |_, args|
+      Rake::Task['db:import:fetch'].invoke('production', args[:date])
       Rake::Task['db:reload:common'].invoke
     end
 
