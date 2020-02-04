@@ -7,8 +7,7 @@ import {
   tenant,
   shipment,
   selectedOffer,
-  theme,
-  user
+  theme
 } from '../../../mocks/index'
 
 import QuoteCard from './index'
@@ -16,7 +15,6 @@ import QuoteCard from './index'
 const propsBase = {
   theme,
   tenant,
-  user,
   identity,
   loggedIn: true,
   truckingTime: 22,
@@ -67,10 +65,6 @@ const newProps = {
     subdomain: 'foosubdomain'
   }
 }
-
-jest.mock('react-redux', () => ({
-  connect: (mapStateToProps, mapDispatchToProps) => Component => Component
-}))
 
 test('shallow rendering', () => {
   expect(shallow(<QuoteCard {...propsBase} />)).toMatchSnapshot()

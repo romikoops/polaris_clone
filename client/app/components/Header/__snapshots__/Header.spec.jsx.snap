@@ -523,6 +523,75 @@ exports[`showModal is true 1`] = `
             LoginPageProps={
               Object {
                 "req": null,
+                "tenant": Object {
+                  "emails": Object {
+                    "sales": Object {
+                      "air": "sales@demo.com",
+                      "general": "sales@demo.com",
+                      "ocean": "sales@demo.com",
+                      "rail": "sales@demo.com",
+                    },
+                    "support": Object {
+                      "air": "imc.air@demo.com",
+                      "general": "support@demo.com",
+                      "ocean": "imc.sea@demo.com",
+                      "rail": "imc.rail@demo.com",
+                    },
+                  },
+                  "id": 123,
+                  "name": "TENANT_NAME",
+                  "phones": Object {
+                    "support": "TENANT_SUPPORT_PHONE",
+                  },
+                  "scope": Object {
+                    "cargo_info_level": "text",
+                    "carriage_options": Object {
+                      "on_carriage": Object {
+                        "export": "mandatory",
+                        "import": "mandatory",
+                      },
+                      "pre_carriage": Object {
+                        "export": "optional",
+                        "import": "optional",
+                      },
+                    },
+                    "closed_quotation_tool": true,
+                    "customs_export_paper": false,
+                    "detailed_billing": true,
+                    "has_customs": true,
+                    "has_insurance": true,
+                    "hide_grand_total": true,
+                    "mandatory_form_fields": Object {
+                      "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                      "total_goods_value": 3370,
+                    },
+                    "modes_of_transport": Object {
+                      "air": Object {
+                        "AIR_LOAD_TYPE": 0,
+                      },
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": 2,
+                      },
+                      "rail": Object {
+                        "RAIL_LOAD_TYPE": 0,
+                      },
+                      "truck": Object {
+                        "TRUCK_LOAD_TYPE": 0,
+                      },
+                    },
+                    "terms": Array [
+                      "FOO_TERM",
+                      "BAR_TERM",
+                    ],
+                  },
+                  "subdomain": "TENANT_SUBDOMAIN",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
                 "theme": Object {
                   "colors": Object {
                     "primary": "#333",

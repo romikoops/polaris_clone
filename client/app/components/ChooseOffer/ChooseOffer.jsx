@@ -197,16 +197,7 @@ class ChooseOffer extends Component {
   }
 
   chooseResult (obj) {
-    const {
-      user, toggleShowRegistration, req, chooseOffer
-    } = this.props
-    if (user.guest) {
-      req.action = 'getOffers'
-      toggleShowRegistration({ action: 'refreshQuotes', shipmentId: req.shipment.id })
-
-      return
-    }
-    chooseOffer(obj)
+    this.props.chooseOffer(obj)
   }
 
   selectQuotes (shipment, quotes, email) {
@@ -237,14 +228,6 @@ class ChooseOffer extends Component {
     return results.filter(result => motKeys.includes(result.meta.mode_of_transport))
   }
 
-  sortedRoutes (routes) {
-    const { tenant, user } = this.props
-    const { scope } = tenant
-    if (user.guest || scope.hide_grand_total) return routes
-
-    return routes.sort((a, b) => parseFloat(get(a, 'quote.total.value')) - parseFloat(get(b, 'quote.total.value')))
-  }
-
   render () {
     const {
       shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay, lastAvailableDate, t
@@ -271,16 +254,17 @@ class ChooseOffer extends Component {
 
     const selectedOffers = isSingleResultRender ? routes : this.state.selectedOffers
 
-    const routesToRender = this.sortedRoutes(routes)
+    const routesToRender = routes
+      .sort((a, b) => parseFloat(a.quote.total.value) - parseFloat(b.quote.total.value))
       .map(s => (
         <div key={v4()} className="margin_bottom flex-100">
           <QuoteCard
             theme={theme}
-            user={user}
             tenant={tenant}
             pickup={shipment.has_pre_carriage}
             startDate={shipment.desired_start_date}
             result={s}
+            user={user}
             shipment={shipment}
             isFirst
             isChecked={isChecked[s.meta.charge_trip_id] || isSingleResultRender}

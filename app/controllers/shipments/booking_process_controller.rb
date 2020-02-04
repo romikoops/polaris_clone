@@ -2,7 +2,7 @@
 
 class Shipments::BookingProcessController < ApplicationController
   skip_before_action :require_non_guest_authentication!,
-                     except: %i[update_shipment request_shipment]
+                     except: %i(update_shipment request_shipment)
   def create_shipment
     resp = ShippingTools.create_shipment(params[:details], current_user, @sandbox)
     response_handler(resp)
@@ -29,17 +29,6 @@ class Shipments::BookingProcessController < ApplicationController
 
   def update_shipment
     resp = ShippingTools.update_shipment(params, current_user, @sandbox)
-    response_handler(resp)
-  end
-
-  def refresh_quotes
-    resp = shipment.charge_breakdowns.map do |charge_breakdown|
-      {
-        trip_id: charge_breakdown.trip_id,
-        quote: charge_breakdown.to_nested_hash(HiddenValueService.new(user: current_user).hide_total_args)
-      }
-    end
-
     response_handler(resp)
   end
 

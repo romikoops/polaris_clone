@@ -4,7 +4,7 @@ module Legacy
   class Shipment < ApplicationRecord
     self.table_name = 'shipments'
 
-    LOAD_TYPES = %w[cargo_item container].freeze
+    LOAD_TYPES = %w(cargo_item container).freeze
 
     belongs_to :user, class_name: 'Legacy::User'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
@@ -113,8 +113,8 @@ module Legacy
       return_bool
     end
 
-    def selected_offer(args)
-      charge_breakdowns.selected.to_nested_hash(args)
+    def selected_offer
+      charge_breakdowns.selected.to_nested_hash
     end
 
     def shipper
@@ -178,8 +178,8 @@ module Legacy
     private
 
     def update_carriage_properties!
-      %w[on_carriage pre_carriage].each do |carriage|
-        self["has_#{carriage}"] = trucking.dig(carriage, 'truck_type').present?
+      %w(on_carriage pre_carriage).each do |carriage|
+        self["has_#{carriage}"] = !trucking.dig(carriage, 'truck_type').blank?
       end
     end
 
@@ -218,6 +218,12 @@ module Legacy
 
     def find_contacts(type)
       Contact.joins(:shipment_contacts).where(shipment_contacts: { contact_type: type, shipment_id: id })
+    end
+
+    def planned_pickup_date_is_a_datetime?
+      return if planned_pickup_date.nil?
+
+      errors.add(:planned_pickup_date, 'must be a DateTime') unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone)
     end
 
     def desired_start_date_is_a_datetime?

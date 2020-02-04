@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next'
 import { RoundButton } from '../../../../RoundButton/RoundButton'
 import styles from './QuoteCardScheduleListItem.scss'
 
-function QuoteCardScheduleListItem ({ schedule, theme, onSelectSchedule, t, user }) {
+function QuoteCardScheduleListItem ({ schedule, theme, onSelectSchedule, t }) {
   return (
     <div className={`flex-100 layout-row layout-align-start-center ${styles.dates_container}`}>
       <div className={`flex-75 layout-row ${styles.dates_row}`}>
@@ -51,8 +51,7 @@ function QuoteCardScheduleListItem ({ schedule, theme, onSelectSchedule, t, user
           size="full"
           handleNext={() => onSelectSchedule(schedule)}
           theme={theme}
-          active={!user.guest}
-          disabled={user.guest}
+          active
           text={t('common:select')}
         />
       </div>

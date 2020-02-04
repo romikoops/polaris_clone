@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require 'active_storage'
 
 class PdfService
@@ -23,8 +22,7 @@ class PdfService
     quotation: nil,
     load_type: nil,
     cargo_units: {},
-    note_remarks: nil,
-    selected_offer: nil
+    note_remarks: nil
   )
     logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
     pdf = PdfHandler.new(
@@ -35,7 +33,6 @@ class PdfService
       template: template,
       name: name,
       shipment: shipment,
-      selected_offer: selected_offer,
       shipments: shipments,
       quotes: quotes,
       quotation: quotation,
@@ -56,9 +53,8 @@ class PdfService
       template: 'shipments/pdfs/shipment_recap.pdf.html.erb',
       shipment: shipment,
       shipments: [shipment],
-      selected_offer: shipment.selected_offer(HiddenValueService.new(user: shipment.user).hide_total_args),
       load_type: load_type,
-      quotes: quotes_with_trip_id(quotation: nil, shipments: [shipment]),
+      quotes: quotes_with_trip_id(nil, [shipment]),
       name: 'shipment_recap',
       cargo_units: { shipment.id => shipment.cargo_units }
     )
@@ -84,13 +80,13 @@ class PdfService
                           Legacy::Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox_id: sandbox&.id)
                         else
                           Legacy::Document.find_by(tenant_id: tenant.id, user: user, shipment: shipment, doc_type: 'quotation', sandbox_id: sandbox&.id)
-                        end
+    end
     return existing_document if needs_update?(object: quotation || shipment, document: existing_document)
 
     shipments = quotation ? quotation.shipments : [shipment]
     shipment = quotation ? Legacy::Shipment.find(quotation.original_shipment_id) : shipment
     quotation = quotation
-    quotes = quotes_with_trip_id(quotation: quotation, shipments: shipments, admin: true)
+    quotes = quotes_with_trip_id(quotation, shipments)
     note_remarks = get_note_remarks(quotes.first['trip_id'])
     file = generate_quote_pdf(
       shipment: shipment,
@@ -116,28 +112,14 @@ class PdfService
     )
   end
 
-  def needs_update?(object:, document:)
+  def needs_update?(object: , document:)
     document.present? && (object.updated_at < document.updated_at && document.file.present?)
   end
 
-  def hidden_value_args(admin: false)
-    value_service = HiddenValueService.new(user: user)
-    if admin
-      value_service.admin_args
-    else
-      value_service.hide_total_args
-    end
-  end
-
-  def quotes_with_trip_id(quotation:, shipments:, admin: false)
-    hidden_args = hidden_value_args(admin: admin)
+  def quotes_with_trip_id(quotation, shipments)
     shipments.flat_map do |shipment|
       trip = shipment.trip
-      offers = if quotation.present?
-                 [shipment.selected_offer(hidden_args)]
-               else
-                 shipment.charge_breakdowns.map { |charge_breakdown| charge_breakdown.to_nested_hash(hidden_args) }
-               end
+      offers = quotation.present? ? [shipment.selected_offer] : shipment.charge_breakdowns.map(&:to_nested_hash)
       offers.map do |offer|
         trip = Trip.find(offer['trip_id']) if trip.nil?
         origin_hub = trip.itinerary.first_stop.hub
@@ -170,7 +152,7 @@ class PdfService
     existing_document = Legacy::Document.find_by(tenant_id: tenant.id, user: user, quotation: quotation, doc_type: 'quotation', sandbox_id: sandbox&.id)
     return existing_document if needs_update?(object: quotation, document: existing_document)
 
-    quotes = quotes_with_trip_id(quotation: quotation, shipments: quotation.shipments)
+    quotes = quotes_with_trip_id(quotation, quotation.shipments)
     shipment = Legacy::Shipment.find(quotation.original_shipment_id)
     note_remarks = get_note_remarks(quotes.first['trip_id'])
     file = generate_quote_pdf(

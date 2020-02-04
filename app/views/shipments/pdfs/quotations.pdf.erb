@@ -337,7 +337,11 @@
                                  .flat_map(&:keys).none? {|k| k.include?('unknown')}
               end %>
 
-            <% if charge.dig('total', 'value').present? %>
+            <% if charge_key != 'cargo' &&
+                  no_custom_fees &&
+                  charge != "Grand Total" &&
+                  !scope['hide_sub_totals'] || (charge_key == 'cargo' && !hide_cargo_sub_totals && no_custom_fees && !scope['hide_sub_totals'])
+            %>
               <h3><%= '%.2f' % charge["total"]["value"].to_f %>&nbsp;<%= charge["total"]["currency"] %></h3>
             <% end %>
           </div>
@@ -480,7 +484,7 @@
           </div>
         </div>
       <% end %>
-      <% unless quote['total'].nil? %>
+      <% unless hide_grand_total[quote['shipment_id']] %>
         <div class="total-row">
           <h4>Total</h4>
           <p class="quote"><%= '%.2f' % quote["total"]["value"].to_f %>

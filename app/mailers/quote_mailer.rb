@@ -11,7 +11,7 @@ class QuoteMailer < ApplicationMailer
     @quotation = quotation
     @user = @shipment.user
     pdf_service = PdfService.new(user: @user, tenant: @user.tenant)
-    @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)
+    @quotes = pdf_service.quotes_with_trip_id(@quotation, @shipments)
     @theme = @user.tenant.theme
     @email = email[/[^@]+/]
     @content = Content.get_component('QuotePdf', @user.tenant.id)
@@ -48,12 +48,12 @@ class QuoteMailer < ApplicationMailer
     @quotation = quotation
     @user = (quotation&.user || shipment&.user)
     pdf_service = PdfService.new(user: @user, tenant: @user.tenant)
-    @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)
+    @quotes = pdf_service.quotes_with_trip_id(@quotation, @shipments)
     @theme = @user.tenant.theme
     @content = Content.get_component('QuotePdf', @user.tenant.id)
     @scope = scope_for(record: @user, sandbox: sandbox)
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
-    document = pdf_service.admin_quotation(quotation: @quotation, shipment: shipment)&.attachment
+    document = PdfService.new(user: @user, tenant: @user.tenant).admin_quotation(quotation: @quotation, shipment: shipment)&.attachment
     attachments[pdf_name] = document if document.present?
     attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
 

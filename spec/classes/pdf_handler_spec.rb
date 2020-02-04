@@ -13,7 +13,7 @@ RSpec.describe PdfHandler do
     {
       shipment: shipment,
       cargo_units: shipment.cargo_units,
-      quotes: pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment])
+      quotes: pdf_service.quotes_with_trip_id(nil, [shipment])
     }
   end
   let(:klass) { described_class.new(default_args) }
@@ -31,10 +31,45 @@ RSpec.describe PdfHandler do
       {
         shipment: fcl_shipment,
         cargo_units: fcl_shipment.cargo_units,
-        quotes: pdf_service.quotes_with_trip_id(quotation: nil, shipments: [fcl_shipment])
+        quotes: pdf_service.quotes_with_trip_id(nil, [fcl_shipment])
       }
     end
     let(:klass) { described_class.new(default_args) }
+
+    describe 'hide_grand_total' do
+      before do
+        dummy_selected_offer = build(:single_currency_selected_offer, trip_id: fcl_shipment.trip_id)
+        allow(fcl_shipment).to receive(:selected_offer).and_return(dummy_selected_offer)
+      end
+
+      let!(:scope) do
+        create(:tenants_scope, target: tenants_tenant, content: {
+                 hide_converted_grand_total: true
+               })
+      end
+
+      it 'will not hide the grand total with a single currency' do
+        expect(klass.hide_grand_total?(fcl_shipment)).to eq(false)
+      end
+    end
+  end
+
+  context 'LCL shipment' do
+    describe 'hide_grand_total' do
+      let!(:scope) do
+        create(:tenants_scope, target: tenants_tenant, content: {
+                 hide_converted_grand_total: true
+               })
+      end
+
+      it 'will hide the grand total with a multiple currencies and scope.hide_converted_grand_total' do
+        expect(klass.hide_grand_total?(shipment)).to eq(true)
+      end
+
+      it 'will hide the grand total with a consolidated selected offer structure' do
+        expect(klass.hide_grand_total?(agg_shipment)).to eq(false)
+      end
+    end
   end
 
   context 'helper methods' do
@@ -145,7 +180,7 @@ RSpec.describe PdfHandler do
 
     describe '.generate_fee_string' do
       let(:charge_shipment) { create(:legacy_shipment, with_breakdown: true) }
-      let(:quotes) { pdf_service.quotes_with_trip_id(quotation: nil, shipments: [charge_shipment]) }
+      let(:quotes) { pdf_service.quotes_with_trip_id(nil, [charge_shipment]) }
       let(:string_klass) { described_class.new(default_args.merge(quotes: quotes)) }
 
       it 'returns MOT Freight as key' do

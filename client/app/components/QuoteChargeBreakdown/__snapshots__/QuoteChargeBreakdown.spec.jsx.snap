@@ -1,0 +1,595 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`correctly determines whether to display subtotals based on currencies charged it hides the grand totals 1`] = `
+Array [
+  <CollapsingBar
+    collapsed={true}
+    content={
+      Array [
+        <div
+          className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+        >
+          
+          <div
+            className="flex-100 layout-row layout-align-space-between-center currency_header"
+          >
+            <div
+              className="flex-70 layout-row layout-align-start-center"
+            >
+              <span
+                className="flex-none bold"
+              >
+                 
+                Sub Total in {{currency}}
+              </span>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-end-center"
+            >
+              <p
+                className="flex-none bold"
+              >
+                540.00 CNY
+              </p>
+            </div>
+          </div>
+        </div>,
+      ]
+    }
+    contentHeader={
+      <div
+        className="flex-100 layout-row layout-align-start-center
+              price_row "
+      >
+        <div
+          className="flex layout-row layout-align-start-center"
+        >
+          <span>
+            Trucking Pre
+          </span>
+          
+        </div>
+        <div
+          className="flex-35 layout-row layout-align-end-center "
+        >
+          <p>
+            61.76 GBP
+          </p>
+        </div>
+      </div>
+    }
+    contentStyle="sub_price_row_wrapper"
+    faClass=""
+    handleCollapser={[Function]}
+    headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+    hideIcon={false}
+    mainWrapperStyle={
+      Object {
+        "borderTop": "1px solid #E0E0E0",
+        "minHeight": "50px",
+      }
+    }
+    minHeight=""
+    overflow={false}
+    parentClass=""
+    showArrow={false}
+    showArrowSpacer={true}
+    startCollapsed={false}
+    text=""
+    theme={null}
+    wrapperContentClasses=""
+  />,
+  <CollapsingBar
+    collapsed={true}
+    content={
+      Array [
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Ams
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
+            <div
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-25 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>,
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Bkn
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
+            <div
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-25 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>,
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Doc
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
+            <div
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-25 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>,
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Tel
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
+            <div
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-25 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>,
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Vgm
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
+            <div
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-25 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>,
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Test
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
+            <div
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-25 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>,
+      ]
+    }
+    contentHeader={
+      <div
+        className="flex-100 layout-row layout-align-start-center
+              price_row "
+      >
+        <div
+          className="flex layout-row layout-align-start-center"
+        >
+          <span>
+            Export
+          </span>
+          
+        </div>
+        <div
+          className="flex-35 layout-row layout-align-end-center "
+        >
+          <p>
+            111.52 GBP
+          </p>
+        </div>
+      </div>
+    }
+    contentStyle="sub_price_row_wrapper"
+    faClass=""
+    handleCollapser={[Function]}
+    headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+    hideIcon={false}
+    mainWrapperStyle={
+      Object {
+        "borderTop": "1px solid #E0E0E0",
+        "minHeight": "50px",
+      }
+    }
+    minHeight=""
+    overflow={false}
+    parentClass=""
+    showArrow={false}
+    showArrowSpacer={true}
+    startCollapsed={false}
+    text=""
+    theme={null}
+    wrapperContentClasses=""
+  />,
+  <CollapsingBar
+    collapsed={true}
+    content={
+      Array [
+        <div
+          className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+        >
+          
+          <div
+            className="flex-100 layout-row layout-align-space-between-center currency_header"
+          >
+            <div
+              className="flex-70 layout-row layout-align-start-center"
+            >
+              <span
+                className="flex-none bold"
+              >
+                 
+                Sub Total in {{currency}}
+              </span>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-end-center"
+            >
+              <p
+                className="flex-none bold"
+              >
+                187.50 GBP
+              </p>
+            </div>
+          </div>
+        </div>,
+      ]
+    }
+    contentHeader={
+      <div
+        className="flex-100 layout-row layout-align-start-center
+              price_row "
+      >
+        <div
+          className="flex layout-row layout-align-start-center"
+        >
+          <span>
+            Cargo
+          </span>
+          
+        </div>
+        <div
+          className="flex-35 layout-row layout-align-end-center "
+        >
+          <p>
+            187.50 GBP
+          </p>
+        </div>
+      </div>
+    }
+    contentStyle="sub_price_row_wrapper"
+    faClass=""
+    handleCollapser={[Function]}
+    headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+    hideIcon={false}
+    mainWrapperStyle={
+      Object {
+        "borderTop": "1px solid #E0E0E0",
+        "minHeight": "50px",
+      }
+    }
+    minHeight=""
+    overflow={false}
+    parentClass=""
+    showArrow={false}
+    showArrowSpacer={true}
+    startCollapsed={false}
+    text=""
+    theme={null}
+    wrapperContentClasses=""
+  />,
+  <CollapsingBar
+    collapsed={true}
+    content={
+      Array [
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Imp
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
+            <div
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-25 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>,
+      ]
+    }
+    contentHeader={
+      <div
+        className="flex-100 layout-row layout-align-start-center
+              price_row "
+      >
+        <div
+          className="flex layout-row layout-align-start-center"
+        >
+          <span>
+            Import
+          </span>
+          
+        </div>
+        <div
+          className="flex-35 layout-row layout-align-end-center "
+        >
+          <p>
+            0.00 GBP
+          </p>
+        </div>
+      </div>
+    }
+    contentStyle="sub_price_row_wrapper"
+    faClass=""
+    handleCollapser={[Function]}
+    headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+    hideIcon={false}
+    mainWrapperStyle={
+      Object {
+        "borderTop": "1px solid #E0E0E0",
+        "minHeight": "50px",
+      }
+    }
+    minHeight=""
+    overflow={false}
+    parentClass=""
+    showArrow={false}
+    showArrowSpacer={true}
+    startCollapsed={false}
+    text=""
+    theme={null}
+    wrapperContentClasses=""
+  />,
+  <CollapsingBar
+    collapsed={true}
+    content={
+      Array [
+        <div
+          className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+        >
+          
+          <div
+            className="flex-100 layout-row layout-align-space-between-center currency_header"
+          >
+            <div
+              className="flex-70 layout-row layout-align-start-center"
+            >
+              <span
+                className="flex-none bold"
+              >
+                 
+                Sub Total in {{currency}}
+              </span>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-end-center"
+            >
+              <p
+                className="flex-none bold"
+              >
+                80.00 GBP
+              </p>
+            </div>
+          </div>
+        </div>,
+      ]
+    }
+    contentHeader={
+      <div
+        className="flex-100 layout-row layout-align-start-center
+              price_row "
+      >
+        <div
+          className="flex layout-row layout-align-start-center"
+        >
+          <span>
+            Trucking On
+          </span>
+          
+        </div>
+        <div
+          className="flex-35 layout-row layout-align-end-center "
+        >
+          <p>
+            80.00 GBP
+          </p>
+        </div>
+      </div>
+    }
+    contentStyle="sub_price_row_wrapper"
+    faClass=""
+    handleCollapser={[Function]}
+    headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+    hideIcon={false}
+    mainWrapperStyle={
+      Object {
+        "borderTop": "1px solid #E0E0E0",
+        "minHeight": "50px",
+      }
+    }
+    minHeight=""
+    overflow={false}
+    parentClass=""
+    showArrow={false}
+    showArrowSpacer={true}
+    startCollapsed={false}
+    text=""
+    theme={null}
+    wrapperContentClasses=""
+  />,
+  "",
+]
+`;

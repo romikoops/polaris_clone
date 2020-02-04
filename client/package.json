@@ -30,8 +30,7 @@
     "automock": true,
     "setupFiles": [
       "./jest.init.js"
-    ],
-    "testEnvironment": "node"
+    ]
   },
   "author": "ItsMyCargo Gmbh",
   "license": "SEE LICENSE IN LICENSE",

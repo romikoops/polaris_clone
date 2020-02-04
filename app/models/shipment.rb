@@ -23,6 +23,7 @@ class Shipment < Legacy::Shipment
     CustomValidations.inclusion(self, attribute, array)
   end
 
+  validate :planned_pickup_date_is_a_datetime?
   validate :desired_start_date_is_a_datetime?
   validate :user_tenant_match
   validate :itinerary_trip_match
@@ -301,9 +302,8 @@ class Shipment < Legacy::Shipment
   end
 
   def as_options_json(options = {})
-    hidden_args = HiddenValueService.new(user: user).hide_total_args
     new_options = options.reverse_merge(
-      methods: %i(mode_of_transport cargo_count company_name client_name),
+      methods: %i(selected_offer mode_of_transport cargo_count company_name client_name),
       include: [
         :destination_nexus,
         :origin_nexus,
@@ -319,7 +319,7 @@ class Shipment < Legacy::Shipment
         }
       ]
     )
-    as_json(new_options).merge(selected_offer: selected_offer(hidden_args))
+    as_json(new_options)
   end
 
   def route_notes

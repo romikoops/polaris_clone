@@ -62,51 +62,6 @@ function getOffers (data, redirect) {
   }
 }
 
-function refreshQuotes (shipmentId) {
-  function request (id) {
-    return {
-      type: shipmentConstants.REFRESH_QUOTES_REQUEST,
-      shipmentId: id
-    }
-  }
-  function success (data) {
-    return {
-      type: shipmentConstants.REFRESH_QUOTES_SUCCESS,
-      payload: data
-    }
-  }
-  function failure (error) {
-    return { type: shipmentConstants.REFRESH_QUOTES_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request(shipmentId))
-
-    return fetch(
-      `${getTenantApiUrl()}/shipments/${shipmentId}/refresh_quotes`,
-      requestOptions('GET', { 'Content-Type': 'application/json' }, JSON.stringify(deepSnakefyKeys(shipmentId)))
-    )
-      .then(resp => resp.json())
-      .then((resp) => {
-        if (resp.success) {
-          dispatch(success(resp.data))
-        } else {
-          dispatch(failure({
-            type: 'error',
-            text: get(resp, 'data.message') || get(resp, 'data.error')
-          }))
-          const errorToRender = {
-            ...resp,
-            componentName: 'RouteSection',
-            side: 'center'
-          }
-          dispatch(errorActions.setError(errorToRender))
-          if (resp.error) console.error(resp.exception)
-        }
-      })
-    }
-  }
-
 function setShipmentContacts (data) {
   function request (shipmentData) {
     return {
@@ -815,8 +770,7 @@ export const shipmentActions = {
   getLastAvailableDate,
   checkAhoyShipment,
   newAhoyShipment,
-  checkLoginOnBookingProcess,
-  refreshQuotes
+  checkLoginOnBookingProcess
 }
 
 export default shipmentActions

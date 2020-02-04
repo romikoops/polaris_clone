@@ -19,7 +19,6 @@ exports[`shallow rendering when props.size is small 1`] = `
     scrollable={false}
     showModal={false}
     showRegistration={false}
-    stage={null}
     t={[Function]}
     tenant={null}
     theme={

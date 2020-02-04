@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import { connect } from 'react-redux'
 import { get } from 'lodash'
 import { withNamespaces } from 'react-i18next'
 import { moment } from '../../../constants'
@@ -22,7 +21,6 @@ import RatesOverview from './Rates'
 import NoteReader from '../Notes'
 import UnitsWeight from '../../Units/Weight'
 import Modal from '../../Modal/Modal'
-import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner'
 
 class QuoteCard extends PureComponent {
   constructor (props) {
@@ -133,19 +131,16 @@ class QuoteCard extends PureComponent {
   }
 
   buttonToDisplay () {
-    const {
-      tenant, result, t, user
-    } = this.props
+    const { tenant, result, t } = this.props
     const { scope, theme } = tenant
     const { showSchedules } = this.state
     const showPriceBreakdownBtn = (
       <RoundButton
-        active={!user.guest}
+        active
         size="full"
         classNames={`pointy layout-row layout-align-center-center ${styles.add_button}`}
         handleNext={() => this.toggleShowSchedules('prices')}
         theme={theme}
-        disabled={user.guest}
         text={t('quote:viewPriceBreakdown')}
       />
     )
@@ -196,10 +191,7 @@ class QuoteCard extends PureComponent {
       aggregatedCargo,
       onClickAdd,
       t,
-      shipment,
-      refreshing,
-      user,
-      selectResult
+      shipment
     } = this.props
     const { scope } = tenant
     const {
@@ -244,33 +236,7 @@ class QuoteCard extends PureComponent {
         parentToggle={this.toggleNotesModal}
       />
     )
-    const freeOutLabel = (
-      <small>
-(
-        {t('common:freeOut')}
-)
-      </small>
-    )
-
-    const loginButton = (
-      <RoundButton
-        active
-        flexContainer="60"
-        classNames={`pointy layout-row layout-align-center-end ${styles.add_button}`}
-        size="full"
-        handleNext={() => selectResult()}
-        theme={theme}
-        text={t('account:loginToSeeOffers')}
-      />
-    )
-    let totalText
-    if (user.guest) {
-      totalText = t('account:loginToSeeOffers')
-    } else if (hideGrandTotal || quote.total == null) {
-      totalText = ''
-    } else {
-      totalText = `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`
-    }
+    const freeOutLabel = (<small>({t('common:freeOut')})</small>)
 
     return (
       <div className={`
@@ -351,13 +317,13 @@ class QuoteCard extends PureComponent {
             {voyageInfo.carrier && result.meta.carrier_name && (
               <div>
                 {switchIcon(result.meta.mode_of_transport)}
-                {t('quote:carrier', { carrierName: result.meta.carrier_name })}
+                {t("quote:carrier", { carrierName: result.meta.carrier_name })}
               </div>
             )}
             {voyageInfo.service_level && result.meta.service_level && (
               <div>
                 <i className="flex-none fa fa-bell-o" />
-                {t('quote:service', { serviceLevel: capitalize(result.meta.service_level) })}
+                {t("quote:service", { serviceLevel: capitalize(result.meta.service_level) })}
               </div>
             )}
             {meta.validUntil && (
@@ -371,7 +337,7 @@ class QuoteCard extends PureComponent {
             {voyageInfo.transshipmentVia && result.meta.transshipmentVia && (
               <div>
                 <i className="flex-none fa fa-exchange" />
-                {t('quote:transshipmentVia', { transshipment: result.meta.transshipmentVia })}
+                {t("quote:transshipmentVia", { transshipment: result.meta.transshipmentVia })}
               </div>
             )}
           </div>
@@ -388,7 +354,7 @@ class QuoteCard extends PureComponent {
           )
         }
         { scope.show_rate_overview ? (<RatesOverview ratesObject={result.meta.pricing_rate_data} />) : '' }
-        <CollapsingContent collapsed={!showSchedules} initialExpanded={showSchedules}>
+        <CollapsingContent collapsed={!showSchedules}>
           <QuoteCardScheduleList
             schedules={schedules}
             theme={theme}
@@ -396,14 +362,12 @@ class QuoteCard extends PureComponent {
             originHub={originHub}
             destinationHub={destinationHub}
             onSelectSchedule={this.handleSelectSchedule}
-            user={user}
           />
         </CollapsingContent>
         <CollapsingContent collapsed={showSchedules}>
           <QuoteChargeBreakdown
             theme={theme}
             scope={tenant.scope}
-            user={user}
             quote={quote}
             meta={meta}
             cargo={cargo}
@@ -434,25 +398,19 @@ class QuoteCard extends PureComponent {
                   />
                 </div>
               ) : ''}
-              <div className="flex-100 layout-row layout-align-space-around-center">
-                <p className="flex-30">{!hideGrandTotal && t('common:total')}</p>
-                <p className="flex-70 layout-row layout-align-end-end">
-                  {' '}
-                  {refreshing && (<LoadingSpinner size="small" />)}
-                  {user.guest ? loginButton : totalText}
-                  {' '}
-                </p>
-              </div>
+              <p className="flex-none" style={{ textAlign: 'right' }}>{hideGrandTotal ? '' : t('common:total')}</p>
+              <p
+                style={{ paddingRight: '18px' }}
+                className="flex"
+              >
+                {hideGrandTotal
+                  ? ''
+                  : `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`}
+              </p>
             </div>
             {result.meta.remarkNotes && (
               <div className={`flex-100 layout-row layout-wrap layout-align-end-center ${styles.remark_note}`}>
-                {result.meta.remarkNotes.map(str => (
-                  <p className={`flex-100 ${styles.remark}`}>
-                    {' '}
-                    {str}
-                    {' '}
-                  </p>
-                ))}
+                {result.meta.remarkNotes.map(str => <p className={`flex-100 ${styles.remark}`} > {str} </p>)}
               </div>
             )}
             <div className="flex-100 layout-row layout-align-end-center">
@@ -472,14 +430,22 @@ class QuoteCard extends PureComponent {
   }
 }
 
-function mapStateToProps (state) {
-  const { bookingData } = state
-
-  const { refreshing } = bookingData
-
-  return { refreshing }
+QuoteCard.defaultProps = {
+  theme: null,
+  truckingTime: 0,
+  tenant: {},
+  result: {
+    notes: []
+  },
+  user: {},
+  cargo: [],
+  selectResult: null,
+  onScheduleRequest: null,
+  onClickAdd: null,
+  pickup: false,
+  isChecked: false,
+  aggregatedCargo: {},
+  validUntil: null
 }
 
-const connectedQuoteCard = connect(mapStateToProps)(QuoteCard)
-
-export default withNamespaces(['common', 'account', 'cargo', 'acronym', 'shipment', 'quote', 'disclaimers'])(connectedQuoteCard)
+export default withNamespaces(['common', 'cargo', 'acronym', 'shipment', 'quote', 'disclaimers'])(QuoteCard)
