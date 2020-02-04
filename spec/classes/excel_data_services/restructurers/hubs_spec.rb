@@ -10,7 +10,7 @@ RSpec.describe ExcelDataServices::Restructurers::Hubs do
   describe '.perform' do
     let(:data) do
       { sheet_name: 'Hubs',
-        data_restructurer_name: 'hubs',
+        restructurer_name: 'hubs',
         rows_data:
   [{ status: 'active',
      type: 'OCEAN',

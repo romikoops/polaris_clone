@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :pricings_fee, class: 'Pricings::Fee' do # rubocop:disable Metrics/BlockLength
+  factory :pricings_fee, class: 'Pricings::Fee' do
     rate { 1111 }
     min { 1 }
     association :rate_basis, factory: :pricings_rate_basis

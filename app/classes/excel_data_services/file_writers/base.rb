@@ -55,25 +55,31 @@ module ExcelDataServices
         transit_time: :transit_time
       ).freeze
 
+      def self.get(category_identifier)
+        "ExcelDataServices::FileWriters::#{category_identifier.camelize}".constantize
+      end
+
       def self.write_document(options)
         new(options).perform
       end
 
-      def initialize(tenant:, file_name:, user:, sandbox: nil)
+      def initialize(tenant:, file_name:, user:, sandbox:, options:)
         @tenant = tenant
         @user = user
-        @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant&.id)
-        @scope = ::Tenants::ScopeService.new(tenant: tenants_tenant, target: user).fetch
-        @file_name = file_name.remove(/.xlsx$/) + '.xlsx'
-        @xlsx = nil
         @sandbox = sandbox
+        @options = options
+
+        @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
+        @scope = ::Tenants::ScopeService.new(tenant: tenants_tenant, target: user).fetch
+        @file_name = Pathname.new(file_name).sub_ext('.xlsx').to_s
+        @xlsx = nil
       end
 
       def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         sheets_data = load_and_prepare_data
 
         tempfile = Tempfile.new('excel')
-        @xlsx = WriteXLSX.new(tempfile, tempdir: Rails.root.join('tmp', 'write_xlsx/').to_s)
+        @xlsx = WriteXLSX.new(tempfile, tempdir: Rails.root.join('tmp/write_xlsx/').to_s)
 
         sheets_data.each do |sheet_name, rows_data|
           worksheet = xlsx.add_worksheet(sheet_name)
@@ -106,7 +112,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :tenant, :file_name, :xlsx, :tenants_tenant, :scope
+      attr_reader :tenant, :file_name, :xlsx, :tenants_tenant, :scope, :options
 
       def load_and_prepare_data
         raise NotImplementedError, "This method must be implemented in #{self.class.name}."
@@ -182,9 +188,9 @@ module ExcelDataServices
       end
 
       def build_rows_with_dynamic_headers(data_with_dynamic_headers, dynamic_headers)
-        return nil unless data_with_dynamic_headers && dynamic_headers
+        return if data_with_dynamic_headers.empty? || dynamic_headers.empty?
 
-        PricingRowDataBuilder.sort!(data_with_dynamic_headers)
+        PricingsRowDataBuilder.sort!(data_with_dynamic_headers)
         unmerged_rows = data_with_dynamic_headers.map do |attributes|
           row_data = {}
 
@@ -212,11 +218,16 @@ module ExcelDataServices
         case sheet_name.to_s
         when 'No Ranges'
           dynamic_headers =
-            rows_data.flat_map(&:keys).compact.uniq - HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES
+            rows_data.flat_map(&:keys).compact.uniq -
+            HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES -
+            HEADER_COLLECTION::OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES
 
-          ExcelDataServices::Validators::HeaderChecker::VARIABLE + HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES + dynamic_headers
+          HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
+            HEADER_COLLECTION::OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
+            dynamic_headers
         when 'With Ranges'
-          ExcelDataServices::Validators::HeaderChecker::VARIABLE + HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES
+          HEADER_COLLECTION::OPTIONAL_PRICING_ONE_COL_FEE_AND_RANGES +
+            HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES
         else
           raise ExcelDataServices::Validators::ValidationErrors::WritingError::UnknownSheetNameError,
                 "Unknown sheet name \"#{sheet_name}\"!"

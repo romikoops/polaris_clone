@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Rows
-    class Hubs < Base
+    class Hubs < ExcelDataServices::Rows::Base
     end
   end
 end

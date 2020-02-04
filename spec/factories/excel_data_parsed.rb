@@ -2,27 +2,31 @@
 
 FactoryBot.define do
   factory :excel_data_parsed, class: 'Hash' do
-    data_restructurer_name { '' }
+    restructurer_name { '' }
     rows_data { [] }
 
     initialize_with do
-      attributes[:all_sheets_data].map { |per_sheet_data| per_sheet_data.merge(attributes[:data_restructurer_name]) }.deep_dup
+      attributes[:all_sheets_data].map { |per_sheet_data| per_sheet_data.merge(attributes[:restructurer_name]) }.deep_dup
     end
 
     trait :pricing_one_col_fee_and_ranges do
-      data_restructurer_name { { data_restructurer_name: 'pricing_one_col_fee_and_ranges' } }
+      restructurer_name { { restructurer_name: 'pricing_one_col_fee_and_ranges' } }
     end
 
     trait :pricing_dynamic_fee_cols_no_ranges do
-      data_restructurer_name { { data_restructurer_name: 'pricing_dynamic_fee_cols_no_ranges' } }
+      restructurer_name { { restructurer_name: 'pricing_dynamic_fee_cols_no_ranges' } }
     end
 
     trait :local_charges do
-      data_restructurer_name { { data_restructurer_name: 'local_charges' } }
+      restructurer_name { { restructurer_name: 'local_charges' } }
     end
 
     trait :saco_shipping do
-      data_restructurer_name { { data_restructurer_name: 'saco_shipping' } }
+      restructurer_name { { restructurer_name: 'saco_shipping' } }
+    end
+
+    trait :margins do
+      restructurer_name { { restructurer_name: 'margins' } }
     end
 
     trait :correct_pricings_one_col_fee_and_ranges do
@@ -379,7 +383,7 @@ FactoryBot.define do
     trait :correct_saco_shipping do
       all_sheets_data do
         [{ sheet_name: 'Africa',
-           data_restructurer_name: 'saco_shipping',
+           restructurer_name: 'saco_shipping',
            rows_data:
            [
              { internal: nil,
@@ -419,9 +423,47 @@ FactoryBot.define do
       end
     end
 
+    trait :correct_margins do
+      all_sheets_data do
+        [{ sheet_name: 'Tabelle1',
+           restructurer_name: 'margins',
+           rows_data:
+            [{ effective_date: Date.parse('Tue, 01 Jan 2019'),
+               expiration_date: Date.parse('Sun, 31 Mar 2019'),
+               origin: 'Dalian',
+               country_origin: 'China',
+               destination: 'Gothenburg',
+               country_destination: 'Sweden',
+               mot: 'ocean',
+               carrier: 'Consolidation',
+               service_level: 'standard',
+               margin_type: 'freight',
+               load_type: 'LCL',
+               fee_code: 'BAS',
+               operator: '+',
+               margin: 0.1,
+               row_nr: 2 },
+             { effective_date: Date.parse('Tue, 01 Jan 2019'),
+               expiration_date: Date.parse('Sun, 31 Mar 2019'),
+               origin: 'Dalian',
+               country_origin: 'China',
+               destination: 'Gothenburg',
+               country_destination: 'Sweden',
+               mot: 'ocean',
+               carrier: 'Consolidation',
+               service_level: 'standard',
+               margin_type: 'freight',
+               load_type: 'LCL',
+               fee_code: 'BAS',
+               operator: '%',
+               margin: 0.1,
+               row_nr: 3 }] }]
+      end
+    end
+
     trait :default_hubs do
       sheet_name { 'Hubs' }
-      data_restructurer_name { 'hubs' }
+      restructurer_name { 'hubs' }
       data do
         [{ status: 'active',
            type: 'OCEAN',
@@ -465,5 +507,6 @@ FactoryBot.define do
     factory :excel_data_parsed_correct_local_charges, traits: %i[local_charges correct_local_charges]
     factory :excel_data_parsed_faulty_local_charges, traits: %i[local_charges faulty_local_charges]
     factory :excel_data_parsed_correct_saco_shipping, traits: %i[saco_shipping correct_saco_shipping]
+    factory :excel_data_parsed_correct_margins, traits: %i[margins correct_margins]
   end
 end

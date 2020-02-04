@@ -6,7 +6,7 @@ RSpec.describe ExcelDataServices::Restructurers::ChargeCategories do
   describe '.perform' do
     let(:data) do
       { sheet_name: 'Sheet1',
-        data_restructurer_name: 'charge_categories',
+        restructurer_name: 'charge_categories',
         rows_data: [{ internal_code: nil, fee_code: 'AMS', fee_name: 'Automated Manifest System', row_nr: 2 },
                     { internal_code: nil, fee_code: 'BAF', fee_name: 'Bunker Adjustment Factor', row_nr: 3 },
                     { internal_code: nil, fee_code: 'BAS', fee_name: 'Basic Ocean Freight', row_nr: 4 },

@@ -21,7 +21,7 @@ module ExcelDataServices
 
       def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         result_insertion_stats = {}
-        data_restructurer_names_for_all_sheets = {}
+        restructurer_names_for_all_sheets = {}
         headers_for_all_sheets = {}
 
         xlsx = open_spreadsheet_file(file_or_path)
@@ -37,12 +37,12 @@ module ExcelDataServices
           header_errors << header_validator.results(filter: :error) unless header_validator.valid?
 
           headers_for_all_sheets[sheet_name] = headers
-          data_restructurer_names_for_all_sheets[sheet_name] = header_validator.data_restructurer_name
+          restructurer_names_for_all_sheets[sheet_name] = header_validator.restructurer_name
         end
 
         return { has_errors: true, errors: header_errors.flatten } if header_errors.present?
 
-        all_sheets_raw_data = parse_data(xlsx, headers_for_all_sheets, data_restructurer_names_for_all_sheets)
+        all_sheets_raw_data = parse_data(xlsx, headers_for_all_sheets, restructurer_names_for_all_sheets)
 
         restructured_data =
           all_sheets_raw_data.each_with_object({}) do |per_sheet_raw_data, hsh|
@@ -107,12 +107,12 @@ module ExcelDataServices
         end
       end
 
-      def parse_data(xlsx, headers_for_all_sheets, data_restructurer_names_for_all_sheets)
+      def parse_data(xlsx, headers_for_all_sheets, restructurer_names_for_all_sheets)
         file_parser = ExcelDataServices::FileParser
         file_parser.parse(tenant: tenant,
                           xlsx: xlsx,
                           headers_for_all_sheets: headers_for_all_sheets,
-                          data_restructurer_names_for_all_sheets: data_restructurer_names_for_all_sheets)
+                          restructurer_names_for_all_sheets: restructurer_names_for_all_sheets)
       end
 
       def restructure_data(raw_data)
@@ -125,8 +125,8 @@ module ExcelDataServices
         inserter.insert(tenant: tenant, data: data, options: options)
       end
 
-      def combine_stats(hsh_1, hsh_2)
-        hsh_1.deep_merge(hsh_2) { |_key, val_1, val_2| val_1 + val_2 }
+      def combine_stats(stats, partial_stats)
+        stats.deep_merge(partial_stats) { |_key, val1, val2| val1 + val2 }
       end
     end
   end

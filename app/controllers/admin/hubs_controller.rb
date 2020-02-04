@@ -105,7 +105,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
 
   def upload
     document = Document.create!(
-      text: "#{current_tenant.subdomain} hubs upload #{Date.today.strftime('%d/%m/%Y')}",
+      text: "#{current_tenant.subdomain} hubs upload #{Time.zone.today.strftime('%d/%m/%Y')}",
       doc_type: 'hubs',
       sandbox: @sandbox,
       tenant: current_tenant,
@@ -127,25 +127,20 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def download
-    key = 'hubs'
+    tenant_slug = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug
+    category_identifier = 'hubs'
+    file_name = "#{tenant_slug}__#{category_identifier}_#{Time.zone.today.strftime('%d/%m/%Y')}"
 
-    file_name = [
-      ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug,
-      Date.today.strftime('%d/%m/%Y')
-    ].join('__hubs_')
-
-    options = { tenant: current_tenant,
-                specific_identifier: 'Hubs',
-                file_name: file_name,
-                sandbox: @sandbox }
-    downloader = ExcelDataServices::Loaders::Downloader.new(options)
-    document = downloader.perform
+    document = ExcelDataServices::Loaders::Downloader.new(
+      tenant: current_tenant,
+      category_identifier: category_identifier,
+      file_name: file_name,
+      sandbox: @sandbox
+    ).perform
 
     response_handler(
-      key: key,
-      url: Rails.application.routes.url_helpers.rails_blob_url(
-        document.file, disposition: 'attachment'
-      )
+      key: category_identifier,
+      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment')
     )
   end
 

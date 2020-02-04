@@ -90,24 +90,27 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
   end
 
   def download
+    tenant_slug = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug
+    category_identifier = 'local_charges'
     mot = download_params[:mot]
-    key = 'local_charges'
-    klass_identifier = 'LocalCharges'
-    file_name = "#{::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug}__local_charges_#{mot}"
+    file_name = "#{tenant_slug}__#{category_identifier}_#{mot}"
 
-    options = {
+    document = ExcelDataServices::Loaders::Downloader.new(
       tenant: current_tenant,
-      specific_identifier: klass_identifier,
+      category_identifier: category_identifier,
       file_name: file_name,
       sandbox: @sandbox,
-      group_id: upload_params[:group_id]
-    }
-    downloader = ExcelDataServices::Loaders::Downloader.new(options)
-
-    document = downloader.perform
+      options: {
+        mode_of_transport: mot,
+        group_id: upload_params[:group_id]
+      }
+    ).perform
 
     # TODO: When timing out, file will not be downloaded!!!
-    response_handler(key: key, url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment'))
+    response_handler(
+      key: category_identifier,
+      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment')
+    )
   end
 
   private

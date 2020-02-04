@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Inserters
-    class Hubs < Base
+    class Hubs < ExcelDataServices::Inserters::Base
       def perform
         data.each do |params|
           mandatory_charge = find_mandatory_charge(params: params.dig(:mandatory_charge))

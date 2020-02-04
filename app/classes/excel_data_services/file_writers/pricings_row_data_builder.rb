@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileWriters
-    class PricingRowDataBuilder < ExcelDataServices::FileWriters::Base # rubocop:disable Metrics/ClassLength
+    class PricingsRowDataBuilder < ExcelDataServices::FileWriters::Base # rubocop:disable Metrics/ClassLength
       def self.build_raw_pricing_rows(pricings, scope = {})
         raw_pricing_rows = []
         if scope['base_pricing']
@@ -140,7 +140,7 @@ module ExcelDataServices
       end
 
       def self.build_rows_data_with_static_fee_col(data_static_fee_col)
-        return nil unless data_static_fee_col
+        return if data_static_fee_col.empty?
 
         sort!(data_static_fee_col)
         data_static_fee_col = expand_ranges(data_static_fee_col)

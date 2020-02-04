@@ -109,7 +109,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
       end
 
       it 'returns error with messages when an error is raised' do
-        post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), tenant_id: 1, mot: 'ocean', load_type: 'cargo_item' }
+        post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), tenant_id: 1 }
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:success)
         expect(json_response.dig('data', 'errors')).to eq(JSON.parse(errors_arr.to_json))
@@ -117,21 +117,89 @@ RSpec.describe Admin::PricingsController, type: :controller do
     end
   end
 
+  describe 'GET #download' do
+    let(:tenant) { create(:tenant) }
+    let(:hubs) do
+      [
+        create(:hub,
+               tenant: tenant,
+               name: 'Gothenburg Port',
+               hub_type: 'ocean',
+               nexus: create(:nexus, name: 'Gothenburg')),
+        create(:hub,
+               tenant: tenant,
+               name: 'Shanghai Port',
+               hub_type: 'ocean',
+               nexus: create(:nexus, name: 'Shanghai'))
+      ]
+    end
+    let(:itinerary_with_stops) do
+      create(:itinerary, tenant: tenant,
+                         stops: [
+                           build(:stop, itinerary_id: nil, index: 0, hub: hubs.first),
+                           build(:stop, itinerary_id: nil, index: 1, hub: hubs.second)
+                         ])
+    end
+    let(:tenant_vehicle) do
+      create(:tenant_vehicle, tenant: tenant)
+    end
+
+    before do
+      create(:tenants_scope, target: Tenants::Tenant.find_by(legacy_id: tenant.id), content: { 'base_pricing' => true })
+      expect_any_instance_of(described_class).to receive(:require_authentication!).and_return(true)
+      expect_any_instance_of(described_class).to receive(:require_non_guest_authentication!).and_return(true)
+      expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
+      expect_any_instance_of(described_class).to receive(:current_tenant).at_least(:once).and_return(tenant)
+      expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(double('User', guest: false, email: 'test@test.com', id: 1, agency_id: nil, agency: nil, tenant: nil, groups: nil, company: nil, scope: nil, sandbox: nil))
+    end
+
+    context 'cargo_item' do
+      let!(:pricings) do
+        [
+          create(:lcl_pricing)
+        ]
+      end
+
+      it 'returns error with messages when an error is raised' do
+        get :download, params: { tenant_id: tenant.id, options: { mot: 'ocean', load_type: 'cargo_item', group_id: nil } }
+        json_response = JSON.parse(response.body)
+        expect(response).to have_http_status(:success)
+        expect(json_response.dig('data', 'url')).to include('demo__pricings_ocean_lcl.xlsx')
+      end
+    end
+
+    context 'container' do
+      let!(:pricings) do
+        [
+          create(:fcl_20_pricing)
+        ]
+      end
+
+      it 'returns error with messages when an error is raised' do
+        get :download, params: { tenant_id: tenant.id, options: { mot: 'ocean', load_type: 'container', group_id: nil } }
+        json_response = JSON.parse(response.body)
+        expect(response).to have_http_status(:success)
+        expect(json_response.dig('data', 'url')).to include('demo__pricings_ocean_fcl.xlsx')
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     let(:tenant) { create(:tenant) }
+
     before do
       expect_any_instance_of(described_class).to receive(:require_authentication!).and_return(true)
       expect_any_instance_of(described_class).to receive(:require_non_guest_authentication!).and_return(true)
       expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
       expect_any_instance_of(described_class).to receive(:current_tenant).at_least(:once).and_return(tenant)
       expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(double('User', guest: false, email: 'test@test.com', id: 1, agency_id: nil, agency: nil, tenant: tenant, groups: nil, company: nil, scope: nil, sandbox: nil))
-
     end
 
     context 'base_pricing' do
       before do
         expect_any_instance_of(described_class).to receive(:current_scope).at_least(:once).and_return({ base_pricing: true }.with_indifferent_access)
       end
+
       let(:base_pricing) { create(:pricings_pricing, tenant: tenant) }
 
       it 'deletes the Pricings::Pricing' do
@@ -143,9 +211,11 @@ RSpec.describe Admin::PricingsController, type: :controller do
 
     context 'legacy_pricing' do
       let(:legacy_pricing) { create(:legacy_pricing, tenant: tenant) }
+
       before do
         expect_any_instance_of(described_class).to receive(:current_scope).at_least(:once).and_return({ base_pricing: false }.with_indifferent_access)
       end
+
       it 'deletes the Pricings::Pricing' do
         delete :destroy, params: { 'id' => legacy_pricing.id, tenant_id: tenant.id }
         expect(response).to have_http_status(:success)

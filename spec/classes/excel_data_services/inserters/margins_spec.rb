@@ -22,9 +22,14 @@ RSpec.describe ExcelDataServices::Inserters::Margins do
 
   describe '.insert' do
     let(:input_data) { build(:excel_data_restructured_correct_margins) }
+    let(:expected_stats) do
+      { "pricings/margins": { number_created: 1, number_updated: 0, number_deleted: 0 },
+        "pricings/details": { number_created: 2, number_updated: 0, number_deleted: 0 } }
+    end
 
     it 'returns correct stats and creates correct data' do
       stats = described_class.insert(options)
+      expect(stats).to eq(expected_stats)
     end
   end
 end

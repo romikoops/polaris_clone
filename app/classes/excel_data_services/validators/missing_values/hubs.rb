@@ -4,12 +4,12 @@ module ExcelDataServices
   module Validators
     module MissingValues
       class Hubs < ExcelDataServices::Validators::MissingValues::Base
-        VALID_HUB_TYPES = %w(
+        VALID_HUB_TYPES = %w[
           ocean
           rail
           truck
           air
-        ).freeze
+        ].freeze
 
         USER_FRIENDLY_KEY_LOOKUP = {
           tenant_id: 'TENANT',
@@ -32,12 +32,12 @@ module ExcelDataServices
         end
 
         def check_row_hub(row:)
-          %i(tenant_id
+          %i[tenant_id
              hub_type
              latitude
              longitude
              name
-             hub_code).each do |hub_attr_key|
+             hub_code].each do |hub_attr_key|
             next if row[:hub][hub_attr_key].present?
 
             add_to_errors(
@@ -51,11 +51,11 @@ module ExcelDataServices
         end
 
         def check_row_nexus(row:)
-          %i(tenant_id
+          %i[tenant_id
              latitude
              longitude
              name
-             locode).each do |hub_attr_key|
+             locode].each do |hub_attr_key|
             next if row[:nexus][hub_attr_key].present?
 
             add_to_errors(
@@ -69,11 +69,11 @@ module ExcelDataServices
         end
 
         def check_row_address(row:)
-          %i(geocoded_address
+          %i[geocoded_address
              latitude
              longitude
              city
-             country).each do |hub_attr_key|
+             country].each do |hub_attr_key|
             next if row[:address][hub_attr_key].present?
 
             add_to_errors(

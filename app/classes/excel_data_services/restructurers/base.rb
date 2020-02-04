@@ -27,7 +27,7 @@ module ExcelDataServices
       end
 
       def self.restructure(options)
-        klass_identifier = options[:data][:data_restructurer_name]
+        klass_identifier = options[:data][:restructurer_name]
         child_klass = klass_identifier ? get(klass_identifier) : self
         child_klass.new(options).perform
       end

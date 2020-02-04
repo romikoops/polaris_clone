@@ -80,7 +80,7 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
       nil
     ]
   end
-  let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx') }
+  let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: {}) }
   let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
   let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 

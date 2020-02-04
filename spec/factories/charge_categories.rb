@@ -8,12 +8,12 @@ FactoryBot.define do
 
     trait :bas do
       name { 'Basic Ocean Freight' }
-      code { 'BAS' }
+      code { 'bas' }
     end
 
     trait :has do
       name { 'Heavy Weight Freight' }
-      code { 'HAS' }
+      code { 'has' }
     end
   end
 end

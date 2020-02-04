@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Loaders::Uploader do
   let(:tenant) { create(:tenant) }
-  let(:specific_identifier) {}
+  let(:category_identifier) {}
   let(:file_or_path) {}
   let(:uploader) do
     ExcelDataServices::Loaders::Uploader.new(
@@ -23,7 +23,7 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
       expect(ExcelDataServices::Validators::HeaderChecker).to receive(:new).exactly(2).times.and_return(header_validator)
       expect(header_validator).to receive(:perform).exactly(2).times
       expect(header_validator).to receive(:valid?).exactly(2).times.and_return(true)
-      expect(header_validator).to receive(:data_restructurer_name).exactly(2).times.and_return('')
+      expect(header_validator).to receive(:restructurer_name).exactly(2).times.and_return('')
       expect(ExcelDataServices::FileParser).to receive(:parse).and_return([{sheet_name: 'DummySheet'}])
       expect(ExcelDataServices::Restructurers::Base).to receive(:restructure).and_return(DummyInsertionType: [])
       expect(ExcelDataServices::Validators::Base).to receive(:get).exactly(3).times.and_return(flavor_based_validator_klass)

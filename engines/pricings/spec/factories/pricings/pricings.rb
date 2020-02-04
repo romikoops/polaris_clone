@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-FactoryBot.define do # rubocop:disable Metrics/BlockLength
-  factory :pricings_pricing, class: 'Pricings::Pricing' do # rubocop:disable Metrics/BlockLength
+FactoryBot.define do
+  factory :pricings_pricing, class: 'Pricings::Pricing' do
     wm_rate { 'Gothenburg' }
-    effective_date { Date.today }
+    effective_date { Time.zone.today }
     expiration_date { 6.months.from_now }
     cargo_class { 'lcl' }
     load_type { 'cargo_item' }

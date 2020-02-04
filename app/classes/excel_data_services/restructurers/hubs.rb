@@ -2,27 +2,27 @@
 
 module ExcelDataServices
   module Restructurers
-    class Hubs < Base # rubocop:disable Metrics/ClassLength
-      COLS_TO_DOWNCASE = %i(
+    class Hubs < ExcelDataServices::Restructurers::Base # rubocop:disable Metrics/ClassLength
+      COLS_TO_DOWNCASE = %i[
         type
-      ).freeze
+      ].freeze
 
-      COLS_TO_UPCASE = %i(
+      COLS_TO_UPCASE = %i[
         locode
-      ).freeze
+      ].freeze
 
-      COLS_TO_BOOLEAN = %i(
+      COLS_TO_BOOLEAN = %i[
         import_charges
         export_charges
         pre_carriage
         on_carriage
         free_out
-      ).freeze
+      ].freeze
 
-      TRUE_SYNONYMS = %w(
+      TRUE_SYNONYMS = %w[
         t
         true
-      ).freeze
+      ].freeze
 
       def perform
         restructured_data = data[:rows_data].map do |row|
@@ -50,7 +50,7 @@ module ExcelDataServices
         lat, lng = Address.new(geocoded_address: target_address).geocode
         row[:latitude] = lat
         row[:longitude] = lng
-        row[:full_address] = target_address unless row[:full_address].present?
+        row[:full_address] = target_address if row[:full_address].blank?
 
         row
       end

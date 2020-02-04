@@ -200,33 +200,39 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def download
-    mot = download_params[:mot]
-    load_type = download_params[:load_type]
-    group_id = download_params[:group_id]
-    key = 'pricings'
-    new_load_type = load_type_renamed(load_type)
-    file_name = "#{::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug}__pricing_#{mot.downcase}_#{new_load_type.downcase}"
+    tenant_slug = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug
+    category_identifier = 'pricings'
+    mot = download_params[:mot].downcase
+    load_type = download_params[:load_type].downcase
+    cargo_class = generic_cargo_class_from_load_type(load_type)
+    file_name = "#{tenant_slug}__#{category_identifier}_#{mot}_#{cargo_class}"
 
-    options = { tenant: current_tenant,
-                specific_identifier: "#{mot}_#{new_load_type}".camelcase,
-                file_name: file_name,
-                sandbox: @sandbox,
-                group_id: group_id,
-                user: Tenants::User.find_by(legacy_id: current_user.id)
-              }
-    downloader = ExcelDataServices::Loaders::Downloader.new(options)
-    document = downloader.perform
+    document = ExcelDataServices::Loaders::Downloader.new(
+      tenant: current_tenant,
+      category_identifier: category_identifier,
+      file_name: file_name,
+      user: Tenants::User.find_by(legacy_id: current_user.id),
+      sandbox: @sandbox,
+      options: {
+        mode_of_transport: mot,
+        load_type: load_type,
+        group_id: download_params[:group_id]
+      }
+    ).perform
 
     # TODO: When timing out, file will not be downloaded!!!
-    response_handler(key: key, url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment'))
+    response_handler(
+      key: category_identifier,
+      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment')
+    )
   end
 
   private
 
-  def load_type_renamed(load_type)
+  def generic_cargo_class_from_load_type(load_type)
     case load_type
-    when 'cargo_item' then 'LCL'
-    when 'container' then 'FCL'
+    when 'cargo_item' then 'lcl'
+    when 'container' then 'fcl'
     else
       raise StandardError, 'Unknown load type! Expected item of [cargo_item, container].'
     end

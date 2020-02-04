@@ -3,24 +3,17 @@
 module ExcelDataServices
   module FileWriters
     class LocalCharges < ExcelDataServices::FileWriters::Base # rubocop:disable Metrics/ClassLength
-      def initialize(tenant:, file_name:, user: nil, mode_of_transport: nil, sandbox: nil)
-        super(tenant: tenant, user: user, file_name: file_name)
-        @mode_of_transport = mode_of_transport
-      end
-
       private
-
-      attr_reader :mode_of_transport
 
       def load_and_prepare_data
         rows_data = []
         all_local_charges = tenant.local_charges.where(sandbox: @sandbox)
-        all_local_charges = all_local_charges.where(group_id: @group_id) if @group_id.present?
+        all_local_charges = all_local_charges.where(group_id: options[:group_id]) if options[:group_id].present?
 
-        local_charges = if mode_of_transport.nil? || mode_of_transport.casecmp?('all')
+        local_charges = if options[:mode_of_transport].nil? || options[:mode_of_transport].casecmp?('all')
                           all_local_charges
                         else
-                          all_local_charges.for_mode_of_transport(mode_of_transport)
+                          all_local_charges.for_mode_of_transport(options[:mode_of_transport])
                         end
         local_charges&.each do |local_charge|
           next unless local_charge.valid?
@@ -159,7 +152,8 @@ module ExcelDataServices
       end
 
       def build_raw_headers(_sheet_name, _rows_data)
-        ExcelDataServices::Validators::HeaderChecker::VARIABLE | ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::LOCAL_CHARGES
+        ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::OPTIONAL_LOCAL_CHARGES +
+          ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::LOCAL_CHARGES
       end
     end
   end

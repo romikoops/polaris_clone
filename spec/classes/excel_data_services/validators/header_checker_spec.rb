@@ -32,13 +32,14 @@ RSpec.describe ExcelDataServices::Validators::HeaderChecker do
     end
 
     describe '.validate' do
-      context 'with completely wrong headers (above threshold)' do
+      context 'with completely wrong headers (below threshold)' do
         it 'logs the errors' do
           validator = described_class.new('Sheet1', completely_wrong_headers)
           validator.perform
+
           expect(validator.errors_and_warnings).to eq(
             [{ exception_class: ExcelDataServices::Validators::ValidationErrors::HeaderChecker,
-               reason: 'The type of the data sheet could not be determined. Please check if the headers of the sheet are correct.',
+               reason: 'The type of the data sheet could not be determined. Please check if the column names are correct.',
                row_nr: 1,
                sheet_name: 'Sheet1',
                type: :error }]
@@ -46,13 +47,14 @@ RSpec.describe ExcelDataServices::Validators::HeaderChecker do
         end
       end
 
-      context 'with slightly wrong headers (below threshold)' do
+      context 'with slightly wrong headers (above threshold)' do
         it 'logs the errors' do
           validator = described_class.new('Sheet1', slightly_wrong_headers)
           validator.perform
+
           expect(validator.errors_and_warnings).to eq(
             [{ exception_class: ExcelDataServices::Validators::ValidationErrors::HeaderChecker,
-               reason: "The following headers of sheet \"Sheet1\" are not valid:\nCorrect static headers for this sheet are: \"EFFECTIVE_DATE, EXPIRATION_DATE, CUSTOMER_EMAIL, ORIGIN, COUNTRY_ORIGIN, DESTINATION, COUNTRY_DESTINATION, MOT, CARRIER, SERVICE_LEVEL, LOAD_TYPE, RATE_BASIS, CURRENCY\",\nMissing static headers are               : \"EFFECTIVE_DATE\",\nUnrecognized static headers are          : \"\"",
+               reason: "The following headers of sheet \"Sheet1\" are not valid:\nCorrect static headers for this sheet are: \"EXPIRATION_DATE, CUSTOMER_EMAIL, ORIGIN, COUNTRY_ORIGIN, DESTINATION, COUNTRY_DESTINATION, MOT, CARRIER, SERVICE_LEVEL, LOAD_TYPE, RATE_BASIS, CURRENCY\",\nMissing static headers are               : \"EFFECTIVE_DATE\"",
                row_nr: 1,
                sheet_name: 'Sheet1',
                type: :error }]

@@ -9,7 +9,7 @@ module ExcelDataServices
       ].freeze
       ROW_IDENTIFIER_KEYS = %i[
         sheet_name
-        data_restructurer_name
+        restructurer_name
         internal
         destination_country
         destination_hub
@@ -98,7 +98,7 @@ module ExcelDataServices
         data[:rows_data].map do |row_data|
           new_row_data = row_data.dup
           new_row_data[:sheet_name] = data[:sheet_name]
-          new_row_data[:data_restructurer_name] = data[:data_restructurer_name]
+          new_row_data[:restructurer_name] = data[:restructurer_name]
           new_row_data
         end
       end

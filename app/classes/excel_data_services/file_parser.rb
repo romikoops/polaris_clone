@@ -6,11 +6,11 @@ module ExcelDataServices
       new(options).perform
     end
 
-    def initialize(tenant:, xlsx:, headers_for_all_sheets:, data_restructurer_names_for_all_sheets:)
+    def initialize(tenant:, xlsx:, headers_for_all_sheets:, restructurer_names_for_all_sheets:)
       @tenant = tenant
       @xlsx = xlsx
       @headers_for_all_sheets = headers_for_all_sheets
-      @data_restructurer_names_for_all_sheets = data_restructurer_names_for_all_sheets
+      @restructurer_names_for_all_sheets = restructurer_names_for_all_sheets
       @sheets_data = []
     end
 
@@ -24,7 +24,7 @@ module ExcelDataServices
         end
 
         @sheets_data << { sheet_name: sheet_name,
-                          data_restructurer_name: data_restructurer_names_for_all_sheets[sheet_name],
+                          restructurer_name: restructurer_names_for_all_sheets[sheet_name],
                           rows_data: rows_data }
       end
 
@@ -33,7 +33,7 @@ module ExcelDataServices
 
     private
 
-    attr_reader :tenant, :xlsx, :headers_for_all_sheets, :data_restructurer_names_for_all_sheets, :sheets_data
+    attr_reader :tenant, :xlsx, :headers_for_all_sheets, :restructurer_names_for_all_sheets, :sheets_data
 
     def raw_rows_without_headers(sheet_data)
       ((sheet_data.first_row + 1)..sheet_data.last_row)

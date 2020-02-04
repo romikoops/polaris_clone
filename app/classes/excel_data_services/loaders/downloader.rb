@@ -3,24 +3,29 @@
 module ExcelDataServices
   module Loaders
     class Downloader < ExcelDataServices::Loaders::Base
-      def initialize(tenant:, specific_identifier:, file_name:, sandbox:, user: nil, group_id: nil)
+      def initialize(tenant:, category_identifier: nil, file_name:, user: nil, sandbox:, options: {})
         super(tenant: tenant)
-        @specific_identifier = specific_identifier
+        @category_identifier = category_identifier
         @file_name = file_name
-        @sandbox = sandbox
-        @group_id = group_id
         @user = user
+        @sandbox = sandbox
+
+        @options = options
       end
 
       def perform
-        file_writer = ExcelDataServices::FileWriters.const_get(specific_identifier)
-        options = { tenant: tenant, file_name: file_name, sandbox: sandbox, user: user }
-        file_writer.write_document(options)
+        ExcelDataServices::FileWriters::Base.get(category_identifier).write_document(
+          tenant: tenant,
+          file_name: file_name,
+          user: user,
+          sandbox: sandbox,
+          options: options
+        )
       end
 
       private
 
-      attr_reader :specific_identifier, :file_name, :sandbox, :user
+      attr_reader :category_identifier, :file_name, :user, :sandbox, :options
     end
   end
 end

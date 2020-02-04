@@ -113,7 +113,7 @@ module ExcelDataServices
         group_of_row_data.map do |row_data|
           row = ExcelDataServices::Rows::Base.get(klass_identifier).new(row_data: row_data, tenant: tenant)
 
-          fee_code = row.fee_code.upcase
+          fee_code = row.fee_code.downcase
           charge_category = ChargeCategory.find_by(
             tenant_id: tenant.id,
             code: fee_code,

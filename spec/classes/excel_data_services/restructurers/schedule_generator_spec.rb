@@ -7,7 +7,7 @@ RSpec.describe ExcelDataServices::Restructurers::ScheduleGenerator do
     let(:tenant) { create(:tenant) }
     let(:data) do
       { sheet_name: 'Sheet1',
-        data_restructurer_name: 'schedule_generator',
+        restructurer_name: 'schedule_generator',
         rows_data: [{ origin: 'DALIAN', destination: 'FELIXSTOWE', etd_days: 'THURSDAY', transit_time: 38, cargo_class: 'fcl', row_nr: 2 },
                     { origin: 'DALIAN', destination: 'SOUTHAMPTON', etd_days: 'WEDNESDAY', transit_time: 34, cargo_class: 'fcl', row_nr: 3 },
                     { origin: 'YANTIAN', destination: 'FELIXSTOWE', etd_days: 'FRIDAY', transit_time: 29, cargo_class: 'lcl', row_nr: 47 },
