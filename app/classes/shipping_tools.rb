@@ -51,7 +51,7 @@ class ShippingTools
     main_quote
   end
 
-  def self.create_shipment(details, current_user, sandbox = nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Metrics/MethodLength
+  def self.create_shipment(details, current_user, sandbox = nil)
     scope = Tenants::ScopeService.new(
       target: ::Tenants::User.find_by(legacy_id: current_user.id),
       tenant: ::Tenants::Tenant.find_by(legacy_id: current_user.tenant.id),
@@ -150,7 +150,7 @@ class ShippingTools
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
-  def self.get_offers(params, current_user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+  def self.get_offers(params, current_user, sandbox = nil)
     scope = Tenants::ScopeService.new(
       target: ::Tenants::User.find_by(legacy_id: current_user.id),
       tenant: ::Tenants::Tenant.find_by(legacy_id: current_user.tenant_id)
@@ -220,7 +220,11 @@ class ShippingTools
     document.attachment
   end
 
-  def self.update_shipment(params, current_user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+  def self.update_shipment(params, current_user, sandbox = nil)
+    scope = Tenants::ScopeService.new(
+      target: ::Tenants::User.find_by(legacy_id: current_user.id),
+      tenant: ::Tenants::Tenant.find_by(legacy_id: current_user.tenant_id)
+    ).fetch
     shipment = Shipment.where(sandbox: sandbox).find(params[:shipment_id])
     shipment_data = params[:shipment]
 
@@ -288,7 +292,7 @@ class ShippingTools
         children_charge_category: ChargeCategory.from_code(code: 'insurance', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
-        price: Price.create(currency: shipment[:total_goods_value]['currency'], value: shipment_data[:insurance][:val]),
+        price: Legacy::Price.create(currency: shipment[:total_goods_value]['currency'], value: shipment_data[:insurance][:val]),
         parent: charge_breakdown.charge('grand_total'),
         sandbox: sandbox
       )
@@ -296,7 +300,7 @@ class ShippingTools
         children_charge_category: ChargeCategory.from_code(code: 'freight_insurance', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
-        price: Price.create(currency: shipment[:total_goods_value]['currency'], value: shipment_data[:insurance][:val]),
+        price: Legacy::Price.create(currency: shipment[:total_goods_value]['currency'], value: shipment_data[:insurance][:val]),
         parent: insurance_charge,
         sandbox: sandbox
       )
@@ -307,7 +311,7 @@ class ShippingTools
         children_charge_category: ChargeCategory.from_code(code: 'customs', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
-        price: Price.create(
+        price: Legacy::Price.create(
           currency: shipment_data[:customs][:total][:currency],
           value: shipment_data[:customs][:total][:val]
         ),
@@ -319,7 +323,7 @@ class ShippingTools
           children_charge_category: ChargeCategory.from_code(code: 'import_customs', tenant_id: shipment.tenant_id),
           charge_category: ChargeCategory.grand_total,
           charge_breakdown: charge_breakdown,
-          price: Price.create(
+          price: Legacy::Price.create(
             currency: shipment_data[:customs][:import][:currency],
             value: shipment_data[:customs][:import][:val]
           ),
@@ -332,7 +336,7 @@ class ShippingTools
           children_charge_category: ChargeCategory.from_code(code: 'export_customs', tenant_id: shipment.tenant_id),
           charge_category: ChargeCategory.grand_total,
           charge_breakdown: charge_breakdown,
-          price: Price.create(
+          price: Legacy::Price.create(
             currency: shipment_data[:customs][:total][:currency],
             value: shipment_data[:customs][:export][:val],
             sandbox: sandbox
@@ -349,7 +353,7 @@ class ShippingTools
         children_charge_category: ChargeCategory.from_code(code: 'addons', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
-        price: Price.create(
+        price: Legacy::Price.create(
           currency: shipment_data[:addons][:customs_export_paper][:currency],
           value: shipment_data[:addons][:customs_export_paper][:value],
           sandbox: sandbox
@@ -361,7 +365,7 @@ class ShippingTools
         children_charge_category: ChargeCategory.from_code(code: 'customs_export_paper', tenant_id: shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
-        price: Price.create(
+        price: Legacy::Price.create(
           currency: shipment_data[:addons][:customs_export_paper][:currency],
           value: shipment_data[:addons][:customs_export_paper][:value],
           sandbox: sandbox
@@ -435,10 +439,11 @@ class ShippingTools
     origin = shipment.has_pre_carriage ? shipment.pickup_address : shipment.origin_nexus
     destination = shipment.has_on_carriage ? shipment.delivery_address : shipment.destination_nexus
     options = {
-      methods: %i[selected_offer mode_of_transport service_level vessel_name carrier voyage_code],
+      methods: %i[mode_of_transport service_level vessel_name carrier voyage_code],
       include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
     }
-    shipment_as_json = shipment.as_json(options).merge(
+    selected_shipment = shipment.selected_offer(HiddenValueService.new(user: current_user).hide_total_args)
+    shipment_as_json = selected_shipment.as_json(options).merge(
       pickup_address: shipment.pickup_address_with_country,
       delivery_address: shipment.delivery_address_with_country
     )
@@ -499,10 +504,11 @@ class ShippingTools
             .merge(address_id: address_id)
   end
 
-  def self.choose_offer(params, current_user, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+  def self.choose_offer(params, current_user, sandbox = nil)
     raise ApplicationError::NotLoggedIn if current_user.guest
 
     shipment = Shipment.find_by(id: params[:shipment_id] || params[:id], sandbox: sandbox)
+
     raise ApplicationError::ShipmentNotFound if shipment.blank?
 
     shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
@@ -628,12 +634,13 @@ class ShippingTools
       endHub: { data: @destination_hub, address: @destination_hub.nexus }
     }
     options = {
-      methods: %i[selected_offer mode_of_transport service_level vessel_name carrier voyage_code],
+      methods: %i[mode_of_transport service_level vessel_name carrier voyage_code],
       include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
     }
     origin = shipment.has_pre_carriage ? shipment.pickup_address : shipment.origin_nexus
     destination = shipment.has_on_carriage ? shipment.delivery_address : shipment.destination_nexus
-    shipment_as_json = shipment.as_json(options).merge(
+    selected_shipment = shipment.selected_offer(HiddenValueService.new(user: shipment.user).hide_total_args)
+    shipment_as_json = selected_shipment.as_json(options).merge(
       pickup_address: shipment.pickup_address_with_country,
       delivery_address: shipment.delivery_address_with_country
     )
@@ -679,7 +686,7 @@ class ShippingTools
     end
   end
 
-  def self.view_more_schedules(trip_id, delta, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def self.view_more_schedules(trip_id, delta, sandbox = nil)
     trip = Trip.find(trip_id)
     trips = if delta.to_i.positive?
               trip.later_trips(sandbox: sandbox)
@@ -763,7 +770,7 @@ class ShippingTools
     new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
   end
 
-  def self.create_shipment_from_result(main_quote:, original_shipment:, result:, sandbox: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+  def self.create_shipment_from_result(main_quote:, original_shipment:, result:, sandbox: nil)
     schedule = result['schedules'].first
     trip = Trip.find(schedule['trip_id'])
     on_carriage_hash = (original_shipment.trucking['on_carriage'] if result['quote']['trucking_on'])

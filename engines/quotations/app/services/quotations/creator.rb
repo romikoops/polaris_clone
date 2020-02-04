@@ -21,7 +21,7 @@ module Quotations
       origin_nexus = @detailed_schedules.first[:meta][:origin_hub].nexus
       destination_nexus = @detailed_schedules.first[:meta][:destination_hub].nexus
       tenant = Tenants::Tenant.find_by(legacy_id: legacy_tenant_id)
-      @quotation = Quotation.create(tenant: tenant,
+      @quotation = Quotations::Quotation.create(tenant: tenant,
                                     user: @user,
                                     origin_nexus: origin_nexus,
                                     destination_nexus: destination_nexus)
@@ -29,6 +29,8 @@ module Quotations
 
     def create_tenders
       @detailed_schedules.each do |quote_object|
+        next if quote_object[:quote].nil? || quote_object[:quote][:total].nil?
+
         quote_total = quote_object[:quote][:total]
         meta = quote_object[:meta]
         attributes = meta.slice(:carrier_name, :load_type, :tenant_vehicle_id, :name)
@@ -47,7 +49,7 @@ module Quotations
       keys = %i(total edited_total name)
       quote_object.except(*keys).values.each do |value|
         value.except(*keys).entries.each do |key, v|
-          next unless v.dig(:total, :value).present?
+          next if v[:total].nil?
 
           LineItem.create(charge_category_id: key.to_s.to_i,
                           tender_id: tender.id,

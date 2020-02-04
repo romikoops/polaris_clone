@@ -83,6 +83,8 @@ function login (data) {
             delete shipmentReq.action
             if (action === 'getOffers') {
               dispatch(shipmentActions.getOffers(shipmentReq, true))
+            } else if (action === 'refreshQuotes') {
+              dispatch(shipmentActions.refreshQuotes(shipmentReq.shipmentId))
             } else {
               dispatch(shipmentActions.chooseOffer(shipmentReq))
             }

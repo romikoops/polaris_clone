@@ -217,6 +217,7 @@ class Shop extends Component {
     } = this.props
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant
+    const { stage } = stageTracker
     const {
       request, response, error, reusedShipment, contacts, originalSelectedDay, ahoyRequest
     } = bookingData
@@ -235,9 +236,13 @@ class Shop extends Component {
             component={<BookingSummary theme={theme} scope={scope} shipmentData={shipmentData} />}
             showMessages={this.toggleShowMessages}
             showRegistration={this.state.showRegistration}
+            toggleShowRegistration={this.toggleShowRegistration}
             noMessages
             scrollable
             noRedirect
+            getOffers
+            prevRequest={request ? request[`stage${stage - 1}`] : null}
+            stage={stage || null}
           />
         </GenericError>
         <GenericError theme={theme}>
@@ -309,6 +314,7 @@ class Shop extends Component {
                 prevRequest={request && request.stage3 ? request.stage3 : null}
                 req={request && request.stage2 ? request.stage2 : {}}
                 user={user}
+                toggleShowRegistration={this.toggleShowRegistration}
                 setStage={this.selectShipmentStage}
                 messages={error ? error.stage3 : []}
                 shipmentDispatch={shipmentDispatch}

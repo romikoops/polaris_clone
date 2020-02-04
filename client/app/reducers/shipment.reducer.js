@@ -1,5 +1,5 @@
 import i18next from 'i18next'
-import { get } from 'lodash'
+import { get, find } from 'lodash'
 import { shipmentConstants } from '../constants'
 
 export default function shipment (state = {}, action) {
@@ -157,6 +157,42 @@ export default function shipment (state = {}, action) {
         // },
         loading: false
       }
+    case shipmentConstants.REFRESH_QUOTES_REQUEST: {
+      return {
+        ...state,
+        refreshing: true
+      }
+    }
+    case shipmentConstants.REFRESH_QUOTES_FAILURE: {
+      return {
+        ...state,
+        refreshing: false
+      }
+    }
+    case shipmentConstants.REFRESH_QUOTES_SUCCESS: {
+      const existingData = get(state, 'response.stage2.results', [])
+      const newResults = existingData.map((result) => {
+        const newQuote = find(action.payload, payload => payload.trip_id === result.meta.charge_trip_id)
+
+        return {
+          ...result,
+          quote: newQuote.quote
+        }
+      })
+
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage2: {
+            ...state.response.stage2,
+            results: newResults
+          }
+        },
+        loading: false,
+        refreshing: false
+      }
+    }
     case shipmentConstants.SHIPMENT_GET_SCHEDULES_REQUEST: {
       return state
     }
@@ -401,7 +437,6 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST:
       return state
     case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS: {
-
       const stage4Docs = get(state, ['response', 'stage4', 'documents'], {})
       const stage3Docs = get(state, ['response', 'stage3', 'documents'], {})
       const docArray = [stage3Docs, stage4Docs]
@@ -410,6 +445,7 @@ export default function shipment (state = {}, action) {
         Object.keys(documents).forEach((key) => {
           newDocuments[key] = documents[key].filter(d => d.id !== action.payload)
         })
+
         return newDocuments
       })
 

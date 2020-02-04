@@ -24,6 +24,16 @@ RSpec.describe Shipment, type: :model do
         expect(shipment.valid_until(other_trip)).to eq(10.days.from_now.beginning_of_day)
       end
     end
+
+    describe 'as_options_json' do
+      it 'returns the shipment info in json' do
+        result = shipment.as_options_json
+
+        expect(result.dig('id')).to be(shipment.id)
+        expect(result.dig('carrier')).to be(shipment.trip.tenant_vehicle.carrier&.name)
+        expect(result.dig(:selected_offer)).to be_truthy
+      end
+    end
   end
 end
 

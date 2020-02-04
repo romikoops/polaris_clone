@@ -16,6 +16,8 @@ module OfferCalculator
       def quotation_tool?
         @scope['open_quotation_tool'] || @scope['closed_quotation_tool']
       end
+
+      attr_reader :scope
     end
   end
 end

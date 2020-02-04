@@ -754,7 +754,8 @@
     "userEmail": "User Email",
     "checkEmailForPassword": "Please check your email for a link to reset your ItsMyCargo Account password.",
     "addresses": "Addresses",
-    "editProfile": "Edit Profile"
+    "editProfile": "Edit Profile",
+    "loginToSeeOffers": "Login to see offers"
   },
   "cargo": {
     "transportInsurance": "Transport Insurance",

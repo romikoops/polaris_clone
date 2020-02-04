@@ -128,4 +128,17 @@ RSpec.describe Shipments::BookingProcessController do
       end
     end
   end
+
+  describe 'GET #refresh_quotes' do
+    it 'returns an http status of success' do
+      get :refresh_quotes, params: { tenant_id: shipment.tenant, shipment_id: shipment.id }
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        json_response = JSON.parse(response.body)
+        expect(json_response.dig('data').length).to eq(1)
+        expect(json_response.dig('data', 0, 'quote', 'total', 'value')).to eq('9.99')
+      end
+    end
+  end
 end

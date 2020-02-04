@@ -55,7 +55,9 @@ exports[`aggregatedCargo is empty object 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
-            <Connect(UnitsWeight)
+            <UnitsWeight
+              scope={Object {}}
+              spanClasses="flex layout-row layout-align-end"
               value={0}
             />
           </p>
@@ -83,6 +85,7 @@ exports[`aggregatedCargo is empty object 1`] = `
   <CollapsingContent
     collapsed={true}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -117,11 +120,27 @@ exports[`aggregatedCargo is empty object 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <CollapsingContent
     collapsed={false}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -144,7 +163,6 @@ exports[`aggregatedCargo is empty object 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
-      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -328,6 +346,21 @@ exports[`aggregatedCargo is empty object 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -365,22 +398,19 @@ exports[`aggregatedCargo is empty object 1`] = `
             }
           />
         </div>
-        <p
-          className="flex-none"
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
-        />
-        <p
-          className="flex"
-          style={
-            Object {
-              "paddingRight": "18px",
-            }
-          }
-        />
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          <p
+            className="flex-30"
+          />
+          <p
+            className="flex-70 layout-row layout-align-end-end"
+          >
+             
+             
+          </p>
+        </div>
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
@@ -449,7 +479,9 @@ exports[`detailed billing working properly 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
-            <Connect(UnitsWeight)
+            <UnitsWeight
+              scope={Object {}}
+              spanClasses="flex layout-row layout-align-end"
               value={220}
             />
           </p>
@@ -477,6 +509,7 @@ exports[`detailed billing working properly 1`] = `
   <CollapsingContent
     collapsed={true}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -511,11 +544,27 @@ exports[`detailed billing working properly 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <CollapsingContent
     collapsed={false}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -538,7 +587,6 @@ exports[`detailed billing working properly 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
-      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -693,6 +741,21 @@ exports[`detailed billing working properly 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -730,26 +793,22 @@ exports[`detailed billing working properly 1`] = `
             }
           />
         </div>
-        <p
-          className="flex-none"
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
         >
-          Total
-        </p>
-        <p
-          className="flex"
-          style={
-            Object {
-              "paddingRight": "18px",
-            }
-          }
-        >
-          440.78 GBP
-        </p>
+          <p
+            className="flex-30"
+          >
+            Total
+          </p>
+          <p
+            className="flex-70 layout-row layout-align-end-end"
+          >
+             
+            440.78 GBP
+             
+          </p>
+        </div>
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
@@ -818,7 +877,9 @@ exports[`shallow rendering 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
-            <Connect(UnitsWeight)
+            <UnitsWeight
+              scope={Object {}}
+              spanClasses="flex layout-row layout-align-end"
               value={220}
             />
           </p>
@@ -846,6 +907,7 @@ exports[`shallow rendering 1`] = `
   <CollapsingContent
     collapsed={true}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -880,11 +942,27 @@ exports[`shallow rendering 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <CollapsingContent
     collapsed={false}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -907,7 +985,6 @@ exports[`shallow rendering 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
-      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -1091,6 +1168,21 @@ exports[`shallow rendering 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -1128,22 +1220,19 @@ exports[`shallow rendering 1`] = `
             }
           />
         </div>
-        <p
-          className="flex-none"
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
-        />
-        <p
-          className="flex"
-          style={
-            Object {
-              "paddingRight": "18px",
-            }
-          }
-        />
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          <p
+            className="flex-30"
+          />
+          <p
+            className="flex-70 layout-row layout-align-end-end"
+          >
+             
+             
+          </p>
+        </div>
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
@@ -1212,7 +1301,9 @@ exports[`show schedule options working 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
-            <Connect(UnitsWeight)
+            <UnitsWeight
+              scope={Object {}}
+              spanClasses="flex layout-row layout-align-end"
               value={220}
             />
           </p>
@@ -1240,6 +1331,7 @@ exports[`show schedule options working 1`] = `
   <CollapsingContent
     collapsed={false}
     content=""
+    initialExpanded={true}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -1274,11 +1366,27 @@ exports[`show schedule options working 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <CollapsingContent
     collapsed={true}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -1301,7 +1409,6 @@ exports[`show schedule options working 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
-      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -1456,6 +1563,21 @@ exports[`show schedule options working 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -1493,26 +1615,22 @@ exports[`show schedule options working 1`] = `
             }
           />
         </div>
-        <p
-          className="flex-none"
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
         >
-          Total
-        </p>
-        <p
-          className="flex"
-          style={
-            Object {
-              "paddingRight": "18px",
-            }
-          }
-        >
-          440.78 GBP
-        </p>
+          <p
+            className="flex-30"
+          >
+            Total
+          </p>
+          <p
+            className="flex-70 layout-row layout-align-end-end"
+          >
+             
+            440.78 GBP
+             
+          </p>
+        </div>
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
@@ -1581,7 +1699,9 @@ exports[`single result rendering removes add button 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
-            <Connect(UnitsWeight)
+            <UnitsWeight
+              scope={Object {}}
+              spanClasses="flex layout-row layout-align-end"
               value={220}
             />
           </p>
@@ -1609,6 +1729,7 @@ exports[`single result rendering removes add button 1`] = `
   <CollapsingContent
     collapsed={true}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -1643,11 +1764,27 @@ exports[`single result rendering removes add button 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <CollapsingContent
     collapsed={false}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -1670,7 +1807,6 @@ exports[`single result rendering removes add button 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
-      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -1854,6 +1990,21 @@ exports[`single result rendering removes add button 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -1865,22 +2016,19 @@ exports[`single result rendering removes add button 1`] = `
       <div
         className="flex-100  layout-row layout-align-end-center"
       >
-        <p
-          className="flex-none"
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
-        />
-        <p
-          className="flex"
-          style={
-            Object {
-              "paddingRight": "18px",
-            }
-          }
-        />
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          <p
+            className="flex-30"
+          />
+          <p
+            className="flex-70 layout-row layout-align-end-end"
+          >
+             
+             
+          </p>
+        </div>
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
@@ -1949,7 +2097,9 @@ exports[`tenant.scope is empty object 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
-            <Connect(UnitsWeight)
+            <UnitsWeight
+              scope={Object {}}
+              spanClasses="flex layout-row layout-align-end"
               value={220}
             />
           </p>
@@ -1977,6 +2127,7 @@ exports[`tenant.scope is empty object 1`] = `
   <CollapsingContent
     collapsed={false}
     content=""
+    initialExpanded={true}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -2011,11 +2162,27 @@ exports[`tenant.scope is empty object 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <CollapsingContent
     collapsed={true}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -2038,7 +2205,6 @@ exports[`tenant.scope is empty object 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
-      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -2180,6 +2346,21 @@ exports[`tenant.scope is empty object 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -2194,26 +2375,22 @@ exports[`tenant.scope is empty object 1`] = `
       <div
         className="flex  layout-row layout-align-end-center"
       >
-        <p
-          className="flex-none"
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
         >
-          Total
-        </p>
-        <p
-          className="flex"
-          style={
-            Object {
-              "paddingRight": "18px",
-            }
-          }
-        >
-          440.78 GBP
-        </p>
+          <p
+            className="flex-30"
+          >
+            Total
+          </p>
+          <p
+            className="flex-70 layout-row layout-align-end-end"
+          >
+             
+            440.78 GBP
+             
+          </p>
+        </div>
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
@@ -2282,7 +2459,9 @@ exports[`validUntil is falsy 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
-            <Connect(UnitsWeight)
+            <UnitsWeight
+              scope={Object {}}
+              spanClasses="flex layout-row layout-align-end"
               value={220}
             />
           </p>
@@ -2310,6 +2489,7 @@ exports[`validUntil is falsy 1`] = `
   <CollapsingContent
     collapsed={true}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -2344,11 +2524,27 @@ exports[`validUntil is falsy 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <CollapsingContent
     collapsed={false}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -2371,7 +2567,6 @@ exports[`validUntil is falsy 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
-      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -2555,6 +2750,21 @@ exports[`validUntil is falsy 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -2592,22 +2802,19 @@ exports[`validUntil is falsy 1`] = `
             }
           />
         </div>
-        <p
-          className="flex-none"
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
-        />
-        <p
-          className="flex"
-          style={
-            Object {
-              "paddingRight": "18px",
-            }
-          }
-        />
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          <p
+            className="flex-30"
+          />
+          <p
+            className="flex-70 layout-row layout-align-end-end"
+          >
+             
+             
+          </p>
+        </div>
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
@@ -2676,7 +2883,9 @@ exports[`validUntil is truthy 1`] = `
             className="flex-100 layout-row layout-align-start"
           >
             Total Weight: 
-            <Connect(UnitsWeight)
+            <UnitsWeight
+              scope={Object {}}
+              spanClasses="flex layout-row layout-align-end"
               value={220}
             />
           </p>
@@ -2704,6 +2913,7 @@ exports[`validUntil is truthy 1`] = `
   <CollapsingContent
     collapsed={true}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -2738,11 +2948,27 @@ exports[`validUntil is truthy 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <CollapsingContent
     collapsed={false}
     content=""
+    initialExpanded={false}
     minHeight=""
     overflow={false}
     wrapperContentClasses=""
@@ -2765,7 +2991,6 @@ exports[`validUntil is truthy 1`] = `
           "validUntil": "2019-12-31T00:00:00.000Z",
         }
       }
-      pricingBreakdowns={Array []}
       quote={
         Object {
           "cargo": Object {
@@ -2949,6 +3174,21 @@ exports[`validUntil is truthy 1`] = `
           },
         }
       }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 1,
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -2986,22 +3226,19 @@ exports[`validUntil is truthy 1`] = `
             }
           />
         </div>
-        <p
-          className="flex-none"
-          style={
-            Object {
-              "textAlign": "right",
-            }
-          }
-        />
-        <p
-          className="flex"
-          style={
-            Object {
-              "paddingRight": "18px",
-            }
-          }
-        />
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          <p
+            className="flex-30"
+          />
+          <p
+            className="flex-70 layout-row layout-align-end-end"
+          >
+             
+             
+          </p>
+        </div>
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"

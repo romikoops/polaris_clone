@@ -17,6 +17,8 @@ RSpec.describe ShippingTools do
   let(:destination_hub) { Hub.find(itinerary.hubs.find_by(name: 'Shanghai Port').id) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:user) { build(:user, tenant: tenant) }
+  let(:hidden_args) { HiddenValueService.new(user: user).hide_total_args }
+  let(:args) { HiddenValueService.new(user: user).hide_total_args }
   let(:tenant_vehicle) { create(:tenant_vehicle, tenant: tenant) }
   let(:transport_category) { create(:transport_category, load_type: 'container') }
   let(:shipment) do
@@ -58,7 +60,7 @@ RSpec.describe ShippingTools do
     let(:results) do
       [
         {
-          quote: charge_breakdown.to_nested_hash,
+          quote: charge_breakdown.to_nested_hash(args, sub_total_charge: false),
           schedules: [
             {
               'trip_id' => trip.id, charge_trip_id: trip.id,
@@ -535,7 +537,7 @@ RSpec.describe ShippingTools do
       let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
       let(:result) do
         {
-          quote: old_shipment.charge_breakdowns.first.to_nested_hash,
+          quote: old_shipment.charge_breakdowns.first.to_nested_hash(args, sub_total_charge: false),
           meta: {
             pricing_rate_data: {},
             pricing_breakdown: {}
@@ -574,7 +576,7 @@ RSpec.describe ShippingTools do
       let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
       let(:result) do
         {
-          quote: old_shipment.charge_breakdowns.first.to_nested_hash,
+          quote: old_shipment.charge_breakdowns.first.to_nested_hash((hidden_args)),
           meta: {
             pricing_rate_data: {},
             pricing_breakdown: {}
@@ -614,7 +616,7 @@ RSpec.describe ShippingTools do
       let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
       let(:result) do
         {
-          quote: old_shipment.charge_breakdowns.first.to_nested_hash,
+          quote: old_shipment.charge_breakdowns.first.to_nested_hash(args, sub_total_charge: false),
           meta: {
             pricing_rate_data: {},
             pricing_breakdown: {}
@@ -650,7 +652,7 @@ RSpec.describe ShippingTools do
       let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
       let(:result) do
         {
-          quote: charge_breakdown.to_nested_hash,
+          quote: charge_breakdown.to_nested_hash(args, sub_total_charge: false),
           meta: {
             pricing_rate_data: {},
             pricing_breakdown: {}
