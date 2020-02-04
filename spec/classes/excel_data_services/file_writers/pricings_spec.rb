@@ -11,8 +11,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
   let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
   let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
   let(:static_pricing_headers) do
-    (described_class::HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
-       described_class::HEADER_COLLECTION::OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES)
+    (described_class::HEADER_COLLECTION::OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
+       described_class::HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES)
       .map { |header| header.to_s.upcase }
   end
 
@@ -25,6 +25,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
     let(:pricing_row) do
       [
+        pricing.respond_to?(:group_id) ? pricing.group_id : nil,
+        pricing.respond_to?(:group_id) ? Tenants::Group.find_by(id: pricing.group_id).name : nil,
         pricing.effective_date.to_date,
         pricing.expiration_date.to_date,
         nil,
@@ -38,8 +40,6 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
         'FCL_20',
         'PER_CONTAINER',
         'EUR',
-        pricing.respond_to?(:group_id) ? pricing.group_id : nil,
-        pricing.respond_to?(:group_id) ? Tenants::Group.find_by(id: pricing.group_id).name : nil,
         14,
         250
       ]
@@ -102,6 +102,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     context 'when all pricings are valid' do
       let(:pricing_row) do
         [
+          nil,
+          nil,
           pricing.effective_date.to_date,
           pricing.expiration_date.to_date,
           nil,
@@ -115,8 +117,6 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           'LCL',
           'PER_WM',
           'EUR',
-          nil,
-          nil,
           14,
           25
         ]

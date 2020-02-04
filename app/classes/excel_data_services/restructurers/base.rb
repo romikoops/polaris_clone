@@ -12,6 +12,7 @@ module ExcelDataServices
         destination_locode
         effective_date
         expiration_date
+        group_id
         internal
         load_type
         mot
