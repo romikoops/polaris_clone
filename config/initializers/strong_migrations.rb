@@ -4,4 +4,4 @@
 StrongMigrations.start_after = 20180913232620 # rubocop:disable Style/NumericLiterals
 
 # PostgreSQL Target
-StrongMigrations.target_postgresql_version = 9.6
+StrongMigrations.target_postgresql_version = "10"
