@@ -106,6 +106,7 @@ end
 #
 # Indexes
 #
+#  index_trucking_truckings_on_group_id     (group_id)
 #  index_trucking_truckings_on_hub_id       (hub_id)
 #  index_trucking_truckings_on_location_id  (location_id)
 #  index_trucking_truckings_on_sandbox_id   (sandbox_id)
