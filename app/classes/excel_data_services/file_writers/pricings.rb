@@ -9,10 +9,15 @@ module ExcelDataServices
         result = {}
         raw_pricing_rows = PricingsRowDataBuilder.build_raw_pricing_rows(filtered_pricings, scope)
 
-        data_with_dynamic_headers, data_static_fee_col = raw_pricing_rows.partition { |row| row[:range].blank? }
+        if options[:load_type] == 'cargo_item'
+          data_static_fee_col = raw_pricing_rows
+        else
+          data_static_fee_col, data_with_dynamic_headers = raw_pricing_rows.partition { |row| row[:range].present? }
+          dynamic_headers = build_dynamic_headers(raw_pricing_rows)
+          result['No Ranges'] = build_rows_with_dynamic_headers(data_with_dynamic_headers, dynamic_headers)
+        end
+
         result['With Ranges'] = PricingsRowDataBuilder.build_rows_data_with_static_fee_col(data_static_fee_col)
-        dynamic_headers = build_dynamic_headers(raw_pricing_rows)
-        result['No Ranges'] = build_rows_with_dynamic_headers(data_with_dynamic_headers, dynamic_headers)
 
         result.compact
       end
