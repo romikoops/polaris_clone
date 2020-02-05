@@ -4,16 +4,10 @@ import { authenticationService } from '../services'
 import {
   alertActions, shipmentActions, adminActions, userActions, tenantActions, clientsActions, appActions
 } from '.'
-import getSubdomain from '../helpers/subdomain'
-import { requestOptions } from '../helpers'
+
+import { requestOptions, cookieKey } from '../helpers'
 
 const { localStorage, fetch } = window
-
-function cookieKey () {
-  const tenantId = localStorage.getItem('tenantId')
-
-  return `${tenantId}_user`
-}
 
 function logout (closeWindow) {
   function lo () {

@@ -1,15 +1,12 @@
 import { Promise } from 'es6-promise-promise'
 import { getTenantApiUrl } from '../constants/api.constants'
-import { authHeader } from '../helpers'
-import getSubdomain from '../helpers/subdomain'
+import { authHeader, cookieKey } from '../helpers'
 
 const { fetch, localStorage } = window
 
-const subdomainKey = getSubdomain()
-const cookieKey = `${subdomainKey}_user`
 function logout () {
   // remove user from local storage to log user out
-  localStorage.removeItem(cookieKey)
+  localStorage.removeItem(cookieKey())
   localStorage.removeItem('authHeader')
 }
 
@@ -60,7 +57,7 @@ function login (data) {
       if (response) {
         // store user details and jwt token in local storage to keep
         // user logged in between page refreshes
-        localStorage.setItem(cookieKey, JSON.stringify(response.data))
+        localStorage.setItem(cookieKey(), JSON.stringify(response.data))
       }
 
       return response
@@ -68,7 +65,7 @@ function login (data) {
 }
 
 function getStoredUser () {
-  const sortedUser = JSON.parse(localStorage.getItem(cookieKey))
+  const sortedUser = JSON.parse(localStorage.getItem(cookieKey()))
   return sortedUser || {}
 }
 
@@ -107,7 +104,7 @@ function register (user) {
       if (response) {
         // store user details and jwt token in local storage to keep
         // user logged in between page refreshes
-        localStorage.setItem(cookieKey, JSON.stringify(response.data))
+        localStorage.setItem(cookieKey(), JSON.stringify(response.data))
       }
       return response
     })
@@ -135,7 +132,7 @@ function updateUser (user, req) {
         }
         // store user details and jwt token in local storage to keep
         // user logged in between page refreshes
-        localStorage.setItem(cookieKey, JSON.stringify(response.data.user))
+        localStorage.setItem(cookieKey(), JSON.stringify(response.data.user))
       }
       return response
     })

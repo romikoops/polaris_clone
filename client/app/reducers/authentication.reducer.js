@@ -1,12 +1,10 @@
 import i18next from 'i18next'
 import { authenticationConstants } from '../constants'
-import getSubdomain from '../helpers/subdomain'
-
-const subdomainKey = getSubdomain()
-const cookieKey = `${subdomainKey}_user`
+import { cookieKey } from '../helpers'
 
 const localStorage = window.localStorage || { getItem (key) { return null } }
-const userCookie = localStorage.getItem(cookieKey)
+
+const userCookie = localStorage.getItem(cookieKey())
 const user = (typeof (userCookie) !== 'undefined') && userCookie !== 'undefined' ? JSON.parse(userCookie) : {}
 
 const initialState = user ? { loggedIn: true, user } : {}

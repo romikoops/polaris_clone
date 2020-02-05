@@ -56,8 +56,8 @@ exports[`error && error[currentStage] 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -152,8 +152,8 @@ exports[`invert is true 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -237,8 +237,8 @@ exports[`noMessages is true 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -322,8 +322,8 @@ exports[`scrollable is true 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -407,8 +407,8 @@ exports[`shallow render 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -492,8 +492,8 @@ exports[`showModal is true 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -767,8 +767,8 @@ exports[`showRegistration is true 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -852,8 +852,8 @@ exports[`tenant is falsy 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -937,8 +937,8 @@ exports[`theme has logoLarge 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -1022,8 +1022,8 @@ exports[`theme has logoWide 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -1107,8 +1107,8 @@ exports[`unread > 0 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -1192,8 +1192,8 @@ exports[`user && user.role && user.role.name.includes(admin) 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -1277,8 +1277,8 @@ exports[`user is falsy 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }
@@ -1348,8 +1348,8 @@ exports[`user.role_id === 2 1`] = `
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
                 "key": "signOut",
+                "select": [Function],
                 "text": "Sign out",
-                "url": "/signout",
               },
             ]
           }

@@ -121,7 +121,8 @@ class Header extends Component {
       tenant,
       theme,
       user,
-      authentication
+      authentication,
+      authenticationDispatch
     } = this.props
     const { isTop } = this.state
     const scope = tenant && tenant.id ? tenant.scope : {}
@@ -140,7 +141,7 @@ class Header extends Component {
           key: 'settings'
         },
         {
-          url: '/signout',
+          select: () => authenticationDispatch.goTo('/signout'),
           text: t('nav:signOut'),
           fontAwesomeIcon: 'fa-sign-out',
           key: 'signOut'
@@ -154,7 +155,7 @@ class Header extends Component {
           key: 'settings'
         },
         {
-          url: '/signout',
+          select: () => authenticationDispatch.goTo('/signout'),
           text: t('nav:signOut'),
           fontAwesomeIcon: 'fa-sign-out',
           key: 'signOut'

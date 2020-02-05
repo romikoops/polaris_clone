@@ -1,12 +1,8 @@
 import { Promise } from 'es6-promise-promise'
-import { authHeader } from '../helpers/auth-header'
-import getSubdomain from '../helpers/subdomain'
 import { getTenantApiUrl } from '../constants/api.constants'
-import { toQueryString } from '../helpers'
+import { toQueryString, cookieKey, authHeader } from '../helpers'
 
 const { fetch, FormData } = window
-const subdomainKey = getSubdomain()
-const cookieKey = `${subdomainKey}_user`
 
 function handleResponse (response) {
   if (!response.ok) {
@@ -71,7 +67,7 @@ function makePrimary (userId, addressId) {
 }
 
 function getStoredUser () {
-  const sortedUser = JSON.parse(window.localStorage.getItem(cookieKey))
+  const sortedUser = JSON.parse(window.localStorage.getItem(cookieKey()))
 
   return sortedUser || {}
 }

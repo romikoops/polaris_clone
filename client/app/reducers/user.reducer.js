@@ -1,12 +1,10 @@
 import merge from 'lodash/merge'
 import { userConstants } from '../constants'
-import getSubdomain from '../helpers/subdomain'
+import { cookieKey } from '../helpers'
 
 const { localStorage } = window
 
-const subdomainKey = getSubdomain()
-const cookieKey = `${subdomainKey}_user`
-const userCookie = localStorage.getItem(cookieKey)
+const userCookie = localStorage.getItem(cookieKey())
 const userData = (typeof (userCookie) !== 'undefined') && userCookie !== 'undefined' ? JSON.parse(userCookie) : {}
 
 const initialState = userData ? { loggedIn: true, userData } : {}

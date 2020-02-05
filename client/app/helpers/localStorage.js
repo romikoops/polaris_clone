@@ -21,3 +21,9 @@ export const saveState = (state) => {
     console.log(err)
   }
 }
+
+export function cookieKey () {
+  const tenantId = localStorage.getItem('tenantId')
+
+  return `${tenantId}_user`
+}
