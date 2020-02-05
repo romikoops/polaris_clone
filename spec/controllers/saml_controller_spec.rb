@@ -4,14 +4,31 @@ require 'rails_helper'
 
 RSpec.describe SamlController, type: :controller do
   let(:tenant) { create(:tenant, subdomain: 'test') }
-  let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:saml_response) { build(:saml_response) }
+
+  let!(:tenants_domain) { create(:tenants_domain, domain: 'test.host', tenant: tenants_tenant) }
+  let!(:saml_metadata) { create(:tenants_saml_metadatum, tenant: tenants_tenant) }
+
+
+  describe 'GET init' do
+    it 'redirects to SAML login' do
+      get :init
+
+      expect(response.location).to start_with('https://accounts.google.com/o/saml2')
+    end
+  end
+
+  describe 'GET metadata' do
+    it 'return correct metadata' do
+      get :metadata
+
+      expect(response.body).to include("entityID='https://#{tenants_domain.domain}/saml/metadata'")
+    end
+  end
 
   context 'with successful login' do
     before do
-      create(:tenants_domain, domain: 'test.host', tenant: tenants_tenant)
-      create(:tenants_saml_metadatum, tenant: tenants_tenant)
-
       create(:role, name: 'shipper')
       one_login = double('OneLogin::RubySaml::Response', is_valid?: true)
       allow(one_login).to receive(:is_valid?).and_return(true)
@@ -35,11 +52,6 @@ RSpec.describe SamlController, type: :controller do
   end
 
   context 'with unsuccessful login' do
-    before do
-      create(:tenants_domain, domain: 'test.host', tenant: tenants_tenant)
-      create(:tenants_saml_metadatum, tenant: tenants_tenant)
-    end
-
     describe 'POST #consume' do
       it 'redirects to error url when the response is not valid' do
         post :consume, params: { SAMLResponse: saml_response }

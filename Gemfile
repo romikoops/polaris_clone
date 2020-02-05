@@ -31,7 +31,7 @@ gem 'lograge'
 
 gem 'devise_token_auth', '~> 0.1.43'
 gem 'omniauth'
-gem 'ruby-saml', '~> 1.9.0', require: 'onelogin/ruby-saml'
+gem 'ruby-saml', '~> 1.11.0', require: 'onelogin/ruby-saml'
 
 # soft delete users and other models
 gem "paranoia", "~> 2.2"

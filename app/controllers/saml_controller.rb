@@ -4,6 +4,14 @@ class SamlController < ApplicationController
   skip_before_action :require_non_guest_authentication!
   skip_before_action :require_authentication!
 
+  def init
+    redirect_to(OneLogin::RubySaml::Authrequest.new.create(saml_settings))
+  end
+
+  def metadata
+    render xml: OneLogin::RubySaml::Metadata.new.generate(saml_settings), content_type: 'application/samlmetadata+xml'
+  end
+
   def consume
     return error_redirect unless saml_response.present? && saml_response.is_valid?
 
@@ -37,17 +45,7 @@ class SamlController < ApplicationController
 
   def tenant
     @tenant ||= begin
-      domains = [
-        request.host,
-        ENV.fetch('DEFAULT_TENANT', 'demo.local')
-      ]
-
-      domains.each do |domain|
-        tenants_domain = Tenants::Domain.where(':domain ~* domain', domain: domain).first
-        return tenants_domain.tenant if tenants_domain
-      end
-
-      nil
+      ::Tenants::Domain.find_by(':domain ~* domain', domain: request.host)&.tenant
     end
   end
 
@@ -60,6 +58,7 @@ class SamlController < ApplicationController
       settings = idp_metadata_parser.parse(tenant_saml_metadata.content)
 
       settings.assertion_consumer_service_url = "https://#{request.host}/saml/consume"
+      settings.sp_entity_id = "https://#{request.host}/saml/metadata"
       settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
       settings.authn_context = 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'
 

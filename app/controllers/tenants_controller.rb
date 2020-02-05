@@ -40,6 +40,10 @@ class TenantsController < ApplicationController
     tenant_json['subdomain'] = tenants_tenant.slug
     tenant_json['slug'] = tenants_tenant.slug
 
+    tenant_json['auth_methods'] = []
+    tenant_json['auth_methods'] << 'password'
+    tenant_json['auth_methods'] << 'saml' if ::Tenants::SamlMetadatum.exists?(tenant_id: tenants_tenant.id)
+
     response_handler(tenant: tenant_json)
   end
 
