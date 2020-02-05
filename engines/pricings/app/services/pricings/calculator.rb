@@ -58,7 +58,7 @@ module Pricings
 
     def target_in_range(ranges:, value:, max: false)
       target = ranges.find do |step|
-        Range.new(step['min'],step['max']).cover?(value)
+        Range.new(step['min'],step['max'], true).cover?(value)
       end
 
       target || (max ? ranges.max_by { |x| x['max'] } : { 'rate' =>  0 })

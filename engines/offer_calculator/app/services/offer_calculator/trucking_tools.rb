@@ -205,7 +205,7 @@ module OfferCalculator
                      end
 
                      trucking_pricing['rates']['kg'].each do |rate|
-                       next unless Range.new(rate['min_kg'].to_d, rate['max_kg'].to_d).cover?(cargo_values['weight'].to_d)
+                       next unless Range.new(rate['min_kg'].to_d, rate['max_kg'].to_d, true).cover?(cargo_values['weight'].to_d)
 
                        rate_to_return = rate['rate']
                        rate_to_return['min_value'] = rate['min_value']
@@ -214,7 +214,7 @@ module OfferCalculator
                      rate_to_return
                    when 'cbm'
                      trucking_pricing['rates']['cbm'].each do |rate|
-                       unless Range.new(rate['min_cbm'].to_d, rate['max_cbm'].to_d).cover?(cargo_values['volume'].to_d)
+                       unless Range.new(rate['min_cbm'].to_d, rate['max_cbm'].to_d, true).cover?(cargo_values['volume'].to_d)
                          next
                        end
 
@@ -231,7 +231,7 @@ module OfferCalculator
                    when 'cbm_kg'
                      result = {}
                      trucking_pricing['rates']['kg'].each do |rate|
-                       next unless Range.new(rate['min_kg'].to_d, rate['max_kg'].to_d).cover?(cargo_values['weight'].to_d)
+                       next unless Range.new(rate['min_kg'].to_d, rate['max_kg'].to_d, true).cover?(cargo_values['weight'].to_d)
 
                        result['kg'] = rate['rate']['value']
                        result['rate_basis'] = rate['rate']['rate_basis']
@@ -239,7 +239,7 @@ module OfferCalculator
                        result['currency'] = rate['rate']['currency']
                      end
                      trucking_pricing['rates']['cbm'].each do |rate|
-                       unless Range.new(rate['min_cbm'].to_d, rate['max_cbm'].to_d).cover?(cargo_values['volume'].to_d)
+                       unless Range.new(rate['min_cbm'].to_d, rate['max_cbm'].to_d, true).cover?(cargo_values['volume'].to_d)
                          next
                        end
 
@@ -294,13 +294,13 @@ module OfferCalculator
                      end
 
                      trucking_pricing['rates']['kg'].each do |rate|
-                       next unless Range.new(rate['min_kg'].to_i, rate['max_kg'].to_i).cover?(cargo_values['weight'].to_i)
+                       next unless Range.new(rate['min_kg'].to_i, rate['max_kg'].to_i, true).cover?(cargo_values['weight'].to_i)
 
                        rate['rate']['min_value'] = rate['min_value']
                        result[:kg] = rate['rate']['value']
                      end
                      trucking_pricing['rates']['unit_in_kg'].each do |rate|
-                       unless Range.new(rate['min_unit_in_kg'].to_i, rate['max_unit_in_kg'].to_i).cover?(cargo_values['weight'].to_i)
+                       unless Range.new(rate['min_unit_in_kg'].to_i, rate['max_unit_in_kg'].to_i, true).cover?(cargo_values['weight'].to_i)
                          next
                        end
 
