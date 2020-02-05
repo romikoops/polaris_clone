@@ -67,24 +67,26 @@ module Legacy
     end
 
     def valid_for_mode_of_transport?(mode_of_transport)
-      # This method determines whether the cargo_item would be valid, should the shipment's itinerary
-      # have the mode of transport supplied as argument.
+      mode_of_transport ||= shipment.itinerary.try(:mode_of_transport)
+      self.chargeable_weight = calc_chargeable_weight(mode_of_transport)
+      max_dimensions = max_dimension(tenant_id: tenant.id, mode_of_transport: mode_of_transport)
+      exceeded_dimensions = DIMENSIONS.reject do |dimension|
+        self[dimension] <= max_dimensions[dimension]
+      end
+      self.chargeable_weight = nil
 
-      # Creates and auxiliary class, cloned from CargoItem, with one aditional
-      # validation, which depends on the mode of transport.
-      klass = ::Legacy::CustomValidations.cargo_item_max_dimensions(CargoItem.clone, mode_of_transport)
-      # Instantiates the auxiliary class, sets the chargeable weight,
-      # and checks if the item is still valid, thereby applying the new validation.
-      aux_cargo_item = klass.new(given_attributes)
-      aux_cargo_item.chargeable_weight = calc_chargeable_weight(mode_of_transport)
-
-      aux_cargo_item.valid?
+      exceeded_dimensions.empty?
     end
 
     private
 
     def set_default_cargo_class!
       self.cargo_class ||= 'lcl'
+    end
+
+    def max_dimension(tenant_id:, mode_of_transport:)
+      bundle = MaxDimensionsBundle.find_by(tenant_id: tenant_id, mode_of_transport: mode_of_transport, aggregate: false)
+      bundle || MaxDimensionsBundle.find_by(tenant_id: tenant_id, mode_of_transport: 'general', aggregate: false)
     end
   end
 end
