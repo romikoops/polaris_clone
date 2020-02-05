@@ -11,7 +11,7 @@ module Tenants
     has_many :memberships, as: :member, dependent: :destroy
     has_many :groups, through: :memberships, as: :member
     has_many :margins, as: :applicable
-    validates :email, presence: true, uniqueness: { scope: :tenant_id }
+    validates :email, presence: true, uniqueness: { scope: :tenant_id }, format: { with: URI::MailTo::EMAIL_REGEXP }
     authenticates_with_sorcery!
 
     has_paper_trail

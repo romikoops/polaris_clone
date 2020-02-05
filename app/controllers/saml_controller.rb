@@ -34,7 +34,7 @@ class SamlController < ApplicationController
   def user_from_saml(response:, tenant_id:)
     User.find_or_initialize_by(
       tenant_id: tenant_id,
-      email: response.name_id,
+      email: response.attributes[:email] || response.name_id,
       role: Role.find_by(name: 'shipper')
     ).tap do |user|
       user.first_name = response.attributes[:firstName]

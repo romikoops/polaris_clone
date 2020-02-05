@@ -13,7 +13,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   before_validation :set_default_optin_status, on: :create
 
   validates :tenant_id, presence: true
-  validates :email, presence: true, uniqueness: { scope: :tenant_id }
+  validates :email, presence: true, uniqueness: { scope: :tenant_id }, format: { with: URI::MailTo::EMAIL_REGEXP }
   pg_search_scope :search, against: %i(first_name last_name company_name email phone), using: {
     tsearch: { prefix: true }
   }
