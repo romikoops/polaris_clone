@@ -34,27 +34,27 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def generate_schedules_from_sheet
-    # TODO: Method should be called `upload`
-
-    Document.create!(
-      text: '',
-      doc_type: 'schedules',
-      sandbox: @sandbox,
-      tenant: current_tenant,
-      file: upload_params[:file]
+    handle_upload(
+      params: upload_params,
+      text: "#{current_tenant.subdomain}:schedule_generator",
+      type: 'schedules_generator',
+      options: {
+        sandbox: @sandbox,
+        user: current_user
+      }
     )
+  end
 
-    file = upload_params[:file].tempfile
-    options = { tenant: current_tenant,
-                file_or_path: file,
-                options: {
-                  user: current_user,
-                  sandbox: @sandbox
-                } }
-    uploader = ExcelDataServices::Loaders::Uploader.new(options)
-
-    insertion_stats_or_errors = uploader.perform
-    response_handler(insertion_stats_or_errors)
+  def upload
+    handle_upload(
+      params: upload_params,
+      text: "#{current_tenant.subdomain}:schedules",
+      type: 'schedules',
+      options: {
+        sandbox: @sandbox,
+        user: current_user
+      }
+    )
   end
 
   def destroy
@@ -66,66 +66,6 @@ class Admin::SchedulesController < Admin::AdminBaseController
     response_handler(trip_layovers)
   end
 
-  def schedules_by_itinerary
-    if params[:file]
-      itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
-
-      req = { 'xlsx' => params[:file], 'itinerary' => itinerary }
-      results = ExcelTool::OverwriteSchedulesByItinerary.new(
-        params: req,
-        user: current_user,
-        sandbox: @sandbox
-      ).perform
-      response_handler(results)
-    else
-      response_handler(false)
-    end
-  end
-
-  def overwrite_trains
-    if params[:file]
-      req = { 'xlsx' => params[:file] }
-      results = ExcelTool::ScheduleOverwriter.new(
-        params: req,
-        mot: 'rail',
-        user: current_user,
-        sandbox: @sandbox
-      ).perform
-      response_handler(results)
-    else
-      response_handler(false)
-   end
-  end
-
-  def overwrite_vessels
-    if params[:file]
-      req = { 'xlsx' => params[:file] }
-      results = ExcelTool::ScheduleOverwriter.new(
-        params: req,
-        mot: 'ocean',
-        user: current_user,
-        sandbox: @sandbox
-      ).perform
-      response_handler(results)
-    else
-      response_handler(false)
-   end
-  end
-
-  def overwrite_air
-    if params[:file]
-      req = { 'xlsx' => params[:file] }
-      results = ExcelTool::ScheduleOverwriter.new(
-        params: req,
-        mot: 'air',
-        user: current_user,
-        sandbox: @sandbox
-      ).perform
-      response_handler(results)
-    else
-      response_handler(false)
-   end
-  end
 
   private
 

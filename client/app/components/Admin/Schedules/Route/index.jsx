@@ -328,7 +328,7 @@ class AdminSchedulesRoute extends Component {
                           <p className="flex-80">{`Upload ${itinerary.name} Schedules Sheet`}</p>
                           <FileUploader
                             theme={theme}
-                            dispatchFn={file => documentDispatch.uploadItinerarySchedules(file, itinerary.id)
+                            dispatchFn={file => documentDispatch.uploadSchedules(file, itinerary.id)
                             }
                             type="xlsx"
                             text="Train Schedules .xlsx"

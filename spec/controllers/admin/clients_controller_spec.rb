@@ -44,19 +44,7 @@ RSpec.describe Admin::ClientsController do
     let(:file) { fixture_file_upload('spec/fixtures/files/excel/dummy.xlsx') }
 
     before do
-      allow(ExcelTool::AgentsOverwriter).to receive(:new).with(anything).and_return(uploader)
       allow(ExcelDataServices::Loaders::Uploader).to receive(:new).with(anything).and_return(uploader)
-    end
-
-    it 'returns an http status of success' do
-      post :agents, params: { tenant_id: tenant, file: file }
-      expect(response).to have_http_status(:success)
-    end
-
-    it 'send the uploaded file to correct uploader' do
-      expect(ExcelTool::AgentsOverwriter).to receive(:new).with(anything).and_return(uploader)
-
-      post :agents, params: { tenant_id: tenant, file: file }
     end
 
     context 'with base pricing' do

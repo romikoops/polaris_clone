@@ -7,13 +7,14 @@ module ExcelDataServices
         "#{parent}::#{flavor.titleize.delete(' ')}::#{klass_identifier}".constantize
       end
 
-      def initialize(tenant:, sheet_name:, data:)
+      def initialize(tenant:, sheet_name:, data:, options: {})
         @tenant = tenant
         @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
         @data = data
         @sheet_name = sheet_name
         @klass_identifier = self.class.name.split('::').last
         @errors_and_warnings = []
+        @options = options
       end
 
       def perform
@@ -38,7 +39,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :tenant, :sheet_name, :data, :klass_identifier
+      attr_reader :tenant, :sheet_name, :data, :klass_identifier, :options
 
       def add_to_errors(type:, row_nr:, sheet_name:, reason:, exception_class:)
         @errors_and_warnings << { type: type,

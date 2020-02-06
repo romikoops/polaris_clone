@@ -17,10 +17,12 @@ RSpec.describe ExcelDataServices::Restructurers::ScheduleGenerator do
     it 'extracts the row data from the sheet hash' do
       result = described_class.restructure(tenant: tenant, data: data)
       result = result['ScheduleGenerator']
-      expect(result.length).to be(4)
-      expect(result.first[:ordinals].length).to be(1)
-      expect(result.first[:ordinals].first).to be(4)
-      expect(result.first[:cargo_class]).to be('container')
+      aggregate_failures do
+        expect(result.length).to be(4)
+        expect(result.first[:ordinals].length).to be(1)
+        expect(result.first[:ordinals].first).to be(4)
+        expect(result.first[:cargo_class]).to be('container')
+      end
     end
   end
 end

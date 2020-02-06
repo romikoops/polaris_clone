@@ -75,7 +75,7 @@ function downloadPricings (options) {
   return fetch(`${getTenantApiUrl()}/admin/pricings/download`, requestOptions).then(handleResponse)
 }
 
-function uploadSchedules (file, target) {
+function uploadSchedules (file) {
   const formData = new FormData()
   formData.append('file', file)
   const requestOptions = {
@@ -84,19 +84,7 @@ function uploadSchedules (file, target) {
     body: formData
   }
 
-  return fetch(`${getTenantApiUrl()}/admin/${target}_schedules/process_csv`, requestOptions).then(handleResponse)
-}
-
-function uploadItinerarySchedules (file, target) {
-  const formData = new FormData()
-  formData.append('file', file)
-  const requestOptions = {
-    method: 'POST',
-    headers: { ...authHeader() },
-    body: formData
-  }
-
-  return fetch(`${getTenantApiUrl()}/admin/schedules/overwrite/${target}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/schedules/upload`, requestOptions).then(handleResponse)
 }
 
 function uploadLocalCharges (file, mot, groupId) {
@@ -253,7 +241,6 @@ export const documentService = {
   downloadPricings,
   downloadLocalCharges,
   downloadHubs,
-  uploadItinerarySchedules,
   downloadTrucking,
   downloadGdpr,
   downloadShipment,

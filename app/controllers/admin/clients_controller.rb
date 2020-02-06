@@ -47,29 +47,15 @@ class Admin::ClientsController < Admin::AdminBaseController
   end
 
   def agents
-    # TODO: Method should be called `upload`
-
-    Document.create!(
-      text: '',
-      doc_type: 'clients',
-      sandbox: @sandbox,
-      tenant: current_tenant,
-      file: upload_params[:file]
+    handle_upload(
+      params: upload_params,
+      text: "#{current_tenant.subdomain}_clients",
+      type: 'clients',
+      options: {
+        sandbox: @sandbox,
+        user: current_user
+      }
     )
-
-    file = upload_params[:file].tempfile
-    uploader =
-      if current_scope[:base_pricing]
-        options = { tenant: current_tenant,
-                    file_or_path: file,
-                    options: { sandbox: @sandbox, user: current_user } }
-        ExcelDataServices::Loaders::Uploader.new(options)
-      else
-        ExcelTool::AgentsOverwriter.new(user: current_user, params: { xlsx: file })
-      end
-
-    insertion_stats_or_errors = uploader.perform
-    response_handler(insertion_stats_or_errors)
   end
 
   # Destroy User account

@@ -150,18 +150,7 @@ Rails.application.routes.draw do
       post 'shipments/:id/edit_service_price', to: 'shipments#edit_service_price'
 
       resources :schedules, only: %i(index show destroy)
-      post 'schedules/overwrite/:id', to: 'schedules#schedules_by_itinerary'
-      post 'train_schedules/process_csv',
-           to: 'schedules#overwrite_trains',
-           as: :schedules_train_overwrite
-      post 'vessel_schedules/process_csv',
-           to: 'schedules#overwrite_vessels',
-           as: :schedules_vessel_overwrite
-      post 'air_schedules/process_csv',
-           to: 'schedules#overwrite_air',
-           as: :schedules_air_overwrite
-      post 'schedules/auto_generate',
-           to: 'schedules#auto_generate_schedules'
+      post 'schedules/upload', to: 'schedules#upload'
       post 'schedules/download', to: 'schedules#download_schedules'
       post 'schedules/auto_generate_sheet',
            to: 'schedules#generate_schedules_from_sheet'
@@ -278,6 +267,8 @@ end
 #                                      user_confirmation GET    /tenants/:tenant_id/auth/confirmation(.:format)                                          users_devise_token_auth/confirmations#show
 #                                                        POST   /tenants/:tenant_id/auth/confirmation(.:format)                                          users_devise_token_auth/confirmations#create
 #                                                        GET    /tenants/:tenant_id/auth/validate_token(.:format)                                        devise_token_auth/token_validations#validate_token
+#                                              saml_init GET    /saml/init(.:format)                                                                     saml#init
+#                                          saml_metadata GET    /saml/metadata(.:format)                                                                 saml#metadata
 #                                           saml_consume POST   /saml/consume(.:format)                                                                  saml#consume
 #                                        current_tenants GET    /tenants/current(.:format)                                                               tenants#current
 #                    email_action_tenant_admin_shipments GET    /tenants/:tenant_id/admin/shipments/email_action(.:format)                               admin/shipments#email_action
@@ -413,11 +404,7 @@ end
 #                                 tenant_admin_schedules GET    /tenants/:tenant_id/admin/schedules(.:format)                                            admin/schedules#index
 #                                  tenant_admin_schedule GET    /tenants/:tenant_id/admin/schedules/:id(.:format)                                        admin/schedules#show
 #                                                        DELETE /tenants/:tenant_id/admin/schedules/:id(.:format)                                        admin/schedules#destroy
-#                                                        POST   /tenants/:tenant_id/admin/schedules/overwrite/:id(.:format)                              admin/schedules#schedules_by_itinerary
-#                 tenant_admin_schedules_train_overwrite POST   /tenants/:tenant_id/admin/train_schedules/process_csv(.:format)                          admin/schedules#overwrite_trains
-#                tenant_admin_schedules_vessel_overwrite POST   /tenants/:tenant_id/admin/vessel_schedules/process_csv(.:format)                         admin/schedules#overwrite_vessels
-#                   tenant_admin_schedules_air_overwrite POST   /tenants/:tenant_id/admin/air_schedules/process_csv(.:format)                            admin/schedules#overwrite_air
-#                   tenant_admin_schedules_auto_generate POST   /tenants/:tenant_id/admin/schedules/auto_generate(.:format)                              admin/schedules#auto_generate_schedules
+#                          tenant_admin_schedules_upload POST   /tenants/:tenant_id/admin/schedules/upload(.:format)                                     admin/schedules#upload
 #                        tenant_admin_schedules_download POST   /tenants/:tenant_id/admin/schedules/download(.:format)                                   admin/schedules#download_schedules
 #             tenant_admin_schedules_auto_generate_sheet POST   /tenants/:tenant_id/admin/schedules/auto_generate_sheet(.:format)                        admin/schedules#generate_schedules_from_sheet
 #                                                        GET    /tenants/:tenant_id/admin/hubs(.:format)                                                 admin/hubs#index
@@ -511,23 +498,23 @@ end
 #                                     rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show
 #                              update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                      active_storage/disk#update
 #                                   rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                           active_storage/direct_uploads#create
-#
+# 
 # Routes for GoogleSignIn::Engine:
 # authorization POST /authorization(.:format) google_sign_in/authorizations#create
 #      callback GET  /callback(.:format)      google_sign_in/callbacks#show
-#
+# 
 # Routes for Easymon::Engine:
 #        GET  /(.:format)       easymon/checks#index
 #   root GET  /                 easymon/checks#index
 #        GET  /:check(.:format) easymon/checks#show
-#
+# 
 # Routes for ApiAuth::Engine:
 #      oauth_token POST   /oauth/token(.:format)      api_auth/tokens#create
 #     oauth_revoke POST   /oauth/revoke(.:format)     api_auth/tokens#revoke
 # oauth_introspect POST   /oauth/introspect(.:format) api_auth/tokens#introspect
 # oauth_token_info GET    /oauth/token/info(.:format) api_auth/token_info#show
 #    oauth_signout DELETE /oauth/signout(.:format)    api_auth/auth#destroy
-#
+# 
 # Routes for Api::Engine:
 #                          v1_me GET  /v1/me(.:format)                             api/v1/users#show
 #                     v1_clients GET  /v1/clients(.:format)                        api/v1/clients#index
@@ -539,27 +526,27 @@ end
 #               settings_v1_ahoy GET  /v1/ahoy/:id/settings(.:format)              api/v1/ahoy#settings
 #                                GET  /v1/itineraries/ports/:tenant_uuid(.:format) api/v1/itineraries#ports
 #                 v1_itineraries GET  /v1/itineraries(.:format)                    api/v1/itineraries#index
-#
+# 
 # Routes for ApiDocs::Engine:
 # raddocs_app      /docs       Raddocs::App
-#
+# 
 # Routes for AdmiraltyAuth::Engine:
 #        login GET    /login(.:format)        admiralty_auth/logins#new
 # create_login GET    /login/create(.:format) admiralty_auth/logins#create
 # delete_login DELETE /login(.:format)        admiralty_auth/logins#destroy
-#
+# 
 # Routes for AdmiraltyReports::Engine:
 #        reports GET  /reports(.:format)        admiralty_reports/reports#index
 #         report GET  /reports/:id(.:format)    admiralty_reports/reports#show
 # download_stats GET  /stats/download(.:format) admiralty_reports/stats#download
-#
+# 
 # Routes for AdmiraltyTenants::Engine:
 #     tenants GET   /tenants(.:format)          admiralty_tenants/tenants#index
 # edit_tenant GET   /tenants/:id/edit(.:format) admiralty_tenants/tenants#edit
 #      tenant GET   /tenants/:id(.:format)      admiralty_tenants/tenants#show
 #             PATCH /tenants/:id(.:format)      admiralty_tenants/tenants#update
 #             PUT   /tenants/:id(.:format)      admiralty_tenants/tenants#update
-#
+# 
 # Routes for Admiralty::Engine:
 #    admiralty_auth      /           AdmiraltyAuth::Engine
 # admiralty_reports      /           AdmiraltyReports::Engine

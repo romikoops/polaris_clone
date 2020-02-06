@@ -216,7 +216,7 @@ FactoryBot.define do
                country_destination: 'Sweden',
                mot: 'ocean',
                carrier: 'APL',
-               service_level: 'standard',
+               service_level: 'Standard',
                load_type: 'FCL_40',
                rate_basis: 'PER_CONTAINER',
                transit_time: 42,

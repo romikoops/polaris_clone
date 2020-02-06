@@ -134,6 +134,21 @@ module ExcelDataServices
           cargo_class
         ].freeze
 
+        SCHEDULES = %i[
+          from
+          to
+          closing_date
+          etd
+          eta
+          transit_time
+          service_level
+          carrier
+          mode_of_transport
+          vessel
+          voyage_code
+          load_type
+        ].freeze
+
         CHARGE_CATEGORIES = %i[
           internal_code
           fee_code

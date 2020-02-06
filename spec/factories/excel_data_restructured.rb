@@ -693,7 +693,7 @@ FactoryBot.define do
             country_destination: 'Sweden',
             mot: 'ocean',
             carrier: 'APL',
-            service_level: 'standard',
+            service_level: 'Standard',
             load_type: 'fcl_40',
             rate_basis: 'PER_CONTAINER',
             transit_time: 42,
@@ -717,7 +717,7 @@ FactoryBot.define do
             country_destination: 'Sweden',
             mot: 'ocean',
             carrier: 'APL',
-            service_level: 'standard',
+            service_level: 'Standard',
             load_type: 'fcl_40',
             rate_basis: 'PER_CONTAINER',
             transit_time: 42,
@@ -2790,14 +2790,67 @@ FactoryBot.define do
       end
     end
 
-    factory :missing_values_hubs_row_data, traits: %i[restructured_hubs_missing_values]
-    factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges, traits: %i[correct_pricings_one_fee_col_and_ranges]
-    factory :excel_data_restructured_faulty_pricings_one_fee_col_and_ranges, traits: %i[faulty_pricings_one_fee_col_and_ranges]
-    factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_rangs, traits: %i[correct_pricings_dynamic_fee_cols_no_rangs]
-    factory :excel_data_restructured_correct_margins, traits: %i[correct_margins]
-    factory :excel_data_restructured_correct_local_charges, traits: %i[correct_local_charges]
-    factory :excel_data_restructured_faulty_local_charges, traits: %i[faulty_local_charges]
-    factory :excel_data_restructured_correct_saco_shipping_pricings, traits: %i[correct_saco_shipping_pricings]
-    factory :excel_data_restructured_correct_saco_shipping_local_charges, traits: %i[correct_saco_shipping_local_charges]
+    trait :restructured_schedules do
+      sheet_name { 'Schedules' }
+      data_restructurer_name { 'schedules' }
+      data do
+        [{
+          from: 'Dalian',
+          to: 'Felixstowe',
+          closing_date: Date.parse('2020/01/01'),
+          etd: Date.parse('2020/01/04'),
+          eta: Date.parse('2020/02/11'),
+          mode_of_transport: 'ocean',
+          transit_time: 38,
+          carrier: 'msc',
+          service_level: 'standard',
+          vessel: 'Cap San Diego',
+          voyage_code: '1010101',
+          load_type: 'container',
+          row_nr: 2
+        },
+         {
+           from: 'Dalian',
+           to: 'Felixstowe',
+           closing_date: Date.parse('2020/01/01'),
+           eta: Date.parse('2020/01/04'),
+           etd: Date.parse('2020/02/11'),
+           mode_of_transport: 'ocean',
+           transit_time: 38,
+           carrier: nil,
+           service_level: 'standard',
+           vessel: 'Cap San Diego',
+           voyage_code: '1010101',
+           load_type: 'cargo_item',
+           row_nr: 3
+         },
+         {
+           from: 'Dalian',
+           to: 'Felixstowe',
+           closing_date: Date.parse('2020/01/01'),
+           eta: Date.parse('2020/01/04'),
+           etd: Date.parse('2020/01/05'),
+           mode_of_transport: 'air',
+           transit_time: 38,
+           carrier: nil,
+           service_level: 'standard',
+           vessel: 'Cap San Diego',
+           voyage_code: '1010101',
+           load_type: 'cargo_item',
+           row_nr: 3
+         }]
+      end
+    end
+
+    factory :missing_values_hubs_row_data, traits: %i(restructured_hubs_missing_values)
+    factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges, traits: %i(correct_pricings_one_fee_col_and_ranges)
+    factory :excel_data_restructured_faulty_pricings_one_fee_col_and_ranges, traits: %i(faulty_pricings_one_fee_col_and_ranges)
+    factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_rangs, traits: %i(correct_pricings_dynamic_fee_cols_no_rangs)
+    factory :excel_data_restructured_correct_margins, traits: %i(correct_margins)
+    factory :excel_data_restructured_correct_local_charges, traits: %i(correct_local_charges)
+    factory :excel_data_restructured_faulty_local_charges, traits: %i(faulty_local_charges)
+    factory :excel_data_restructured_correct_saco_shipping_pricings, traits: %i(correct_saco_shipping_pricings)
+    factory :excel_data_restructured_correct_saco_shipping_local_charges, traits: %i(correct_saco_shipping_local_charges)
+    factory :excel_data_restructured_schedules, traits: %i(restructured_schedules)
   end
 end

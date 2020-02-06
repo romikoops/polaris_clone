@@ -131,6 +131,18 @@ module ExcelDataServices
           raw_datum
         end
       end
+
+      def parse_cargo_class(rows_data:, key:)
+        rows_data.each do |row_data|
+          row_data[key] =
+            case row_data[key].downcase
+            when /^(lcl|cargo_item)$/
+              'cargo_item'
+            when /^(fcl|container)$/
+              'container'
+            end
+        end
+      end
     end
   end
 end

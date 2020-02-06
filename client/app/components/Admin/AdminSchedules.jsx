@@ -222,64 +222,12 @@ class AdminSchedules extends Component {
                         styles.action_section
                       } flex-100 layout-row layout-align-center-center layout-wrap`}
                     >
-                      <p className="flex-80">{t('admin:generatorSheet')}</p>
+                      <p className="flex-80">{t('common:upload')}</p>
                       <FileUploader
                         theme={theme}
                         dispatchFn={file => documentDispatch.uploadGeneratorSheet(file)}
                         type="xlsx"
-                        text={t('admin:generatorSheet')}
-                      />
-                    </div>
-                    <div
-                      className={`${
-                        styles.action_section
-                      } flex-100 layout-row layout-align-center-center layout-wrap`}
-                    >
-                      <p className="flex-80">{t('admin:uploadAirSchedules')}</p>
-                      <FileUploader
-                        theme={theme}
-                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'air')}
-                        type="xlsx"
-                        text={t('admin:airSchedulesExcel')}
-                      />
-                    </div>
-                    <div
-                      className={`${
-                        styles.action_section
-                      } flex-100 layout-row layout-align-center-center layout-wrap`}
-                    >
-                      <p className="flex-80">{t('admin:uploadTrainSchedules')}</p>
-                      <FileUploader
-                        theme={theme}
-                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'train')}
-                        type="xlsx"
-                        text={t('admin:trainSchedulesExcel')}
-                      />
-                    </div>
-                    <div
-                      className={`${
-                        styles.action_section
-                      } flex-100 layout-row layout-align-center-center layout-wrap`}
-                    >
-                      <p className="flex-80">{t('admin:uploadVesselSchedules')}</p>
-                      <FileUploader
-                        theme={theme}
-                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'vessel')}
-                        type="xlsx"
-                        text={t('admin:vesselSchedulesExcel')}
-                      />
-                    </div>
-                    <div
-                      className={`${
-                        styles.action_section
-                      } flex-100 layout-row layout-align-center-center layout-wrap`}
-                    >
-                      <p className="flex-80">{t('admin:uploadTruckingSchedules')}</p>
-                      <FileUploader
-                        theme={theme}
-                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'truck')}
-                        type="xlsx"
-                        text={t('admin:truckSchedulesExcel')}
+                        text={t('common:upload')}
                       />
                     </div>
                   </div>
@@ -399,4 +347,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withNamespaces('admin')(connect(mapStateToProps, mapDispatchToProps)(AdminSchedules))
+export default withNamespaces(['admin', 'common'])(connect(mapStateToProps, mapDispatchToProps)(AdminSchedules))

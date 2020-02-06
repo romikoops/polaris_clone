@@ -2,22 +2,15 @@
 
 class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:disable # Style/ClassAndModuleChildren
   def upload
-    Document.create!(
-      text: '',
-      doc_type: 'charge_categories',
-      sandbox: @sandbox,
-      tenant: current_tenant,
-      file: upload_params[:file]
+    handle_upload(
+      params: upload_params,
+      text: "#{current_tenant.subdomain}_charge_categories",
+      type: 'charge_categories',
+      options: {
+        sandbox: @sandbox,
+        user: current_user
+      }
     )
-
-    file = upload_params[:file].tempfile
-    options = { tenant: current_tenant,
-                file_or_path: file,
-                options: { sandbox: @sandbox, user: current_user } }
-    uploader = ExcelDataServices::Loaders::Uploader.new(options)
-
-    insertion_stats_or_errors = uploader.perform
-    response_handler(insertion_stats_or_errors)
   end
 
   def download

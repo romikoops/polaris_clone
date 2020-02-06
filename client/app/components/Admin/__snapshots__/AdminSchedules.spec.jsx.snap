@@ -481,7 +481,7 @@ exports[`user.internal is truthy 1`] = `
                                 <p
                                   className="flex-80"
                                 >
-                                  Generator Sheet
+                                  Upload
                                 </p>
                                 <FileUploader
                                   dispatchFn={[Function]}
@@ -489,119 +489,7 @@ exports[`user.internal is truthy 1`] = `
                                   size="small"
                                   square={false}
                                   t={[Function]}
-                                  text="Generator Sheet"
-                                  theme={
-                                    Object {
-                                      "colors": Object {
-                                        "primary": "#333",
-                                        "secondary": "#fafafa",
-                                      },
-                                    }
-                                  }
-                                  tooltip=""
-                                  type="xlsx"
-                                  uploadFn={null}
-                                />
-                              </div>
-                              <div
-                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                              >
-                                <p
-                                  className="flex-80"
-                                >
-                                  Upload Air Schedules Sheet
-                                </p>
-                                <FileUploader
-                                  dispatchFn={[Function]}
-                                  formClasses=""
-                                  size="small"
-                                  square={false}
-                                  t={[Function]}
-                                  text="Air Schedules .xlsx"
-                                  theme={
-                                    Object {
-                                      "colors": Object {
-                                        "primary": "#333",
-                                        "secondary": "#fafafa",
-                                      },
-                                    }
-                                  }
-                                  tooltip=""
-                                  type="xlsx"
-                                  uploadFn={null}
-                                />
-                              </div>
-                              <div
-                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                              >
-                                <p
-                                  className="flex-80"
-                                >
-                                  Upload Train Schedules Sheet
-                                </p>
-                                <FileUploader
-                                  dispatchFn={[Function]}
-                                  formClasses=""
-                                  size="small"
-                                  square={false}
-                                  t={[Function]}
-                                  text="Train Schedules .xlsx"
-                                  theme={
-                                    Object {
-                                      "colors": Object {
-                                        "primary": "#333",
-                                        "secondary": "#fafafa",
-                                      },
-                                    }
-                                  }
-                                  tooltip=""
-                                  type="xlsx"
-                                  uploadFn={null}
-                                />
-                              </div>
-                              <div
-                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                              >
-                                <p
-                                  className="flex-80"
-                                >
-                                  Upload Vessel Schedules Sheet
-                                </p>
-                                <FileUploader
-                                  dispatchFn={[Function]}
-                                  formClasses=""
-                                  size="small"
-                                  square={false}
-                                  t={[Function]}
-                                  text="Vessel Schedules .xlsx"
-                                  theme={
-                                    Object {
-                                      "colors": Object {
-                                        "primary": "#333",
-                                        "secondary": "#fafafa",
-                                      },
-                                    }
-                                  }
-                                  tooltip=""
-                                  type="xlsx"
-                                  uploadFn={null}
-                                />
-                              </div>
-                              <div
-                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                              >
-                                <p
-                                  className="flex-80"
-                                >
-                                  Upload Trucking Schedules Sheet
-                                </p>
-                                <FileUploader
-                                  dispatchFn={[Function]}
-                                  formClasses=""
-                                  size="small"
-                                  square={false}
-                                  t={[Function]}
-                                  text="Truck Schedules .xlsx"
+                                  text="Upload"
                                   theme={
                                     Object {
                                       "colors": Object {

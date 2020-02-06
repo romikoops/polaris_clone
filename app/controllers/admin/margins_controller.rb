@@ -138,24 +138,18 @@ class Admin::MarginsController < Admin::AdminBaseController
   end
 
   def upload
-    Document.create!(
-      text: "target_id:#{upload_params[:target_id]},target_type:#{upload_params[:target_type]}",
-      doc_type: 'margins',
-      sandbox: @sandbox,
-      tenant: current_tenant,
-      file: upload_params[:file]
-    )
-
     applicable = get_target(type: upload_params[:target_type], id: upload_params[:target_id])
-    file = upload_params[:file].tempfile
-
-    options = { tenant: current_tenant,
-                file_or_path: file,
-                options: { applicable: applicable, sandbox: @sandbox, user: current_user } }
-    uploader = ExcelDataServices::Loaders::Uploader.new(options)
-
-    insertion_stats_or_errors = uploader.perform
-    response_handler(insertion_stats_or_errors)
+    handle_upload(
+      params: upload_params,
+      text: "target_id:#{upload_params[:target_id]},target_type:#{upload_params[:target_type]}",
+      type: 'margins',
+      options: {
+        sandbox: @sandbox,
+        applicable: applicable,
+        group_id: upload_params[:group_id],
+        user: current_user
+      }
+    )
   end
 
   def download

@@ -104,26 +104,16 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def upload
-    document = Document.create!(
+    handle_upload(
+      params: upload_params,
       text: "#{current_tenant.subdomain} hubs upload #{Time.zone.today.strftime('%d/%m/%Y')}",
-      doc_type: 'hubs',
-      sandbox: @sandbox,
-      tenant: current_tenant,
-      file: upload_params[:file]
+      type: 'hubs',
+      options: {
+        sandbox: @sandbox,
+        user: current_user,
+        group_id: upload_params[:group_id]
+      }
     )
-
-    file = upload_params[:file].tempfile
-    options = { tenant: current_tenant,
-                file_or_path: file,
-                options: {
-                  sandbox: @sandbox,
-                  user: current_user,
-                  group_id: upload_params[:group_id],
-                  document: document
-                } }
-    uploader = ExcelDataServices::Loaders::Uploader.new(options)
-
-    response_handler(uploader.perform)
   end
 
   def download

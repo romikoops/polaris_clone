@@ -475,33 +475,6 @@ function uploadSchedules (file, target) {
   }
 }
 
-function uploadItinerarySchedules (file, target) {
-  function request (uploadData) {
-    return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
-  }
-  function success (uploadData) {
-    return { type: documentConstants.UPLOAD_SUCCESS, payload: uploadData.data }
-  }
-  function failure (error) {
-    return { type: documentConstants.UPLOAD_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request())
-
-    documentService.uploadItinerarySchedules(file, target).then(
-      (data) => {
-        dispatch(success(data))
-        dispatch(adminActions.getSchedules(false))
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
-
 function uploadLocalCharges (file, mot, groupId = null) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
@@ -577,7 +550,6 @@ export const documentActions = {
   downloadPricings,
   uploadLocalCharges,
   uploadSchedules,
-  uploadItinerarySchedules,
   downloadTrucking,
   downloadGdpr,
   downloadShipment,

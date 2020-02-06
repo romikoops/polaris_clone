@@ -65,28 +65,16 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
   end
 
   def upload
-    document = Document.create!(
+    handle_upload(
+      params: upload_params,
       text: "group_id:#{upload_params[:group_id] || 'all'}",
-      doc_type: 'local_charges',
-      sandbox: @sandbox,
-      tenant: current_tenant,
-      file: upload_params[:file]
+      type: 'local_charges',
+      options: {
+        sandbox: @sandbox,
+        group_id: upload_params[:group_id],
+        user: current_user
+      }
     )
-
-    file = upload_params[:file].tempfile
-
-    options = { tenant: current_tenant,
-                file_or_path: file,
-                options: {
-                  sandbox: @sandbox,
-                  user: current_user,
-                  group_id: upload_params[:group_id],
-                  document: document
-                } }
-    uploader = ExcelDataServices::Loaders::Uploader.new(options)
-
-    insertion_stats_or_errors = uploader.perform
-    response_handler(insertion_stats_or_errors)
   end
 
   def download

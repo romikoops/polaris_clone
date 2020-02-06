@@ -56,7 +56,8 @@ module ExcelDataServices
               validator_klass = ExcelDataServices::Validators::Base.get(flavor, insertion_type.to_s)
               validator = validator_klass.new(tenant: tenant,
                                               sheet_name: sheet_name,
-                                              data: data_part)
+                                              data: data_part,
+                                              options: options)
               validator.perform
               validation_errors << validator.results(filter: :error) unless validator.valid?
             end
