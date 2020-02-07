@@ -62,7 +62,6 @@ FactoryBot.define do
             children_charge_category: create(:legacy_charge_categories,
                 name: 'Basic Freight',
                 code: 'bas',
-                cargo_unit_id: cargo_unit.id,
                 tenant_id: shipment.tenant_id)
           )
 

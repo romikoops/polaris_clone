@@ -37,6 +37,32 @@ FactoryBot.define do
       end
     end
 
+    trait :with_meta do
+      after(:build) do |shipment|
+        shipment.meta = {
+          'pricing_rate_data': {
+            "lcl": {
+              "bas": {
+                "min": '7.0',
+                "base": nil,
+                "rate": '7.0',
+                "range": [],
+                "currency": 'USD',
+                "rate_basis": 'PER_WM',
+                "hw_threshold": nil,
+                "hw_rate_basis": nil
+              },
+              "total": {
+                "value": '7.0',
+                "currency": 'USD'
+              },
+              "valid_until": '2020-12-31T23:59:59.000Z'
+            }
+          }
+        }
+      end
+    end
+
     trait :with_hubs do
       after(:create) do |shipment|
         shipment.origin_hub = shipment.itinerary.first_stop.hub if shipment.itinerary.present?
@@ -62,7 +88,8 @@ FactoryBot.define do
       end
     end
 
-    factory :complete_legacy_shipment, traits: %i(with_contacts with_hubs)
+    factory :complete_legacy_shipment, traits: %i[with_contacts with_hubs]
+    factory :completed_legacy_shipment, traits: %i[with_contacts with_hubs with_meta]
   end
 end
 

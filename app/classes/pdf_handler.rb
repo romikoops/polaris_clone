@@ -6,6 +6,8 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
   include ApplicationHelper
   BreezyError = Class.new(StandardError)
 
+  FEE_DETAIL_LEVEL = 3
+
   attr_reader :name, :full_name, :pdf, :url, :path
 
   def initialize(args = {}) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -44,8 +46,14 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       item_strings: {}
     }
 
-    @quotes.each { |quote| generate_fee_string(quote) }
     @shipments << @shipment if @shipments.empty?
+    @quotes.each do |quote|
+      generate_fee_string(
+        quote: quote,
+        shipment: @shipments.find {|shipment| shipment.id == quote['shipment_id']}
+      )
+    end
+
     @shipments.each do |s|
       calculate_cargo_data(s)
       calculate_pricing_data(s)
@@ -58,7 +66,13 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
   end
 
   def calculate_pricing_data(shipment)
-    @pricing_data[shipment.id] = shipment.meta['pricing_rate_data']
+    @pricing_data[shipment.id] = shipment.meta['pricing_rate_data']&.each_with_object({}) do |(cargo_class, fees), rate_data|
+      fees_values = fees.except('total', 'valid_until').values
+      fees['total'] = fees_values.inject(Money.new(0, shipment.user.currency)) do |total, value|
+        total + Money.new(value['rate'].to_d * 100, value['currency'])
+      end
+      rate_data[cargo_class] = fees
+    end
   end
 
   def prep_notes(shipment)
@@ -79,34 +93,25 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                           .or(notes_association.where(pricings_pricing_id: pricings.ids))
   end
 
-  def generate_fee_string(quote)
-    quote
-      .slice('import', 'export', 'cargo', 'trucking_pre', 'trucking_on')
-      .each do |charge_section_key, charge_section|
-      charge_section_keys = charge_section
-                            .except('total', 'edited_total', 'name')
-                            .keys
-      charge_section_keys.each do |subsection_key|
-        mode_of_transport = quote.fetch('mode_of_transport')
-        charge_section[subsection_key]
-          .except('total', 'edited_total', 'name')
-          .each do |charge_key, fee_value|
-          adjusted_key = extract_key(
-            section_key: charge_section_key,
-            key: charge_key,
-            mot: mode_of_transport
-          )
-          adjusted_name = extract_name(
-            section_key: charge_section_key,
-            name: fee_value.fetch('name'),
-            mot: mode_of_transport
-          )
-          @fee_keys_and_names[charge_key] = determine_render_string(
-            key: adjusted_key,
-            name: adjusted_name
-          )
-        end
-      end
+  def generate_fee_string(quote: , shipment:)
+    charge_breakdown = shipment.charge_breakdowns.find_by(trip_id: quote['trip_id'])
+    charge_breakdown.charges.where(detail_level: FEE_DETAIL_LEVEL).each do |charge|
+      charge_section_key = charge.parent&.charge_category&.code
+      charge_category = charge.children_charge_category
+      adjusted_key = extract_key(
+        section_key: charge_section_key,
+        key: charge_category.code,
+        mot: quote[:mode_of_transport]
+      )
+      adjusted_name = extract_name(
+        section_key: charge_section_key,
+        name: charge_category.name,
+        mot: quote[:mode_of_transport]
+      )
+      @fee_keys_and_names[charge_category.code] = determine_render_string(
+        key: adjusted_key,
+        name: adjusted_name
+      )
     end
 
     @fee_keys_and_names

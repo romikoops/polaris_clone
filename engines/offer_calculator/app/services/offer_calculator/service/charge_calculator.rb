@@ -273,6 +273,7 @@ module OfferCalculator
           cunit_class = cargo_unit.class.to_s
           cargo_unit_model = cunit_class == 'Hash' || is_agg_cargo ? 'CargoItem' : cunit_class.gsub('Legacy::', '')
           cargo_unit_id = cunit_class == 'Hash' ? nil : cargo_unit[:id]
+
           children_charge_category = Legacy::ChargeCategory.find_or_create_by!(
             name: cargo_unit_model.humanize,
             code: cargo_unit_model.underscore.downcase,

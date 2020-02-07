@@ -165,10 +165,6 @@ module OfferCalculator
               pricing_hash[code.to_s]['rate'] += value if value.present?
             end
 
-            pricing_hash['total'] = pricing_hash.keys.each_with_object('value' => 0, 'currency' => nil) do |key, obj|
-              obj['value'] += pricing_hash[key]['rate']
-              obj['currency'] ||= pricing_hash[key]['currency']
-            end
             pricing_hash['valid_until'] = pricing.expiration_date
             hash[pricing.cargo_class] = pricing_hash
           end

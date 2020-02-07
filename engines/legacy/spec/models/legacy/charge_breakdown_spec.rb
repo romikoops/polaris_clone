@@ -75,6 +75,7 @@ module Legacy
 
       describe '.to_nested_hash' do
         it 'gets nested_hash' do
+          cargo_unit_id = charge_breakdown.charges.find_by(detail_level: 3)&.charge_category&.cargo_unit_id
           expected = {
             'total' => { 'value' => 0.999e1, 'currency' => 'EUR' },
             'edited_total' => nil,
@@ -83,7 +84,7 @@ module Legacy
           { 'total' => { 'value' => 0.999e1, 'currency' => 'EUR' },
             'edited_total' => nil,
             'name' => 'Cargo',
-            'legacy/container' =>
+            cargo_unit_id.to_s =>
             { 'total' => { 'value' => 0.999e1, 'currency' => 'EUR' },
               'edited_total' => nil,
               'name' => 'Legacy::container',

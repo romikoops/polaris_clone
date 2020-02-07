@@ -136,7 +136,7 @@
             <% shipment_rate_data.keys.sort.each do |cargo_class| %>
               <div class="rate_section">
                 <p class="rate_header"><%= cargo_class.humanize.upcase %></p>
-                <p class="rate_value"><%= '%.2f' % shipment_rate_data.dig(cargo_class, 'total', 'value').to_d %></p>
+                <p class="rate_value"><%= '%.2f' % shipment_rate_data.dig(cargo_class, 'total').value_cents.to_d %></p>
               </div>
               <% end %>
           </div>
