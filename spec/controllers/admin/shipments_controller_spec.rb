@@ -6,10 +6,12 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
   let!(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let!(:user) { create(:legacy_user, tenant: tenant, email: 'user@itsmycargo.com', role: role) }
+  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
   let!(:role) { create(:role, name: 'shipper') }
-  let(:shipment) { FactoryBot.create(:shipment) }
-  let(:charge_breakdown) { FactoryBot.create(:charge_breakdown, shipment: shipment) }
+  let(:shipment) { FactoryBot.create(:shipment, with_breakdown: true) }
+  let(:charge_breakdown) { shipment.charge_breakdowns.selected }
   let(:breakdown) { FactoryBot.build(:pricings_breakdown) }
+  let(:user_breakdown) { FactoryBot.build(:pricings_breakdown, target: tenants_user) }
 
   describe 'GET #index' do
     before do
@@ -30,13 +32,13 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
       allow(controller).to receive(:current_user).and_return(user)
       allow(controller).to receive(:append_info_to_payload).and_return(true)
 
-      allow(Pricings::Metadatum).to receive(:find_by).and_return(double(breakdowns: [ breakdown ]))
+      allow(Pricings::Metadatum).to receive(:find_by).and_return(double(breakdowns: [ breakdown, user_breakdown ]))
     end
 
     context 'with charge breakdowns' do
       before do
-        allow_any_instance_of(Shipment).to receive(:selected_offer).and_return({})
-        allow_any_instance_of(Shipment).to receive('charge_breakdowns').and_return(double(selected: charge_breakdown))
+        allow_any_instance_of(Legacy::Shipment).to receive(:selected_offer).and_return({})
+        allow_any_instance_of(Legacy::Shipment).to receive('charge_breakdowns').and_return(double(selected: charge_breakdown))
       end
 
       it 'returns the shipment object sent in the parameters' do
@@ -53,8 +55,8 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
 
     context 'without charge breakdowns' do
       before do
-        allow_any_instance_of(Shipment).to receive(:selected_offer).and_return({})
-        allow_any_instance_of(Shipment).to receive('charge_breakdowns').and_return(double(selected: nil))
+        allow_any_instance_of(Legacy::Shipment).to receive(:selected_offer).and_return({})
+        allow_any_instance_of(Legacy::Shipment).to receive('charge_breakdowns').and_return(double(selected: nil))
       end
 
       it 'returns the shipment object sent in the parameters' do

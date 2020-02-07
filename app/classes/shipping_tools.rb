@@ -844,6 +844,7 @@ class ShippingTools
                                  end
                                end
           end
+
           new_charge.children_charge_category = new_charge_category
           new_charge.save!
         end

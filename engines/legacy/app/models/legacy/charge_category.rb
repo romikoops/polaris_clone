@@ -14,6 +14,14 @@ module Legacy
       find_or_create_by(code: 'base_node', name: 'Base Node')
     end
 
+    def self.grand_total
+      find_or_create_by(code: 'grand_total', name: 'Grand Total')
+    end
+  
+    def self.base_node
+      find_or_create_by(code: 'base_node', name: 'Base Node')
+    end
+
     def self.from_code(code:, tenant_id: nil, name: nil, sandbox: nil)
       name ||= code
       code = code.to_s.downcase

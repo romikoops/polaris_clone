@@ -112,17 +112,13 @@ class Admin::MarginsController < Admin::AdminBaseController
     response_handler([all, *list_options])
   end
 
-  def test # rubocop:disable Metrics/AbcSize
-    target = get_target(type: upload_params[:target_type], id: upload_params[:target_id])
-    results = Pricings::Preview.new(target: target, itinerary_id: params[:itinerary_id]).perform
-    itinerary = Itinerary.find(params[:itinerary_id])
-    tenant_vehicle_options = itinerary.pricings.map { |p| { value: p.tenant_vehicle, label: p.tenant_vehicle.full_name } }
-    cargo_class_options = itinerary.pricings.map { |p| { value: p.cargo_class, label: p.cargo_class.humanize } }
-    response_handler(
-      results: results,
-      cargoClasses: cargo_class_options.uniq,
-      tenantVehicles: tenant_vehicle_options.uniq
-    )
+  def test
+    results = Pricings::Preview.new(
+      target: get_target(type: test_params[:targetType], id: test_params[:targetId]),
+      params: test_params,
+      tenant: Tenants::Tenant.find_by(legacy_id: current_tenant.id)
+    ).perform
+    response_handler(results: results)
   end
 
   def fee_data
@@ -158,7 +154,7 @@ class Admin::MarginsController < Admin::AdminBaseController
 
   private
 
-  def get_target(type:, id:)
+  def get_target(type: , id:)
     case type
     when 'group'
       Tenants::Group.find_by(id: id, sandbox: @sandbox)
@@ -312,5 +308,17 @@ class Admin::MarginsController < Admin::AdminBaseController
 
   def upload_params
     params.permit(:file, :target_id, :target_type)
+  end
+
+  def test_params
+    params.permit(
+      :selectedOriginHub,
+      :selectedDestinationHub,
+      :targetType,
+      :targetId,
+      :margin,
+      :selectedCargoClass,
+      selectedOriginTrucking: %i(lat lng),
+      selectedDestinationTrucking: %i(lat lng))
   end
 end

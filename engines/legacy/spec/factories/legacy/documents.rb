@@ -10,6 +10,8 @@ FactoryBot.define do
         document.file.attach(io: StringIO.new, filename: 'test-image.jpg', content_type: 'image/jpg')
       end
     end
+
+    factory :document_with_file, traits: [:with_file]
   end
 end
 

@@ -3,34 +3,46 @@ import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { get } from 'lodash'
+import GmapsWrapper from '../../../../hocs/GmapsWrapper'
 import { clientsActions } from '../../../../actions'
 import styles from './index.scss'
-import AdminClientMarginPreviewResult from './Result'
-import { moment, getTenantApiUrl } from '../../../../constants'
+import AdminMarginPreviewResult from './Result'
+import { cargoClassOptions } from '../../../../constants'
 import NamedAsync from '../../../NamedSelect/NamedAsync'
-import { authHeader } from '../../../../helpers'
+import { getHubOptions, isEmpty } from '../../../../helpers'
 import NamedSelect from '../../../NamedSelect/NamedSelect'
 import CollapsingBar from '../../../CollapsingBar/CollapsingBar'
+import PlaceSearch from '../../../Maps/PlaceSearch'
+import CarriageToggle from '../../../ShipmentDetails/RouteSection/CarriageToggle'
+import SquareButton from '../../../SquareButton/index'
+import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner'
 
 class AdminClientMarginPreview extends Component {
-  static getDerivedStateFromProps (nextProps, prevState) {
-    const nextState = {}
-    if (nextProps.marginPreview) {
-      nextState.filteredTenantVehicles = nextProps.marginPreview.tenantVehicles
-      nextState.filteredCargoClasses = nextProps.marginPreview.cargoClasses
-    }
-
-    return nextState
+  static targetKeys (target) {
+    return target.includes('Origin') ? ['selectedDestinationTrucking', 'selectedDestinationHub'] : ['selectedOriginTrucking', 'selectedOriginHub']
   }
 
   constructor (props) {
     super(props)
     this.state = {
+      stage: 0,
       filteredTenantVehicles: [],
-      filteredCargoClasses: [],
+      filteredCargoClasses: cargoClassOptions,
+      selectedOriginHub: {},
+      selectedDestinationHub: {},
+      selectedOriginTrucking: {},
+      selectedDestinationTrucking: {},
+      originTrucking: false,
+      destinationTrucking: false,
       collapsed: get(props, ['collapsed'], true)
     }
     this.toggleCollapsed = this.toggleCollapsed.bind(this)
+    this.testMargins = this.testMargins.bind(this)
+  }
+
+  componentWillUnmount () {
+    const { clientsDispatch } = this.props
+    clientsDispatch.clearMarginPreview()
   }
 
   setItinerary (n, e) {
@@ -52,48 +64,74 @@ class AdminClientMarginPreview extends Component {
     this.setState(prevState => ({ collapsed: !prevState.collapsed }))
   }
 
+  selectHub (name, e) {
+    const target = name === 'pre' ? 'selectedOriginHub' : 'selectedDestinationHub'
+    this.setState({ [target]: e }, () => {
+      if (AdminClientMarginPreview.targetKeys(target).some(key => !!isEmpty(this.state[key]))) {
+        this.setState({ stage: 3 })
+      }
+    })
+  }
+
+  selectCargoClass (e) {
+    this.setState(prevState => ({ selectedCargoClass: e, stage: 1 }))
+  }
+
+  handleTruckingToggle (target) {
+    this.setState(prevState => ({ [`${target}Trucking`]: !prevState[`${target}Trucking`] }))
+  }
+
+  selectTruckingLocation (place, target) {
+    const latLngObj = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }
+    this.setState(({ [target]: latLngObj }), () => {
+      if (AdminClientMarginPreview.targetKeys(target).some(key => !!isEmpty(this.state[key]))) {
+        this.setState({ stage: 3 })
+      }
+    })
+  }
+
+  testMargins () {
+    const { clientsDispatch, targetType, targetId } = this.props
+    const {
+      selectedOriginTrucking,
+      selectedOriginHub,
+      selectedDestinationTrucking,
+      selectedDestinationHub,
+      selectedCargoClass
+    } = this.state
+    clientsDispatch.testMargins({
+      selectedOriginTrucking,
+      selectedOriginHub: get(selectedOriginHub, ['value', 'id']),
+      selectedDestinationTrucking,
+      selectedCargoClass: get(selectedCargoClass, 'value'),
+      selectedDestinationHub: get(selectedDestinationHub, ['value', 'id']),
+      targetType,
+      targetId
+    })
+  }
+
   render () {
     const {
-      t, tenant, marginPreview
+      t, tenant, marginPreview, theme, loading
     } = this.props
     const {
-      selectedItinerary,
-      selectedTenantVehicle,
+      selectedOriginHub,
+      selectedDestinationHub,
       selectedCargoClass,
-      filteredTenantVehicles,
       filteredCargoClasses,
-      collapsed
+      collapsed,
+      originTrucking,
+      destinationTrucking,
+      stage
     } = this.state
-    const getItineraryOptions = (input) => {
-      const requestOptions = {
-        method: 'GET',
-        headers: { ...authHeader() }
-      }
-
-      return window
-        .fetch(`${getTenantApiUrl()}/admin/margins/form/itineraries?query=${input}`, requestOptions)
-        .then(response => response.json())
-        .then(json => ({ options: json.data }))
-    }
-    const previewsToRender = marginPreview.results.filter((mp) => {
-      if (selectedTenantVehicle && !selectedCargoClass) {
-        return mp[0].tenant_vehicle_id === selectedTenantVehicle.value.id
-      }
-      if (!selectedTenantVehicle && selectedCargoClass) {
-        return mp[0].cargo_class === selectedCargoClass.value
-      }
-      if (!selectedTenantVehicle && selectedCargoClass) {
-        return mp[0].cargo_class === selectedCargoClass.value && mp[0].tenant_vehicle_id === selectedTenantVehicle.value.id
-      }
-
-      return !!mp
-    })
+    const previewsToRender = get(marginPreview, 'results', [])
 
     return (
       <CollapsingBar
         wrapperClassName="flex-100 layout-row"
         contentClassName="flex-100 layout-row layout-align-center-center layout-wrap greyBg"
         text={t('admin:marginPreview')}
+        collapsed={false}
         collapsed={collapsed}
         handleCollapser={this.toggleCollapsed}
         minHeight="450px"
@@ -101,46 +139,96 @@ class AdminClientMarginPreview extends Component {
         showArrow
       >
         <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.filter_row}`}>
-          <div className="flex-25 layout-row layout-align-center-center layout-wrap">
-            <h4 className="flex-none">{t('admin:filters')}</h4>
-          </div>
-          <div className="flex layout-row layout-align-center-center layout-wrap">
-            <div className="flex-33 layout-row layout-align-center-center">
-              <NamedAsync
-                classes="flex-90"
-                value={selectedItinerary}
-                cacheOptions
-                placeholder={t('admin:searchItineraries')}
-                name={selectedItinerary}
-                autoload={false}
-                loadOptions={getItineraryOptions}
-                onChange={(n, e) => this.setItinerary(n, e)}
-              />
-            </div>
-            <div className="flex-33 layout-row layout-align-center-center">
-              <NamedSelect
-                className="flex-90"
-                value={selectedTenantVehicle}
-                placeholder={t('admin:selectServiceLevel')}
-                name="selectedTenantVehicle"
-                options={filteredTenantVehicles}
-                onChange={(n, e) => this.setFilter(n, e, 'selectedTenantVehicle')}
-              />
-            </div>
-            <div className="flex-33 layout-row layout-align-center-center">
+          <div className="flex-100 layout-row layout-align-center-center layout-wrap">
+            <div className="flex-20 layout-row layout-align-center-center">
               <NamedSelect
                 className="flex-90"
                 name="selectedCargoClass"
                 placeholder={t('admin:selectCargoClass')}
                 value={selectedCargoClass}
                 options={filteredCargoClasses}
-                onChange={(n, e) => this.setFilter(n, e, 'selectedCargoClass')}
+                onChange={e => this.selectCargoClass(e)}
               />
+
+            </div>
+            <div className="flex layout-row layout-align-center-center layout-wrap relative">
+              <div className={`flex-gt-sm-50 flex-100 layout-row layout-align-center-center ${styles.route_inputs}`}>
+                <div className={`flex layout-row layout-align-center-center ${styles.route_toggle}`}>
+                  <CarriageToggle
+                    carriage="pre"
+                    theme={theme}
+                    checked={!originTrucking}
+                    onChange={e => this.handleTruckingToggle('origin')}
+                  />
+                </div>
+                { originTrucking ? (
+                  <NamedAsync
+                    classes="flex"
+                    value={selectedOriginHub}
+                    placeholder={t('admin:hub')}
+                    cacheOptions
+                    name="pre"
+                    autoload={false}
+                    loadOptions={getHubOptions}
+                    onChange={(n, e) => this.selectHub(n, e)}
+                  />
+                ) : (
+                  <GmapsWrapper
+                    component={PlaceSearch}
+                    hideMap
+                    wrapperFlex="flex"
+                    theme={theme}
+                    target="pre"
+                    handlePlaceChange={e => this.selectTruckingLocation(e, 'selectedOriginTrucking')}
+                  />
+                ) }
+              </div>
+              <div className={`flex-gt-sm-50 flex-100 layout-row layout-align-center-center ${styles.route_inputs}`}>
+                <div className={`flex layout-row layout-align-center-center ${styles.route_toggle}`}>
+                  <CarriageToggle
+                    carriage="on"
+                    theme={theme}
+                    checked={!destinationTrucking}
+                    onChange={e => this.handleTruckingToggle('destination')}
+                  />
+
+                </div>
+                { destinationTrucking ? (
+                  <NamedAsync
+                    classes="flex"
+                    value={selectedDestinationHub}
+                    placeholder={t('admin:hub')}
+                    cacheOptions
+                    name="on"
+                    autoload={false}
+                    loadOptions={getHubOptions}
+                    onChange={(n, e) => this.selectHub(n, e)}
+                  />
+                ) : (
+                  <GmapsWrapper
+                    wrapperFlex="flex"
+                    component={PlaceSearch}
+                    hideMap
+                    theme={theme}
+                    handlePlaceChange={e => this.selectTruckingLocation(e, 'selectedDestinationTrucking')}
+                  />
+                ) }
+              </div>
+            </div>
+            <div className="flex-15 layout-row layout-align-center-center relative">
+              <SquareButton
+                handleNext={() => this.testMargins()}
+                text={t('rates:fetchRates')}
+                theme={theme}
+                size="small"
+                inverse
+                disabled={stage < 2}
+              /> 
             </div>
           </div>
         </div>
         <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-          {previewsToRender.map(mp => <AdminClientMarginPreviewResult results={mp} tenant={tenant} />)}
+          { loading ? <LoadingSpinner size="large" /> : previewsToRender.map(mp => <AdminMarginPreviewResult result={mp} tenant={tenant} />)}
         </div>
       </CollapsingBar>
     )
@@ -152,19 +240,21 @@ AdminClientMarginPreview.defaultProps = {
   marginPreview: {
     results: []
   },
-  collapsed: true
+  collapsed: true,
+  laoding: false
 }
 
 function mapStateToProps (state) {
   const { clients, app } = state
-  const { marginPreview } = clients
+  const { marginPreview, loading } = clients
   const { tenant } = app
   const { theme } = tenant
 
   return {
     marginPreview,
     tenant,
-    theme
+    theme,
+    loading
   }
 }
 function mapDispatchToProps (dispatch) {

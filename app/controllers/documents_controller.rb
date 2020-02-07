@@ -10,6 +10,13 @@ class DocumentsController < ApplicationController
     )
   end
 
+  def download_url
+    response_handler(url: rails_blob_url(
+      Document.find_by(id: params[:document_id], sandbox: @sandbox).file,
+      disposition: 'attachment'
+    ))
+  end
+
   def delete
     @document = Document.find_by(id: params[:document_id], user_id: current_user.id, sandbox: @sandbox)
     if @document.destroy

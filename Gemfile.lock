@@ -196,6 +196,7 @@ PATH
   specs:
     pricings (9999.1.0.0)
       core
+      geocoder
       legacy
       tenants
       trucking

@@ -11,9 +11,9 @@ FactoryBot.define do
     association :country, factory: :legacy_country
 
     trait :shanghai do
-      name { 'Gothenburg' }
-      latitude { '57.694253' }
-      longitude { '11.854048' }
+      name { 'Shanghai' }
+      latitude { '31.232014' }
+      longitude { '121.4867159' }
       zip_code { '20001' }
       geocoded_address { '88 Henan Middle Road, Shanghai' }
       city { 'Shanghai' }

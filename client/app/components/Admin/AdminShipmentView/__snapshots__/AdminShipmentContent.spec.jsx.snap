@@ -232,290 +232,339 @@ exports[`feeHash.trucking_pre is falsy 1`] = `
     }
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+      className="flex-100 layout-row layout-align-start-start padding_top card_margin_right"
     >
       <div
-        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
+        className=" margin_bottom layout-column flex-55"
       >
         <div
-          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+          className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
         >
           <div
-            className="layout-column flex-100"
+            className="flex-66 flex-sm-100 flex-xs-100 layout-row services_box"
           >
-            <h3>
-              Freight, Duties & Carriage:
-            </h3>
             <div
-              className="layout-wrap layout-row flex"
+              className="layout-column flex-100"
             >
+              <h3>
+                Freight, Duties & Carriage:
+              </h3>
               <div
-                className="flex-45 margin_bottom"
+                className="layout-wrap layout-row flex"
               >
                 <div
-                  className="layout-row flex-100"
+                  className="flex-45 margin_bottom"
                 >
                   <div
-                    className="flex-100 layout-wrap layout-row"
+                    className="layout-row flex-100"
                   >
                     <div
-                      className="flex-100 layout-row"
+                      className="flex-100 layout-wrap layout-row"
                     >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Pick-up
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Delivery
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        ON_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="layout-row flex-100"
-                    >
-                      <i
-                        className="fa fa-file-text clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Origin Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Destination Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row layout-wrap flex-100"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-ship clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        {{mot}} Freight
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        FEE_HASH_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                    <div
-                      className="layout-row flex-100 layout-align-end-stretch greyborder"
-                    >
-                      <span
-                        className="layout-row flex-100 layout-padding
-                            layout-align-center-center greybg"
+                      <div
+                        className="flex-100 layout-row"
                       >
-                        NEW_PRICES_CURRENCY
-                      </span>
-                      <input
-                        className="layout-padding layout-row flex-70 flex-initial"
-                        onChange={[Function]}
-                        type="number"
-                      />
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Pick-up
+                        </p>
+                      </div>
                     </div>
                   </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Delivery
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          ON_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="layout-row flex-100"
+                      >
+                        <i
+                          className="fa fa-file-text clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Origin Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Destination Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row layout-wrap flex-100"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-ship clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          {{mot}} Freight
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          FEE_HASH_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                      <div
+                        className="layout-row flex-100 layout-align-end-stretch greyborder"
+                      >
+                        <span
+                          className="layout-row flex-100 layout-padding
+                              layout-align-center-center greybg"
+                        >
+                          NEW_PRICES_CURRENCY
+                        </span>
+                        <input
+                          className="layout-padding layout-row flex-70 flex-initial"
+                          onChange={[Function]}
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          >
+            <div
+              className="layout-column flex-80"
+            >
+              <h3>
+                Additional Services
+              </h3>
+              <div
+                className=""
+              >
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-id-card clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Customs
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-umbrella clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Insurance
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="layout-row layout-padding flex-20 layout-align-center-start"
+            >
+              <div
+                className="layout-column layout-align-center-center"
+              >
+                <div
+                  className="layout-row layout-align-center-center save"
+                >
+                  <i
+                    className="fa fa-check"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="layout-row layout-align-center-center cancel"
+                >
+                  <i
+                    className="fa fa-trash"
+                    onClick={[Function]}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="flex-40 layout-row"
+      >
         <div
-          className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          className="flex-100 layout-row layout-wrap wrapper"
         >
+          <QuoteChargeBreakdown
+            pricingBreakdowns={Array []}
+            quote={
+              Object {
+                "cargo": Object {},
+                "total": Object {
+                  "value": 77,
+                },
+              }
+            }
+            scope={
+              Object {
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              }
+            }
+            showBreakdowns={true}
+            shrinkHeaders={true}
+            t={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            trucking={
+              Object {
+                "on_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+                "pre_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+              }
+            }
+          />
           <div
-            className="layout-column flex-80"
-          >
-            <h3>
-              Additional Services
-            </h3>
-            <div
-              className=""
-            >
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-id-card clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Customs
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-umbrella clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Insurance
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row layout-padding flex-20 layout-align-center-start"
+            className="flex-100 layout-wrap layout-align-start-stretch"
           >
             <div
-              className="layout-column layout-align-center-center"
+              className="flex-100 layout-row layout-align-start-stretch total_row"
             >
               <div
-                className="layout-row layout-align-center-center save"
+                className="flex-30 layout-row layout-align-start-center"
               >
-                <i
-                  className="fa fa-check"
-                  onClick={[Function]}
-                />
-              </div>
-              <div
-                className="layout-row layout-align-center-center cancel"
-              >
-                <i
-                  className="fa fa-trash"
-                  onClick={[Function]}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-        >
-          <div
-            className="layout-column flex-100"
-          >
-            <div
-              className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-            >
-              <div
-                className="layout-align-start-center layout-row flex"
-              >
-                <span
-                  className="layout-align-center-center layout-row flex-none quantity_square"
-                  style={Object {}}
-                >
-                  x 
-                  1
+                <span>
+                  Total
                 </span>
+              </div>
+              <div
+                className="flex-70 layout-row layout-align-end-center"
+              >
                 <p
-                  className="layout-align-sm-end-center layout-align-xs-end-center"
+                  className="card_padding_right"
                 >
-                  <Component />
+                  77 undefined
                 </p>
               </div>
             </div>
-            <h2
-              className="layout-align-start-center layout-row flex"
-            >
-               
-            </h2>
           </div>
         </div>
       </div>
@@ -1101,299 +1150,348 @@ exports[`loadType === cargo_item && cargoCount === 1 1`] = `
     }
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+      className="flex-100 layout-row layout-align-start-start padding_top card_margin_right"
     >
       <div
-        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
+        className=" margin_bottom layout-column flex-55"
       >
         <div
-          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+          className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
         >
           <div
-            className="layout-column flex-100"
+            className="flex-66 flex-sm-100 flex-xs-100 layout-row services_box"
           >
-            <h3>
-              Freight, Duties & Carriage:
-            </h3>
             <div
-              className="layout-wrap layout-row flex"
+              className="layout-column flex-100"
             >
+              <h3>
+                Freight, Duties & Carriage:
+              </h3>
               <div
-                className="flex-45 margin_bottom"
+                className="layout-wrap layout-row flex"
               >
                 <div
-                  className="layout-row flex-100"
+                  className="flex-45 margin_bottom"
                 >
                   <div
-                    className="flex-100 layout-wrap layout-row"
+                    className="layout-row flex-100"
                   >
                     <div
-                      className="flex-100 layout-row"
+                      className="flex-100 layout-wrap layout-row"
                     >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Pick-up
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        PRE_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Delivery
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        ON_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="layout-row flex-100"
-                    >
-                      <i
-                        className="fa fa-file-text clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Origin Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Destination Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row layout-wrap flex-100"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-ship clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        {{mot}} Freight
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        FEE_HASH_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                    <div
-                      className="layout-row flex-100 layout-align-end-stretch greyborder"
-                    >
-                      <span
-                        className="layout-row flex-100 layout-padding
-                            layout-align-center-center greybg"
+                      <div
+                        className="flex-100 layout-row"
                       >
-                        NEW_PRICES_CURRENCY
-                      </span>
-                      <input
-                        className="layout-padding layout-row flex-70 flex-initial"
-                        onChange={[Function]}
-                        type="number"
-                      />
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Pick-up
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          PRE_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
                     </div>
                   </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Delivery
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          ON_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="layout-row flex-100"
+                      >
+                        <i
+                          className="fa fa-file-text clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Origin Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Destination Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row layout-wrap flex-100"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-ship clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          {{mot}} Freight
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          FEE_HASH_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                      <div
+                        className="layout-row flex-100 layout-align-end-stretch greyborder"
+                      >
+                        <span
+                          className="layout-row flex-100 layout-padding
+                              layout-align-center-center greybg"
+                        >
+                          NEW_PRICES_CURRENCY
+                        </span>
+                        <input
+                          className="layout-padding layout-row flex-70 flex-initial"
+                          onChange={[Function]}
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          >
+            <div
+              className="layout-column flex-80"
+            >
+              <h3>
+                Additional Services
+              </h3>
+              <div
+                className=""
+              >
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-id-card clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Customs
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-umbrella clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Insurance
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="layout-row layout-padding flex-20 layout-align-center-start"
+            >
+              <div
+                className="layout-column layout-align-center-center"
+              >
+                <div
+                  className="layout-row layout-align-center-center save"
+                >
+                  <i
+                    className="fa fa-check"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="layout-row layout-align-center-center cancel"
+                >
+                  <i
+                    className="fa fa-trash"
+                    onClick={[Function]}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="flex-40 layout-row"
+      >
         <div
-          className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          className="flex-100 layout-row layout-wrap wrapper"
         >
+          <QuoteChargeBreakdown
+            pricingBreakdowns={Array []}
+            quote={
+              Object {
+                "cargo": Object {},
+                "total": Object {
+                  "value": 77,
+                },
+              }
+            }
+            scope={
+              Object {
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              }
+            }
+            showBreakdowns={true}
+            shrinkHeaders={true}
+            t={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            trucking={
+              Object {
+                "on_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+                "pre_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+              }
+            }
+          />
           <div
-            className="layout-column flex-80"
-          >
-            <h3>
-              Additional Services
-            </h3>
-            <div
-              className=""
-            >
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-id-card clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Customs
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-umbrella clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Insurance
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row layout-padding flex-20 layout-align-center-start"
+            className="flex-100 layout-wrap layout-align-start-stretch"
           >
             <div
-              className="layout-column layout-align-center-center"
+              className="flex-100 layout-row layout-align-start-stretch total_row"
             >
               <div
-                className="layout-row layout-align-center-center save"
+                className="flex-30 layout-row layout-align-start-center"
               >
-                <i
-                  className="fa fa-check"
-                  onClick={[Function]}
-                />
-              </div>
-              <div
-                className="layout-row layout-align-center-center cancel"
-              >
-                <i
-                  className="fa fa-trash"
-                  onClick={[Function]}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-        >
-          <div
-            className="layout-column flex-100"
-          >
-            <div
-              className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-            >
-              <div
-                className="layout-align-start-center layout-row flex"
-              >
-                <span
-                  className="layout-align-center-center layout-row flex-none quantity_square"
-                  style={Object {}}
-                >
-                  x 
-                  1
+                <span>
+                  Total
                 </span>
+              </div>
+              <div
+                className="flex-70 layout-row layout-align-end-center"
+              >
                 <p
-                  className="layout-align-sm-end-center layout-align-xs-end-center"
+                  className="card_padding_right"
                 >
-                  <Component />
+                  77 undefined
                 </p>
               </div>
             </div>
-            <h2
-              className="layout-align-start-center layout-row flex"
-            >
-               
-            </h2>
           </div>
         </div>
       </div>
@@ -1979,299 +2077,348 @@ exports[`loadType === cargo_item && cargoCount > 1 1`] = `
     }
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+      className="flex-100 layout-row layout-align-start-start padding_top card_margin_right"
     >
       <div
-        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
+        className=" margin_bottom layout-column flex-55"
       >
         <div
-          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+          className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
         >
           <div
-            className="layout-column flex-100"
+            className="flex-66 flex-sm-100 flex-xs-100 layout-row services_box"
           >
-            <h3>
-              Freight, Duties & Carriage:
-            </h3>
             <div
-              className="layout-wrap layout-row flex"
+              className="layout-column flex-100"
             >
+              <h3>
+                Freight, Duties & Carriage:
+              </h3>
               <div
-                className="flex-45 margin_bottom"
+                className="layout-wrap layout-row flex"
               >
                 <div
-                  className="layout-row flex-100"
+                  className="flex-45 margin_bottom"
                 >
                   <div
-                    className="flex-100 layout-wrap layout-row"
+                    className="layout-row flex-100"
                   >
                     <div
-                      className="flex-100 layout-row"
+                      className="flex-100 layout-wrap layout-row"
                     >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Pick-up
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        PRE_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Delivery
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        ON_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="layout-row flex-100"
-                    >
-                      <i
-                        className="fa fa-file-text clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Origin Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Destination Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row layout-wrap flex-100"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-ship clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        {{mot}} Freight
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        FEE_HASH_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                    <div
-                      className="layout-row flex-100 layout-align-end-stretch greyborder"
-                    >
-                      <span
-                        className="layout-row flex-100 layout-padding
-                            layout-align-center-center greybg"
+                      <div
+                        className="flex-100 layout-row"
                       >
-                        NEW_PRICES_CURRENCY
-                      </span>
-                      <input
-                        className="layout-padding layout-row flex-70 flex-initial"
-                        onChange={[Function]}
-                        type="number"
-                      />
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Pick-up
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          PRE_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
                     </div>
                   </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Delivery
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          ON_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="layout-row flex-100"
+                      >
+                        <i
+                          className="fa fa-file-text clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Origin Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Destination Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row layout-wrap flex-100"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-ship clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          {{mot}} Freight
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          FEE_HASH_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                      <div
+                        className="layout-row flex-100 layout-align-end-stretch greyborder"
+                      >
+                        <span
+                          className="layout-row flex-100 layout-padding
+                              layout-align-center-center greybg"
+                        >
+                          NEW_PRICES_CURRENCY
+                        </span>
+                        <input
+                          className="layout-padding layout-row flex-70 flex-initial"
+                          onChange={[Function]}
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          >
+            <div
+              className="layout-column flex-80"
+            >
+              <h3>
+                Additional Services
+              </h3>
+              <div
+                className=""
+              >
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-id-card clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Customs
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-umbrella clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Insurance
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="layout-row layout-padding flex-20 layout-align-center-start"
+            >
+              <div
+                className="layout-column layout-align-center-center"
+              >
+                <div
+                  className="layout-row layout-align-center-center save"
+                >
+                  <i
+                    className="fa fa-check"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="layout-row layout-align-center-center cancel"
+                >
+                  <i
+                    className="fa fa-trash"
+                    onClick={[Function]}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="flex-40 layout-row"
+      >
         <div
-          className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          className="flex-100 layout-row layout-wrap wrapper"
         >
+          <QuoteChargeBreakdown
+            pricingBreakdowns={Array []}
+            quote={
+              Object {
+                "cargo": Object {},
+                "total": Object {
+                  "value": 77,
+                },
+              }
+            }
+            scope={
+              Object {
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              }
+            }
+            showBreakdowns={true}
+            shrinkHeaders={true}
+            t={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            trucking={
+              Object {
+                "on_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+                "pre_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+              }
+            }
+          />
           <div
-            className="layout-column flex-80"
-          >
-            <h3>
-              Additional Services
-            </h3>
-            <div
-              className=""
-            >
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-id-card clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Customs
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-umbrella clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Insurance
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row layout-padding flex-20 layout-align-center-start"
+            className="flex-100 layout-wrap layout-align-start-stretch"
           >
             <div
-              className="layout-column layout-align-center-center"
+              className="flex-100 layout-row layout-align-start-stretch total_row"
             >
               <div
-                className="layout-row layout-align-center-center save"
+                className="flex-30 layout-row layout-align-start-center"
               >
-                <i
-                  className="fa fa-check"
-                  onClick={[Function]}
-                />
-              </div>
-              <div
-                className="layout-row layout-align-center-center cancel"
-              >
-                <i
-                  className="fa fa-trash"
-                  onClick={[Function]}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-        >
-          <div
-            className="layout-column flex-100"
-          >
-            <div
-              className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-            >
-              <div
-                className="layout-align-start-center layout-row flex"
-              >
-                <span
-                  className="layout-align-center-center layout-row flex-none quantity_square"
-                  style={Object {}}
-                >
-                  x 
-                  1
+                <span>
+                  Total
                 </span>
+              </div>
+              <div
+                className="flex-70 layout-row layout-align-end-center"
+              >
                 <p
-                  className="layout-align-sm-end-center layout-align-xs-end-center"
+                  className="card_padding_right"
                 >
-                  <Component />
+                  77 undefined
                 </p>
               </div>
             </div>
-            <h2
-              className="layout-align-start-center layout-row flex"
-            >
-               
-            </h2>
           </div>
         </div>
       </div>
@@ -2857,299 +3004,348 @@ exports[`loadType === container && cargoCount === 1 1`] = `
     }
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+      className="flex-100 layout-row layout-align-start-start padding_top card_margin_right"
     >
       <div
-        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
+        className=" margin_bottom layout-column flex-55"
       >
         <div
-          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+          className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
         >
           <div
-            className="layout-column flex-100"
+            className="flex-66 flex-sm-100 flex-xs-100 layout-row services_box"
           >
-            <h3>
-              Freight, Duties & Carriage:
-            </h3>
             <div
-              className="layout-wrap layout-row flex"
+              className="layout-column flex-100"
             >
+              <h3>
+                Freight, Duties & Carriage:
+              </h3>
               <div
-                className="flex-45 margin_bottom"
+                className="layout-wrap layout-row flex"
               >
                 <div
-                  className="layout-row flex-100"
+                  className="flex-45 margin_bottom"
                 >
                   <div
-                    className="flex-100 layout-wrap layout-row"
+                    className="layout-row flex-100"
                   >
                     <div
-                      className="flex-100 layout-row"
+                      className="flex-100 layout-wrap layout-row"
                     >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Pick-up
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        PRE_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Delivery
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        ON_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="layout-row flex-100"
-                    >
-                      <i
-                        className="fa fa-file-text clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Origin Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Destination Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row layout-wrap flex-100"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-ship clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        {{mot}} Freight
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        FEE_HASH_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                    <div
-                      className="layout-row flex-100 layout-align-end-stretch greyborder"
-                    >
-                      <span
-                        className="layout-row flex-100 layout-padding
-                            layout-align-center-center greybg"
+                      <div
+                        className="flex-100 layout-row"
                       >
-                        NEW_PRICES_CURRENCY
-                      </span>
-                      <input
-                        className="layout-padding layout-row flex-70 flex-initial"
-                        onChange={[Function]}
-                        type="number"
-                      />
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Pick-up
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          PRE_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
                     </div>
                   </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Delivery
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          ON_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="layout-row flex-100"
+                      >
+                        <i
+                          className="fa fa-file-text clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Origin Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Destination Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row layout-wrap flex-100"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-ship clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          {{mot}} Freight
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          FEE_HASH_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                      <div
+                        className="layout-row flex-100 layout-align-end-stretch greyborder"
+                      >
+                        <span
+                          className="layout-row flex-100 layout-padding
+                              layout-align-center-center greybg"
+                        >
+                          NEW_PRICES_CURRENCY
+                        </span>
+                        <input
+                          className="layout-padding layout-row flex-70 flex-initial"
+                          onChange={[Function]}
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          >
+            <div
+              className="layout-column flex-80"
+            >
+              <h3>
+                Additional Services
+              </h3>
+              <div
+                className=""
+              >
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-id-card clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Customs
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-umbrella clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Insurance
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="layout-row layout-padding flex-20 layout-align-center-start"
+            >
+              <div
+                className="layout-column layout-align-center-center"
+              >
+                <div
+                  className="layout-row layout-align-center-center save"
+                >
+                  <i
+                    className="fa fa-check"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="layout-row layout-align-center-center cancel"
+                >
+                  <i
+                    className="fa fa-trash"
+                    onClick={[Function]}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="flex-40 layout-row"
+      >
         <div
-          className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          className="flex-100 layout-row layout-wrap wrapper"
         >
+          <QuoteChargeBreakdown
+            pricingBreakdowns={Array []}
+            quote={
+              Object {
+                "cargo": Object {},
+                "total": Object {
+                  "value": 77,
+                },
+              }
+            }
+            scope={
+              Object {
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              }
+            }
+            showBreakdowns={true}
+            shrinkHeaders={true}
+            t={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            trucking={
+              Object {
+                "on_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+                "pre_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+              }
+            }
+          />
           <div
-            className="layout-column flex-80"
-          >
-            <h3>
-              Additional Services
-            </h3>
-            <div
-              className=""
-            >
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-id-card clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Customs
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-umbrella clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Insurance
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row layout-padding flex-20 layout-align-center-start"
+            className="flex-100 layout-wrap layout-align-start-stretch"
           >
             <div
-              className="layout-column layout-align-center-center"
+              className="flex-100 layout-row layout-align-start-stretch total_row"
             >
               <div
-                className="layout-row layout-align-center-center save"
+                className="flex-30 layout-row layout-align-start-center"
               >
-                <i
-                  className="fa fa-check"
-                  onClick={[Function]}
-                />
-              </div>
-              <div
-                className="layout-row layout-align-center-center cancel"
-              >
-                <i
-                  className="fa fa-trash"
-                  onClick={[Function]}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-        >
-          <div
-            className="layout-column flex-100"
-          >
-            <div
-              className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-            >
-              <div
-                className="layout-align-start-center layout-row flex"
-              >
-                <span
-                  className="layout-align-center-center layout-row flex-none quantity_square"
-                  style={Object {}}
-                >
-                  x 
-                  1
+                <span>
+                  Total
                 </span>
+              </div>
+              <div
+                className="flex-70 layout-row layout-align-end-center"
+              >
                 <p
-                  className="layout-align-sm-end-center layout-align-xs-end-center"
+                  className="card_padding_right"
                 >
-                  <Component />
+                  77 undefined
                 </p>
               </div>
             </div>
-            <h2
-              className="layout-align-start-center layout-row flex"
-            >
-               
-            </h2>
           </div>
         </div>
       </div>
@@ -3735,299 +3931,348 @@ exports[`loadType === container && cargoCount > 1 1`] = `
     }
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+      className="flex-100 layout-row layout-align-start-start padding_top card_margin_right"
     >
       <div
-        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
+        className=" margin_bottom layout-column flex-55"
       >
         <div
-          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+          className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
         >
           <div
-            className="layout-column flex-100"
+            className="flex-66 flex-sm-100 flex-xs-100 layout-row services_box"
           >
-            <h3>
-              Freight, Duties & Carriage:
-            </h3>
             <div
-              className="layout-wrap layout-row flex"
+              className="layout-column flex-100"
             >
+              <h3>
+                Freight, Duties & Carriage:
+              </h3>
               <div
-                className="flex-45 margin_bottom"
+                className="layout-wrap layout-row flex"
               >
                 <div
-                  className="layout-row flex-100"
+                  className="flex-45 margin_bottom"
                 >
                   <div
-                    className="flex-100 layout-wrap layout-row"
+                    className="layout-row flex-100"
                   >
                     <div
-                      className="flex-100 layout-row"
+                      className="flex-100 layout-wrap layout-row"
                     >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Pick-up
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        PRE_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Delivery
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        ON_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="layout-row flex-100"
-                    >
-                      <i
-                        className="fa fa-file-text clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Origin Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Destination Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row layout-wrap flex-100"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-ship clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        {{mot}} Freight
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        FEE_HASH_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                    <div
-                      className="layout-row flex-100 layout-align-end-stretch greyborder"
-                    >
-                      <span
-                        className="layout-row flex-100 layout-padding
-                            layout-align-center-center greybg"
+                      <div
+                        className="flex-100 layout-row"
                       >
-                        NEW_PRICES_CURRENCY
-                      </span>
-                      <input
-                        className="layout-padding layout-row flex-70 flex-initial"
-                        onChange={[Function]}
-                        type="number"
-                      />
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Pick-up
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          PRE_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
                     </div>
                   </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Delivery
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          ON_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="layout-row flex-100"
+                      >
+                        <i
+                          className="fa fa-file-text clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Origin Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Destination Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row layout-wrap flex-100"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-ship clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          {{mot}} Freight
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          FEE_HASH_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                      <div
+                        className="layout-row flex-100 layout-align-end-stretch greyborder"
+                      >
+                        <span
+                          className="layout-row flex-100 layout-padding
+                              layout-align-center-center greybg"
+                        >
+                          NEW_PRICES_CURRENCY
+                        </span>
+                        <input
+                          className="layout-padding layout-row flex-70 flex-initial"
+                          onChange={[Function]}
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          >
+            <div
+              className="layout-column flex-80"
+            >
+              <h3>
+                Additional Services
+              </h3>
+              <div
+                className=""
+              >
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-id-card clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Customs
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-umbrella clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Insurance
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="layout-row layout-padding flex-20 layout-align-center-start"
+            >
+              <div
+                className="layout-column layout-align-center-center"
+              >
+                <div
+                  className="layout-row layout-align-center-center save"
+                >
+                  <i
+                    className="fa fa-check"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="layout-row layout-align-center-center cancel"
+                >
+                  <i
+                    className="fa fa-trash"
+                    onClick={[Function]}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="flex-40 layout-row"
+      >
         <div
-          className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          className="flex-100 layout-row layout-wrap wrapper"
         >
+          <QuoteChargeBreakdown
+            pricingBreakdowns={Array []}
+            quote={
+              Object {
+                "cargo": Object {},
+                "total": Object {
+                  "value": 77,
+                },
+              }
+            }
+            scope={
+              Object {
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              }
+            }
+            showBreakdowns={true}
+            shrinkHeaders={true}
+            t={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            trucking={
+              Object {
+                "on_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+                "pre_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+              }
+            }
+          />
           <div
-            className="layout-column flex-80"
-          >
-            <h3>
-              Additional Services
-            </h3>
-            <div
-              className=""
-            >
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-id-card clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Customs
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-umbrella clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Insurance
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row layout-padding flex-20 layout-align-center-start"
+            className="flex-100 layout-wrap layout-align-start-stretch"
           >
             <div
-              className="layout-column layout-align-center-center"
+              className="flex-100 layout-row layout-align-start-stretch total_row"
             >
               <div
-                className="layout-row layout-align-center-center save"
+                className="flex-30 layout-row layout-align-start-center"
               >
-                <i
-                  className="fa fa-check"
-                  onClick={[Function]}
-                />
-              </div>
-              <div
-                className="layout-row layout-align-center-center cancel"
-              >
-                <i
-                  className="fa fa-trash"
-                  onClick={[Function]}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-        >
-          <div
-            className="layout-column flex-100"
-          >
-            <div
-              className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-            >
-              <div
-                className="layout-align-start-center layout-row flex"
-              >
-                <span
-                  className="layout-align-center-center layout-row flex-none quantity_square"
-                  style={Object {}}
-                >
-                  x 
-                  1
+                <span>
+                  Total
                 </span>
+              </div>
+              <div
+                className="flex-70 layout-row layout-align-end-center"
+              >
                 <p
-                  className="layout-align-sm-end-center layout-align-xs-end-center"
+                  className="card_padding_right"
                 >
-                  <Component />
+                  77 undefined
                 </p>
               </div>
             </div>
-            <h2
-              className="layout-align-start-center layout-row flex"
-            >
-               
-            </h2>
           </div>
         </div>
       </div>
@@ -4613,299 +4858,348 @@ exports[`shallow render 1`] = `
     }
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+      className="flex-100 layout-row layout-align-start-start padding_top card_margin_right"
     >
       <div
-        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
+        className=" margin_bottom layout-column flex-55"
       >
         <div
-          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+          className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
         >
           <div
-            className="layout-column flex-100"
+            className="flex-66 flex-sm-100 flex-xs-100 layout-row services_box"
           >
-            <h3>
-              Freight, Duties & Carriage:
-            </h3>
             <div
-              className="layout-wrap layout-row flex"
+              className="layout-column flex-100"
             >
+              <h3>
+                Freight, Duties & Carriage:
+              </h3>
               <div
-                className="flex-45 margin_bottom"
+                className="layout-wrap layout-row flex"
               >
                 <div
-                  className="layout-row flex-100"
+                  className="flex-45 margin_bottom"
                 >
                   <div
-                    className="flex-100 layout-wrap layout-row"
+                    className="layout-row flex-100"
                   >
                     <div
-                      className="flex-100 layout-row"
+                      className="flex-100 layout-wrap layout-row"
                     >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Pick-up
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        PRE_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Delivery
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        ON_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="layout-row flex-100"
-                    >
-                      <i
-                        className="fa fa-file-text clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Origin Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Destination Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row layout-wrap flex-100"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-ship clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        {{mot}} Freight
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        FEE_HASH_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                    <div
-                      className="layout-row flex-100 layout-align-end-stretch greyborder"
-                    >
-                      <span
-                        className="layout-row flex-100 layout-padding
-                            layout-align-center-center greybg"
+                      <div
+                        className="flex-100 layout-row"
                       >
-                        NEW_PRICES_CURRENCY
-                      </span>
-                      <input
-                        className="layout-padding layout-row flex-70 flex-initial"
-                        onChange={[Function]}
-                        type="number"
-                      />
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Pick-up
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          PRE_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
                     </div>
                   </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Delivery
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          ON_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="layout-row flex-100"
+                      >
+                        <i
+                          className="fa fa-file-text clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Origin Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Destination Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row layout-wrap flex-100"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-ship clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          {{mot}} Freight
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          FEE_HASH_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                      <div
+                        className="layout-row flex-100 layout-align-end-stretch greyborder"
+                      >
+                        <span
+                          className="layout-row flex-100 layout-padding
+                              layout-align-center-center greybg"
+                        >
+                          NEW_PRICES_CURRENCY
+                        </span>
+                        <input
+                          className="layout-padding layout-row flex-70 flex-initial"
+                          onChange={[Function]}
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          >
+            <div
+              className="layout-column flex-80"
+            >
+              <h3>
+                Additional Services
+              </h3>
+              <div
+                className=""
+              >
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-id-card clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Customs
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-umbrella clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Insurance
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="layout-row layout-padding flex-20 layout-align-center-start"
+            >
+              <div
+                className="layout-column layout-align-center-center"
+              >
+                <div
+                  className="layout-row layout-align-center-center save"
+                >
+                  <i
+                    className="fa fa-check"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="layout-row layout-align-center-center cancel"
+                >
+                  <i
+                    className="fa fa-trash"
+                    onClick={[Function]}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="flex-40 layout-row"
+      >
         <div
-          className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          className="flex-100 layout-row layout-wrap wrapper"
         >
+          <QuoteChargeBreakdown
+            pricingBreakdowns={Array []}
+            quote={
+              Object {
+                "cargo": Object {},
+                "total": Object {
+                  "value": 77,
+                },
+              }
+            }
+            scope={
+              Object {
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              }
+            }
+            showBreakdowns={true}
+            shrinkHeaders={true}
+            t={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            trucking={
+              Object {
+                "on_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+                "pre_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+              }
+            }
+          />
           <div
-            className="layout-column flex-80"
-          >
-            <h3>
-              Additional Services
-            </h3>
-            <div
-              className=""
-            >
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-id-card clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Customs
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-umbrella clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Insurance
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row layout-padding flex-20 layout-align-center-start"
+            className="flex-100 layout-wrap layout-align-start-stretch"
           >
             <div
-              className="layout-column layout-align-center-center"
+              className="flex-100 layout-row layout-align-start-stretch total_row"
             >
               <div
-                className="layout-row layout-align-center-center save"
+                className="flex-30 layout-row layout-align-start-center"
               >
-                <i
-                  className="fa fa-check"
-                  onClick={[Function]}
-                />
-              </div>
-              <div
-                className="layout-row layout-align-center-center cancel"
-              >
-                <i
-                  className="fa fa-trash"
-                  onClick={[Function]}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-        >
-          <div
-            className="layout-column flex-100"
-          >
-            <div
-              className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-            >
-              <div
-                className="layout-align-start-center layout-row flex"
-              >
-                <span
-                  className="layout-align-center-center layout-row flex-none quantity_square"
-                  style={Object {}}
-                >
-                  x 
-                  1
+                <span>
+                  Total
                 </span>
+              </div>
+              <div
+                className="flex-70 layout-row layout-align-end-center"
+              >
                 <p
-                  className="layout-align-sm-end-center layout-align-xs-end-center"
+                  className="card_padding_right"
                 >
-                  <Component />
+                  77 undefined
                 </p>
               </div>
             </div>
-            <h2
-              className="layout-align-start-center layout-row flex"
-            >
-               
-            </h2>
           </div>
         </div>
       </div>
@@ -5491,299 +5785,348 @@ exports[`shipment.has_on_carriage is true 1`] = `
     }
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+      className="flex-100 layout-row layout-align-start-start padding_top card_margin_right"
     >
       <div
-        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
+        className=" margin_bottom layout-column flex-55"
       >
         <div
-          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+          className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
         >
           <div
-            className="layout-column flex-100"
+            className="flex-66 flex-sm-100 flex-xs-100 layout-row services_box"
           >
-            <h3>
-              Freight, Duties & Carriage:
-            </h3>
             <div
-              className="layout-wrap layout-row flex"
+              className="layout-column flex-100"
             >
+              <h3>
+                Freight, Duties & Carriage:
+              </h3>
               <div
-                className="flex-45 margin_bottom"
+                className="layout-wrap layout-row flex"
               >
                 <div
-                  className="layout-row flex-100"
+                  className="flex-45 margin_bottom"
                 >
                   <div
-                    className="flex-100 layout-wrap layout-row"
+                    className="layout-row flex-100"
                   >
                     <div
-                      className="flex-100 layout-row"
+                      className="flex-100 layout-wrap layout-row"
                     >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Pick-up
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        PRE_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Delivery
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        ON_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="layout-row flex-100"
-                    >
-                      <i
-                        className="fa fa-file-text clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Origin Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Destination Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row layout-wrap flex-100"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-ship clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        {{mot}} Freight
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        FEE_HASH_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                    <div
-                      className="layout-row flex-100 layout-align-end-stretch greyborder"
-                    >
-                      <span
-                        className="layout-row flex-100 layout-padding
-                            layout-align-center-center greybg"
+                      <div
+                        className="flex-100 layout-row"
                       >
-                        NEW_PRICES_CURRENCY
-                      </span>
-                      <input
-                        className="layout-padding layout-row flex-70 flex-initial"
-                        onChange={[Function]}
-                        type="number"
-                      />
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Pick-up
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          PRE_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
                     </div>
                   </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Delivery
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          ON_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="layout-row flex-100"
+                      >
+                        <i
+                          className="fa fa-file-text clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Origin Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Destination Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row layout-wrap flex-100"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-ship clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          {{mot}} Freight
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          FEE_HASH_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                      <div
+                        className="layout-row flex-100 layout-align-end-stretch greyborder"
+                      >
+                        <span
+                          className="layout-row flex-100 layout-padding
+                              layout-align-center-center greybg"
+                        >
+                          NEW_PRICES_CURRENCY
+                        </span>
+                        <input
+                          className="layout-padding layout-row flex-70 flex-initial"
+                          onChange={[Function]}
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          >
+            <div
+              className="layout-column flex-80"
+            >
+              <h3>
+                Additional Services
+              </h3>
+              <div
+                className=""
+              >
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-id-card clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Customs
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-umbrella clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Insurance
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="layout-row layout-padding flex-20 layout-align-center-start"
+            >
+              <div
+                className="layout-column layout-align-center-center"
+              >
+                <div
+                  className="layout-row layout-align-center-center save"
+                >
+                  <i
+                    className="fa fa-check"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="layout-row layout-align-center-center cancel"
+                >
+                  <i
+                    className="fa fa-trash"
+                    onClick={[Function]}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="flex-40 layout-row"
+      >
         <div
-          className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          className="flex-100 layout-row layout-wrap wrapper"
         >
+          <QuoteChargeBreakdown
+            pricingBreakdowns={Array []}
+            quote={
+              Object {
+                "cargo": Object {},
+                "total": Object {
+                  "value": 77,
+                },
+              }
+            }
+            scope={
+              Object {
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              }
+            }
+            showBreakdowns={true}
+            shrinkHeaders={true}
+            t={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            trucking={
+              Object {
+                "on_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+                "pre_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+              }
+            }
+          />
           <div
-            className="layout-column flex-80"
-          >
-            <h3>
-              Additional Services
-            </h3>
-            <div
-              className=""
-            >
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-id-card clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Customs
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-umbrella clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Insurance
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row layout-padding flex-20 layout-align-center-start"
+            className="flex-100 layout-wrap layout-align-start-stretch"
           >
             <div
-              className="layout-column layout-align-center-center"
+              className="flex-100 layout-row layout-align-start-stretch total_row"
             >
               <div
-                className="layout-row layout-align-center-center save"
+                className="flex-30 layout-row layout-align-start-center"
               >
-                <i
-                  className="fa fa-check"
-                  onClick={[Function]}
-                />
-              </div>
-              <div
-                className="layout-row layout-align-center-center cancel"
-              >
-                <i
-                  className="fa fa-trash"
-                  onClick={[Function]}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-        >
-          <div
-            className="layout-column flex-100"
-          >
-            <div
-              className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-            >
-              <div
-                className="layout-align-start-center layout-row flex"
-              >
-                <span
-                  className="layout-align-center-center layout-row flex-none quantity_square"
-                  style={Object {}}
-                >
-                  x 
-                  1
+                <span>
+                  Total
                 </span>
+              </div>
+              <div
+                className="flex-70 layout-row layout-align-end-center"
+              >
                 <p
-                  className="layout-align-sm-end-center layout-align-xs-end-center"
+                  className="card_padding_right"
                 >
-                  <Component />
+                  77 undefined
                 </p>
               </div>
             </div>
-            <h2
-              className="layout-align-start-center layout-row flex"
-            >
-               
-            </h2>
           </div>
         </div>
       </div>
@@ -6369,299 +6712,348 @@ exports[`shipment.has_pre_carriage is true 1`] = `
     }
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+      className="flex-100 layout-row layout-align-start-start padding_top card_margin_right"
     >
       <div
-        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
+        className=" margin_bottom layout-column flex-55"
       >
         <div
-          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+          className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
         >
           <div
-            className="layout-column flex-100"
+            className="flex-66 flex-sm-100 flex-xs-100 layout-row services_box"
           >
-            <h3>
-              Freight, Duties & Carriage:
-            </h3>
             <div
-              className="layout-wrap layout-row flex"
+              className="layout-column flex-100"
             >
+              <h3>
+                Freight, Duties & Carriage:
+              </h3>
               <div
-                className="flex-45 margin_bottom"
+                className="layout-wrap layout-row flex"
               >
                 <div
-                  className="layout-row flex-100"
+                  className="flex-45 margin_bottom"
                 >
                   <div
-                    className="flex-100 layout-wrap layout-row"
+                    className="layout-row flex-100"
                   >
                     <div
-                      className="flex-100 layout-row"
+                      className="flex-100 layout-wrap layout-row"
                     >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Pick-up
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        PRE_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Delivery
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        ON_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="layout-row flex-100"
-                    >
-                      <i
-                        className="fa fa-file-text clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Origin Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Destination Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row layout-wrap flex-100"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-ship clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        {{mot}} Freight
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        FEE_HASH_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                    <div
-                      className="layout-row flex-100 layout-align-end-stretch greyborder"
-                    >
-                      <span
-                        className="layout-row flex-100 layout-padding
-                            layout-align-center-center greybg"
+                      <div
+                        className="flex-100 layout-row"
                       >
-                        NEW_PRICES_CURRENCY
-                      </span>
-                      <input
-                        className="layout-padding layout-row flex-70 flex-initial"
-                        onChange={[Function]}
-                        type="number"
-                      />
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Pick-up
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          PRE_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
                     </div>
                   </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Delivery
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          ON_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="layout-row flex-100"
+                      >
+                        <i
+                          className="fa fa-file-text clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Origin Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Destination Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row layout-wrap flex-100"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-ship clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          {{mot}} Freight
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          FEE_HASH_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                      <div
+                        className="layout-row flex-100 layout-align-end-stretch greyborder"
+                      >
+                        <span
+                          className="layout-row flex-100 layout-padding
+                              layout-align-center-center greybg"
+                        >
+                          NEW_PRICES_CURRENCY
+                        </span>
+                        <input
+                          className="layout-padding layout-row flex-70 flex-initial"
+                          onChange={[Function]}
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          >
+            <div
+              className="layout-column flex-80"
+            >
+              <h3>
+                Additional Services
+              </h3>
+              <div
+                className=""
+              >
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-id-card clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Customs
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-umbrella clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Insurance
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="layout-row layout-padding flex-20 layout-align-center-start"
+            >
+              <div
+                className="layout-column layout-align-center-center"
+              >
+                <div
+                  className="layout-row layout-align-center-center save"
+                >
+                  <i
+                    className="fa fa-check"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="layout-row layout-align-center-center cancel"
+                >
+                  <i
+                    className="fa fa-trash"
+                    onClick={[Function]}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="flex-40 layout-row"
+      >
         <div
-          className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          className="flex-100 layout-row layout-wrap wrapper"
         >
+          <QuoteChargeBreakdown
+            pricingBreakdowns={Array []}
+            quote={
+              Object {
+                "cargo": Object {},
+                "total": Object {
+                  "value": 77,
+                },
+              }
+            }
+            scope={
+              Object {
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              }
+            }
+            showBreakdowns={true}
+            shrinkHeaders={true}
+            t={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            trucking={
+              Object {
+                "on_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+                "pre_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+              }
+            }
+          />
           <div
-            className="layout-column flex-80"
-          >
-            <h3>
-              Additional Services
-            </h3>
-            <div
-              className=""
-            >
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-id-card clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Customs
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-umbrella clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Insurance
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row layout-padding flex-20 layout-align-center-start"
+            className="flex-100 layout-wrap layout-align-start-stretch"
           >
             <div
-              className="layout-column layout-align-center-center"
+              className="flex-100 layout-row layout-align-start-stretch total_row"
             >
               <div
-                className="layout-row layout-align-center-center save"
+                className="flex-30 layout-row layout-align-start-center"
               >
-                <i
-                  className="fa fa-check"
-                  onClick={[Function]}
-                />
-              </div>
-              <div
-                className="layout-row layout-align-center-center cancel"
-              >
-                <i
-                  className="fa fa-trash"
-                  onClick={[Function]}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-        >
-          <div
-            className="layout-column flex-100"
-          >
-            <div
-              className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-            >
-              <div
-                className="layout-align-start-center layout-row flex"
-              >
-                <span
-                  className="layout-align-center-center layout-row flex-none quantity_square"
-                  style={Object {}}
-                >
-                  x 
-                  1
+                <span>
+                  Total
                 </span>
+              </div>
+              <div
+                className="flex-70 layout-row layout-align-end-center"
+              >
                 <p
-                  className="layout-align-sm-end-center layout-align-xs-end-center"
+                  className="card_padding_right"
                 >
-                  <Component />
+                  77 undefined
                 </p>
               </div>
             </div>
-            <h2
-              className="layout-align-start-center layout-row flex"
-            >
-               
-            </h2>
           </div>
         </div>
       </div>
@@ -7249,314 +7641,364 @@ exports[`shipment.selected_offer.trucking_pre is true 1`] = `
     }
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+      className="flex-100 layout-row layout-align-start-start padding_top card_margin_right"
     >
       <div
-        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
+        className=" margin_bottom layout-column flex-55"
       >
         <div
-          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+          className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100 "
         >
           <div
-            className="layout-column flex-100"
+            className="flex-66 flex-sm-100 flex-xs-100 layout-row services_box"
           >
-            <h3>
-              Freight, Duties & Carriage:
-            </h3>
             <div
-              className="layout-wrap layout-row flex"
+              className="layout-column flex-100"
+            >
+              <h3>
+                Freight, Duties & Carriage:
+              </h3>
+              <div
+                className="layout-wrap layout-row flex"
+              >
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Pick-up
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          PRE_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                      <div
+                        className="layout-row flex-100 layout-align-end-stretch greyborder"
+                      >
+                        <span
+                          className="layout-row flex-100 layout-padding
+                              layout-align-center-center greybg"
+                        >
+                          NEW_PRICES_TRUCKING_PRE_CURRENCY
+                        </span>
+                        <input
+                          className="layout-padding flex-70 layout-row flex-initial"
+                          onChange={[Function]}
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-truck clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Delivery
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          ON_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="flex-100 layout-wrap layout-row"
+                    >
+                      <div
+                        className="layout-row flex-100"
+                      >
+                        <i
+                          className="fa fa-file-text clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Origin Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-offset-10 flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          Destination Local Charges
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-45 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row layout-wrap flex-100"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-ship clip flex-none layout-align-center-center"
+                          style={Object {}}
+                        />
+                        <p>
+                          {{mot}} Freight
+                        </p>
+                      </div>
+                      <div
+                        className="flex-100 layout-row layout-align-end-center"
+                      >
+                        <p>
+                          FEE_HASH_CURRENCY
+                           
+                          NaN
+                        </p>
+                      </div>
+                      <div
+                        className="layout-row flex-100 layout-align-end-stretch greyborder"
+                      >
+                        <span
+                          className="layout-row flex-100 layout-padding
+                              layout-align-center-center greybg"
+                        >
+                          NEW_PRICES_CURRENCY
+                        </span>
+                        <input
+                          className="layout-padding layout-row flex-70 flex-initial"
+                          onChange={[Function]}
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          >
+            <div
+              className="layout-column flex-80"
+            >
+              <h3>
+                Additional Services
+              </h3>
+              <div
+                className=""
+              >
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-id-card clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Customs
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 margin_bottom"
+                >
+                  <div
+                    className="layout-row flex-100"
+                  >
+                    <div
+                      className="layout-row flex-100 layout-wrap"
+                    >
+                      <div
+                        className="flex-100 layout-row"
+                      >
+                        <i
+                          className="fa fa-umbrella clip flex-none"
+                          style={Object {}}
+                        />
+                        <p>
+                          Insurance
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="layout-row layout-padding flex-20 layout-align-center-start"
             >
               <div
-                className="flex-45 margin_bottom"
+                className="layout-column layout-align-center-center"
               >
                 <div
-                  className="layout-row flex-100"
+                  className="layout-row layout-align-center-center save"
                 >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Pick-up
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        PRE_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                    <div
-                      className="layout-row flex-100 layout-align-end-stretch greyborder"
-                    >
-                      <span
-                        className="layout-row flex-100 layout-padding
-                            layout-align-center-center greybg"
-                      >
-                        NEW_PRICES_TRUCKING_PRE_CURRENCY
-                      </span>
-                      <input
-                        className="layout-padding flex-70 layout-row flex-initial"
-                        onChange={[Function]}
-                        type="number"
-                      />
-                    </div>
-                  </div>
+                  <i
+                    className="fa fa-check"
+                    onClick={[Function]}
+                  />
                 </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
                 <div
-                  className="layout-row flex-100"
+                  className="layout-row layout-align-center-center cancel"
                 >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-truck clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Delivery
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        ON_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="flex-100 layout-wrap layout-row"
-                  >
-                    <div
-                      className="layout-row flex-100"
-                    >
-                      <i
-                        className="fa fa-file-text clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Origin Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-offset-10 flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        Destination Local Charges
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-45 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row layout-wrap flex-100"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-ship clip flex-none layout-align-center-center"
-                        style={Object {}}
-                      />
-                      <p>
-                        {{mot}} Freight
-                      </p>
-                    </div>
-                    <div
-                      className="flex-100 layout-row layout-align-end-center"
-                    >
-                      <p>
-                        FEE_HASH_CURRENCY
-                         
-                        NaN
-                      </p>
-                    </div>
-                    <div
-                      className="layout-row flex-100 layout-align-end-stretch greyborder"
-                    >
-                      <span
-                        className="layout-row flex-100 layout-padding
-                            layout-align-center-center greybg"
-                      >
-                        NEW_PRICES_CURRENCY
-                      </span>
-                      <input
-                        className="layout-padding layout-row flex-70 flex-initial"
-                        onChange={[Function]}
-                        type="number"
-                      />
-                    </div>
-                  </div>
+                  <i
+                    className="fa fa-trash"
+                    onClick={[Function]}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="flex-40 layout-row"
+      >
         <div
-          className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+          className="flex-100 layout-row layout-wrap wrapper"
         >
+          <QuoteChargeBreakdown
+            pricingBreakdowns={Array []}
+            quote={
+              Object {
+                "cargo": Object {},
+                "total": Object {
+                  "value": 77,
+                },
+                "trucking_pre": true,
+              }
+            }
+            scope={
+              Object {
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              }
+            }
+            showBreakdowns={true}
+            shrinkHeaders={true}
+            t={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            trucking={
+              Object {
+                "on_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+                "pre_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+              }
+            }
+          />
           <div
-            className="layout-column flex-80"
-          >
-            <h3>
-              Additional Services
-            </h3>
-            <div
-              className=""
-            >
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-id-card clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Customs
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-100 margin_bottom"
-              >
-                <div
-                  className="layout-row flex-100"
-                >
-                  <div
-                    className="layout-row flex-100 layout-wrap"
-                  >
-                    <div
-                      className="flex-100 layout-row"
-                    >
-                      <i
-                        className="fa fa-umbrella clip flex-none"
-                        style={Object {}}
-                      />
-                      <p>
-                        Insurance
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row layout-padding flex-20 layout-align-center-start"
+            className="flex-100 layout-wrap layout-align-start-stretch"
           >
             <div
-              className="layout-column layout-align-center-center"
+              className="flex-100 layout-row layout-align-start-stretch total_row"
             >
               <div
-                className="layout-row layout-align-center-center save"
+                className="flex-30 layout-row layout-align-start-center"
               >
-                <i
-                  className="fa fa-check"
-                  onClick={[Function]}
-                />
-              </div>
-              <div
-                className="layout-row layout-align-center-center cancel"
-              >
-                <i
-                  className="fa fa-trash"
-                  onClick={[Function]}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-        >
-          <div
-            className="layout-column flex-100"
-          >
-            <div
-              className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-            >
-              <div
-                className="layout-align-start-center layout-row flex"
-              >
-                <span
-                  className="layout-align-center-center layout-row flex-none quantity_square"
-                  style={Object {}}
-                >
-                  x 
-                  1
+                <span>
+                  Total
                 </span>
+              </div>
+              <div
+                className="flex-70 layout-row layout-align-end-center"
+              >
                 <p
-                  className="layout-align-sm-end-center layout-align-xs-end-center"
+                  className="card_padding_right"
                 >
-                  <Component />
+                  77 undefined
                 </p>
               </div>
             </div>
-            <h2
-              className="layout-align-start-center layout-row flex"
-            >
-               
-            </h2>
           </div>
         </div>
       </div>

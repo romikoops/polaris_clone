@@ -206,10 +206,12 @@ RSpec.describe OfferCalculator::PricingTools do
     end
 
     it 'returns the correct number of charges for single cargo classes (LCL & BASE PRICING)' do
+      FactoryBot.create(:tenants_scope, target: tenants_user, content: { base_pricing: true })
+      export_margin = FactoryBot.create(:export_margin, applicable: tenants_user, tenant: tenants_tenant, origin_hub_id: lcl_local_charge.hub_id)
+      FactoryBot.create(:pricings_detail, margin: export_margin, operator: '+', charge_category: FactoryBot.create(:legacy_charge_categories, code: 'isps', tenant: tenant))
       lcl = FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id)
-      scope = FactoryBot.create(:tenants_scope, target: tenants_user, content: { base_pricing: true })
-      FactoryBot.create(:export_margin, applicable: tenants_tenant, tenant: tenants_tenant)
-      local_charges_data, metadata = described_class.new(user: user, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user)
+
+      local_charges_data = described_class.new(user: user, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user)
       expect(local_charges_data.values.first.length).to eq(2)
       expect(local_charges_data.values.length).to eq(1)
     end
@@ -368,12 +370,34 @@ RSpec.describe OfferCalculator::PricingTools do
   describe '.handle_range_fee' do
     let(:fee) do
       {
+        'key' => 'THC',
         'rate' => 0.5e1,
         'rate_basis' => 'PER_CBM_RANGE',
         'currency' => 'EUR',
         'min' => 0.5e1,
         'range' => [{ 'max' => 10.0, 'min' => 0.0, 'rate' => 5.0 }, { 'max' => 100.0, 'min' => 10.0, 'rate' => 10.0 }]
-      }
+      }.with_indifferent_access
+    end
+    let(:metadata_id) { SecureRandom.uuid }
+    let(:metadata) do
+      [
+        {
+          metadata_id: metadata_id,
+          fees: {
+            THC: {
+              breakdowns: [
+                {
+                  adjusted_rate: {
+                    range: [
+                      { 'max' => 100.0, 'min' => 10.0, 'rate' => 15.0 }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
     end
 
     subject { described_class.new(user: user, shipment: shipment) }
@@ -381,13 +405,13 @@ RSpec.describe OfferCalculator::PricingTools do
     context 'PER_CBM_RANGE' do
       it 'returns the correct fee_range for the larger volume' do
         cargo_hash = { weight_measure: 11, volume: 11, weight: 11_000, raw_weight: 11_000, quantity: 9 }
-        value = subject.handle_range_fee(fee, cargo_hash)
+        value = subject.handle_range_fee(fee: fee, cargo: cargo_hash, metadata_id: metadata_id)
         expect(value).to eq(110)
       end
 
       it 'returns the correct fee_range for the smaller volume' do
         cargo_hash = { weight_measure: 4, volume: 4, raw_weight: 4000, weight: 4000, quantity: 9 }
-        value = subject.handle_range_fee(fee, cargo_hash)
+        value = subject.handle_range_fee(fee: fee, cargo: cargo_hash, metadata_id: metadata_id)
         expect(value).to eq(20)
       end
     end
@@ -405,7 +429,7 @@ RSpec.describe OfferCalculator::PricingTools do
 
       it 'returns the correct fee_range for the weight_measure' do
         cargo_hash = { weight_measure: 11, volume: 11, weight: 11_000, raw_weight: 11_000, quantity: 9 }
-        value = subject.handle_range_fee(fee, cargo_hash)
+        value = subject.handle_range_fee(fee: fee, cargo: cargo_hash, metadata_id: metadata_id)
         expect(value).to eq(10)
       end
     end
@@ -692,124 +716,141 @@ RSpec.describe OfferCalculator::PricingTools do
 
   describe '.fee_value' do
     let(:klass) { described_class.new(user: user, shipment: shipment) }
+    context 'with CBM_TON_RANGE rate basis' do
+      let(:fee) do
+        {
+          'key' => 'QDF',
+          'max' => nil,
+          'min' => 57,
+          'name' => 'Wharfage / Quay Dues',
+          'range' => [{ 'max' => 5, 'min' => 0, 'ton' => 41, 'currency' => 'EUR' }, { 'cbm' => 8, 'max' => 12, 'min' => 6, 'currency' => 'EUR' }],
+          'currency' => 'EUR',
+          'rate_basis' => 'PER_UNIT_TON_CBM_RANGE'
+        }
+      end
 
-    it 'calculates the PER_CBM_TON_RANGE in favour of CBM' do
-      fee = {
-        'key' => 'QDF',
-        'max' => nil,
-        'min' => 57,
-        'name' => 'Wharfage / Quay Dues',
-        'range' => [{ 'max' => 5, 'min' => 0, 'ton' => 41, 'currency' => 'EUR' }, { 'cbm' => 8, 'max' => 40, 'min' => 6, 'currency' => 'EUR' }],
-        'currency' => 'EUR',
-        'rate_basis' => 'PER_UNIT_TON_CBM_RANGE'
-      }
-      cargo_hash = {
-        volume: 6,
-        weight: 500,
-        raw_weight: 500,
-        weight_measure: 6
-      }
-      result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
-      expect(result).to eq(57)
-    end
+      it 'calculates the PER_CBM_TON_RANGE in favour of CBM' do
+        fee = {
+          'key' => 'QDF',
+          'max' => nil,
+          'min' => 57,
+          'name' => 'Wharfage / Quay Dues',
+          'range' => [{ 'max' => 5, 'min' => 0, 'ton' => 41, 'currency' => 'EUR' }, { 'cbm' => 8, 'max' => 40, 'min' => 6, 'currency' => 'EUR' }],
+          'currency' => 'EUR',
+          'rate_basis' => 'PER_UNIT_TON_CBM_RANGE'
+        }
+        cargo_hash = {
+          volume: 6,
+          weight: 500,
+          raw_weight: 500,
+          weight_measure: 6
+        }
+        result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
+        expect(result).to eq(57)
+      end
 
-    it 'calculates the PER_CBM_TON_RANGE out of range' do
-      fee = {
-        'key' => 'QDF',
-        'max' => nil,
-        'min' => 57,
-        'name' => 'Wharfage / Quay Dues',
-        'range' => [{ 'max' => 5, 'min' => 0, 'ton' => 41, 'currency' => 'EUR' }],
-        'currency' => 'EUR',
-        'rate_basis' => 'PER_UNIT_TON_CBM_RANGE'
-      }
-      cargo_hash = {
-        volume: 6,
-        weight: 500,
-        raw_weight: 500,
-        weight_measure: 6
-      }
-      result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
-      expect(result).to eq(57)
-    end
+      it 'calculates the PER_CBM_TON_RANGE out of range' do
+        fee = {
+          'key' => 'QDF',
+          'max' => nil,
+          'min' => 57,
+          'name' => 'Wharfage / Quay Dues',
+          'range' => [{ 'max' => 5, 'min' => 0, 'ton' => 41, 'currency' => 'EUR' }],
+          'currency' => 'EUR',
+          'rate_basis' => 'PER_UNIT_TON_CBM_RANGE'
+        }
+        cargo_hash = {
+          volume: 6,
+          weight: 500,
+          raw_weight: 500,
+          weight_measure: 6
+        }
+        result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
+        expect(result).to eq(57)
+      end
 
-    it 'calculates the PER_SHIPMENT_TON' do
-      fee = {
-        'key' => 'THC',
-        'max' => nil,
-        'min' => 57,
-        'rate' => 100,
-        'name' => 'A Fee',
-        'currency' => 'EUR',
-        'rate_basis' => 'PER_SHIPMENT_TON'
-      }
-      cargo_hash = {
-        volume: 2,
-        weight: 2500,
-        weight_measure: 2.5
-      }
-      result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
-      expect(result).to eq(250)
-    end
+      it 'calculates the PER_SHIPMENT_TON' do
+        fee = {
+          'key' => 'THC',
+          'max' => nil,
+          'min' => 57,
+          'rate' => 100,
+          'name' => 'A Fee',
+          'currency' => 'EUR',
+          'rate_basis' => 'PER_SHIPMENT_TON'
+        }
+        cargo_hash = {
+          volume: 2,
+          weight: 2500,
+          raw_weight: 2500,
+          weight_measure: 2.5
+        }
+        result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
+        expect(result).to eq(250)
+      end
 
-    it 'calculates the PER_CBM_TON in favour of ton' do
-      fee = {
-        'key' => 'THC',
-        'max' => nil,
-        'min' => 57,
-        'ton' => 100,
-        'cbm' => 100,
-        'name' => 'A Fee',
-        'currency' => 'EUR',
-        'rate_basis' => 'PER_CBM_TON'
-      }
-      cargo_hash = {
-        volume: 2,
-        weight: 2500,
-        weight_measure: 2.5
-      }
-      result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
-      expect(result).to eq(250)
-    end
+      it 'calculates the PER_CBM_TON in favour of ton' do
+        fee = {
+          'key' => 'THC',
+          'max' => nil,
+          'min' => 57,
+          'ton' => 100,
+          'cbm' => 100,
+          'name' => 'A Fee',
+          'currency' => 'EUR',
+          'rate_basis' => 'PER_CBM_TON'
+        }
+        cargo_hash = {
+          volume: 2,
+          weight: 2500,
+          raw_weight: 2500,
+          weight_measure: 2.5
+        }
+        result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
+        expect(result).to eq(250)
+      end
 
-    it 'calculates the PER_CBM_TON in favour of cbm' do
-      fee = {
-        'key' => 'THC',
-        'max' => nil,
-        'min' => 57,
-        'ton' => 100,
-        'cbm' => 100,
-        'name' => 'A Fee',
-        'currency' => 'EUR',
-        'rate_basis' => 'PER_CBM_TON'
-      }
-      cargo_hash = {
-        volume: 3,
-        weight: 2500,
-        weight_measure: 3
-      }
-      result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
-      expect(result).to eq(300)
-    end
+      it 'calculates the PER_CBM_TON in favour of cbm' do
+        fee = {
+          'key' => 'THC',
+          'max' => nil,
+          'min' => 57,
+          'ton' => 100,
+          'cbm' => 100,
+          'name' => 'A Fee',
+          'currency' => 'EUR',
+          'rate_basis' => 'PER_CBM_TON'
+        }
+        cargo_hash = {
+          volume: 3,
+          weight: 2500,
+          raw_weight: 2500,
+          weight_measure: 3
+        }
+        result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
+        expect(result).to eq(300)
+      end
 
-    it 'calculates the PER_X_KG_FLAT' do
-      fee = {
-        'key' => 'THC',
-        'max' => nil,
-        'min' => 57,
-        'base' => 100,
-        'value' => 50,
-        'name' => 'A Fee',
-        'currency' => 'EUR',
-        'rate_basis' => 'PER_X_KG_FLAT'
-      }
-      cargo_hash = {
-        volume: 3,
-        weight: 2001,
-        weight_measure: 3
-      }
-      result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
-      expect(result).to eq(0.105e6)
+      it 'calculates the PER_X_KG_FLAT' do
+        fee = {
+          'key' => 'THC',
+          'max' => nil,
+          'min' => 57,
+          'base' => 100,
+          'value' => 50,
+          'name' => 'A Fee',
+          'currency' => 'EUR',
+          'rate_basis' => 'PER_X_KG_FLAT'
+        }
+        cargo_hash = {
+          volume: 3,
+          weight: 2001,
+          raw_weight: 2001,
+          weight_measure: 3
+        }
+        result = klass.fee_value(fee: fee, cargo: cargo_hash, rounding: true)
+        expect(result).to eq(0.105e6)
+      end
     end
   end
 end

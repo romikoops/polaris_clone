@@ -17,7 +17,7 @@ import NamedAsync from '../../../NamedSelect/NamedAsync'
 import StandardSelect from '../../../NamedSelect/StandardSelect'
 import GreyBox from '../../../GreyBox/GreyBox'
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner'
-import { authHeader } from '../../../../helpers'
+import { authHeader, getHubOptions } from '../../../../helpers'
 
 class AdminClientMarginCreator extends Component {
   static dayPickerProps (end) {
@@ -492,17 +492,6 @@ class AdminClientMarginCreator extends Component {
 
       return window
         .fetch(`${getTenantApiUrl()}/admin/margins/form/itineraries?query=${input}`, requestOptions)
-        .then(response => response.json())
-        .then(json => ({ options: json.data }))
-    }
-    const getHubOptions = (input) => {
-      const requestOptions = {
-        method: 'GET',
-        headers: { ...authHeader() }
-      }
-
-      return window
-        .fetch(`${getTenantApiUrl()}/admin/hubs/search/options?query=${input}`, requestOptions)
         .then(response => response.json())
         .then(json => ({ options: json.data }))
     }

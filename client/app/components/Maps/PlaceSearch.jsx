@@ -31,6 +31,7 @@ class PlaceSearch extends Component {
   componentDidMount () {
     this.initMap(this.setInitialMarker)
   }
+
   componentWillReceiveProps (nextProps) {
     const { address } = nextProps
     if (address && this.state.autoText.address === '') {
@@ -38,6 +39,7 @@ class PlaceSearch extends Component {
     }
     this.setInitialMarker()
   }
+
   setInitialMarker () {
     const { address } = this.props
     if (address && address.latitude && address.longitude) {
@@ -82,6 +84,7 @@ class PlaceSearch extends Component {
     const { name, value } = event.target
     this.setState({ autoText: { [name]: value } })
   }
+
   initMap (callback) {
     const mapsOptions = {
       center: {
@@ -103,12 +106,13 @@ class PlaceSearch extends Component {
 
   initAutocomplete (map) {
     const options = this.props.options ? this.props.options : {}
-    const input = document.getElementById('address')
+    const input = document.getElementById(`${this.props.target}_address`)
     const autocomplete = new this.props.gMaps.places.Autocomplete(input, options)
     autocomplete.bindTo('bounds', map)
     this.setState({ autoListener: { ...this.state.autoListener, address: autocomplete } })
     this.autocompleteListener(map, autocomplete)
   }
+
   autocompleteListener (aMap, autocomplete) {
     const infowindow = new this.props.gMaps.InfoWindow()
     const infowindowContent = document.getElementById('infowindow-content')
@@ -141,12 +145,13 @@ class PlaceSearch extends Component {
       this.selectLocation(place)
     })
   }
+
   selectLocation (place) {
     this.props.handlePlaceChange(place)
   }
 
   render () {
-    const { t } = this.props
+    const { t, target, wrapperFlex } = this.props
     const autoInputStyles = {}
     const mapStyle = Object.assign({}, baseMapStyle)
     if (this.props.hideMap) {
@@ -165,8 +170,8 @@ class PlaceSearch extends Component {
     const autoInput = (
       <div className="flex-100 layout-row layout-wrap" style={autoInputStyles}>
         <input
-          id="address"
-          name="address"
+          id={`${target}_address`}
+          name={`${target}_address`}
           className={`flex-none ${styles.input}`}
           type="string"
           onChange={this.handleAuto}
@@ -178,7 +183,7 @@ class PlaceSearch extends Component {
     )
 
     return (
-      <div className={`flex-100 layout-row layout-wrap ${styles.map_box}`}>
+      <div className={`${wrapperFlex} layout-row layout-wrap ${styles.map_box}`}>
         <div id="map" className={`flex-100 layout-row ${styles.place_map}`} style={mapStyle} />
         {autoInput}
       </div>
@@ -186,13 +191,13 @@ class PlaceSearch extends Component {
   }
 }
 
-
 PlaceSearch.defaultProps = {
   theme: null,
   hideMap: false,
   inputStyles: {},
   options: {},
-  address: {}
+  address: {},
+  wrapperFlex: "flex-100"
 }
 
 export default withNamespaces('nav')(PlaceSearch)

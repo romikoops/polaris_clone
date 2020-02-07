@@ -63,6 +63,7 @@ exports[`service && service.total 1`] = `
           },
         }
       }
+      cargo={Array []}
       cargoView={Array []}
       deliveryDate={
         <p
@@ -483,6 +484,7 @@ exports[`shallow render 1`] = `
           },
         }
       }
+      cargo={Array []}
       cargoView={Array []}
       deliveryDate={
         <p

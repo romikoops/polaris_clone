@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'core'
+require 'geocoder'
 require 'legacy'
 require 'tenants'
 require 'trucking'

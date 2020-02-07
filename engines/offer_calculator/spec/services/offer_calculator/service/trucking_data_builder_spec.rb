@@ -34,50 +34,49 @@ RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
   let(:hub_result) { { origin: [hub] } }
 
   context 'legacy' do
-    let!(:user_trucking) { FactoryBot.create(:trucking_trucking, tenant: tenant, hub: hub, user_id: user.id, location: trucking_location) }
+    before do
+      allow(service).to receive(:calc_distance).and_return(10)
+      FactoryBot.create(:trucking_trucking, tenant: tenant, hub: hub, user_id: user.id, location: trucking_location)
+    end
+
     describe '.perform' do
       it 'finds the trucking pricings and calculates the rates' do
-        allow(service).to receive(:calc_distance).and_return(10)
-
         results = service.perform(hub_result)
-        expect(results.keys).to match_array(%i(metadata trucking_pricings))
-        expect(results.dig(:trucking_pricings, 'pre').keys).to match_array([hub.id])
+        aggregate_failures do
+          expect(results.keys).to match_array(%i[metadata trucking_pricings selected_fees])
+          expect(results.dig(:trucking_pricings, 'pre').keys).to match_array([hub.id])
+        end
       end
     end
   end
 
-  let!(:default_margins) do
-    [
-      FactoryBot.create(:trucking_on_margin, default_for: 'trucking', tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-      FactoryBot.create(:trucking_pre_margin, default_for: 'trucking', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
-    ]
+  before do
+    FactoryBot.create(:trucking_on_margin, default_for: 'trucking', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+    FactoryBot.create(:trucking_pre_margin, default_for: 'trucking', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
   end
+
   Timecop.freeze(Time.utc(2020, 1, 1, 0, 0, 0)) do
     before(:each) do
       stub_request(:get, 'https://maps.googleapis.com/maps/api/directions/xml?alternative=false&departure_time=1576800000&destination=57.694253,11.854048&key=&language=en&mode=driving&origin=57.694253,11.854048&traffic_model=pessimistic')
-        .with(
-          headers: {
-            'Accept' => '*/*',
-            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-            'User-Agent' => 'Ruby'
-          }
-        )
         .to_return(status: 200, body: FactoryBot.create(:google_directions_response), headers: {})
     end
 
     context 'base_pricing' do
+      before do
+        FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
+        FactoryBot.create(:tenants_membership, member: tenants_user, group: group)
+        FactoryBot.create(:trucking_trucking, tenant: tenant, hub: hub, group_id: group.id, location: trucking_location)
+      end
+
       let!(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
-      let!(:scope) { FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true }) }
       let!(:group) { FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'Test') }
-      let!(:base_pricing_scope) { FactoryBot.create(:tenants_scope, target: tenants_user, content: { base_pricing: true }) }
-      let!(:membership) { FactoryBot.create(:tenants_membership, member: tenants_user, group: group) }
-      let!(:group_trucking) { FactoryBot.create(:trucking_trucking, tenant: tenant, hub: hub, group_id: group.id, location: trucking_location) }
+
       describe '.perform (base pricing)' do
         it 'finds the trucking pricings and calculates the rates' do
           allow(service).to receive(:calc_distance).and_return(10)
 
           results = service.perform(hub_result)
-          expect(results.keys).to match_array(%i(metadata trucking_pricings))
+          expect(results.keys).to match_array(%i[metadata trucking_pricings selected_fees])
           expect(results.dig(:trucking_pricings, 'pre').keys).to match_array([hub.id])
         end
 
@@ -91,22 +90,20 @@ RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
             allow_any_instance_of(OfferCalculator::GoogleDirections).to receive(:distance_in_km).and_return(1000)
 
             results = service.perform(hub_result)
-            expect(results.keys).to match_array(%i(metadata trucking_pricings))
+            expect(results.keys).to match_array(%i[metadata trucking_pricings selected_fees])
           end
 
           it 'return 0 if from google directions cant find the distance' do
             allow_any_instance_of(OfferCalculator::GoogleDirections).to receive(:distance_in_km).and_return(nil)
 
             results = service.perform(hub_result)
-            expect(results.keys).to match_array(%i(metadata trucking_pricings))
+            expect(results.keys).to match_array(%i[metadata trucking_pricings selected_fees])
           end
         end
-
       end
     end
 
     context 'errors' do
-
       let(:error_shipment) do
         FactoryBot.create(:legacy_shipment,
                           load_type: 'cargo_item',
@@ -123,11 +120,11 @@ RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
                           itinerary: itinerary,
                           cargo_items: [
                             FactoryBot.build(:legacy_cargo_item,
-                                              dimension_x: 240,
-                                              dimension_y: 160,
-                                              dimension_z: 230,
-                                              payload_in_kg: 1000,
-                                              quantity: 2)
+                                             dimension_x: 240,
+                                             dimension_y: 160,
+                                             dimension_z: 230,
+                                             payload_in_kg: 1000,
+                                             quantity: 2)
                           ],
                           has_pre_carriage: true)
       end

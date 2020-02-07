@@ -4,360 +4,323 @@ module Pricings
   class Preview # rubocop:disable Metrics/ClassLength
     attr_accessor :itinerary, :tenant_vehicle_id, :cargo_class, :target, :date, :tenant
 
-    def initialize(itinerary_id:, target:, cargo_class: nil, tenant_vehicle_id: nil, date: Date.today + 5.days)
-      @itinerary = ::Legacy::Itinerary.find(itinerary_id)
-      @legacy_tenant = @itinerary.tenant
+    def initialize(params:, target:, tenant: nil, tenant_vehicle_id: nil, date: Date.today + 5.days)
+      @params = params
       @target = target
-      @tenant = ::Tenants::Tenant.find_by(legacy_id: itinerary.tenant_id)
-      args = {
-        itinerary_id: itinerary_id
-      }
-      args[:cargo_class] = cargo_class if cargo_class
-      args[:tenant_vehicle_id] = tenant_vehicle_id if tenant_vehicle_id
-      @pricings = ::Pricings::Pricing.for_dates(date, date + 5.days).where(args)
-      @margins = ::Pricings::Margin.where(margin_type: :freight_margin).for_dates(date, date + 5.days)
+      @tenant = tenant
+      @legacy_tenant = tenant.legacy
+      @scope = Tenants::ScopeService.new(target: target, tenant: tenant).fetch
+      @local_charges = { origin: [], destination: [] }
+      @cargo_class = params[:selectedCargoClass]
+      @load_type = params[:selectedCargoClass] == 'lcl' ? 'cargo_item' : 'container'
+      @hierarchy = Tenants::HierarchyService.new(target: target).fetch
       @pricings_to_return = []
       @date = date
+      @truckings = {}
+      @manipulated_pricings = []
+      @manipulated_local_charges = []
+      @manipulated_truckings = []
+      @metadata_pricings = []
+      @metadata_local_charges = []
+      @metadata_truckings = []
     end
 
     def perform
-      margin_preview = @pricings.map do |pricing|
-        @pricing = pricing
-        schedules = create_schedules_for_pricing(pricing: pricing)
-        next if schedules.empty?
+      handle_trucking
+      determine_itineraries
+      prepare_trips
+      determine_service_levels
+      determine_local_charges
+      manipulate_pricings
+      manipulate_local_charges
+      manipulate_truckings
+      determine_route_combinations
 
-        @applicable_margins = find_applicable_margins
-        @margins_to_apply = sort_margins
-        manipulate_pricings
-      end
-      margin_preview
+      @route_results.compact
     end
 
-    def find_applicable_margins # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-      hierachy = case target.class.to_s
-                 when 'Tenants::Group'
-                   [
-                     { rank: 0, data: [target] },
-                     { rank: 1, data: target.memberships || [] }
-                   ]
-                 when 'Tenants::Company'
-                   [
-                     { rank: 0, data: [target] },
-                     { rank: 1, data: target.memberships || [] }
-                   ]
-                 when 'Tenants::User'
-                   [
-                     { rank: 0, data: [target] },
-                     { rank: 1, data: target.memberships || [] },
-                     { rank: 2, data: [target&.company] || [] },
-                     { rank: 3, data: target&.company&.memberships || [] }
-                   ]
-                end
-      all_margins = apply_hierarchy(hierachy)
-      return all_margins unless all_margins.empty?
+    def determine_route_combinations
+      @route_results = @manipulated_pricings.map do |pricing|
+        origin_hub, destination_hub = ::Legacy::Itinerary.find(pricing[:itinerary_id]).stops.map(&:hub)
+        pre_carriage = @manipulated_truckings.find { |trucking| trucking[:hub_id] == origin_hub.id }
+        on_carriage = @manipulated_truckings.find { |trucking| trucking[:hub_id] == destination_hub.id }
+        origin_charges_mandatory = origin_hub.mandatory_charge&.export_charges || pre_carriage.present?
+        destination_charges_mandatory = destination_hub.mandatory_charge&.import_charges || on_carriage.present?
+        origin_local_charge = @manipulated_local_charges.find do |lc|
+          lc[:hub_id] == origin_hub.id && lc[:direction] == 'export' && lc[:tenant_vehicle_id] == pricing[:tenant_vehicle_id]
+        end
+        destination_local_charge = @manipulated_local_charges.find do |lc|
+          lc[:hub_id] == destination_hub.id && lc[:direction] == 'import' && lc[:tenant_vehicle_id] == pricing[:tenant_vehicle_id]
+        end
 
-      tenant_h = [
-        { rank: 0, data: [target.tenant] }
-      ]
+        next if origin_charges_mandatory && origin_local_charge.nil?
+        next if destination_charges_mandatory && destination_local_charge.nil?
 
-      apply_hierarchy(tenant_h)
-    end
-
-    def create_schedules_for_pricing(pricing:)
-      trip = ::Legacy::Trip.for_dates(date, date + 5.days).where(
-        tenant_vehicle_id: pricing.tenant_vehicle_id,
-        itinerary_id: pricing.itinerary_id,
-        load_type: pricing.load_type
-      ).first
-
-      trip ||= ::Legacy::Trip.create!(
-        start_date: date,
-        end_date: date + 5.days,
-        closing_date: date - 4.days,
-        tenant_vehicle_id: pricing.tenant_vehicle_id,
-        load_type: pricing.load_type,
-        itinerary_id: pricing.itinerary_id
-      )
-
-      [trip]
-    end
-
-    def apply_hierarchy(hierarchy) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      default_args = [
-        {
-          tenant_id: @tenant.id,
-          pricing: @pricing,
-          default_for: nil
-        },
-        {
-          tenant_id: @tenant.id,
-          itinerary_id: itinerary.id,
-          tenant_vehicle_id: tenant_vehicle_id,
-          cargo_class: cargo_class,
-          default_for: nil
-        },
-        {
-          tenant_id: @tenant.id,
-          origin_hub_id: itinerary.ordered_hub_ids.first,
-          tenant_vehicle_id: tenant_vehicle_id,
-          cargo_class: cargo_class
-        },
-        {
-          tenant_id: @tenant.id,
-          destination_hub_id: itinerary.ordered_hub_ids.last,
-          tenant_vehicle_id: tenant_vehicle_id,
-          cargo_class: cargo_class
-        },
-        {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: nil,
-          tenant_vehicle_id: tenant_vehicle_id,
-          cargo_class: cargo_class,
-          default_for: nil
-        },
-        {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: itinerary.id,
-          cargo_class: nil,
-          tenant_vehicle_id: nil,
-          default_for: nil
-        },
-        {
-          tenant_id: @tenant.id,
-          origin_hub_id: itinerary.ordered_hub_ids.first,
-          destination_hub_id: itinerary.ordered_hub_ids.last,
-          itinerary_id: nil,
-          cargo_class: nil,
-          tenant_vehicle_id: nil,
-          default_for: nil
-        },
-        {
-          tenant_id: @tenant.id,
-          destination_hub_id: itinerary.ordered_hub_ids.last,
-          itinerary_id: nil,
-          cargo_class: nil,
-          tenant_vehicle_id: nil,
-          default_for: nil
-        },
-        {
-          tenant_id: @tenant.id,
-          origin_hub_id: itinerary.ordered_hub_ids.first,
-          itinerary_id: nil,
-          cargo_class: nil,
-          tenant_vehicle_id: nil,
-          default_for: nil
-        },
-        {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: nil,
-          cargo_class: nil,
-          tenant_vehicle_id: tenant_vehicle_id,
-          default_for: nil
-        },
-        {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: nil,
-          tenant_vehicle_id: nil,
-          cargo_class: cargo_class,
-          default_for: nil
-        },
-        {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: nil,
-          tenant_vehicle_id: nil,
-          cargo_class: nil,
-          default_for: itinerary.mode_of_transport
-        },
-        {
-          tenant_id: @tenant.id,
-          origin_hub_id: nil,
-          destination_hub_id: nil,
-          itinerary_id: nil,
-          tenant_vehicle_id: nil,
-          cargo_class: nil,
-          default_for: nil
+        result = {
+          freight: build_breakdowns(target: pricing, type: 'pricing')
         }
-      ]
-      all_margins = []
-      all_margin_ids = []
-      default_args.each do |args|
-        hierarchy.each do |h_data|
-          h_data[:data].each do |target|
-            args[:applicable] = target.is_a?(::Tenants::Membership) ? target.group : target
-            margins = find_margins_for(args)
-            margins.uniq.each do |m|
-              next if all_margin_ids.include?(m.id)
+        if origin_local_charge.present?
+          result[:export] = build_breakdowns(target: origin_local_charge, type: 'local_charge')
+        end
+        if destination_local_charge.present?
+          result[:import] = build_breakdowns(target: destination_local_charge, type: 'local_charge')
+        end
+        result[:trucking_pre] = build_breakdowns(target: pre_carriage, type: 'trucking') if pre_carriage.present?
+        result[:trucking_on] = build_breakdowns(target: on_carriage, type: 'trucking') if on_carriage.present?
 
-              prio = target.is_a?(::Tenants::Membership) ? target.priority : 0
-              all_margins << { priority: prio, margin: m, rank: h_data[:rank] }
-              all_margin_ids << m.id
-            end
+        result
+      end
+    end
+
+    def build_breakdowns(target:, type:)
+      metadata = case type
+                 when 'pricing'
+                   @metadata_pricings
+                 when 'local_charge'
+                   @metadata_local_charges
+                 when 'trucking'
+                   @metadata_truckings
+                 end
+
+      target_service_level = tenant_vehicles.find_by(id: target[:tenant_vehicle_id])
+      target_metadata = metadata.find { |md| md[:metadata_id] == target[:metadata_id] }
+      breakdowns = {}
+
+      breakdowns[:fees] = build_breakdown_response(metadata: target_metadata)
+
+      breakdowns[:service_level] =
+        if target_service_level.present?
+          target_service_level.full_name
+        else
+          Trucking::Courier.find_by(id: target[:courier_id])&.name
+        end
+
+      breakdowns
+    end
+
+    def manipulate_breakdown(breakdown:)
+      adjusted_breakdown = breakdown.dup
+      adjusted_breakdown[:data] = adjusted_breakdown.delete(:adjusted_rate)
+      adjusted_breakdown[:target_name] = adjusted_breakdown.delete(:margin_target_name)
+      adjusted_breakdown[:target_id] = adjusted_breakdown.delete(:margin_target_id)
+      adjusted_breakdown[:target_type] = adjusted_breakdown.delete(:margin_target_type)
+      adjusted_breakdown[:url_id] =
+        if breakdown[:margin_target_type] == 'Tenants::User'
+          Tenants::User.find(breakdown[:margin_target_id]).legacy_id
+        else
+          breakdown[:margin_target_id]
+        end
+
+      adjusted_breakdown
+    end
+
+    def build_breakdown_response(metadata:)
+      metadata[:fees].each_with_object({}) do |(fee_key, data), hash|
+        adjusted_breakdowns = data[:breakdowns].map { |breakdown| manipulate_breakdown(breakdown: breakdown) }
+        margin_breakdowns = adjusted_breakdowns.reject { |breakdown| breakdown[:operator] == '+' }
+        flat_breakdowns = adjusted_breakdowns.select { |breakdown| breakdown[:operator] == '+' }
+        original = adjusted_breakdowns.find { |breakdown| breakdown[:margin_id].blank? }
+        hash[fee_key] = {
+          original: original[:data],
+          margins: margin_breakdowns.reject { |breakdown| breakdown == original },
+          flatMargins: flat_breakdowns,
+          final: margin_breakdowns.last[:data],
+          rate_origin: original[:data].present? ? fee_origins[original[:id]][fee_key] : original[:metadata]
+        }
+        hash
+      end
+    end
+
+    def handle_trucking
+      args = {
+        load_type: @load_type,
+        tenant_id: @tenant.legacy_id,
+        truck_type: @cargo_class == 'lcl' ? 'default' : 'chassis',
+        cargo_classes: [@cargo_class],
+        sandbox: @sandbox,
+        order_by: 'group_id'
+      }
+      @params.slice(:selectedOriginTrucking, :selectedDestinationTrucking).each do |key, target|
+        next if target.empty?
+
+        carriage = key.to_sym == :selectedOriginTrucking ? 'pre' : 'on'
+        adjusted_args = args.merge(
+          address: ::Legacy::Address.new(latitude: target[:lat], longitude: target[:lng]).reverse_geocode,
+          carriage: carriage
+        )
+        results = Trucking::Queries::Availability.new(adjusted_args).perform | Trucking::Queries::Distance.new(adjusted_args).perform
+        next if results.empty?
+
+        hub_truckings = []
+        grouped_results = results.group_by(&:hub_id)
+        trucking_group_ids = group_ids.dup.unshift(nil)
+        trucking_group_ids.each do |group_id|
+          grouped_results.each do |_hub_id, truckings_by_cargo_class|
+            designated_trucking = truckings_by_cargo_class.find { |trp| trp.user_id.nil? && group_id == trp.group_id }
+            hub_truckings << designated_trucking if designated_trucking.present?
           end
         end
-      end
 
-      all_margins
+        @truckings[carriage] = hub_truckings
+      end
     end
 
-    def sort_margins # rubocop:disable Metrics/AbcSize
-      margin_periods = @applicable_margins.group_by { |x| x[:margin].slice(:effective_date, :expiration_date) }
-      if margin_periods.keys.length == 1
-        margin_periods.values.first.sort_by! { |x| [x[:margin][:application_order], x[:rank], x[:priority]] }
-        return margin_periods
-      end
-      new_margin_periods = {}
-      date_keys = margin_periods.keys.map(&:values).flatten.uniq.sort
-      new_date_keys = date_keys.map.with_index do |date, i|
-        effective_date = date.hour == 23 ? date.beginning_of_day + 1.day : date.beginning_of_day
-        next_date = date_keys[i + 1]
-        next unless next_date
-
-        expiration_date = next_date.hour == 23 ? next_date : next_date.end_of_day - 1.day
-        {
-          effective_date: effective_date,
-          expiration_date: expiration_date
-        }
-      end
-
-      new_date_keys.compact.each do |dk|
-        new_margin_periods[dk] = @applicable_margins.select do |m|
-          m[:margin][:expiration_date] >= dk[:effective_date] &&
-            m[:margin][:effective_date] <= dk[:expiration_date]
-        end.sort_by! { |x| [x[:margin][:application_order], x[:rank], x[:priority]] }
-      end
-
-      new_margin_periods
+    def determine_itineraries
+      origin_stops = ::Legacy::Stop.where(hub_id: origin_hub_ids, index: 0)
+      destination_stops = ::Legacy::Stop.where(hub_id: destination_hub_ids, index: 1)
+      itinerary_ids = origin_stops.select { |os| destination_stops.any? { |ds| ds.itinerary_id == os.itinerary_id } }.map(&:itinerary_id)
+      @itineraries = ::Legacy::Itinerary.where(id: itinerary_ids)
     end
 
-    def find_margins_for(args)
-      margins = @margins.where(tenant_id: @tenant.id, pricing: @pricing, applicable: args[:applicable])
-      return margins unless margins.empty?
-
-      margins = @margins.where(args)
-      margins
+    def tenant_vehicles
+      @tenant_vehicles ||= ::Legacy::TenantVehicle.where(id: pricings.pluck(:tenant_vehicle_id))
     end
 
-    def manipulate_pricings # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      @pricings_to_return = @margins_to_apply.map do |date_keys, data| # rubocop:disable Metrics/BlockLength
-        fees = @pricing.fees
-        fee_hash = {}
-        fee_snapshots = data.map do |mdata|
-          margin = mdata[:margin]
-          fees.each do |fee|
-            fee_json = fee.to_fee_hash
-            effective_margin = (margin.details.find_by(charge_category_id: fee.charge_category_id) || margin)
-            effective_value = if effective_margin.operator == '+' && effective_margin == margin
-                                effective_margin.value / fees.size
-                              else
-                                effective_margin.value
-                              end
-            result_json = apply_manipulation(
-              operator: effective_margin.operator,
-              value: effective_value,
-              fee: fee_hash[fee.fee_code] || fee_json.values.first
-            )
-            fee_hash[fee.fee_code] = result_json
-          end
+    def fee_origins
+      @fee_origins ||= Pricings::Fee.where(pricing_id: pricings.ids).each_with_object(Hash.new { |h, k| h[k] = {} }) do |fee, hash|
+        hash[fee.pricing_id][fee.fee_code] = fee.metadata if fee.metadata.present?
+      end
+    end
 
-          {
-            fees: fee_hash.dup,
-            applicable: applicable_string(margin: margin),
-            margin: margin_json_data(margin)
+    def determine_service_levels
+      ::Legacy::TenantVehicle.where(id: pricings.pluck(:tenant_vehicle_id))
+    end
+
+    def determine_local_charges
+      cargo_local_charges = ::Legacy::LocalCharge.where(load_type: @cargo_class)
+      @local_charges[:origin] = cargo_local_charges.where(
+        hub_id: origin_hub_ids,
+        group_id: group_ids,
+        direction: 'export'
+      )
+      @local_charges[:destination] = cargo_local_charges.where(
+        hub_id: destination_hub_ids,
+        direction: 'import',
+        group_id: group_ids
+      )
+      if @local_charges[:origin].empty?
+        @local_charges[:origin] = cargo_local_charges.where(
+          hub_id: origin_hub_ids,
+          group_id: nil,
+          direction: 'export'
+        )
+      end
+      return if @local_charges[:destination].present?
+
+      @local_charges[:destination] = cargo_local_charges.where(
+        hub_id: destination_hub_ids,
+        group_id: nil,
+        direction: 'import'
+      )
+    end
+
+    def manipulate_pricings
+      pricings.each do |pricing|
+        manipulated, metadata = Pricings::Manipulator.new(
+          type: :freight_margin,
+          target: @target,
+          tenant: @tenant,
+          args: {
+            schedules: default_schedules(tenant_vehicle_id: pricing.tenant_vehicle_id),
+            pricing: pricing,
+            sandbox: @sandbox
           }
-        end
-        new_effective_date, new_expiration_date = manipulate_dates(date_keys)
-        manipulated_pricing = @pricing.as_json
-        manipulated_pricing['effective_date'] = new_effective_date
-        manipulated_pricing['expiration_date'] = new_expiration_date
-        manipulated_pricing['manipulation_steps'] = fee_snapshots
-        manipulated_pricing['itinerary'] = @itinerary
-        manipulated_pricing['service_level'] = @pricing.tenant_vehicle.full_name
-        manipulated_pricing.with_indifferent_access
+        ).perform
+        @manipulated_pricings |= manipulated
+        @metadata_pricings |= metadata
       end
     end
 
-    def margin_json_data(margin, options = {})
-      new_options = options.reverse_merge(
-        methods: %i(service_level itinerary_name fee_code cargo_class mode_of_transport)
-      )
-      margin.as_json(new_options).reverse_merge(
-        marginDetails: margin.details.map { |d| margin_detail_json_data(d) }
-      ).deep_transform_keys { |key| key.to_s.camelize(:lower) }
-    end
+    def manipulate_local_charges
+      @local_charges.values.flatten.each do |local_charge|
+        scheds = default_schedules(tenant_vehicle_id: local_charge.tenant_vehicle_id)
+        next if scheds.blank?
 
-    def margin_detail_json_data(detail, options = {})
-      new_options = options.reverse_merge(
-        methods: %i(rate_basis itinerary_name fee_code)
-      )
-      detail.as_json(new_options)
-    end
-
-    def determine_manipulation(rate:, value:, operator:)
-      case operator
-      when '%'
-        apply_percentage(value: value, rate: rate)
-      when '+'
-        apply_addition(value: value, rate: rate)
+        manipulated, metadata = Pricings::Manipulator.new(
+          type: "#{local_charge.direction}_margin".to_sym,
+          target: @target,
+          tenant: @tenant,
+          args: {
+            schedules: scheds,
+            local_charge: local_charge,
+            sandbox: @sandbox
+          }
+        ).perform
+        @manipulated_local_charges |= manipulated
+        @metadata_local_charges |= metadata
       end
     end
 
-    def apply_manipulation(value:, operator:, fee:)
-      new_fee = fee.dup
+    def manipulate_truckings
+      @truckings.values.flatten.each do |trucking|
+        manipulated, metadata = Pricings::Manipulator.new(
+          type: "trucking_#{trucking[:carriage]}_margin".to_sym,
+          target: @target,
+          tenant: @tenant,
+          args: {
+            schedules: default_schedules(tenant_vehicle_id: nil),
+            trucking_pricing: trucking,
+            date: Date.today,
+            sandbox: @sandbox
+          }
+        ).perform
 
-      new_fee['rate'] = determine_manipulation(rate: fee['rate'].to_d, value: value, operator: operator)
-      new_fee['min'] = determine_manipulation(rate: fee['min'].to_d, value: value, operator: operator) if fee['min']
-      return new_fee if fee['range'].nil? || fee['range'].empty?
-
-      new_fee['range'] = fee['range'].map do |range|
-        range['rate'] = determine_manipulation(rate: range['rate'].to_d, value: value, operator: operator)
-        range['min'] = determine_manipulation(rate: range['min'].to_d, value: value, operator: operator) if range['min']
-        range
+        @manipulated_truckings << manipulated.first
+        @metadata_truckings |= metadata
       end
-
-      new_fee
     end
 
-    def manipulate_dates(date_keys)
-      effective_date = @pricing.effective_date
-      expiration_date = @pricing.expiration_date
-      effective_date = date_keys[:effective_date] if date_keys[:effective_date] > effective_date
-      expiration_date = date_keys[:expiration_date] if date_keys[:expiration_date] < expiration_date
-      [effective_date, expiration_date]
+    def prepare_trips
+      @trips = pricings.map do |pricing|
+        trip = ::Legacy::Trip.for_dates(date, date + 5.days).where(
+          tenant_vehicle_id: pricing.tenant_vehicle_id,
+          itinerary_id: pricing.itinerary_id,
+          load_type: pricing.load_type
+        ).first
+
+        trip ||= ::Legacy::Trip.create!(
+          start_date: date,
+          end_date: date + 5.days,
+          closing_date: date - 4.days,
+          tenant_vehicle_id: pricing.tenant_vehicle_id,
+          load_type: pricing.load_type,
+          itinerary_id: pricing.itinerary_id
+        )
+
+        trip
+      end
     end
 
-    def apply_percentage(value:, rate:)
-      return rate.to_d if value.zero?
+    private
 
-      rate.to_d * (1 + value)
+    def origin_hub_ids
+      @truckings['pre'].present? ? @truckings['pre'].map { |trucking| trucking[:hub_id] }.uniq : [@params[:selectedOriginHub]]
     end
 
-    def apply_addition(value:, rate:)
-      rate.to_d + value
+    def destination_hub_ids
+      @truckings['on'].present? ? @truckings['on'].map { |trucking| trucking[:hub_id] }.uniq : [@params[:selectedDestinationHub]]
     end
 
-    def applicable_string(margin:)
-      case margin.applicable.class.to_s
-      when 'Tenants::Group'
-        "Group: #{margin.applicable.name}"
-      when 'Tenants::Company'
-        "Company: #{margin.applicable.name}"
-      when 'Tenants::Tenant'
-        "Tenant: #{margin.applicable.legacy.name}"
-      when 'Tenants::User'
-        "User: #{margin.applicable.legacy.full_name}"
+    def group_ids
+      if @target.is_a?(Tenants::User)
+        @hierarchy.select { |hier| hier.is_a?(Tenants::Group) }.map(&:id)
+      elsif @target.is_a?(Tenants::Group)
+        [@target.id]
+      end
+    end
+
+    def pricings
+      association = Pricings::Pricing.where(itinerary_id: @itineraries, cargo_class: @cargo_class)
+      if @scope.slice(:display_itineraries_with_rates, :dedicated_pricings_only).values.any?(&:present?)
+        association = association.where(group_id: group_ids)
       else
-        "User: #{margin.applicable.full_name}"
+        Pricings::Pricing.where(itinerary_id: @itineraries, cargo_class: @cargo_class)
       end
+      association.for_dates(date, date + 15.days)
+    end
+
+    def default_schedules(tenant_vehicle_id: tenant_vehicles.first.id)
+      @trips.select { |trip| trip.tenant_vehicle_id == tenant_vehicle_id }.map { |trip| ::Legacy::Schedule.from_trip(trip) }
     end
   end
 end

@@ -5,15 +5,12 @@ module Pricings
     MissingArgument = Class.new(StandardError)
     TRUCKING_QUERY_DAYS = 10
 
-    def initialize(type:, user:, args:)
-      argument_errors(type, user, args)
+    def initialize(type:, target:, tenant:, args:)
+      argument_errors(type, target, args)
       @type = type
-      @user = user
-      @tenant = @user.tenant
-      @scope = Tenants::ScopeService.new(
-        target: ::Tenants::User.find_by(legacy_id: user.id),
-        tenant: ::Tenants::Tenant.find_by(legacy_id: @tenant.id)
-      ).fetch
+      @target = target
+      @tenant = tenant.is_a?(Tenants::Tenant) ? tenant : Tenants::Tenant.find_by(legacy_id: tenant.id)
+      @scope = Tenants::ScopeService.new(target: target, tenant: tenant).fetch
       @shipment = args[:shipment]
       @sandbox = args[:sandbox]
       @without_meta = args[:without_meta]
@@ -38,17 +35,16 @@ module Pricings
     end
 
     def find_applicable_margins
-      user_hierarchy = [
-        { rank: 0, data: [user] },
-        { rank: 1, data: user.memberships || [] },
-        { rank: 2, data: user&.company&.memberships || [] }
-      ].reject { |section| section[:data].empty? }
-      all_margins = apply_hierarchy(hierarchy: user_hierarchy)
+      hierarchy = Tenants::HierarchyService.new(target: target, tenant: tenant).fetch
+      target_hierarchy = hierarchy.reverse.reject {|hier| hier == tenant }
+                                .map.with_index {|hier, i| {rank: i , data: hier} }
+
+      all_margins = apply_hierarchy(hierarchy: target_hierarchy)
 
       return all_margins unless all_margins.empty?
 
       tenant_hierarchy = [
-        { rank: 0, data: [user.tenant] }
+        { rank: 0, data: [tenant] }
       ]
 
       apply_hierarchy(hierarchy: tenant_hierarchy, for_tenant: true)
@@ -59,15 +55,13 @@ module Pricings
       all_margins = []
       margin_params.each do |args|
         hierarchy.each do |hierarchy_data|
-          hierarchy_data[:data].each do |target|
-            args[:applicable] = target.is_a?(::Tenants::Membership) ? target.group : target
-            all_margins = find_margins_for(
-              args: args,
-              target: target,
-              all_margins: all_margins,
-              rank: hierarchy_data[:rank]
-            )
-          end
+          args[:applicable] = hierarchy_data[:data]
+          all_margins = find_margins_for(
+            args: args,
+            target: @target,
+            all_margins: all_margins,
+            rank: hierarchy_data[:rank]
+          )
         end
       end
 
@@ -164,7 +158,7 @@ module Pricings
     end
 
     def find_margins_for(args:, target:, all_margins:, rank:)
-      margins.where(args).inject(all_margins) do |margin_collection, margin|
+      margins.where(args).order(application_order: :asc).inject(all_margins) do |margin_collection, margin|
         priority = target.is_a?(::Tenants::Membership) ? target.priority : 0
         margin_collection << { priority: priority, margin: margin, rank: rank }
       end
@@ -193,6 +187,7 @@ module Pricings
         flat_margins = Hash.new { |h, k| h[k] = [] }
         fee_hash = fees.each_with_object({}) do |fee, hash|
           fee_json = fee.to_fee_hash
+          fee_metadata = fee.metadata
           fee_code = fee.fee_code
           next if fee_code.nil?
 
@@ -251,7 +246,7 @@ module Pricings
 
     def manipulate_trucking_pricings # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       @pricings_to_return = margins_to_apply.map do |date_keys, data| # rubocop:disable Metrics/BlockLength
-        next if date_keys[:expiration_date] < date_keys[:effective_date]
+        next if date_keys[:expiration_date] < date_keys[:effective_date] || date_keys[:expiration_date] < Date.today
 
         fees = trucking_pricing.fees
         manipulated_pricing = trucking_pricing.as_json
@@ -464,7 +459,7 @@ module Pricings
         margins['total'].uniq.each do |total_margin|
           divided_margin_value = total_margin.value / fee_keys.count
           update_meta_for_margin(
-            fee_code: key,
+            fee_code: key.include?('trucking') ? metadata_charge_category.code : key,
             margin_value: divided_margin_value,
             margin_or_detail: total_margin,
             result: {}
@@ -506,7 +501,7 @@ module Pricings
           tenant_vehicle_id: args[:tenant_vehicle_id],
           cargo_class: args[:cargo_class],
           itinerary_id: args[:itinerary_id],
-          tenant_id: user.tenant.legacy_id
+          tenant_id: @tenant.legacy_id
         )
         @tenant_vehicle_id = args[:tenant_vehicle_id]
         @cargo_class = args[:cargo_class]
@@ -585,10 +580,9 @@ module Pricings
       )
     end
 
-    def argument_errors(type, user, args) # rubocop:disable Metrics/CyclomaticComplexity
-      raise Pricings::Manipulator::MissingArgument unless user
-      raise Pricings::Manipulator::MissingArgument unless user.is_a?(Tenants::User)
-      raise Pricings::Manipulator::MissingArgument unless args[:shipment]
+    def argument_errors(type, target, args) # rubocop:disable Metrics/CyclomaticComplexity
+      raise Pricings::Manipulator::MissingArgument unless target
+
       unless (args[:schedules].present? && type == :freight_margin) || type != :freight_margin
         raise Pricings::Manipulator::MissingArgument
       end
@@ -596,7 +590,7 @@ module Pricings
 
     private
 
-    attr_reader :user, :tenant, :scope, :shipment, :sandbox, :without_meta, :cargo_unit_id, :meta, :type,
+    attr_reader :target, :tenant, :scope, :shipment, :sandbox, :without_meta, :cargo_unit_id, :meta, :type,
                 :applicable_margins, :margins_to_apply, :pricings_to_return, :default_margin, :itinerary,
                 :origin_hub_id, :destination_hub_id, :tenant_vehicle_id, :cargo_class, :pricing, :end_date,
                 :local_charge, :margins, :trucking_pricing, :trucking_charge_category, :direction, :schedules,

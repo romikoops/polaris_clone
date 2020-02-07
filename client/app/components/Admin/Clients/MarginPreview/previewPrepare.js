@@ -1,13 +1,20 @@
 export function previewPrepare (breakdowns, cargo, key) {
   const feeBreakdowns = extractBreakdowns(breakdowns, cargo, key)
   const originalFee = feeBreakdowns[0]
-  const finalFee = feeBreakdowns[feeBreakdowns.length - 1]
+  const marginBreakdowns = feeBreakdowns.filter(breakdown => !!breakdown.margin_id && breakdown.operator === '%')
+  const flatMarginBreakdowns = feeBreakdowns.filter(breakdown => !!breakdown.margin_id && breakdown.operator !== '%')
+  const finalFee = marginBreakdowns[marginBreakdowns.length - 1]
   const result = {
     original: originalFee.data,
-    final: finalFee.data
+    metadata: originalFee.rate_origin
   }
-  const marginBreakdowns = feeBreakdowns.filter(breakdown => !!breakdown.margin_id)
-  result.margins = marginBreakdowns.map((breakdown) => (breakdown))
+  
+  if (finalFee) {
+    result.final = finalFee.data
+  }
+  result.margins = marginBreakdowns
+  result.flatMargins = flatMarginBreakdowns
+
   return result
 }
 

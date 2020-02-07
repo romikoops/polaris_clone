@@ -224,7 +224,7 @@ class AdminShipmentView extends Component {
         groupCount += 1
       }
     })
-    
+
     Object.keys(cargoGroups).forEach((k) => {
       resultArray.push(<CargoItemGroup
         shipment={shipment}
@@ -511,8 +511,7 @@ class AdminShipmentView extends Component {
       ''
     )
 
-
-    const actionDropDown = isQuote({scope}) ? '' : (
+    const actionDropDown = isQuote({ scope }) ? '' : (
       <div className="layout-row flex-15 flex-md-20 flex-sm-25 flex-xs-30 layout-align-center-center ">
         <StatusSelectButton
           options={this.statusOptions}
@@ -776,57 +775,38 @@ class AdminShipmentView extends Component {
           {actionDropDown}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
-          {shipment.status !== 'quoted' ? (
-            <AdminShipmentContent
-              theme={theme}
-              gradientBorderStyle={gradientBorderStyle}
-              gradientStyle={gradientStyle}
-              switchIcon={switchIcon}
-              estimatedTimes={estimatedTimes}
-              pickupDate={pickupDate}
-              deliveryDate={deliveryDate}
-              originDropOffDate={originDropOffDate}
-              destinationCollectionDate={destinationCollectionDate}
-              totalPrice={totalPrice}
-              background={background}
-              dnrEditKeys={dnrEditKeys}
-              showEditTime={this.state.showEditTime}
-              saveNewTime={this.saveNewTime}
-              toggleEditTime={this.toggleEditTime}
-              feeHash={feeHash}
-              toggleEditServicePrice={this.toggleEditServicePrice}
-              showEditServicePrice={showEditServicePrice}
-              newPrices={newPrices}
-              selectedStyle={selectedStyle}
-              deselectedStyle={deselectedStyle}
-              cargoView={cargoView}
-              shipmentData={shipmentData}
-              handlePriceChange={this.handlePriceChange}
-              saveNewEditedPrice={this.saveNewEditedPrice}
-              adminDispatch={adminDispatch}
-              remarkDispatch={remarkDispatch}
-              scope={scope}
-            />
-          ) : (
-            <ShipmentQuotationContent
-              theme={theme}
-              gradientBorderStyle={gradientBorderStyle}
-              gradientStyle={gradientStyle}
-              estimatedTimes={estimatedTimes}
-              showBreakdowns
-              scope={scope}
-              shipment={shipment}
-              background={background}
-              selectedStyle={selectedStyle}
-              deselectedStyle={deselectedStyle}
-              feeHash={feeHash}
-              cargo={cargoToRender}
-              cargoView={cargoView}
-              remarkDispatch={remarkDispatch}
-              pricingBreakdowns={pricingBreakdowns}
-            />
-          )}
-
+          <AdminShipmentContent
+            theme={theme}
+            gradientBorderStyle={gradientBorderStyle}
+            gradientStyle={gradientStyle}
+            switchIcon={switchIcon}
+            estimatedTimes={estimatedTimes}
+            pickupDate={pickupDate}
+            deliveryDate={deliveryDate}
+            originDropOffDate={originDropOffDate}
+            destinationCollectionDate={destinationCollectionDate}
+            totalPrice={totalPrice}
+            background={background}
+            dnrEditKeys={dnrEditKeys}
+            showEditTime={this.state.showEditTime}
+            saveNewTime={this.saveNewTime}
+            toggleEditTime={this.toggleEditTime}
+            feeHash={feeHash}
+            toggleEditServicePrice={this.toggleEditServicePrice}
+            showEditServicePrice={showEditServicePrice}
+            newPrices={newPrices}
+            selectedStyle={selectedStyle}
+            deselectedStyle={deselectedStyle}
+            cargoView={cargoView}
+            cargo={cargoToRender}
+            shipmentData={shipmentData}
+            handlePriceChange={this.handlePriceChange}
+            saveNewEditedPrice={this.saveNewEditedPrice}
+            adminDispatch={adminDispatch}
+            remarkDispatch={remarkDispatch}
+            pricingBreakdowns={pricingBreakdowns}
+            scope={scope}
+          />
         </div>
         <div className="flex-100 layout-row layout-wrap">
           <div className="layout-row flex-100 layout-wrap layout-align-center-center" style={{ paddingTop: '30px' }}>

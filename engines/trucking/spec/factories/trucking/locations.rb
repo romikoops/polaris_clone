@@ -10,6 +10,10 @@ FactoryBot.define do
       association :location, factory: :swedish_location
     end
 
+    trait :with_chinese_location do
+      association :location, factory: :chinese_location
+    end
+
     trait :distance do
       distance { 55 }
     end
@@ -31,6 +35,7 @@ FactoryBot.define do
     country_code { 'SE' }
 
     factory :city_location, traits: [:with_location]
+    factory :chinese_trucking_location, traits: [:with_chinese_location]
     factory :zipcode_location, traits: [:zipcode_sequence]
   end
 end

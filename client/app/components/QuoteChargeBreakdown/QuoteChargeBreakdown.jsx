@@ -315,11 +315,13 @@ class QuoteChargeBreakdown extends Component {
   showPricingBreakdown (type, price, cargo) {
     const key = price[0].toLowerCase()
     const data = this.pricingBreakdowns(cargo, key)
+    const finalPrice = has(price, [1, 'total']) ? get(price, [1, 'total']) : price[1]
 
     this.setState({
       pricingBreakdownData: data,
       pricingBreakdownFeeKey: key,
-      pricingBreakdownType: type
+      pricingBreakdownType: type,
+      pricingBreakdownPrice: finalPrice
     }, () => this.togglePricingBreakdownModal())
   }
 
@@ -507,7 +509,8 @@ class QuoteChargeBreakdown extends Component {
       pricingBreakdownData,
       showPricingBreakdownModal,
       pricingBreakdownFeeKey,
-      pricingBreakdownType
+      pricingBreakdownType,
+      pricingBreakdownPrice
     } = this.state
     if (Object.keys(quote).length === 0) return ''
     const headerClass = shrinkHeaders ? styles.small_headers : ''
@@ -516,6 +519,7 @@ class QuoteChargeBreakdown extends Component {
         rate={pricingBreakdownData}
         feeKey={pricingBreakdownFeeKey}
         type={pricingBreakdownType}
+        price={pricingBreakdownPrice}
       />
     )
     const pricingBreakdownModal = (

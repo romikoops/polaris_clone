@@ -236,7 +236,7 @@ class SideNav extends Component {
         adminDispatch.getDashboard(true)
         break
       case 'routes':
-        adminDispatch.getItineraries(true)
+        adminDispatch.goTo('/admin/routes')
         break
       case 'wizard':
         adminDispatch.goTo('/admin/wizard')

@@ -34,7 +34,7 @@ gem 'omniauth'
 gem 'ruby-saml', '~> 1.11.0', require: 'onelogin/ruby-saml'
 
 # soft delete users and other models
-gem "paranoia", "~> 2.2"
+gem 'paranoia', '~> 2.2'
 
 gem 'sass-rails'
 gem 'sprockets-rails', require: 'sprockets/railtie'
@@ -162,7 +162,7 @@ group :development, :test do
   gem 'rspec_junit_formatter'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: %i(mri mingw x64_mingw)
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   # Better debugging
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -193,7 +193,7 @@ group :development do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: %i(mingw mswin x64_mingw jruby)
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # Engines
 Dir['engines/*/*.gemspec'].each do |gemspec_path|

@@ -637,7 +637,8 @@
       "pricingChanges": "Pricing Changes",
       "metadata": "Metadata",
       "initialRate": "Initial Rate",
-      "noMarginsApplied": "No Margins Applied"
+      "noMarginsApplied": "No Margins Applied",
+      "sourceData": "Data source"
 
   },
   "itbox": {
@@ -1250,6 +1251,7 @@
     "PER_CBM_TON": "Per cbm/ton",
     "PER_BILL": "Per B/L",
     "PER_CBM": "Per cbm",
+    "PER_CBM_RANGE": "Per cbm range",
     "PER_WM": "Per W/M",
     "PER_KG": "Per kg",
     "PER_KG_RANGE": "Per kg range",
@@ -1264,9 +1266,24 @@
     "operator": "Operator",
     "value": "Value",
     "fetchRates": "Fetch Rates",
-    "viewMargins": "View Applied Margins",
-    "viewOriginal": "View Original Rate",
-    "viewFinal": "View Final Rate",
-    "noMargins": "No Applied Margins"
+    "margins": "Applied Margins",
+    "flatMargins": "Applied Flat Margins",
+    "originalRate": "Original Rate",
+    "finalRate": "Final Rate",
+    "noMargins": "No Applied Margins",
+    "effRange": "{{min}} to {{max}} {{unit}}",
+    "rateValue": "{{value}} {{rateBasis}}",
+    "rate": "Rate",
+    "min": "Minimum",
+    "max": "Maximum",
+    "adjustedRate": "Adjusted Rate",
+    "pricingBreakdownFor": "Pricing Breakdown for: {{feeName}}",
+    "finalChargedAmount": "Final Charged Amount",
+    "rateBasis": "Rate Basis",
+    "type": "Type",
+    "trucking": "Trucking",
+    "delta": "Delta",
+    "range": "Effective Range",
+    "rateRange": "Rate Range"
   }
 }

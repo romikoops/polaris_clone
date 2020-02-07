@@ -111,10 +111,9 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0, max: 2000, rate: 100 },
-          { min: 2001, max: 5000, rate: 80 },
-          { min: 5001, max: 20_000, rate: 60 },
-          { min: 20_001, max: 23_000, rate: 60 }
+          { min: 0, max: 4, rate: 100 },
+          { min: 5, max: 10, rate: 80 },
+          { min: 11, max: 20, rate: 60 }
         ]
       end
     end

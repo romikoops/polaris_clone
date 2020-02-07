@@ -12,6 +12,12 @@ module OfferCalculator
         @sandbox = args.fetch(:sandbox)
         @shipment = args.fetch(:shipment)
         @metadata_list = args.fetch(:metadata_list, [])
+        @pricing_tools = OfferCalculator::PricingTools.new(
+          shipment: @shipment,
+          user: @user,
+          sandbox: @sandbox,
+          metadata: @metadata_list
+        )
         super(shipment: @shipment, sandbox: @sandbox)
       end
 
@@ -242,13 +248,14 @@ module OfferCalculator
         end
         cargo_unit_array.each do |cargo_unit|  # rubocop:disable Metrics/BlockLength
           cargo_class = is_agg_cargo ? 'lcl' : cargo_unit[:cargo_class]
-          charge_result = if @scope['base_pricing']
+          charge_result, pricing_metadata_list = if @scope['base_pricing']
                             Pricings::Calculator.new(
                               cargo: cargo_unit,
                               pricing: @data.dig(:pricings_by_cargo_class, cargo_class),
                               user: @user,
                               mode_of_transport: @schedule.mode_of_transport,
-                              date: @shipment.planned_pickup_date
+                              date: @shipment.planned_pickup_date,
+                              metadata: @metadata_list
                             ).perform
                           else
                             @pricing_tools.determine_cargo_freight_price(
@@ -258,6 +265,9 @@ module OfferCalculator
                               mode_of_transport: @schedule.mode_of_transport
                             )
                           end
+
+          @metadata_list |= pricing_metadata_list if pricing_metadata_list.present?
+
           next if charge_result.nil?
 
           cunit_class = cargo_unit.class.to_s
@@ -324,6 +334,7 @@ module OfferCalculator
                                                else
                                                  [target_metadata.dig(:fees, children_charge_category.code.to_sym), children_charge_category]
                       end
+
           next unless target_fee.present?
 
           create_metadata_from_charges(

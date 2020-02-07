@@ -49,7 +49,7 @@ RSpec.describe Pricings::Manipulator do
     }
   end
   let!(:default_margins) do
-    %w(ocean air rail truck trucking local_charge).flat_map do |mot|
+    %w[ocean air rail truck trucking local_charge].flat_map do |mot|
       [
         FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
         FactoryBot.create(:trucking_on_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
@@ -78,7 +78,8 @@ RSpec.describe Pricings::Manipulator do
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -123,7 +124,8 @@ RSpec.describe Pricings::Manipulator do
                           effective_date: (Date.today + 1.day).beginning_of_day,
                           expiration_date: (Date.today + 30.days).end_of_day)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -159,7 +161,8 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:freight_margin, pricing: group_pricing, tenant: tenants_tenant, applicable: group_1)
         manipulated_pricings_and_metadata = described_class.new(
           type: :freight_margin,
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           args: {
             sandbox: nil,
             pricing: group_pricing,
@@ -197,7 +200,8 @@ RSpec.describe Pricings::Manipulator do
                           tenant: tenants_tenant,
                           applicable: group_1)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -217,7 +221,7 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns multiple manipulated freight pricings when margins overlap attached to the group without pricing' do
-        Timecop.freeze(Time.now) do
+        Timecop.freeze(Time.zone.now) do
           group_pricing = FactoryBot.create(:lcl_pricing,
                                             tenant_vehicle: tenant_vehicle_1,
                                             tenant: tenant,
@@ -246,7 +250,8 @@ RSpec.describe Pricings::Manipulator do
                                        value: 0.5,
                                        applicable: group_1)
           manipulated_pricings_and_metadata = described_class.new(
-            user: tenants_user,
+            target: tenants_user,
+            tenant: tenants_tenant,
             type: :freight_margin,
             args: {
               sandbox: nil,
@@ -302,7 +307,8 @@ RSpec.describe Pricings::Manipulator do
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin, pricing: group_pricing, tenant: tenants_tenant, applicable: company_group)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -335,7 +341,8 @@ RSpec.describe Pricings::Manipulator do
         end
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -369,7 +376,8 @@ RSpec.describe Pricings::Manipulator do
         user_multi_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing_3, tenant: tenants_tenant, applicable: tenants_user)
         FactoryBot.create(:bas_margin_detail, margin: user_multi_margin, value: 0.25, charge_category: bas_charge_category)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -382,7 +390,7 @@ RSpec.describe Pricings::Manipulator do
         manipulated_pricings = manipulated_pricings_and_metadata.first
 
         expect(manipulated_pricings.first['id']).to eq(lcl_pricing_3.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(%w(bas baf))
+        expect(manipulated_pricings.first['data'].keys).to eq(%w[bas baf])
         expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(50)
         expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
         expect(manipulated_pricings.first.dig('data', 'baf', 'rate')).to eq(44)
@@ -403,7 +411,8 @@ RSpec.describe Pricings::Manipulator do
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin, pricing: lcl_range_pricing, tenant: tenants_tenant, applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -435,7 +444,8 @@ RSpec.describe Pricings::Manipulator do
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin, pricing: lcl_pricing_4, tenant: tenants_tenant, applicable: tenants_user, value: 10, operator: '+')
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -471,7 +481,8 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:pricings_detail, margin: margin, value: 10, operator: '+', charge_category: bas_charge_category)
 
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -512,7 +523,8 @@ RSpec.describe Pricings::Manipulator do
                           tenant: tenants_tenant,
                           applicable: tenants_tenant)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -552,7 +564,8 @@ RSpec.describe Pricings::Manipulator do
                           tenant: tenants_tenant,
                           applicable: tenants_tenant)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -588,7 +601,8 @@ RSpec.describe Pricings::Manipulator do
         end
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -627,7 +641,8 @@ RSpec.describe Pricings::Manipulator do
                           tenant: tenants_tenant,
                           applicable: tenants_tenant)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -668,7 +683,8 @@ RSpec.describe Pricings::Manipulator do
                           cargo_class: group_pricing.cargo_class,
                           applicable: tenants_tenant)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -713,7 +729,8 @@ RSpec.describe Pricings::Manipulator do
                           tenant: tenants_tenant,
                           applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -754,7 +771,8 @@ RSpec.describe Pricings::Manipulator do
                           expiration_date: local_charge.effective_date + 20.days,
                           applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -799,7 +817,8 @@ RSpec.describe Pricings::Manipulator do
                           tenant: tenants_tenant,
                           applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :import_margin,
           args: {
             sandbox: nil,
@@ -850,7 +869,8 @@ RSpec.describe Pricings::Manipulator do
                                      effective_date: (Date.today + 1.day).beginning_of_day,
                                      expiration_date: (Date.today + 30.days).end_of_day)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -906,7 +926,8 @@ RSpec.describe Pricings::Manipulator do
                           effective_date: (Date.today + 1.day).beginning_of_day,
                           expiration_date: (Date.today + 30.days).end_of_day)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :import_margin,
           args: {
             sandbox: nil,
@@ -946,7 +967,8 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: group_1)
         manipulated_pricings_and_metadata = described_class.new(
           type: :export_margin,
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           args: {
             sandbox: nil,
             local_charge: local_charge,
@@ -963,7 +985,7 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns multiple manipulated local_charges when margins overlap attached to the group without pricing' do
-        Timecop.freeze(Time.now) do
+        Timecop.freeze(Time.zone.now) do
           hub = itinerary_1.first_stop.hub
           local_charge = FactoryBot.create(:legacy_local_charge,
                                            hub: hub,
@@ -996,7 +1018,8 @@ RSpec.describe Pricings::Manipulator do
                                        value: 0.5,
                                        applicable: group_1)
           manipulated_pricings_and_metadata = described_class.new(
-            user: tenants_user,
+            target: tenants_user,
+            tenant: tenants_tenant,
             type: :export_margin,
             args: {
               sandbox: nil,
@@ -1045,7 +1068,8 @@ RSpec.describe Pricings::Manipulator do
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:export_margin, origin_hub: hub, tenant_vehicle: tenant_vehicle_1, tenant: tenants_tenant, applicable: company_group)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -1082,7 +1106,8 @@ RSpec.describe Pricings::Manipulator do
         end
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -1116,8 +1141,8 @@ RSpec.describe Pricings::Manipulator do
                                              'currency' => 'EUR',
                                              'rate_basis' => 'PER_SHIPMENT'
                                            },
-                                           'BAF' => {
-                                             'key' => 'BAF',
+                                           'baf' => {
+                                             'key' => 'baf',
                                              'max' => nil,
                                              'min' => 20,
                                              'name' => 'Bunker Adjustment Fee',
@@ -1139,7 +1164,8 @@ RSpec.describe Pricings::Manipulator do
         user_multi_margin = FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user)
         FactoryBot.create(:bas_margin_detail, margin: user_multi_margin, value: 0.25, charge_category: baf_charge_category)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -1152,11 +1178,11 @@ RSpec.describe Pricings::Manipulator do
         manipulated_pricings = manipulated_pricings_and_metadata.first
 
         expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(%w(SOLAS BAF))
+        expect(manipulated_pricings.first['fees'].keys).to eq(%w[SOLAS baf])
         expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
         expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
-        expect(manipulated_pricings.first.dig('fees', 'BAF', 'value')).to eq(25)
-        expect(manipulated_pricings.first.dig('fees', 'BAF', 'rate_basis')).to eq('PER_SHIPMENT')
+        expect(manipulated_pricings.first.dig('fees', 'baf', 'value')).to eq(25)
+        expect(manipulated_pricings.first.dig('fees', 'baf', 'rate_basis')).to eq('PER_SHIPMENT')
       end
 
       it 'returns the manipulated local_charge attached to the user with a range' do
@@ -1192,7 +1218,8 @@ RSpec.describe Pricings::Manipulator do
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -1230,7 +1257,8 @@ RSpec.describe Pricings::Manipulator do
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user, value: 10, operator: '+')
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -1247,6 +1275,7 @@ RSpec.describe Pricings::Manipulator do
         expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(17.5)
         expect(manipulated_pricings.first.dig('flat_margins')).to eq('SOLAS' => 0.1e2)
         expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to match_array([{ 'SOLAS' => 0.1e2 }])
       end
 
       it 'returns the manipulated local_charge attached to the tenant with nothing else' do
@@ -1270,7 +1299,8 @@ RSpec.describe Pricings::Manipulator do
                           tenant: tenants_tenant,
                           applicable: tenants_tenant)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -1296,7 +1326,8 @@ RSpec.describe Pricings::Manipulator do
 
         FactoryBot.create(:trucking_pre_margin, destination_hub: hub, tenant: tenants_tenant, applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :trucking_pre_margin,
           args: {
             sandbox: nil,
@@ -1334,7 +1365,8 @@ RSpec.describe Pricings::Manipulator do
                           effective_date: (Date.today + 1.day).beginning_of_day,
                           expiration_date: (Date.today + 30.days).end_of_day)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :trucking_pre_margin,
           args: {
             sandbox: nil,
@@ -1362,7 +1394,8 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:trucking_pre_margin, destination_hub: hub, tenant: tenants_tenant, applicable: group_1)
         manipulated_pricings_and_metadata = described_class.new(
           type: :trucking_pre_margin,
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           args: {
             sandbox: nil,
             trucking_pricing: trucking_pricing,
@@ -1380,7 +1413,7 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns multiple manipulated trucking pricings when margins overlap attached to the group without pricing' do
-        Timecop.freeze(Time.now) do
+        Timecop.freeze(Time.zone.now) do
           hub = itinerary_1.first_stop.hub
           trucking_pricing = FactoryBot.create(:trucking_trucking, hub: hub, tenant: tenant, carriage: 'pre')
 
@@ -1398,7 +1431,8 @@ RSpec.describe Pricings::Manipulator do
                             value: 0.5,
                             applicable: group_1)
           manipulated_pricings_and_metadata = described_class.new(
-            user: tenants_user,
+            target: tenants_user,
+            tenant: tenants_tenant,
             type: :trucking_pre_margin,
             args: {
               sandbox: nil,
@@ -1427,7 +1461,8 @@ RSpec.describe Pricings::Manipulator do
         trucking_pricing = FactoryBot.create(:trucking_trucking, hub: hub, tenant: tenant, carriage: 'on')
         FactoryBot.create(:trucking_on_margin, origin_hub: hub, tenant: tenants_tenant, applicable: company_group)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :trucking_on_margin,
           args: {
             sandbox: nil,
@@ -1452,7 +1487,8 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:pricings_detail, margin: user_base_margin, value: 0.25, charge_category: puf_charge_category)
 
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :trucking_on_margin,
           args: {
             sandbox: nil,
@@ -1495,7 +1531,8 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:pricings_detail, margin: user_base_margin, value: 0.25, charge_category: puf_charge_category)
 
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :trucking_on_margin,
           args: {
             sandbox: nil,
@@ -1533,7 +1570,8 @@ RSpec.describe Pricings::Manipulator do
       schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
       user_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing_user, tenant: tenants_tenant, applicable: tenants_user)
       margins = described_class.new(
-        user: tenants_user,
+        target: tenants_user,
+        tenant: tenants_tenant,
         type: :freight_margin,
         args: {
           sandbox: nil,
@@ -1560,7 +1598,8 @@ RSpec.describe Pricings::Manipulator do
       schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
       tenant_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing_tenant, tenant: tenants_tenant, applicable: tenants_tenant)
       margins = described_class.new(
-        user: tenants_user,
+        target: tenants_user,
+        tenant: tenants_tenant,
         type: :freight_margin,
         args: {
           sandbox: nil,
@@ -1589,7 +1628,8 @@ RSpec.describe Pricings::Manipulator do
       schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
 
       keys = described_class.new(
-        user: tenants_user,
+        target: tenants_user,
+        tenant: tenants_tenant,
         type: :invalid_type,
         args: {
           sandbox: nil,
@@ -1609,7 +1649,7 @@ RSpec.describe Pricings::Manipulator do
         shipment: lcl_shipment
       }
 
-      expect { described_class.new(user: tenants_user, type: :freight_margin, args: args) }.to raise_error(Pricings::Manipulator::MissingArgument)
+      expect { described_class.new(target: tenants_user, tenant: tenants_tenant, type: :freight_margin, args: args) }.to raise_error(Pricings::Manipulator::MissingArgument)
     end
   end
 
@@ -1629,7 +1669,8 @@ RSpec.describe Pricings::Manipulator do
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -1642,7 +1683,7 @@ RSpec.describe Pricings::Manipulator do
 
         metadata = manipulated_pricings_and_metadata.second.first
 
-        expect(metadata.keys).to match_array(%i(pricing_id cargo_class fees metadata_id))
+        expect(metadata.keys).to match_array(%i[pricing_id cargo_class fees metadata_id])
         expect(metadata[:pricing_id]).to eq(lcl_pricing_1.id)
         expect(metadata[:fees].keys).to eq([:bas])
         expect(metadata.dig(:fees, :bas, :breakdowns).length).to eq(2)
@@ -1665,7 +1706,8 @@ RSpec.describe Pricings::Manipulator do
         margin_1 = FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user)
         margin_2 = FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user, value: 50, operator: '+')
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -1677,7 +1719,7 @@ RSpec.describe Pricings::Manipulator do
         ).perform
 
         metadata = manipulated_pricings_and_metadata.second.first
-        expect(metadata.keys).to match_array(%i(pricing_id cargo_class fees metadata_id))
+        expect(metadata.keys).to match_array(%i[pricing_id cargo_class fees metadata_id])
         expect(metadata[:pricing_id]).to eq(lcl_pricing_1.id)
         expect(metadata[:fees].keys).to eq([:bas])
         expect(metadata.dig(:fees, :bas, :breakdowns).length).to eq(3)
@@ -1703,7 +1745,8 @@ RSpec.describe Pricings::Manipulator do
         margin_1 = FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user)
         margin_2 = FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user, value: 50, operator: '+')
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :freight_margin,
           args: {
             sandbox: nil,
@@ -1716,9 +1759,9 @@ RSpec.describe Pricings::Manipulator do
 
         metadata = manipulated_pricings_and_metadata.second.first
 
-        expect(metadata.keys).to match_array(%i(pricing_id cargo_class fees metadata_id))
+        expect(metadata.keys).to match_array(%i[pricing_id cargo_class fees metadata_id])
         expect(metadata[:pricing_id]).to eq(lcl_pricing_1.id)
-        expect(metadata[:fees].keys).to match_array(%i(bas baf))
+        expect(metadata[:fees].keys).to match_array(%i[bas baf])
         expect(metadata.dig(:fees, :bas, :breakdowns).length).to eq(3)
         expect(metadata.dig(:fees, :bas, :breakdowns, 1, :margin_id)).to eq(margin_1.id)
         expect(metadata.dig(:fees, :bas, :breakdowns, 1, :margin_value)).to eq(margin_1.value)
@@ -1757,7 +1800,8 @@ RSpec.describe Pricings::Manipulator do
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
 
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -1770,7 +1814,7 @@ RSpec.describe Pricings::Manipulator do
 
         metadata = manipulated_pricings_and_metadata.second.first
 
-        expect(metadata.keys).to match_array(%i(pricing_id cargo_class fees metadata_id direction))
+        expect(metadata.keys).to match_array(%i[pricing_id cargo_class fees metadata_id direction])
         expect(metadata[:pricing_id]).to eq(local_charge.id)
         expect(metadata[:fees].keys).to eq([:SOLAS])
         expect(metadata.dig(:fees, :SOLAS, :breakdowns).length).to eq(2)
@@ -1810,7 +1854,8 @@ RSpec.describe Pricings::Manipulator do
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
 
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -1822,7 +1867,7 @@ RSpec.describe Pricings::Manipulator do
         ).perform
 
         metadata = manipulated_pricings_and_metadata.second.first
-        expect(metadata.keys).to match_array(%i(pricing_id cargo_class fees metadata_id direction))
+        expect(metadata.keys).to match_array(%i[pricing_id cargo_class fees metadata_id direction])
         expect(metadata[:pricing_id]).to eq(local_charge.id)
         expect(metadata[:fees].keys).to eq([:SOLAS])
         expect(metadata.dig(:fees, :SOLAS, :breakdowns).length).to eq(3)
@@ -1884,7 +1929,8 @@ RSpec.describe Pricings::Manipulator do
         schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
 
         manipulated_pricings_and_metadata = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :export_margin,
           args: {
             sandbox: nil,
@@ -1896,9 +1942,9 @@ RSpec.describe Pricings::Manipulator do
         ).perform
 
         metadata = manipulated_pricings_and_metadata.second.first
-        expect(metadata.keys).to match_array(%i(pricing_id cargo_class fees metadata_id direction))
+        expect(metadata.keys).to match_array(%i[pricing_id cargo_class fees metadata_id direction])
         expect(metadata[:pricing_id]).to eq(local_charge.id)
-        expect(metadata[:fees].keys).to eq(%i(SOLAS THC))
+        expect(metadata[:fees].keys).to eq(%i[SOLAS THC])
         expect(metadata.dig(:fees, :SOLAS, :breakdowns).length).to eq(3)
         expect(metadata.dig(:fees, :SOLAS, :breakdowns, 1, :margin_id)).to eq(margin_1.id)
         expect(metadata.dig(:fees, :SOLAS, :breakdowns, 1, :margin_value)).to eq(margin_1.value)
@@ -1918,7 +1964,8 @@ RSpec.describe Pricings::Manipulator do
 
         margin_1 = FactoryBot.create(:trucking_pre_margin, destination_hub: hub, tenant: tenants_tenant, applicable: tenants_user)
         manipulated_pricings, metadata_results = described_class.new(
-          user: tenants_user,
+          target: tenants_user,
+          tenant: tenants_tenant,
           type: :trucking_pre_margin,
           args: {
             sandbox: nil,
@@ -1931,9 +1978,9 @@ RSpec.describe Pricings::Manipulator do
 
         metadata = metadata_results.first
 
-        expect(metadata.keys).to match_array(%i(pricing_id cargo_class fees metadata_id direction))
+        expect(metadata.keys).to match_array(%i[pricing_id cargo_class fees metadata_id direction])
         expect(metadata[:pricing_id]).to eq(trucking_pricing.id)
-        expect(metadata[:fees].keys).to eq(%i(PUF trucking_lcl))
+        expect(metadata[:fees].keys).to eq(%i[PUF trucking_lcl])
         expect(metadata.dig(:fees, :PUF, :breakdowns).length).to eq(2)
         expect(metadata.dig(:fees, :trucking_lcl, :breakdowns).length).to eq(2)
         expect(metadata.dig(:fees, :PUF, :breakdowns, 1, :margin_id)).to eq(margin_1.id)

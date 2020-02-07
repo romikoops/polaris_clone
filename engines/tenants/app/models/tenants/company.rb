@@ -5,7 +5,7 @@ module Tenants
     include PgSearch::Model
 
     acts_as_paranoid
-    
+
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_many :memberships, as: :member
@@ -13,7 +13,7 @@ module Tenants
     has_many :groups, through: :memberships
     belongs_to :address, class_name: 'Legacy::Address', optional: true
     belongs_to :tenant
-    has_one :company, through: :address, class_name: 'Legacy::Country'
+    has_one :country, through: :address, class_name: 'Legacy::Country'
 
     pg_search_scope :name_search, against: %i(name), using: {
       tsearch: { prefix: true }

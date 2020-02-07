@@ -33,7 +33,7 @@ module Tenants
     end
 
     def company_hierarchy
-      return [] unless target&.company
+      return [] unless target.respond_to?(:company) && target.company.present?
 
       [
         target.company.groups.map(&:groups),

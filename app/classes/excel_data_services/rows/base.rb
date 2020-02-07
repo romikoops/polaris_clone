@@ -77,6 +77,10 @@ module ExcelDataServices
         @service_level ||= data[:service_level] || 'standard'
       end
 
+      def sheet_name
+        @sheet_name ||= data[:sheet_name]
+      end
+
       def group_id
         @group_id ||= data[:group_id]
       end

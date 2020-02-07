@@ -1,6 +1,50 @@
 import { push } from 'react-router-redux'
 import { clientsConstants } from '../constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 import { clientsService } from '../services'
+import { requestOptions } from '../helpers'
+
+const { fetch } = window
+
+// New Format (Action only)
+
+function testMargins (args) {
+  function request () {
+    return { type: clientsConstants.TEST_MARGINS_REQUEST }
+  }
+  function success (payload) {
+    return { type: clientsConstants.TEST_MARGINS_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: clientsConstants.TEST_MARGINS_ERROR, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    return fetch(
+      `${getTenantApiUrl()}/admin/margins/test/data`,
+      requestOptions(
+        'POST',
+        { 'Content-Type': 'application/json' },
+        JSON.stringify(args)
+      )
+    )
+      .then(resp => resp.json())
+      .then((resp) => {
+        dispatch(success(resp.data))
+      })
+      .catch((error) => {
+        dispatch(failure(error))
+      })
+  }
+}
+
+function clearMarginPreview () {
+  return dispatch => dispatch({ type: clientsConstants.CLEAR_MARGIN_PREVIEW })
+}
+
+// Legacy Format (Action + Service)
 
 function getClientsForList (args) {
   function request () {
@@ -322,32 +366,6 @@ function getMarginFormData (id) {
   return (dispatch) => {
     dispatch(request)
     clientsService.getMarginFormData(id).then(
-      (resp) => {
-        dispatch(success(resp.data))
-      },
-      (error) => {
-        error.then((data) => {
-          dispatch(failure({ type: 'error', text: data.message }))
-        })
-      }
-    )
-  }
-}
-
-function testMargins (args) {
-  function request () {
-    return { type: clientsConstants.TEST_MARGINS_REQUEST }
-  }
-  function success (payload) {
-    return { type: clientsConstants.TEST_MARGINS_SUCCESS, payload }
-  }
-  function failure (error) {
-    return { type: clientsConstants.TEST_MARGINS_ERROR, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request)
-    clientsService.testMargins(args).then(
       (resp) => {
         dispatch(success(resp.data))
       },
@@ -711,8 +729,8 @@ export const clientsActions = {
   removeClient,
   getLocalChargesForList,
   removeLocalCharge,
-  clearMarginsList
-
+  clearMarginsList,
+  clearMarginPreview
 }
 
 export default clientsActions

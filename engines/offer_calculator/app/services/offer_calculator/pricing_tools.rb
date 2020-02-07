@@ -3,8 +3,9 @@
 require 'bigdecimal'
 
 class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
-  attr_accessor :scope, :user, :shipment
-  def initialize(user:, shipment: nil, sandbox: nil)
+  attr_accessor :scope, :user, :shipment, :metadata
+  
+  def initialize(user:, shipment: nil, sandbox: nil, metadata: [])
     @user = user
     @shipment = shipment
     @scope = ::Tenants::ScopeService.new(
@@ -12,6 +13,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       tenant: ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
     )
     @sandbox = sandbox
+    @metadata = metadata
   end
 
   DEFAULT_MAX = Float::INFINITY
@@ -68,12 +70,12 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
             get_manipulated_local_charge(charge, @shipment, schedules, cargo_data[:cargo_id])
 
           if charges.present?
-            charges.each do |charge|
-              charges_for_filtering << charge
+            charges.each do |charge_result|
+              charges_for_filtering << charge_result
             end
           end
 
-          all_charges_with_metadata |= local_charge_metadata if local_charge_metadata.present?
+          @metadata |= local_charge_metadata if local_charge_metadata.present?
           break if charges.present?
         end
       else
@@ -112,7 +114,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
           end
 
           shipment_charges['fees'][fk] = filter_charge['fees'].delete(fk)
-          if filter_charge.dig(:charge, 'flat_margins', fk).present?
+          if filter_charge.dig('flat_margins', fk).present?
             shipment_charges['flat_margins'][fk] = filter_charge['flat_margins'].delete(fk)
           end
         end
@@ -122,7 +124,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       results << shipment_charges unless shipment_charges['fees'].empty?
       hash[dates] = results
     end
-    [local_charge_by_dates, all_charges_with_metadata]
+    local_charge_by_dates
   end
 
   def get_cargo_weights(cargo:, mot:)
@@ -176,14 +178,17 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
   def local_charge_calculation_block(charge_object, cargo_hash, user)
     totals = { 'total' => {} }
     charge_object.fetch('fees', {}).each do |key, fee|
+      fee[:key] = key
       calculated_value = fee_value(
         fee: fee,
         cargo: cargo_hash,
-        rounding: @scope.fetch(:continuous_rounding)
+        rounding: @scope.fetch(:continuous_rounding),
+        metadata_id: charge_object[:metadata_id]
       )
+
       next if calculated_value.blank?
 
-      totals[key]             ||= { 'value' => 0, 'currency' => fee['currency'] }
+      totals[key] ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[key]['currency'] ||= fee['currency']
       totals[key]['value'] += calculated_value
 
@@ -201,7 +206,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
   end
 
   def determine_local_charges(schedules, cargos, direction, user) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    charges_by_dates, local_charge_metadata = find_local_charge(schedules, cargos, direction, user)
+    charges_by_dates = find_local_charge(schedules, cargos, direction, user)
     return {} if charges_by_dates.empty?
 
     consolidated_hash = consolidated_cargo_hash(cargos: cargos, mot: schedules.first.mode_of_transport)
@@ -243,7 +248,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       end
       hash[dates] = charge_results.flatten.compact
     end
-    [result, local_charge_metadata]
+    [result, metadata]
   end
 
   def calc_addon_charges(charge:, cargos:, user:, mode_of_transport:) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -263,6 +268,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
     totals = { 'total' => {} }
     charge.each do |k, fee|
+      fee['key'] = k
       totals[k] ||= { 'value' => 0, 'currency' => fee['currency'] }
       if !fee['unknown']
         totals[k]['currency'] ||= fee['currency']
@@ -289,7 +295,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
     pricing.keys.each do |k|
       fee = pricing[k].clone
-
+      fee['key'] = k
       totals[k]['currency'] = fee['currency']
 
       totals[k]['value'] +=
@@ -311,49 +317,53 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     totals
   end
 
-  def handle_range_fee(fee, cargo_hash) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
-    weight_kg = cargo_hash.fetch(:weight)
-    volume = cargo_hash.fetch(:volume)
-    raw_weight_kg = cargo_hash.fetch(:raw_weight)
-    weight_measure = cargo_hash.fetch(:weight_measure)
-    quantity = cargo_hash.fetch(:quantity, 1)
+  def handle_range_fee(fee:, cargo:, metadata_id:) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
+    weight_kg = cargo.fetch(:weight)
+    volume = cargo.fetch(:volume)
+    raw_weight_kg = cargo.fetch(:raw_weight, cargo.fetch(:weight))
+    weight_measure = cargo.fetch(:weight_measure)
+    quantity = cargo.fetch(:quantity, 1)
     min = (fee['min'] || 0).to_d
     max = (fee['max'] || DEFAULT_MAX).to_d
     rate_basis = Legacy::RateBasis.get_internal_key(fee['rate_basis'])
 
-    result = case rate_basis
-             when 'PER_KG_RANGE'
-               target = target_in_range(ranges: fee['range'], value: weight_kg, max: true)
-               value = target['rate'] * weight_kg
+    res =
+      case rate_basis
+      when 'PER_KG_RANGE'
+        target = target_in_range(ranges: fee['range'], value: weight_kg, max: true)
+        value = target['rate'] * weight_kg
 
-               [value, min].max
-             when 'PER_CBM_RANGE'
-               target = target_in_range(ranges: fee['range'], value: volume, max: true)
+        [value, min].max
+      when 'PER_CBM_RANGE'
+        target = target_in_range(ranges: fee['range'], value: volume, max: true)
 
-               target['rate'] * volume
-             when 'PER_WM_RANGE'
-               target = target_in_range(ranges: fee['range'], value: weight_measure, max: false)
-               target.dig('rate')
-             when 'PER_UNIT_TON_CBM_RANGE'
-               ratio = volume / (raw_weight_kg / 1000.0)
-               target = target_in_range(ranges: fee['range'], value: ratio, max: false)
-               value = if target['ton']
-                         target['ton'] * raw_weight_kg / 1000.0
-                       elsif target['cbm']
-                         target['cbm'] * volume
-                       else
-                         target['rate'] || 0
-                       end
+        target['rate'] * volume
+      when 'PER_WM_RANGE'
+        target = target_in_range(ranges: fee['range'], value: weight_measure, max: false)
+        target.dig('rate')
+      when 'PER_UNIT_TON_CBM_RANGE'
+        ratio = volume / (raw_weight_kg / 1000.0)
+        target = target_in_range(ranges: fee['range'], value: ratio, max: false)
 
-               [value, min].max
-             when 'PER_UNIT_RANGE'
-               target = target_in_range(ranges: fee['range'], value: quantity, max: true)
-               value = target.nil? ? 0 : target['rate']
+        value = if target['ton']
+                  target['ton'] * raw_weight_kg / 1000
+                elsif target['cbm']
+                  target['cbm'] * volume
+                else
+                  target.fetch('rate', 0)
+                end
 
-               [value, min].max
-             end
+        [value, min].max
+      when 'PER_UNIT_RANGE'
+        target = target_in_range(ranges: fee['range'], value: quantity, max: true)
+        value = target.nil? ? 0 : target['rate']
 
-    [result, max].min
+        [value, min].max
+      end
+
+    update_range_fee_metadata(key: fee[:key], final_range: target, metadata_id: metadata_id) if target.present?
+
+    [res, max].min
   end
 
   def target_in_range(ranges:, value:, max: false)
@@ -397,7 +407,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     round_fee(result, continuous_rounding)
   end
 
-  def fee_value(fee:, cargo:, rounding: false) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def fee_value(fee:, cargo:, rounding: false, metadata_id: nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     rate_basis = Legacy::RateBasis.get_internal_key(fee['rate_basis'])
     value = (fee['value'] || fee['rate'] || 0).to_d
     max = (fee['max'] || DEFAULT_MAX).to_d
@@ -428,7 +438,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
                tonne = (cargo[:weight] / 1000.to_d) * value
                [cbm, tonne].max
              when /RANGE/
-               handle_range_fee(fee, cargo)
+               handle_range_fee(fee: fee, cargo: cargo, metadata_id: metadata_id)
              end
 
     return if result.nil?
@@ -471,7 +481,8 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
     Pricings::Manipulator.new(
       type: "#{local_charge.direction}_margin".to_sym,
-      user: ::Tenants::User.find_by(legacy_id: shipment.user_id),
+      target: ::Tenants::User.find_by(legacy_id: shipment.user_id),
+      tenant: ::Tenants::Tenant.find_by(legacy_id: shipment.tenant_id),
       args: {
         cargo_class: local_charge.load_type,
         schedules: schedules,
@@ -481,5 +492,18 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
         cargo_unit_id: cargo_unit_id
       }
     ).perform
+  end
+
+  def update_range_fee_metadata(key:, final_range:, metadata_id: nil)
+    target_metadata = metadata.find { |m| m[:metadata_id] == metadata_id }
+    return if target_metadata.blank?
+
+    target_metadata.dig(:fees, key.to_sym, :breakdowns).each do |breakdown|
+      next if breakdown.dig(:adjusted_rate, :range).blank?
+
+      target_ranges = breakdown[:adjusted_rate][:range]
+                      .select { |range| range.slice('min', 'max') == final_range.slice('min', 'max') }
+      breakdown[:adjusted_rate][:rate] = target_ranges
+    end
   end
 end

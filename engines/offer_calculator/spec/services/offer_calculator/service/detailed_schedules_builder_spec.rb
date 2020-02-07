@@ -103,7 +103,7 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
   end
 
   let!(:default_margins) do
-    %w(ocean air rail truck trucking local_charge).flat_map do |mot|
+    %w[ocean air rail truck trucking local_charge].flat_map do |mot|
       [
         FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
         FactoryBot.create(:trucking_on_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
@@ -626,7 +626,7 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
 
     context 'base pricing' do
       let!(:pricing_one) do
-        FactoryBot.create(:lcl_pricing,
+        FactoryBot.create(:loaded_lcl_pricing,
                           itinerary: itinerary_1,
                           tenant_vehicle: tenant_vehicle_1,
                           tenant: tenant)
@@ -651,42 +651,74 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
       end
 
       let!(:scope) { FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true }) }
-      it 'returns an object with two quotes with subtotals and grand totals' do
-        service = described_class.new(shipment: cargo_shipment, sandbox: nil)
-        results = service.perform(schedules, no_trucking_data, user)
-        expect(results.count).to eq(1)
-        expect(results.first[:quote][:total][:value]).to be_truthy
-        expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+
+      context 'without margins' do
+        it 'returns an object with two quotes with subtotals and grand totals' do
+          service = described_class.new(shipment: cargo_shipment, sandbox: nil)
+          results = service.perform(schedules, no_trucking_data, user)
+          expect(results.count).to eq(1)
+          expect(results.first[:quote][:total][:value]).to be_truthy
+          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+        end
+
+        it 'returns an object with two quotes with subtotals and grand totals w/ aggregated cargo' do
+          service = described_class.new(shipment: agg_cargo_shipment, sandbox: nil)
+          results = service.perform(schedules, no_trucking_data, user)
+          expect(results.count).to eq(1)
+          expect(results.first[:quote][:total][:value]).to be_truthy
+          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+        end
+
+        it 'returns an object with two quotes with subtotals and grand totals w/ containers' do
+          service = described_class.new(shipment: agg_cargo_shipment, sandbox: nil)
+          results = service.perform(schedules, no_trucking_data, user)
+          expect(results.count).to eq(1)
+          expect(results.first[:quote][:total][:value]).to be_truthy
+          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+        end
       end
 
-      it 'returns an object with two quotes with subtotals and grand totals w/ flat margins' do
-        FactoryBot.create(:pricings_margin,
-                                   operator: '+',
-                                   value: 100,
-                                   itinerary_id: itinerary_1.id,
-                                   applicable: tenants_user,
-                                   tenant: tenants_tenant)
-        service = described_class.new(shipment: cargo_shipment, sandbox: nil)
-        results = service.perform(schedules, no_trucking_data, user)
-        expect(results.count).to eq(1)
-        expect(results.first[:quote][:total][:value]).to be_truthy
-        expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
-      end
+      context 'with margins and breakdowns' do
+        let(:group) { FactoryBot.create(:tenants_group, name: 'TEST', tenant: tenants_tenant) }
+        let!(:membership) { FactoryBot.create(:tenants_membership, member: tenants_user, group: group) }
 
-      it 'returns an object with two quotes with subtotals and grand totals w/ aggregated cargo' do
-        service = described_class.new(shipment: agg_cargo_shipment, sandbox: nil)
-        results = service.perform(schedules, no_trucking_data, user)
-        expect(results.count).to eq(1)
-        expect(results.first[:quote][:total][:value]).to be_truthy
-        expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
-      end
+        it 'returns an object with two quotes with subtotals and grand totals w/ % margins' do
+          FactoryBot.create(:pricings_margin,
+                            operator: '%',
+                            value: 10,
+                            itinerary_id: itinerary_1.id,
+                            applicable: group,
+                            tenant: tenants_tenant)
+          service = described_class.new(shipment: cargo_shipment, sandbox: nil)
+          results = service.perform(schedules, no_trucking_data, user)
 
-      it 'returns an object with two quotes with subtotals and grand totals w/ containers' do
-        service = described_class.new(shipment: agg_cargo_shipment, sandbox: nil)
-        results = service.perform(schedules, no_trucking_data, user)
-        expect(results.count).to eq(1)
-        expect(results.first[:quote][:total][:value]).to be_truthy
-        expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+          expect(results.count).to eq(1)
+          target_result = results.first
+          expect(target_result.dig(:quote, :total, :value)).to be_truthy
+          expect(target_result.dig(:quote, :cargo, :total, :value)).to be_truthy
+          metadatum = Pricings::Metadatum.find_by(id: target_result.dig(:meta, :metadata_id))
+          expect(metadatum).to be_present
+          expect(metadatum.breakdowns.pluck(:charge_category_id).uniq).to match_array(pricing_one.fees.pluck(:charge_category_id))
+        end
+
+        it 'returns an object with two quotes with subtotals and grand totals w/ flat margins' do
+          FactoryBot.create(:pricings_margin,
+                            operator: '+',
+                            value: 100,
+                            itinerary_id: itinerary_1.id,
+                            applicable: group,
+                            tenant: tenants_tenant)
+          service = described_class.new(shipment: cargo_shipment, sandbox: nil)
+          results = service.perform(schedules, no_trucking_data, user)
+          target_result = results.first
+          expect(results.count).to eq(1)
+          expect(target_result.dig(:quote, :total, :value)).to be_truthy
+          expect(target_result.dig(:quote, :cargo, :total, :value)).to be_truthy
+          metadatum = Pricings::Metadatum.find_by(id: target_result.dig(:meta, :metadata_id))
+          expect(metadatum).to be_present
+          expect(metadatum.breakdowns.pluck(:charge_category_id).uniq).to match_array(pricing_one.fees.pluck(:charge_category_id))
+          expect(metadatum.breakdowns.map { |b| b.margin&.operator }.compact.uniq).to match_array(['+'])
+        end
       end
     end
   end

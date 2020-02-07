@@ -3,7 +3,7 @@
 require 'bigdecimal'
 module Pricings
   class Calculator # rubocop:disable Metrics/ClassLength
-    def initialize(cargo:, pricing:, user:, mode_of_transport:, date:)
+    def initialize(cargo:, pricing:, user:, mode_of_transport:, date:, metadata: [])
       @user = user
       @mot = mode_of_transport
       @cargo = cargo
@@ -11,6 +11,7 @@ module Pricings
       @pricing = @data[:data]
       @margins = @data[:flat_margins] || {}
       @metadata_id = @data[:metadata_id]
+      @metadata = metadata
       @converter = Pricings::Conversion.new(base: @user.currency, tenant_id: @user.tenant_id)
       @totals = Hash.new { |h, k| h[k] = { 'value' => 0, 'currency' => nil } unless k.to_s == 'metadata_id' }
       @date = date
@@ -24,12 +25,13 @@ module Pricings
       calculate_fees
       convert_fees
 
-      @totals.with_indifferent_access.merge('metadata_id' => @metadata_id)
+      [@totals.with_indifferent_access.merge('metadata_id' => @metadata_id), metadata]
     end
 
     def calculate_fees
       @pricing.keys.each do |k|
-        fee = @pricing[k].clone
+        fee = @pricing[k].clone.merge(key: k)
+
         @totals[k]['currency'] ||= fee['currency']
         @totals[k]['value'] +=
           if fee['hw_rate_basis']
@@ -103,6 +105,7 @@ module Pricings
         value = target.nil? ? 0 : target['rate']
         res = [value, min].max
       end
+      update_range_fee_metadata(key: fee[:key], final_range: target) if target.present?
 
       [res, max].min
     end
@@ -204,7 +207,7 @@ module Pricings
           weight: @cargo[:chargeable_weight],
           weight_measure: @cargo[:chargeable_weight] / 1000.0,
           raw_weight: @cargo[:payload_in_kg],
-          quantity: @cargo[:num_of_items]
+          quantity: @cargo[:num_of_items] || 1
         }
       else
         chargeable_weight = @cargo.calc_chargeable_weight(@mot)
@@ -217,5 +220,20 @@ module Pricings
         }
       end
     end
+
+    def update_range_fee_metadata(key:, final_range:)
+      target_metadata = metadata.find { |m| m[:metadata_id] == metadata_id }
+      return if target_metadata.blank?
+
+      target_metadata.dig(:fees, key.to_sym, :breakdowns).each do |breakdown|
+        next if breakdown.blank? || breakdown.dig(:adjusted_rate, :range).blank?
+
+        target_ranges = breakdown[:adjusted_rate][:range]
+                          .select { |range| range.slice(:min, :max) == final_range.slice(:min, :max) }
+        breakdown[:adjusted_rate][:rate] = target_ranges
+      end
+    end
+
+    attr_accessor :metadata, :metadata_id
   end
 end

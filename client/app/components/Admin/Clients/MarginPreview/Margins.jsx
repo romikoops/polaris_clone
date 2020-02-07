@@ -1,75 +1,48 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { get, find } from 'lodash'
 import { withNamespaces } from 'react-i18next'
-import ReactTable from 'react-table'
-import 'react-table/react-table.css'
 import styles from './index.scss'
-import { numberSpacing } from '../../../../helpers'
 
-class AdminMarginPreviewMargins extends Component {
-  static renderValue (operator, value) {
-    if (operator === '%') return Number(value) * 100
+function Margins ({ margins, t, viewOwner }) {
+  const valueKeys = ['rate', 'value', 'cbm', 'ton', 'margin_value']
 
-    return numberSpacing(value, 2)
-  }
-
-  render () {
-    const { t, data } = this.props
-
-    const columns = [
-      {
-        columns: [
-          {
-            Header: t('rates:owner'),
-            accessor: d => d.target_name,
-            id: 'owner'
-          },
-          {
-            Header: t('rates:operator'),
-            accessor: d => d.operator,
-            id: 'operator'
-          },
-          {
-            Header: t('rates:value'),
-            accessor: d => AdminMarginPreviewMargins.renderValue(d.operator, d.margin_value),
-            id: 'value'
-          },
-          {
-            Header: t('rates:order'),
-            accessor: d => d.order,
-            id: 'order'
-          }
-        ]
-      }
-    ]
-    const dataWithOrder = data.map((row, i) => ({ ...row, order: i + 1 }))
+  function percentRow (margin) {
+    const valueKey = find(valueKeys, key => !!margin.data[key])
+    const value = get(margin, ['data', valueKey])
+    const currency = get(margin, ['data', 'currency'])
+    const ownerString = `${margin.target_type.replace('Tenants::', '')}: ${margin.target_name}`
 
     return (
-      <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.rate_wrapper}`}>
-        <div className={`flex-100 layout-row layout-aling-start-center ${styles.back_btn_row}`}>
-          <div
-            className={`flex-none layout-row layout-align-start-center ${styles.back_btn}`}
-            onClick={this.props.back}
-          >
-            <i className="fa fa-chevron-left" />
-            <p className="flex-none">{t('common:basicBack')}</p>
-          </div>
-        </div>
-        <ReactTable
-          className="flex-100 height_100"
-          data={dataWithOrder}
-          columns={columns}
-          defaultSorted={[
-            {
-              id: 'order',
-              desc: true
-            }
-          ]}
-          defaultPageSize={3}
-          showPaginationBottom={false}
-        />
-      </div>
+      <tr>
+        <td colSpan="4" className={styles.value_cell}>{`${parseFloat(margin.margin_value) * 100} ${margin.operator}`}</td>
+        <td colSpan="4" className={styles.value_cell}>{`${value} ${currency}`}</td>
+        <td
+          colSpan="4"
+          className={styles.owner_cell}
+          onClick={() => viewOwner(margin)}
+        >
+          {ownerString}
+        </td>
+      </tr>
     )
   }
+
+  const rows = margins.map(margin => percentRow(margin))
+
+  return (
+    <table className="flex-100">
+      <thead>
+        <th colSpan="4" className={styles.value_cell}>{t('rates:delta')}</th>
+        <th colSpan="4" className={styles.value_cell}>{t('rates:adjustedRate')}</th>
+        <th colSpan="4" className={styles.owner_cell}>{t('rates:owner')}</th>
+      </thead>
+      {rows}
+    </table>
+  )
 }
 
-export default withNamespaces(['rates', 'admin', 'shipment'])(AdminMarginPreviewMargins)
+Margins.defaultProps = {
+  margins: []
+}
+
+export default withNamespaces(['rates'])(Margins)

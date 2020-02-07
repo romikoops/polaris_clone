@@ -298,6 +298,10 @@ class AdminPricesTable extends PureComponent {
   }
 }
 
+AdminPricesTable.defaultProps = {
+  manual: false
+}
+
 function mapStateToProps (state) {
   const {
     authentication, app, admin

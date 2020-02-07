@@ -1,94 +1,87 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { get, has } from 'lodash'
 import { withNamespaces } from 'react-i18next'
-import { moment } from '../../../../constants'
-import GreyBox from '../../../GreyBox/GreyBox'
 import styles from './index.scss'
-import { capitalize } from '../../../../helpers'
+import Modal from '../../../Modal/Modal'
+import AdminMarginPreviewRate from './Rate'
+import { numberSpacing } from '../../../../helpers'
+import ResultSection from './ResultSection'
 
-function AdminClientMarginPreviewResult ({ results, tenant, t }) {
-  const getMarginValue = (margin, key) => {
-    const effectiveMargin = margin.marginDetails.filter(md => md.fee_code === key)[0] || margin
-    const value = effectiveMargin.operator === '%' ? parseFloat(effectiveMargin.value) * 100 : effectiveMargin.value
-
-    return `@ ${value} ${margin.operator}`
+class AdminMarginPreviewResult extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      hoverActive: {},
+      selectedRate: false
+    }
+    this.viewRate = this.viewRate.bind(this)
   }
 
-  return (
-    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-      { results.map(result => (
-        <GreyBox
-          wrapperClassName={`flex-100 ${styles.result_box}`}
-          contentClassName="flex-100 layout-row layout-align-start-start layout-wrap"
-        >
-          <div className={`flex-100 layout-row layout-align-start-start greyBg ${styles.header}`}>
-            <div className="flex layout-row layout-align-center-center">
-              <h2 className="flex">
-                {result.itinerary.name}
-              </h2>
-            </div>
-            <div className="flex layout-row layout-align-center-center">
-              <h4 className="flex-none">
-                {`${t('admin:cargoClass')} ${t(`common:${result.cargo_class}`)}`}
-              </h4>
-            </div>
-            <div className="flex layout-row layout-align-center-center">
-              <h4 className="flex-none">
-                {`${t('admin:serviceLevel')}: ${capitalize(result.service_level)}`}
-              </h4>
-            </div>
+  toggleHoverClass (feeKey) {
+    this.setState(prevState => ({
+      ...prevState,
+      hoverActive: {
+        ...prevState.hoverActive,
+        [feeKey]: !get(prevState, ['hoverActive', feeKey], false)
+      }
+    }))
+  }
+
+  viewRate (sectionKey, feeKey) {
+    this.setState({ targetSectionKey: sectionKey, targetRateKey: feeKey })
+  }
+
+  renderSection (sectionKey) {
+    const { result } = this.props
+
+    return <ResultSection section={result[sectionKey]} sectionKey={sectionKey} viewRate={this.viewRate} />
+  }
+
+  render () {
+    const { targetSectionKey, targetRateKey } = this.state
+    const { tenant, result, t } = this.props
+    const selectedRate = get(result, [targetSectionKey, 'fees', targetRateKey], false)
+    const { theme } = tenant
+    const sectionKeys = ['trucking_pre', 'export', 'freight', 'import', 'trucking_on']
+
+    const rateModal = selectedRate ? (
+      <Modal
+        component={(
+          <AdminMarginPreviewRate
+            theme={theme}
+            rate={selectedRate}
+            type={targetSectionKey}
+            price={{ name: targetRateKey }}
+          />
+        )}
+        minWidth="400px"
+        minHeight="400px"
+        verticalPadding="30px"
+        horizontalPadding="40px"
+        parentToggle={() => this.viewRate(false, false)}
+      />
+    ) : ''
+
+    return (
+      <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.result_wrapper}`}>
+        {rateModal}
+        <div className="flex-100 layout-row layout-align-start-center">
+          <div className={`flex-20 center ${styles.service_level}`}>
+            <p className="flex-none">{`${t('shipment:serviceLevel')}:  ${get(result, ['trucking_pre', 'service_level'], 'N/A')}`}</p>
           </div>
-          <div className="flex-100 layout-row layout-align-start-start">
-            <table className={`flex-100 ${styles.result_table}`}>
-              <tbody>
-                <tr>
-                  <th>{t('admin:label')}</th>
-                  <th>{t('admin:effectivePeriod')}</th>
-                  <th>
-                    {t('admin:source')}
-                  </th>
-                  { Object.keys(result.data).map(k => <th>{k}</th>)}
-                </tr>
-                <tr>
-                  <td>{t('admin:basePricing')}</td>
-                  <td>
-                    {`${moment(result.effective_date).format('MM/YY')} - ${moment(result.expiration_date).format('MM/YY')}`}
-                  </td>
-                  <td>
-                    {t('admin:base')}
-                  </td>
-                  { Object.keys(result.data).map(k => (
-                    <td>
-                      {`${result.data[k].rate} ${result.data[k].currency}`}
-                    </td>
-                  ))}
-                </tr>
-                { result.manipulation_steps.map((ms, i) => (
-                  <tr>
-                    <td>
-                      {`Margin ${i + 1}`}
-                    </td>
-                    <td>
-                      {`${moment(ms.margin.effectiveDate).format('MM/YY')} - ${moment(ms.margin.expirationDate).format('MM/YY')}`}
-                    </td>
-                    <td>
-                      {ms.applicable}
-                    </td>
-                    { Object.keys(result.data).map(k => (
-                      <td>
-                        {`${ms.fees[k].rate} ${ms.fees[k].currency} ${getMarginValue(ms.margin, k)}`}
-                      </td>
-                    ))}
-                  </tr>))}
-              </tbody>
-            </table>
+          <div className={`flex-60 center ${styles.service_level} ${styles.service_level_main}`}>
+            <p className="flex-none">{`${t('shipment:serviceLevel')}:  ${get(result, ['freight', 'service_level'], 'N/A')}`}</p>
           </div>
-        </GreyBox>)) }
-    </div>
-  )
+          <div className={`flex-20 center ${styles.service_level}`}>
+            <p className="flex-none">{`${t('shipment:serviceLevel')}:  ${get(result, ['trucking_on', 'service_level'], 'N/A')}`}</p>
+          </div>
+        </div>
+        <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.section_container}`}>
+          {sectionKeys.map(sectionKey => <ResultSection section={result[sectionKey]} sectionKey={sectionKey} viewRate={this.viewRate} />)}
+        </div>
+      </div>
+    )
+  }
 }
 
-AdminClientMarginPreviewResult.defaultProps = {
-  results: []
-}
-
-export default withNamespaces(['admin', 'common'])(AdminClientMarginPreviewResult)
+export default withNamespaces(['admin', 'shipment'])(AdminMarginPreviewResult)

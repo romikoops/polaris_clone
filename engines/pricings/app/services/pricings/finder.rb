@@ -43,7 +43,8 @@ module Pricings
 
         Pricings::Manipulator.new(
           type: :freight_margin,
-          user: @user,
+          target: @user,
+          tenant: @user.tenant,
           args: {
             schedules: filtered_schedules,
             shipment: @shipment,

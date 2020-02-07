@@ -8,7 +8,7 @@ module OfferCalculator
 
       def perform(schedules, trucking_data, user) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
         @pricings_with_meta = {}
-        @metadata_list = trucking_data[:metadata]
+        @metadata_list = trucking_data.fetch(:metadata, [])
         schedules_by_pricings = grouped_schedules(schedules: schedules,
                                                   shipment: @shipment,
                                                   user: user).compact
@@ -30,6 +30,7 @@ module OfferCalculator
 
           next if grand_total_charges.blank?
 
+
           grand_total_charges.map do |grand_total_charge|
             quote = grand_total_charge[:total].deconstruct_tree_into_schedule_charge.deep_symbolize_keys
             next if invalid_quote?(quote: quote)
@@ -38,7 +39,7 @@ module OfferCalculator
               quote: grand_total_charge[:total].deconstruct_tree_into_schedule_charge.deep_symbolize_keys,
               schedules: grand_total_charge[:schedules].map(&:to_detailed_hash),
               meta: meta(
-                schedule: grand_total_charge[:schedules].first,
+                result: grand_total_charge,
                 shipment: @shipment,
                 pricings_by_cargo_class: current_result[:pricings_by_cargo_class],
                 user: user
@@ -85,7 +86,8 @@ module OfferCalculator
         filtered_detailed_schedules
       end
 
-      def meta(schedule:, shipment:, pricings_by_cargo_class:, user:) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def meta(result:, shipment:, pricings_by_cargo_class:, user:) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        schedule = result[:schedules].first
         chargeable_weight = if shipment.lcl? && shipment.aggregated_cargo
                               shipment.aggregated_cargo.calc_chargeable_weight(schedule.mode_of_transport)
                             elsif shipment.lcl? && !shipment.aggregated_cargo
@@ -120,6 +122,7 @@ module OfferCalculator
           transshipmentVia: transshipment_via,
           validUntil: shipment.valid_until(schedule.trip),
           remarkNotes: remark_notes,
+          metadata_id: result[:metadata].id,
           pricing_rate_data: grab_pricing_rates(
             schedule: schedule,
             load_type: shipment.load_type,
@@ -141,7 +144,8 @@ module OfferCalculator
                    .for_load_type(load_type)
                    .each_with_object({}) do |pricing, hash|
             manipulated_pricing, _metadata = ::Pricings::Manipulator.new(
-              user: user.tenants_user,
+              target: Tenants::User.find_by(legacy_id: user.id),
+              tenant: Tenants::Tenant.find_by(legacy_id: user.tenant_id),
               type: :freight_margin,
               args: {
                 pricing: pricing,

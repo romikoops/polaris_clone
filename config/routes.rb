@@ -85,7 +85,7 @@ Rails.application.routes.draw do
       resources :memberships, only: %i(index show create destroy)
 
       get 'margins/form/data', to: 'margins#form_data'
-      get 'margins/test/data', to: 'margins#test'
+      post 'margins/test/data', to: 'margins#test'
       get 'margins/form/itineraries', to: 'margins#itinerary_list'
       get 'margins/form/fee_data', to: 'margins#fee_data'
       post 'margins/update/multiple', to: 'margins#update_multiple'
@@ -340,7 +340,7 @@ end
 #                                tenant_admin_membership GET    /tenants/:tenant_id/admin/memberships/:id(.:format)                                      admin/memberships#show
 #                                                        DELETE /tenants/:tenant_id/admin/memberships/:id(.:format)                                      admin/memberships#destroy
 #                         tenant_admin_margins_form_data GET    /tenants/:tenant_id/admin/margins/form/data(.:format)                                    admin/margins#form_data
-#                         tenant_admin_margins_test_data GET    /tenants/:tenant_id/admin/margins/test/data(.:format)                                    admin/margins#test
+#                         tenant_admin_margins_test_data POST   /tenants/:tenant_id/admin/margins/test/data(.:format)                                    admin/margins#test
 #                  tenant_admin_margins_form_itineraries GET    /tenants/:tenant_id/admin/margins/form/itineraries(.:format)                             admin/margins#itinerary_list
 #                     tenant_admin_margins_form_fee_data GET    /tenants/:tenant_id/admin/margins/form/fee_data(.:format)                                admin/margins#fee_data
 #                   tenant_admin_margins_update_multiple POST   /tenants/:tenant_id/admin/margins/update/multiple(.:format)                              admin/margins#update_multiple

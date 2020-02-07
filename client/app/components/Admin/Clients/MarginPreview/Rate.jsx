@@ -1,145 +1,157 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { withNamespaces } from 'react-i18next'
-import { get } from 'lodash'
+import { get, has } from 'lodash'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { adminActions } from '../../../../actions'
+import { numberSpacing } from '../../../../helpers'
 import styles from './index.scss'
-import AdminFeeTable from '../../Pricing/FeeTable'
-import AdminRangeFeeTable from '../../Pricing/RangeTable'
-import TruckingTableRateHeaders from '../../Trucking/Table/RateHeaders'
-import AdminMarginPreviewMargins from './Margins'
+import Margins from './Margins'
+import FlatMargins from './FlatMargins'
+import TruckingMargins from './TruckingMargins'
+import Fees from './Fees'
+import TruckingFees from './TruckingFees'
+import DocumentsDownloader from '../../../Documents/Downloader'
 
-class AdminMarginPreviewRate extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      hoverActive: {}
+function AdminMarginPreviewRate ({
+  type, rate, price, t, adminDispatch
+}) {
+  function viewOwner (margin) {
+    let url
+    switch (margin.target_type) {
+      case 'Tenants::User':
+        url = `/admin/clients/client/${margin.url_id}`
+        break
+      case 'Tenants::Group':
+        url = `/admin/clients/groups/${margin.url_id}`
+        break
+      case 'Tenants::Company':
+        url = `/admin/clients/companies/${margin.url_id}`
+        break
+
+      default:
+        url = false
+        break
+    }
+    if (url) {
+      adminDispatch.goTo(url)
     }
   }
 
-  selectView (target) {
-    this.setState({ targetView: target }, () => (this.toggleHoverClass(target)))
+  function extractCurrency () {
+    if (['trucking_pre', 'trucking_on'].includes(type)) {
+      const firstKey = Object.keys(rate.original)[0]
+
+      return get(rate, ['original', firstKey, 0, 'rate', 'currency'])
+    }
+
+    return get(rate, ['original', 'currency'])
   }
 
-  toggleHoverClass (key) {
-    this.setState(prevState => ({
-      ...prevState,
-      hoverActive: {
-        ...prevState.hoverActive,
-        [key]: !get(prevState, ['hoverActive', key], false)
+  const currency = extractCurrency()
+
+  function renderRateTable (target) {
+    if (['trucking_pre', 'trucking_on'].includes(type)) {
+      return <TruckingFees data={rate[target]} />
+    }
+
+    return <Fees data={rate[target]} />
+  }
+
+  function renderMargins () {
+    if (['trucking_pre', 'trucking_on'].includes(type)) {
+      return <TruckingMargins margins={rate.margins} currency={currency} viewOwner={viewOwner} />
+    }
+
+    return <Margins margins={rate.margins} viewOwner={viewOwner} />
+  }
+
+  const showMargins = rate.margins.length > 0
+  const showFlatMargins = rate.flatMargins.length > 0
+  const feeName = type.includes('trucking') ? t('rates:trucking') : price.name
+  const { metadata } = rate
+
+  return (
+    <div className={`${styles.container} flex-100 layout-row layout-wrap layout-align-center-center`}>
+      <div className={`${styles.header} flex-100 layout-row layout-align-center-center`}>
+        <h4 className="flex-none">{t('rates:pricingBreakdownFor', { feeName })}</h4>
+      </div>
+      <div className={`${styles.table_section} flex-100 layout-row layout-wrap`}>
+        <p className={`${styles.table_section_title} flex-100`}>{t('rates:originalRate')}</p>
+        {renderRateTable('original')}
+      </div>
+      <div className={`${styles.table_section} flex-100 layout-row layout-wrap`}>
+        <p className={`${styles.table_section_title} flex-100`}>{t('rates:margins')}</p>
+        {showMargins ? renderMargins() : <p className={`${styles.no_margins} flex-100`}>{t('rates:noMargins')}</p>}
+      </div>
+      {
+        showFlatMargins &&
+        (
+          <div className={`${styles.table_section} flex-100 layout-row layout-wrap`}>
+            <p className={`${styles.table_section_title} flex-100`}>{t('rates:finalRate')}</p>
+            {renderRateTable('final')}
+          </div>
+        )
       }
-    }))
-  }
-
-  renderFeeTable (fee, localCharge) {
-    const { t } = this.props
-
-    if (
-      Object.values(fee)
-        .some(val => val.range && val.range.length > 0)
-    ) {
-      return (
-        <div className="flex-100 layout-row layout-wrap">
-          <div className={`flex-100 layout-row layout-aling-start-center ${styles.back_btn_row}`}>
-            <div
-              className={`flex-none layout-row layout-align-start-center ${styles.back_btn}`}
-              onClick={() => this.selectView(false)}
-            >
-              <i className="fa fa-chevron-left" />
-              <p className="flex-none">{t('common:basicBack')}</p>
+      {
+        showFlatMargins &&
+        (
+          <div className={`${styles.table_section} flex-100 layout-row layout-wrap`}>
+            <p className={`${styles.table_section_title} flex-100`}>{t('rates:flatMargins')}</p>
+            <FlatMargins margins={rate.flatMargins} currency={currency} viewOwner={viewOwner} />
+          </div>
+        )
+      }
+      {
+        has(price, ['value']) &&
+        (
+          <div className={`${styles.final_result} flex-100 layout-row layout-wrap`}>
+            <h4 className="flex-50">{t('rates:finalChargedAmount')}</h4>
+            <h3 className="flex-50">{`${price.currency} ${numberSpacing(price.value, 2)}`}</h3>
+          </div>
+        )
+      }
+      { metadata &&
+          (
+            <div className={`${styles.metadata_section} flex-100 layout-row layout-wrap`}>
+              <div className="flex-100 layout-row">
+                <p className={`${styles.table_section_title} flex-100`}>
+                  {t('admin:sourceData')}
+                </p>
+              </div>
+              <div className={`flex-100 layout-row layout-align-space-between-center ${styles.breakdown_line}`}>
+                <p className={`flex-none ${styles.row_header}`}>
+                  {t('admin:sourceFile')}
+                </p>
+                <p className="flex-none">{metadata.file_name}</p>
+              </div>
+              <div className={`flex-100 layout-row layout-align-space-between-center ${styles.breakdown_line}`}>
+                <p className="flex-none">{t('admin:rowNumber')}</p>
+                <p className="flex-none">{metadata.row_number}</p>
+              </div>
+              { metadata.document_id &&
+              (
+                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.breakdown_line}`}>
+                  <p className="flex-none">{t('admin:downloadOriginalFile')}</p>
+                  <DocumentsDownloader target="id" options={{ id: metadata.document_id }} modal />
+                </div>
+              )}
             </div>
-          </div>
-          <AdminRangeFeeTable classes="flex-100" row={fee} isLocalCharge={localCharge} />
-        </div>
-      )
-    }
+          )
+        }
+    </div>
+  )
+}
 
-    return (
-      <div className="flex-100 layout-row layout-wrap">
-        <div className={`flex-100 layout-row layout-aling-start-center ${styles.back_btn_row}`}>
-          <div
-            className={`flex-none layout-row layout-align-start-center ${styles.back_btn}`}
-            onClick={() => this.selectView(false)}
-          >
-            <i className="fa fa-chevron-left" />
-            <p className="flex-none">{t('common:basicBack')}</p>
-          </div>
-        </div>
-        <AdminFeeTable classes="flex-100" row={fee} isLocalCharge={localCharge} />
-      </div>
-    )
+function mapStateToProps (state) {
+  return {
+
   }
-
-  renderRate (target) {
-    const { type, rate, feeKey } = this.props
-
-    if ( ['cargo', 'freight'].includes(type) && target !== 'margins') {
-      return this.renderFeeTable({ [feeKey]: rate[target] }, false)
-    }
-    if (['import', 'export'].includes(type) && target !== 'margins') {
-      return this.renderFeeTable({ [feeKey]: rate[target] }, true)
-    }
-    if (['trucking_pre', 'trucking_on'].includes(type) && target !== 'margins') {
-      return (
-        <TruckingTableRateHeaders
-          truckingPricing={{ rates: rate[target] }}
-          back={() => this.selectView(false)}
-        />
-      )
-    }
-    if (target === 'margins') {
-      return (
-        <AdminMarginPreviewMargins
-          data={rate[target]}
-          back={() => this.selectView(false)}
-        />
-      )
-    }
-
-    return ''
-  }
-
-  render () {
-    const { t, rate } = this.props
-    const { targetView, hoverActive } = this.state
-    const showMargins = rate.margins.length > 0
-
-    const listComp = (
-      <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-        <div
-          className={`flex-100 layout-row layout-align-center-center ${styles.rate_nav_buttons} ${hoverActive.original ? styles.hover : ''}`}
-          onClick={() => this.selectView('original')}
-          onMouseEnter={() => this.toggleHoverClass('original')}
-          onMouseLeave={() => this.toggleHoverClass('original')}
-        >
-          <h3 className="flex-none">{t('rates:viewOriginal')}</h3>
-        </div>
-        <div
-          className={`flex-100 layout-row layout-align-center-center ${styles.rate_nav_buttons} ${hoverActive.margins ? styles.hover : ''}`}
-          onClick={showMargins ? () => this.selectView('margins') : null}
-          onMouseEnter={() => this.toggleHoverClass('margins')}
-          onMouseLeave={() => this.toggleHoverClass('margins')}
-        >
-          <h3 className="flex-none">{t(`rates:${showMargins ? 'viewMargins' : 'noMargins'}`)}</h3>
-        </div>
-        <div
-          className={`flex-100 layout-row layout-align-center-center ${styles.rate_nav_buttons} ${hoverActive.final ? styles.hover : ''}`}
-          onClick={() => this.selectView('final')}
-          onMouseEnter={() => this.toggleHoverClass('final')}
-          onMouseLeave={() => this.toggleHoverClass('final')}
-        >
-          <h3 className="flex-none">{t('rates:viewFinal')}</h3>
-        </div>
-      </div>
-
-    )
-
-    return (
-      <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-        <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-          {targetView ? this.renderRate(targetView) : listComp}
-        </div>
-      </div>
-    )
+}
+function mapDispatchToProps (dispatch) {
+  return {
+    adminDispatch: bindActionCreators(adminActions, dispatch)
   }
 }
 
-export default withNamespaces(['admin', 'shipment'])(AdminMarginPreviewRate)
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces(['rates'])(AdminMarginPreviewRate))

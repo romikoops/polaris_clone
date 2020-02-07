@@ -18,9 +18,12 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'core'
+  s.add_dependency 'geocoder'
   s.add_dependency 'legacy'
   s.add_dependency 'tenants'
   s.add_dependency 'trucking'
- 
+
+  s.add_development_dependency 'routing'
+
   Gemhelper.common_gems(s)
 end

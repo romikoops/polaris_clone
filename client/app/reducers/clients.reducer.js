@@ -79,12 +79,6 @@ export default function clients (state = {}, action) {
         group: action.payload
       }
     }
-    // case 'EDIT_MEMBERSHIP_SUCCESS': {
-    //   return {
-    //     ...state,
-    //     group: action.payload
-    //   }
-    // }
     case 'GET_MARGIN_FORM_DATA_SUCCESS': {
       return {
         ...state,
@@ -132,10 +126,17 @@ export default function clients (state = {}, action) {
         }
       }
     }
+    case 'TEST_MARGINS_REQUEST': {
+      return {
+        ...state,
+        loading: true
+      }
+    }
     case 'TEST_MARGINS_SUCCESS': {
       return {
         ...state,
-        marginPreview: action.payload
+        marginPreview: action.payload,
+        loading: false
       }
     }
     case 'FETCH_SCOPE_SUCCESS': {
@@ -143,6 +144,12 @@ export default function clients (state = {}, action) {
         ...state,
         scopes: action.payload
       }
+    }
+    case 'CLEAR_MARGIN_PREVIEW': {
+      const newState = { ...state }
+      delete newState.marginPreview
+
+      return newState
     }
     default:
       return state

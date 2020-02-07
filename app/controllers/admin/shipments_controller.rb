@@ -34,20 +34,20 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def show
-    prepare_response
     response = Rails.cache.fetch("#{@shipment.cache_key}/view_shipment", expires_in: 12.hours) do
-    {
-      shipment: shipment_as_json,
-      cargoItems: @cargo_items.map(&:with_cargo_type),
-      containers: @containers,
-      aggregatedCargo: @shipment.aggregated_cargo,
-      contacts: contacts,
-      documents: @documents,
-      addresses: addresses,
-      cargoItemTypes: cargo_item_types,
-      accountHolder: @shipment.user,
-      pricingBreakdowns: pricing_breakdowns(shipment: @shipment)
-    }.as_json
+      prepare_response
+      {
+        shipment: shipment_as_json,
+        cargoItems: @cargo_items.map(&:with_cargo_type),
+        containers: @containers,
+        aggregatedCargo: @shipment.aggregated_cargo,
+        contacts: contacts,
+        documents: @documents,
+        addresses: addresses,
+        cargoItemTypes: cargo_item_types,
+        accountHolder: @shipment.user,
+        pricingBreakdowns: pricing_breakdowns(shipment: @shipment)
+      }.as_json
     end
 
     response_handler(response)
@@ -152,15 +152,23 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def pricing_breakdowns(shipment:)
     metadatum = Pricings::Metadatum.find_by(charge_breakdown_id: shipment.charge_breakdowns.selected&.id)
-    return [] unless metadatum
+    return [] if metadatum.blank?
 
     metadatum.breakdowns.map do |breakdown|
-      breakdown.attributes.merge(
-                code: breakdown.code,
-                target_name: breakdown.target_name,
-                operator: breakdown.margin&.operator,
-                margin_value: breakdown.margin&.value
-              ).with_indifferent_access
+      url_id = if breakdown.target_type == 'Tenants::User'
+                 Tenants::User.find_by(id: breakdown.target_id).legacy_id
+               else
+                 breakdown.target_id
+               end
+      breakdown.as_json
+               .merge(
+                 code: breakdown.code,
+                 target_name: breakdown.target_name,
+                 operator: breakdown.margin&.operator,
+                 margin_value: breakdown.margin&.value,
+                 url_id: url_id
+               )
+               .with_indifferent_access
     end
   end
 
@@ -389,7 +397,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def options
     @options ||= {
-      methods: %i(selected_offer mode_of_transport),
+      methods: %i[selected_offer mode_of_transport],
       include: [{ destination_nexus: {} },
                 { origin_nexus: {} },
                 { destination_hub: {} },

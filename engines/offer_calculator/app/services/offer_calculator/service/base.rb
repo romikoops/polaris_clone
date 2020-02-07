@@ -9,7 +9,6 @@ module OfferCalculator
           target: Tenants::User.find_by(legacy_id: @shipment.user_id),
           tenant: Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
         ).fetch
-        @pricing_tools = OfferCalculator::PricingTools.new(shipment: @shipment, user: @shipment.user, sandbox: sandbox)
         @sandbox = sandbox
       end
 

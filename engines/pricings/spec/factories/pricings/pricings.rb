@@ -35,7 +35,7 @@ FactoryBot.define do
                     tenant: pricing.tenant,
                     rate_basis: FactoryBot.create(:per_wm_rate_basis),
                     rate: 25,
-                    charge_category: FactoryBot.create(:bas_charge))
+                    charge_category: FactoryBot.create(:bas_charge, tenant: pricing.tenant))
       end
     end
     trait :fcl_20 do
@@ -48,7 +48,7 @@ FactoryBot.define do
                     tenant: pricing.tenant,
                     rate_basis: FactoryBot.create(:per_container),
                     rate: 250,
-                    charge_category: FactoryBot.create(:bas_charge))
+                    charge_category: FactoryBot.create(:bas_charge, tenant: pricing.tenant))
       end
     end
 
@@ -62,7 +62,7 @@ FactoryBot.define do
                     tenant: pricing.tenant,
                     rate_basis: FactoryBot.create(:per_container),
                     rate: 250,
-                    charge_category: FactoryBot.create(:bas_charge))
+                    charge_category: FactoryBot.create(:bas_charge, tenant: pricing.tenant))
       end
     end
 
@@ -76,7 +76,7 @@ FactoryBot.define do
                     tenant: pricing.tenant,
                     rate_basis: FactoryBot.create(:per_container),
                     rate: 250,
-                    charge_category: FactoryBot.create(:bas_charge))
+                    charge_category: FactoryBot.create(:bas_charge, tenant: pricing.tenant))
       end
     end
 
@@ -102,6 +102,24 @@ FactoryBot.define do
       end
     end
 
+    trait :fully_loaded_lcl do
+      cargo_class { 'lcl' }
+      load_type { 'cargo_item' }
+      after :create do |pricing|
+        create(:pricings_fee,
+                  pricing: pricing,
+                  tenant: pricing.tenant,
+                  rate_basis: FactoryBot.create(:per_wm_rate_basis),
+                  rate: 25,
+                  charge_category: FactoryBot.create(:bas_charge, tenant: pricing.tenant))
+        create(:fee_per_kg_range,
+                  pricing: pricing,
+                  tenant: pricing.tenant,
+                  charge_category: FactoryBot.create(:solas_charge, tenant: pricing.tenant))
+      end
+    end
+
+    factory :loaded_lcl_pricing, traits: [:fully_loaded_lcl]
     factory :lcl_pricing, traits: [:lcl]
     factory :lcl_range_pricing, traits: [:lcl_range]
     factory :container_range_pricing, traits: [:container_range]

@@ -7,13 +7,14 @@ module OfferCalculator
 
       def perform(hubs)
         @trucking_pricings_metadata = []
+        @all_selected_fees = {}
         trucking_pricings = { origin: 'pre', destination: 'on' }
                             .select { |_, carriage| @shipment.has_carriage?(carriage) }
                             .each_with_object({}) do |(target, carriage), obj|
           obj[carriage] = data_for_hubs(hubs[target], carriage)
         end
 
-        { trucking_pricings: trucking_pricings, metadata: @trucking_pricings_metadata }
+        { trucking_pricings: trucking_pricings, metadata: @trucking_pricings_metadata, selected_fees: @all_selected_fees }
       end
 
       private
@@ -56,7 +57,7 @@ module OfferCalculator
         raise OfferCalculator::Calculator::MissingTruckingData
       rescue OfferCalculator::TruckingTools::LoadMeterageExceeded
         raise OfferCalculator::TruckingTools::LoadMeterageExceeded
-      rescue StandardError => e
+      rescue StandardError
         raise OfferCalculator::Calculator::MissingTruckingData
       end
 
@@ -81,8 +82,9 @@ module OfferCalculator
       def data_for_trucking_charges(trucking_pricings, distance)
         trucking_pricings.each_with_object({}) do |(cargo_class, trucking_pricing), trucking_charge_data|
           key = cargo_class
-          trucking_charges = calc_trucking_charges(distance, trucking_pricing)
+          trucking_charges, selected_fees = calc_trucking_charges(distance, trucking_pricing)
           trucking_charge_data[key] = trucking_charges
+          all_selected_fees[key] = selected_fees
         end
       rescue OfferCalculator::TruckingTools::LoadMeterageExceeded => e
         { error: e }
@@ -111,7 +113,8 @@ module OfferCalculator
           cargo_units,
           distance,
           trucking_pricing.carriage,
-          @shipment.user
+          @shipment.user,
+          @trucking_pricings_metadata
         ).perform
 
         calculation_result.merge('metadata_id' => manipulated_trucking_pricing['metadata_id'])
@@ -120,7 +123,8 @@ module OfferCalculator
       def get_manipulated_trucking_pricing(trucking_pricing)
         manipulated_trucking_pricings, trucking_pricing_meta = Pricings::Manipulator.new(
           type: "trucking_#{trucking_pricing.carriage}_margin".to_sym,
-          user: ::Tenants::User.find_by(legacy_id: @shipment.user_id),
+          target: ::Tenants::User.find_by(legacy_id: @shipment.user_id),
+          tenant: ::Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id),
           args: {
             cargo_class: trucking_pricing.cargo_class,
             date: @shipment.desired_start_date,
@@ -133,6 +137,8 @@ module OfferCalculator
 
         manipulated_trucking_pricings.first
       end
+
+      attr_accessor :all_selected_fees
     end
   end
 end

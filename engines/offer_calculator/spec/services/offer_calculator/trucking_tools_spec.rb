@@ -495,14 +495,6 @@ RSpec.describe OfferCalculator::TruckingTools do
         expect(result_object.dig('stackable')).to eq({})
       end
 
-      it 'correctly returns the calculated trucking (kg cbm special rates)' do
-        trucking_pricing = FactoryBot.create(:trucking_with_kg_cbm_special, load_meterage: { ratio: 1000, area: 48_000 })
-        result_object = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).perform
-
-        expect(result_object.dig('stackable', :currency)).to eq('SEK')
-        expect(result_object.dig('non_stackable')).to eq({})
-      end
-
       it 'correctly returns the calculated trucking (cbm rates)' do
         trucking_pricing = FactoryBot.create(:trucking_with_cbm_rates, load_meterage: { ratio: 1000, area: 48_000 })
         result_object = described_class.new(trucking_pricing, default_cargos, 0, 'pre', user).perform
@@ -565,6 +557,85 @@ RSpec.describe OfferCalculator::TruckingTools do
 
         expect(result_object.dig('stackable', :currency)).to eq('SEK')
         expect(result_object.dig('non_stackable')).to eq({})
+      end
+    end
+
+    describe '.handle_range_fare' do
+      let(:metadata_id) { SecureRandom.uuid }
+      let(:metadata) do
+        [
+          {
+            metadata_id: metadata_id,
+            fees: {
+              THC: {
+                breakdowns: [
+                  {
+                    adjusted_rate: {
+                      range: [
+                        { 'max' => 100.0, 'min' => 10.0, 'rate' => 15.0 }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      end
+      let(:trucking_pricing_with_meta) do
+        default_trucking_pricing.as_json.merge(metadata_id: metadata_id)
+      end
+
+      let!(:klass) { described_class.new(trucking_pricing_with_meta, default_cargos, 0, 'pre', user, metadata) }
+
+      context 'with CBM_TON_RANGE rate basis' do
+        let(:fee) { FactoryBot.build(:per_unit_ton_cbm_range_trucking_fee) }
+
+        it 'calculates in favour of CBM' do
+          cargo_hash = {
+            volume: 6,
+            weight: 500,
+            raw_weight: 500
+          }.with_indifferent_access
+          result = klass.handle_range_fare(fee: fee, cargo: cargo_hash)
+          expect(result).to eq(57)
+        end
+
+        it 'calculates in favour of TON' do
+          cargo_hash = {
+            volume: 1,
+            weight: 500,
+            raw_weight: 500
+          }.with_indifferent_access
+          result = klass.handle_range_fare(fee: fee, cargo: cargo_hash)
+          expect(result).to eq(57)
+        end
+
+        it 'returns the min when out of range' do
+          cargo_hash = {
+            volume: 100,
+            weight: 500,
+            raw_weight: 500
+          }.with_indifferent_access
+          result = klass.handle_range_fare(fee: fee, cargo: cargo_hash)
+          expect(result).to eq(57)
+        end
+      end
+
+      context 'with CBM_RANGE rate basis' do
+        let(:fee) { FactoryBot.build(:per_cbm_range_trucking_fee) }
+
+        it 'returns the correct fee_range for the larger volume' do
+          cargo_hash = { volume: 11, raw_weight: 11_000, weight: 11_000, quantity: 9 }.with_indifferent_access
+          value = klass.handle_range_fare(fee: fee, cargo: cargo_hash)
+          expect(value).to eq(110)
+        end
+
+        it 'returns the correct fee_range for the smaller volume' do
+          cargo_hash = { volume: 4, raw_weight: 4000, weight: 4000, quantity: 9 }.with_indifferent_access
+          value = klass.handle_range_fare(fee: fee, cargo: cargo_hash)
+          expect(value).to eq(20)
+        end
       end
     end
   end

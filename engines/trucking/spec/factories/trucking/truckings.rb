@@ -328,9 +328,15 @@ FactoryBot.define do
           wm: [
             {
               rate: { value: 100, currency: 'SEK', rate_basis: 'PER_WM' },
-              max_wm: '0',
-              min_wm: '5',
+              min_wm: '0',
+              max_wm: '5',
               min_value: 400.0
+            },
+            {
+              rate: { value: 100, currency: 'SEK', rate_basis: 'PER_WM' },
+              min_wm: '5.000001',
+              max_wm: '15',
+              min_value: 200.0
             }
           ]
         }
@@ -344,8 +350,8 @@ FactoryBot.define do
           wm: [
             {
               rate: { value: 100, currency: 'SEK', rate_basis: 'PER_WM' },
-              max_wm: '0',
-              min_wm: '5',
+              min_wm: '0',
+              max_wm: '15',
               min_value: 1_000_000
             }
           ]

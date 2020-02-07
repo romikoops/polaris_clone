@@ -34,6 +34,7 @@ module Trucking
       def perform
         find_locations_locations
         find_trucking_locations
+
         find_trucking_truckings
       end
 

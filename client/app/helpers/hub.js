@@ -1,3 +1,6 @@
+import { getTenantApiUrl } from '../constants'
+import { authHeader } from '../helpers'
+
 function splitName (fullName) {
   const fullNameArr = fullName.split(' ')
   const hubType = fullNameArr.pop()
@@ -29,6 +32,18 @@ export function getHubType (hub) {
   }
 
   return hubType
+}
+
+export const getHubOptions = (input) => {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader() }
+  }
+
+  return window
+    .fetch(`${getTenantApiUrl()}/admin/hubs/search/options?query=${input}`, requestOptions)
+    .then(response => response.json())
+    .then(json => ({ options: json.data }))
 }
 
 export default splitName

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :tenants_membership, class: 'Tenants::Membership' do
-    association :group, factory: :tenants_groups
+    association :group, factory: :tenants_group
     association :member, factory: :tenants_users
     trait :user do
       association :member, factory: :tenants_users
