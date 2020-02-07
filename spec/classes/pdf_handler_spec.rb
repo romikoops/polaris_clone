@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe PdfHandler do
   let(:tenant) { create(:tenant, currency: 'USD') }
   let(:user) { create(:user, tenant: tenant, currency: 'USD') }
+  let(:currency) { create(:legacy_currency, base: 'USD', tenant_id: tenant.id) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let!(:shipment) { create(:completed_legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_breakdown: true) }
   let!(:agg_shipment) { create(:legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_aggregated_cargo: true) }
@@ -23,6 +24,10 @@ RSpec.describe PdfHandler do
     consolidated_selected_offer = build(:consolidated_selected_offer, trip_id: shipment.trip_id)
     allow(shipment).to receive(:selected_offer).and_return(dummy_selected_offer)
     allow(agg_shipment).to receive(:selected_offer).and_return(consolidated_selected_offer)
+    %w[EUR USD BIF AED].each do |currency|
+      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
+        .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
+    end
   end
 
   context 'FCL 20 shipment' do

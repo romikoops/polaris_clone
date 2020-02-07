@@ -7,7 +7,7 @@ RSpec.describe QuoteMailer, type: :mailer do
   let(:user) { create(:user, tenant: tenant) }
 
   let(:original_shipment) do
-    create(:legacy_shipment, user: user, tenant: tenant, with_breakdown: true).tap do |shipment|
+    create(:legacy_shipment, :with_meta, user: user, tenant: tenant, with_breakdown: true).tap do |shipment|
       shipment.trip_id = nil
     end
   end
@@ -18,6 +18,10 @@ RSpec.describe QuoteMailer, type: :mailer do
   end
 
   before do
+    %w[EUR USD BIF AED].each do |currency|
+      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
+        .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
+    end
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
     stub_request(:post, "#{Settings.breezy.url}/render/html").to_return(status: 201, body: '', headers: {})

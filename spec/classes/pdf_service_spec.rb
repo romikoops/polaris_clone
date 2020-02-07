@@ -23,6 +23,10 @@ RSpec.describe PdfService do
     create(:tenants_scope, target: tenants_tenant, content: {
              show_chargeable_weight: true
            })
+     %w[EUR USD].each do |currency|
+       stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
+         .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
+     end
   end
 
   context 'FCL 20 shipment' do

@@ -11,6 +11,10 @@ RSpec.describe Shipments::BookingProcessController do
     allow(controller).to receive(:user_signed_in?).and_return(true)
     allow(controller).to receive(:current_user).and_return(user)
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
+    %w[EUR USD].each do |currency|
+      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
+        .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
+    end
   end
 
   describe 'GET #download_shipment' do

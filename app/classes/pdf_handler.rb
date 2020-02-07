@@ -50,7 +50,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @quotes.each do |quote|
       generate_fee_string(
         quote: quote,
-        shipment: @shipments.find {|shipment| shipment.id == quote['shipment_id']}
+        shipment: @shipments.find { |shipment| shipment.id == quote['shipment_id'] }
       )
     end
 
@@ -66,13 +66,22 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
   end
 
   def calculate_pricing_data(shipment)
-    @pricing_data[shipment.id] = shipment.meta['pricing_rate_data']&.each_with_object({}) do |(cargo_class, fees), rate_data|
-      fees_values = fees.except('total', 'valid_until').values
-      fees['total'] = fees_values.inject(Money.new(0, shipment.user.currency)) do |total, value|
-        total + Money.new(value['rate'].to_d * 100, value['currency'])
-      end
-      rate_data[cargo_class] = fees
-    end
+    currency = shipment.user.currency
+    exchange_rates = Legacy::CurrencyTools.new.get_rates(currency, shipment.tenant_id)&.today
+    result = if exchange_rates.blank?
+               shipment.meta['pricing_rate_data']
+             else
+               shipment.meta['pricing_rate_data']&.each_with_object({}) do |(cargo_class, fees), rate_data|
+                 fees_values = fees.except('total', 'valid_until').values
+                 fees['total'] = fees_values.inject('value' => 0, 'currency' => currency) do |total, value|
+                   converted_rate = (exchange_rates[value['currency']] || 1) * value['rate'].to_d
+                   total['value'] += converted_rate
+                   total
+                 end
+                 rate_data[cargo_class] = fees
+               end
+             end
+    @pricing_data[shipment.id] = result
   end
 
   def prep_notes(shipment)
@@ -93,7 +102,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
                           .or(notes_association.where(pricings_pricing_id: pricings.ids))
   end
 
-  def generate_fee_string(quote: , shipment:)
+  def generate_fee_string(quote:, shipment:)
     charge_breakdown = shipment.charge_breakdowns.find_by(trip_id: quote['trip_id'])
     charge_breakdown.charges.where(detail_level: FEE_DETAIL_LEVEL).each do |charge|
       charge_section_key = charge.parent&.charge_category&.code

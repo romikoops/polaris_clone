@@ -2,7 +2,7 @@
 
 class QuoteMailerPreview < ActionMailer::Preview
   def quotation_email
-    ids = Tenant.find_by(subdomain: 'fivestar').shipments.ids
+    ids = Tenant.find_by(subdomain: 'saco').shipments.ids
     quotation = Quotation.where(original_shipment_id: ids).last
     @shipments = Shipment.where(quotation_id: quotation.id)
     @shipment = @shipments.first
@@ -11,7 +11,7 @@ class QuoteMailerPreview < ActionMailer::Preview
   end
 
   def quotation_admin_email
-    ids = Tenant.find_by(subdomain: 'fivestar').shipments.ids
+    ids = Tenant.find_by(subdomain: 'saco').shipments.ids
     quotation = Quotation.where(original_shipment_id: ids).last
     @shipments = Shipment.where(quotation_id: quotation.id)
     @shipment = @shipments.first
