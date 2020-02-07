@@ -1,0 +1,25 @@
+<div class="table-responsive">
+  <h3>Most recent Quotations</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">
+        <th scope="col">Date</th>
+        <th scope="col">Quotations Reference #</th>
+        <th scope="col">Tenant </th>
+        <th scope="col">User Email</th>
+      </tr>
+    </thead>
+      <tbody>
+        <% @quotations.each do |quotation|%>
+          <tr>
+            <td></td>
+            <td><%= quotation.created_at.strftime('%B %e, %Y, %H:%M') %></td>
+            <td><%= link_to(quotation.id, booking_link(quotation), target: '_blank')%></td>
+            <td><%= booking_slug(quotation)%></td>
+            <td><%= quotation.user.email %></td>
+          </tr>
+        <% end %>
+      </tbody>
+  </table>
+</div>

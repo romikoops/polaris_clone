@@ -7,7 +7,7 @@ FactoryBot.define do
     end
 
     sequence(:email) { |n| "test#{n}@itsmycargo.test" }
-
+    association :legacy, factory: :legacy_user
     after(:create) do |user, evaluator|
       user.activate! if evaluator.activate
     end

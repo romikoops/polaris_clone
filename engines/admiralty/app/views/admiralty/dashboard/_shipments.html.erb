@@ -1,0 +1,25 @@
+<div class="table-responsive">
+  <h3>Most recent Shipments</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">
+        <th scope="col">Date</th>
+        <th scope="col">Shipments Reference #</th>
+        <th scope="col">Tenant </th>
+        <th scope="col">User Email</th>
+      </tr>
+    </thead>
+      <tbody>
+        <% @shipments.each do |shipment|%>
+          <tr>
+            <td></td>
+            <td><%= shipment.created_at.strftime('%B %e, %Y, %H:%M') %></td>
+            <td><%= link_to(shipment.id, booking_link(shipment), target: '_blank')%></td>
+            <td><%= booking_slug(shipment)%></td>
+            <td><%= shipment.user.email %></td>
+          </tr>
+        <% end %>
+      </tbody>
+  </table>
+</div>

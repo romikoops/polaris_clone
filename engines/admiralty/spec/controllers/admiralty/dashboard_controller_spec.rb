@@ -9,6 +9,8 @@ module Admiralty
 
     before do
       allow_any_instance_of(AdmiraltyAuth::AuthorizedController).to receive(:authenticate!).and_return(true)
+      FactoryBot.create_list(:shipments_shipment_request, 10)
+      FactoryBot.create_list(:quotations_quotation, 10)
     end
 
     describe 'GET #index' do

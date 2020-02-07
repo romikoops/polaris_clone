@@ -21,6 +21,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'admiralty_reports'
   s.add_dependency 'admiralty_tenants'
   s.add_dependency 'core'
+  s.add_dependency 'legacy'
+  s.add_dependency 'quotations'
+  s.add_dependency 'shipments'
+  s.add_dependency 'tenants'
 
   Gemhelper.common_gems(s)
 end

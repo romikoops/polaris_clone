@@ -64,6 +64,10 @@ PATH
       admiralty_reports
       admiralty_tenants
       core
+      legacy
+      quotations
+      shipments
+      tenants
 
 PATH
   remote: engines/api_auth
