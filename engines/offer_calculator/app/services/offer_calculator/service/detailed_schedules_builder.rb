@@ -35,15 +35,21 @@ module OfferCalculator
             quote = grand_total_charge[:total].deconstruct_tree_into_schedule_charge.deep_symbolize_keys
             next if invalid_quote?(quote: quote)
 
+            meta_for_result = meta(
+              result: grand_total_charge,
+              shipment: @shipment,
+              pricings_by_cargo_class: current_result[:pricings_by_cargo_class],
+              user: user
+            )
+            Quotations::Creator.new(
+              charge: grand_total_charge[:total],
+              meta: meta_for_result,
+              user: user
+            ).perform
             {
               quote: grand_total_charge[:total].deconstruct_tree_into_schedule_charge.deep_symbolize_keys,
               schedules: grand_total_charge[:schedules].map(&:to_detailed_hash),
-              meta: meta(
-                result: grand_total_charge,
-                shipment: @shipment,
-                pricings_by_cargo_class: current_result[:pricings_by_cargo_class],
-                user: user
-              ),
+              meta: meta_for_result,
               notes: grab_notes(
                 schedule: grand_total_charge[:schedules].first,
                 tenant_id: @shipment.tenant_id,
@@ -57,9 +63,7 @@ module OfferCalculator
 
         raise OfferCalculator::Calculator::NoSchedulesCharges if compacted_detailed_schedules.empty?
 
-        detailed_schedules_with_service_level_count(detailed_schedules: compacted_detailed_schedules).tap do |filtered_detailed_schedules|
-          Quotations::Creator.new(schedules: filtered_detailed_schedules, user: user).perform
-        end
+        detailed_schedules_with_service_level_count(detailed_schedules: compacted_detailed_schedules)
       end
 
       def detailed_schedules_with_service_level_count(detailed_schedules:)

@@ -13,6 +13,7 @@ end
 #  updated_at  :datetime         not null
 #  sandbox_id  :uuid
 #  shipment_id :integer
+#  tender_id   :uuid
 #  trip_id     :integer
 #
 # Indexes

@@ -46,7 +46,7 @@ RSpec.describe ShippingTools do
 
   describe '.choose_offer' do
     it 'assigns the id of the chosen tender to the meta data of the shipment' do
-      create(:charge_breakdown, shipment: shipment)
+      create(:charge_breakdown, shipment: shipment, tender_id: tender_id)
 
       expect { described_class.choose_offer(params, user) }.to change { Shipment.find(shipment.id).tender_id }.from(nil).to(tender_id)
     end
@@ -245,6 +245,7 @@ RSpec.describe ShippingTools do
     end
 
     describe 'success cases' do
+      let!(:charge_breakdown) { create(:charge_breakdown, shipment: shipment, trip: trip) }
       let(:mock_offer_calculator) do
         double(shipment: shipment,
                detailed_schedules: [

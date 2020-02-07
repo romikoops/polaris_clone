@@ -507,12 +507,13 @@ class ShippingTools
 
     shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
     shipment.meta['pricing_breakdown'] = params[:meta][:pricing_breakdown]
-    shipment.meta['tender_id'] = params[:meta][:tender_id]
-    shipment.tender_id = params[:meta][:tender_id]
 
     shipment.user_id = current_user.id
     shipment.customs_credit = params[:customs_credit]
     shipment.trip_id = params[:schedule]['trip_id']
+    shipment.tender_id = shipment.charge_breakdowns.find_by(trip_id: params[:schedule]['trip_id']).tender_id
+    shipment.meta['tender_id'] = shipment.tender_id
+
     copy_charge_breakdowns(shipment, params[:schedule][:charge_trip_id], params[:schedule]['trip_id'])
 
     @schedule = params[:schedule].as_json
@@ -768,6 +769,7 @@ class ShippingTools
     trip = Trip.find(schedule['trip_id'])
     on_carriage_hash = (original_shipment.trucking['on_carriage'] if result['quote']['trucking_on'])
     pre_carriage_hash = (original_shipment.trucking['pre_carriage'] if result['quote']['trucking_pre'])
+    original_charge_breakdown = original_shipment.charge_breakdowns.find_by(trip: trip)
 
     new_shipment = main_quote.shipments.create!(
       status: 'quoted',
@@ -787,7 +789,7 @@ class ShippingTools
         pre_carriage: pre_carriage_hash,
         on_carriage: on_carriage_hash
       },
-      tender_id: result.dig('meta', 'tender_id'),
+      tender_id: original_charge_breakdown.tender_id,
       load_type: original_shipment.load_type,
       itinerary_id: trip.itinerary_id,
       desired_start_date: original_shipment.desired_start_date,
@@ -795,7 +797,6 @@ class ShippingTools
       sandbox: sandbox
     )
 
-    new_shipment.meta['pricing_rate_data'] = result[:meta][:pricing_rate_data]
     charge_category_map = {}
 
     if original_shipment.aggregated_cargo.present?
@@ -815,41 +816,38 @@ class ShippingTools
       new_shipment.cargo_units.map(&:set_chargeable_weight!)
     end
 
-    original_shipment.charge_breakdowns.where(trip: trip).each do |charge_breakdown|
-      new_charge_breakdown = charge_breakdown.dup
-      new_charge_breakdown.update(shipment: new_shipment)
-      metadatum = Pricings::Metadatum.find_by(charge_breakdown_id: charge_breakdown.id)
-      new_metadatum = metadatum.dup.tap {|meta| meta.charge_breakdown_id = new_charge_breakdown.id; meta.save } if metadatum
+    new_charge_breakdown = original_charge_breakdown.dup
+    new_charge_breakdown.update(shipment: new_shipment)
+    metadatum = Pricings::Metadatum.find_by(charge_breakdown_id: original_charge_breakdown.id)
+    new_metadatum = metadatum.dup.tap {|meta| meta.charge_breakdown_id = new_charge_breakdown.id; meta.save } if metadatum
 
-      new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
-      %w[import export cargo].each do |charge_key|
-        next if new_charge_breakdown.charge(charge_key).nil?
+    new_charge_breakdown.dup_charges(charge_breakdown: original_charge_breakdown)
+    %w[import export cargo].each do |charge_key|
+      next if new_charge_breakdown.charge(charge_key).nil?
 
-        new_charge_breakdown.charge(charge_key).children.each do |new_charge|
-          old_charge_category = new_charge&.children_charge_category
-          next if old_charge_category&.cargo_unit_id.nil?
+      new_charge_breakdown.charge(charge_key).children.each do |new_charge|
+        old_charge_category = new_charge&.children_charge_category
+        next if old_charge_category&.cargo_unit_id.nil?
 
-          new_charge_category = old_charge_category.dup
-          new_charge_category.cargo_unit_id = charge_category_map[old_charge_category.cargo_unit_id]
-          new_charge_category.save!
+        new_charge_category = old_charge_category.dup
+        new_charge_category.cargo_unit_id = charge_category_map[old_charge_category.cargo_unit_id]
+        new_charge_category.save!
 
-          if metadatum && new_metadatum
-            Pricings::Breakdown.where(metadatum_id: metadatum.id, cargo_unit_id: old_charge_category.cargo_unit_id)
-                               .each do |breakdown|
-                                 breakdown.dup.tap do |breakd|
-                                   breakd.update(
-                                     metadatum_id: new_metadatum.id,
-                                     cargo_unit_id: charge_category_map[old_charge_category.cargo_unit_id]
-                                   )
-                                 end
+        if metadatum && new_metadatum
+          Pricings::Breakdown.where(metadatum_id: metadatum.id, cargo_unit_id: old_charge_category.cargo_unit_id)
+                             .each do |breakdown|
+                               breakdown.dup.tap do |breakd|
+                                 breakd.update(
+                                   metadatum_id: new_metadatum.id,
+                                   cargo_unit_id: charge_category_map[old_charge_category.cargo_unit_id]
+                                 )
                                end
-          end
-
-          new_charge.children_charge_category = new_charge_category
-          new_charge.save!
+                             end
         end
-
+        new_charge.children_charge_category = new_charge_category
+        new_charge.save!
       end
+
     end
 
     new_shipment.save!
