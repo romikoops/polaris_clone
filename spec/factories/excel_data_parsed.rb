@@ -461,6 +461,60 @@ FactoryBot.define do
       end
     end
 
+    trait :faulty_margins do
+      all_sheets_data do
+        [{ sheet_name: 'Tabelle1',
+           restructurer_name: 'margins',
+           rows_data:
+            [{ effective_date: Date.parse('Tue, 01 Jan 2019'),
+               expiration_date: Date.parse('Sun, 31 Mar 2019'),
+               origin: 'Dalian',
+               country_origin: 'China',
+               destination: 'Gothenburg',
+               country_destination: 'Sweden',
+               mot: 'ocean',
+               carrier: 'consolidation',
+               service_level: 'standard',
+               margin_type: 'freight',
+               load_type: 'lcl',
+               fee_code: 'BAS',
+               operator: '+',
+               margin: 0.1,
+               row_nr: 2 },
+             { effective_date: Date.parse('Tue, 01 Jan 2019'),
+               expiration_date: Date.parse('Sun, 31 Mar 2019'),
+               origin: 'Dalian',
+               country_origin: 'China',
+               destination: 'Gothenburg',
+               country_destination: 'Sweden',
+               mot: 'air',
+               carrier: 'consolidation',
+               service_level: 'fast',
+               margin_type: 'freight',
+               load_type: 'lcl',
+               fee_code: 'BAS',
+               operator: '%',
+               margin: 0.1,
+               row_nr: 3 },
+             { effective_date: Date.parse('Tue, 01 Jan 2019'),
+               expiration_date: Date.parse('Sun, 31 Mar 2019'),
+               origin: 'Dalian',
+               country_origin: 'China',
+               destination: 'Gothenburg',
+               country_destination: 'Sweden',
+               mot: 'ocean',
+               carrier: 'consolidation',
+               service_level: 'fast',
+               margin_type: 'freight',
+               load_type: 'lcl',
+               fee_code: 'BAS',
+               operator: '%',
+               margin: 0.1,
+               row_nr: 3 }
+               ] }]
+      end
+    end
+
     trait :default_hubs do
       sheet_name { 'Hubs' }
       restructurer_name { 'hubs' }
@@ -508,5 +562,6 @@ FactoryBot.define do
     factory :excel_data_parsed_faulty_local_charges, traits: %i[local_charges faulty_local_charges]
     factory :excel_data_parsed_correct_saco_shipping, traits: %i[saco_shipping correct_saco_shipping]
     factory :excel_data_parsed_correct_margins, traits: %i[margins correct_margins]
+    factory :excel_data_parsed_faulty_margins, traits: %i[margins faulty_margins]
   end
 end

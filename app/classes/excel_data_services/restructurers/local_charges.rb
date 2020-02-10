@@ -36,6 +36,7 @@ module ExcelDataServices
         rows_data = replace_nil_equivalents_with_nil(data[:rows_data])
         rows_data = correct_capitalization(rows_data)
         rows_data = add_group_ids(rows_data)
+        rows_data = sanitize_service_level_and_carrier(rows_data)
         sanitize_service_level!(rows_data)
         rows_data = expand_fcl_to_all_sizes(rows_data)
         rows_data = cut_based_on_date_overlaps(rows_data, ROW_IDENTIFIERS - %i[effective_date expiration_date])

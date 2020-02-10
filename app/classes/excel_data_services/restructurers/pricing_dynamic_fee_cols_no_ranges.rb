@@ -24,6 +24,7 @@ module ExcelDataServices
         end
 
         restructured_data = add_hub_names(restructured_data)
+        restructured_data = sanitize_service_level_and_carrier(restructured_data)
         restructured_data = downcase_load_types(restructured_data)
         restructured_data.each do |row_data|
           row_data[:internal] ||= false

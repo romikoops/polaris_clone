@@ -43,6 +43,7 @@ module ExcelDataServices
         end
 
         restructured_data = add_hub_names(restructured_data)
+        restructured_data = sanitize_service_level_and_carrier(restructured_data)
         restructured_data = cut_based_on_date_overlaps(
           restructured_data,
           ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i[effective_date expiration_date]

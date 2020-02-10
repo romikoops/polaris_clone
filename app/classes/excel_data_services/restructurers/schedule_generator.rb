@@ -18,28 +18,18 @@ module ExcelDataServices
       end
 
       def build_charge_params
-        data[:rows_data].map do |row_data|
-          dates_to_ordinals(row_data)
-          parse_cargo_class(row_data)
-          row_data
+        restructured_data = sanitize_service_level_and_carrier(data[:rows_data])
+        restructured_data = parse_cargo_class(rows_data: restructured_data, key: :cargo_class)
+        convert_days_to_ordinals(rows_data: restructured_data)
+      end
+
+      def convert_days_to_ordinals(rows_data:)
+        rows_data.each do |row_data|
+          row_data[:ordinals] =
+            row_data.delete(:etd_days)
+                    .split(',')
+                    .map { |string| ORDINALS_LOOKUP[string.strip.upcase.to_sym] }
         end
-      end
-
-      def dates_to_ordinals(row_data)
-        row_data[:ordinals] =
-          row_data.delete(:etd_days)
-                  .split(',')
-                  .map { |string| ORDINALS_LOOKUP[string.strip.upcase.to_sym] }
-      end
-
-      def parse_cargo_class(row_data)
-        row_data[:cargo_class] =
-          case row_data[:cargo_class].downcase
-          when /^(lcl|cargo_item)$/
-            'cargo_item'
-          when /^(fcl|container)$/
-            'container'
-          end
       end
     end
   end

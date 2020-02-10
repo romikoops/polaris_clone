@@ -132,7 +132,14 @@ module ExcelDataServices
         end
       end
 
-      def parse_cargo_class(rows_data:, key:)
+      def sanitize_service_level_and_carrier(rows_data)
+        rows_data.each do |row_data|
+          row_data[:service_level] = strip_and_downcase(row_data[:service_level])
+          row_data[:carrier] = strip_and_downcase(row_data[:carrier])
+        end
+      end
+
+      def parse_cargo_class(rows_data: ,key:)
         rows_data.each do |row_data|
           row_data[key] =
             case row_data[key].downcase
@@ -142,6 +149,12 @@ module ExcelDataServices
               'container'
             end
         end
+      end
+
+      def strip_and_downcase(string)
+        return unless string.present?
+
+        string.strip.downcase
       end
     end
   end
