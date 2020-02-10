@@ -44,27 +44,16 @@ class RatesOverview extends Component {
         currencyByFees[key] = ratesObject[cargoClass][key].currency
       })
     })
-    const singleCurrency = uniq(compact(Object.values(currencyByFees))).length === 1
-    const currencyToDisplay = singleCurrency ? Object.values(ratesObject)[0].total.currency : null
     const overviewNode = [
       (<div className="flex-20 layout-row layout-wrap layout-align-start-center">
         <p className={`flex-100  ${styles.rates_header}`}>
           {`${t(`common:freightCharges`)}:`}
         </p>
-        { singleCurrency ? (<p className={`flex-100  ${styles.rates_value}`}>
-          {`${t(`common:perUnitLumpsum`)}:`}
-        </p>
-        ) : '' }
       </div>),
       (<div className="flex layout-row layout-wrap layout-align-center-center">
         <p className={`flex-100 center ${styles.rates_header}`}>
           {`${t(`common:currency`)}`}
         </p>
-        { singleCurrency ? (
-          <p className={`flex-100 center ${styles.rates_value}`}>
-            {`${currencyToDisplay}`}
-          </p>
-        ) : '' }
       </div>)
     ]
 
@@ -74,11 +63,6 @@ class RatesOverview extends Component {
           <p className={`flex-100 center ${styles.rates_header}`}>
             {t(`common:${cargoClass}`)}
           </p>
-          { singleCurrency ? (
-            <p className={`flex-100 center ${styles.rates_value}`}>
-              {`${numberSpacing(ratesObject[cargoClass].total.value, 2)}`}
-            </p>
-          ) : '' }
         </div>
       )
     })
