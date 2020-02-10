@@ -430,7 +430,11 @@ RSpec.describe ShippingTools do
         {
           shipment_id: shipment.id,
           customs_credit: {},
-          schedule: schedule.as_json.merge(origin_hub: schedule.origin_hub, destination_hub: schedule.destination_hub).with_indifferent_access,
+          schedule: schedule.as_json.merge(
+            origin_hub: schedule.origin_hub,
+            destination_hub: schedule.destination_hub,
+            charge_trip_id: schedule.trip_id
+          ).with_indifferent_access,
           meta: {
             pricing_rate_data: {},
             pricing_breakdown: {},
@@ -474,7 +478,11 @@ RSpec.describe ShippingTools do
         {
           shipment_id: lcl_shipment.id,
           customs_credit: {},
-          schedule: schedule.as_json.merge(origin_hub: schedule.origin_hub, destination_hub: schedule.destination_hub).with_indifferent_access,
+          schedule: schedule.as_json.merge(
+            origin_hub: schedule.origin_hub,
+            destination_hub: schedule.destination_hub,
+            charge_trip_id: schedule.trip_id
+          ).with_indifferent_access,
           meta: {
             pricing_rate_data: {},
             pricing_breakdown: {},

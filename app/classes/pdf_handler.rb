@@ -110,12 +110,12 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       adjusted_key = extract_key(
         section_key: charge_section_key,
         key: charge_category.code,
-        mot: quote[:mode_of_transport]
+        mot: quote['mode_of_transport']
       )
       adjusted_name = extract_name(
         section_key: charge_section_key,
         name: charge_category.name,
-        mot: quote[:mode_of_transport]
+        mot: quote['mode_of_transport']
       )
       @fee_keys_and_names[charge_category.code] = determine_render_string(
         key: adjusted_key,

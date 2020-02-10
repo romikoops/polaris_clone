@@ -511,7 +511,7 @@ class ShippingTools
     shipment.user_id = current_user.id
     shipment.customs_credit = params[:customs_credit]
     shipment.trip_id = params[:schedule]['trip_id']
-    shipment.tender_id = shipment.charge_breakdowns.find_by(trip_id: params[:schedule]['trip_id']).tender_id
+    shipment.tender_id = shipment.charge_breakdowns.find_by(trip_id: params[:schedule]['charge_trip_id']).tender_id
     shipment.meta['tender_id'] = shipment.tender_id
 
     copy_charge_breakdowns(shipment, params[:schedule][:charge_trip_id], params[:schedule]['trip_id'])
