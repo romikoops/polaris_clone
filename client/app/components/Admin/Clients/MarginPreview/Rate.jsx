@@ -14,7 +14,7 @@ import TruckingFees from './TruckingFees'
 import DocumentsDownloader from '../../../Documents/Downloader'
 
 function AdminMarginPreviewRate ({
-  type, rate, price, t, adminDispatch
+  type, rate, price, t, adminDispatch, feeKey
 }) {
   function viewOwner (margin) {
     let url
@@ -51,7 +51,7 @@ function AdminMarginPreviewRate ({
   const currency = extractCurrency()
 
   function renderRateTable (target) {
-    if (['trucking_pre', 'trucking_on'].includes(type)) {
+    if (feeKey.includes('trucking_')) {
       return <TruckingFees data={rate[target]} />
     }
 

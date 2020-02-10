@@ -41,17 +41,17 @@ class AdminMarginPreviewResult extends Component {
     const { targetSectionKey, targetRateKey } = this.state
     const { tenant, result, t } = this.props
     const selectedRate = get(result, [targetSectionKey, 'fees', targetRateKey], false)
-    const { theme } = tenant
+
     const sectionKeys = ['trucking_pre', 'export', 'freight', 'import', 'trucking_on']
 
     const rateModal = selectedRate ? (
       <Modal
         component={(
           <AdminMarginPreviewRate
-            theme={theme}
             rate={selectedRate}
             type={targetSectionKey}
             price={{ name: targetRateKey }}
+            feeKey={targetRateKey}
           />
         )}
         minWidth="400px"
