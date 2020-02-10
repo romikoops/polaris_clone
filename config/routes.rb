@@ -195,6 +195,7 @@ Rails.application.routes.draw do
       get 'view_more_schedules', controller:  'shipments/booking_process', action: 'view_more_schedules'
       post 'quotations/download', controller: 'shipments/booking_process', action: 'download_quotations'
       post 'shipment/download', controller: 'shipments/booking_process', action: 'download_shipment'
+      get 'refresh_quotes', controller: 'shipments/booking_process', action: 'refresh_quotes'
       patch 'update_user', on: :member
     end
 
@@ -450,6 +451,7 @@ end
 #                    tenant_shipment_view_more_schedules GET    /tenants/:tenant_id/shipments/:shipment_id/view_more_schedules(.:format)                 shipments/booking_process#view_more_schedules
 #                    tenant_shipment_quotations_download POST   /tenants/:tenant_id/shipments/:shipment_id/quotations/download(.:format)                 shipments/booking_process#download_quotations
 #                      tenant_shipment_shipment_download POST   /tenants/:tenant_id/shipments/:shipment_id/shipment/download(.:format)                   shipments/booking_process#download_shipment
+#                         tenant_shipment_refresh_quotes GET    /tenants/:tenant_id/shipments/:shipment_id/refresh_quotes(.:format)                      shipments/booking_process#refresh_quotes
 #                            update_user_tenant_shipment PATCH  /tenants/:tenant_id/shipments/:id/update_user(.:format)                                  shipments#update_user
 #                                       tenant_shipments GET    /tenants/:tenant_id/shipments(.:format)                                                  shipments#index
 #                                        tenant_shipment GET    /tenants/:tenant_id/shipments/:id(.:format)                                              shipments#show

@@ -5,14 +5,12 @@ require_relative 'charge_calculator'
 module OfferCalculator
   module Service
     class DetailedSchedulesBuilder < Base # rubocop:disable Metrics/ClassLength
-
-      def perform(schedules, trucking_data, user) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+      def perform(schedules, trucking_data, user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         @pricings_with_meta = {}
         @metadata_list = trucking_data.fetch(:metadata, [])
         schedules_by_pricings = grouped_schedules(schedules: schedules,
                                                   shipment: @shipment,
                                                   user: user).compact
-
         raise OfferCalculator::Calculator::NoValidPricings if schedules_by_pricings.empty?
 
         detailed_schedules = schedules_by_pricings.map do |grouped_result| # rubocop:disable Metrics/BlockLength
@@ -32,8 +30,15 @@ module OfferCalculator
 
 
           grand_total_charges.map do |grand_total_charge|
-            quote = grand_total_charge[:total].deconstruct_tree_into_schedule_charge.deep_symbolize_keys
-            next if invalid_quote?(quote: quote)
+            quote = grand_total_charge[:total].deconstruct_tree_into_schedule_charge(
+              {guest: user.guest?,
+              hidden_grand_total: scope['hide_grand_total'],
+              hidden_sub_total: scope['hide_sub_totals']}
+            ).deep_symbolize_keys
+            next if invalid_quote?(quote: quote,
+                                   hidden_grand_total:  scope['hide_grand_total'],
+                                   user: user,
+                                   hidden_sub_total: scope['hide_sub_totals'])
 
             meta_for_result = meta(
               result: grand_total_charge,
@@ -47,7 +52,7 @@ module OfferCalculator
               user: user
             ).perform
             {
-              quote: grand_total_charge[:total].deconstruct_tree_into_schedule_charge.deep_symbolize_keys,
+              quote: quote,
               schedules: grand_total_charge[:schedules].map(&:to_detailed_hash),
               meta: meta_for_result,
               notes: grab_notes(
@@ -224,6 +229,7 @@ module OfferCalculator
           )
 
           next nil if pricings_by_cargo_class.empty?
+
           # Find the group with the most pricings and create the object to be passed on
           most_diverse_set = pricings_by_cargo_class.values.max_by(&:length)
           other_pricings = pricings_by_cargo_class
@@ -231,7 +237,7 @@ module OfferCalculator
                            .reject { |pricing_group| pricing_group == most_diverse_set }
                            .flatten
 
-          if @scope['base_pricing'] # rubocop:disable Style/IfInsideElse
+          if @scope['base_pricing']
             most_diverse_set.each do |pricing| # rubocop:disable Metrics/BlockLength
               schedules_for_obj = schedules_array.dup
               if dates[:is_quote]
@@ -244,7 +250,7 @@ module OfferCalculator
                 schedules_for_obj.select! do |sched|
                   sched.etd < pricing[:expiration_date] && sched.etd > pricing[:effective_date]
                 end
-                if schedules_for_obj.empty? # rubocop:disable Metrics/BlockNesting
+                if schedules_for_obj.empty?
                   schedules_for_obj = schedules_array.select do |sched|
                     sched.closing_date < pricing[:expiration_date] &&
                       sched.closing_date > pricing[:effective_date]
@@ -288,7 +294,7 @@ module OfferCalculator
                 schedules_for_obj.select! do |sched|
                   sched.etd < pricing[:expiration_date] && sched.etd > pricing[:effective_date]
                 end
-                if schedules_for_obj.empty? # rubocop:disable Metrics/BlockNesting
+                if schedules_for_obj.empty?
                   schedules_for_obj = schedules_array.select do |sched|
                     sched.closing_date < pricing[:expiration_date] &&
                       sched.closing_date > pricing[:effective_date]
@@ -306,7 +312,6 @@ module OfferCalculator
               }
 
               other_pricings.each do |other_pricing|
-
                 other_cargo_class_key = other_pricing.try(:cargo_class) ||
                                         Legacy::TransportCategory.find_by(id: other_pricing['transport_category_id'])&.cargo_class&.to_s
                 if other_pricing['effective_date'] < dates[:start_date] &&
@@ -399,7 +404,9 @@ module OfferCalculator
         }
       end
 
-      def invalid_quote?(quote:)
+      def invalid_quote?(quote:, hidden_grand_total:, user:, hidden_sub_total:)
+        return false if user.guest? || hidden_grand_total || hidden_sub_total
+
         quote.dig(:total, :value).blank? ||
           quote.dig(:total, :value).to_i.zero? ||
           !quote.dig(:cargo, :value).nil?

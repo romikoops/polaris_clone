@@ -39,8 +39,13 @@ module Legacy
       charges << value
     end
 
-    def to_nested_hash
-      grand_total.deconstruct_tree_into_schedule_charge
+    def currency_count
+      Legacy::Price.where(id: charges.select(:price_id)).select(:currency).distinct.count
+    end
+
+    def to_nested_hash(args, sub_total_charge: false)
+      grand_total.deconstruct_tree_into_schedule_charge(args,
+                                                        sub_total_charge: sub_total_charge)
                  .merge(trip_id: trip_id, valid_until: valid_until)
                  .deep_stringify_keys
     end

@@ -3,6 +3,7 @@ import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import { gradientTextGenerator, determineSpecialism, switchIcon, numberSpacing, capitalize } from '../../../helpers'
+import { get } from 'lodash'
 
 function IncotermRow ({
   theme,
@@ -43,8 +44,8 @@ function IncotermRow ({
           styles.fee_value
         } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
       >
-        <p className="flex-none no_m letter_3 center">{feeHash.cargo.total.currency}</p>
-        <p className="flex-none no_m letter_3 center">{numberSpacing(feeHash.cargo.total.value, 2)}</p>
+        <p className="flex-none no_m letter_3 center">{get(feeHash.cargo, 'total.currency', '')}</p>
+        <p className="flex-none no_m letter_3 center">{numberSpacing(get(feeHash.cargo, 'total.value', ''), 2)}</p>
       </div>
     ) : (
       ''

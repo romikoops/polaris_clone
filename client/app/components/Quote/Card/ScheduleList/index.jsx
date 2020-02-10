@@ -8,7 +8,7 @@ import Pagination from '../../../../containers/Pagination'
 import { getHubType } from '../../../../helpers'
 
 function QuoteCardScheduleList ({
-  schedules, theme, finalResults, originHub, destinationHub, onSelectSchedule, t
+  schedules, theme, finalResults, originHub, destinationHub, onSelectSchedule, t, user
 }) {
   const perPage = 5
 
@@ -27,7 +27,7 @@ function QuoteCardScheduleList ({
             const lastSchedule = items[items.length - 1]
 
             const _schedules = items.map(schedule => (
-              <QuoteCardScheduleListItem schedule={schedule} theme={theme} onSelectSchedule={onSelectSchedule} />
+              <QuoteCardScheduleListItem schedule={schedule} theme={theme} onSelectSchedule={onSelectSchedule} user={user} />
             ))
 
             while (_schedules.length < perPage) {

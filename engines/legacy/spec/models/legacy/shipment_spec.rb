@@ -59,15 +59,6 @@ module Legacy
       end
     end
 
-    describe '#planned_pickup_date_is_a_datetime?' do
-      let(:shipment) { FactoryBot.create(:legacy_shipment, planned_pickup_date: Date.current) }
-
-      it 'returns no errors' do
-        shipment.send('planned_pickup_date_is_a_datetime?')
-        expect(shipment.errors).to be_empty
-      end
-    end
-
     describe '#desired_start_date_is_a_datetime?' do
       let(:shipment) { FactoryBot.create(:legacy_shipment, desired_start_date: Date.current) }
 

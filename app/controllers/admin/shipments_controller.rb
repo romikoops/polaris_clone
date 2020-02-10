@@ -385,7 +385,29 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def shipment_as_json
-    @shipment.with_address_options_json
+    hidden_args = HiddenValueService.new(user: @shipment.user).admin_args
+    options = {
+      methods: %i(mode_of_transport cargo_count company_name client_name),
+      include: [
+        :destination_nexus,
+        :origin_nexus,
+        {
+          destination_hub: {
+            include: { address: { only: %i(geocoded_address latitude longitude) } }
+          }
+        },
+        {
+          origin_hub: {
+            include: { address: { only: %i(geocoded_address latitude longitude) } }
+          }
+        }
+      ]
+    }
+    @shipment.as_json(options).merge(
+      selected_offer: @shipment.selected_offer(hidden_args),
+      pickup_address: @shipment.pickup_address_with_country,
+      delivery_address: @shipment.delivery_address_with_country
+    )
   end
 
   def addresses

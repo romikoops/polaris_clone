@@ -27,9 +27,9 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @remarks               = args[:remarks]
     @cargo_units           = args[:cargo_units]
     @note_remarks          = args[:note_remarks]
+    @selected_offer        = args[:selected_offer]
     @hide_cargo_sub_totals = false
     @content               = {}
-    @hide_grand_total = {}
     @has_legacy_charges = {}
     @notes = {}
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
@@ -58,7 +58,6 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       calculate_cargo_data(s)
       calculate_pricing_data(s)
       prep_notes(s)
-      @hide_grand_total[s.id] = hide_grand_total?(s)
     end
     @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
 
@@ -157,46 +156,6 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     when 'name'
       name
     end
-  end
-
-  def hide_grand_total?(shipment) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    return true if @scope['hide_grand_total']
-    return false if !@scope['hide_grand_total'] && !@scope['hide_converted_grand_total']
-
-    currencies = []
-    result = shipment
-             .selected_offer
-             .except('total', 'edited_total', 'name', 'trip_id', 'valid_until')
-             .find do |charge_key, charge|
-               charge_keys = charge
-                             .except('total', 'edited_total', 'name')
-                             .keys
-
-               charge_currencies = if %w[export import].include?(charge_key)
-                                     charge_keys.map { |k| charge[k]['currency'] }
-                                   elsif charge_key == 'cargo'
-                                     charge_keys
-                                       .map do |k|
-                                         charge[k]
-                                           .except('total', 'edited_total', 'name')
-                                           .keys
-                                           .reject { |rk| rk.include?('unknown') }
-                                           .map do |ck|
-                                             if %w[cargo_item container].include?(k)
-                                               charge.dig(k, 'currency')
-                                             else
-                                               charge.dig(k, ck, 'currency')
-                                             end
-                                           end
-                                       end
-                                   else
-                                     charge_keys.map { |k| charge[k]['total']['currency'] }
-                                   end
-               currencies += charge_currencies.flatten.compact
-               currencies.uniq.count > 1
-             end
-
-    result.present? || (currencies.uniq.first != shipment.user.currency)
   end
 
   def calculate_cargo_data(shipment)
@@ -351,14 +310,14 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         notes: @notes,
         hide_cargo_sub_totals: @hide_cargo_sub_totals,
         content: @content,
-        hide_grand_total: @hide_grand_total,
         has_legacy_charges: @has_legacy_charges,
         pricing_data: @pricing_data,
         scope: @scope,
         cargo_units: @cargo_units,
         hub_names: @hub_names,
         note_remarks: @note_remarks,
-        fee_keys_and_names: @fee_keys_and_names
+        fee_keys_and_names: @fee_keys_and_names,
+        selected_offer: @selected_offer
       }
     )
 

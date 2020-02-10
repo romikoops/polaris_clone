@@ -8,6 +8,13 @@ module Legacy
       let(:charge_breakdown) { FactoryBot.create(:legacy_charge_breakdown) }
       let(:price) { FactoryBot.create(:legacy_price) }
       let(:grand_total_category) { ChargeCategory.find_by(code: 'grand_total') }
+      let(:hidden_args) do
+        {
+          hidden_grand_total: false,
+          hidden_sub_total: false,
+          hide_converted_grand_total: false
+        }
+      end
 
       let(:charge) do
         FactoryBot.create(
@@ -92,7 +99,7 @@ module Legacy
             'trip_id' => 2107
           }
 
-          expect(charge_breakdown.to_nested_hash['cargo']).to eq(expected['cargo'])
+          expect(charge_breakdown.to_nested_hash(hidden_args)['cargo']).to eq(expected['cargo'])
         end
       end
 

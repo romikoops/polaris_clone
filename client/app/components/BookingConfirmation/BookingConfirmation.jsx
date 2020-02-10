@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
-import { pick, uniqWith } from 'lodash'
+import { pick, uniqWith, get } from 'lodash'
 import { moment, documentTypes, shipmentStatii } from '../../constants'
 import styles from './BookingConfirmation.scss'
 import RouteHubBox from '../RouteHubBox/RouteHubBox'
@@ -227,7 +227,7 @@ export class BookingConfirmation extends Component {
     const showCargoSummary = !aggregatedCargo
     let cargoSummary
     if (showCargoSummary && cargoItems.length) {
-      cargoSummary = <CargoItemSummary items={cargoItems} t={t} mot={shipment.mode_of_transport} scope={tenant.scope}/>
+      cargoSummary = <CargoItemSummary items={cargoItems} t={t} mot={shipment.mode_of_transport} scope={tenant.scope} />
     } else if (showCargoSummary && containers.length) {
       cargoSummary = <CargoContainerSummary items={containers} t={t} />
     }
@@ -300,7 +300,7 @@ export class BookingConfirmation extends Component {
         title={t('common:itinerary')}
       >
         <div className={INNER_WRAPPER}>
-          <RouteHubBox shipment={shipment} theme={theme} scope={scope}/>
+          <RouteHubBox shipment={shipment} theme={theme} scope={scope} />
         </div>
       </GreyBox>
     )
@@ -321,9 +321,11 @@ export class BookingConfirmation extends Component {
                 />
               </div>
               <div className={`${ROW(30)} ${ALIGN_END_CENTER}`}>
-                <h5 className="flex-none letter_3">
-                  {`${totalPrice(shipment).currency} ${calcFareTotals(feeHash)}`}
-                </h5>
+                {(get(shipment.selected_offer, 'total') !== null) && (
+                  <h5 className="flex-none letter_3">
+                    {`${totalPrice(shipment).currency} ${calcFareTotals(feeHash)}`}
+                  </h5>
+                )}
               </div>
             </div>
             <div className={BOOKING}>
@@ -350,15 +352,17 @@ export class BookingConfirmation extends Component {
                 />
               </div>
               <div className={`${WRAP_ROW(30)} ${ALIGN_END_CENTER}`}>
-                <h5 className="flex-none letter_3">
-                  {`${
-                    totalPrice(shipment).currency
-                  } ${calcExtraTotals(feeHash)} `}
-                </h5>
-                { feeHash.customs && feeHash.customs.hasUnknown && (
+                {(get(shipment.selected_offer, 'total') !== null) && (
+                  <h5 className="flex-none letter_3">
+                    {`${
+                      totalPrice(shipment).currency
+                    } ${calcExtraTotals(feeHash)} `}
+                  </h5>
+                )}
+                {feeHash.customs && feeHash.customs.hasUnknown && (
                   <div className={`${ROW(100)} ${ALIGN_END_CENTER}`}>
                     <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
-                            ( excl. charges subject to local regulations )
+                      ( excl. charges subject to local regulations )
                     </p>
                   </div>
                 )}
@@ -379,15 +383,17 @@ export class BookingConfirmation extends Component {
           <div className={`${ROW(70)} ${ALIGN_START_CENTER}`}>
             <h3 className="flex-none letter_3">Shipment Total: </h3>
           </div>
-          <div className={`${WRAP_ROW(30)} ${ALIGN_END_CENTER}`}>
-            <h3 className="flex-none letter_3">{totalPriceString(shipment)}</h3>
-            <div className={`${ROW(100)} ${ALIGN_END_CENTER}`}>
-              <p className="flex-none center no_m" style={{ fontSize: '12px' }}>
-                {' '}
-                    ( incl. Quoted Additional Services )
-              </p>
+          {(get(shipment.selected_offer, 'total') !== null) && (
+            <div className={`${WRAP_ROW(30)} ${ALIGN_END_CENTER}`}>
+              <h3 className="flex-none letter_3">{totalPriceString(shipment)}</h3>
+              <div className={`${ROW(100)} ${ALIGN_END_CENTER}`}>
+                <p className="flex-none center no_m" style={{ fontSize: '12px' }}>
+                  {' '}
+                  ( incl. Quoted Additional Services )
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </GreyBox>
 
@@ -418,7 +424,7 @@ export class BookingConfirmation extends Component {
         showArrow
       >
         <div className={LAYOUT_WRAP}>
-          {showCargoSummary ? cargoSummary : '' }
+          {showCargoSummary ? cargoSummary : ''}
           {cargoView}
         </div>
       </CollapsingBar>

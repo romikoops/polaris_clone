@@ -17,6 +17,8 @@ import {
 import FlashMessages from '../FlashMessages/FlashMessages'
 import Alert from '../Alert/Alert'
 
+const getOffersStage = 3
+
 class Header extends Component {
   constructor (props) {
     super(props)
@@ -37,7 +39,10 @@ class Header extends Component {
     if (this.props.loginAttempt && !this.state.showLogin) {
       this.setState({ showLogin: true })
     }
-    if ((this.props.loginAttempt || this.props.registrationAttempt) && !this.state.alertVisible) {
+    if (
+      (this.props.loginAttempt || this.props.registrationAttempt) &&
+      !this.state.alertVisible
+    ) {
       this.setState({ alertVisible: true })
     }
   }
@@ -62,7 +67,10 @@ class Header extends Component {
       this.setState({ alertVisible: false })
     }
 
-    if ((nextProps.loginAttempt || nextProps.registrationAttempt) && !this.state.alertVisible) {
+    if (
+      (nextProps.loginAttempt || nextProps.registrationAttempt) &&
+      !this.state.alertVisible
+    ) {
       this.setState({ alertVisible: true })
     }
   }
@@ -80,7 +88,7 @@ class Header extends Component {
 
   goHome () {
     const { user, userDispatch, adminDispatch } = this.props
-    if (user.guest) { 
+    if (user.guest) {
       this.toggleShowLogin()
     } else if (user && user.role && user.role.name.includes('admin')) {
       adminDispatch.getDashboard(true)
@@ -94,10 +102,22 @@ class Header extends Component {
   }
 
   toggleShowLogin () {
-    const { showModal, authenticationDispatch, noRedirect } = this.props
+    const {
+      showModal,
+      authenticationDispatch,
+      noRedirect,
+      stage,
+      prevRequest,
+      toggleShowRegistration
+    } = this.props
+
     if (showModal) {
       authenticationDispatch.closeLogin()
       this.setState({ alertVisible: false })
+    } else if (stage == getOffersStage) {
+      prevRequest.action = "getOffers"
+      toggleShowRegistration(prevRequest)
+      
     } else {
       authenticationDispatch.showLogin({ noRedirect })
     }
@@ -126,11 +146,8 @@ class Header extends Component {
     } = this.props
     const { isTop } = this.state
     const scope = tenant && tenant.id ? tenant.scope : {}
-    let dropDownText = ''
-    if (user) {
-      if (user.first_name && user.last_name) dropDownText = `${user.first_name} ${user.last_name}`
-      dropDownText = dropDownText || user.email
-    }
+    const dropDownText =
+      user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
     const sandbox = get(user, ['sandbox'], false)
     const accountLinks = user && user.role && user.role.name.includes('admin')
       ? [
@@ -184,10 +201,15 @@ class Header extends Component {
         user={user}
         isLanding={isLanding}
         toggleShowLogin={this.toggleShowLogin}
-        loginText={scope.closed_registration ? t('common:logIn') : `${t('common:logIn')} / ${t('common:register')}`}
+        loginText={
+          scope.closed_registration
+            ? t('common:logIn')
+            : `${t('common:logIn')} / ${t('common:register')}`
+        }
       />
     )
-    const hasErrors = error && error[currentStage] && error[currentStage].length > 0
+    const hasErrors =
+      error && error[currentStage] && error[currentStage].length > 0
 
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
@@ -195,24 +217,23 @@ class Header extends Component {
       </div>
     )
 
-    const loginComponent = (scope.closed_registration || !tenant.id) ? (
-      <LoginPage
-        theme={theme}
-        tenant={tenant}
-        req={req}
-      />
-    ) : (
-      <LoginRegistrationWrapper
-        LoginPageProps={{ theme, req, tenant }}
-        RegistrationPageProps={{
-          theme,
-          tenant,
-          req,
-          user
-        }}
-        initialCompName={this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'}
-      />
-    )
+    const loginComponent =
+      scope.closed_registration || !tenant.id ? (
+        <LoginPage theme={theme} req={req} />
+      ) : (
+        <LoginRegistrationWrapper
+          LoginPageProps={{ theme, req }}
+          RegistrationPageProps={{
+            theme,
+            tenant,
+            req,
+            user
+          }}
+          initialCompName={
+            this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'
+          }
+        />
+      )
 
     const loginModal = (
       <Modal
@@ -224,15 +245,15 @@ class Header extends Component {
       />
     )
 
-    const alert = this.state.alertVisible
-      ? (
-        <Alert
-          message={{ type: 'error', text: get(authentication, 'error.message') }}
-          onClose={this.hideAlert}
-          timeout={50000}
-        />
-      )
-      : ''
+    const alert = this.state.alertVisible ? (
+      <Alert
+        message={{ type: 'error', text: get(authentication, 'error.message') }}
+        onClose={this.hideAlert}
+        timeout={50000}
+      />
+    ) : (
+      ''
+    )
 
     const headerClass =
       `${styles.header} layout-row flex-100 layout-wrap layout-align-center ` +
@@ -241,7 +262,10 @@ class Header extends Component {
       `${scrollable && !isTop ? styles.scrolled : ''}`
 
     return (
-      <div className={headerClass} style={{ color: invert ? 'white' : 'black' }}>
+      <div
+        className={headerClass}
+        style={{ color: invert ? 'white' : 'black' }}
+      >
         <div className="flex-100 layout-row" style={{ padding: '0 15px' }}>
           <div className="hide-sm hide-xs layout-row flex layout-align-start-center pointy">
             <img
@@ -255,16 +279,17 @@ class Header extends Component {
           {component}
           <div className="flex layout-row layout-align-end-center">
             {dropDowns}
-            { this.props.showModal && loginModal }
+            {this.props.showModal && loginModal}
           </div>
         </div>
         {alert}
-        { hasErrors
-          ? (
-            <div className={`flex-none layout-row ${styles.error_messages}`}>
-              <FlashMessages messages={error[currentStage]} />
-            </div>
-          ) : '' }
+        {hasErrors ? (
+          <div className={`flex-none layout-row ${styles.error_messages}`}>
+            <FlashMessages messages={error[currentStage]} />
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     )
   }
@@ -274,6 +299,7 @@ Header.defaultProps = {
   tenant: null,
   theme: null,
   user: null,
+  stage: null,
   registering: false,
   noRedirect: false,
   isLanding: false,
@@ -291,10 +317,17 @@ Header.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, shipment, app, bookingData
+   authentication, shipment, app, messaging, bookingData 
   } = state
+
   const {
-    user, loggedIn, loggingIn, registering, loginAttempt, showModal, registrationAttempt
+    user,
+    loggedIn,
+    loggingIn,
+    registering,
+    loginAttempt,
+    showModal,
+    registrationAttempt
   } = authentication
 
   const { currencies, tenant, tenants } = app
@@ -327,4 +360,6 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withNamespaces(['nav', 'common'])(connect(mapStateToProps, mapDispatchToProps)(Header))
+export default withNamespaces(['nav', 'common'])(
+  connect(mapStateToProps, mapDispatchToProps)(Header)
+)
