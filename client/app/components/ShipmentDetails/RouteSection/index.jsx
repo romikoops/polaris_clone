@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { intersection } from 'lodash'
 import { withNamespaces } from 'react-i18next'
+import RouteSectionLabel from './RouteSectionLabel/RouteSectionLabel'
 import { bookingProcessActions, shipmentActions, errorActions } from '../../../actions'
 import RouteSectionMap from './Map'
 import RouteSectionForm from './Form'
@@ -70,6 +71,7 @@ class RouteSection extends React.PureComponent {
     const {
       lookupTablesForRoutes, routes, shipment, tenant, bookingProcessDispatch, shipmentDispatch, addressErrors, scope
     } = nextProps
+
     const { collapsedAddressFields } = prevState
     const {
       preCarriage, onCarriage, origin, destination
@@ -441,7 +443,10 @@ class RouteSection extends React.PureComponent {
                     <div className={`${styles.label} flex-gt-md-30 flex-100 layout-row layout-wrap layout-align-space-between`}>
                       <div className={`${(loadType !== 'container' || !preCarriage) ? 'flex-100' : 'flex-40'} layout-row layout-align-center-start`}>
                         <p>
-                          {t('shipment:pickUp')}
+                          <RouteSectionLabel
+                            truckingOptions={truckTypes.origin.length}
+                            target="origin"
+                          />
                         </p>
                       </div>
                       {(loadType === 'container' || preCarriage) && (
@@ -478,7 +483,10 @@ class RouteSection extends React.PureComponent {
                     <div className={`${styles.label} flex-gt-md-30 flex-100 layout-row layout-wrap layout-align-space-between`}>
                       <div className={`${(loadType !== 'container' || !onCarriage) ? 'flex-100' : 'flex-40'} layout-row layout-align-center-start`}>
                         <p>
-                          {t('shipment:delivery')}
+                          <RouteSectionLabel
+                            truckingOptions={truckTypes.destination.length}
+                            target="destination"
+                          />
                         </p>
                       </div>
                       {(loadType === 'container' || onCarriage) && (
