@@ -30,7 +30,7 @@ module Admiralty
     def quotations_from_external_users
       ::Quotations::Quotation.joins(:user)
                              .where(users: { internal: false })
-                             .where.not(email: excluded_emails)
+                             .where.not(users: { email: excluded_emails })
                              .order(created_at: :desc)
     end
 
