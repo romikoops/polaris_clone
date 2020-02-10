@@ -10,7 +10,6 @@ pipeline {
     buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '10'))
     podTemplate(inheritFrom: 'default')
     preserveStashes()
-    retry(2)
     skipDefaultCheckout()
     timeout(45)
   }
@@ -50,8 +49,6 @@ pipeline {
             }
 
             stage('RSpec') {
-              options { retry(2) }
-
               steps {
                 defaultCheckout()
                 container('ruby') { appRunner('app') }
@@ -112,8 +109,6 @@ pipeline {
             }
 
             stage('RSpec') {
-              options { retry(2) }
-
               steps {
                 container('ruby') { appRunner('engines') }
               }
@@ -140,7 +135,7 @@ pipeline {
               yaml podSpec(
                 containers: [
                   [ name: 'node', image: 'itsmycargo/builder:node-12', command: 'cat', tty: true,
-                    requests: [ memory: '2000Mi', cpu: '1000m' ],
+                    requests: [ memory: '3000Mi', cpu: '1000m' ],
                   ]
                 ]
               )
@@ -170,8 +165,6 @@ pipeline {
             }
 
             stage('Jest') {
-              options { retry(2) }
-
               steps {
                 container('node') {
                   dir('client') {
@@ -207,8 +200,6 @@ pipeline {
     stage('Build') {
       parallel {
         stage('Backend') {
-          options { retry(2) }
-
           steps {
             dockerBuild(
               dir: '.',
@@ -220,20 +211,69 @@ pipeline {
           }
         }
 
-        stage('Frontend') {
-          options { retry(2) }
+        stage("Frontend / Docker") {
+          stages {
+            stage('Build') {
+              steps {
+                dockerBuild(
+                  dir: 'client/',
+                  image: "${jobName()}/frontend",
+                  memory: 2000,
+                  args: [
+                    RELEASE: env.GIT_COMMIT,
+                    SENTRY_AUTH_TOKEN: "env:SENTRY_AUTH_TOKEN"
+                  ],
+                  stash: 'frontend'
+                )
+              }
+            }
+          }
+        }
 
-          steps {
-            dockerBuild(
-              dir: 'client/',
-              image: "${jobName()}/frontend",
-              memory: 2000,
-              args: [
-                RELEASE: env.GIT_COMMIT,
-                SENTRY_AUTH_TOKEN: "env:SENTRY_AUTH_TOKEN"
-              ],
-              stash: 'frontend'
-            )
+        stage("Frontend / S3") {
+          agent {
+            kubernetes {
+              yaml podSpec(
+                containers: [
+                  [ name: 'node', image: 'node:12-slim', command: 'cat', tty: true,
+                    requests: [ memory: '3000Mi', cpu: '1000m' ],
+                  ]
+                ]
+              )
+            }
+          }
+
+          stages {
+            stage('Build') {
+              steps {
+                defaultCheckout()
+                container('node') {
+                  withCache(['client/node_modules=client/package-lock.json']) {
+                    dir('client') {
+                      sh(label: 'NPM Install', script: "npm install --no-progress")
+                      sh("npm run build")
+                    }
+                  }
+                }
+              }
+            }
+
+            stage('Deploy') {
+              when { branch 'master' }
+
+              steps {
+                withSecrets {
+                  s3Upload(
+                    bucket: env.DIPPER_BUCKET,
+                    workingDir: "client/dist",
+                    includePathPattern: "**",
+                    excludePathPattern: "index.html,config*.js,*.map*",
+                    metadatas: ["Revision:${env.GIT_COMMIT}"],
+                    verbose: true
+                  )
+                }
+              }
+            }
           }
         }
       }
