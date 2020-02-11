@@ -14,14 +14,14 @@ new_labels << 'polaris' if all_files.any? { |f| f =~ /\A(?!client)/ }
 new_labels << 'migrations' if all_files.include?('db/migrate/*')
 
 ## Translations
-rails_translations = all_files.include? 'config/locales/*'
-js_translations = all_files.include? 'client/i18n/**/*'
-new_labels << 'translations' if rails_translations || js_translations
+new_labels << 'translations' if all_files.include?('config/locales/*') || all_files.include?('client/i18n/**/*')
 
 ## Drafts
-new_labels << 'draft' if git.commits.any? { |c| c.message =~ /\Awip/i }
+new_labels << 'draft' if git.commits.any? { |c| /\A(wip|fixup!|squash!)/i.match?(c.message) }
 
 ### Set new labels
 (new_labels - pr_labels).uniq.each do |label|
+  next unless all_labels.include?(label)
+
   github.api.add_labels_to_an_issue(github.pr_json[:base][:repo][:full_name], github.pr_json['number'], [label])
 end

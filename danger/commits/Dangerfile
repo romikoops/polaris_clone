@@ -3,14 +3,28 @@
 # rubocop:disable all
 
 # Ensure all commits have ticket number
-unless git.commits.all? { |c| c.message =~ /^((IMC-[\d]+)|chore|(hot)?fix)/i }
-  failure 'Please add JIRA Ticket to commits or mark properly as hotfix/chore'
+COMMIT_REGEXP = /\A(IMC-\d+)|ci|chore|(hot)?fix|revert|merge branch/i
+unless git.commits.all? { |c| COMMIT_REGEXP.match?(c.message) }
+  title = ':bookmark: Invalid Commit Message'
+  body = <<-END_OF_HELP
+    Please follow commit message format: <IDENTIFIER> <TITLE>, where
+    <IDENTIFIER> is either JIRA Ticket number (IMC-1234) or conventional category:
+      `ci`, `chore`, `hotfix`, `fix`, or `revert`.
+    <TITLE> is short title of commit, max 40 characters.
+  END_OF_HELP
+  failure("#{title} - #{body}")
 end
 
 # Disallow Draft commits
-failure 'Please rebase to remove work in progress commits' if git.commits.any? { |c| c.message =~ /\Awip/i }
+if git.commits.any? { |c| /\Awip/i.match?(c.message) }
+  title = ':construction: Work in progress'
+  body = 'Please rebase to remove work in progress commits'
+  failure("#{title} - #{body}")
+end
 
 # Prevent merging PRs with commits intended to be rebased
 if git.commits.any? { |c| c.message.include?('fixup!') || c.message.include?('squash!') }
-  failure('This PR contains commits marked as squash or fixup. Please perform an interactive rebase to apply the changes.')
+  title = ':construction: Work in progress'
+  body = 'This PR contains commits marked as squash or fixup. Please perform an interactive rebase to apply the changes.'
+  failure("#{title} - #{body}")
 end
