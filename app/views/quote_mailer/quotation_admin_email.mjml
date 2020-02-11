@@ -92,11 +92,11 @@
                 <%= quote['destination'] %></strong>
             </p>
             <% if quote['has_on_carriage'].present? %>
-              <p> <strong>Delivery to: </strong><%=  quote['delivery_address'] %></p> 
+              <p> <strong>Delivery to: </strong><%=  quote['delivery_address'] %></p>
             <% end %>
           </mj-text>
         </mj-column>
-        
+
       </mj-group>
     </mj-section>
 
@@ -105,8 +105,8 @@
         <mj-column padding-left="30px">
           <mj-text line-height="16px" font-size="18px">
             <p> <strong>Total: </strong>
-              <%= '%.2f' % quote["total"]["value"].to_f %>
-              &nbsp;<%= quote["total"]["currency"] %>
+              <%= '%.2f' % quote.dig('total', 'value')&.to_f %>
+              &nbsp;<%= quote.dig('total', 'currency') %>
             </p>
             </mj-text>
         </mj-column>
