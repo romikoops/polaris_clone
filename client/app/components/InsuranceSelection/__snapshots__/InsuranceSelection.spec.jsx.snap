@@ -1,0 +1,269 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Custom Insurance Message should match snapshot 1`] = `
+<div
+  className="flex-100"
+>
+  <div
+    className="flex-100 layout-row layout-align-center padd_top"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-start"
+      >
+        <div
+          className="flex-none layout-row layout-align-space-around-center"
+        >
+          <TextHeading
+            color="#4F4F4F"
+            fontWeight="bold"
+            size={2}
+            text="cargo:transportInsurance"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-end-center padd_top"
+      >
+        <div
+          className="flex-20 layout-row layout-align-end-center"
+        >
+          <Toggle
+            className="ccb_yes_insurance"
+            icons={
+              Object {
+                "checked": <Unknown />,
+                "unchecked": <Unknown />,
+              }
+            }
+            id="yes_insurance"
+            onChange={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-5"
+        />
+        <div
+          className="flex-75 layout-row layout-align-start-center"
+        >
+          <label
+            className="pointy"
+            htmlFor="yes_insurance"
+          >
+            <b>
+              common:yes
+            </b>
+            . 
+            nice acceptance message
+          </label>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-end-center padd_top"
+      >
+        <div
+          className="flex-20 layout-row layout-align-end-center"
+        >
+          <Toggle
+            checked={true}
+            className="ccb_no_insurance"
+            icons={
+              Object {
+                "checked": <Unknown />,
+                "unchecked": <Unknown />,
+              }
+            }
+            id="no_insurance"
+            onChange={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-5"
+        />
+        <div
+          className="flex-75 layout-row layout-align-start-center"
+        >
+          <label
+            className="pointy"
+            htmlFor="no_insurance"
+          >
+            <b>
+              common:no
+            </b>
+            . 
+            nice decline message
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100"
+>
+  <div
+    className="flex-100 layout-row layout-align-center padd_top"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-start"
+      >
+        <div
+          className="flex-none layout-row layout-align-space-around-center"
+        >
+          <TextHeading
+            color="#4F4F4F"
+            fontWeight="bold"
+            size={2}
+            text="cargo:transportInsurance"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-end-center padd_top"
+      >
+        <div
+          className="flex-20 layout-row layout-align-end-center"
+        >
+          <Toggle
+            className="ccb_yes_insurance"
+            icons={
+              Object {
+                "checked": <Unknown />,
+                "unchecked": <Unknown />,
+              }
+            }
+            id="yes_insurance"
+            onChange={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-5"
+        />
+        <div
+          className="flex-75 layout-row layout-align-start-center"
+        >
+          <label
+            className="pointy"
+            htmlFor="yes_insurance"
+          >
+            <b>
+              common:yes
+            </b>
+            . 
+            cargo:quoteInsurance
+          </label>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-end-center padd_top"
+      >
+        <div
+          className="flex-20 layout-row layout-align-end-center"
+        >
+          <Toggle
+            checked={true}
+            className="ccb_no_insurance"
+            icons={
+              Object {
+                "checked": <Unknown />,
+                "unchecked": <Unknown />,
+              }
+            }
+            id="no_insurance"
+            onChange={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-5"
+        />
+        <div
+          className="flex-75 layout-row layout-align-start-center"
+        >
+          <label
+            className="pointy"
+            htmlFor="no_insurance"
+          >
+            <b>
+              common:no
+            </b>
+            . 
+            cargo:noQuoteInsurance
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

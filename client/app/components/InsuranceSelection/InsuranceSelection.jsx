@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { get } from 'lodash'
 import Toggle from 'react-toggle'
 import defaults from '../../styles/default_classes.scss'
 import TextHeading from '../TextHeading/TextHeading'
@@ -7,6 +8,8 @@ class InsuranceSelection extends Component {
   constructor (props) {
     super(props)
     this.toggleInsurance = this.toggleInsurance.bind(this)
+    this.quoteInsuranceMessage = this.quoteInsuranceMessage.bind(this)
+    this.quoteNoInsuranceMessage = this.quoteNoInsuranceMessage.bind(this)
   }
 
   toggleInsurance (bool) {
@@ -14,15 +17,36 @@ class InsuranceSelection extends Component {
     handleInsurance(bool)
   }
 
+  quoteInsuranceMessage () {
+    const { t, tenant } = this.props
+    const customMessage = get(tenant, 'scope.insurance.messages.accept', null)
+
+    if (customMessage) {
+      return customMessage
+    }
+
+    const insurancePercentage = (parseFloat(tenant.scope.transport_insurance_rate) * 100).toFixed(2)
+
+    return t('cargo:quoteInsurance', { tenantRate: insurancePercentage })
+  }
+
+  quoteNoInsuranceMessage () {
+    const { t, tenant } = this.props
+    const customMessage = get(tenant, 'scope.insurance.messages.decline', null)
+
+    if (customMessage) {
+      return customMessage
+    }
+
+    return t('cargo:noQuoteInsurance', { tenantName: tenant.name })
+  }
+
   render () {
     const {
       t,
       theme,
-      tenant,
       insuranceBool
     } = this.props
-
-    const insurancePercentage = (parseFloat(tenant.scope.transport_insurance_rate) * 100).toFixed(2)
 
     return (
       <div className="flex-100">
@@ -67,7 +91,8 @@ class InsuranceSelection extends Component {
               <div className="flex-75 layout-row layout-align-start-center">
                 <label htmlFor="yes_insurance" className="pointy">
                   <b>{t('common:yes')}</b>
-                  {t('cargo:quoteInsurance', { tenantRate: insurancePercentage })}
+                  {'. '}
+                  {this.quoteInsuranceMessage()}
                 </label>
               </div>
             </div>
@@ -85,7 +110,8 @@ class InsuranceSelection extends Component {
               <div className="flex-75 layout-row layout-align-start-center">
                 <label htmlFor="no_insurance" className="pointy">
                   <b>{t('common:no')}</b>
-                  {t('cargo:noQuoteInsurance', { tenantName: tenant.name })}
+                  {'. '}
+                  {this.quoteNoInsuranceMessage()}
                 </label>
               </div>
             </div>

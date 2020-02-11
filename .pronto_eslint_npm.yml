@@ -1,2 +1,2 @@
 files_to_lint: '(\.jsx?|\.es6)$'
-cmd_line_opts: '-c client/.eslintrc'
+cmd_line_opts: '-c client/.eslintrc --rule "import/no-unresolved: off"'

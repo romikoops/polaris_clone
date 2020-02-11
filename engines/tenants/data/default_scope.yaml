@@ -157,3 +157,7 @@ user_restrictions:
     email: false
     company: false
     currency: false
+insurance:
+  messages:
+    accept: ''
+    decline: ''
