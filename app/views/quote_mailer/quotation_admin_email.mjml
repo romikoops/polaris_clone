@@ -105,7 +105,7 @@
         <mj-column padding-left="30px">
           <mj-text line-height="16px" font-size="18px">
             <p> <strong>Total: </strong>
-              <%= '%.2f' % quote.dig('total', 'value')&.to_f %>
+              <%= quote.dig('total', 'value')&.to_f&.round(2) %>
               &nbsp;<%= quote.dig('total', 'currency') %>
             </p>
             </mj-text>
