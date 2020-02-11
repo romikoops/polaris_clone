@@ -238,8 +238,8 @@ class PdfService
 
   def get_note_remarks(trip_id)
     trip = Trip.find(trip_id)
-    start_date = trip.start_date || OfferCalculator::Schedule::QUOTE_TRIP_START_DATE
-    end_date = trip.end_date || OfferCalculator::Schedule::QUOTE_TRIP_END_DATE
+    start_date = trip.start_date || OfferCalculator::Schedule.quote_trip_start_date
+    end_date = trip.end_date || OfferCalculator::Schedule.quote_trip_end_date
     pricing_ids = Pricings::Pricing.where(
       itinerary_id: trip.itinerary_id,
       tenant_vehicle_id: trip.tenant_vehicle_id

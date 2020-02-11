@@ -36,8 +36,8 @@ module Pricings
 
     def find_applicable_margins
       hierarchy = Tenants::HierarchyService.new(target: target, tenant: tenant).fetch
-      target_hierarchy = hierarchy.reverse.reject {|hier| hier == tenant }
-                                .map.with_index {|hier, i| {rank: i , data: hier} }
+      target_hierarchy = hierarchy.reverse.reject { |hier| hier == tenant }
+                                  .map.with_index { |hier, i| { rank: i, data: hier } }
 
       all_margins = apply_hierarchy(hierarchy: target_hierarchy)
 
@@ -197,7 +197,6 @@ module Pricings
             if effective_margin.operator == '+'
               margin_key = effective_margin == margin ? 'total' : fee.fee_code
               flat_margins[margin_key] << effective_margin
-              next
             end
 
             result_json = apply_freight_manipulation(
@@ -205,12 +204,15 @@ module Pricings
               value: effective_margin.value,
               fee: hash[fee_code] || fee_json.values.first
             )
-            update_meta_for_margin(
-              fee_code: fee.fee_code,
-              margin_value: effective_margin.value,
-              margin_or_detail: margin,
-              result: result_json
-            )
+            unless effective_margin.operator == '+'
+              update_meta_for_margin(
+                fee_code: fee.fee_code,
+                margin_value: effective_margin.value,
+                margin_or_detail: margin,
+                result: result_json
+              )
+            end
+
             hash[fee_code] = result_json
           end
         end
@@ -262,7 +264,6 @@ module Pricings
             if effective_margin.operator == '+'
               margin_key = effective_margin == mdata[:margin] ? 'total' : trucking_charge_category.code
               flat_margins[margin_key] << effective_margin
-              next
             end
 
             result_json = apply_trucking_rate_manipulation(
@@ -271,12 +272,14 @@ module Pricings
               rates: hash[key] || range
             )
 
-            update_meta_for_margin(
-              fee_code: metadata_charge_category&.code,
-              margin_value: effective_margin.value,
-              margin_or_detail: mdata[:margin],
-              result: { key => result_json }
-            )
+            unless effective_margin.operator == '+'
+              update_meta_for_margin(
+                fee_code: metadata_charge_category&.code,
+                margin_value: effective_margin.value,
+                margin_or_detail: mdata[:margin],
+                result: { key => result_json }
+              )
+            end
             hash[key] = result_json
           end
         end
@@ -354,7 +357,6 @@ module Pricings
           if effective_margin.operator == '+'
             margin_key = effective_margin == margin ? 'total' : key
             flat_margins[margin_key] << effective_margin
-            next
           end
 
           result_json = apply_json_fee_manipulation(
@@ -362,12 +364,14 @@ module Pricings
             value: effective_margin.value,
             fee: hash[key] || fee
           )
-          update_meta_for_margin(
-            fee_code: key,
-            margin_value: effective_margin.value,
-            margin_or_detail: margin,
-            result: result_json
-          )
+          unless effective_margin.operator == '+'
+            update_meta_for_margin(
+              fee_code: key,
+              margin_value: effective_margin.value,
+              margin_or_detail: margin,
+              result: result_json
+            )
+          end
 
           hash[key] = result_json
         end
@@ -387,6 +391,8 @@ module Pricings
       case operator
       when '%'
         apply_percentage(value: value, rate: rate)
+      else
+        rate
       end
     end
 
@@ -580,7 +586,7 @@ module Pricings
       )
     end
 
-    def argument_errors(type, target, args) # rubocop:disable Metrics/CyclomaticComplexity
+    def argument_errors(type, target, args)
       raise Pricings::Manipulator::MissingArgument unless target
 
       unless (args[:schedules].present? && type == :freight_margin) || type != :freight_margin

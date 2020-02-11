@@ -35,6 +35,7 @@ module OfferCalculator
               hidden_grand_total: scope['hide_grand_total'],
               hidden_sub_total: scope['hide_sub_totals']}
             ).deep_symbolize_keys
+
             next if invalid_quote?(quote: quote,
                                    hidden_grand_total:  scope['hide_grand_total'],
                                    user: user,

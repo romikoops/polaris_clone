@@ -61,21 +61,23 @@ RSpec.describe Pricings::Manipulator do
   end
   let(:wm_rate_basis) { double('WM Rate basis', external_code: 'PER_WM', internal_code: 'PER_WM') }
   let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
+  let(:trips) do
+    [1, 3, 5, 7, 11, 12].map do |num|
+      base_date = num.days.from_now
+      FactoryBot.create(:legacy_trip,
+                        itinerary: itinerary_1,
+                        tenant_vehicle: tenant_vehicle_1,
+                        closing_date: base_date - 4.days,
+                        start_date: base_date,
+                        end_date: base_date + 30.days)
+    end
+  end
+  let(:schedules) { trips.map { |t| Legacy::Schedule.from_trip(t) } }
 
   context 'freight pricings' do
     describe '.perform' do
       it 'returns the manipulated freight pricing attached to the user' do
         lcl_pricing_1 = FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
@@ -97,18 +99,34 @@ RSpec.describe Pricings::Manipulator do
         expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
       end
 
+      it 'returns the manipulated freight pricing attached to the user (single flat margin)' do # rubocop:disable Rspec/ExampleLength
+        lcl_pricing1 = FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1)
+        FactoryBot.create(:freight_margin, pricing: lcl_pricing1, tenant: tenants_tenant, applicable: tenants_user, operator: '+', value: 100)
+        manipulated_pricings_and_metadata = described_class.new(
+          target: tenants_user,
+          tenant: tenants_tenant,
+          type: :freight_margin,
+          args: {
+            sandbox: nil,
+            pricing: lcl_pricing1,
+            schedules: schedules,
+            shipment: lcl_shipment,
+            without_meta: true
+          }
+        ).perform
+        manipulated_pricings = manipulated_pricings_and_metadata.first
+
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(lcl_pricing1.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(25)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+          expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to eq([{ 'bas' => 100 }])
+        end
+      end
+
       it 'returns the manipulated freight pricing attached to the user with multiple margins' do
         lcl_pricing_1 = FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin,
                           pricing: lcl_pricing_1,
                           tenant: tenants_tenant,
@@ -138,12 +156,13 @@ RSpec.describe Pricings::Manipulator do
         manipulated_pricings = manipulated_pricings_and_metadata.first
 
         manipulated_pricings.sort_by! { |m| m['effective_date'] }
-
-        expect(manipulated_pricings.pluck(:id).uniq).to eq([lcl_pricing_1.id])
-        expect(manipulated_pricings.flat_map { |pricing| pricing['data'].keys }.uniq).to eq(['bas'])
-        expect(manipulated_pricings.map { |pricing| pricing.dig('data', 'bas', 'rate') }).to eq([25.0, 27.5, 25.0, 25.0])
-        expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to eq([{}, { 'bas' => 0.1e2 }, { 'bas' => 0.1e2 }, {}])
-        expect(manipulated_pricings.map { |pricing| pricing.dig('data', 'bas', 'rate_basis') }.uniq).to eq(['PER_WM'])
+        aggregate_failures do
+          expect(manipulated_pricings.pluck(:id).uniq).to eq([lcl_pricing_1.id])
+          expect(manipulated_pricings.flat_map { |pricing| pricing['data'].keys }.uniq).to eq(['bas'])
+          expect(manipulated_pricings.map { |pricing| pricing.dig('data', 'bas', 'rate') }).to eq([25.0, 27.5, 25.0, 25.0])
+          expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to eq([{}, { 'bas' => 0.1e2 }, { 'bas' => 0.1e2 }, {}])
+          expect(manipulated_pricings.map { |pricing| pricing.dig('data', 'bas', 'rate_basis') }.uniq).to eq(['PER_WM'])
+        end
       end
 
       it 'returns the manipulated freight pricing attached to the group' do
@@ -157,7 +176,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin, pricing: group_pricing, tenant: tenants_tenant, applicable: group_1)
         manipulated_pricings_and_metadata = described_class.new(
           type: :freight_margin,
@@ -172,10 +190,12 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        end
       end
 
       it 'returns the manipulated freight pricing attached to the group without pricing' do
@@ -192,7 +212,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin,
                           itinerary_id: group_pricing.itinerary_id,
                           tenant_vehicle_id: group_pricing.tenant_vehicle_id,
@@ -214,10 +233,12 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        end
       end
 
       it 'returns multiple manipulated freight pricings when margins overlap attached to the group without pricing' do
@@ -225,17 +246,7 @@ RSpec.describe Pricings::Manipulator do
           group_pricing = FactoryBot.create(:lcl_pricing,
                                             tenant_vehicle: tenant_vehicle_1,
                                             tenant: tenant,
-                                            itinerary: FactoryBot.create(:default_itinerary, tenant: tenant))
-          trips = [1, 3, 10, 13].map do |num|
-            base_date = num.days.from_now
-            FactoryBot.create(:legacy_trip,
-                              itinerary: group_pricing.itinerary,
-                              tenant_vehicle: group_pricing.tenant_vehicle,
-                              closing_date: base_date - 4.days,
-                              start_date: base_date,
-                              end_date: base_date + 30.days)
-          end
-          schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
+                                            itinerary: itinerary_1)
           margin_a = FactoryBot.create(:freight_margin,
                                        pricing: group_pricing,
                                        effective_date: Date.today - 3.days,
@@ -265,26 +276,27 @@ RSpec.describe Pricings::Manipulator do
           ).perform
           manipulated_pricings = manipulated_pricings_and_metadata.first
           manipulated_pricings.sort_by! { |m| m['effective_date'] }
+          aggregate_failures do
+            expect(manipulated_pricings[0]['id']).to eq(group_pricing.id)
+            expect(manipulated_pricings[0]['expiration_date'].end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
+            expect(manipulated_pricings.dig(0, 'data').keys).to eq(['bas'])
+            expect(manipulated_pricings.dig(0, 'data', 'bas', 'rate')).to eq(27.5)
+            expect(manipulated_pricings.dig(0, 'data', 'bas', 'rate_basis')).to eq('PER_WM')
 
-          expect(manipulated_pricings[0]['id']).to eq(group_pricing.id)
-          expect(manipulated_pricings[0]['expiration_date'].end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
-          expect(manipulated_pricings.dig(0, 'data').keys).to eq(['bas'])
-          expect(manipulated_pricings.dig(0, 'data', 'bas', 'rate')).to eq(27.5)
-          expect(manipulated_pricings.dig(0, 'data', 'bas', 'rate_basis')).to eq('PER_WM')
+            expect(manipulated_pricings[1]['id']).to eq(group_pricing.id)
+            expect(manipulated_pricings[1]['effective_date']).to eq(margin_b.effective_date)
+            expect(manipulated_pricings[1]['expiration_date'].end_of_minute).to eq(margin_a.expiration_date)
+            expect(manipulated_pricings.dig(1, 'data').keys).to eq(['bas'])
+            expect(manipulated_pricings.dig(1, 'data', 'bas', 'rate')).to eq(41.25)
+            expect(manipulated_pricings.dig(1, 'data', 'bas', 'rate_basis')).to eq('PER_WM')
 
-          expect(manipulated_pricings[1]['id']).to eq(group_pricing.id)
-          expect(manipulated_pricings[1]['effective_date']).to eq(margin_b.effective_date)
-          expect(manipulated_pricings[1]['expiration_date'].end_of_minute).to eq(margin_a.expiration_date)
-          expect(manipulated_pricings.dig(1, 'data').keys).to eq(['bas'])
-          expect(manipulated_pricings.dig(1, 'data', 'bas', 'rate')).to eq(41.25)
-          expect(manipulated_pricings.dig(1, 'data', 'bas', 'rate_basis')).to eq('PER_WM')
-
-          expect(manipulated_pricings[2]['id']).to eq(group_pricing.id)
-          expect(manipulated_pricings[2]['effective_date']).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
-          expect(manipulated_pricings[2]['expiration_date'].end_of_minute).to eq(margin_b.expiration_date)
-          expect(manipulated_pricings.dig(2, 'data').keys).to eq(['bas'])
-          expect(manipulated_pricings.dig(2, 'data', 'bas', 'rate')).to eq(37.5)
-          expect(manipulated_pricings.dig(2, 'data', 'bas', 'rate_basis')).to eq('PER_WM')
+            expect(manipulated_pricings[2]['id']).to eq(group_pricing.id)
+            expect(manipulated_pricings[2]['effective_date']).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
+            expect(manipulated_pricings[2]['expiration_date'].end_of_minute).to eq(margin_b.expiration_date)
+            expect(manipulated_pricings.dig(2, 'data').keys).to eq(['bas'])
+            expect(manipulated_pricings.dig(2, 'data', 'bas', 'rate')).to eq(37.5)
+            expect(manipulated_pricings.dig(2, 'data', 'bas', 'rate_basis')).to eq('PER_WM')
+          end
         end
       end
 
@@ -304,7 +316,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin, pricing: group_pricing, tenant: tenants_tenant, applicable: company_group)
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
@@ -319,10 +330,12 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        end
       end
 
       it 'returns the manipulated freight pricing with specific detail attached to the user' do
@@ -339,7 +352,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
           tenant: tenants_tenant,
@@ -353,10 +365,12 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(lcl_pricing_2.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(50)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(lcl_pricing_2.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(50)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        end
       end
 
       it 'returns the manipulated freight pricing with one specific detail and general attached to the user' do
@@ -370,7 +384,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:fee_per_wm, tenant: tenant, charge_category: bas_charge_category, pricing: lcl_pricing_3, rate: 40)
         FactoryBot.create(:fee_per_wm, tenant: tenant, charge_category: baf_charge_category, pricing: lcl_pricing_3, rate: 40)
         user_multi_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing_3, tenant: tenants_tenant, applicable: tenants_user)
@@ -388,13 +401,14 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-
-        expect(manipulated_pricings.first['id']).to eq(lcl_pricing_3.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(%w[bas baf])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(50)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
-        expect(manipulated_pricings.first.dig('data', 'baf', 'rate')).to eq(44)
-        expect(manipulated_pricings.first.dig('data', 'baf', 'rate_basis')).to eq('PER_WM')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(lcl_pricing_3.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(%w[bas baf])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(50)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+          expect(manipulated_pricings.first.dig('data', 'baf', 'rate')).to eq(44)
+          expect(manipulated_pricings.first.dig('data', 'baf', 'rate_basis')).to eq('PER_WM')
+        end
       end
 
       it 'returns the manipulated freight pricing attached to the user with a range' do
@@ -408,7 +422,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin, pricing: lcl_range_pricing, tenant: tenants_tenant, applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
@@ -423,11 +436,12 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-
-        expect(manipulated_pricings.first['id']).to eq(lcl_range_pricing.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'range', 0, 'rate')).to eq(11)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_KG_RANGE')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(lcl_range_pricing.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'range', 0, 'rate')).to eq(11)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_KG_RANGE')
+        end
       end
 
       it 'returns the manipulated freight pricing attached to the user for addition margin' do
@@ -441,7 +455,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin, pricing: lcl_pricing_4, tenant: tenants_tenant, applicable: tenants_user, value: 10, operator: '+')
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
@@ -456,12 +469,13 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-
-        expect(manipulated_pricings.first['id']).to eq(lcl_pricing_4.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(25)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
-        expect(manipulated_pricings.first.dig('flat_margins')).to eq('bas' => 0.1e2)
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(lcl_pricing_4.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(25)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+          expect(manipulated_pricings.first.dig('flat_margins')).to eq('bas' => 0.1e2)
+        end
       end
 
       it 'returns the manipulated freight pricing attached to the user for addition margin with flat margins' do
@@ -475,7 +489,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing_4, tenant: tenants_tenant, applicable: tenants_user, value: 0, operator: '%')
         bas_charge_category = lcl_pricing_4.fees.first.charge_category
         FactoryBot.create(:pricings_detail, margin: margin, value: 10, operator: '+', charge_category: bas_charge_category)
@@ -493,12 +506,13 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-
-        expect(manipulated_pricings.first['id']).to eq(lcl_pricing_4.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(25)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
-        expect(manipulated_pricings.first.dig('flat_margins')).to eq('bas' => 0.1e2)
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(lcl_pricing_4.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(25)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+          expect(manipulated_pricings.first.dig('flat_margins')).to eq('bas' => 0.1e2)
+        end
       end
 
       it 'returns the manipulated freight pricing attached to the tenant without pricing' do
@@ -515,7 +529,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin,
                           itinerary_id: group_pricing.itinerary_id,
                           tenant_vehicle_id: group_pricing.tenant_vehicle_id,
@@ -538,10 +551,12 @@ RSpec.describe Pricings::Manipulator do
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
         manipulated_pricings.sort_by! { |m| m['effective_date'] }
-        expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        end
       end
 
       it 'returns the manipulated freight pricing attached to the tenant with itinerary only' do
@@ -558,7 +573,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin,
                           itinerary_id: group_pricing.itinerary_id,
                           tenant: tenants_tenant,
@@ -578,11 +592,12 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-
-        expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        end
       end
 
       it 'returns the manipulated freight pricing attached to the tenant with default_for' do
@@ -599,7 +614,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
           tenant: tenants_tenant,
@@ -615,11 +629,12 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-
-        expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(25)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(25)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        end
       end
 
       it 'returns the manipulated freight pricing attached to the tenant with nothing else' do
@@ -636,7 +651,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin,
                           tenant: tenants_tenant,
                           applicable: tenants_tenant)
@@ -655,11 +669,12 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-
-        expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        end
       end
 
       it 'returns the manipulated freight pricing attached to hub and cargo class' do
@@ -676,7 +691,6 @@ RSpec.describe Pricings::Manipulator do
                             start_date: base_date,
                             end_date: base_date + 30.days)
         end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:freight_margin,
                           tenant: tenants_tenant,
                           origin_hub: group_pricing.itinerary.hubs.first,
@@ -697,10 +711,12 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
-        expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
-        expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(group_pricing.id)
+          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(27.5)
+          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
+        end
       end
     end
   end
@@ -713,16 +729,6 @@ RSpec.describe Pricings::Manipulator do
                                          hub: hub,
                                          tenant_vehicle: tenant_vehicle_1,
                                          tenant: tenant)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:export_margin,
                           origin_hub: hub,
                           tenant_vehicle: tenant_vehicle_1,
@@ -741,10 +747,12 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        end
       end
 
       it 'returns the manipulated local_charge (export) attached to the user not covering entire validity' do
@@ -753,16 +761,6 @@ RSpec.describe Pricings::Manipulator do
                                          hub: hub,
                                          tenant_vehicle: tenant_vehicle_1,
                                          tenant: tenant)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:export_margin,
                           origin_hub: hub,
                           tenant_vehicle: tenant_vehicle_1,
@@ -784,14 +782,16 @@ RSpec.describe Pricings::Manipulator do
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
         manipulated_pricings.sort_by! { |m| m['effective_date'] }
-        expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(17.5)
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
-        expect(manipulated_pricings.last['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.last['fees'].keys).to eq(['SOLAS'])
-        expect(manipulated_pricings.last.dig('fees', 'SOLAS', 'value')).to eq(19.25)
-        expect(manipulated_pricings.last.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(17.5)
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(manipulated_pricings.last['id']).to eq(local_charge.id)
+          expect(manipulated_pricings.last['fees'].keys).to eq(['SOLAS'])
+          expect(manipulated_pricings.last.dig('fees', 'SOLAS', 'value')).to eq(19.25)
+          expect(manipulated_pricings.last.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        end
       end
 
       it 'returns the manipulated local_charge (import) attached to the user' do
@@ -801,16 +801,6 @@ RSpec.describe Pricings::Manipulator do
                                          direction: 'import',
                                          tenant_vehicle: tenant_vehicle_1,
                                          tenant: tenant)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:import_margin,
                           destination_hub: hub,
                           tenant_vehicle: tenant_vehicle_1,
@@ -830,10 +820,12 @@ RSpec.describe Pricings::Manipulator do
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
 
-        expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        end
       end
 
       it 'returns the manipulated local_charge (export) attached to the user with multiple margins' do
@@ -842,16 +834,6 @@ RSpec.describe Pricings::Manipulator do
                                          hub: hub,
                                          tenant_vehicle: tenant_vehicle_1,
                                          tenant: tenant)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         margin_a = FactoryBot.create(:export_margin,
                                      origin_hub: hub,
                                      tenant_vehicle: tenant_vehicle_1,
@@ -883,14 +865,16 @@ RSpec.describe Pricings::Manipulator do
         manipulated_pricings = manipulated_pricings_and_metadata.first
         manipulated_pricings.sort_by! { |m| m['effective_date'] }
 
-        expect(manipulated_pricings.map { |mp| mp['id'] }.uniq).to match_array([local_charge.id])
-        expect(manipulated_pricings.map { |mp| mp.dig('fees', 'SOLAS', 'value') }).to match_array([17.5, 19.25, 17.5, 17.5])
-        expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to eq([{}, { 'SOLAS' => 0.1e2 }, { 'SOLAS' => 0.1e2 }, {}])
-        expect(manipulated_pricings[0]['expiration_date'].end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
-        expect(manipulated_pricings[1]['effective_date']).to eq(margin_b.effective_date)
-        expect(manipulated_pricings[1]['expiration_date'].end_of_minute).to eq(margin_a.expiration_date)
-        expect(manipulated_pricings[2]['effective_date']).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
-        expect(manipulated_pricings[2]['expiration_date'].end_of_minute).to eq(margin_b.expiration_date)
+        aggregate_failures do
+          expect(manipulated_pricings.map { |mp| mp['id'] }.uniq).to match_array([local_charge.id])
+          expect(manipulated_pricings.map { |mp| mp.dig('fees', 'SOLAS', 'value') }).to match_array([17.5, 19.25, 17.5, 17.5])
+          expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to eq([{}, { 'SOLAS' => 0.1e2 }, { 'SOLAS' => 0.1e2 }, {}])
+          expect(manipulated_pricings[0]['expiration_date'].end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
+          expect(manipulated_pricings[1]['effective_date']).to eq(margin_b.effective_date)
+          expect(manipulated_pricings[1]['expiration_date'].end_of_minute).to eq(margin_a.expiration_date)
+          expect(manipulated_pricings[2]['effective_date']).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
+          expect(manipulated_pricings[2]['expiration_date'].end_of_minute).to eq(margin_b.expiration_date)
+        end
       end
       it 'returns the manipulated local_charge (import) attached to the user with multiple margins' do
         hub = itinerary_1.last_stop.hub
@@ -899,16 +883,6 @@ RSpec.describe Pricings::Manipulator do
                                          direction: 'import',
                                          tenant_vehicle: tenant_vehicle_1,
                                          tenant: tenant)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:import_margin,
                           destination_hub: hub,
                           tenant_vehicle: tenant_vehicle_1,
@@ -940,11 +914,13 @@ RSpec.describe Pricings::Manipulator do
         manipulated_pricings = manipulated_pricings_and_metadata.first
 
         manipulated_pricings.map { |mp| mp.dig('fees', 'PUF', 'value') }
-        expect(manipulated_pricings.pluck(:id).uniq).to eq([local_charge.id])
-        expect(manipulated_pricings.flat_map { |pricing| pricing['fees'].keys }.uniq).to eq(['SOLAS'])
-        expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to eq([{}, { 'SOLAS' => 0.1e2 }, { 'SOLAS' => 0.1e2 }, {}])
-        expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'SOLAS', 'value') }).to match_array([17.5, 19.25, 17.5, 17.5])
-        expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'SOLAS', 'rate_basis') }.uniq).to eq(['PER_SHIPMENT'])
+        aggregate_failures do
+          expect(manipulated_pricings.pluck(:id).uniq).to eq([local_charge.id])
+          expect(manipulated_pricings.flat_map { |pricing| pricing['fees'].keys }.uniq).to eq(['SOLAS'])
+          expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to eq([{}, { 'SOLAS' => 0.1e2 }, { 'SOLAS' => 0.1e2 }, {}])
+          expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'SOLAS', 'value') }).to match_array([17.5, 19.25, 17.5, 17.5])
+          expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'SOLAS', 'rate_basis') }.uniq).to eq(['PER_SHIPMENT'])
+        end
       end
 
       it 'returns the manipulated local_charge attached to the group' do
@@ -954,16 +930,6 @@ RSpec.describe Pricings::Manipulator do
                                          direction: 'export',
                                          tenant_vehicle: tenant_vehicle_1,
                                          tenant: tenant)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: group_1)
         manipulated_pricings_and_metadata = described_class.new(
           type: :export_margin,
@@ -978,10 +944,13 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        end
       end
 
       it 'returns multiple manipulated local_charges when margins overlap attached to the group without pricing' do
@@ -1001,7 +970,6 @@ RSpec.describe Pricings::Manipulator do
                               start_date: base_date,
                               end_date: base_date + 30.days)
           end
-          schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
           margin_a = FactoryBot.create(:export_margin,
                                        origin_hub: hub,
                                        tenant_vehicle: tenant_vehicle_1,
@@ -1032,15 +1000,18 @@ RSpec.describe Pricings::Manipulator do
           manipulated_pricings = manipulated_pricings_and_metadata.first
 
           manipulated_pricings.sort_by! { |m| m['effective_date'] }
-          expect(manipulated_pricings.pluck(:id).uniq).to eq([local_charge.id])
-          expect(manipulated_pricings.flat_map { |pricing| pricing['fees'].keys }.uniq).to eq(['SOLAS'])
-          expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'SOLAS', 'value') }).to eq([19.25, 17.5, 26.25, 17.5])
-          expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'SOLAS', 'rate_basis') }.uniq).to eq(['PER_SHIPMENT'])
-          expect(manipulated_pricings[0]['expiration_date'].end_of_minute).to eq(margin_a.expiration_date)
-          expect(manipulated_pricings[1]['effective_date']).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
-          expect(manipulated_pricings[1]['expiration_date'].end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
-          expect(manipulated_pricings[2]['effective_date']).to eq(margin_b.effective_date)
-          expect(manipulated_pricings[2]['expiration_date'].end_of_minute).to eq(margin_b.expiration_date)
+
+          aggregate_failures do
+            expect(manipulated_pricings.pluck(:id).uniq).to eq([local_charge.id])
+            expect(manipulated_pricings.flat_map { |pricing| pricing['fees'].keys }.uniq).to eq(['SOLAS'])
+            expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'SOLAS', 'value') }).to eq([19.25, 17.5, 26.25, 17.5])
+            expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'SOLAS', 'rate_basis') }.uniq).to eq(['PER_SHIPMENT'])
+            expect(manipulated_pricings[0]['expiration_date'].end_of_minute).to eq(margin_a.expiration_date)
+            expect(manipulated_pricings[1]['effective_date']).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
+            expect(manipulated_pricings[1]['expiration_date'].end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
+            expect(manipulated_pricings[2]['effective_date']).to eq(margin_b.effective_date)
+            expect(manipulated_pricings[2]['expiration_date'].end_of_minute).to eq(margin_b.expiration_date)
+          end
         end
       end
 
@@ -1056,16 +1027,6 @@ RSpec.describe Pricings::Manipulator do
                                          direction: 'export',
                                          tenant_vehicle: tenant_vehicle_1,
                                          tenant: tenant)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:export_margin, origin_hub: hub, tenant_vehicle: tenant_vehicle_1, tenant: tenants_tenant, applicable: company_group)
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
@@ -1080,10 +1041,12 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        end
       end
 
       it 'returns the manipulated local_charge with specific detail attached to the user' do
@@ -1095,16 +1058,6 @@ RSpec.describe Pricings::Manipulator do
                                          tenant: tenant)
         user_base_margin = FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user, value: 0)
         FactoryBot.create(:bas_margin_detail, margin: user_base_margin, value: 0.25, charge_category: solas_charge_category)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
           tenant: tenants_tenant,
@@ -1118,10 +1071,13 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(21.875)
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(21.875)
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        end
       end
 
       it 'returns the manipulated local_charge with one specific detail and general attached to the user' do
@@ -1151,16 +1107,6 @@ RSpec.describe Pricings::Manipulator do
                                              'rate_basis' => 'PER_SHIPMENT'
                                            }
                                          })
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         user_multi_margin = FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user)
         FactoryBot.create(:bas_margin_detail, margin: user_multi_margin, value: 0.25, charge_category: baf_charge_category)
         manipulated_pricings_and_metadata = described_class.new(
@@ -1177,12 +1123,14 @@ RSpec.describe Pricings::Manipulator do
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
 
-        expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(%w[SOLAS baf])
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
-        expect(manipulated_pricings.first.dig('fees', 'baf', 'value')).to eq(25)
-        expect(manipulated_pricings.first.dig('fees', 'baf', 'rate_basis')).to eq('PER_SHIPMENT')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(%w[SOLAS baf])
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(manipulated_pricings.first.dig('fees', 'baf', 'value')).to eq(25)
+          expect(manipulated_pricings.first.dig('fees', 'baf', 'rate_basis')).to eq('PER_SHIPMENT')
+        end
       end
 
       it 'returns the manipulated local_charge attached to the user with a range' do
@@ -1206,16 +1154,6 @@ RSpec.describe Pricings::Manipulator do
                                              ]
                                            }
                                          })
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
@@ -1231,11 +1169,13 @@ RSpec.describe Pricings::Manipulator do
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
 
-        expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'range', 0, 'cbm')).to eq(11)
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'range', 0, 'ton')).to eq(44)
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_CBM_TON_RANGE')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'range', 0, 'cbm')).to eq(11)
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'range', 0, 'ton')).to eq(44)
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_CBM_TON_RANGE')
+        end
       end
 
       it 'returns the manipulated local_charge attached to the user for addition margin' do
@@ -1245,16 +1185,6 @@ RSpec.describe Pricings::Manipulator do
                                          direction: 'export',
                                          tenant_vehicle: tenant_vehicle_1,
                                          tenant: tenant)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user, value: 10, operator: '+')
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
@@ -1270,12 +1200,14 @@ RSpec.describe Pricings::Manipulator do
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
 
-        expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(17.5)
-        expect(manipulated_pricings.first.dig('flat_margins')).to eq('SOLAS' => 0.1e2)
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
-        expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to match_array([{ 'SOLAS' => 0.1e2 }])
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(17.5)
+          expect(manipulated_pricings.first.dig('flat_margins')).to eq('SOLAS' => 0.1e2)
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to match_array([{ 'SOLAS' => 0.1e2 }])
+        end
       end
 
       it 'returns the manipulated local_charge attached to the tenant with nothing else' do
@@ -1285,16 +1217,6 @@ RSpec.describe Pricings::Manipulator do
                                          direction: 'export',
                                          tenant_vehicle: tenant_vehicle_1,
                                          tenant: tenant)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         FactoryBot.create(:export_margin,
                           tenant: tenants_tenant,
                           applicable: tenants_tenant)
@@ -1311,10 +1233,13 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
-        expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['SOLAS'])
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'value')).to eq(19.25)
+          expect(manipulated_pricings.first.dig('fees', 'SOLAS', 'rate_basis')).to eq('PER_SHIPMENT')
+        end
       end
     end
   end
@@ -1339,11 +1264,13 @@ RSpec.describe Pricings::Manipulator do
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
 
-        expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'value')).to eq(275)
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'rate_basis')).to eq('PER_SHIPMENT')
-        expect(manipulated_pricings.first['rates'].dig('kg', 0, 'rate', 'value')).to eq(261.25)
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'value')).to eq(275)
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(manipulated_pricings.first['rates'].dig('kg', 0, 'rate', 'value')).to eq(261.25)
+        end
       end
 
       it 'returns the manipulated trucking pricing attached to the user with multiple margins' do
@@ -1379,12 +1306,14 @@ RSpec.describe Pricings::Manipulator do
         manipulated_pricings = manipulated_pricings_and_metadata.first
         manipulated_pricings.sort_by! { |m| m['effective_date'] }
 
-        expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
-        expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to match_array([{}, { 'PUF' => 0.5e1, 'trucking_pre' => 0.5e1 }, { 'PUF' => 0.5e1, 'trucking_pre' => 0.5e1 }, {}])
-        expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'PUF', 'value') }).to match_array([250.0, 275.0, 250.0, 250.0])
-        expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'PUF', 'rate_basis') }.uniq).to eq(['PER_SHIPMENT'])
-        expect(manipulated_pricings.map { |pricing| pricing.dig('rates', 'kg', 0, 'rate', 'value') }).to eq([0.2375e3, 0.26125e3, 0.2375e3, 0.2375e3])
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
+          expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to match_array([{}, { 'PUF' => 0.5e1, 'trucking_pre' => 0.5e1 }, { 'PUF' => 0.5e1, 'trucking_pre' => 0.5e1 }, {}])
+          expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'PUF', 'value') }).to match_array([250.0, 275.0, 250.0, 250.0])
+          expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'PUF', 'rate_basis') }.uniq).to eq(['PER_SHIPMENT'])
+          expect(manipulated_pricings.map { |pricing| pricing.dig('rates', 'kg', 0, 'rate', 'value') }).to eq([0.2375e3, 0.26125e3, 0.2375e3, 0.2375e3])
+        end
       end
 
       it 'returns the manipulated trucking pricing attached to the group' do
@@ -1405,11 +1334,13 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'value')).to eq(275)
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'rate_basis')).to eq('PER_SHIPMENT')
-        expect(manipulated_pricings.first['rates'].dig('kg', 0, 'rate', 'value')).to eq(261.25)
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'value')).to eq(275)
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(manipulated_pricings.first['rates'].dig('kg', 0, 'rate', 'value')).to eq(261.25)
+        end
       end
 
       it 'returns multiple manipulated trucking pricings when margins overlap attached to the group without pricing' do
@@ -1445,9 +1376,11 @@ RSpec.describe Pricings::Manipulator do
           manipulated_pricings = manipulated_pricings_and_metadata.first
           manipulated_pricings.sort_by! { |m| m['effective_date'] }
 
-          expect(manipulated_pricings.map { |tp| tp['id'] }.uniq).to match_array([trucking_pricing.id])
-          expect(manipulated_pricings.map { |mp| mp[:rates].dig('kg', 0, 'rate', 'value') }).to match_array([0.26125e3, 0.391875e3, 0.35625e3, 0.2375e3])
-          expect(manipulated_pricings.map { |mp| mp.dig('fees', 'PUF', 'value') }).to match_array([0.275e3, 0.4125e3, 0.375e3, 0.25e3])
+          aggregate_failures do
+            expect(manipulated_pricings.map { |tp| tp['id'] }.uniq).to match_array([trucking_pricing.id])
+            expect(manipulated_pricings.map { |mp| mp[:rates].dig('kg', 0, 'rate', 'value') }).to match_array([0.26125e3, 0.391875e3, 0.35625e3, 0.2375e3])
+            expect(manipulated_pricings.map { |mp| mp.dig('fees', 'PUF', 'value') }).to match_array([0.275e3, 0.4125e3, 0.375e3, 0.25e3])
+          end
         end
       end
 
@@ -1473,11 +1406,13 @@ RSpec.describe Pricings::Manipulator do
           }
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
-        expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'value')).to eq(275)
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'rate_basis')).to eq('PER_SHIPMENT')
-        expect(manipulated_pricings.first['rates'].dig('kg', 0, 'rate', 'value')).to eq(261.25)
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'value')).to eq(275)
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(manipulated_pricings.first['rates'].dig('kg', 0, 'rate', 'value')).to eq(261.25)
+        end
       end
 
       it 'returns the manipulated trucking pricing with specific detail attached to the user' do
@@ -1500,11 +1435,13 @@ RSpec.describe Pricings::Manipulator do
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
 
-        expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'value')).to eq(312.5)
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'rate_basis')).to eq('PER_SHIPMENT')
-        expect(manipulated_pricings.first['rates'].dig('kg', 0, 'rate', 'value')).to eq(261.25)
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'value')).to eq(312.5)
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(manipulated_pricings.first['rates'].dig('kg', 0, 'rate', 'value')).to eq(261.25)
+        end
       end
 
       it 'returns the manipulated trucking pricing with range fee' do
@@ -1544,13 +1481,15 @@ RSpec.describe Pricings::Manipulator do
         ).perform
         manipulated_pricings = manipulated_pricings_and_metadata.first
 
-        expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
-        expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'value')).to eq(21.875)
-        expect(manipulated_pricings.first['rates'].dig('kg', 0, 'rate', 'value')).to eq(261.25)
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'range', 0, 'cbm')).to eq(12.5)
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'range', 0, 'ton')).to eq(50)
-        expect(manipulated_pricings.first.dig('fees', 'PUF', 'rate_basis')).to eq('PER_CBM_TON_RANGE')
+        aggregate_failures do
+          expect(manipulated_pricings.first['id']).to eq(trucking_pricing.id)
+          expect(manipulated_pricings.first['fees'].keys).to eq(['PUF'])
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'value')).to eq(21.875)
+          expect(manipulated_pricings.first['rates'].dig('kg', 0, 'rate', 'value')).to eq(261.25)
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'range', 0, 'cbm')).to eq(12.5)
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'range', 0, 'ton')).to eq(50)
+          expect(manipulated_pricings.first.dig('fees', 'PUF', 'rate_basis')).to eq('PER_CBM_TON_RANGE')
+        end
       end
     end
   end
@@ -1567,7 +1506,6 @@ RSpec.describe Pricings::Manipulator do
                           start_date: base_date,
                           end_date: base_date + 30.days)
       end
-      schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
       user_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing_user, tenant: tenants_tenant, applicable: tenants_user)
       margins = described_class.new(
         target: tenants_user,
@@ -1595,7 +1533,6 @@ RSpec.describe Pricings::Manipulator do
                           start_date: base_date,
                           end_date: base_date + 30.days)
       end
-      schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
       tenant_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing_tenant, tenant: tenants_tenant, applicable: tenants_tenant)
       margins = described_class.new(
         target: tenants_user,
@@ -1625,7 +1562,6 @@ RSpec.describe Pricings::Manipulator do
                           start_date: base_date,
                           end_date: base_date + 30.days)
       end
-      schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
 
       keys = described_class.new(
         target: tenants_user,
@@ -1657,16 +1593,6 @@ RSpec.describe Pricings::Manipulator do
     describe 'freight margins' do
       it 'returns the manipulated freight pricing with metadata attached to the user - single margin' do
         lcl_pricing_1 = FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user)
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
@@ -1693,16 +1619,6 @@ RSpec.describe Pricings::Manipulator do
 
       it 'returns the manipulated freight pricing with metadata attached to the user - double margin' do
         lcl_pricing_1 = FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1)
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         margin_1 = FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user)
         margin_2 = FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user, value: 50, operator: '+')
         manipulated_pricings_and_metadata = described_class.new(
@@ -1732,16 +1648,6 @@ RSpec.describe Pricings::Manipulator do
       it 'returns the manipulated freight pricing with metadata attached to the user - flat margin, many fees' do
         lcl_pricing_1 = FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1)
         baf_fee = FactoryBot.create(:pricings_fee, pricing: lcl_pricing_1, charge_category: FactoryBot.create(:baf_charge))
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
         margin_1 = FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user)
         margin_2 = FactoryBot.create(:freight_margin, pricing: lcl_pricing_1, tenant: tenants_tenant, applicable: tenants_user, value: 50, operator: '+')
         manipulated_pricings_and_metadata = described_class.new(
@@ -1788,16 +1694,6 @@ RSpec.describe Pricings::Manipulator do
                                    tenant: tenants_tenant,
                                    applicable: tenants_user)
 
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
 
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
@@ -1842,16 +1738,6 @@ RSpec.describe Pricings::Manipulator do
                                      value: 50,
                                      operator: '+')
 
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
 
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,
@@ -1917,16 +1803,6 @@ RSpec.describe Pricings::Manipulator do
                                      value: 50,
                                      operator: '+')
 
-        trips = [1, 3].map do |num|
-          base_date = num.days.from_now
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary_1,
-                            tenant_vehicle: tenant_vehicle_1,
-                            closing_date: base_date - 4.days,
-                            start_date: base_date,
-                            end_date: base_date + 30.days)
-        end
-        schedules = trips.map { |t| Legacy::Schedule.from_trip(t) }
 
         manipulated_pricings_and_metadata = described_class.new(
           target: tenants_user,

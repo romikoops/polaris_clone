@@ -1,12 +1,8 @@
 # frozen_string_literal: true
-require 'pry'
 
 module OfferCalculator
   class Schedule # rubocop:disable Metrics/ClassLength
     include ActiveModel::Model
-
-    QUOTE_TRIP_START_DATE = 5.days.from_now
-    QUOTE_TRIP_END_DATE = 31.days.from_now
 
     attr_accessor :id, :origin_hub_id, :destination_hub_id,
                   :origin_hub_name, :destination_hub_name, :mode_of_transport,
@@ -30,6 +26,18 @@ module OfferCalculator
 
     def trip
       Legacy::Trip.find trip_id
+    end
+
+    def self.quote_trip_end_date
+      31.days.from_now.beginning_of_day
+    end
+
+    def self.quote_trip_start_date
+      5.days.from_now.beginning_of_day
+    end
+
+    def self.quote_trip_closing_date
+      2.days.from_now.beginning_of_day
     end
 
     def to_detailed_hash

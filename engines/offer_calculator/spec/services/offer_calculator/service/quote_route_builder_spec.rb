@@ -37,8 +37,8 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
 
         expect(results.length).to eq(4)
         expect(results.map { |sched| sched.trip.tenant_vehicle_id }).to match_array(pricings.map(&:tenant_vehicle_id))
-        expect(results.map(&:etd).uniq).to match_array([OfferCalculator::Schedule::QUOTE_TRIP_START_DATE])
-        expect(results.map(&:eta).uniq).to match_array([OfferCalculator::Schedule::QUOTE_TRIP_END_DATE])
+        expect(results.map(&:etd).uniq).to match_array([OfferCalculator::Schedule.quote_trip_start_date])
+        expect(results.map(&:eta).uniq).to match_array([OfferCalculator::Schedule.quote_trip_end_date])
       end
     end
   end
