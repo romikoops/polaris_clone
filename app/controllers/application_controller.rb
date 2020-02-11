@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-require "#{Rails.root}/app/classes/application_error.rb"
+require Rails.root.join('app/classes/application_error.rb')
 
 class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
   include Response
+
   before_action :set_sandbox
   before_action :set_raven_context
   before_action :require_authentication!
@@ -72,7 +73,7 @@ class ApplicationController < ActionController::API
       tenant: current_tenant && ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)&.slug
     )
     Raven.extra_context(
-      agency: current_user&.agency&.slice(%i(id name)),
+      agency: current_user&.agency&.slice(%i[id name]),
       params: params.to_unsafe_h,
       url: request.url,
       scope: current_scope

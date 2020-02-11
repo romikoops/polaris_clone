@@ -1,0 +1,16 @@
+name: Wolfhound
+
+on: pull_request
+
+jobs:
+  wolfhound:
+    name: Wolfhound
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/master:refs/remotes/origin/master
+      - uses: docker://itsmycargo/wolfhound:latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

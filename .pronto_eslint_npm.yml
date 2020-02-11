@@ -1,0 +1,2 @@
+files_to_lint: '(\.jsx?|\.es6)$'
+cmd_line_opts: '-c client/.eslintrc'

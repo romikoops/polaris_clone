@@ -19,10 +19,8 @@ function deletePricing (pricing, fromGroup = false) {
   function failure (error) {
     return { type: adminConstants.DELETE_PRICING_FAILURE, error }
   }
-
   return (dispatch) => {
     dispatch(request())
-
     return fetch(`${getTenantApiUrl()}/admin/pricings/${pricing.id}`, requestOptions('DELETE'))
       .then(resp => resp.json())
       .then(() => {
@@ -34,7 +32,6 @@ function deletePricing (pricing, fromGroup = false) {
       })
   }
 }
-
 function getItineraries (page, filters, sorted, pageSize) {
   function request (routeData) {
     return { type: adminConstants.GET_ROUTES_REQUEST, payload: routeData }

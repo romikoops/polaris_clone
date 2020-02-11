@@ -2,7 +2,7 @@
 
 class UsersController < ApplicationController
   skip_before_action :require_authentication!, only: :currencies
-  skip_before_action :require_non_guest_authentication!, only: %i(update set_currency currencies)
+  skip_before_action :require_non_guest_authentication!, only: %i[update set_currency currencies]
 
   def home
     current_shipments = current_user.shipments.where(sandbox: @sandbox)
@@ -10,8 +10,8 @@ class UsersController < ApplicationController
       @contacts = current_user.contacts.where(sandbox: @sandbox).limit(6).map do |contact|
         contact.as_json(
           include: { address: { include: { country: { only: :name } },
-                                except: %i(created_at updated_at country_id) } },
-          except: %i(created_at updated_at address_id)
+                                except: %i[created_at updated_at country_id] } },
+          except: %i[created_at updated_at address_id]
         )
       end
       user_locs = current_user.user_addresses
@@ -45,9 +45,7 @@ class UsersController < ApplicationController
     updating_guest_to_regular_user = current_user.guest
     @user.update(user_params)
 
-    if @user.valid? && !@user.guest && updating_guest_to_regular_user
-      @user.send_confirmation_instructions
-    end
+    @user.send_confirmation_instructions if @user.valid? && !@user.guest && updating_guest_to_regular_user
 
     if params[:update][:address]
       address = Address.create_from_raw_params!(address_params.merge(sandbox: @sandbox))

@@ -1,4 +1,4 @@
-## Description
+## Summary
 
 <!--
 Summarise the changes in this PR
@@ -11,7 +11,8 @@ Why is this change required? What problem does it solve?
 Add screenshots of relevant UI changes if applicable.
 -->
 
-## Checklist
+## Test Plan
 
-- [ ] All code paths are tested
-- [ ] No migrations that will cause downtime
+<!--
+How to test this PR?
+-->
