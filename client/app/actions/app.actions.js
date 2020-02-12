@@ -115,8 +115,8 @@ function getTenant () {
     return { type: appConstants.SET_TENANT_SUCCESS, payload }
   }
 
-  function failure (error) {
-    return { type: appConstants.SET_TENANT_ERROR, error }
+  function failure (payload) {
+    return { type: appConstants.SET_TENANT_ERROR, payload }
   }
 
   return (dispatch) => {
@@ -130,9 +130,13 @@ function getTenant () {
         dispatch(fetchCurrencies())
       },
       (error) => {
-        error.then((data) => {
-          dispatch(failure({ type: 'error', text: data.message }))
-        })
+        if (error.then) {
+          error.then((data) => {
+            dispatch(failure({ type: 'error', text: data.message }))
+          })
+        } else {
+          dispatch(failure({ type: 'FATAL', text: error.message || error }))
+        }
       }
     )
   }

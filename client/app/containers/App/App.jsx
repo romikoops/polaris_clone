@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import {
   Switch, Route, Redirect, withRouter
 } from 'react-router-dom'
+import { get } from 'lodash'
+
 import UserAccount from '../UserAccount/UserAccount'
 import Landing from '../Landing/Landing'
 import Shop from '../Shop/Shop'
@@ -21,6 +23,7 @@ import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
 import GenericError from '../../components/ErrorHandling/Generic'
 import SamlRedirect from '../../components/Redirects/SamlRedirect'
+import FatalError from '../../components/ErrorHandling/FatalError'
 
 class App extends Component {
   constructor (props) {
@@ -52,8 +55,15 @@ class App extends Component {
     }
   }
 
+  hasFatalError () {
+    const { app } = this.props
+
+    return get(app, 'error.type', '') === 'FATAL'
+  }
+
   render () {
     const {
+      app,
       tenant,
       tenants,
       user,
@@ -61,6 +71,10 @@ class App extends Component {
       appDispatch,
       loading
     } = this.props
+
+    if (this.hasFatalError()) {
+      return <FatalError error={get(app, 'error')} />
+    }
 
     if (!tenant) {
       return null; // Wait until tenant is fetched
