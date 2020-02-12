@@ -167,8 +167,8 @@ module Legacy
       trip&.voyage_code
     end
 
-    def total_price
-      return if trip_id.nil?
+    def total_price(hidden_total: false)
+      return if trip_id.nil? || hidden_total
 
       price = charge_breakdowns.find_by(trip_id: trip_id).charge('grand_total').price
 

@@ -329,8 +329,9 @@ class Shipment < Legacy::Shipment
   end
 
   def as_index_json(options = {})
+    hidden_args = HiddenValueService.new(user: user).hide_total_args
     new_options = options.reverse_merge(
-      methods: %i(total_price mode_of_transport cargo_units cargo_count edited_total company_name client_name),
+      methods: %i[mode_of_transport cargo_units cargo_count edited_total company_name client_name],
       include: [
         :destination_nexus,
         :origin_nexus,
@@ -342,7 +343,7 @@ class Shipment < Legacy::Shipment
         }
       ]
     )
-    as_json(new_options)
+    as_json(new_options).merge(total_price: total_price(hidden_total: hidden_args[:hidden_grand_total]))
   end
 
   def with_address_options_json(options = {})

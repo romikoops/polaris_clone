@@ -25,6 +25,7 @@ import FileUploader from '../FileUploader/FileUploader'
 import ShipmentNotes from '../ShipmentNotes'
 import CargoItemSummary from '../Cargo/Item/Summary'
 import CargoContainerSummary from '../Cargo/Container/Summary'
+import UserShipmentFeeContent from './UserShipmentFeeContent'
 
 class UserShipmentContent extends Component {
   constructor (props) {
@@ -304,18 +305,9 @@ class UserShipmentContent extends Component {
                           <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                           <p>{t('shipment:pickUp')}</p>
                         </div>
-                        {scope.detailed_billing && feeHash.trucking_pre ? (
-                          <div className="flex layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.trucking_pre ? feeHash.trucking_pre.total.currency : ''}
-                              { ' ' }
-                              {feeHash.trucking_pre.edited_total
-                                ? parseFloat(feeHash.trucking_pre.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}
-                            </p>
-                          </div>
-                        )
-                          : '' }
+                        {scope.detailed_billing && feeHash.trucking_pre && (
+                          <UserShipmentFeeContent feeHashType={feeHash.trucking_pre} />
+                        )}
                       </div>
                     </div>
                     <div className="flex-offset-10 flex-45 margin_bottom">
@@ -327,19 +319,9 @@ class UserShipmentContent extends Component {
                           />
                           <p>{t('shipment:delivery')}</p>
                         </div>
-                        {scope.detailed_billing && feeHash.trucking_on ? (
-                          <div className="flex layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.trucking_on ? feeHash.trucking_on.total.currency : ''}
-                              { ' ' }
-                              {feeHash.trucking_on.edited_total
-                                ? parseFloat(feeHash.trucking_on.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.trucking_on.total.value).toFixed(2)}
-                            </p>
-                          </div>
-                        )
-                          : ''}
-
+                        {scope.detailed_billing && feeHash.trucking_on && (
+                          <UserShipmentFeeContent feeHashType={feeHash.trucking_on} />
+                        )}
                       </div>
                     </div>
                     <div className="flex-45 margin_bottom">
@@ -353,18 +335,9 @@ class UserShipmentContent extends Component {
                             {t('shipment:originLocalCharges')}
                           </p>
                         </div>
-                        {scope.detailed_billing && feeHash.export ? (
-                          <div className="flex layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.export ? feeHash.export.total.currency : ''}
-                              { ' ' }
-                              {feeHash.export.edited_total
-                                ? parseFloat(feeHash.export.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.export.total.value).toFixed(2)}
-                            </p>
-                          </div>
-                        )
-                          : ''}
+                        {scope.detailed_billing && feeHash.export && (
+                          <UserShipmentFeeContent feeHashType={feeHash.export} />
+                        )}
                       </div>
                     </div>
                     <div
@@ -380,18 +353,9 @@ class UserShipmentContent extends Component {
                             {t('shipment:destinationLocalCharges')}
                           </p>
                         </div>
-                        {scope.detailed_billing && feeHash.import ? (
-                          <div className="flex layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.import ? feeHash.import.total.currency : ''}
-                              { ' ' }
-                              {feeHash.import.edited_total
-                                ? parseFloat(feeHash.import.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.import.total.value).toFixed(2)}
-                            </p>
-                          </div>
-                        )
-                          : ''}
+                        {scope.detailed_billing && feeHash.import && (
+                          <UserShipmentFeeContent feeHashType={feeHash.import} />
+                        )}
                       </div>
                     </div>
                     <div className="flex-45 margin_bottom">
@@ -403,19 +367,9 @@ class UserShipmentContent extends Component {
                           />
                           <p>{t('shipment:motCargo', { mot: capitalize(shipment.mode_of_transport) })}</p>
                         </div>
-                        {scope.detailed_billing && feeHash.cargo
-                          ? (
-                            <div className="flex layout-row layout-align-end-center">
-                              <p>
-                                {feeHash.cargo ? feeHash.cargo.total.currency : ''}
-                                { ' ' }
-                                {feeHash.cargo.edited_total
-                                  ? parseFloat(feeHash.cargo.edited_total.value).toFixed(2)
-                                  : parseFloat(feeHash.cargo.total.value).toFixed(2)}
-                              </p>
-                            </div>
-                          )
-                          : ''}
+                        {scope.detailed_billing && feeHash.cargo && (
+                          <UserShipmentFeeContent feeHashType={feeHash.cargo} />
+                        )}
                       </div>
 
                     </div>
@@ -432,19 +386,9 @@ class UserShipmentContent extends Component {
                           <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
                           <p>{t('shipment:customs')}</p>
                         </div>
-                        {scope.detailed_billing && feeHash.customs
-                          ? (
-                            <div className="flex layout-row layout-align-end-center">
-                              <p>
-                                {feeHash.customs ? feeHash.customs.total.currency : ''}
-                                { ' ' }
-                                {feeHash.customs.edited_total
-                                  ? parseFloat(feeHash.customs.edited_total.value).toFixed(2)
-                                  : parseFloat(feeHash.customs.total.value).toFixed(2)}
-                              </p>
-                            </div>
-                          )
-                          : '' }
+                        {scope.detailed_billing && feeHash.customs && (
+                          <UserShipmentFeeContent feeHashType={feeHash.customs} />
+                        )}
                       </div>
                     </div>
                     <div className="layout-column flex-100 margin_bottom">
@@ -453,22 +397,10 @@ class UserShipmentContent extends Component {
                           <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
                           <p>{t('shipment:insurance')}</p>
                         </div>
-                        {scope.detailed_billing && feeHash.insurance && (feeHash.insurance.value || feeHash.insurance.edited_total)
-                          ? (
-                            <div className="flex layout-row layout-align-end-center">
-                              <p>
-                                {feeHash.insurance ? feeHash.insurance.currency : ''}
-                                { ' ' }
-                                {feeHash.insurance.edited_total
-                                  ? parseFloat(feeHash.insurance.edited_total.value).toFixed(2)
-                                  : ''}
-                                {feeHash.insurance.value
-                                  ? parseFloat(feeHash.insurance.value).toFixed(2)
-                                  : ''}
-                              </p>
-                            </div>
-                          )
-                          : '' }
+                        {scope.detailed_billing && feeHash.insurance &&
+                        (feeHash.insurance.value || feeHash.insurance.edited_total) && (
+                          <UserShipmentFeeContent feeHashType={feeHash.insurance} />
+                        )}
                         {scope.detailed_billing && feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
                           ? (
                             <div className="flex layout-row layout-align-end-center">
@@ -494,7 +426,7 @@ class UserShipmentContent extends Component {
                   <h2 className="layout-align-start-center layout-row flex-100">
                     {numberSpacing(totalPrice(shipment).value, 2)}
                     {' '}
-                    {totalPrice(shipment).currency}
+                    {totalPrice(shipment) && totalPrice(shipment).currency}
                   </h2>
                 </div>
               </div>
@@ -521,11 +453,13 @@ class UserShipmentContent extends Component {
           theme={theme}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-            {showCargoSummary ? <GreyBox
+            {showCargoSummary && (
+              <GreyBox
                 wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}
                 contentClassName="layout-column flex"
                 content={cargoSummary}
-              /> : '' }
+              />
+            )}
             <GreyBox
               wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}
               contentClassName="layout-column flex"

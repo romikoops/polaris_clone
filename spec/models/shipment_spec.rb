@@ -3,16 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe Shipment, type: :model do
-  context 'Shipment with Charge breakdown' do
-    let(:tenant) { build(:tenant) }
-    let(:shipment) { create(:shipment, tenant: tenant, with_breakdown: true) }
-    let(:other_trip) { create(:trip) }
-    let!(:other_charge_breakdown) do
-      create(:charge_breakdown,
-             shipment: shipment,
-             trip: other_trip,
-             valid_until: 10.days.from_now.beginning_of_day,
-             charge_category_name: 'Cargo1')
+  before do
+    create(:charge_breakdown,
+           shipment: shipment,
+           trip: other_trip,
+           valid_until: 10.days.from_now.beginning_of_day,
+           charge_category_name: 'Cargo1')
+  end
+
+  let(:tenant) { build(:tenant) }
+  let(:shipment) { create(:shipment, tenant: tenant, with_breakdown: true) }
+  let(:other_trip) { create(:trip) }
+  let(:hidden_value_service) { instance_double(HiddenValueService) }
+
+  context 'when hidden grand totals is true' do
+    before do
+      allow(HiddenValueService).to receive(:new).and_return(hidden_value_service)
+      allow(hidden_value_service).to receive(:hide_total_args).and_return(hidden_grand_total: false)
     end
 
     describe '.valid_until' do
@@ -29,9 +36,32 @@ RSpec.describe Shipment, type: :model do
       it 'returns the shipment info in json' do
         result = shipment.as_options_json
 
-        expect(result.dig('id')).to be(shipment.id)
-        expect(result.dig('carrier')).to be(shipment.trip.tenant_vehicle.carrier&.name)
-        expect(result.dig(:selected_offer)).to be_truthy
+        aggregate_failures 'testing response' do
+          expect(result.dig('id')).to be(shipment.id)
+          expect(result.dig('carrier')).to be(shipment.trip.tenant_vehicle.carrier&.name)
+          expect(result.dig(:selected_offer)).to be_truthy
+        end
+      end
+    end
+
+    describe 'as_index_json' do
+      it 'returns the shipments as a json with a total price when hidden scope is false' do
+        result = shipment.as_index_json
+        expect(result[:total_price].nil?).to be(false)
+      end
+    end
+  end
+
+  context 'when hidden_grand_totals scope is true' do
+    before do
+      allow(HiddenValueService).to receive(:new).and_return(hidden_value_service)
+      allow(hidden_value_service).to receive(:hide_total_args).and_return(hidden_grand_total: true)
+    end
+
+    describe 'as_index_json' do
+      it 'returns the shipments as a json with a total price when hidden scope is false' do
+        result = shipment.as_index_json
+        expect(result[:total_price]).to be_nil
       end
     end
   end

@@ -61,7 +61,6 @@ exports[`shallow rendering 1`] = `
       <div>
         <b>
           19
-           
           days
         </b>
         <br />
@@ -242,9 +241,7 @@ exports[`shallow rendering 1`] = `
            
         </span>
         <span>
-           
           USD
-           
         </span>
       </span>
     </div>
