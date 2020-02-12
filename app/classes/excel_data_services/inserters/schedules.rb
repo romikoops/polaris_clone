@@ -22,6 +22,7 @@ module ExcelDataServices
           voyage_code: params[:voyage_code],
           load_type: params[:load_type],
           start_date: params[:etd],
+          closing_date: params[:closing_date],
           end_date: params[:eta],
           itinerary: itinerary,
           tenant_vehicle_id: tenant_vehicle_id(params),
@@ -42,6 +43,8 @@ module ExcelDataServices
           stop_index_zero = stop.index.zero?
           Legacy::Layover.new(
             stop_id: stop.id,
+            stop_index: stop.index,
+            closing_date: params[:closing_date],
             itinerary_id: stop.itinerary_id,
             eta: stop_index_zero ? nil : params[:eta],
             etd: stop_index_zero ? params[:etd] : nil
