@@ -156,7 +156,7 @@ module OfferCalculator
 
     def target_in_range(ranges:, value:, max: false)
       target = ranges.find do |step|
-        Range.new(step['min'],step['max']).cover?(value)
+        Range.new(step['min'], step['max']).cover?(value)
       end
 
       target || (max ? ranges.max_by { |x| x['max'] } : { 'rate' => 0 })
@@ -197,53 +197,81 @@ module OfferCalculator
 
         res = [value, min].max
       end
-      update_range_fee_metadata(key: fee[:key], fee: target) unless target.blank?
+      update_range_fee_metadata(key: fee[:key], fee: target) if target.present?
 
       [res, max].min
+    end
+
+    def hard_limit_checker(rates:, key:, limit:, value:)
+      last_rate = rates.compact.last[key].to_d
+      decimal_value = value.to_d
+      return false if last_rate > decimal_value
+
+      raise OfferCalculator::TruckingTools::LoadMeterageExceeded if decimal_value > last_rate && limit
+
+      true
+    end
+
+    def sort_ranges(ranges:)
+      ranges.each_with_object({}) do |(modifier, range), result|
+        result[modifier] = range.compact.sort_by { |range_fee| range_fee["max_#{modifier}"].to_d }
+      end
     end
 
     def filter_trucking_pricings(trucking_pricing, cargo_values, scope) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
       return {} if cargo_values['weight'].to_i.zero?
 
+      all_ranges = sort_ranges(ranges: trucking_pricing['rates'])
       final_rate = case trucking_pricing['modifier']
                    when 'kg'
-                     if cargo_values['weight'].to_d > trucking_pricing['rates']['kg'].compact.last['max_kg'].to_d && scope['hard_trucking_limit']
-                       raise OfferCalculator::TruckingTools::LoadMeterageExceeded
-                     elsif cargo_values['weight'].to_d > trucking_pricing['rates']['kg'].compact.last['max_kg'].to_d && !scope['hard_trucking_limit']
-                       last_rate = trucking_pricing['rates']['kg'].compact.last
+                     if hard_limit_checker(
+                       rates: all_ranges['kg'],
+                       key: 'max_kg',
+                       value: cargo_values['weight'],
+                       limit: scope['hard_trucking_limit']
+                     )
+                       last_rate = all_ranges['kg'].last
                        rate_to_return = last_rate['rate']
                        rate_to_return['min_value'] = last_rate['min_value']
-                       update_trucking_rate_metadata(modifier: 'kg', min_max: last_rate.slice("min_kg", "max_kg"))
+                       update_trucking_rate_metadata(modifier: 'kg', min_max: last_rate.slice('min_kg', 'max_kg'))
                      end
 
-                     trucking_pricing['rates']['kg'].each do |rate|
-                       next unless Range.new(rate['min_kg'].to_d, rate['max_kg'].to_d, true).cover?(cargo_values['weight'].to_d)
+                     all_ranges['kg'].each do |rate|
+                       next unless trucking_rate_range_finder(
+                         min: rate['min_kg'],
+                         max: rate['max_kg'],
+                         value: cargo_values['weight']
+                       )
 
-                       update_trucking_rate_metadata(modifier: 'kg', min_max: rate.slice("min_kg", "max_kg"))
+                       update_trucking_rate_metadata(modifier: 'kg', min_max: rate.slice('min_kg', 'max_kg'))
                        rate_to_return = rate['rate']
                        rate_to_return['min_value'] = rate['min_value']
                      end
 
                      rate_to_return
                    when 'cbm'
-                     trucking_pricing['rates']['cbm'].each do |rate|
-                       unless Range.new(rate['min_cbm'].to_d, rate['max_cbm'].to_d, true).cover?(cargo_values['volume'].to_d)
-                         next
-                       end
+                     all_ranges['cbm'].each do |rate|
+                       next unless trucking_rate_range_finder(
+                         min: rate['min_cbm'],
+                         max: rate['max_cbm'],
+                         value: cargo_values['volume']
+                       )
 
-                       update_trucking_rate_metadata(modifier: 'cbm', min_max: rate.slice("min_cbm", "max_cbm"))
+                       update_trucking_rate_metadata(modifier: 'cbm', min_max: rate.slice('min_cbm', 'max_cbm'))
                        rate_to_return = rate['rate']
                        rate_to_return['min_value'] = rate['min_value']
                      end
                      rate_to_return
                    when 'wm'
-                     trucking_pricing['rates']['wm'].each do |rate|
-                       unless Range.new(rate['min_wm'].to_d, rate['max_wm'].to_d)
-                                .cover?([cargo_values['volume'].to_d, cargo_values['weight'].to_d / 1000].max)
-                         next
-                       end
+                     all_ranges['wm'].each do |rate|
+                       wm = [cargo_values['volume'].to_d, cargo_values['weight'].to_d / 1000].max
+                       next unless trucking_rate_range_finder(
+                         min: rate['min_wm'],
+                         max: rate['max_wm'],
+                         value: wm
+                       )
 
-                       update_trucking_rate_metadata(modifier: 'wm', min_max: rate.slice("min_wm", "max_wm"))
+                       update_trucking_rate_metadata(modifier: 'wm', min_max: rate.slice('min_wm', 'max_wm'))
                        rate_to_return = rate['rate']
                        rate_to_return['min_value'] = rate['min_value']
                      end
@@ -251,50 +279,56 @@ module OfferCalculator
                      rate_to_return
                    when 'cbm_kg'
                      result = {}
-                     trucking_pricing['rates']['kg'].each do |rate|
-                       next unless Range.new(rate['min_kg'].to_d, rate['max_kg'].to_d, true).cover?(cargo_values['weight'].to_d)
+                     all_ranges['kg'].each do |rate|
+                       next unless trucking_rate_range_finder(
+                         min: rate['min_kg'],
+                         max: rate['max_kg'],
+                         value: cargo_values['weight']
+                       )
 
-                       update_trucking_rate_metadata(modifier: 'kg', min_max: rate.slice("min_kg", "max_kg"))
+                       update_trucking_rate_metadata(modifier: 'kg', min_max: rate.slice('min_kg', 'max_kg'))
                        result['kg'] = rate['rate']['value']
                        result['rate_basis'] = rate['rate']['rate_basis']
                        result['min_value'] = rate['min_value']
                        result['currency'] = rate['rate']['currency']
                      end
-                     trucking_pricing['rates']['cbm'].each do |rate|
-                       unless Range.new(rate['min_cbm'].to_d, rate['max_cbm'].to_d, true).cover?(cargo_values['volume'].to_d)
-                         next
-                       end
+                     all_ranges['cbm'].each do |rate|
+                       next unless trucking_rate_range_finder(
+                         min: rate['min_cbm'],
+                         max: rate['max_cbm'],
+                         value: cargo_values['volume']
+                       )
 
-                       update_trucking_rate_metadata(modifier: 'cbm', min_max: rate.slice("min_cbm", "max_cbm"))
+                       update_trucking_rate_metadata(modifier: 'cbm', min_max: rate.slice('min_cbm', 'max_cbm'))
                        result['rate_basis'] = rate['rate']['rate_basis']
                        result['cbm'] = rate['rate']['value']
                        result['min_value'] = rate['min_value']
                        result['currency'] = rate['rate']['currency']
                      end
 
-                     if cargo_values['volume'] < trucking_pricing['rates']['cbm'].first['min_cbm'].to_d
-                       result['rate_basis'] = trucking_pricing['rates']['cbm'].first['rate']['rate_basis']
-                       result['cbm'] = trucking_pricing['rates']['cbm'].first['rate']['value']
-                       result['min_value'] = trucking_pricing['rates']['cbm'].first['min_value']
-                       result['currency'] = trucking_pricing['rates']['cbm'].first['rate']['currency']
-                     elsif cargo_values['volume'] > trucking_pricing['rates']['cbm'].compact.last['max_cbm'].to_d
+                     if cargo_values['volume'] < all_ranges['cbm'].first['min_cbm'].to_d
+                       result['rate_basis'] = all_ranges['cbm'].first['rate']['rate_basis']
+                       result['cbm'] = all_ranges['cbm'].first['rate']['value']
+                       result['min_value'] = all_ranges['cbm'].first['min_value']
+                       result['currency'] = all_ranges['cbm'].first['rate']['currency']
+                     elsif cargo_values['volume'] > all_ranges['cbm'].last['max_cbm'].to_d
 
-                       result['rate_basis'] = trucking_pricing['rates']['cbm'].compact.last['rate']['rate_basis']
-                       result['cbm'] = trucking_pricing['rates']['cbm'].compact.last['rate']['value']
-                       result['min_value'] = trucking_pricing['rates']['cbm'].compact.last['min_value']
-                       result['currency'] = trucking_pricing['rates']['cbm'].compact.last['rate']['currency']
+                       result['rate_basis'] = all_ranges['cbm'].last['rate']['rate_basis']
+                       result['cbm'] = all_ranges['cbm'].last['rate']['value']
+                       result['min_value'] = all_ranges['cbm'].last['min_value']
+                       result['currency'] = all_ranges['cbm'].last['rate']['currency']
                      end
                      result
                    when 'unit'
                      target_rate = trucking_pricing['rates']['unit'][0]
-                     update_trucking_rate_metadata(modifier: 'unit', min_max: target_rate.slice("min_unit", "max_unit"))
+                     update_trucking_rate_metadata(modifier: 'unit', min_max: target_rate.slice('min_unit', 'max_unit'))
                      target_rate['rate']
                    when 'unit_per_km'
                      result = { rate_basis: 'PER_CONTAINER_KM' }
                      unit_rate = trucking_pricing.rates.dig('unit', 0)
                      km_rate = trucking_pricing.rates.dig('km', 0)
-                     update_trucking_rate_metadata(modifier: 'km', min_max: km_rate.slice("min_km", "max_km"))
-                     update_trucking_rate_metadata(modifier: 'unit', min_max: unit_rate.slice("min_unit", "max_unit"))
+                     update_trucking_rate_metadata(modifier: 'km', min_max: km_rate.slice('min_km', 'max_km'))
+                     update_trucking_rate_metadata(modifier: 'unit', min_max: unit_rate.slice('min_unit', 'max_unit'))
                      result[:unit] = unit_rate['rate']['value']
                      result[:km] = km_rate['rate']['value']
                      result[:min_value] = trucking_pricing['rates']['unit'][0]['min_value']
@@ -303,36 +337,54 @@ module OfferCalculator
                      result
                    when 'unit_and_kg'
                      result = { rate_basis: 'PER_UNIT_KG' }
-                     result[:min_value] = trucking_pricing['rates']['kg'][0]['min_value']
-                     result[:currency] = trucking_pricing['rates']['kg'][0]['rate']['currency']
-                     if cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].compact.last['max_kg'].to_i && scope['hard_trucking_limit']
-                       raise OfferCalculator::TruckingTools::LoadMeterageExceeded
-                     elsif cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].compact.last['max_kg'].to_i && !scope['hard_trucking_limit']
-                       rate = trucking_pricing['rates']['kg'].compact.last
+                     result[:min_value] = all_ranges['kg'][0]['min_value']
+                     result[:currency] = all_ranges['kg'][0]['rate']['currency']
+
+                     if hard_limit_checker(
+                       rates: all_ranges['kg'],
+                       key: 'max_kg',
+                       value: cargo_values['weight'],
+                       limit: scope['hard_trucking_limit']
+                     )
+                       rate = all_ranges['kg'].last
                        rate['rate']['min_value'] = rate['min_value']
                        result[:kg] = rate['rate']['value']
                      end
 
-                     trucking_pricing['rates']['kg'].each do |rate|
-                       next unless Range.new(rate['min_kg'].to_i, rate['max_kg'].to_i, true).cover?(cargo_values['weight'].to_i)
+                     all_ranges['kg'].each do |range_rate|
+                       next unless trucking_rate_range_finder(
+                         min: range_rate['min_kg'],
+                         max: range_rate['max_kg'],
+                         value: cargo_values['weight']
+                       )
 
-                       rate['rate']['min_value'] = rate['min_value']
-                       result[:kg] = rate['rate']['value']
+                       range_rate['rate']['min_value'] = range_rate['min_value']
+                       result[:kg] = range_rate['rate']['value']
                      end
 
-                     update_trucking_rate_metadata(modifier: 'kg', min_max: rate.slice("min_kg", "max_kg")) if rate.present?
+                     if rate.present?
+                       update_trucking_rate_metadata(
+                         modifier: 'kg',
+                         min_max: rate.slice('min_kg', 'max_kg')
+                       )
+                     end
+                     all_ranges['unit_in_kg'].each do |unit_kg_rate|
+                       next unless trucking_rate_range_finder(
+                         min: unit_kg_rate['min_unit_in_kg'],
+                         max: unit_kg_rate['max_unit_in_kg'],
+                         value: cargo_values['weight']
+                       )
 
-                     trucking_pricing['rates']['unit_in_kg'].each do |unit_rate|
-                       unless Range.new(unit_rate['min_unit_in_kg'].to_i, unit_rate['max_unit_in_kg'].to_i, true).cover?(cargo_values['weight'].to_i)
-                         next
-                       end
-                       update_trucking_rate_metadata(modifier: 'unit_in_kg', min_max: unit_rate.slice("min_unit_in_kg", "max_unit_in_kg"))
-                       unit_rate['rate']['min_value'] = unit_rate['min_value']
-                       result[:kgr] = unit_rate['rate']['value']
+                       update_trucking_rate_metadata(
+                         modifier: 'unit_in_kg',
+                         min_max: unit_kg_rate.slice('min_unit_in_kg', 'max_unit_in_kg')
+                       )
+                       unit_kg_rate['rate']['min_value'] = unit_kg_rate['min_value']
+                       result[:kgr] = unit_kg_rate['rate']['value']
                      end
 
                      result
-                    end
+                   end
 
       { rate: final_rate, fees: trucking_pricing['fees'], flat_margins: trucking_pricing['flat_margins'] }
     end
@@ -349,7 +401,9 @@ module OfferCalculator
           'number_of_items' => 0
         }
       }
-      consolidation = ::Tenants::ScopeService.new(target: ::Tenants::User.find_by(legacy_id: cargos.first.shipment.user.id)).fetch(:consolidation)
+      consolidation = ::Tenants::ScopeService.new(
+        target: ::Tenants::User.find_by(legacy_id: cargos.first.shipment.user.id)
+      ).fetch(:consolidation)
 
       if consolidation.dig('trucking', 'load_meterage_only')
         consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
@@ -413,7 +467,9 @@ module OfferCalculator
         total_area =  cargos.first.volume / 1.3
         non_stackable = false
       else
-        total_area =  cargos.sum { |cargo| cargo_data_value(:dimension_x, cargo) * cargo_data_value(:dimension_y, cargo) * cargo.quantity }
+        total_area =  cargos.sum do |cargo|
+          cargo_data_value(:dimension_x, cargo) * cargo_data_value(:dimension_y, cargo) * cargo.quantity
+        end
         non_stackable = cargos.select(&:stackable).empty?
       end
 
@@ -469,28 +525,25 @@ module OfferCalculator
     end
 
     def determine_load_meterage(trucking_pricing, cargo_object, cargo) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      total_area = (cargo.try(:dimension_x) || 1) * (cargo.try(:dimension_y) || 1) * (cargo.try(:quantity) || 1)
       if trucking_pricing['load_meterage'] && trucking_pricing['load_meterage']['ratio']
         if cargo.is_a? Legacy::AggregatedCargo
           calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
-        else
-          if (trucking_pricing['load_meterage']['height_limit'] &&
+        elsif (trucking_pricing['load_meterage']['height_limit'] &&
             (cargo[:dimension_z] > trucking_pricing['load_meterage']['height_limit'])) ||
-             (!cargo[:stackable] && trucking_pricing['load_meterage']['height_limit'])
-            calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
-          elsif (trucking_pricing['load_meterage']['area_limit'] &&
-            ((cargo[:dimension_x] * cargo[:dimension_y] * cargo[:quantity]) >= trucking_pricing['load_meterage']['area_limit'])) ||
-                (!cargo[:stackable] && trucking_pricing['load_meterage']['area_limit'])
-            calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
-          else
-            calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
-          end
-        end
-      else
-        if cargo.is_a? Legacy::AggregatedCargo
-          calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
+              (!cargo[:stackable] && trucking_pricing['load_meterage']['height_limit'])
+          calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
+        elsif (trucking_pricing['load_meterage']['area_limit'] &&
+          (total_area >= trucking_pricing['load_meterage']['area_limit'])) ||
+              (!cargo[:stackable] && trucking_pricing['load_meterage']['area_limit'])
+          calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
         else
           calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
         end
+      elsif cargo.is_a? Legacy::AggregatedCargo
+        calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
+      else
+        calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
       end
 
       cargo_object
@@ -570,7 +623,7 @@ module OfferCalculator
 
     def trucking_chargeable_weight_by_height(trucking_pricing, cargo)
       load_meterage = (
-          (cargo_unit_area(cargo)) / LOAD_METERAGE_AREA_DIVISOR
+          cargo_unit_area(cargo) / LOAD_METERAGE_AREA_DIVISOR
         ) * cargo_quantity(cargo)
       load_meterage * trucking_pricing['load_meterage']['ratio']
     end
@@ -647,29 +700,34 @@ module OfferCalculator
       end
     end
 
-    def update_trucking_rate_metadata(modifier:, min_max: )
+    def update_trucking_rate_metadata(modifier:, min_max:)
       cargo_class_key = "trucking_#{trucking_pricing[:cargo_class]}".to_sym
-      target_metadata = metadata.find {|m| m[:metadata_id] == trucking_pricing[:metadata_id] }
-      return unless target_metadata.present?
+      target_metadata = metadata.find { |m| m[:metadata_id] == trucking_pricing[:metadata_id] }
+      return if target_metadata.blank?
 
       target_metadata.dig(:fees, cargo_class_key, :breakdowns).each do |breakdown|
-        next unless breakdown[:adjusted_rate].present?
+        next if breakdown[:adjusted_rate].blank?
 
-        target_ranges = breakdown[:adjusted_rate][modifier].select {|range| range.slice(*min_max.keys) == min_max}
+        target_ranges = breakdown[:adjusted_rate][modifier].select { |range| range.slice(*min_max.keys) == min_max }
         breakdown[:adjusted_rate][modifier] = target_ranges
       end
     end
 
-    def update_range_fee_metadata(key:, fee: )
-      target_metadata = metadata.find {|m| m[:metadata_id] == trucking_pricing[:metadata_id] }
-      return unless target_metadata.present?
+    def update_range_fee_metadata(key:, fee:)
+      target_metadata = metadata.find { |m| m[:metadata_id] == trucking_pricing[:metadata_id] }
+      return if target_metadata.blank?
 
       target_metadata.dig(:fees, key.to_sym, :breakdowns)&.each do |breakdown|
-        next unless breakdown[:adjusted_rate].present?
+        next if breakdown[:adjusted_rate].blank?
 
-        target_ranges = breakdown[:adjusted_rate][:range].select {|range| range.slice(:min, :max) == fee.slice(:min, :max)}
+        target_ranges = breakdown[:adjusted_rate][:range]
+                        .select { |range| range.slice(:min, :max) == fee.slice(:min, :max) }
         breakdown[:adjusted_rate][:rate] = target_ranges
       end
+    end
+
+    def trucking_rate_range_finder(min:, max:, value:)
+      min.to_d < value.to_d && value.to_d <= max.to_d
     end
   end
 end
