@@ -7165,10 +7165,13 @@ exports[`tenant.scope.hide_grand_total is false 1`] = `
       <div
         className="flex-100 layout-row layout-align-start-center selected_offer"
       >
-        <span>
-          467.00
-           
-        </span>
+        <ShowTotal
+          total={
+            Object {
+              "value": 467,
+            }
+          }
+        />
         <i
           className="fa fa-times pointy layout-row layout-align-end-center"
           onClick={[Function]}

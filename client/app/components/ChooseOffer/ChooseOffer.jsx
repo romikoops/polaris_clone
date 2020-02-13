@@ -19,6 +19,7 @@ import QuoteCard from '../Quote/Card'
 import { Modal } from '../Modal/Modal'
 import ScrollTracking from '../Addons/ScrollTracking'
 import { trackingConstants } from '../../constants/tracking.constants'
+import ShowTotal from '../ShowTotal/ShowTotal'
 
 class ChooseOffer extends Component {
   static dynamicSort (property) {
@@ -375,11 +376,9 @@ class ChooseOffer extends Component {
                         </span>
                       )
                       : (
-                        <span>
-                          {numberSpacing(offer.quote.total.value, 2)}
-                        &nbsp;
-                          {shipmentData.results[0].quote.total.currency}
-                        </span>
+                        <ShowTotal
+                          total={offer.quote.total}
+                        />
                       )
                     }
                     <i className="fa fa-times pointy layout-row layout-align-end-center" onClick={() => this.handleClick(false, offer)} />
