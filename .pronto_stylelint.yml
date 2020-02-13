@@ -1,0 +1,1 @@
+cli_options: '--config client/stylelint.config.js'

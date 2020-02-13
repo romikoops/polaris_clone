@@ -55,7 +55,7 @@ export function NavDropdown ({
               {whiteProfileIconJSX}
               {blackProfileIconJSX}
             </div>
-            {dropDownText ? <span className="flex-none">{dropDownText}</span> : ''}
+            {dropDownText ? <span className="flex-none hide-xs hide-sm hide-md">{dropDownText}</span> : ''}
             <i
               className={`flex-none fa fa-caret-down ${defaults.spacing_sm_left}`}
               aria-hidden="true"

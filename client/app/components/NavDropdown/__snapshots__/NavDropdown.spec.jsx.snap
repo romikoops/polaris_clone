@@ -65,7 +65,7 @@ exports[`linkOption provides url 1`] = `
         />
       </div>
       <span
-        className="flex-none"
+        className="flex-none hide-xs hide-sm hide-md"
       >
         FOO_TEXT
       </span>
@@ -115,7 +115,7 @@ exports[`missing fontAwesomeIcon 1`] = `
         />
       </div>
       <span
-        className="flex-none"
+        className="flex-none hide-xs hide-sm hide-md"
       >
         FOO_TEXT
       </span>
@@ -161,7 +161,7 @@ exports[`shallow rendering 1`] = `
         />
       </div>
       <span
-        className="flex-none"
+        className="flex-none hide-xs hide-sm hide-md"
       >
         FOO_TEXT
       </span>

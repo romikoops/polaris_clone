@@ -1,6 +1,6 @@
 :local {
   @import '../../styles/defaults';
-  
+
   .wrapper_profile_icon {
     position: relative;
     top: -2px;
@@ -60,5 +60,11 @@
 
   .dropdown:hover .dropbtn {
     text-decoration: underline;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .dropdowncontent {
+      left: -64px;
+    }
   }
 }

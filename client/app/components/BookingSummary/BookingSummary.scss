@@ -36,23 +36,25 @@
 		height: 13px;
 	}
 	.connection_graphics {
-		$w: 100px;
-	  position: absolute;
-	  left: calc((50% - #{$w}/2));
-	  top: 20px;
-	  width: $w;
-	  i {
-	    margin: 0 4px;
-	  }
-	  i.map_marker {
-	    position: absolute;
-	    left: -26px;
-	    top: 10px;
-	  }
-	  i.flag {
-	    position: absolute;
-	    right: -34px;
-	    top: 10px;
-	  }
+		width: 25%;
+		position: absolute;
+		display: flex;
+		top: 20px;
+		flex-wrap: nowrap;
+		i {
+			flex-grow: 1;
+			text-align: center;
+		}
+
+		> div {
+			flex-grow: 5;
+			margin: 0 5px;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		.dashed_container {
+			width: 70%;
+		}
 	}
 }

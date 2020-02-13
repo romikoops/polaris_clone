@@ -2,7 +2,7 @@
 
 exports[`loadType is cargo_item 1`] = `
 <div
-  class="booking_summary flex-70 flex-gt-sm-50 layout-align-center-center layout-align-sm-end-center layout-row"
+  class="booking_summary flex-70 flex-gt-lg-30 flex-gt-md-50 flex-gt-sm-70 layout-align-center-center layout-align-sm-end-center layout-row"
 >
   <div
     class="route_sec flex-70 layout-column layout-align-stretch"
@@ -11,23 +11,16 @@ exports[`loadType is cargo_item 1`] = `
       class="flex-none layout-row layout-align-center"
     >
       <div
-        class="flex-none connection_graphics"
+        class="connection_graphics"
       >
         <i
-          class="fa fa-map-marker map_marker"
+          class="fa fa-map-marker"
         />
-        <i
-          class="fa fa-flag-o flag"
-        />
-        <div
-          class="mot_wrapper layout-row layout-align-center-center"
-        >
-          <i
-            class="fa fa-anchor  "
-          />
-        </div>
         <div
           style="margin-top:6px;height:2px;width:100%;background:linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa);background-size:16px 2px, 100% 2px"
+        />
+        <i
+          class="fa fa-flag-o"
         />
       </div>
     </div>
@@ -101,7 +94,7 @@ exports[`loadType is cargo_item 1`] = `
         <p
           class="trucking_elem flex-none"
         >
-          with 
+          with
                 delivery
         </p>
       </div>
@@ -140,7 +133,7 @@ exports[`loadType is cargo_item 1`] = `
 
 exports[`modeOfTransport is falsy 1`] = `
 <div
-  class="booking_summary flex-70 flex-gt-sm-50 layout-align-center-center layout-align-sm-end-center layout-row"
+  class="booking_summary flex-70 flex-gt-lg-30 flex-gt-md-50 flex-gt-sm-70 layout-align-center-center layout-align-sm-end-center layout-row"
 >
   <div
     class="route_sec flex-70 layout-column layout-align-stretch"
@@ -149,21 +142,16 @@ exports[`modeOfTransport is falsy 1`] = `
       class="flex-none layout-row layout-align-center"
     >
       <div
-        class="flex-none connection_graphics"
+        class="connection_graphics"
       >
         <i
-          class="fa fa-map-marker map_marker"
+          class="fa fa-map-marker"
         />
-        <i
-          class="fa fa-flag-o flag"
-        />
-        <div
-          class="mot_wrapper layout-row layout-align-center-center"
-        >
-           
-        </div>
         <div
           style="margin-top:6px;height:2px;width:100%;background:linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa);background-size:16px 2px, 100% 2px"
+        />
+        <i
+          class="fa fa-flag-o"
         />
       </div>
     </div>
@@ -237,7 +225,7 @@ exports[`modeOfTransport is falsy 1`] = `
         <p
           class="trucking_elem flex-none"
         >
-          with 
+          with
                 delivery
         </p>
       </div>
@@ -262,7 +250,7 @@ exports[`modeOfTransport is falsy 1`] = `
 
 exports[`render render 1`] = `
 <div
-  class="booking_summary flex-70 flex-gt-sm-50 layout-align-center-center layout-align-sm-end-center layout-row"
+  class="booking_summary flex-70 flex-gt-lg-30 flex-gt-md-50 flex-gt-sm-70 layout-align-center-center layout-align-sm-end-center layout-row"
 >
   <div
     class="route_sec flex-70 layout-column layout-align-stretch"
@@ -271,23 +259,16 @@ exports[`render render 1`] = `
       class="flex-none layout-row layout-align-center"
     >
       <div
-        class="flex-none connection_graphics"
+        class="connection_graphics"
       >
         <i
-          class="fa fa-map-marker map_marker"
+          class="fa fa-map-marker"
         />
-        <i
-          class="fa fa-flag-o flag"
-        />
-        <div
-          class="mot_wrapper layout-row layout-align-center-center"
-        >
-          <i
-            class="fa fa-anchor  "
-          />
-        </div>
         <div
           style="margin-top:6px;height:2px;width:100%;background:linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa);background-size:16px 2px, 100% 2px"
+        />
+        <i
+          class="fa fa-flag-o"
         />
       </div>
     </div>
@@ -361,7 +342,7 @@ exports[`render render 1`] = `
         <p
           class="trucking_elem flex-none"
         >
-          with 
+          with
                 delivery
         </p>
       </div>
@@ -386,7 +367,7 @@ exports[`render render 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  class="booking_summary flex-70 flex-gt-sm-50 layout-align-center-center layout-align-sm-end-center layout-row"
+  class="booking_summary flex-70 flex-gt-lg-30 flex-gt-md-50 flex-gt-sm-70 layout-align-center-center layout-align-sm-end-center layout-row"
 >
   <div
     class="route_sec flex-70 layout-column layout-align-stretch"
@@ -395,23 +376,16 @@ exports[`theme is falsy 1`] = `
       class="flex-none layout-row layout-align-center"
     >
       <div
-        class="flex-none connection_graphics"
+        class="connection_graphics"
       >
         <i
-          class="fa fa-map-marker map_marker"
+          class="fa fa-map-marker"
         />
-        <i
-          class="fa fa-flag-o flag"
-        />
-        <div
-          class="mot_wrapper layout-row layout-align-center-center"
-        >
-          <i
-            class="fa fa-anchor  "
-          />
-        </div>
         <div
           style="margin-top:6px;height:2px;width:100%;background:black;background-size:16px 2px, 100% 2px"
+        />
+        <i
+          class="fa fa-flag-o"
         />
       </div>
     </div>
@@ -485,7 +459,7 @@ exports[`theme is falsy 1`] = `
         <p
           class="trucking_elem flex-none"
         >
-          with 
+          with
                 delivery
         </p>
       </div>
@@ -510,7 +484,7 @@ exports[`theme is falsy 1`] = `
 
 exports[`trucking.onCarriage is empty object 1`] = `
 <div
-  class="booking_summary flex-70 flex-gt-sm-50 layout-align-center-center layout-align-sm-end-center layout-row"
+  class="booking_summary flex-70 flex-gt-lg-30 flex-gt-md-50 flex-gt-sm-70 layout-align-center-center layout-align-sm-end-center layout-row"
 >
   <div
     class="route_sec flex-70 layout-column layout-align-stretch"
@@ -519,23 +493,16 @@ exports[`trucking.onCarriage is empty object 1`] = `
       class="flex-none layout-row layout-align-center"
     >
       <div
-        class="flex-none connection_graphics"
+        class="connection_graphics"
       >
         <i
-          class="fa fa-map-marker map_marker"
+          class="fa fa-map-marker"
         />
-        <i
-          class="fa fa-flag-o flag"
-        />
-        <div
-          class="mot_wrapper layout-row layout-align-center-center"
-        >
-          <i
-            class="fa fa-anchor  "
-          />
-        </div>
         <div
           style="margin-top:6px;height:2px;width:100%;background:linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa);background-size:16px 2px, 100% 2px"
+        />
+        <i
+          class="fa fa-flag-o"
         />
       </div>
     </div>
@@ -609,7 +576,7 @@ exports[`trucking.onCarriage is empty object 1`] = `
         <p
           class="trucking_elem flex-none"
         >
-          without 
+          without
                 delivery
         </p>
       </div>
@@ -634,7 +601,7 @@ exports[`trucking.onCarriage is empty object 1`] = `
 
 exports[`trucking.preCarriage is empty object 1`] = `
 <div
-  class="booking_summary flex-70 flex-gt-sm-50 layout-align-center-center layout-align-sm-end-center layout-row"
+  class="booking_summary flex-70 flex-gt-lg-30 flex-gt-md-50 flex-gt-sm-70 layout-align-center-center layout-align-sm-end-center layout-row"
 >
   <div
     class="route_sec flex-70 layout-column layout-align-stretch"
@@ -643,23 +610,16 @@ exports[`trucking.preCarriage is empty object 1`] = `
       class="flex-none layout-row layout-align-center"
     >
       <div
-        class="flex-none connection_graphics"
+        class="connection_graphics"
       >
         <i
-          class="fa fa-map-marker map_marker"
+          class="fa fa-map-marker"
         />
-        <i
-          class="fa fa-flag-o flag"
-        />
-        <div
-          class="mot_wrapper layout-row layout-align-center-center"
-        >
-          <i
-            class="fa fa-anchor  "
-          />
-        </div>
         <div
           style="margin-top:6px;height:2px;width:100%;background:linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa);background-size:16px 2px, 100% 2px"
+        />
+        <i
+          class="fa fa-flag-o"
         />
       </div>
     </div>
@@ -733,7 +693,7 @@ exports[`trucking.preCarriage is empty object 1`] = `
         <p
           class="trucking_elem flex-none"
         >
-          with 
+          with
                 delivery
         </p>
       </div>

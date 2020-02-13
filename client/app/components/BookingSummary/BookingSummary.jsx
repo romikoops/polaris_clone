@@ -23,20 +23,21 @@ function BookingSummary (props) {
         : 'black',
     backgroundSize: '16px 2px, 100% 2px'
   }
-  const icon = modeOfTransport ? switchIcon(modeOfTransport) : ' '
+
   const weightToRender = weight.unit === 'kg' ? totalWeight : (totalWeight / 1000)
 
+  let containerClasses = styles.booking_summary
+  containerClasses += ' flex-70 flex-gt-lg-30 flex-gt-md-50 flex-gt-sm-70'
+  containerClasses += ' layout-align-center-center layout-align-sm-end-center layout-row'
+
   return (
-    <div className={`${styles.booking_summary} flex-70 flex-gt-sm-50 layout-align-center-center layout-align-sm-end-center layout-row`}>
+    <div className={containerClasses}>
       <div className={`${styles.route_sec} flex-70 layout-column layout-align-stretch`}>
         <div className="flex-none layout-row layout-align-center">
-          <div className={`flex-none ${styles.connection_graphics}`}>
-            <i className={`fa fa-map-marker ${styles.map_marker}`} />
-            <i className={`fa fa-flag-o ${styles.flag}`} />
-            <div className={`${styles.mot_wrapper} layout-row layout-align-center-center`}>
-              {icon}
-            </div>
+          <div className={`${styles.connection_graphics}`}>
+            <i className="fa fa-map-marker" />
             <div style={dashedLineStyles} />
+            <i className="fa fa-flag-o" />
           </div>
         </div>
         <div className="flex-50 layout-row layout-align-space-between">
@@ -74,7 +75,7 @@ function BookingSummary (props) {
                 (
                   (cities.destination && trucking.onCarriage.truckType) ||
                   (nexuses.destination && !trucking.onCarriage.truckType)
-                ) && `${(trucking.onCarriage.truckType ? t('common:with') : t('common:without'))} 
+                ) && `${(trucking.onCarriage.truckType ? t('common:with') : t('common:without'))}
                 ${t('shipment:delivery').toLowerCase()}`
               }
             </p>
