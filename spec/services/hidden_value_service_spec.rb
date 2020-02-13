@@ -37,4 +37,12 @@ RSpec.describe HiddenValueService, type: :service do
       expect(klass.hide_total_args[:hide_converted_grand_total]).to eq(true)
     end
   end
+
+  context 'when user is nil' do
+    it 'returns true for all hidden values' do
+      expected_value = { hidden_grand_total: true, hidden_sub_total: true, hide_converted_grand_total: true }
+      class_with_nil_user = described_class.new(user: nil)
+      expect(class_with_nil_user.hide_total_args).to eq(expected_value)
+    end
+  end
 end

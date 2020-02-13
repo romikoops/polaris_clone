@@ -7,9 +7,9 @@ class HiddenValueService
 
   def hide_total_args
     {
-      hidden_grand_total: @user.guest || scope['hide_grand_total'],
-      hidden_sub_total: @user.guest || scope['hide_sub_totals'],
-      hide_converted_grand_total: scope['hide_converted_grand_total']
+      hidden_grand_total: @user.nil? || @user.guest || scope['hide_grand_total'],
+      hidden_sub_total: @user.nil? || @user.guest || scope['hide_sub_totals'],
+      hide_converted_grand_total: @user.nil? || scope['hide_converted_grand_total']
     }
   end
 
