@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ContentsController do
   describe 'GET #component' do
     let(:tenant) { create(:tenant) }
-    let!(:content) { create(:content, tenant_id: tenant.id) }
+    let!(:content) { create(:legacy_content, tenant_id: tenant.id) }
 
     it 'returns http success' do
       get :component, params: { tenant_id: tenant.id, component: content.component }

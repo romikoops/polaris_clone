@@ -18,7 +18,7 @@ class Admin::AdminBaseController < ApplicationController
   end
 
   def handle_upload(params:, text:, type:, options: {})
-    document = Document.create!(
+    document = Legacy::File.create!(
       text: text,
       doc_type: type,
       sandbox: @sandbox,

@@ -13,6 +13,10 @@ module Legacy
     has_one :tenants_user, class_name: 'Tenants::User', foreign_key: :legacy_id
     delegate :company, to: :tenants_user
 
+    has_many :files, class_name: 'Legacy::File', dependent: :destroy
+    has_many :documents
+    deprecate documents: 'Migrated to Legacy::File'
+
     acts_as_paranoid
 
     def full_name

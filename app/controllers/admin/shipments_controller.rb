@@ -111,7 +111,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def upload_client_document
     @shipment = Shipment.find(params[:shipment_id])
     if params[:file]
-      @doc = Document.create!(
+      document = Legacy::File.create!(
         shipment: @shipment,
         text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, '_'),
         doc_type: params[:type],
@@ -121,12 +121,12 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         sandbox: @sandbox
       )
 
-      @doc.as_json.merge(
-        signed_url: Rails.application.routes.url_helpers.rails_blob_url(@doc.file, disposition: 'attachment')
+      document_with_url = document.as_json.merge(
+        signed_url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment')
       )
     end
 
-    response_handler(@doc)
+    response_handler(document_with_url)
   end
 
   def update
@@ -135,7 +135,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def document_action
-    @document = Document.find_by(id: params[:id], sandbox: @sandbox)
+    @document = Legacy::File.find_by(id: params[:id], sandbox: @sandbox)
     @user = @document.user
     decide_document_action
 
@@ -144,7 +144,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def document_delete
-    @document = Document.find_by(id: params[:id], sandbox: @sandbox)
+    @document = Legacy::File.find_by(id: params[:id], sandbox: @sandbox)
     @document.destroy
 
     response_handler(id: params[:id])
@@ -428,7 +428,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def populate_documents
-    @documents = @shipment.documents.where(sandbox: @sandbox).select { |doc| doc.file.attached? }.map do |doc|
+    @documents = @shipment.files.where(sandbox_id: @sandbox&.id).select { |doc| doc.file.attached? }.map do |doc|
       doc.as_json.merge(signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: 'attachment'))
     end
   end
@@ -569,23 +569,23 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def documents
     @documents ||= {
-      'requested_shipments' => Document.where(
+      'requested_shipments' => Legacy::File.where(
         shipment_id: tenant_shipments.requested.select(:id),
         sandbox: @sandbox
       ).group_by(&:doc_type),
-      'open_shipments' => Document.where(
+      'open_shipments' => Legacy::File.where(
         shipment_id: tenant_shipments.open.select(:id),
         sandbox: @sandbox
       ).group_by(&:doc_type),
-      'finished_shipments' => Document.where(
+      'finished_shipments' => Legacy::File.where(
         shipment_id: tenant_shipments.finished.select(:id),
         sandbox: @sandbox
       ).group_by(&:doc_type),
-      'rejected_shipments' => Document.where(
+      'rejected_shipments' => Legacy::File.where(
         shipment_id: tenant_shipments.rejected.select(:id),
         sandbox: @sandbox
       ).group_by(&:doc_type),
-      'archived_shipments' => Document.where(
+      'archived_shipments' => Legacy::File.where(
         shipment_id: tenant_shipments.archived.select(:id),
         sandbox: @sandbox
       ).group_by(&:doc_type)

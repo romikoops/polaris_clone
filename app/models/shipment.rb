@@ -43,7 +43,6 @@ class Shipment < Legacy::Shipment
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   has_many :contacts, through: :shipment_contacts
-  has_many :documents
   has_many :messages, through: :conversations
   has_many :shipment_contacts
   has_many :charge_breakdowns do

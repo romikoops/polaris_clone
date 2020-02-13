@@ -82,7 +82,7 @@ RSpec.describe Admin::HubsController, type: :controller do
       let(:error) { { has_errors: true, errors: errors_arr } }
 
       before do
-        expect(Document).to receive(:create!)
+        allow(Legacy::File).to receive(:create!)
         expect_any_instance_of(ExcelDataServices::Loaders::Uploader).to receive(:perform).and_return(error)
       end
 

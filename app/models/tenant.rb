@@ -17,7 +17,7 @@ class Tenant < Legacy::Tenant
   has_many :trucking_pricings, dependent: :destroy
   has_many :hub_truckings, through: :hubs, dependent: :destroy
   has_many :trucking_destinations, through: :hub_truckings, dependent: :destroy
-  has_many :documents, dependent: :destroy
+  has_many :files, dependent: :destroy, class_name: 'Legacy::File'
   has_many :pricings, dependent: :destroy
   has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
   has_many :pricing_exceptions, dependent: :destroy
@@ -40,6 +40,9 @@ class Tenant < Legacy::Tenant
 
   # validates :scope, presence: true, scope: true
   validates :emails, presence: true, emails: true
+
+  has_many :documents, dependent: :destroy # DEPRECATED
+  deprecate documents: 'Migrated to Legacy::File'
 
   def get_admin
     users.joins(:role).where('roles.name': 'admin').first

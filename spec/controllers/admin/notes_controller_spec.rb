@@ -3,17 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe Admin::NotesController, type: :controller do
+  let!(:tenant) { FactoryBot.create(:legacy_tenant) }
+  let(:role) { FactoryBot.create(:legacy_role, name: 'Admin') }
+  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, role: role) }
+
   before do
-    expect_any_instance_of(described_class).to receive(:require_authentication!).and_return(true)
-    expect_any_instance_of(described_class).to receive(:require_non_guest_authentication!).and_return(true)
-    expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
-    expect_any_instance_of(described_class).to receive(:current_tenant).at_least(:once).and_return(double('Tenant', scope: {}, subdomain: 'test', id: 1))
-    expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(double('User', guest: false, email: 'test@test.com', id: 1, agency_id: nil, agency: nil, tenant: nil, groups: nil, company: nil, scope: nil, sandbox: nil))
+    allow(controller).to receive(:require_authentication!).and_return(true)
+    allow(controller).to receive(:require_non_guest_authentication!).and_return(true)
+    allow(controller).to receive(:require_login_and_role_is_admin).and_return(true)
+    allow(controller).to receive(:current_user).and_return(user)
+    allow(controller).to receive(:current_tenant).and_return(tenant)
   end
 
   describe 'POST #upload' do
     before do
-      expect(Document).to receive(:create!)
+      allow(Legacy::File).to receive(:create!)
     end
 
     it 'returns error with messages when an error is raised' do

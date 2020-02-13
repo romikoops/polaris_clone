@@ -5,12 +5,12 @@ class WelcomeMailer < ApplicationMailer
   add_template_helper(ApplicationHelper)
 
   def welcome_email(user, sandbox = nil) # rubocop:disable Metrics/AbcSize
-    return unless Content.exists?(tenant_id: user.tenant_id, component: 'WelcomeMail')
+    return unless Legacy::Content.exists?(tenant_id: user.tenant_id, component: 'WelcomeMail')
 
     @user = user
     @tenant = @user.tenant
     @theme = @tenant.theme
-    @content = Content.get_component('WelcomeMail', @tenant.id)
+    @content = Legacy::Content.get_component('WelcomeMail', @tenant.id)
     @scope = ::Tenants::ScopeService.new(target: ::Tenants::User.find_by(legacy_id: @user.id)).fetch
     attachments.inline['logo.png'] = URI.try(:open, @theme['emailLogo']).try(:read)
 
@@ -18,6 +18,7 @@ class WelcomeMailer < ApplicationMailer
       'https://assets.itsmycargo.com/assets/tenants/normanglobal/ngl_welcome_image.jpg'
     ).read
     subject = sandbox ? "[SANDBOX] - #{@content['subject'][0]['text']}" : @content['subject'][0]['text']
+
     mail(
       from: Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: @user.tenant.id).slug}.itsmycargo.shop")
                          .tap { |a| a.display_name = @user.tenant.name }.format,

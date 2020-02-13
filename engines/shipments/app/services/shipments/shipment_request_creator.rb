@@ -44,7 +44,7 @@ module Shipments
     end
 
     def build_documents
-      @shipment_request.documents = ::Legacy::Document.where(shipment: legacy_shipment).map do |doc|
+      @shipment_request.documents = ::Legacy::File.where(shipment: legacy_shipment).map do |doc|
         Document.new(attachable: shipment_request).tap do |new_doc|
           new_doc.file.attach(doc.file.blob)
         end

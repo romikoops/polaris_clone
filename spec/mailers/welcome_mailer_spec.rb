@@ -7,10 +7,10 @@ RSpec.describe WelcomeMailer do
   let(:user) { create(:user, tenant: tenant) }
 
   before do
-    create(:content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
-    create(:content, component: 'WelcomeMail', section: 'body', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
-    create(:content, component: 'WelcomeMail', section: 'social', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
-    create(:content, component: 'WelcomeMail', section: 'footer', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
+    create(:legacy_content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
+    create(:legacy_content, component: 'WelcomeMail', section: 'body', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
+    create(:legacy_content, component: 'WelcomeMail', section: 'social', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
+    create(:legacy_content, component: 'WelcomeMail', section: 'footer', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
 
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})

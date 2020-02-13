@@ -1,4 +1,4 @@
-# frozen_string_literal: true 
+# frozen_string_literal: true
 namespace :content do
   task update: :environment do
     custom_content = {
@@ -309,9 +309,9 @@ namespace :content do
 
     custom_content.each do |subdomain, content_array|
       tenant = ::Tenant.find_by_subdomain(subdomain)
-      ::Content.where(tenant_id: tenant.id).destroy_all
+      ::Legacy::Content.where(tenant_id: tenant.id).destroy_all
       content_array.each do |content_hash|
-        content = ::Content.find_or_create_by!(
+        content = ::Legacy::Content.find_or_create_by!(
           tenant_id: tenant.id,
           component: content_hash[:component],
           section: content_hash[:section],

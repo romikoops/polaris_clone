@@ -41,7 +41,7 @@ module RmsExport
 
         xlsx.close
 
-        Legacy::Document.create!(
+        Legacy::File.create!(
           text: file_name,
           doc_type: sheet_type,
           tenant: tenant.legacy,

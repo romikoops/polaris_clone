@@ -22,7 +22,7 @@ RSpec.describe Admin::MarginsController, type: :controller do
     create(:tenants_membership, member: tenants_user, group: group)
     group
   end
-
+  let(:json_response) { JSON.parse(response.body) }
   let(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
 
   before do
@@ -181,12 +181,11 @@ RSpec.describe Admin::MarginsController, type: :controller do
 
   describe 'POST #upload' do
     before do
-      expect(Document).to receive(:create!)
+      allow(Legacy::File).to receive(:create!)
     end
 
     it 'returns error with messages when an error is raised' do
       post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), tenant_id: 1 }
-      json_response = JSON.parse(response.body)
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(json_response['data']).not_to be_empty

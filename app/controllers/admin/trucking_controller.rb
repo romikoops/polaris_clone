@@ -53,7 +53,7 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def overwrite_zonal_trucking_by_hub
     if upload_params[:file]
-      document = Document.create!(
+      document = Legacy::File.create!(
         text: '',
         doc_type: 'truckings',
         sandbox: @sandbox,

@@ -7,6 +7,7 @@ RSpec.describe ShippingTools do
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
+    create(:tenants_scope, target: tenants_tenant, content: { send_email_on_quote_download: true, send_email_on_quote_email: true, base_pricing: true })
     %w[EUR USD].each do |currency|
       stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
         .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
@@ -35,7 +36,6 @@ RSpec.describe ShippingTools do
            origin_nexus: origin_hub&.nexus,
            destination_nexus: destination_hub&.nexus)
   end
-  let!(:scope) { create(:tenants_scope, target: tenants_tenant, content: { send_email_on_quote_download: true, send_email_on_quote_email: true, base_pricing: true }) }
   let(:schedules) { [Legacy::Schedule.from_trip(trip)] }
   let(:tender_id) { SecureRandom.uuid }
   let(:params) do
@@ -50,16 +50,7 @@ RSpec.describe ShippingTools do
     }.with_indifferent_access
   end
 
-  describe '.choose_offer' do
-    it 'assigns the id of the chosen tender to the meta data of the shipment' do
-      create(:charge_breakdown, shipment: shipment, tender_id: tender_id)
-
-      expect { described_class.choose_offer(params, user) }.to change { Shipment.find(shipment.id).tender_id }.from(nil).to(tender_id)
-    end
-  end
-
-  context 'sending admin emails on quote download/send' do
-    let!(:quotation) { create(:legacy_quotation, original_shipment_id: shipment.id) }
+  context 'when sending admin emails on quote download' do
     let!(:charge_breakdown) { create(:legacy_charge_breakdown, shipment: shipment, trip: trip) }
     let(:results) do
       [
@@ -77,44 +68,42 @@ RSpec.describe ShippingTools do
       ]
     end
 
+    before do
+      quote_mailer = object_double('Mailer')
+      create(:legacy_quotation, original_shipment_id: shipment.id)
+      FactoryBot.create(:legacy_content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
+      allow(QuoteMailer).to receive(:quotation_admin_email).at_least(:once).and_return(quote_mailer)
+      allow(QuoteMailer).to receive(:quotation_email).at_least(:once).and_return(quote_mailer)
+      allow(quote_mailer).to receive(:deliver_later).at_least(:twice)
+    end
+
     describe '.save_pdf_quotes' do
       it 'successfully calls the mailer and return the quote Document' do
-        quote_mailer = double('QuoteMailer')
-        allow(quote_mailer).to receive(:deliver_later).and_return(true)
-        expect(described_class).to receive(:handle_existing_quote).once.and_return(quotation)
-        expect(QuoteMailer).to receive(:quotation_admin_email).once.and_return(quote_mailer)
-        expect(quote_mailer).to receive(:deliver_later).once
         described_class.save_pdf_quotes(shipment, user.tenant, results)
       end
     end
 
     describe '.save_and_send_quotes' do
       it 'successfully calls the mailer and return the quote Document' do
-        quote_mailer = double('QuoteMailer')
-        allow(quote_mailer).to receive(:deliver_later).and_return(true)
-        expect(described_class).to receive(:handle_existing_quote).once.and_return(quotation)
-        expect(QuoteMailer).to receive(:quotation_admin_email).once.and_return(quote_mailer)
-        expect(quote_mailer).to receive(:deliver_later).once
         described_class.save_and_send_quotes(shipment, results, user.email)
       end
     end
   end
 
   describe '.request_shipment' do
+    before do
+      cargo_creator = instance_double('Cargo::Creator', errors: [])
+      shipment_request_creator = instance_double('Shipments::ShipmentRequestCreator', errors: [])
+      shipment_request = instance_double('Shipments::ShipmentRequest', id: 1, tenant_id: 123)
+      allow(Cargo::Creator).to receive(:new).with(legacy_shipment: shipment).and_return(cargo_creator)
+      allow(cargo_creator).to receive(:perform).once
+      allow(Shipments::ShipmentRequestCreator).to receive(:new).with(legacy_shipment: shipment, user: user, sandbox: nil).and_return(shipment_request_creator)
+      allow(shipment_request_creator).to receive(:create).once
+      allow(shipment_request_creator).to receive(:shipment_request).and_return(shipment_request)
+      allow(Integrations::Processor).to receive(:process).once.with(shipment_request_id: 1, tenant_id: 123)
+    end
+
     it 'persists data into the engine models' do
-      cargo_creator = double('Cargo::Creator', errors: [])
-      shipment_request_creator = double('Shipments::ShipmentRequestCreator', errors: [])
-      shipment_request = double('Shipments::ShipmentRequest', id: 1, tenant_id: 123)
-
-      expect(Cargo::Creator).to receive(:new).with(legacy_shipment: shipment).and_return(cargo_creator)
-      expect(cargo_creator).to receive(:perform).once
-
-      expect(Shipments::ShipmentRequestCreator).to receive(:new).with(legacy_shipment: shipment, user: user, sandbox: nil).and_return(shipment_request_creator)
-      expect(shipment_request_creator).to receive(:create).once
-      expect(shipment_request_creator).to receive(:shipment_request).and_return(shipment_request)
-
-      expect(Integrations::Processor).to receive(:process).once.with(shipment_request_id: 1, tenant_id: 123)
-
       described_class.request_shipment(params, user)
     end
   end
@@ -124,54 +113,56 @@ RSpec.describe ShippingTools do
     let(:current_user) { create(:user, tenant: tenant) }
     let(:itinerary_with_no_pricing) { create(:gothenburg_shanghai_itinerary, tenant: tenant) }
 
-    context 'with base pricing enabled' do
-      context 'with :display_itineraries_with_rates in scope' do
-        before do
-          Pricings::Pricing.create(itinerary: itinerary,
-                                   load_type: details[:loadType],
-                                   tenant: tenant, user: user,
-                                   tenant_vehicle: tenant_vehicle,
-                                   internal: false)
-          Tenants::Scope.create(target: tenants_tenant, content: { base_pricing: true, display_itineraries_with_rates: true })
-        end
+    context 'with base pricing  && display_itineraries_with_rates enabled' do
+      before do
+        Pricings::Pricing.create(itinerary: itinerary,
+                                 load_type: details[:loadType],
+                                 tenant: tenant, user: user,
+                                 tenant_vehicle: tenant_vehicle,
+                                 internal: false)
+        Tenants::Scope.create(target: tenants_tenant, content: { base_pricing: true, display_itineraries_with_rates: true })
+      end
 
-        it 'creates the shipment and sends routes matching with valid pricings' do
-          result = described_class.create_shipment(details, current_user)
+      it 'creates the shipment and sends routes matching with valid pricings' do
+        result = described_class.create_shipment(details, current_user)
+        aggregate_failures do
           expect(result['routes']).not_to be_empty
-          expect(result['routes'].find { |route| route['itineraryId'] === itinerary.id }).not_to be_nil
-          expect(result['routes'].find { |route| route['itineraryId'] === itinerary_with_no_pricing.id }).to be_nil
+          expect(result['routes'].find { |route| route['itineraryId'] == itinerary.id }).not_to be_nil
+          expect(result['routes'].find { |route| route['itineraryId'] == itinerary_with_no_pricing.id }).to be_nil
         end
       end
     end
 
-    context 'closed quotation tool' do
-      before { Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true }) }
-
-      context 'without user agency' do
-        before { allow(current_user).to receive(:agency).and_return(nil) }
-
-        it 'raises a NonAgentUser error' do
-          expect { described_class.create_shipment(details, current_user) }.to raise_error(ApplicationError)
-        end
+    context 'when closed quotation tool without user agency' do
+      before do
+        Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true })
+        allow(current_user).to receive(:agency).and_return(nil)
       end
 
-      context 'with user agency' do
-        let(:agency_manager) { create(:user, tenant: tenant) }
-        let(:agency) { create(:agency, agency_manager: agency_manager, tenant: tenant) }
-        let(:user_within_agency) { create(:user, tenant: tenant, agency: agency) }
+      it 'raises a NonAgentUser error' do
+        expect { described_class.create_shipment(details, current_user) }.to raise_error(ApplicationError)
+      end
+    end
 
-        before do
-          Legacy::Pricing.create(itinerary: itinerary,
-                                 user: agency_manager,
-                                 tenant: tenant,
-                                 transport_category: transport_category,
-                                 tenant_vehicle: tenant_vehicle)
-        end
+    context 'when it is a closed quotation tool' do
+      let(:agency_manager) { create(:user, tenant: tenant) }
+      let(:agency) { create(:agency, agency_manager: agency_manager, tenant: tenant) }
+      let(:user_within_agency) { create(:user, tenant: tenant, agency: agency) }
 
-        it 'creates the shipment and filters the routes according to the users agency' do
-          result = described_class.create_shipment(details, user_within_agency)
+      before do
+        Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true })
+        Legacy::Pricing.create(itinerary: itinerary,
+                               user: agency_manager,
+                               tenant: tenant,
+                               transport_category: transport_category,
+                               tenant_vehicle: tenant_vehicle)
+      end
+
+      it 'creates the shipment and filters the routes according to the users agency' do
+        result = described_class.create_shipment(details, user_within_agency)
+        aggregate_failures do
           expect(result['routes']).not_to be_empty
-          expect(result['routes'].find { |route| route['itineraryId'] === itinerary.id }).not_to be_nil
+          expect(result['routes'].find { |route| route['itineraryId'] == itinerary.id }).not_to be_nil
         end
       end
     end
@@ -196,7 +187,7 @@ RSpec.describe ShippingTools do
           country: destination_hub.nexus.country.name
         },
         direction: 'export',
-        selected_day: Date.today,
+        selected_day: Time.zone.today,
         containers_attributes: [{
           size_class: 'fcl_40',
           quantity: 1,
@@ -209,110 +200,111 @@ RSpec.describe ShippingTools do
       ActionController::Parameters.new(shipment_id: shipment.id, shipment: shipment_params)
     end
 
-    let(:offer_calculator_double) { double(OfferCalculator::Calculator) }
+    let(:offer_calculator_double) { instance_double(OfferCalculator::Calculator) }
 
-    describe 'fail cases' do
-      before { allow(OfferCalculator::Calculator).to receive(:new).and_return(offer_calculator_double) }
+    before do
+      allow(OfferCalculator::Calculator).to receive(:new).and_return(offer_calculator_double)
+    end
 
-      context 'with a guest user' do
-        before do
-          Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_after_map: true })
-          allow(current_user).to receive(:guest).and_return(true)
-        end
-
-        it 'raises an Application::NotLoggedInError' do
-          expect { described_class.get_offers(params, current_user) }.to raise_error(ApplicationError, 'Please sign in to continue with your booking request.')
-        end
+    context 'when failing with a guest user' do
+      before do
+        Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_after_map: true })
+        allow(current_user).to receive(:guest).and_return(true)
       end
 
-      context 'errors from OfferCalculator' do
-        let(:offer_calculator_error_map) do
-          {
-            "OfferCalculator::TruckingTools::LoadMeterageExceeded": 'Your shipment has exceeded the load meterage limits for online booking.',
-            "OfferCalculator::Calculator::MissingTruckingData": 'A problem occurred calculating trucking for this shipment',
-            "OfferCalculator::Calculator::InvalidPickupAddress": 'Unable to build pickup location from address fields.',
-            "OfferCalculator::Calculator::InvalidDeliveryAddress": 'Unable to build delivery location from address fields.',
-            "OfferCalculator::Calculator::NoDirectionsFound": 'Unable to determine trucking directions. Please check the address and try again.',
-            "OfferCalculator::Calculator::NoRoute": 'No route matches the selected origin and destination.',
-            "OfferCalculator::Calculator::InvalidRoutes": ' Exceded maximum total chargeable weight for the modes of transport available in the selected route. ',
-            "OfferCalculator::Calculator::NoValidPricings": 'There are no pricings valid for this timeframe.',
-            "OfferCalculator::Calculator::NoSchedulesCharges": 'Unable to determine charges.',
-            "ArgumentError": 'Something has gone wrong!'
-          }
-        end
+      it 'raises an Application::NotLoggedInError' do
+        expect { described_class.get_offers(params, current_user) }.to raise_error(ApplicationError, 'Please sign in to continue with your booking request.')
+      end
+    end
 
-        it 'rescues errors from the offer calculator service and spews the right messages' do
-          offer_calculator_error_map.each do |key, message|
-            allow(offer_calculator_double).to receive(:perform).and_raise(key.to_s.constantize)
-            expect { described_class.get_offers(params, current_user).perform }.to raise_error(ApplicationError, message)
-          end
+    context 'when failing in OfferCalculator' do
+      let(:offer_calculator_error_map) do
+        {
+          "OfferCalculator::TruckingTools::LoadMeterageExceeded": 'Your shipment has exceeded the load meterage limits for online booking.',
+          "OfferCalculator::Calculator::MissingTruckingData": 'A problem occurred calculating trucking for this shipment',
+          "OfferCalculator::Calculator::InvalidPickupAddress": 'Unable to build pickup location from address fields.',
+          "OfferCalculator::Calculator::InvalidDeliveryAddress": 'Unable to build delivery location from address fields.',
+          "OfferCalculator::Calculator::NoDirectionsFound": 'Unable to determine trucking directions. Please check the address and try again.',
+          "OfferCalculator::Calculator::NoRoute": 'No route matches the selected origin and destination.',
+          "OfferCalculator::Calculator::InvalidRoutes": ' Exceded maximum total chargeable weight for the modes of transport available in the selected route. ',
+          "OfferCalculator::Calculator::NoValidPricings": 'There are no pricings valid for this timeframe.',
+          "OfferCalculator::Calculator::NoSchedulesCharges": 'Unable to determine charges.',
+          "ArgumentError": 'Something has gone wrong!'
+        }
+      end
+
+      it 'rescues errors from the offer calculator service and spews the right messages' do
+        offer_calculator_error_map.each do |key, message|
+          allow(offer_calculator_double).to receive(:perform).and_raise(key.to_s.constantize)
+          expect { described_class.get_offers(params, current_user).perform }.to raise_error(ApplicationError, message)
         end
       end
     end
 
     describe 'success cases' do
-      let!(:charge_breakdown) { create(:charge_breakdown, shipment: shipment, trip: trip) }
       let(:mock_offer_calculator) do
-        double(shipment: shipment,
-               detailed_schedules: [
-                 {
-                   quote: {
-                     total: { value: '1220.0', currency: 'USD' },
-                     name: 'Grand Total'
-                   },
-                   schedules: [
-                     {
-                       id: '71ad5e38-5e98-4f54-9007-d4a4a258b998',
-                       origin_hub: { name: origin_hub.name },
-                       destination_hub: { name: destination_hub.name },
-                       mode_of_transport: 'ocean',
-                       eta: Date.today + 40,
-                       etd: Date.today,
-                       closing_date: Date.today + 20,
-                       vehicle_name: 'standard',
-                       trip_id: trip.id
-                     }
-                   ],
-                   meta: {
-                     load_type: 'container',
-                     mode_of_transport: 'ocean',
-                     name: 'Gothenburg - Shanghai',
-                     service_level: 'standard',
-                     origin_hub: origin_hub.as_json.with_indifferent_access,
-                     itinerary_id: itinerary.id,
-                     destination_hub: destination_hub.as_json.with_indifferent_access,
-                     service_level_count: 2,
-                     pricing_rate_data: {
-                       fcl_20: {
-                         BAS: {
-                           rate: '1220.0',
-                           rate_basis: 'PER_CONTAINER',
-                           currency: 'USD',
-                           min: '1220.0'
-                         },
-                         total: {
-                           value: '1220.0',
-                           currency: 'USD'
-                         }
-                       }
-                     }
-                   }
-                 }
-               ],
-               hubs: {
-                 origin: [origin_hub],
-                 destination: [destination_hub]
-               })
+        instance_double('OfferCalculator::Calculator',
+                        shipment: shipment,
+                        detailed_schedules: [
+                          {
+                            quote: {
+                              total: { value: '1220.0', currency: 'USD' },
+                              name: 'Grand Total'
+                            },
+                            schedules: [
+                              {
+                                id: '71ad5e38-5e98-4f54-9007-d4a4a258b998',
+                                origin_hub: { name: origin_hub.name },
+                                destination_hub: { name: destination_hub.name },
+                                mode_of_transport: 'ocean',
+                                eta: Time.zone.today + 40,
+                                etd: Time.zone.today,
+                                closing_date: Time.zone.today + 20,
+                                vehicle_name: 'standard',
+                                trip_id: trip.id
+                              }
+                            ],
+                            meta: {
+                              load_type: 'container',
+                              mode_of_transport: 'ocean',
+                              name: 'Gothenburg - Shanghai',
+                              service_level: 'standard',
+                              origin_hub: origin_hub.as_json.with_indifferent_access,
+                              itinerary_id: itinerary.id,
+                              destination_hub: destination_hub.as_json.with_indifferent_access,
+                              service_level_count: 2,
+                              pricing_rate_data: {
+                                fcl_20: {
+                                  BAS: {
+                                    rate: '1220.0',
+                                    rate_basis: 'PER_CONTAINER',
+                                    currency: 'USD',
+                                    min: '1220.0'
+                                  },
+                                  total: {
+                                    value: '1220.0',
+                                    currency: 'USD'
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        hubs: {
+                          origin: [origin_hub],
+                          destination: [destination_hub]
+                        })
       end
 
       before do
+        create(:charge_breakdown, shipment: shipment, trip: trip)
         allow(OfferCalculator::Calculator).to receive(:new).and_return(mock_offer_calculator)
         allow(mock_offer_calculator).to receive(:perform)
       end
 
-      context 'with a booking configuration' do
-        it 'returns the correct response including the cargo units' do
-          result = described_class.get_offers(params, user)
+      it 'returns the correct response including the cargo units' do
+        result = described_class.get_offers(params, user)
+        aggregate_failures do
           expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
           expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
           expect(result[:destinationHubs]).to eq(mock_offer_calculator.hubs[:destination])
@@ -320,12 +312,11 @@ RSpec.describe ShippingTools do
         end
       end
 
-      context 'with a quote configuration' do
-        before do
-          Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true })
-        end
-        it 'returns the correct response including the cargo units' do
-          result = described_class.get_offers(params, user)
+      it 'returns the correct response including the cargo units for a quote setup' do
+        Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true })
+
+        result = described_class.get_offers(params, user)
+        aggregate_failures do
           expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
           expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
           expect(result[:destinationHubs]).to eq(mock_offer_calculator.hubs[:destination])
@@ -379,6 +370,7 @@ RSpec.describe ShippingTools do
 
     before do
       FactoryBot.create(:charge_breakdown, shipment: shipment, trip: trip)
+      FactoryBot.create(:legacy_file, :with_file, shipment: shipment, doc_type: 'packing_sheet')
       allow(Address).to receive(:create_and_geocode).and_return(address)
       %w[EUR USD].each do |currency|
         stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
@@ -406,26 +398,24 @@ RSpec.describe ShippingTools do
     let(:params) { {} }
     let(:current_user) { FactoryBot.create(:user, tenant: tenant) }
 
-    context 'when fail cases' do
-      context 'with a guest user' do
-        before do
-          Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_after_map: true })
-          allow(current_user).to receive(:guest).and_return(true)
-        end
-
-        it 'throws an ApplicationError::NotLoggedIn with a guest user' do
-          expect { described_class.choose_offer(params, current_user) }.to raise_error(ApplicationError)
-        end
+    context 'when failing with a guest user' do
+      before do
+        Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_after_map: true })
+        allow(current_user).to receive(:guest).and_return(true)
       end
 
-      context 'with an invalid shipment_id' do
-        it 'raises an ApplicationError::ShipmentNotFound error' do
-          expect { described_class.choose_offer({ shipment_id: 5 }, current_user) }.to raise_error(ApplicationError)
-        end
+      it 'throws an ApplicationError::NotLoggedIn with a guest user' do
+        expect { described_class.choose_offer(params, current_user) }.to raise_error(ApplicationError)
       end
     end
 
-    context 'basic flc example' do
+    context 'when failing with an invalid shipment_id' do
+      it 'raises an ApplicationError::ShipmentNotFound error' do
+        expect { described_class.choose_offer({ shipment_id: 5 }, current_user) }.to raise_error(ApplicationError)
+      end
+    end
+
+    context 'when basic fcl example' do
       let(:trip) { FactoryBot.create(:trip, itinerary: itinerary_2, tenant_vehicle: tenant_vehicle) }
       let(:schedule) { OfferCalculator::Schedule.from_trip(trip) }
       let(:params) do
@@ -445,22 +435,20 @@ RSpec.describe ShippingTools do
         }
       end
 
-      before { FactoryBot.create(:charge_breakdown, shipment: shipment) }
+      before { FactoryBot.create(:charge_breakdown, shipment: shipment, tender_id: tender_id) }
 
       it 'selects an offer for the shipment and assigns a reference number' do
         result = described_class.choose_offer(params, user)
-        expect(result[:shipment]['trip_id']).to eq(trip.id)
+        aggregate_failures do
+          expect(result[:shipment]['trip_id']).to eq(trip.id)
+          expect(result[:shipment]['tender_id']).to eq(tender_id)
+        end
       end
     end
 
-    context 'basic lcl with documents customs' do
+    context 'when it is a basic lcl with documents customs' do
       let(:address) { create(:address) }
-
-      let!(:user_address) { create(:user_addresses, user: user, address: address) }
-      let!(:origin_fee) { create(:customs_fee, hub: origin_hub, direction: 'export', tenant_vehicle_id: trip.tenant_vehicle_id) }
-      let!(:destination_fee) { create(:customs_fee, hub: destination_hub, direction: 'import', tenant_vehicle_id: trip.tenant_vehicle_id) }
       let(:schedule) { OfferCalculator::Schedule.from_trip(trip) }
-
       let(:lcl_shipment) do
         create(:shipment,
                user: user,
@@ -473,9 +461,6 @@ RSpec.describe ShippingTools do
                load_type: 'cargo_item',
                trucking: { "pre_carriage": { "truck_type": 'default', "trucking_time_in_seconds": 10_000 } })
       end
-
-      let!(:document) { create(:documents, shipment_id: lcl_shipment.id) }
-
       let(:params) do
         {
           shipment_id: lcl_shipment.id,
@@ -494,9 +479,12 @@ RSpec.describe ShippingTools do
       end
 
       before do
+        create(:user_addresses, user: user, address: address)
+        create(:customs_fee, hub: origin_hub, direction: 'export', tenant_vehicle_id: trip.tenant_vehicle_id)
+        create(:customs_fee, hub: destination_hub, direction: 'import', tenant_vehicle_id: trip.tenant_vehicle_id)
+        create(:documents, shipment_id: lcl_shipment.id)
         stub_request(:get, 'http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR')
           .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
-
         FactoryBot.create(:charge_breakdown, shipment: lcl_shipment)
       end
 
@@ -536,7 +524,7 @@ RSpec.describe ShippingTools do
       end
     end
 
-    context 'create_shipment_from_result (FCL)' do
+    context 'when we create_shipment_from_result (FCL)' do
       let(:old_trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
       let(:old_shipment) do
         create(:legacy_shipment,
@@ -569,7 +557,13 @@ RSpec.describe ShippingTools do
       end
     end
 
-    context 'create_shipment_from_result (LCL)' do
+    context 'when we create_shipment_from_result (LCL)' do
+      before do
+        create(:pricings_metadatum,
+               tenant: tenants_tenant,
+               charge_breakdown_id: old_shipment.charge_breakdowns.first.id)
+      end
+
       let(:old_trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
       let(:old_shipment) do
         create(:legacy_shipment,
@@ -580,16 +574,11 @@ RSpec.describe ShippingTools do
                load_type: 'cargo_item',
                meta: {})
       end
-      let!(:metadatum) do
-        create(:pricings_metadatum,
-               tenant: tenants_tenant,
-               charge_breakdown_id: old_shipment.charge_breakdowns.first.id)
-      end
       let(:quote) { create(:quotation, original_shipment_id: old_shipment.id) }
       let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
       let(:result) do
         {
-          quote: old_shipment.charge_breakdowns.first.to_nested_hash((hidden_args)),
+          quote: old_shipment.charge_breakdowns.first.to_nested_hash(hidden_args),
           meta: {
             pricing_rate_data: {},
             pricing_breakdown: {}
@@ -608,7 +597,13 @@ RSpec.describe ShippingTools do
       end
     end
 
-    context 'create_shipment_from_result (LCL && Aggregated)' do
+    context 'when we create_shipment_from_result (LCL && Aggregated)' do
+      before do
+        create(:pricings_metadatum,
+               tenant: tenants_tenant,
+               charge_breakdown_id: old_shipment.charge_breakdowns.first.id)
+      end
+
       let(:old_trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
       let(:old_shipment) do
         create(:legacy_shipment,
@@ -620,11 +615,7 @@ RSpec.describe ShippingTools do
                meta: {},
                with_aggregated_cargo: true)
       end
-      let!(:metadatum) do
-        create(:pricings_metadatum,
-               tenant: tenants_tenant,
-               charge_breakdown_id: old_shipment.charge_breakdowns.first.id)
-      end
+
       let(:quote) { create(:quotation, original_shipment_id: old_shipment.id) }
       let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
       let(:result) do
@@ -648,7 +639,11 @@ RSpec.describe ShippingTools do
       end
     end
 
-    context 'create_shipment_from_result (AGG)' do
+    context 'when we create_shipment_from_result (AGG)' do
+      before do
+        create(:pricings_metadatum, tenant: tenants_tenant, charge_breakdown_id: charge_breakdown.id)
+      end
+
       let(:old_trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
       let!(:old_shipment) do
         create(:shipment,
@@ -660,7 +655,6 @@ RSpec.describe ShippingTools do
                with_aggregated_cargo: true)
       end
       let(:charge_breakdown) { create(:charge_breakdown, shipment: old_shipment) }
-      let!(:metadatum) { create(:pricings_metadatum, tenant: tenants_tenant, charge_breakdown_id: charge_breakdown.id) }
       let(:quote) { create(:quotation, original_shipment_id: old_shipment.id) }
       let(:new_schedule) { OfferCalculator::Schedule.from_trip(old_trip).to_detailed_hash }
       let(:result) do
@@ -681,6 +675,21 @@ RSpec.describe ShippingTools do
           result: result
         )
         expect(new_shipment_saved).to be_truthy
+      end
+    end
+  end
+
+  describe '.shipper_welcome_email' do
+    context 'with content' do
+      before do
+        welcome_mailer = double('WelcomeMailer', deliver_later: true)
+        FactoryBot.create(:legacy_content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
+        allow(WelcomeMailer).to receive(:welcome_email).at_least(:once).and_return(welcome_mailer)
+        allow(welcome_mailer).to receive(:deliver_later)
+      end
+
+      it 'calls the mailer when content is available' do
+        described_class.shipper_welcome_email(user)
       end
     end
   end

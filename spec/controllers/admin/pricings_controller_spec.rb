@@ -3,27 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe Admin::PricingsController, type: :controller do
+  let(:tenant) { FactoryBot.create(:legacy_tenant) }
+  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
+  let(:json_response) { JSON.parse(response.body) }
+
+  before do
+    allow(controller).to receive(:require_authentication!).and_return(true)
+    allow(controller).to receive(:require_non_guest_authentication!).and_return(true)
+    allow(controller).to receive(:require_login_and_role_is_admin).and_return(true)
+    allow(controller).to receive(:current_tenant).at_least(:once).and_return(tenant)
+    allow(controller).to receive(:current_user).at_least(:once).and_return(user)
+  end
+
   describe 'GET #route' do
     before do
-      user_double = double('User', guest: false,
-                                   email: 'test@test.com',
-                                   id: 1,
-                                   agency_id: nil,
-                                   agency: nil,
-                                   tenant: nil,
-                                   groups: nil,
-                                   company: nil,
-                                   scope: nil,
-                                   sandbox: nil,
-                                   internal: false)
-      expect_any_instance_of(described_class).to receive(:require_authentication!).and_return(true)
-      expect_any_instance_of(described_class).to receive(:require_non_guest_authentication!).and_return(true)
-      expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
-      expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(user_double)
-      expect_any_instance_of(described_class).to receive(:current_scope).at_least(:once).and_return('base_pricing' => true)
+      allow(controller).to receive(:current_scope).at_least(:once).and_return('base_pricing' => true)
     end
 
-    let(:tenant) { FactoryBot.create(:legacy_tenant) }
     let(:itinerary) do
       FactoryBot.create(:itinerary, tenant_id: tenant.id)
     end
@@ -89,7 +85,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
   end
 
   describe 'POST #upload' do
-    context 'error testing' do
+    context 'when error testing' do
       let(:errors_arr) do
         [{ row_no: 1, reason: 'A' },
          { row_no: 2, reason: 'B' },
@@ -99,20 +95,17 @@ RSpec.describe Admin::PricingsController, type: :controller do
       let(:error) { { has_errors: true, errors: errors_arr } }
 
       before do
-        expect_any_instance_of(described_class).to receive(:require_authentication!).and_return(true)
-        expect_any_instance_of(described_class).to receive(:require_non_guest_authentication!).and_return(true)
-        expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
-        expect_any_instance_of(described_class).to receive(:current_tenant).at_least(:once).and_return(double('Tenant', scope: {}, subdomain: 'test', id: 1))
-        expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(double('User', guest: false, email: 'test@test.com', id: 1, agency_id: nil, agency: nil, tenant: nil, groups: nil, company: nil, scope: nil, sandbox: nil))
-        expect(Document).to receive(:create!)
-        expect_any_instance_of(ExcelDataServices::Loaders::Uploader).to receive(:perform).and_return(error)
+        allow(Legacy::File).to receive(:create!)
+        excel_service = instance_double('ExcelDataServices::Loaders::Uploader', perform: error)
+        allow(ExcelDataServices::Loaders::Uploader).to receive(:new).and_return(excel_service)
       end
 
       it 'returns error with messages when an error is raised' do
         post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), tenant_id: 1 }
-        json_response = JSON.parse(response.body)
-        expect(response).to have_http_status(:success)
-        expect(json_response.dig('data', 'errors')).to eq(JSON.parse(errors_arr.to_json))
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(json_response.dig('data', 'errors')).to eq(JSON.parse(errors_arr.to_json))
+        end
       end
     end
   end
@@ -146,80 +139,67 @@ RSpec.describe Admin::PricingsController, type: :controller do
 
     before do
       create(:tenants_scope, target: Tenants::Tenant.find_by(legacy_id: tenant.id), content: { 'base_pricing' => true })
-      expect_any_instance_of(described_class).to receive(:require_authentication!).and_return(true)
-      expect_any_instance_of(described_class).to receive(:require_non_guest_authentication!).and_return(true)
-      expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
-      expect_any_instance_of(described_class).to receive(:current_tenant).at_least(:once).and_return(tenant)
-      expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(double('User', guest: false, email: 'test@test.com', id: 1, agency_id: nil, agency: nil, tenant: nil, groups: nil, company: nil, scope: nil, sandbox: nil))
     end
 
-    context 'cargo_item' do
-      let!(:pricings) do
-        [
-          create(:lcl_pricing)
-        ]
-      end
-
-      it 'returns error with messages when an error is raised' do
+    context 'when calculating cargo_item' do
+      before do
+        create(:lcl_pricing)
         get :download, params: { tenant_id: tenant.id, options: { mot: 'ocean', load_type: 'cargo_item', group_id: nil } }
-        json_response = JSON.parse(response.body)
-        expect(response).to have_http_status(:success)
-        expect(json_response.dig('data', 'url')).to include('demo__pricings_ocean_lcl.xlsx')
-      end
-    end
-
-    context 'container' do
-      let!(:pricings) do
-        [
-          create(:fcl_20_pricing)
-        ]
       end
 
       it 'returns error with messages when an error is raised' do
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(json_response.dig('data', 'url')).to include('demo__pricings_ocean_lcl.xlsx')
+        end
+      end
+    end
+
+    context 'when a container' do
+      before do
+        create(:fcl_20_pricing)
         get :download, params: { tenant_id: tenant.id, options: { mot: 'ocean', load_type: 'container', group_id: nil } }
-        json_response = JSON.parse(response.body)
-        expect(response).to have_http_status(:success)
-        expect(json_response.dig('data', 'url')).to include('demo__pricings_ocean_fcl.xlsx')
+      end
+
+      it 'returns error with messages when an error is raised' do
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(json_response.dig('data', 'url')).to include('demo__pricings_ocean_fcl.xlsx')
+        end
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    let(:tenant) { create(:tenant) }
-
-    before do
-      expect_any_instance_of(described_class).to receive(:require_authentication!).and_return(true)
-      expect_any_instance_of(described_class).to receive(:require_non_guest_authentication!).and_return(true)
-      expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
-      expect_any_instance_of(described_class).to receive(:current_tenant).at_least(:once).and_return(tenant)
-      expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(double('User', guest: false, email: 'test@test.com', id: 1, agency_id: nil, agency: nil, tenant: tenant, groups: nil, company: nil, scope: nil, sandbox: nil))
-    end
-
-    context 'base_pricing' do
+    context 'when base_pricing' do
       before do
-        expect_any_instance_of(described_class).to receive(:current_scope).at_least(:once).and_return({ base_pricing: true }.with_indifferent_access)
+        allow(controller).to receive(:current_scope).at_least(:once).and_return({ base_pricing: true }.with_indifferent_access)
+        delete :destroy, params: { 'id' => base_pricing.id, tenant_id: tenant.id }
       end
 
       let(:base_pricing) { create(:pricings_pricing, tenant: tenant) }
 
       it 'deletes the Pricings::Pricing' do
-        delete :destroy, params: { 'id' => base_pricing.id, tenant_id: tenant.id }
-        expect(response).to have_http_status(:success)
-        expect(Pricings::Pricing.exists?(id: base_pricing.id)).to eq(false)
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(Pricings::Pricing.exists?(id: base_pricing.id)).to eq(false)
+        end
       end
     end
 
-    context 'legacy_pricing' do
+    context 'with legacy_pricing' do
       let(:legacy_pricing) { create(:legacy_pricing, tenant: tenant) }
 
       before do
-        expect_any_instance_of(described_class).to receive(:current_scope).at_least(:once).and_return({ base_pricing: false }.with_indifferent_access)
+        allow(controller).to receive(:current_scope).at_least(:once).and_return({ base_pricing: false }.with_indifferent_access)
+        delete :destroy, params: { 'id' => legacy_pricing.id, tenant_id: tenant.id }
       end
 
       it 'deletes the Pricings::Pricing' do
-        delete :destroy, params: { 'id' => legacy_pricing.id, tenant_id: tenant.id }
-        expect(response).to have_http_status(:success)
-        expect(Legacy::Pricing.exists?(id: legacy_pricing.id)).to eq(false)
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(Legacy::Pricing.exists?(id: legacy_pricing.id)).to eq(false)
+        end
       end
     end
   end

@@ -9,6 +9,16 @@ AllCops:
     - 'db/schema.rb'
     - '**/Rakefile'
 
+Layout/LineLength:
+  Max: 120
+  IgnoreCopDirectives: true
+  Exclude:
+    - '**/*_spec.rb'
+    - '**/*/factories/**/*.rb'
+    - db/custom_seeds/*.rb
+    - qa/features/**/*_steps.rb
+    - qa/features/**/*.feature
+
 Metrics/AbcSize:
   Max: 25
   Exclude:
@@ -26,16 +36,6 @@ Metrics/BlockLength:
     - db/migrate/*.rb
     - engines/*/db/migrate/*.rb
     - Gemfile
-
-Metrics/LineLength:
-  Max: 120
-  IgnoreCopDirectives: true
-  Exclude:
-    - '**/*_spec.rb'
-    - '**/*/factories/**/*.rb'
-    - db/custom_seeds/*.rb
-    - qa/features/**/*_steps.rb
-    - qa/features/**/*.feature
 
 Metrics/MethodLength:
   Max: 25

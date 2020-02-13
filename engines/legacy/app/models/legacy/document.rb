@@ -7,14 +7,6 @@ module Legacy
     belongs_to :user, class_name: 'Legacy::User', optional: true
     belongs_to :tenant
     belongs_to :quotation, optional: true
-
-    def attachment
-      file&.download
-    end
-
-    def local_file_path
-      ActiveStorage::Blob.service.send(:path_for, file.key)
-    end
   end
 end
 

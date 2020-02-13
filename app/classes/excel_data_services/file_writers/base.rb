@@ -94,7 +94,7 @@ module ExcelDataServices
 
         xlsx.close
 
-        Document.create!(
+        Legacy::File.create!(
           text: file_name,
           doc_type: 'pricing',
           tenant: tenant,

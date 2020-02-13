@@ -32,20 +32,14 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   belongs_to :role
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   has_many :shipments
-  has_many :documents
-
   has_many :user_addresses, dependent: :destroy
   has_many :addresses, through: :user_addresses
-
   has_many :receivable_shipments, foreign_key: 'consignee_id'
-
   has_many :user_route_discounts
   has_many :routes, foreign_key: :customer_id
-
   has_many :contacts
   has_many :consignees, through: :contacts
   has_many :notifyees, through: :contacts
-
   has_many :user_managers
   has_many :pricings
   has_many :rates, class_name: 'Pricings::Pricing'

@@ -59,7 +59,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
       calculate_pricing_data(s)
       prep_notes(s)
     end
-    @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
+    @content = Legacy::Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end

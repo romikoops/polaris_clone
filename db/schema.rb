@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_06_123212) do
+ActiveRecord::Schema.define(version: 2020_02_06_135755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -23,8 +23,10 @@ ActiveRecord::Schema.define(version: 2020_02_06_123212) do
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
     t.string "name", null: false
-    t.bigint "record_id", null: false
+    t.uuid "record_id", null: false
+    t.bigint "record_id_20200211"
     t.string "record_type", null: false
+    t.string "record_type_20200211"
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -606,6 +608,18 @@ ActiveRecord::Schema.define(version: 2020_02_06_123212) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "legacy_contents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "component"
+    t.datetime "created_at", null: false
+    t.integer "index"
+    t.string "section"
+    t.integer "tenant_id"
+    t.jsonb "text", default: {}
+    t.datetime "updated_at", null: false
+    t.index ["component"], name: "index_legacy_contents_on_component"
+    t.index ["tenant_id"], name: "index_legacy_contents_on_tenant_id"
+  end
+
   create_table "legacy_countries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -614,6 +628,25 @@ ActiveRecord::Schema.define(version: 2020_02_06_123212) do
   create_table "legacy_currencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_files", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.jsonb "approval_details"
+    t.string "approved"
+    t.datetime "created_at", null: false
+    t.string "doc_type"
+    t.integer "quotation_id"
+    t.uuid "sandbox_id"
+    t.integer "shipment_id"
+    t.integer "tenant_id"
+    t.string "text"
+    t.datetime "updated_at", null: false
+    t.string "url"
+    t.integer "user_id"
+    t.index ["quotation_id"], name: "index_legacy_files_on_quotation_id"
+    t.index ["sandbox_id"], name: "index_legacy_files_on_sandbox_id"
+    t.index ["shipment_id"], name: "index_legacy_files_on_shipment_id"
+    t.index ["tenant_id"], name: "index_legacy_files_on_tenant_id"
   end
 
   create_table "legacy_hubs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

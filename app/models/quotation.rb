@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-class Quotation < ApplicationRecord
-  has_many :shipments
-  has_many :documents
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-  belongs_to :user
+class Quotation < Legacy::Quotation
 end
 
 # == Schema Information

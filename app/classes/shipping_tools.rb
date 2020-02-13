@@ -424,7 +424,9 @@ class ShippingTools
       aggregated_cargo.save!
     end
 
-    documents = shipment.documents.select { |doc| doc.file.attached? }.map do |doc|
+    documents = shipment.files.map do |doc|
+      next unless doc.file.attached?
+
       doc.as_json.merge(
         signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: 'attachment')
       )
@@ -463,7 +465,7 @@ class ShippingTools
       consignee: consignee,
       notifyees: notifyees,
       shipper: shipper,
-      documents: documents,
+      documents: documents.compact,
       cargoItemTypes: cargo_item_types
     }
   end
@@ -551,7 +553,7 @@ class ShippingTools
     shipment.planned_etd       = @schedule['etd']
     shipment.planned_eta       = @schedule['eta']
     documents = Hash.new { |h, k| h[k] = [] }
-    shipment.documents.each do |doc|
+    shipment.files.each do |doc|
       documents[doc.doc_type] << doc
     end
 
@@ -738,9 +740,9 @@ class ShippingTools
     ShipmentMailer.shipper_notification(user, shipment, sandbox).deliver_later
   end
 
-  def self.shipper_welcome_email(user, shipment, sandbox = nil)
-    no_welcome_content = Content.where(tenant_id: user.tenant_id, component: 'WelcomeMail').empty?
-    WelcomeMailer.welcome_email(user, shipment, sandbox).deliver_later unless no_welcome_content
+  def self.shipper_welcome_email(user, sandbox = nil)
+    no_welcome_content = Legacy::Content.where(tenant_id: user.tenant_id, component: 'WelcomeMail').empty?
+    WelcomeMailer.welcome_email(user, sandbox).deliver_later unless no_welcome_content
   end
 
   def self.shipper_confirmation_email(user, shipment, sandbox = nil)

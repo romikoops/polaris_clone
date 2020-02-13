@@ -14,7 +14,7 @@ class QuoteMailer < ApplicationMailer
     @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)
     @theme = @user.tenant.theme
     @email = email[/[^@]+/]
-    @content = Content.get_component('QuotePdf', @user.tenant.id)
+    @content = Legacy::Content.get_component('QuotePdf', @user.tenant.id)
     @scope = scope_for(record: @user, sandbox: sandbox)
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipments.first.mode_of_transport}.png"
@@ -50,7 +50,7 @@ class QuoteMailer < ApplicationMailer
     pdf_service = PdfService.new(user: @user, tenant: @user.tenant)
     @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)
     @theme = @user.tenant.theme
-    @content = Content.get_component('QuotePdf', @user.tenant.id)
+    @content = Legacy::Content.get_component('QuotePdf', @user.tenant.id)
     @scope = scope_for(record: @user, sandbox: sandbox)
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
     document = pdf_service.admin_quotation(quotation: @quotation, shipment: shipment)&.attachment

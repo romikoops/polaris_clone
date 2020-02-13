@@ -79,7 +79,7 @@ class ShipmentsController < ApplicationController
   def upload_document
     @shipment = Shipment.find_by(id: params[:shipment_id], sandbox: @sandbox)
     if params[:file]
-      @doc = Document.create!(
+      document = Legacy::File.create!(
         shipment: @shipment,
         text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, '_'),
         doc_type: params[:type],
@@ -89,12 +89,12 @@ class ShipmentsController < ApplicationController
         sandbox: @sandbox
       )
 
-      @doc.as_json.merge(
-        signed_url: Rails.application.routes.url_helpers.rails_blob_url(@doc.file, disposition: 'attachment')
+      document_with_url = document.as_json.merge(
+        signed_url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment')
       )
     end
 
-    response_handler(@doc)
+    response_handler(document_with_url)
   end
 
   def update_user
@@ -111,7 +111,7 @@ class ShipmentsController < ApplicationController
       { contact: sc.contact, type: sc.contact_type, address: sc.contact.address } if sc.contact
     end
 
-    documents = shipment.documents.where(sandbox: @sandbox).select { |doc| doc.file.attached? }.map do |doc|
+    documents = shipment.files.where(sandbox: @sandbox).select { |doc| doc.file.attached? }.map do |doc|
       doc.as_json.merge(
         signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: 'attachment')
       )

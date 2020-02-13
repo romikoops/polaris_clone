@@ -3,10 +3,10 @@
 module Legacy
   class Quotation < ApplicationRecord
     self.table_name = 'quotations'
-    
+
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_many :shipments, class_name: 'Legacy::Shipment'
-    has_many :documents, class_name: 'Legacy::Document'
+    has_many :files, class_name: 'Legacy::File', dependent: :destroy
     belongs_to :user, class_name: 'Legacy::User'
 
   end

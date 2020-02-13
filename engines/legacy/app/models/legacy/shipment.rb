@@ -22,11 +22,15 @@ module Legacy
     has_many :cargo_items, class_name: 'Legacy::CargoItem'
     has_many :cargo_item_types, through: :cargo_items, class_name: 'Legacy::CargoItemType'
     has_one :aggregated_cargo, class_name: 'Legacy::AggregatedCargo'
+    has_many :files, class_name: 'Legacy::File'
     has_many :charge_breakdowns, class_name: 'Legacy::ChargeBreakdown' do
       def to_schedules_charges
         reduce({}) { |obj, charge_breakdown| obj.merge(charge_breakdown.to_schedule_charges) }
       end
     end
+
+    has_many :documents # DEPRECATED
+    deprecate documents: 'Migrated to Legacy::File'
 
      # Scopes
     scope :has_pre_carriage, -> { where(has_pre_carriage: true) }
