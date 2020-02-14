@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Dir[File.join(File.expand_path('../lib/spec/support', __dir__), '**', '*.rb')].each { |f| require f }
+Dir[File.join(File.expand_path('../lib/spec/support', __dir__), '**', '*.rb')].sort.each { |f| require f }
 
 SimpleCov.start do
   command_name File.dirname(File.expand_path('../', __dir__))
