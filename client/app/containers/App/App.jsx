@@ -16,13 +16,16 @@ import { SignOut } from '../../components/SignOut/SignOut'
 import Loading from '../../components/Loading/Loading'
 import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
 import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
-import { appActions, authenticationActions, shipmentActions, userActions } from '../../actions'
+import {
+  appActions, authenticationActions, shipmentActions, userActions
+} from '../../actions'
 import { moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
 import GenericError from '../../components/ErrorHandling/Generic'
 import SamlRedirect from '../../components/Redirects/SamlRedirect'
+import { UserContext, TenantContext } from '../../helpers/contexts'
 import FatalError from '../../components/ErrorHandling/FatalError'
 
 class App extends Component {
@@ -71,13 +74,12 @@ class App extends Component {
       appDispatch,
       loading
     } = this.props
-
     if (this.hasFatalError()) {
       return <FatalError error={get(app, 'error')} />
     }
 
     if (!tenant) {
-      return null; // Wait until tenant is fetched
+      return null // Wait until tenant is fetched
     }
 
     const { theme } = tenant
@@ -88,96 +90,101 @@ class App extends Component {
     }
 
     return (
-      <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
-        {
-          tenants && tenants.length > 0 ? (
-            <TenantMenu tenant={tenant} tenants={tenants} appDispatch={appDispatch} />
-          ) : ''
-        }
-        <CookieConsentBar
-          user={user}
-          theme={theme}
-          tenant={tenant}
-          loggedIn={loggedIn}
-          cookieRef={this.cookieRef}
-        />
-        <div className="flex-100 mc layout-row  layout-align-start">
-          {loading ? <Loading tenant={tenant} text="loading..." /> : ''}
-          {user &&
-          user.id &&
-          tenant &&
-          user.tenant_id !== tenant.id &&
-            user.role &&
-            user.role.name !== 'super_admin' ? (
-              <Redirect to="/signout" />
-            ) : (
-              ''
-            )}
-          <GenericError theme={theme}>
-            <Switch className="flex">
+      <TenantContext.Provider value={tenant}>
+        <UserContext.Provider value={user}>
+          <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
+            {
+              tenants && tenants.length > 0 ? (
+                <TenantMenu tenant={tenant} tenants={tenants} appDispatch={appDispatch} />
+              ) : ''
+            }
+            <CookieConsentBar
+              user={user}
+              theme={theme}
+              tenant={tenant}
+              loggedIn={loggedIn}
+              cookieRef={this.cookieRef}
+            />
+            <div className="flex-100 mc layout-row  layout-align-start">
+              {loading ? <Loading tenant={tenant} text="loading..." /> : ''}
+              {user &&
+              user.id &&
+              tenant &&
+              user.tenant_id !== tenant.id &&
+              user.role &&
+              user.role.name !== 'super_admin' && (<Redirect to="/signout" />)}
+              <GenericError theme={theme}>
+                <Switch className="flex">
 
-              <Route exact path="/" render={props => <Landing theme={theme} {...props} />} />
+                  <Route exact path="/" render={(props) => <Landing theme={theme} {...props} />} />
 
-              <Route
-                exact
-                path="/terms_and_conditions"
-                render={() => <TermsAndConditions tenant={tenant} user={user} theme={theme} />}
-              />
+                  <Route
+                    exact
+                    path="/terms_and_conditions"
+                    render={() => <TermsAndConditions tenant={tenant} user={user} theme={theme} />}
+                  />
 
-              <Route
-                exact
-                path="/insurance"
-                render={() => <InsuranceDetails tenant={tenant} user={user} theme={theme} />}
-              />
+                  <Route
+                    exact
+                    path="/insurance"
+                    render={() => <InsuranceDetails tenant={tenant} user={user} theme={theme} />}
+                  />
 
-              <Route
-                exact
-                path="/password_reset"
-                render={props => <ResetPasswordForm user={user} theme={theme} {...props} />}
-              />
+                  <Route
+                    exact
+                    path="/password_reset"
+                    render={(props) => <ResetPasswordForm user={user} theme={theme} {...props} />}
+                  />
 
-              <Route
-                path="/booking"
-                component={Shop}
-                user={user}
-                loggedIn={loggedIn}
-                theme={theme}
-              />
+                  <Route
+                    path="/booking"
+                    component={Shop}
+                    user={user}
+                    loggedIn={loggedIn}
+                    theme={theme}
+                  />
 
-              <AdminPrivateRoute
-                path="/admin"
-                component={Admin}
-                user={user}
-                loggedIn={loggedIn}
-                theme={theme}
-              />
+                  <AdminPrivateRoute
+                    path="/admin"
+                    component={Admin}
+                    user={user}
+                    loggedIn={loggedIn}
+                    theme={theme}
+                  />
 
-              <Route path="/signout" render={props => <SignOut theme={theme} {...props} />} />
+                  <Route path="/signout" render={(props) => <SignOut theme={theme} {...props} />} />
 
-              <Route
-                exact
-                path="/redirects/shipments/:uuid"
-                render={props => <AdminShipmentAction theme={theme} {...props} />}
-              />
+                  <Route
+                    exact
+                    path="/redirects/shipments/:uuid"
+                    render={(props) => <AdminShipmentAction theme={theme} {...props} />}
+                  />
 
-              <PrivateRoute
-                path="/account"
-                component={UserAccount}
-                user={user}
-                tenant={tenant}
-                loggedIn={loggedIn}
-                theme={theme}
-              />
+                  <PrivateRoute
+                    path="/account"
+                    component={UserAccount}
+                    user={user}
+                    tenant={tenant}
+                    loggedIn={loggedIn}
+                    theme={theme}
+                  />
 
-              <Route path="/login/saml/success" render={props => <SamlRedirect theme={theme} {...props} />} />
-              <Route path="/login/saml/error" render={props => <SamlRedirect theme={theme} failure {...props} />} />
+                  <Route path="/login/saml/success" render={(props) => <SamlRedirect theme={theme} {...props} />} />
+                  <Route
+                    path="/login/saml/error"
+                    render={(props) => (
+                      <SamlRedirect theme={theme} failure {...props} />
+                    )}
+                  />
 
-              <Route render={props => <Redirect to="/" />} />
+                  <Route render={() => <Redirect to="/" />} />
 
-            </Switch>
-          </GenericError>
-        </div>
-      </div>
+                </Switch>
+              </GenericError>
+            </div>
+          </div>
+        </UserContext.Provider>
+      </TenantContext.Provider>
     )
   }
 }

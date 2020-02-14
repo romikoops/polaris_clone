@@ -14,6 +14,7 @@ import {
   fixedWeightChargeableString
 } from '../../helpers'
 import { breakdownExists, previewPrepare } from '../Admin/Clients/MarginPreview/previewPrepare'
+import { UserContext } from '../../helpers/contexts'
 
 class QuoteChargeBreakdown extends Component {
   static shouldShowSubTotal (currencySections, scope) {
@@ -35,6 +36,8 @@ class QuoteChargeBreakdown extends Component {
       )
     }
   }
+
+  static contextType = UserContext
 
   toggleExpander (key) {
     const { scope } = this.props
@@ -120,7 +123,8 @@ class QuoteChargeBreakdown extends Component {
   }
 
   dynamicValueExtractor (key, price) {
-    const { scope, user } = this.props
+    const { scope } = this.props
+    const user = this.context
     let currency
     let value
     if (key.includes('trucking') && (user.guest || scope.hide_grand_total)) {
