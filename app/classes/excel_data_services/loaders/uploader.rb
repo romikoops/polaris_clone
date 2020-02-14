@@ -44,12 +44,20 @@ module ExcelDataServices
 
         all_sheets_raw_data = parse_data(xlsx, headers_for_all_sheets, restructurer_names_for_all_sheets)
 
+        type_errors = []
+        all_sheets_raw_data.each do |sheet|
+          type_validator = ExcelDataServices::Validators::TypeValidity::Base.get(sheet[:restructurer_name])
+          type_errors << type_validator.new(sheet: sheet).type_errors
+        end
+
+        return { has_errors: true, errors: type_errors.flatten } if type_errors.flatten.any?
+
+        validation_errors = []
         restructured_data =
           all_sheets_raw_data.each_with_object({}) do |per_sheet_raw_data, hsh|
             hsh[per_sheet_raw_data[:sheet_name]] = restructure_data(per_sheet_raw_data)
           end
 
-        validation_errors = []
         restructured_data.each do |sheet_name, data_by_insertion_types|
           data_by_insertion_types.each do |insertion_type, data_part|
             VALIDATION_FLAVORS.each do |flavor|
