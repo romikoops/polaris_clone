@@ -47,7 +47,7 @@ module Pricings
           tenant: @user.tenant,
           args: {
             schedules: filtered_schedules,
-            shipment: @shipment,
+            cargo_class_count: @shipment.cargo_classes.count,
             pricing: pricing,
             sandbox: @sandbox
           }

@@ -6,14 +6,14 @@ module Pricings
     belongs_to :margin
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
+    validates :operator, inclusion: { in: %w[+ % &],
+                                      message: '%{value} is not a valid operator for a margin detail' }
 
     def rate_basis
       margin.get_pricing&.fees&.find_by(charge_category_id: charge_category_id)&.rate_basis&.external_code
     end
 
-    def itinerary_name
-      margin.itinerary_name
-    end
+    delegate :itinerary_name, to: :margin
 
     def fee_code
       charge_category&.code

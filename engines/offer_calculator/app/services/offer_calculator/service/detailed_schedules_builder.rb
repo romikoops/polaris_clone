@@ -160,7 +160,7 @@ module OfferCalculator
               args: {
                 pricing: pricing,
                 schedules: [schedule],
-                shipment: @shipment
+                cargo_class_count: @shipment.cargo_classes.count
               }
             ).perform
 

@@ -20,6 +20,11 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       code { 'baf' }
     end
 
+    trait :thc do
+      name { 'Terminal Handling Cost' }
+      code { 'thc' }
+    end
+
     trait :has do
       name { 'Heavy Weight Freight' }
       code { 'has' }
@@ -28,6 +33,21 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     trait :puf do
       name { 'Pick Up Fee' }
       code { 'puf' }
+    end
+
+    trait :export do
+      name { 'Export Charges' }
+      code { 'export' }
+    end
+
+    trait :import do
+      name { 'Import Charges' }
+      code { 'import' }
+    end
+
+    trait :cargo do
+      name { 'Freight Charges' }
+      code { 'cargo' }
     end
 
     trait :trucking_pre do
@@ -44,8 +64,12 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     factory :bas_charge, traits: [:bas]
     factory :solas_charge, traits: [:solas]
     factory :baf_charge, traits: [:baf]
+    factory :thc_charge, traits: [:thc]
     factory :has_charge, traits: [:has]
     factory :puf_charge, traits: [:puf]
+    factory :cargo_charge_category, traits: [:cargo]
+    factory :import_charge_category, traits: [:import]
+    factory :export_charge_category, traits: [:export]
     factory :trucking_pre_charge, traits: [:trucking_pre]
     factory :trucking_on_charge, traits: [:trucking_on]
   end

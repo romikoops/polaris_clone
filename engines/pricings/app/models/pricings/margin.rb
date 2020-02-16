@@ -28,6 +28,8 @@ module Pricings
               Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
             ))
     end)
+    validates :operator, inclusion: { in: %w[+ %],
+                                      message: '%{value} is not a valid operator for a parent margin' }
 
     before_validation :set_application_order
 

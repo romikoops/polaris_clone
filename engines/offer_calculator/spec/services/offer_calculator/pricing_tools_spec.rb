@@ -181,18 +181,14 @@ RSpec.describe OfferCalculator::PricingTools do
       ]
     end
   end
-  before(:each) do
+  before do
     stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
-      .with(
-        headers: {
-          'Accept' => '*/*',
-          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'Host' => 'data.fixer.io',
-          'User-Agent' => 'Ruby'
-        }
-      )
       .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26 } }.to_json, headers: {})
+    %w[adi eca qdf fill isps].each do |code|
+      FactoryBot.create(:legacy_charge_categories, code: code, name: code, tenant: tenant)
+    end
   end
+
   let(:fcl_20) { FactoryBot.create(:legacy_container, shipment_id: shipment.id, size_class: 'fcl_20', cargo_class: 'fcl_20') }
   let(:fcl_40) { FactoryBot.create(:legacy_container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40') }
   let(:fcl_40_hq) { FactoryBot.create(:legacy_container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq') }

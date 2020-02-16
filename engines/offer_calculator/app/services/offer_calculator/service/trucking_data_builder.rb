@@ -128,7 +128,7 @@ module OfferCalculator
           args: {
             cargo_class: trucking_pricing.cargo_class,
             date: @shipment.desired_start_date,
-            shipment: @shipment,
+            cargo_class_count: @shipment.cargo_classes.count,
             trucking_pricing: trucking_pricing
           }
         ).perform

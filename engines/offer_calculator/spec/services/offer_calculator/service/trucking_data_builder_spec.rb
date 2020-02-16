@@ -51,6 +51,7 @@ RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
   end
 
   before do
+    FactoryBot.create(:puf_charge, tenant: tenant)
     FactoryBot.create(:trucking_on_margin, default_for: 'trucking', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
     FactoryBot.create(:trucking_pre_margin, default_for: 'trucking', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
   end

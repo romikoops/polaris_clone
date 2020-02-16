@@ -11,6 +11,25 @@ FactoryBot.define do
     dangerous_goods { false }
     quantity { 1 }
     association :shipment, factory: :legacy_shipment
+
+    trait :fcl_20 do
+      size_class { 'fcl_20' }
+      cargo_class { 'fcl_20' }
+    end
+
+    trait :fcl_40 do
+      size_class { 'fcl_40' }
+      cargo_class { 'fcl_40' }
+    end
+
+    trait :fcl_40_hq do
+      size_class { 'fcl_40_hq' }
+      cargo_class { 'fcl_40_hq' }
+    end
+
+    factory :fcl_20_container, traits: [:fcl_20]
+    factory :fcl_40_container, traits: [:fcl_40]
+    factory :fcl_40_hq_container, traits: [:fcl_40_hq]
   end
 end
 

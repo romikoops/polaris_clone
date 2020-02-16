@@ -121,6 +121,18 @@ class AdminClientMarginCreator extends Component {
     clientsDispatch.getMarginFormData()
   }
 
+  setAttachment (target) {
+    this.setState({ attachedTo: target })
+  }
+
+  setMarginType (target) {
+    if (target === 'freight') {
+      this.setState({ marginType: target })
+    } else {
+      this.setState({ marginType: target, attachedTo: 'hub' })
+    }
+  }
+
   selectItinerary (n, e) {
     const freshState = {
       cargoClasses: [],
@@ -136,26 +148,6 @@ class AdminClientMarginCreator extends Component {
     const { clientsDispatch } = this.props
     const itineraryIds = e.map(it => get(it, ['value', 'id'], null))
     clientsDispatch.getMarginFormData(itineraryIds, null)
-  }
-
-  selectHub (n, e) {
-    const freshState = {
-      cargoClasses: [],
-      carriers: [],
-      serviceLevels: [],
-      pricings: [],
-      selectedHubs: e,
-      selectedCargoClasses: [],
-      selectedCarrier: [],
-      selectedServiceLevels: []
-    }
-    this.setState(freshState)
-    const { clientsDispatch } = this.props
-    clientsDispatch.getMarginFormData()
-  }
-
-  selectCounterpartHub (n, e) {
-    this.setState({ counterpartHub: e })
   }
 
   selectHub (n, e) {
@@ -376,18 +368,6 @@ class AdminClientMarginCreator extends Component {
     })
   }
 
-  setAttachment (target) {
-    this.setState({ attachedTo: target })
-  }
-
-  setMarginType (target) {
-    if (target === 'freight') {
-      this.setState({ marginType: target })
-    } else {
-      this.setState({ marginType: target, attachedTo: 'hub' })
-    }
-  }
-
   selectHubDirection (target) {
     this.setState({ selectedHubDirection: target })
   }
@@ -434,7 +414,8 @@ class AdminClientMarginCreator extends Component {
     }
     const operandOptions = [
       { label: t('admin:percentage'), value: '%' },
-      { label: t('admin:addition'), value: '+' }
+      { label: t('admin:addition'), value: '+' },
+      { label: t('admin:total'), value: '&' }
     ]
     const hubDirectionOptions = [
       { label: t('admin:import'), value: 'import' },

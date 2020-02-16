@@ -780,11 +780,11 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
-    rubocop-itsmycargo (0.1.4)
-      rubocop (~> 0.77)
-      rubocop-performance (~> 1.5)
-      rubocop-rails (~> 2.4)
-      rubocop-rspec (~> 1.37)
+    rubocop-itsmycargo (0.1.9)
+      rubocop
+      rubocop-performance
+      rubocop-rails
+      rubocop-rspec
     rubocop-performance (1.5.2)
       rubocop (>= 0.71.0)
     rubocop-rails (2.4.2)

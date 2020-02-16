@@ -223,6 +223,7 @@ module Pricings
           args: {
             schedules: default_schedules(tenant_vehicle_id: pricing.tenant_vehicle_id),
             pricing: pricing,
+            cargo_class_count: 1,
             sandbox: @sandbox
           }
         ).perform
@@ -243,6 +244,7 @@ module Pricings
           args: {
             schedules: scheds,
             local_charge: local_charge,
+            cargo_class_count: 1,
             sandbox: @sandbox
           }
         ).perform
@@ -261,6 +263,7 @@ module Pricings
             schedules: default_schedules(tenant_vehicle_id: nil),
             trucking_pricing: trucking,
             date: Date.today,
+            cargo_class_count: 1,
             sandbox: @sandbox
           }
         ).perform

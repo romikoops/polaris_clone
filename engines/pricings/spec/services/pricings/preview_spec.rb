@@ -46,6 +46,8 @@ RSpec.describe Pricings::Preview do
         FactoryBot.create(:export_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
       ]
     end
+    FactoryBot.create(:solas_charge, tenant: tenant)
+    FactoryBot.create(:puf_charge, tenant: tenant)
   end
 
   describe '.perform' do
@@ -183,16 +185,16 @@ RSpec.describe Pricings::Preview do
           expect(results.length).to eq(1)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :margin_id)).to eq(freight_margin.id)
           expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
-          expect(results.dig(0, :import, :fees, :SOLAS, :margins, 0, :margin_id)).to eq(import_margin.id)
-          expect(results.dig(0, :import, :fees, :SOLAS, :final, 'value')).to eq(19.25)
-          expect(results.dig(0, :export, :fees, :SOLAS, :margins, 0, :margin_id)).to eq(export_margin.id)
-          expect(results.dig(0, :export, :fees, :SOLAS, :final, 'value')).to eq(19.25)
-          expect(results.dig(0, :trucking_pre, :fees, :PUF, :margins, 0, :margin_id)).to eq(trucking_pre_margin.id)
-          expect(results.dig(0, :trucking_pre, :fees, :PUF, :final, 'value')).to eq(275)
+          expect(results.dig(0, :import, :fees, :solas, :margins, 0, :margin_id)).to eq(import_margin.id)
+          expect(results.dig(0, :import, :fees, :solas, :final, 'value')).to eq(19.25)
+          expect(results.dig(0, :export, :fees, :solas, :margins, 0, :margin_id)).to eq(export_margin.id)
+          expect(results.dig(0, :export, :fees, :solas, :final, 'value')).to eq(19.25)
+          expect(results.dig(0, :trucking_pre, :fees, :puf, :margins, 0, :margin_id)).to eq(trucking_pre_margin.id)
+          expect(results.dig(0, :trucking_pre, :fees, :puf, :final, 'value')).to eq(275)
           expect(results.dig(0, :trucking_pre, :fees, :trucking_lcl, :margins, 0, :margin_id)).to eq(trucking_pre_margin.id)
           expect(results.dig(0, :trucking_pre, :fees, :trucking_lcl, :final, 'wm', 0, 'rate', 'value')).to eq(110)
-          expect(results.dig(0, :trucking_on, :fees, :PUF, :margins, 0, :margin_id)).to eq(trucking_on_margin.id)
-          expect(results.dig(0, :trucking_on, :fees, :PUF, :final, 'value')).to eq(275)
+          expect(results.dig(0, :trucking_on, :fees, :puf, :margins, 0, :margin_id)).to eq(trucking_on_margin.id)
+          expect(results.dig(0, :trucking_on, :fees, :puf, :final, 'value')).to eq(275)
           expect(results.dig(0, :trucking_on, :fees, :trucking_lcl, :margins, 0, :margin_id)).to eq(trucking_on_margin.id)
           expect(results.dig(0, :trucking_on, :fees, :trucking_lcl, :final, 'cbm', 0, 'rate', 'value')).to eq(261.25)
         end

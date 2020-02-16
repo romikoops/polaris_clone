@@ -4,7 +4,7 @@ require 'bigdecimal'
 
 class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
   attr_accessor :scope, :user, :shipment, :metadata
-  
+
   def initialize(user:, shipment: nil, sandbox: nil, metadata: [])
     @user = user
     @shipment = shipment
@@ -42,17 +42,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
     charges_for_filtering = []
     all_charges_with_metadata = []
-    cargos_for_loop = if @scope.fetch(:consolidation, :cargo, :backend) && @shipment.load_type == 'cargo_item'
-                        [{ load_type: 'lcl', cargo_id: 'cargo_item' }]
-                      else
-                        cargos.map do |cargo|
-                          {
-                            load_type: cargo.respond_to?(:size_class) ? cargo.size_class : 'lcl',
-                            cargo_id: cargo.id
-                          }
-                        end
-                      end
-    cargos_for_loop.each do |cargo_data|
+    cargos_for_loop(cargos: cargos).each do |cargo_data| # rubocop:disable Metrics/BlockLength,
       if @scope.fetch(:base_pricing)
         group_ids = user.group_ids | [nil]
         group_ids.each do |group_id|
@@ -210,6 +200,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     return {} if charges_by_dates.empty?
 
     consolidated_hash = consolidated_cargo_hash(cargos: cargos, mot: schedules.first.mode_of_transport)
+
     result = charges_by_dates.each_with_object({}) do |(dates, values), hash|
       unit_charges_array, shipment_charges = values
       hash[dates] = {} if unit_charges_array.empty?
@@ -486,7 +477,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       args: {
         cargo_class: local_charge.load_type,
         schedules: schedules,
-        shipment: shipment,
+        cargo_class_count: shipment.cargo_classes.count,
         local_charge: local_charge,
         sandbox: @sandbox,
         cargo_unit_id: cargo_unit_id
@@ -504,6 +495,20 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       target_ranges = breakdown[:adjusted_rate][:range]
                       .select { |range| range.slice('min', 'max') == final_range.slice('min', 'max') }
       breakdown[:adjusted_rate][:rate] = target_ranges
+    end
+  end
+
+  def cargos_for_loop(cargos:)
+    if @scope.fetch(:consolidation, :cargo, :backend) && @shipment.load_type == 'cargo_item'
+      [{ load_type: 'lcl', cargo_id: 'cargo_item' }]
+    else
+      cargos_to_use = @shipment.fcl? ? cargos.uniq(&:size_class) : cargos
+      cargos_to_use.map do |cargo|
+        {
+          load_type: cargo.respond_to?(:size_class) ? cargo.size_class : 'lcl',
+          cargo_id: cargo.id
+        }
+      end
     end
   end
 end

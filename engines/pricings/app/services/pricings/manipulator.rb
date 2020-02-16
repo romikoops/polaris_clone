@@ -11,9 +11,7 @@ module Pricings
       @target = target
       @tenant = tenant.is_a?(Tenants::Tenant) ? tenant : Tenants::Tenant.find_by(legacy_id: tenant.id)
       @scope = Tenants::ScopeService.new(target: target, tenant: tenant).fetch
-      @shipment = args[:shipment]
       @sandbox = args[:sandbox]
-      @without_meta = args[:without_meta]
       @cargo_unit_id = args[:cargo_unit_id]
       @meta = {}
       if @type == :freight_margin
@@ -23,6 +21,7 @@ module Pricings
       elsif %i[import_margin export_margin].include?(@type)
         local_charge_variables(args: args)
       end
+      @cargo_count = args[:cargo_class_count]
       @metadata_list = []
     end
 
@@ -108,28 +107,28 @@ module Pricings
       params.uniq
     end
 
-    def sort_margins # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize, Metrics/MethodLength
-      outer_date = if type == :freight_margin
-                     pricing.expiration_date
-                   elsif %i[trucking_pre_margin trucking_on_margin].include?(type)
-                     end_date
-                   else
-                     local_charge.expiration_date
-                   end
+    def outer_date
+      @outer_date ||= if type == :freight_margin
+                        pricing.expiration_date
+                      elsif %i[trucking_pre_margin trucking_on_margin].include?(type)
+                        end_date
+                      else
+                        local_charge.expiration_date
+                      end
+    end
 
-      margin_periods = applicable_margins.group_by { |x| x[:margin].slice(:effective_date, :expiration_date) }
-      if margin_periods.keys.length == 1
-        margin_periods.values.first.sort_by! { |x| [x[:margin][:application_order], x[:rank], x[:priority]] }
-        return margin_periods
-      end
-      date_keys = margin_periods.keys
-                                .reject { |dk| dk[:effective_date] > outer_date }
-                                .map(&:values)
-                                .flatten
-                                .uniq
-                                .sort
+    def extract_date_keys(margin_periods:)
+      margin_periods.keys
+                    .reject { |dk| dk[:effective_date] > outer_date }
+                    .map(&:values)
+                    .flatten
+                    .uniq
+                    .sort
+    end
 
-      new_date_keys = date_keys.map.with_index do |date, i|
+    def adjusted_date_keys(margin_periods:)
+      date_keys = extract_date_keys(margin_periods: margin_periods)
+      result_date_keys = date_keys.map.with_index do |date, i|
         effective_date = date.hour == 23 ? date.beginning_of_day + 1.day : date.beginning_of_day
         next_date = date_keys[i + 1]
         next unless next_date
@@ -141,8 +140,11 @@ module Pricings
           expiration_date: expiration_date
         }
       end
+      result_date_keys.compact
+    end
 
-      final_margin_periods = new_date_keys.compact.each_with_object({}) do |date_keys, hash|
+    def final_margin_periods(margin_periods:)
+      adjusted_date_keys(margin_periods: margin_periods).each_with_object({}) do |date_keys, hash|
         hash[date_keys] = {}
 
         sorted_margins = applicable_margins.select do |m|
@@ -153,8 +155,16 @@ module Pricings
         sorted_margins.sort_by! { |x| [x[:margin][:application_order], x[:rank], x[:priority]] }
         hash[date_keys] = sorted_margins
       end
+    end
 
-      final_margin_periods
+    def sort_margins
+      margin_periods = applicable_margins.group_by { |x| x[:margin].slice(:effective_date, :expiration_date) }
+      if margin_periods.keys.length == 1
+        margin_periods.values.first.sort_by! { |x| [x[:margin][:application_order], x[:rank], x[:priority]] }
+        return margin_periods
+      end
+
+      final_margin_periods(margin_periods: margin_periods)
     end
 
     def find_margins_for(args:, target:, all_margins:, rank:)
@@ -174,123 +184,119 @@ module Pricings
       end
     end
 
-    def manipulate_freight_pricings # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      @pricings_to_return = margins_to_apply.map do |date_keys, data| # rubocop:disable Metrics/BlockLength
+    def reset_flat_margins
+      @flat_margins = Hash.new { |h, k| h[k] = [] }
+    end
+
+    def manipulate_freight_pricings
+      @pricings_to_return = margins_to_apply.map do |date_keys, data|
         fees = pricing.fees
         new_effective_date, new_expiration_date = manipulate_dates(pricing, date_keys)
         next if new_effective_date > new_expiration_date
 
-        manipulated_pricing = pricing.as_json
-        manipulated_pricing['effective_date'] = new_effective_date
-        manipulated_pricing['expiration_date'] = new_expiration_date
+        manipulated_pricing = update_result_effective_periods(
+          effective_date: new_effective_date,
+          expiration_date: new_expiration_date
+        )
         update_meta(manipulated_pricing)
-        flat_margins = Hash.new { |h, k| h[k] = [] }
-        fee_hash = fees.each_with_object({}) do |fee, hash|
-          fee_json = fee.to_fee_hash
-          fee_metadata = fee.metadata
-          fee_code = fee.fee_code
-          next if fee_code.nil?
-
-          data.each do |mdata|
-            margin = mdata[:margin]
-            effective_margin = (margin.details.find_by(charge_category_id: fee.charge_category_id) || margin)
-            if effective_margin.operator == '+'
-              margin_key = effective_margin == margin ? 'total' : fee.fee_code
-              flat_margins[margin_key] << effective_margin
-            end
-
-            result_json = apply_freight_manipulation(
-              operator: effective_margin.operator,
-              value: effective_margin.value,
-              fee: hash[fee_code] || fee_json.values.first
-            )
-            unless effective_margin.operator == '+'
-              update_meta_for_margin(
-                fee_code: fee.fee_code,
-                margin_value: effective_margin.value,
-                margin_or_detail: margin,
-                result: result_json
-              )
-            end
-
-            hash[fee_code] = result_json
-          end
-        end
-        manipulated_pricing['data'] = fee_hash
+        manipulated_pricing['data'] = manipulate_freight_rates(fees: fees, data: data)
         adjusted_flat_margins = adjust_flat_margins_for_fees(margins: flat_margins)
         manipulated_pricing['flat_margins'] = adjusted_flat_margins
-
-        metadata_list << meta
-        manipulated_pricing.with_indifferent_access
+        final_handling(manipulated_pricing: manipulated_pricing)
       end
     end
 
     def manipulate_local_charges
       @pricings_to_return = margins_to_apply.map do |date_keys, data|
         fees = local_charge.fees.deep_dup
-        flat_margins = Hash.new { |h, k| h[k] = [] }
         manipulated_pricing = local_charge.as_json
         update_meta(manipulated_pricing)
-        fee_hash, flat_margins = manipulate_json_hash_fees(fee_hash: fees, data: data, flat_margins: flat_margins)
+        fee_hash = manipulate_json_hash_fees(fee_hash: fees, data: data)
         new_effective_date, new_expiration_date = manipulate_dates(local_charge, date_keys)
-        manipulated_pricing['effective_date'] = new_effective_date
-        manipulated_pricing['expiration_date'] = new_expiration_date
+        manipulated_pricing = update_result_effective_periods(
+          effective_date: new_effective_date,
+          expiration_date: new_expiration_date
+        )
         next if new_effective_date > new_expiration_date
         next if fee_hash.empty?
 
         manipulated_pricing['fees'] = fee_hash
         manipulated_pricing['flat_margins'] = adjust_flat_margins_for_fees(margins: flat_margins)
-
-        metadata_list << meta
-        manipulated_pricing.with_indifferent_access
+        final_handling(manipulated_pricing: manipulated_pricing)
       end
     end
 
-    def manipulate_trucking_pricings # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      @pricings_to_return = margins_to_apply.map do |date_keys, data| # rubocop:disable Metrics/BlockLength
-        next if date_keys[:expiration_date] < date_keys[:effective_date] || date_keys[:expiration_date] < Date.today
+    def final_handling(manipulated_pricing:)
+      manipulated_pricing['metadata_id'] = meta[:metadata_id]
+      metadata_list << meta
+      manipulated_pricing.with_indifferent_access
+    end
 
-        fees = trucking_pricing.fees
-        manipulated_pricing = trucking_pricing.as_json
-        manipulated_pricing['effective_date'] =  date_keys[:effective_date]
-        manipulated_pricing['expiration_date'] = date_keys[:expiration_date]
+    def manipulate_trucking_pricings
+      @pricings_to_return = margins_to_apply.map do |date_keys, data|
+        manipulated_pricing = update_result_effective_periods(
+          effective_date: date_keys[:effective_date],
+          expiration_date: date_keys[:expiration_date]
+        )
         update_meta(manipulated_pricing)
-        flat_margins = Hash.new { |h, k| h[k] = [] }
-        fee_hash, flat_margins = manipulate_json_hash_fees(fee_hash: fees, data: data, flat_margins: flat_margins)
-        rates = trucking_pricing.rates.deep_dup
-        rates_hash = rates.each_with_object({}) do |(key, range), hash|
-          data.each do |mdata|
-            effective_margin = (mdata[:margin].details.find_by(charge_category_id: trucking_charge_category.id) || mdata[:margin])
-            if effective_margin.operator == '+'
-              margin_key = effective_margin == mdata[:margin] ? 'total' : trucking_charge_category.code
-              flat_margins[margin_key] << effective_margin
-            end
 
-            result_json = apply_trucking_rate_manipulation(
-              operator: effective_margin.operator,
-              value: effective_margin.value,
-              rates: hash[key] || range
-            )
-
-            unless effective_margin.operator == '+'
-              update_meta_for_margin(
-                fee_code: metadata_charge_category&.code,
-                margin_value: effective_margin.value,
-                margin_or_detail: mdata[:margin],
-                result: { key => result_json }
-              )
-            end
-            hash[key] = result_json
-          end
-        end
-
-        manipulated_pricing['fees'] = fee_hash
-        manipulated_pricing['rates'] = rates_hash
+        manipulated_pricing['fees'] = manipulate_json_hash_fees(fee_hash: trucking_pricing.fees, data: data)
+        manipulated_pricing['rates'] = manipulate_trucking_rates_array(
+          rates: trucking_pricing.rates.deep_dup,
+          data: data
+        )
         manipulated_pricing['flat_margins'] = adjust_flat_margins_for_fees(margins: flat_margins)
-
-        metadata_list << meta
-        manipulated_pricing.with_indifferent_access
+        final_handling(manipulated_pricing: manipulated_pricing)
       end
+    end
+
+    def trucking_value_for_manipulation(result:, key:, range:)
+      if result[key].present?
+        result.slice(key)
+      else
+        { key => range }
+      end
+    end
+
+    def manipulate_trucking_rates_array(rates:, data:)
+      rates.each_with_object({}) do |(key, range), hash|
+        adjusted_key = key.downcase
+        data.each do |mdata|
+          result = handle_manipulation(
+            margin: mdata[:margin],
+            charge_category: metadata_charge_category,
+            fee_json: trucking_value_for_manipulation(result: hash, key: adjusted_key, range: range),
+            fee_count: 1,
+            fee_format: :trucking
+          )
+
+          hash.merge!(result)
+        end
+      end
+    end
+
+    def manipulate_freight_rates(fees:, data:)
+      fees.each_with_object({}) do |fee, hash|
+        fee_json = fee.to_fee_hash
+        fee_code = fee.fee_code.downcase
+        next if fee_code.nil?
+
+        data.each do |mdata|
+          hash[fee_code] = handle_manipulation(
+            margin: mdata[:margin],
+            charge_category: fee.charge_category,
+            fee_json: hash[fee_code] || fee_json.values.first,
+            fee_count: fees.count
+          )
+        end
+      end
+    end
+
+    def update_result_effective_periods(effective_date:, expiration_date:)
+      manipulated_pricing = (pricing || local_charge || trucking_pricing).as_json
+      manipulated_pricing['effective_date'] =  effective_date
+      manipulated_pricing['expiration_date'] = expiration_date
+      manipulated_pricing
     end
 
     def update_meta_for_margin(margin_value:, fee_code:, margin_or_detail:, result:)
@@ -318,65 +324,66 @@ module Pricings
         cargo_class: @cargo_class,
         metadata_id: meta_id
       }
-      manipulated_pricing['metadata_id'] = meta_id
       meta[:cargo_unit_id] = cargo_unit_id if cargo_unit_id.present?
+      reset_flat_margins
       if pricing.present?
-        pricing.fees.each do |fee|
-          next unless meta[:fees][fee.fee_code.to_sym][:breakdowns].empty?
-
-          meta[:fees][fee.fee_code.to_sym][:breakdowns] << { adjusted_rate: fee.fee_data }
-          meta[:fees][fee.fee_code.to_sym][:metadata] = fee.metadata
-        end
+        update_freight_meta
       elsif trucking_pricing.present?
-        trucking_pricing.fees.each do |fee_key, fee|
-          next unless meta[:fees][fee_key.to_sym][:breakdowns].empty?
-
-          meta[:fees][fee_key.to_sym][:breakdowns] << { adjusted_rate: fee }
-          meta[:fees][fee_key.to_sym][:metadata] = trucking_pricing.metadata
-        end
-        meta[:direction] = direction
-        meta[:fees][metadata_charge_category.code.to_sym][:breakdowns] << { adjusted_rate: trucking_pricing.rates }
-        meta[:fees][metadata_charge_category.code.to_sym][:metadata] = trucking_pricing.metadata
+        update_trucking_meta
       else
-        meta[:direction] = direction
-        local_charge.fees.each do |fee_key, fee|
-          next unless meta[:fees][fee_key.to_sym][:breakdowns].empty?
+        update_json_fee_meta
+      end
+      meta[:direction] = direction if pricing.blank?
+    end
 
-          meta[:fees][fee_key.to_sym][:breakdowns] << { adjusted_rate: fee }
-          meta[:fees][fee_key.to_sym][:metadata] = local_charge.metadata
-        end
+    def update_freight_meta
+      pricing.fees.each do |fee|
+        next unless meta[:fees][fee.fee_code.to_sym][:breakdowns].empty?
+
+        meta[:fees][fee.fee_code.to_sym][:breakdowns] << { adjusted_rate: fee.fee_data }
+        meta[:fees][fee.fee_code.to_sym][:metadata] = fee.metadata
       end
     end
 
-    def manipulate_json_hash_fees(fee_hash:, data:, flat_margins:)
+    def update_json_fee_meta
+      meta[:direction] = direction
+      target = local_charge || trucking_pricing
+      target.fees.each do |fee_key, fee|
+        meta_key = fee_key.downcase.to_sym
+        next unless meta[:fees][meta_key][:breakdowns].empty?
+
+        meta[:fees][meta_key][:breakdowns] << { adjusted_rate: fee }
+        meta[:fees][meta_key][:metadata] = target.metadata
+      end
+    end
+
+    def update_trucking_meta
+      update_json_fee_meta
+      update_trucking_rate_meta
+    end
+
+    def update_trucking_rate_meta
+      meta[:fees][metadata_charge_category.code.to_sym][:breakdowns] << { adjusted_rate: trucking_pricing.rates }
+      meta[:fees][metadata_charge_category.code.to_sym][:metadata] = trucking_pricing.metadata
+    end
+
+    def manipulate_json_hash_fees(fee_hash:, data:)
+      fee_count = fee_hash.keys.count
       result = fee_hash.each_with_object({}) do |(key, fee), hash|
-        charge_category = ::Legacy::ChargeCategory.find_by(code: key.downcase, tenant: tenant.legacy_id)
+        adjusted_key = key.downcase
+        charge_category = ::Legacy::ChargeCategory.find_by(code: adjusted_key, tenant: tenant.legacy_id)
+
         data.each do |mdata|
-          margin = mdata[:margin]
-          effective_margin = (margin.details.find_by(charge_category_id: charge_category&.id) || margin)
-          if effective_margin.operator == '+'
-            margin_key = effective_margin == margin ? 'total' : key
-            flat_margins[margin_key] << effective_margin
-          end
-
-          result_json = apply_json_fee_manipulation(
-            operator: effective_margin.operator,
-            value: effective_margin.value,
-            fee: hash[key] || fee
+          hash[adjusted_key] = handle_manipulation(
+            margin: mdata[:margin],
+            charge_category: charge_category,
+            fee_json: hash[adjusted_key] || fee,
+            fee_count: fee_count,
+            fee_format: :json
           )
-          unless effective_margin.operator == '+'
-            update_meta_for_margin(
-              fee_code: key,
-              margin_value: effective_margin.value,
-              margin_or_detail: margin,
-              result: result_json
-            )
-          end
-
-          hash[key] = result_json
         end
       end
-      [result, flat_margins]
+      result
     end
 
     def manipulate_dates(pricing, date_keys)
@@ -391,24 +398,109 @@ module Pricings
       case operator
       when '%'
         apply_percentage(value: value, rate: rate)
-      else
-        rate
+      when '&'
+        apply_absolute_value(value: value, rate: rate)
       end
+    end
+
+    def handle_total_margin(margin:, fee_key:, flat_margins:, total:)
+      margin_key = total ? 'total' : fee_key
+      flat_margins[margin_key.downcase] << margin
+    end
+
+    def extract_margin_value_and_operator(margin:, fee_count:)
+      {
+        operator: margin.operator,
+        value: margin.operator == '%' ? margin.value : margin.value / fee_count.to_d
+      }
+    end
+
+    def calulate_result_json(operator_and_value:, fee_json:, fee_format: :regular)
+      case fee_format
+      when :json
+        apply_json_fee_manipulation(
+          operator: operator_and_value[:operator],
+          value: operator_and_value[:value],
+          fee: fee_json
+        )
+      when :trucking
+        apply_trucking_rate_manipulation(
+          operator: operator_and_value[:operator],
+          value: operator_and_value[:value],
+          rates: fee_json
+        )
+      when :regular
+        apply_freight_manipulation(
+          operator: operator_and_value[:operator],
+          value: operator_and_value[:value],
+          fee: fee_json
+        )
+      end
+    end
+
+    def handle_relative_and_absolute(operator_and_value:, margin:, fee_json:, fee_key:, fee_format: :regular)
+      result_json = calulate_result_json(
+        operator_and_value: operator_and_value,
+        fee_json: fee_json,
+        fee_format: fee_format
+      )
+
+      update_meta_for_margin(
+        fee_code: fee_key.downcase,
+        margin_value: operator_and_value[:value],
+        margin_or_detail: margin,
+        result: result_json
+      )
+
+      result_json
+    end
+
+    def handle_manipulation(margin:, charge_category:, fee_json:, fee_count:, fee_format: :regular)
+      effective_margin = (margin.details.find_by(charge_category_id: charge_category.id) || margin)
+      parent_margin = effective_margin == margin
+      if effective_margin.operator == '+'
+        handle_total_margin(
+          margin: effective_margin,
+          fee_key: charge_category.code,
+          flat_margins: flat_margins,
+          total: effective_margin == margin
+        )
+        return fee_json
+      end
+
+      operator_and_value = extract_margin_value_and_operator(
+        margin: effective_margin,
+        fee_count: parent_margin ? fee_count : 1
+      )
+
+      handle_relative_and_absolute(
+        operator_and_value: operator_and_value,
+        margin: effective_margin,
+        fee_json: fee_json,
+        fee_key: charge_category.code,
+        fee_format: fee_format
+      )
     end
 
     def apply_freight_manipulation(value:, operator:, fee:)
       new_fee = fee.dup
-      new_fee['rate'] = determine_manipulation(rate: fee['rate'].to_d, value: value, operator: operator)
-      new_fee['min'] = determine_manipulation(rate: fee['min'].to_d, value: value, operator: operator) if fee['min']
+      new_fee = apply_to_rate_and_min(object: new_fee, value: value, operator: operator)
       return new_fee if fee['range'].blank?
 
       new_fee['range'] = fee['range'].map do |range|
-        range['rate'] = determine_manipulation(rate: range['rate'].to_d, value: value, operator: operator)
-        range['min'] = determine_manipulation(rate: range['min'].to_d, value: value, operator: operator) if range['min']
-        range
+        apply_to_rate_and_min(object: range, value: value, operator: operator)
       end
 
       new_fee
+    end
+
+    def apply_to_rate_and_min(object:, value:, operator:)
+      %w[rate min].each do |target_key|
+        if object[target_key]
+          object[target_key] = determine_manipulation(rate: object[target_key].to_d, value: value, operator: operator)
+        end
+      end
+      object
     end
 
     def apply_json_fee_manipulation(value:, operator:, fee:)
@@ -417,6 +509,7 @@ module Pricings
       only_values.keys.each do |k|
         new_fee[k] = determine_manipulation(rate: fee[k].to_d, value: value, operator: operator) if fee[k]
       end
+      new_fee['key'] = fee['key'].downcase
 
       return new_fee if fee['range'].blank?
 
@@ -431,14 +524,20 @@ module Pricings
     end
 
     def apply_trucking_rate_manipulation(value:, operator:, rates:)
-      new_rates = rates.map do |rate|
-        new_rate = rate.dup
-        new_rate['rate']['value'] = determine_manipulation(rate: rate['rate']['value'].to_d, value: value, operator: operator)
-        new_rate['min_value'] = determine_manipulation(rate: rate['min_value'].to_d, value: value, operator: operator)
-        new_rate
-      end
+      rates.entries.each_with_object({}).each do |(key, range), hash|
+        new_range = range.map do |rate|
+          new_rate = rate.dup
+          new_rate['rate']['value'] = determine_manipulation(
+            rate: rate['rate']['value'].to_d,
+            value: value,
+            operator: operator
+          )
+          new_rate['min_value'] = determine_manipulation(rate: rate['min_value'].to_d, value: value, operator: operator)
+          new_rate
+        end
 
-      new_rates
+        hash[key] = new_range
+      end
     end
 
     def apply_percentage(value:, rate:)
@@ -447,33 +546,41 @@ module Pricings
       rate.to_d * (1 + value)
     end
 
+    def apply_absolute_value(value:, rate:)
+      rate.to_d + value
+    end
+
     def adjust_flat_margins_for_fees(margins:)
       return {} if margins.empty?
 
-      per_fee_total_margin = margins['total'].uniq.sum(&:value) / fee_keys.count
-
       fee_keys.each_with_object(Hash.new { |h, k| h[k] = 0 }) do |key, hash|
-        margins[key].uniq.each do |margin|
+        adjusted_key = key.downcase
+        margins[adjusted_key].uniq.each do |margin|
           update_meta_for_margin(
-            fee_code: key,
+            fee_code: adjusted_key,
             margin_value: margin.value,
             margin_or_detail: margin,
             result: {}
           )
-          hash[key] += margin.value
+          hash[adjusted_key] += margin.value
         end
-        margins['total'].uniq.each do |total_margin|
-          divided_margin_value = total_margin.value / fee_keys.count
-          update_meta_for_margin(
-            fee_code: key.include?('trucking') ? metadata_charge_category.code : key,
-            margin_value: divided_margin_value,
-            margin_or_detail: total_margin,
-            result: {}
-          )
-          hash[key] += divided_margin_value
-        end
-        hash
+        handle_shipment_total_margins(total_margins: margins['total'], key: adjusted_key, result: hash)
       end
+    end
+
+    def handle_shipment_total_margins(total_margins:, key:, result:)
+      total_margins.uniq.each do |total_margin|
+        divided_margin_value = total_margin.value / (fee_keys.count * cargo_count)
+
+        update_meta_for_margin(
+          fee_code: key.include?('trucking') ? metadata_charge_category.code : key,
+          margin_value: divided_margin_value,
+          margin_or_detail: total_margin,
+          result: {}
+        )
+        result[key] += divided_margin_value
+      end
+      result
     end
 
     def fee_keys
@@ -486,97 +593,124 @@ module Pricings
              .pluck('charge_categories.code')
     end
 
-    def freight_variables(args:) # rubocop:disable Metrics/AbcSize
-      @schedules = args[:schedules].sort_by!(&:etd)
+    def find_dates(args:)
+      case type
+      when :freight_margin
+        freight_dates
+      when :trucking_pre_margin, :trucking_on_margin
+        trucking_dates(args: args)
+      else
+        local_charge_dates
+      end
+    end
 
+    def freight_dates
       @start_date = schedules.first.etd
       @end_date = schedules.last.etd
-      query_args = {
+    end
+
+    def trucking_dates(args:)
+      @start_date = args[:date]
+      @end_date = args[:date] + TRUCKING_QUERY_DAYS.days
+    end
+
+    def local_charge_dates
+      @start_date = schedules.first.etd || Time.zone.today + 4.days
+      @end_date = schedules.last.eta || Time.zone.today + 24.days
+    end
+
+    def freight_variables(args:)
+      @schedules = args[:schedules]&.sort_by!(&:etd)
+      find_dates(args: args)
+      find_freight_pricing_and_margins(args: args)
+      @origin_hub_id = itinerary.ordered_hub_ids.first
+      @destination_hub_id = itinerary.ordered_hub_ids.last
+      @pricing_to_return = pricing&.as_json
+    end
+
+    def build_from_freight_pricing(pricing:)
+      @pricing = pricing
+      @margins = ::Pricings::Margin.for_dates(pricing.effective_date, pricing.expiration_date).where(margin_query_args)
+      @tenant_vehicle_id = pricing.tenant_vehicle_id
+      @cargo_class = pricing.cargo_class
+      @itinerary = pricing.itinerary
+      assign_default_margin(default_for: pricing&.mode_of_transport)
+    end
+
+    def build_from_freight_attributes(args:)
+      @itinerary = ::Legacy::Itinerary.find_by(id: args[:itinerary_id])
+      @pricing =   @itinerary&.rates&.for_dates(start_date, end_date)&.find_by(
+        args.slice(:tenant_vehicle_id, :cargo_class, :itinerary_id).merge(
+          tenant_id: @tenant.legacy_id
+        )
+      )
+      @tenant_vehicle_id = args[:tenant_vehicle_id]
+      @cargo_class = args[:cargo_class]
+      find_margins(default_for: itinerary.mode_of_transport)
+    end
+
+    def margin_query_args
+      {
         margin_type: type,
         tenant_id: tenant.id,
         sandbox: sandbox,
         default_for: nil
       }
+    end
+
+    def find_freight_pricing_and_margins(args:)
       if args[:pricing]
-        @pricing = args[:pricing]
-        @margins = ::Pricings::Margin.for_dates(pricing.effective_date, pricing.expiration_date).where(query_args)
-        @tenant_vehicle_id = pricing.tenant_vehicle_id
-        @cargo_class = pricing.cargo_class
+        build_from_freight_pricing(pricing: args[:pricing])
       else
-        @pricing = ::Legacy::Itinerary.find(args[:itinerary_id])&.rates&.for_dates(start_date, end_date)&.find_by(
-          tenant_vehicle_id: args[:tenant_vehicle_id],
-          cargo_class: args[:cargo_class],
-          itinerary_id: args[:itinerary_id],
-          tenant_id: @tenant.legacy_id
-        )
-        @tenant_vehicle_id = args[:tenant_vehicle_id]
-        @cargo_class = args[:cargo_class]
-        @margins = ::Pricings::Margin
-                   .where(query_args)
-                   .for_dates(start_date, end_date)
+        build_from_freight_attributes(args: args)
       end
-      set_default_margin(default_for: pricing.mode_of_transport)
-      @itinerary = pricing.itinerary
-      @origin_hub_id = itinerary.ordered_hub_ids.first
-      @destination_hub_id = itinerary.ordered_hub_ids.last
-      @pricing_to_return = pricing.as_json
+    end
+
+    def find_margins(default_for:)
+      @margins = ::Pricings::Margin.where(margin_query_args).for_dates(start_date, end_date)
+      assign_default_margin(default_for: default_for)
     end
 
     def trucking_variables(args:)
-      query_args = {
-        margin_type: type,
-        tenant_id: tenant.id,
-        sandbox: sandbox,
-        default_for: nil
-      }
+      find_dates(args: args)
       @trucking_pricing = args[:trucking_pricing]
-      if type == :trucking_pre_margin
-        @trucking_charge_category = ::Legacy::ChargeCategory.from_code(tenant_id: tenant.legacy_id, code: 'trucking_pre')
-        @destination_hub_id = trucking_pricing.hub_id
-        @direction = 'export'
-      else
-        @trucking_charge_category = ::Legacy::ChargeCategory.from_code(tenant_id: tenant.legacy_id, code: 'trucking_on')
-        @origin_hub_id = trucking_pricing.hub_id
-        @direction = 'import'
-      end
+      is_pre_carriage =  type == :trucking_pre_margin
+      @trucking_charge_category = ::Legacy::ChargeCategory.from_code(
+        tenant_id: tenant.legacy_id,
+        code: "trucking_#{is_pre_carriage ? 'pre' : 'on'}"
+      )
       @cargo_class = trucking_pricing.cargo_class
+      @direction = is_pre_carriage ? 'export' : 'import'
+      if is_pre_carriage
+        @destination_hub_id = trucking_pricing.hub_id
+      else
+        @origin_hub_id = trucking_pricing.hub_id
+      end
       @metadata_charge_category = ::Legacy::ChargeCategory.from_code(
         code: "trucking_#{cargo_class}",
         tenant_id: trucking_pricing.tenant_id,
         sandbox: sandbox
       )
-      @start_date = args[:date]
-      # Date reduced to 10 days to reduce the chances of multiple manipulated truckings being returned
-      # Magic number because we dont have validity dates on the trucking, but do on the
-      @end_date = args[:date] + TRUCKING_QUERY_DAYS.days
-      set_default_margin(default_for: 'trucking')
-      @margins = ::Pricings::Margin.where(query_args).for_dates(start_date, end_date)
+      find_margins(default_for: 'trucking')
     end
 
     def local_charge_variables(args:)
-      query_args = {
-        margin_type: type,
-        tenant_id: tenant.id,
-        sandbox: sandbox,
-        default_for: nil
-      }
+      @schedules = args[:schedules]&.sort_by!(&:etd)
       @local_charge = args[:local_charge]
-      @cargo_class = args[:local_charge].load_type
-      @direction = args[:local_charge].direction
+      @cargo_class = local_charge.load_type
+      @direction = local_charge.direction
       @counterpart_hub_id = local_charge.counterpart_hub_id
       if @type == :import_margin
         @destination_hub_id = local_charge.hub_id
       else
         @origin_hub_id = local_charge.hub_id
       end
-      set_default_margin(default_for: 'local_charge')
       @tenant_vehicle_id = local_charge.tenant_vehicle_id
-      @start_date = args[:schedules].first.etd || Date.today + 4.days
-      @end_date = args[:schedules].last.eta || Date.today + 24.days
-      @margins = ::Pricings::Margin.where(query_args).for_dates(start_date, end_date)
+      find_dates(args: args)
+      find_margins(default_for: 'local_charge')
     end
 
-    def set_default_margin(default_for:)
+    def assign_default_margin(default_for:)
       @default_margin = Pricings::Margin.find_by(
         margin_type: type,
         tenant_id: tenant.id,
@@ -589,17 +723,18 @@ module Pricings
     def argument_errors(type, target, args)
       raise Pricings::Manipulator::MissingArgument unless target
 
-      unless (args[:schedules].present? && type == :freight_margin) || type != :freight_margin
-        raise Pricings::Manipulator::MissingArgument
-      end
+      return if (args[:schedules].present? && type == :freight_margin) || type != :freight_margin
+
+      raise Pricings::Manipulator::MissingArgument
     end
 
     private
 
-    attr_reader :target, :tenant, :scope, :shipment, :sandbox, :without_meta, :cargo_unit_id, :meta, :type,
+    attr_reader :target, :tenant, :scope, :shipment, :sandbox, :cargo_unit_id, :meta, :type,
                 :applicable_margins, :margins_to_apply, :pricings_to_return, :default_margin, :itinerary,
                 :origin_hub_id, :destination_hub_id, :tenant_vehicle_id, :cargo_class, :pricing, :end_date,
                 :local_charge, :margins, :trucking_pricing, :trucking_charge_category, :direction, :schedules,
-                :start_date, :pricing_to_return, :counterpart_hub_id, :metadata_list, :metadata_charge_category
+                :start_date, :pricing_to_return, :counterpart_hub_id, :metadata_list, :metadata_charge_category,
+                :flat_margins, :cargo_count
   end
 end
