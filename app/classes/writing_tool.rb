@@ -2,7 +2,7 @@
 
 module WritingTool
   def write_to_aws(dir, tenant, filename, doc_type)
-    new_doc = tenant.documents.create!(
+    new_doc = tenant.files.create!(
       file: { io: File.open(dir), filename: filename, content_type: 'application/vnd.ms-excel' },
       text: filename, doc_type: doc_type
     )
