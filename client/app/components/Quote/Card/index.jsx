@@ -351,7 +351,7 @@ class QuoteCard extends PureComponent {
             {voyageInfo.carrier && result.meta.carrier_name && (
               <div>
                 {switchIcon(result.meta.mode_of_transport)}
-                {t('quote:carrier', { carrierName: result.meta.carrier_name })}
+                {t('quote:carrier', { carrierName: result.meta.carrier_name.toUpperCase() })}
               </div>
             )}
             {voyageInfo.service_level && result.meta.service_level && (

@@ -232,7 +232,7 @@ class PdfService
       imc_reference: shipment.imc_reference,
       shipment_id: shipment.id,
       load_type: shipment.load_type,
-      carrier: trip.tenant_vehicle.carrier&.name,
+      carrier: trip.tenant_vehicle.carrier&.name&.upcase,
       service_level: trip.tenant_vehicle.name,
       transshipment: transshipment_note(trip: trip)
     }
