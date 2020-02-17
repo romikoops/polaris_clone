@@ -4,6 +4,8 @@ module ExcelDataServices
   module Validators
     module TypeValidity
       class Base < ExcelDataServices::Validators::Base
+        COLUMN_TO_CLASS_LOOKUP = {}.freeze
+
         TYPE_VALIDATOR_LOOKUP = {
           fee: Validators::TypeValidity::TypeValidators::FeeValidator,
           locode: Validators::TypeValidity::TypeValidators::LocodeValidator,
