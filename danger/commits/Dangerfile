@@ -7,11 +7,15 @@ COMMIT_REGEXP = /\A(IMC-\d+)|ci|chore|(hot)?fix|revert|merge branch/i
 unless git.commits.all? { |c| COMMIT_REGEXP.match?(c.message) }
   title = ':bookmark: Invalid Commit Message'
   body = <<-END_OF_HELP
-    Please follow commit message format: <IDENTIFIER> <TITLE>, where
-    <IDENTIFIER> is either JIRA Ticket number (IMC-1234) or conventional category:
-      `ci`, `chore`, `hotfix`, `fix`, or `revert`.
-    <TITLE> is short title of commit, max 40 characters.
+    Please prefix commit messages with either JIRA ticket number or category (ci, chore, hotfix, fix or revert).
   END_OF_HELP
+  failure("#{title} - #{body}")
+end
+
+# Ensure commit messages has upcase ticket
+if git.commits.any? { |c| /\A(imc-\d+)/.match?(c.message) }
+  title = ':bookmark: Lowercase ticket number'
+  body = 'Please make sure all ticket numbers in commit messages are always upper case.'
   failure("#{title} - #{body}")
 end
 
