@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withNamespaces } from 'react-i18next'
-
+import { has } from 'lodash'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
 import styles from '../Admin/AdminShipments.scss'
@@ -9,7 +9,7 @@ import adminStyles from '../Admin/Admin.scss'
 import quoteStyles from '../Quote/Card/index.scss'
 import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from '../Admin/AdminShipmentView/ShipmentOverviewShowCard'
-import { moment } from '../../constants'
+import { moment, documentTypes } from '../../constants'
 import {
   switchIcon,
   numberSpacing,
@@ -20,9 +20,10 @@ import {
 import GreyBox from '../GreyBox/GreyBox'
 import ShipmentNotes from '../ShipmentNotes'
 import QuoteChargeBreakdown from '../QuoteChargeBreakdown/QuoteChargeBreakdown'
+import CargoItemSummary from '../Cargo/Item/Summary'
+import CargoContainerSummary from '../Cargo/Container/Summary'
 
 class ShipmentQuotationContent extends Component {
-
   constructor (props) {
     super(props)
     this.state = {
@@ -55,7 +56,6 @@ class ShipmentQuotationContent extends Component {
       gradientBorderStyle,
       gradientStyle,
       estimatedTimes,
-      shipment,
       background,
       selectedStyle,
       deselectedStyle,
@@ -66,12 +66,6 @@ class ShipmentQuotationContent extends Component {
       remark,
       cargo,
       pricingBreakdowns,
-      dnrEditKeys,
-      adminDispatch,
-      originDropOffDate,
-      showEditTime,
-      saveNewTime,
-      toggleEditTime,
       newPrices,
       showEditServicePrice,
       toggleEditServicePrice,
@@ -81,10 +75,9 @@ class ShipmentQuotationContent extends Component {
     } = this.props
 
     const {
-      contacts,
-      // shipment,
       documents,
       accountHolder,
+      shipment,
       containers,
       cargoItems,
       aggregatedCargo
@@ -114,7 +107,6 @@ class ShipmentQuotationContent extends Component {
     const docView = []
     const missingDocs = []
     const documentUrl = `/admin/shipments/${shipment.id}/upload/${fileType.value}`
-
 
     if (documents) {
       const uploadedDocs = documents.reduce((docObj, item) => {
@@ -203,9 +195,9 @@ class ShipmentQuotationContent extends Component {
                     <div className="flex-100 layout-align-center-center layout-wrap layout-row">
                       <p className="flex-100 layout-row layout-align-center-center">{t('shipment:estimatedTimeDelivery')}</p>
                       <h5>
-                          {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)}
-                          {' '}
-                          {t('common:days')}
+                        {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)}
+                        {' '}
+                        {t('common:days')}
                       </h5>
                     </div>
                   ) : ''}
@@ -238,7 +230,7 @@ class ShipmentQuotationContent extends Component {
           theme={theme}
         >
           <div className="flex-100 layout-row layout-align-start-start padding_top card_margin_right">
-            <div className={`${adminStyles.border_box} margin_bottom layout-column flex-60`}>
+            <div className={`${adminStyles.border_box} margin_bottom layout-column flex-55`}>
               <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100 `}>
                 <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
                   <div className="layout-column flex-100">
@@ -251,7 +243,7 @@ class ShipmentQuotationContent extends Component {
                               <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                               <p>{t('shipment:pickUp')}</p>
                             </div>
-                            {feeHash.trucking_pre ? (
+                            {has(feeHash, 'trucking_pre.total.currency') ? (
                               <div className="flex-100 layout-row layout-align-end-center">
                                 <p>
                                   {feeHash.trucking_pre ? feeHash.trucking_pre.total.currency : ''}
@@ -297,7 +289,7 @@ class ShipmentQuotationContent extends Component {
                               />
                               <p>{t('shipment:delivery')}</p>
                             </div>
-                            {feeHash.trucking_on ? (
+                            {has(feeHash, 'trucking_on.total.currency') ? (
                               <div className="flex-100 layout-row layout-align-end-center">
                                 <p>
                                   {feeHash.trucking_on ? feeHash.trucking_on.total.currency : ''}
@@ -344,7 +336,7 @@ class ShipmentQuotationContent extends Component {
                                 {t('shipment:originLocalCharges')}
                               </p>
                             </div>
-                            {feeHash.export ? (
+                            {has(feeHash, 'export.total.currency') ? (
                               <div className="flex-100 layout-row layout-align-end-center">
                                 <p>
                                   {feeHash.export ? feeHash.export.total.currency : ''}
@@ -393,7 +385,7 @@ class ShipmentQuotationContent extends Component {
                                 {t('shipment:destinationLocalCharges')}
                               </p>
                             </div>
-                            {feeHash.import ? (
+                            {has(feeHash, 'import.total.currency') ? (
                               <div className="flex-100 layout-row layout-align-end-center">
                                 <p>
                                   {feeHash.import ? feeHash.import.total.currency : ''}
@@ -438,11 +430,11 @@ class ShipmentQuotationContent extends Component {
                               />
                               <p>{t('shipment:motCargo', { mot: capitalize(shipment.mode_of_transport) })}</p>
                             </div>
-                            {feeHash.cargo
+                            {has(feeHash, 'cargo.total.currency')
                               ? (
                                 <div className="flex-100 layout-row layout-align-end-center">
                                   <p>
-                                    {feeHash.cargo ? feeHash.cargo.total.currency : ''}
+                                    {has(feeHash, 'cargo.total.currency') ? feeHash.cargo.total.currency : ''}
                                     { ' ' }
                                     {feeHash.cargo.edited_total
                                       ? parseFloat(feeHash.cargo.edited_total.value).toFixed(2)
@@ -619,32 +611,36 @@ class ShipmentQuotationContent extends Component {
                 </div>
               ) : ''}
             </div>
-          </div>
-          <div className="flex-40 layout-row">
-            <div
-              className={`flex-100 layout-row layout-wrap ${quoteStyles.wrapper}`}
-            >
-              <QuoteChargeBreakdown
-                theme={theme}
-                scope={scope}
-                cargo={cargo}
-                shrinkHeaders
-                trucking={shipment.trucking}
-                showBreakdowns
-                metadata={shipment.meta}
-                pricingBreakdowns={pricingBreakdowns}
-                quote={shipment.selected_offer}
-                mot={shipment.mode_of_transport}
-              />
-              <div className="flex-100 layout-wrap layout-align-start-stretch">
-                <div className={`flex-100 layout-row layout-align-start-stretch ${quoteStyles.total_row}`}>
-                  <div className="flex-30 layout-row layout-align-start-center">
-                    <span>{t('common:total')}</span>
-                  </div>
-                  <div className="flex-70 layout-row layout-align-end-center">
-                    <p className="card_padding_right">
-                      {`${numberSpacing(shipment.selected_offer.total.value, 2)} ${shipment.selected_offer.total.currency}`}
-                    </p>
+            <div className="flex-100 flex-gt-md-40 layout-row">
+              <div
+                className={`flex-100 layout-row layout-wrap ${quoteStyles.wrapper}`}
+              >
+                <QuoteChargeBreakdown
+                  theme={theme}
+                  scope={scope}
+                  cargo={cargoItems || containers}
+                  shrinkHeaders
+                  trucking={shipment.trucking}
+                  showBreakdowns
+                  metadata={shipment.meta}
+                  pricingBreakdowns={pricingBreakdowns}
+                  quote={shipment.selected_offer}
+                  mot={shipment.mode_of_transport}
+                />
+                <div className="flex-100 layout-wrap layout-align-start-stretch">
+                  <div className={`flex-100 layout-row layout-align-start-stretch ${quoteStyles.total_row}`}>
+                    { has(feeHash, 'total.currency')
+                      ? [
+                        (<div className="flex-30 layout-row layout-align-start-center">
+                          <span>{t('common:total')}</span>
+                        </div>),
+                        (<div className="flex-70 layout-row layout-align-end-center">
+                          <p className="card_padding_right">
+                            {`${numberSpacing(shipment.selected_offer.total.value, 2)} ${shipment.selected_offer.total.currency}`}
+                          </p>
+                        </div>)
+                      ] : ''
+                    }
                   </div>
                 </div>
               </div>

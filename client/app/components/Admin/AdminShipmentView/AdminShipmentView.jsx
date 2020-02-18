@@ -24,7 +24,6 @@ import {
 } from '../../../helpers'
 import CargoContainerGroup from '../../Cargo/Container/Group'
 import AdminShipmentContent from './AdminShipmentContent'
-import ShipmentQuotationContent from '../../UserAccount/ShipmentQuotationContent'
 import StatusSelectButton from '../../StatusSelectButton'
 
 class AdminShipmentView extends Component {

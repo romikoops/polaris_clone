@@ -351,7 +351,8 @@ class UserShipmentView extends Component {
               cargo={cargoItems || containers}
               userDispatch={userDispatch}
               remarkDispatch={remarkDispatch}
-            />) : (
+            />
+            ) : (
               <ShipmentQuotationContent
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
@@ -366,6 +367,7 @@ class UserShipmentView extends Component {
               feeHash={feeHash}
               cargoView={cargoView}
               remarkDispatch={remarkDispatch}
+              shipmentData={shipmentData}
             />
           )}
           <div className="flex-100 layout-row layout-wrap">
