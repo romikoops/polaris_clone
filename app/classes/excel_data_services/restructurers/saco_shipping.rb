@@ -179,11 +179,11 @@ module ExcelDataServices
           effective_month = months_german_to_english(row_data[corresponding_month_key])
 
           if effective_month && !effective_month.match?(%r{-|incl|n/a})
-            month_start = Date.parse("#{effective_month} #{effective_date.year}")
-            month_start = Date.parse("#{effective_month} #{expiration_date.year}") if month_start < effective_date
+            month_start = Date.parse("#{effective_month} #{expiration_date.year}")
+            month_start = Date.parse("#{effective_month} #{effective_date.year}") if month_start > expiration_date
 
             month_end = month_start.end_of_month.change(usec: 0)
-            if month_end < expiration_date
+            if month_start >= effective_date && month_end <= expiration_date
               effective_date = month_start
               expiration_date = month_end
             end
