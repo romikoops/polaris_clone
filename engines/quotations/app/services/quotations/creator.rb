@@ -23,10 +23,10 @@ module Quotations
       origin_nexus = @meta[:origin_hub].nexus
       destination_nexus = @meta[:destination_hub].nexus
       tenant = Tenants::Tenant.find_by(legacy_id: legacy_tenant_id)
-      @quotation = Quotation.find_or_create_by(tenant: tenant,
-                                               user: @user,
-                                               origin_nexus: origin_nexus,
-                                               destination_nexus: destination_nexus)
+      @quotation = Quotation.create(tenant: tenant,
+                                    user: @user,
+                                    origin_nexus: origin_nexus,
+                                    destination_nexus: destination_nexus)
     end
 
     def create_tenders
