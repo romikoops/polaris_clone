@@ -29,6 +29,7 @@ RSpec.describe SamlController, type: :controller do
 
   context 'with successful login' do
     before do
+      create(:tenants_group, tenant: tenants_tenant, name: 'default')
       create(:role, name: 'shipper')
       one_login = double('OneLogin::RubySaml::Response', is_valid?: true)
       allow(one_login).to receive(:is_valid?).and_return(true)

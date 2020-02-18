@@ -18,9 +18,7 @@ class SamlController < ApplicationController
     user = user_from_saml(response: saml_response, tenant_id: tenant.legacy_id)
     return error_redirect unless user.save
 
-    auth = user.create_new_auth_token
-
-    response_params = auth.merge(userId: user.id, tenantId: tenant.legacy_id)
+    response_params = user.create_new_auth_token.merge(userId: user.id, tenantId: tenant.legacy_id)
 
     redirect_to generate_url(url_string: "https://#{request.host}/login/saml/success", params: response_params)
   end
@@ -40,6 +38,18 @@ class SamlController < ApplicationController
       user.first_name = response.attributes[:firstName]
       user.last_name = response.attributes[:lastName]
       user.phone = response.attributes[:phoneNumber]
+
+      # Attach default group
+      if Tenants::Group.exists?(tenant_id: tenant_id, name: 'default') &&
+         !Tenants::Membership.exists?(
+           member: Tenants::User.find_by(legacy_id: user.id),
+           group: Tenants::Group.find_by(tenant_id: tenants_user.tenant_id, name: 'default')
+         )
+        Tenants::Membership.create(
+          member: Tenants::User.find_by(legacy_id: user.id),
+          group: Tenants::Group.find_by(tenant_id: tenants_user.tenant_id, name: 'default')
+        )
+      end
     end
   end
 
