@@ -6,13 +6,17 @@ module OfferCalculator
 
     NoDrivingTime = Class.new(StandardError)
     NoValidPricings = Class.new(StandardError)
-    NoSchedulesCharges = Class.new(StandardError)
+    NoValidSchedules = Class.new(StandardError)
     InvalidRoutes = Class.new(StandardError)
     NoRoute = Class.new(StandardError)
     NoDirectionsFound = Class.new(StandardError)
     InvalidPickupAddress = Class.new(StandardError)
     InvalidDeliveryAddress = Class.new(StandardError)
     MissingTruckingData = Class.new(StandardError)
+    InvalidTruckingMatch = Class.new(StandardError)
+    InvalidLocalCharges = Class.new(StandardError)
+    InvalidFreightResult = Class.new(StandardError)
+    InvalidLocalChargeResult = Class.new(StandardError)
 
     def initialize(shipment:, params:, user:, sandbox: nil)
       @user           = user

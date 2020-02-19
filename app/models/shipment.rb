@@ -3,26 +3,6 @@
 class Shipment < Legacy::Shipment
   include PgSearch::Model
 
-  STATUSES = %w(
-    booking_process_started
-    requested_by_unconfirmed_account
-    requested
-    pending
-    confirmed
-    declined
-    ignored
-    finished
-    quoted
-    archived
-  ).freeze
-  LOAD_TYPES = %w(cargo_item container).freeze
-  DIRECTIONS = %w(import export).freeze
-
-  # Validations
-  { status: STATUSES, load_type: LOAD_TYPES, direction: DIRECTIONS }.each do |attribute, array|
-    CustomValidations.inclusion(self, attribute, array)
-  end
-
   validate :desired_start_date_is_a_datetime?
   validate :user_tenant_match
   validate :itinerary_trip_match

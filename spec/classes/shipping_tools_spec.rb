@@ -228,7 +228,9 @@ RSpec.describe ShippingTools do
           "OfferCalculator::Calculator::NoRoute": 'No route matches the selected origin and destination.',
           "OfferCalculator::Calculator::InvalidRoutes": ' Exceded maximum total chargeable weight for the modes of transport available in the selected route. ',
           "OfferCalculator::Calculator::NoValidPricings": 'There are no pricings valid for this timeframe.',
-          "OfferCalculator::Calculator::NoSchedulesCharges": 'Unable to determine charges.',
+          "OfferCalculator::Calculator::NoValidSchedules": 'There are no departures for this timeframe.',
+          "OfferCalculator::Calculator::InvalidLocalChargeResult": 'The system was unable to calculate a valid set of local charges for this booking.',
+          "OfferCalculator::Calculator::InvalidFreightResult": 'The system was unable to calculate a valid set of freight charges for this booking.',
           "ArgumentError": 'Something has gone wrong!'
         }
       end

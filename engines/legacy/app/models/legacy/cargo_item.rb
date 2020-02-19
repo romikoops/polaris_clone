@@ -12,7 +12,7 @@ module Legacy
       truck: 0.333
     }.freeze
 
-    DIMENSIONS = %i(dimension_x dimension_y dimension_z payload_in_kg chargeable_weight).freeze
+    DIMENSIONS = %i[dimension_x dimension_y dimension_z payload_in_kg chargeable_weight].freeze
 
     has_paper_trail
 
@@ -45,7 +45,7 @@ module Legacy
         include: [
           {
             cargo_item_type: {
-              only: %i(description)
+              only: %i[description]
             }
           }
         ]

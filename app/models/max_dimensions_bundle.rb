@@ -11,7 +11,7 @@ class MaxDimensionsBundle < Legacy::MaxDimensionsBundle
       "'#{obj.mode_of_transport}' already exists"
     end
   }
-  CustomValidations.inclusion(self, :mode_of_transport, %w(ocean rail air truck truck_carriage general))
+
   validates :dimension_x, :dimension_y, :dimension_z, :payload_in_kg, :chargeable_weight,
             numericality: true, allow_nil: true
 

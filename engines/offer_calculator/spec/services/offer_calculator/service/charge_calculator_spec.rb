@@ -130,6 +130,20 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
   let(:fcl_local_charge_fees) { FactoryBot.build(:fcl_local_charge_fees_hash) }
   let(:lcl_trucking_data) { FactoryBot.build(:lcl_trucking_data, hub: hub) }
   let(:fcl_trucking_data) { FactoryBot.build(:all_fcl_trucking_data, hub: hub) }
+  let(:default_pricing) do
+    FactoryBot.create(:legacy_lcl_pricing,
+                      itinerary: itinerary1,
+                      tenant_vehicle: tenant_vehicle1,
+                      transport_category: cargo_transport_category)
+  end
+  let(:default_data) do
+    {
+      pricings_by_cargo_class: {
+        'lcl' => default_pricing.as_json
+      },
+      schedules: schedules
+    }
+  end
 
   before do
     stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
@@ -627,6 +641,60 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
             expect(freight_cargo_ids).to match_array(target_shipment.cargo_units.ids)
           end
         end
+      end
+    end
+  end
+
+  describe 'errors' do
+    let(:klass) do
+      described_class.new(
+        shipment: cargo_shipment,
+        user: user,
+        data: default_data,
+        trucking_data: lcl_trucking_data,
+        sandbox: nil,
+        metadata_list: []
+      )
+    end
+
+    context 'without a valid trucking match' do
+      before do
+        allow(klass).to receive(:trucking_valid_for_schedule).and_return(false)
+      end
+
+      it 'raises InvalidTruckingMatch when there is hubs dont match the results' do
+        expect(klass.perform).to eq([{ error: OfferCalculator::Calculator::InvalidTruckingMatch }])
+      end
+    end
+
+    context 'without a valid local charges' do
+      before do
+        failure_response_key = { effective_date: Time.zone.today, expiration_date: Time.zone.today + 4.days }
+        allow(klass).to receive(:local_charge_periods).and_return(failure_response_key => {})
+      end
+
+      it 'raises InvalidLocalCharges when there is no valid local charges' do
+        expect(klass.perform).to eq([{ error: OfferCalculator::Calculator::InvalidLocalCharges }])
+      end
+    end
+
+    context 'without a valid local charge result' do
+      before do
+        allow(klass).to receive(:calc_local_charges).and_return(nil)
+      end
+
+      it 'raises InvalidLocalChargeResult when there is no valid result' do
+        expect(klass.perform).to eq([{ error: OfferCalculator::Calculator::InvalidLocalChargeResult }])
+      end
+    end
+
+    context 'without a valid freight charge result' do
+      before do
+        allow(klass).to receive(:calc_cargo_charges).and_return(nil)
+      end
+
+      it 'raises InvalidFreightResult when there is no valid result' do
+        expect(klass.perform).to eq([{ error: OfferCalculator::Calculator::InvalidFreightResult }])
       end
     end
   end

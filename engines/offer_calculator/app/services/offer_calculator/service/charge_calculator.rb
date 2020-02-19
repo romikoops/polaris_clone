@@ -22,10 +22,10 @@ module OfferCalculator
       end
 
       def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        return nil unless trucking_valid_for_schedule
+        return [{ error: OfferCalculator::Calculator::InvalidTruckingMatch }] unless trucking_valid_for_schedule
 
         periods = local_charge_periods
-        return nil if periods.values.compact.any?(&:empty?)
+        return [{ error: OfferCalculator::Calculator::InvalidLocalCharges }] if periods.values.compact.any?(&:empty?)
 
         charges_by_period = sort_by_local_charge_periods(periods)
         charges_by_period.values.map do |charge_obj|
@@ -52,12 +52,17 @@ module OfferCalculator
           create_trucking_charges
 
           cargo_result = calc_cargo_charges
-          next if cargo_result.nil? || local_charge_result.nil?
 
-          @grand_total_charge.update_price!
-          @grand_total_charge.save
+          if cargo_result.blank?
+            { error: OfferCalculator::Calculator::InvalidFreightResult }
+          elsif local_charge_result.blank?
+            { error: OfferCalculator::Calculator::InvalidLocalChargeResult }
+          else
+            @grand_total_charge.update_price!
+            @grand_total_charge.save
 
-          { total: @grand_total_charge, schedules: charge_obj[:schedules], metadata: @metadata }
+            { total: @grand_total_charge, schedules: charge_obj[:schedules], metadata: @metadata }
+          end
         end.compact # rubocop:disable Style/MethodCalledOnDoEndBlock
       end
 

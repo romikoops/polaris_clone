@@ -32,6 +32,7 @@
 en:
   error:
     # Booking Process Errors
+    # Routing : Code Prefix 1
     no_route:
       http_code: 400
       code: 1000
@@ -43,33 +44,77 @@ en:
         Exceded maximum total chargeable weight for the modes
         of transport available in the selected route.
       "
-    unavailable_local_charges:
+    invalid_pickup_address:
       http_code: 400
       code: 1002
+      message: "Unable to build pickup location from address fields."
+    invalid_delivery_address:
+      http_code: 400
+      code: 1003
+      message: "Unable to build delivery location from address fields."
+    no_valid_schedules:
+      http_code: 400
+      code: 1004
+      message: "Unable to find schedules departing during your desired timeframe. Please try another date."
+    no_directions_found:
+      http_code: 400
+      code: 1005
+      message: "Unable to determine trucking directions. Please check the address and try again."
+    no_trucking_time:
+      http_code: 400
+      code: 1006
+      message: "Unable to calculate trucking time with the given date"
+    no_valid_schedules:
+      http_code: 400
+      code: 1007
+      message: "There are no departures for this timeframe."
+
+    # Pricing : Code prefix 2
+    no_valid_pricings:
+      http_code: 400
+      code: 2001
+      message: "There are no pricings valid for this timeframe."
+    no_valid_local_charges:
+      http_code: 400
+      code: 2002
+      message: "There are no local charges valid for this timeframe."
+    invalid_local_charge_result:
+      http_code: 400
+      code: 2003
+      message: "The system was unable to calculate a valid set of local charges for this booking."
+    invalid_freight_result:
+      http_code: 400
+      code: 2004
+      message: "The system was unable to calculate a valid set of freight charges for this booking."
+    no_valid_local_charges:
+      http_code: 400
+      code: 2005
+      message: "There are no local charges valid for this timeframe."
+
+    unavailable_local_charges:
+      http_code: 400
+      code: 2003
       message: "
         The availability of this route is pending confirmation
         of the applicable local charges.
       "
-    no_trucking_time:
+
+      # Trucking : Prefix 3
+    missing_trucking_data:
       http_code: 400
-      code: 1003
-      message: "Unable to calculate trucking time with the given date"
+      code: 3001
+      message: "A problem occurred calculating trucking for this shipment"
+    load_meterage_exceeded:
+      http_code: 400
+      code: 3002
+      message: "Your shipment has exceeded the load meterage limits for online booking."
+
     # ...:
     #   http_code: 400
     #   code: 1004
     #   message: ""
-    no_schedules_charges:
-      http_code: 400
-      code: 1005
-      message: "Unable to determine charges."
-    invalid_pickup_address:
-      http_code: 400
-      code: 1006
-      message: "Unable to build pickup location from address fields."
-    invalid_delivery_address:
-      http_code: 400
-      code: 1007
-      message: "Unable to build delivery location from address fields."
+
+
     invalid_remark:
       http_code: 400
       code: 1008
@@ -86,22 +131,12 @@ en:
       http_code: 400
       code: 1011
       message: "Unable to update tenant"
-    no_valid_pricings:
-      http_code: 400
-      code: 1012
-      message: "There are no pricings valid for this timeframe."
+
     non_agent_user:
       http_code: 400
       code: 1013
       message: "Current user is not an agent"
-    missing_trucking_data:
-      http_code: 400
-      code: 1014
-      message: "A problem occurred calculating trucking for this shipment"
-    load_meterage_exceeded:
-      http_code: 400
-      code: 1015
-      message: "Your shipment has exceeded the load meterage limits for online booking."
+
     internal_error:
       http_code: 400
       code: 1016
@@ -122,10 +157,6 @@ en:
       http_code: 409
       code: 1020
       message: "The subdomain (slug) has already been taken"
-    no_directions_found:
-      http_code: 400
-      code: 1021
-      message: "Unable to determine trucking directions. Please check the address and try again."
     invalid_cargo:
       http_code: 400
       code: 1022

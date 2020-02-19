@@ -49,7 +49,7 @@ RSpec.describe OfferCalculator::TruckingTools, :aggregate_failures do
       let(:rates) do
         {
           km: [{ rate: { base: 1.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_X_KM' }, min_km: 0.0, max_km: 2000.0, min_value: 273.0 }],
-          unit: [{ rate: { base: 1.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_CONTAINER' } }]
+          unit: [{ rate: { base: 1.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_CONTAINER' }, min_unit: 1, max_unit: 10_000 }]
         }
       end
 
@@ -62,7 +62,7 @@ RSpec.describe OfferCalculator::TruckingTools, :aggregate_failures do
       let(:modifier) { 'unit' }
       let(:rates) do
         {
-          unit: [{ rate: { base: 1.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_CONTAINER' } }]
+          unit: [{ rate: { base: 1.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_CONTAINER' }, min_unit: 1, max_unit: 10_000 }]
         }
       end
 

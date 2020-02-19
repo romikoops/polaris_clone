@@ -201,6 +201,10 @@ class ShippingTools
     raise ApplicationError::InvalidPickupAddress
   rescue OfferCalculator::Calculator::InvalidDeliveryAddress
     raise ApplicationError::InvalidDeliveryAddress
+  rescue OfferCalculator::Calculator::InvalidLocalChargeResult
+    raise ApplicationError::InvalidLocalChargeResult
+  rescue OfferCalculator::Calculator::InvalidFreightResult
+    raise ApplicationError::InvalidFreightResult
   rescue OfferCalculator::Calculator::NoDirectionsFound
     raise ApplicationError::NoDirectionsFound
   rescue OfferCalculator::Calculator::NoRoute
@@ -209,8 +213,8 @@ class ShippingTools
     raise ApplicationError::InvalidRoutes
   rescue OfferCalculator::Calculator::NoValidPricings
     raise ApplicationError::NoValidPricings
-  rescue OfferCalculator::Calculator::NoSchedulesCharges
-    raise ApplicationError::NoSchedulesCharges
+  rescue OfferCalculator::Calculator::NoValidSchedules
+    raise ApplicationError::NoValidSchedules
   rescue ArgumentError
     raise ApplicationError::InternalError
   end

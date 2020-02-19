@@ -2,9 +2,13 @@
 
 module Legacy
   class MaxDimensionsBundle < ApplicationRecord
+    MODES_OF_TRANSPORT = %w[ocean rail air truck truck_carriage general].freeze
+
     self.table_name = 'max_dimensions_bundles'
+
     belongs_to :tenant
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+
     validates :mode_of_transport, presence: true, uniqueness: {
       scope: %i(tenant_id aggregate),
       message: lambda do |obj, _|
@@ -13,7 +17,12 @@ module Legacy
         "'#{obj.mode_of_transport}' already exists"
       end
     }
-    Legacy::CustomValidations.inclusion(self, :mode_of_transport, %w(ocean rail air truck truck_carriage general))
+    validates :mode_of_transport,
+              inclusion: {
+                in: MODES_OF_TRANSPORT,
+                message: "must be included in #{MODES_OF_TRANSPORT}"
+              },
+              allow_nil: true
     validates :dimension_x, :dimension_y, :dimension_z, :payload_in_kg, :chargeable_weight,
               numericality: true, allow_nil: true
 

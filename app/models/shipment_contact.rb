@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 
 class ShipmentContact < Legacy::ShipmentContact
-  CONTACT_TYPES = %w(shipper consignee notifyee).freeze
+  CONTACT_TYPES = %w[shipper consignee notifyee].freeze
 
   belongs_to :shipment
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   belongs_to :contact
 
-  CustomValidations.inclusion(self, :contact_type, CONTACT_TYPES)
+  validates :contact_type,
+            inclusion: {
+              in: CONTACT_TYPES,
+              message: "must be included in #{CONTACT_TYPES}"
+            },
+            allow_nil: true
 end
 
 # == Schema Information

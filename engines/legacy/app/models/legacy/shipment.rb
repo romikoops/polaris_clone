@@ -3,8 +3,21 @@
 module Legacy
   class Shipment < ApplicationRecord
     self.table_name = 'shipments'
-
+    STATUSES = %w[
+      booking_process_started
+      requested_by_unconfirmed_account
+      requested
+      pending
+      confirmed
+      declined
+      ignored
+      finished
+      quoted
+      archived
+      in_progress
+    ].freeze
     LOAD_TYPES = %w[cargo_item container].freeze
+    DIRECTIONS = %w[import export].freeze
 
     belongs_to :user, class_name: 'Legacy::User'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
@@ -47,6 +60,16 @@ module Legacy
 
     validates_with Legacy::MaxAggregateDimensionsValidator
     validates_with Legacy::HubNexusMatchValidator
+
+    # Validations
+    { status: STATUSES, load_type: LOAD_TYPES, direction: DIRECTIONS }.each do |attribute, array|
+      validates attribute.to_sym,
+                inclusion: {
+                  in: array,
+                  message: "must be included in #{array}"
+                },
+                allow_nil: true
+    end
 
     before_validation :generate_imc_reference,
                       :set_default_trucking, :set_tenant,

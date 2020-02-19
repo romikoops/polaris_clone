@@ -29,7 +29,6 @@ RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
                       itinerary: itinerary,
                       has_pre_carriage: true)
   end
-  let(:address) { FactoryBot.create(:legacy_address) }
   let(:service) { described_class.new(shipment: shipment, sandbox: nil) }
   let(:hub_result) { { origin: [hub] } }
 

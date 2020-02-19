@@ -5,7 +5,11 @@ require_relative 'charge_calculator'
 module OfferCalculator
   module Service
     class DetailedSchedulesBuilder < Base # rubocop:disable Metrics/ClassLength
-      def perform(schedules, trucking_data, user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def perform(schedules, trucking_data, user)
+        raise OfferCalculator::Calculator::NoValidSchedules if schedules.empty?
+
+        @trucking_data = trucking_data
+        @user = user
         @pricings_with_meta = {}
         @metadata_list = trucking_data.fetch(:metadata, [])
         schedules_by_pricings = grouped_schedules(schedules: schedules,
@@ -13,63 +17,86 @@ module OfferCalculator
                                                   user: user).compact
         raise OfferCalculator::Calculator::NoValidPricings if schedules_by_pricings.empty?
 
-        detailed_schedules = schedules_by_pricings.map do |grouped_result| # rubocop:disable Metrics/BlockLength
+        detailed_schedules = schedules_by_pricings.flat_map do |grouped_result|
           next if grouped_result[:schedules].empty?
 
-          current_result = grouped_result.dup
-          grand_total_charges = ChargeCalculator.new(
-            trucking_data: trucking_data[:trucking_pricings],
-            shipment: @shipment,
-            user: user,
-            data: current_result,
-            sandbox: @sandbox,
-            metadata_list: @metadata_list
-          ).perform
-
-          next if grand_total_charges.blank?
-
-
-          grand_total_charges.map do |grand_total_charge|
-            quote = grand_total_charge[:total].deconstruct_tree_into_schedule_charge(
-              {guest: user.guest?,
-              hidden_grand_total: scope['hide_grand_total'],
-              hidden_sub_total: scope['hide_sub_totals']}
-            ).deep_symbolize_keys
-
-            next if invalid_quote?(quote: quote,
-                                   hidden_grand_total:  scope['hide_grand_total'],
-                                   user: user,
-                                   hidden_sub_total: scope['hide_sub_totals'])
-
-            meta_for_result = meta(
-              result: grand_total_charge,
-              shipment: @shipment,
-              pricings_by_cargo_class: current_result[:pricings_by_cargo_class],
-              user: user
-            )
-            Quotations::Creator.new(
-              charge: grand_total_charge[:total],
-              meta: meta_for_result,
-              user: user
-            ).perform
-            {
-              quote: quote,
-              schedules: grand_total_charge[:schedules].map(&:to_detailed_hash),
-              meta: meta_for_result,
-              notes: grab_notes(
-                schedule: grand_total_charge[:schedules].first,
-                tenant_id: @shipment.tenant_id,
-                pricing_ids: current_result[:pricings_by_cargo_class].values.flatten
-              )
-            }
-          end
+          handle_group_result(grouped_result: grouped_result)
+        end
+        compacted_detailed_schedules = detailed_schedules.compact
+        if compacted_detailed_schedules.all? { |result| result[:error].present? }
+          handle_errors(errors: compacted_detailed_schedules)
         end
 
-        compacted_detailed_schedules = detailed_schedules.flatten.compact
+        valid_compacted_detailed_schedules = compacted_detailed_schedules.reject { |result| result[:error].present? }
 
-        raise OfferCalculator::Calculator::NoSchedulesCharges if compacted_detailed_schedules.empty?
+        detailed_schedules_with_service_level_count(detailed_schedules: valid_compacted_detailed_schedules)
+      end
 
-        detailed_schedules_with_service_level_count(detailed_schedules: compacted_detailed_schedules)
+      def handle_group_result(grouped_result:)
+        current_result = grouped_result.dup
+        grand_total_charges = ChargeCalculator.new(
+          trucking_data: trucking_data[:trucking_pricings],
+          shipment: @shipment,
+          user: user,
+          data: current_result,
+          sandbox: @sandbox,
+          metadata_list: @metadata_list
+        ).perform
+
+        return grand_total_charges if grand_total_charges.all? { |charge| charge[:error].present? }
+
+        valid_charges = grand_total_charges.reject { |charge| charge[:error].present? }
+        valid_charges.map do |grand_total_charge|
+          next if invalid_quote?(charge: grand_total_charge[:total])
+
+          handle_valid_charge(valid_charge: grand_total_charge, current_result: current_result)
+        end
+      end
+
+      def handle_valid_charge(valid_charge:, current_result:)
+        quote = quote_from_charge(charge: valid_charge[:total])
+        meta_for_result = meta(
+          result: valid_charge,
+          shipment: @shipment,
+          pricings_by_cargo_class: current_result[:pricings_by_cargo_class],
+          user: user
+        )
+        Quotations::Creator.new(
+          charge: valid_charge[:total],
+          meta: meta_for_result,
+          user: user
+        ).perform
+        result_to_return(
+          quote: quote,
+          meta_for_result: meta_for_result,
+          grand_total_charge: valid_charge,
+          current_result: current_result
+        )
+      end
+
+      def result_to_return(quote:, meta_for_result:, grand_total_charge:, current_result:)
+        {
+          quote: quote,
+          schedules: grand_total_charge[:schedules].map(&:to_detailed_hash),
+          meta: meta_for_result,
+          notes: grab_notes(
+            schedule: grand_total_charge[:schedules].first,
+            tenant_id: @shipment.tenant_id,
+            pricing_ids: current_result[:pricings_by_cargo_class].values.flatten
+          )
+        }
+      end
+
+      def quote_from_charge(charge:)
+        charge.deconstruct_tree_into_schedule_charge(
+          guest: user.guest?,
+          hidden_grand_total: scope['hide_grand_total'],
+          hidden_sub_total: scope['hide_sub_totals']
+        ).deep_symbolize_keys
+      end
+
+      def handle_errors(errors:)
+        raise errors.last[:error]
       end
 
       def detailed_schedules_with_service_level_count(detailed_schedules:)
@@ -314,7 +341,9 @@ module OfferCalculator
 
               other_pricings.each do |other_pricing|
                 other_cargo_class_key = other_pricing.try(:cargo_class) ||
-                                        Legacy::TransportCategory.find_by(id: other_pricing['transport_category_id'])&.cargo_class&.to_s
+                                        Legacy::TransportCategory.find_by(
+                                          id: other_pricing['transport_category_id']
+                                        )&.cargo_class&.to_s
                 if other_pricing['effective_date'] < dates[:start_date] &&
                    other_pricing['expiration_date'] > dates[:end_date]
                   obj[:pricings_by_cargo_class][other_cargo_class_key] =
@@ -405,12 +434,8 @@ module OfferCalculator
         }
       end
 
-      def invalid_quote?(quote:, hidden_grand_total:, user:, hidden_sub_total:)
-        return false if user.guest? || hidden_grand_total || hidden_sub_total
-
-        quote.dig(:total, :value).blank? ||
-          quote.dig(:total, :value).to_i.zero? ||
-          !quote.dig(:cargo, :value).nil?
+      def invalid_quote?(charge:)
+        charge.price.value.zero?
       end
 
       def grab_notes(pricing_ids:, tenant_id:, schedule:)
@@ -433,6 +458,8 @@ module OfferCalculator
                            .or(transshipment_notes.where(pricings_pricing_id: pricings.ids))
                            .select(:id, :body)
       end
+
+      attr_reader :trucking_data, :user, :shipment
     end
   end
 end

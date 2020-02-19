@@ -785,4 +785,36 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
       end
     end
   end
+
+  describe 'errors' do
+    context 'without a any schedules' do
+      it 'raises NoValidSchedules when there are no schedules' do
+        expect { klass.perform([], target_trucking_data, user) }.to raise_error(OfferCalculator::Calculator::NoValidSchedules)
+      end
+    end
+
+    context 'with charge calculator errors' do
+      before do
+        FactoryBot.create(:legacy_lcl_pricing,
+                          itinerary: itinerary,
+                          tenant_vehicle: tenant_vehicle,
+                          transport_category: cargo_transport_category)
+        allow(klass).to receive(:handle_group_result).and_return([{ error: OfferCalculator::Calculator::InvalidFreightResult }])
+      end
+
+      it 'raises InvalidFreightResult when there are no schedules' do
+        expect { klass.perform(schedules, target_trucking_data, user) }.to raise_error(OfferCalculator::Calculator::InvalidFreightResult)
+      end
+    end
+
+    context 'without a any pricings' do
+      before do
+        allow(klass).to receive(:grouped_schedules).and_return([])
+      end
+
+      it 'raises NoValidPricings when there are no schedules' do
+        expect { results }.to raise_error(OfferCalculator::Calculator::NoValidPricings)
+      end
+    end
+  end
 end
