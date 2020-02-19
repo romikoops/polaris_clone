@@ -122,25 +122,6 @@
             </div>
           </div>
         <% end %>
-        <% if scope['show_rate_overview'] %>
-          <% shipment_rate_data = pricing_data[quote['shipment_id']] %>
-          <div class="rate_wrapper">
-            <div class="rate_section">
-              <p class="rate_header">Freight Charges:</p>
-              <p class="rate_value">Per Unit Lumpsum</p>
-            </div>
-            <div class="rate_section">
-              <p class="rate_header">Currency</p>
-              <p class="rate_value"><%= shipment_rate_data.values.first.dig('total', 'currency')%></p>
-            </div>
-            <% shipment_rate_data.keys.sort.each do |cargo_class| %>
-              <div class="rate_section">
-                <p class="rate_header"><%= cargo_class.humanize.upcase %></p>
-                <p class="rate_value"><%= '%.2f' % shipment_rate_data.dig(cargo_class, 'total', 'value').to_d %></p>
-              </div>
-              <% end %>
-          </div>
-        <% end %>
       </div>
       <div class="no-padding">
         <div class="sub-prices">
