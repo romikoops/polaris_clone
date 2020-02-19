@@ -1,8 +1,9 @@
 **/bin/*
 **/config/environments/*
-**/spec/*_helper.rb
 **/spec/**/*_spec.rb
+**/spec/*_helper.rb
 **/spec/factories/*
+*.rake
 app/classes/**/*.rb
 db/custom_seeds/*.rb
 db/schema.rb
