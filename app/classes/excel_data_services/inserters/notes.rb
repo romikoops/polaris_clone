@@ -15,16 +15,21 @@ module ExcelDataServices
 
       def update_or_create_note(params:)
         target = determine_target(params: params)
+
         return unless target
 
-        note = Note.create(
+        note = Note.create_with(
           header: target.name,
           target: target,
           body: params[:note],
-          contains_html: params[:contains_html],
-          tenant: tenant
-        )
+          tenant: tenant,
+          contains_html: params[:contains_html]
+        ).find_or_initialize_by(header: target.name,
+                                target: target,
+                                tenant: tenant)
+
         add_stats(note)
+        note.save
 
         note
       end
