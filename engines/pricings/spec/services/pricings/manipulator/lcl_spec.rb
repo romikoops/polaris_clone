@@ -356,7 +356,7 @@ RSpec.describe Pricings::Manipulator do
       it 'returns the manipulated freight pricing with one specific detail and general attached to the user' do
         aggregate_failures do
           expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(%w[bas baf])
+          expect(manipulated_pricings.first['data'].keys).to match_array(%w[bas baf])
           expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(50)
           expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_WM')
           expect(manipulated_pricings.first.dig('data', 'baf', 'rate')).to eq(44)

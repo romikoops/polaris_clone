@@ -17,6 +17,8 @@ module Tenants
     has_paper_trail
     acts_as_paranoid
 
+    after_create :attach_to_default_group
+
     def all_groups
       membership_ids = [memberships.pluck(:group_id), company&.memberships&.pluck(:group_id)].compact.flatten
       ::Tenants::Group.where(id: membership_ids)
@@ -35,6 +37,25 @@ module Tenants
         tenant_id: tenant_id
       )&.id
       update(company_id: company_id)
+    end
+
+    def attach_to_default_group
+      return unless groups_exist?
+
+      Tenants::Membership.find_or_create_by(
+        member: self,
+        group: default_group
+      )
+    end
+
+    def groups_exist?
+      return false if groups.present? || company&.groups.present?
+
+      Tenants::Group.exists?(tenant_id: tenant_id, name: 'default')
+    end
+
+    def default_group
+      Tenants::Group.find_by(tenant_id: tenant_id, name: 'default')
     end
   end
 end
