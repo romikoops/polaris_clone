@@ -25,7 +25,20 @@ class Admin::MembershipsController < Admin::AdminBaseController
     response_handler(memberships.map { |m| for_list_json(m) })
   end
 
+  def destroy
+    group = membership.group
+    if membership.destroy
+      response_handler(group)
+    else
+      response_handler(membership.errors)
+    end
+  end
+
   private
+
+  def membership
+    @membership ||= Tenants::Membership.find(params[:id])
+  end
 
   def target_member
     @target_member ||= if params[:targetId]
@@ -42,7 +55,7 @@ class Admin::MembershipsController < Admin::AdminBaseController
 
   def for_list_json(membership, options = {})
     new_options = options.reverse_merge(
-      methods: %i(member_name human_type member_email original_member_id)
+      methods: %i[member_name human_type member_email original_member_id]
     )
     membership.as_json(new_options)
   end

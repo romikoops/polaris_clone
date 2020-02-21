@@ -18,8 +18,15 @@ import Tabs from '../../../Tabs/Tabs'
 import MarginButtons from './MarginButtons'
 import PricingButtons from './PricingButtons'
 import LocalChargeButtons from './LocalChargeButtons'
+import { RoundButton } from '../../../RoundButton/RoundButton'
+import { LoadingSpinner } from '../../../LoadingSpinner/LoadingSpinner'
 
 class AdminClientGroup extends Component {
+  static defaultProps = {
+    memberList: [],
+    marginsList: []
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -75,6 +82,13 @@ class AdminClientGroup extends Component {
     }
   }
 
+  removeMembership (rowData) {
+    const { original } = rowData
+    const { id } = original
+    const { clientsDispatch } = this.props
+    clientsDispatch.removeMembership(id)
+  }
+
   newMargin () {
     const { clientsDispatch, id } = this.props
     clientsDispatch.newMarginFromGroup(id)
@@ -128,7 +142,12 @@ class AdminClientGroup extends Component {
 
   render () {
     const {
-      member_list, t, name, id, theme
+      memberList,
+      t,
+      name,
+      id,
+      theme,
+      loading
     } = this.props
 
     const { editUsers, editMargins } = this.state
@@ -180,6 +199,21 @@ class AdminClientGroup extends Component {
             </p>
           </div>
         )
+      },
+      {
+        id: 'remove_member',
+        Header: t('admin:removeMembership'),
+        accessor: 'remove_member',
+        Cell: (rowData) => (
+          <RoundButton
+            theme={theme}
+            size="full"
+            text={t('admin:remove')}
+            handleNext={() => this.removeMembership(rowData)}
+            iconClass="fa-trash"
+            classNames="five_m"
+          />
+        )
       }
     ]
 
@@ -187,7 +221,7 @@ class AdminClientGroup extends Component {
       <div className="flex-100 layout-row layout-align-center-center layout-wrap ">
         <ReactTable
           className="flex height_100"
-          data={member_list}
+          data={memberList}
           columns={userColumns}
           defaultSorted={[
             {
@@ -223,7 +257,7 @@ class AdminClientGroup extends Component {
             >
               <div className="flex-100 layout-row layout-wrap">
                 <div className="flex flex-xs-100 layout-row">
-                  {userTable}
+                  {loading ? <LoadingSpinner size="medium" /> : userTable}
                 </div>
                 <div className="flex-15 flex-xs-100 layout-row layout-wrap">
                   <div className="flex-100 layout-row layout-align-center-start margin_5">
@@ -316,19 +350,15 @@ class AdminClientGroup extends Component {
     )
   }
 }
-AdminClientGroup.defaultProps = {
-  member_list: [],
-  margins_list: []
-}
 
 function mapStateToProps (state) {
   const { clients, app } = state
-  const { group } = clients
+  const { group, loading } = clients
   const { theme } = app.tenant
   const {
     name,
-    margins_list,
-    member_list,
+    margins_list: marginsList,
+    member_list: memberList,
     itineraries,
     pricings,
     id
@@ -336,12 +366,13 @@ function mapStateToProps (state) {
 
   return {
     name,
-    margins_list,
-    member_list,
+    marginsList,
+    memberList,
     itineraries,
     pricings,
     id,
-    theme
+    theme,
+    loading
   }
 }
 function mapDispatchToProps (dispatch) {

@@ -30,7 +30,7 @@ function testMargins (args) {
         JSON.stringify(args)
       )
     )
-      .then(resp => resp.json())
+      .then((resp) => resp.json())
       .then((resp) => {
         dispatch(success(resp.data))
       })
@@ -40,8 +40,36 @@ function testMargins (args) {
   }
 }
 
+function removeMembership (membershipID) {
+  function request () {
+    return { type: clientsConstants.REMOVE_MEMBERSHIP_REQUEST }
+  }
+  function success (payload) {
+    return { type: clientsConstants.REMOVE_MEMBERSHIP_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: clientsConstants.REMOVE_MEMBERSHIP_ERROR, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    return fetch(
+      `${getTenantApiUrl()}/admin/memberships/${membershipID}`, requestOptions('DELETE')
+    )
+      .then((resp) => resp.json())
+      .then((resp) => {
+        dispatch(success(membershipID))
+        dispatch(viewGroup(resp.data.id))
+      })
+      .catch((error) => {
+        dispatch(failure(error))
+      })
+  }
+}
+
 function clearMarginPreview () {
-  return dispatch => dispatch({ type: clientsConstants.CLEAR_MARGIN_PREVIEW })
+  return (dispatch) => dispatch({ type: clientsConstants.CLEAR_MARGIN_PREVIEW })
 }
 
 // Legacy Format (Action + Service)
@@ -299,6 +327,7 @@ function editMemberships (args) {
     )
   }
 }
+
 function editCompanyEmployees (args) {
   function request () {
     return { type: clientsConstants.EDIT_EMPLOYEES_REQUEST }
@@ -495,7 +524,7 @@ function viewGroup (id) {
   }
 
   return (dispatch) => {
-    dispatch(request)
+    dispatch(request())
     clientsService.viewGroup(id).then(
       (resp) => {
         dispatch(success(resp.data))
@@ -695,11 +724,12 @@ function goTo (path) {
 }
 
 function updateGroupUsers (groupId, userIds) {
-  return dispatch => dispatch({ type: clientsConstants.UPDATE_GROUP_USERS, payload: { groupId, userIds } })
+  return (dispatch) => dispatch({ type: clientsConstants.UPDATE_GROUP_USERS, payload: { groupId, userIds } })
 }
 
 export const clientsActions = {
   editCompanyEmployees,
+  removeMembership,
   getGroupsAndMargins,
   newMarginFromGroup,
   viewGroup,

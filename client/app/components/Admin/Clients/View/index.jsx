@@ -325,9 +325,9 @@ export class AdminClientView extends Component {
             </span>
             <div className="layout-align-start-center layout-row flex padding_left">
               <h1 className="flex-none layout-row cli">
-                {capitalizeCities(client.first_name)}
+                {client.first_name}
                 {' '}
-                {capitalizeCities(client.last_name)}
+                {client.last_name}
               </h1>
             </div>
           </div>

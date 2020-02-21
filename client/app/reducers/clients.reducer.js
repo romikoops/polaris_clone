@@ -55,15 +55,24 @@ export default function clients (state = {}, action) {
         groups: action.payload
       }
     }
+    case 'VIEW_GROUP_REQUEST': {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case 'VIEW_GROUP_FAILURE':
     case 'VIEW_GROUP_SUCCESS': {
       return {
         ...state,
+        loading: false,
         group: action.payload
       }
     }
     case 'VIEW_CLIENT_SUCCESS': {
       return {
         ...state,
+        loading: false,
         client: action.payload
       }
     }
@@ -74,6 +83,12 @@ export default function clients (state = {}, action) {
       }
     }
     case 'EDIT_GROUP_MEMBERSHIP_SUCCESS': {
+      return {
+        ...state,
+        group: action.payload
+      }
+    }
+    case 'REMOVE_MEMBERSHIP_SUCCESS': {
       return {
         ...state,
         group: action.payload

@@ -255,6 +255,16 @@ function editCompanyEmployees (args) {
     .then(handleResponse)
 }
 
+function removeMembership (membershipID) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader()
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/memberships/${membershipID}`, requestOptions)
+    .then(handleResponse)
+}
+
 function updateMarginValues (args) {
   const requestOptions = {
     method: 'POST',
@@ -353,6 +363,7 @@ export const clientsService = {
   testMargins,
   deleteMargin,
   editCompanyEmployees,
+  removeMembership,
   createCompany,
   deleteGroup,
   deleteCompany,

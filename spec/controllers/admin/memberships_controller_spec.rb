@@ -8,6 +8,12 @@ RSpec.describe Admin::MembershipsController, type: :controller do
   let(:user) { create(:legacy_user, tenant: tenant) }
   let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
 
+  before do
+    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive(:current_user).and_return(user)
+    allow(controller).to receive(:require_login_and_role_is_admin).and_return(true)
+  end
+
   describe 'POST #bulk_edit' do
     let(:group_a) { create(:tenants_group, tenant: tenants_tenant, name: 'Group A') }
     let(:group_b) { create(:tenants_group, tenant: tenants_tenant, name: 'Group B') }
@@ -37,6 +43,7 @@ RSpec.describe Admin::MembershipsController, type: :controller do
         tenant_id: user.tenant_id
       }
     }
+
     it 'returns http success' do
       allow(controller).to receive(:user_signed_in?).and_return(true)
       allow(controller).to receive(:current_user).and_return(user)
@@ -47,6 +54,27 @@ RSpec.describe Admin::MembershipsController, type: :controller do
       expect(json['success']).to eq true
       expect(json.dig('data').length).to eq 1
       expect(json.dig('data', 0, 'priority')).to eq 0
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let(:group) { create(:tenants_group, tenant: tenants_tenant, name: 'Discount') }
+    let(:membership_user) { create(:tenants_user, tenant: tenants_tenant) }
+    let(:membership) { create(:tenants_membership, group: group, member: membership_user) }
+
+    it 'destroys the membership' do
+      delete :destroy, params: { id: membership.id, tenant_id: tenant.id }
+      expect(Tenants::Membership.find_by(id: membership.id)).to be(nil)
+    end
+
+    it 'returns an error when membership is not deleted' do
+      allow(controller).to receive(:membership).and_return(instance_double('Membership',
+                                                                           destroy: false,
+                                                                           group: group,
+                                                                           errors: ['error']))
+
+      delete :destroy, params: { id: membership.id, tenant_id: tenant.id }
+      expect(JSON.parse(response.body)['data']).to eq(['error'])
     end
   end
 end
