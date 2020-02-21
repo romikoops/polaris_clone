@@ -95,7 +95,7 @@ class AdminClientAdder extends Component {
       }
       const obj = target || { id }
 
-      if (!addedMembers[type].some(x => x.id === obj.id)) {
+      if (type && !addedMembers[type].some((x) => x.id === obj.id)) {
         addedMembers[type].push(obj)
       }
 
@@ -106,7 +106,7 @@ class AdminClientAdder extends Component {
   removeMember (type, id) {
     this.setState((prevState) => {
       const { addedMembers } = prevState
-      const updatedMembers = addedMembers[type].filter(c => c.id !== id)
+      const updatedMembers = addedMembers[type].filter((c) => c.id !== id)
       addedMembers[type] = updatedMembers
 
       return { addedMembers }
@@ -115,7 +115,7 @@ class AdminClientAdder extends Component {
 
   handleMemberChange (type, id) {
     const { addedMembers } = this.state
-    if (addedMembers[type].map(a => a.id).includes(id)) {
+    if (type && addedMembers[type].map((a) => a.id).includes(id)) {
       this.removeMember(type, id)
     } else {
       this.addMember(type, id)
