@@ -8,13 +8,20 @@ module UsersDeviseTokenAuth
 
     def create
       super do |resource|
+        # Create UserProfile
+
+        create_params = @profile_params
+                        .slice('first_name', 'last_name', 'phone', 'company_name')
+                        .merge(user_id: ::Tenants::User.find_by(legacy_id: resource.id).id)
+        profile = Profiles::Profile.create(create_params)
+
         # Create token even though email is not confirmed
         resource.create_token
 
         if quotation_tool?(resource)
           resource.role_id = Role.find_by_name('agency_manager').id
           @agency = Agency.find_or_create_by!(
-            name: resource.company_name,
+            name: profile.company_name,
             tenant_id: resource.tenant.id
           )
 
@@ -67,7 +74,13 @@ module UsersDeviseTokenAuth
         ).id
       end
 
-      ActionController::Parameters.new(params_h).permit(*User::PERMITTED_PARAMS)
+      @profile_params = params_h.slice(
+        *(params_h.keys - %w[email password password_confirmation guest tenant_id])
+      )
+
+      ActionController::Parameters.new(
+        params_h.slice('email', 'password', 'password_confirmation', 'guest', 'tenant_id')
+      ).permit(*User::PERMITTED_PARAMS)
     end
 
     def provider
