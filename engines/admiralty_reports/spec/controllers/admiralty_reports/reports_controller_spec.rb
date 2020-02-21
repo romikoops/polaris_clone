@@ -46,7 +46,7 @@ module AdmiraltyReports
       context 'filtered results ' do
         let!(:tenant) { quote_tenant }
         let!(:agency) { FactoryBot.create(:legacy_agency) }
-        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id, company_name: nil, agency: agency) }
+        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id, agency: agency) }
         let!(:shipments) do
           [
             FactoryBot.create(:legacy_shipment,
@@ -92,7 +92,7 @@ module AdmiraltyReports
 
       context 'booking tool' do
         let!(:tenant) { booking_tenant }
-        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id, company_name: nil) }
+        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id) }
 
         let!(:shipments) do
           [

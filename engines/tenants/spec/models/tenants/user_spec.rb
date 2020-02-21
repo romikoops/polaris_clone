@@ -88,7 +88,7 @@ module Tenants
     context 'when instance methods' do
       let!(:currency) { FactoryBot.create(:legacy_currency) }
       let(:address) { FactoryBot.create(:legacy_address) }
-      let!(:user) { FactoryBot.create(:legacy_user, tenant: legacy_tenant, currency: currency.base, company_name: 'ItsMyCargo') }
+      let!(:user) { FactoryBot.create(:legacy_user, tenant: legacy_tenant, currency: currency.base) }
       let!(:tenants_user) { described_class.find_by(legacy_id: user.id) }
       let!(:group_1) do
         FactoryBot.create(:tenants_group, tenant: tenant).tap do |tapped_group|
@@ -96,7 +96,10 @@ module Tenants
         end
       end
 
-      before { FactoryBot.create(:tenants_company, tenant: tenant, address: address, name: 'ItsMyCargo') }
+      before do
+        FactoryBot.create(:tenants_company, tenant: tenant, address: address, name: 'ItsMyCargo')
+        FactoryBot.create(:profiles_profile, company_name: 'ItsMyCargo', user_id: tenants_user.id)
+      end
 
       describe '.groups' do
         it 'returns the groups that the company is a member of' do

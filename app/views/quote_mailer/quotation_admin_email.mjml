@@ -3,7 +3,7 @@
   <mj-column>
     <mj-text>
       <p style="display: none;max-height: 0px;overflow: hidden;">
-        Hello <%= @email %>, <%= @user.full_name %> from <%= @user.agency&.name || @user.company_name %>
+        Hello <%= @email %>, <%= @user_profile.full_name %> from <%= @user.agency&.name || @user_profile.company_name %>
               has generated a quote using the ItsMyCargo Quotation Tool:
       </p>
     </mj-text>
@@ -50,9 +50,9 @@
     <mj-column width="100%" padding="0 2.5%">
       <mj-text line-height="10px">
         <p>The following user has generated a quote through your ItsMyCargo Quotation Tool:
-          <p><strong>Name</strong>: <%= @user.full_name%></p>
+          <p><strong>Name</strong>: <%= @user_profile.full_name%></p>
           <p><strong>Email</strong>: <%= @user.email %></p>
-          <p><strong>Phone</strong>:<%= @user.phone %></p>
+          <p><strong>Phone</strong>:<%= @user_profile.phone %></p>
           <% if @user.external_id %>
             <strong>Customer ID: </strong><%= @user.external_id %>
           <% end %>

@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'api_auth'
   s.add_dependency 'core'
+  s.add_dependency 'profiles'
   s.add_dependency 'tenants'
   s.add_dependency 'trucking'
   s.add_dependency 'wheelhouse'

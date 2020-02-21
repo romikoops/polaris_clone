@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'core'
   s.add_dependency 'legacy'
   s.add_dependency 'mailers'
+  s.add_dependency 'profiles'
 
   s.add_dependency 'paranoia'
   s.add_dependency 'pg_search', '~> 2.3.0'

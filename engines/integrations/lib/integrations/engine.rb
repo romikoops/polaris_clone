@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'profiles'
+
 module Integrations
   class Engine < ::Rails::Engine
     isolate_namespace Integrations

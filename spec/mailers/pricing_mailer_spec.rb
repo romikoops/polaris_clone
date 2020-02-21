@@ -3,10 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe PricingMailer, type: :mailer do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, with_profile: false) }
   let(:pricing) { create(:pricing) }
 
   before do
+    create(:profiles_profile,
+           first_name: 'John',
+           last_name: 'Doe',
+           user_id: Tenants::User.find_by(legacy_id: user.id).id)
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
     stub_request(:post, "#{Settings.breezy.url}/render/html").to_return(status: 201, body: '', headers: {})

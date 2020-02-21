@@ -56,6 +56,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
     let(:company_b) { create(:tenants_company, tenant: tenants_tenant) }
     let!(:membership_a) { create(:tenants_membership, group: edit_group, member: Tenants::User.find_by(legacy_id: user_b.id)) }
     let!(:membership_b) { create(:tenants_membership, group: edit_group, member: company_b) }
+    let(:profile) { FactoryBot.build(:profiles_profile) }
     let(:edit_params) {
       { 'addedMembers' =>
         { 'clients' =>
@@ -66,6 +67,9 @@ RSpec.describe Admin::GroupsController, type: :controller do
         'tenant_id' => tenant.id,
         'id' => edit_group.id }
     }
+
+    before { allow(Profiles::ProfileService).to receive(:fetch).and_return(Profiles::ProfileDecorator.new(profile)) }
+
     it 'returns http success' do
       allow(controller).to receive(:user_signed_in?).and_return(true)
       allow(controller).to receive(:current_user).and_return(user)

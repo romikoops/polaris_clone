@@ -4,7 +4,7 @@
   <mj-column>
     <mj-text>
       <p style="display: none;max-height: 0px;overflow: hidden;">
-        Hello <%= @user.full_name %> and welcome to the <%= @user.tenant.name %> online shop:
+        Hello <%= @user_profile.full_name %> and welcome to the <%= @user.tenant.name %> online shop:
       </p>
     </mj-text>
     <mj-text>
@@ -36,7 +36,7 @@
   <mj-section full-width="full-width" padding="0px" padding-top="20px">
     <mj-column width="100%" padding="0 2.5%">
       <mj-text>
-        <p>Hello <span><%= @user.full_name %>,</span></p>
+        <p>Hello <span><%= @user_profile.full_name %>,</span></p>
       </mj-text>
     </mj-column>
     <mj-column width="100%" padding="0 2.5%">

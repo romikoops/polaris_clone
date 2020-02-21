@@ -4,7 +4,7 @@
   <mj-column>
     <mj-text>
       <p style="display: none;max-height: 0px;overflow: hidden;">
-        Hello! <%= @user.full_name %> from <%= @user.company_name %> has requested a dedicated rate for the following route
+        Hello! <%= @user_profile.full_name %> from <%= @user_profile.company_name %> has requested a dedicated rate for the following route
       </p>
     </mj-text>
     <mj-text>
@@ -49,7 +49,7 @@
 
       <mj-text line-height="24px">
         <p>
-          <%= @user.full_name %> from <strong><%= @user.company_name %></strong> has requested a dedicated rate for the following route:
+          <%= @user_profile.full_name %> from <strong><%= @user_profile.company_name %></strong> has requested a dedicated rate for the following route:
         </p>
       </mj-text>
     </mj-column>
@@ -83,7 +83,7 @@
     <mj-column width="100%" padding="0 2.5%">
       <mj-text line-height="24px">
         <p>
-          To assign <%= @user.full_name %> a new pricing proceed to the Pricings section of the Admin Dashboard and upload a Dedicated Pricing.
+          To assign <%= @user_profile.full_name %> a new pricing proceed to the Pricings section of the Admin Dashboard and upload a Dedicated Pricing.
         </p>
       </mj-text>
     </mj-column>

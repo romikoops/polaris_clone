@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'core'
+require 'profiles'
 
 require 'active_model_serializers'
 require 'activerecord-import'

@@ -1178,6 +1178,16 @@ ActiveRecord::Schema.define(version: 2020_02_06_135755) do
     t.index ["sandbox_id"], name: "index_pricings_rate_bases_on_sandbox_id"
   end
 
+  create_table "profiles_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "company_name"
+    t.string "first_name"
+    t.string "image"
+    t.string "last_name"
+    t.string "phone"
+    t.uuid "user_id"
+    t.index ["user_id"], name: "index_profiles_profiles_on_user_id"
+  end
+
   create_table "quotations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
@@ -1828,7 +1838,6 @@ ActiveRecord::Schema.define(version: 2020_02_06_135755) do
     t.string "unlock_token"
     t.datetime "updated_at", null: false
     t.index ["activation_token"], name: "index_tenants_users_on_activation_token"
-    t.index ["email", "tenant_id"], name: "index_tenants_users_on_email_and_tenant_id", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_tenants_users_on_last_logout_at_and_last_activity_at"
     t.index ["reset_password_token"], name: "index_tenants_users_on_reset_password_token"
     t.index ["sandbox_id"], name: "index_tenants_users_on_sandbox_id"
@@ -2050,7 +2059,7 @@ ActiveRecord::Schema.define(version: 2020_02_06_135755) do
   create_table "users", comment: "FILTER WITH users.email NOT LIKE '%@itsmycargo.com' AND users.email NOT LIKE '%demo%@%'", force: :cascade do |t|
     t.integer "agency_id"
     t.boolean "allow_password_change", default: false, null: false
-    t.string "company_name"
+    t.string "company_name_20200207"
     t.string "company_number"
     t.datetime "confirmation_sent_at"
     t.string "confirmation_token"
@@ -2063,17 +2072,17 @@ ActiveRecord::Schema.define(version: 2020_02_06_135755) do
     t.string "email", comment: "MASKED WITH EmailAddress"
     t.string "encrypted_password", default: "", null: false
     t.string "external_id"
-    t.string "first_name", comment: "MASKED WITH FirstName"
+    t.string "first_name_20200207"
     t.boolean "guest", default: false
     t.string "image"
     t.boolean "internal", default: false
-    t.string "last_name", comment: "MASKED WITH LastName"
+    t.string "last_name_20200207"
     t.datetime "last_sign_in_at"
     t.string "last_sign_in_ip"
     t.string "nickname"
     t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
-    t.string "phone", comment: "MASKED WITH Phone"
+    t.string "phone_20200207"
     t.string "provider", default: "tenant_email", null: false
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
@@ -2121,6 +2130,7 @@ ActiveRecord::Schema.define(version: 2020_02_06_135755) do
   add_foreign_key "cargo_units", "cargo_cargos", column: "cargo_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "profiles_profiles", "tenants_users", column: "user_id"
   add_foreign_key "quotations_tenders", "quotations_quotations", column: "quotation_id"
   add_foreign_key "remarks", "tenants"
   add_foreign_key "shipments", "transport_categories"

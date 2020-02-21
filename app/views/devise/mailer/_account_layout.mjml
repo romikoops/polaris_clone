@@ -3,7 +3,7 @@
   <mj-column>
     <mj-text>
       <p style="display: none;max-height: 0px;overflow: hidden;">
-        Hello <%= @user.full_name %>, thank you for registering a new account in the <%=tenant.name%> Shop (powered by ItsMyCargo).
+        Hello <%= @user_profile.full_name %>, thank you for registering a new account in the <%=tenant.name%> Shop (powered by ItsMyCargo).
       </p>
     </mj-text>
     <mj-text>
@@ -36,7 +36,7 @@
 <mj-section full-width="full-width" padding="0px">
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
-       <p style="margin-bottom: 0;">Hello <span><%= @user.full_name %>,</span></p>
+       <p style="margin-bottom: 0;">Hello <span><%= @user_profile.full_name %>,</span></p>
     </mj-text>
   </mj-column>
 </mj-section>

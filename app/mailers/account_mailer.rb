@@ -16,7 +16,8 @@ class AccountMailer < Devise::Mailer
     attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read)
     opts[:subject] = "#{tenant.name} Account Confirmation Email"
     @confirmation_url = "#{base_url(tenant)}account/confirmation/#{token}"
-
+    tenants_user = Tenants::User.find_by(legacy_id: record.id)
+    @user_profile = Profiles::ProfileService.fetch(user_id: tenants_user.id)
     @links = tenant.email_links ? tenant.email_links['confirmation_instructions'] : []
     @scope = ::Tenants::ScopeService.new(target: ::Tenants::User.find_by(legacy_id: record.id)).fetch
     WelcomeMailer.welcome_email(record).deliver_later
@@ -32,6 +33,8 @@ class AccountMailer < Devise::Mailer
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
     @scope = ::Tenants::ScopeService.new(target: ::Tenants::User.find_by(legacy_id: record.id)).fetch
+    tenants_user = Tenants::User.find_by(legacy_id: record.id)
+    @user_profile = Profiles::ProfileService.fetch(user_id: tenants_user.id)
     opts[:subject] = "#{tenant.name} Account Password Reset"
     redirect_url = base_url(tenant) + 'password_reset'
     @reset_url = "#{base_server_url}tenants/#{tenant.id}/auth/password/edit?" \

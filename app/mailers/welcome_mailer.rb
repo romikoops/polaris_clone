@@ -8,6 +8,8 @@ class WelcomeMailer < ApplicationMailer
     return unless Legacy::Content.exists?(tenant_id: user.tenant_id, component: 'WelcomeMail')
 
     @user = user
+    tenants_user = Tenants::User.find_by(legacy_id: user.id)
+    @user_profile = Profiles::ProfileService.fetch(user_id: tenants_user.id)
     @tenant = @user.tenant
     @theme = @tenant.theme
     @content = Legacy::Content.get_component('WelcomeMail', @tenant.id)

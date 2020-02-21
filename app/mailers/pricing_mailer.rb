@@ -8,6 +8,7 @@ class PricingMailer < ApplicationMailer
   def request_email(user_id:, pricing_id:, tenant_id:, status: 'requested') # rubocop:disable Metrics/AbcSize
     @pricing = Pricing.find(pricing_id)
     @user = User.find(user_id)
+    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
     @itinerary = @pricing.itinerary
     @tenant = Tenant.find(tenant_id)
     @theme = @tenant.theme
@@ -27,7 +28,7 @@ class PricingMailer < ApplicationMailer
                          .tap { |a| a.display_name = 'ItsMyCargo Service Request' }.format,
       reply_to: 'support@itsmycargo.com',
       to: mail_target_interceptor(@user, email),
-      subject: "New Rate Request for #{@itinerary.name} from #{@user.full_name}"
+      subject: "New Rate Request for #{@itinerary.name} from #{@user_profile.full_name}"
     ) do |format|
       format.html
       format.mjml

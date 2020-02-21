@@ -4,7 +4,7 @@
     <mj-column>
       <mj-text>
         <p style="display: none;max-height: 0px;overflow: hidden;">
-          Hello <%= @email %>, <%= @user.full_name %> from <%= @shipment.tenant.name %>
+          Hello <%= @email %>, <%= @user_profile.full_name %> from <%= @shipment.tenant.name %>
                 prepared for you a document with the best quotations for the itinerary:
         </p>
       </mj-text>
@@ -52,7 +52,7 @@
     <mj-column width="100%" padding="0 2.5%">
       <mj-text line-height="24px">
         <p>
-          <%= @user.full_name %> from <strong>
+          <%= @user_profile.full_name %> from <strong>
             <%= @shipment.tenant.name %></strong>
           prepared for you a document with the best quotations for the itinerary:
         </p>

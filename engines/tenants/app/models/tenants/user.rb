@@ -27,12 +27,13 @@ module Tenants
     def verify_company
       return if company_id
 
+      user_profile = Profiles::Profile.find_by(user_id: id)
       company_id = ::Tenants::Company.find_by(
-        name: legacy&.company_name,
+        name: user_profile.company_name,
         tenant_id: tenant_id
       )&.id
       company_id ||= ::Tenants::Company.find_or_create_by(
-        name: legacy&.company_name,
+        name: user_profile.company_name,
         vat_number: legacy&.vat_number,
         tenant_id: tenant_id
       )&.id

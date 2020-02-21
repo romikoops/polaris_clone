@@ -65,6 +65,33 @@ RSpec.describe Shipment, type: :model do
       end
     end
   end
+
+  context 'when searching via user profiles' do
+    let(:tenant) { FactoryBot.create(:tenant) }
+    let(:user) { FactoryBot.create(:user, tenant: tenant) }
+    let!(:shipment) { FactoryBot.create(:shipment, tenant: tenant, user: user) }
+
+    before do
+      tenants_user = Tenants::User.find_by(legacy_id: user.id)
+      FactoryBot.create(:profiles_profile,
+                        first_name: 'Test',
+                        last_name: 'User',
+                        company_name: 'ItsMyCargo',
+                        user_id: tenants_user.id)
+    end
+
+    context 'when searching via user names' do
+      it 'returns shipments matching with users matching the name provided' do
+        expect(described_class.user_name('Test')).to include(shipment)
+      end
+    end
+
+    context 'when searching via company names' do
+      it 'returns shipments matching with users matching the company name provided' do
+        expect(described_class.company_name('ItsMyCargo')).to include(shipment)
+      end
+    end
+  end
 end
 
 # == Schema Information

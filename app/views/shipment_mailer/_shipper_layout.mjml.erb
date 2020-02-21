@@ -1,5 +1,4 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
-
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%" padding="30px 2.5% 0 2.5%">
@@ -37,7 +36,7 @@
     <mj-column width="100%" padding="30px 2.5% 0 2.5%">
       <mj-text>
         <p style="margin-bottom: 0;">
-          Hello <span><%= @user.full_name %>,</span>
+          Hello <span><%= @user_profile.full_name  %>,</span>
         </p>
       </mj-text>
     </mj-column>

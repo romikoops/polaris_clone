@@ -13,7 +13,7 @@ module Tenants
     def member_name
       case member.class.to_s
       when 'Tenants::User'
-        member&.legacy&.full_name
+        Profiles::ProfileService.fetch(user_id: member.id).full_name
       else
         member&.name
       end

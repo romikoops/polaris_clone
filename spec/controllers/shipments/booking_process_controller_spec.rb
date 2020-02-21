@@ -18,6 +18,12 @@ RSpec.describe Shipments::BookingProcessController do
   end
 
   describe 'GET #download_shipment' do
+    let(:profile) { FactoryBot.build(:profiles_profile) }
+
+    before do
+      allow(Profiles::ProfileService).to receive(:fetch).and_return(profile)
+    end
+
     it 'returns an http status of success' do
       get :download_shipment, params: { tenant_id: shipment.tenant, shipment_id: shipment.id }
 

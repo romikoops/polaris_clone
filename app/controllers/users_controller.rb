@@ -30,7 +30,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    response_handler(current_user.token_validation_response)
+    response_handler(merge_profile(user: current_user))
   end
 
   def account
@@ -44,7 +44,12 @@ class UsersController < ApplicationController
     @user = current_user
     updating_guest_to_regular_user = current_user.guest
     @user.update(user_params)
-
+    tenants_user = Tenants::User.find_by(legacy_id: @user.id)
+    Profiles::ProfileService.create_or_update_profile(user: tenants_user,
+                                                      first_name: user_profile_params[:first_name],
+                                                      last_name: user_profile_params[:last_name],
+                                                      company_name: user_profile_params[:company_name],
+                                                      phone: user_profile_params[:phone])
     @user.send_confirmation_instructions if @user.valid? && !@user.guest && updating_guest_to_regular_user
 
     if params[:update][:address]
@@ -54,7 +59,7 @@ class UsersController < ApplicationController
     end
 
     headers = @user.create_new_auth_token
-    response_handler(user: @user.token_validation_response, headers: headers)
+    response_handler(user: merge_profile(user: @user), headers: headers)
   end
 
   def currencies
@@ -72,7 +77,7 @@ class UsersController < ApplicationController
     current_user.currency = params[:currency]
     current_user.save!
     rates = Legacy::CurrencyTools.new.get_rates(params[:currency], current_user.tenant_id)
-    response_handler(user: current_user.token_validation_response, rates: rates)
+    response_handler(user: merge_profile(user: current_user), rates: rates)
   end
 
   def hubs
@@ -90,7 +95,7 @@ class UsersController < ApplicationController
     optin_status = OptinStatus.find_by(new_status)
     current_user.optin_status = optin_status
     current_user.save!
-    response_handler(user: current_user.token_validation_response)
+    response_handler(user: merge_profile(user: current_user))
   end
 
   private
@@ -98,8 +103,7 @@ class UsersController < ApplicationController
   def user_params
     return_params = params.require(:update).permit(
       :guest, :tenant_id, :email, :password, :confirm_password, :password_confirmation,
-      :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone, :cookies,
-      :company_number
+      :vat_number, :VAT_number, :cookies, :company_number
     ).to_h
 
     unless return_params[:confirm_password].nil?
@@ -114,6 +118,14 @@ class UsersController < ApplicationController
     end
 
     return_params
+  end
+
+  def user_profile_params
+    params.require(:update).permit(%i[first_name last_name phone company_name])
+  end
+
+  def merge_profile(user:)
+    ProfileTools.merge_profile(target: user.token_validation_response)
   end
 
   def shipments_hash

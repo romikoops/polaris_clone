@@ -17,9 +17,9 @@
       <img src="data:image/png;base64,<%=logo%>" alt="" class="header-logo">
     </div>
     <div class="agent-info">
-        <p><strong><%= shipment.user.first_name %> <%= shipment.user.last_name %></strong></p>
+        <p><strong><%= shipper_profile.first_name %> <%= shipper_profile.last_name %></strong></p>
         <p><%= shipment.user.email %></p>
-        <p><%= shipment.user.phone %></p>
+        <p><%= shipper_profile.phone %></p>
         <% if shipment.user.external_id %>
           <p>Customer ID: <%= shipment.user.external_id.to_i %></p>
         <% end %>

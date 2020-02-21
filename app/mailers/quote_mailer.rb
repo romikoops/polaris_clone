@@ -10,6 +10,7 @@ class QuoteMailer < ApplicationMailer
     @shipment = shipment
     @quotation = quotation
     @user = @shipment.user
+    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
     pdf_service = PdfService.new(user: @user, tenant: @user.tenant)
     @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)
     @theme = @user.tenant.theme
@@ -47,6 +48,7 @@ class QuoteMailer < ApplicationMailer
     @shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
     @quotation = quotation
     @user = (quotation&.user || shipment&.user)
+    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
     pdf_service = PdfService.new(user: @user, tenant: @user.tenant)
     @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)
     @theme = @user.tenant.theme

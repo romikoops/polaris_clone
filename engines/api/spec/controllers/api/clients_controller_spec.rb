@@ -23,7 +23,8 @@ module Api
       end
 
       before do
-        FactoryBot.create_list(:legacy_user, 5, guest: false, tenant: user.tenant.legacy)
+        users = FactoryBot.create_list(:legacy_user, 5, guest: false, tenant: user.tenant.legacy)
+        users.each { |user| FactoryBot.create(:profiles_profile, user_id: Tenants::User.find_by(legacy_id: user.id).id) }
         allow_any_instance_of(Tenants::User).to receive(:tenant).and_return(tenant)
       end
 
@@ -35,8 +36,15 @@ module Api
     end
 
     describe 'Get #show' do
-      let(:user) { FactoryBot.create(:legacy_user, first_name: 'Max', last_name: 'Muster')}
+      let(:user) { FactoryBot.create(:legacy_user) }
       let(:request_object) { get :show, params: { id: user.id }, as: :json }
+
+      before do
+        FactoryBot.create(:profiles_profile,
+                          first_name: 'Max',
+                          last_name: 'Muster',
+                          user_id: Tenants::User.find_by(legacy_id: user.id).id)
+      end
 
       it 'returns the requested client correctly' do
         json = JSON.parse(subject.body)

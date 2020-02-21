@@ -14,7 +14,7 @@ module DocumentService
       @user_contacts = @user.contacts
       @user_shipments = @user.shipments
       @user_addresses = @user.user_addresses
-      @filename = "#{@user.first_name}_#{@user.last_name}_GDPR.xlsx"
+      @filename = "#{user_profile.first_name}_#{user_profile.last_name}_GDPR.xlsx"
       @directory = "tmp/#{@filename}"
       @workbook = create_workbook(@directory)
       header_format = @workbook.add_format
@@ -53,7 +53,7 @@ module DocumentService
       row = 1
       user_keys.each do |k|
         user_sheet.write(row, 0, k.humanize)
-        user_sheet.write(row, 1, user[k])
+        user_sheet.write(row, 1, (user[k] || user_profile[k]))
         row += 1
       end
     end
@@ -118,6 +118,14 @@ module DocumentService
         shipment_sheet.write(row, 11, shipment.customs && shipment.customs['val'] ? "#{shipment.customs['currency']} #{shipment.customs['val'].to_d.round(2)}" : 'N/A')
         row += 1
       end
+    end
+
+    def user_profile
+      @user_profile ||= Profiles::Profile.find_by(user_id: tenants_user.id)
+    end
+
+    def tenants_user
+      @tenants_user ||= Tenants::User.find_by(legacy_id: @user.id)
     end
   end
 end

@@ -2,6 +2,7 @@
 
 require 'api_auth'
 require 'core'
+require 'profiles'
 require 'tenants'
 require 'trucking'
 require 'wheelhouse'

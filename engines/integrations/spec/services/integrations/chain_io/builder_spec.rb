@@ -10,6 +10,7 @@ module Integrations
         let!(:tenants_tenant) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
         let(:currency) { FactoryBot.create(:legacy_currency) }
         let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
+        let(:profile) { FactoryBot.create(:profiles_profile) }
         let(:tender) { FactoryBot.create(:quotations_tender) }
         let(:fcl_legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, tenant: tenant, user: user, meta: { tender_id: tender.id }) }
         let(:shipment_request_creator) { ::Shipments::ShipmentRequestCreator.new(legacy_shipment: fcl_legacy_shipment, user: user, sandbox: nil) }
@@ -28,6 +29,8 @@ module Integrations
         let(:data) { Builder.new(shipment_request_id: shipment_request.id).prepare }
         let(:shipment_request_decorator) { ShipmentRequest.find(shipment_request.id) }
         let(:json_shipment) { data[:shipments].first }
+
+        before { allow(Profiles::ProfileService).to receive(:fetch).and_return(Profiles::ProfileDecorator.new(profile)) }
 
         it 'builds a json with the correct schema' do
           expect(data).to be_present

@@ -5,13 +5,13 @@ class Admin::ClientsController < Admin::AdminBaseController
 
   def index
     paginated_clients = handle_search(params).paginate(pagination_options)
-    response_clients = paginated_clients.map do |contact|
-      contact.for_admin_json.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+    response_clients = paginated_clients.map do |client|
+      merge_profile(user: client).deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
     response_handler(
       pagination_options.merge(
-        clientData: response_clients,
+        clientData: sort_response_clients(response_clients),
         numPages: paginated_clients.total_pages
       )
     )
@@ -24,7 +24,10 @@ class Admin::ClientsController < Admin::AdminBaseController
     addresses = client.addresses
     groups = client.groups.map { |g| group_index_json(g) }
     manager_assignments = UserManager.where(user_id: client)
-    resp = { clientData: client, addresses: addresses, managerAssignments: manager_assignments, groups: groups }
+    tenants_user = Tenants::User.find_by(legacy_id: client.id)
+    profile = Profiles::Profile.find_by(user_id: tenants_user.id).as_json(except: %i[user_id id])
+    client_data = client.token_validation_response.merge(profile)
+    resp = { clientData: client_data, addresses: addresses, managerAssignments: manager_assignments, groups: groups }
     response_handler(resp)
   end
 
@@ -33,17 +36,19 @@ class Admin::ClientsController < Admin::AdminBaseController
     json = JSON.parse(params[:new_client])
     user_data = {
       email: json['email'],
-      company_name: json['companyName'],
-      first_name: json['firstName'],
-      phone: json['phone'],
-      last_name: json['lastName'],
       password: json['password'],
       password_confirmation: json['password_confirmation'],
       sandbox: @sandbox
     }
     new_user = current_user.tenant.users.create!(user_data)
-
-    response_handler(new_user.token_validation_response)
+    tenants_user = Tenants::User.find_by(legacy_id: new_user.id)
+    profile = Profiles::ProfileService.create_or_update_profile(user: tenants_user,
+                                                                first_name: json['firstName'],
+                                                                last_name: json['lastName'],
+                                                                company_name: json['companyName'],
+                                                                phone: json['phone'])
+    user_response = new_user.token_validation_response.merge(profile.as_json(except: %i[user_id id]))
+    response_handler(user_response)
   end
 
   def agents
@@ -68,7 +73,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   private
 
   def clients
-    blocked_roles = Role.where(name: %w(admin super_admin))
+    blocked_roles = Role.where(name: %w[admin super_admin])
     @clients ||=  current_tenant.users
                                 .where(guest: false, sandbox: @sandbox)
                                 .where.not(role: blocked_roles)
@@ -86,12 +91,11 @@ class Admin::ClientsController < Admin::AdminBaseController
     params[:page]&.to_i || 1
   end
 
-  def handle_search(params) # rubocop:disable Metrics/AbcSize
-    query = clients
-    query = query.search(params[:query]) if params[:query]
-    query = query.first_name_search(params[:first_name]) if params[:first_name]
-    query = query.last_name_search(params[:last_name]) if params[:last_name]
-    query = query.email_search(params[:email]) if params[:email]
+  def handle_search(params)
+    user_query = clients
+    user_query = user_query.search(params[:query]) if params[:query]
+    user_query = user_query.email_search(params[:email]) if params[:email]
+    profile_query = handle_profile_search(clients: clients)
     if params[:company_name]
       user_ids =
         Tenants::User.where(
@@ -99,25 +103,33 @@ class Admin::ClientsController < Admin::AdminBaseController
                         .where(tenant_id: ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).id)
                         .name_search(params[:company_name])
                         .ids
-        ).pluck(:legacy_id)
+        ).ids
+      profile_query = profile_query.where(user_id: user_ids)
+    end
+    merge_search_results(users_search_results: user_query,
+                         profiles_search_results: profile_query)
+  end
 
-      query = query.where(id: user_ids)
-    end
-    if search_params[:first_name_desc].present?
-      query = query.reorder(first_name: search_params[:first_name_desc] == 'true' ? :desc : :asc)
-    end
-    if search_params[:last_name_desc].present?
-      query = query.reorder(last_name: search_params[:last_name_desc] == 'true' ? :desc : :asc)
-    end
-    if search_params[:email_desc].present?
-      query = query.reorder(email: search_params[:email_desc] == 'true' ? :desc : :asc)
-    end
-    if search_params[:company_name_desc].present?
-      query = query.left_joins(tenants_user: :company)
-                   .reorder("tenants_companies.name #{search_params[:company_name_desc] == 'true' ? 'desc' : 'asc'}")
-    end
+  def handle_profile_search(clients:)
+    return [] if params[:email] || params[:email_desc]
 
+    tenant_user_ids = Tenants::User.where(legacy_id: clients.pluck(:id))
+    query = Profiles::Profile.where(user_id: tenant_user_ids)
+    query = query.search(params[:query]) if params[:query]
+    query = query.first_name_search(params[:first_name]) if params[:first_name]
+    query = query.last_name_search(params[:last_name]) if params[:last_name]
     query
+  end
+
+  def merge_search_results(users_search_results:, profiles_search_results:)
+    user_ids = Tenants::User.where(id: profiles_search_results.pluck(:user_id)).pluck(:legacy_id)
+    email_params_present = %i[email email_desc query].any? { |key| params[key] }
+    users_search_results_ids = email_params_present ? users_search_results.pluck(:id) : []
+    results = clients.where(id: [*user_ids, *users_search_results_ids].uniq)
+    if search_params[:email_desc].present?
+      results = results.reorder(email: search_params[:email_desc] == 'true' ? :desc : :asc)
+    end
+    results
   end
 
   def upload_params
@@ -130,9 +142,13 @@ class Admin::ClientsController < Admin::AdminBaseController
 
   def group_index_json(group, options = {})
     new_options = options.reverse_merge(
-      methods: %i(member_count margin_count)
+      methods: %i[member_count margin_count]
     )
     group.as_json(new_options)
+  end
+
+  def merge_profile(user:)
+    ProfileTools.merge_profile(target: user.for_admin_json)
   end
 
   def search_params
@@ -148,5 +164,19 @@ class Admin::ClientsController < Admin::AdminBaseController
       :page_size,
       :per_page
     )
+  end
+
+  def sort_response_clients(clients)
+    %i[first_name_desc last_name_desc company_name_desc].each do |order_key|
+      next if search_params[order_key].blank?
+
+      key = order_key.to_s.gsub('_desc', '').camelize(:lower)
+      clients = if search_params[order_key] == 'true'
+                  clients.sort_by { |client| client[key] }.reverse
+                else
+                  clients.sort_by { |client| client[key] }
+                end
+    end
+    clients
   end
 end

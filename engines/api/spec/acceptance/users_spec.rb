@@ -14,6 +14,8 @@ RSpec.resource 'Users' do
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
 
+  before { FactoryBot.create(:profiles_profile, user_id: user.id) }
+
   get '/v1/me' do
     response_field :id, 'Unique identifier', Type: :UUID
     response_field :email, 'Registetred email address', Type: :String

@@ -7,9 +7,16 @@ RSpec.describe DocumentService::GdprWriter do
     subject { described_class.new(user_id: user.id) }
     subject(:writer) { described_class.new(user_id: user.id) }
 
-    let(:user) { create(:user, first_name: 'Max', last_name: 'Muster') }
+    let(:user) { create(:user, with_profile: false) }
     let!(:contact) { create(:contact, user: user) }
     let!(:shipment) { create(:shipment, user: user, with_breakdown: true) }
+
+    before do
+      create(:profiles_profile,
+             first_name: 'Max',
+             last_name: 'Muster',
+             user_id: Tenants::User.find_by(legacy_id: user.id).id)
+    end
 
     it 'creates file' do
       expect(subject).to receive(:write_to_aws).with('tmp/Max_Muster_GDPR.xlsx', user.tenant, 'Max_Muster_GDPR.xlsx', 'gdpr').and_return('http://AWS')

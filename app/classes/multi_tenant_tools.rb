@@ -97,62 +97,66 @@ module MultiTenantTools
 
   def create_internal_users(tenant)
     unless tenant.users.exists?(email: 'shopadmin@itsmycargo.com')
-      tenant.users.create!(
+      user = tenant.users.create!(
         email: 'shopadmin@itsmycargo.com',
         role: Role.find_by(name: 'admin'),
-        company_name: 'ItsMyCargo GmbH',
-        first_name: 'IMC',
-        last_name: 'Admin',
         password: 'IMC123456789',
         guest: false,
         currency: 'EUR',
         optin_status_id: 1,
         internal: true
       )
+      create_user_profile(user: user,
+                          first_name: 'IMC',
+                          last_name: 'Admin',
+                          company_name: 'ItsMyCargo GmbH')
     end
     if quotation_tool?(tenant)
       unless tenant.users.exists?(email: 'manager@itsmycargo.com')
-        tenant.users.create!(
+        user = tenant.users.create!(
           email: 'manager@itsmycargo.com',
           role: Role.find_by(name: 'manager'),
-          company_name: 'ItsMyCargo GmbH',
-          first_name: 'IMC',
-          last_name: 'Admin',
           guest: false,
           password: 'IMC123456789',
           currency: 'EUR',
           optin_status_id: 1,
           internal: true
         )
+        create_user_profile(user: user,
+                            first_name: 'IMC',
+                            last_name: 'Admin',
+                            company_name: 'ItsMyCargo GmbH')
       end
       unless tenant.users.exists?(email: 'agent@itsmycargo.com')
-        tenant.users.create!(
+        user = tenant.users.create!(
           email: 'agent@itsmycargo.com',
           role: Role.find_by(name: 'agent'),
-          company_name: 'ItsMyCargo GmbH',
-          first_name: 'IMC',
-          last_name: 'Admin',
           guest: false,
           password: 'IMC123456789',
           currency: 'EUR',
           optin_status_id: 1,
           internal: true
         )
+        create_user_profile(user: user,
+                            first_name: 'IMC',
+                            last_name: 'Admin',
+                            company_name: 'ItsMyCargo GmbH')
       end
     else
       unless tenant.users.exists?(email: 'shipper@itsmycargo.com')
-        tenant.users.create!(
+        shipper = tenant.users.create!(
           email: 'shipper@itsmycargo.com',
           role: Role.find_by(name: 'shipper'),
-          company_name: 'ItsMyCargo GmbH',
-          first_name: 'IMC',
-          last_name: 'Admin',
           guest: false,
           password: 'IMC123456789',
           currency: 'EUR',
           optin_status_id: 1,
           internal: true
         )
+        create_user_profile(user: shipper,
+                            first_name: 'IMC',
+                            last_name: 'Admin',
+                            company_name: 'ItsMyCargo GmbH')
       end
     end
   end
@@ -365,36 +369,33 @@ module MultiTenantTools
     tenant.users.destroy_all
     admin = tenant.users.new(
       role: Role.find_by_name('admin'),
-
-      company_name: tenant.name,
-      first_name: 'Admin',
-      last_name: 'Admin',
-      phone: '123456789',
-
       email: "admin@#{subdomain}.#{tld}",
       password: 'demo123456789',
       password_confirmation: 'demo123456789',
-
       confirmed_at: DateTime.new(2017, 1, 20)
     )
 
     admin.save!
+    create_user_profile(user: admin,
+                        first_name: 'Admin',
+                        last_name: 'Admin',
+                        company_name: tenant.name,
+                        phone: '123456789')
+
     shipper = tenant.users.new(
       role: Role.find_by_name('shipper'),
-
-      company_name: 'Example Shipper Company',
-      first_name: 'John',
-      last_name: 'Smith',
-      phone: '123456789',
-
       email: "demo@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).slug}.#{tld}",
       password: 'demo123456789',
       password_confirmation: 'demo123456789',
-
       confirmed_at: DateTime.new(2017, 1, 20)
     )
     # shipper.skip_confirmation!
     shipper.save!
+    create_user_profile(user: shipper,
+                        first_name: 'John',
+                        last_name: 'Smith',
+                        company_name: 'Example Shipper Company',
+                        phone: '123456789')
     # Create dummy addresses for shipper
     dummy_addresses = [
       {
@@ -513,4 +514,12 @@ module MultiTenantTools
     scope['open_quotation_tool'] || scope['closed_quotation_tool']
   end
 
+  def create_user_profile(user:, first_name:, last_name:, company_name:, phone: nil)
+    tenants_user = Tenants::User.find_by(legacy_id: user.id)
+    Profiles::ProfileService.create_or_update_profile(user: tenants_user,
+                                                      first_name: first_name,
+                                                      last_name: last_name,
+                                                      company_name: company_name,
+                                                      phone: phone)
+  end
 end

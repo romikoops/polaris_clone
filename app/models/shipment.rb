@@ -59,7 +59,7 @@ class Shipment < Legacy::Shipment
   pg_search_scope :index_search,
                   against: %i(imc_reference),
                   associated_against: {
-                    user: %i(first_name last_name company_name email),
+                    user: %i[email],
                     origin_hub: %i(name),
                     destination_hub: %i(name)
                   },
@@ -68,13 +68,15 @@ class Shipment < Legacy::Shipment
                   }
 
   scope :user_name, lambda { |query|
-    user_ids = User.where('first_name ILIKE ? OR last_name ILIKE ?', "%#{query}%", "%#{query}%").ids
-    where(user_id: user_ids)
+    user_ids = Profiles::Profile
+               .where('first_name ILIKE ? OR last_name ILIKE ?', "%#{query}%", "%#{query}%")
+               .pluck(:user_id)
+    where(user_id: Tenants::User.where(id: user_ids).pluck(:legacy_id))
   }
 
   scope :company_name, lambda { |query|
-    user_ids = User.where('company_name ILIKE ? ', "%#{query}%").ids
-    where(user_id: user_ids)
+    user_ids = Profiles::Profile.where('company_name ILIKE ? ', "%#{query}%").pluck(:user_id)
+    where(user_id: Tenants::User.where(id: user_ids).pluck(:legacy_id))
   }
 
   scope :reference_number, lambda { |query|
@@ -272,11 +274,17 @@ class Shipment < Legacy::Shipment
   deprecate :view_offers, deprecator: ActiveSupport::Deprecation.new('', Rails.application.railtie_name)
 
   def client_name
-    user&.full_name
+    shipment_user_profile.full_name
   end
 
   def company_name
-    user&.company_name
+    shipment_user_profile.company_name
+  end
+
+  def shipment_user_profile
+    tenants_user = Tenants::User.find_by(legacy_id: user.id)
+    profile = Profiles::Profile.find_by(user_id: tenants_user.id)
+    Profiles::ProfileDecorator.new(profile)
   end
 
   def as_options_json(options = {})
@@ -354,7 +362,6 @@ class Shipment < Legacy::Shipment
       s.save!
     end
   end
-
 end
 
 # == Schema Information

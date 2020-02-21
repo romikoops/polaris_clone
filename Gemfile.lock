@@ -93,6 +93,7 @@ PATH
       active_model_serializers (~> 0.10, >= 0.10.8)
       api_auth
       core
+      profiles
       tenants
       trucking
       wheelhouse
@@ -140,6 +141,7 @@ PATH
   specs:
     integrations (9999.1.0.0)
       core
+      profiles
       shipments
 
 PATH
@@ -166,6 +168,7 @@ PATH
       mobility
       paranoia
       pg_search (~> 2.3.0)
+      profiles
 
 PATH
   remote: engines/locations
@@ -205,6 +208,13 @@ PATH
       legacy
       tenants
       trucking
+
+PATH
+  remote: engines/profiles
+  specs:
+    profiles (9999.1.0.0)
+      core
+      pg_search
 
 PATH
   remote: engines/quotations
@@ -291,6 +301,7 @@ PATH
       mailers
       paranoia
       pg_search (~> 2.3.0)
+      profiles
       sorcery (~> 0.13.0)
 
 PATH
@@ -966,6 +977,7 @@ DEPENDENCIES
   pg (>= 0.18, < 2.0)
   pg_search (~> 2.3.0)
   pricings!
+  profiles!
   pry-rails
   puma (~> 3.11)
   quotations!

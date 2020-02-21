@@ -8,15 +8,19 @@ module Integrations
 
       def created_by
         {
-          username: user.legacy.full_name,
+          username: user_profile.full_name,
           email: user.email,
-          first_name: user.legacy.first_name,
-          last_name: user.legacy.last_name
+          first_name: user_profile.first_name,
+          last_name: user_profile.last_name
         }
       end
 
       def incoterm_text
         super || ''
+      end
+
+      def user_profile
+        Profiles::ProfileService.fetch(user_id: user.id)
       end
     end
   end

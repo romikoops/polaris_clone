@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'core'
+  s.add_dependency 'profiles'
 
   s.add_dependency 'active_model_serializers'
   s.add_dependency 'activerecord-import'

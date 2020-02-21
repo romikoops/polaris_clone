@@ -84,6 +84,12 @@ RSpec.describe ShippingTools do
     end
 
     describe '.save_pdf_quotes' do
+      let(:profile) { FactoryBot.build(:profiles_profile) }
+
+      before do
+        allow(Profiles::ProfileService).to receive(:fetch).and_return(profile)
+      end
+
       it 'successfully calls the mailer and return the quote Document' do
         described_class.save_pdf_quotes(shipment, user.tenant, results)
       end

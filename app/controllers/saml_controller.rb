@@ -18,6 +18,7 @@ class SamlController < ApplicationController
     user = user_from_saml(response: saml_response, tenant_id: tenant.legacy_id)
     return error_redirect unless user.save
 
+    create_or_update_user_profile(user: user, response: saml_response)
     response_params = user.create_new_auth_token.merge(userId: user.id, tenantId: tenant.legacy_id)
 
     redirect_to generate_url(url_string: "https://#{request.host}/login/saml/success", params: response_params)
@@ -34,17 +35,21 @@ class SamlController < ApplicationController
       tenant_id: tenant_id,
       email: response.attributes[:email] || response.name_id,
       role: Role.find_by(name: 'shipper')
-    ).tap do |user|
-      user.first_name = response.attributes[:firstName]
-      user.last_name = response.attributes[:lastName]
-      user.phone = response.attributes[:phoneNumber]
-    end
+    )
   end
 
   def tenant
     @tenant ||= begin
       ::Tenants::Domain.find_by(':domain ~* domain', domain: request.host)&.tenant
     end
+  end
+
+  def create_or_update_user_profile(user:, response:)
+    tenants_user = Tenants::User.find_by(legacy_id: user.id)
+    Profiles::ProfileService.create_or_update_profile(user: tenants_user,
+                                                      first_name: response.attributes[:firstName],
+                                                      last_name: response.attributes[:lastName],
+                                                      phone: response.attributes[:phone])
   end
 
   def saml_settings

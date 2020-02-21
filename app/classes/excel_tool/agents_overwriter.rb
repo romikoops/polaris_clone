@@ -5,8 +5,6 @@ module ExcelTool
     attr_reader :first_sheet, :user, :agent_row
 
     def post_initialize(args)
-      @agency_sheet = xlsx.sheet('Agencies').dup
-      @agent_sheet = xlsx.sheet('Agents').dup
       @user = args[:user]
       @manager_role = Role.find_by_name('agency_manager')
       @agent_role = Role.find_by_name('agent')
@@ -41,7 +39,7 @@ module ExcelTool
     end
 
     def agent_rows
-      @agent_rows ||= @agent_sheet.parse(
+      @agent_rows ||= xlsx.sheet('Agents').parse(
         first_name: 'FIRST_NAME',
         last_name: 'LAST_NAME',
         email: 'EMAIL',
@@ -55,7 +53,7 @@ module ExcelTool
     end
 
     def agency_rows
-      @agency_rows ||= @agency_sheet.parse(
+      @agency_rows ||= xlsx.sheet('Agencies').parse(
         first_name: 'FIRST_NAME',
         last_name: 'LAST_NAME',
         email: 'EMAIL',
@@ -109,11 +107,8 @@ module ExcelTool
 
     def update_agency_manager
       @agency_manager.update_attributes(
-        first_name: @agency_row[:first_name],
-        last_name: @agency_row[:last_name],
         tenant_id: @user.tenant_id,
         email: @agency_row[:email].downcase,
-        phone: @agency_row[:phone],
         vat_number: @agency_row[:vat_number],
         external_id: @agency_row[:external_id],
         agency_id: @agency.id,
@@ -123,11 +118,8 @@ module ExcelTool
 
     def create_agency_manager
       @user.tenant.users.create!(
-        first_name: @agency_row[:first_name],
-        last_name: @agency_row[:last_name],
         tenant_id: @user.tenant_id,
         email: @agency_row[:email].downcase,
-        phone: @agency_row[:phone],
         vat_number: @agency_row[:vat_number],
         external_id: @agency_row[:external_id],
         agency_id: @agency.id,
@@ -152,6 +144,7 @@ module ExcelTool
         results[:agency_managers] << @agency_manager
         @stats[:agency_managers][:number_created] += 1
       end
+      update_or_create_user_profile(row: @agency_row, target: @agency_manager)
     end
 
     def agent
@@ -165,11 +158,8 @@ module ExcelTool
 
     def update_agent
       @agent.update_attributes(
-        first_name: @agent_row[:first_name],
-        last_name: @agent_row[:last_name],
         tenant_id: @user.tenant_id,
         email: @agent_row[:email].downcase,
-        phone: @agent_row[:phone],
         vat_number: @agent_row[:vat_number],
         agency_id: @agent_agency.id,
         role: @agent_role
@@ -178,11 +168,8 @@ module ExcelTool
 
     def create_agent
       @user.tenant.users.create!(
-        first_name: @agent_row[:first_name],
-        last_name: @agent_row[:last_name],
         tenant_id: @user.tenant_id,
         email: @agent_row[:email].downcase,
-        phone: @agent_row[:phone],
         vat_number: @agent_row[:vat_number],
         password: @agent_row[:password],
         agency_id: @agent_agency.id,
@@ -200,6 +187,7 @@ module ExcelTool
         results[:agents] << @agent
         stats[:agents][:number_created] += 1
       end
+      update_or_create_user_profile(row: @agent_row, target: @agent)
     end
 
     def determine_agent_agency
@@ -209,20 +197,29 @@ module ExcelTool
     def overwrite_agents
       agent_rows
       agency_rows
-      @agency_rows.map do |_agency_row|
-        @agency_row = _agency_row
+      agency_rows.map do |raw_agency_row|
+        @agency_row = raw_agency_row
         agency
         update_or_create_agency
         agency_manager
         update_or_create_agency_manager
       end
-      @agent_rows.map do |_agent_row|
-        @agent_row = _agent_row
+      agent_rows.map do |raw_agent_row|
+        @agent_row = raw_agent_row
         determine_agent_agency
         agent
         update_or_create_agent
       end
       @stats
+    end
+
+    def update_or_create_user_profile(row:, target:)
+      tenants_user = Tenants::User.find_by(legacy_id: target.id)
+      Profiles::ProfileService.create_or_update_profile(user: tenants_user,
+                                                        first_name: row[:first_name],
+                                                        last_name: row[:last_name],
+                                                        phone: row[:phone])
+      target
     end
   end
 end

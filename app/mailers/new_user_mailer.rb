@@ -7,6 +7,7 @@ class NewUserMailer < ApplicationMailer
 
   def new_user_email(user_id:) # rubocop:disable Metrics/AbcSize
     @user = User.find(user_id)
+    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
     @tenant = Tenant.find(@user.tenant_id)
     @theme = @tenant.theme
     @scope = scope_for(record: @user)

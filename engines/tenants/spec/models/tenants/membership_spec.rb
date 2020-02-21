@@ -14,6 +14,7 @@ module Tenants
           group = FactoryBot.create(:tenants_group, tenant: tenants_tenant)
           user = FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base)
           tenants_user = Tenants::User.find_by(legacy_id: user.id)
+          FactoryBot.create(:profiles_profile, user_id: tenants_user.id, first_name: 'John', last_name: 'Smith')
           membership = Tenants::Membership.create(member: tenants_user, group: group)
           expect(membership.member_name).to eq('John Smith')
         end

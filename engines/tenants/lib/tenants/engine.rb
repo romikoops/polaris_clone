@@ -3,6 +3,7 @@
 require 'core'
 require 'legacy'
 require 'mailers'
+require 'profiles'
 
 require 'paranoia'
 require 'pg_search'

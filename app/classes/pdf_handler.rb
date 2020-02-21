@@ -317,6 +317,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         hub_names: @hub_names,
         note_remarks: @note_remarks,
         fee_keys_and_names: @fee_keys_and_names,
+        shipper_profile: ProfileTools.profile_for_user(legacy_user: @shipment.user),
         selected_offer: @selected_offer
       }
     )

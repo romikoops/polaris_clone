@@ -14,7 +14,9 @@ RSpec.resource 'Clients' do
   let(:token_header) { "Bearer #{access_token.token}" }
 
   before do
-    legacy_tenant.users.create(guest: false)
+    legacy_user = legacy_tenant.users.create(guest: false)
+    tenants_user = FactoryBot.create(:tenants_user, tenant: tenant, legacy_id: legacy_user.id)
+    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
     allow_any_instance_of(Tenants::User).to receive(:tenant).and_return(tenant)
   end
 

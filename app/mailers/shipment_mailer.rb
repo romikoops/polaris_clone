@@ -9,6 +9,7 @@ class ShipmentMailer < ApplicationMailer
 
   def tenant_notification(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
     @user = user
+    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
     tenant = user.tenant
     @shipment = shipment
     @scope = scope_for(record: user, sandbox: sandbox)
@@ -39,6 +40,7 @@ class ShipmentMailer < ApplicationMailer
 
   def shipper_notification(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
     @user = user
+    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
     tenant = user.tenant
     @shipment = shipment
     @scope = scope_for(record: user, sandbox: sandbox)
@@ -67,6 +69,7 @@ class ShipmentMailer < ApplicationMailer
 
   def shipper_confirmation(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
     @user = user
+    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
     @shipment = shipment
     tenant = shipment.tenant
     @scope = scope_for(record: user, sandbox: sandbox)

@@ -27,5 +27,9 @@ module UsersDeviseTokenAuth
 
       @resource = resource_class.where(query, params[:tenant_id], email).first
     end
+
+    def render_create_success
+      render json: { data: ProfileTools.merge_profile(target: @resource.token_validation_response) }
+    end
   end
 end
