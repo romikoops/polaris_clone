@@ -7,7 +7,6 @@ RSpec.describe ShippingTools do
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
-    create(:tenants_scope, target: tenants_tenant, content: { send_email_on_quote_download: true, send_email_on_quote_email: true, base_pricing: true })
     %w[EUR USD].each do |currency|
       stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
         .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
@@ -21,7 +20,14 @@ RSpec.describe ShippingTools do
   let(:origin_hub) { Hub.find(itinerary.hubs.find_by(name: 'Gothenburg Port').id) }
   let(:destination_hub) { Hub.find(itinerary.hubs.find_by(name: 'Shanghai Port').id) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { build(:user, tenant: tenant) }
+  let!(:scope) { create(:tenants_scope, target: tenants_tenant, content: { send_email_on_quote_download: true, send_email_on_quote_email: true, base_pricing: true }) }
+  let(:user) { create(:user, tenant: tenant) }
+  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
+  let(:group) do
+    FactoryBot.create(:tenants_group, name: 'Test', tenant: tenants_tenant).tap do |tapped_group|
+      FactoryBot.create(:tenants_membership, member: tenants_user, group: tapped_group)
+    end
+  end
   let(:hidden_args) { HiddenValueService.new(user: user).hide_total_args }
   let(:args) { HiddenValueService.new(user: user).hide_total_args }
   let(:tenant_vehicle) { create(:tenant_vehicle, tenant: tenant) }
@@ -110,21 +116,23 @@ RSpec.describe ShippingTools do
 
   describe '.create_shipment' do
     let(:details) { { loadType: 'container', direction: 'export' }.with_indifferent_access }
-    let(:current_user) { create(:user, tenant: tenant) }
-    let(:itinerary_with_no_pricing) { create(:gothenburg_shanghai_itinerary, tenant: tenant) }
 
     context 'with base pricing  && display_itineraries_with_rates enabled' do
+      let!(:itinerary_with_no_pricing) { create(:shanghai_gothenburg_itinerary, tenant: tenant) }
+
       before do
-        Pricings::Pricing.create(itinerary: itinerary,
-                                 load_type: details[:loadType],
-                                 tenant: tenant, user: user,
-                                 tenant_vehicle: tenant_vehicle,
-                                 internal: false)
-        Tenants::Scope.create(target: tenants_tenant, content: { base_pricing: true, display_itineraries_with_rates: true })
+        FactoryBot.create(:pricings_pricing,
+                          itinerary: itinerary,
+                          cargo_class: 'fcl_20',
+                          load_type: details[:loadType],
+                          tenant: tenant, group_id: group.id,
+                          tenant_vehicle: tenant_vehicle,
+                          internal: false)
+        scope.update(content: { base_pricing: true, display_itineraries_with_rates: true })
       end
 
       it 'creates the shipment and sends routes matching with valid pricings' do
-        result = described_class.create_shipment(details, current_user)
+        result = described_class.create_shipment(details, user)
         aggregate_failures do
           expect(result['routes']).not_to be_empty
           expect(result['routes'].find { |route| route['itineraryId'] == itinerary.id }).not_to be_nil
@@ -133,14 +141,46 @@ RSpec.describe ShippingTools do
       end
     end
 
+    context 'with base pricing  && expired rates' do
+      let(:itinerary_with_expired_pricing) { create(:shanghai_gothenburg_itinerary, tenant: tenant) }
+
+      before do
+        FactoryBot.create(:pricings_pricing,
+                          itinerary: itinerary,
+                          cargo_class: 'fcl_20',
+                          load_type: details[:loadType],
+                          tenant: tenant, group_id: group.id,
+                          tenant_vehicle: tenant_vehicle,
+                          internal: false)
+        FactoryBot.create(:pricings_pricing,
+                          itinerary: itinerary_with_expired_pricing,
+                          cargo_class: 'fcl_20',
+                          load_type: details[:loadType],
+                          tenant: tenant, group_id: group.id,
+                          tenant_vehicle: tenant_vehicle,
+                          internal: false,
+                          expiration_date: Time.zone.today - 1.day,
+                          effective_date: Time.zone.today - 10.days)
+      end
+
+      it 'creates the shipment and sends routes matching with valid pricings' do
+        result = described_class.create_shipment(details, user)
+        aggregate_failures do
+          expect(result['routes']).not_to be_empty
+          expect(result['routes'].find { |route| route['itineraryId'] == itinerary.id }).not_to be_nil
+          expect(result['routes'].find { |route| route['itineraryId'] == itinerary_with_expired_pricing.id }).to be_nil
+        end
+      end
+    end
+
     context 'when closed quotation tool without user agency' do
       before do
         Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true })
-        allow(current_user).to receive(:agency).and_return(nil)
+        allow(user).to receive(:agency).and_return(nil)
       end
 
       it 'raises a NonAgentUser error' do
-        expect { described_class.create_shipment(details, current_user) }.to raise_error(ApplicationError)
+        expect { described_class.create_shipment(details, user) }.to raise_error(ApplicationError)
       end
     end
 
@@ -151,15 +191,35 @@ RSpec.describe ShippingTools do
 
       before do
         Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true })
-        Legacy::Pricing.create(itinerary: itinerary,
-                               user: agency_manager,
-                               tenant: tenant,
-                               transport_category: transport_category,
-                               tenant_vehicle: tenant_vehicle)
+        create(:legacy_pricing, itinerary: itinerary,
+                                user: agency_manager,
+                                tenant: tenant,
+                                transport_category: transport_category,
+                                tenant_vehicle: tenant_vehicle)
       end
 
       it 'creates the shipment and filters the routes according to the users agency' do
         result = described_class.create_shipment(details, user_within_agency)
+        aggregate_failures do
+          expect(result['routes']).not_to be_empty
+          expect(result['routes'].find { |route| route['itineraryId'] == itinerary.id }).not_to be_nil
+        end
+      end
+    end
+
+    context 'when it is a legacy shipper' do
+      let(:legacy_shipper) { create(:user, tenant: tenant) }
+
+      before do
+        create(:legacy_pricing, itinerary: itinerary,
+                                tenant: tenant,
+                                transport_category: transport_category,
+                                tenant_vehicle: tenant_vehicle)
+        Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { base_pricing: false })
+      end
+
+      it 'creates the shipment and filters the routes according to the users agency' do
+        result = described_class.create_shipment(details, legacy_shipper)
         aggregate_failures do
           expect(result['routes']).not_to be_empty
           expect(result['routes'].find { |route| route['itineraryId'] == itinerary.id }).not_to be_nil

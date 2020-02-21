@@ -91,7 +91,7 @@ class ShippingTools
             load_type: load_type,
             group_id: current_user.all_groups.ids,
             internal: false
-          ).empty?
+          ).where('expiration_date > ?', Time.zone.tomorrow).empty?
           no_margins = if no_general_margins
                          Pricings::Margin.where(
                            itinerary_id: id,
@@ -111,7 +111,7 @@ class ShippingTools
             itinerary_id: id,
             load_type: load_type,
             internal: false
-          ).empty?
+          ).where('expiration_date > ?', Time.zone.tomorrow).empty?
         end
       end
     else
@@ -120,16 +120,16 @@ class ShippingTools
 
         user_pricing_id = current_user.agency.agency_manager_id
         itinerary_ids = tenant_itineraries.ids.reject do |id|
-          Pricing.where(
-            sandbox: sandbox,
-            itinerary_id: id,
-            user_id: user_pricing_id,
-            internal: false
-          ).for_load_type(load_type).empty?
+          Pricing.where(sandbox: sandbox, itinerary_id: id, user_id: user_pricing_id, internal: false)
+                 .for_load_type(load_type)
+                 .where('expiration_date > ?', Time.zone.tomorrow).empty?
         end
       else
         itinerary_ids = tenant_itineraries.ids.reject do |id|
-          Pricing.where(sandbox: sandbox, itinerary_id: id, internal: false).for_load_type(load_type).empty?
+          Pricing.where(sandbox: sandbox, itinerary_id: id, internal: false)
+                 .for_load_type(load_type)
+                 .where('expiration_date > ?', Time.zone.tomorrow)
+                 .empty?
         end
       end
     end
