@@ -5,8 +5,6 @@ class ContactsController < ApplicationController
   include ActionController::Helpers
 
   def index
-    paginated_contacts = contacts.paginate(pagination_options)
-
     response_handler(
       pagination_options.merge(
         contacts: paginated_contacts.map(&:as_options_json),
@@ -68,11 +66,6 @@ class ContactsController < ApplicationController
   end
 
   def search_contacts
-    # TODO: Handle invalid query
-    return if filterrific.nil?
-
-    paginated_contacts = filterrific.find.paginate(pagination_options)
-
     response_handler(
       pagination_options.merge(
         contacts: paginated_contacts.map(&:as_options_json),
@@ -82,18 +75,13 @@ class ContactsController < ApplicationController
   end
 
   def booking_process
-    if params[:query] && params[:query] != ''
-      search_results = Contact.contact_search(params[:query])
-      paginated_contacts = search_results.paginate(pagination_options)
-    else
-      paginated_contacts = contacts.paginate(pagination_options)
-    end
     response_contacts = paginated_contacts.map do |contact|
       {
         address: contact.address.try(:to_custom_hash) || {},
         contact: contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
+
     response_handler(
       pagination_options.merge(
         contacts: response_contacts,
@@ -150,6 +138,14 @@ class ContactsController < ApplicationController
 
   private
 
+  def search_params
+    params.permit(
+      :query,
+      :page,
+      :per_page
+    )
+  end
+
   def contacts
     @contacts ||= current_user.contacts.where(sandbox: @sandbox).order(updated_at: :desc)
   end
@@ -161,13 +157,10 @@ class ContactsController < ApplicationController
     }.compact
   end
 
-  def filterrific
-    @filterrific ||= initialize_filterrific(
-      contacts,
-      { contacts_query: params[:query] },
-      available_filters: %i(contacts_query),
-      sanitize_params: true
-    )
+  def paginated_contacts
+    return contacts.paginate(pagination_options) if search_params[:query].blank?
+
+    contacts.contact_search(search_params[:query]).paginate(pagination_options)
   end
 
   def current_page
