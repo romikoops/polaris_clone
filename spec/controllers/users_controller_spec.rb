@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe UsersController do
   let(:addresses) { create_list(:address, 5) }
-  let(:user) { create(:user, guest: true) }
+  let(:user) { create(:user, guest: true, with_profile: true) }
 
   before do
     allow(controller).to receive(:user_signed_in?).and_return(true)
@@ -13,7 +13,7 @@ RSpec.describe UsersController do
   end
 
   describe 'GET #home' do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, with_profile: true) }
 
     before do
       allow(controller).to receive(:user_signed_in?).and_return(true)
@@ -28,7 +28,7 @@ RSpec.describe UsersController do
   end
 
   describe 'GET #show' do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, with_profile: true) }
 
     before do
       allow(controller).to receive(:user_signed_in?).and_return(true)
@@ -93,7 +93,7 @@ RSpec.describe UsersController do
     end
 
     it 'if there is no currency for user, it will use EUR' do
-      user = create(:user, currency: nil)
+      user = create(:user, currency: nil, with_profile: true)
       get :currencies, params: { tenant_id: user.tenant.id, user_id: user.id }
 
       body = JSON.parse(response.body)
@@ -139,7 +139,7 @@ RSpec.describe UsersController do
   end
 
   describe 'POST #opt_out' do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, with_profile: true) }
 
     before do
       allow(controller).to receive(:user_signed_in?).and_return(true)

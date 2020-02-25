@@ -11,7 +11,6 @@ import { cargoClassOptions } from '../../../../constants'
 import NamedAsync from '../../../NamedSelect/NamedAsync'
 import { getHubOptions, isEmpty } from '../../../../helpers'
 import NamedSelect from '../../../NamedSelect/NamedSelect'
-import CollapsingBar from '../../../CollapsingBar/CollapsingBar'
 import PlaceSearch from '../../../Maps/PlaceSearch'
 import CarriageToggle from '../../../ShipmentDetails/RouteSection/CarriageToggle'
 import SquareButton from '../../../SquareButton/index'
@@ -33,10 +32,8 @@ class AdminClientMarginPreview extends Component {
       selectedOriginTrucking: {},
       selectedDestinationTrucking: {},
       originTrucking: false,
-      destinationTrucking: false,
-      collapsed: get(props, ['collapsed'], true)
+      destinationTrucking: false
     }
-    this.toggleCollapsed = this.toggleCollapsed.bind(this)
     this.testMargins = this.testMargins.bind(this)
   }
 
@@ -58,10 +55,6 @@ class AdminClientMarginPreview extends Component {
   setFilter (e) {
     const { name, label, value } = e
     this.setState({ [name]: { value, label } })
-  }
-
-  toggleCollapsed () {
-    this.setState(prevState => ({ collapsed: !prevState.collapsed }))
   }
 
   selectHub (name, e) {
@@ -119,7 +112,6 @@ class AdminClientMarginPreview extends Component {
       selectedDestinationHub,
       selectedCargoClass,
       filteredCargoClasses,
-      collapsed,
       originTrucking,
       destinationTrucking,
       stage
@@ -127,17 +119,10 @@ class AdminClientMarginPreview extends Component {
     const previewsToRender = get(marginPreview, 'results', [])
 
     return (
-      <CollapsingBar
-        wrapperClassName="flex-100 layout-row"
-        contentClassName="flex-100 layout-row layout-align-center-center layout-wrap greyBg"
-        text={t('admin:marginPreview')}
-        collapsed={false}
-        collapsed={collapsed}
-        handleCollapser={this.toggleCollapsed}
-        minHeight="450px"
-        overflow
-        showArrow
-      >
+      <div className="flex-100 layout-row layout-align-center-center layout-wrap ">
+        <div className={`flex-100 layout-row layout-align-start-center layout-wrap greyBg ${styles.preview_header}`}>
+          <h3 className="flex-none">{t('admin:marginPreview')}</h3>
+        </div>
         <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.filter_row}`}>
           <div className="flex-100 layout-row layout-align-center-center layout-wrap">
             <div className="flex-20 layout-row layout-align-center-center">
@@ -223,14 +208,14 @@ class AdminClientMarginPreview extends Component {
                 size="small"
                 inverse
                 disabled={stage < 2}
-              /> 
+              />
             </div>
           </div>
         </div>
         <div className="flex-100 layout-row layout-align-center-center layout-wrap">
           { loading ? <LoadingSpinner size="large" /> : previewsToRender.map(mp => <AdminMarginPreviewResult result={mp} tenant={tenant} />)}
         </div>
-      </CollapsingBar>
+      </div>
     )
   }
 }
@@ -263,4 +248,5 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces(['common', 'admin'])(AdminClientMarginPreview))
+export const translatedMarginPreview = withNamespaces(['common', 'admin'])(AdminClientMarginPreview)
+export default connect(mapStateToProps, mapDispatchToProps)(translatedMarginPreview)

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :shipment do
-    association :user
+    association :user, with_profile: true
     association :origin_hub, factory: :hub
     association :destination_hub, factory: :hub
     association :trip

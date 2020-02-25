@@ -72,6 +72,7 @@ RSpec.describe Pricings::Manipulator do
   let(:hub) { itinerary.hubs.first }
 
   before do
+    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
     FactoryBot.create(:tenants_scope, content: {}, target: tenants_tenant)
     %w[ocean trucking local_charge].flat_map do |mot|
       [
@@ -533,8 +534,27 @@ RSpec.describe Pricings::Manipulator do
           expect(metadatum[:pricing_id]).to eq(pricing.id)
           expect(metadatum[:fees].keys).to eq([:bas])
           expect(metadatum.dig(:fees, :bas, :breakdowns).length).to eq(2)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :margin_id)).to eq(margin.id)
+          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :source_id)).to eq(margin.id)
           expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :margin_value)).to eq(margin.value)
+        end
+      end
+    end
+
+    context 'with manipulated freight pricing with metadata attached to the user - single absolute margin' do
+      let(:parent_margin) { FactoryBot.create(:freight_margin, pricing: pricing, tenant: tenants_tenant, applicable: tenants_user, operator: '%', value: 0) }
+      let!(:detail) { FactoryBot.create(:bas_margin_detail, margin: parent_margin, value: 50, operator: '&', charge_category: bas_charge_category) }
+
+      let!(:metadata) { klass.perform.second }
+      let!(:metadatum) { metadata.first }
+
+      it 'returns the manipulated freight pricing with metadata attached to the user - single absolute margin' do
+        aggregate_failures do
+          expect(metadatum.keys).to match_array(%i[pricing_id cargo_class fees metadata_id])
+          expect(metadatum[:pricing_id]).to eq(pricing.id)
+          expect(metadatum[:fees].keys).to eq([:bas])
+          expect(metadatum.dig(:fees, :bas, :breakdowns).length).to eq(2)
+          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :source_id)).to eq(detail.id)
+          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :margin_value)).to eq(detail.value)
         end
       end
     end
@@ -556,7 +576,7 @@ RSpec.describe Pricings::Manipulator do
       it 'returns the manipulated freight pricing with metadata attached to the user - first margin' do
         aggregate_failures do
           expect(metadatum.dig(:fees, :bas, :breakdowns).length).to eq(3)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :margin_id)).to eq(margin1.id)
+          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :source_id)).to eq(margin1.id)
           expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :margin_value)).to eq(margin1.value)
         end
       end
@@ -564,7 +584,7 @@ RSpec.describe Pricings::Manipulator do
       it 'returns the manipulated freight pricing with metadata attached to the user - second margin' do
         aggregate_failures do
           expect(metadatum.dig(:fees, :bas, :breakdowns).length).to eq(3)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :margin_id)).to eq(margin2.id)
+          expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :source_id)).to eq(margin2.id)
           expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :margin_value)).to eq(margin2.value)
         end
       end
@@ -592,18 +612,18 @@ RSpec.describe Pricings::Manipulator do
 
       it 'returns the manipulated freight pricing with metadata attached to the user - flat margin, first fee' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :margin_id)).to eq(margin1.id)
+          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :source_id)).to eq(margin1.id)
           expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :margin_value)).to eq(margin1.value)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :margin_id)).to eq(margin2.id)
+          expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :source_id)).to eq(margin2.id)
           expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :margin_value)).to eq(margin2.value / 2)
         end
       end
 
       it 'returns the manipulated freight pricing with metadata attached to the user - flat margin, second fee' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :baf, :breakdowns, 1, :margin_id)).to eq(margin1.id)
+          expect(metadatum.dig(:fees, :baf, :breakdowns, 1, :source_id)).to eq(margin1.id)
           expect(metadatum.dig(:fees, :baf, :breakdowns, 1, :margin_value)).to eq(margin1.value)
-          expect(metadatum.dig(:fees, :baf, :breakdowns, 2, :margin_id)).to eq(margin2.id)
+          expect(metadatum.dig(:fees, :baf, :breakdowns, 2, :source_id)).to eq(margin2.id)
           expect(metadatum.dig(:fees, :baf, :breakdowns, 2, :margin_value)).to eq(margin2.value / 2)
         end
       end

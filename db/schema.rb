@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_06_135755) do
+ActiveRecord::Schema.define(version: 2020_02_24_171231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1050,6 +1050,8 @@ ActiveRecord::Schema.define(version: 2020_02_06_135755) do
     t.integer "order"
     t.string "pricing_id"
     t.jsonb "rate_origin", default: {}
+    t.uuid "source_id"
+    t.string "source_type"
     t.uuid "target_id"
     t.string "target_type"
     t.datetime "updated_at", null: false
@@ -1058,6 +1060,7 @@ ActiveRecord::Schema.define(version: 2020_02_06_135755) do
     t.index ["charge_id"], name: "index_pricings_breakdowns_on_charge_id"
     t.index ["margin_id"], name: "index_pricings_breakdowns_on_margin_id"
     t.index ["metadatum_id"], name: "index_pricings_breakdowns_on_metadatum_id"
+    t.index ["source_type", "source_id"], name: "index_pricings_breakdowns_on_source_type_and_source_id"
     t.index ["target_type", "target_id"], name: "index_pricings_breakdowns_on_target_type_and_target_id"
   end
 
@@ -1181,7 +1184,6 @@ ActiveRecord::Schema.define(version: 2020_02_06_135755) do
   create_table "profiles_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "company_name"
     t.string "first_name"
-    t.string "image"
     t.string "last_name"
     t.string "phone"
     t.uuid "user_id"
@@ -1838,6 +1840,7 @@ ActiveRecord::Schema.define(version: 2020_02_06_135755) do
     t.string "unlock_token"
     t.datetime "updated_at", null: false
     t.index ["activation_token"], name: "index_tenants_users_on_activation_token"
+    t.index ["email", "tenant_id"], name: "index_tenants_users_on_email_and_tenant_id", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_tenants_users_on_last_logout_at_and_last_activity_at"
     t.index ["reset_password_token"], name: "index_tenants_users_on_reset_password_token"
     t.index ["sandbox_id"], name: "index_tenants_users_on_sandbox_id"
@@ -2072,17 +2075,17 @@ ActiveRecord::Schema.define(version: 2020_02_06_135755) do
     t.string "email", comment: "MASKED WITH EmailAddress"
     t.string "encrypted_password", default: "", null: false
     t.string "external_id"
-    t.string "first_name_20200207"
+    t.string "first_name_20200207", comment: "MASKED WITH FirstName"
     t.boolean "guest", default: false
     t.string "image"
     t.boolean "internal", default: false
-    t.string "last_name_20200207"
+    t.string "last_name_20200207", comment: "MASKED WITH LastName"
     t.datetime "last_sign_in_at"
     t.string "last_sign_in_ip"
     t.string "nickname"
     t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
-    t.string "phone_20200207"
+    t.string "phone_20200207", comment: "MASKED WITH Phone"
     t.string "provider", default: "tenant_email", null: false
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
@@ -2130,7 +2133,7 @@ ActiveRecord::Schema.define(version: 2020_02_06_135755) do
   add_foreign_key "cargo_units", "cargo_cargos", column: "cargo_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
-  add_foreign_key "profiles_profiles", "tenants_users", column: "user_id"
+  add_foreign_key "profiles_profiles", "tenants_users", column: "user_id", on_delete: :cascade
   add_foreign_key "quotations_tenders", "quotations_quotations", column: "quotation_id"
   add_foreign_key "remarks", "tenants"
   add_foreign_key "shipments", "transport_categories"

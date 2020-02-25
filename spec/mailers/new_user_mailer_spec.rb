@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe NewUserMailer, type: :mailer do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, with_profile: true) }
+
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
@@ -17,13 +18,14 @@ RSpec.describe NewUserMailer, type: :mailer do
     end
 
     it 'renders the correct sender' do
-      expect(mail.from).to eq(['no-reply@itsmycargo.test'])
-      expect(mail.reply_to).to eq(['support@itsmycargo.com'])
+      aggregate_failures do
+        expect(mail.from).to eq(['no-reply@itsmycargo.test'])
+        expect(mail.reply_to).to eq(['support@itsmycargo.com'])
+      end
     end
 
     it 'renders the correct receiver' do
       expect(mail.to).to eq([user.tenant.emails.dig('sales', 'general')])
     end
   end
-
 end

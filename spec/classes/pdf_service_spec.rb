@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe PdfService do
   let(:tenant) { create(:tenant, currency: 'USD') }
-  let(:user) { create(:user, tenant: tenant, currency: 'USD') }
+  let(:user) { create(:user, tenant: tenant, currency: 'USD', with_profile: true) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let!(:shipment) { create(:shipment, tenant: tenant, user: user, load_type: 'cargo_item') }
   let(:pdf_service) { described_class.new(tenant: tenant, user: user) }

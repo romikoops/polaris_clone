@@ -306,14 +306,21 @@ module Pricings
       parent_margin = margin_or_detail.margin if margin_or_detail.is_a?(Pricings::Detail)
 
       meta[:fees][fee_code.to_sym][:breakdowns].push(
-        margin_id: margin_or_detail.id,
+        source_id: margin_or_detail.id,
+        source_type: margin_or_detail.class.to_s,
         margin_value: margin_value,
         operator: margin_or_detail.operator,
         margin_target_type: parent_margin.applicable_type,
         margin_target_id: parent_margin.applicable_id,
-        margin_target_name: parent_margin.applicable.try(:name),
+        margin_target_name: margin_target_name(parent_margin.applicable),
         adjusted_rate: result
       )
+    end
+
+    def margin_target_name(applicable)
+      return applicable.try(:name) unless applicable.is_a?(Tenants::User)
+
+      Profiles::ProfileService.fetch(user_id: applicable.id)&.full_name
     end
 
     def update_meta(manipulated_pricing)

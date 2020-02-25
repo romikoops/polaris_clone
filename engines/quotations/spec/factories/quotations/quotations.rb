@@ -30,6 +30,6 @@ end
 #  index_quotations_quotations_on_destination_nexus_id  (destination_nexus_id)
 #  index_quotations_quotations_on_origin_nexus_id       (origin_nexus_id)
 #  index_quotations_quotations_on_sandbox_id            (sandbox_id)
-#  index_quotations_quotations_on_tenant_id               (tenant_id)
+#  index_quotations_quotations_on_tenant_id             (tenant_id)
 #  index_quotations_quotations_on_user_id               (user_id)
 #

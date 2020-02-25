@@ -61,6 +61,7 @@ RSpec.describe Pricings::Manipulator do
   let(:hub) { itinerary.hubs.first }
 
   before do
+    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
     FactoryBot.create(:tenants_scope, content: {}, target: tenants_tenant)
     FactoryBot.create(:thc_charge, tenant: tenant)
     %w[ocean trucking local_charge].flat_map do |mot|
@@ -472,7 +473,7 @@ RSpec.describe Pricings::Manipulator do
 
       it 'returns the manipulated local charge with metadata attached to the user - single margin' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :margin_id)).to eq(margin.id)
+          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :source_id)).to eq(margin.id)
           expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :margin_value)).to eq(margin.value)
         end
       end
@@ -509,14 +510,14 @@ RSpec.describe Pricings::Manipulator do
 
       it 'returns the manipulated local charge with metadata attached to the user - first margin' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :margin_id)).to eq(margin1.id)
+          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :source_id)).to eq(margin1.id)
           expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :margin_value)).to eq(margin1.value)
         end
       end
 
       it 'returns the manipulated local charge with metadata attached to the user - second margin' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 2, :margin_id)).to eq(margin2.id)
+          expect(metadatum.dig(:fees, :solas, :breakdowns, 2, :source_id)).to eq(margin2.id)
           expect(metadatum.dig(:fees, :solas, :breakdowns, 2, :margin_value)).to eq(margin2.value)
         end
       end
@@ -585,18 +586,18 @@ RSpec.describe Pricings::Manipulator do
       it 'returns the manipulated local charge with metadata attached to the user - first fee' do
         aggregate_failures do
           expect(metadatum.dig(:fees, :solas, :breakdowns).length).to eq(3)
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :margin_id)).to eq(margin1.id)
+          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :source_id)).to eq(margin1.id)
           expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :margin_value)).to eq(margin1.value)
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 2, :margin_id)).to eq(margin2.id)
+          expect(metadatum.dig(:fees, :solas, :breakdowns, 2, :source_id)).to eq(margin2.id)
           expect(metadatum.dig(:fees, :solas, :breakdowns, 2, :margin_value)).to eq(margin2.value / 2)
         end
       end
 
       it 'returns the manipulated local charge with metadata attached to the user - second fee' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :thc, :breakdowns, 1, :margin_id)).to eq(margin1.id)
+          expect(metadatum.dig(:fees, :thc, :breakdowns, 1, :source_id)).to eq(margin1.id)
           expect(metadatum.dig(:fees, :thc, :breakdowns, 1, :margin_value)).to eq(margin1.value)
-          expect(metadatum.dig(:fees, :thc, :breakdowns, 2, :margin_id)).to eq(margin2.id)
+          expect(metadatum.dig(:fees, :thc, :breakdowns, 2, :source_id)).to eq(margin2.id)
           expect(metadatum.dig(:fees, :thc, :breakdowns, 2, :margin_value)).to eq(margin2.value / 2)
         end
       end

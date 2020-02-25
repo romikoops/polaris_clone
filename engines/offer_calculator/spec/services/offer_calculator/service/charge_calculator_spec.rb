@@ -146,6 +146,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
   end
 
   before do
+    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
     stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
       .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26 } }.to_json, headers: {})
     %w[ocean air rail truck trucking local_charge].flat_map do |mot|

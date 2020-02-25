@@ -388,7 +388,8 @@ module OfferCalculator
           )
           if breakdown[:operator].present?
             pricing_breakdown.assign_attributes(
-              margin_id: breakdown[:margin_id],
+              source_id: breakdown[:source_id],
+              source_type: breakdown[:source_type],
               target_type: breakdown[:margin_target_type],
               target_id: breakdown[:margin_target_id]
             )

@@ -61,6 +61,7 @@ RSpec.describe Pricings::Manipulator do
   let(:hub) { itinerary.hubs.first }
 
   before do
+    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
     FactoryBot.create(:tenants_scope, content: {}, target: tenants_tenant)
     %w[ocean trucking local_charge].flat_map do |mot|
       [
@@ -300,14 +301,14 @@ RSpec.describe Pricings::Manipulator do
 
       it 'returns the manipulated trucking pricing with metadata attached to the user - fee' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :puf, :breakdowns, 1, :margin_id)).to eq(margin1.id)
+          expect(metadatum.dig(:fees, :puf, :breakdowns, 1, :source_id)).to eq(margin1.id)
           expect(metadatum.dig(:fees, :puf, :breakdowns, 1, :margin_value)).to eq(margin1.value)
         end
       end
 
       it 'returns the manipulated trucking pricing with metadata attached to the user -main rate' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :trucking_lcl, :breakdowns, 1, :margin_id)).to eq(margin1.id)
+          expect(metadatum.dig(:fees, :trucking_lcl, :breakdowns, 1, :source_id)).to eq(margin1.id)
           expect(metadatum.dig(:fees, :trucking_lcl, :breakdowns, 1, :margin_value)).to eq(margin1.value)
         end
       end

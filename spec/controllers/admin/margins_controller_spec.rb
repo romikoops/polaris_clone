@@ -10,6 +10,7 @@ RSpec.describe Admin::MarginsController, type: :controller do
   let!(:currency) { FactoryBot.create(:legacy_currency) }
   let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
   let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
+  let!(:user_profile) { create(:profiles_profile, user_id: tenants_user.id) }
   let(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
   let(:company) do
     company = create(:tenants_company, name: 'Test', tenant: tenants_tenant)
@@ -44,137 +45,53 @@ RSpec.describe Admin::MarginsController, type: :controller do
   end
 
   describe 'POST #test' do
-    it 'returns http success for a User target' do
-      user_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, tenant: tenants_tenant, applicable: tenants_user)
-      args = {
+    let(:args) do
+      {
         selectedOriginHub: itinerary_1.hubs.first.id,
         selectedDestinationHub: itinerary_1.hubs.last.id,
         selectedCargoClass: 'lcl',
-        targetId: user.id,
-        targetType: 'user',
         tenant_id: tenant.id
       }
+    end
+    let(:json) { JSON.parse(response.body) }
+    let(:results) { json.dig('data', 'results') }
 
-      post :test, params: args
+    it 'returns http success for a User target' do
+      user_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, tenant: tenants_tenant, applicable: tenants_user)
+      params = args.merge(targetId: user.id, targetType: 'user')
+
+      post :test, params: params
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
-        json = JSON.parse(response.body)
-        results = json.dig('data', 'results')
         expect(results.length).to eq(1)
-        expect(results.first).to include(
-          'freight' => {
-            'fees' => {
-              'bas' => {
-                'original' => { 'rate' => '25.0', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.0', 'range' => [] },
-                'margins' => [
-                  { 'margin_id' => user_margin.id,
-                    'margin_value' => '0.1',
-                    'operator' => '%',
-                    'data' => { 'rate' => '27.5', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.1', 'range' => [] },
-                    'target_name' => nil,
-                    'target_id' => tenants_user.id,
-                    'target_type' => 'Tenants::User',
-                    'url_id' => user.id }
-                ],
-                'flatMargins' => [],
-                'final' => { 'rate' => '27.5', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.1', 'range' => [] },
-                'rate_origin' => nil
-              }
-            },
-            'service_level' => tenant_vehicle_1.name
-          }
-        )
+        expect(results.first).to include(build(:margin_preview_result, target: tenants_user, target_name: "#{user_profile.first_name} #{user_profile.last_name}", margin: user_margin, service_level: tenant_vehicle_1))
       end
     end
 
     it 'returns http success for a Company target' do
       company_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, tenant: tenants_tenant, applicable: company)
-      args = {
-        selectedOriginHub: itinerary_1.hubs.first.id,
-        selectedDestinationHub: itinerary_1.hubs.last.id,
-        selectedCargoClass: 'lcl',
-        targetId: company.id,
-        targetType: 'company',
-        tenant_id: tenant.id
-      }
+      params = args.merge(targetId: company.id, targetType: 'company')
 
-      post :test, params: args
+      post :test, params: params
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
-        json = JSON.parse(response.body)
-
-        results = json.dig('data', 'results')
         expect(results.length).to eq(1)
-        expect(results.first).to include(
-          'freight' => {
-            'fees' => {
-              'bas' => {
-                'original' => { 'rate' => '25.0', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.0', 'range' => [] },
-                'margins' => [
-                  { 'margin_id' => company_margin.id,
-                    'margin_value' => '0.1',
-                    'operator' => '%',
-                    'data' => { 'rate' => '27.5', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.1', 'range' => [] },
-                    'target_name' => company.name,
-                    'target_id' => company.id,
-                    'target_type' => 'Tenants::Company',
-                    'url_id' => company.id }
-                ],
-                'flatMargins' => [],
-                'final' => { 'rate' => '27.5', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.1', 'range' => [] },
-                'rate_origin' => nil
-              }
-            },
-            'service_level' => tenant_vehicle_1.name
-          }
-        )
+        expect(results.first).to include(build(:margin_preview_result, target: company, target_name: company.name, margin: company_margin, service_level: tenant_vehicle_1))
       end
     end
 
     it 'returns http success for a Group target' do
       group_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, tenant: tenants_tenant, applicable: group)
-      args = {
-        selectedOriginHub: itinerary_1.hubs.first.id,
-        selectedDestinationHub: itinerary_1.hubs.last.id,
-        selectedCargoClass: 'lcl',
-        targetId: group.id,
-        targetType: 'group',
-        tenant_id: tenant.id
-      }
+      params = args.merge(targetId: group.id, targetType: 'group')
 
-      post :test, params: args
+      post :test, params: params
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
-        json = JSON.parse(response.body)
-
-        results = json.dig('data', 'results')
         expect(results.length).to eq(1)
-        expect(results.first).to include(
-          'freight' => {
-            'fees' => {
-              'bas' => {
-                'original' => { 'rate' => '25.0', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.0', 'range' => [] },
-                'margins' => [
-                  { 'margin_id' => group_margin.id,
-                    'margin_value' => '0.1',
-                    'operator' => '%',
-                    'data' => { 'rate' => '27.5', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.1', 'range' => [] },
-                    'target_name' => group.name,
-                    'target_id' => group.id,
-                    'target_type' => 'Tenants::Group',
-                    'url_id' => group.id }
-                ],
-                'flatMargins' => [],
-                'final' => { 'rate' => '27.5', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.1', 'range' => [] },
-                'rate_origin' => nil
-              }
-            },
-            'service_level' => tenant_vehicle_1.name
-          }
-        )
+        expect(results.first).to include(build(:margin_preview_result, target: group, target_name: group.name, margin: group_margin, service_level: tenant_vehicle_1))
       end
     end
   end

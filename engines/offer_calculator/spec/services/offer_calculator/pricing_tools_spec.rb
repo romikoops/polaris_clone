@@ -182,6 +182,7 @@ RSpec.describe OfferCalculator::PricingTools do
     end
   end
   before do
+    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
     stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
       .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26 } }.to_json, headers: {})
     %w[adi eca qdf fill isps].each do |code|

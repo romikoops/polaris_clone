@@ -51,6 +51,7 @@ RSpec.describe Pricings::Manipulator do
   let(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, tenant: tenant) }
 
   before do
+    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
     FactoryBot.create(:tenants_scope, content: {}, target: tenants_tenant)
     FactoryBot.create(:freight_margin, default_for: 'ocean', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
   end

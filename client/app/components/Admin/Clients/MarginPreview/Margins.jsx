@@ -11,10 +11,12 @@ function Margins ({ margins, t, viewOwner }) {
     const value = get(margin, ['data', valueKey])
     const currency = get(margin, ['data', 'currency'])
     const ownerString = `${margin.target_type.replace('Tenants::', '')}: ${margin.target_name}`
+    const valueToRender = parseFloat(margin.margin_value) * (margin.operator === '%' ? 100 : 1)
+    const operatorToRender = margin.operator === '%' ? '%' : '+'
 
     return (
       <tr>
-        <td colSpan="4" className={styles.value_cell}>{`${parseFloat(margin.margin_value) * 100} ${margin.operator}`}</td>
+        <td colSpan="4" className={styles.value_cell}>{`${valueToRender} ${operatorToRender}`}</td>
         <td colSpan="4" className={styles.value_cell}>{`${value} ${currency}`}</td>
         <td
           colSpan="4"

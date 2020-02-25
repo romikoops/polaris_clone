@@ -10,6 +10,7 @@ module Profiles
         company_name: company_name,
         phone: phone
       }
+
       if Profiles::Profile.exists?(user_id: user.id)
         Profiles::Profile.find_by(user_id: user.id).update(profile_attributes)
       else

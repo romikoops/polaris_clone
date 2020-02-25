@@ -164,8 +164,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
                .merge(
                  code: breakdown.code,
                  target_name: breakdown.target_name,
-                 operator: breakdown.margin&.operator,
-                 margin_value: breakdown.margin&.value,
+                 operator: breakdown.source&.operator,
+                 margin_value: breakdown.source&.value,
                  url_id: url_id
                )
                .with_indifferent_access

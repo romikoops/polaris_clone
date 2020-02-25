@@ -1,14 +1,14 @@
 export function previewPrepare (breakdowns, cargo, key) {
   const feeBreakdowns = extractBreakdowns(breakdowns, cargo, key)
   const originalFee = feeBreakdowns[0]
-  const marginBreakdowns = feeBreakdowns.filter(breakdown => !!breakdown.margin_id && breakdown.operator === '%')
-  const flatMarginBreakdowns = feeBreakdowns.filter(breakdown => !!breakdown.margin_id && breakdown.operator !== '%')
+  const marginBreakdowns = feeBreakdowns.filter((breakdown) => !!breakdown.margin_id && breakdown.operator !== '+')
+  const flatMarginBreakdowns = feeBreakdowns.filter((breakdown) => !!breakdown.margin_id && breakdown.operator === '+')
   const finalFee = marginBreakdowns[marginBreakdowns.length - 1]
   const result = {
     original: originalFee.data,
     metadata: originalFee.rate_origin
   }
-  
+
   if (finalFee) {
     result.final = finalFee.data
   }
@@ -20,12 +20,12 @@ export function previewPrepare (breakdowns, cargo, key) {
 
 export function extractBreakdowns (breakdowns, cargo, key) {
   return breakdowns
-    .filter(breakdown => (cargoEquality(breakdown, key, cargo)))
+    .filter((breakdown) => (cargoEquality(breakdown, key, cargo)))
     .sort((a, b) => (a.order - b.order))
 }
 
 export function breakdownExists (breakdowns, cargo, key) {
-  return !!breakdowns.find(breakdown => (cargoEquality(breakdown, key, cargo)))
+  return !!breakdowns.find((breakdown) => (cargoEquality(breakdown, key, cargo)))
 }
 
 function cargoEquality (breakdown, key, cargo) {

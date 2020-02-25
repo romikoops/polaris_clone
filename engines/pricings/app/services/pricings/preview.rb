@@ -119,7 +119,7 @@ module Pricings
         adjusted_breakdowns = data[:breakdowns].map { |breakdown| manipulate_breakdown(breakdown: breakdown) }
         margin_breakdowns = adjusted_breakdowns.reject { |breakdown| breakdown[:operator] == '+' }
         flat_breakdowns = adjusted_breakdowns.select { |breakdown| breakdown[:operator] == '+' }
-        original = adjusted_breakdowns.find { |breakdown| breakdown[:margin_id].blank? }
+        original = adjusted_breakdowns.find { |breakdown| breakdown[:source_id].blank? }
         hash[fee_key] = {
           original: original[:data],
           margins: margin_breakdowns.reject { |breakdown| breakdown == original },

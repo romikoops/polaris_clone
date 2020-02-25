@@ -154,6 +154,7 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
   let(:bas_charge_category) { Legacy::ChargeCategory.find_by(code: 'bas') || FactoryBot.create(:bas_charge, tenant: tenant) }
 
   before do
+    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
     stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
       .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26 } }.to_json, headers: {})
     %w[ocean trucking local_charge].flat_map do |mot|
@@ -748,7 +749,7 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
           metadatum = Pricings::Metadatum.find_by(id: target_result.dig(:meta, :metadata_id))
           expect(metadatum).to be_present
           expect(metadatum.breakdowns.pluck(:charge_category_id).uniq).to match_array(lcl_pricing.fees.pluck(:charge_category_id))
-          expect(metadatum.breakdowns.map { |b| b.margin&.operator }.compact.uniq).to match_array(['+'])
+          expect(metadatum.breakdowns.map { |b| b.source&.operator }.compact.uniq).to match_array(['+'])
         end
       end
     end
@@ -780,7 +781,7 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
           metadatum = Pricings::Metadatum.find_by(id: target_result.dig(:meta, :metadata_id))
           expect(metadatum).to be_present
           expect(metadatum.breakdowns.pluck(:charge_category_id).uniq).to match_array(lcl_pricing.fees.pluck(:charge_category_id))
-          expect(metadatum.breakdowns.map { |b| Pricings::Detail.find_by(id: b.margin_id)&.operator }.compact.uniq).to match_array(['&'])
+          expect(metadatum.breakdowns.map { |b| b.source&.operator }.compact.uniq).to match_array(['&'])
         end
       end
     end

@@ -2,6 +2,8 @@
 
 module Profiles
   class Profile < ApplicationRecord
+    validates :user_id, uniqueness: true
+
     include PgSearch::Model
     pg_search_scope :search, against: %i[first_name last_name company_name phone], using: {
       tsearch: { prefix: true }
@@ -23,7 +25,6 @@ end
 #  id           :uuid             not null, primary key
 #  company_name :string
 #  first_name   :string
-#  image        :string
 #  last_name    :string
 #  phone        :string
 #  user_id      :uuid
@@ -34,5 +35,5 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (user_id => tenants_users.id)
+#  fk_rails_...  (user_id => tenants_users.id) ON DELETE => cascade
 #

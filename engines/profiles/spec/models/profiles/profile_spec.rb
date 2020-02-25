@@ -15,7 +15,6 @@ end
 #  id           :uuid             not null, primary key
 #  company_name :string
 #  first_name   :string
-#  image        :string
 #  last_name    :string
 #  phone        :string
 #  user_id      :uuid
@@ -26,5 +25,5 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (user_id => tenants_users.id)
+#  fk_rails_...  (user_id => tenants_users.id) ON DELETE => cascade
 #

@@ -2,13 +2,16 @@
 
 module Pricings
   class Breakdown < ApplicationRecord
-    belongs_to :margin, optional: true
+    belongs_to :source, polymorphic: true, optional: true
     belongs_to :metadatum
     belongs_to :charge, class_name: 'Legacy::Charge'
     belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
     belongs_to :cargo_unit, polymorphic: true, optional: true
     belongs_to :target, polymorphic: true, optional: true
-    validates :margin_id, uniqueness: { scope: %i[charge_id charge_category_id metadatum_id] }
+    validates :source_id, uniqueness: { scope: %i[charge_id charge_category_id metadatum_id] }
+
+    belongs_to :margin, optional: true
+    deprecate margin: 'Converted to source'
 
     def code
       ::Legacy::ChargeCategory.find(charge_category_id)&.code
@@ -30,6 +33,7 @@ end
 #  data               :jsonb
 #  order              :integer
 #  rate_origin        :jsonb
+#  source_type        :string
 #  target_type        :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
@@ -39,6 +43,7 @@ end
 #  margin_id          :uuid
 #  metadatum_id       :uuid             not null
 #  pricing_id         :string
+#  source_id          :uuid
 #  target_id          :uuid
 #
 # Indexes
@@ -48,5 +53,6 @@ end
 #  index_pricings_breakdowns_on_charge_id                          (charge_id)
 #  index_pricings_breakdowns_on_margin_id                          (margin_id)
 #  index_pricings_breakdowns_on_metadatum_id                       (metadatum_id)
+#  index_pricings_breakdowns_on_source_type_and_source_id          (source_type,source_id)
 #  index_pricings_breakdowns_on_target_type_and_target_id          (target_type,target_id)
 #

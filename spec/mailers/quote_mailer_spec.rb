@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe QuoteMailer, type: :mailer do
   let(:tenant) { create(:tenant) }
-  let(:user) { create(:user, tenant: tenant) }
+  let(:user) { create(:user, tenant: tenant, with_profile: true) }
 
   let(:original_shipment) do
     create(:legacy_shipment, :with_meta, user: user, tenant: tenant, with_breakdown: true).tap do |shipment|

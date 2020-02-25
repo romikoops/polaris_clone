@@ -48,6 +48,7 @@ RSpec.describe Pricings::Preview do
     end
     FactoryBot.create(:solas_charge, tenant: tenant)
     FactoryBot.create(:puf_charge, tenant: tenant)
+    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
   end
 
   describe '.perform' do
@@ -57,7 +58,7 @@ RSpec.describe Pricings::Preview do
         results = described_class.new(target: tenants_user, tenant: tenants_tenant, params: args).perform
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :margin_id)).to eq(user_margin.id)
+          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(user_margin.id)
           expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
         end
       end
@@ -68,7 +69,7 @@ RSpec.describe Pricings::Preview do
 
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :margin_id)).to eq(group_margin.id)
+          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(group_margin.id)
           expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
         end
       end
@@ -79,7 +80,7 @@ RSpec.describe Pricings::Preview do
 
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :margin_id)).to eq(company_margin.id)
+          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(company_margin.id)
           expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
         end
       end
@@ -90,7 +91,7 @@ RSpec.describe Pricings::Preview do
 
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :margin_id)).to eq(company_margin.id)
+          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(company_margin.id)
           expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
         end
       end
@@ -103,11 +104,11 @@ RSpec.describe Pricings::Preview do
 
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :margin_id)).to eq(user_margin_1.id)
+          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(user_margin_1.id)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :data, 'rate')).to eq(27.5)
-          expect(results.dig(0, :freight, :fees, :bas, :margins, 1, :margin_id)).to eq(user_margin_2.id)
+          expect(results.dig(0, :freight, :fees, :bas, :margins, 1, :source_id)).to eq(user_margin_2.id)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 1, :data, 'rate')).to eq(30.25)
-          expect(results.dig(0, :freight, :fees, :bas, :margins, 2, :margin_id)).to eq(user_margin_3.id)
+          expect(results.dig(0, :freight, :fees, :bas, :margins, 2, :source_id)).to eq(user_margin_3.id)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 2, :data, 'rate')).to eq(33.275)
         end
       end
@@ -183,19 +184,19 @@ RSpec.describe Pricings::Preview do
 
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :margin_id)).to eq(freight_margin.id)
+          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(freight_margin.id)
           expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
-          expect(results.dig(0, :import, :fees, :solas, :margins, 0, :margin_id)).to eq(import_margin.id)
+          expect(results.dig(0, :import, :fees, :solas, :margins, 0, :source_id)).to eq(import_margin.id)
           expect(results.dig(0, :import, :fees, :solas, :final, 'value')).to eq(19.25)
-          expect(results.dig(0, :export, :fees, :solas, :margins, 0, :margin_id)).to eq(export_margin.id)
+          expect(results.dig(0, :export, :fees, :solas, :margins, 0, :source_id)).to eq(export_margin.id)
           expect(results.dig(0, :export, :fees, :solas, :final, 'value')).to eq(19.25)
-          expect(results.dig(0, :trucking_pre, :fees, :puf, :margins, 0, :margin_id)).to eq(trucking_pre_margin.id)
+          expect(results.dig(0, :trucking_pre, :fees, :puf, :margins, 0, :source_id)).to eq(trucking_pre_margin.id)
           expect(results.dig(0, :trucking_pre, :fees, :puf, :final, 'value')).to eq(275)
-          expect(results.dig(0, :trucking_pre, :fees, :trucking_lcl, :margins, 0, :margin_id)).to eq(trucking_pre_margin.id)
+          expect(results.dig(0, :trucking_pre, :fees, :trucking_lcl, :margins, 0, :source_id)).to eq(trucking_pre_margin.id)
           expect(results.dig(0, :trucking_pre, :fees, :trucking_lcl, :final, 'wm', 0, 'rate', 'value')).to eq(110)
-          expect(results.dig(0, :trucking_on, :fees, :puf, :margins, 0, :margin_id)).to eq(trucking_on_margin.id)
+          expect(results.dig(0, :trucking_on, :fees, :puf, :margins, 0, :source_id)).to eq(trucking_on_margin.id)
           expect(results.dig(0, :trucking_on, :fees, :puf, :final, 'value')).to eq(275)
-          expect(results.dig(0, :trucking_on, :fees, :trucking_lcl, :margins, 0, :margin_id)).to eq(trucking_on_margin.id)
+          expect(results.dig(0, :trucking_on, :fees, :trucking_lcl, :margins, 0, :source_id)).to eq(trucking_on_margin.id)
           expect(results.dig(0, :trucking_on, :fees, :trucking_lcl, :final, 'cbm', 0, 'rate', 'value')).to eq(261.25)
         end
       end
@@ -232,9 +233,9 @@ RSpec.describe Pricings::Preview do
           results = described_class.new(target: tenants_user, tenant: tenants_tenant, params: args).perform
           aggregate_failures do
             expect(results.length).to eq(1)
-            expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :margin_id)).to eq(user_margin.id)
+            expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(user_margin.id)
             expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
-            expect(results.dig(0, :freight, :fees, :baf, :margins, 0, :margin_id)).to eq(user_margin.id)
+            expect(results.dig(0, :freight, :fees, :baf, :margins, 0, :source_id)).to eq(user_margin.id)
             expect(results.dig(0, :freight, :fees, :baf, :final, 'rate')).to eq(1100)
           end
         end

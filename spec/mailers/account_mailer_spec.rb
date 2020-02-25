@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe AccountMailer, type: :mailer do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, with_profile: true) }
 
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})

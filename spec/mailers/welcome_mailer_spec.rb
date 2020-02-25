@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe WelcomeMailer do
   let(:tenant) { create(:tenant) }
-  let(:user) { create(:user, tenant: tenant) }
+  let(:user) { create(:user, tenant: tenant, with_profile: true) }
 
   before do
     create(:legacy_content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
