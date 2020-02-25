@@ -5,32 +5,26 @@ module Legacy
     self.table_name = 'containers'
 
     TARE_WEIGHTS = {
+      fcl_10: 1300,
       fcl_20: 2370,
+      fcl_20_ot: 2400,
+      fcl_20_rf: 3200,
+      fcl_20_frs: 2530,
+      fcl_20_frw: 2530,
       fcl_40: 3750,
-      fcl_40_hq: 4000,
-      fcl_20_rf: 2370,
-      fcl_40_rf: 3750,
-      fcl_45_rf: 4000
+      fcl_40_hq: 4590,
+      fcl_40_ot: 3850,
+      fcl_40_rf: 4900,
+      fcl_40_hq_rf: 4500,
+      fcl_40_frs: 5480,
+      fcl_40_frw: 5480,
+      fcl_45: 4000,
+      fcl_45_hq: 4590,
+      fcl_45_rf: 5200
     }.freeze
 
     PRICING_WEIGHT_STEPS = [28.0, 24.0, 18.0, 14.0, 5.0].freeze
-    CARGO_CLASSES = %w[
-      fcl_10
-      fcl_20
-      fcl_20_ot
-      fcl_20_rf
-      fcl_20_frs
-      fcl_20_frw
-      fcl_40
-      fcl_40_hq
-      fcl_40_ot
-      fcl_40_rf
-      fcl_40_frs
-      fcl_40_frw
-      fcl_45
-      fcl_45_hq
-      fcl_45_rf
-    ].freeze
+    CARGO_CLASSES = TARE_WEIGHTS.keys.map(&:to_s)
 
     belongs_to :shipment, class_name: 'Legacy::Shipment'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true

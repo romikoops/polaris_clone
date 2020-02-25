@@ -92,6 +92,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 16), DateTime.new(2018, 11, 14, 23, 59, 59)],
           [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 30, 23, 59, 59)],
           [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
@@ -126,6 +127,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD']
         ]
       end
@@ -138,8 +140,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 20, number_deleted: 0, number_updated: 3 },
-            "pricings/fees": { number_created: 27, number_deleted: 0, number_updated: 0 } }
+            "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 3 },
+            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 } }
         end
 
         include_examples 'Pricing .insert'
@@ -153,8 +155,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "legacy/pricings": { number_created: 20, number_updated: 3, number_deleted: 0 },
-            "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 } }
+            "legacy/pricings": { number_created: 21, number_updated: 3, number_deleted: 0 },
+            "legacy/pricing_details": { number_created: 28, number_deleted: 0, number_updated: 0 } }
         end
 
         include_examples 'Pricing .insert'
@@ -166,6 +168,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         [
           [DateTime.new(2018, 3, 1), DateTime.new(2018, 3, 14, 23, 59, 59)],
           [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
@@ -216,6 +219,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD']
         ]
       end
@@ -243,8 +247,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 20, number_deleted: 0, number_updated: 4 },
-            "pricings/fees": { number_created: 27, number_deleted: 0, number_updated: 0 } }
+            "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 4 },
+            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 } }
         end
 
         include_examples 'Pricing .insert'
@@ -271,8 +275,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         end
         let!(:expected_stats) do
           { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 20, number_deleted: 0, number_updated: 4 },
-            "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
+            "legacy/pricings": { number_created: 21, number_deleted: 0, number_updated: 4 },
+            "legacy/pricing_details": { number_created: 28, number_deleted: 0, number_updated: 0 },
             "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
         end
 
@@ -284,6 +288,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       let!(:expected_dates) do
         [
           [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
@@ -335,6 +340,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD']
         ]
       end
@@ -362,8 +368,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 20, number_deleted: 0, number_updated: 3 },
-            "pricings/fees": { number_created: 27, number_deleted: 0, number_updated: 0 } }
+            "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 3 },
+            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 } }
         end
 
         include_examples 'Pricing .insert'
@@ -390,8 +396,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         end
         let!(:expected_stats) do
           { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 20, number_deleted: 0, number_updated: 3 },
-            "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
+            "legacy/pricings": { number_created: 21, number_deleted: 0, number_updated: 3 },
+            "legacy/pricing_details": { number_created: 28, number_deleted: 0, number_updated: 0 },
             "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
         end
 
@@ -404,6 +410,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         [
           [DateTime.new(2017, 6, 1), DateTime.new(2018, 3, 10, 23, 59, 59)],
           [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
@@ -456,6 +463,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD']
         ]
       end
@@ -483,8 +491,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 8 },
-            "pricings/fees": { number_created: 27, number_deleted: 0, number_updated: 0 } }
+            "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 8 },
+            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 } }
         end
 
         include_examples 'Pricing .insert'
@@ -511,8 +519,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         end
         let!(:expected_stats) do
           { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 21, number_deleted: 0, number_updated: 8 },
-            "legacy/pricing_details": { number_created: 27, number_deleted: 0, number_updated: 0 },
+            "legacy/pricings": { number_created: 22, number_deleted: 0, number_updated: 8 },
+            "legacy/pricing_details": { number_created: 28, number_deleted: 0, number_updated: 0 },
             "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
         end
 
@@ -524,6 +532,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       let!(:expected_dates) do
         [
           [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
@@ -573,6 +582,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
+          [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD'],
           [0.1234e4, 'PER_CONTAINER', 0.1234e4, [], 'USD']
         ]
       end
@@ -600,8 +610,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 20, number_deleted: 1, number_updated: 6 },
-            "pricings/fees": { number_created: 27, number_deleted: 1, number_updated: 0 } }
+            "pricings/pricings": { number_created: 21, number_deleted: 1, number_updated: 6 },
+            "pricings/fees": { number_created: 28, number_deleted: 1, number_updated: 0 } }
         end
 
         include_examples 'Pricing .insert'
@@ -629,8 +639,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 },
             "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 20, number_deleted: 1, number_updated: 6 },
-            "legacy/pricing_details": { number_created: 27, number_deleted: 1, number_updated: 0 } }
+            "legacy/pricings": { number_created: 21, number_deleted: 1, number_updated: 6 },
+            "legacy/pricing_details": { number_created: 28, number_deleted: 1, number_updated: 0 } }
         end
 
         include_examples 'Pricing .insert'
