@@ -12,29 +12,35 @@ namespace :content do
           "index": 0
         },
         {
-          "text": '<h1 class="ngl_title">Norman Global Logistics Online</h1>',
+          "text": '<h1 class="ngl_title">Norman Global nQuote</h1>',
           "component": 'LandingTop',
           "section": 'welcome',
           "index": 1
         },
         {
-          "text": '<h2 ><i>Quote. Book. Confirm.</i></h2>',
+          "text": '<h3 ><i>QUOTE | BOOK | SHIPPED</i></h3>',
           "component": 'LandingTop',
           "section": 'welcome',
           "index": 2
         },
         {
-          "text": '<h3 >Get real-time quotes and create automatic bookings, with our easy to quote
-           & booking system.</h3>',
+          "text": '<h3 >Get real-time quotes and create automatic bookings</h3>',
           "component": 'LandingTop',
           "section": 'welcome',
           "index": 3
         },
         {
-          "text": '<h3 ><i> -Trust us to deliver for you every time.</i></h3>',
+          "text": '<h3 >TRUST US TO DELIVER for you every time</h3>',
           "component": 'LandingTop',
           "section": 'welcome',
           "index": 4
+        },
+        {
+          "text": '<img src="https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo_white.png"
+           alt="" class="flex-none landing_logo_corner"/>',
+          "component": 'LandingTop',
+          "section": 'welcome',
+          "index": 5
         },
         {
           "text": '<h2 class="flex-none">Get real-time quotes and create automatic bookings, with
