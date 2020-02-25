@@ -9,8 +9,8 @@ module Admiralty
 
     def index
       item_number = dashboard_params[:item_number] || DEFAULT_ITEM_NUMBER
-      @shipments = shipments_from_external_users.last(item_number)
-      @quotations = quotations_from_external_users.last(item_number)
+      @shipments = shipments_from_external_users.first(item_number)
+      @quotations = quotations_from_external_users.first(item_number)
     end
 
     private
