@@ -29,7 +29,6 @@ module Pricings
       @applicable_margins = find_applicable_margins
       @margins_to_apply = sort_margins
       manipulate_pricings
-
       [pricings_to_return.compact, metadata_list]
     end
 
@@ -613,7 +612,7 @@ module Pricings
 
     def freight_dates
       @start_date = schedules.first.etd
-      @end_date = schedules.last.etd
+      @end_date = schedules.last.etd == schedules.first.etd ? schedules.first.etd + 10.days : schedules.last.etd
     end
 
     def trucking_dates(args:)

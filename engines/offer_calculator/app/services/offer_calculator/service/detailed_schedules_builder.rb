@@ -15,6 +15,7 @@ module OfferCalculator
         schedules_by_pricings = grouped_schedules(schedules: schedules,
                                                   shipment: @shipment,
                                                   user: user).compact
+
         raise OfferCalculator::Calculator::NoValidPricings if schedules_by_pricings.empty?
 
         detailed_schedules = schedules_by_pricings.flat_map do |grouped_result|
@@ -173,7 +174,7 @@ module OfferCalculator
         tenant_vehicle_id = schedule.trip.tenant_vehicle_id
         itinerary = schedule.trip.itinerary
         eta = schedule.eta || Time.zone.today
-        etd = schedule.etd || Time.zone.today
+        etd = schedule.closing_date || Time.zone.today
         if @scope['base_pricing']
           itinerary.rates
                    .where(tenant_vehicle_id: tenant_vehicle_id, internal: false, sandbox: @sandbox)
@@ -264,25 +265,16 @@ module OfferCalculator
                            .values
                            .reject { |pricing_group| pricing_group == most_diverse_set }
                            .flatten
-
           if @scope['base_pricing']
             most_diverse_set.each do |pricing| # rubocop:disable Metrics/BlockLength
               schedules_for_obj = schedules_array.dup
-              if dates[:is_quote]
-                schedules_for_obj.reject! do |sched|
-                  sched.etd > pricing[:expiration_date]
-                end
-
-                next if schedules_for_obj.empty?
-              else
-                schedules_for_obj.select! do |sched|
-                  sched.etd < pricing[:expiration_date] && sched.etd > pricing[:effective_date]
-                end
-                if schedules_for_obj.empty?
-                  schedules_for_obj = schedules_array.select do |sched|
-                    sched.closing_date < pricing[:expiration_date] &&
-                      sched.closing_date > pricing[:effective_date]
-                  end
+              schedules_for_obj.select! do |sched|
+                sched.etd < pricing[:expiration_date] && sched.etd > pricing[:effective_date]
+              end
+              if schedules_for_obj.empty?
+                schedules_for_obj = schedules_array.select do |sched|
+                  sched.closing_date < pricing[:expiration_date] &&
+                    sched.closing_date > pricing[:effective_date]
                 end
               end
               cargo_class_key = pricing[:cargo_class]
