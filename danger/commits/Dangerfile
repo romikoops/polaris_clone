@@ -7,7 +7,8 @@ COMMIT_REGEXP = /\A(IMC-\d+)|ci|chore|(hot)?fix|revert|merge branch/i
 unless git.commits.all? { |c| COMMIT_REGEXP.match?(c.message) }
   title = ':bookmark: Invalid Commit Message'
   body = <<-END_OF_HELP
-    Please prefix commit messages with either JIRA ticket number or category (ci, chore, hotfix, fix or revert).
+    Please prefix commit messages with either JIRA ticket number or category
+    (ci, chore, hotfix, fix or revert).
   END_OF_HELP
   failure("#{title} - #{body}")
 end
@@ -15,7 +16,8 @@ end
 # Ensure commit messages has upcase ticket
 if git.commits.any? { |c| /\A(imc-\d+)/.match?(c.message) }
   title = ':bookmark: Lowercase ticket number'
-  body = 'Please make sure all ticket numbers in commit messages are always upper case.'
+  body = 'Please make sure all ticket numbers in commit messages are always
+  upper case.'
   failure("#{title} - #{body}")
 end
 
@@ -29,6 +31,9 @@ end
 # Prevent merging PRs with commits intended to be rebased
 if git.commits.any? { |c| c.message.include?('fixup!') || c.message.include?('squash!') }
   title = ':construction: Work in progress'
-  body = 'This PR contains commits marked as squash or fixup. Please perform an interactive rebase to apply the changes.'
+  body = <<~BODY
+    This PR contains commits marked as squash or fixup. Please perform an
+    interactive rebase to apply the changes.
+  BODY
   failure("#{title} - #{body}")
 end

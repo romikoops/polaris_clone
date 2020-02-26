@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+all_files = git.added_files + git.modified_files + git.deleted_files
+
+if all_files.include?('*.gemspec') && !all_files.include?('doc/cobra/graph.pdf')
+  title = ':notebook: COBRA Documentation'
+  body = <<-END_OF_HELP
+    There has been changes in engines dependencies. Did you run `rails cobra:doc`?
+  END_OF_HELP
+  warn("#{title} - #{body}")
+end

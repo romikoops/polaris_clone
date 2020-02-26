@@ -5,26 +5,15 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = 'core'
-  s.version     = '9999.1.0.0'
+  s.name        = 'imc-core'
+  s.version     = '1'
   s.license     = 'PROPRIETARY'
   s.authors     = ['Mikko Kokkonen']
   s.email       = ['mikko.kokkonen@itsmycargo.com']
   s.summary     = 'Summary of Core.'
-
-  # s.metadata = { 'type' => 'direct' }
+  s.metadata = { 'type' => 'core' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
-  s.add_dependency 'activerecord-postgis-adapter', '5.2.2'
-  s.add_dependency 'config', '~> 1.7.1'
-  s.add_dependency 'paper_trail', '~> 10.1', '>= 10.1.0'
-  s.add_dependency 'pg', '>= 0.18', '< 2.0'
-  s.add_dependency 'rails', '5.2.2'
-  s.add_dependency 'strong_migrations', '0.4.1'
-
-  # Fix dry-logic issue
-  s.add_dependency 'dry-logic', '>= 0.4.2', '< 0.5.0'
-
-  Gemhelper.common_gems(s)
+  Gemhelper.common(s)
 end

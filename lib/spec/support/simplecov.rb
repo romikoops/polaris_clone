@@ -5,6 +5,7 @@ require 'simplecov'
 SimpleCov.configure do
   load_profile 'rails'
   add_filter 'vendor/ruby'
+  add_filter(%r{^/lib/generators/}) # For Generators
 
   if ENV['COVERAGE_DIR']
     coverage_dir(ENV['COVERAGE_DIR'])

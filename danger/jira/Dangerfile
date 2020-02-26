@@ -8,7 +8,7 @@ jira_issues = git.commits.map { |commit| commit.message.scan(JIRA_REGEXP) }.flat
 
 # MR Tickets
 pr_title_issues = github.pr_title.scan(JIRA_REGEXP).flatten.map(&:upcase).uniq
-fix_chore_pr = /\A(chore|(hot)?fix):/i.match?(github.pr_title)
+fix_chore_pr = /\A(chore|(hot)?fix)/i.match?(github.pr_title)
 
 if pr_title_issues.empty? && !fix_chore_pr
   title = ':ticket: Missing JIRA Ticket'

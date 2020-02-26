@@ -5,22 +5,24 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = 'wheelhouse'
-  s.version     = '9999.1.0.0'
+  s.name        = 'imc-wheelhouse'
+  s.version     = '1'
   s.license     = 'PROPRIETARY'
   s.authors     = ['Hasstrup Ezekiel']
   s.email       = ['hasstrup.ezekiel@gmail.com']
-  s.summary     = 'This engine houses logic that proxies internal quotations to the offer calculator engine'
+  s.summary     = <<~SUMMARY
+    This engine houses logic that proxies internal quotations to the offer
+    calculator engine
+  SUMMARY
 
-  # Uncomment line below to mark this component to be directly required by app.
-  # s.metadata = { 'type' => 'direct' }
+  s.metadata = { 'type' => 'services' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
-  s.add_dependency 'core'
-  s.add_dependency 'legacy'
-  s.add_dependency 'offer_calculator'
-  s.add_dependency 'tenants'
+  s.add_dependency 'imc-core'
+  s.add_dependency 'imc-legacy'
+  s.add_dependency 'imc-offer_calculator'
+  s.add_dependency 'imc-tenants'
 
-  Gemhelper.common_gems(s)
+  Gemhelper.common(s)
 end

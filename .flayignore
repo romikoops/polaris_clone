@@ -4,9 +4,11 @@
 **/spec/*_helper.rb
 **/spec/factories/*
 *.rake
+Gemfile
 app/classes/**/*.rb
 db/custom_seeds/*.rb
 db/schema.rb
+engines/*/Gemfile
 engines/*/lib/*/engine.rb
 engines/*/spec/dummy/*
 scripts/

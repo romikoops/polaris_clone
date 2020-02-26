@@ -7,13 +7,13 @@ class EngineGenerator < Rails::Generators::NamedBase
   class_option :type, aliases: ['-t'], type: :string, required: true,
                       desc: 'Engine type (options: view/service/data)'
 
-  def create_engine # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize
+  def create_engine # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
     @engine_name = name.downcase
     @engine_type = options['type']
     @engine_dest = "engines/#{@engine_name}"
 
     raise 'Invalid Engine Name' unless @engine_name[/\A[a-z_]+\z/]
-    raise 'Invalid Engine Type' unless %w(view service data).include?(@engine_type)
+    raise 'Invalid Engine Type' unless %w[view service data].include?(@engine_type)
 
     # Create engine template
     template_dir = Rails.root.join('tmp', Time.now.to_i.to_s)
@@ -38,13 +38,18 @@ class EngineGenerator < Rails::Generators::NamedBase
         end
       end
 
-      remove_dir 'app/controllers', verbose: false unless @engine_type == 'view'
-      remove_dir 'config', verbose: false unless @engine_type == 'view'
-      remove_dir 'app/models', verbose: false unless @engine_type == 'data'
+      unless @engine_type == 'view'
+        remove_dir 'app/controllers', verbose: false
+        remove_dir 'config', verbose: false
+        remove_file 'spec/dummy/config/routes.rb', verbose: false
+      end
+
+      remove_dir 'app/models', verbose: false
       remove_dir 'app/services', verbose: false unless @engine_type == 'service'
 
       Dir['**/*engine_template*'].each do |item|
-        run "mv #{Shellwords.escape(item)} #{Shellwords.escape(item.gsub(/engine_template/, @engine_name))}", verbose: false
+        new_item = item.gsub(/engine_template/, @engine_name)
+        run "mv #{Shellwords.escape(item)} #{Shellwords.escape(new_item)}", verbose: false
       end
     end
 

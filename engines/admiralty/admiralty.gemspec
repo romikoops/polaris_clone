@@ -5,26 +5,29 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = 'admiralty'
-  s.version     = '9999.1.0.0'
+  s.name        = 'imc-admiralty'
+  s.version     = '1'
   s.license     = 'PROPRIETARY'
   s.authors     = ['Mikko Kokkonen']
   s.email       = ['mikko.kokkonen@itsmycargo.com']
-  s.summary     = 'Summary of Admiralty.'
+  s.summary     = <<~SUMMARY
+    This engine provides super-admin view for managing tenants and accessing
+    financial reports.
+  SUMMARY
 
-  s.metadata = { 'type' => 'direct' }
+  s.metadata = { 'type' => 'view', 'direct' => 'true' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
-  s.add_dependency 'admiralty_assets'
-  s.add_dependency 'admiralty_auth'
-  s.add_dependency 'admiralty_reports'
-  s.add_dependency 'admiralty_tenants'
-  s.add_dependency 'core'
-  s.add_dependency 'legacy'
-  s.add_dependency 'quotations'
-  s.add_dependency 'shipments'
-  s.add_dependency 'tenants'
+  s.add_dependency 'imc-admiralty_assets'
+  s.add_dependency 'imc-admiralty_auth'
+  s.add_dependency 'imc-admiralty_reports'
+  s.add_dependency 'imc-admiralty_tenants'
+  s.add_dependency 'imc-core'
+  s.add_dependency 'imc-legacy'
+  s.add_dependency 'imc-quotations'
+  s.add_dependency 'imc-shipments'
+  s.add_dependency 'imc-tenants'
 
-  Gemhelper.common_gems(s)
+  Gemhelper.common(s)
 end

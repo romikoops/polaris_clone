@@ -5,22 +5,24 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = 'sequential'
-  s.version     = '9999.1.0.0'
+  s.name        = 'imc-sequential'
+  s.version     = '1'
   s.license     = 'PROPRIETARY'
   s.authors     = ['Bassam Aziz']
   s.email       = ['bassam.aziz@itsmycargo.com']
-  s.summary     = 'The Sequential Engine generates gapless sequential numbers, primarily for invoice numbers.
-  it handles race conditions, and it is generic, so that it can be used for creating counters of other purposes'
+  s.summary     = <<~SUMMARY
+    The Sequential Engine generates gapless sequential numbers, primarily for
+    invoice numbers. It handles race conditions, and it is generic, so that it
+    can be used for creating counters of other purposes
+  SUMMARY
 
-  # Uncomment line below to mark this component to be directly required by app.
-  # s.metadata = { 'type' => 'direct' }
+  s.metadata = { 'type' => 'data' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
-  s.add_dependency 'core'
-
-  Gemhelper.common_gems(s)
+  s.add_dependency 'imc-core'
 
   s.add_development_dependency 'database_cleaner'
+
+  Gemhelper.common(s)
 end

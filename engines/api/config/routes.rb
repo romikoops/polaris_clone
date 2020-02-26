@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Api::Engine.routes.draw do
+  mount ApiAuth::Engine, at: '/'
+
   namespace :v1 do
     resource :me, controller: :users, only: :show
     resources :clients, only: %i(index show)
@@ -21,4 +23,6 @@ Api::Engine.routes.draw do
       end
     end
   end
+
+  mount ApiDocs::Engine, at: '/'
 end

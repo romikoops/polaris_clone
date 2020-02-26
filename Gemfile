@@ -124,7 +124,7 @@ gem 'mjml-rails', '~> 4.1'
 gem 'mini_magick'
 
 # Audit trail for changes
-gem 'paper_trail', '~> 10.1', '>= 10.1.0'
+gem 'paper_trail', '~> 10.3'
 
 # Google translate api
 gem 'google-cloud-translate'
@@ -198,7 +198,8 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # Engines
 Dir['engines/*/*.gemspec'].each do |gemspec_path|
   engine_path = File.dirname(gemspec_path)
-  gem_name = File.basename(engine_path)
+  engine_name = File.basename(engine_path)
+  gem_name = "imc-#{engine_name}"
 
   gem gem_name, path: engine_path
 end

@@ -5,31 +5,28 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = 'api'
-  s.version     = '9999.1.0.0'
+  s.name        = 'imc-api'
+  s.version     = '1'
   s.license     = 'PROPRIETARY'
   s.authors     = ['Mikko Kokkonen']
   s.email       = ['mikko.kokkonen@itsmycargo.com']
-  s.summary     = 'Summary of Api.'
+  s.summary     = 'Improved API for new frontend code.'
 
-  # Uncomment line below to mark this component to be directly required by app.
-  s.metadata = { 'type' => 'direct' }
+  s.metadata = { 'type' => 'view', 'direct' => 'true' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
-  s.add_dependency 'api_auth'
-  s.add_dependency 'core'
-  s.add_dependency 'profiles'
-  s.add_dependency 'tenants'
-  s.add_dependency 'trucking'
-  s.add_dependency 'wheelhouse'
+  s.add_dependency 'imc-api_auth'
+  s.add_dependency 'imc-api_docs'
+  s.add_dependency 'imc-core'
+  s.add_dependency 'imc-profiles'
+  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-trucking'
+  s.add_dependency 'imc-wheelhouse'
 
   s.add_dependency 'active_model_serializers', '~> 0.10', '>= 0.10.8'
 
-  s.add_development_dependency 'api_docs'
-  s.add_development_dependency 'legacy'
-
-  Gemhelper.common_gems(s)
+  Gemhelper.common(s)
 
   s.add_development_dependency 'rspec_api_documentation'
 end

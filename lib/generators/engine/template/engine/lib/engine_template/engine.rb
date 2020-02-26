@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+require 'activerecord-postgis-adapter'
+require 'config'
+require 'paper_trail'
+require 'rails'
+require 'strong_migrations'
+
 module EngineTemplate
   class Engine < ::Rails::Engine
     isolate_namespace EngineTemplate
