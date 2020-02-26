@@ -19,7 +19,7 @@ module Legacy
     LOAD_TYPES = %w[cargo_item container].freeze
     DIRECTIONS = %w[import export].freeze
 
-    belongs_to :user, class_name: 'Legacy::User'
+    belongs_to :user, -> { with_deleted }
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :tenant, class_name: 'Legacy::Tenant'
     belongs_to :origin_nexus, class_name: 'Legacy::Nexus', optional: true
