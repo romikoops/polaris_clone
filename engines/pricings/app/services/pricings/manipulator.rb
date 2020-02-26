@@ -191,14 +191,18 @@ module Pricings
       @pricings_to_return = margins_to_apply.map do |date_keys, data|
         fees = pricing.fees
         new_effective_date, new_expiration_date = manipulate_dates(pricing, date_keys)
-        next if new_effective_date > new_expiration_date
+        next if new_effective_date > new_expiration_date || fees.empty? || data.pluck(:margin).empty?
 
         manipulated_pricing = update_result_effective_periods(
           effective_date: new_effective_date,
           expiration_date: new_expiration_date
         )
         update_meta(manipulated_pricing)
-        manipulated_pricing['data'] = manipulate_freight_rates(fees: fees, data: data)
+
+        manipulated_freight_rates = manipulate_freight_rates(fees: fees, data: data)
+        next if manipulated_freight_rates.empty?
+
+        manipulated_pricing['data'] = manipulated_freight_rates
         adjusted_flat_margins = adjust_flat_margins_for_fees(margins: flat_margins)
         manipulated_pricing['flat_margins'] = adjusted_flat_margins
         final_handling(manipulated_pricing: manipulated_pricing)
@@ -275,6 +279,8 @@ module Pricings
     end
 
     def manipulate_freight_rates(fees:, data:)
+      return {} if data.empty?
+
       fees.each_with_object({}) do |fee, hash|
         fee_json = fee.to_fee_hash
         fee_code = fee.fee_code.downcase

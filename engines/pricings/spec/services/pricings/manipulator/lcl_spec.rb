@@ -66,6 +66,7 @@ RSpec.describe Pricings::Manipulator do
       args: args
     )
   end
+
   let(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, tenant: tenant) }
   let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, tenant_vehicle: tenant_vehicle, tenant: tenant) }
   let(:target_shipment) { lcl_shipment }
@@ -587,6 +588,16 @@ RSpec.describe Pricings::Manipulator do
           expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :source_id)).to eq(margin2.id)
           expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :margin_value)).to eq(margin2.value)
         end
+      end
+    end
+
+    context 'with manipulated freight pricing and no fees' do
+      before do
+        pricing.fees.destroy_all
+      end
+
+      it 'returns a blank array if the pricing has no fees' do
+        expect(klass.perform.first).to eq([])
       end
     end
 
