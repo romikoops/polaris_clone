@@ -4,14 +4,17 @@ class Admin::ClientsController < Admin::AdminBaseController
   # Return all clients and managers for dashboard
 
   def index
-    paginated_clients = handle_search(params).paginate(pagination_options)
-    response_clients = paginated_clients.map do |client|
-      merge_profile(user: client).deep_transform_keys { |key| key.to_s.camelize(:lower) }
-    end
+    clients, profiles = handle_search(params)
+    paginated_clients = clients.paginate(pagination_options)
+    response_clients = if search_params[:email_desc].present? || profiles.blank?
+                         paginated_clients.map { |client| merge_profile(user: client) }
+                       else
+                         sort_response_clients(clients: paginated_clients, profiles: profiles)
+                       end
 
     response_handler(
       pagination_options.merge(
-        clientData: sort_response_clients(response_clients),
+        clientData: response_clients,
         numPages: paginated_clients.total_pages
       )
     )
@@ -106,8 +109,10 @@ class Admin::ClientsController < Admin::AdminBaseController
         ).ids
       profile_query = profile_query.where(user_id: user_ids)
     end
-    merge_search_results(users_search_results: user_query,
-                         profiles_search_results: profile_query)
+    # merge results from Tenant::User search and Profiles Search into one list
+    clients = merge_search_results(users_search_results: user_query,
+                                   profiles_search_results: profile_query)
+    [clients, profile_query]
   end
 
   def handle_profile_search(clients:)
@@ -147,8 +152,10 @@ class Admin::ClientsController < Admin::AdminBaseController
     group.as_json(new_options)
   end
 
-  def merge_profile(user:)
-    ProfileTools.merge_profile(target: user.for_admin_json)
+  def merge_profile(user:, profile: nil)
+    ProfileTools
+      .merge_profile(target: user.for_admin_json, profile: profile)
+      .deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
   def search_params
@@ -166,17 +173,21 @@ class Admin::ClientsController < Admin::AdminBaseController
     )
   end
 
-  def sort_response_clients(clients)
-    %i[first_name_desc last_name_desc company_name_desc].each do |order_key|
-      next if search_params[order_key].blank?
+  def sort_response_clients(clients:, profiles:)
+    sort_keys = %i[first_name_desc last_name_desc company_name_desc]
+    if sort_keys.any? { |key| params[key].present? }
+      # fetch & order the profiles per the params first then match the clients accordingly
+      sort_keys.each do |order_key|
+        next if search_params[order_key].blank?
 
-      key = order_key.to_s.gsub('_desc', '').camelize(:lower)
-      clients = if search_params[order_key] == 'true'
-                  clients.sort_by { |client| client[key] }.reverse
-                else
-                  clients.sort_by { |client| client[key] }
-                end
+        key = order_key.to_s.gsub('_desc', '')
+        order_params = { key => search_params[order_key] == 'true' ? :desc : :asc }
+        profiles = profiles.reorder(order_params)
+      end
     end
-    clients
+    profiles.map do |profile|
+      legacy_user_id = Tenants::User.find(profile.user_id).legacy_id
+      merge_profile(user: User.find(legacy_user_id), profile: profile)
+    end
   end
 end

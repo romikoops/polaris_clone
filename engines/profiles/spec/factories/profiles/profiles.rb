@@ -15,8 +15,8 @@ end
 #
 #  id           :uuid             not null, primary key
 #  company_name :string
-#  first_name   :string
-#  last_name    :string
+#  first_name   :string           default(""), not null
+#  last_name    :string           default(""), not null
 #  phone        :string
 #  user_id      :uuid
 #

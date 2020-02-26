@@ -37,7 +37,8 @@ RSpec.describe Admin::ClientsController do
       users.each do |user_details|
         user = FactoryBot.create(:user,
                                  email: user_details[:email],
-                                 tenant: tenant_2)
+                                 tenant: tenant_2,
+                                 with_profile: false)
         tenants_user = Tenants::User.find_by(legacy_id: user.id)
         tenants_user.update(company_id: tenants_company.id)
         FactoryBot.create(:profiles_profile,
@@ -79,8 +80,8 @@ RSpec.describe Admin::ClientsController do
           end
 
           it 'sorts the result according to the param provided' do
-            expected_response = users.pluck(search_key.to_sym).sort
-            get :index, params: { "#{search_key}_desc" => 'false', tenant_id: tenant_2.id }
+            expected_response = users.pluck(search_key.to_sym).sort.reverse
+            get :index, params: { "#{search_key}_desc" => 'true', tenant_id: tenant_2.id }
             resp = JSON.parse(response.body)
             expect(resp['data']['clientData'].pluck(search_key.camelize(:lower))).to eq(expected_response)
           end
@@ -98,7 +99,9 @@ RSpec.describe Admin::ClientsController do
   end
 
   describe 'post #create' do
-    let(:attributes) { attributes_for(:user, email: 'email123@demo.com').deep_transform_keys { |k| k.to_s.camelize(:lower) } }
+    let(:user_attributes) { attributes_for(:user, email: 'email123@demo.com').deep_transform_keys { |k| k.to_s.camelize(:lower) } }
+    let(:profile_attributes) { attributes_for(:profiles_profile).deep_transform_keys { |k| k.to_s.camelize(:lower) } }
+    let(:attributes) { user_attributes.merge(profile_attributes) }
 
     it 'returns an http status of success' do
       post :create, params: { tenant_id: tenant, new_client: attributes.to_json }
