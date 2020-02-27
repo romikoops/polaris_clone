@@ -63,7 +63,7 @@ namespace :db do
       end
 
       # Speed up download if possible
-      if (aws = `which aws`.strip)
+      if (aws = `which aws`.strip).present?
         system(aws, 's3', 'cp', "s3://#{bucket}/#{object.key}", seed_file.to_s) || exit(1)
       else
         puts ' *** For faster download, please install aws-cli ***'
