@@ -616,19 +616,27 @@ module Pricings
       end
     end
 
+    def sanitize_date(date)
+      return date if date.blank?
+      return date if date.is_a?(ActiveSupport::TimeWithZone) || date.is_a?(Date)
+
+      DateTime.parse(date)
+    end
+
     def freight_dates
-      @start_date = schedules.first.etd
-      @end_date = schedules.last.etd == schedules.first.etd ? schedules.first.etd + 10.days : schedules.last.etd
+      @start_date = sanitize_date(schedules.first.etd)
+      @end_date = sanitize_date(schedules.last.etd)
+      @end_date += 10.days if schedules.last.etd == schedules.first.etd
     end
 
     def trucking_dates(args:)
-      @start_date = args[:date]
-      @end_date = args[:date] + TRUCKING_QUERY_DAYS.days
+      @start_date = sanitize_date(args[:date])
+      @end_date = sanitize_date(args[:date]) + TRUCKING_QUERY_DAYS.days
     end
 
     def local_charge_dates
-      @start_date = schedules.first.etd || Time.zone.today + 4.days
-      @end_date = schedules.last.eta || Time.zone.today + 24.days
+      @start_date = sanitize_date(schedules.first.etd) || Time.zone.today + 4.days
+      @end_date = sanitize_date(schedules.last.eta) || Time.zone.today + 24.days
     end
 
     def freight_variables(args:)

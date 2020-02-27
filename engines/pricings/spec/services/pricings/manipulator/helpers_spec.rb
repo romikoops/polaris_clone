@@ -71,6 +71,21 @@ RSpec.describe Pricings::Manipulator do
     end
   end
 
+  describe 'sanitize_date' do
+    let(:args) do
+      {
+        sandbox: nil,
+        schedules: schedules,
+        itinerary_id: itinerary.id,
+        cargo_class_count: target_shipment.cargo_classes.count
+      }
+    end
+
+    it 'returns a DateTime' do
+      expect(klass.sanitize_date('2020/12/31')).to eq(DateTime.parse('2020/12/31'))
+    end
+  end
+
   describe 'type error' do
     context 'without schedules' do
       let(:args) do
