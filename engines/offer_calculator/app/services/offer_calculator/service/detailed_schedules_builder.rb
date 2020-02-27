@@ -24,6 +24,9 @@ module OfferCalculator
           handle_group_result(grouped_result: grouped_result)
         end
         compacted_detailed_schedules = detailed_schedules.compact
+
+        raise OfferCalculator::Calculator::NoValidSchedules if compacted_detailed_schedules.empty?
+
         if compacted_detailed_schedules.all? { |result| result[:error].present? }
           handle_errors(errors: compacted_detailed_schedules)
         end
