@@ -615,33 +615,55 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
                         transport_category: fcl_40_hq_transport_category)
     end
 
-    it 'returns an object with two quotes with subtotals and grand totals' do
-      service = described_class.new(shipment: cargo_shipment, sandbox: nil)
-      results = service.perform(schedules, no_trucking_data, user)
-      aggregate_failures do
-        expect(results.count).to eq(1)
-        expect(results.first[:quote][:total][:value]).to be_truthy
-        expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+    context 'when regular' do
+      let(:target_shipment) { cargo_shipment }
+
+      it 'returns an object with two quotes with subtotals and grand totals' do
+        aggregate_failures do
+          expect(results.count).to eq(1)
+          expect(results.first[:quote][:total][:value]).to be_truthy
+          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+        end
       end
     end
 
-    it 'returns an object with two quotes with subtotals and grand totals w/ aggregated cargo' do
-      service = described_class.new(shipment: agg_cargo_shipment, sandbox: nil)
-      results = service.perform(schedules, no_trucking_data, user)
-      aggregate_failures do
-        expect(results.count).to eq(1)
-        expect(results.first[:quote][:total][:value]).to be_truthy
-        expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+    context 'with rate_overview' do
+      before do
+        FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { show_rate_overview: true })
+      end
+
+      let(:target_shipment) { cargo_shipment }
+
+      it 'returns an object with two quotes with subtotals and grand totals' do
+        aggregate_failures do
+          expect(results.count).to eq(1)
+          expect(results.first[:quote][:total][:value]).to be_truthy
+          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+        end
       end
     end
 
-    it 'returns an object with two quotes with subtotals and grand totals w/ containers' do
-      service = described_class.new(shipment: container_shipment, sandbox: nil)
-      results = service.perform(schedules, no_trucking_data, user)
-      aggregate_failures do
-        expect(results.count).to eq(1)
-        expect(results.first[:quote][:total][:value]).to be_truthy
-        expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+    context 'with aggregated cargo' do
+      let(:target_shipment) { agg_cargo_shipment }
+
+      it 'returns an object with two quotes with subtotals and grand totals w/ aggregated cargo' do
+        aggregate_failures do
+          expect(results.count).to eq(1)
+          expect(results.first[:quote][:total][:value]).to be_truthy
+          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+        end
+      end
+    end
+
+    context 'with containers' do
+      let(:target_shipment) { container_shipment }
+
+      it 'returns an object with two quotes with subtotals and grand totals w/ containers' do
+        aggregate_failures do
+          expect(results.count).to eq(1)
+          expect(results.first[:quote][:total][:value]).to be_truthy
+          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+        end
       end
     end
   end
@@ -656,6 +678,22 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
     end
 
     context 'without margins (regular)' do
+      let(:target_shipment) { cargo_shipment }
+
+      it 'returns an object with two quotes with subtotals and grand totals' do
+        aggregate_failures do
+          expect(results.count).to eq(1)
+          expect(results.first[:quote][:total][:value]).to be_truthy
+          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+        end
+      end
+    end
+
+    context 'without margins (regular  & rate_overview)' do
+      before do
+        tenants_tenant.scope.update(content: { base_pricing: true, show_rate_overview: true })
+      end
+
       let(:target_shipment) { cargo_shipment }
 
       it 'returns an object with two quotes with subtotals and grand totals' do
@@ -731,6 +769,38 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
                           itinerary_id: itinerary.id,
                           applicable: group,
                           tenant: tenants_tenant)
+      end
+
+      let(:target_shipment) { cargo_shipment }
+      let!(:target_result) { results.first }
+
+      it 'returns an object with two quotes with subtotals and grand totals w/ total margins' do
+        aggregate_failures do
+          expect(results.count).to eq(1)
+          expect(target_result.dig(:quote, :total, :value)).to be_truthy
+          expect(target_result.dig(:quote, :cargo, :total, :value)).to be_truthy
+        end
+      end
+
+      it 'returns an object with Metadatum w/ total margins' do
+        aggregate_failures do
+          metadatum = Pricings::Metadatum.find_by(id: target_result.dig(:meta, :metadata_id))
+          expect(metadatum).to be_present
+          expect(metadatum.breakdowns.pluck(:charge_category_id).uniq).to match_array(lcl_pricing.fees.pluck(:charge_category_id))
+          expect(metadatum.breakdowns.map { |b| b.source&.operator }.compact.uniq).to match_array(['+'])
+        end
+      end
+    end
+
+    context 'with margins and breakdowns (total margins & show_rate_overview)' do
+      before do
+        FactoryBot.create(:pricings_margin,
+                          operator: '+',
+                          value: 100,
+                          itinerary_id: itinerary.id,
+                          applicable: group,
+                          tenant: tenants_tenant)
+        tenants_tenant.scope.update(content: { show_rate_overview: true, base_pricing: true })
       end
 
       let(:target_shipment) { cargo_shipment }

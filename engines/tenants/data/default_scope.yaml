@@ -71,6 +71,7 @@ show_chargeable_weight: false
 condense_local_fees_pdf: false
 freight_in_original_currency: false
 show_beta_features: false
+show_rate_overview: false
 fixed_exchange_rate: false
 hard_trucking_limit: true
 hide_converted_grand_total: false

@@ -174,17 +174,20 @@ module OfferCalculator
 
       def grab_pricing_rates(schedule:, load_type:, user:) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         # Used to create data for rate overview
+        return {} if @scope['show_rate_overview'].blank?
+
         tenant_vehicle_id = schedule.trip.tenant_vehicle_id
         itinerary = schedule.trip.itinerary
         eta = schedule.eta || Time.zone.today
         etd = schedule.closing_date || Time.zone.today
+
         if @scope['base_pricing']
           itinerary.rates
                    .where(tenant_vehicle_id: tenant_vehicle_id, internal: false, sandbox: @sandbox)
                    .for_dates(etd, eta)
                    .for_load_type(load_type)
                    .each_with_object({}) do |pricing, hash|
-            manipulated_pricing, _metadata = ::Pricings::Manipulator.new(
+            manipulated_pricings, _metadata = ::Pricings::Manipulator.new(
               target: Tenants::User.find_by(legacy_id: user.id),
               tenant: Tenants::Tenant.find_by(legacy_id: user.tenant_id),
               type: :freight_margin,
@@ -195,8 +198,8 @@ module OfferCalculator
               }
             ).perform
 
-            pricing_hash = manipulated_pricing.first.dig('data')
-            flat_margins = manipulated_pricing.first.dig('flat_margins')
+            pricing_hash = manipulated_pricings.dig(0, 'data') || {}
+            flat_margins = manipulated_pricings.dig(0, 'flat_margins') || {}
 
             flat_margins.each do |code, value|
               pricing_hash[code.to_s]['rate'] += value if value.present?
