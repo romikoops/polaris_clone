@@ -4,8 +4,13 @@ require 'rails_helper'
 
 RSpec.describe Admin::PricingsController, type: :controller do
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
+  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
+  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
   let(:json_response) { JSON.parse(response.body) }
+  let(:itinerary) do
+    FactoryBot.create(:itinerary, tenant_id: tenant.id)
+  end
 
   before do
     allow(controller).to receive(:require_authentication!).and_return(true)
@@ -20,11 +25,9 @@ RSpec.describe Admin::PricingsController, type: :controller do
       allow(controller).to receive(:current_scope).at_least(:once).and_return('base_pricing' => true)
     end
 
-    let(:itinerary) do
-      FactoryBot.create(:itinerary, tenant_id: tenant.id)
-    end
     let!(:pricings) do
       [
+        FactoryBot.create(:pricings_pricing, tenant_id: tenant.id, itinerary_id: itinerary.id),
         FactoryBot.create(:pricings_pricing, tenant_id: tenant.id,
                                              itinerary_id: itinerary.id,
                                              effective_date: DateTime.new(2019, 1, 1),
@@ -201,6 +204,29 @@ RSpec.describe Admin::PricingsController, type: :controller do
           expect(Legacy::Pricing.exists?(id: legacy_pricing.id)).to eq(false)
         end
       end
+    end
+  end
+
+  describe 'GET #group' do
+    let(:group) do
+      FactoryBot.create(:tenants_group, tenant: tenants_tenant).tap do |tapped_group|
+        FactoryBot.create(:tenants_membership, group: tapped_group, member: tenants_user)
+      end
+    end
+    let!(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, group_id: group.id) }
+
+    before do
+      FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
+      post :group, params: { id: group.id, tenant_id: tenant.id }
+    end
+
+    it 'returns an http status of success' do
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'returns the pricings for the group' do
+      json = JSON.parse(response.body)
+      expect(json.dig('data', 'pricings', 0, 'id')).to eq(pricing.id.to_s)
     end
   end
 end

@@ -24,7 +24,7 @@ module ExcelDataServices
 
       def filtered_pricings
         pricings = scope['base_pricing'] ? tenant.rates : tenant.pricings
-        pricings = pricings.where(sandbox: @sandbox)
+        pricings = pricings.current.where(sandbox: @sandbox)
         pricings = pricings.where(group_id: options[:group_id]) if options[:group_id]
         pricings = pricings.for_mode_of_transport(options[:mode_of_transport]) if options[:mode_of_transport]
         pricings = pricings.for_load_type(options[:load_type]) if options[:load_type]

@@ -76,7 +76,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def group
-    pricings = Pricings::Pricing.where(sandbox: @sandbox, group_id: params[:id])
+    pricings = Pricings::Pricing.current.where(sandbox: @sandbox, group_id: params[:id])
 
     response_handler(
       pricings: pricings.map(&:for_table_json),
@@ -348,6 +348,6 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
   def pricings_based_on_scope(itinerary)
     pricings = current_scope['base_pricing'] ? itinerary.rates : itinerary.pricings
-    pricings.where(sandbox: @sandbox)
+    pricings.current.where(sandbox: @sandbox)
   end
 end

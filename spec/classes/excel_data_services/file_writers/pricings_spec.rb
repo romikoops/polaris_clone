@@ -141,6 +141,46 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
       end
     end
 
+    context 'when some pricings are expired' do
+      let(:pricing_row) do
+        [
+          nil,
+          nil,
+          pricing.effective_date.to_date,
+          pricing.expiration_date.to_date,
+          nil,
+          'Gothenburg',
+          'Sweden',
+          'Shanghai',
+          'China',
+          'ocean',
+          nil,
+          'standard',
+          'LCL',
+          'PER_WM',
+          'EUR',
+          14,
+          25
+        ]
+      end
+      let(:transport_category) { create(:ocean_lcl) }
+      let!(:pricing) { create(:legacy_lcl_pricing, tenant: tenant, itinerary: itinerary, transport_category: transport_category) }
+      let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean' }) }
+      let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
+      let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
+
+      before { create(:legacy_lcl_pricing, tenant: tenant, itinerary: itinerary, expiration_date: Time.zone.now - 10.days, effective_date: Time.zone.now - 30.days, transport_category: transport_category) }
+
+      describe '.perform' do
+        it 'writes all valid pricings to the sheet' do
+          aggregate_failures 'testing sheet values' do
+            expect(first_sheet.row(2)).to eq(pricing_row)
+            expect(first_sheet.row(3).compact).to be_empty
+          end
+        end
+      end
+    end
+
     context 'when all pricings are valid with attached group' do
       before do
         create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })

@@ -21,6 +21,7 @@ module Pricings
       scope: %i(tenant_id user_id tenant_vehicle_id effective_date expiration_date cargo_class load_type legacy_id group_id)
     }
 
+    scope :current, -> { where('expiration_date > ?', 7.days.ago) }
     scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot.downcase }) }
     scope :for_load_type, (lambda do |load_type|
       where(load_type: load_type.downcase)

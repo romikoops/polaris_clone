@@ -24,6 +24,7 @@ module Legacy
 
     delegate :load_type, to: :transport_category
     delegate :cargo_class, to: :transport_category
+    scope :current, -> { where('expiration_date > ?', 7.days.ago) }
     scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot.downcase }) }
     scope :for_load_type, (lambda do |load_type|
       joins(:transport_category).where(transport_categories: { load_type: load_type.downcase })
