@@ -16,10 +16,8 @@ module AdmiraltyReports
     end
 
     def overview
-      shipment_type = quotation_tool? ? uniq_quotations_by_original_shipments : uniq_shipments_by_original_shipments
-      shipments = shipments_for(shipment_type)
-      ship_bundle = shipment_type.zip(shipments)
-      ship_bundle_groups = group_by_date(ship_bundle)
+      grouped_requests = quotation_tool? ? uniq_quotations_by_original_shipments : uniq_shipments_by_original_shipments
+      ship_bundle_groups = group_by_date(grouped_requests)
 
       @overview ||= ship_bundle_groups.each_with_object({}) do |(k_date, v_bundle), result_hsh|
         agent_counts = shipments_per_agent(v_bundle)
@@ -29,9 +27,8 @@ module AdmiraltyReports
       end
     end
 
-    def raw_data
-      shipment_type = quotation_tool? ? uniq_quotations_by_original_shipments : uniq_shipments_by_original_shipments
-      shipments_for(shipment_type)
+    def raw_request_data
+      quotation_tool? ? uniq_quotations_by_original_shipments : uniq_shipments_by_original_shipments
     end
 
     def find_years
@@ -70,9 +67,8 @@ module AdmiraltyReports
     end
 
     def uniq_quotations_by_original_shipments
-      legacy_quotations = filtered(::Legacy::Quotation
-                                              .where(original_shipment_id: original_shipments.ids)
-                                              .where('created_at < ?', NON_LEGACY_QUOTATIONS_DATE))
+      legacy_quotations = filtered(::Legacy::Quotation.where(original_shipment_id: original_shipments.ids)
+                                                      .where('created_at < ?', NON_LEGACY_QUOTATIONS_DATE))
       non_legacy_quotations = filtered(non_flagged_quotations)
       quotations = legacy_quotations | non_legacy_quotations
       quotations.sort_by(&:updated_at).reverse.uniq
@@ -100,10 +96,6 @@ module AdmiraltyReports
       else
         start_date.end_of_month
       end
-    end
-
-    def shipments_for(shipment_type)
-      ::Legacy::Shipment.where(id: shipment_type.pluck(:original_shipment_id).uniq)
     end
 
     def excluded_emails

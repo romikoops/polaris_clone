@@ -4,12 +4,12 @@ require 'axlsx'
 
 module AdmiraltyReports
   class ExcelGenerator
-    def self.generate(raw_data:)
-      new(raw_data: raw_data)
+    def self.generate(raw_request_data:)
+      new(raw_request_data: raw_request_data)
     end
 
-    def initialize(raw_data:)
-      @raw_data = raw_data
+    def initialize(raw_request_data:)
+      @raw_request_data = raw_request_data
     end
 
     def process_excel_file
@@ -23,13 +23,15 @@ module AdmiraltyReports
     def xlsx_content(workbook)
       workbook.add_worksheet(name: 'Stat Overview') do |sheet|
         sheet.add_row ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Agency', 'Status']
-        @raw_data.each do |shipment|
+        @raw_request_data.each do |request|
+          request_user = request&.user
+          request_tenant = request.try(:tenant) || Legacy::Shipment.find(request.original_shipment_id).tenant
           sheet.add_row(
-            [shipment.tenant.name,
-             shipment.updated_at,
-             shipment&.user&.email,
-             shipment&.user&.agency&.name,
-             shipment.status]
+            [request_tenant.try(:name) || request_tenant.try(:slug),
+             request.updated_at.to_date,
+             request_user&.email,
+             request_user&.agency&.name,
+             request.try(:status)]
           )
         end
       end

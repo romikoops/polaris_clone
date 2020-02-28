@@ -3,46 +3,47 @@
 module AdmiraltyReports
   RSpec.describe ExcelGenerator, type: :service do
     describe '#process_excel_file' do
-      let(:tenant) {
-        FactoryBot.create(:legacy_tenant,
-                          name: 'Test Tenant')
-      }
-      let(:user) {
-        FactoryBot.create(:legacy_user,
-                          email: 'imc@imc.com')
-      }
-      let(:raw_data) do
+      let(:tenant) { FactoryBot.create(:legacy_tenant, name: 'Test Tenant') }
+      let(:quotation_tenant) { FactoryBot.create(:tenants_tenant, slug: 'quotetenant') }
+      let(:user) { FactoryBot.create(:legacy_user, email: 'imc@imc.com') }
+
+      let(:raw_request_data) do
         [
           FactoryBot.build(:legacy_shipment,
-                            user: user,
-                            tenant: tenant,
-                            updated_at: Date.new(2019, 2, 3),
-                            created_at: Date.new(2019, 2, 2),
-                            status: 'accepted'),
-          FactoryBot.build(:legacy_shipment,
-                            user: user,
-                            tenant: tenant,
-                            updated_at: DateTime.new(2019, 2, 5),
-                            created_at: DateTime.new(2019, 2, 4)
-                          )
+                           user: user,
+                           tenant: tenant,
+                           updated_at: Date.new(2020, 2, 3),
+                           created_at: Date.new(2020, 2, 2),
+                           status: 'accepted'),
+          FactoryBot.build(:quotations_quotation,
+                           tenant: quotation_tenant,
+                           user: user,
+                           updated_at: DateTime.new(2020, 2, 3),
+                           created_at: DateTime.new(2020, 2, 1))
         ]
       end
 
-      subject { ExcelGenerator.generate(raw_data: raw_data).process_excel_file }
-
       context 'when custom fields are not specified' do
-        let(:expected_headers) do
-          ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Agency', 'Status']
-        end
+        subject { described_class.generate(raw_request_data: raw_request_data).process_excel_file }
 
-        let(:expected_info) do
-          ['Test Tenant', DateTime.new(2019, 2, 3), 'imc@imc.com', nil, 'accepted']
-        end
+        let(:expected_headers) { ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Agency', 'Status'] }
 
-        it 'should create excel of data from given document' do
-          generated_file = Roo::Excelx.new(subject.to_stream)
+        let(:expected_shipment) { ['Test Tenant', DateTime.new(2020, 2, 3), 'imc@imc.com', nil, 'accepted'] }
+
+        let(:expected_quotation) { ['quotetenant', DateTime.new(2020, 2, 3), 'imc@imc.com', nil, nil] }
+
+        let(:generated_file) { Roo::Excelx.new(subject.to_stream) }
+
+        it 'creates headers correctly' do
           expect(generated_file.row(1)).to eq(expected_headers)
-          expect(generated_file.row(2)).to eq(expected_info)
+        end
+
+        it 'creates excel with a shipment' do
+          expect(generated_file.row(2)).to eq(expected_shipment)
+        end
+
+        it 'creates excel with a quotation' do
+          expect(generated_file.row(3)).to eq(expected_quotation)
         end
       end
     end
