@@ -61,7 +61,7 @@ class AccountMailer < Devise::Mailer
 
   def base_url(tenant)
     case Rails.env
-    when 'production'  then "https://#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}/"
+    when 'production'  then "https://#{tenant.default_domain}/"
     when 'review'      then ENV['REVIEW_URL']
     when 'development' then 'http://localhost:8080/'
     when 'test'        then 'http://localhost:8080/'
