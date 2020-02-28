@@ -53,5 +53,16 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
         expect { described_class.new(shipment: shipment).perform(routes) }.to raise_error(OfferCalculator::Calculator::InvalidRoutes)
       end
     end
+
+    context 'with failure (AggregatedCargo)' do
+      before do
+        shipment.aggregated_cargo = FactoryBot.create(:legacy_aggregated_cargo)
+        allow(shipment.aggregated_cargo).to receive(:valid_for_mode_of_transport?).and_return(false)
+      end
+
+      it 'raises InvalidRoutes when the routes are invalid' do
+        expect { described_class.new(shipment: shipment).perform(routes) }.to raise_error(OfferCalculator::Calculator::InvalidRoutes)
+      end
+    end
   end
 end

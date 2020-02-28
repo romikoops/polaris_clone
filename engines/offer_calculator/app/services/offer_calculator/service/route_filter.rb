@@ -19,12 +19,16 @@ module OfferCalculator
       private
 
       def should_apply_filter?(routes)
-        !routes.empty? && @shipment.cargo_units.first.is_a?(Legacy::CargoItem)
+        !routes.empty? && !@shipment.cargo_units.first.is_a?(Legacy::Container)
       end
 
       def all_cargo_items_are_valid_for_mode_of_transport?(mode_of_transport)
-        @shipment.cargo_items.all? do |cargo_item|
-          cargo_item.valid_for_mode_of_transport?(mode_of_transport)
+        if @shipment.aggregated_cargo
+          @shipment.aggregated_cargo.valid_for_mode_of_transport?(mode_of_transport)
+        else
+          @shipment.cargo_items.all? do |cargo_item|
+            cargo_item.valid_for_mode_of_transport?(mode_of_transport)
+          end
         end
       end
     end
