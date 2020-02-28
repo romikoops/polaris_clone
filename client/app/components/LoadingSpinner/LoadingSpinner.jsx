@@ -1,8 +1,9 @@
 import React from 'react'
 import './LoadingSpinner.scss'
-import PropTypes from '../../prop-types'
 
-export function LoadingSpinner ({ size }) {
+export function LoadingSpinner ({ size, show }) {
+  if (!show) { return null }
+
   return (
     <div id="floatingCirclesG" className={size}>
       <div className="f_circleG" id="frotateG_01" />
@@ -16,12 +17,10 @@ export function LoadingSpinner ({ size }) {
     </div>
   )
 }
-LoadingSpinner.propTypes = {
-  size: PropTypes.string
-}
 
 LoadingSpinner.defaultProps = {
-  size: ''
+  size: '',
+  show: true
 }
 
 export default LoadingSpinner

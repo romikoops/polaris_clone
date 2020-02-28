@@ -1,13 +1,16 @@
+import React from 'react'
 import { withNamespaces } from 'react-i18next'
 
 function RouteSectionLabel (props) {
-  const { truckingOptions, target, t } = props
+  const { truckingOptions, target, t, className } = props
 
-  if (target === 'origin') {
-    return truckingOptions >= 1 ? t('shipment:pickUp') : t('shipment:portOfLoading')
+  let label = truckingOptions >= 1 ? t('shipment:origin') : t('shipment:portOfLoading')
+
+  if (target === 'destination') {
+    label = truckingOptions >= 1 ? t('shipment:destination') : t('shipment:portOfDischarge')
   }
 
-  return truckingOptions >= 1 ? t('shipment:delivery') : t('shipment:portOfDischarge')
+  return (<div className={className}>{label}</div>)
 }
 
 export default withNamespaces('shipment')(RouteSectionLabel)

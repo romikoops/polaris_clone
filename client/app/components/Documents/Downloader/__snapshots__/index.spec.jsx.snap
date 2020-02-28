@@ -38,6 +38,7 @@ exports[`props.loading is true, state.requested is true 1`] = `
   data-tip="FOO_TOOLTIP"
 >
   <LoadingSpinner
+    show={true}
     size="small"
   />
 </div>

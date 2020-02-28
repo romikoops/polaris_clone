@@ -19,6 +19,7 @@ exports[`color is falsy 1`] = `
     effect="solid"
     id="UUID_MOCK_KEY_1"
     insecure={true}
+    place="top"
     resizeHide={true}
     wrapper="div"
   />
@@ -44,6 +45,7 @@ exports[`shallow render 1`] = `
     effect="solid"
     id="UUID_MOCK_KEY_0"
     insecure={true}
+    place="top"
     resizeHide={true}
     wrapper="div"
   />

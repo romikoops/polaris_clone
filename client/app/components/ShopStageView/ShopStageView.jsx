@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { cookieActions } from '../../actions'
 import styles from './ShopStageView.scss'
-import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import { SHIPMENT_STAGES, QUOTE_STAGES } from '../../constants'
 import {
@@ -17,13 +16,21 @@ class ShopStageView extends Component {
     history.goBack()
   }
 
+  static defaultProps = {
+    currentStage: 1,
+    theme: null,
+    tenant: {},
+    disabledClick: false,
+    hasNextStage: false,
+    goForward: null
+  }
+
   constructor (props) {
     super(props)
+    const { tenant } = this.props
     this.state = {}
     this.applicableStages =
-      this.props.tenant.scope.closed_quotation_tool ||
-        this.props.tenant.scope.open_quotation_tool
-        ? QUOTE_STAGES : SHIPMENT_STAGES
+      tenant.scope.closed_quotation_tool || tenant.scope.open_quotation_tool ? QUOTE_STAGES : SHIPMENT_STAGES
   }
 
   componentWillReceiveProps (nextProps) {
@@ -31,26 +38,30 @@ class ShopStageView extends Component {
   }
 
   componentWillUnmount () {
-    this.props.cookieDispatch.updateCookieHeight({ fixedHeight: 0 })
+    const { cookieDispatch } = this.props
+    cookieDispatch.updateCookieHeight({ fixedHeight: 0 })
   }
 
   setStageHeader (currentStage) {
-    const { header } = this.applicableStages.find(stage => stage.step === currentStage) || {}
+    const { header } = this.applicableStages.find((stage) => stage.step === currentStage) || {}
     this.setState({ stageHeader: header })
   }
 
   handleClickStage (stage) {
-    if (this.props.disabledClick) return
+    const { disabledClick, setStage } = this.props
 
-    this.props.setStage(stage)
+    if (disabledClick) return
+
+    setStage(stage)
   }
 
   showContactHelp () {
-    this.setState({ showHelp: !this.state.showHelp })
+    const { showHelp } = this.state
+    this.setState({ showHelp: !showHelp })
   }
 
   stageBoxCircle (stage) {
-    const { theme } = this.props
+    const { theme, currentStage, disabledClick } = this.props
     const gradientStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
@@ -61,12 +72,12 @@ class ShopStageView extends Component {
         ? gradientGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
         : theme.colors.brightPrimary
 
-    if (stage.step < this.props.currentStage) {
+    if (stage.step < currentStage) {
       return (
         <div
           className={
             `${styles.shop_stage_past} flex-none ` +
-            `${this.props.disabledClick ? '' : 'pointy'} ` +
+            `${disabledClick ? '' : 'pointy'} ` +
             'layout-column layout-align-center-center'
           }
           onClick={() => this.handleClickStage(stage)}
@@ -76,7 +87,7 @@ class ShopStageView extends Component {
       )
     }
 
-    if (stage.step === this.props.currentStage) {
+    if (stage.step === currentStage) {
       return (
         <div className={styles.wrapper_shop_stage_current}>
           <div
@@ -124,9 +135,15 @@ class ShopStageView extends Component {
       hasNextStage,
       tenant,
       currentStage,
-      t
+      t,
+      goForward,
+      cookieDispatch
     } = this.props
+
+    const { stageHeader } = this.state
+
     const shouldHideNavButtons = currentStage > 5
+    const shouldDisplayHeader = currentStage !== 1
     const stepBarShowStyle = shouldHideNavButtons ? styles.hide_nav_options : ''
     const { bookingProcessImage } = theme
     const bookingProcessImageWrapped = bookingProcessImage
@@ -134,7 +151,7 @@ class ShopStageView extends Component {
       : "url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg')"
 
     const { showHelp } = this.state
-    const stageBoxes = this.applicableStages.map(stage => this.stageBox(stage))
+    const stageBoxes = this.applicableStages.map((stage) => this.stageBox(stage))
     const gradientStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -147,7 +164,7 @@ class ShopStageView extends Component {
     const backBtn = (
       <div
         className={`${styles.stage_box} flex-none layout-column layout-align-start-center ${stepBarShowStyle}`}
-        onClick={!shouldHideNavButtons ? () => ShopStageView.goBack() : null}
+        onClick={!shouldHideNavButtons ? () => ShopStageView.goBack() : () => {}}
       >
         <div className={styles.wrapper_shop_stage_current}>
           <div
@@ -179,7 +196,7 @@ class ShopStageView extends Component {
     const fwdBtn = hasNextStage ? (
       <div
         className={`${styles.stage_box} flex-none layout-column layout-align-start-center`}
-        onClick={() => this.props.goForward()}
+        onClick={() => goForward()}
       >
         <div className={styles.wrapper_shop_stage_current}>
           <div
@@ -199,34 +216,36 @@ class ShopStageView extends Component {
       <div className={`${styles.stage_box} flex-none layout-column layout-align-start-center`} />
     )
 
+    const header = (
+      <div
+        className={`${styles.shop_banner} layout-row flex-100 layout-align-center`}
+        style={{ backgroundImage: bookingProcessImageWrapped }}
+      >
+        <div className={styles.fade} />
+        <div
+          className={`layout-row ${defs.content_width} layout-wrap layout-align-start-center ${
+          styles.banner_content
+        }`}
+        >
+          <h3 className="flex-none header">
+            { isQuote(tenant) ? t('common:quotation') : t('common:booking') }
+          </h3>
+          <i className="fa fa-chevron-right fade" />
+          <p className={`flex-gt-md-70 fade ${styles.stage_header}`}>
+            {stageHeader}
+          </p>
+        </div>
+      </div>
+    )
+
     return (
       <div className="layout-row flex-100 layout-align-center layout-wrap">
-        <div
-          className={`${styles.shop_banner} layout-row flex-100 layout-align-center`}
-          style={{ backgroundImage: bookingProcessImageWrapped }}
-        >
-          <div className={styles.fade} />
-          <div
-            className={`layout-row ${defs.content_width} layout-wrap layout-align-start-center ${
-              styles.banner_content
-            }`}
-          >
-            <h3 className="flex-none header">
-              { isQuote(tenant) ? t('common:quotation') : t('common:booking') }
-            </h3>
-            <i className="fa fa-chevron-right fade" />
-            <p className="flex-gt-md-70 fade">
-              {' '}
-              {this.state.stageHeader}
-              {' '}
-            </p>
-          </div>
-        </div>
+        { shouldDisplayHeader && header }
         <div
           className={`${styles.stage_row} layout-row flex-100 layout-align-center`}
           ref={(div) => {
             if (!div) return
-            this.props.cookieDispatch.updateCookieHeight({ fixedHeight: div.offsetHeight })
+            cookieDispatch.updateCookieHeight({ fixedHeight: div.offsetHeight })
           }}
         >
           {backBtn}
@@ -245,29 +264,6 @@ class ShopStageView extends Component {
       </div>
     )
   }
-}
-
-ShopStageView.propTypes = {
-  theme: PropTypes.theme,
-  tenant: PropTypes.tenant,
-  t: PropTypes.func.isRequired,
-  setStage: PropTypes.func.isRequired,
-  currentStage: PropTypes.number,
-  disabledClick: PropTypes.bool,
-  hasNextStage: PropTypes.bool,
-  goForward: PropTypes.func,
-  cookieDispatch: PropTypes.shape({
-    updateCookieHeight: PropTypes.func
-  }).isRequired
-}
-
-ShopStageView.defaultProps = {
-  currentStage: 1,
-  theme: null,
-  tenant: {},
-  disabledClick: false,
-  hasNextStage: false,
-  goForward: null
 }
 
 function mapDispatchToProps (dispatch) {

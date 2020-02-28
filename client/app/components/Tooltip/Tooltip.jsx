@@ -8,7 +8,7 @@ import { gradientTextGenerator } from '../../helpers'
 import styles from './Tooltip.scss'
 
 export function Tooltip ({
-  text, icon, theme, color, toolText
+  text, icon, theme, color, toolText, place
 }) {
   const textStyle = color
     ? { color }
@@ -25,7 +25,7 @@ export function Tooltip ({
         data-tip={tipText}
         data-for={id}
       />
-      <ReactTooltip id={id} className={styles.tooltip_box} effect="solid" />
+      <ReactTooltip id={id} className={styles.tooltip_box} effect="solid" place={place} />
     </div>
   )
 }
@@ -35,7 +35,8 @@ Tooltip.propTypes = {
   text: PropTypes.string,
   icon: PropTypes.string,
   color: PropTypes.string,
-  toolText: PropTypes.string
+  toolText: PropTypes.string,
+  place: PropTypes.string
 }
 
 Tooltip.defaultProps = {
@@ -43,7 +44,8 @@ Tooltip.defaultProps = {
   theme: {},
   toolText: '',
   text: '',
-  icon: ''
+  icon: '',
+  place: 'top'
 }
 
 export default Tooltip

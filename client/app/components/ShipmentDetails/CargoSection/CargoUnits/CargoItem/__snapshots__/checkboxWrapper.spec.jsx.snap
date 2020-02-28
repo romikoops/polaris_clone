@@ -44,6 +44,7 @@ exports[`renders correctly 1`] = `
     <Tooltip
       color="#0D5BA9"
       icon="fa-info-circle"
+      place="top"
       text="stackable"
       theme={Object {}}
       toolText=""

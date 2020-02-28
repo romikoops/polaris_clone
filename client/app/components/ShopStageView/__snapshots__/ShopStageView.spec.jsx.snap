@@ -5,36 +5,6 @@ exports[`hasNextStage is true 1`] = `
   className="layout-row flex-100 layout-align-center layout-wrap"
 >
   <div
-    className="shop_banner layout-row flex-100 layout-align-center"
-    style={
-      Object {
-        "backgroundImage": "url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg')",
-      }
-    }
-  >
-    <div
-      className="fade"
-    />
-    <div
-      className="layout-row content_width layout-wrap layout-align-start-center banner_content"
-    >
-      <h3
-        className="flex-none header"
-      >
-        Quotation
-      </h3>
-      <i
-        className="fa fa-chevron-right fade"
-      />
-      <p
-        className="flex-gt-md-70 fade"
-      >
-         
-         
-      </p>
-    </div>
-  </div>
-  <div
     className="stage_row layout-row flex-100 layout-align-center"
   >
     <div
@@ -216,36 +186,6 @@ exports[`shallow rendering 1`] = `
   className="layout-row flex-100 layout-align-center layout-wrap"
 >
   <div
-    className="shop_banner layout-row flex-100 layout-align-center"
-    style={
-      Object {
-        "backgroundImage": "url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg')",
-      }
-    }
-  >
-    <div
-      className="fade"
-    />
-    <div
-      className="layout-row content_width layout-wrap layout-align-start-center banner_content"
-    >
-      <h3
-        className="flex-none header"
-      >
-        Quotation
-      </h3>
-      <i
-        className="fa fa-chevron-right fade"
-      />
-      <p
-        className="flex-gt-md-70 fade"
-      >
-         
-         
-      </p>
-    </div>
-  </div>
-  <div
     className="stage_row layout-row flex-100 layout-align-center"
   >
     <div
@@ -395,36 +335,6 @@ exports[`state.showHelp is true 1`] = `
 <div
   className="layout-row flex-100 layout-align-center layout-wrap"
 >
-  <div
-    className="shop_banner layout-row flex-100 layout-align-center"
-    style={
-      Object {
-        "backgroundImage": "url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg')",
-      }
-    }
-  >
-    <div
-      className="fade"
-    />
-    <div
-      className="layout-row content_width layout-wrap layout-align-start-center banner_content"
-    >
-      <h3
-        className="flex-none header"
-      >
-        Quotation
-      </h3>
-      <i
-        className="fa fa-chevron-right fade"
-      />
-      <p
-        className="flex-gt-md-70 fade"
-      >
-         
-         
-      </p>
-    </div>
-  </div>
   <div
     className="stage_row layout-row flex-100 layout-align-center"
   >
@@ -651,36 +561,6 @@ exports[`tenant.scope is falsy 1`] = `
   className="layout-row flex-100 layout-align-center layout-wrap"
 >
   <div
-    className="shop_banner layout-row flex-100 layout-align-center"
-    style={
-      Object {
-        "backgroundImage": "url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg')",
-      }
-    }
-  >
-    <div
-      className="fade"
-    />
-    <div
-      className="layout-row content_width layout-wrap layout-align-start-center banner_content"
-    >
-      <h3
-        className="flex-none header"
-      >
-        Booking
-      </h3>
-      <i
-        className="fa fa-chevron-right fade"
-      />
-      <p
-        className="flex-gt-md-70 fade"
-      >
-         
-         
-      </p>
-    </div>
-  </div>
-  <div
     className="stage_row layout-row flex-100 layout-align-center"
   >
     <div
@@ -872,36 +752,6 @@ exports[`theme.bookingProcessImage is truthy 1`] = `
 <div
   className="layout-row flex-100 layout-align-center layout-wrap"
 >
-  <div
-    className="shop_banner layout-row flex-100 layout-align-center"
-    style={
-      Object {
-        "backgroundImage": "url(BOOKING_PROCESS_IMAGE)",
-      }
-    }
-  >
-    <div
-      className="fade"
-    />
-    <div
-      className="layout-row content_width layout-wrap layout-align-start-center banner_content"
-    >
-      <h3
-        className="flex-none header"
-      >
-        Quotation
-      </h3>
-      <i
-        className="fa fa-chevron-right fade"
-      />
-      <p
-        className="flex-gt-md-70 fade"
-      >
-         
-         
-      </p>
-    </div>
-  </div>
   <div
     className="stage_row layout-row flex-100 layout-align-center"
   >

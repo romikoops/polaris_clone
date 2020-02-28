@@ -41,6 +41,7 @@ exports[`pre carriage is true 1`] = `
         <Tooltip
           color=""
           icon="fa-info-circle"
+          place="top"
           text="planned_pickup_date"
           theme={
             Object {
@@ -247,6 +248,7 @@ exports[`renders correctly 1`] = `
         <Tooltip
           color=""
           icon="fa-info-circle"
+          place="top"
           text="planned_dropoff_date"
           theme={
             Object {
@@ -453,6 +455,7 @@ exports[`selected day is falsy 1`] = `
         <Tooltip
           color=""
           icon="fa-info-circle"
+          place="top"
           text="planned_dropoff_date"
           theme={
             Object {

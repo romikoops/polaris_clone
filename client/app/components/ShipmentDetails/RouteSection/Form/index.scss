@@ -1,0 +1,16 @@
+:local {
+  .routeSelectionForm {
+    margin-top: 10px;
+    position: relative;
+  }
+
+  .autocompleteItem {
+    :first-child {
+      margin-right: 5px;
+    }
+  }
+
+  .loadingWrapper {
+    margin: 20px 0 ;
+  }
+}

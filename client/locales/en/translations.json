@@ -1021,7 +1021,9 @@
     "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date.",
     "portOfLoading": "Port of Loading",
     "portOfDischarge": "Port of Discharge",
-    "portOrAddress": "Port or Address..."
+    "portOrAddress": "Port or Address...",
+    "address": "Address",
+    "port": "Port"
   },
   "user": {
     "companyName": "Company Name",
@@ -1106,7 +1108,9 @@
     "offerErrorContact": "Don't worry we are here to help make your booking happen. Just reach out through any of the contacts below to complete your booking.",
     "offerErrorCode": "Error Code: {{code}}",
     "salesTeamMot": "Contact the {{mot}} team by {{medium}} at",
-    "salesTeamGeneral": "Contact the sales team by {{medium}} at"
+    "salesTeamGeneral": "Contact the sales team by {{medium}} at",
+    "invalidAddress": "Please check if all address information is correct",
+    "truckingNotAvailable": "Trucking not available for this address Error Code: {{code}}"
   },
   "trucking": {
     "isNotAvailableLocal": " is not available in ",
@@ -1287,5 +1291,13 @@
     "delta": "Delta",
     "range": "Effective Range",
     "rateRange": "Rate Range"
+  },
+
+  "address": {
+    "street": "Street",
+    "number": "Number",
+    "postalCode": "Postal Code",
+    "city": "City",
+    "country": "Country"
   }
 }

@@ -12,12 +12,15 @@ class RouteSectionMapContent extends React.PureComponent {
 
     this.mapStyle = {
       width: '100%',
-      height: '600px',
+      height: '540px',
       borderRadius: '3px',
       boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
     }
 
-    this.state = { markers: { origin: null, destination: null }, geoJsons: { origin: null, destination: null } }
+    this.state = {
+      markers: { origin: null, destination: null },
+      geoJsons: { origin: null, destination: null }
+    }
 
     this.getIcon = this.getIcon.bind(this)
     this.setMarker = this.setMarker.bind(this)
@@ -77,10 +80,10 @@ class RouteSectionMapContent extends React.PureComponent {
     }
     const newMarker = this.getMarker(target, address)
 
-    if (!newMarker) return null
+    if (!newMarker) return
 
     this.setState(
-      prevState => ({
+      (prevState) => ({
         markers: {
           ...prevState.markers,
           [target]: newMarker
@@ -131,7 +134,7 @@ class RouteSectionMapContent extends React.PureComponent {
   setDrivingDirections () {
     const { markers } = this.state
 
-    if (Object.values(markers).some(marker => marker == null)) return
+    if (Object.values(markers).some((marker) => marker == null)) return
 
     this.directionsDisplay.setMap(this.map)
     const request = {
@@ -158,7 +161,7 @@ class RouteSectionMapContent extends React.PureComponent {
       styles: mapStyling,
       keyboard: false,
       gestureHandling: 'none',
-      zoomControl: false
+      zoomControl: true
     }
 
     this.map = new gMaps.Map(this.mapDiv, mapsOptions)
@@ -188,20 +191,21 @@ class RouteSectionMapContent extends React.PureComponent {
 
     const bounds = new gMaps.LatLngBounds()
 
-    Object.values(markers).forEach(marker => {
-      if(marker == null) { return }
+    Object.values(markers).forEach((marker) => {
+      if (marker == null) { return }
 
       const position = marker.getPosition()
-      return position && bounds.extend(position)
+
+      position && bounds.extend(position)
     })
 
-    if (Object.values(markers).every(marker => marker == null)) {
+    if (Object.values(markers).every((marker) => marker == null)) {
       this.map.setCenter({
         lat: 55.675647,
         lng: 12.567848
       })
       this.map.setZoom(5)
-    } else if (Object.values(markers).every(marker => marker)) {
+    } else if (Object.values(markers).every((marker) => marker)) {
       this.map.fitBounds(bounds, { top: 100, bottom: 20 })
     } else {
       this.map.setCenter(bounds.getCenter())
@@ -211,12 +215,21 @@ class RouteSectionMapContent extends React.PureComponent {
 
   render () {
     const { children, gMaps } = this.props
+    const childrenProps = {
+      gMaps,
+      map: this.map,
+      setMarker: this.setMarker,
+      adjustMapBounds: this.adjustMapBounds
+    }
+
+    let wrapperClassNames = 'flex-100 layout-row layout-wrap layout-align-space-between '
+    wrapperClassNames += styles.children_wrapper
 
     return (
       <div className={`flex-100 ${styles.route_section_map}`}>
         <div ref={(div) => { this.mapDiv = div }} id="map" style={this.mapStyle} />
-        <div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.children_wrapper}`}>
-          { this.map && children({ gMaps, map: this.map, setMarker: this.setMarker }) }
+        <div className={wrapperClassNames}>
+          { this.map && children(childrenProps) }
         </div>
       </div>
     )

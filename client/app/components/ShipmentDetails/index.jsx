@@ -177,7 +177,7 @@ class ShipmentDetails extends React.PureComponent {
           onInvalid={this.disableGetOffers}
           className="flex-100 layout-row layout-wrap"
         >
-          <RouteSection requiresFullAddress={scope.require_full_address} addressErrors={addressErrors} />
+          <RouteSection addressErrors={addressErrors} />
           { scope.show_beta_features ? <NotesSection /> : '' }
           <DayPickerSection />
           <CargoSection toggleModal={this.toggleModal} totalShipmentErrors={totalShipmentErrors} />

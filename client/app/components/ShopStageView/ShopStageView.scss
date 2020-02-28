@@ -73,7 +73,7 @@
     right: 0;
     width: 100%;
     background: white;
-    border-top: 1px solid rgba(black, 0.2); 
+    border-top: 1px solid rgba(black, 0.2);
     box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, 0.2);
     z-index: 499;
   }
@@ -110,7 +110,7 @@
     i {
       background-clip: text !important;
       -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;      
+      -webkit-text-fill-color: transparent !important;
     }
     h3 {
       font-weight: normal;
@@ -142,16 +142,16 @@
     margin: 0;
   }
   .wrapper_shop_stage_current {
-    position: relative;    
+    position: relative;
     height: 27px !important;
     width: 27px !important;
   }
   .shop_stage_current {
     position: absolute;
     z-index: 1;
-    top: 2px; 
+    top: 2px;
     bottom: 2px;
-    left: 2px; 
+    left: 2px;
     right: 2px;
     border-radius: 50% !important;
     background: white;
@@ -159,14 +159,14 @@
       margin: 0;
       background-clip: text !important;
       -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;      
+      -webkit-text-fill-color: transparent !important;
     }
   }
   .shop_stage_current_border {
     position: absolute;
-    top: 0; 
+    top: 0;
     bottom: 0;
-    left: 0; 
+    left: 0;
     right: 0;
     content: '';
     z-index: 0;
@@ -190,5 +190,9 @@
     i {
       margin-left: 5px;
     }
+  }
+
+  .stage_header {
+    margin-left: 3px;
   }
 }

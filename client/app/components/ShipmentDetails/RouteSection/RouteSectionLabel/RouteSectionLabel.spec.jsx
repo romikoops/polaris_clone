@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 
 import RouteSectionLabel from './RouteSectionLabel'
 
-test('text should be pick-up if target is origin and trucktypes exist', () => {
+test('text should be Origin if target is origin and trucktypes exist', () => {
   const props = {
     truckingOptions: 1,
     target: 'origin'
@@ -11,10 +11,10 @@ test('text should be pick-up if target is origin and trucktypes exist', () => {
 
   const routeSection = shallow(<RouteSectionLabel {...props} />)
   expect(routeSection).toMatchSnapshot()
-  expect(routeSection.contains('Pick-up')).toBe(true)
+  expect(routeSection.contains('Origin')).toBe(true)
 })
 
-test('text should be delivery if target is destination and  trucktypes exist', () => {
+test('text should be Destination if target is destination and trucktypes exist', () => {
   const props = {
     truckingOptions: 1,
     target: 'destination'
@@ -22,7 +22,7 @@ test('text should be delivery if target is destination and  trucktypes exist', (
 
   const routeSection = shallow(<RouteSectionLabel {...props} />)
   expect(routeSection).toMatchSnapshot()
-  expect(routeSection.contains('Delivery')).toBe(true)
+  expect(routeSection.contains('Destination')).toBe(true)
 })
 
 test('text should be port-of-loading if target is origin and trucktypes do not exist', () => {

@@ -25,6 +25,7 @@
       .tooltip {
         height: 25px;
         margin-left: 4px;
+        margin-top: 10px;
         display: inline-block;
       }
       .overlay {
@@ -42,5 +43,9 @@
     .carriage_sec {
       position: relative;
     }
+  }
+
+  .carriageSection {
+    margin-right: 10px;
   }
 }

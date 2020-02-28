@@ -61,6 +61,7 @@ exports[`shallow rendering 1`] = `
             <Tooltip
               color=""
               icon="fa-info-circle"
+              place="top"
               text="0"
               theme={
                 Object {
@@ -102,6 +103,7 @@ exports[`shallow rendering 1`] = `
             <Tooltip
               color=""
               icon="fa-info-circle"
+              place="top"
               text="1"
               theme={
                 Object {
@@ -143,6 +145,7 @@ exports[`shallow rendering 1`] = `
             <Tooltip
               color=""
               icon="fa-info-circle"
+              place="top"
               text="2"
               theme={
                 Object {

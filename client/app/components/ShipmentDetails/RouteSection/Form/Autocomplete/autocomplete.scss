@@ -1,0 +1,46 @@
+$spacing: 5px;
+:local {
+  $itemHeight: 25px;
+  .autocomplete {
+    position: relative;
+  }
+
+  .autocompleteField {
+    width: 95%;
+    height: $itemHeight;
+    line-height: $itemHeight;
+    padding: $spacing $spacing * 2;
+  }
+
+  .autocompleteResults {
+    background: white;
+    margin: 0;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    list-style: none;
+    padding: 0;
+
+    li {
+      min-height: $itemHeight;
+      line-height: $itemHeight;
+      cursor: pointer;
+
+      padding: $spacing $spacing * 2;
+
+      &:hover {
+        background-color: rgba(17, 17, 17, 0.3)
+      }
+    }
+  }
+  .autocompleteResultsSelected {
+    background-color: rgba(17, 17, 17, 0.3)
+  }
+
+  .loading {
+    position: relative;
+    float: right;
+
+    margin: -28px 5px;
+  }
+}

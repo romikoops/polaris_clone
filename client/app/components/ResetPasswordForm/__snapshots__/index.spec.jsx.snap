@@ -632,6 +632,7 @@ exports[`state.settingPassword is true 1`] = `
             className="spinner"
           >
             <LoadingSpinner
+              show={true}
               size=""
             />
           </div>

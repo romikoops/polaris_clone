@@ -1,9 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`text should be delivery if target is destination and  trucktypes exist 1`] = `"Delivery"`;
+exports[`text should be Destination if target is destination and trucktypes exist 1`] = `
+<div>
+  Destination
+</div>
+`;
 
-exports[`text should be pick-up if target is origin and trucktypes exist 1`] = `"Pick-up"`;
+exports[`text should be Origin if target is origin and trucktypes exist 1`] = `
+<div>
+  Origin
+</div>
+`;
 
-exports[`text should be port-of-discharge if target is destination and trucktypes do not exist 1`] = `"Port of Discharge"`;
+exports[`text should be port-of-discharge if target is destination and trucktypes do not exist 1`] = `
+<div>
+  Port of Discharge
+</div>
+`;
 
-exports[`text should be port-of-loading if target is origin and trucktypes do not exist 1`] = `"Port of Loading"`;
+exports[`text should be port-of-loading if target is origin and trucktypes do not exist 1`] = `
+<div>
+  Port of Loading
+</div>
+`;

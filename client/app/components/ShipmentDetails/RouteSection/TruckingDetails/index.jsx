@@ -6,11 +6,10 @@ import { Tooltip } from '../../../Tooltip/Tooltip'
 import { humanizeSnakeCase } from '../../../../helpers/stringTools'
 
 function TruckingDetails ({
-  theme, trucking, truckTypes, onTruckingDetailsChange, target, hide, carriageType
+  theme, trucking, truckTypes, onTruckingDetailsChange, target, hide, wrapperClassName
 }) {
-  if (hide) return ''
-
-  if (truckTypes.length === 0) return ''
+  if (hide) return null
+  if (truckTypes.length === 0) return null
 
   function tooltip (truckType) {
     return (
@@ -20,6 +19,7 @@ function TruckingDetails ({
         theme={theme}
         color="white"
         wrapperClassName={styles.tooltip}
+        place="left"
       />
     )
   }
@@ -33,8 +33,7 @@ function TruckingDetails ({
     return (
       <div
         className={`
-          ${styles.form_group} ${disabledClass}
-          flex-50
+          ${styles.form_group} ${disabledClass} ${wrapperClassName}
           layout-row
         `}
         data-tip={`${humanizedTruckType} is not available for the given address.`}
@@ -62,14 +61,14 @@ function TruckingDetails ({
     const baseTruckTypes = ['side_lifter', 'chassis']
 
     return (
-      <div className={`${styles.carriage_sec} flex-100 layout-column layout-align-space-between-start`}>
-        { baseTruckTypes.map(_truckType => formGroup(carriage, _truckType)) }
+      <div className="flex-100 layout-row layout-align-start">
+        { baseTruckTypes.map((truckType) => formGroup(carriage, truckType)) }
       </div>
     )
   }
 
   return (
-    <div className={`flex-100 layout-row ${styles.trucking_details}`}>
+    <div className={styles.trucking_details}>
       { carriageSection(target) }
     </div>
   )

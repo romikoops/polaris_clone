@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Field> context disabled renders correctly  1`] = `
+<div
+  className="field TestClassName"
+>
+  <label
+    htmlFor="TestName"
+  >
+    TestLabel
+  </label>
+  <Formsy(FormsyInput)
+    disabled={true}
+    innerRef={[Function]}
+    name="TestName"
+    onBlur={[Function]}
+    placeholder="TestLabel"
+    required={false}
+    validationError=""
+    validationErrors={Object {}}
+    validations={Object {}}
+    value="1234"
+  />
+</div>
+`;
+
+exports[`<Field> renders correctly  1`] = `
+<div
+  className="field TestClassName"
+>
+  <label
+    htmlFor="TestName"
+  >
+    TestLabel
+  </label>
+  <Formsy(FormsyInput)
+    disabled={false}
+    innerRef={[Function]}
+    name="TestName"
+    onBlur={[Function]}
+    placeholder="TestLabel"
+    required={false}
+    validationError=""
+    validationErrors={Object {}}
+    validations={Object {}}
+    value="1234"
+  />
+</div>
+`;

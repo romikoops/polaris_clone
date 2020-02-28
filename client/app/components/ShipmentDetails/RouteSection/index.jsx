@@ -1,10 +1,10 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { intersection } from 'lodash'
+import { intersection, flatten, get, has } from 'lodash'
 import { withNamespaces } from 'react-i18next'
 import RouteSectionLabel from './RouteSectionLabel/RouteSectionLabel'
-import { bookingProcessActions, shipmentActions, errorActions } from '../../../actions'
+import { bookingProcessActions, shipmentActions } from '../../../actions'
 import RouteSectionMap from './Map'
 import RouteSectionForm from './Form'
 import styles from './RouteSection.scss'
@@ -14,44 +14,26 @@ import {
   camelize, camelToSnakeCase, onlyUnique, isEmpty, isQuote, determineSpecialism
 } from '../../../helpers'
 import getRequests from './getRequests'
+import addressFromPlace from './Form/addressFromPlace'
 
 class RouteSection extends React.PureComponent {
   constructor (props) {
     super(props)
+    const { routes } = props
 
     this.state = {
-      collapsedAddressFields: {
-        origin: true,
-        destination: true
-      },
-      truckingAvailability: {
-        origin: null,
-        destination: null
-      },
+      loading: { origin: false, destination: false },
+      routeSelectionErrors: { origin: false, destination: false },
+      truckingAvailability: { origin: null, destination: null },
+      originTrucking: false,
+      destinationTrucking: false,
       carriageOptions: props.scope.carriage_options,
       newRoute: false,
-      hubSelected: { origin: false, destination: false },
-      countries: { origin: [], destination: [] }
+      countries: RouteSection.getCountriesList(routes)
     }
+    const emptyFn = () => {}
+    this.setGoogleApi(emptyFn, {}, emptyFn, emptyFn)
 
-    this.handleCarriageChange = this.handleCarriageChange.bind(this)
-    this.handleInputBlur = this.handleInputBlur.bind(this)
-    this.handleDropdownSelect = this.handleDropdownSelect.bind(this)
-    this.handleAutocompleteTrigger = this.handleAutocompleteTrigger.bind(this)
-    this.clearCarriage = this.clearCarriage.bind(this)
-    this.handleTruckingDetailsChange = this.handleTruckingDetailsChange.bind(this)
-    this.handleClickCollapser = this.handleClickCollapser.bind(this)
-    this.updateCollapsedAddressFields = this.updateCollapsedAddressFields.bind(this)
-
-    const { routes } = props
-    routes.forEach((route) => {
-      if (route.origin.truckTypes.length > 0) {
-        this.state.countries.origin.push(route.origin.country.toLowerCase())
-      }
-      if (route.destination.truckTypes.length > 0) {
-        this.state.countries.destination.push(route.destination.country.toLowerCase())
-      }
-    })
     this.truckTypes = {
       container: ['chassis', 'side_lifter'],
       cargo_item: ['default']
@@ -69,7 +51,7 @@ class RouteSection extends React.PureComponent {
 
   static getDerivedStateFromProps (nextProps, prevState) {
     const {
-      lookupTablesForRoutes, routes, shipment, tenant, bookingProcessDispatch, shipmentDispatch, addressErrors, scope
+      lookupTablesForRoutes, routes, shipment, tenant, bookingProcessDispatch, shipmentDispatch, scope
     } = nextProps
 
     const { collapsedAddressFields } = prevState
@@ -77,7 +59,14 @@ class RouteSection extends React.PureComponent {
       preCarriage, onCarriage, origin, destination
     } = shipment
     const nextState = {
-      preCarriage, onCarriage, origin, destination, collapsedAddressFields, countries: prevState.countries, truckTypes: prevState.truckTypes
+      preCarriage,
+      onCarriage,
+      origin,
+      destination,
+      collapsedAddressFields,
+      countries: prevState.countries,
+      truckTypes: prevState.truckTypes,
+      requiresFullAddress: scope.require_full_address
     }
 
     if (
@@ -90,32 +79,55 @@ class RouteSection extends React.PureComponent {
       let destinationIndeces = [...Array(routes.length).keys()]
       nextState.newRoute = true
       nextState.countries = { origin: [], destination: [] }
+      const motLookup = {
+        origin: {},
+        destination: {}
+      }
+
+      const prepareHub = (target, route) => {
+        const hub = route[target]
+        const mot = route.modeOfTransport
+
+        if (!has(motLookup, [target, hub.nexusId])) {
+          motLookup[target][hub.nexusId] = { ...hub, mots: [] }
+        }
+
+        if (motLookup[target][hub.nexusId].mots.includes(mot)) {
+          return
+        }
+
+        motLookup[target][hub.nexusId].mots.push(mot)
+      }
 
       // update origins (for react state)
       if (!onCarriage && destination.nexusId) {
         originIndeces = lookupTablesForRoutes.destinationNexus[destination.nexusId]
-        nextState.origins = originIndeces.map(idx => routes[idx].origin)
+        originIndeces.map((idx) => prepareHub('origin', routes[idx]))
       } else if (onCarriage && destination.hubIds) {
         originIndeces = destination.hubIds.reduce((indeces, hubId) => (
           [...indeces, ...lookupTablesForRoutes.destinationHub[hubId]]
         ), []).filter(onlyUnique)
-        nextState.origins = originIndeces.map(idx => routes[idx].origin)
+        originIndeces.map((idx) => prepareHub('origin', routes[idx]))
       } else {
-        nextState.origins = routes.map(route => route.origin)
+        routes.map((route) => prepareHub('origin', route))
       }
+
+      nextState.origins = Object.values(motLookup.origin)
 
       // update destinations (for react state)
       if (!preCarriage && origin.nexusId) {
         destinationIndeces = lookupTablesForRoutes.originNexus[origin.nexusId]
-        nextState.destinations = destinationIndeces.map(idx => routes[idx].destination)
+        destinationIndeces.map((idx) => prepareHub('destination', routes[idx]))
       } else if (preCarriage && origin.hubIds) {
         destinationIndeces = origin.hubIds.reduce((indeces, hubId) => (
           [...indeces, ...lookupTablesForRoutes.originHub[hubId]]
         ), []).filter(onlyUnique)
-        nextState.destinations = destinationIndeces.map(idx => routes[idx].destination)
+        destinationIndeces.map((idx) => prepareHub('destination', routes[idx]))
       } else {
-        nextState.destinations = routes.map(route => route.destination)
+        routes.map((route) => prepareHub('destination', route))
       }
+
+      nextState.destinations = Object.values(motLookup.destination)
 
       // update availableRoutes, availableMots, truckTypes and lastAvailableDate
       const availableRoutes = []
@@ -176,12 +188,6 @@ class RouteSection extends React.PureComponent {
       onCarriage === prevState.onCarriage) {
       nextState.newRoute = false
     }
-    if (addressErrors.origin) {
-      nextState.collapsedAddressFields.origin = false
-    }
-    if (addressErrors.destination) {
-      nextState.collapsedAddressFields.destination = false
-    }
 
     nextState.originTrucking = nextState.truckTypes.origin.length > 0
     nextState.destinationTrucking = nextState.truckTypes.destination.length > 0
@@ -189,6 +195,22 @@ class RouteSection extends React.PureComponent {
     nextState.carriageOptions = scope.carriage_options
 
     return nextState
+  }
+
+  static getCountriesList (routes) {
+    const origins = []
+    const destinations = []
+
+    routes.forEach((route) => {
+      if (route.origin.truckTypes.length > 0) {
+        origins.push(route.origin.country.toLowerCase())
+      }
+      if (route.destination.truckTypes.length > 0) {
+        destinations.push(route.destination.country.toLowerCase())
+      }
+    })
+
+    return { origin: origins, destination: destinations }
   }
 
   componentDidMount () {
@@ -200,7 +222,7 @@ class RouteSection extends React.PureComponent {
     })
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate (_prevProps, prevState) {
     const { carriageOptions } = this.state
     const { scope, shipment } = this.props
     if (carriageOptions === prevState.carriageOptions) return
@@ -212,23 +234,41 @@ class RouteSection extends React.PureComponent {
     })
   }
 
-  handleTruckingDetailsChange (e) {
-    const { shipment, bookingProcessDispatch } = this.props
-    const [carriage, truckType] = e.target.id.split('-')
-
-    bookingProcessDispatch.updateShipment(
-      'trucking',
-      {
-        ...shipment.trucking,
-        [carriage]: {
-          ...shipment.trucking[carriage],
-          truckType
-        }
-      }
-    )
+  setGoogleApi = (gMaps, map, setMarker, adjustMapBounds) => {
+    this.gmaps = { gMaps, map, setMarker, adjustMapBounds }
   }
 
-  handleCarriageChange (e, options = {}) {
+  setRouteSelectionError = (target, message) => {
+    const { routeSelectionErrors } = this.state
+
+    routeSelectionErrors[target] = message
+    this.setState({ routeSelectionErrors })
+  }
+
+  setLoading = (target, value) => {
+    const { loading } = this.state
+
+    loading[target] = value
+    this.setState(loading)
+  }
+
+  setTruckingType = (carriage, truckType) => {
+    const { shipment, bookingProcessDispatch } = this.props
+
+    bookingProcessDispatch.updateShipment('trucking',
+      {
+        ...shipment.trucking,
+        [carriage]: { ...shipment.trucking[carriage], truckType }
+      })
+  }
+
+  onTruckingDetailsChange = (e) => {
+    const [carriage, truckType] = e.target.id.split('-')
+
+    this.setTruckingType(carriage, truckType)
+  }
+
+  handleCarriageChange = (e, options = {}) => {
     const { checked } = e.target
     const carriage = e.target.name
 
@@ -254,93 +294,71 @@ class RouteSection extends React.PureComponent {
     }
 
     if (!artificialEvent.target.id) return
-    this.handleTruckingDetailsChange(artificialEvent)
+    this.onTruckingDetailsChange(artificialEvent)
   }
 
-  handleInputBlur (e) {
-    const [target, key] = e.target.name.split('-')
-    const { shipment } = this.props
-
-    const address = { ...shipment[target], [key]: e.target.value }
-
+  clearCarriage = (target) => {
     const { bookingProcessDispatch } = this.props
-    bookingProcessDispatch.updateShipment(target, address)
+    let carriage = 'preCarriage'
+
+    if (target === 'destination') {
+      carriage = 'onCarriage'
+    }
+
+    bookingProcessDispatch.updateShipment(carriage, false)
+    this.setTruckingType(carriage, '')
   }
 
-  handleDropdownSelect (target, selectedOption, setMarker) {
+  clearShipmentLocation = (target) => {
     const { bookingProcessDispatch } = this.props
+    const { adjustMapBounds, setMarker } = this.gmaps
 
-    if (selectedOption) {
-      const { value } = selectedOption
+    bookingProcessDispatch.updateShipment(target, {})
 
-      const lat = value.latitude
-      const lng = value.longitude
-
-      const targetData = {
-        latitude: lat,
-        longitude: lng,
-        nexusId: value.id,
-        nexusName: value.name,
-        country: value.country,
-        fullAddress: `${value.name}, ${value.country}`
-      }
-
-      bookingProcessDispatch.updateShipment(target, targetData)
-
-      setMarker(target, { lat, lng })
-    } else {
-      bookingProcessDispatch.updateShipment(target, {})
-      setMarker(target, null)
-    }
+    setMarker(target, null)
+    adjustMapBounds()
   }
 
-  handleHubSelect (target, bool) {
-    this.setState(prevState => (
-      {
-        hubSelected: {
-          ...prevState.hubSelected,
-          [target]: bool
-        }
-      }
-    ))
-    this.clearCarriage(target)
+  updateTruckingAvailability = (target, value) => {
+    const { truckingAvailability } = this.state
+
+    truckingAvailability[target] = value
+
+    this.setState(truckingAvailability)
   }
 
-  clearCarriage (target) {
-    const { bookingProcessDispatch, shipment } = this.props
-
-    if (target === 'origin' && shipment.preCarriage) {
-      bookingProcessDispatch.updateShipment('preCarriage', false)
-    }
-    if (target === 'destination' && shipment.onCarriage) {
-      bookingProcessDispatch.updateShipment('onCarriage', false)
-    }
-  }
-
-  updateTruckingAvailability (target, value) {
-    this.setState(prevState => ({
-      truckingAvailability: {
-        ...prevState.truckingAvailability,
-        [target]: value
-      }
-    }))
-  }
-
-  handleAutocompleteTrigger (target, address, setMarker) {
+  updateAddress = (target, address) => new Promise((resolve) => {
     const {
-      bookingProcessDispatch, errorDispatch, shipment
+      bookingProcessDispatch,
+      shipment,
+      t
     } = this.props
 
     const { loadType } = shipment
-
+    const { setMarker } = this.gmaps
     const { origins, destinations } = this.state
 
     const prefix = target === 'origin' ? 'pre' : 'on'
     const targets = target === 'origin' ? origins : destinations
-    const availableHubIds = targets.map(targetData => targetData.hubId)
+    const availableHubIds = targets.map((targetData) => targetData.hubId)
 
-    this.updateTruckingAvailability(target, 'request')
-    this.updateCollapsedAddressFields(target, false)
+    const onTruckingAvailable = (hubIds) => {
+      this.updateTruckingAvailability(target, true)
+
+      this.handleCarriageChange({ target: { name: `${prefix}Carriage`, checked: true } }, { force: true })
+      bookingProcessDispatch.updateShipment(target, { ...address, hubIds })
+      setMarker(target, { lat: address.latitude, lng: address.longitude, geojson: address.geojson })
+
+      resolve()
+    }
+
+    const onTruckingNotAvailable = () => {
+      this.updateTruckingAvailability(target, false)
+      bookingProcessDispatch.updateShipment(target, { })
+
+      this.setRouteSelectionError(target, t('errors:truckingNotAvailable', { code: 1101 }))
+      resolve()
+    }
 
     getRequests.findAvailability(
       address.latitude,
@@ -348,69 +366,266 @@ class RouteSection extends React.PureComponent {
       loadType,
       prefix,
       availableHubIds,
-      (truckingAvailable, nexusIds, hubIds) => {
-        if (!truckingAvailable) {
-          this.updateTruckingAvailability(target, 'not_available')
-          this.updateCollapsedAddressFields(target, true)
-
-          errorDispatch.setError({
-            componentName: 'RouteSection',
-            code: '1101',
-            target,
-            side: target === 'origin' ? 'left' : 'right',
-            targetAddress: address.fullAddress
-          })
-          bookingProcessDispatch.updateShipment(target, { fullAddress: address.fullAddress })
+      (truckingAvailable, _nexusIds, hubIds) => {
+        if (truckingAvailable) {
+          onTruckingAvailable(hubIds)
         } else {
-          this.updateTruckingAvailability(target, 'animate_available')
-          setTimeout(() => this.updateTruckingAvailability(target, 'available'), 1000)
-          setTimeout(() => this.updateCollapsedAddressFields(target, true), 5000)
-          this.handleCarriageChange({ target: { name: `${prefix}Carriage`, checked: true } }, { force: true })
-          bookingProcessDispatch.updateShipment(target, { ...address, hubIds })
-          errorDispatch.clearError({
-            componentName: 'RouteSection',
-            target,
-            side: target === 'origin' ? 'left' : 'right'
-          })
-          setMarker(target, { lat: address.latitude, lng: address.longitude, geojson: address.geojson })
+          onTruckingNotAvailable()
         }
       }
     )
+  })
+
+  updateAddressFields = (target, addressFields, changedField) => new Promise((resolve) => {
+    const { setMarker } = this.gmaps
+    const { bookingProcessDispatch, shipment, t } = this.props
+    const [changedKey, changedValue] = Object.entries(changedField)[0]
+
+    const currentAddress = shipment[target]
+    currentAddress[changedKey] = changedValue
+    bookingProcessDispatch.updateShipment(target, currentAddress)
+
+    const searchComplete = (result) => {
+      const updatedAddress = {
+        ...currentAddress,
+        fullAddress: result.fullAddress,
+        latitude: result.latitude,
+        longitude: result.longitude
+      }
+
+      bookingProcessDispatch.updateShipment(target, updatedAddress)
+      setMarker(target, { lat: result.latitude, lng: result.longitude })
+      resolve()
+    }
+
+    const fields = [
+      addressFields.street,
+      addressFields.number,
+      addressFields.zipCode,
+      addressFields.city,
+      addressFields.country
+    ]
+
+    const combinedAddress = fields.join(', ')
+    const options = { input: combinedAddress }
+
+    this.gmapsAddressAutocomplete(options).then((predictions) => {
+      if (!predictions) {
+        this.setRouteSelectionError(target, t('errors:invalidAddress'))
+        resolve()
+
+        return
+      }
+
+      const result = predictions[0]
+      this.gmapsAddressFetch(result.place_id).then(searchComplete)
+    }).catch(resolve)
+  })
+
+  updateHub = (target, value) => {
+    const { setMarker } = this.gmaps
+    const { bookingProcessDispatch } = this.props
+
+    if (!value) {
+      this.clearShipmentLocation()
+
+      return
+    }
+
+    const lat = value.latitude
+    const lng = value.longitude
+
+    const targetData = {
+      latitude: lat,
+      longitude: lng,
+      nexusId: value.id,
+      nexusName: value.name,
+      country: value.country,
+      fullAddress: `${value.name}, ${value.country}`
+    }
+
+    bookingProcessDispatch.updateShipment(target, targetData)
+
+    setMarker(target, { lat, lng })
   }
 
-  handleClickCollapser (target) {
-    this.setState(prevState => (
-      {
-        collapsedAddressFields: {
-          ...prevState.collapsedAddressFields,
-          [target]: !prevState.collapsedAddressFields[target]
-        }
-      }
-    ))
+  onRouteSelectionChange = (target, item, field) => {
+    this.validateTarget(target)
+    this.setRouteSelectionError(target, false)
+
+    if (!item) {
+      this.clearShipmentLocation(target)
+      this.clearCarriage(target)
+
+      return
+    }
+
+    if (item.type === 'hub') {
+      this.updateHub(target, item.rawResult)
+      this.clearCarriage(target)
+
+      return
+    }
+
+    this.setLoading(target, true)
+    if (item.type === 'address') {
+      this.updateAddress(target, item.address)
+        .finally(() => this.setLoading(target, false))
+
+      return
+    }
+
+    if (item.type === 'addressFields') {
+      this.updateAddressFields(target, item.rawResult, field)
+        .finally(() => this.setLoading(target, false))
+    }
   }
 
-  updateCollapsedAddressFields (target, value) {
-    this.setState(prevState => (
-      {
-        collapsedAddressFields: {
-          ...prevState.collapsedAddressFields,
-          [target]: value
-        }
+  onRouteSelectionBlur = (target) => {
+    this.validateTarget(target)
+
+    const { adjustMapBounds } = this.gmaps
+
+    adjustMapBounds()
+  }
+
+  onRouteSelectionFocus = (target) => {
+    this.validateTarget(target)
+
+    const { map } = this.gmaps
+    const { shipment } = this.props
+    const fieldName = `${target}Focused`
+
+    const selected = shipment[target]
+
+    if (!(selected && selected.latitude && selected.longitude)) { return }
+
+    map.setZoom(14)
+    map.setCenter({ lat: selected.latitude, lng: selected.longitude })
+
+    this.setState({ [fieldName]: true })
+  }
+
+  addressSearch = (target, query) => {
+    const { countries } = this.state
+    const groupedCountries = countries[target].filter(onlyUnique)
+
+    const executeSearch = (grouped) => {
+      const options = {
+        input: query,
+        componentRestrictions: { country: grouped }
       }
-    ))
+
+      return this.gmapsAddressAutocomplete(options)
+    }
+
+    const promises = groupedCountries.map(executeSearch)
+
+    return Promise.all(promises)
+      .then((predictions) => flatten(predictions))
+  }
+
+  addressFetch = (item) => this.gmapsAddressFetch(item.rawResult.place_id)
+
+  gmapsAddressFetch = (placeId) => new Promise((resolve) => {
+    const { gMaps, map } = this.gmaps
+
+    const placesService = new gMaps.places.PlacesService(map)
+    placesService.getDetails({ placeId }, (place) => {
+      addressFromPlace(place, gMaps, map, (address) => {
+        resolve(address)
+      })
+    })
+  })
+
+  gmapsAddressAutocomplete = (options) => new Promise((resolve) => {
+    const { gMaps } = this.gmaps
+
+    const addressSearchService = new gMaps.places.AutocompleteService({ types: ['address'] })
+    addressSearchService.getPlacePredictions(options, (predictions, status) => {
+      if (!['ZERO_RESULTS', 'OK'].includes(status)) {
+        resolve([])
+      }
+
+      resolve(predictions)
+    })
+  })
+
+  hasHubs = (target) => {
+    this.validateTarget(target)
+
+    const { scope, shipment } = this.props
+    const { direction } = shipment
+
+    const carriageType = target === 'origin' ? 'pre_carriage' : 'on_carriage'
+    const carriageOption = get(scope, ['carriage_options', carriageType, direction], 'optional')
+
+    return carriageOption !== 'mandatory'
+  }
+
+  hasTrucking = (target) => {
+    this.validateTarget(target)
+
+    const {
+      originTrucking,
+      destinationTrucking,
+      truckingAvailability
+    } = this.state
+
+    if (originTrucking && target === 'origin') {
+      return truckingAvailability.origin === null || truckingAvailability.origin
+    }
+
+    if (destinationTrucking && target === 'destination') {
+      return truckingAvailability.destination === null || truckingAvailability.destination
+    }
+
+    return false
+  }
+
+  validateTarget = (target) => {
+    if (target !== 'origin' && target !== 'destination') {
+      throw new Error(`Invalid target ${target}`)
+    }
+  }
+
+  routeSelectionErrors = (target) => {
+    const { routeSelectionErrors } = this.state
+
+    const error = routeSelectionErrors[target]
+    if (!error) { return null }
+
+    return (
+      <div className={styles.routeSelectionErrors}>
+        <i className="fa fa-exclamation-triangle" />
+        { error }
+      </div>
+    )
   }
 
   render () {
     const {
-      shipment, theme, scope, availableMots, requiresFullAddress, t
+      shipment, theme, availableMots
     } = this.props
 
     const {
-      onCarriage, preCarriage, origin, destination, trucking, loadType
+      destination,
+      loadType,
+      onCarriage,
+      origin,
+      preCarriage,
+      trucking
     } = shipment
 
     const {
-      origins, destinations, truckTypes, collapsedAddressFields, truckingAvailability, newRoute, hubSelected, originTrucking, destinationTrucking, countries
+      destinations,
+      destinationTrucking,
+      loading,
+      newRoute,
+      origins,
+      originTrucking,
+      requiresFullAddress,
+      truckTypes
     } = this.state
 
     return (
@@ -422,105 +637,91 @@ class RouteSection extends React.PureComponent {
           withDrivingDirections={this.specialty === 'truck'}
         >
           {
-            ({ gMaps, map, setMarker }) => {
-              const sharedFormProps = {
-                onInputBlur: this.handleInputBlur,
-                onDropdownSelect: (...args) => this.handleDropdownSelect(...args, setMarker),
-                onAutocompleteTrigger: (...args) => this.handleAutocompleteTrigger(...args, setMarker),
-                clearCarriage: (...args) => this.clearCarriage(...args),
-                origins,
-                destinations,
-                theme,
-                scope,
-                gMaps,
-                map,
-                handleHubSelect: (...args) => this.handleHubSelect(...args)
-              }
+            ({ gMaps, map, setMarker, adjustMapBounds }) => {
+              this.setGoogleApi(gMaps, map, setMarker, adjustMapBounds)
 
               return (
-                <React.Fragment>
-                  <div name="originAuto" className="flex-50 layout-row layout-wrap layout-align-space-around-start">
-                    <div className={`${styles.label} flex-gt-md-30 flex-100 layout-row layout-wrap layout-align-space-between`}>
-                      <div className={`${(loadType !== 'container' || !preCarriage) ? 'flex-100' : 'flex-40'} layout-row layout-align-center-start`}>
-                        <p>
-                          <RouteSectionLabel
-                            truckingOptions={truckTypes.origin.length}
-                            target="origin"
-                          />
-                        </p>
-                      </div>
-                      {(loadType === 'container' || preCarriage) && (
-                        <div className="flex-60 layout-column layout-align-center-center">
-                          <TruckingDetails
-                            carriageType="pre"
-                            hide={loadType !== 'container' || !preCarriage}
-                            theme={theme}
-                            trucking={trucking}
-                            truckTypes={truckTypes.origin}
-                            target="preCarriage"
-                            onTruckingDetailsChange={this.handleTruckingDetailsChange}
-                          />
-                        </div>
-                      )}
-                    </div>
-                    <RouteSectionForm
-                      {...sharedFormProps}
-                      collapsed={collapsedAddressFields.origin}
-                      onClickCollapser={this.handleClickCollapser}
+                <>
+                  <div name="originAuto" className={styles.routeContainer}>
+
+                    <RouteSectionLabel
+                      className={styles.label}
+                      truckingOptions={truckTypes.origin.length}
                       target="origin"
-                      carriage={preCarriage}
-                      formData={origin}
-                      availableTargets={origins}
-                      availableCounterparts={destinations}
-                      countries={countries.origin.filter(onlyUnique)}
-                      truckingAvailable={truckingAvailability.origin}
-                      requiresFullAddress={requiresFullAddress}
-                      hasTrucking={originTrucking}
-                      hubSelected={hubSelected.origin}
                     />
-                  </div>
-                  <div name="destinationAuto" className="flex-50 layout-row layout-wrap layout-align-space-around-start">
-                    <div className={`${styles.label} flex-gt-md-30 flex-100 layout-row layout-wrap layout-align-space-between`}>
-                      <div className={`${(loadType !== 'container' || !onCarriage) ? 'flex-100' : 'flex-40'} layout-row layout-align-center-start`}>
-                        <p>
-                          <RouteSectionLabel
-                            truckingOptions={truckTypes.destination.length}
-                            target="destination"
-                          />
-                        </p>
-                      </div>
-                      {(loadType === 'container' || onCarriage) && (
-                        <div className="flex-60 layout-column layout-align-center-center">
-                          <TruckingDetails
-                            carriageType="on"
-                            hide={loadType !== 'container' || !onCarriage}
-                            theme={theme}
-                            trucking={trucking}
-                            truckTypes={truckTypes.destination}
-                            target="onCarriage"
-                            onTruckingDetailsChange={this.handleTruckingDetailsChange}
-                          />
-                        </div>
-                      )}
-                    </div>
+
                     <RouteSectionForm
-                      {...sharedFormProps}
-                      collapsed={collapsedAddressFields.destination}
-                      onClickCollapser={this.handleClickCollapser}
-                      target="destination"
-                      carriage={onCarriage}
-                      formData={destination}
-                      availableTargets={destinations}
-                      availableCounterparts={origins}
-                      countries={countries.destination.filter(onlyUnique)}
-                      truckingAvailable={truckingAvailability.destination}
+                      addressFetch={(item) => this.addressFetch(item)}
+                      addressSearch={(query) => this.addressSearch('origin', query)}
+                      hasHubs={this.hasHubs('origin')}
+                      hasTrucking={this.hasTrucking('origin')}
+                      hubs={origins}
+                      loading={loading.origin}
                       requiresFullAddress={requiresFullAddress}
-                      hasTrucking={destinationTrucking}
-                      hubSelected={hubSelected.destination}
+                      showAddress={originTrucking}
+                      value={origin}
+
+                      onBlur={() => this.onRouteSelectionBlur('origin')}
+                      onChange={(item, field) => this.onRouteSelectionChange('origin', item, field)}
+                      onFocus={() => this.onRouteSelectionFocus('origin')}
                     />
+
+                    <TruckingDetails
+                      wrapperClassName={styles.truckingDetails}
+                      hide={loadType !== 'container' || !preCarriage}
+                      theme={theme}
+                      trucking={trucking}
+                      truckTypes={truckTypes.origin}
+                      target="preCarriage"
+                      onTruckingDetailsChange={this.onTruckingDetailsChange}
+                    />
+
+                    { this.routeSelectionErrors('origin') }
                   </div>
-                  <OfferError availableMots={availableMots} newRoute={newRoute} componentName="RouteSection" />
-                </React.Fragment>
+
+                  <OfferError
+                    availableMots={availableMots}
+                    newRoute={newRoute}
+                    componentName="RouteSection"
+                  />
+
+                  <div name="destinationAuto" className={styles.routeContainer}>
+
+                    <RouteSectionLabel
+                      className={styles.label}
+                      truckingOptions={truckTypes.destination.length}
+                      target="destination"
+                    />
+
+                    <RouteSectionForm
+                      addressFetch={(item) => this.addressFetch(item)}
+                      addressSearch={(query) => this.addressSearch('destination', query)}
+                      hasHubs={this.hasHubs('destination')}
+                      hasTrucking={this.hasTrucking('destination')}
+                      hubs={destinations}
+                      loading={loading.destination}
+                      requiresFullAddress={requiresFullAddress}
+                      showAddress={destinationTrucking}
+                      value={destination}
+
+                      onBlur={() => this.onRouteSelectionBlur('destination')}
+                      onChange={(item, field) => this.onRouteSelectionChange('destination', item, field)}
+                      onFocus={() => this.onRouteSelectionFocus('destination')}
+                    />
+
+                    <TruckingDetails
+                      wrapperClassName={styles.truckingDetails}
+                      hide={loadType !== 'container' || !onCarriage}
+                      theme={theme}
+                      trucking={trucking}
+                      truckTypes={truckTypes.destination}
+                      target="onCarriage"
+                      onTruckingDetailsChange={this.onTruckingDetailsChange}
+                    />
+
+                    { this.routeSelectionErrors('destination') }
+                  </div>
+                </>
               )
             }
           }
@@ -539,17 +740,22 @@ function mapStateToProps (state) {
   const { theme, scope } = tenant
 
   return {
-    ...ShipmentDetails, shipment, routes, lookupTablesForRoutes, theme, scope, tenant
+    ...ShipmentDetails,
+    lookupTablesForRoutes,
+    routes,
+    scope,
+    shipment,
+    tenant,
+    theme
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
     bookingProcessDispatch: bindActionCreators(bookingProcessActions, dispatch),
-    shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
-    errorDispatch: bindActionCreators(errorActions, dispatch)
+    shipmentDispatch: bindActionCreators(shipmentActions, dispatch)
   }
 }
 
 const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(RouteSection)
-export default withNamespaces(['shipment'])(connectedComponent)
+export default withNamespaces(['shipment', 'errors'])(connectedComponent)

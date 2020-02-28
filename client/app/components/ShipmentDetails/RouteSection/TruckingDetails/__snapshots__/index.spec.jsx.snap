@@ -4,15 +4,14 @@ exports[`hide is true 1`] = `""`;
 
 exports[`renders correctly 1`] = `
 <div
-  className="flex-100 layout-row trucking_details"
+  className="trucking_details"
 >
   <div
-    className="carriage_sec flex-100 layout-column layout-align-space-between-start"
+    className="flex-100 layout-row layout-align-start"
   >
     <div
       className="
-          form_group 
-          flex-50
+          form_group  undefined
           layout-row
         "
       data-for="UUID_MOCK_KEY_0"
@@ -38,6 +37,7 @@ exports[`renders correctly 1`] = `
       <Tooltip
         color="white"
         icon="fa-info-circle"
+        place="left"
         text="side_lifter"
         theme={
           Object {
@@ -60,8 +60,7 @@ exports[`renders correctly 1`] = `
     </div>
     <div
       className="
-          form_group 
-          flex-50
+          form_group  undefined
           layout-row
         "
       data-for="UUID_MOCK_KEY_1"
@@ -87,6 +86,7 @@ exports[`renders correctly 1`] = `
       <Tooltip
         color="white"
         icon="fa-info-circle"
+        place="left"
         text="chassis"
         theme={
           Object {
@@ -113,15 +113,14 @@ exports[`renders correctly 1`] = `
 
 exports[`target truck type is not part of truckTypes 1`] = `
 <div
-  className="flex-100 layout-row trucking_details"
+  className="trucking_details"
 >
   <div
-    className="carriage_sec flex-100 layout-column layout-align-space-between-start"
+    className="flex-100 layout-row layout-align-start"
   >
     <div
       className="
-          form_group disabled
-          flex-50
+          form_group disabled undefined
           layout-row
         "
       data-for="UUID_MOCK_KEY_2"
@@ -155,6 +154,7 @@ exports[`target truck type is not part of truckTypes 1`] = `
       <Tooltip
         color="white"
         icon="fa-info-circle"
+        place="left"
         text="side_lifter"
         theme={
           Object {
@@ -177,8 +177,7 @@ exports[`target truck type is not part of truckTypes 1`] = `
     </div>
     <div
       className="
-          form_group disabled
-          flex-50
+          form_group disabled undefined
           layout-row
         "
       data-for="UUID_MOCK_KEY_3"
@@ -212,6 +211,7 @@ exports[`target truck type is not part of truckTypes 1`] = `
       <Tooltip
         color="white"
         icon="fa-info-circle"
+        place="left"
         text="chassis"
         theme={
           Object {
