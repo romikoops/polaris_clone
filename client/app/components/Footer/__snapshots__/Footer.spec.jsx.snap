@@ -79,40 +79,80 @@ exports[`shallow render 1`] = `
         Company
       </h4>
     </div>
-    <ul>
-      <li>
-        <a
-          href="https://www.itsmycargo.com/en/"
-          target="_blank"
-        >
-          About Us
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://www.itsmycargo.com/en/contact"
-          target="_blank"
-        >
-          Imprint
-        </a>
-      </li>
-      <li>
-        <a
-          href=""
-          target="_blank"
-        >
-          Terms and Conditions
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://itsmycargo.com/en/privacy"
-          target="_blank"
-        >
-          Privacy Policy
-        </a>
-      </li>
-    </ul>
+    <FooterLinks
+      t={[Function]}
+      tenant={
+        Object {
+          "emails": Object {
+            "sales": Object {
+              "air": "sales@demo.com",
+              "general": "sales@demo.com",
+              "ocean": "sales@demo.com",
+              "rail": "sales@demo.com",
+            },
+            "support": Object {
+              "air": "imc.air@demo.com",
+              "general": "support@demo.com",
+              "ocean": "imc.sea@demo.com",
+              "rail": "imc.rail@demo.com",
+            },
+          },
+          "id": 123,
+          "name": "TENANT_NAME",
+          "phones": Object {
+            "support": "TENANT_SUPPORT_PHONE",
+          },
+          "scope": Object {
+            "cargo_info_level": "text",
+            "carriage_options": Object {
+              "on_carriage": Object {
+                "export": "mandatory",
+                "import": "mandatory",
+              },
+              "pre_carriage": Object {
+                "export": "optional",
+                "import": "optional",
+              },
+            },
+            "closed_quotation_tool": true,
+            "customs_export_paper": false,
+            "detailed_billing": true,
+            "has_customs": true,
+            "has_insurance": true,
+            "hide_grand_total": true,
+            "mandatory_form_fields": Object {
+              "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+              "total_goods_value": 3370,
+            },
+            "modes_of_transport": Object {
+              "air": Object {
+                "AIR_LOAD_TYPE": 0,
+              },
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": 2,
+              },
+              "rail": Object {
+                "RAIL_LOAD_TYPE": 0,
+              },
+              "truck": Object {
+                "TRUCK_LOAD_TYPE": 0,
+              },
+            },
+            "terms": Array [
+              "FOO_TERM",
+              "BAR_TERM",
+            ],
+          },
+          "subdomain": "TENANT_SUBDOMAIN",
+          "theme": Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          },
+        }
+      }
+    />
   </div>
   <div
     className=" flex-50 flex-gt-sm-20 flex-order--4 flex-order-gt-sm-4 layout-row layout-wrap layout-align-start-start "
@@ -227,40 +267,80 @@ exports[`theme is falsy 1`] = `
         Company
       </h4>
     </div>
-    <ul>
-      <li>
-        <a
-          href="https://www.itsmycargo.com/en/"
-          target="_blank"
-        >
-          About Us
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://www.itsmycargo.com/en/contact"
-          target="_blank"
-        >
-          Imprint
-        </a>
-      </li>
-      <li>
-        <a
-          href=""
-          target="_blank"
-        >
-          Terms and Conditions
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://itsmycargo.com/en/privacy"
-          target="_blank"
-        >
-          Privacy Policy
-        </a>
-      </li>
-    </ul>
+    <FooterLinks
+      t={[Function]}
+      tenant={
+        Object {
+          "emails": Object {
+            "sales": Object {
+              "air": "sales@demo.com",
+              "general": "sales@demo.com",
+              "ocean": "sales@demo.com",
+              "rail": "sales@demo.com",
+            },
+            "support": Object {
+              "air": "imc.air@demo.com",
+              "general": "support@demo.com",
+              "ocean": "imc.sea@demo.com",
+              "rail": "imc.rail@demo.com",
+            },
+          },
+          "id": 123,
+          "name": "TENANT_NAME",
+          "phones": Object {
+            "support": "TENANT_SUPPORT_PHONE",
+          },
+          "scope": Object {
+            "cargo_info_level": "text",
+            "carriage_options": Object {
+              "on_carriage": Object {
+                "export": "mandatory",
+                "import": "mandatory",
+              },
+              "pre_carriage": Object {
+                "export": "optional",
+                "import": "optional",
+              },
+            },
+            "closed_quotation_tool": true,
+            "customs_export_paper": false,
+            "detailed_billing": true,
+            "has_customs": true,
+            "has_insurance": true,
+            "hide_grand_total": true,
+            "mandatory_form_fields": Object {
+              "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+              "total_goods_value": 3370,
+            },
+            "modes_of_transport": Object {
+              "air": Object {
+                "AIR_LOAD_TYPE": 0,
+              },
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": 2,
+              },
+              "rail": Object {
+                "RAIL_LOAD_TYPE": 0,
+              },
+              "truck": Object {
+                "TRUCK_LOAD_TYPE": 0,
+              },
+            },
+            "terms": Array [
+              "FOO_TERM",
+              "BAR_TERM",
+            ],
+          },
+          "subdomain": "TENANT_SUBDOMAIN",
+          "theme": Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          },
+        }
+      }
+    />
   </div>
   <div
     className=" flex-50 flex-gt-sm-20 flex-order--4 flex-order-gt-sm-4 layout-row layout-wrap layout-align-start-start "

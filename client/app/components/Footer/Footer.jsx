@@ -2,11 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
-import { has } from 'lodash'
 import { cookieActions } from '../../actions'
 import styles from './Footer.scss'
 import { socialIcons, isQuote } from '../../helpers'
 import SquareButton from '../SquareButton'
+import FooterLinks from './FooterLinks'
 
 class Footer extends React.PureComponent {
   componentWillUnmount () {
@@ -29,19 +29,8 @@ class Footer extends React.PureComponent {
     const links = checkTenantScope ? tenant.scope.links : {}
     const socialLinks = checkTenantScope ? tenant.scope.social_links : {}
     const isQuotationShop = isQuote(tenant)
-    const defaultLinks = {
-      privacy: 'https://itsmycargo.com/en/privacy',
-      about: 'https://www.itsmycargo.com/en/ourstory',
-      home: 'https://www.itsmycargo.com/en/',
-      legal: 'https://www.itsmycargo.com/en/contact'
-    }
-    const home = links && links.home ? links.home : defaultLinks.home
-    let termsLink = ''
-    tenant.slug ? termsLink = `/terms_and_conditions` : termsLink = ''
-    if (has(tenant, ['scope', 'links', 'terms'])) {
-      termsLink = tenant.scope.links.terms
-    }
-    const filteredSocialLinks = socialLinks ? Object.entries(socialLinks).filter(array => array[1] !== '') : []
+    const home = links && links.home ? links.home : 'https://www.itsmycargo.com/en/'
+    const filteredSocialLinks = socialLinks ? Object.entries(socialLinks).filter((array) => array[1] !== '') : []
     const oo = filteredSocialLinks.map((value) => {
       const social = value[0]
       const link = value[1]
@@ -107,28 +96,9 @@ class Footer extends React.PureComponent {
               {t('footer:company')}
             </h4>
           </div>
-          <ul>
-            <li>
-              <a target="_blank" href={links && links.about ? links.about : defaultLinks.home}>
-                {t('footer:about')}
-              </a>
-            </li>
-            <li>
-              <a target="_blank" href={links && links.legal ? links.legal : defaultLinks.legal}>
-                {t('footer:imprint')}
-              </a>
-            </li>
-            <li>
-              <a target="_blank" href={termsLink}>
-                {t('footer:terms')}
-              </a>
-            </li>
-            <li>
-              <a target="_blank" href={links && links.privacy ? links.privacy : defaultLinks.privacy}>
-                {t('footer:privacy')}
-              </a>
-            </li>
-          </ul>
+          <FooterLinks
+            tenant={tenant}
+          />
         </div>
         <div
           className="
