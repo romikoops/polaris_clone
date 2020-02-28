@@ -8,11 +8,11 @@ class PricingsController < ApplicationController
     closed_quotation_tool = current_scope.fetch(:closed_quotation_tool)
     if closed_quotation_tool
       user_pricing_id = current_user.agency.agency_manager_id
-      @pricings = tenant.pricings.where(user_id: user_pricing_id, sandbox: @sandbox)
+      @pricings = Pricing.where(user_id: user_pricing_id, sandbox: @sandbox, tenant_id: current_tenant.id)
       @itineraries = @pricings.map(&:itinerary)
     else
-      @pricings = tenant.pricings.where(sandbox: @sandbox)
-      @itineraries = tenant.itineraries.where(sandbox: @sandbox)
+      @pricings = Pricing.where(sandbox: @sandbox, tenant_id: current_tenant.id)
+      @itineraries = Itinerary.where(sandbox: @sandbox, tenant_id: current_tenant.id)
     end
     response = Rails.cache.fetch("#{@pricings.cache_key}/pricings_index", expires_in: 12.hours) do
       @transports = TransportCategory.where(sandbox: @sandbox).uniq

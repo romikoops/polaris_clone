@@ -3,7 +3,7 @@
     <mj-column width="100%" padding="0 2.5%">
       <mj-text line-height="24px">
         <p>
-          Thank you for registering a new account in the  <b> <%= @resource.tenant.name%> </b> (powered by ItsMyCargo). 
+          Thank you for registering a new account in the  <b> <%= @resource.tenant.name%> </b> (powered by ItsMyCargo).
         </p>
       </mj-text>
     </mj-column>

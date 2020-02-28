@@ -5,13 +5,13 @@ require 'profiles'
 
 require 'active_model_serializers'
 require 'activerecord-import'
+require 'devise_token_auth'
 require 'geocoder'
 require 'mobility'
 require 'money'
 require 'money/bank/fixer_currency'
 require 'paranoia'
 require 'pg_search'
-
 
 module Legacy
   class Engine < ::Rails::Engine

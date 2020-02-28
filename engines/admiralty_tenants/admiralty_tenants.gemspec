@@ -18,8 +18,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-admiralty_auth'
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-legacy'
+  s.add_dependency 'imc-pricings'
   s.add_dependency 'imc-tenants'
 
+  s.add_dependency 'draper'
   s.add_dependency 'jsoneditor-rails'
 
   Gemhelper.common(s)

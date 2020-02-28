@@ -17,7 +17,7 @@ module Legacy
       let(:loc) { FactoryBot.build(:legacy_hub, :with_lat_lng) }
 
       it 'returns a string' do
-        expect(hub.distance_to(loc)).to eql(0.0)
+        expect(hub.distance_to(loc)).to be(0.0)
       end
     end
 
@@ -26,6 +26,14 @@ module Legacy
 
       it 'returns a string' do
         expect(hub.lng_lat_array).to eql([11.854048, 57.694253])
+      end
+    end
+
+    describe '.point_wkt' do
+      let(:hub) { FactoryBot.build(:legacy_hub) }
+
+      it 'returns the Rgeo WKT point of the hub' do
+        expect(hub.point_wkt).to eq("Point (#{hub.address.longitude} #{hub.address.latitude})")
       end
     end
   end

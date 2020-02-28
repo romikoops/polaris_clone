@@ -117,7 +117,7 @@ class Shipment < Legacy::Shipment
   # Instance methods
 
   def edited_total
-    return nil if trip_id.nil?
+    return if trip_id.nil?
 
     price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').edited_price
 

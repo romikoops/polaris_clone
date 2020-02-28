@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'active_model_serializers'
   s.add_dependency 'activerecord-import'
+  s.add_dependency 'devise_token_auth', '~> 0.1.43'
   s.add_dependency 'fixer_currency', '~> 3.4'
   s.add_dependency 'geocoder'
   s.add_dependency 'mobility'

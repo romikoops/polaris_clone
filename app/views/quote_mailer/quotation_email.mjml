@@ -1,4 +1,3 @@
-<% primary_color = @user.tenant.theme["colors"]["primary"] %>
 <mj-wrapper >
   <mj-section>
     <mj-column>

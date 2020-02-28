@@ -17,6 +17,31 @@ RSpec.describe Admin::SchedulesController, type: :controller do
     allow(controller).to receive(:require_login_and_role_is_admin).and_return(true)
   end
 
+  describe 'GET #index' do
+    let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
+    let(:carrier) { FactoryBot.create(:legacy_carrier, name: 'MSC') }
+    let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier) }
+    let(:closing_date) { Time.zone.today }
+    let(:start_date) { Time.zone.today + 4.days }
+    let(:end_date) { Time.zone.today + 30.days }
+
+    before do
+      (1..10).map do |delta|
+        FactoryBot.create(:legacy_trip,
+                          itinerary: itinerary,
+                          closing_date: closing_date + delta.days,
+                          start_date: start_date + delta.days,
+                          end_date: end_date + delta.days,
+                          tenant_vehicle: tenant_vehicle)
+      end
+      get :index, params: { tenant_id: user.tenant_id }
+    end
+
+    it 'returns http success' do
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe 'GET #show' do
     let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
     let(:carrier) { FactoryBot.create(:legacy_carrier, name: 'MSC') }

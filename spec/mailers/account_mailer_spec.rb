@@ -3,12 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe AccountMailer, type: :mailer do
-  let(:user) { create(:user, with_profile: true) }
+  let(:tenant) { create(:tenant) }
+  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:user) { create(:user, tenant: tenant, with_profile: true) }
 
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
     stub_request(:post, "#{Settings.breezy.url}/render/html").to_return(status: 201, body: '', headers: {})
+    FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
   end
 
   describe 'confirmation_instructions' do

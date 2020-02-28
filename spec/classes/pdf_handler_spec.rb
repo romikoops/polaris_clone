@@ -152,6 +152,11 @@ RSpec.describe PdfHandler do
       let(:charge_shipment) { create(:legacy_shipment, with_breakdown: true) }
       let(:quotes) { pdf_service.quotes_with_trip_id(quotation: nil, shipments: [charge_shipment]) }
       let(:string_klass) { described_class.new(default_args.merge(quotes: quotes, shipment: charge_shipment)) }
+      let(:tenants_tenant) { FactoryBot.create(:tenants_tenant, legacy_id: charge_shipment.tenant_id) }
+
+      before do
+        FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
+      end
 
       it 'returns MOT Freight as key' do
         result = string_klass.generate_fee_string(quote: quotes.first, shipment: charge_shipment)

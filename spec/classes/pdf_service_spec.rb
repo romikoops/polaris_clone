@@ -27,6 +27,7 @@ RSpec.describe PdfService do
       stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
         .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
     end
+    FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
   end
 
   context 'when it is a FCL 20 shipment' do

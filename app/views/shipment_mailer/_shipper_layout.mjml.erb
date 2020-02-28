@@ -1,4 +1,3 @@
-<% primary_color = @user.tenant.theme["colors"]["primary"] %>
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%" padding="30px 2.5% 0 2.5%">
@@ -17,7 +16,7 @@
 </mj-wrapper>
 <mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
-    <mj-image width="150px" align="left" src="<%= @user.tenant.theme["emailLogo"] %>" />
+    <mj-image width="150px" align="left" src="<%= @theme['emailLogo'] %>" />
   </mj-column>
   <mj-column>
     <mj-navbar base-url="" hamburger="hamburger" ico-color="white">
@@ -56,7 +55,7 @@
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width">
     <mj-column>
-      <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+      <mj-divider border-width="4px" border-style="solid" border-color="<%= @theme.dig('colors', 'primary') %>" />
     </mj-column>
   </mj-section>
 </mj-wrapper>

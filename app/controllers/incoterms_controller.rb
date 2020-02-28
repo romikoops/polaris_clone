@@ -10,7 +10,7 @@ class IncotermsController < ApplicationController
     on_carriage = params[:on_carriage] != 'null' ? params[:on_carriage] : false
     mot = params[:mode_of_transport]
     incoterm_charge = IncotermCharge.find_by(pre_carriage: pre_carriage, on_carriage: on_carriage)
-    incoterms = current_user.tenant.incoterms.where("#{buyer_seller}_incoterm_charge" => incoterm_charge)
+    incoterms = current_tenant.incoterms.where("#{buyer_seller}_incoterm_charge" => incoterm_charge)
     response_handler(format_for_select_box(incoterms))
   end
 

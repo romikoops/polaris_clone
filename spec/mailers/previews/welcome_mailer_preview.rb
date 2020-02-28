@@ -2,7 +2,7 @@
 
 class WelcomeMailerPreview < ActionMailer::Preview
   def welcome_email
-    @tenant = Tenant.normanglobal
+    @tenant = Tenant.find_by(subdomain: 'normanglobal')
     @user = @tenant.users.shipper.last
     WelcomeMailer.welcome_email(@user)
   end

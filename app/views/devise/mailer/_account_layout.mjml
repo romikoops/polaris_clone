@@ -1,4 +1,3 @@
-<% primary_color = tenant.theme["colors"]["primary"] %>
 <mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
     <mj-text>

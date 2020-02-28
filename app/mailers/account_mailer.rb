@@ -7,15 +7,17 @@ class AccountMailer < Devise::Mailer
   include Devise::Controllers::UrlHelpers
 
   def confirmation_instructions(record, token, opts = {}) # rubocop:disable Metrics/AbcSize
-    tenant = record.tenant
-    @primary_color = tenant.theme.dig('colors', 'primary')
-
-    opts[:from] = Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).slug}.itsmycargo.shop")
-                               .tap { |a| a.display_name = tenant.name }.format
+    tenant = Tenant.find(record.tenant_id)
+    tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: record.tenant_id)
+    @theme = ::Tenants::ThemeDecorator.new(tenants_tenant.theme).legacy_format
+    @primary_color = @theme.dig('colors', 'primary')
+    no_reply = Mail::Address.new("no-reply@#{tenants_tenant.slug}.itsmycargo.shop")
+    opts[:from] = no_reply.tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
-    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read)
+    email_logo = tenants_tenant.theme.email_logo
+    attachments.inline['logo.png'] = email_logo.attached? ? email_logo&.download : ''
     opts[:subject] = "#{tenant.name} Account Confirmation Email"
-    @confirmation_url = "#{base_url(tenant)}account/confirmation/#{token}"
+    @confirmation_url = "#{base_url(tenants_tenant)}account/confirmation/#{token}"
     tenants_user = Tenants::User.find_by(legacy_id: record.id)
     @user_profile = Profiles::ProfileService.fetch(user_id: tenants_user.id)
     @links = tenant.email_links ? tenant.email_links['confirmation_instructions'] : []
@@ -26,17 +28,20 @@ class AccountMailer < Devise::Mailer
   end
 
   def reset_password_instructions(record, token, opts = {})
-    tenant = record.tenant
-    @primary_color = tenant.theme.dig('colors', 'primary')
-    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read) if tenant.theme['emailLogo']
-    opts[:from] = Mail::Address.new("no-reply@#{::Tenants::Tenant.find_by(legacy_id: tenant.id).slug}.itsmycargo.shop")
+    tenant = Tenant.find(record.tenant_id)
+    tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: record.tenant_id)
+    @theme = ::Tenants::ThemeDecorator.new(tenants_tenant.theme).legacy_format
+    @primary_color = @theme.dig('colors', 'primary')
+    email_logo = tenants_tenant.theme.email_logo
+    attachments.inline['logo.png'] = email_logo.attached? ? email_logo&.download : ''
+    opts[:from] = Mail::Address.new("no-reply@#{tenants_tenant.slug}.itsmycargo.shop")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
     @scope = ::Tenants::ScopeService.new(target: ::Tenants::User.find_by(legacy_id: record.id)).fetch
     tenants_user = Tenants::User.find_by(legacy_id: record.id)
     @user_profile = Profiles::ProfileService.fetch(user_id: tenants_user.id)
     opts[:subject] = "#{tenant.name} Account Password Reset"
-    redirect_url = base_url(tenant) + 'password_reset'
+    redirect_url = base_url(tenants_tenant) + 'password_reset'
     @reset_url = "#{base_server_url}tenants/#{tenant.id}/auth/password/edit?" \
                  "redirect_url=#{redirect_url}&reset_password_token=#{token}"
 

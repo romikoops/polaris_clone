@@ -97,7 +97,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def all_hubs
-    processed_hubs = current_user.tenant.hubs.where(sandbox: @sandbox).map do |hub|
+    processed_hubs = Hub.where(sandbox: @sandbox, tenant_id: current_tenant.id).map do |hub|
       { data: hub, address: hub.address.to_custom_hash }
     end
     response_handler(hubs: processed_hubs)

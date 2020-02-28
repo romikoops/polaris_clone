@@ -81,6 +81,7 @@ RSpec.describe ShippingTools do
       allow(QuoteMailer).to receive(:quotation_admin_email).at_least(:once).and_return(quote_mailer)
       allow(QuoteMailer).to receive(:quotation_email).at_least(:once).and_return(quote_mailer)
       allow(quote_mailer).to receive(:deliver_later).at_least(:twice)
+      FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
     end
 
     describe '.save_pdf_quotes' do

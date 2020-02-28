@@ -333,4 +333,13 @@ RSpec.describe Pricings::MarginCreator do
       end
     end
   end
+
+  describe '.create_default_margins' do
+    let(:new_tenant) { FactoryBot.create(:tenants_tenant) }
+
+    it 'creates default margins for new tenants' do
+      described_class.create_default_margins(new_tenant)
+      expect(::Pricings::Margin.where(tenant: new_tenant).count).to eq(35)
+    end
+  end
 end

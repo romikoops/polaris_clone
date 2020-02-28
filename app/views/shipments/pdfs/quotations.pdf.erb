@@ -1,8 +1,7 @@
 <div class="wrapper-quotations">
-  <% primary_color = tenant.theme["colors"]["primary"] %>
+  <% primary_color = theme.primary_color %>
   <% neutral_color = '#C4C4C4' %>
   <% tenant_logo_asset = "logoLarge_" + tenant["subdomain"] + ".png" %>
-  <% tenant_logo_url = tenant.theme["logoLarge"] %>
   <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
   <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
   <% weight_units = scope['values']['weight'] %>

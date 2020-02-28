@@ -2130,13 +2130,11 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
   end
 
   add_foreign_key "address_book_contacts", "tenants_sandboxes", column: "sandbox_id"
-  add_foreign_key "address_book_contacts", "tenants_users", column: "user_id"
   add_foreign_key "cargo_cargos", "quotations_quotations", column: "quotation_id"
   add_foreign_key "cargo_units", "cargo_cargos", column: "cargo_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "profiles_profiles", "tenants_users", column: "user_id", on_delete: :cascade
-  add_foreign_key "quotations_tenders", "quotations_quotations", column: "quotation_id"
   add_foreign_key "remarks", "tenants"
   add_foreign_key "shipments", "transport_categories"
   add_foreign_key "shipments_cargos", "tenants_sandboxes", column: "sandbox_id"

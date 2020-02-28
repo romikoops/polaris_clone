@@ -1,6 +1,5 @@
-<% primary_color = @shipment.tenant.theme["colors"]["primary"] %>
 <mj-section padding="10px 0">
-  <mj-column width="100%" padding-top="0"> 
+  <mj-column width="100%" padding-top="0">
     <mj-divider border-width="1px" padding="0" padding-bottom="14px" border-color="#E0E0E0"></mj-divider>
   </mj-column>
 </mj-section>
@@ -13,7 +12,7 @@
         </h3>
       </mj-text>
       <mj-text padding-left="0">
-        <p style="margin: 0;"> 
+        <p style="margin: 0;">
           Booking placed at:
           <%= @shipment.booking_placed_at.strftime('%d.%m.%Y %H:%M') %>
         </p>
@@ -26,22 +25,22 @@
         </h3>
       </mj-text>
       <mj-text padding-left="0">
-        <p style="margin: 0;"> 
-          
-          Name:  <%= @user_profile.full_name %> 
+        <p style="margin: 0;">
+
+          Name:  <%= @user_profile.full_name %>
           <br>
           <br>
-          Email: <%= @user.email %> 
+          Email: <%= @user.email %>
           <br>
           <br>
-          Phone: <%= @user_profile.phone %> 
+          Phone: <%= @user_profile.phone %>
           <br>
           <br>
         </p>
       </mj-text>
     </mj-column>
   </mj-section>
-  
+
   <mj-section background-color="#f3f3f3">
     <mj-group vertical-align="middle">
       <mj-column padding="0 5% 0 42%" width="14%">
@@ -57,8 +56,8 @@
               <% @shipment.pickup_address.geocoded_address.split(", ").each do |address_elem| %>
                 <% if address_elem %>
                   <span><%= address_elem %></span>
-                <% end %>  
-              <% end %>  
+                <% end %>
+              <% end %>
             <% else %>
               <strong> From:</strong> <%= @shipment.origin_hub.name %>
             <% end %>
@@ -69,8 +68,8 @@
               <% @shipment.delivery_address.geocoded_address.split(", ").each do |address_elem| %>
                 <% if address_elem %>
                   <span><%= address_elem %></span><br/>
-                <% end %>  
-              <% end %>  
+                <% end %>
+              <% end %>
             <% else %>
               <strong>To:</strong> <%= @shipment.destination_hub.name %>
             <% end %>

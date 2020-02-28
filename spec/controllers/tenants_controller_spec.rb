@@ -8,6 +8,10 @@ RSpec.describe TenantsController do
   let(:tenants_domain) { create(:tenants_domain, tenant_id: tenants_tenant.id) }
   let(:user) { create(:user, tenant_id: tenant.id) }
 
+  before do
+    FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
+  end
+
   describe 'GET #index' do
     it 'returns http success' do
       get :index

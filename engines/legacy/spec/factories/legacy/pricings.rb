@@ -10,6 +10,10 @@ FactoryBot.define do
     association :itinerary, factory: :default_itinerary
     association :tenant_vehicle, factory: :legacy_tenant_vehicle
 
+    transient do
+      pricing_detail_attrs { {} }
+    end
+
     trait :lcl do
       transport_category { create(:ocean_lcl) }
       after :create do |pricing|

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class User < Legacy::User # rubocop:disable Metrics/ClassLength
-  # Include default devise modules.
   include PgSearch::Model
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
@@ -10,7 +9,6 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   include DeviseTokenAuth::Concerns::User
   before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
   before_create :set_default_currency
-  before_validation :set_default_optin_status, on: :create
 
   validates :tenant_id, presence: true
   validates :email, presence: true, uniqueness: { scope: :tenant_id }, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -46,18 +44,26 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   end
 
   PERMITTED_PARAMS = %i(
-    email password
-    guest tenant_id confirm_password password_confirmation
+    email password guest tenant_id confirm_password password_confirmation
     company_name vat_number VAT_number first_name last_name phone
     optin_status_id cookies company_number
   ).freeze
 
+  acts_as_paranoid
+
+  # Basic associations
+  has_many :documents, dependent: :destroy
+
+  has_paper_trail
+
+  delegate :company, to: :tenants_user
+
   # Filterrific
   filterrific default_filter_params: { sorted_by: 'created_at_asc' },
-              available_filters: %w(
+              available_filters: %w[
                 sorted_by
                 search_query
-              )
+              ]
   self.per_page = 10 # default for will_paginate
 
   scope :search_query, lambda { |query|
@@ -266,13 +272,6 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
     shipments.requested_by_unconfirmed_account.each do |shipment|
       shipment.status = 'requested'
       shipment.save
-    end
-  end
-
-  def set_default_optin_status
-    unless optin_status_id
-      optin_status = OptinStatus.find_by(tenant: false, cookies: false, itsmycargo: false)
-      self.optin_status = optin_status
     end
   end
 

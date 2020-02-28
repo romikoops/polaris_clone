@@ -540,6 +540,8 @@ end
 #
 # Routes for AdmiraltyTenants::Engine:
 #     tenants GET   /tenants(.:format)          admiralty_tenants/tenants#index
+#             POST  /tenants(.:format)          admiralty_tenants/tenants#create
+#  new_tenant GET   /tenants/new(.:format)      admiralty_tenants/tenants#new
 # edit_tenant GET   /tenants/:id/edit(.:format) admiralty_tenants/tenants#edit
 #      tenant GET   /tenants/:id(.:format)      admiralty_tenants/tenants#show
 #             PATCH /tenants/:id(.:format)      admiralty_tenants/tenants#update

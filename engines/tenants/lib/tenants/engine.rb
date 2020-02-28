@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'activerecord-import'
 require 'core'
 require 'legacy'
 require 'mailers'

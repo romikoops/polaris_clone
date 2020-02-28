@@ -4,7 +4,6 @@
       For preview text in the emails:
       https://litmus.com/blog/the-little-known-preview-text-hack-you-may-want-to-use-in-every-email
     -->
-    <% primary_color = @user.tenant.theme["colors"]["primary"] %>
     <%= yield %>
   </mj-body>
 </mjml>

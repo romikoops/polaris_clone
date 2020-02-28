@@ -89,7 +89,13 @@ module Tenants
       let!(:currency) { FactoryBot.create(:legacy_currency) }
       let(:address) { FactoryBot.create(:legacy_address) }
       let!(:user) { FactoryBot.create(:legacy_user, tenant: legacy_tenant, currency: currency.base) }
-      let!(:tenants_user) { described_class.find_by(legacy_id: user.id) }
+      let(:company) { FactoryBot.create(:tenants_company, tenant: tenant, address: address) }
+      let(:tenants_user) do
+        described_class.find_by(legacy_id: user.id).tap do |u|
+          u.company = company
+        end
+      end
+
       let!(:group_1) do
         FactoryBot.create(:tenants_group, tenant: tenant).tap do |tapped_group|
           FactoryBot.create(:tenants_membership, member: tenants_user, group: tapped_group)
@@ -102,15 +108,24 @@ module Tenants
       end
 
       describe '.groups' do
-        it 'returns the groups that the company is a member of' do
+        it 'returns the groups that the user is a member of' do
           expect(tenants_user.groups).to eq([group_1])
+        end
+      end
+
+      describe '.all_groups' do
+        let(:group_2) { FactoryBot.create(:tenants_group, tenant: tenant) }
+
+        it 'returns the groups that the user and company is a member of' do
+          FactoryBot.create(:tenants_membership, member: company, group: group_2)
+          expect(tenants_user.all_groups).to match_array([group_1, group_2])
         end
       end
 
       describe '.verify_company' do
         it 'creates the company if it doesnt exist' do
           tenants_user.verify_company
-          expect(tenants_user.company&.name).to eq('ItsMyCargo')
+          expect(tenants_user.company&.name).to eq('ItsMyCargo GmbH')
         end
       end
     end

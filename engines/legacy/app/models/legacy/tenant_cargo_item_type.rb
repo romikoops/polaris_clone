@@ -3,10 +3,16 @@
 module Legacy
   class TenantCargoItemType < ApplicationRecord
     self.table_name = 'tenant_cargo_item_types'
-    belongs_to :tenant
-    belongs_to :cargo_item_type
 
-    validates :cargo_item_type, uniqueness: { scope: :tenant }
+    belongs_to :tenant, class_name: 'Legacy::Tenant'
+    belongs_to :cargo_item_type, class_name: 'Legacy::CargoItemType'
+
+    validates :cargo_item_type, uniqueness: {
+      scope: :tenant,
+      message: lambda { |_, cargo_item_type|
+        "(id: #{cargo_item_type[:value].id}) has already been taken by this Tenant"
+      }
+    }
   end
 end
 

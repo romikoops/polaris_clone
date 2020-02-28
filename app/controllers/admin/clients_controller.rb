@@ -41,9 +41,10 @@ class Admin::ClientsController < Admin::AdminBaseController
       email: json['email'],
       password: json['password'],
       password_confirmation: json['password_confirmation'],
-      sandbox: @sandbox
+      sandbox: @sandbox,
+      tenant_id: current_tenant.id
     }
-    new_user = current_user.tenant.users.create!(user_data)
+    new_user = User.create(user_data)
     tenants_user = Tenants::User.find_by(legacy_id: new_user.id)
     profile = Profiles::ProfileService.create_or_update_profile(user: tenants_user,
                                                                 first_name: json['firstName'],

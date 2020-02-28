@@ -3,6 +3,10 @@
 FactoryBot.define do
   factory :tenants_tenant, class: 'Tenants::Tenant' do
     sequence(:slug) { |n| "test_#{n}" }
+
+    trait :with_theme do
+      association :theme
+    end
   end
 end
 

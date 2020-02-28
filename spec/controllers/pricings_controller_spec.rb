@@ -40,11 +40,7 @@ RSpec.describe PricingsController, type: :controller do
 
     context 'with closed_quotation_tool' do
       before do
-        instance = ::Tenants::ScopeService.new(target: ::Tenants::User.find_by(legacy_id: user.id))
-
-        allow(instance).to receive(:fetch).and_return(instance.fetch)
-        allow(instance).to receive(:fetch).with(:closed_quotation_tool).and_return(true)
-        allow(::Tenants::ScopeService).to receive(:new).and_return(instance)
+        create(:tenants_scope, target: tenants_tenant, content: { closed_quotation_tool: true })
       end
 
       it 'returns the currency rates the tenant' do

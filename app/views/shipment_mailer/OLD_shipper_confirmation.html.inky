@@ -1,1 +1,0 @@
-<%= render "shipper_layout", greeting_text: "Your booking with reference number #{@shipment.imc_reference} has been successfully processed and we are looking forward to receiving your cargo." %>

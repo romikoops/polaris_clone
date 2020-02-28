@@ -3,7 +3,7 @@
 module Admin
   class TenantsController < AdminBaseController
     def update
-      tenant = current_user.tenant
+      tenant = current_tenant
       tenant.assign_attributes(tenant_params)
 
       raise ApplicationError::InvalidTenant unless tenant.save

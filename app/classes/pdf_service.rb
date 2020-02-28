@@ -10,6 +10,8 @@ class PdfService
 
   def initialize(tenant:, user:, sandbox: nil)
     @tenant = tenant
+    @tenants_tenant = Tenants::Tenant.find_by(legacy_id: @tenant.id)
+    @theme = @tenants_tenant.theme
     @user   = user
     @sandbox = sandbox
   end
@@ -26,7 +28,7 @@ class PdfService
     note_remarks: nil,
     selected_offer: nil
   )
-    logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
+    logo = Base64.encode64(@theme.large_logo.download) if @theme.large_logo.attached?
     pdf = PdfHandler.new(
       layout: 'pdfs/simple.pdf.html.erb',
       margin: { top: 10, bottom: 5, left: 8, right: 8 },

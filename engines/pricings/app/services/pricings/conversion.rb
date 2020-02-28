@@ -6,7 +6,7 @@ module Pricings
     def initialize(base:, tenant_id:)
       @tenant = ::Legacy::Tenant.find(tenant_id)
       @base = base
-      @scope = @tenant.scope
+      @scope = Tenants::ScopeService.new(tenant: Tenants::Tenant.find_by(legacy_id: tenant_id)).fetch
       @rates = get_rates(@base)
     end
 

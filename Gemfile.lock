@@ -73,10 +73,12 @@ PATH
     imc-admiralty_tenants (1)
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
+      draper
       imc-admiralty_assets
       imc-admiralty_auth
       imc-core
       imc-legacy
+      imc-pricings
       imc-tenants
       jsoneditor-rails
       paper_trail (~> 10.3)
@@ -247,6 +249,7 @@ PATH
       activerecord-import
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
+      devise_token_auth (~> 0.1.43)
       fixer_currency (~> 3.4)
       geocoder
       imc-core
@@ -463,6 +466,7 @@ PATH
   remote: engines/tenants
   specs:
     imc-tenants (1)
+      activerecord-import
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       imc-core
@@ -565,6 +569,10 @@ GEM
       globalid (>= 0.3.6)
     activemodel (5.2.2)
       activesupport (= 5.2.2)
+    activemodel-serializers-xml (1.0.2)
+      activemodel (> 5.x)
+      activesupport (> 5.x)
+      builder (~> 3.1)
     activerecord (5.2.2)
       activemodel (= 5.2.2)
       activesupport (= 5.2.2)
@@ -683,6 +691,12 @@ GEM
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
       railties (>= 3.2, < 6.1)
+    draper (4.0.0)
+      actionpack (>= 5.0)
+      activemodel (>= 5.0)
+      activemodel-serializers-xml (>= 1.0)
+      activesupport (>= 5.0)
+      request_store (>= 1.0)
     dry-configurable (0.11.3)
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.4, >= 0.4.7)

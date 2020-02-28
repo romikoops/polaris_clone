@@ -3,41 +3,32 @@
 module Legacy
   class User < ApplicationRecord
     self.table_name = 'users'
-    has_paper_trail
+
+    devise :database_authenticatable, :registerable,
+           :recoverable, :rememberable, :trackable, :validatable,
+           :confirmable
+
+    include DeviseTokenAuth::Concerns::User
+
     before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
-    belongs_to :tenant
     belongs_to :role, optional: true, class_name: 'Legacy::Role'
-    belongs_to :agency, optional: true
-    has_many :pricings
+    belongs_to :tenant
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-    has_one :tenants_user, class_name: 'Tenants::User', foreign_key: :legacy_id
-    delegate :company, to: :tenants_user
 
     has_many :files, class_name: 'Legacy::File', dependent: :destroy
     has_many :documents
     deprecate documents: 'Migrated to Legacy::File'
+    belongs_to :agency, class_name: 'Legacy::Agency', optional: true
+    has_one :tenants_user, class_name: 'Tenants::User', foreign_key: :legacy_id
+    delegate :company, to: :tenants_user
 
     acts_as_paranoid
-
-    def full_name
-      "#{first_name} #{last_name}"
-    end
-
-    def full_name_and_company
-      "#{first_name} #{last_name}, #{company_name}"
-    end
-
-    def full_name_and_company_and_address
-      "#{first_name} #{last_name}\n#{company_name}\n#{address.geocoded_address}"
-    end
 
     def pricing_id
       role&.name == 'agent' ? agency_pricing_id : id
     end
 
-    def all_groups
-      tenants_user.all_groups
-    end
+    delegate :all_groups, to: :tenants_user
 
     def group_ids
       all_groups.ids
@@ -52,11 +43,7 @@ module Legacy
     private
 
     def set_default_role
-      self.role ||= Legacy::Role.find_by_name('shipper')
-    end
-
-    def set_default_currency
-      self.currency = tenant.currency
+      self.role ||= Legacy::Role.find_by(name: 'shipper')
     end
 
     def clear_tokens_if_empty
@@ -70,7 +57,6 @@ module Legacy
     def agency_pricing_id
       agency&.agency_manager_id
     end
-
   end
 end
 

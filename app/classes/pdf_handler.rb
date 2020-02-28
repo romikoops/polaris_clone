@@ -33,6 +33,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
     @has_legacy_charges = {}
     @notes = {}
     tenants_tenant = Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
+    @theme = tenants_tenant.theme
     @scope = ::Tenants::ScopeService.new(
       target: ::Tenants::User.find_by(legacy_id: @shipment.user.id),
       tenant: tenants_tenant
@@ -306,6 +307,7 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
         load_type: @load_type,
         remarks: @remarks,
         tenant: @shipment.tenant,
+        theme: @theme,
         cargo_data: @cargo_data,
         notes: @notes,
         hide_cargo_sub_totals: @hide_cargo_sub_totals,

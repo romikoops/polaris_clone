@@ -186,5 +186,22 @@ module Pricings
       end
       iterations
     end
+
+    def self.create_default_margins(tenant)
+      ['rail', 'ocean', 'air', 'truck', 'local_charge', 'trucking', nil].each do |default|
+        %i[freight_margin export_margin import_margin trucking_pre_margin trucking_on_margin].each do |m_type|
+          ::Pricings::Margin.find_or_create_by!(
+            tenant: tenant,
+            value: 0,
+            default_for: default,
+            operator: '%',
+            applicable: tenant,
+            margin_type: m_type,
+            effective_date: Date.current,
+            expiration_date: Date.current + 5.years
+          )
+        end
+      end
+    end
   end
 end

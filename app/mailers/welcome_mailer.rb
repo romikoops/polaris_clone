@@ -11,14 +11,15 @@ class WelcomeMailer < ApplicationMailer
     tenants_user = Tenants::User.find_by(legacy_id: user.id)
     @user_profile = Profiles::ProfileService.fetch(user_id: tenants_user.id)
     @tenant = @user.tenant
-    @theme = @tenant.theme
     @content = Legacy::Content.get_component('WelcomeMail', @tenant.id)
-    @scope = ::Tenants::ScopeService.new(target: ::Tenants::User.find_by(legacy_id: @user.id)).fetch
-    attachments.inline['logo.png'] = URI.try(:open, @theme['emailLogo']).try(:read)
+    @scope = scope_for(record: @user)
+    @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
+    @theme = ::Tenants::ThemeDecorator.new(@tenants_tenant.theme).legacy_format
+    email_logo = @tenants_tenant.theme.email_logo
+    welcome_email_image = @tenants_tenant.theme.welcome_email_image
+    attachments.inline['logo.png'] = email_logo.attached? ? email_logo.download : ''
+    attachments.inline['ngl_welcome_image.jpg'] = welcome_email_image.attached? ? welcome_email_image.download : ''
 
-    attachments.inline['ngl_welcome_image.jpg'] = URI.open(
-      'https://assets.itsmycargo.com/assets/tenants/normanglobal/ngl_welcome_image.jpg'
-    ).read
     subject = sandbox ? "[SANDBOX] - #{@content['subject'][0]['text']}" : @content['subject'][0]['text']
 
     mail(

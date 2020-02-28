@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-mailers'
   s.add_dependency 'imc-profiles'
 
+  s.add_dependency 'activerecord-import'
   s.add_dependency 'paranoia'
   s.add_dependency 'pg_search', '~> 2.3.0'
   s.add_dependency 'sorcery', '~> 0.13.0'

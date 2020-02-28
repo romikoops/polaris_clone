@@ -116,7 +116,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, '_'),
         doc_type: params[:type],
         user: @shipment.user,
-        tenant: current_user.tenant,
+        tenant: current_tenant,
         file: params[:file],
         sandbox: @sandbox
       )

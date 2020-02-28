@@ -36,6 +36,7 @@ class TenantsController < ApplicationController
     scope = current_scope
 
     tenant_json = tenant.as_json
+    tenant_json['theme'] = ::Tenants::ThemeDecorator.new(tenants_tenant.theme).legacy_format
     tenant_json['scope'] = scope
     tenant_json['subdomain'] = tenants_tenant.slug
     tenant_json['slug'] = tenants_tenant.slug

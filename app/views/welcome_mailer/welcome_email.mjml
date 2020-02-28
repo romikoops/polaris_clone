@@ -1,5 +1,5 @@
-<% primary_color = @user.tenant.theme["colors"]["primary"] %>
-<% secondary_color = @user.tenant.theme["colors"]["secondary"] %>
+<% primary_color = @theme.dig('colors', 'primary') %>
+<% secondary_color = @theme.dig('colors', 'secondary') %>
 <mj-section>
   <mj-column>
     <mj-text>

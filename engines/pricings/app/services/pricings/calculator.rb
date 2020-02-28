@@ -12,6 +12,7 @@ module Pricings
       @margins = @data[:flat_margins] || {}
       @metadata_id = @data[:metadata_id]
       @metadata = metadata
+      @scope = Tenants::ScopeService.new(tenant: Tenants::Tenant.find_by(legacy_id: user.tenant_id)).fetch
       @converter = Pricings::Conversion.new(base: @user.currency, tenant_id: @user.tenant_id)
       @totals = Hash.new { |h, k| h[k] = { 'value' => 0, 'currency' => nil } unless k.to_s == 'metadata_id' }
       @date = date
@@ -35,9 +36,9 @@ module Pricings
         @totals[k]['currency'] ||= fee['currency']
         @totals[k]['value'] +=
           if fee['hw_rate_basis']
-            heavy_weight_fee_value(fee, @user.tenant.scope)
+            heavy_weight_fee_value(fee, @scope)
           else
-            fee_value(fee, get_cargo_hash, @user.tenant.scope)
+            fee_value(fee, get_cargo_hash, @scope)
           end
       end
 

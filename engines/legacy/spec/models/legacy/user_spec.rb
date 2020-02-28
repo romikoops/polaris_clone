@@ -10,6 +10,9 @@ module Legacy
     let(:agency_user) { FactoryBot.build(:legacy_user, agency: agency, role: role) }
     let(:user_no_company) { FactoryBot.build(:legacy_user, agency: nil) }
 
+    let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: user.tenant_id) }
+    let(:scope) { FactoryBot.create(:tenants_scope, content: { base_pricing: true }) }
+
     describe '#pricing_id' do
       it 'get the princing id from agency if it is has agency role' do
         expect(agency_user.pricing_id).to eq(agency_user.agency.agency_manager_id)

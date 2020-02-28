@@ -242,7 +242,8 @@ module OfferCalculator
         if @scope['base_pricing']
           @scope['dedicated_pricings_only']
         else
-          user.pricings.where(internal: false, sandbox: @sandbox).exists? && @scope['dedicated_pricings_only']
+          legacy_pricing = Legacy::Pricing.where(user: user, internal: false, sandbox: @sandbox)
+          legacy_pricing.exists? && @scope['dedicated_pricings_only']
         end
       end
 

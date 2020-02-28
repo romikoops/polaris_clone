@@ -74,7 +74,7 @@ class ShippingTools
     )
     shipment.save!
 
-    tenant_itineraries = current_user.tenant.itineraries.where(sandbox: sandbox)
+    tenant_itineraries = Itinerary.where(tenant_id: tenant.id, sandbox: sandbox)
     if scope['base_pricing']
       if scope[:display_itineraries_with_rates]
         cargo_classes = [nil] + (load_type == 'cargo_item' ? ['lcl'] : Container::CARGO_CLASSES)
@@ -251,7 +251,6 @@ class ShippingTools
       sandbox: sandbox
     )
     shipper = { data: contact, address: contact_address.to_custom_hash }
-    # NOT CORRECT:UserAddress.create(user: current_user, address: contact_address) if shipment.export?
 
     # Consignee
     resource = shipment_data.require(:consignee)
@@ -268,7 +267,6 @@ class ShippingTools
     raise ApplicationError::ContactsRedundancyError if consignee.invalid?
 
     consignee = { data: contact, address: contact_address.to_custom_hash }
-    # NOT CORRECT:UserAddress.create(user: current_user, address: contact_address) if shipment.import?
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|

@@ -8,8 +8,6 @@ class Tenant < Legacy::Tenant
   has_many :users, dependent: :destroy
   has_many :tenant_vehicles, dependent: :destroy
   has_many :vehicles, through: :tenant_vehicles, dependent: :destroy
-  has_many :tenant_cargo_item_types, dependent: :destroy
-  has_many :cargo_item_types, through: :tenant_cargo_item_types, dependent: :destroy
   has_many :itineraries, dependent: :destroy
   has_many :stops, through: :itineraries, dependent: :destroy
   has_many :trips, through: :itineraries, dependent: :destroy

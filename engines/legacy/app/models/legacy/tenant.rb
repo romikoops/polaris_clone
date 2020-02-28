@@ -14,6 +14,8 @@ module Legacy
     has_many :margins, as: :applicable
     has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
     has_many :max_dimensions_bundles, dependent: :destroy, class_name: 'Legacy::MaxDimensionsBundle'
+    has_many :tenant_cargo_item_types, dependent: :destroy
+    has_many :cargo_item_types, through: :tenant_cargo_item_types, dependent: :destroy
 
     has_paper_trail
 

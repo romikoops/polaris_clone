@@ -53,6 +53,14 @@ module Legacy
         expect(aggregated_bundles.pluck(:mode_of_transport)).to match_array %w[general air]
       end
     end
+
+    describe '.creates a valid object' do
+      let!(:max_dimensions_bundle) { FactoryBot.build(:legacy_max_dimensions_bundle) }
+
+      it 'builds a valid max dimensions bundle' do
+        expect(max_dimensions_bundle).to be_valid
+      end
+    end
   end
 end
 
