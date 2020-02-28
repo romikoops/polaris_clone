@@ -7,9 +7,7 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'imc-rms_export'
   s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['Warwick Beamish']
-  s.email       = ['warwick.beamish@itsmycargo.com']
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'RMS - Export rates to Phoenix'
 
   s.metadata = { 'type' => 'services' }

@@ -7,9 +7,7 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'imc-address_book'
   s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['Bassam Aziz']
-  s.email       = ['bassam.aziz@itsmycargo.com']
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = <<~SUMMARY
     This engine is used to work with addresses and contacts for shipments.
     eg: consignee, consignor, notifyees.

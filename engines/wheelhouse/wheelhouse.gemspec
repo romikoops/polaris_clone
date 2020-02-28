@@ -7,9 +7,7 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'imc-wheelhouse'
   s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['Hasstrup Ezekiel']
-  s.email       = ['hasstrup.ezekiel@gmail.com']
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = <<~SUMMARY
     This engine houses logic that proxies internal quotations to the offer
     calculator engine

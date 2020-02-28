@@ -7,9 +7,7 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'imc-sequential'
   s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['Bassam Aziz']
-  s.email       = ['bassam.aziz@itsmycargo.com']
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = <<~SUMMARY
     The Sequential Engine generates gapless sequential numbers, primarily for
     invoice numbers. It handles race conditions, and it is generic, so that it

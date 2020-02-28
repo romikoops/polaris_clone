@@ -7,10 +7,7 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'imc-integrations'
   s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['Bassam Aziz']
-  s.email       = ['bassam.aziz@itsmycargo.com']
-
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'Provides integration with 3rd party systems.'
 
   s.metadata = { 'type' => 'services' }

@@ -6,10 +6,8 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = 'imc-locations'
-  s.version     = '0.0.1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['Warwick Beamish']
-  s.email       = ['warwick.beamish@itsmycargo.com']
+  s.version     = '1'
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'Provides location information.'
 
   s.metadata = { 'type' => 'services' }

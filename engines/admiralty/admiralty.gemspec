@@ -7,9 +7,7 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'imc-admiralty'
   s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['Mikko Kokkonen']
-  s.email       = ['mikko.kokkonen@itsmycargo.com']
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = <<~SUMMARY
     This engine provides super-admin view for managing tenants and accessing
     financial reports.

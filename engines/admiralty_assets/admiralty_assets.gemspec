@@ -7,9 +7,7 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'imc-admiralty_assets'
   s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['Mikko Kokkonen']
-  s.email       = ['mikko.kokkonen@itsmycargo.com']
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'Provides common assets for admiralty views.'
 
   s.metadata = { 'type' => 'view' }

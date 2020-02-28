@@ -7,9 +7,7 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'imc-shipments'
   s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['Bassam Aziz']
-  s.email       = ['bassam.aziz@itsmycargo.com']
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = <<~SUMMARY
     The Shipments Engine is responsible for handling the data level of shipment requests and shipments
   SUMMARY

@@ -7,9 +7,7 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'imc-engine_template'
   s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['GITUSER_NAME']
-  s.email       = ['GITUSER_EMAIL']
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = <<~SUMMARY
   SUMMARY
 

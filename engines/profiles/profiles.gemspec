@@ -7,9 +7,7 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'imc-profiles'
   s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['Hasstrup Ezekiel']
-  s.email       = ['hasstrup.ezekiel@itsmycargo.com']
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'An engine for hosting user profiles'
 
   s.metadata = { 'type' => 'services' }

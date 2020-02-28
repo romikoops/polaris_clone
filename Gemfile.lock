@@ -262,7 +262,7 @@ PATH
 PATH
   remote: engines/locations
   specs:
-    imc-locations (0.0.1)
+    imc-locations (1)
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       elasticsearch (~> 7.3.0)

@@ -7,9 +7,7 @@ require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'imc-admiralty_reports'
   s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['Henry Perschk']
-  s.email       = ['henry.perschk@itsmycargo.com']
+  s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'Provides financal reporting for Admiralty.'
 
   s.metadata = { 'type' => 'view' }
