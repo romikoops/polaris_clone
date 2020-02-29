@@ -50,7 +50,7 @@ module ExcelDataServices
       }.freeze
       LOCAL_CHARGE_COLUMNS = [].freeze # May be filled in the future, only ocean freight for now
       STANDARD_OCEAN_COLUMNS = %w[20dc 40dc 40hq].freeze
-      STANDARD_OCEAN_FREIGHT_FEE_CODE = 'BAS'
+      STANDARD_MAIN_FREIGHT_FEE_CODE = 'BAS'
       MONTHS_GERMAN_TO_ENGLISH_LOOKUP = {
         'MAI' => 'MAY',
         'OKT' => 'OCT',
@@ -72,6 +72,7 @@ module ExcelDataServices
         clean_html_format_artifacts(restructured_data) # TODO: change method to use instance variable
         combine_terminal_and_destination
         @restructured_data = expand_to_multiple
+        @restructured_data = remove_data_without_main_freight(restructured_data)
         restructured_data_pricings, restructured_data_local_charges =
           restructured_data.partition { |row_data| row_data.delete(:klass_identifier) == 'Pricing' }
         restructured_data_pricings = cut_based_on_date_overlaps(
@@ -247,7 +248,7 @@ module ExcelDataServices
       def fee_code_from_col_name(col_name, fee_type)
         case fee_type
         when 'Pricing'
-          STANDARD_OCEAN_COLUMNS.include?(col_name) ? STANDARD_OCEAN_FREIGHT_FEE_CODE : extract_fee_code(col_name)
+          STANDARD_OCEAN_COLUMNS.include?(col_name) ? STANDARD_MAIN_FREIGHT_FEE_CODE : extract_fee_code(col_name)
         when 'LocalCharges'
           extract_fee_code(col_name)
         end
@@ -266,15 +267,6 @@ module ExcelDataServices
 
       def fee_is_included?(value)
         value.match?(/incl/i) if value.respond_to?(:match?)
-      end
-
-      def adapt_origin_destination(multiple_objs)
-        multiple_objs.each do |row_data|
-          row_data[:origin] = row_data.delete(:origin_hub)
-          row_data[:country_origin] = row_data.delete(:origin_country)
-          row_data[:destination] = row_data.delete(:destination_hub)
-          row_data[:country_destination] = row_data.delete(:destination_country)
-        end
       end
 
       def expand_based_on_preliminary_load_type(multiple_objs)
@@ -310,6 +302,21 @@ module ExcelDataServices
         multiple_objs.select { |row_data| row_data[:klass_identifier] == 'Pricing' }.each do |row_data|
           row_data[:notes] = notes
         end
+      end
+
+      def adapt_origin_destination(multiple_objs)
+        multiple_objs.each do |row_data|
+          row_data[:origin] = row_data.delete(:origin_hub)
+          row_data[:country_origin] = row_data.delete(:origin_country)
+          row_data[:destination] = row_data.delete(:destination_hub)
+          row_data[:country_destination] = row_data.delete(:destination_country)
+        end
+      end
+
+      def remove_data_without_main_freight(rows_data)
+        grouped = group_by_params(rows_data, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i[effective_date expiration_date])
+        grouped.select! { |group| group.any? { |row_data| row_data[:fee_code] == STANDARD_MAIN_FREIGHT_FEE_CODE } }
+        grouped.flatten
       end
 
       def pricings_format_to_local_charges_format(rows_data)
