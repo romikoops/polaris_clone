@@ -1184,9 +1184,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
   create_table "profiles_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "company_name"
     t.string "first_name", default: "", null: false
-    t.string "image"
     t.string "last_name", default: "", null: false
-    t.string "nickname"
     t.string "phone"
     t.uuid "user_id"
     t.index ["user_id"], name: "index_profiles_profiles_on_user_id"
