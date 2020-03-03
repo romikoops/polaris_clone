@@ -11,16 +11,22 @@ module Legacy
     include DeviseTokenAuth::Concerns::User
 
     before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
+
+    validates :email, presence: true, uniqueness: { scope: :tenant_id }, format: { with: URI::MailTo::EMAIL_REGEXP }
+
     belongs_to :role, optional: true, class_name: 'Legacy::Role'
-    belongs_to :tenant
+    belongs_to :tenant, class_name: 'Legacy::Tenant'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
+    has_many :user_addresses, class_name: 'Legacy::UserAddress', dependent: :destroy
+    has_many :addresses, class_name: 'Legacy::Address', through: :user_addresses
     has_many :files, class_name: 'Legacy::File', dependent: :destroy
     has_many :documents
     deprecate documents: 'Migrated to Legacy::File'
     belongs_to :agency, class_name: 'Legacy::Agency', optional: true
     has_one :tenants_user, class_name: 'Tenants::User', foreign_key: :legacy_id
     delegate :company, to: :tenants_user
+    accepts_nested_attributes_for :addresses
 
     acts_as_paranoid
 

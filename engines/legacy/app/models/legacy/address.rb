@@ -11,7 +11,7 @@ module Legacy
     after_validation :reverse_geocode, if: proc { |address| address.country.nil? }
 
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-    has_many :user_addresses
+    has_many :user_addresses, class_name: 'Legacy::UserAddress'
     has_many :users, class_name: 'Legacy::User', through: :user_addresses, dependent: :destroy
     has_many :shipments
 

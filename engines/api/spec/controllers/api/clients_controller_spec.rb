@@ -6,16 +6,17 @@ module Api
   RSpec.describe V1::ClientsController, type: :controller do
     routes { Engine.routes }
 
-    let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenant) { Tenants::Tenant.create(legacy: legacy_tenant) }
-    let(:user) { FactoryBot.create(:tenants_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', tenant: tenant) }
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
-    let(:token_header) { "Bearer #{access_token.token}" }
-
     subject do
       request.headers['Authorization'] = token_header
       request_object
     end
+
+    let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
+    let(:tenant) { Tenants::Tenant.create(legacy: legacy_tenant, slug: '1234') }
+    let(:tenant_group) { Tenants::Group.create(tenant: tenant) }
+    let(:user) { FactoryBot.create(:tenants_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', tenant: tenant) }
+    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
+    let(:token_header) { "Bearer #{access_token.token}" }
 
     describe 'GET #index' do
       let(:request_object) do
@@ -50,8 +51,50 @@ module Api
         json = JSON.parse(subject.body)
         expect(response).to be_successful
         expect(json['data']).not_to be_empty
-        %w(company-name email phone first-name last-name).each do |key|
+        %w[company-name email phone first-name last-name].each do |key|
           expect(json['data']['attributes']).to have_key(key)
+        end
+      end
+    end
+
+    describe 'POST #create' do
+      let(:user_info) { FactoryBot.attributes_for(:legacy_user).merge(group_id: tenant_group.id) }
+      let(:profile_info) { FactoryBot.attributes_for(:profiles_profile) }
+      let(:country) { FactoryBot.create(:legacy_country) }
+      let(:role) { FactoryBot.create(:legacy_role) }
+      let(:perform_request) { subject }
+      let(:address_info) do
+        { street: 'Brooktorkai', house_number: '7', city: 'Hamburg', postal_code: '22047', country: country.name }
+      end
+      let(:request_object) do
+        post :create, params: { client: { **user_info, **profile_info, **address_info, role: role.name } }, as: :json
+      end
+
+      context 'when request is successful' do
+        it 'returns http status of success' do
+          perform_request
+          expect(response).to have_http_status(:success)
+        end
+
+        it 'creates the user successfully' do
+          perform_request
+          expect(Legacy::User.find_by(email: user_info[:email])).not_to be_nil
+        end
+      end
+
+      context 'when request is unsuccessful (bad or missing data)' do
+        let(:request_object) do
+          post :create, params: { client: { **user_info, **profile_info, **address_info, role: role.name, email: nil } }, as: :json
+        end
+
+        it 'returns with a 400 response' do
+          perform_request
+          expect(response).to have_http_status(:bad_request)
+        end
+
+        it 'returns list of errors' do
+          json = JSON.parse(perform_request.body)
+          expect(json['error']).to include("Validation failed: Email can't be blank, Email is invalid")
         end
       end
     end

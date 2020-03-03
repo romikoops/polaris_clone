@@ -5,12 +5,12 @@ Api::Engine.routes.draw do
 
   namespace :v1 do
     resource :me, controller: :users, only: :show
-    resources :clients, only: %i(index show)
+    resources :clients, only: %i[index show create]
     resource :dashboard, controller: :dashboard, only: %i(show)
     resources :quotations, only: :create
     resources :cargo_item_types, only: :index
     resources :trucking_availability, controller: :trucking_availability, only: %i(index)
-
+    resources :groups, controller: :tenants_groups, only: :index
     resources :ahoy, only: [] do
       member do
         get 'settings'

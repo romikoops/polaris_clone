@@ -2,7 +2,7 @@
 
 module Api
   class UserSerializer < ActiveModel::Serializer
-    attributes %i[id email tenant_id first_name last_name company_name phone state tenant_id]
+    attributes %i[id email first_name last_name company_name phone state]
     delegate :first_name, to: :profile
     delegate :last_name, to: :profile
     delegate :phone, to: :profile

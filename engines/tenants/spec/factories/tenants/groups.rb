@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :tenants_group, class: 'Tenants::Group' do
+    sequence(:name) { |n| "Example Group #{n}" }
     association :tenant, factory: :tenants_tenant
   end
 end
