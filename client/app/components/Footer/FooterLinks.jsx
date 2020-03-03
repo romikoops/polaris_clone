@@ -27,22 +27,22 @@ function FooterLinks (props) {
   return (
     <ul>
       <li>
-        <a target="_blank" href={aboutLink}>
+        <a target="_parent" href={aboutLink}>
           {t('footer:about')}
         </a>
       </li>
       <li>
-        <a target="_blank" href={legalLink}>
+        <a target="_parent" href={legalLink}>
           {t('footer:imprint')}
         </a>
       </li>
       <li>
-        <a target="_blank" href={termsLink}>
+        <a target="_parent" href={termsLink}>
           {t('footer:terms')}
         </a>
       </li>
       <li>
-        <a target="_blank" href={privacyLink}>
+        <a target="_parent" href={privacyLink}>
           {t('footer:privacy')}
         </a>
       </li>
