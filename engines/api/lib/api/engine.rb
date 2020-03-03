@@ -8,6 +8,7 @@ require 'trucking'
 require 'wheelhouse'
 
 require 'active_model_serializers'
+require 'draper'
 
 module Api
   class Engine < ::Rails::Engine
@@ -31,6 +32,7 @@ module Api
 
     initializer 'json_api', after: 'active_model_serializers.set_configs' do
       ActiveModelSerializers.config.adapter = :json_api
+      ActiveModelSerializers.config.key_transform = :camel_lower
     end
 
     initializer :append_migrations do |app|

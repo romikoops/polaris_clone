@@ -10,13 +10,14 @@ module Api
                      .where(guest: false)
                      .where.not(role: blocked_roles)
                      .ids
+        clients = Tenants::User.where(legacy_id: client_ids)
 
-        render json: Tenants::User.where(legacy_id: client_ids), each_serializer: UserSerializer
+        render json: UserDecorator.decorate_collection(clients), each_serializer: UserSerializer
       end
 
       def show
         client = Tenants::User.find_by(legacy_id: params[:id])
-        render json: client, serializer: UserSerializer
+        render json: UserDecorator.decorate(client), serializer: UserSerializer
       end
 
       def create
@@ -31,7 +32,7 @@ module Api
             create_user_profile(tenants_user: user)
             create_user_group(tenants_user: user)
           end
-          render json: tenants_user, serializer: UserSerializer
+          render json: UserDecorator.decorate(tenants_user), serializer: UserSerializer
         end
       rescue ActiveRecord::RecordInvalid => e
         render(json: { error: e.message }, status: :bad_request)

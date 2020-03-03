@@ -7,19 +7,13 @@ module Api
     routes { Engine.routes }
 
     let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenant) { FactoryBot.create(:tenants_tenant, legacy: legacy_tenant) }
+    let(:tenant) { FactoryBot.create(:tenants_tenant, legacy: legacy_tenant, slug: 'demo-test') }
 
     describe 'GET #itineraries' do
       let(:user) { FactoryBot.create(:tenants_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', tenant: tenant) }
       let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
       let(:token_header) { "Bearer #{access_token.token}" }
-
-      before do
-        FactoryBot.create_list(:legacy_itinerary, 5, :default, tenant: legacy_tenant, name: 'Ningbo - Gothenburg')
-        allow_any_instance_of(Tenants::User).to receive(:tenant).and_return(tenant)
-      end
-
-      subject do
+      let(:itinerary_subject) do
         request.headers['Authorization'] = token_header
         request_object
       end
@@ -28,11 +22,17 @@ module Api
         get :index, as: :json
       end
 
-      it 'should return a list of itineraries belonging to the tenant' do
+      before do
+        FactoryBot.create_list(:legacy_itinerary, 5, :default, tenant: legacy_tenant, name: 'Ningbo - Gothenburg')
+      end
+
+      it 'has a successful respoonse' do
         expect(response).to be_successful
-        expect(subject.body).not_to be_empty
-        data = JSON.parse(subject.body)['data']
-        expect(data.length).to eq(5)
+      end
+
+      it 'returns a list of itineraries belonging to the tenant' do
+        data = JSON.parse(itinerary_subject.body)
+        expect(data['data'].length).to eq(5)
       end
     end
 
@@ -49,52 +49,51 @@ module Api
 
       let(:itinerary_second_tenant) { FactoryBot.create(:shanghai_felixstowe_itinerary, tenant: second_tenant) }
 
-      it 'should return a list of origin locations belonging to the tenant' do
+      it 'returns a list of origin locations belonging to the tenant' do
         query = first_hub[:name]
-
         get :ports, as: :json, params: { tenant_uuid: tenant.id, location_type: 'origin', query: query }
-
-        expect(response).to be_successful
-        expect(response.body).not_to be_empty
-
         data = JSON.parse(response.body)['data']
-        expect(data.first['attributes']['name']).to eq(query)
-        expect(data.length).to eq(1)
+        aggregate_failures do
+          expect(response).to be_successful
+          expect(data.first['attributes']['name']).to eq(query)
+          expect(data.length).to eq(1)
+        end
       end
 
-      it 'should return filter related locations to origin' do
+      it 'returns filter related locations to origin' do
         query = last_hub[:name]
         get :ports, as: :json, params: { tenant_uuid: tenant.id, location_type: 'origin', location_id: first_hub[:id], query: query }
-
-        expect(response).to be_successful
-        expect(response.body).not_to be_empty
-
         data = JSON.parse(response.body)['data']
-        expect(data.first['attributes']['name']).to eq(query)
-        expect(data.length).to eq(1)
+
+        aggregate_failures do
+          expect(response).to be_successful
+          expect(data.first['attributes']['name']).to eq(query)
+          expect(data.length).to eq(1)
+        end
       end
 
-      it 'should return filter related locations to destination' do
+      it 'returns filter related locations to destination' do
         query = first_hub[:name]
         get :ports, as: :json, params: { tenant_uuid: tenant.id, location_type: 'destination', location_id: last_hub[:id], query: query }
-
-        expect(response).to be_successful
-        expect(response.body).not_to be_empty
-
         data = JSON.parse(response.body)['data']
-        expect(data.first['attributes']['name']).to eq(query)
-        expect(data.length).to eq(1)
+
+        aggregate_failures do
+          expect(response).to be_successful
+          expect(data.first['attributes']['name']).to eq(query)
+          expect(data.length).to eq(1)
+        end
       end
 
-      it 'should filter locations by tenant' do
+      it 'filters locations by tenant' do
         get :ports, as: :json, params: { tenant_uuid: second_tenant.id, location_type: 'origin', query: first_hub[:name] }
-
-        expect(response).to be_successful
         data = JSON.parse(response.body)['data']
-        expect(data).to be_empty
+        aggregate_failures do
+          expect(response).to be_successful
+          expect(data).to be_empty
+        end
       end
 
-      it 'should return empty if there are no locations for the tenant' do
+      it 'returns empty if there are no locations for the tenant' do
         target = Tenants::Tenant.find_by(legacy: FactoryBot.create(:legacy_tenant))
 
         get :ports, as: :json, params: { tenant_uuid: target.id, location_type: 'origin', query: first_hub[:name] }
@@ -103,17 +102,14 @@ module Api
         expect(data.length).to eq(0)
       end
 
-      it 'should return :not_found if tenant does not exist' do
+      it 'returns :not_found if tenant does not exist' do
         get :ports, as: :json, params: { tenant_uuid: 'tenant_uuid', location_type: 'origin', query: 'aaa' }
 
         expect(response).to have_http_status(:not_found)
       end
 
-      it 'should return :bad_request if some of the params (:tenant_uuid and :location_type) are missing' do
+      it 'returns :bad_request if some of the params (:tenant_uuid and :location_type) are missing' do
         params = { tenant_uuid: tenant.id, location_type: 'origin', query: 'aaa' }
-
-        get :ports, as: :json, params: params.except(:location_type)
-        expect(response).to have_http_status(:bad_request)
 
         get :ports, as: :json, params: params.except(:location_type)
         expect(response).to have_http_status(:bad_request)

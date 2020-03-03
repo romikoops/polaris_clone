@@ -51,7 +51,7 @@ module Api
         json = JSON.parse(subject.body)
         expect(response).to be_successful
         expect(json['data']).not_to be_empty
-        %w[company-name email phone first-name last-name].each do |key|
+        %w[companyName email phone firstName lastName].each do |key|
           expect(json['data']['attributes']).to have_key(key)
         end
       end

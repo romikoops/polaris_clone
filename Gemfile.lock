@@ -142,6 +142,7 @@ PATH
       active_model_serializers (~> 0.10, >= 0.10.8)
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
+      draper (~> 4.0)
       imc-api_auth
       imc-api_docs
       imc-core

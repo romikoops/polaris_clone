@@ -12,7 +12,9 @@ module Api
 
       def index
         itineraries = Legacy::Itinerary.where(tenant_id: current_tenant.legacy_id)
-        render json: itineraries, each_serializer: Legacy::ItinerarySerializer, key_transform: :unaltered
+        render json: itineraries,
+               each_serializer: ItinerarySerializer,
+               include: ['stops', 'stops.hub', 'stops.hub.address', 'stops.hub.nexus']
       end
 
       def ports
@@ -31,7 +33,7 @@ module Api
       private
 
       def ports_params
-        required_params = %i(tenant_uuid location_type)
+        required_params = %i[tenant_uuid location_type]
 
         params.require(required_params)
         params.permit(*required_params, :location_id, :query)
