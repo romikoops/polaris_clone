@@ -368,6 +368,16 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
     t.index ["tenant_id"], name: "index_documents_on_tenant_id"
   end
 
+  create_table "exchange_rates", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "from"
+    t.decimal "rate"
+    t.string "to"
+    t.datetime "updated_at", null: false
+    t.index ["from"], name: "index_exchange_rates_on_from"
+    t.index ["to"], name: "index_exchange_rates_on_to"
+  end
+
   create_table "geometries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.geometry "data", limit: {:srid=>0, :type=>"geometry"}

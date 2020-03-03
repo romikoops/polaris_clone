@@ -1,8 +1,9 @@
-# encoding : utf-8
+# frozen_string_literal: true
+
 require 'money-rails'
+require_relative '../../lib/money/cache'
 
 MoneyRails.configure do |config|
-
   # To set the default currency
   #
   # config.default_currency = :usd
@@ -11,7 +12,7 @@ MoneyRails.configure do |config|
   # Set default bank object
   #
   # Example:
-  # config.default_bank = EuCentralBank.new
+  config.default_bank = Money::Bank::VariableExchange.new(MoneyCache.new)
 
   # Add exchange rates to current money bank object.
   # (The conversion rate refers to one direction only)

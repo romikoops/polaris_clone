@@ -4,9 +4,9 @@ module Legacy
   class Charge < ApplicationRecord
     self.table_name = 'charges'
     has_paper_trail
-    belongs_to :price, class_name: 'Legacy::Price'
+    belongs_to :price
     belongs_to :edited_price, class_name: 'Legacy::Price', optional: true
-    belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
+    belongs_to :charge_category
     belongs_to :children_charge_category,
                foreign_key: 'children_charge_category_id', class_name: 'Legacy::ChargeCategory'
     belongs_to :charge_breakdown, optional: true
@@ -51,26 +51,20 @@ module Legacy
     end
 
     def update_price!
-      rates = Legacy::CurrencyTools.new.get_rates(price.currency, tenant_id).today.merge(price.currency => 1.0)
-      price.value = children.reduce(0) do |sum, charge|
-        delta = charge.price.value.nil? ? 0 : charge.price.value / rates[charge.price.currency].to_d
-        sum + delta
+      price.money = children.reduce(Money.new(0, price.currency)) do |sum, charge|
+        sum + charge.price.money
       end
-
-      price.save!
+      price.save
     end
 
     def update_edited_price!
       self.edited_price = Price.new(currency: price.currency) if edited_price.nil?
-      rates = Legacy::CurrencyTools.new.get_rates(edited_price.currency, tenant_id).today.merge(edited_price.currency => 1.0)
-      edited_price.value = children.reduce(0) do |sum, charge|
-        price = charge.edited_price || charge.price
-        delta = price.value.nil? ? 0 : price.value / rates[price.currency].to_d
-
-        sum + delta
+      new_total = children.reduce(0) do |sum, charge|
+        sum + (charge.edited_price || charge.price).money
       end
 
-      edited_price.save!
+      edited_price.money = new_total
+      edited_price.save
     end
 
     def dup_tree(charge_breakdown:, parent: nil)

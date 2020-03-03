@@ -7,10 +7,8 @@ RSpec.describe ShippingTools do
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
-    %w[EUR USD].each do |currency|
-      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
-        .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
-    end
+    stub_request(:get, 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
+      .to_return(status: 200, body: file_fixture('ecb_rates.xml'), headers: {})
   end
 
   let(:tenant) { create(:tenant) }
@@ -419,7 +417,7 @@ RSpec.describe ShippingTools do
           contact: { companyName: 'ItsMyCargo', firstName: 'Test', lastName: 'shipper', email: 'shipper_test@itsmycargo.com', phone: '123' }
         ),
         notifyees: [user_params],
-        insurance: { isSelected: true },
+        insurance: { isSelected: true, val: 1000 },
         customs: { total: { val: 34, currency: 'USD' }, import: { bool: true, value: '22', currency: 'USD' }, export: { bool: true, value: 12, currency: 'USD' } },
         addons: { customs_export_paper: { value: 12, currency: 'USD' } },
         consignee: ActionController::Parameters.new(

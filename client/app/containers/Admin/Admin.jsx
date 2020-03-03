@@ -23,7 +23,6 @@ import GenericError from '../../components/ErrorHandling/Generic'
 import AdminSchedulesRoute from '../../components/Admin/Schedules/Route'
 import SuperAdminTenantCreator from '../SuperAdmin/Tenant/Creator'
 import { SuperAdminPrivateRoute } from '../../routes/index'
-import AdminCurrencyCenter from '../../components/Admin/Currency/Center'
 import { adminHubs as hubsTip } from '../../constants'
 
 class Admin extends Component {
@@ -139,13 +138,6 @@ class Admin extends Component {
                       hubs={hubs}
                       pricingData={pricingData}
                     />
-                  )}
-                />
-
-                <Route
-                  path="/admin/currencies"
-                  render={props => (
-                    <AdminCurrencyCenter theme={theme} setCurrentUrl={this.setCurrentUrl} />
                   )}
                 />
                 <Route

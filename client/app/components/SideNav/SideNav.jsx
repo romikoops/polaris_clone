@@ -140,14 +140,6 @@ class SideNav extends Component {
       },
       {
         key: v4(),
-        icon: 'fa-money',
-        text: t('account:currencies'),
-        url: '/admin/currencies',
-        target: 'currencies',
-        tooltip: menuTip.currencies
-      },
-      {
-        key: v4(),
         icon: 'fa-cog',
         text: t('account:settings'),
         url: '/admin/settings',

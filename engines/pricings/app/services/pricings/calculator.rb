@@ -13,7 +13,6 @@ module Pricings
       @metadata_id = @data[:metadata_id]
       @metadata = metadata
       @scope = Tenants::ScopeService.new(tenant: Tenants::Tenant.find_by(legacy_id: user.tenant_id)).fetch
-      @converter = Pricings::Conversion.new(base: @user.currency, tenant_id: @user.tenant_id)
       @totals = Hash.new { |h, k| h[k] = { 'value' => 0, 'currency' => nil } unless k.to_s == 'metadata_id' }
       @date = date
     end
@@ -54,17 +53,16 @@ module Pricings
     end
 
     def convert_fees
-      converted = @converter.sum_and_convert_cargo(@totals)
-      @cargo.try(:unit_price=, value: converted, currency: @user.currency)
-      @totals['total'] = { value: converted, currency: @user.currency }
+      converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(@totals, @user.currency)
+      @totals['total'] = { value: converted.cents / 100.0, currency: converted.currency.to_s }
     end
 
     def target_in_range(ranges:, value:, max: false)
       target = ranges.find do |step|
-        Range.new(step['min'],step['max'], true).cover?(value)
+        Range.new(step['min'], step['max'], true).cover?(value)
       end
 
-      target || (max ? ranges.max_by { |x| x['max'] } : { 'rate' =>  0 })
+      target || (max ? ranges.max_by { |x| x['max'] } : { 'rate' => 0 })
     end
 
     def handle_range_fee(fee, cargo_hash) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
@@ -230,7 +228,7 @@ module Pricings
         next if breakdown.blank? || breakdown.dig(:adjusted_rate, :range).blank?
 
         target_ranges = breakdown[:adjusted_rate][:range]
-                          .select { |range| range.slice(:min, :max) == final_range.slice(:min, :max) }
+                        .select { |range| range.slice(:min, :max) == final_range.slice(:min, :max) }
         breakdown[:adjusted_rate][:rate] = target_ranges
       end
     end

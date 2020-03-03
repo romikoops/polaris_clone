@@ -67,19 +67,13 @@ class PdfHandler # rubocop:disable Metrics/ClassLength
 
   def calculate_pricing_data(shipment)
     currency = shipment.user.currency
-    exchange_rates = Legacy::CurrencyTools.new.get_rates(currency, shipment.tenant_id)&.today
-    result = if exchange_rates.blank?
-               shipment.meta['pricing_rate_data']
-             else
-               shipment.meta['pricing_rate_data']&.each_with_object({}) do |(cargo_class, fees), rate_data|
-                 fees_values = fees.except('total', 'valid_until').values
-                 fees['total'] = fees_values.inject('value' => 0, 'currency' => currency) do |total, value|
-                   converted_rate = (exchange_rates[value['currency']] || 1) * value['rate'].to_d
-                   total['value'] += converted_rate
-                   total
-                 end
-                 rate_data[cargo_class] = fees
+    result = shipment.meta['pricing_rate_data']&.each_with_object({}) do |(cargo_class, fees), rate_data|
+               fees_values = fees.except('total', 'valid_until').values
+               fees['total'] = fees_values.inject(Money.new(0, currency)) do |total, value|
+                 total += Money.new(value['rate'].to_d * 100.0, value['currency'])
+                 total
                end
+               rate_data[cargo_class] = fees
              end
     @pricing_data[shipment.id] = result
   end

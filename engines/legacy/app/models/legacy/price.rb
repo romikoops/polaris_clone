@@ -13,6 +13,16 @@ module Legacy
         currency: currency
       }
     end
+
+    def money
+      Money.new(value * 100.0, currency)
+    end
+
+    def money=(money_obj)
+      self.value = money_obj.cents / 100.0
+      self.currency = money_obj.currency
+      save
+    end
   end
 end
 

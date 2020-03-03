@@ -327,7 +327,7 @@ class ShippingTools
           charge_breakdown: charge_breakdown,
           price: Legacy::Price.create(
             currency: shipment_data[:customs][:import][:currency],
-            value: shipment_data[:customs][:import][:val]
+            value: shipment_data[:customs][:import][:value]
           ),
           parent: @customs_charge,
           sandbox: sandbox
@@ -340,14 +340,13 @@ class ShippingTools
           charge_breakdown: charge_breakdown,
           price: Legacy::Price.create(
             currency: shipment_data[:customs][:total][:currency],
-            value: shipment_data[:customs][:export][:val],
+            value: shipment_data[:customs][:export][:value],
             sandbox: sandbox
           ),
           parent: @customs_charge,
           sandbox: sandbox
         )
       end
-
       @customs_charge.update_price!
     end
     if shipment_data[:addons][:customs_export_paper]
@@ -377,6 +376,7 @@ class ShippingTools
       )
       @addons_charge.update_price!
     end
+
     charge_breakdown.charge('grand_total').update_price!
     shipment.customs_credit = shipment_data[:customsCredit]
     shipment.notes = shipment_data['notes']

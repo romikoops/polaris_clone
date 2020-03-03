@@ -185,10 +185,10 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       totals[key]['value'] += charge_object.dig('flat_margins', key) if charge_object.dig('flat_margins', key).present?
     end
 
-    converted = Legacy::CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
+    converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(totals, user.currency)
     return nil if converted.zero?
 
-    totals['total'] = { value: converted, currency: user.currency }
+    totals['total'] = { value: converted.cents / 100.0, currency: converted.currency }
     totals['key'] = cargo_hash.key?(:id) ? cargo_hash[:id] : charge_object['load_type']
     totals['metadata_id'] = charge_object['metadata_id']
 
@@ -274,8 +274,9 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       end
     end
 
-    converted = Legacy::CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
-    totals['total'] = { 'value' => converted, 'currency' => user.currency }
+    converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(totals, user.currency)
+    value = converted.cents / 100.0
+    totals['total'] = { 'value' => value, 'currency' => converted.currency }
     totals
   end
 
@@ -301,9 +302,9 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
         end
     end
 
-    converted = Legacy::CurrencyTools.new.sum_and_convert_cargo(totals, user.currency, user.tenant_id)
-    cargo.try(:unit_price=, value: converted, currency: user.currency)
-    totals['total'] = { 'value' => converted, 'currency' => user.currency }
+    converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(totals, user.currency)
+    value = converted.cents / 100.0
+    totals['total'] = { 'value' => value, 'currency' => converted.currency }
 
     totals
   end

@@ -62,12 +62,6 @@ class UsersController < ApplicationController
     response_handler(user: merge_profile(user: @user), headers: headers)
   end
 
-  def currencies
-    currency = current_user.try(:currency) || 'EUR'
-    results = Legacy::CurrencyTools.new.get_currency_array(currency, params[:tenant_id])
-    response_handler(results)
-  end
-
   def download_gdpr
     url = DocumentService::GdprWriter.new(user_id: current_user.id).perform
     response_handler(url: url, key: 'gdpr')
@@ -76,8 +70,8 @@ class UsersController < ApplicationController
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!
-    rates = Legacy::CurrencyTools.new.get_rates(params[:currency], current_user.tenant_id)
-    response_handler(user: merge_profile(user: current_user), rates: rates)
+
+    response_handler(user: merge_profile(user: current_user))
   end
 
   def hubs

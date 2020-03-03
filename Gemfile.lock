@@ -255,6 +255,7 @@ PATH
       imc-core
       imc-profiles
       mobility
+      money-rails
       paper_trail (~> 10.3)
       paranoia
       pg (>= 0.18, < 2.0)
@@ -746,6 +747,9 @@ GEM
       faraday
       multi_json
     erubi (1.9.0)
+    eu_central_bank (1.4.2)
+      money (~> 6.13)
+      nokogiri (~> 1.8)
     execjs (2.7.0)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
@@ -1145,6 +1149,7 @@ DEPENDENCIES
   devise_token_auth (~> 0.1.43)
   dotenv-rails
   easymon
+  eu_central_bank
   factory_bot_rails (~> 4.0, < 5)
   filterrific
   font-awesome-rails
@@ -1197,6 +1202,7 @@ DEPENDENCIES
   mobility (~> 0.8.6)
   monetize
   money
+  money-rails
   nokogiri
   omniauth
   os

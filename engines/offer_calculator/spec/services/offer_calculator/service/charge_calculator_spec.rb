@@ -147,8 +147,6 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
 
   before do
     FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
-    stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
-      .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26 } }.to_json, headers: {})
     %w[ocean air rail truck trucking local_charge].flat_map do |mot|
       [
         FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
@@ -218,16 +216,17 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
     let(:target_shipment) { cargo_shipment }
     let(:target_trucking_data) { lcl_trucking_data }
     let(:metadata_list) { [] }
-    let(:klass) do
-      described_class.new(
+    let(:args) do
+      {
         shipment: target_shipment,
         user: user,
         data: target_data,
         trucking_data: target_trucking_data,
         sandbox: nil,
         metadata_list: metadata_list
-      )
+      }
     end
+    let(:klass) { described_class.new(args) }
     let(:results) { klass.perform }
 
     context 'when legacy' do
@@ -647,16 +646,17 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
   end
 
   describe 'errors' do
-    let(:klass) do
-      described_class.new(
+    let(:args) do
+      {
         shipment: cargo_shipment,
         user: user,
         data: default_data,
         trucking_data: lcl_trucking_data,
         sandbox: nil,
         metadata_list: []
-      )
+      }
     end
+    let(:klass) { described_class.new(args) }
 
     context 'without a valid trucking match' do
       before do

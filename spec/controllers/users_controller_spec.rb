@@ -70,40 +70,6 @@ RSpec.describe UsersController do
     end
   end
 
-  describe 'GET currencies' do
-    let(:rates) { { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34, USD: 1.3 } } }
-
-    before do
-      stub_request(:get, 'http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR')
-        .to_return(status: 200, body: rates.to_json, headers: {})
-    end
-
-    it 'returns http success' do
-      get :currencies, params: { tenant_id: user.tenant.id, user_id: user.id }
-      expect(response).to have_http_status(:success)
-    end
-
-    it 'returns the correct currency rate' do
-      get :currencies, params: { tenant_id: user.tenant.id, user_id: user.id }
-      body = JSON.parse(response.body)
-
-      expected = body.dig('data', 1)
-      expect(expected['key']).to eq('AED')
-      expect(expected['rate']).to eq(4.11)
-    end
-
-    it 'if there is no currency for user, it will use EUR' do
-      user = create(:user, currency: nil, with_profile: true)
-      get :currencies, params: { tenant_id: user.tenant.id, user_id: user.id }
-
-      body = JSON.parse(response.body)
-
-      expected = body.dig('data', 1)
-      expect(expected['key']).to eq('AED')
-      expect(expected['rate']).to eq(4.11)
-    end
-  end
-
   describe 'POST currencies' do
     let(:rates) { { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34, USD: 1.3 } } }
 
@@ -125,16 +91,6 @@ RSpec.describe UsersController do
 
       user.reload
       expect(user.currency).to eq('BRL')
-    end
-
-    it 'returns the new currency rate' do
-      post :currencies, params: { tenant_id: user.tenant.id, user_id: user.id }
-
-      body = JSON.parse(response.body)
-
-      expected = body.dig('data', 1)
-      expect(expected['key']).to eq('AED')
-      expect(expected['rate']).to eq(4.11)
     end
   end
 

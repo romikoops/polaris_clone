@@ -144,7 +144,9 @@ gem 'holidays'
 gem 'mobility', '~> 0.8.6'
 
 # Use money gem
+gem 'eu_central_bank'
 gem 'money'
+gem 'money-rails'
 
 # Use monetize gem to parse strings into Money objects
 gem 'monetize'
