@@ -3,9 +3,17 @@
 module Tenants
   class User < ApplicationRecord
     include ::Tenants::Legacy
+    include PgSearch::Model
+
+    pg_search_scope :search, against: %i[email], associated_against: {
+      profile: %i[first_name last_name company_name]
+    }, using: {
+      tsearch: { prefix: true }
+    }
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :legacy, class_name: 'Legacy::User', optional: true
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
+    has_one :profile, class_name: 'Profiles::Profile', foreign_key: :user_id
     belongs_to :tenant, optional: true
     belongs_to :company, optional: true, class_name: 'Tenants::Company'
     has_many :memberships, as: :member, dependent: :destroy

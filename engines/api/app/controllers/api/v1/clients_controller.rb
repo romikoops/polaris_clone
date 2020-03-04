@@ -11,6 +11,7 @@ module Api
                      .where.not(role: blocked_roles)
                      .ids
         clients = Tenants::User.where(legacy_id: client_ids)
+        clients = clients.search(params[:q]) if params[:q].present?
 
         render json: UserDecorator.decorate_collection(clients), each_serializer: UserSerializer
       end

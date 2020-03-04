@@ -10,8 +10,15 @@ module Requests
       response_json.fetch('data')
     end
   end
+
+  module AcceptanceHelpers
+    def response_data
+      JSON.parse(response_body).fetch('data')
+    end
+  end
 end
 
 RSpec.configure do |config|
   config.include Requests::ApiHelpers, type: :controller
+  config.include Requests::AcceptanceHelpers, acceptance: true
 end

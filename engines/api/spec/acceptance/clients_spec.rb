@@ -2,14 +2,16 @@
 
 require 'rails_helper'
 
-RSpec.resource 'Clients' do
+RSpec.resource 'Clients', acceptance: true do
   header 'Accept', 'application/json'
   header 'Content-Type', 'application/json'
   header 'Authorization', :token_header
 
   let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.create(legacy: legacy_tenant) }
+  let(:tenant) { Tenants::Tenant.create(legacy: legacy_tenant, slug: 'imc-demo') }
   let(:tenant_group) { Tenants::Group.create(tenant: tenant) }
+  let(:role) { FactoryBot.create(:legacy_role, name: 'shipper') }
+  let(:shipper) { FactoryBot.create(:legacy_user, email: 'test-user@example.com', tenant: legacy_tenant, role: role) }
   let(:user) { FactoryBot.create(:tenants_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', tenant: tenant) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
@@ -18,10 +20,10 @@ RSpec.resource 'Clients' do
     legacy_user = legacy_tenant.users.create(guest: false)
     tenants_user = FactoryBot.create(:tenants_user, tenant: tenant, legacy_id: legacy_user.id)
     FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
-    allow_any_instance_of(Tenants::User).to receive(:tenant).and_return(tenant)
   end
 
   get '/v1/clients' do
+    parameter :q, '[Optional] Search term to be queried for'
     response_field :id, 'Unique identifier', Type: String
     response_field :tenant_id, "User's tenant id", Type: Integer
     %w[last-name first-name email company-name phone].each do |field|
@@ -33,6 +35,17 @@ RSpec.resource 'Clients' do
         Use this endpoint to return a list of clients for a specific tenant
       DOC
       expect(status).to eq 200
+    end
+
+    context 'when performing a search request' do
+      before do
+        FactoryBot.create(:profiles_profile, user_id: Tenants::User.find_by(legacy_id: shipper.id).id)
+      end
+
+      example do
+        do_request(q: 'test')
+        expect(response_data.first['attributes']['email']).to eq(shipper.email)
+      end
     end
   end
 
