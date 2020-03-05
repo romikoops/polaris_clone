@@ -10,6 +10,10 @@ import FormsyInput from '../../components/FormsyInput/FormsyInput'
 import ForgotPassword from './ForgotPassword'
 
 class LoginPage extends React.Component {
+  static redirectToSamlLogin () {
+    window.location.href = `${window.location.href}saml/init`
+  }
+
   constructor (props) {
     super(props)
 
@@ -55,7 +59,7 @@ class LoginPage extends React.Component {
   }
 
   render () {
-    const { loggingIn, theme, scope } = this.props
+    const { loggingIn, theme, scope, authMethods } = this.props
     const focusStyles = {
       borderColor: theme && theme.colors ? theme.colors.primary : 'black',
       borderWidth: '1.5px',
@@ -70,6 +74,9 @@ class LoginPage extends React.Component {
 
     const ie11Positioning =
       navigator.userAgent.includes('MSIE') || document.documentMode ? styles.login_ie_11 : ''
+    const hasSamlLogin = authMethods.includes('saml')
+    const { focus } = this.state
+    const { email, password } = focus
 
     return (
       <Formsy
@@ -78,6 +85,18 @@ class LoginPage extends React.Component {
         onValidSubmit={this.handleSubmit}
         onInvalidSubmit={this.handleInvalidSubmit}
       >
+        { hasSamlLogin && (
+          <div className="form-group">
+            <RoundButton
+              handleNext={() => LoginPage.redirectToSamlLogin()}
+              classNames="ccb_saml_signin"
+              text={`Sign In with ${scope.saml_text}`}
+              theme={theme}
+              active
+            />
+            <hr className={styles.saml_border} />
+          </div>
+        )}
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <FormsyInput
@@ -91,7 +110,7 @@ class LoginPage extends React.Component {
             validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
             required
           />
-          <hr style={this.state.focus.email ? focusStyles : {}} />
+          <hr style={email ? focusStyles : {}} />
         </div>
         <div className="form-group">
           <label htmlFor="password">Password</label>
@@ -104,13 +123,12 @@ class LoginPage extends React.Component {
             validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
             required
           />
-          <hr style={this.state.focus.password ? focusStyles : {}} />
+          <hr style={password ? focusStyles : {}} />
           { allowForgotPassword && (
             <a onClick={() => this.renderForgotPassword()} className={styles.forget_password_link}>
-            forgot password?
+              forgot password?
             </a>
-          )
-          }
+          )}
         </div>
         <div className={`form-group ${styles.form_group_submit_btn}`}>
           <RoundButton classNames="ccb_signin" text="Sign In" theme={theme} active />
@@ -126,7 +144,7 @@ function mapStateToProps (state) {
   const {
     loggingIn, loginAttempt, user, noRedirect, req, redirectUrl
   } = authentication
-  const { scope } = app.tenant
+  const { scope, auth_methods: authMethods } = app.tenant
 
   return {
     loggingIn,
@@ -135,7 +153,8 @@ function mapStateToProps (state) {
     noRedirect,
     req,
     redirectUrl,
-    scope
+    scope,
+    authMethods
   }
 }
 
@@ -144,7 +163,8 @@ LoginPage.defaultProps = {
   theme: null,
   loginAttempt: false,
   noRedirect: false,
-  req: null
+  req: null,
+  authMethods: []
 }
 
 const connectedLoginPage = connect(mapStateToProps)(LoginPage)
