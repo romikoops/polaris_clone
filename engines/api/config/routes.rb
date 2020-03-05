@@ -16,6 +16,13 @@ Api::Engine.routes.draw do
     resources :cargo_item_types, only: :index
     resources :trucking_availability, controller: :trucking_availability, only: %i(index)
     resources :groups, controller: :tenants_groups, only: :index
+    resources :locations do
+      collection do
+        get 'origins'
+        get 'destinations'
+      end
+    end
+
     resources :ahoy, only: [] do
       member do
         get 'settings'

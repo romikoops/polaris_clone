@@ -13,7 +13,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     trait :default do
       after(:build) do |itinerary, evaluator|
         next if itinerary.stops.length >= 2
- 
+
         index = 0
         evaluator.num_stops.times do
           itinerary.stops << build(:legacy_stop,
@@ -50,6 +50,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
 
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
+        hub = Legacy::Hub.find_by(name: 'Shanghai Port')
 
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
@@ -61,10 +62,10 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
                                  index: 1,
-                                 hub: build(:shanghai_hub,
+                                 hub: (hub || build(:shanghai_hub,
                                             tenant: itinerary.tenant,
                                             nexus: build(:shanghai_nexus,
-                                                         tenant: itinerary.tenant)))
+                                                         tenant: itinerary.tenant))))
       end
     end
 
@@ -94,6 +95,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       name { 'Felixstowe - Shanghai' }
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
+        hub = Legacy::Hub.find_by(name: 'Shanghai Port')
 
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
@@ -105,10 +107,10 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
                                  index: 1,
-                                 hub: build(:shanghai_hub,
+                                 hub: (hub || build(:shanghai_hub,
                                             tenant: itinerary.tenant,
                                             nexus: build(:shanghai_nexus,
-                                                         tenant: itinerary.tenant)))
+                                                         tenant: itinerary.tenant))))
       end
     end
 
@@ -138,6 +140,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       name { 'Hamburg - Shanghai' }
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
+        hub = Legacy::Hub.find_by(name: 'Shanghai Port')
 
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
@@ -149,10 +152,10 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
                                  index: 1,
-                                 hub: build(:shanghai_hub,
+                                 hub: (hub || build(:shanghai_hub,
                                             tenant: itinerary.tenant,
                                             nexus: build(:shanghai_nexus,
-                                                         tenant: itinerary.tenant)))
+                                                         tenant: itinerary.tenant))))
       end
     end
 

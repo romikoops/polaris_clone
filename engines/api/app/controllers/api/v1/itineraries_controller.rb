@@ -13,8 +13,7 @@ module Api
       def index
         itineraries = Legacy::Itinerary.where(tenant_id: current_tenant.legacy_id)
         render json: itineraries,
-               each_serializer: ItinerarySerializer,
-               include: ['stops', 'stops.hub', 'stops.hub.address', 'stops.hub.nexus']
+               each_serializer: ItinerarySerializer, include: ['stops']
       end
 
       def ports

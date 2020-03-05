@@ -3,7 +3,7 @@
 module Trucking
   module Queries
     class Availability
-      MANDATORY_ARGS = %i(load_type tenant_id carriage).freeze
+      MANDATORY_ARGS = %i[tenant_id carriage].freeze
 
       def initialize(args = {}) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         argument_errors(args)
@@ -59,15 +59,19 @@ module Trucking
                               .where(
                                 tenant_id: @tenant_id,
                                 location_id: @trucking_locations.pluck(:id),
-                                load_type: @load_type,
                                 carriage: @carriage,
                                 sandbox_id: @sandbox&.id
                               )
+                              .where(load_type_condition)
                               .where(cargo_class_condition)
                               .where(hubs_condition)
                               .where(truck_type_condition)
                               .where(nexuses_condition)
                               .order("#{@order_by} DESC NULLS LAST")
+      end
+
+      def load_type_condition
+        @load_type ? { 'load_type': @load_type } : {}
       end
 
       def truck_type_condition

@@ -23,14 +23,6 @@ RSpec.describe Trucking::Queries::Availability do
         FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)
       end
       context 'basic tests' do
-        it 'raises an ArgumentError if no load_type is provided' do
-          expect do
-            described_class.new(
-              klass: ::Trucking::Trucking, tenant_id: tenant.id, zipcode: zipcode, carriage: carriage, country_code: country_code
-            ).perform
-          end.to raise_error(ArgumentError)
-        end
-
         it 'raises an ArgumentError if no tenant_id is provided' do
           expect do
             described_class.new(

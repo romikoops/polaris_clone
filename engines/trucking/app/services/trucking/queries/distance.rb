@@ -3,7 +3,7 @@
 module Trucking
   module Queries
     class Distance
-      MANDATORY_ARGS = %i(load_type tenant_id carriage).freeze
+      MANDATORY_ARGS = %i[tenant_id carriage].freeze
 
       def initialize(args = {}) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         argument_errors(args)
