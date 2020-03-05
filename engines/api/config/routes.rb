@@ -6,7 +6,11 @@ Api::Engine.routes.draw do
   namespace :v1 do
     resource :me, controller: :users, only: :show
     resources :clients, only: %i[index show create]
-    resources :tenants, only: :index
+    resources :tenants, only: :index do
+      member do
+        get 'scope'
+      end
+    end
     resource :dashboard, controller: :dashboard, only: %i(show)
     resources :quotations, only: :create
     resources :cargo_item_types, only: :index
