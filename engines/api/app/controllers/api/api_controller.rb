@@ -26,5 +26,12 @@ module Api
     def set_sandbox
       @sandbox = ::Tenants::Sandbox.find_by(id: request.headers[:sandbox])
     end
+
+    def current_scope
+      @current_scope ||= ::Tenants::ScopeService.new(
+        target: current_user,
+        tenant: current_tenant
+      ).fetch
+    end
   end
 end

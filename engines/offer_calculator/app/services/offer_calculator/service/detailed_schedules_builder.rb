@@ -129,6 +129,7 @@ module OfferCalculator
 
       def meta(result:, shipment:, pricings_by_cargo_class:, user:) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         schedule = result[:schedules].first
+        transit_time = (schedule.eta.to_date - schedule.etd.to_date).to_i
         chargeable_weight = if shipment.lcl? && shipment.aggregated_cargo
                               shipment.aggregated_cargo.calc_chargeable_weight(schedule.mode_of_transport)
                             elsif shipment.lcl? && !shipment.aggregated_cargo
@@ -148,6 +149,8 @@ module OfferCalculator
                                        .pluck(:body)
 
         {
+          shipment_id: shipment.id,
+          transit_time: transit_time,
           load_type: shipment.load_type,
           mode_of_transport: schedule.mode_of_transport,
           name: schedule.trip.itinerary.name,

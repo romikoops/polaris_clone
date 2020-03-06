@@ -3,72 +3,130 @@
 require 'rails_helper'
 
 RSpec.describe Wheelhouse::QuotationService do
+  let(:tenant) { FactoryBot.create(:legacy_tenant) }
+  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
+  let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: tenant) }
+  let(:air_itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, mode_of_transport: 'air', tenant: tenant) }
+  let(:origin_hub) { itinerary.hubs.find_by(name: 'Hamburg Port') }
+  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:origin_airport) { air_itinerary.hubs.find_by(name: 'Hamburg Port') }
+  let(:destination_airport) { air_itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}) }
-  let(:origin_nexus) { FactoryBot.create(:legacy_nexus, hubs: [origin_hub]) }
-  let(:destination_nexus) { FactoryBot.create(:legacy_nexus, hubs: [destination_hub]) }
-  let(:origin_hub) { FactoryBot.create(:legacy_hub, tenant: tenant, name: 'Hub 1') }
-  let(:destination_hub) { FactoryBot.create(:legacy_hub, tenant: tenant, name: 'Hub 2') }
-  let(:itinerary) { FactoryBot.create(:legacy_itinerary, tenant: tenant) }
-  let(:routes) { [OfferCalculator::Route.new] }
-
-  describe '#results' do
-    let(:shipment_update_handler_double) { double }
-    let(:shipment_update_methods) { %i[update_selected_day update_cargo_units update_trucking update_nexuses] }
-    let(:shipping_info) { {} }
-    let(:input) do
-      { tenant_id: tenant.id,
-        user_id: user.id,
-        direction: direction,
-        load_type: load_type,
-        selected_date: Time.zone.today,
-        origin: { nexus_id: origin_nexus },
-        destination: { nexus_id: destination_nexus },
-      }
-    end
-
-    let(:offercalculator_proxies) do
+  let(:shipping_info) do
+    {
+      trucking_info: { pre_carriage: { truck_type: '' }, on_carriage: { truck_type: '' } }
+    }
+  end
+  let(:cargo_item_attributes) do
+    [
       {
-        hub_finder: instance_double(OfferCalculator::Service::HubFinder, perform: { origin: origin_hub, destination: destination_hub }),
-        route_finder: instance_double(OfferCalculator::Service::RouteFinder, perform: routes),
-        route_filter: instance_double(OfferCalculator::Service::RouteFilter, perform: routes),
-        schedule_finder: instance_double(OfferCalculator::Service::ScheduleFinder, perform: nil),
-        trucking_data_builder: instance_double(OfferCalculator::Service::TruckingDataBuilder, perform: nil),
-        detail_schedules_builder: instance_double(OfferCalculator::Service::DetailedSchedulesBuilder, perform: [])
+        'payload_in_kg' => 120,
+        'total_volume' => 0,
+        'total_weight' => 0,
+        'dimension_x' => 120,
+        'dimension_y' => 80,
+        'dimension_z' => 120,
+        'quantity' => 1,
+        'cargo_item_type_id' => pallet.id,
+        'dangerous_goods' => false,
+        'stackable' => true
       }
-    end
+    ]
+  end
+  let(:input) do
+    { tenant_id: tenant.id,
+      user_id: user.id,
+      direction: direction,
+      load_type: load_type,
+      selected_date: Time.zone.today }
+  end
+  let!(:tenants_scope) { FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true }) }
+  let(:port_to_port_input) do
+    input[:origin] = { nexus_id: origin_hub.nexus_id }
+    input[:destination] = { nexus_id: destination_hub.nexus_id }
+    input
+  end
 
-    before do
-      shipment_update_methods.each do |method_name|
-        allow(shipment_update_handler_double).to receive(method_name).and_return(true)
+  before do
+    [itinerary, air_itinerary].product(%w[container cargo_item]).each do |it, load|
+      FactoryBot.create(:trip_with_layovers, itinerary: it, load_type: load, tenant_vehicle: tenant_vehicle)
+      FactoryBot.create(:trip_with_layovers,
+                        itinerary: it,
+                        load_type: load,
+                        tenant_vehicle: tenant_vehicle,
+                        start_date: 10.days.from_now,
+                        end_date: 30.days.from_now)
+    end
+    FactoryBot.create(:legacy_tenant_cargo_item_type, cargo_item_type: pallet, tenant: tenant)
+    FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:lcl_pricing, itinerary: air_itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    %w[ocean trucking local_charge].flat_map do |mot|
+      [
+        FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:trucking_on_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:trucking_pre_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:import_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:export_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+      ]
+    end
+  end
+
+  describe '.perform' do
+    context 'when port to port (defaults)' do
+      let(:service) { described_class.new(quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info) }
+
+      it 'perform a booking calulation' do
+        results = service.results
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
+          expect(results.first.dig(:quote, :total, :value)).to eq(1)
+        end
       end
-      allow(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:new).and_return(shipment_update_handler_double)
-      allow(OfferCalculator::Service::HubFinder).to receive(:new).and_return(offercalculator_proxies[:hub_finder])
-      allow(OfferCalculator::Service::RouteFinder).to receive(:new).and_return(offercalculator_proxies[:route_finder])
-      allow(OfferCalculator::Service::RouteFilter).to receive(:new).and_return(offercalculator_proxies[:route_filter])
-      allow(OfferCalculator::Service::ScheduleFinder).to receive(:new).and_return(offercalculator_proxies[:schedule_finder])
-      allow(OfferCalculator::Service::TruckingDataBuilder).to receive(:new).and_return(offercalculator_proxies[:trucking_data_builder])
-      allow(OfferCalculator::Service::DetailedSchedulesBuilder).to receive(:new).and_return(offercalculator_proxies[:detail_schedules_builder])
+
+      it 'returns results as tenders for serialization' do
+        tenders = service.tenders
+        results = service.results
+
+        expect(tenders.first.to_h.keys).to match(results.first.keys)
+      end
     end
 
-    context 'when initialization' do
-      it 'initializes the shipment update handler and updates the necessary attributes' do
-        described_class.new(quotation_details: input.with_indifferent_access, shipping_info: shipping_info)
-        shipment_update_methods.each do |method|
-          expect(shipment_update_handler_double).to have_received(method)
+    context 'when port to port (defaults & quote & container)' do
+      before { tenants_scope.update(content: { base_pricing: true, closed_quotation_tool: true }) }
+
+      let(:load_type) { 'container' }
+      let(:service) { described_class.new(quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info) }
+
+      it 'perform a quote calulation' do
+        results = service.results
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
+          expect(results.first.dig(:quote, :total, :value)).to eq(250)
         end
       end
     end
 
-    context 'when proxying calls to the offer_calculator service' do
-      let(:load_type) { 'container' }
+    context 'when port to port (with cargo)' do
+      let(:shipping_info) do
+        {
+          cargo_items_attributes: cargo_item_attributes
+        }
+      end
+      let(:service) { described_class.new(quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info) }
 
-      it 'proxies :perform call to the correct classes' do
-        offercalculator_proxies.each do |_key, method_double|
-          described_class.new(quotation_details: input.with_indifferent_access, shipping_info: shipping_info).results
-          expect(method_double).to have_received(:perform).at_least(:once)
+      it 'perform a booking calulation' do
+        results = service.results
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
+          expect(results.first.dig(:quote, :total, :value)).to eq(28.8)
         end
       end
     end

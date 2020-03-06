@@ -2,13 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.resource 'Quotations' do
+RSpec.resource 'Quotations', acceptance: true do
   header 'Accept', 'application/json'
   header 'Content-Type', 'application/json'
   header 'Authorization', :token_header
 
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}) }
+  let(:tenant_user) { Tenants::User.find_by(legacy: user) }
   let(:origin_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
   let(:destination_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
   let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
@@ -19,7 +20,7 @@ RSpec.resource 'Quotations' do
   let!(:trip) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle) }
   let!(:schedules) { [OfferCalculator::Schedule.from_trip(trip)] }
 
-  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
+  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenant_user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
 
   post '/v1/quotations' do
@@ -59,8 +60,7 @@ RSpec.resource 'Quotations' do
 
         do_request(request)
         expect(status).to eq(200)
-        result = JSON.parse(response_body).first
-        expect(result['quote']['total']['value']).to eq("250.0")
+        expect(response_data[0].dig('attributes', 'total', 'value')).to eq(250.0)
       end
     end
   end

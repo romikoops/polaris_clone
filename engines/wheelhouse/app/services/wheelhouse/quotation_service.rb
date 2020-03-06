@@ -21,6 +21,12 @@ module Wheelhouse
       detailed_schedules.flatten
     end
 
+    def tenders
+      results.map do |result|
+        JSON.parse(result.to_json, object_class: ::Wheelhouse::OpenStruct)
+      end
+    end
+
     private
 
     attr_reader :shipment, :shipping_info, :selected_date

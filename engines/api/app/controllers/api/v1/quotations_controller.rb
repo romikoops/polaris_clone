@@ -6,12 +6,14 @@ module Api
   module V1
     class QuotationsController < ApiController
       def create
-        quotation_service = Wheelhouse::QuotationService.new(quotation_details: quotation_params,
-                                                             shipping_info: shipment_params)
-        render json: quotation_service.results
+        render json: quotation_service.tenders, each_serializer: TenderSerializer, scope: current_scope
       end
 
       private
+
+      def quotation_service
+        Wheelhouse::QuotationService.new(quotation_details: quotation_params, shipping_info: shipment_params)
+      end
 
       def quotation_params
         params.require(:quote).permit(
