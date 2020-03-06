@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-legacy'
   s.add_dependency 'imc-offer_calculator'
+  s.add_dependency 'imc-pdf'
   s.add_dependency 'imc-tenants'
 
   Gemhelper.common(s)

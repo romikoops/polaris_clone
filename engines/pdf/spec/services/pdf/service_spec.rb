@@ -2,11 +2,11 @@
 
 require 'rails_helper'
 
-RSpec.describe PdfService do
-  let(:tenant) { create(:tenant, currency: 'USD') }
-  let(:user) { create(:user, tenant: tenant, currency: 'USD', with_profile: true) }
+RSpec.describe Pdf::Service do
+  let(:tenant) { FactoryBot.create(:legacy_tenant, currency: 'USD') }
+  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: 'USD', with_profile: true) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:shipment) { create(:shipment, tenant: tenant, user: user, load_type: 'cargo_item') }
+  let!(:shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item') }
   let(:pdf_service) { described_class.new(tenant: tenant, user: user) }
   let(:default_args) do
     {
@@ -20,18 +20,28 @@ RSpec.describe PdfService do
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png')
       .to_return(status: 200, body: '', headers: {})
-    create(:tenants_scope, target: tenants_tenant, content: {
-             show_chargeable_weight: true
-           })
-    %w[EUR USD].each do |currency|
-      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
-        .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
-    end
+    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: {
+                        show_chargeable_weight: true
+                      })
     FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
   end
 
   context 'when it is a FCL 20 shipment' do
-    let!(:fcl_shipment) { create(:complete_legacy_shipment, tenant: tenant, user: user, load_type: 'container', with_breakdown: true) }
+    let!(:fcl_shipment) { FactoryBot.create(:complete_legacy_shipment, tenant: tenant, user: user, load_type: 'container', with_breakdown: true) }
+
+    describe '.wheelhouse_quotation (booking shop)' do
+      let(:tenders) do
+        fcl_shipment.charge_breakdowns.map { |cb| { shipmentId: fcl_shipment.id, chargeTripId: cb.trip_id } }
+      end
+
+      it 'generates the wheelhouse quote pdf' do
+        pdf = klass.wheelhouse_quotation(shipment: fcl_shipment, tenders: tenders)
+        aggregate_failures do
+          expect(pdf).to be_a(Legacy::File)
+          expect(pdf.file).to be_attached
+        end
+      end
+    end
 
     describe '.admin_quotation (booking shop)' do
       it 'generates the admin quote pdf' do
@@ -44,7 +54,7 @@ RSpec.describe PdfService do
     end
 
     describe '.quotation' do
-      let(:quotation) { create(:legacy_quotation, user: user, load_type: 'container') }
+      let(:quotation) { FactoryBot.create(:legacy_quotation, user: user, load_type: 'container') }
 
       it 'generates the quote pdf' do
         pdf = klass.quotation_pdf(quotation: quotation)
@@ -56,7 +66,7 @@ RSpec.describe PdfService do
     end
 
     describe '.quotation with existing docuemnt' do
-      let(:quotation) { create(:legacy_quotation, user: user, load_type: 'container') }
+      let(:quotation) { FactoryBot.create(:legacy_quotation, user: user, load_type: 'container') }
 
       before do
         klass.quotation_pdf(quotation: quotation)
@@ -84,7 +94,7 @@ RSpec.describe PdfService do
   end
 
   context 'when it is a LCL shipment' do
-    let(:lcl_shipment) { create(:complete_legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_breakdown: true) }
+    let(:lcl_shipment) { FactoryBot.create(:complete_legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_breakdown: true) }
 
     describe '.admin_quotation (booking shop)' do
       it 'generates the admin quote pdf' do
@@ -97,7 +107,7 @@ RSpec.describe PdfService do
     end
 
     describe '.quotation' do
-      let(:quotation) { create(:legacy_quotation, user: user) }
+      let(:quotation) { FactoryBot.create(:legacy_quotation, user: user) }
 
       it 'generates the quote pdf' do
         pdf = klass.quotation_pdf(quotation: quotation)
@@ -146,8 +156,8 @@ RSpec.describe PdfService do
   end
 
   describe '.load_type_plural' do
-    let(:lcl_shipment) { create(:legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item') }
-    let(:fcl_shipment) { create(:legacy_shipment, tenant: tenant, user: user, load_type: 'container') }
+    let(:lcl_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item') }
+    let(:fcl_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user, load_type: 'container') }
 
     context 'with multiple cargo items' do
       before do
@@ -180,6 +190,24 @@ RSpec.describe PdfService do
     context 'with single container' do
       it 'returns the correct singular string' do
         expect(klass.load_type_plural(shipment: fcl_shipment)).to eq('Container')
+      end
+    end
+  end
+
+  describe '.quotes_with_trip_id' do
+    before do
+      FactoryBot.create(:legacy_charge_breakdown, shipment: shipment)
+    end
+
+    let(:tender_ids) do
+      [shipment.charge_breakdowns.first.trip_id]
+    end
+
+    it 'limits the quotes returned when tender ids are provided' do
+      quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
+      aggregate_failures do
+        expect(quotes.length).to eq(1)
+        expect(quotes.pluck('trip_id')).to eq(tender_ids)
       end
     end
   end

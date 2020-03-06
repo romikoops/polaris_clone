@@ -288,7 +288,7 @@ class Shipment < Legacy::Shipment
   end
 
   def as_options_json(options = {})
-    hidden_args = HiddenValueService.new(user: user).hide_total_args
+    hidden_args = Pdf::HiddenValueService.new(user: user).hide_total_args
     new_options = options.reverse_merge(
       methods: %i(mode_of_transport cargo_count company_name client_name),
       include: [
@@ -316,7 +316,7 @@ class Shipment < Legacy::Shipment
   end
 
   def as_index_json(options = {})
-    hidden_args = HiddenValueService.new(user: user).hide_total_args
+    hidden_args = Pdf::HiddenValueService.new(user: user).hide_total_args
     new_options = options.reverse_merge(
       methods: %i[mode_of_transport cargo_units cargo_count edited_total company_name client_name],
       include: [

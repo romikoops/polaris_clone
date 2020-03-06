@@ -26,8 +26,8 @@ RSpec.describe ShippingTools do
       FactoryBot.create(:tenants_membership, member: tenants_user, group: tapped_group)
     end
   end
-  let(:hidden_args) { HiddenValueService.new(user: user).hide_total_args }
-  let(:args) { HiddenValueService.new(user: user).hide_total_args }
+  let(:hidden_args) { Pdf::HiddenValueService.new(user: user).hide_total_args }
+  let(:args) { Pdf::HiddenValueService.new(user: user).hide_total_args }
   let(:tenant_vehicle) { create(:tenant_vehicle, tenant: tenant) }
   let(:transport_category) { create(:transport_category, load_type: 'container') }
   let(:shipment) do

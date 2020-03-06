@@ -12,7 +12,10 @@ Api::Engine.routes.draw do
       end
     end
     resource :dashboard, controller: :dashboard, only: %i(show)
-    resources :quotations, only: :create
+    resources :quotations do
+      post :create
+      post :download
+    end
     resources :cargo_item_types, only: :index
     resources :trucking_availability, controller: :trucking_availability, only: %i(index)
     resources :groups, controller: :tenants_groups, only: :index

@@ -312,6 +312,25 @@ PATH
       strong_migrations (~> 0.6)
 
 PATH
+  remote: engines/pdf
+  specs:
+    imc-pdf (1)
+      activerecord-postgis-adapter (= 5.2.2)
+      config (~> 2.2)
+      imc-core
+      imc-legacy
+      imc-pricings
+      imc-profiles
+      imc-quotations
+      imc-tenants
+      paper_trail (~> 10.3)
+      pdfkit
+      pg (>= 0.18, < 2.0)
+      rails (= 5.2.2)
+      strong_migrations (~> 0.6)
+      wkhtmltopdf-binary
+
+PATH
   remote: engines/pricings
   specs:
     imc-pricings (1)
@@ -527,6 +546,7 @@ PATH
       imc-core
       imc-legacy
       imc-offer_calculator
+      imc-pdf
       imc-tenants
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
@@ -1178,6 +1198,7 @@ DEPENDENCIES
   imc-locations!
   imc-mailers!
   imc-offer_calculator!
+  imc-pdf!
   imc-pricings!
   imc-profiles!
   imc-quotations!

@@ -8,7 +8,8 @@ RSpec.resource 'Quotations', acceptance: true do
   header 'Authorization', :token_header
 
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}) }
+  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}, with_profile: true) }
   let(:tenant_user) { Tenants::User.find_by(legacy: user) }
   let(:origin_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
   let(:destination_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
@@ -22,6 +23,7 @@ RSpec.resource 'Quotations', acceptance: true do
 
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenant_user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
+  before { FactoryBot.create(:tenants_theme, tenant: tenants_tenant) }
 
   post '/v1/quotations' do
     with_options scope: :quote, with_example: true do
@@ -45,8 +47,8 @@ RSpec.resource 'Quotations', acceptance: true do
         FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, transport_category: cargo_transport_category, tenant: tenant)
       end
 
-      example 'getting a quotation with port to port parameters' do
-        request = {
+      let(:request) do
+        {
           quote: {
             selected_date: Time.zone.now,
             tenant_id: tenant.id,
@@ -57,10 +59,41 @@ RSpec.resource 'Quotations', acceptance: true do
           },
           shipment_info: { trucking_info: {} }
         }
+      end
 
+      example 'getting a quotation with port to port parameters' do
         do_request(request)
-        expect(status).to eq(200)
-        expect(response_data[0].dig('attributes', 'total', 'value')).to eq(250.0)
+        aggregate_failures do
+          expect(status).to eq(200)
+          expect(response_data[0].dig('attributes', 'total', 'value')).to eq(250.0)
+        end
+      end
+    end
+  end
+
+  post '/v1/quotations/:quotation_id/download' do
+    with_options scope: :quote, with_example: true do
+      parameter :tenders, 'The selected tenders for download', required: true
+      parameter :quotation_id, 'The selected shipment id', required: false
+    end
+
+    context 'when downloading a pdf' do
+      let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, tenant: tenant, user: user) }
+      let(:request) do
+        {
+          quotation_id: shipment.id,
+          tenders: [
+            { shipmentId: shipment.id, chargeTripId: shipment.charge_breakdowns.first.trip_id }
+          ]
+        }
+      end
+
+      example 'getting a quotation pdf with the selected offers on it' do
+        do_request(request)
+        aggregate_failures do
+          expect(status).to eq(200)
+          expect(response_data.dig('attributes', 'url')).to include('test.host')
+        end
       end
     end
   end

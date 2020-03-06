@@ -3,6 +3,7 @@
 require 'core'
 require 'legacy'
 require 'offer_calculator'
+require 'pdf'
 require 'tenants'
 
 module Wheelhouse

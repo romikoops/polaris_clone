@@ -5,6 +5,19 @@ FactoryBot.define do
     sequence(:email) { |n| "demo#{n}@itsmycargo.test" }
     association :tenant, factory: :legacy_tenant
     sandbox { false }
+
+    transient do
+      with_profile { false }
+      first_name { 'Guest' }
+      last_name { 'User' }
+    end
+
+    after(:create) do |user, evaluator|
+      evaluator.with_profile && create(:profiles_profile,
+                                       first_name: evaluator.first_name,
+                                       last_name: evaluator.last_name,
+                                       user_id: Tenants::User.find_by(legacy_id: user.id).id)
+    end
   end
 end
 

@@ -11,7 +11,7 @@ class QuoteMailer < ApplicationMailer
     @quotation = quotation
     @user = @shipment.user
     @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
-    pdf_service = PdfService.new(user: @user, tenant: @user.tenant)
+    pdf_service = Pdf::Service.new(user: @user, tenant: @user.tenant)
     @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)
     @tenant = Tenant.find(@user.tenant_id)
     @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
@@ -56,7 +56,7 @@ class QuoteMailer < ApplicationMailer
     @user = (quotation&.user || shipment&.user)
     @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
 
-    pdf_service = PdfService.new(user: @user, tenant: @tenant)
+    pdf_service = Pdf::Service.new(user: @user, tenant: @tenant)
     @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)
     @content = Legacy::Content.get_component('QuotePdf', @user.tenant.id)
     @scope = scope_for(record: @user, sandbox: sandbox)
@@ -80,7 +80,7 @@ class QuoteMailer < ApplicationMailer
   private
 
   def generate_and_upload_quotation(quotes, sandbox = nil)
-    quotation = PdfHandler.new(
+    quotation = Pdf::Handler.new(
       layout: 'pdfs/simple.pdf.html.erb',
       template: 'shipments/pdfs/quotations.pdf.erb',
       margin: { top: 15, bottom: 5, left: 8, right: 8 },
@@ -90,7 +90,7 @@ class QuoteMailer < ApplicationMailer
       quotes: quotes,
       color: @theme['colors']['primary'],
       name: 'quotation',
-      remarks: Remark.where(tenant_id: @user.tenant_id, sandbox: sandbox).order(order: :asc),
+      remarks: Legacy::Remark.where(tenant_id: @user.tenant_id, sandbox: sandbox).order(order: :asc),
       scope: scope_for(record: @user, sandbox: sandbox)
     )
     quotation.generate

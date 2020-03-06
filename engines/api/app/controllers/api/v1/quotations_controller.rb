@@ -9,6 +9,11 @@ module Api
         render json: quotation_service.tenders, each_serializer: TenderSerializer, scope: current_scope
       end
 
+      def download
+        document = Wheelhouse::PdfService.new(tenders: download_params[:tenders]).download
+        render json: document, serializer: PdfSerializer
+      end
+
       private
 
       def quotation_service
@@ -39,6 +44,10 @@ module Api
 
       def address_params
         %i[name zip_code number city country full_address latitude longitude nexus_id nexus_name]
+      end
+
+      def download_params
+        params.permit(tenders: %i[shipmentId chargeTripId])
       end
     end
   end

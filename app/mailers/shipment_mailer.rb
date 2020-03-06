@@ -105,7 +105,7 @@ class ShipmentMailer < ApplicationMailer
   private
 
   def generate_and_upload_bill_of_lading
-    bill_of_lading = PdfHandler.new(
+    bill_of_lading = Pdf::Handler.new(
       layout: 'pdfs/simple.pdf.html.erb',
       template: 'shipments/pdfs/bill_of_lading.pdf.html.erb',
       margin: { top: 10, bottom: 5, left: 8, right: 8 },

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Remark < ApplicationRecord
+class Remark < Legacy::Remark
   belongs_to :tenant
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 end

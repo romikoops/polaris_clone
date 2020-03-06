@@ -14,11 +14,11 @@ RSpec.describe Shipment, type: :model do
   let(:tenant) { build(:tenant) }
   let(:shipment) { create(:shipment, tenant: tenant, with_breakdown: true) }
   let(:other_trip) { create(:trip) }
-  let(:hidden_value_service) { instance_double(HiddenValueService) }
+  let(:hidden_value_service) { instance_double(Pdf::HiddenValueService) }
 
   context 'when hidden grand totals is true' do
     before do
-      allow(HiddenValueService).to receive(:new).and_return(hidden_value_service)
+      allow(Pdf::HiddenValueService).to receive(:new).and_return(hidden_value_service)
       allow(hidden_value_service).to receive(:hide_total_args).and_return(hidden_grand_total: false)
     end
 
@@ -54,7 +54,7 @@ RSpec.describe Shipment, type: :model do
 
   context 'when hidden_grand_totals scope is true' do
     before do
-      allow(HiddenValueService).to receive(:new).and_return(hidden_value_service)
+      allow(Pdf::HiddenValueService).to receive(:new).and_return(hidden_value_service)
       allow(hidden_value_service).to receive(:hide_total_args).and_return(hidden_grand_total: true)
     end
 

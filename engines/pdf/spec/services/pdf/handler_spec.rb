@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.describe PdfHandler do
-  let(:tenant) { create(:tenant, currency: 'USD') }
-  let(:user) { create(:user, tenant: tenant, currency: 'USD') }
-  let(:currency) { create(:legacy_currency, base: 'USD', tenant_id: tenant.id) }
+RSpec.describe Pdf::Handler do
+  let(:tenant) { FactoryBot.create(:legacy_tenant, currency: 'USD') }
+  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: 'USD') }
+  let(:currency) { FactoryBot.create(:legacy_currency, base: 'USD', tenant_id: tenant.id) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:shipment) { create(:completed_legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_breakdown: true) }
-  let!(:agg_shipment) { create(:legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_aggregated_cargo: true) }
-  let(:pdf_service) { PdfService.new(tenant: tenant, user: user) }
+  let!(:shipment) { FactoryBot.create(:completed_legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_breakdown: true) }
+  let!(:agg_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_aggregated_cargo: true) }
+  let(:pdf_service) { Pdf::Service.new(tenant: tenant, user: user) }
   let(:default_args) do
     {
       shipment: shipment,
@@ -19,9 +19,9 @@ RSpec.describe PdfHandler do
   end
   let(:klass) { described_class.new(default_args) }
 
-  before(:each) do
-    dummy_selected_offer = build(:multi_currency_selected_offer, trip_id: shipment.trip_id)
-    consolidated_selected_offer = build(:consolidated_selected_offer, trip_id: shipment.trip_id)
+  before do
+    dummy_selected_offer = FactoryBot.build(:multi_currency_selected_offer, trip_id: shipment.trip_id)
+    consolidated_selected_offer = FactoryBot.build(:consolidated_selected_offer, trip_id: shipment.trip_id)
     allow(shipment).to receive(:selected_offer).and_return(dummy_selected_offer)
     allow(agg_shipment).to receive(:selected_offer).and_return(consolidated_selected_offer)
     %w[EUR USD BIF AED].each do |currency|
@@ -30,21 +30,9 @@ RSpec.describe PdfHandler do
     end
   end
 
-  context 'FCL 20 shipment' do
-    let!(:fcl_shipment) { create(:legacy_shipment, tenant: tenant, user: user, load_type: 'container') }
-    let(:default_args) do
-      {
-        shipment: fcl_shipment,
-        cargo_units: fcl_shipment.cargo_units,
-        quotes: pdf_service.quotes_with_trip_id(quotation: nil, shipments: [fcl_shipment])
-      }
-    end
-    let(:klass) { described_class.new(default_args) }
-  end
-
-  context 'helper methods' do
+  context 'with helper methods' do
     let!(:scope) do
-      create(:tenants_scope, target: tenants_tenant, content: {
+      FactoryBot.create(:tenants_scope, target: tenants_tenant, content: {
                hide_converted_grand_total: true,
                fine_fee_detail: true,
                chargeable_weight_view: 'weight'
@@ -149,7 +137,7 @@ RSpec.describe PdfHandler do
     end
 
     describe '.generate_fee_string' do
-      let(:charge_shipment) { create(:legacy_shipment, with_breakdown: true) }
+      let(:charge_shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true) }
       let(:quotes) { pdf_service.quotes_with_trip_id(quotation: nil, shipments: [charge_shipment]) }
       let(:string_klass) { described_class.new(default_args.merge(quotes: quotes, shipment: charge_shipment)) }
       let(:tenants_tenant) { FactoryBot.create(:tenants_tenant, legacy_id: charge_shipment.tenant_id) }

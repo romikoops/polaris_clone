@@ -385,7 +385,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def shipment_as_json
-    hidden_args = HiddenValueService.new(user: @shipment.user).admin_args
+    hidden_args = Pdf::HiddenValueService.new(user: @shipment.user).admin_args
     options = {
       methods: %i(mode_of_transport cargo_count company_name client_name),
       include: [

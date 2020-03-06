@@ -220,7 +220,7 @@ class ShippingTools
   end
 
   def self.generate_shipment_pdf(shipment:, sandbox: nil)
-    document = PdfService.new(user: shipment.user, tenant: shipment.tenant).shipment_pdf(shipment: shipment)
+    document = Pdf::Service.new(user: shipment.user, tenant: shipment.tenant).shipment_pdf(shipment: shipment)
     document.attachment
   end
 
@@ -447,7 +447,7 @@ class ShippingTools
       include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
     }
     shipment_as_json = shipment.as_json(options).merge(
-      selected_offer: shipment.selected_offer(HiddenValueService.new(user: shipment.user).hide_total_args),
+      selected_offer: shipment.selected_offer(Pdf::HiddenValueService.new(user: shipment.user).hide_total_args),
       pickup_address: shipment.pickup_address_with_country,
       delivery_address: shipment.delivery_address_with_country
     )
@@ -645,7 +645,7 @@ class ShippingTools
     origin = shipment.has_pre_carriage ? shipment.pickup_address : shipment.origin_nexus
     destination = shipment.has_on_carriage ? shipment.delivery_address : shipment.destination_nexus
     shipment_as_json = shipment.as_json(options).merge(
-      selected_offer: shipment.selected_offer(HiddenValueService.new(user: shipment.user).hide_total_args),
+      selected_offer: shipment.selected_offer(Pdf::HiddenValueService.new(user: shipment.user).hide_total_args),
       pickup_address: shipment.pickup_address_with_country,
       delivery_address: shipment.delivery_address_with_country
     )
@@ -721,7 +721,7 @@ class ShippingTools
       target: ::Tenants::User.find_by(legacy_id: shipment.user.id)
     ).fetch(:send_email_on_quote_download)
     QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_download
-    PdfService.new(user: shipment.user, tenant: tenant).quotation_pdf(quotation: main_quote)
+    Pdf::Service.new(user: shipment.user, tenant: tenant).quotation_pdf(quotation: main_quote)
   end
 
   def self.save_and_send_quotes(shipment, schedules, email, sandbox = nil)

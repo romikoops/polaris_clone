@@ -36,7 +36,7 @@ class Shipments::BookingProcessController < ApplicationController
     resp = shipment.charge_breakdowns.map do |charge_breakdown|
       {
         trip_id: charge_breakdown.trip_id,
-        quote: charge_breakdown.to_nested_hash(HiddenValueService.new(user: current_user).hide_total_args)
+        quote: charge_breakdown.to_nested_hash(Pdf::HiddenValueService.new(user: current_user).hide_total_args)
       }
     end
 
@@ -49,7 +49,7 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def download_shipment
-    document = PdfService.new(tenant: shipment.tenant, user: shipment.user).shipment_pdf(shipment: shipment)
+    document = Pdf::Service.new(tenant: shipment.tenant, user: shipment.user).shipment_pdf(shipment: shipment)
 
     response_handler(
       key: 'shipment_recap',
