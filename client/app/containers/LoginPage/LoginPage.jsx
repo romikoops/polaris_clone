@@ -11,7 +11,7 @@ import ForgotPassword from './ForgotPassword'
 
 class LoginPage extends React.Component {
   static redirectToSamlLogin () {
-    window.location.href = `${window.location.href}saml/init`
+    window.location.href = '/saml/init'
   }
 
   constructor (props) {
