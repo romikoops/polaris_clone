@@ -22,7 +22,7 @@ const noLinksTenant = {
 }
 
 const defaultLinks = {
-  privacy: 'https://itsmycargo.com/en/privacy',
+  privacy: 'https://www.itsmycargo.com/en/privacy',
   about: 'https://www.itsmycargo.com/en/ourstory',
   legal: 'https://www.itsmycargo.com/en/contact',
   terms: 'https://www.itsmycargo.com/legal/terms-of-service'

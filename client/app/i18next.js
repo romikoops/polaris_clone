@@ -28,7 +28,7 @@ i18n
       'shipment',
       'trucking',
       'user'],
-    debug: true,
+    debug: false,
     interpolation: {
       escapeValue: false,
       prefix: '{{',

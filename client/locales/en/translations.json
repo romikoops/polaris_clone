@@ -677,7 +677,8 @@
     "poweredBy": "Powered by",
     "copyright": "Copyright",
     "social": "Social",
-    "imprint": "Imprint"
+    "imprint": "Imprint",
+    "website_data_collection": "Website Data Collection"
   },
   "doc": {
     "reject": "Reject document",

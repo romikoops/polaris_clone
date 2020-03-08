@@ -157,8 +157,8 @@ class CargoItem extends React.PureComponent {
             style={{ marginBottom: '20px' }}
           >
             <CargoUnitNumberInput
-              image={this.getImage('length')}
-              labelText={t('common:length')}
+              image={this.getImage('width')}
+              labelText={t('common:width')}
               maxDimensionsErrorText={t('errors:maxLength')}
               unit="cm"
               validations={{
@@ -170,8 +170,8 @@ class CargoItem extends React.PureComponent {
             />
 
             <CargoUnitNumberInput
-              image={this.getImage('width')}
-              labelText={t('common:width')}
+              image={this.getImage('length')}
+              labelText={t('common:length')}
               maxDimensionsErrorText={t('errors:maxWidth')}
               unit="cm"
               validations={{

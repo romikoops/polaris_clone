@@ -1,0 +1,48 @@
+import { uniqBy, omit } from 'lodash'
+
+const Segment = (events) => {
+  const currentEvents = uniqBy(events, (value) => omit(events, ['timeSaved'])).filter((event) => {
+    if (event.timeSaved === undefined || event.hitType === 'identify') {
+      return true
+    }
+
+    return false
+  })
+
+  // Send events to Segment
+  if (!window) { return }
+  if (!window.analytics) {
+    throw new Error(
+      'window.analytics is not defined, Have you forgotten to include the Segment tracking snippet?'
+    )
+  }
+
+  const analytics = window.analytics
+
+  currentEvents.forEach((event) => {
+    switch (event.hitType) {
+      case 'identify':
+        analytics.identify(event.userId, event.traits, event.options)
+        break
+      case 'group':
+        analytics.group(event.groupId, event.traits, event.options)
+        break
+      case 'pageview':
+        analytics.page(event.page, event.name, event.properties, event.options)
+        break
+      case 'event':
+        analytics.track(event.eventAction, event.properties, event.options)
+        break
+      case 'alias':
+        analytics.alias(event.userId, event.previousId, event.options)
+        break
+      case 'reset':
+        analytics.reset()
+        break
+      default:
+        break
+    }
+  })
+}
+
+export default Segment

@@ -15,9 +15,6 @@ const propsBase = {
   currentStage: 1,
   shopType: 'FOO_SHOP_TYPE',
   disabledClick: false,
-  cookieDispatch: {
-    updateCookieHeight: jest.fn()
-  },
   store: {
     getState: jest.fn(),
     subscribe: jest.fn()

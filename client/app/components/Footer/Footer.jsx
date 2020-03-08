@@ -2,17 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
-import { cookieActions } from '../../actions'
 import styles from './Footer.scss'
 import { socialIcons, isQuote } from '../../helpers'
 import SquareButton from '../SquareButton'
 import FooterLinks from './FooterLinks'
 
 class Footer extends React.PureComponent {
-  componentWillUnmount () {
-    this.props.cookieDispatch.updateCookieHeight({ height: 0 })
-  }
-
   render () {
     const {
       theme, tenant, t, bookNow
@@ -128,10 +123,4 @@ Footer.defaultProps = {
   width: null
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    cookieDispatch: bindActionCreators(cookieActions, dispatch)
-  }
-}
-export const translatedFooter = withNamespaces(['footer'])(Footer)
-export default connect(null, mapDispatchToProps)(translatedFooter)
+export default withNamespaces(['footer'])(Footer)

@@ -15,7 +15,6 @@ import map from './map.reducer'
 import document from './document.reducer'
 import bookingSummary from './bookingSummary.reducer'
 import { tenant, selectedSubdomain } from './tenant.reducer'
-import cookie from './cookie.reducer'
 import remark from './remark.reducer'
 import content from './content.reducer'
 import bookingProcess from './bookingProcess.reducer'
@@ -46,7 +45,6 @@ const rootReducer = combineReducers({
   remark,
   bookingSummary,
   document,
-  cookie,
   content,
   bookingProcess,
   clients

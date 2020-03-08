@@ -12,8 +12,6 @@ export const trackingConstants = {
   COMPLETE_BOOKING_SCROLL: 'COMPLETE_BOOKING_SCROLL',
 
   BOOKING_FINISHED_SCROLL: 'BOOKING_FINISHED_SCROLL',
-
-  TRACKING_CONSENT: 'TRACKING_CONSENT'
 }
 
 export default trackingConstants

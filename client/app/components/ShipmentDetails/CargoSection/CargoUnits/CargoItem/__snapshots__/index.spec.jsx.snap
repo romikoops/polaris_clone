@@ -60,13 +60,13 @@ exports[`renders correcly 1`] = `
         i={0}
         image={
           <img
-            alt="length"
+            alt="width"
             border="0"
             data-for="UUID_MOCK_KEY_0"
-            data-tip="Length"
+            data-tip="Width"
           />
         }
-        labelText="Length"
+        labelText="Width"
         maxDimension={590}
         maxDimensionsErrorText="Maximum length is"
         name="0-dimensionX"
@@ -108,13 +108,13 @@ exports[`renders correcly 1`] = `
         i={0}
         image={
           <img
-            alt="width"
+            alt="length"
             border="0"
             data-for="UUID_MOCK_KEY_1"
-            data-tip="Width"
+            data-tip="Length"
           />
         }
-        labelText="Width"
+        labelText="Length"
         maxDimension={234.2}
         maxDimensionsErrorText="Maximum width is"
         name="0-dimensionY"

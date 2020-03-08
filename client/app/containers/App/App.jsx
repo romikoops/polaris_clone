@@ -22,11 +22,12 @@ import {
 import { moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
-import CookieConsentBar from '../../components/CookieConsentBar'
+import ConsentManager from '../../components/ConsentManager'
 import GenericError from '../../components/ErrorHandling/Generic'
 import SamlRedirect from '../../components/Redirects/SamlRedirect'
 import ContextProvider from '../../hocs/ContextProvider'
 import FatalError from '../../components/ErrorHandling/FatalError'
+import getConfig from '../../constants/config.constants'
 
 class App extends Component {
   constructor (props) {
@@ -35,10 +36,13 @@ class App extends Component {
   }
 
   componentWillMount () {
-    const { appDispatch, shipmentDispatch, location } = this.props
+    const { appDispatch, authDispatch, shipmentDispatch, location, user } = this.props
 
     appDispatch.getTenantId()
     appDispatch.setTenants()
+    if (user) {
+      authDispatch.setUser({ data: user })
+    }
     shipmentDispatch.checkAhoyShipment(location)
   }
 
@@ -95,14 +99,8 @@ class App extends Component {
       <ContextProvider tenant={tenant} theme={theme} user={user}>
         <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
           { displayTenantsMenu && <TenantMenu tenant={tenant} tenants={tenants} appDispatch={appDispatch} /> }
-          <CookieConsentBar
-            user={user}
-            theme={theme}
-            tenant={tenant}
-            loggedIn={loggedIn}
-            cookieRef={this.cookieRef}
-          />
-          <div className="flex-100 mc layout-row  layout-align-start">
+          <div className="flex-100"><ConsentManager writeKey={getConfig().segment} /></div>
+          <div className="flex-100 mc layout-row layout-align-start">
             {loading ? <Loading tenant={tenant} text="loading..." /> : ''}
             {user &&
               user.id &&

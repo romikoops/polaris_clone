@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { cookieActions } from '../../actions'
 import styles from './ShopStageView.scss'
 import defs from '../../styles/default_classes.scss'
 import { SHIPMENT_STAGES, QUOTE_STAGES } from '../../constants'
@@ -35,11 +34,6 @@ class ShopStageView extends Component {
 
   componentWillReceiveProps (nextProps) {
     this.setStageHeader(nextProps.currentStage)
-  }
-
-  componentWillUnmount () {
-    const { cookieDispatch } = this.props
-    cookieDispatch.updateCookieHeight({ fixedHeight: 0 })
   }
 
   setStageHeader (currentStage) {
@@ -136,8 +130,7 @@ class ShopStageView extends Component {
       tenant,
       currentStage,
       t,
-      goForward,
-      cookieDispatch
+      goForward
     } = this.props
 
     const { stageHeader } = this.state
@@ -245,7 +238,6 @@ class ShopStageView extends Component {
           className={`${styles.stage_row} layout-row flex-100 layout-align-center`}
           ref={(div) => {
             if (!div) return
-            cookieDispatch.updateCookieHeight({ fixedHeight: div.offsetHeight })
           }}
         >
           {backBtn}
@@ -266,10 +258,4 @@ class ShopStageView extends Component {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    cookieDispatch: bindActionCreators(cookieActions, dispatch)
-  }
-}
-
-export default connect(null, mapDispatchToProps)(withNamespaces(['common', 'help'])(ShopStageView))
+export default withNamespaces(['common', 'help'])(ShopStageView)

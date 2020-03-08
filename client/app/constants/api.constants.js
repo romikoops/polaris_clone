@@ -1,12 +1,12 @@
 import getConfig from './config.constants'
 
 export function getApiHost () {
-  return `${getConfig().api_url}`
+  return `${getConfig().apiUrl}`
 }
 
 export function getTenantApiUrl () {
   const { localStorage } = window
   const id = localStorage.getItem('tenantId')
 
-  return `${getConfig().api_url}/tenants/${id}`
+  return `${getConfig().apiUrl}/tenants/${id}`
 }

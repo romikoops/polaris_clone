@@ -6,7 +6,7 @@ import styles from '../Admin.scss'
 import { RoundButton } from '../../RoundButton/RoundButton'
 // import {v4} from 'uuid';
 import FileUploader from '../../../components/FileUploader/FileUploader'
-import history from '../../../helpers'
+import { history } from '../../../helpers'
 
 export class AdminWizardServiceCharges extends Component {
   static back () {

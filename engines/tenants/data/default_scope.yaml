@@ -165,3 +165,4 @@ insurance:
     accept: ''
     decline: ''
 saml_text: ''
+exclude_analytics: false

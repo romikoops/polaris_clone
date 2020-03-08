@@ -1,6 +1,7 @@
 import React from 'react'
 import { has, isEmpty } from 'lodash'
 import { withNamespaces } from 'react-i18next'
+import { openConsentManager } from '@segment/consent-manager'
 
 function FooterLinks (props) {
   const { tenant, t } = props
@@ -8,7 +9,7 @@ function FooterLinks (props) {
   const { links } = scope
 
   const defaultLinks = {
-    privacy: 'https://itsmycargo.com/en/privacy',
+    privacy: 'https://www.itsmycargo.com/en/privacy',
     about: 'https://www.itsmycargo.com/en/ourstory',
     legal: 'https://www.itsmycargo.com/en/contact',
     terms: 'https://www.itsmycargo.com/legal/terms-of-service'
@@ -44,6 +45,11 @@ function FooterLinks (props) {
       <li>
         <a target="_parent" href={privacyLink}>
           {t('footer:privacy')}
+        </a>
+      </li>
+      <li>
+        <a href="" onClick={openConsentManager}>
+          {t('footer:website_data_collection')}
         </a>
       </li>
     </ul>

@@ -7,7 +7,6 @@ const Dotenv = require('dotenv-webpack')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const optimizationsDevelopment = {
@@ -127,13 +126,10 @@ module.exports = (env, options) => ({
   },
 
   plugins: [
-    new ProgressBarPlugin(),
-
     new Dotenv(),
     new webpack.EnvironmentPlugin({
       BASE_URL: '//localhost:3000',
-      RELEASE: '',
-      GTM_ID: 'GTM-P29HCHV'
+      SEGMENT_KEY: JSON.stringify(process.env.SEGMENT_KEY)
     }),
 
     new CleanWebpackPlugin(
@@ -143,7 +139,7 @@ module.exports = (env, options) => ({
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
     new CopyWebpackPlugin([
-      { from: 'app/config.201906251733.js' }
+      { from: 'app/config.202003052356.js' }
     ]),
 
     new MiniCssExtractPlugin({

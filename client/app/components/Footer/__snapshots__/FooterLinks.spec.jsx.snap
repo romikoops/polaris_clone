@@ -28,10 +28,18 @@ exports[`when props with links are not passed 1`] = `
   </li>
   <li>
     <a
-      href="https://itsmycargo.com/en/privacy"
+      href="https://www.itsmycargo.com/en/privacy"
       target="_parent"
     >
       Privacy Policy
+    </a>
+  </li>
+  <li>
+    <a
+      href=""
+      onClick={[Function]}
+    >
+      Website Data Collection
     </a>
   </li>
 </ul>
@@ -69,6 +77,14 @@ exports[`when props with links are passed 1`] = `
       target="_parent"
     >
       Privacy Policy
+    </a>
+  </li>
+  <li>
+    <a
+      href=""
+      onClick={[Function]}
+    >
+      Website Data Collection
     </a>
   </li>
 </ul>

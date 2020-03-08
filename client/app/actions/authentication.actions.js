@@ -62,6 +62,7 @@ function login (data) {
       (response) => {
         const shipmentReq = data.req
         dispatch(success(response.data))
+        dispatch(setUser({ data: response.data }))
         dispatch(shipmentActions.checkLoginOnBookingProcess())
 
         if (data.redirectUrl) {
