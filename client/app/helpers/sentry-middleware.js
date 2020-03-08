@@ -1,8 +1,14 @@
 import { get } from 'lodash'
+import FullStory from '@fullstory/browser'
 
 const identity = x => x
 const getUndefined = () => {}
 const filter = () => true
+
+const fullStoryReady = false
+window['_fs_ready'] = function() {
+ fullStoryReady = true
+}
 
 export default function createSentryMiddleware (Sentry, options = {}) {
   const {
@@ -24,6 +30,10 @@ export default function createSentryMiddleware (Sentry, options = {}) {
           state: stateTransformer(state)
         }
         scope.setExtra('scope', reduxExtra)
+
+        if (fullStoryReady) {
+          scope.setExtra("fullstory", { fullStoryUrl: FullStory.getCurrentSessionURL(true) })
+        }
 
         const user = get(state, 'authentication.user')
         scope.setUser({ id: get(user, 'id'), email: get(user, 'email'), role: get(user, 'role.name') })

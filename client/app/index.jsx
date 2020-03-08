@@ -3,7 +3,6 @@ import 'whatwg-fetch' // Required for polyfill fetch for IE11
 import React from 'react'
 import { render } from 'react-dom'
 import * as Sentry from '@sentry/browser'
-import SentryFullStory from '@sentry/fullstory'
 import { I18nextProvider } from 'react-i18next'
 import { configureStore, history } from './store/configureStore'
 import i18n from './i18next'
@@ -15,7 +14,6 @@ Sentry.init({
   debug: (process.env.NODE_ENV !== 'production'),
   dsn: 'https://3559b4ca079e44c687cd6f4c135426d0@sentry.itsmycargo.tech/3',
   sampleRate: process.env.NODE_ENV === 'production' ? 1 : 0,
-  integrations: [new SentryFullStory('itsmycargo')],
   environment: window.keel.environment,
   release: window.keel.release || process.env.RELEASE,
   whitelistUrls: [window.location.origin]

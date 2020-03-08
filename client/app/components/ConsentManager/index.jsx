@@ -4,6 +4,8 @@ import inEU from '@segment/in-eu'
 
 export default function (props) {
   const { writeKey } = props
+  const { location } = window
+  const { host } = location
 
   const bannerContent = (
     <span>
@@ -29,6 +31,7 @@ export default function (props) {
         writeKey={writeKey}
         shouldRequireConsent={inEU}
         closeBehavior="accept"
+        cookieDomain={host}
         bannerContent={bannerContent}
         bannerSubContent={bannerSubContent}
         preferencesDialogTitle={preferencesDialogTitle}
