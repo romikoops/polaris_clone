@@ -18,6 +18,7 @@ const offlineStorage = OfflineWeb((state) => consent)
 const eventsHandler = (action) => (_action, _prevState, _nextState) => {
   if (!eventsMap[action.type]) { return null }
   if (get(_nextState, 'app.tenant.scope.exclude_analytics', false) === true) { return null }
+  if (get(_nextState, 'authentication.user.email', '').indexOf("itsmycargo.com") != -1) { return null }
 
   return eventsMap[action.type](_action, _nextState)
 }
