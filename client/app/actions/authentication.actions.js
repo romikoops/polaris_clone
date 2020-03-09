@@ -275,7 +275,7 @@ function postSamlActions (payload) {
     return { type: authenticationConstants.SAML_USER_REQUEST, payload: userData }
   }
   function success (userData) {
-    localStorage.setItem(cookieKey(), JSON.stringify(userData))
+    setUser(userData)
 
     return { type: authenticationConstants.SAML_USER_SUCCESS, payload: userData }
   }
@@ -292,7 +292,7 @@ function postSamlActions (payload) {
     return fetch(`${getTenantApiUrl()}/users/${userId}/show`, requestOptions('GET'))
       .then(resp => resp.json())
       .then((response) => {
-        dispatch(success(response.data))
+        dispatch(success(response))
         dispatch(userActions.getDashboard(userId, true))
       })
       .catch((error) => {
