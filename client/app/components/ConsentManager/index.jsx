@@ -1,24 +1,45 @@
 import React from 'react'
-import { ConsentManager } from '@segment/consent-manager'
+import { ConsentManager, openConsentManager } from '@itsmycargo/consent-manager'
 import inEU from '@segment/in-eu'
+import styles from './index.scss'
 
 export default function (props) {
   const { writeKey } = props
   const { location } = window
   const { host } = location
 
+  const openConsent = (event) => {
+    event.preventDefault()
+
+    openConsentManager()
+
+    return false
+  }
+
   const bannerContent = (
-    <span>
-      We use cookies (and other similar technologies) to collect data to improve your experience on
-      our site. By using our website, you’re agreeing to the collection of data as described in our
-      {' '}
-      <a href="https://www.itsmycargo.com/en/privacy" target="_blank">
-        Website Data Collection Policy
-      </a>
-      .
-    </span>
+    <div>
+      <div>
+        <strong>About Cookies On This Site</strong>
+      </div>
+      <br />
+      <div>
+        <span>
+          By clicking “Accept”, you agree to the use of ItsMyCargo and third-party cookies and
+          other similar technologies to enhance your browsing experience, analyze and
+          measure your engagement with our content. Learn more about your
+          {' '}
+          <a href="#" onClick={openConsent}>choices</a>
+          {' '}
+          and
+          {' '}
+          <a href="https://www.itsmycargo.com/en/privacy" target="_blank">cookies</a>
+          .
+        </span>
+      </div>
+    </div>
   )
-  const bannerSubContent = 'You can change your preferences at any time.'
+
+  const bannerSubContent = ''
   const preferencesDialogTitle = 'Website Data Collection Preferences'
   const preferencesDialogContent = 'We use data collected by cookies and JavaScript libraries to improve your browsing experience, analyze site traffic, deliver personalized advertisements, and increase the overall performance of our site.'
 
@@ -26,7 +47,7 @@ export default function (props) {
   const cancelDialogContent = 'Your preferences have not been saved. By continuing to use our website, you՚re agreeing to our Website Data Collection Policy.'
 
   return (
-    <div>
+    <div className={styles.ConsentManager}>
       <ConsentManager
         writeKey={writeKey}
         shouldRequireConsent={inEU}

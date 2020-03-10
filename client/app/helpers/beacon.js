@@ -1,7 +1,7 @@
 import { createMiddleware } from 'redux-beacon'
 import logger from '@redux-beacon/logger'
 import OfflineWeb from '@redux-beacon/offline-web'
-import { loadPreferences, onPreferencesSaved } from '@segment/consent-manager'
+import { loadPreferences, onPreferencesSaved } from '@itsmycargo/consent-manager'
 import { has, get } from 'lodash'
 import Segment from './beacon/segment'
 import eventsMap from './beacon/events'

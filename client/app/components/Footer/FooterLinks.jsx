@@ -1,7 +1,7 @@
 import React from 'react'
 import { has, isEmpty } from 'lodash'
 import { withNamespaces } from 'react-i18next'
-import { openConsentManager } from '@segment/consent-manager'
+import { openConsentManager } from '@itsmycargo/consent-manager'
 
 function FooterLinks (props) {
   const { tenant, t } = props
@@ -24,6 +24,14 @@ function FooterLinks (props) {
   const aboutLink = links && !isEmpty(links.about) ? links.about : defaultLinks.about
   const legalLink = links && !isEmpty(links.legal) ? links.legal : defaultLinks.legal
   const privacyLink = links && !isEmpty(links.privacy) ? links.privacy : defaultLinks.privacy
+
+  const openConsent = (event) => {
+    event.preventDefault()
+
+    openConsentManager()
+
+    return false
+  }
 
   return (
     <ul>
@@ -48,7 +56,7 @@ function FooterLinks (props) {
         </a>
       </li>
       <li>
-        <a href="" onClick={openConsentManager}>
+        <a href="" onClick={openConsent}>
           {t('footer:website_data_collection')}
         </a>
       </li>
