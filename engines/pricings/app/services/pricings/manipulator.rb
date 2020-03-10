@@ -29,6 +29,7 @@ module Pricings
       @applicable_margins = find_applicable_margins
       @margins_to_apply = sort_margins
       manipulate_pricings
+
       [pricings_to_return.compact, metadata_list]
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_26_084016) do
+ActiveRecord::Schema.define(version: 2020_03_03_153420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -419,10 +419,12 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
     t.string "name"
     t.integer "nexus_id"
     t.string "photo"
+    t.geometry "point", limit: {:srid=>0, :type=>"geometry"}
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.string "trucking_type"
     t.datetime "updated_at", null: false
+    t.index ["point"], name: "index_hubs_on_point", using: :gist
     t.index ["sandbox_id"], name: "index_hubs_on_sandbox_id"
     t.index ["tenant_id"], name: "index_hubs_on_tenant_id"
   end
@@ -729,9 +731,11 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }
+    t.daterange "validity"
     t.index ["sandbox_id"], name: "index_local_charges_on_sandbox_id"
     t.index ["tenant_id"], name: "index_local_charges_on_tenant_id"
     t.index ["uuid"], name: "index_local_charges_on_uuid", unique: true
+    t.index ["validity"], name: "index_local_charges_on_validity", using: :gist
   end
 
   create_table "locations", force: :cascade do |t|
@@ -1038,6 +1042,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }
+    t.daterange "validity"
     t.decimal "wm_rate"
     t.index ["itinerary_id"], name: "index_pricings_on_itinerary_id"
     t.index ["sandbox_id"], name: "index_pricings_on_sandbox_id"
@@ -1045,6 +1050,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
     t.index ["transport_category_id"], name: "index_pricings_on_transport_category_id"
     t.index ["user_id"], name: "index_pricings_on_user_id"
     t.index ["uuid"], name: "index_pricings_on_uuid", unique: true
+    t.index ["validity"], name: "legacy_pricings_validity_index", using: :gist
   end
 
   create_table "pricings_breakdowns", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1129,6 +1135,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
     t.uuid "tenant_id"
     t.integer "tenant_vehicle_id"
     t.datetime "updated_at", null: false
+    t.daterange "validity"
     t.decimal "value"
     t.index ["applicable_type", "applicable_id"], name: "index_pricings_margins_on_applicable_type_and_applicable_id"
     t.index ["application_order"], name: "index_pricings_margins_on_application_order"
@@ -1170,6 +1177,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
     t.integer "tenant_vehicle_id"
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.daterange "validity"
     t.decimal "wm_rate"
     t.index ["cargo_class"], name: "index_pricings_pricings_on_cargo_class"
     t.index ["itinerary_id"], name: "index_pricings_pricings_on_itinerary_id"
@@ -1178,6 +1186,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
     t.index ["tenant_id"], name: "index_pricings_pricings_on_tenant_id"
     t.index ["tenant_vehicle_id"], name: "index_pricings_pricings_on_tenant_vehicle_id"
     t.index ["user_id"], name: "index_pricings_pricings_on_user_id"
+    t.index ["validity"], name: "index_pricings_pricings_on_validity", using: :gist
   end
 
   create_table "pricings_rate_bases", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -2138,11 +2147,13 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
   end
 
   add_foreign_key "address_book_contacts", "tenants_sandboxes", column: "sandbox_id"
+  add_foreign_key "address_book_contacts", "tenants_users", column: "user_id"
   add_foreign_key "cargo_cargos", "quotations_quotations", column: "quotation_id"
   add_foreign_key "cargo_units", "cargo_cargos", column: "cargo_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "profiles_profiles", "tenants_users", column: "user_id", on_delete: :cascade
+  add_foreign_key "quotations_tenders", "quotations_quotations", column: "quotation_id"
   add_foreign_key "remarks", "tenants"
   add_foreign_key "shipments", "transport_categories"
   add_foreign_key "shipments_cargos", "tenants_sandboxes", column: "sandbox_id"
@@ -2161,6 +2172,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_084016) do
   add_foreign_key "shipments_shipments", "tenants_tenants", column: "tenant_id"
   add_foreign_key "shipments_shipments", "tenants_users", column: "user_id"
   add_foreign_key "shipments_units", "tenants_sandboxes", column: "sandbox_id"
+  add_foreign_key "stops", "itineraries"
   add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
   add_foreign_key "tenant_cargo_item_types", "tenants"
   add_foreign_key "users", "roles"

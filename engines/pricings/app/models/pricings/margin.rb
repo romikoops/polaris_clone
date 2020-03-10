@@ -20,18 +20,12 @@ module Pricings
       where(cargo_class: cargo_classes.map(&:downcase))
     end)
     scope :for_dates, (lambda do |start_date, end_date|
-      where(Arel::Nodes::InfixOperation.new(
-              'OVERLAPS',
-              Arel::Nodes::SqlLiteral.new(
-                "(#{arel_table[:effective_date].name}, #{arel_table[:expiration_date].name})"
-              ),
-              Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
-            ))
+      where('validity && daterange(?::date, ?::date)', start_date, end_date)
     end)
     validates :operator, inclusion: { in: %w[+ %],
                                       message: '%{value} is not a valid operator for a parent margin' }
 
-    before_validation :set_application_order
+    before_validation :set_application_order, :set_validity
 
     def service_level
       (tenant_vehicle&.name || pricing&.tenant_vehicle&.name) || 'All'
@@ -83,6 +77,10 @@ module Pricings
 
       self.application_order = existing_margins.first.application_order + 1
     end
+
+    def set_validity
+      self.validity ||= Range.new(effective_date.to_date, expiration_date.to_date)
+    end
   end
 end
 
@@ -99,6 +97,7 @@ end
 #  expiration_date    :datetime
 #  margin_type        :integer
 #  operator           :string
+#  validity           :daterange
 #  value              :decimal(, )
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null

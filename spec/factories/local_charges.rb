@@ -24,6 +24,7 @@ end
 #  metadata           :jsonb
 #  mode_of_transport  :string
 #  uuid               :uuid
+#  validity           :daterange
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  counterpart_hub_id :integer
@@ -39,4 +40,5 @@ end
 #  index_local_charges_on_sandbox_id  (sandbox_id)
 #  index_local_charges_on_tenant_id   (tenant_id)
 #  index_local_charges_on_uuid        (uuid) UNIQUE
+#  index_local_charges_on_validity    (validity) USING gist
 #

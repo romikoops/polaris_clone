@@ -498,6 +498,14 @@ FactoryBot.define do
       end
     end
 
+    after(:create) do |trucking|
+      trucking.fees.each do |key, fee|
+        next if Legacy::ChargeCategory.exists?(tenant: trucking.tenant, code: key.downcase)
+
+        FactoryBot.create(:legacy_charge_categories, tenant: trucking.tenant, code: key.downcase, name: fee['name'])
+      end
+    end
+
     factory :fcl_20_trucking, traits: [:fcl_20]
     factory :trucking_with_fees, traits: [:with_fees]
     factory :trucking_with_return, traits: [:return_distance]

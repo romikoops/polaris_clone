@@ -4,42 +4,43 @@ require 'rails_helper'
 
 RSpec.describe OfferCalculator::Calculator do
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  
+
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let!(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
+  let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: tenant) }
+  let(:air_itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, mode_of_transport: 'air', tenant: tenant) }
+  let(:origin_hub) { itinerary.hubs.find_by(name: 'Hamburg Port') }
   let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:origin_airport) { air_itinerary.hubs.find_by(name: 'Hamburg Port') }
+  let(:destination_airport) { air_itinerary.hubs.find_by(name: 'Shanghai Port') }
   let(:shanghai_address) { FactoryBot.create(:shanghai_address) }
-  let(:gothenburg_address) { FactoryBot.create(:gothenburg_address) }
+  let(:hamburg_address) { FactoryBot.create(:hamburg_address) }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
+  let(:pickup_address) { FactoryBot.create(:hamburg_address) }
+  let(:delivery_address) { FactoryBot.create(:shanghai_address) }
   let(:base_shipment) do
     FactoryBot.create(:legacy_shipment,
                       load_type: 'cargo_item',
                       destination_hub: nil,
                       origin_hub: nil,
-                      desired_start_date: Date.today + 4.days,
+                      desired_start_date: Time.zone.today + 4.days,
                       user: user,
                       tenant: tenant)
   end
-  let(:trip_1) do
-    FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'cargo_item', tenant_vehicle: tenant_vehicle)
-  end
-  let(:trip_2) do
-    FactoryBot.create(:trip_with_layovers,
-                      itinerary: itinerary,
-                      load_type: 'cargo_item',
-                      tenant_vehicle: tenant_vehicle,
-                      start_date: 10.days.from_now,
-                      end_date: 30.days.from_now)
-  end
-  let!(:schedules) do
-    [
-      OfferCalculator::Schedule.from_trip(trip_1),
-      OfferCalculator::Schedule.from_trip(trip_2)
-    ]
+
+  let(:trips) do
+    [itinerary, air_itinerary].flat_map do |it|
+      [
+        FactoryBot.create(:trip_with_layovers, itinerary: it, load_type: 'cargo_item', tenant_vehicle: tenant_vehicle),
+        FactoryBot.create(:trip_with_layovers,
+                          itinerary: it,
+                          load_type: 'cargo_item',
+                          tenant_vehicle: tenant_vehicle,
+                          start_date: 10.days.from_now,
+                          end_date: 30.days.from_now)
+      ]
+    end
   end
 
   let(:cargo_item_attributes) do
@@ -106,27 +107,46 @@ RSpec.describe OfferCalculator::Calculator do
       }
     }
   end
-  let!(:lcl_pricing) do
-    FactoryBot.create(:legacy_lcl_pricing,
-                      itinerary: itinerary,
-                      tenant: tenant,
-                      tenant_vehicle: tenant_vehicle)
-  end
 
-  before(:each) do
+  let(:pickup_location) { FactoryBot.create(:trucking_location, zipcode: pickup_address.zip_code, country_code: pickup_address.country.code) }
+  let(:delivery_location) { FactoryBot.create(:trucking_location, zipcode: delivery_address.zip_code, country_code: delivery_address.country.code) }
+
+  before do
+    [origin_airport, origin_hub].each do |hub|
+      FactoryBot.create(:trucking_trucking,
+                        hub: hub,
+                        tenant: tenant,
+                        location: pickup_location)
+    end
+    [destination_airport, destination_hub].each do |hub|
+      FactoryBot.create(:trucking_trucking,
+                        hub: hub,
+                        tenant: tenant,
+                        carriage: 'on',
+                        location: delivery_location)
+    end
+    FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:lcl_pricing, itinerary: air_itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:legacy_local_charge, tenant: tenant, hub: origin_hub, tenant_vehicle: tenant_vehicle, direction: 'export')
+    FactoryBot.create(:legacy_local_charge, tenant: tenant, hub: destination_hub, tenant_vehicle: tenant_vehicle, direction: 'import')
+    FactoryBot.create(:legacy_local_charge, tenant: tenant, hub: origin_airport, mode_of_transport: 'air', tenant_vehicle: tenant_vehicle, direction: 'export')
+    FactoryBot.create(:legacy_local_charge, tenant: tenant, hub: destination_airport, mode_of_transport: 'air', tenant_vehicle: tenant_vehicle, direction: 'import')
+    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
     stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
-      .with(
-        headers: {
-          'Accept' => '*/*',
-          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'Host' => 'data.fixer.io',
-          'User-Agent' => 'Ruby'
-        }
-      )
-      .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26 } }.to_json, headers: {})
+      .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26, SEK: 8.26 } }.to_json, headers: {})
+    %w[ocean trucking local_charge].flat_map do |mot|
+      [
+        FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:trucking_on_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:trucking_pre_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:import_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
+        FactoryBot.create(:export_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+      ]
+    end
+    trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) }
   end
 
-  context 'port to port' do
+  context 'with port to port' do
     let(:port_to_port_params) do
       params[:shipment]['origin'] = {
         'latitude' => origin_hub.latitude,
@@ -150,22 +170,115 @@ RSpec.describe OfferCalculator::Calculator do
     describe '.perform' do
       it 'perform a booking calulation' do
         results = service.perform
-        expect(results.length).to eq(1)
-        expect(results.first.keys).to match_array(%i(quote schedules meta notes))
-        expect(results.first.dig(:quote, :total, :value)).to eq(28.8)
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
+          expect(results.first.dig(:quote, :total, :value)).to eq(28.8)
+        end
       end
 
-      it 'perform a booking calulation' do
+      it 'perform a quote calulation' do
         port_to_port_params['shipment']['isQuote'] = true
         results = service.perform
-        expect(results.length).to eq(1)
-        expect(results.first.keys).to match_array(%i(quote schedules meta notes))
-        expect(results.first.dig(:quote, :total, :value)).to eq(28.8)
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
+          expect(results.first.dig(:quote, :total, :value)).to eq(28.8)
+        end
+      end
+    end
+  end
+
+  context 'with door to door' do
+    let(:trucking_shipment) do
+      FactoryBot.create(:legacy_shipment,
+                        load_type: 'cargo_item',
+                        destination_hub: nil,
+                        origin_hub: nil,
+                        desired_start_date: Time.zone.today + 4.days,
+                        user: user,
+                        trucking: {
+                          pre_carriage: {
+                            address_id: pickup_address.id,
+                            truck_type: 'default'
+                          },
+                          on_carriage: {
+                            address_id: delivery_address.id,
+                            truck_type: 'default'
+                          }
+                        },
+                        tenant: tenant)
+    end
+    let(:port_to_port_params) do
+      params[:shipment]['trucking'] = {
+        pre_carriage: {
+          address_id: pickup_address.id,
+          truck_type: 'default'
+        },
+        on_carriage: {
+          address_id: delivery_address.id,
+          truck_type: 'default'
+        }
+      }
+      params[:shipment]['origin'] = {
+        'latitude' => pickup_address.latitude,
+        'longitude' => pickup_address.longitude,
+        'nexus_id' => origin_hub.nexus_id,
+        'nexus_name' => origin_hub.nexus.name,
+        'country' => origin_hub.nexus.country.code
+      }
+      params[:shipment]['destination'] = {
+        'latitude' => delivery_address.latitude,
+        'longitude' => delivery_address.longitude,
+        'nexus_id' => destination_hub.nexus_id,
+        'nexus_name' => destination_hub.nexus.name,
+        'country' => destination_hub.nexus.country.code
+      }
+      params[:shipment]['cargo_items_attributes'] = cargo_item_attributes
+      ActionController::Parameters.new(params)
+    end
+    let(:origin_address_params) do
+      {
+        latitude: pickup_address.latitude,
+        longitude: pickup_address.longitude,
+        zip_code: pickup_address.zip_code,
+        country: pickup_address.country.name,
+        geocoded_address: pickup_address.geocoded_address,
+        street_number: pickup_address.street_number,
+        sandbox: nil
+      }.with_indifferent_access
+    end
+    let(:destination_address_params) do
+      {
+        latitude: delivery_address.latitude,
+        longitude: delivery_address.longitude,
+        zip_code: delivery_address.zip_code,
+        country: delivery_address.country.name,
+        geocoded_address: delivery_address.geocoded_address,
+        street_number: delivery_address.street_number,
+        sandbox: nil
+      }.with_indifferent_access
+    end
+    let(:service) { described_class.new(shipment: trucking_shipment, params: port_to_port_params, user: user, sandbox: nil) }
+
+    before do
+      # rubocop:disable RSpec/AnyInstance
+      allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params).with(:origin).and_return(origin_address_params)
+      allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params).with(:destination).and_return(destination_address_params)
+      allow_any_instance_of(OfferCalculator::Service::TruckingDataBuilder).to receive(:calc_distance).and_return(10)
+      allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
+      # rubocop:enable RSpec/AnyInstance
+    end
+
+    describe '.perform' do
+      it 'perform a booking calulation' do
+        results = service.perform
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
+          expect(results.first.dig(:quote, :total, :value)).to eq(270.82)
+        end
       end
     end
   end
 end
-# update_incoterm
-# update_cargo_units
-# update_selected_day
-# update_updated_at

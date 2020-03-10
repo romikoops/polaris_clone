@@ -41,3 +41,7 @@ end
 #
 #  index_stops_on_sandbox_id  (sandbox_id)
 #
+# Foreign Keys
+#
+#  fk_rails_...  (itinerary_id => itineraries.id)
+#

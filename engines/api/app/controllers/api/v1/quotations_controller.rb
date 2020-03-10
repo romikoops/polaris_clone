@@ -6,7 +6,16 @@ module Api
   module V1
     class QuotationsController < ApiController
       def create
-        render json: quotation_service.tenders, each_serializer: TenderSerializer, scope: current_scope
+        render(
+          json: {
+            data: ActiveModel::Serializer::CollectionSerializer.new(
+              quotation_service.tenders,
+              serializer: TenderSerializer,
+              adapter: :json_api,
+              scope: current_scope
+            )
+          }
+        )
       end
 
       def download
@@ -24,7 +33,6 @@ module Api
         params.require(:quote).permit(
           :selected_date,
           :user_id,
-          :tenant_id,
           :load_type,
           :delay,
           origin: [*address_params, hub_ids: []],

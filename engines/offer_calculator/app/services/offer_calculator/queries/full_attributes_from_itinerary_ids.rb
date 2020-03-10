@@ -133,6 +133,7 @@ module OfferCalculator
             MAX(destination_nexuses.longitude) AS destination_longitude,
             MAX(origin_countries.code)         AS origin_country,
             MAX(destination_countries.code)    AS destination_country,
+            MAX(tenant_vehicles.id)             AS tenant_vehicle_id,
             STRING_AGG(pricings_pricings.cargo_class, ',') AS cargo_classes,
             STRING_AGG(
               DISTINCT CASE
@@ -169,6 +170,8 @@ module OfferCalculator
             ON origin_hubs_addresses.country_id = origin_countries.id
           JOIN countries AS destination_countries
             ON destination_hubs_addresses.country_id = destination_countries.id
+          JOIN tenant_vehicles AS tenant_vehicles
+            ON tenant_vehicles.id = pricings_pricings.tenant_vehicle_id
           JOIN nexuses AS origin_nexuses
             ON origin_nexuses.id = origin_hubs.nexus_id
           JOIN nexuses AS destination_nexuses

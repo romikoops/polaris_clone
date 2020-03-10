@@ -4,18 +4,21 @@ module OfferCalculator
   class Route
     include ActiveModel::Model
 
-    attr_accessor :itinerary_id, :mode_of_transport, :origin_stop_id, :destination_stop_id
+    attr_accessor :itinerary_id, :mode_of_transport, :origin_stop_id, :destination_stop_id,
+                  :tenant_vehicle_id, :carrier_id
 
     def self.group_data_by_attribute(routes)
       routes.each_with_object(Hash.new { |h, k| h[k] = [] }) do |route, obj|
         obj[:itinerary_ids]        << route.itinerary_id
         obj[:origin_stop_ids]      << route.origin_stop_id
         obj[:destination_stop_ids] << route.destination_stop_id
+        obj[:tenant_vehicle_ids]   << route.tenant_vehicle_id
+        obj[:carrier_ids]          << route.carrier_id
       end
     end
 
     def self.detailed_hashes_from_itinerary_ids(itinerary_ids, options = {})
-      look_ups = %w(origin_hub destination_hub origin_nexus destination_nexus)
+      look_ups = %w[origin_hub destination_hub origin_nexus destination_nexus tenant_vehicle_id]
                  .each_with_object({}) do |name, obj|
         obj[name] = Hash.new { |h, k| h[k] = [] }
       end
@@ -37,11 +40,17 @@ module OfferCalculator
       }
     end
 
-    def self.attributes_from_hub_and_itinerary_ids(origin_hub_ids, destination_hub_ids, itinerary_ids)
-      OfferCalculator::Queries::AttributesFromHubAndItineraryIds.new(
-        origin_hub_ids: origin_hub_ids,
-        destination_hub_ids: destination_hub_ids,
-        itinerary_ids: itinerary_ids
+    def self.attributes_from_hub_and_itinerary_ids(
+      query:,
+      shipment:,
+      date_range:,
+      scope:
+    )
+      OfferCalculator::Queries::ValidRoutes.new(
+        query: query,
+        shipment: shipment,
+        date_range: date_range,
+        scope: scope
       ).perform
     end
 
@@ -57,7 +66,7 @@ module OfferCalculator
     end
 
     def self.hash_from_attributes(attributes, target, options)
-      attribute_names = %i(stop_id hub_id hub_name nexus_id nexus_name latitude longitude country)
+      attribute_names = %i[stop_id hub_id hub_name nexus_id nexus_name latitude longitude country]
       attribute_names << :truck_types if options[:with_truck_types]
       attribute_names.each_with_object({}) do |attribute_name, obj|
         obj[attribute_name] = attributes["#{target}_#{attribute_name}"] || ''

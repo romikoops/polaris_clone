@@ -10,7 +10,7 @@ RSpec.resource 'Quotations', acceptance: true do
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}, with_profile: true) }
-  let(:tenant_user) { Tenants::User.find_by(legacy: user) }
+  let(:tenants_user) { Tenants::User.find_by(legacy: user) }
   let(:origin_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
   let(:destination_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
   let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
@@ -21,7 +21,7 @@ RSpec.resource 'Quotations', acceptance: true do
   let!(:trip) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle) }
   let!(:schedules) { [OfferCalculator::Schedule.from_trip(trip)] }
 
-  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenant_user.id, scopes: 'public') }
+  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenants_user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
   before { FactoryBot.create(:tenants_theme, tenant: tenants_tenant) }
 
@@ -42,8 +42,6 @@ RSpec.resource 'Quotations', acceptance: true do
 
     context 'when port to port' do
       before do
-        stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
-          .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26 } }.to_json, headers: {})
         FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, transport_category: cargo_transport_category, tenant: tenant)
       end
 
@@ -52,7 +50,7 @@ RSpec.resource 'Quotations', acceptance: true do
           quote: {
             selected_date: Time.zone.now,
             tenant_id: tenant.id,
-            user_id: user.id,
+            user_id: tenants_user.id,
             load_type: 'container',
             origin: { nexus_id: origin_hub.nexus_id },
             destination: { nexus_id: destination_hub.nexus_id }
@@ -65,7 +63,7 @@ RSpec.resource 'Quotations', acceptance: true do
         do_request(request)
         aggregate_failures do
           expect(status).to eq(200)
-          expect(response_data[0].dig('attributes', 'total', 'value')).to eq(250.0)
+          expect(response_data.dig(0, 'total')).to eq('€250.00')
         end
       end
     end

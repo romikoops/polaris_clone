@@ -111,8 +111,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
   let(:cargo_item) { FactoryBot.create(:legacy_cargo_item) }
   let(:schedules) do
     [
-      OfferCalculator::Schedule.from_trip(trip1),
-      OfferCalculator::Schedule.from_trip(trip2)
+      OfferCalculator::Schedule.from_trip(trip1)
     ]
   end
   let(:containers) do
@@ -156,10 +155,6 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
         FactoryBot.create(:export_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
       ]
     end
-    FactoryBot.create(:legacy_charge_categories, code: 'qdf', name: 'qdf', tenant: tenant)
-    FactoryBot.create(:legacy_charge_categories, code: 'adi', name: 'adi', tenant: tenant)
-    FactoryBot.create(:legacy_charge_categories, code: 'eca', name: 'eca', tenant: tenant)
-    FactoryBot.create(:legacy_charge_categories, code: 'fill', name: 'fill', tenant: tenant)
     FactoryBot.create(:legacy_local_charge,
                       tenant: tenant,
                       hub: hub,

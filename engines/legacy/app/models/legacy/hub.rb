@@ -17,7 +17,6 @@ module Legacy
     has_many :stops,    dependent: :destroy
     has_many :layovers, through: :stops
     has_many :hub_truckings
-    has_many :trucking_pricings, -> { distinct }, through: :hub_truckings
     has_many :local_charges
     has_many :customs_fees
     has_many :notes, dependent: :destroy
@@ -55,6 +54,8 @@ module Legacy
       tsearch: { prefix: true }
     }
 
+    before_validation :set_point
+
     MOT_HUB_NAME = {
       'ocean' => 'Port',
       'air' => 'Airport',
@@ -78,7 +79,14 @@ module Legacy
     end
 
     def point_wkt
-      "Point (#{address.longitude} #{address.latitude})"
+      long = longitude || address.longitude
+      lat = latitude || address.latitude
+
+      "Point (#{long} #{lat})"
+    end
+
+    def set_point
+      self.point = point_wkt
     end
 
     def earliest_expiration
@@ -102,6 +110,7 @@ end
 #  longitude           :float
 #  name                :string
 #  photo               :string
+#  point               :geometry({:srid= geometry, 0
 #  trucking_type       :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
@@ -113,6 +122,7 @@ end
 #
 # Indexes
 #
+#  index_hubs_on_point       (point) USING gist
 #  index_hubs_on_sandbox_id  (sandbox_id)
 #  index_hubs_on_tenant_id   (tenant_id)
 #

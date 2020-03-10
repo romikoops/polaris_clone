@@ -10,14 +10,6 @@ class LocalCharge < Legacy::LocalCharge
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
-
-  scope :for_dates, (lambda do |start_date, end_date|
-    where(Arel::Nodes::InfixOperation.new(
-            'OVERLAPS',
-            Arel::Nodes::SqlLiteral.new("(#{arel_table[:effective_date].name}, #{arel_table[:expiration_date].name})"),
-            Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
-          ))
-  end)
 end
 
 # == Schema Information
@@ -35,6 +27,7 @@ end
 #  metadata           :jsonb
 #  mode_of_transport  :string
 #  uuid               :uuid
+#  validity           :daterange
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  counterpart_hub_id :integer
@@ -50,4 +43,5 @@ end
 #  index_local_charges_on_sandbox_id  (sandbox_id)
 #  index_local_charges_on_tenant_id   (tenant_id)
 #  index_local_charges_on_uuid        (uuid) UNIQUE
+#  index_local_charges_on_validity    (validity) USING gist
 #

@@ -7,8 +7,8 @@ FactoryBot.define do
     direction { 'export' }
     load_type { 'lcl' }
     mode_of_transport { 'ocean' }
-    effective_date { Date.today }
-    expiration_date { Date.today + 6.months }
+    effective_date { Time.zone.today }
+    expiration_date { Time.zone.today + 6.months }
     fees do
       {
         'SOLAS' => {
@@ -26,15 +26,23 @@ FactoryBot.define do
     trait :range do
       fees do
         {
-          "QDF"=>
-            {"key"=>"QDF",
-              "max"=>nil,
-              "min"=>57,
-              "name"=>"Wharfage / Quay Dues",
-              "range"=>[{"max"=>5, "min"=>0, "ton"=>41, "currency"=>"EUR"}, {"cbm"=>8, "max"=>40, "min"=>6, "currency"=>"EUR"}],
-              "currency"=>"EUR",
-              "rate_basis"=>"PER_UNIT_TON_CBM_RANGE"},
+          'QDF' =>
+            { 'key' => 'QDF',
+              'max' => nil,
+              'min' => 57,
+              'name' => 'Wharfage / Quay Dues',
+              'range' => [{ 'max' => 5, 'min' => 0, 'ton' => 41, 'currency' => 'EUR' }, { 'cbm' => 8, 'max' => 40, 'min' => 6, 'currency' => 'EUR' }],
+              'currency' => 'EUR',
+              'rate_basis' => 'PER_UNIT_TON_CBM_RANGE' }
         }
+      end
+    end
+
+    after(:create) do |local_charge|
+      local_charge.fees.each do |key, fee|
+        next if Legacy::ChargeCategory.exists?(tenant: local_charge.tenant, code: key.downcase)
+
+        FactoryBot.create(:legacy_charge_categories, tenant: local_charge.tenant, code: key.downcase, name: fee['name'])
       end
     end
 
@@ -57,6 +65,7 @@ end
 #  metadata           :jsonb
 #  mode_of_transport  :string
 #  uuid               :uuid
+#  validity           :daterange
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  counterpart_hub_id :integer
@@ -72,4 +81,5 @@ end
 #  index_local_charges_on_sandbox_id  (sandbox_id)
 #  index_local_charges_on_tenant_id   (tenant_id)
 #  index_local_charges_on_uuid        (uuid) UNIQUE
+#  index_local_charges_on_validity    (validity) USING gist
 #

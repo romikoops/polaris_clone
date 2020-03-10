@@ -12,12 +12,10 @@ module Legacy
     scope :for_mode_of_transport, ->(mot) { where(mode_of_transport: mot.downcase) }
     scope :for_load_type, ->(load_type) { where(load_type: load_type.downcase) }
     scope :for_dates, (lambda do |start_date, end_date|
-      where(Arel::Nodes::InfixOperation.new(
-              'OVERLAPS',
-              Arel::Nodes::SqlLiteral.new("(#{arel_table[:effective_date].name}, #{arel_table[:expiration_date].name})"),
-              Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
-            ))
+      where('validity && daterange(?::date, ?::date)', start_date, end_date)
     end)
+
+    before_validation :set_validity
 
     def hub_name
       hub&.name
@@ -33,6 +31,10 @@ module Legacy
 
     def service_level
       tenant_vehicle&.name
+    end
+
+    def set_validity
+      self.validity ||= Range.new(effective_date.to_date, expiration_date.to_date)
     end
   end
 end
@@ -52,6 +54,7 @@ end
 #  metadata           :jsonb
 #  mode_of_transport  :string
 #  uuid               :uuid
+#  validity           :daterange
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  counterpart_hub_id :integer
@@ -67,4 +70,5 @@ end
 #  index_local_charges_on_sandbox_id  (sandbox_id)
 #  index_local_charges_on_tenant_id   (tenant_id)
 #  index_local_charges_on_uuid        (uuid) UNIQUE
+#  index_local_charges_on_validity    (validity) USING gist
 #

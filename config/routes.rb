@@ -518,11 +518,15 @@ end
 #                       api_auth      /                                            ApiAuth::Engine
 #                          v1_me GET  /v1/me(.:format)                             api/v1/users#show
 #                     v1_clients GET  /v1/clients(.:format)                        api/v1/clients#index
+#                                POST /v1/clients(.:format)                        api/v1/clients#create
 #                      v1_client GET  /v1/clients/:id(.:format)                    api/v1/clients#show
+#                scope_v1_tenant GET  /v1/tenants/:id/scope(.:format)              api/v1/tenants#scope
+#                     v1_tenants GET  /v1/tenants(.:format)                        api/v1/tenants#index
 #                   v1_dashboard GET  /v1/dashboard(.:format)                      api/v1/dashboard#show
 #                  v1_quotations POST /v1/quotations(.:format)                     api/v1/quotations#create
 #            v1_cargo_item_types GET  /v1/cargo_item_types(.:format)               api/v1/cargo_item_types#index
 # v1_trucking_availability_index GET  /v1/trucking_availability(.:format)          api/v1/trucking_availability#index
+#                      v1_groups GET  /v1/groups(.:format)                         api/v1/tenants_groups#index
 #               settings_v1_ahoy GET  /v1/ahoy/:id/settings(.:format)              api/v1/ahoy#settings
 #                                GET  /v1/itineraries/ports/:tenant_uuid(.:format) api/v1/itineraries#ports
 #                 v1_itineraries GET  /v1/itineraries(.:format)                    api/v1/itineraries#index

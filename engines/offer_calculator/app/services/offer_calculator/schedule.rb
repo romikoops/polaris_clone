@@ -77,24 +77,30 @@ module OfferCalculator
         JOIN tenant_vehicles AS tenant_vehicles
           ON trips.tenant_vehicle_id = tenant_vehicles.id
         LEFT OUTER JOIN carriers AS carriers ON tenant_vehicles.carrier_id = carriers.id
-        WHERE itineraries.id       IN (?)
-        AND   origin_stops.id      IN (?)
-        AND   destination_stops.id IN (?)
+        WHERE itineraries.id       IN (:itinerary_ids)
+        AND   origin_stops.id      IN (:origin_stop_ids)
+        AND   destination_stops.id IN (:destination_stop_ids)
+        AND   tenant_vehicles.id IN (:tenant_vehicle_ids)
         AND   origin_layovers.trip_id = destination_layovers.trip_id
-        AND   origin_layovers.etd < ?
-        AND   origin_layovers.etd > ?
-        AND   trips.load_type = ?
+        AND   origin_layovers.etd < :end_date
+        AND   origin_layovers.etd > :start_date
+        AND   trips.load_type = :load_type
         ORDER BY origin_layovers.etd
       "
+
       sanitized_query = ActiveRecord::Base.sanitize_sql_array(
         [
           raw_query,
-          grouped_data_from_routes[:itinerary_ids],
-          grouped_data_from_routes[:origin_stop_ids],
-          grouped_data_from_routes[:destination_stop_ids],
-          current_etd_in_search + delay_in_days.days,
-          current_etd_in_search,
-          load_type
+          {
+            itinerary_ids: grouped_data_from_routes[:itinerary_ids],
+            origin_stop_ids: grouped_data_from_routes[:origin_stop_ids],
+            destination_stop_ids: grouped_data_from_routes[:destination_stop_ids],
+            tenant_vehicle_ids: grouped_data_from_routes[:tenant_vehicle_ids],
+            carrier_ids: grouped_data_from_routes[:carrier_ids],
+            end_date: current_etd_in_search + delay_in_days.days,
+            start_date: current_etd_in_search,
+            load_type: load_type
+          }
         ]
       )
 

@@ -33,6 +33,7 @@ module OfferCalculator
 
           address = Legacy::Address.new_from_raw_params(address_params(target))
           address.save!
+
           raise_trucking_address_error(target) if trucking_address_invalid?(address)
           @shipment.trucking["#{carriage}_carriage"]['address_id'] = address.id
         end

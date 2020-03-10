@@ -21,6 +21,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                   index: index,
                                   hub: build(:legacy_hub,
                                               tenant: itinerary.tenant,
+                                              hub_type: itinerary.mode_of_transport,
                                               nexus: build(:legacy_nexus,
                                                           tenant: itinerary.tenant)))
           index += 1
@@ -57,6 +58,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  index: 0,
                                  hub: build(:gothenburg_hub,
                                             tenant: itinerary.tenant,
+                                            hub_type: itinerary.mode_of_transport,
                                             nexus: build(:gothenburg_nexus,
                                                          tenant: itinerary.tenant)))
         itinerary.stops << build(:legacy_stop,
@@ -64,6 +66,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  index: 1,
                                  hub: (hub || build(:shanghai_hub,
                                             tenant: itinerary.tenant,
+                                            hub_type: itinerary.mode_of_transport,
                                             nexus: build(:shanghai_nexus,
                                                          tenant: itinerary.tenant))))
       end
@@ -79,6 +82,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  index: 0,
                                  hub: build(:shanghai_hub,
                                             tenant: itinerary.tenant,
+                                            hub_type: itinerary.mode_of_transport,
                                             nexus: build(:shanghai_nexus,
                                                          tenant: itinerary.tenant)))
         itinerary.stops << build(:legacy_stop,
@@ -86,6 +90,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  index: 1,
                                  hub: build(:gothenburg_hub,
                                             tenant: itinerary.tenant,
+                                            hub_type: itinerary.mode_of_transport,
                                             nexus: build(:gothenburg_nexus,
                                                          tenant: itinerary.tenant)))
       end
@@ -102,6 +107,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  index: 0,
                                  hub: build(:felixstowe_hub,
                                             tenant: itinerary.tenant,
+                                            hub_type: itinerary.mode_of_transport,
                                             nexus: build(:felixstowe_nexus,
                                                          tenant: itinerary.tenant)))
         itinerary.stops << build(:legacy_stop,
@@ -109,6 +115,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  index: 1,
                                  hub: (hub || build(:shanghai_hub,
                                             tenant: itinerary.tenant,
+                                            hub_type: itinerary.mode_of_transport,
                                             nexus: build(:shanghai_nexus,
                                                          tenant: itinerary.tenant))))
       end
@@ -124,6 +131,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  index: 0,
                                  hub: build(:shanghai_hub,
                                             tenant: itinerary.tenant,
+                                            hub_type: itinerary.mode_of_transport,
                                             nexus: build(:shanghai_nexus,
                                                          tenant: itinerary.tenant)))
         itinerary.stops << build(:legacy_stop,
@@ -131,6 +139,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  index: 1,
                                  hub: build(:felixstowe_hub,
                                             tenant: itinerary.tenant,
+                                            hub_type: itinerary.mode_of_transport,
                                             nexus: build(:felixstowe_nexus,
                                                          tenant: itinerary.tenant)))
       end
@@ -147,6 +156,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  index: 0,
                                  hub: build(:hamburg_hub,
                                             tenant: itinerary.tenant,
+                                            hub_type: itinerary.mode_of_transport,
                                             nexus: build(:hamburg_nexus,
                                                          tenant: itinerary.tenant)))
         itinerary.stops << build(:legacy_stop,
@@ -154,6 +164,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  index: 1,
                                  hub: (hub || build(:shanghai_hub,
                                             tenant: itinerary.tenant,
+                                            hub_type: itinerary.mode_of_transport,
                                             nexus: build(:shanghai_nexus,
                                                          tenant: itinerary.tenant))))
       end
@@ -168,6 +179,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  itinerary: itinerary,
                                  index: 0,
                                  hub: build(:shanghai_hub,
+                                            hub_type: itinerary.mode_of_transport,
                                             tenant: itinerary.tenant,
                                             nexus: build(:shanghai_nexus,
                                                          tenant: itinerary.tenant)))
@@ -176,6 +188,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
                                  index: 1,
                                  hub: build(:hamburg_hub,
                                             tenant: itinerary.tenant,
+                                            hub_type: itinerary.mode_of_transport,
                                             nexus: build(:hamburg_nexus,
                                                          tenant: itinerary.tenant)))
       end

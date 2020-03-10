@@ -74,7 +74,7 @@ RSpec.describe Pricings::Manipulator do
 
   before do
     FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
-    FactoryBot.create(:tenants_scope, content: {}, target: tenants_tenant)
+    FactoryBot.create(:tenants_scope, content: { base_pricing: true }, target: tenants_tenant)
     %w[ocean trucking local_charge].flat_map do |mot|
       [
         FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),

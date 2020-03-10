@@ -72,6 +72,7 @@ end
 #  expiration_date    :datetime
 #  margin_type        :integer
 #  operator           :string
+#  validity           :daterange
 #  value              :decimal(, )
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null

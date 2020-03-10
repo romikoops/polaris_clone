@@ -21,6 +21,8 @@ module Pricings
       scope: %i(tenant_id user_id tenant_vehicle_id effective_date expiration_date cargo_class load_type legacy_id group_id)
     }
 
+    before_validation :set_validity
+
     scope :current, -> { where('expiration_date > ?', 7.days.ago) }
     scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot.downcase }) }
     scope :for_load_type, (lambda do |load_type|
@@ -30,13 +32,7 @@ module Pricings
       where(cargo_class: cargo_classes.map(&:downcase))
     end)
     scope :for_dates, (lambda do |start_date, end_date|
-      where(Arel::Nodes::InfixOperation.new(
-              'OVERLAPS',
-              Arel::Nodes::SqlLiteral.new(
-                "(#{arel_table[:effective_date].name}, #{arel_table[:expiration_date].name})"
-              ),
-              Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
-            ))
+      where('validity && daterange(?::date, ?::date)', start_date, end_date)
     end)
 
     def as_json(options = {})
@@ -80,6 +76,10 @@ module Pricings
     def service_level
       tenant_vehicle&.name
     end
+
+    def set_validity
+      self.validity ||= Range.new(effective_date.to_date, expiration_date.to_date)
+    end
   end
 end
 
@@ -93,6 +93,7 @@ end
 #  expiration_date   :datetime
 #  internal          :boolean          default(FALSE)
 #  load_type         :string
+#  validity          :daterange
 #  wm_rate           :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
@@ -113,4 +114,5 @@ end
 #  index_pricings_pricings_on_tenant_id          (tenant_id)
 #  index_pricings_pricings_on_tenant_vehicle_id  (tenant_vehicle_id)
 #  index_pricings_pricings_on_user_id            (user_id)
+#  index_pricings_pricings_on_validity           (validity) USING gist
 #

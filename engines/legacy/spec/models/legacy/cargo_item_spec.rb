@@ -66,7 +66,7 @@ module Legacy
     describe '#valid_for_mode_of_transport?' do
       it 'validates the mode of transport acorging to the max dimensions' do
         cargo = FactoryBot.create(:legacy_cargo_item)
-        expect(cargo.valid_for_mode_of_transport?('ocean')).to eq(true)
+        expect(cargo.valid_for_mode_of_transport?(mode_of_transport: 'ocean')).to eq(true)
       end
     end
 
@@ -83,7 +83,7 @@ module Legacy
 
       context 'when valid' do
         it 'returns true when cargo item is valid' do
-          valid = cargo_item.valid_for_mode_of_transport?('ocean')
+          valid = cargo_item.valid_for_mode_of_transport?(mode_of_transport: 'ocean')
           expect(valid).to be_truthy
         end
       end
@@ -98,7 +98,7 @@ module Legacy
         end
 
         it 'returns false when cargo item is invalid' do
-          valid = cargo_item.valid_for_mode_of_transport?('air')
+          valid = cargo_item.valid_for_mode_of_transport?(mode_of_transport: 'air')
           expect(valid).to be_falsy
         end
       end

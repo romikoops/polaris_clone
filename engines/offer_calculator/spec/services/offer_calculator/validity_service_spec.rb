@@ -19,62 +19,82 @@ RSpec.describe OfferCalculator::ValidityService do
   describe '.parse_schedules' do
     it 'returns the correct dates for V.A.T.O.S import' do
       validity_service = described_class.new(logic: 'vatos', schedules: schedules, direction: 'import', booking_date: nil)
-      expect(validity_service.start_date.beginning_of_minute).to eq(schedules.first.etd.beginning_of_minute)
-      expect(validity_service.end_date.beginning_of_minute).to eq(schedules.last.etd.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(schedules.first.etd.to_date)
+        expect(validity_service.end_date).to eq(schedules.last.etd.to_date)
+      end
     end
 
     it 'returns the correct dates for V.A.T.O.A import' do
       validity_service = described_class.new(logic: 'vatoa', schedules: schedules, direction: 'import', booking_date: nil)
-      expect(validity_service.start_date.beginning_of_minute).to eq(schedules.first.eta.beginning_of_minute)
-      expect(validity_service.end_date.beginning_of_minute).to eq(schedules.last.eta.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(schedules.first.eta.to_date)
+        expect(validity_service.end_date).to eq(schedules.last.eta.to_date)
+      end
     end
 
     it 'returns the correct dates for V.A.T.O.B import' do
       validity_service = described_class.new(logic: 'vatob', schedules: schedules, direction: 'import', booking_date: booking_date)
-      expect(validity_service.start_date.beginning_of_minute).to eq(booking_date.beginning_of_minute)
-      expect(validity_service.end_date.beginning_of_minute).to eq(booking_date.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(booking_date.to_date)
+        expect(validity_service.end_date).to eq(booking_date.to_date + 1.day)
+      end
     end
 
     it 'returns the correct dates for V.A.T.O.S export' do
       validity_service = described_class.new(logic: 'vatos', schedules: schedules, direction: 'export', booking_date: nil)
-      expect(validity_service.start_date.beginning_of_minute).to eq(schedules.first.etd.beginning_of_minute)
-      expect(validity_service.end_date.beginning_of_minute).to eq(schedules.last.etd.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(schedules.first.etd.to_date)
+        expect(validity_service.end_date).to eq(schedules.last.etd.to_date)
+      end
     end
 
     it 'returns the correct dates for V.A.T.O.A export' do
       validity_service = described_class.new(logic: 'vatoa', schedules: schedules, direction: 'export', booking_date: nil)
-      expect(validity_service.start_date.beginning_of_minute).to eq(schedules.first.etd.beginning_of_minute)
-      expect(validity_service.end_date.beginning_of_minute).to eq(schedules.last.etd.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(schedules.first.etd.to_date)
+        expect(validity_service.end_date).to eq(schedules.last.etd.to_date)
+      end
     end
 
     it 'returns the correct dates for V.A.T.O.B export' do
       validity_service = described_class.new(logic: 'vatob', schedules: schedules, direction: 'export', booking_date: booking_date)
-      expect(validity_service.start_date.beginning_of_minute).to eq(booking_date.beginning_of_minute)
-      expect(validity_service.end_date.beginning_of_minute).to eq(booking_date.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(booking_date.to_date)
+        expect(validity_service.end_date).to eq(booking_date.to_date + 1.day)
+      end
     end
 
     it 'returns the default dates for no schedules V.A.T.O.S import' do
       validity_service = described_class.new(logic: 'vatos', schedules: [], direction: 'import', booking_date: booking_date)
-      expect(validity_service.start_date.beginning_of_minute).to eq(5.days.from_now.beginning_of_minute)
-      expect(validity_service.end_date.beginning_of_minute).to eq(25.days.from_now.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(5.days.from_now.to_date)
+        expect(validity_service.end_date).to eq(25.days.from_now.to_date)
+      end
     end
 
     it 'returns the default dates for no schedules V.A.T.O.A import' do
       validity_service = described_class.new(logic: 'vatoa', schedules: [], direction: 'import', booking_date: booking_date)
-      expect(validity_service.start_date.beginning_of_minute).to eq(5.days.from_now.beginning_of_minute)
-      expect(validity_service.end_date.beginning_of_minute).to eq(25.days.from_now.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(5.days.from_now.to_date)
+        expect(validity_service.end_date).to eq(25.days.from_now.to_date)
+      end
     end
 
     it 'returns the default dates for no schedules V.A.T.O.S export' do
       validity_service = described_class.new(logic: 'vatos', schedules: [], direction: 'export', booking_date: booking_date)
-      expect(validity_service.start_date.beginning_of_minute).to eq(5.days.from_now.beginning_of_minute)
-      expect(validity_service.end_date.beginning_of_minute).to eq(25.days.from_now.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(5.days.from_now.to_date)
+        expect(validity_service.end_date).to eq(25.days.from_now.to_date)
+      end
     end
 
     it 'returns the default dates for no schedules V.A.T.O.A export' do
       validity_service = described_class.new(logic: 'vatoa', schedules: [], direction: 'export', booking_date: booking_date)
-      expect(validity_service.start_date.beginning_of_minute).to eq(5.days.from_now.beginning_of_minute)
-      expect(validity_service.end_date.beginning_of_minute).to eq(25.days.from_now.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(5.days.from_now.to_date)
+        expect(validity_service.end_date).to eq(25.days.from_now.to_date)
+      end
     end
   end
 
@@ -84,37 +104,55 @@ RSpec.describe OfferCalculator::ValidityService do
     it 'returns the correct dates for one schedule V.A.T.O.S export' do
       validity_service = described_class.new(logic: 'vatos', schedules: [], direction: '', booking_date: booking_date)
       validity_service.parse_schedule(schedule: schedule, direction: 'export')
-      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(schedule.etd.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(schedule.etd.to_date)
+        expect(validity_service.end_date).to eq(schedule.etd.to_date + 1.day)
+      end
     end
 
     it 'returns the correct dates for one schedule V.A.T.O.A export' do
       validity_service = described_class.new(logic: 'vatoa', schedules: [], direction: '', booking_date: booking_date)
       validity_service.parse_schedule(schedule: schedule, direction: 'export')
-      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(schedule.etd.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(schedule.etd.to_date)
+        expect(validity_service.end_date).to eq(schedule.etd.to_date + 1.day)
+      end
     end
 
     it 'returns the correct dates for one schedule V.A.T.O.B export' do
       validity_service = described_class.new(logic: 'vatob', schedules: [], direction: '', booking_date: booking_date)
       validity_service.parse_schedule(schedule: schedule, direction: 'export')
-      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(booking_date.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(booking_date.to_date)
+        expect(validity_service.end_date).to eq(booking_date.to_date + 1.day)
+      end
     end
 
     it 'returns the correct dates for one schedule V.A.T.O.S import' do
       validity_service = described_class.new(logic: 'vatos', schedules: [], direction: '', booking_date: booking_date)
       validity_service.parse_schedule(schedule: schedule, direction: 'import')
-      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(schedule.etd.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(schedule.etd.to_date)
+        expect(validity_service.end_date).to eq(schedule.etd.to_date + 1.day)
+      end
     end
 
     it 'returns the correct dates for one schedule V.A.T.O.A import' do
       validity_service = described_class.new(logic: 'vatoa', schedules: [], direction: '', booking_date: booking_date)
       validity_service.parse_schedule(schedule: schedule, direction: 'import')
-      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(schedule.eta.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(schedule.eta.to_date)
+        expect(validity_service.end_date).to eq(schedule.eta.to_date + 1.day)
+      end
     end
 
     it 'returns the correct dates for one schedule V.A.T.O.B import' do
       validity_service = described_class.new(logic: 'vatob', schedules: [], direction: '', booking_date: booking_date)
       validity_service.parse_schedule(schedule: schedule, direction: 'import')
-      expect(validity_service.start_date.beginning_of_minute).to eq(validity_service.end_date.beginning_of_minute) & eq(booking_date.beginning_of_minute)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(booking_date.to_date)
+        expect(validity_service.end_date).to eq(booking_date.to_date + 1.day)
+      end
     end
   end
 end

@@ -5,7 +5,7 @@ module OfferCalculator
     class TruckingDataBuilder < Base # rubocop:disable Metrics/ClassLength
       MissingTruckingData = Class.new(StandardError)
 
-      def perform(hubs)
+      def perform(hubs:)
         @trucking_pricings_metadata = []
         @all_selected_fees = {}
         trucking_pricings = { origin: 'pre', destination: 'on' }
@@ -32,9 +32,8 @@ module OfferCalculator
           sandbox: @sandbox
         )
 
-        data = Legacy::Hub.where(id: hub_ids).each_with_object({}) do |hub, obj|
+        data = Legacy::Hub.where(id: hub_ids).each_with_object(Hash.new { |h, k| h[k] = [] }) do |hub, obj|
           distance = calc_distance(address, hub)
-
           trucking_pricings = trucking_pricing_finder.perform(hub.id, distance)
 
           trucking_charge_data = data_for_trucking_charges(trucking_pricings, distance)
@@ -50,6 +49,7 @@ module OfferCalculator
         valid_object = validate_data_for_hubs(data)
 
         raise errors.first if errors.length == hub_ids.length
+
         raise OfferCalculator::Calculator::MissingTruckingData if valid_object.empty?
 
         valid_object
@@ -138,7 +138,7 @@ module OfferCalculator
         manipulated_trucking_pricings.first
       end
 
-      attr_accessor :all_selected_fees
+      attr_accessor :all_selected_fees, :schedules
     end
   end
 end

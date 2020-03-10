@@ -9,6 +9,7 @@ RSpec.describe OfferCalculator::Service::RouteFinder do
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
   let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
   let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, tenant: tenant) }
   let(:shipment) do
     FactoryBot.create(:legacy_shipment,
                       load_type: 'cargo_item',
@@ -21,13 +22,16 @@ RSpec.describe OfferCalculator::Service::RouteFinder do
       destination: Legacy::Hub.where(id: destination_hub.id)
     }
   end
-  let(:results) { described_class.new(shipment: shipment).perform(hubs) }
+  let(:date_range) { (Time.zone.today..Time.zone.today + 20.days) }
+  let(:results) { described_class.new(shipment: shipment).perform(hubs: hubs, date_range: date_range) }
 
   before do
-    FactoryBot.create(:legacy_lcl_pricing, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:legacy_fcl_40_pricing, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:legacy_fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant)
+    FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle, load_type: 'container')
+    FactoryBot.create(:legacy_lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:legacy_fcl_40_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:legacy_fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
   end
 
   describe '.perform', :vcr do

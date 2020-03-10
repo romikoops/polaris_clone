@@ -96,6 +96,7 @@ end
 #  expiration_date       :datetime
 #  internal              :boolean          default(FALSE)
 #  uuid                  :uuid
+#  validity              :daterange
 #  wm_rate               :decimal(, )
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
@@ -114,4 +115,5 @@ end
 #  index_pricings_on_transport_category_id  (transport_category_id)
 #  index_pricings_on_user_id                (user_id)
 #  index_pricings_on_uuid                   (uuid) UNIQUE
+#  legacy_pricings_validity_index           (validity) USING gist
 #

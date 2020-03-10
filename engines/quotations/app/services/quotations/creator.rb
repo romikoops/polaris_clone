@@ -23,7 +23,7 @@ module Quotations
       origin_nexus = @meta[:origin_hub].nexus
       destination_nexus = @meta[:destination_hub].nexus
       tenant = Tenants::Tenant.find_by(legacy_id: legacy_tenant_id)
-      @quotation = Quotation.create(tenant: tenant,
+      @quotation = Quotations::Quotation.create(tenant: tenant,
                                     user: @user,
                                     origin_nexus: origin_nexus,
                                     destination_nexus: destination_nexus)

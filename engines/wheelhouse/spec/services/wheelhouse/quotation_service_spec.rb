@@ -6,6 +6,7 @@ RSpec.describe Wheelhouse::QuotationService do
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
+  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
   let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: tenant) }
   let(:air_itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, mode_of_transport: 'air', tenant: tenant) }
   let(:origin_hub) { itinerary.hubs.find_by(name: 'Hamburg Port') }
@@ -39,7 +40,7 @@ RSpec.describe Wheelhouse::QuotationService do
   end
   let(:input) do
     { tenant_id: tenant.id,
-      user_id: user.id,
+      user_id: tenants_user.id,
       direction: direction,
       load_type: load_type,
       selected_date: Time.zone.today }

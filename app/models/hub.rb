@@ -208,6 +208,7 @@ end
 #  longitude           :float
 #  name                :string
 #  photo               :string
+#  point               :geometry({:srid= geometry, 0
 #  trucking_type       :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
@@ -219,6 +220,7 @@ end
 #
 # Indexes
 #
+#  index_hubs_on_point       (point) USING gist
 #  index_hubs_on_sandbox_id  (sandbox_id)
 #  index_hubs_on_tenant_id   (tenant_id)
 #

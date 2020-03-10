@@ -15,6 +15,8 @@ FactoryBot.define do
       latitude { '31.232014' }
       longitude { '121.4867159' }
       zip_code { '20001' }
+      street { 'Henan Middle Road' }
+      street_number { '88' }
       geocoded_address { '88 Henan Middle Road, Shanghai' }
       city { 'Shanghai' }
       association :country, factory: :country_cn
@@ -45,7 +47,9 @@ FactoryBot.define do
       latitude { '53.55' }
       longitude { '9.927' }
       zip_code { '20457' }
-      geocoded_address { '' }
+      street { 'Brooktorkai' }
+      street_number { '7' }
+      geocoded_address { 'Brooktorkai 7, Hamburg, 20457, Germany' }
       city { 'Hamburg' }
       association :country, factory: :country_de
     end

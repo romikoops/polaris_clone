@@ -88,6 +88,7 @@ end
 #  expiration_date   :datetime
 #  internal          :boolean          default(FALSE)
 #  load_type         :string
+#  validity          :daterange
 #  wm_rate           :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
@@ -108,4 +109,5 @@ end
 #  index_pricings_pricings_on_tenant_id          (tenant_id)
 #  index_pricings_pricings_on_tenant_vehicle_id  (tenant_vehicle_id)
 #  index_pricings_pricings_on_user_id            (user_id)
+#  index_pricings_pricings_on_validity           (validity) USING gist
 #

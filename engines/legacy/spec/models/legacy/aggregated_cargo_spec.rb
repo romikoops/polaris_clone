@@ -56,28 +56,18 @@ end
 
 # == Schema Information
 #
-# Table name: cargo_items
+# Table name: aggregated_cargos
 #
-#  id                 :bigint           not null, primary key
-#  cargo_class        :string
-#  chargeable_weight  :decimal(, )
-#  customs_text       :string
-#  dangerous_goods    :boolean
-#  dimension_x        :decimal(, )
-#  dimension_y        :decimal(, )
-#  dimension_z        :decimal(, )
-#  hs_codes           :string           default([]), is an Array
-#  payload_in_kg      :decimal(, )
-#  quantity           :integer
-#  stackable          :boolean          default(TRUE)
-#  unit_price         :jsonb
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  cargo_item_type_id :integer
-#  sandbox_id         :uuid
-#  shipment_id        :integer
+#  id                :bigint           not null, primary key
+#  chargeable_weight :decimal(, )
+#  volume            :decimal(, )
+#  weight            :decimal(, )
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  sandbox_id        :uuid
+#  shipment_id       :integer
 #
 # Indexes
 #
-#  index_cargo_items_on_sandbox_id  (sandbox_id)
+#  index_aggregated_cargos_on_sandbox_id  (sandbox_id)
 #

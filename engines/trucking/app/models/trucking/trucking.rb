@@ -34,10 +34,6 @@ module Trucking
       where(hub_id: hub.id).destroy_all
     end
 
-    def self.find_by_filter(args = {})
-      ::Trucking::Queries::FindTrucking.new(args.merge(klass: self)).perform
-    end
-
     def self.find_by_hub_id(hub_id:, options: {})
       find_by_hub_ids(hub_ids: [hub_id], options: options)
     end

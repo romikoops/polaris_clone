@@ -13,17 +13,15 @@ module OfferCalculator
 
       def hubs_for_target(target, carriage)
         if @shipment.has_carriage?(carriage)
-          Legacy::Hub.where(id: trucking_hub_ids(carriage))
+          trucking_hubs(carriage)
         else
           @shipment.tenant.hubs.where(sandbox: @sandbox, nexus_id: @shipment["#{target}_nexus_id"])
         end
       end
 
-      def trucking_hub_ids(carriage)
+      def trucking_hubs(carriage)
         trucking_details = @shipment.trucking["#{carriage}_carriage"]
-        base_pricing_enabled = Tenants::ScopeService.new(
-          target: ::Tenants::User.find_by(legacy_id: @shipment.user)
-        ).fetch(:base_pricing)
+        base_pricing_enabled = scope.fetch(:base_pricing)
         args = {
           address: Legacy::Address.find(trucking_details['address_id']),
           load_type: @shipment.load_type,
@@ -34,8 +32,8 @@ module OfferCalculator
           sandbox: @sandbox,
           order_by: base_pricing_enabled ? 'group_id' : 'user_id'
         }
-        results = Trucking::Queries::Availability.new(args).perform | Trucking::Queries::Distance.new(args).perform
-        results.map(&:hub_id)
+
+        Trucking::Queries::Hubs.new(args).perform
       end
     end
   end

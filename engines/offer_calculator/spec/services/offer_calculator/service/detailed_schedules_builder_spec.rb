@@ -7,6 +7,7 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
   let(:direction) { 'export' }
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:tenants_scope) { FactoryBot.create(:tenants_scope, target: tenants_tenant, content: {}) }
   let(:cargo_transport_category) do
     Legacy::TransportCategory.find_by(cargo_class: 'lcl', load_type: 'cargo_item') ||
       FactoryBot.create(:legacy_transport_category, cargo_class: 'lcl', load_type: 'cargo_item')
@@ -96,8 +97,9 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
   end
   let(:no_trucking_data) { { trucking_pricings: {}, metadata: [] } }
   let(:target_trucking_data) { no_trucking_data }
+  let(:wheelhouse) { false }
   let(:klass) { described_class.new(shipment: target_shipment, sandbox: nil) }
-  let(:results) { klass.perform(schedules, target_trucking_data, user) }
+  let(:results) { klass.perform(schedules, target_trucking_data, user, wheelhouse) }
   let(:target_shipment) { cargo_shipment }
   let(:lcl_pricing) do
     FactoryBot.create(:loaded_lcl_pricing,
@@ -155,8 +157,6 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
 
   before do
     FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
-    stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
-      .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26 } }.to_json, headers: {})
     %w[ocean trucking local_charge].flat_map do |mot|
       [
         FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
@@ -171,145 +171,9 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
   describe '.grouped_schedules', :vcr do
     let(:results) { klass.grouped_schedules(schedules: schedules, shipment: target_shipment, user: user) }
 
-    context 'with two unique pricings' do
-      before do
-        FactoryBot.create(:legacy_pricing,
-                          itinerary: itinerary,
-                          tenant: tenant,
-                          tenant_vehicle: tenant_vehicle,
-                          transport_category: cargo_transport_category)
-        FactoryBot.create(:legacy_pricing,
-                          itinerary: itinerary2,
-                          tenant: tenant,
-                          tenant_vehicle: tenant_vehicle2,
-                          transport_category: cargo_transport_category)
-      end
-
-      it 'returns two pricing objects with unique pricing_ids' do
-        aggregate_failures do
-          expect(results.length).to eq(2)
-          expect(results.any? { |r| r.dig(:pricings_by_cargo_class, 'lcl').nil? }).to eq(false)
-          expect(results.map { |r| r.dig(:pricings_by_cargo_class, 'lcl') }.uniq.length).to eq(2)
-        end
-      end
-    end
-
-    context 'with two unique pricings in quote shop' do
-      before do
-        FactoryBot.create(:legacy_pricing,
-                          itinerary: itinerary,
-                          tenant: tenant,
-                          tenant_vehicle: tenant_vehicle,
-                          transport_category: cargo_transport_category)
-        FactoryBot.create(:legacy_pricing,
-                          itinerary: itinerary2,
-                          tenant: tenant,
-                          tenant_vehicle: tenant_vehicle2,
-                          transport_category: cargo_transport_category)
-        allow(klass).to receive(:quotation_tool?).and_return(true)
-      end
-
-      it 'returns two pricing objects with unique pricing_ids for quote shop' do
-        aggregate_failures do
-          expect(results.length).to eq(2)
-          expect(results.any? { |r| r.dig(:pricings_by_cargo_class, 'lcl').nil? }).to eq(false)
-          expect(results.map { |r| r.dig(:pricings_by_cargo_class, 'lcl') }.uniq.length).to eq(2)
-        end
-      end
-    end
-
-    context 'with three pricing objects with unique pricing_ids and cargo classes by closing_date (fcl)' do
-      let!(:pricing1) do
-        FactoryBot.create(:legacy_fcl_20_pricing,
-                          itinerary: itinerary,
-                          tenant: tenant,
-                          tenant_vehicle: tenant_vehicle)
-      end
-      let!(:pricing2) do
-        FactoryBot.create(:legacy_fcl_40_pricing,
-                          itinerary: itinerary,
-                          tenant: tenant,
-                          tenant_vehicle: tenant_vehicle)
-      end
-      let(:schedules) do
-        [
-          FactoryBot.create(:legacy_trip,
-                            tenant_vehicle: pricing1.tenant_vehicle,
-                            itinerary: pricing1.itinerary,
-                            closing_date: pricing1.expiration_date - 2.days,
-                            start_date: pricing1.expiration_date + 2.days,
-                            end_date: pricing1.expiration_date + 22.days),
-          FactoryBot.create(:legacy_trip,
-                            tenant_vehicle: pricing2.tenant_vehicle,
-                            itinerary: pricing2.itinerary,
-                            closing_date: pricing2.expiration_date - 2.days,
-                            start_date: pricing2.expiration_date + 2.days,
-                            end_date: pricing2.expiration_date + 22.days)
-        ].map { |trip| OfferCalculator::Schedule.from_trip(trip) }
-      end
-      let(:target_shipment) { container_shipment }
-
-      before do
-        FactoryBot.create(:legacy_fcl_40_hq_pricing,
-                          itinerary: itinerary,
-                          tenant: tenant,
-                          tenant_vehicle: tenant_vehicle)
-      end
-
-      it 'returns three pricing objects with unique pricing_ids and cargo classes by closing_date (fcl)' do
-        aggregate_failures do
-          expect(results.length).to eq(1)
-          expect(results.any? { |r| r.dig(:pricings_by_cargo_class, 'fcl_20').nil? }).to eq(false)
-          expect(results.any? { |r| r.dig(:pricings_by_cargo_class, 'fcl_40').nil? }).to eq(false)
-          expect(results.any? { |r| r.dig(:pricings_by_cargo_class, 'fcl_40_hq').nil? }).to eq(false)
-        end
-      end
-    end
-
-    context 'with two pricing objects with unique pricing_ids by closing_date' do
-      let(:pricing1) do
-        FactoryBot.create(:legacy_pricing,
-                          itinerary: itinerary,
-                          tenant: tenant,
-                          tenant_vehicle: tenant_vehicle,
-                          transport_category: cargo_transport_category)
-      end
-      let(:pricing2) do
-        FactoryBot.create(:legacy_pricing,
-                          itinerary: itinerary2,
-                          tenant: tenant,
-                          tenant_vehicle: tenant_vehicle2,
-                          transport_category: cargo_transport_category)
-      end
-      let(:schedules) do
-        [
-          FactoryBot.create(:legacy_trip,
-                            tenant_vehicle: pricing1.tenant_vehicle,
-                            itinerary: pricing1.itinerary,
-                            closing_date: pricing1.expiration_date - 2.days,
-                            start_date: pricing1.expiration_date + 2.days,
-                            end_date: pricing1.expiration_date + 22.days),
-          FactoryBot.create(:legacy_trip,
-                            tenant_vehicle: pricing2.tenant_vehicle,
-                            itinerary: pricing2.itinerary,
-                            closing_date: pricing2.expiration_date - 2.days,
-                            start_date: pricing2.expiration_date + 2.days,
-                            end_date: pricing2.expiration_date + 22.days)
-        ].map { |trip| OfferCalculator::Schedule.from_trip(trip) }
-      end
-
-      it 'returns two pricing objects with unique pricing_ids by closing_date' do
-        aggregate_failures do
-          expect(results.length).to eq(2)
-          expect(results.any? { |r| r.dig(:pricings_by_cargo_class, 'lcl').nil? }).to eq(false)
-          expect(results.map { |r| r.dig(:pricings_by_cargo_class, 'lcl') }.uniq.length).to eq(2)
-        end
-      end
-    end
-
     context 'with base_pricing' do
       before do
-        FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
+        tenants_scope.update(content: { base_pricing: true })
       end
 
       let(:pricing1) do
@@ -452,9 +316,9 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
     let(:dates) do
       {
         start_date: schedules.first.etd,
-        end_date: schedules.first.etd,
+        end_date: schedules.first.etd + 1.day,
         closing_start_date: schedules.first.closing_date,
-        closing_end_date: schedules.first.closing_date
+        closing_end_date: schedules.first.closing_date + 1.day
       }
     end
     let(:results) do
@@ -466,6 +330,7 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
         dedicated_pricings_only: dedicated_pricings_only
       )
     end
+    let(:pricings_by_cargo_class) { results.first }
 
     context 'when legacy and  transport category (lcl)' do
       let(:target_shipment) { cargo_shipment }
@@ -476,8 +341,8 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
 
       it 'returns an object containing pricings grouped by transport category (lcl)' do
         aggregate_failures do
-          expect(results.keys.length).to eq(1)
-          expect(results.values.first.first['id']).to eq(legacy_lcl_pricing.id)
+          expect(pricings_by_cargo_class.keys.length).to eq(1)
+          expect(pricings_by_cargo_class.values.first.first['id']).to eq(legacy_lcl_pricing.id)
         end
       end
     end
@@ -494,10 +359,10 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
 
       it 'returns an object containing pricings grouped by transport category (fcl)' do
         aggregate_failures do
-          expect(results.keys.length).to eq(3)
-          expect(results[fcl_40_hq_transport_category.id].first['id']).to eq(legacy_fcl_40_hq_pricing.id)
-          expect(results[fcl_40_transport_category.id].first['id']).to eq(legacy_fcl_40_pricing.id)
-          expect(results[fcl_20_transport_category.id].first['id']).to eq(legacy_fcl_20_pricing.id)
+          expect(pricings_by_cargo_class.keys.length).to eq(3)
+          expect(pricings_by_cargo_class['fcl_40_hq'].first['id']).to eq(legacy_fcl_40_hq_pricing.id)
+          expect(pricings_by_cargo_class['fcl_40'].first['id']).to eq(legacy_fcl_40_pricing.id)
+          expect(pricings_by_cargo_class['fcl_20'].first['id']).to eq(legacy_fcl_20_pricing.id)
         end
       end
     end
@@ -526,50 +391,34 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
 
       it 'returns pricings valid for closing_dates if departure dates return nil' do
         aggregate_failures do
-          expect(results.keys.length).to eq(1)
-          expect(results.values.first.first['id']).to eq(pricing1.id)
+          expect(pricings_by_cargo_class.keys.length).to eq(1)
+          expect(pricings_by_cargo_class.values.first.first['id']).to eq(pricing1.id)
         end
       end
     end
 
     context 'with user and dedicated pricing available' do
       before do
-        FactoryBot.create(:legacy_pricing,
+        FactoryBot.create(:lcl_pricing,
                           itinerary: itinerary,
                           tenant: tenant,
-                          tenant_vehicle: tenant_vehicle,
-                          transport_category: cargo_transport_category,
-                          effective_date: Date.parse('01/01/2019'),
-                          expiration_date: Date.parse('31/01/2019'))
+                          tenant_vehicle: tenant_vehicle)
+        tenants_scope.update(content: { base_pricing: true })
       end
 
       let!(:pricing1) do
-        FactoryBot.create(:legacy_pricing,
-                          user: user,
+        FactoryBot.create(:lcl_pricing,
+                          group_id: group.id,
                           itinerary: itinerary,
                           tenant: tenant,
-                          tenant_vehicle: tenant_vehicle,
-                          transport_category: cargo_transport_category,
-                          effective_date: Date.parse('01/01/2019'),
-                          expiration_date: Date.parse('31/01/2019'))
-      end
-      let(:trip) do
-        FactoryBot.create(:legacy_trip,
-                          start_date: Date.parse('02/02/2019'),
-                          end_date: Date.parse('28/02/2019'),
-                          closing_date: Date.parse('28/01/2019'),
-                          tenant_vehicle: tenant_vehicle,
-                          itinerary: itinerary)
-      end
-      let(:schedules) do
-        [OfferCalculator::Schedule.from_trip(trip)]
+                          tenant_vehicle: tenant_vehicle)
       end
       let(:dedicated_pricings_only) { true }
 
       it 'returns pricings valid for closing_dates and user if dedicated pricing available' do
         aggregate_failures do
-          expect(results.keys.length).to eq(1)
-          expect(results.values.first.first['id']).to eq(pricing1.id)
+          expect(pricings_by_cargo_class.keys.length).to eq(1)
+          expect(pricings_by_cargo_class.values.first.first['id']).to eq(pricing1.id)
         end
       end
     end
@@ -587,94 +436,13 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
     end
   end
 
-  describe '.perform (legacy)', :vcr do
-    let(:no_trucking_data) { { trucking_pricings: {}, metadata: [] } }
-    let(:target_trucking_data) { no_trucking_data }
-    let(:klass) { described_class.new(shipment: target_shipment, sandbox: nil) }
-    let(:results) { klass.perform(schedules, target_trucking_data, user) }
-
-    before do
-      FactoryBot.create(:legacy_lcl_pricing,
-                        itinerary: itinerary,
-                        tenant_vehicle: tenant_vehicle,
-                        transport_category: cargo_transport_category)
-      FactoryBot.create(:legacy_fcl_20_pricing,
-                        itinerary: itinerary,
-                        tenant: tenant,
-                        tenant_vehicle: tenant_vehicle,
-                        transport_category: fcl_20_transport_category)
-      FactoryBot.create(:legacy_fcl_40_pricing,
-                        itinerary: itinerary,
-                        tenant: tenant,
-                        tenant_vehicle: tenant_vehicle,
-                        transport_category: fcl_40_transport_category)
-      FactoryBot.create(:legacy_fcl_40_hq_pricing,
-                        itinerary: itinerary,
-                        tenant: tenant,
-                        tenant_vehicle: tenant_vehicle,
-                        transport_category: fcl_40_hq_transport_category)
-    end
-
-    context 'when regular' do
-      let(:target_shipment) { cargo_shipment }
-
-      it 'returns an object with two quotes with subtotals and grand totals' do
-        aggregate_failures do
-          expect(results.count).to eq(1)
-          expect(results.first[:quote][:total][:value]).to be_truthy
-          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
-        end
-      end
-    end
-
-    context 'with rate_overview' do
-      before do
-        FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { show_rate_overview: true })
-      end
-
-      let(:target_shipment) { cargo_shipment }
-
-      it 'returns an object with two quotes with subtotals and grand totals' do
-        aggregate_failures do
-          expect(results.count).to eq(1)
-          expect(results.first[:quote][:total][:value]).to be_truthy
-          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
-        end
-      end
-    end
-
-    context 'with aggregated cargo' do
-      let(:target_shipment) { agg_cargo_shipment }
-
-      it 'returns an object with two quotes with subtotals and grand totals w/ aggregated cargo' do
-        aggregate_failures do
-          expect(results.count).to eq(1)
-          expect(results.first[:quote][:total][:value]).to be_truthy
-          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
-        end
-      end
-    end
-
-    context 'with containers' do
-      let(:target_shipment) { container_shipment }
-
-      it 'returns an object with two quotes with subtotals and grand totals w/ containers' do
-        aggregate_failures do
-          expect(results.count).to eq(1)
-          expect(results.first[:quote][:total][:value]).to be_truthy
-          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
-        end
-      end
-    end
-  end
-
   describe '.perform (base pricing)', :vcr do
     before do
       lcl_pricing
       fcl_20_pricing
       fcl_40_pricing
       fcl_40_hq_pricing
-      FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
+      tenants_scope.update(content: { base_pricing: true })
     end
 
     context 'without margins (regular)' do
@@ -691,9 +459,22 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
 
     context 'without margins (regular  & rate_overview)' do
       before do
-        tenants_tenant.scope.update(content: { base_pricing: true, show_rate_overview: true })
+        tenants_scope.update(content: { base_pricing: true, show_rate_overview: true })
       end
 
+      let(:target_shipment) { cargo_shipment }
+
+      it 'returns an object with two quotes with subtotals and grand totals' do
+        aggregate_failures do
+          expect(results.count).to eq(1)
+          expect(results.first[:quote][:total][:value]).to be_truthy
+          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+        end
+      end
+    end
+
+    context 'without margins (regular  & wheelhouse)' do
+      let(:wheelhouse) { true }
       let(:target_shipment) { cargo_shipment }
 
       it 'returns an object with two quotes with subtotals and grand totals' do
@@ -800,7 +581,7 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
                           itinerary_id: itinerary.id,
                           applicable: group,
                           tenant: tenants_tenant)
-        tenants_tenant.scope.update(content: { show_rate_overview: true, base_pricing: true })
+        tenants_scope.update(content: { show_rate_overview: true, base_pricing: true })
       end
 
       let(:target_shipment) { cargo_shipment }
@@ -866,10 +647,8 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
 
     context 'with charge calculator errors' do
       before do
-        FactoryBot.create(:legacy_lcl_pricing,
-                          itinerary: itinerary,
-                          tenant_vehicle: tenant_vehicle,
-                          transport_category: cargo_transport_category)
+        lcl_pricing
+        tenants_scope.update(content: { base_pricing: true })
         allow(klass).to receive(:handle_group_result).and_return([{ error: OfferCalculator::Calculator::InvalidFreightResult }])
       end
 

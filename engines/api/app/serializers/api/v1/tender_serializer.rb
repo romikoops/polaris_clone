@@ -4,7 +4,7 @@ module Api
   module V1
     class TenderSerializer < ActiveModel::Serializer
       attributes %i[origin destination carrier service_level mode_of_transport total shipment_id charge_trip_id]
-      delegate :origin_hub, :destination_hub, :carrier, :service_level, :transit_time,
+      delegate :origin_hub, :destination_hub, :service_level, :transit_time,
                :mode_of_transport, :shipment_id, :charge_trip_id, to: :meta
       delegate :meta, to: :object
 
@@ -18,11 +18,14 @@ module Api
         destination_hub.name
       end
 
+      def carrier
+        object.dig('meta', 'carrier_name')
+      end
+
       def total
-        {
-          value: object.quote.total.value.to_f,
-          currency: object.quote.total.currency
-        }
+        return '' if object.dig('quote', 'total', 'value').blank?
+
+        Money.new(object.quote.total.value.to_d * 100, object.quote.total.currency).format
       end
 
       def quotation_tool?

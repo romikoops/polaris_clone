@@ -16,15 +16,10 @@ module DocumentService
       @filename = _filename
       @directory = "tmp/#{@filename}"
       @workbook = create_workbook(@directory)
-      @trucking_pricings = Trucking::Trucking.find_by_hub_id(
+      @trucking_pricings = Trucking::Trucking.where(
         hub_id: options[:hub_id],
-        options: {
-          group_id: options[:group_id],
-          filters: {
-            load_type: options[:load_type]
-          },
-          paginate: false
-        }
+        group_id: options[:group_id],
+        load_type: options[:load_type]
       )
       @results_by_truck_type = {}
       @dir_fees = {}

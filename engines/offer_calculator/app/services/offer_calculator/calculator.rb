@@ -18,11 +18,12 @@ module OfferCalculator
     InvalidFreightResult = Class.new(StandardError)
     InvalidLocalChargeResult = Class.new(StandardError)
 
-    def initialize(shipment:, params:, user:, sandbox: nil)
+    def initialize(shipment:, params:, user:, wheelhouse: false, sandbox: nil)
       @user           = user
       @shipment       = shipment
       @delay          = params['delay']
       @isQuote = params['shipment'].delete('isQuote')
+      @wheelhouse = wheelhouse
       @sandbox = sandbox
       instantiate_service_classes(params)
       update_shipment
@@ -30,10 +31,10 @@ module OfferCalculator
 
     def perform
       @hubs               = @hub_finder.perform
-      @trucking_data      = @trucking_data_builder.perform(@hubs)
-      @routes             = @route_finder.perform(@hubs)
+      @routes             = @route_finder.perform(hubs: @hubs, date_range: date_range)
       @routes             = @route_filter.perform(@routes)
-      @detailed_schedules = @detailed_schedules_builder.perform(schedules, @trucking_data, @user)
+      @trucking_data = @trucking_data_builder.perform(hubs: @hubs)
+      @detailed_schedules = @detailed_schedules_builder.perform(schedules, @trucking_data, @user, @wheelhouse)
     end
 
     private
@@ -67,11 +68,11 @@ module OfferCalculator
     end
 
     def schedules
-      if quotation_tool?
-        @quote_route_builder.perform(@routes)
-      else
-        @schedule_finder.perform(@routes, @delay, @hubs)
-      end
+      @schedules ||= if quotation_tool?
+                       @quote_route_builder.perform(@routes)
+                     else
+                       @schedule_finder.perform(@routes, @delay, @hubs)
+                     end
     end
 
     def quotation_tool?
@@ -81,6 +82,18 @@ module OfferCalculator
       ).fetch
 
       @isQuote || scope['open_quotation_tool'] || scope['closed_quotation_tool']
+    end
+
+    def date_range
+      (@shipment.desired_start_date..(@shipment.desired_start_date + sanitized_delay_in_days))
+    end
+
+    def sanitized_delay_in_days
+      (@delay ? @delay.try(:to_i) : default_delay_in_days).days
+    end
+
+    def default_delay_in_days
+      60
     end
   end
 end
