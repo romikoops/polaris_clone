@@ -29,7 +29,7 @@ module Api
         FactoryBot.create(:felixstowe_shanghai_itinerary, tenant: legacy_tenant)
         FactoryBot.create(:hamburg_shanghai_itinerary, tenant: legacy_tenant)
 
-        get :origins, params: { location: { id: destination_hub.nexus_id } }
+        get :origins, params: { id: destination_hub.nexus_id }
 
         origins = %w[Gothenburg Felixstowe Hamburg]
         expect(response_data.map { |origin| origin.dig('attributes', 'name') }).to eq(origins)
@@ -48,7 +48,7 @@ module Api
 
     describe 'GET #destinations' do
       it 'Renders a json of destinations for a given a origin id' do
-        get :destinations, params: { location: { id: origin_hub.nexus_id } }
+        get :destinations, params: { id: origin_hub.nexus_id }
 
         expect(response_data[0]['attributes']['name']).to eq(destination_nexus.name)
       end

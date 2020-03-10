@@ -24,11 +24,8 @@ RSpec.resource 'Locations', acceptance: true do
       parameter :id, 'the id of the origin'
 
       example 'Renders a json of origins avaialable for the chosen destination' do
-        request = {
-          location: {
-            id: destination_hub.nexus_id
-          }
-        }
+        request = { id: destination_hub.nexus_id }
+
         do_request(request)
 
         expect(response_data.count).to eq 1
@@ -52,7 +49,8 @@ RSpec.resource 'Locations', acceptance: true do
       parameter :lng, 'the Longitude of the chosen address'
 
       example 'Renders a json of origins available for the chosen destination address' do
-        request = { location: { lat: address.latitude, lng: address.longitude } }
+        request = { lat: address.latitude, lng: address.longitude }
+
         do_request(request)
 
         aggregate_failures do
@@ -68,9 +66,8 @@ RSpec.resource 'Locations', acceptance: true do
       end
 
       example 'Renders a json of origins' do
-        request = {
-          q: 'goth'
-        }
+        request = { q: 'goth' }
+
         do_request(request)
 
         aggregate_failures do
@@ -88,7 +85,7 @@ RSpec.resource 'Locations', acceptance: true do
       parameter :id, 'the id of the origin'
 
       example 'Renders a json of destinations avaialable for the chosen origin' do
-        request = { location: { id: origin_hub.nexus_id } }
+        request = { id: origin_hub.nexus_id }
 
         do_request(request)
         aggregate_failures do
@@ -118,7 +115,8 @@ RSpec.resource 'Locations', acceptance: true do
       parameter :lng, 'the Longitude of the chosen address'
 
       example 'Renders a json of destinations available for the chosen origin' do
-        request = { location: { lat: address.latitude, lng: address.longitude } }
+        request = { lat: address.latitude, lng: address.longitude }
+
         do_request(request)
 
         aggregate_failures do
@@ -134,9 +132,8 @@ RSpec.resource 'Locations', acceptance: true do
       end
 
       example 'Renders a json of destinations' do
-        request = {
-          q: 'shang'
-        }
+        request = { q: 'shang' }
+
         do_request(request)
 
         aggregate_failures do

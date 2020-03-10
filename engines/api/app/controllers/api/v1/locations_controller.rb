@@ -56,10 +56,7 @@ module Api
       end
 
       def location_params
-        params.permit(
-          :q,
-          location: %i[id lat lng]
-        )
+        params.permit(:q, :id, :lat, :lng)
       end
 
       def tenant_itineraries
@@ -69,32 +66,34 @@ module Api
       end
 
       def location_itineraries(itineraries:, index:, carriage:)
-        return itineraries if params[:location].blank?
+        return itineraries unless location?
 
-        if params[:location][:id].present?
-          itineraries = itineraries.where(stops: { index: index, hub_id: nexus_hubs(params[:location][:id]) })
+        if params[:id].present?
+          itineraries = itineraries.where(stops: { index: index, hub_id: nexus_hubs(params[:id]) })
         end
-        if params[:location][:lat].present? && params[:location][:lng].present?
-          hubs = carriage_hubs_for(location: params[:location], carriage: carriage)
+        if params[:lat].present? && params[:lng].present?
+          hubs = carriage_hubs_for(lat: params[:lat], lng: params[:lng], carriage: carriage)
           itineraries = itineraries.where(stops: { index: index, hub_id: hubs })
         end
         itineraries
       end
 
-      def carriage_hubs_for(location:, carriage:)
+      def carriage_hubs_for(lat:, lng:, carriage:)
+        trucking_params = trucking_args(lat: lat, lng: lng, carriage: carriage)
+
         trucking_pricings ||= begin
-          area_results = ::Trucking::Queries::Availability.new(trucking_args(location, carriage)).perform
-          distance_results = ::Trucking::Queries::Distance.new(trucking_args(location, carriage)).perform
+          area_results = ::Trucking::Queries::Availability.new(trucking_params).perform
+          distance_results = ::Trucking::Queries::Distance.new(trucking_params).perform
           area_results | distance_results
         end
 
         trucking_pricings.pluck(:hub_id)
       end
 
-      def trucking_args(location, carriage)
+      def trucking_args(lat:, lng:, carriage:)
         {
           tenant_id: current_tenant.legacy_id,
-          address: address(location),
+          address: address(lat: lat, lng: lng),
           carriage: carriage,
           klass: Trucking::Trucking,
           sandbox: @sandbox,
@@ -102,13 +101,13 @@ module Api
         }
       end
 
-      def address(location)
-        address = Geocoder.search([location[:lat].to_f, location[:lng].to_f]).first
+      def address(lat:, lng:)
+        address = Geocoder.search([lat.to_f, lng.to_f]).first
         return unless address
 
         OpenStruct.new(
-          latitude: location[:lat].to_f,
-          longitude: location[:lng].to_f,
+          latitude: lat.to_f,
+          longitude: lng.to_f,
           get_zip_code: address.postal_code,
           city_name: address.city,
           country: OpenStruct.new(code: address.country_code)
@@ -120,6 +119,10 @@ module Api
           target: current_user,
           tenant: current_tenant
         ).fetch(:base_pricing)
+      end
+
+      def location?
+        params[:id] || (params[:lat] && params[:lat])
       end
     end
   end
