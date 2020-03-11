@@ -203,7 +203,7 @@ pipeline {
           steps {
             dockerBuild(
               dir: '.',
-              image: "${jobName()}/backend",
+              image: "polaris",
               memory: 1500,
               stash: 'backend',
               pre_script: "scripts/docker-prepare.sh"
@@ -217,7 +217,7 @@ pipeline {
               steps {
                 dockerBuild(
                   dir: 'client/',
-                  image: "${jobName()}/frontend",
+                  image: "dipper",
                   memory: 2000,
                   args: [
                     RELEASE: env.GIT_COMMIT,
