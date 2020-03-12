@@ -1,39 +1,41 @@
-user  nginx;
-worker_processes  1;
+user nginx;
+worker_processes 1;
 
-error_log  /var/log/nginx/error.log warn;
-pid        /var/run/nginx.pid;
-
+error_log /var/log/nginx/error.log warn;
+pid /var/run/nginx.pid;
 
 events {
-  worker_connections  1024;
+  worker_connections 1024;
 }
 
 http {
-  include       /etc/nginx/mime.types;
-  default_type  application/octet-stream;
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
 
-  log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                    '$status $body_bytes_sent "$http_referer" '
-                    '"$http_user_agent" "$http_x_forwarded_for"';
+  real_ip_header    X-Forwarded-For;
+  real_ip_recursive on;
 
-  access_log  /var/log/nginx/access.log  main;
+  add_header X-Host $hostname;
 
-  sendfile        on;
-  #tcp_nopush     on;
+  log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                  '$status $body_bytes_sent "$http_referer" '
+                  '"$http_user_agent" "$http_x_forwarded_for"';
 
-  keepalive_timeout  65;
+  access_log /var/log/nginx/access.log  main;
+
+  sendfile on;
+
+  keepalive_timeout 65;
 
   server {
     listen 80;
     server_name _;
 
-    if ($http_x_forwarded_proto = "http") {
-        return 301 https://$host$request_uri;
-    }
-
     location /config.202003052356.js {
       add_header Content-Type application/javascript;
+      add_header X-Host $hostname;
+      expires 1m;
+
       return 200 '
 window.keel = {
   apiUrl: \'{{ .Env.API_URL }}\',
@@ -43,20 +45,28 @@ window.keel = {
 ';
     }
 
+    location ~* \.(?:css|js|jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc)(\.gz)?$ {
+      try_files $uri =404;
+      expires max;
+    }
+
     location ~ \.map(\.gz)?$ {
       if ($http_x_requested_by !~* "X-Sentry-Token: 551d82a6c71211e884000a580a281e11") {
         return 403;
       }
+
+      try_files $uri =404;
+      expires max;
+    }
+
+    location /version.json {
+      try_files $uri =404;
+      expires 1m;
     }
 
     location / {
-      root   /usr/share/nginx/html;
-      try_files $uri /index.html;
-    }
-
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-      root   /usr/share/nginx/html;
+      try_files $uri $uri/ /index.html;
+      expires 5m;
     }
   }
 }
