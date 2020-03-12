@@ -781,15 +781,16 @@ class ShippingTools
     on_carriage_hash = (original_shipment.trucking['on_carriage'] if result['quote']['trucking_on'])
     pre_carriage_hash = (original_shipment.trucking['pre_carriage'] if result['quote']['trucking_pre'])
     original_charge_breakdown = original_shipment.charge_breakdowns.find_by(trip: trip)
-
+    origin_hub = Legacy::Hub.find(schedule['origin_hub']['id'])
+    destination_hub = Legacy::Hub.find(schedule['destination_hub']['id'])
     new_shipment = main_quote.shipments.create!(
       status: 'quoted',
       user_id: original_shipment.user_id,
       imc_reference: original_shipment.imc_reference,
-      origin_hub_id: schedule['origin_hub']['id'],
-      destination_hub_id: schedule['destination_hub']['id'],
-      origin_nexus_id: original_shipment.origin_nexus_id || result.dig('meta', 'origin_hub')&.nexus_id,
-      destination_nexus_id: original_shipment.destination_nexus_id || result.dig('meta', 'destination_hub')&.nexus_id,
+      origin_hub: origin_hub,
+      destination_hub: destination_hub,
+      origin_nexus_id: origin_hub.nexus_id,
+      destination_nexus_id: destination_hub.nexus_id,
       quotation_id: schedule['id'],
       trip_id: trip.id,
       booking_placed_at: DateTime.now,

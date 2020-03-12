@@ -23,7 +23,10 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def send_quotes
-    ShippingTools.save_and_send_quotes(shipment, save_and_send_params[:quotes].map(&:to_h), params[:email], @sandbox)
+    ShippingTools.save_and_send_quotes(shipment,
+                                       save_and_send_params[:quotes].map(&:to_h),
+                                       current_user.email,
+                                       @sandbox)
     response_handler(params)
   end
 

@@ -5,18 +5,20 @@ require 'rails_helper'
 RSpec.describe Shipments::BookingProcessController do
   let(:tenant) { create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:shipment) { create(:complete_legacy_shipment, tenant: tenant, with_breakdown: true) }
+  let(:shipment) { create(:legacy_shipment, tenant: tenant, trip: trip, itinerary: itinerary, with_breakdown: true) }
+  let(:shipments_shipment) { Shipment.find(shipment.id) }
   let(:user) { create(:legacy_user, tenant: tenant) }
+  let(:itinerary) { create(:gothenburg_shanghai_itinerary, tenant: tenant) }
+  let(:trip) { create(:legacy_trip, itinerary: itinerary) }
 
   before do
     allow(controller).to receive(:user_signed_in?).and_return(true)
     allow(controller).to receive(:current_user).and_return(user)
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
-    %w[EUR USD].each do |currency|
-      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
-        .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
-    end
     FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
+    FactoryBot.create(:shipment_contact, shipment: shipments_shipment, contact_type: 'shipper')
+    FactoryBot.create(:shipment_contact, shipment: shipments_shipment, contact_type: 'consignee')
+    FactoryBot.create(:shipment_contact, shipment: shipments_shipment, contact_type: 'notifyee')
   end
 
   describe 'GET #download_shipment' do
@@ -34,6 +36,35 @@ RSpec.describe Shipments::BookingProcessController do
         json_response = JSON.parse(response.body)
         expect(json_response.dig('data', 'key')).to eq('shipment_recap')
         expect(json_response.dig('data', 'url')).to include("shipment_#{shipment.imc_reference}.pdf?disposition=attachment")
+      end
+    end
+  end
+
+  context 'when sending admin emails on quote download' do
+    let(:charge_breakdown) { shipment.charge_breakdowns.first }
+    let(:quotes) do
+      [
+        {
+          quote: charge_breakdown.to_nested_hash({}),
+          schedules: [
+            OfferCalculator::Schedule.from_trip(trip).to_detailed_hash
+          ],
+          meta: { trip_id: trip.id }
+        }.with_indifferent_access
+      ]
+    end
+
+    before do
+      quote_mailer = object_double('Mailer')
+      create(:legacy_quotation, original_shipment_id: shipment.id)
+      allow(QuoteMailer).to receive(:quotation_admin_email).at_least(:once).and_return(quote_mailer)
+      allow(QuoteMailer).to receive(:quotation_email).at_least(:once).and_return(quote_mailer)
+      allow(quote_mailer).to receive(:deliver_later).at_least(:twice)
+    end
+
+    describe '.save_and_send_quotes' do
+      it 'successfully calls the mailer and return the quote Document' do
+        post :send_quotes, params: { tenant_id: shipment.tenant, shipment_id: shipment.id, quotes: quotes }
       end
     end
   end
@@ -81,8 +112,8 @@ RSpec.describe Shipments::BookingProcessController do
                  schedules: [
                    {
                      id: '71ad5e38-5e98-4f54-9007-d4a4a258b998',
-                     origin_hub: { name: origin_hub.name },
-                     destination_hub: { name: destination_hub.name },
+                     origin_hub: { name: origin_hub.name, id: origin_hub.id },
+                     destination_hub: { name: destination_hub.name, id: destination_hub.id },
                      mode_of_transport: 'ocean',
                      eta: Date.today + 40,
                      etd: Date.today,

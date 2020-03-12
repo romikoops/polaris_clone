@@ -321,8 +321,8 @@ RSpec.describe ShippingTools do
                             schedules: [
                               {
                                 id: '71ad5e38-5e98-4f54-9007-d4a4a258b998',
-                                origin_hub: { name: origin_hub.name },
-                                destination_hub: { name: destination_hub.name },
+                                origin_hub: { name: origin_hub.name, id: origin_hub.id },
+                                destination_hub: { name: destination_hub.name, id: destination_hub.id },
                                 mode_of_transport: 'ocean',
                                 eta: Time.zone.today + 40,
                                 etd: Time.zone.today,
