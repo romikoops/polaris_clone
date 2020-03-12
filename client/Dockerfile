@@ -14,10 +14,15 @@ RUN apt-get update && apt-get install -y \
   optipng \
   pngquant
 
+RUN mkdir -p /src
+WORKDIR /src
+
 COPY package.json package-lock.json ./
 RUN npm install --no-progress --production
 
-COPY . .
+COPY *config.js ./
+COPY locales/ ./locales/
+COPY app/ ./app/
 
 ARG RELEASE=""
 ENV RELEASE $RELEASE
@@ -36,7 +41,7 @@ ENV SENTRY_ORG $SENTRY_ORG
 ENV SENTRY_PROJECT $SENTRY_PROJECT
 ENV SENTRY_AUTH_TOKEN $SENTRY_AUTH_TOKEN
 
-COPY --from=builder /dist /work
+COPY --from=builder /src/dist /work
 ARG RELEASE=""
 ENV RELEASE $RELEASE
 
@@ -52,6 +57,6 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 
 COPY nginx/nginx.tmpl /etc/nginx/
 
-COPY --from=builder --chown=nginx:nginx /dist /usr/share/nginx/html
+COPY --from=builder --chown=nginx:nginx /src/dist /usr/share/nginx/html
 
 CMD ["dockerize", "-template", "/etc/nginx/nginx.tmpl:/etc/nginx/nginx.conf", "nginx", "-g", "daemon off;"]

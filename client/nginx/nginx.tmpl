@@ -21,7 +21,7 @@ http {
                   '$status $body_bytes_sent "$http_referer" '
                   '"$http_user_agent" "$http_x_forwarded_for"';
 
-  access_log /var/log/nginx/access.log  main;
+  access_log /var/log/nginx/access.log main;
 
   sendfile on;
 
@@ -31,16 +31,22 @@ http {
     listen 80;
     server_name _;
 
-    location /config.202003052356.js {
+    root /usr/share/nginx/html;
+
+    location = /version.json {
+      try_files $uri =404;
+      expires 1m;
+    }
+
+    location = /config.202003052356.js {
       add_header Content-Type application/javascript;
       add_header X-Host $hostname;
       expires 1m;
 
-      return 200 '
-window.keel = {
-  apiUrl: \'{{ .Env.API_URL }}\',
-  environment: \'{{ .Env.APP_ENVIRONMENT }}\',
-  appName: \'{{ .Env.APP_NAME }}\'
+      return 200 'window.keel = {
+apiUrl: \'{{ .Env.API_URL }}\',
+environment: \'{{ .Env.APP_ENVIRONMENT }}\',
+appName: \'{{ .Env.APP_NAME }}\'
 }
 ';
     }
@@ -55,13 +61,7 @@ window.keel = {
         return 403;
       }
 
-      try_files $uri =404;
       expires max;
-    }
-
-    location /version.json {
-      try_files $uri =404;
-      expires 1m;
     }
 
     location / {
