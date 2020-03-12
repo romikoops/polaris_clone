@@ -71,6 +71,7 @@ end
 #
 # Indexes
 #
+#  index_pricings_fees_on_pricing_id  (pricing_id)
 #  index_pricings_fees_on_sandbox_id  (sandbox_id)
 #  index_pricings_fees_on_tenant_id   (tenant_id)
 #

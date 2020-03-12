@@ -119,6 +119,7 @@ end
 #  index_pricings_margins_on_effective_date                     (effective_date)
 #  index_pricings_margins_on_expiration_date                    (expiration_date)
 #  index_pricings_margins_on_itinerary_id                       (itinerary_id)
+#  index_pricings_margins_on_margin_type                        (margin_type)
 #  index_pricings_margins_on_origin_hub_id                      (origin_hub_id)
 #  index_pricings_margins_on_pricing_id                         (pricing_id)
 #  index_pricings_margins_on_sandbox_id                         (sandbox_id)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_03_153420) do
+ActiveRecord::Schema.define(version: 2020_03_11_104241) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1089,6 +1089,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_153420) do
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
     t.decimal "value"
+    t.index ["charge_category_id"], name: "index_pricings_details_on_charge_category_id"
     t.index ["margin_id"], name: "index_pricings_details_on_margin_id"
     t.index ["sandbox_id"], name: "index_pricings_details_on_sandbox_id"
     t.index ["tenant_id"], name: "index_pricings_details_on_tenant_id"
@@ -1112,6 +1113,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_153420) do
     t.uuid "sandbox_id"
     t.bigint "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["pricing_id"], name: "index_pricings_fees_on_pricing_id"
     t.index ["sandbox_id"], name: "index_pricings_fees_on_sandbox_id"
     t.index ["tenant_id"], name: "index_pricings_fees_on_tenant_id"
   end
@@ -1144,6 +1146,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_153420) do
     t.index ["effective_date"], name: "index_pricings_margins_on_effective_date"
     t.index ["expiration_date"], name: "index_pricings_margins_on_expiration_date"
     t.index ["itinerary_id"], name: "index_pricings_margins_on_itinerary_id"
+    t.index ["margin_type"], name: "index_pricings_margins_on_margin_type"
     t.index ["origin_hub_id"], name: "index_pricings_margins_on_origin_hub_id"
     t.index ["pricing_id"], name: "index_pricings_margins_on_pricing_id"
     t.index ["sandbox_id"], name: "index_pricings_margins_on_sandbox_id"
@@ -1180,6 +1183,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_153420) do
     t.daterange "validity"
     t.decimal "wm_rate"
     t.index ["cargo_class"], name: "index_pricings_pricings_on_cargo_class"
+    t.index ["group_id"], name: "index_pricings_pricings_on_group_id"
     t.index ["itinerary_id"], name: "index_pricings_pricings_on_itinerary_id"
     t.index ["load_type"], name: "index_pricings_pricings_on_load_type"
     t.index ["sandbox_id"], name: "index_pricings_pricings_on_sandbox_id"

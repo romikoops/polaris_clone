@@ -57,7 +57,8 @@ end
 #
 # Indexes
 #
-#  index_pricings_details_on_margin_id   (margin_id)
-#  index_pricings_details_on_sandbox_id  (sandbox_id)
-#  index_pricings_details_on_tenant_id   (tenant_id)
+#  index_pricings_details_on_charge_category_id  (charge_category_id)
+#  index_pricings_details_on_margin_id           (margin_id)
+#  index_pricings_details_on_sandbox_id          (sandbox_id)
+#  index_pricings_details_on_tenant_id           (tenant_id)
 #

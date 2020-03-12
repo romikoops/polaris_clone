@@ -108,6 +108,7 @@ end
 # Indexes
 #
 #  index_pricings_pricings_on_cargo_class        (cargo_class)
+#  index_pricings_pricings_on_group_id           (group_id)
 #  index_pricings_pricings_on_itinerary_id       (itinerary_id)
 #  index_pricings_pricings_on_load_type          (load_type)
 #  index_pricings_pricings_on_sandbox_id         (sandbox_id)
