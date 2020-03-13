@@ -6,38 +6,37 @@ import { API_KEY } from '../constants'
 export default function GmapsLoader (props) {
   const params = {
     key: API_KEY, // Define your api key here
-    libraries: 'places', // To request multiple libraries, separate them with a comma
+    libraries: 'places,geocoder', // To request multiple libraries, separate them with a comma
     language: 'en'
   }
   const ParamComponent = props.component
+
   return (
     <ReactGoogleMapLoader
       params={params}
-      render={googleMaps =>
-        googleMaps && (
-          <ParamComponent
-            prevRequest={props.prevRequest}
-            allNexuses={props.allNexuses}
-            setTargetAddress={props.setTargetAddress}
-            theme={props.theme}
-            gMaps={googleMaps}
-            handleCarriageChange={props.handleCarriageChange}
-            has_on_carriage={props.has_on_carriage}
-            has_pre_carriage={props.has_pre_carriage}
-            origin={props.origin}
-            destination={props.destination}
-            shipmentData={props.shipmentData}
-            shipmentDispatch={props.shipmentDispatch}
-            nextStageAttempts={props.nextStageAttempts}
-            handleAddressChange={props.handleAddressChange}
-            routeIds={props.routeIds}
-            setNotesIds={(e, t) => props.setNotesIds(e, t)}
-            handleSelectLocation={props.handleSelectLocation}
-            scope={props.scope}
-            {...props}
-          />
-        )
-      }
+      render={(googleMaps) => googleMaps && (
+        <ParamComponent
+          prevRequest={props.prevRequest}
+          allNexuses={props.allNexuses}
+          setTargetAddress={props.setTargetAddress}
+          theme={props.theme}
+          gMaps={googleMaps}
+          handleCarriageChange={props.handleCarriageChange}
+          has_on_carriage={props.has_on_carriage}
+          has_pre_carriage={props.has_pre_carriage}
+          origin={props.origin}
+          destination={props.destination}
+          shipmentData={props.shipmentData}
+          shipmentDispatch={props.shipmentDispatch}
+          nextStageAttempts={props.nextStageAttempts}
+          handleAddressChange={props.handleAddressChange}
+          routeIds={props.routeIds}
+          setNotesIds={(e, t) => props.setNotesIds(e, t)}
+          handleSelectLocation={props.handleSelectLocation}
+          scope={props.scope}
+          {...props}
+        />
+      )}
     />
   )
 }

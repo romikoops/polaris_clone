@@ -386,6 +386,18 @@ class RouteSection extends React.PureComponent {
     bookingProcessDispatch.updateShipment(target, currentAddress)
 
     const searchComplete = (result) => {
+      if (currentAddress.city && currentAddress.city !== result.city) {
+        resolve()
+
+        return
+      }
+
+      if (currentAddress.postalCode && currentAddress.postalCode !== result.postalCode) {
+        resolve()
+
+        return
+      }
+
       const updatedAddress = {
         ...currentAddress,
         fullAddress: result.fullAddress,
@@ -397,27 +409,16 @@ class RouteSection extends React.PureComponent {
       setMarker(target, { lat: result.latitude, lng: result.longitude })
       resolve()
     }
-
-    const fields = [
-      addressFields.street,
-      addressFields.number,
-      addressFields.zipCode,
-      addressFields.city,
-      addressFields.country
-    ]
-
-    const combinedAddress = fields.join(', ')
-    const options = { input: combinedAddress }
-
-    this.gmapsAddressAutocomplete(options).then((predictions) => {
-      if (!predictions) {
+    const combinedAddress = [addressFields.street, addressFields.number].join(' ').trim()
+    this.gmapsGeocodeAddress(combinedAddress, addressFields.city, addressFields.zipCode).then((geocodedResults) => {
+      if (!geocodedResults) {
         this.setRouteSelectionError(target, t('errors:invalidAddress'))
         resolve()
 
         return
       }
 
-      const result = predictions[0]
+      const result = geocodedResults[0]
       this.gmapsAddressFetch(result.place_id).then(searchComplete)
     }).catch(resolve)
   })
@@ -548,6 +549,35 @@ class RouteSection extends React.PureComponent {
       }
 
       resolve(predictions)
+    })
+  })
+
+  gmapsGeocodeAddress = (address, city, postalCode) => new Promise((resolve, reject) => {
+    const { gMaps } = this.gmaps
+
+    const options = {
+      componentRestrictions: {}
+    }
+
+    if (address) {
+      options.address = address
+    }
+
+    if (city) {
+      options.componentRestrictions.administrativeArea = city
+    }
+
+    if (postalCode) {
+      options.componentRestrictions.postalCode = postalCode
+    }
+
+    const geocodeService = new gMaps.Geocoder()
+    geocodeService.geocode(options, (geocoderResults, status) => {
+      if (!['ZERO_RESULTS', 'OK'].includes(status)) {
+        resolve([])
+      }
+
+      resolve(geocoderResults)
     })
   })
 
