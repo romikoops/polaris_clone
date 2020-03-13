@@ -13,8 +13,10 @@ RSpec.describe ExcelDataServices::Restructurers::SacoShipping do
 
     it 'restructures the data correctly' do
       result = described_class.restructure(options)
-      expect(result.slice('Pricing')).to eq(output_data_pricings)
-      expect(result.slice('LocalCharges')).to eq(output_data_local_charges)
+      aggregate_failures do
+        expect(result.slice('Pricing')).to eq(output_data_pricings)
+        expect(result.slice('LocalCharges')).to eq(output_data_local_charges)
+      end
     end
   end
 end

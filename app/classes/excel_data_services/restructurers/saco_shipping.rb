@@ -123,6 +123,16 @@ module ExcelDataServices
         end
       end
 
+      def combine_terminal_and_destination
+        restructured_data.each do |row_data|
+          row_data[:destination_hub] = [row_data[:destination_hub], row_data.delete(:terminal)].compact.join(' - ')
+        end
+      end
+
+      def correctly_mark_internal_row_data
+        restructured_data.each { |row_data| row_data[:internal] = row_data[:internal].to_s.casecmp?('x') }
+      end
+
       def expand_to_multiple
         note_keys = restructured_data.first.keys.select { |k| k.to_s.starts_with?('note/') }
         restructured_data.flat_map do |row_data|
@@ -136,69 +146,99 @@ module ExcelDataServices
         end
       end
 
-      def combine_terminal_and_destination
-        restructured_data.each do |row_data|
-          row_data[:destination_hub] = [row_data[:destination_hub], row_data.delete(:terminal)].compact.join(' - ')
-        end
-      end
-
-      def correctly_mark_internal_row_data
-        restructured_data.each { |row_data| row_data[:internal] = row_data[:internal].to_s.casecmp?('x') }
-      end
-
       def expand_based_on_fee_containing_column(row_data)
         row_nr = row_data.delete(:row_nr)
         same_for_all_fees = row_data.slice(*ROW_IDENTIFIER_KEYS)
 
-        full_effective_date = Date.parse(row_data.delete(:effective_date).to_s)
-        full_expiration_date = Date.parse(row_data.delete(:expiration_date).to_s)
+        effective_date = Date.parse(row_data.delete(:effective_date).to_s)
+        expiration_date = Date.parse(row_data.delete(:expiration_date).to_s)
+
+        inner_expiration_date =
+          inner_expiration_date(row_data: row_data, effective_date: effective_date, expiration_date: expiration_date)
 
         # Map the data that is not the same for all fees and combine each object with the data that is the same for all
-        multiple_objs = row_data.except(*ROW_IDENTIFIER_KEYS).map do |key, value|
+        row_data.except(*ROW_IDENTIFIER_KEYS).each_with_object([]) do |(key, value), multiple_objs|
           col_name = key.to_s
-          next if value.blank? || col_name.starts_with?('note/') || col_name.match?(/curr_month|next_month/)
+          next if value.blank? || col_name.starts_with?('note/') || col_name.match?(/(curr|next)_month/)
 
-          effective_date, expiration_date =
-            determine_correct_effective_period(col_name, row_data, full_effective_date, full_expiration_date)
+          adjusted_effective_date, adjusted_expiration_date = correct_effective_period(
+            col_name: col_name,
+            row_data: row_data,
+            outer_effective_date: effective_date,
+            outer_expiration_date: expiration_date,
+            inner_expiration_date: inner_expiration_date
+          )
 
-          same_for_all_fees.merge(
+          multiple_objs << same_for_all_fees.merge(
             key => value,
-            effective_date: effective_date,
-            expiration_date: expiration_date,
+            effective_date: adjusted_effective_date,
+            expiration_date: adjusted_expiration_date,
             mot: 'ocean',
             rate_basis: 'PER_CONTAINER',
             row_nr: row_nr
           )
         end
-
-        multiple_objs.compact
       end
 
-      def determine_correct_effective_period(col_name, row_data, effective_date, expiration_date)
-        if col_name.match?(/(curr_fee|next_fee)/)
-          corresponding_month_key = col_name.sub('fee', 'month').remove(%r{/\d+}).to_sym
-          effective_month = months_german_to_english(row_data[corresponding_month_key])
-
-          if effective_month && !effective_month.match?(%r{-|incl|n/a})
-            month_start = Date.parse("#{effective_month} #{expiration_date.year}")
-            month_start = Date.parse("#{effective_month} #{effective_date.year}") if month_start > expiration_date
-
-            month_end = month_start.end_of_month.change(usec: 0)
-            if month_start >= effective_date && month_end <= expiration_date
-              effective_date = month_start
-              expiration_date = month_end
-            end
-          end
+      def inner_expiration_date(row_data:, effective_date:, expiration_date:)
+        cols_with_months = row_data.select do |col_name, month|
+          col_name.match?(/(curr|next)_month/) && month.present? && !month.match?(/incl/)
         end
 
-        [effective_date, expiration_date]
+        converted_dates = cols_with_months.values.map do |month|
+          month = month_german_to_english(month)
+          date_from_month(month: month, effective_date: effective_date, expiration_date: expiration_date)
+        end
+
+        converted_dates.max.end_of_month.change(usec: 0)
       end
 
-      def months_german_to_english(month)
-        return if month.nil?
+      def date_from_month(month:, effective_date:, expiration_date:)
+        date = Date.parse("#{month} #{expiration_date.year}")
+        date = Date.parse("#{month} #{effective_date.year}") if date > expiration_date
+        date
+      end
 
+      def month_german_to_english(month)
         month = I18n.transliterate(month[0..2]).upcase
         MONTHS_GERMAN_TO_ENGLISH_LOOKUP[month] || month
+      end
+
+      def correct_effective_period(col_name:,
+                                   row_data:,
+                                   outer_effective_date:,
+                                   outer_expiration_date:,
+                                   inner_expiration_date:)
+        unmodified_effective_period = [outer_effective_date, inner_expiration_date]
+
+        return unmodified_effective_period unless col_name.match?(/(curr|next)_fee/)
+
+        effective_month = determine_effective_month(col_name: col_name, row_data: row_data)
+
+        return unmodified_effective_period unless effective_month
+
+        month_start, month_end = actual_effective_period(month: effective_month,
+                                                         effective_date: outer_effective_date,
+                                                         expiration_date: outer_expiration_date)
+
+        return [month_start, month_end] if month_start >= outer_effective_date && month_end <= outer_expiration_date
+
+        unmodified_effective_period
+      end
+
+      def actual_effective_period(month:, effective_date:, expiration_date:)
+        month_start = date_from_month(month: month, effective_date: effective_date, expiration_date: expiration_date)
+
+        [month_start, month_start.end_of_month.change(usec: 0)]
+      end
+
+      def determine_effective_month(col_name:, row_data:)
+        corresponding_month_key = col_name.sub('fee', 'month').remove(%r{/\d+}).to_sym
+        month = row_data[corresponding_month_key]
+
+        return if month.nil? || month.match?(/incl/)
+
+        month_german_to_english(month)
       end
 
       def expand_based_on_type_of_fee(multiple_objs)
