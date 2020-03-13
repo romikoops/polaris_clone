@@ -1229,6 +1229,7 @@ ActiveRecord::Schema.define(version: 2020_03_11_104241) do
     t.string "amount_currency"
     t.bigint "charge_category_id"
     t.datetime "created_at", null: false
+    t.integer "section"
     t.uuid "tender_id"
     t.datetime "updated_at", null: false
     t.index ["charge_category_id"], name: "index_quotations_line_items_on_charge_category_id"

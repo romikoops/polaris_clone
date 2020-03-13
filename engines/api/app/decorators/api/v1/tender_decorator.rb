@@ -1,0 +1,23 @@
+# frozen_string_literal: true
+
+module Api
+  module V1
+    class TenderDecorator < Draper::Decorator
+      delegate_all
+      delegate :trip, to: :charge_breakdown
+      delegate :vessel, to: :trip
+
+      def route
+        charge_breakdown.trip.itinerary.name
+      end
+
+      def charges
+        LineItemDecorator.decorate_collection(line_items, context: { scope: context[:scope] })
+      end
+
+      def transit_time
+        (trip.end_date.to_date - trip.start_date.to_date).to_i
+      end
+    end
+  end
+end

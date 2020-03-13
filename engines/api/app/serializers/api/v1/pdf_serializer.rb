@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class PdfSerializer < ActiveModel::Serializer
+    class PdfSerializer < Api::ApplicationSerializer
       attributes %i[url]
 
       def url

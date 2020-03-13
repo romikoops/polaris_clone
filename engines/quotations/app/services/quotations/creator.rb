@@ -45,8 +45,10 @@ module Quotations
     def create_line_items_for_tender(tender)
       charge_breakdown.charges.where(detail_level: 3).each do |child_charge|
         price = child_charge.price
+        section = "#{child_charge.parent.charge_category.code}_section".to_sym
         LineItem.create(charge_category_id: child_charge.children_charge_category_id,
                         tender_id: tender.id,
+                        section: section,
                         amount_cents: price.value,
                         amount_currency: price.currency)
       end

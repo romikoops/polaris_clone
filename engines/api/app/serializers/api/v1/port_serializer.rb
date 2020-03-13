@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class PortSerializer < ActiveModel::Serializer
+    class PortSerializer < Api::ApplicationSerializer
       attributes %i[id name hub_type]
     end
   end

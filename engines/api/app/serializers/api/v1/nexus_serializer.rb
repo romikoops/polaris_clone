@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class NexusSerializer < ActiveModel::Serializer
+    class NexusSerializer < Api::ApplicationSerializer
       attributes %i[id name latitude longitude modes_of_transport]
     end
   end

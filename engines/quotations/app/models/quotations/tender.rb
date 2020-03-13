@@ -6,10 +6,13 @@ module Quotations
     belongs_to :origin_hub, class_name: 'Legacy::Hub'
     belongs_to :destination_hub, class_name: 'Legacy::Hub'
     belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle'
+    has_one :charge_breakdown, class_name: 'Legacy::ChargeBreakdown'
 
     has_many :line_items, inverse_of: :tender
 
     monetize :amount_cents
+
+    delegate :mode_of_transport, to: :tenant_vehicle
   end
 end
 

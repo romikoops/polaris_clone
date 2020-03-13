@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class ItinerarySerializer < ActiveModel::Serializer
+    class ItinerarySerializer < Api::ApplicationSerializer
       type 'Itinerary'
       attributes %i[id mode_of_transport name]
       has_many :stops, each_serializer: StopSerializer

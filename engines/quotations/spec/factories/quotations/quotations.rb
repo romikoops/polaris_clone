@@ -6,7 +6,7 @@ FactoryBot.define do
 
     association :origin_nexus, factory: :legacy_nexus
     association :destination_nexus, factory: :legacy_nexus
-    association :user, factory: :legacy_user
+    association :user, factory: :legacy_user, with_profile: true
     association :tenant, factory: :tenants_tenant
   end
 end

@@ -11,13 +11,14 @@ Api::Engine.routes.draw do
         get 'scope'
       end
     end
-    resource :dashboard, controller: :dashboard, only: %i(show)
+    resource :dashboard, controller: :dashboard, only: %i[show]
     resources :quotations do
       post :create
       post :download
+      resources :charges, only: %i[show]
     end
     resources :cargo_item_types, only: :index
-    resources :trucking_availability, controller: :trucking_availability, only: %i(index)
+    resources :trucking_availability, controller: :trucking_availability, only: %i[index]
     resources :groups, controller: :tenants_groups, only: :index
     resources :locations do
       collection do
@@ -32,7 +33,7 @@ Api::Engine.routes.draw do
       end
     end
 
-    resources :itineraries, only: %i(index) do
+    resources :itineraries, only: %i[index] do
       collection do
         get 'ports/:tenant_uuid', action: :ports
       end

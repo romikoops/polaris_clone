@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class AddressSerializer < ActiveModel::Serializer
+    class AddressSerializer < Api::ApplicationSerializer
       attributes %i[longitude latitude geocoded_address]
     end
   end

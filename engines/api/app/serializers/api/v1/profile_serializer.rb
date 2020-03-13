@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class ProfileSerializer < ActiveModel::Serializer
+    class ProfileSerializer < Api::ApplicationSerializer
     end
   end
 end

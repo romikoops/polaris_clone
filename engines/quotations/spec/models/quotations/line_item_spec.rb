@@ -25,6 +25,7 @@ end
 #  id                 :uuid             not null, primary key
 #  amount_cents       :integer
 #  amount_currency    :string
+#  section            :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  charge_category_id :bigint

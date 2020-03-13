@@ -6,6 +6,7 @@ FactoryBot.define do
     amount_currency { 'USD' }
     association :tender, factory: :quotations_tender
     association :charge_category, factory: :legacy_charge_categories
+    section { 3 }
   end
 end
 
@@ -16,6 +17,7 @@ end
 #  id                 :uuid             not null, primary key
 #  amount_cents       :integer
 #  amount_currency    :string
+#  section            :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  charge_category_id :bigint
