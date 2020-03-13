@@ -99,7 +99,7 @@ class App extends Component {
       <ContextProvider tenant={tenant} theme={theme} user={user}>
         <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
           { displayTenantsMenu && <TenantMenu tenant={tenant} tenants={tenants} appDispatch={appDispatch} /> }
-          <div className="flex-100"><ConsentManager writeKey={getConfig().segment} /></div>
+          <ConsentManager writeKey={getConfig().segment} />
           <div className="flex-100 mc layout-row layout-align-start">
             {loading ? <Loading tenant={tenant} text="loading..." /> : ''}
             {user &&
