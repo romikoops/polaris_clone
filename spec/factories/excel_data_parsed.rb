@@ -408,6 +408,8 @@ FactoryBot.define do
                "next_month/baf": 'JUL',
                "next_fee/20/baf": 'incl',
                "next_fee/40/baf": 'incl',
+               "curr_month/caf": 'OKT',
+               "curr_fee/20/caf": Money.new(30, 'EUR'),
                "thc": Money.new(19_700, 'EUR'),
                "int/20/imo": 'n/a',
                "int/40/imo": 'n/a',

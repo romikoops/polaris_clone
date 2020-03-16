@@ -161,7 +161,7 @@ module ExcelDataServices
           col_name = key.to_s
           next if value.blank? || col_name.starts_with?('note/') || col_name.match?(/(curr|next)_month/)
 
-          adjusted_effective_date, adjusted_expiration_date = correct_effective_period(
+          adjusted_dates = correct_effective_period(
             col_name: col_name,
             row_data: row_data,
             outer_effective_date: effective_date,
@@ -169,10 +169,12 @@ module ExcelDataServices
             inner_expiration_date: inner_expiration_date
           )
 
+          next if adjusted_dates.values.any?(&:nil?)
+
           multiple_objs << same_for_all_fees.merge(
             key => value,
-            effective_date: adjusted_effective_date,
-            expiration_date: adjusted_expiration_date,
+            effective_date: adjusted_dates[:effective_date],
+            expiration_date: adjusted_dates[:expiration_date],
             mot: 'ocean',
             rate_basis: 'PER_CONTAINER',
             row_nr: row_nr
@@ -185,10 +187,15 @@ module ExcelDataServices
           col_name.match?(/(curr|next)_month/) && month.present? && !month.match?(/incl/)
         end
 
-        converted_dates = cols_with_months.values.map do |month|
+        return expiration_date if cols_with_months.empty?
+
+        converted_dates = cols_with_months.values.each_with_object([]) do |month, dates|
           month = month_german_to_english(month)
-          date_from_month(month: month, effective_date: effective_date, expiration_date: expiration_date)
+          date = date_from_month(month: month, effective_date: effective_date, expiration_date: expiration_date)
+          dates << date if date
         end
+
+        return expiration_date if converted_dates.empty?
 
         converted_dates.max.end_of_month.change(usec: 0)
       end
@@ -196,7 +203,7 @@ module ExcelDataServices
       def date_from_month(month:, effective_date:, expiration_date:)
         date = Date.parse("#{month} #{expiration_date.year}")
         date = Date.parse("#{month} #{effective_date.year}") if date > expiration_date
-        date
+        date if date >= effective_date && date <= expiration_date
       end
 
       def month_german_to_english(month)
@@ -209,7 +216,7 @@ module ExcelDataServices
                                    outer_effective_date:,
                                    outer_expiration_date:,
                                    inner_expiration_date:)
-        unmodified_effective_period = [outer_effective_date, inner_expiration_date]
+        unmodified_effective_period = { effective_date: outer_effective_date, expiration_date: inner_expiration_date }
 
         return unmodified_effective_period unless col_name.match?(/(curr|next)_fee/)
 
@@ -217,19 +224,18 @@ module ExcelDataServices
 
         return unmodified_effective_period unless effective_month
 
-        month_start, month_end = actual_effective_period(month: effective_month,
-                                                         effective_date: outer_effective_date,
-                                                         expiration_date: outer_expiration_date)
-
-        return [month_start, month_end] if month_start >= outer_effective_date && month_end <= outer_expiration_date
-
-        unmodified_effective_period
+        actual_effective_period(
+          month: effective_month,
+          effective_date: outer_effective_date,
+          expiration_date: outer_expiration_date
+        )
       end
 
       def actual_effective_period(month:, effective_date:, expiration_date:)
         month_start = date_from_month(month: month, effective_date: effective_date, expiration_date: expiration_date)
+        return { effective_date: nil, expiration_date: nil } if month_start.nil?
 
-        [month_start, month_start.end_of_month.change(usec: 0)]
+        { effective_date: month_start, expiration_date: month_start.end_of_month.change(usec: 0) }
       end
 
       def determine_effective_month(col_name:, row_data:)
