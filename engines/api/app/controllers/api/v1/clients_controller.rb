@@ -12,13 +12,14 @@ module Api
                      .ids
         clients = Tenants::User.where(legacy_id: client_ids)
         clients = clients.search(params[:q]) if params[:q].present?
-
-        render json: UserDecorator.decorate_collection(clients), each_serializer: UserSerializer
+        decorated_clients = UserDecorator.decorate_collection(clients)
+        render json: UserSerializer.new(decorated_clients)
       end
 
       def show
         client = Tenants::User.find_by(legacy_id: params[:id])
-        render json: UserDecorator.decorate(client), serializer: UserSerializer
+        decorated_client = UserDecorator.decorate(client)
+        render json: UserSerializer.new(decorated_client)
       end
 
       def create
@@ -33,7 +34,8 @@ module Api
             create_user_profile(tenants_user: user)
             create_user_group(tenants_user: user)
           end
-          render json: UserDecorator.decorate(tenants_user), serializer: UserSerializer
+          decorated_user = UserDecorator.decorate(tenants_user)
+          render json: UserSerializer.new(decorated_user)
         end
       rescue ActiveRecord::RecordInvalid => e
         render(json: { error: e.message }, status: :bad_request)

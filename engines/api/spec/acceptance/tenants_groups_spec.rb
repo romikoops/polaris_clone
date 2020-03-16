@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.resource 'TenantsGroups' do
+RSpec.resource 'TenantsGroups', acceptance: true do
   header 'Accept', 'application/json'
   header 'Content-Type', 'application/json'
   header 'Authorization', :token_header
@@ -25,8 +25,7 @@ RSpec.resource 'TenantsGroups' do
       explanation <<-DOC
         Use this enddpoint to return a list of groups for a tenant
       DOC
-      response_data = JSON.parse(response_body)
-      expect(response_data['data'].count).to eq(5)
+      expect(response_data.count).to eq(5)
     end
   end
 end

@@ -6,6 +6,8 @@ require 'offer_calculator'
 require 'pdf'
 require 'tenants'
 
+require 'draper'
+
 module Wheelhouse
   class Engine < ::Rails::Engine
     isolate_namespace Wheelhouse

@@ -12,8 +12,7 @@ module Api
 
       def index
         itineraries = Legacy::Itinerary.where(tenant_id: current_tenant.legacy_id)
-        render json: itineraries,
-               each_serializer: ItinerarySerializer, include: ['stops']
+        render json: ItinerarySerializer.new(itineraries, params: { includes: ['stops'] })
       end
 
       def ports
@@ -26,7 +25,7 @@ module Api
 
         hubs = hubs.name_search(ports_params[:query]) unless ports_params[:query].empty?
 
-        render json: hubs, each_serializer: PortSerializer
+        render json: PortSerializer.new(hubs)
       end
 
       private

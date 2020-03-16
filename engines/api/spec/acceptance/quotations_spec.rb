@@ -16,14 +16,17 @@ RSpec.resource 'Quotations', acceptance: true do
   let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
   let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
+  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'quickly') }
   let(:cargo_transport_category) { FactoryBot.create(:legacy_transport_category, cargo_class: 'fcl_20', load_type: 'container') }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let!(:trip) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle) }
-  let!(:schedules) { [OfferCalculator::Schedule.from_trip(trip)] }
-
+  let(:trip_1) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle) }
+  let(:trip_2) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle_2) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenants_user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
-  before { FactoryBot.create(:tenants_theme, tenant: tenants_tenant) }
+
+  before do
+    FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
+  end
 
   post '/v1/quotations' do
     with_options scope: :quote, with_example: true do
@@ -41,11 +44,7 @@ RSpec.resource 'Quotations', acceptance: true do
     end
 
     context 'when port to port' do
-      before do
-        FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
-        FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, transport_category: cargo_transport_category, tenant: tenant)
-      end
-
+      let(:trips) { [trip_1, trip_2] }
       let(:request) do
         {
           quote: {
@@ -60,11 +59,20 @@ RSpec.resource 'Quotations', acceptance: true do
         }
       end
 
+      before do
+        [tenant_vehicle, tenant_vehicle_2].each do |t_vehicle|
+          FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, transport_category: cargo_transport_category, tenant: tenant)
+        end
+        OfferCalculator::Schedule.from_trips(trips)
+        FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
+        FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, transport_category: cargo_transport_category, tenant: tenant)
+      end
+
       example 'getting a quotation with port to port parameters' do
         do_request(request)
         aggregate_failures do
           expect(status).to eq(200)
-          expect(response_data.dig(0, 'total')).to eq('€250.00')
+          expect(response_data.dig(0, 'attributes', 'total')).to eq('€250.00')
         end
       end
     end

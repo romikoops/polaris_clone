@@ -3,7 +3,7 @@
 module Api
   module V1
     class StopSerializer < Api::ApplicationSerializer
-      type 'Stop'
+      set_type 'Stop'
       attributes %i[id]
       belongs_to :hub, serializer: HubSerializer
     end

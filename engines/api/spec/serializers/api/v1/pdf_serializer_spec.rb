@@ -8,7 +8,7 @@ module Api
     let(:serialized_file) { described_class.new(file).serializable_hash }
 
     it 'returns the correct name for the object passed' do
-      expect(serialized_file[:url]).to include('test.host')
+      expect(serialized_file.dig(:data, :attributes, :url)).to include('test.host')
     end
   end
 end

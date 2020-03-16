@@ -10,14 +10,14 @@ module Api
 
       def origins
         origin_nexuses = nexuses(direction: :origin_destination)
-
-        render json: NexusDecorator.decorate_collection(origin_nexuses), each_serializer: NexusSerializer
+        decorated_nexuses = NexusDecorator.decorate_collection(origin_nexuses)
+        render json: NexusSerializer.new(decorated_nexuses)
       end
 
       def destinations
         destination_nexuses = nexuses(direction: :destination_origin)
-
-        render json: NexusDecorator.decorate_collection(destination_nexuses), each_serializer: NexusSerializer
+        decorated_nexuses = NexusDecorator.decorate_collection(destination_nexuses)
+        render json: NexusSerializer.new(decorated_nexuses)
       end
 
       private

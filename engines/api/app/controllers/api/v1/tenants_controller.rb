@@ -5,7 +5,7 @@ module Api
     class TenantsController < ApiController
       def index
         tenants = TenantDecorator.decorate_collection([current_tenant])
-        render json: tenants, each_serializer: TenantSerializer
+        render json: TenantSerializer.new(tenants)
       end
 
       def scope

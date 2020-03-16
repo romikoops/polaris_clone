@@ -7,8 +7,8 @@ require 'tenants'
 require 'trucking'
 require 'wheelhouse'
 
-require 'active_model_serializers'
 require 'draper'
+require 'fast_jsonapi'
 
 module Api
   class Engine < ::Rails::Engine

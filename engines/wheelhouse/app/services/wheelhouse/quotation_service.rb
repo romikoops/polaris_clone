@@ -29,7 +29,8 @@ module Wheelhouse
 
     def tenders
       results.map do |result|
-        JSON.parse(result.to_json, object_class: ::Wheelhouse::OpenStruct)
+        tender = JSON.parse(result.to_json, object_class: ::Wheelhouse::OpenStruct)
+        Wheelhouse::TenderDecorator.new(tender)
       end
     end
 

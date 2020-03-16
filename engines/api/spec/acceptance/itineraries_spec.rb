@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.resource 'Itineraries' do
+RSpec.resource 'Itineraries', acceptance: true do
   header 'Accept', 'application/json'
   header 'Content-Type', 'application/json'
   header 'Authorization', :token_header
@@ -14,6 +14,7 @@ RSpec.resource 'Itineraries' do
   let(:token_header) { "Bearer #{access_token.token}" }
 
   before do
+    FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant)
     legacy_tenant.users.create(guest: false)
     allow_any_instance_of(Tenants::User).to receive(:tenant).and_return(tenant)
   end

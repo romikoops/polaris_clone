@@ -6,7 +6,8 @@ module Api
   module V1
     class UsersController < ApiController
       def show
-        render json: UserDecorator.decorate(current_user), serializer: UserSerializer
+        decorated_user = UserDecorator.decorate(current_user)
+        render json: UserSerializer.new(decorated_user)
       end
     end
   end

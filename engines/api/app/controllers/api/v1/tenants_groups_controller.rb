@@ -7,7 +7,7 @@ module Api
     class TenantsGroupsController < ApiController
       def index
         tenants_groups = Tenants::Group.where(tenant_id: current_tenant.id)
-        render json: tenants_groups, each_serializer: TenantsGroupSerializer
+        render json: TenantsGroupSerializer.new(tenants_groups)
       end
     end
   end

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.resource 'Users' do
+RSpec.resource 'Users', acceptance: true do
   header 'Accept', 'application/json'
   header 'Content-Type', 'application/json'
   header 'Authorization', :token_header
@@ -33,8 +33,7 @@ RSpec.resource 'Users' do
       explanation <<-DOC
         Use this endpoint to fetch information of currently signed in user.
       DOC
-
-      expect(status).to eq 200
+      expect(response_data.dig('attributes', 'email')).to eq(email)
     end
   end
 end

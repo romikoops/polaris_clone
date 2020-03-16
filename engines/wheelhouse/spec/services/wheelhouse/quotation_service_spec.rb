@@ -91,10 +91,9 @@ RSpec.describe Wheelhouse::QuotationService do
       end
 
       it 'returns results as tenders for serialization' do
-        tenders = service.tenders
         results = service.results
-
-        expect(tenders.first.to_h.keys).to match(results.first.keys)
+        tender = service.tenders.first.object
+        expect(tender.to_h.keys).to match(results.first.keys)
       end
     end
 

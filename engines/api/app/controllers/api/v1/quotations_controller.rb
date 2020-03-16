@@ -6,21 +6,12 @@ module Api
   module V1
     class QuotationsController < ApiController
       def create
-        render(
-          json: {
-            data: ActiveModel::Serializer::CollectionSerializer.new(
-              quotation_service.tenders,
-              serializer: TenderSerializer,
-              adapter: :json_api,
-              scope: current_scope
-            )
-          }
-        )
+        render json: TenderSerializer.new(quotation_service.tenders, params: { scope: current_scope })
       end
 
       def download
         document = Wheelhouse::PdfService.new(tenders: download_params[:tenders]).download
-        render json: document, serializer: PdfSerializer
+        render json: PdfSerializer.new(document)
       end
 
       private

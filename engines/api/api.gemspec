@@ -22,8 +22,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-trucking'
   s.add_dependency 'imc-wheelhouse'
 
-  s.add_dependency 'active_model_serializers', '~> 0.10', '>= 0.10.8'
   s.add_dependency 'draper', '~> 4.0'
+  s.add_dependency 'fast_jsonapi'
 
   Gemhelper.common(s)
 

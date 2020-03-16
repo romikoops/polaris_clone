@@ -23,5 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-pdf'
   s.add_dependency 'imc-tenants'
 
+  s.add_dependency 'draper', '~> 4.0'
+
   Gemhelper.common(s)
 end

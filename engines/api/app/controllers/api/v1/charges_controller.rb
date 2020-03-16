@@ -6,7 +6,8 @@ module Api
   module V1
     class ChargesController < ApiController
       def show
-        render json: TenderDecorator.decorate(tender), serializer: ChargesSerializer, scope: current_scope
+        decorated_tender = TenderDecorator.decorate(tender)
+        render json: ChargesSerializer.new(decorated_tender, params: { scope: current_scope })
       end
 
       private

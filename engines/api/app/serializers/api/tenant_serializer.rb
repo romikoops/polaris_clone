@@ -2,6 +2,6 @@
 
 module Api
   class TenantSerializer < Api::ApplicationSerializer
-    attributes :slug
+    attribute :slug
   end
 end
