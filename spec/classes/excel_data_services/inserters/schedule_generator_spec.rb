@@ -45,7 +45,7 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
         create(:itinerary, tenant: tenant, name: 'Shanghai - Felixstowe', mode_of_transport: 'ocean'),
         create(:itinerary, tenant: tenant, name: 'Sahnghai - Felixstowe', mode_of_transport: 'air')
       ]
-      end
+    end
 
     context 'without base pricing' do
       before do
@@ -55,6 +55,7 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
           create(:pricing, itinerary: it, tenant_vehicle: tenant_vehicle_2, transport_category: fcl_40_transport_category)
           create(:pricing, itinerary: it, tenant_vehicle: tenant_vehicle_2, transport_category: fcl_40_hq_transport_category)
         end
+        FactoryBot.create(:tenants_scope, target: Tenants::Tenant.find_by(legacy_id: tenant.id), content: { base_pricing: false })
       end
 
       it 'creates the trips for the correct itineraries' do
@@ -67,7 +68,7 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
           expect(itinerary.trips.where(load_type: 'container').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_2.id])
           expect(itinerary.trips.pluck(:start_date).map { |d| d.strftime('%^A') }.uniq).to eq(['THURSDAY'])
           expect(ignored_itinerary.trips).to be_empty
-          expect(multi_mot_itineraries.map{|it| it.trips.count}.sum).to be_positive
+          expect(multi_mot_itineraries.map { |it| it.trips.count }.sum).to be_positive
         end
       end
     end
@@ -80,7 +81,6 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
           create(:fcl_40_pricing, itinerary: it, tenant_vehicle: tenant_vehicle_2)
           create(:fcl_40_hq_pricing, itinerary: it, tenant_vehicle: tenant_vehicle_2)
         end
-        FactoryBot.create(:tenants_scope, target: Tenants::Tenant.find_by(legacy_id: tenant.id), content: { base_pricing: true })
       end
 
       it 'creates the trips for the correct itineraries with base pricing' do
@@ -94,7 +94,7 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
           expect(itinerary.trips.where(load_type: 'container').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_2.id])
           expect(itinerary.trips.pluck(:start_date).map { |d| d.strftime('%^A') }.uniq).to eq(['THURSDAY'])
           expect(ignored_itinerary.trips).to be_empty
-          expect(multi_mot_itineraries.map{|it| it.trips.count}.sum).to be_positive
+          expect(multi_mot_itineraries.map { |it| it.trips.count }.sum).to be_positive
         end
       end
     end

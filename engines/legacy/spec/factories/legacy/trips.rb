@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :legacy_trip, class: 'Legacy::Trip' do
-    start_date { Date.today + 7.days }
-    end_date { Date.tomorrow + 20.days }
-    closing_date { Date.today + 2.days }
+    start_date { Time.zone.today + 7.days }
+    end_date { Time.zone.tomorrow + 20.days }
+    closing_date { Time.zone.today + 2.days }
     association :itinerary, factory: :default_itinerary
     load_type { 'cargo_item' }
     association :tenant_vehicle, factory: :legacy_tenant_vehicle

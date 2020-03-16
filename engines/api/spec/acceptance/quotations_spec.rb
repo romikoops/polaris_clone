@@ -42,6 +42,7 @@ RSpec.resource 'Quotations', acceptance: true do
 
     context 'when port to port' do
       before do
+        FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
         FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, transport_category: cargo_transport_category, tenant: tenant)
       end
 

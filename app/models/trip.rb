@@ -11,7 +11,7 @@ class Trip < Legacy::Trip
     message: 'Trip must be unique to add.'
   }
 
-  scope :lastday_today, -> { where('closing_date > ?', Date.today) }
+  scope :lastday_today, -> { where('closing_date > ?', Date.current) }
 
   def self.update_times
     trips = Trip.all

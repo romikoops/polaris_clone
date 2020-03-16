@@ -273,6 +273,10 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
       end
 
       context 'when standard lcl' do
+        before do
+          FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
+        end
+
         it 'returns an object with calculated totals and schedules for lcl' do
           aggregate_failures do
             expect(results.count).to eq(1)
@@ -284,6 +288,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
 
       context 'when lcl w/ mandatory charges' do
         before do
+          FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
           hub.update(mandatory_charge_id: mandatory_charge.id)
         end
 
@@ -427,10 +432,6 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
       let(:export_charge) { quote_charge_breakdown.charges.find_by(children_charge_category: export_charge_category) }
       let(:export_cargo_ids) { export_charge.children.map(&:children_charge_category).pluck(:cargo_unit_id).uniq }
       let(:freight_cargo_ids) { cargo_charge.children.map(&:children_charge_category).pluck(:cargo_unit_id).uniq }
-
-      before do
-        FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
-      end
 
       context 'when lcl' do
         let!(:current_results) { results }

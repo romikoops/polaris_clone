@@ -180,7 +180,7 @@ RSpec.describe ShippingTools do
 
     context 'when closed quotation tool without user agency' do
       before do
-        Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true })
+        Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true, base_pricing: false })
         allow(user).to receive(:agency).and_return(nil)
       end
 
@@ -195,7 +195,7 @@ RSpec.describe ShippingTools do
       let(:user_within_agency) { create(:user, tenant: tenant, agency: agency) }
 
       before do
-        Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true })
+        Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true, base_pricing: false })
         create(:legacy_pricing, itinerary: itinerary,
                                 user: agency_manager,
                                 tenant: tenant,

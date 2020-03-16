@@ -54,7 +54,7 @@ open_quotation_tool: false
 hide_user_pricing_requests: true
 customs_export_paper: false
 fixed_exchange_rates: true
-base_pricing: false
+base_pricing: true
 require_full_address: true
 closed_quotation_tool: false
 quote_notes:
@@ -89,13 +89,13 @@ signup_form_fields:
   first_name: true
   last_name: true
   company_name: true
-  company_id: true
-  phone: true
+  company_id: false
+  phone: false
   password: true
 translation_overrides: false
 offer_disclaimers: false
 closed_after_map: false
-feature_uploaders: false
+feature_uploaders: true
 email_on_registration: true
 dedicated_pricings_only: false
 quote_card:

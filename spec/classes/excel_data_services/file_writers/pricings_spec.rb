@@ -46,6 +46,10 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
 
     context 'when all pricings are valid' do
+      before do
+        create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
+      end
+
       let!(:charge_category) { create(:charge_category, :bas, tenant: tenant) }
       let!(:pricing) { create(:legacy_fcl_20_pricing, tenant: tenant, itinerary: itinerary) }
       let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean' }) }
@@ -66,10 +70,6 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
 
     context 'when all pricings are valid with attached group' do
-      before do
-        create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
-      end
-
       let(:group_id) { create(:tenants_group, tenant: tenants_tenant, name: 'TEST').id }
       let!(:pricing) { create(:fcl_20_pricing, tenant: tenant, group_id: group_id, itinerary: itinerary) }
       let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean', group_id: group_id }) }
@@ -100,6 +100,10 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
 
     context 'when all pricings are valid' do
+      before do
+        create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
+      end
+
       let(:pricing_row) do
         [
           nil,
@@ -142,6 +146,11 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
 
     context 'when some pricings are expired' do
+      before do
+        create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
+        create(:legacy_lcl_pricing, tenant: tenant, itinerary: itinerary, expiration_date: Time.zone.now - 10.days, effective_date: Time.zone.now - 30.days, transport_category: transport_category)
+      end
+
       let(:pricing_row) do
         [
           nil,
@@ -169,8 +178,6 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
-      before { create(:legacy_lcl_pricing, tenant: tenant, itinerary: itinerary, expiration_date: Time.zone.now - 10.days, effective_date: Time.zone.now - 30.days, transport_category: transport_category) }
-
       describe '.perform' do
         it 'writes all valid pricings to the sheet' do
           aggregate_failures 'testing sheet values' do
@@ -182,14 +189,12 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
 
     context 'when all pricings are valid with attached group' do
-      before do
-        create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
-      end
-
       let(:pricing_headers) do
         (described_class::HEADER_COLLECTION::OPTIONAL_PRICING_ONE_COL_FEE_AND_RANGES +
            described_class::HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES).map { |header| header.to_s.upcase }
       end
+      let(:group_id) { create(:tenants_group, tenant: tenants_tenant, name: 'TEST').id }
+      let(:pricing) { create(:pricings_pricing, tenant: tenant, group_id: group_id, itinerary: itinerary) }
       let(:pricing_row) do
         [
           pricing.group_id,
@@ -215,8 +220,6 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           8
         ]
       end
-      let(:group_id) { create(:tenants_group, tenant: tenants_tenant, name: 'TEST').id }
-      let(:pricing) { create(:pricings_pricing, tenant: tenant, group_id: group_id, itinerary: itinerary) }
       let!(:fee) do
         create(:pricings_fee, pricing_id: pricing.id,
                               range: [

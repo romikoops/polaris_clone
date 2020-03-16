@@ -172,10 +172,6 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
     let(:results) { klass.grouped_schedules(schedules: schedules, shipment: target_shipment, user: user) }
 
     context 'with base_pricing' do
-      before do
-        tenants_scope.update(content: { base_pricing: true })
-      end
-
       let(:pricing1) do
         FactoryBot.create(:lcl_pricing,
                           itinerary: itinerary,
@@ -311,6 +307,10 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
   end
 
   describe '.sort_pricings', :vcr do
+    before do
+      tenants_scope.update(content: { base_pricing: false })
+    end
+
     let(:cargo_classes) { ['lcl'] }
     let(:dedicated_pricings_only) { false }
     let(:dates) do
@@ -348,14 +348,15 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
     end
 
     context 'with legacy and transport category (fcl)' do
-      let(:target_shipment) { container_shipment }
-      let(:cargo_classes) { Legacy::Container::CARGO_CLASSES }
-
       before do
+        tenants_scope.update(content: { base_pricing: false })
         legacy_fcl_20_pricing
         legacy_fcl_40_pricing
         legacy_fcl_40_hq_pricing
       end
+
+      let(:target_shipment) { container_shipment }
+      let(:cargo_classes) { Legacy::Container::CARGO_CLASSES }
 
       it 'returns an object containing pricings grouped by transport category (fcl)' do
         aggregate_failures do
@@ -368,6 +369,10 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
     end
 
     context 'when departure dates return nil' do
+      before do
+        tenants_scope.update(content: { base_pricing: false })
+      end
+
       let!(:pricing1) do
         FactoryBot.create(:legacy_pricing,
                           itinerary: itinerary,
@@ -442,7 +447,6 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
       fcl_20_pricing
       fcl_40_pricing
       fcl_40_hq_pricing
-      tenants_scope.update(content: { base_pricing: true })
     end
 
     context 'without margins (regular)' do

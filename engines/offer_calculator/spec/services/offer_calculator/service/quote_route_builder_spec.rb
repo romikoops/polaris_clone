@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
+  before do
+    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
+  end
+
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
@@ -23,6 +27,7 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
       FactoryBot.create(:legacy_fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant)
     ]
   end
+
   context 'class methods' do
     describe '.perform', :vcr do
       it 'return the route detail hashes' do

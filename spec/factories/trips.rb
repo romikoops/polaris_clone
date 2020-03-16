@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :trip do
-    start_date { Date.today + 7.days }
-    end_date { Date.tomorrow + 20.days }
-    closing_date { Date.today + 2.days }
+    start_date { Time.zone.today + 7.days }
+    end_date { Time.zone.tomorrow + 20.days }
+    closing_date { Time.zone.today + 2.days }
     association :itinerary
     association :tenant_vehicle
   end
