@@ -30,7 +30,10 @@ module Integrations
         let(:shipment_request_decorator) { ShipmentRequest.find(shipment_request.id) }
         let(:json_shipment) { data[:shipments].first }
 
-        before { allow(Profiles::ProfileService).to receive(:fetch).and_return(Profiles::ProfileDecorator.new(profile)) }
+        before do
+          FactoryBot.create(:legacy_charge_breakdown, shipment: fcl_legacy_shipment, tender_id: tender.id)
+          allow(Profiles::ProfileService).to receive(:fetch).and_return(Profiles::ProfileDecorator.new(profile))
+        end
 
         it 'builds a json with the correct schema' do
           expect(data).to be_present

@@ -29,7 +29,8 @@ module Integrations
           'containers' => units[:containers],
           'created_by' => created_by,
           'transport_mode' => transport_mode,
-          'package_group' => units[:packages]
+          'package_group' => units[:packages],
+          'cost_invoices' => [service_invoice]
         }
         @data[:shipments] = [shipment]
         @data
@@ -53,6 +54,11 @@ module Integrations
 
       def freight_payment_terms
         'Collect'
+      end
+
+      def service_invoice
+        shipment_request_breakdown = Legacy::ChargeBreakdown.find_by(tender_id: @shipment_request.tender)
+        Integrations::ChainIo::ServiceInvoice.new(charge_breakdown: shipment_request_breakdown).format
       end
     end
   end

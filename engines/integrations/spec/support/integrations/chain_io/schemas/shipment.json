@@ -182,6 +182,17 @@
         },
         "transport_mode": {
           "type": "string"
+        },
+        "cost_invoices": {
+          "type": "object",
+          "currency": "string",
+          "service_invoice_line": {
+            "type": "array",
+            "charge_code": "string",
+            "unit_price": "decimal",
+            "currency": "string"
+          },
+          "total_due": "decimal"
         }
       }
     }
