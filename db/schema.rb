@@ -1232,14 +1232,11 @@ ActiveRecord::Schema.define(version: 2020_03_11_104241) do
   create_table "quotations_line_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "amount_cents"
     t.string "amount_currency"
-    t.bigint "cargo_id"
-    t.string "cargo_type"
     t.bigint "charge_category_id"
     t.datetime "created_at", null: false
     t.integer "section"
     t.uuid "tender_id"
     t.datetime "updated_at", null: false
-    t.index ["cargo_type", "cargo_id"], name: "index_quotations_line_items_on_cargo_type_and_cargo_id"
     t.index ["charge_category_id"], name: "index_quotations_line_items_on_charge_category_id"
     t.index ["tender_id"], name: "index_quotations_line_items_on_tender_id"
   end
