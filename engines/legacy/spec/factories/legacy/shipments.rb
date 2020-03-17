@@ -37,6 +37,13 @@ FactoryBot.define do
       end
     end
 
+    trait :without_notifyee do
+      after(:build) do |shipment|
+        shipment.shipment_contacts << build(:legacy_shipment_contact, contact_type: :shipper)
+        shipment.shipment_contacts << build(:legacy_shipment_contact, contact_type: :consignee)
+      end
+    end
+
     trait :with_meta do
       after(:build) do |shipment|
         shipment.meta = {
@@ -89,6 +96,7 @@ FactoryBot.define do
     end
 
     factory :complete_legacy_shipment, traits: %i[with_contacts with_hubs]
+    factory :legacy_shipment_without_notifyee, traits: %i[without_notifyee with_hubs]
     factory :completed_legacy_shipment, traits: %i[with_contacts with_hubs with_meta]
   end
 end

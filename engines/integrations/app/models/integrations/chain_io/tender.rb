@@ -18,6 +18,10 @@ module Integrations
           description: "#{destination_hub.address.city}, #{destination_hub.address.country.code}"
         }
       end
+
+      def created_on
+        created_at.to_datetime
+      end
     end
   end
 end

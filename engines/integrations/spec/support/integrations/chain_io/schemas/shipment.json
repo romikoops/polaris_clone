@@ -193,6 +193,150 @@
             "currency": "string"
           },
           "total_due": "decimal"
+        },
+        "cargo_ready_estimated": {
+          "type": "datetime"
+        },
+        "chargeable_weight": {
+          "type": "decimal"
+        },
+        "created_on": {
+          "type": "datetime"
+        },
+        "dimensional_weight": {
+          "type": "decimal"
+        },
+        "notify_party": {
+          "type": "object",
+          "properties": {
+            "source_party_id": {
+              "type": "string"
+            },
+            "target_party_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "address_1": {
+              "type": "string"
+            },
+            "address_2": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "state_name": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "country_name": {
+              "type": "string"
+            },
+            "postal_code": {
+              "type": "string"
+            },
+            "phone_number": {
+              "type": "string"
+            },
+            "unlocode": {
+              "type": "string"
+            }
+          }
+        },
+        "ship_from": {
+          "type": "object",
+          "properties": {
+            "source_party_id": {
+              "type": "string"
+            },
+            "target_party_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "address_1": {
+              "type": "string"
+            },
+            "address_2": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "state_name": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "country_name": {
+              "type": "string"
+            },
+            "postal_code": {
+              "type": "string"
+            },
+            "phone_number": {
+              "type": "string"
+            },
+            "unlocode": {
+              "type": "string"
+            }
+          }
+        },
+        "ship_to": {
+          "type": "object",
+          "properties": {
+            "source_party_id": {
+              "type": "string"
+            },
+            "target_party_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "address_1": {
+              "type": "string"
+            },
+            "address_2": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "state_name": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "country_name": {
+              "type": "string"
+            },
+            "postal_code": {
+              "type": "string"
+            },
+            "phone_number": {
+              "type": "string"
+            },
+            "unlocode": {
+              "type": "string"
+            }
+          }
         }
       }
     }

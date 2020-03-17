@@ -217,6 +217,7 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       imc-core
+      imc-legacy
       imc-profiles
       imc-shipments
       paper_trail (~> 10.3)
