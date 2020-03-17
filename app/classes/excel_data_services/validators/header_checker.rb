@@ -199,6 +199,18 @@ module ExcelDataServices
           on_carriage
           alternative_names
         ].freeze
+
+        MAX_DIMENSIONS = %i[
+          carrier
+          service_level
+          mode_of_transport
+          dimension_x
+          dimension_y
+          dimension_z
+          payload_in_kg
+          chargeable_weight
+          aggregate
+        ].freeze
       end
 
       attr_reader :restructurer_name, :errors

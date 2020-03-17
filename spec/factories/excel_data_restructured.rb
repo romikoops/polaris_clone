@@ -895,10 +895,9 @@ FactoryBot.define do
                     'SOL': { 'key':  nil, 'max': nil, 'min': nil, 'name': 'SOLAS Fee', 'value': 7.5, 'currency': nil, 'rate_basis': 'PER_CBM_KG' },
                     'ZAP': { 'key':  'ZAP', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_BILL' },
                     'THC': { 'key':  'THC', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_WM_RANGE' },
-                    'CBM': { 'key':  'CBM', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_CBM_TON' } ,
+                    'CBM': { 'key':  'CBM', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_CBM_TON' },
                     'BCL': { 'key':  'BCL', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_BILL_CONTAINER' },
-                    'XKG': { 'key':  'XKG', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_X_KG_FLAT' },
-                  },
+                    'XKG': { 'key':  'XKG', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_X_KG_FLAT' } },
             dangerous: nil,
             effective_date: Date.parse('Thu, 24 Jan 2019'),
             expiration_date: Date.parse('Fri, 24 Jan 2020') },
@@ -2406,8 +2405,6 @@ FactoryBot.define do
     end
 
     trait :restructured_schedules do
-      sheet_name { 'Schedules' }
-      data_restructurer_name { 'schedules' }
       data do
         [{
           from: 'Dalian',
@@ -2457,15 +2454,49 @@ FactoryBot.define do
       end
     end
 
-    factory :missing_values_hubs_row_data, traits: %i(restructured_hubs_missing_values)
-    factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges, traits: %i(correct_pricings_one_fee_col_and_ranges)
-    factory :excel_data_restructured_faulty_pricings_one_fee_col_and_ranges, traits: %i(faulty_pricings_one_fee_col_and_ranges)
-    factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_rangs, traits: %i(correct_pricings_dynamic_fee_cols_no_rangs)
-    factory :excel_data_restructured_correct_margins, traits: %i(correct_margins)
-    factory :excel_data_restructured_correct_local_charges, traits: %i(correct_local_charges)
-    factory :excel_data_restructured_faulty_local_charges, traits: %i(faulty_local_charges)
-    factory :excel_data_restructured_correct_saco_shipping_pricings, traits: %i(correct_saco_shipping_pricings)
-    factory :excel_data_restructured_correct_saco_shipping_local_charges, traits: %i(correct_saco_shipping_local_charges)
-    factory :excel_data_restructured_schedules, traits: %i(restructured_schedules)
+    trait :restructured_max_dimensions do
+      data do
+        [{
+          sheet_name: 'Sheet1',
+          restructurer_name: 'max_dimensions',
+          carrier: 'msc',
+          service_level: 'standard',
+          mode_of_transport: 'ocean',
+          dimension_x: 0.1e4,
+          dimension_y: 0.9e3,
+          dimension_z: 0.12e4,
+          payload_in_kg: 0.1e5,
+          chargeable_weight: 0.1e5,
+          aggregate: nil,
+          row_nr: 2
+        },
+         {
+           sheet_name: 'Sheet1',
+           restructurer_name: 'max_dimensions',
+           carrier: 'msc',
+           service_level: 'faster',
+           mode_of_transport: 'ocean',
+           dimension_x: 0.1e4,
+           dimension_y: 0.9e3,
+           dimension_z: 0.12e4,
+           payload_in_kg: 0.1e5,
+           chargeable_weight: 0.1e5,
+           aggregate: true,
+           row_nr: 3
+         }]
+      end
+    end
+
+    factory :missing_values_hubs_row_data, traits: %i[restructured_hubs_missing_values]
+    factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges, traits: %i[correct_pricings_one_fee_col_and_ranges]
+    factory :excel_data_restructured_faulty_pricings_one_fee_col_and_ranges, traits: %i[faulty_pricings_one_fee_col_and_ranges]
+    factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_rangs, traits: %i[correct_pricings_dynamic_fee_cols_no_rangs]
+    factory :excel_data_restructured_correct_margins, traits: %i[correct_margins]
+    factory :excel_data_restructured_correct_local_charges, traits: %i[correct_local_charges]
+    factory :excel_data_restructured_faulty_local_charges, traits: %i[faulty_local_charges]
+    factory :excel_data_restructured_correct_saco_shipping_pricings, traits: %i[correct_saco_shipping_pricings]
+    factory :excel_data_restructured_correct_saco_shipping_local_charges, traits: %i[correct_saco_shipping_local_charges]
+    factory :excel_data_restructured_schedules, traits: %i[restructured_schedules]
+    factory :excel_data_restructured_max_dimensions, traits: %i[restructured_max_dimensions]
   end
 end

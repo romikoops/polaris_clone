@@ -29,6 +29,10 @@ FactoryBot.define do
       restructurer_name { { restructurer_name: 'margins' } }
     end
 
+    trait :max_dimensions do
+      restructurer_name { { restructurer_name: 'max_dimensions' } }
+    end
+
     trait :correct_pricings_one_col_fee_and_ranges do
       all_sheets_data do
         [{ sheet_name: 'Sheet1',
@@ -512,8 +516,7 @@ FactoryBot.define do
                fee_code: 'BAS',
                operator: '%',
                margin: 0.1,
-               row_nr: 3 }
-               ] }]
+               row_nr: 3 }] }]
       end
     end
 
@@ -556,6 +559,34 @@ FactoryBot.define do
       end
     end
 
+    trait :correct_max_dimensions do
+      all_sheets_data do
+        [{ sheet_name: 'Sheet1',
+           restructurer_name: 'max_dimensions',
+           rows_data:
+          [{ carrier: 'msc',
+             service_level: 'standard',
+             mode_of_transport: 'ocean',
+             dimension_x: 0.1e4,
+             dimension_y: 0.9e3,
+             dimension_z: 0.12e4,
+             payload_in_kg: 0.1e5,
+             chargeable_weight: 0.1e5,
+             aggregate: nil,
+             row_nr: 2 },
+           { carrier: 'msc',
+             service_level: 'faster',
+             mode_of_transport: 'ocean',
+             dimension_x: 0.1e4,
+             dimension_y: 0.9e3,
+             dimension_z: 0.12e4,
+             payload_in_kg: 0.1e5,
+             chargeable_weight: 0.1e5,
+             aggregate: true,
+             row_nr: 3 }] }]
+      end
+    end
+
     factory :default_hubs_row_data, traits: %i[default_hubs]
     factory :excel_data_parsed_correct_pricings_one_col_fee_and_ranges, traits: %i[pricing_one_col_fee_and_ranges correct_pricings_one_col_fee_and_ranges]
     factory :excel_data_parsed_faulty_pricings_one_col_fee_and_ranges, traits: %i[pricing_one_col_fee_and_ranges faulty_pricings_one_col_fee_and_ranges]
@@ -565,5 +596,6 @@ FactoryBot.define do
     factory :excel_data_parsed_correct_saco_shipping, traits: %i[saco_shipping correct_saco_shipping]
     factory :excel_data_parsed_correct_margins, traits: %i[margins correct_margins]
     factory :excel_data_parsed_faulty_margins, traits: %i[margins faulty_margins]
+    factory :excel_data_parsed_correct_max_dimensions, traits: %i[max_dimensions correct_max_dimensions]
   end
 end

@@ -533,7 +533,7 @@ end
 #                                PUT    /v1/quotations/:id(.:format)                       api/v1/quotations#update
 #                                DELETE /v1/quotations/:id(.:format)                       api/v1/quotations#destroy
 #            v1_cargo_item_types GET    /v1/cargo_item_types(.:format)                     api/v1/cargo_item_types#index
-# v1_trucking_availability_index GET    /v1/trucking_availability(.:format)         api/v1/trucking_availability#index
+# v1_trucking_availability_index GET    /v1/trucking_availability(.:format)                api/v1/trucking_availability#index
 #                      v1_groups GET    /v1/groups(.:format)                               api/v1/tenants_groups#index
 #           origins_v1_locations GET    /v1/locations/origins(.:format)                    api/v1/locations#origins
 #      destinations_v1_locations GET    /v1/locations/destinations(.:format)               api/v1/locations#destinations

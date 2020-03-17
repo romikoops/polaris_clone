@@ -66,28 +66,10 @@ module Legacy
       Legacy::CargoItem.calc_chargeable_weight_from_values(volume, payload_in_kg, mot)
     end
 
-    def valid_for_mode_of_transport?(mode_of_transport:)
-      mot = mode_of_transport || shipment.itinerary.try(:mode_of_transport)
-      self.chargeable_weight = calc_chargeable_weight(mode_of_transport)
-      # Able to add max dimensions by carrier and service level here
-      max_dimensions = max_dimension(tenant_id: tenant.id, mode_of_transport: mot)
-      exceeded_dimensions = DIMENSIONS.reject do |dimension|
-        self[dimension] <= max_dimensions[dimension]
-      end
-      self.chargeable_weight = nil
-
-      exceeded_dimensions.empty?
-    end
-
     private
 
     def set_default_cargo_class!
       self.cargo_class ||= 'lcl'
-    end
-
-    def max_dimension(tenant_id:, mode_of_transport:)
-      bundle = MaxDimensionsBundle.find_by(tenant_id: tenant_id, mode_of_transport: mode_of_transport, aggregate: false)
-      bundle || MaxDimensionsBundle.find_by(tenant_id: tenant_id, mode_of_transport: 'general', aggregate: false)
     end
   end
 end

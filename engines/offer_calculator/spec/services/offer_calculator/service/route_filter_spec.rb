@@ -9,6 +9,8 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
   let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
   let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:carrier) { FactoryBot.create(:legacy_carrier) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier, tenant: tenant) }
   let(:shipment) do
     FactoryBot.create(:legacy_shipment,
                       load_type: 'cargo_item',
@@ -21,6 +23,8 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
         itinerary_id: itinerary.id,
         origin_stop_id: itinerary.stops.first.id,
         destination_stop_id: itinerary.stops.last.id,
+        tenant_vehicle_id: tenant_vehicle.id,
+        carrier_id: carrier.id,
         mode_of_transport: 'ocean'
       )
     ]
@@ -46,7 +50,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
 
     context 'with failure' do
       before do
-        allow(shipment.cargo_items.first).to receive(:valid_for_mode_of_transport?).and_return(false)
+        shipment.cargo_items.first.update(payload_in_kg: 150_000)
       end
 
       it 'raises InvalidRoutes when the routes are invalid' do
@@ -56,12 +60,71 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
 
     context 'with failure (AggregatedCargo)' do
       before do
-        shipment.aggregated_cargo = FactoryBot.create(:legacy_aggregated_cargo)
-        allow(shipment.aggregated_cargo).to receive(:valid_for_mode_of_transport?).and_return(false)
+        shipment.aggregated_cargo = FactoryBot.create(:legacy_aggregated_cargo, weight: 25_000)
       end
 
       it 'raises InvalidRoutes when the routes are invalid' do
         expect { described_class.new(shipment: shipment).perform(routes) }.to raise_error(OfferCalculator::Calculator::InvalidRoutes)
+      end
+    end
+
+    context 'with service specfic max dimensions (success)' do
+      before do
+        FactoryBot.create(:legacy_cargo_item,
+                          dimension_x: 990,
+                          dimension_z: 990,
+                          dimension_y: 990,
+                          payload_in_kg: 10_000,
+                          chargeable_weight: 10_000,
+                          shipment: shipment)
+        FactoryBot.create(:legacy_max_dimensions_bundle,
+                          dimension_x: 1000,
+                          dimension_z: 1000,
+                          dimension_y: 1000,
+                          payload_in_kg: 1_000_000,
+                          chargeable_weight: 1_000_000,
+                          tenant_vehicle_id: tenant_vehicle.id,
+                          carrier_id: carrier.id,
+                          mode_of_transport: 'ocean',
+                          tenant: tenant)
+      end
+
+      it 'returns the valid routes' do
+        results = described_class.new(shipment: shipment).perform(routes)
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results).to match_array(routes)
+        end
+      end
+    end
+
+    context 'with carrier specfic max dimensions (success)' do
+      before do
+        FactoryBot.create(:legacy_cargo_item,
+                          dimension_x: 990,
+                          dimension_z: 990,
+                          dimension_y: 990,
+                          payload_in_kg: 10_000,
+                          chargeable_weight: 10_000,
+                          shipment: shipment)
+        FactoryBot.create(:legacy_max_dimensions_bundle,
+                          dimension_x: 1000,
+                          dimension_z: 1000,
+                          dimension_y: 1000,
+                          payload_in_kg: 1_000_000,
+                          chargeable_weight: 1_000_000,
+                          tenant_vehicle_id: nil,
+                          carrier_id: carrier.id,
+                          mode_of_transport: 'ocean',
+                          tenant: tenant)
+      end
+
+      it 'returns the valid routes' do
+        results = described_class.new(shipment: shipment).perform(routes)
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results).to match_array(routes)
+        end
       end
     end
   end

@@ -831,6 +831,7 @@ ActiveRecord::Schema.define(version: 2020_03_11_104241) do
 
   create_table "max_dimensions_bundles", force: :cascade do |t|
     t.boolean "aggregate"
+    t.bigint "carrier_id"
     t.decimal "chargeable_weight"
     t.datetime "created_at", null: false
     t.decimal "dimension_x"
@@ -840,9 +841,13 @@ ActiveRecord::Schema.define(version: 2020_03_11_104241) do
     t.decimal "payload_in_kg"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
+    t.bigint "tenant_vehicle_id"
     t.datetime "updated_at", null: false
+    t.index ["carrier_id"], name: "index_max_dimensions_bundles_on_carrier_id"
+    t.index ["mode_of_transport"], name: "index_max_dimensions_bundles_on_mode_of_transport"
     t.index ["sandbox_id"], name: "index_max_dimensions_bundles_on_sandbox_id"
     t.index ["tenant_id"], name: "index_max_dimensions_bundles_on_tenant_id"
+    t.index ["tenant_vehicle_id"], name: "index_max_dimensions_bundles_on_tenant_vehicle_id"
   end
 
   create_table "messages_20200114", force: :cascade do |t|
@@ -1227,11 +1232,14 @@ ActiveRecord::Schema.define(version: 2020_03_11_104241) do
   create_table "quotations_line_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "amount_cents"
     t.string "amount_currency"
+    t.bigint "cargo_id"
+    t.string "cargo_type"
     t.bigint "charge_category_id"
     t.datetime "created_at", null: false
     t.integer "section"
     t.uuid "tender_id"
     t.datetime "updated_at", null: false
+    t.index ["cargo_type", "cargo_id"], name: "index_quotations_line_items_on_cargo_type_and_cargo_id"
     t.index ["charge_category_id"], name: "index_quotations_line_items_on_charge_category_id"
     t.index ["tender_id"], name: "index_quotations_line_items_on_tender_id"
   end

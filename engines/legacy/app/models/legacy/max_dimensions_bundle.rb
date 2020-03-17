@@ -7,10 +7,12 @@ module Legacy
     self.table_name = 'max_dimensions_bundles'
 
     belongs_to :tenant
+    belongs_to :tenant_vehicle, optional: true
+    belongs_to :carrier, optional: true
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     validates :mode_of_transport, presence: true, uniqueness: {
-      scope: %i(tenant_id aggregate),
+      scope: %i[tenant_id aggregate tenant_vehicle_id carrier_id],
       message: lambda do |obj, _|
         max_dimensions_name = "max#{aggregate ? '_aggregate' : ''}_dimensions"
 
@@ -128,11 +130,16 @@ end
 #  payload_in_kg     :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  carrier_id        :bigint
 #  sandbox_id        :uuid
 #  tenant_id         :integer
+#  tenant_vehicle_id :bigint
 #
 # Indexes
 #
-#  index_max_dimensions_bundles_on_sandbox_id  (sandbox_id)
-#  index_max_dimensions_bundles_on_tenant_id   (tenant_id)
+#  index_max_dimensions_bundles_on_carrier_id         (carrier_id)
+#  index_max_dimensions_bundles_on_mode_of_transport  (mode_of_transport)
+#  index_max_dimensions_bundles_on_sandbox_id         (sandbox_id)
+#  index_max_dimensions_bundles_on_tenant_id          (tenant_id)
+#  index_max_dimensions_bundles_on_tenant_vehicle_id  (tenant_vehicle_id)
 #
