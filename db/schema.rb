@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_11_104241) do
+ActiveRecord::Schema.define(version: 2020_03_18_114246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -419,7 +419,7 @@ ActiveRecord::Schema.define(version: 2020_03_11_104241) do
     t.string "name"
     t.integer "nexus_id"
     t.string "photo"
-    t.geometry "point", limit: {:srid=>0, :type=>"geometry"}
+    t.geometry "point", limit: {:srid=>4326, :type=>"geometry"}
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.string "trucking_type"

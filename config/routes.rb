@@ -520,7 +520,9 @@ end
 #                     v1_clients GET    /v1/clients(.:format)                              api/v1/clients#index
 #                                POST   /v1/clients(.:format)                              api/v1/clients#create
 #                      v1_client GET    /v1/clients/:id(.:format)                          api/v1/clients#show
+#                  v1_equipments GET    /v1/equipments(.:format)                           api/v1/equipments#index
 #                scope_v1_tenant GET    /v1/tenants/:id/scope(.:format)                    api/v1/tenants#scope
+#            countries_v1_tenant GET    /v1/tenants/:id/countries(.:format)                api/v1/tenants#countries
 #                     v1_tenants GET    /v1/tenants(.:format)                              api/v1/tenants#index
 #                   v1_dashboard GET    /v1/dashboard(.:format)                            api/v1/dashboard#show
 #            v1_quotation_create POST   /v1/quotations/:quotation_id/create(.:format)      api/v1/quotations#create
