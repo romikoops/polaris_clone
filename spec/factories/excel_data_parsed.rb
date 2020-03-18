@@ -9,8 +9,8 @@ FactoryBot.define do
       attributes[:all_sheets_data].map { |per_sheet_data| per_sheet_data.merge(attributes[:restructurer_name]) }.deep_dup
     end
 
-    trait :pricing_one_col_fee_and_ranges do
-      restructurer_name { { restructurer_name: 'pricing_one_col_fee_and_ranges' } }
+    trait :pricing_one_fee_col_and_ranges do
+      restructurer_name { { restructurer_name: 'pricing_one_fee_col_and_ranges' } }
     end
 
     trait :pricing_dynamic_fee_cols_no_ranges do
@@ -33,7 +33,7 @@ FactoryBot.define do
       restructurer_name { { restructurer_name: 'max_dimensions' } }
     end
 
-    trait :correct_pricings_one_col_fee_and_ranges do
+    trait :correct_pricings_one_fee_col_and_ranges do
       all_sheets_data do
         [{ sheet_name: 'Sheet1',
            rows_data:
@@ -180,34 +180,7 @@ FactoryBot.define do
       end
     end
 
-    trait :faulty_pricings_one_col_fee_and_ranges do
-      all_sheets_data do
-        [{ sheet_name: 'Sheet1',
-           rows_data:
-            [{ effective_date: Date.parse('Thu, 15 Mar 2018'),
-               expiration_date: Date.parse('Sun, 17 Mar 2019'),
-               customer_email: nil,
-               origin: 'Gothenburg',
-               country_origin: 'Sweden',
-               destination: 'Shanghai',
-               country_destination: 'China',
-               mot: 'ocean',
-               carrier: nil,
-               service_level: 'standard',
-               load_type: 'LCL',
-               rate_basis: 'PER_WM',
-               range_min: nil,
-               range_max: nil,
-               fee_code: 'BAS',
-               fee_name: 'Bas',
-               currency: 'USD',
-               fee_min: 17,
-               fee: 17,
-               row_nr: 2 }] }]
-      end
-    end
-
-    trait :correct_pricings_dynamic_fee_cols_no_rangs do
+    trait :correct_pricings_dynamic_fee_cols_no_ranges do
       all_sheets_data do
         [{ sheet_name: 'Sheet1',
            rows_data:
@@ -347,43 +320,6 @@ FactoryBot.define do
       end
     end
 
-    trait :faulty_local_charges do
-      all_sheets_data do
-        [{ sheet_name: 'Sheet1',
-           rows_data:
-        [{ hubbbbbbbbbbbb: 'Bremerhaven',
-           country: 'Germany',
-           effective_date: Date.parse('2019-01-24'),
-           expiration_date: Date.parse('2020-01-24'),
-           counterpart_hub: nil,
-           counterpart_country: nil,
-           service_level: 'standard',
-           carrier: 'SACO Shipping',
-           fee_code: 'DOC',
-           fee: 'Documentation',
-           mot: 'ocean',
-           load_type: 'lcl',
-           direction: 'export',
-           currency: 'EUR',
-           rate_basis: 'PER_BILL',
-           minimum: nil,
-           maximum: nil,
-           base: nil,
-           ton: 20,
-           cbm: nil,
-           kg: nil,
-           item: nil,
-           shipment: nil,
-           bill: nil,
-           container: nil,
-           wm: nil,
-           range_min: nil,
-           range_max: nil,
-           dangerous: nil,
-           row_nr: 2 }] }]
-      end
-    end
-
     trait :correct_saco_shipping do
       all_sheets_data do
         [{ sheet_name: 'Africa',
@@ -467,59 +403,6 @@ FactoryBot.define do
       end
     end
 
-    trait :faulty_margins do
-      all_sheets_data do
-        [{ sheet_name: 'Tabelle1',
-           restructurer_name: 'margins',
-           rows_data:
-            [{ effective_date: Date.parse('Tue, 01 Jan 2019'),
-               expiration_date: Date.parse('Sun, 31 Mar 2019'),
-               origin: 'Dalian',
-               country_origin: 'China',
-               destination: 'Gothenburg',
-               country_destination: 'Sweden',
-               mot: 'ocean',
-               carrier: 'consolidation',
-               service_level: 'standard',
-               margin_type: 'freight',
-               load_type: 'lcl',
-               fee_code: 'BAS',
-               operator: '+',
-               margin: 0.1,
-               row_nr: 2 },
-             { effective_date: Date.parse('Tue, 01 Jan 2019'),
-               expiration_date: Date.parse('Sun, 31 Mar 2019'),
-               origin: 'Dalian',
-               country_origin: 'China',
-               destination: 'Gothenburg',
-               country_destination: 'Sweden',
-               mot: 'air',
-               carrier: 'consolidation',
-               service_level: 'fast',
-               margin_type: 'freight',
-               load_type: 'lcl',
-               fee_code: 'BAS',
-               operator: '%',
-               margin: 0.1,
-               row_nr: 3 },
-             { effective_date: Date.parse('Tue, 01 Jan 2019'),
-               expiration_date: Date.parse('Sun, 31 Mar 2019'),
-               origin: 'Dalian',
-               country_origin: 'China',
-               destination: 'Gothenburg',
-               country_destination: 'Sweden',
-               mot: 'ocean',
-               carrier: 'consolidation',
-               service_level: 'fast',
-               margin_type: 'freight',
-               load_type: 'lcl',
-               fee_code: 'BAS',
-               operator: '%',
-               margin: 0.1,
-               row_nr: 3 }] }]
-      end
-    end
-
     trait :default_hubs do
       sheet_name { 'Hubs' }
       restructurer_name { 'hubs' }
@@ -588,14 +471,11 @@ FactoryBot.define do
     end
 
     factory :default_hubs_row_data, traits: %i[default_hubs]
-    factory :excel_data_parsed_correct_pricings_one_col_fee_and_ranges, traits: %i[pricing_one_col_fee_and_ranges correct_pricings_one_col_fee_and_ranges]
-    factory :excel_data_parsed_faulty_pricings_one_col_fee_and_ranges, traits: %i[pricing_one_col_fee_and_ranges faulty_pricings_one_col_fee_and_ranges]
-    factory :excel_data_parsed_correct_pricings_dynamic_fee_cols_no_rangs, traits: %i[pricing_dynamic_fee_cols_no_ranges correct_pricings_dynamic_fee_cols_no_rangs]
+    factory :excel_data_parsed_correct_pricings_one_fee_col_and_ranges, traits: %i[pricing_one_fee_col_and_ranges correct_pricings_one_fee_col_and_ranges]
+    factory :excel_data_parsed_correct_pricings_dynamic_fee_cols_no_ranges, traits: %i[pricing_dynamic_fee_cols_no_ranges correct_pricings_dynamic_fee_cols_no_ranges]
     factory :excel_data_parsed_correct_local_charges, traits: %i[local_charges correct_local_charges]
-    factory :excel_data_parsed_faulty_local_charges, traits: %i[local_charges faulty_local_charges]
     factory :excel_data_parsed_correct_saco_shipping, traits: %i[saco_shipping correct_saco_shipping]
     factory :excel_data_parsed_correct_margins, traits: %i[margins correct_margins]
-    factory :excel_data_parsed_faulty_margins, traits: %i[margins faulty_margins]
     factory :excel_data_parsed_correct_max_dimensions, traits: %i[max_dimensions correct_max_dimensions]
   end
 end

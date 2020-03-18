@@ -35,6 +35,8 @@ module ExcelDataServices
         end
 
         def check_single_data(row)
+          check_group(row)
+
           check_correct_individual_effective_period(row)
 
           user = get_user(row)

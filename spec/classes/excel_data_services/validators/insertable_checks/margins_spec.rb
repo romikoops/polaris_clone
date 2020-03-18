@@ -10,7 +10,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Margins do
   let(:options) do
     {
       tenant: tenant,
-      data: input_data[:rows_data],
+      data: input_data,
       sheet_name: 'Margins',
       options: {
         applicable: tenants_user
@@ -37,7 +37,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Margins do
   end
 
   context 'with faulty data' do
-    let(:input_data) { build(:excel_data_parsed_faulty_margins).first }
+    let(:input_data) { build(:excel_data_restructured_faulty_margins) }
 
     describe '.validate' do
       it 'logs the errors' do

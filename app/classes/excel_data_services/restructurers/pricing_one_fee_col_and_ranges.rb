@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Restructurers
-    class PricingOneColFeeAndRanges < ExcelDataServices::Restructurers::Base
+    class PricingOneFeeColAndRanges < ExcelDataServices::Restructurers::Base
       ROWS_BY_CONNECTED_RANGES_GROUPING_KEYS =
         (ROWS_BY_PRICING_PARAMS_GROUPING_KEYS +
           %i[

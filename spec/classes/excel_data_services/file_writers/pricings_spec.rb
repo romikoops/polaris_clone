@@ -190,8 +190,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
 
     context 'when all pricings are valid with attached group' do
       let(:pricing_headers) do
-        (described_class::HEADER_COLLECTION::OPTIONAL_PRICING_ONE_COL_FEE_AND_RANGES +
-           described_class::HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES).map { |header| header.to_s.upcase }
+        (described_class::HEADER_COLLECTION::OPTIONAL_PRICING_ONE_FEE_COL_AND_RANGES +
+           described_class::HEADER_COLLECTION::PRICING_ONE_FEE_COL_AND_RANGES).map { |header| header.to_s.upcase }
       end
       let(:group_id) { create(:tenants_group, tenant: tenants_tenant, name: 'TEST').id }
       let(:pricing) { create(:pricings_pricing, tenant: tenant, group_id: group_id, itinerary: itinerary) }

@@ -24,32 +24,53 @@ module ExcelDataServices
         end
 
         def check_group(row)
-          return if row.group_id.nil? && row.group_name.nil?
+          if row.group_id.present?
+            group_by_id = Tenants::Group.find_by(tenant: @tenants_tenant, id: row.group_id)
 
-          check_group_id(row)
-          check_group_name(row)
+            check_group_by_id(row, group_by_id)
+          end
+
+          if row.group_name.present?
+            group_by_name = Tenants::Group.find_by(tenant: @tenants_tenant, name: row.group_name)
+
+            check_group_by_name(row, group_by_name)
+          end
+
+          check_groups_are_the_same(row, group_by_id, group_by_name) if [group_by_id, group_by_name].all?
         end
 
-        def check_group_id(row)
-          return if row.group_id.present? && UUID.validate(row.group_id)
+        def check_group_by_id(row, group_by_id)
+          return if group_by_id.present?
 
           add_to_errors(
             type: :error,
             row_nr: row.nr,
             sheet_name: sheet_name,
-            reason: 'Group ID must be a valid UUID string!',
+            reason: "The Group with ID '#{row.group_id}' does not exist!",
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
           )
         end
 
-        def check_group_name(row)
-          return if row.name.present? && Tenants::Group.exists?(tenant_id: @tenants_tenant.id, name: row.name)
+        def check_group_by_name(row, group_by_name)
+          return if group_by_name.present?
 
           add_to_errors(
             type: :error,
             row_nr: row.nr,
             sheet_name: sheet_name,
-            reason: "The Group #{row.group_name} does not exist!",
+            reason: "The Group with name '#{row.group_name}' does not exist!",
+            exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
+          )
+        end
+
+        def check_groups_are_the_same(row, group_by_id, group_by_name)
+          return if group_by_id == group_by_name
+
+          add_to_errors(
+            type: :error,
+            row_nr: row.nr,
+            sheet_name: sheet_name,
+            reason: "The Group with ID '#{row.group_id}' is not the same as the group with name '#{row.group_name}'!",
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
           )
         end

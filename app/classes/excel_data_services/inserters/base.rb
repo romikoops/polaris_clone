@@ -13,7 +13,7 @@ module ExcelDataServices
 
       def initialize(tenant:, data:, options:)
         @tenant = tenant
-        @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant&.id)
+        @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
         @scope = ::Tenants::ScopeService.new(
           tenant: tenants_tenant,
           target: ::Tenants::User.find_by(legacy_id: options[:user]&.id)
@@ -49,7 +49,7 @@ module ExcelDataServices
 
         return row.group_id if row.group_id.present?
 
-        Tenants::Group.find_by(tenant_id: Tenants::Tenant.find_by(legacy_id: tenant.id).id, name: row.group_name)&.id
+        Tenants::Group.find_by(tenant: tenants_tenant, name: row.group_name).id if row.group_name
       end
 
       def add_stats(data_record, force_new_record = false)

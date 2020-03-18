@@ -42,7 +42,7 @@ module ExcelDataServices
         currency: :currency_name
       }.freeze
 
-      PRICING_ONE_COL_FEE_AND_RANGES_LOOKUP = PRICING_COMMON_LOOKUP.merge(
+      PRICING_ONE_FEE_COL_AND_RANGES_LOOKUP = PRICING_COMMON_LOOKUP.merge(
         range_min: :range_min,
         range_max: :range_max,
         fee_code: :shipping_type,
@@ -226,8 +226,8 @@ module ExcelDataServices
             HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
             dynamic_headers
         when 'With Ranges'
-          HEADER_COLLECTION::OPTIONAL_PRICING_ONE_COL_FEE_AND_RANGES +
-            HEADER_COLLECTION::PRICING_ONE_COL_FEE_AND_RANGES
+          HEADER_COLLECTION::OPTIONAL_PRICING_ONE_FEE_COL_AND_RANGES +
+            HEADER_COLLECTION::PRICING_ONE_FEE_COL_AND_RANGES
         else
           raise ExcelDataServices::Validators::ValidationErrors::WritingError::UnknownSheetNameError,
                 "Unknown sheet name \"#{sheet_name}\"!"

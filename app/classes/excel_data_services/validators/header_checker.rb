@@ -66,7 +66,7 @@ module ExcelDataServices
           group_name
         ].freeze
 
-        PRICING_ONE_COL_FEE_AND_RANGES = %i[
+        PRICING_ONE_FEE_COL_AND_RANGES = %i[
           effective_date
           expiration_date
           customer_email
@@ -88,7 +88,7 @@ module ExcelDataServices
           fee
         ].freeze
 
-        OPTIONAL_PRICING_ONE_COL_FEE_AND_RANGES = %i[
+        OPTIONAL_PRICING_ONE_FEE_COL_AND_RANGES = %i[
           group_id
           group_name
         ].freeze
