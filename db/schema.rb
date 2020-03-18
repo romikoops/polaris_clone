@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_18_114246) do
+ActiveRecord::Schema.define(version: 2020_03_18_122257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1232,11 +1232,14 @@ ActiveRecord::Schema.define(version: 2020_03_18_114246) do
   create_table "quotations_line_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "amount_cents"
     t.string "amount_currency"
+    t.integer "cargo_id"
+    t.string "cargo_type"
     t.bigint "charge_category_id"
     t.datetime "created_at", null: false
     t.integer "section"
     t.uuid "tender_id"
     t.datetime "updated_at", null: false
+    t.index ["cargo_type", "cargo_id"], name: "index_quotations_line_items_on_cargo_type_and_cargo_id"
     t.index ["charge_category_id"], name: "index_quotations_line_items_on_charge_category_id"
     t.index ["tender_id"], name: "index_quotations_line_items_on_tender_id"
   end

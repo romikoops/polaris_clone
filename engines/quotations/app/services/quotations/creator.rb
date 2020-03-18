@@ -7,6 +7,7 @@ module Quotations
       @charge_breakdown = charge.charge_breakdown
       @meta = meta
       @user = user
+      @shipment = @charge_breakdown.shipment
     end
 
     def perform
@@ -24,9 +25,9 @@ module Quotations
       destination_nexus = @meta[:destination_hub].nexus
       tenant = Tenants::Tenant.find_by(legacy_id: legacy_tenant_id)
       @quotation = Quotations::Quotation.create(tenant: tenant,
-                                    user: @user,
-                                    origin_nexus: origin_nexus,
-                                    destination_nexus: destination_nexus)
+                                                user: @user,
+                                                origin_nexus: origin_nexus,
+                                                destination_nexus: destination_nexus)
     end
 
     def create_tenders
@@ -49,11 +50,20 @@ module Quotations
         LineItem.create(charge_category_id: child_charge.children_charge_category_id,
                         tender_id: tender.id,
                         section: section,
+                        cargo: extract_cargo_from_charge(charge_category: child_charge.charge_category),
                         amount_cents: price.value,
                         amount_currency: price.currency)
       end
     end
 
-    attr_reader :meta, :charge, :charge_breakdown, :user, :quotation
+    def extract_cargo_from_charge(charge_category:)
+      return if charge_category.cargo_unit_id.nil?
+
+      return shipment.aggregated_cargo if shipment.aggregated_cargo.present?
+
+      shipment.cargo_units.find(charge_category.cargo_unit_id)
+    end
+
+    attr_reader :meta, :charge, :charge_breakdown, :user, :quotation, :shipment
   end
 end
