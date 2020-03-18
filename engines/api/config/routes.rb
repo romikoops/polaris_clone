@@ -6,6 +6,7 @@ Api::Engine.routes.draw do
   namespace :v1 do
     resource :me, controller: :users, only: :show
     resources :clients, only: %i[index show create]
+    resources :equipments, only: :index
     resources :tenants, only: :index do
       member do
         get 'scope'
