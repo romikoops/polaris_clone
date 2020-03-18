@@ -8,6 +8,7 @@ module ExcelDataServices
 
         TYPE_VALIDATOR_LOOKUP = {
           fee: Validators::TypeValidity::TypeValidators::FeeValidator,
+          load_type: Validators::TypeValidity::TypeValidators::LoadTypeValidator,
           locode: Validators::TypeValidity::TypeValidators::LocodeValidator,
           date: Validators::TypeValidity::TypeValidators::DateValidator,
           required_string: Validators::TypeValidity::TypeValidators::StringValidator,
@@ -17,6 +18,7 @@ module ExcelDataServices
 
         EXCEPTION_LOOKUP = {
           fee: ExcelDataServices::Validators::ValidationErrors::TypeValidity::InvalidFee,
+          load_type: ExcelDataServices::Validators::ValidationErrors::TypeValidity::InvalidLoadType,
           locode: ExcelDataServices::Validators::ValidationErrors::TypeValidity::InvalidLocode,
           date: ExcelDataServices::Validators::ValidationErrors::TypeValidity::InvalidDate,
           required_string: ExcelDataServices::Validators::ValidationErrors::TypeValidity::InvalidString,

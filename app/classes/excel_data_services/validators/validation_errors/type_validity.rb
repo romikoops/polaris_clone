@@ -21,6 +21,9 @@ module ExcelDataServices
 
         class InvalidInternal < TypeValidity
         end
+
+        class InvalidLoadType < TypeValidity
+        end
       end
     end
   end
