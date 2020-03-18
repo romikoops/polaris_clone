@@ -45,18 +45,10 @@ module Api
         hubs_nexuses(hubs)
       end
 
-      def nexus_hubs(nexus_id)
-        Legacy::Hub.where(nexus_id: nexus_id).ids
-      end
-
       def hubs_nexuses(hubs)
         nexuses = Legacy::Nexus.where(id: hubs.pluck(:nexus_id))
         nexuses = nexuses.name_search(location_params[:q]) if location_params[:q].present?
         nexuses
-      end
-
-      def location_params
-        params.permit(:q, :id, :lat, :lng)
       end
 
       def tenant_itineraries
@@ -66,12 +58,10 @@ module Api
       end
 
       def location_itineraries(itineraries:, index:, carriage:)
-        return itineraries unless location?
-
         if params[:id].present?
-          itineraries = itineraries.where(stops: { index: index, hub_id: nexus_hubs(params[:id]) })
-        end
-        if params[:lat].present? && params[:lng].present?
+          hubs = Legacy::Hub.where(nexus_id: params[:id])
+          itineraries = itineraries.where(stops: { index: index, hub_id: hubs.ids })
+        elsif params[:lat].present? && params[:lng].present?
           hubs = carriage_hubs_for(lat: params[:lat], lng: params[:lng], carriage: carriage)
           itineraries = itineraries.where(stops: { index: index, hub_id: hubs })
         end
@@ -119,6 +109,10 @@ module Api
           target: current_user,
           tenant: current_tenant
         ).fetch(:base_pricing)
+      end
+
+      def location_params
+        params.permit(:q, :id, :lat, :lng)
       end
 
       def location?
