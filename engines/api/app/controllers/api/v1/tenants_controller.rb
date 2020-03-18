@@ -15,7 +15,7 @@ module Api
       end
 
       def countries
-        countries = Legacy::Hub.where(tenant: current_tenant.legacy).collect(&:country)
+        countries = Legacy::Hub.where(tenant: current_tenant.legacy).collect(&:country).uniq
         render json: CountrySerializer.new(countries)
       end
     end
