@@ -20,4 +20,17 @@ RSpec.resource 'Tenants' do
       expect(status).to eq 200
     end
   end
+
+  get '/v1/tenants/:id/countries' do
+    response_field :name, 'Country Name', Type: String
+    response_field :code, 'Country Code', Type: String
+    response_field :flag, 'Country Flag', Type: String
+
+    let(:id) { tenant.id }
+    example_request 'Returns all the countries on which the tenant operates' do
+      explanation <<-DOC
+      Use this endpoint to fetch all countries on which the tenant operates
+      DOC
+    end
+  end
 end

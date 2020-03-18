@@ -13,6 +13,11 @@ module Api
 
         render json: scope
       end
+
+      def countries
+        countries = Legacy::Hub.where(tenant: current_tenant.legacy).collect(&:country)
+        render json: CountrySerializer.new(countries)
+      end
     end
   end
 end

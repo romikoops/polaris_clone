@@ -9,6 +9,7 @@ Api::Engine.routes.draw do
     resources :tenants, only: :index do
       member do
         get 'scope'
+        get 'countries'
       end
     end
     resource :dashboard, controller: :dashboard, only: %i[show]
