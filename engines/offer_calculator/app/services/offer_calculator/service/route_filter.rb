@@ -40,7 +40,7 @@ module OfferCalculator
       def valid_for_mode_of_transport?(cargo:, route:, aggregate:)
         mode_of_transport = route.mode_of_transport
         cargo.chargeable_weight = cargo.calc_chargeable_weight(mode_of_transport)
-        max_dimensions = target_max_dimension(route: route)
+        max_dimensions = target_max_dimension(route: route, aggregate: aggregate)
         exceeded_dimensions = validate_cargo_dimensions(
           max_dimensions: max_dimensions,
           cargo: cargo,
@@ -68,17 +68,18 @@ module OfferCalculator
         value <= limit
       end
 
-      def target_max_dimension(route:)
+      def target_max_dimension(route:, aggregate:)
         args = {
           carrier_id: route.carrier_id,
           tenant_vehicle_id: route.tenant_vehicle_id,
-          mode_of_transport: route.mode_of_transport
+          mode_of_transport: route.mode_of_transport,
+          aggregate: aggregate
         }
         mot_filtered_max_dimensions = tenant_max_dimensions_bundles.exists?(args.slice(:mode_of_transport))
         args[:mode_of_transport] = 'general' if mot_filtered_max_dimensions.blank?
         bundle = tenant_max_dimensions_bundles.find_by(args)
         bundle ||= tenant_max_dimensions_bundles.find_by(args.except(:tenant_vehicle_id))
-        bundle || tenant_max_dimensions_bundles.find_by(args.slice(:mode_of_transport))
+        bundle || tenant_max_dimensions_bundles.find_by(args.slice(:mode_of_transport, :aggregate))
       end
     end
   end

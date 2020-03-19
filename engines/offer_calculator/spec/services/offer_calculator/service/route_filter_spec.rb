@@ -128,4 +128,45 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
       end
     end
   end
+
+  describe '.target_max_dimension' do
+    let!(:klass) { described_class.new(shipment: shipment) }
+    let(:route) { routes.first }
+
+    before do
+      Legacy::MaxDimensionsBundle.destroy_all
+    end
+
+    context 'when non aggregate and mot ' do
+      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: false, mode_of_transport: route.mode_of_transport) }
+
+      it 'finds the corrrect max dimension for the mot' do
+        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: false)).to eq(target_mdb)
+      end
+    end
+
+    context 'when  aggregate and mot ' do
+      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: true, mode_of_transport: route.mode_of_transport) }
+
+      it 'finds the corrrect max dimension for the mot' do
+        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: true)).to eq(target_mdb)
+      end
+    end
+
+    context 'when aggregate, mot and tenant_vehicle_id' do
+      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: true, mode_of_transport: route.mode_of_transport, tenant_vehicle_id: route.tenant_vehicle_id) }
+
+      it 'finds the corrrect max dimension for the mot' do
+        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: true)).to eq(target_mdb)
+      end
+    end
+
+    context 'when non aggregate, mot and tenant_vehicle_id' do
+      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: false, mode_of_transport: route.mode_of_transport, tenant_vehicle_id: route.tenant_vehicle_id) }
+
+      it 'finds the corrrect max dimension for the mot' do
+        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: false)).to eq(target_mdb)
+      end
+    end
+  end
 end
