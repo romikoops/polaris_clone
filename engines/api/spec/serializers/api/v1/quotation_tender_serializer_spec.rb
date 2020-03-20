@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 module Api
-  RSpec.describe V1::ChargesSerializer do
+  RSpec.describe V1::QuotationTenderSerializer do
     let(:tenant) { FactoryBot.create(:legacy_tenant) }
 
     let(:charge_category) { FactoryBot.create(:bas_charge) }

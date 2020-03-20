@@ -19,6 +19,7 @@ Api::Engine.routes.draw do
       post :download
       resources :charges, only: %i[show]
     end
+    resources :tenders, only: :update
     resources :cargo_item_types, only: :index
     resources :trucking_availability, controller: :trucking_availability, only: %i[index]
     resources :groups, controller: :tenants_groups, only: :index

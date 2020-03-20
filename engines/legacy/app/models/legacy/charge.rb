@@ -65,6 +65,7 @@ module Legacy
 
       edited_price.money = new_total
       edited_price.save
+      save
     end
 
     def dup_tree(charge_breakdown:, parent: nil)

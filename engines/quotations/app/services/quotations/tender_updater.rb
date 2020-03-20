@@ -1,0 +1,83 @@
+# frozen_string_literal: true
+
+module Quotations
+  class TenderUpdater
+    def initialize(tender:, line_item_id:, charge_category_id:, value:, section:)
+      @tender = tender
+      @line_item = Quotations::LineItem.find(line_item_id) if line_item_id.present?
+      @section = section
+      @value = value
+      @charge_category_id = charge_category_id
+      @charge = charge_to_edit
+    end
+
+    def perform
+      ActiveRecord::Base.transaction do
+        update_line_items if charge.detail_level == 3
+
+        update_charge
+        update_parent(charge.parent) if charge.parent.present?
+        update_tender
+      end
+      tender
+    end
+
+    def update_line_items
+      @line_item.update!(amount: amount) if @line_item.present?
+    end
+
+    def update_tender
+      tender.update!(amount: charge_breakdown.grand_total.edited_price.money)
+    end
+
+    def update_charge
+      @charge.edited_price = Legacy::Price.create(value: value, currency: charge.price.currency)
+      @charge.save!
+    end
+
+    def update_parent(parent_charge)
+      return true if parent_charge.blank?
+
+      parent_charge.update_edited_price!
+      update_parent(parent_charge.parent)
+    end
+
+    private
+
+    def charge_breakdown
+      Legacy::ChargeBreakdown.find_by(tender_id: tender.id)
+    end
+
+    def charge_category_by_section
+      charge_breakdown.charge_categories.find_by(code: section)
+    end
+
+    def charge_category_by_cargo
+      charge_breakdown.charge_categories.find_by(cargo_unit_id: line_item.cargo_id)
+    end
+
+    def cargo_charge
+      section_charge.children.find_by(children_charge_category: charge_category_by_cargo)
+    end
+
+    def line_item_charge
+      cargo_charge.children.find_by(children_charge_category: line_item.charge_category)
+    end
+
+    def section_charge
+      charge_breakdown.charges.find_by(children_charge_category: charge_category_by_section)
+    end
+
+    def charge_to_edit
+      return line_item_charge if line_item.present?
+
+      charge_breakdown.charges.find_by(children_charge_category_id: charge_category_id)
+    end
+
+    def amount
+      Money.new(value * 100, charge.price.currency)
+    end
+
+    attr_reader :tender, :line_item, :section, :value, :charge_category_id, :charge
+  end
+end
