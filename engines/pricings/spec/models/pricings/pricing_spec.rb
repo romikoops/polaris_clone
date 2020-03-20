@@ -88,6 +88,7 @@ end
 #  expiration_date   :datetime
 #  internal          :boolean          default(FALSE)
 #  load_type         :string
+#  transshipment     :string
 #  validity          :daterange
 #  wm_rate           :decimal(, )
 #  created_at        :datetime         not null
