@@ -127,7 +127,6 @@ function getTenant () {
     appService.getTenant(tenantId).then(
       (resp) => {
         dispatch(success(resp.data))
-        dispatch(fetchCurrencies())
       },
       (error) => {
         if (error.then) {
