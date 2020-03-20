@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react'
 import { connect } from 'react-redux'
 import Formsy from 'formsy-react'
@@ -75,17 +76,12 @@ class LoginPage extends React.Component {
     const ie11Positioning =
       navigator.userAgent.includes('MSIE') || document.documentMode ? styles.login_ie_11 : ''
     const hasSamlLogin = authMethods.includes('saml')
-    const { focus } = this.state
+    const { focus, submitAttempted } = this.state
     const { email, password } = focus
 
     return (
-      <Formsy
-        className={`${styles.login_form} ${ie11Positioning}`}
-        name="form"
-        onValidSubmit={this.handleSubmit}
-        onInvalidSubmit={this.handleInvalidSubmit}
-      >
-        { hasSamlLogin && (
+      <div>
+        {hasSamlLogin && (
           <div className="form-group">
             <RoundButton
               handleNext={() => LoginPage.redirectToSamlLogin()}
@@ -97,44 +93,51 @@ class LoginPage extends React.Component {
             <hr className={styles.saml_border} />
           </div>
         )}
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <FormsyInput
-            type="text"
-            className={styles.form_control}
-            onFocus={this.handleFocus}
-            onBlur={this.handleFocus}
-            name="email"
-            placeholder="enter your email"
-            submitAttempted={this.state.submitAttempted}
-            validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
-            required
-          />
-          <hr style={email ? focusStyles : {}} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <FormsyInput
-            type="password"
-            className={styles.form_control}
-            name="password"
-            placeholder="enter your password"
-            submitAttempted={this.state.submitAttempted}
-            validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
-            required
-          />
-          <hr style={password ? focusStyles : {}} />
-          { allowForgotPassword && (
-            <a onClick={() => this.renderForgotPassword()} className={styles.forget_password_link}>
-              forgot password?
-            </a>
-          )}
-        </div>
-        <div className={`form-group ${styles.form_group_submit_btn}`}>
-          <RoundButton classNames="ccb_signin" text="Sign In" theme={theme} active />
-          <div className={styles.spinner}>{loggingIn && <LoadingSpinner />}</div>
-        </div>
-      </Formsy>
+        <Formsy
+          className={`${styles.login_form} ${ie11Positioning}`}
+          name="form"
+          onValidSubmit={this.handleSubmit}
+          onInvalidSubmit={this.handleInvalidSubmit}
+        >
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <FormsyInput
+              type="text"
+              className={styles.form_control}
+              onFocus={this.handleFocus}
+              onBlur={this.handleFocus}
+              name="email"
+              placeholder="enter your email"
+              submitAttempted={submitAttempted}
+              validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
+              required
+            />
+            <hr style={email ? focusStyles : {}} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <FormsyInput
+              type="password"
+              className={styles.form_control}
+              name="password"
+              placeholder="enter your password"
+              submitAttempted={submitAttempted}
+              validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
+              required
+            />
+            <hr style={password ? focusStyles : {}} />
+            {allowForgotPassword && (
+              <a onClick={() => this.renderForgotPassword()} className={styles.forget_password_link}>
+                forgot password?
+              </a>
+            )}
+          </div>
+          <div className={`form-group ${styles.form_group_submit_btn}`}>
+            <RoundButton classNames="ccb_signin" text="Sign In" theme={theme} active />
+            <div className={styles.spinner}>{loggingIn && <LoadingSpinner />}</div>
+          </div>
+        </Formsy>
+      </div>
     )
   }
 }
