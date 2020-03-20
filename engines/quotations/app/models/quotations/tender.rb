@@ -6,6 +6,7 @@ module Quotations
     belongs_to :origin_hub, class_name: 'Legacy::Hub'
     belongs_to :destination_hub, class_name: 'Legacy::Hub'
     belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle'
+    belongs_to :itinerary, class_name: 'Legacy::Itinerary'
     has_one :charge_breakdown, class_name: 'Legacy::ChargeBreakdown'
 
     has_many :line_items, inverse_of: :tender
@@ -29,6 +30,7 @@ end
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  destination_hub_id :integer
+#  itinerary_id       :integer
 #  origin_hub_id      :integer
 #  quotation_id       :uuid
 #  tenant_vehicle_id  :bigint

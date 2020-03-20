@@ -18,6 +18,7 @@ Api::Engine.routes.draw do
       post :create
       post :download
       resources :charges, only: %i[show]
+      resources :schedules, only: %i[show]
     end
     resources :tenders, only: :update
     resources :cargo_item_types, only: :index

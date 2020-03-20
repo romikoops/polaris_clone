@@ -8,7 +8,7 @@ module Api
       delegate :mode_of_transport, to: :tender
 
       def total
-        amount.format
+        amount_cents.zero? ? '-' : amount.format
       end
 
       def description
@@ -46,7 +46,7 @@ module Api
           adjusted_key.tr('_', ' ').upcase
         when 'key_and_name'
           "#{adjusted_key.upcase} - #{adjusted_name}"
-        when 'name'
+        else
           adjusted_name
         end
       end

@@ -483,9 +483,8 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
 
       it 'returns an object with two quotes with subtotals and grand totals' do
         aggregate_failures do
-          expect(results.count).to eq(1)
-          expect(results.first[:quote][:total][:value]).to be_truthy
-          expect(results.first[:quote][:cargo][:total][:value]).to be_truthy
+          expect(results).to be_a(Quotations::Quotation)
+          expect(results.tenders).to be_truthy
         end
       end
     end

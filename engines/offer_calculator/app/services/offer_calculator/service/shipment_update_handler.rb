@@ -27,7 +27,6 @@ module OfferCalculator
       def update_trucking
         # Setting trucking also sets has_on_carriage and has_pre_carriage
         @shipment.update(trucking: trucking_params.to_h)
-
         { origin: 'pre', destination: 'on' }.each do |target, carriage|
           next unless @shipment.has_carriage?(carriage)
 

@@ -2,11 +2,8 @@
 
 module Wheelhouse
   class TenderDecorator < Draper::Decorator
-    decorates 'Wheelhouse::OpenStruct'
-
-    delegate :origin_hub, :destination_hub, :service_level, :transit_time,
-             :mode_of_transport, :shipment_id, :charge_trip_id, to: :meta
-    delegate :meta, to: :object
+    decorates 'Quotations::Tender'
+    delegate_all
 
     def origin
       origin_hub.name
@@ -17,13 +14,28 @@ module Wheelhouse
     end
 
     def carrier
-      object.dig('meta', 'carrier_name')
+      tenant_vehicle.carrier&.name
+    end
+
+    def service_level
+      tenant_vehicle.name
+    end
+
+    def transshipment
+      '-' # pending new transshipment data
+    end
+
+    def transit_time
+      trip = itinerary.trips.find_by(tenant_vehicle: tenant_vehicle, load_type: load_type)
+      return '-' if trip.blank?
+
+      (trip.end_date.to_date - trip.start_date.to_date).to_i
     end
 
     def total
-      return '' if object.dig('quote', 'total', 'value').blank?
+      return '' if amount_cents.zero?
 
-      Money.new(object.quote.total.value.to_d * 100, object.quote.total.currency).format
+      amount.format
     end
 
     def uuid

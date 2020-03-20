@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.resource 'Charges', acceptance: true do
+RSpec.resource 'Schedules', acceptance: true do
   header 'Accept', 'application/json'
   header 'Content-Type', 'application/json'
   header 'Authorization', :token_header
@@ -13,20 +13,26 @@ RSpec.resource 'Charges', acceptance: true do
   let(:tenant_user) { Tenants::User.find_by(legacy_id: user.id) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenant_user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let(:quotation) { FactoryBot.create(:quotations_quotation, tenant: tenants_tenant, user: user) }
-  let(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, with_full_breakdown: true, with_tenders: true, trip: trip, tenant: tenant, user: user) }
-  let(:tender) { shipment.charge_breakdowns.first.tender }
+  let(:tender) { FactoryBot.create(:quotations_tender, itinerary: itinerary, tenant_vehicle: tenant_vehicle, load_type: 'cargo_item') }
 
-  before { FactoryBot.create(:tenants_theme, tenant: tenants_tenant) }
+  before do
+    [1, 3, 5, 10].map do |num|
+      base_date = num.days.from_now
+      FactoryBot.create(:legacy_trip,
+                        itinerary: itinerary,
+                        tenant_vehicle: tenant_vehicle,
+                        closing_date: base_date - 4.days,
+                        start_date: base_date,
+                        end_date: base_date + 30.days)
+    end
+    FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
+  end
 
-  get '/v1/quotations/:quotation_id/charges/:id' do
+  get '/v1/quotations/:quotation_id/schedules/:id' do
     with_options scope: :quote, with_example: true do
-      parameter :id, 'The charge trip id of the selected tender', required: true
+      parameter :id, 'The trip id of the selected tender', required: true
       parameter :quotation_id, 'The selected quotation id', required: true
     end
 
@@ -42,8 +48,7 @@ RSpec.resource 'Charges', acceptance: true do
         do_request(request)
         aggregate_failures do
           expect(status).to eq(200)
-          expect(response_data.dig('id')).to eq(shipment.charge_breakdowns.first.tender_id.to_s)
-          expect(response_data.dig('attributes').keys).to match_array(%w[charges route transitTime vessel id])
+          expect(response_data.dig(0, 'attributes').keys).to match_array(%w[closing start end service carrier vessel voyageCode tenderId])
         end
       end
     end

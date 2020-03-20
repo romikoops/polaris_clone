@@ -19,18 +19,36 @@ module OfferCalculator
 
         raise OfferCalculator::Calculator::NoValidPricings if schedules_by_pricings.empty?
 
-        detailed_schedules = schedules_by_pricings.flat_map do |grouped_result|
+        charges_and_result = schedules_by_pricings.flat_map do |grouped_result|
           next if grouped_result[:schedules].empty?
 
-          handle_group_result(grouped_result: grouped_result)
+          { grouped_result: grouped_result, valid_charges: handle_group_result(grouped_result: grouped_result) }
         end
+
+        results_for_quotation = charges_and_result.pluck(:valid_charges)
+                                                  .flatten
+        handle_errors(errors: results_for_quotation) if results_for_quotation.all? { |result| result[:error].present? }
+
+        if results_for_quotation.present?
+          quotation = Quotations::Creator.new(results: results_for_quotation, user: user).perform
+        end
+
+        return quotation if @wheelhouse.present? && quotation.present?
+
+        detailed_schedules = charges_and_result.flat_map do |grand_total_charge_and_result|
+          grand_total_charge_and_result[:valid_charges].map do |grand_total_charge|
+            next if invalid_quote?(charge: grand_total_charge[:total])
+
+            handle_valid_charge(
+              valid_charge: grand_total_charge,
+              current_result: grand_total_charge_and_result[:grouped_result]
+            )
+          end
+        end
+
         compacted_detailed_schedules = detailed_schedules.compact
 
         raise OfferCalculator::Calculator::NoValidSchedules if compacted_detailed_schedules.empty?
-
-        if compacted_detailed_schedules.all? { |result| result[:error].present? }
-          handle_errors(errors: compacted_detailed_schedules)
-        end
 
         valid_compacted_detailed_schedules = compacted_detailed_schedules.reject { |result| result[:error].present? }
 
@@ -50,32 +68,19 @@ module OfferCalculator
 
         return grand_total_charges if grand_total_charges.all? { |charge| charge[:error].present? }
 
-        valid_charges = grand_total_charges.reject { |charge| charge[:error].present? }
-        valid_charges.map do |grand_total_charge|
-          next if invalid_quote?(charge: grand_total_charge[:total])
-
-          handle_valid_charge(
-            valid_charge: grand_total_charge,
-            current_result: current_result,
-            rate_overview: current_result[:rate_overview]
-          )
-        end
+        grand_total_charges.reject { |charge| charge[:error].present? }
       end
 
-      def handle_valid_charge(valid_charge:, current_result:, rate_overview:)
+      def handle_valid_charge(valid_charge:, current_result:)
         quote = quote_from_charge(charge: valid_charge[:total])
         meta_for_result = meta(
           result: valid_charge,
           shipment: @shipment,
           pricings_by_cargo_class: current_result[:pricings_by_cargo_class],
           user: user,
-          rate_overview: rate_overview
+          rate_overview: current_result[:rate_overview]
         )
-        Quotations::Creator.new(
-          charge: valid_charge[:total],
-          meta: meta_for_result,
-          user: user
-        ).perform
+
         result_to_return(
           quote: quote,
           meta_for_result: meta_for_result,

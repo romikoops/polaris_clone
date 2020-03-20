@@ -5,6 +5,7 @@ module Legacy
     self.table_name = 'charge_breakdowns'
 
     belongs_to :shipment
+    belongs_to :tender, class_name: 'Quotations::Tender', optional: true
     belongs_to :trip
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 

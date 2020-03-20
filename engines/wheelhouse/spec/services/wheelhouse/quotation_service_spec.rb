@@ -82,18 +82,11 @@ RSpec.describe Wheelhouse::QuotationService do
       let(:service) { described_class.new(quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info) }
 
       it 'perform a booking calulation' do
-        results = service.results
+        results = service.tenders
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
-          expect(results.first.dig(:quote, :total, :value)).to eq(1)
+          expect(results.first.amount_cents).to eq(100)
         end
-      end
-
-      it 'returns results as tenders for serialization' do
-        results = service.results
-        tender = service.tenders.first.object
-        expect(tender.to_h.keys).to match(results.first.keys)
       end
     end
 
@@ -104,11 +97,10 @@ RSpec.describe Wheelhouse::QuotationService do
       let(:service) { described_class.new(quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info) }
 
       it 'perform a quote calulation' do
-        results = service.results
+        results = service.tenders
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
-          expect(results.first.dig(:quote, :total, :value)).to eq(250)
+          expect(results.first.amount_cents).to eq(25_000)
         end
       end
     end
@@ -122,11 +114,10 @@ RSpec.describe Wheelhouse::QuotationService do
       let(:service) { described_class.new(quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info) }
 
       it 'perform a booking calulation' do
-        results = service.results
+        results = service.tenders
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
-          expect(results.first.dig(:quote, :total, :value)).to eq(28.8)
+          expect(results.first.amount_cents).to eq(2880)
         end
       end
     end

@@ -2,12 +2,12 @@
 
 module Quotations
   class Creator
-    def initialize(charge:, meta:, user:)
-      @charge = charge
-      @charge_breakdown = charge.charge_breakdown
-      @meta = meta
+    def initialize(results:, user:)
+      @results = results
+      @shipment = results.first[:total].charge_breakdown.shipment
+      @origin_nexus = results.dig(0, :schedules, 0).origin_hub.nexus
+      @destination_nexus = results.dig(0, :schedules, 0).destination_hub.nexus
       @user = user
-      @shipment = @charge_breakdown.shipment
     end
 
     def perform
@@ -15,43 +15,59 @@ module Quotations
         find_or_create_quotation
         create_tenders
       end
+      @quotation
     end
 
     private
 
     def find_or_create_quotation
-      legacy_tenant_id = @meta[:origin_hub].tenant_id
-      origin_nexus = @meta[:origin_hub].nexus
-      destination_nexus = @meta[:destination_hub].nexus
-      tenant = Tenants::Tenant.find_by(legacy_id: legacy_tenant_id)
+      tenant = Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
       @quotation = Quotations::Quotation.create(tenant: tenant,
                                                 user: @user,
-                                                origin_nexus: origin_nexus,
-                                                destination_nexus: destination_nexus)
+                                                origin_nexus: @origin_nexus,
+                                                destination_nexus: @destination_nexus)
     end
 
     def create_tenders
-      quote_total = charge.price
-      attributes = meta.slice(:carrier_name, :load_type, :tenant_vehicle_id, :name)
-                       .merge(quotation: @quotation,
-                              origin_hub: meta[:origin_hub],
-                              destination_hub: meta[:destination_hub],
-                              amount: quote_total.value,
-                              amount_currency: quote_total.currency)
-      tender = Tender.create(attributes)
-      charge.charge_breakdown.update(tender_id: tender.id)
-      create_line_items_for_tender(tender)
+      results.each do |result|
+        tender = Tender.create(tender_attributes_from_result(result: result))
+        charge_breakdown = result[:total].charge_breakdown
+        charge_breakdown.update(tender_id: tender.id)
+        create_line_items_for_tender(tender: tender, charge_breakdown: charge_breakdown)
+      end
     end
 
-    def create_line_items_for_tender(tender)
+    def tender_attributes_from_result(result:)
+      charge = result[:total]
+      schedule = result.dig(:schedules, 0)
+      origin_hub = schedule.origin_hub
+      destination_hub = schedule.destination_hub
+      quote_total = charge.price
+      {
+        carrier_name: schedule.carrier_name,
+        tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
+        load_type: shipment.load_type,
+        name: schedule.trip.itinerary.name,
+        itinerary: schedule.trip.itinerary,
+        quotation: quotation,
+        origin_hub: origin_hub,
+        destination_hub: destination_hub,
+        amount: quote_total.value,
+        amount_currency: quote_total.currency
+      }
+    end
+
+    def create_line_items_for_tender(tender:, charge_breakdown:)
       charge_breakdown.charges.where(detail_level: 3).each do |child_charge|
+        next if child_charge.children_charge_category.code == 'total'
+
         price = child_charge.price
-        section = "#{child_charge.parent.charge_category.code}_section".to_sym
+        line_item_section = "#{child_charge.parent.charge_category.code}_section".to_sym
         LineItem.create(charge_category_id: child_charge.children_charge_category_id,
                         tender_id: tender.id,
-                        section: section,
+                        section: line_item_section,
                         cargo: extract_cargo_from_charge(charge_category: child_charge.charge_category),
-                        amount_cents: price.value,
+                        amount_cents: price.value.to_d * 100,
                         amount_currency: price.currency)
       end
     end
@@ -64,6 +80,6 @@ module Quotations
       shipment.cargo_units.find(charge_category.cargo_unit_id)
     end
 
-    attr_reader :meta, :charge, :charge_breakdown, :user, :quotation, :shipment
+    attr_reader :meta, :results, :user, :quotation, :shipment
   end
 end

@@ -515,40 +515,43 @@ end
 # raddocs_app      /docs       Raddocs::App
 # 
 # Routes for Api::Engine:
-#                       api_auth        /                                                  ApiAuth::Engine
-#                          v1_me GET    /v1/me(.:format)                                   api/v1/users#show
-#                     v1_clients GET    /v1/clients(.:format)                              api/v1/clients#index
-#                                POST   /v1/clients(.:format)                              api/v1/clients#create
-#                      v1_client GET    /v1/clients/:id(.:format)                          api/v1/clients#show
-#                  v1_equipments GET    /v1/equipments(.:format)                           api/v1/equipments#index
-#                scope_v1_tenant GET    /v1/tenants/:id/scope(.:format)                    api/v1/tenants#scope
-#            countries_v1_tenant GET    /v1/tenants/:id/countries(.:format)                api/v1/tenants#countries
-#                     v1_tenants GET    /v1/tenants(.:format)                              api/v1/tenants#index
-#                   v1_dashboard GET    /v1/dashboard(.:format)                            api/v1/dashboard#show
-#            v1_quotation_create POST   /v1/quotations/:quotation_id/create(.:format)      api/v1/quotations#create
-#          v1_quotation_download POST   /v1/quotations/:quotation_id/download(.:format)    api/v1/quotations#download
-#            v1_quotation_charge GET    /v1/quotations/:quotation_id/charges/:id(.:format) api/v1/charges#show
-#                  v1_quotations GET    /v1/quotations(.:format)                           api/v1/quotations#index
-#                                POST   /v1/quotations(.:format)                           api/v1/quotations#create
-#                   v1_quotation GET    /v1/quotations/:id(.:format)                       api/v1/quotations#show
-#                                PATCH  /v1/quotations/:id(.:format)                       api/v1/quotations#update
-#                                PUT    /v1/quotations/:id(.:format)                       api/v1/quotations#update
-#                                DELETE /v1/quotations/:id(.:format)                       api/v1/quotations#destroy
-#            v1_cargo_item_types GET    /v1/cargo_item_types(.:format)                     api/v1/cargo_item_types#index
-# v1_trucking_availability_index GET    /v1/trucking_availability(.:format)                api/v1/trucking_availability#index
-#                      v1_groups GET    /v1/groups(.:format)                               api/v1/tenants_groups#index
-#           origins_v1_locations GET    /v1/locations/origins(.:format)                    api/v1/locations#origins
-#      destinations_v1_locations GET    /v1/locations/destinations(.:format)               api/v1/locations#destinations
-#                   v1_locations GET    /v1/locations(.:format)                            api/v1/locations#index
-#                                POST   /v1/locations(.:format)                            api/v1/locations#create
-#                    v1_location GET    /v1/locations/:id(.:format)                        api/v1/locations#show
-#                                PATCH  /v1/locations/:id(.:format)                        api/v1/locations#update
-#                                PUT    /v1/locations/:id(.:format)                        api/v1/locations#update
-#                                DELETE /v1/locations/:id(.:format)                        api/v1/locations#destroy
-#               settings_v1_ahoy GET    /v1/ahoy/:id/settings(.:format)                    api/v1/ahoy#settings
-#                                GET    /v1/itineraries/ports/:tenant_uuid(.:format)       api/v1/itineraries#ports
-#                 v1_itineraries GET    /v1/itineraries(.:format)                          api/v1/itineraries#index
-#                       api_docs        /                                                  ApiDocs::Engine
+#                       api_auth        /                                                    ApiAuth::Engine
+#                          v1_me GET    /v1/me(.:format)                                     api/v1/users#show
+#                     v1_clients GET    /v1/clients(.:format)                                api/v1/clients#index
+#                                POST   /v1/clients(.:format)                                api/v1/clients#create
+#                      v1_client GET    /v1/clients/:id(.:format)                            api/v1/clients#show
+#                  v1_equipments GET    /v1/equipments(.:format)                             api/v1/equipments#index
+#                scope_v1_tenant GET    /v1/tenants/:id/scope(.:format)                      api/v1/tenants#scope
+#            countries_v1_tenant GET    /v1/tenants/:id/countries(.:format)                  api/v1/tenants#countries
+#                     v1_tenants GET    /v1/tenants(.:format)                                api/v1/tenants#index
+#                   v1_dashboard GET    /v1/dashboard(.:format)                              api/v1/dashboard#show
+#            v1_quotation_create POST   /v1/quotations/:quotation_id/create(.:format)        api/v1/quotations#create
+#          v1_quotation_download POST   /v1/quotations/:quotation_id/download(.:format)      api/v1/quotations#download
+#            v1_quotation_charge GET    /v1/quotations/:quotation_id/charges/:id(.:format)   api/v1/charges#show
+#          v1_quotation_schedule GET    /v1/quotations/:quotation_id/schedules/:id(.:format) api/v1/schedules#show
+#                  v1_quotations GET    /v1/quotations(.:format)                             api/v1/quotations#index
+#                                POST   /v1/quotations(.:format)                             api/v1/quotations#create
+#                   v1_quotation GET    /v1/quotations/:id(.:format)                         api/v1/quotations#show
+#                                PATCH  /v1/quotations/:id(.:format)                         api/v1/quotations#update
+#                                PUT    /v1/quotations/:id(.:format)                         api/v1/quotations#update
+#                                DELETE /v1/quotations/:id(.:format)                         api/v1/quotations#destroy
+#                      v1_tender PATCH  /v1/tenders/:id(.:format)                            api/v1/tenders#update
+#                                PUT    /v1/tenders/:id(.:format)                            api/v1/tenders#update
+#            v1_cargo_item_types GET    /v1/cargo_item_types(.:format)                       api/v1/cargo_item_types#index
+# v1_trucking_availability_index GET    /v1/trucking_availability(.:format)                  api/v1/trucking_availability#index
+#                      v1_groups GET    /v1/groups(.:format)                                 api/v1/tenants_groups#index
+#           origins_v1_locations GET    /v1/locations/origins(.:format)                      api/v1/locations#origins
+#      destinations_v1_locations GET    /v1/locations/destinations(.:format)                 api/v1/locations#destinations
+#                   v1_locations GET    /v1/locations(.:format)                              api/v1/locations#index
+#                                POST   /v1/locations(.:format)                              api/v1/locations#create
+#                    v1_location GET    /v1/locations/:id(.:format)                          api/v1/locations#show
+#                                PATCH  /v1/locations/:id(.:format)                          api/v1/locations#update
+#                                PUT    /v1/locations/:id(.:format)                          api/v1/locations#update
+#                                DELETE /v1/locations/:id(.:format)                          api/v1/locations#destroy
+#               settings_v1_ahoy GET    /v1/ahoy/:id/settings(.:format)                      api/v1/ahoy#settings
+#                                GET    /v1/itineraries/ports/:tenant_uuid(.:format)         api/v1/itineraries#ports
+#                 v1_itineraries GET    /v1/itineraries(.:format)                            api/v1/itineraries#index
+#                       api_docs        /                                                    ApiDocs::Engine
 # 
 # Routes for AdmiraltyAuth::Engine:
 #        login GET    /login(.:format)        admiralty_auth/logins#new

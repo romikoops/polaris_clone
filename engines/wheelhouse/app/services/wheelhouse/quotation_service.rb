@@ -15,7 +15,7 @@ module Wheelhouse
       @shipment = Legacy::Shipment.new(user_id: @user.legacy_id, load_type: @load_type, tenant_id: @legacy_tenant_id)
     end
 
-    def results
+    def result
       params = ActionController::Parameters.new(shipment: shipping_params, sandbox: nil)
       offer_calculator = OfferCalculator::Calculator.new(
         shipment: @shipment,
@@ -28,8 +28,7 @@ module Wheelhouse
     end
 
     def tenders
-      results.map do |result|
-        tender = JSON.parse(result.to_json, object_class: ::Wheelhouse::OpenStruct)
+      result.tenders.map do |tender|
         Wheelhouse::TenderDecorator.new(tender)
       end
     end
@@ -50,7 +49,17 @@ module Wheelhouse
 
     def trucking_info
       trucking_data = shipping_info.delete(:trucking_info)&.to_h || {}
-      { pre_carriage: { truck_type: '' }, on_carriage: { truck_type: '' } }.merge(trucking_data)
+      default_trucking_params.merge(trucking_data)
+    end
+
+    def default_trucking_params
+      [
+        { carriage: :pre_carriage, hub: @origin },
+        { carriage: :on_carriage, hub: @destination }
+      ].each_with_object({}) do |carriage_hub, hash|
+        truck_type = @load_type == 'cargo_item' ? 'default' : 'chassis'
+        hash[carriage_hub[:carriage]] = { truck_type: carriage_hub[:hub][:nexus_id] ? '' : truck_type }
+      end
     end
 
     def cargo_units
@@ -64,12 +73,14 @@ module Wheelhouse
 
     def container_default
       {
-        containers_attributes: [{
-          cargo_class: 'fcl_20',
-          payload_in_kg: 1,
-          quantity: 1,
-          size_class: 'fcl_20'
-        }]
+        containers_attributes: [
+          {
+            cargo_class: 'fcl_20',
+            payload_in_kg: 1,
+            quantity: 1,
+            size_class: 'fcl_20'
+          }
+        ]
       }.merge(@shipping_info.slice(:containers_attributes))
     end
 

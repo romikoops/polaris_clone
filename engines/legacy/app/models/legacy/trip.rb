@@ -16,6 +16,8 @@ module Legacy
             ))
     end)
 
+    scope :lastday_today, -> { where('closing_date > ?', Date.current) }
+
     def vehicle
       tenant_vehicle.vehicle
     end

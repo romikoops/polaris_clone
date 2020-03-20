@@ -287,6 +287,7 @@ module OfferCalculator
               trucking_charges, children_charge_category, charge_category, parent_charge
             )
           end
+
           parent_charge.update_price!
         end
       end

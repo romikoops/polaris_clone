@@ -1267,6 +1267,7 @@ ActiveRecord::Schema.define(version: 2020_03_20_105905) do
     t.string "carrier_name"
     t.datetime "created_at", null: false
     t.integer "destination_hub_id"
+    t.integer "itinerary_id"
     t.string "load_type"
     t.string "name"
     t.integer "origin_hub_id"

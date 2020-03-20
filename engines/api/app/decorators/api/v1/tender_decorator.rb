@@ -12,7 +12,7 @@ module Api
       end
 
       def charges
-        LineItemDecorator.decorate_collection(line_items, context: { scope: context[:scope] })
+        Api::FeeTableService.new(tender: object, scope: context[:scope]).perform
       end
 
       def transit_time

@@ -39,6 +39,7 @@ end
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  destination_hub_id :integer
+#  itinerary_id       :integer
 #  origin_hub_id      :integer
 #  quotation_id       :uuid
 #  tenant_vehicle_id  :bigint

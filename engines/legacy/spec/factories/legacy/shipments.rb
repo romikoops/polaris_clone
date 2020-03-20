@@ -26,6 +26,8 @@ FactoryBot.define do
 
     transient do
       with_breakdown { false }
+      with_full_breakdown { false }
+      with_tenders { false }
       with_aggregated_cargo { false }
     end
 
@@ -90,8 +92,13 @@ FactoryBot.define do
         shipment.cargo_units << create("legacy_#{shipment.load_type}".to_sym, shipment: shipment)
       end
 
-      if evaluator.with_breakdown
-        shipment.charge_breakdowns << create(:legacy_charge_breakdown, trip: shipment.trip, shipment: shipment)
+      if evaluator.with_breakdown || evaluator.with_full_breakdown
+        sections = evaluator.with_full_breakdown ? %w[trucking_pre export cargo import trucking_on] : ['cargo']
+        shipment.charge_breakdowns << create(:legacy_charge_breakdown,
+                                             trip: shipment.trip,
+                                             shipment: shipment,
+                                             with_tender: evaluator.with_tenders,
+                                             sections: sections)
       end
     end
 

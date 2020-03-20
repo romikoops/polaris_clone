@@ -174,6 +174,7 @@ RSpec.describe OfferCalculator::Calculator do
           expect(results.length).to eq(1)
           expect(results.first.keys).to match_array(%i[quote schedules meta notes])
           expect(results.first.dig(:quote, :total, :value)).to eq(28.8)
+          expect(Quotations::Quotation.count).to be(1)
         end
       end
 
@@ -184,6 +185,7 @@ RSpec.describe OfferCalculator::Calculator do
           expect(results.length).to eq(1)
           expect(results.first.keys).to match_array(%i[quote schedules meta notes])
           expect(results.first.dig(:quote, :total, :value)).to eq(28.8)
+          expect(Quotations::Quotation.count).to be(1)
         end
       end
     end
@@ -277,6 +279,7 @@ RSpec.describe OfferCalculator::Calculator do
           expect(results.length).to eq(1)
           expect(results.first.keys).to match_array(%i[quote schedules meta notes])
           expect(results.first.dig(:quote, :total, :value)).to eq(270.82)
+          expect(Quotations::Quotation.count).to be(1)
         end
       end
     end

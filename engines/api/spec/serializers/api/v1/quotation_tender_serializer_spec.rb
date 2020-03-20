@@ -9,8 +9,8 @@ module Api
     let(:charge_category) { FactoryBot.create(:bas_charge) }
     let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary) }
     let(:trip) { FactoryBot.create(:legacy_trip, vessel: 'Cap San Diego', itinerary: itinerary) }
-    let(:charge_breakdown) { FactoryBot.create(:legacy_charge_breakdown, trip: trip) }
-    let(:tender) { FactoryBot.create(:quotations_tender, charge_breakdown: charge_breakdown) }
+    let(:shipment) { FactoryBot.create(:legacy_shipment, with_full_breakdown: true, with_tenders: true, trip: trip, tenant: tenant) }
+    let(:tender) { shipment.charge_breakdowns.first.tender }
     let(:decorated_tender) { Api::V1::TenderDecorator.new(tender, context: { scope: {} }) }
     let(:serialized_tender) { described_class.new(decorated_tender, params: { scope: {} }).serializable_hash }
     let(:target) { serialized_tender.dig(:data, :attributes) }
@@ -32,7 +32,7 @@ module Api
     end
 
     it 'returns the correct charges for the object passed' do
-      expect(target[:charges].count).to eq(tender.line_items.count)
+      expect(target[:charges].count).to eq(23)
     end
   end
 end
