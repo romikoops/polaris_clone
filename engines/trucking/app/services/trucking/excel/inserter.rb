@@ -493,7 +493,7 @@ module Trucking
             }
           end
 
-          ::ChargeCategory.find_or_create_by!(code: row[:fee_code].downcase, name: row[:fee])
+          Legacy::ChargeCategory.from_code(code: row[:fee_code].downcase, name: row[:fee], tenant_id: @tenant.id)
         end
       end
 
