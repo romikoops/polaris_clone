@@ -140,7 +140,7 @@ class ShopStageView extends Component {
     const stepBarShowStyle = shouldHideNavButtons ? styles.hide_nav_options : ''
     const { bookingProcessImage } = theme
     const bookingProcessImageWrapped = bookingProcessImage
-      ? `url(${bookingProcessImage})`
+      ? `url('${bookingProcessImage}')`
       : "url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg')"
 
     const { showHelp } = this.state
