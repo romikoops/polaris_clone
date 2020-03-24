@@ -6,7 +6,10 @@ module Api
   module V1
     class QuotationsController < ApiController
       def create
-        render json: TenderSerializer.new(quotation_service.tenders, params: { scope: current_scope })
+        tenders = quotation_service.tenders
+        render json: TenderSerializer.new(tenders, params: { scope: current_scope })
+      rescue Wheelhouse::ApplicationError => e
+        render json: { error: e.message }, status: 422
       end
 
       def download

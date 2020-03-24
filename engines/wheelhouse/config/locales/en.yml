@@ -1,0 +1,195 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   'true': 'foo'
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  error:
+    # Booking Process Errors
+    # Routing : Code Prefix 1
+    no_route:
+      http_code: 400
+      code: 1000
+      message: "No route matches the selected origin and destination."
+    invalid_routes:
+      http_code: 400
+      code: 1001
+      message: "
+        Exceeded maximum total chargeable weight for the modes
+        of transport available in the selected route.
+      "
+    invalid_pickup_address:
+      http_code: 400
+      code: 1002
+      message: "Unable to build pickup location from address fields."
+    invalid_delivery_address:
+      http_code: 400
+      code: 1003
+      message: "Unable to build delivery location from address fields."
+    no_valid_schedules:
+      http_code: 400
+      code: 1004
+      message: "Unable to find schedules departing during your desired timeframe. Please try another date."
+    no_directions_found:
+      http_code: 400
+      code: 1005
+      message: "Unable to determine trucking directions. Please check the address and try again."
+    no_trucking_time:
+      http_code: 400
+      code: 1006
+      message: "Unable to calculate trucking time with the given date"
+    no_valid_schedules:
+      http_code: 400
+      code: 1007
+      message: "There are no departures for this timeframe."
+
+    # Pricing : Code prefix 2
+    no_valid_pricings:
+      http_code: 400
+      code: 2001
+      message: "There are no pricings valid for this timeframe."
+    no_valid_local_charges:
+      http_code: 400
+      code: 2002
+      message: "There are no local charges valid for this timeframe."
+    invalid_local_charge_result:
+      http_code: 400
+      code: 2003
+      message: "The system was unable to calculate a valid set of local charges for this booking."
+    invalid_freight_result:
+      http_code: 400
+      code: 2004
+      message: "The system was unable to calculate a valid set of freight charges for this booking."
+    no_valid_local_charges:
+      http_code: 400
+      code: 2005
+      message: "There are no local charges valid for this timeframe."
+
+    unavailable_local_charges:
+      http_code: 400
+      code: 2003
+      message: "
+        The availability of this route is pending confirmation
+        of the applicable local charges.
+      "
+
+      # Trucking : Prefix 3
+    missing_trucking_data:
+      http_code: 400
+      code: 3001
+      message: "A problem occurred calculating trucking for this shipment"
+    load_meterage_exceeded:
+      http_code: 400
+      code: 3002
+      message: "Your shipment has exceeded the load meterage limits for online booking."
+
+    # ...:
+    #   http_code: 400
+    #   code: 1004
+    #   message: ""
+
+
+    invalid_remark:
+      http_code: 400
+      code: 1008
+      message: "Unable to build remark from user input."
+    unable_to_delete_remark:
+      http_code: 400,
+      code: 1009
+      message: "Unable to delete requested remark."
+    unable_to_update_emails:
+      http_code: 400,
+      code: 1010
+      message: "Unable to update shop emails."
+    invalid_tenant:
+      http_code: 400
+      code: 1011
+      message: "Unable to update tenant"
+
+    non_agent_user:
+      http_code: 400
+      code: 1013
+      message: "Current user is not an agent"
+
+    internal_error:
+      http_code: 400
+      code: 1016
+      message: "Something has gone wrong!"
+    missing_modifier_keys:
+      http_code: 400
+      code: 1017
+      message: "Please check the sheet to make sure each column has a modifer key above it"
+    not_logged_in:
+      http_code: 400
+      code: 1018
+      message: "Please sign in to continue with your booking request."
+    shipment_not_found:
+      http_code: 404
+      code: 1019
+      message: "Shipment not found!"
+    tenant_slug_taken:
+      http_code: 409
+      code: 1020
+      message: "The subdomain (slug) has already been taken"
+    invalid_cargo:
+      http_code: 400
+      code: 1022
+
+
+    # Authentication Errors
+    not_authenticated:
+      http_code: 401
+      code: 1050
+      message: "You are not signed in."
+    bad_credentials:
+      http_code: 401
+      code: 1051
+      message: "Invalid email or password."
+    incorrect_token:
+      http_code: 401
+      code: 1052
+      message: "Wrong confirmation token provided, please retry"
+    authentication_error:
+      http_code: 401
+      code: 1053
+      message: "An unknown error has occurred while trying to sign you in"
+
+    # Data errors
+    bad_data:
+      http_code: 400
+      code: 1020
+      message: 'Incorrect data provided. Please check the sheet and try again.'
+    data_mapping_error:
+      http_code: 422
+      code: 1021
+      message: 'There was an error mapping data'
+    contacts_redundancy_error:
+      http_code: 422
+      code: 1023
+      message: 'Shipper and Consignee cannot be the same contacts'

@@ -121,5 +121,43 @@ RSpec.describe Wheelhouse::QuotationService do
         end
       end
     end
+
+    context 'when failing in OfferCalculator' do
+      let(:offer_calculator_error_map) do
+        {
+          "OfferCalculator::TruckingTools::LoadMeterageExceeded": 'Your shipment has exceeded the load meterage limits for online booking.',
+          "OfferCalculator::Calculator::MissingTruckingData": 'A problem occurred calculating trucking for this shipment',
+          "OfferCalculator::Calculator::InvalidPickupAddress": 'Unable to build pickup location from address fields.',
+          "OfferCalculator::Calculator::InvalidDeliveryAddress": 'Unable to build delivery location from address fields.',
+          "OfferCalculator::Calculator::NoDirectionsFound": 'Unable to determine trucking directions. Please check the address and try again.',
+          "OfferCalculator::Calculator::NoRoute": 'No route matches the selected origin and destination.',
+          "OfferCalculator::Calculator::InvalidRoutes": ' Exceeded maximum total chargeable weight for the modes of transport available in the selected route. ',
+          "OfferCalculator::Calculator::NoValidPricings": 'There are no pricings valid for this timeframe.',
+          "OfferCalculator::Calculator::NoValidSchedules": 'There are no departures for this timeframe.',
+          "OfferCalculator::Calculator::InvalidLocalChargeResult": 'The system was unable to calculate a valid set of local charges for this booking.',
+          "OfferCalculator::Calculator::InvalidFreightResult": 'The system was unable to calculate a valid set of freight charges for this booking.',
+          "ArgumentError": 'Something has gone wrong!'
+        }
+      end
+      let(:shipping_info) do
+        {
+          cargo_items_attributes: cargo_item_attributes
+        }
+      end
+
+      let(:service) { described_class.new(quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info) }
+      let(:offer_calculator_double) { instance_double(::OfferCalculator::Calculator) }
+
+      before do
+        allow(::OfferCalculator::Calculator).to receive(:new).and_return(offer_calculator_double)
+      end
+
+      it 'rescues errors from the offer calculator service and spews the right messages' do
+        offer_calculator_error_map.each do |key, message|
+          allow(offer_calculator_double).to receive(:perform).and_raise(key.to_s.constantize)
+          expect { described_class.new(quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info).tenders }.to raise_error(Wheelhouse::ApplicationError, message)
+        end
+      end
+    end
   end
 end

@@ -9,6 +9,10 @@ module Requests
     def response_data
       response_json.fetch('data')
     end
+
+    def response_error
+      response_json.fetch('error')
+    end
   end
 
   module AcceptanceHelpers
