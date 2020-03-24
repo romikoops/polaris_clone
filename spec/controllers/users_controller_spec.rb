@@ -68,6 +68,23 @@ RSpec.describe UsersController do
       expect(user.guest).to eq false
       expect(user).to have_received(:send_confirmation_instructions).once
     end
+
+    context 'when updating with no profile attributes' do
+      let(:params) do
+        {
+          tenant_id: user.tenant_id,
+          user_id: user.id,
+          update: {
+            guest: true
+          }
+        }
+      end
+
+      it 'returns http status and updates the user' do
+        post :update, params: params
+        expect(response).to have_http_status(:success)
+      end
+    end
   end
 
   describe 'POST currencies' do
