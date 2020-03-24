@@ -77,26 +77,14 @@ export class ValidatorGroupResult extends Component {
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start" style={{ padding: '5px' }}>
-        <CollapsingBar
-          parentClass={styles.shipment_card_border}
-          startCollapsed
-          showArrow
-          minHeight="150px"
-          mainWrapperStyle={{ background: '#E0E0E0', color: '#4F4F4F' }}
-          contentHeader={(
-            <div className={`flex layout-row layout-align-start-center ${styles.group_header}`}>
-              {this.groupStatus()}
-              <p className="flex">{t('admin:groupNameVar', { groupName: data.group.name })}</p>
-            </div>
-          )}
-          content={(
-            <div className="flex-100 layout-row layout-wrap">
-              { data.results.length === 0 ? (<h3 className="flex center">{t('admin:no_data')}</h3>) : table }
-            </div>
+        <div className={`flex layout-row layout-align-start-center ${styles.group_header}`}>
+          {this.groupStatus()}
+          <p className="flex">{t('admin:groupNameVar', { groupName: data.group.name })}</p>
+        </div>
 
-          )}
-        />
-
+        <div className="flex-100 layout-row layout-wrap">
+          { data.results.length === 0 ? (<h3 className="flex center">{t('admin:no_data')}</h3>) : table }
+        </div>
       </div>
     )
   }

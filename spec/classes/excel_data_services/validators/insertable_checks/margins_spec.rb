@@ -21,7 +21,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Margins do
     create(:tenant_vehicle,
            tenant: tenant,
            name: 'standard',
-           carrier: build(:carrier, name: 'consolidation'))
+           carrier: build(:carrier, code: 'consolidation', name: 'Consolidation'))
   end
 
   before do
@@ -48,7 +48,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Margins do
             type: :warning,
             row_nr: 2,
             sheet_name: "Margins",
-            reason: 
+            reason:
             "There exist margins (in the system or this file) with an overlapping effective period.\n(Old is covered by new: [2019-01-01 00:00 - 2019-03-31 00:00] <-> [2019-01-01 00:00 - 2019-03-31 23:59]).",
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks},
           {
@@ -61,7 +61,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Margins do
             type: :warning,
             row_nr: 3,
             sheet_name: "Margins",
-            reason: "There is specified service level does not exist in the database.\nfast - consolidation.",
+            reason: "There is specified service level does not exist in the database.\nfast - Consolidation.",
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks}]
         )
       end

@@ -52,7 +52,7 @@ module ExcelDataServices
         return [nil] unless params[:carrier]
         return all_carriers_of_tenant if params[:carrier].downcase.casecmp?('all')
 
-        [Carrier.find_or_create_by(name: params[:carrier])]
+        [carrier_from_code(name: params[:carrier])]
       end
 
       def all_carriers_of_tenant

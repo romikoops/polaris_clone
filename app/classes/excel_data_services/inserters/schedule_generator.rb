@@ -58,7 +58,7 @@ module ExcelDataServices
         query = TenantVehicle.where(id: tenant_vehicle_ids, tenant_id: tenant.id, sandbox: @sandbox)
 
         if params[:carrier]
-          carrier = Carrier.find_by(name: params[:carrier])
+          carrier = carrier_from_code(name: params[:carrier])
           query = query.where(carrier_id: carrier&.id)
         end
 

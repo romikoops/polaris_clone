@@ -135,7 +135,7 @@ module ExcelDataServices
       def sanitize_service_level_and_carrier(rows_data)
         rows_data.each do |row_data|
           row_data[:service_level] = strip_and_downcase(row_data[:service_level])
-          row_data[:carrier] = strip_and_downcase(row_data[:carrier])
+          row_data[:carrier] = row_data[:carrier]&.strip
         end
       end
 

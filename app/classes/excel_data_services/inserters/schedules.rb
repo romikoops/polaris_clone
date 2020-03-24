@@ -42,7 +42,7 @@ module ExcelDataServices
       end
 
       def find_tenant_vehicle_id(params)
-        carrier = Carrier.find_by(name: params[:carrier]) if params[:carrier].present?
+        carrier = carrier_from_code(name: params[:carrier]) if params[:carrier].present?
 
         TenantVehicle.find_by(
           tenant: tenant,

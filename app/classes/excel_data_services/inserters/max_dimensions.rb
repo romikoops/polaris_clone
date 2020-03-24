@@ -23,7 +23,7 @@ module ExcelDataServices
       def find_carrier(name:)
         return nil if name.blank?
 
-        Legacy::Carrier.find_by(name: name)
+        carrier_from_code(name: name)
       end
 
       def find_service_level(name:, carrier:)

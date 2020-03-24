@@ -68,7 +68,7 @@ module ExcelDataServices
       end
 
       def find_or_create_tenant_vehicle(row)
-        carrier = Legacy::Carrier.find_or_create_by(name: row.carrier) if row.carrier.present?
+        carrier = carrier_from_code(name: row.carrier) if row.carrier.present?
 
         tenant_vehicle = Legacy::TenantVehicle.find_by(
           tenant: tenant,

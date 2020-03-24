@@ -13,8 +13,8 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
 
   describe '.insert' do
     let!(:carriers) {
-      [create(:carrier, name: 'saco shipping'),
-       create(:carrier, name: 'msc')]
+      [create(:carrier, code: 'saco shipping', name: 'SACO Shipping'),
+       create(:carrier, code: 'msc', name: 'MSC')]
     }
     let!(:tenant_vehicles) do
       [create(:tenant_vehicle, tenant: tenant, carrier: carriers.first),

@@ -46,7 +46,7 @@ RSpec.describe ExcelDataServices::Restructurers::Schedules do
       result = described_class.restructure(tenant: tenant, data: data)
       result = result['Schedules']
       expect(result.length).to be(2)
-      expect(result.pluck(:carrier)).to match_array(['msc', nil])
+      expect(result.pluck(:carrier)).to match_array(['MSC', nil])
       expect(result.pluck(:service_level)).to match_array(['standard', 'express'])
       expect(result.pluck(:load_type)).to match_array(['container', 'cargo_item'])
     end

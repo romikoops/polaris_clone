@@ -52,6 +52,13 @@ module ExcelDataServices
         Tenants::Group.find_by(tenant: tenants_tenant, name: row.group_name).id if row.group_name
       end
 
+      def carrier_from_code(name:)
+        Legacy::Carrier.find_or_initialize_by(code: name.downcase).tap do |carrier|
+          carrier.name ||= name
+          carrier.save
+        end
+      end
+
       def add_stats(data_record, force_new_record = false)
         descriptor = data_record.class.name.underscore.pluralize.to_sym
         @stats[descriptor] ||= {

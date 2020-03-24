@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Inserters::Schedules do
   describe '.perform' do
-    let(:carrier) { create(:carrier, name: 'msc') }
+    let(:carrier) { create(:carrier, name: 'MSC', code: 'msc') }
     let(:data) { build(:excel_data_restructured_schedules) }
     let(:tenant) { create(:tenant) }
     let!(:tenant_vehicle_1) { create(:tenant_vehicle, name: 'standard', tenant: tenant) }

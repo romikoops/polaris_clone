@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
   describe '.perform' do
-    let(:carrier) { create(:carrier) }
     let(:data) do
       [
         { origin: 'DALIAN', destination: 'FELIXSTOWE', transit_time: 38, carrier: 'Hapag Lloyd', service_level: nil, mot: 'ocean', cargo_class: 'container', row_nr: 2, ordinals: [4] },
@@ -35,8 +34,9 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
              ],
              tenant_vehicles: [tenant_vehicle_1])
     end
+    let(:carrier) { create(:carrier, code: 'hapag lloyd', name: 'Hapag LLoyd') }
     let(:tenant_vehicle_1) { create(:tenant_vehicle, name: 'cargo_item', tenant: tenant) }
-    let(:tenant_vehicle_2) { create(:tenant_vehicle, name: 'container', tenant: tenant) }
+    let(:tenant_vehicle_2) { create(:tenant_vehicle, name: 'container', tenant: tenant, carrier: carrier) }
 
     let!(:itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe') }
     let!(:ignored_itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe', mode_of_transport: 'rail') }
