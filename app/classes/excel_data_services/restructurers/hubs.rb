@@ -43,14 +43,16 @@ module ExcelDataServices
       end
 
       def confirm_lat_lngs(row:)
-        return row if row[:latitude].present? && row[:longitude].present?
+        return row if row.values_at(:latitude, :longitude, :full_address).all?
 
-        target_address = row[:full_address] || [row[:name], row[:country]].join(', ')
-
-        lat, lng = Address.new(geocoded_address: target_address).geocode
-        row[:latitude] = lat
-        row[:longitude] = lng
-        row[:full_address] = target_address if row[:full_address].blank?
+        if row.values_at(:latitude, :longitude).any?(&:nil?)
+          geocode_params = row[:full_address] || [row[:name], row[:country]].join(', ')
+          row[:latitude], row[:longitude] = Address.new(geocoded_address: geocode_params).geocode
+        end
+        row[:full_address] ||= begin
+          lat, lng = row.values_at(:latitude, :longitude)
+          Address.new(latitude: lat, longitude: lng).reverse_geocode.geocoded_address
+        end
 
         row
       end

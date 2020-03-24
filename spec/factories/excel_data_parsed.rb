@@ -470,6 +470,56 @@ FactoryBot.define do
       end
     end
 
+    trait :hubs_missing_lat_lon do
+      restructurer_name { { restructurer_name: 'hubs' } }
+      all_sheets_data do
+        [{
+          sheet_name: 'Hubs',
+          rows_data: [{ status: 'active',
+                        type: 'OCEAN',
+                        name: 'Sultan Lake',
+                        locode: 'AEAUH',
+                        latitude: nil,
+                        longitude: nil,
+                        country: 'United Arab Emirates',
+                        full_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
+                        photo: nil,
+                        free_out: 'false',
+                        import_charges: 'true',
+                        export_charges: 'false',
+                        pre_carriage: nil,
+                        on_carriage: 'false',
+                        alternative_names: nil,
+                        row_nr: 2 }]
+        }]
+      end
+    end
+
+    trait :hubs_missing_address do
+      restructurer_name { { restructurer_name: 'hubs' } }
+      all_sheets_data do
+        [{
+          sheet_name: 'Hubs',
+          rows_data: [{ status: 'active',
+                        type: 'OCEAN',
+                        name: 'Sultan Lake',
+                        locode: 'AEAUH',
+                        latitude: nil,
+                        longitude: nil,
+                        country: 'United Arab Emirates',
+                        full_address: nil,
+                        photo: nil,
+                        free_out: 'false',
+                        import_charges: 'true',
+                        export_charges: 'false',
+                        pre_carriage: nil,
+                        on_carriage: 'false',
+                        alternative_names: nil,
+                        row_nr: 2 }]
+        }]
+      end
+    end
+
     factory :default_hubs_row_data, traits: %i[default_hubs]
     factory :excel_data_parsed_correct_pricings_one_fee_col_and_ranges, traits: %i[pricing_one_fee_col_and_ranges correct_pricings_one_fee_col_and_ranges]
     factory :excel_data_parsed_correct_pricings_dynamic_fee_cols_no_ranges, traits: %i[pricing_dynamic_fee_cols_no_ranges correct_pricings_dynamic_fee_cols_no_ranges]
@@ -477,5 +527,6 @@ FactoryBot.define do
     factory :excel_data_parsed_correct_saco_shipping, traits: %i[saco_shipping correct_saco_shipping]
     factory :excel_data_parsed_correct_margins, traits: %i[margins correct_margins]
     factory :excel_data_parsed_correct_max_dimensions, traits: %i[max_dimensions correct_max_dimensions]
+    factory :hubs_missing_address_data, traits: %i[hubs_missing_address]
   end
 end

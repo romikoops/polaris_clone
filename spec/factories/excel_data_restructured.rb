@@ -2463,6 +2463,19 @@ FactoryBot.define do
            nexus: { name: 'Adelaide', latitude: -34.9284989, longitude: 138.6007456, photo: nil, locode: 'AUADL', country: { name: 'Australia' }, tenant_id: tenant.id, sandbox: nil },
            mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
            hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456, name: 'Adelaide Port', photo: nil, sandbox: nil, hub_code: 'AUADL' }
+         },
+         {
+           address:
+           { name: 'Sultan Lake',
+             latitude: 24.806936,
+             longitude: 54.644405,
+             country: { name: 'United Arab Emirates' },
+             city: 'Sultan Lake',
+             geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
+             sandbox: nil },
+           nexus: { name: 'Sultan Lake', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, tenant_id: tenant.id, sandbox: nil },
+           mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
+           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Sultan Lake', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
          }]
       end
     end

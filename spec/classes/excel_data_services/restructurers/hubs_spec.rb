@@ -7,6 +7,7 @@ RSpec.describe ExcelDataServices::Restructurers::Hubs do
     Geocoder::Lookup::Test.add_stub('Khalifa Port - Abu Dhabi - United Arab Emirates',
                                     [{ 'coordinates' => [24.806936, 54.644405] }])
   end
+
   describe '.perform' do
     let(:data) do
       { sheet_name: 'Hubs',
@@ -54,6 +55,37 @@ RSpec.describe ExcelDataServices::Restructurers::Hubs do
       expect(result['Hubs'].map { |hub| hub.dig(:address, :latitude) }).to match_array([24.806936, -34.9284989])
       expect(result['Hubs'].length).to be(2)
       expect(result.class).to be(Hash)
+    end
+
+    context 'with missing lat lng values' do
+      let(:data) { FactoryBot.build(:excel_data_parsed, :hubs_missing_lat_lon).first }
+      let(:expected_result) { FactoryBot.build(:excel_data_restructured, :restructured_hubs_data, tenant: tenant) }
+
+      it 'extracts the row data from the sheet hash' do
+        result = described_class.restructure(tenant: tenant, data: data)
+        target = expected_result.find { |hub| hub.dig(:hub, :name) == data.dig(:rows_data).first[:name] }
+        expect(result['Hubs'].first[:address]).to eq(target[:address])
+      end
+    end
+
+    context 'with a missing address field' do
+      before do
+        Geocoder::Lookup::Test.add_stub('Sultan Lake, United Arab Emirates',
+                                        [{ 'coordinates' => [24.806936, 54.644405] }])
+        Geocoder::Lookup::Test.add_stub([24.806936, 54.644405], [{
+                                          address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
+                                          address_components: []
+                                        }])
+      end
+
+      let(:data) { FactoryBot.build(:excel_data_parsed, :hubs_missing_address).first }
+      let(:expected_result) { FactoryBot.build(:excel_data_restructured, :restructured_hubs_data, tenant: tenant) }
+
+      it 'extracts the row data from the sheet hash' do
+        result = described_class.restructure(tenant: tenant, data: data)
+        target = expected_result.find { |hub| hub.dig(:hub, :name) == data.dig(:rows_data).first[:name] }
+        expect(result['Hubs'].first[:address]).to eq(target[:address])
+      end
     end
   end
 end
