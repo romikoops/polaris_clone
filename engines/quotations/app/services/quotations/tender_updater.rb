@@ -2,6 +2,8 @@
 
 module Quotations
   class TenderUpdater
+    attr_reader :tender, :line_item, :section, :value, :charge_category_id, :charge
+
     def initialize(tender:, line_item_id:, charge_category_id:, value:, section:)
       @tender = tender
       @line_item = Quotations::LineItem.find(line_item_id) if line_item_id.present?
@@ -56,16 +58,16 @@ module Quotations
       charge_breakdown.charge_categories.find_by(cargo_unit_id: line_item.cargo_id)
     end
 
+    def section_charge
+      charge_breakdown.charges.find_by(children_charge_category: charge_category_by_section)
+    end
+
     def cargo_charge
       section_charge.children.find_by(children_charge_category: charge_category_by_cargo)
     end
 
     def line_item_charge
       cargo_charge.children.find_by(children_charge_category: line_item.charge_category)
-    end
-
-    def section_charge
-      charge_breakdown.charges.find_by(children_charge_category: charge_category_by_section)
     end
 
     def charge_to_edit
@@ -77,7 +79,5 @@ module Quotations
     def amount
       Money.new(value * 100, charge.price.currency)
     end
-
-    attr_reader :tender, :line_item, :section, :value, :charge_category_id, :charge
   end
 end

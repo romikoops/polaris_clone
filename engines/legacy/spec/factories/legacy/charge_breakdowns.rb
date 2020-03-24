@@ -33,28 +33,28 @@ FactoryBot.define do
                     code: section,
                     tenant_id: shipment.tenant_id)
 
+        base_charge = create(
+          :legacy_charge,
+          charge_breakdown: charge_breakdown,
+          charge_category: Legacy::ChargeCategory.base_node,
+          children_charge_category: Legacy::ChargeCategory.grand_total
+        )
+
+        grand_total_charge = create(
+          :legacy_charge,
+          charge_breakdown: charge_breakdown,
+          charge_category: Legacy::ChargeCategory.grand_total,
+          children_charge_category: section_charge_category,
+          parent_id: base_charge.id,
+          detail_level: 1
+        )
+
         cargo_units.each do |cargo_unit|
           cargo_unit_charge_category = create(:legacy_charge_categories,
                                               name: cargo_unit.class.name.humanize,
                                               code: cargo_unit.class.name.underscore.downcase,
                                               cargo_unit_id: cargo_unit[:id],
                                               tenant_id: shipment.tenant_id)
-
-          base_charge = create(
-            :legacy_charge,
-            charge_breakdown: charge_breakdown,
-            charge_category: Legacy::ChargeCategory.base_node,
-            children_charge_category: Legacy::ChargeCategory.grand_total
-          )
-
-          grand_total_charge = create(
-            :legacy_charge,
-            charge_breakdown: charge_breakdown,
-            charge_category: Legacy::ChargeCategory.grand_total,
-            children_charge_category: section_charge_category,
-            parent_id: base_charge.id,
-            detail_level: 1
-          )
 
           cargo_charge = create(
             :legacy_charge,
@@ -85,8 +85,6 @@ FactoryBot.define do
                               section: "#{section}_section".to_sym)
           end
 
-          charge_breakdown.charges << base_charge
-          charge_breakdown.charges << grand_total_charge
           charge_breakdown.charges << cargo_charge
           charge_breakdown.charges << cargo_unit_charge
         end
