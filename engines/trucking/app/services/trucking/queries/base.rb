@@ -65,7 +65,7 @@ module Trucking
       end
 
       def hubs_condition
-        @hub_ids ? { 'tenant_id': @tenant_id, 'hub_id': @hub_ids } : {}
+        @hub_ids ? { 'tenant_id': @tenant_id, 'hub_id': @hub_ids } : { 'tenant_id': @tenant_id }
       end
 
       def trucking_location_where_statement
