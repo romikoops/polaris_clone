@@ -89,6 +89,10 @@ module ExcelDataServices
         @group_name ||= data[:group_name]
       end
 
+      def transshipment
+        @transshipment ||= data[:transshipment] || data[:transshipment_via]
+      end
+
       private
 
       attr_reader :data, :tenant

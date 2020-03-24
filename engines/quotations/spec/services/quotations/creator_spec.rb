@@ -25,11 +25,21 @@ RSpec.describe Quotations::Creator do
     [
       {
         total: charge,
-        schedules: [Legacy::Schedule.from_trip(trip_1)]
+        schedules: [Legacy::Schedule.from_trip(trip_1)],
+        pricings_by_cargo_class: {
+          'lcl': {
+            'transshipment': ''
+          }
+        }
       },
       {
         total: charge_2,
-        schedules: [Legacy::Schedule.from_trip(trip_2)]
+        schedules: [Legacy::Schedule.from_trip(trip_2)],
+        pricings_by_cargo_class: {
+          'lcl': {
+            'transshipment': 'via ZACPT'
+          }
+        }
       }
     ]
   end

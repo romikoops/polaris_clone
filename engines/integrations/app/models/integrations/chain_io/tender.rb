@@ -36,6 +36,7 @@ end
 #  carrier_name       :string
 #  load_type          :string
 #  name               :string
+#  transshipment      :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  destination_hub_id :integer

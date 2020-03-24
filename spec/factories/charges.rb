@@ -27,5 +27,7 @@ end
 #
 # Indexes
 #
-#  index_charges_on_sandbox_id  (sandbox_id)
+#  index_charges_on_charge_category_id           (charge_category_id)
+#  index_charges_on_children_charge_category_id  (children_charge_category_id)
+#  index_charges_on_sandbox_id                   (sandbox_id)
 #

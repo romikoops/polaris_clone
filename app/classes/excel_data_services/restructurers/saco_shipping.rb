@@ -5,7 +5,6 @@ module ExcelDataServices
     class SacoShipping < ExcelDataServices::Restructurers::Base # rubocop:disable Metrics/ClassLength
       TREAT_AS_NOTE_COLUMNS = %i[
         remarks
-        transshipment_via
       ].freeze
       ROW_IDENTIFIER_KEYS = %i[
         sheet_name
@@ -17,6 +16,7 @@ module ExcelDataServices
         origin_hub
         origin_locode
         carrier
+        transshipment_via
       ].freeze
       ADDITIONAL_KEYS_SAME_FOR_ALL = %i[
         effective_date

@@ -43,6 +43,7 @@ module Quotations
       origin_hub = schedule.origin_hub
       destination_hub = schedule.destination_hub
       quote_total = charge.price
+
       {
         carrier_name: schedule.carrier_name,
         tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
@@ -53,7 +54,8 @@ module Quotations
         origin_hub: origin_hub,
         destination_hub: destination_hub,
         amount: quote_total.value,
-        amount_currency: quote_total.currency
+        amount_currency: quote_total.currency,
+        transshipment: extract_transshipment(result: result)
       }
     end
 
@@ -78,6 +80,10 @@ module Quotations
       return shipment.aggregated_cargo if shipment.aggregated_cargo.present?
 
       shipment.cargo_units.find(charge_category.cargo_unit_id)
+    end
+
+    def extract_transshipment(result:)
+      result[:pricings_by_cargo_class].values.pluck(:transshipment).first
     end
 
     attr_reader :meta, :results, :user, :quotation, :shipment

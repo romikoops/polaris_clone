@@ -235,6 +235,8 @@ ActiveRecord::Schema.define(version: 2020_03_23_153430) do
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["cargo_unit_id"], name: "index_charge_categories_on_cargo_unit_id"
+    t.index ["code"], name: "index_charge_categories_on_code"
     t.index ["sandbox_id"], name: "index_charge_categories_on_sandbox_id"
     t.index ["tenant_id"], name: "index_charge_categories_on_tenant_id"
   end
@@ -250,6 +252,8 @@ ActiveRecord::Schema.define(version: 2020_03_23_153430) do
     t.integer "price_id"
     t.uuid "sandbox_id"
     t.datetime "updated_at", null: false
+    t.index ["charge_category_id"], name: "index_charges_on_charge_category_id"
+    t.index ["children_charge_category_id"], name: "index_charges_on_children_charge_category_id"
     t.index ["sandbox_id"], name: "index_charges_on_sandbox_id"
   end
 
@@ -1274,6 +1278,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_153430) do
     t.integer "origin_hub_id"
     t.uuid "quotation_id"
     t.bigint "tenant_vehicle_id"
+    t.string "transshipment"
     t.datetime "updated_at", null: false
     t.index ["destination_hub_id"], name: "index_quotations_tenders_on_destination_hub_id"
     t.index ["origin_hub_id"], name: "index_quotations_tenders_on_origin_hub_id"

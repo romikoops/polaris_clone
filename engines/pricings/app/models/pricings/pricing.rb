@@ -18,7 +18,16 @@ module Pricings
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     validates :itinerary_id, uniqueness: {
-      scope: %i(tenant_id user_id tenant_vehicle_id effective_date expiration_date cargo_class load_type legacy_id group_id)
+      scope: %i[ tenant_id
+                 user_id
+                 tenant_vehicle_id
+                 effective_date
+                 expiration_date
+                 cargo_class
+                 load_type
+                 legacy_id
+                 group_id
+                 transshipment ]
     }
 
     before_validation :set_validity
@@ -37,22 +46,22 @@ module Pricings
 
     def as_json(options = {})
       new_options = options.reverse_merge(
-        methods: %i(data carrier service_level),
-        only: %i(
+        methods: %i[data carrier service_level],
+        only: %i[
           effective_date expiration_date wm_rate itinerary_id load_type cargo_class
-          tenant_id id tenant_vehicle_id internal group_id
-        )
+          tenant_id id tenant_vehicle_id internal group_id transshipment
+        ]
       )
       super(new_options)
     end
 
     def for_table_json(options = {})
       new_options = options.reverse_merge(
-        methods: %i(data load_type cargo_class carrier service_level itinerary_name mode_of_transport),
-        only: %i(
+        methods: %i[data load_type cargo_class carrier service_level itinerary_name mode_of_transport],
+        only: %i[
           effective_date expiration_date wm_rate itinerary_id
           tenant_id id tenant_vehicle_id internal group_id
-        )
+        ]
       )
       as_json(new_options)
     end

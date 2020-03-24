@@ -330,7 +330,7 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
         dedicated_pricings_only: dedicated_pricings_only
       )
     end
-    let(:pricings_by_cargo_class) { results.first }
+    let(:pricings_by_cargo_class) { results.dig(0, 0) }
 
     context 'when legacy and  transport category (lcl)' do
       let(:target_shipment) { cargo_shipment }

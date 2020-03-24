@@ -103,6 +103,7 @@ module ExcelDataServices
           pricing_params =
             { tenant: tenant,
               internal: row.internal,
+              transshipment: row.transshipment,
               cargo_class: row.load_type,
               load_type: load_type,
               tenant_vehicle: tenant_vehicle,
@@ -112,7 +113,9 @@ module ExcelDataServices
               expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
           new_pricing = itinerary.rates.new(pricing_params)
-          old_pricings = itinerary.rates.where(pricing_params.except(:effective_date, :expiration_date, :internal))
+          old_pricings = itinerary.rates.where(pricing_params.except(:effective_date,
+                                                                     :expiration_date,
+                                                                     :internal))
           overlap_handler = ExcelDataServices::Inserters::DateOverlapHandler.new(old_pricings, new_pricing)
           pricings_with_actions = overlap_handler.perform
           pricings_for_new_pricing_details = act_on_overlapping_pricings(pricings_with_actions, notes)
@@ -142,7 +145,9 @@ module ExcelDataServices
               expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
           new_pricing = itinerary.pricings.new(pricing_params)
-          old_pricings = itinerary.pricings.where(pricing_params.except(:effective_date, :expiration_date, :internal))
+          old_pricings = itinerary.pricings.where(pricing_params.except(:effective_date,
+                                                                        :expiration_date,
+                                                                        :internal))
           overlap_handler = ExcelDataServices::Inserters::DateOverlapHandler.new(old_pricings, new_pricing)
           pricings_with_actions = overlap_handler.perform
 

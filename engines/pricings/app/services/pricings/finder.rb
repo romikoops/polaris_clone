@@ -41,10 +41,14 @@ module Pricings
 
       return [{}, [], {}] if margin_pricings_with_meta_by_cargo_class_and_dates.compact.empty?
 
-      pricings_with_rate_overview, metadata_list =
+      pricings_with_rate_overviews_and_metadata_lists =
         resort_manipulated_pricings_and_schedules(data: margin_pricings_with_meta_by_cargo_class_and_dates.compact)
-      pricings_to_return, rate_overview = separate_rate_overview(pricings: pricings_with_rate_overview)
-      [pricings_to_return, metadata_list, rate_overview]
+      pricings_with_rate_overviews_and_metadata_lists.map do |pricings_with_rate_overview_and_metadata_list|
+        pricings_by_cargo_class, metadata_list = pricings_with_rate_overview_and_metadata_list
+        pricings_to_return, rate_overview = separate_rate_overview(pricings: pricings_by_cargo_class)
+
+        [pricings_to_return, metadata_list, rate_overview]
+      end
     end
 
     def relevant_pricings_for_journey
@@ -90,6 +94,8 @@ module Pricings
 
     def separate_rate_overview(pricings:)
       rate_overview = pricings.dup
+      return [{}, {}] if pricings.nil?
+
       pricings_to_return = pricings.slice(*cargo_classes)
 
       [pricings_to_return, rate_overview]
@@ -113,13 +119,13 @@ module Pricings
       flat_data = data.flatten
       pricings = flat_data.select { |datum| datum['itinerary_id'].present? }
       metadata = flat_data.select { |datum| datum[:pricing_id].present? }
-      cargo_classes = pricings.pluck('cargo_class')
 
-      pricings_by_cargo_class = cargo_classes.each_with_object(Hash.new { |h, k| h[k] = [] }) do |cargo_class, hash|
-        hash[cargo_class] = pricings.select { |pricing| pricing['cargo_class'] == cargo_class }
+      pricings.group_by { |pricing| pricing[:transshipment] }.values.map do |route_pricings|
+        pricings_by_cargo_class = route_pricings.group_by { |pricing| pricing[:cargo_class] }
+        pricing_ids = route_pricings.pluck(:id)
+        route_metadata = metadata.select { |metadatum| pricing_ids.include?(metadatum[:pricing_id]) }
+        [pricings_by_cargo_class, route_metadata]
       end
-
-      [pricings_by_cargo_class, metadata]
     end
 
     def pricings_association

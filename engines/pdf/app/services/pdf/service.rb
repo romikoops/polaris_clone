@@ -262,17 +262,14 @@ module Pdf
         load_type: shipment.load_type,
         carrier: trip.tenant_vehicle.carrier&.name&.upcase,
         service_level: trip.tenant_vehicle.name,
-        transshipment: transshipment_note(trip: trip)
+        transshipment: transshipment(trip: trip)
       }
     end
 
-    def transshipment_note(trip:)
-      Legacy::Note.find_by(
-        transshipment: true,
-        pricings_pricing_id: ::Pricings::Pricing.where(
-          itinerary_id: trip.itinerary_id, tenant_vehicle_id: trip.tenant_vehicle_id
-        ).ids
-      )&.body
+    def transshipment(trip:)
+      ::Pricings::Pricing
+        .find_by(itinerary_id: trip.itinerary_id, tenant_vehicle_id: trip.tenant_vehicle_id)
+         &.transshipment
     end
 
     def create_file(object:, file:, user:, shipments: [], sandbox: nil)

@@ -189,6 +189,21 @@ RSpec.describe OfferCalculator::Calculator do
         end
       end
     end
+
+    describe '.perform with transshipments' do
+      let!(:transshipment_pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle, transshipment: 'via ZACPT') }
+
+      it 'perform a booking calulation' do
+        results = service.perform
+        aggregate_failures do
+          expect(results.length).to eq(2)
+          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
+          expect(results.first.dig(:quote, :total, :value)).to eq(28.8)
+          expect(results.map { |result| result.dig(:meta, :transshipmentVia) }).to match_array([nil, transshipment_pricing.transshipment])
+          expect(Quotations::Quotation.count).to be(1)
+        end
+      end
+    end
   end
 
   context 'with door to door' do

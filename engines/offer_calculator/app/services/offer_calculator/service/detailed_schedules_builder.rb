@@ -8,11 +8,7 @@ module OfferCalculator
       def perform(schedules, trucking_data, user, wheelhouse = false)
         raise OfferCalculator::Calculator::NoValidSchedules if schedules.empty?
 
-        @trucking_data = trucking_data
-        @user = user
-        @pricings_with_meta = {}
-        @metadata_list = trucking_data.fetch(:metadata, [])
-        @wheelhouse = wheelhouse
+        set_variables(schedules: schedules, trucking_data: trucking_data, user: user, wheelhouse: wheelhouse)
         schedules_by_pricings = grouped_schedules(schedules: schedules,
                                                   shipment: @shipment,
                                                   user: user).compact
@@ -25,9 +21,7 @@ module OfferCalculator
           { grouped_result: grouped_result, valid_charges: handle_group_result(grouped_result: grouped_result) }
         end
 
-        results_for_quotation = charges_and_result.pluck(:valid_charges)
-                                                  .flatten
-        handle_errors(errors: results_for_quotation) if results_for_quotation.all? { |result| result[:error].present? }
+        results_for_quotation = filter_results_for_quotation(charges_and_result: charges_and_result)
 
         if results_for_quotation.present?
           quotation = Quotations::Creator.new(results: results_for_quotation, user: user).perform
@@ -35,6 +29,24 @@ module OfferCalculator
 
         return quotation if @wheelhouse.present? && quotation.present?
 
+        compacted_detailed_schedules = detailed_schedules_from_result(charges_and_result: charges_and_result)
+
+        raise OfferCalculator::Calculator::NoValidSchedules if compacted_detailed_schedules.empty?
+
+        valid_compacted_detailed_schedules = compacted_detailed_schedules.reject { |result| result[:error].present? }
+
+        detailed_schedules_with_service_level_count(detailed_schedules: valid_compacted_detailed_schedules)
+      end
+
+      def set_variables(schedules:, trucking_data:, user:, wheelhouse:)
+        @trucking_data = trucking_data
+        @user = user
+        @pricings_with_meta = {}
+        @metadata_list = trucking_data.fetch(:metadata, [])
+        @wheelhouse = wheelhouse
+      end
+
+      def detailed_schedules_from_result(charges_and_result:)
         detailed_schedules = charges_and_result.flat_map do |grand_total_charge_and_result|
           grand_total_charge_and_result[:valid_charges].map do |grand_total_charge|
             next if invalid_quote?(charge: grand_total_charge[:total])
@@ -46,13 +58,18 @@ module OfferCalculator
           end
         end
 
-        compacted_detailed_schedules = detailed_schedules.compact
+        detailed_schedules.compact
+      end
 
-        raise OfferCalculator::Calculator::NoValidSchedules if compacted_detailed_schedules.empty?
+      def filter_results_for_quotation(charges_and_result:)
+        results_for_quotation = charges_and_result.flat_map do |result|
+          result[:valid_charges].map do |valid_charge|
+            valid_charge.merge(result[:grouped_result].slice(:pricings_by_cargo_class))
+          end
+        end
+        handle_errors(errors: results_for_quotation) if results_for_quotation.all? { |result| result[:error].present? }
 
-        valid_compacted_detailed_schedules = compacted_detailed_schedules.reject { |result| result[:error].present? }
-
-        detailed_schedules_with_service_level_count(detailed_schedules: valid_compacted_detailed_schedules)
+        results_for_quotation
       end
 
       def handle_group_result(grouped_result:)
@@ -159,8 +176,7 @@ module OfferCalculator
                               0
                             end
         pricing_ids = pricings_by_cargo_class.values.flat_map { |pricing| pricing['id'] }
-        transshipment_notes = grab_transshipments_notes(pricing_ids: pricing_ids, tenant_id: shipment.tenant_id)
-        transshipment_via = transshipment_notes.first&.body
+        transshipment = pricings_by_cargo_class.values.pluck(:transshipment).compact.first
 
         note_association = Legacy::Note.where(tenant_id: shipment.tenant_id, remarks: true)
         remark_notes = note_association.where(pricings_pricing_id: pricing_ids)
@@ -183,7 +199,7 @@ module OfferCalculator
           charge_trip_id: schedule.trip_id,
           ocean_chargeable_weight: chargeable_weight,
           pricings_by_cargo_class: pricings_by_cargo_class,
-          transshipmentVia: transshipment_via,
+          transshipmentVia: transshipment,
           validUntil: valid_until,
           remarkNotes: remark_notes,
           metadata_id: result[:metadata].id,
@@ -283,7 +299,7 @@ module OfferCalculator
         schedule_groupings.each do |_key, schedules_array|
           schedules_array.sort_by!(&:eta)
           dates = extract_dates_and_quote(schedules_array)
-          pricings_by_cargo_class, rate_overview = sort_pricings(
+          pricings_by_cargo_classes_and_rate_overviews = sort_pricings(
             schedules: schedules_array,
             user_pricing_id: user_pricing_id,
             cargo_classes: cargo_classes,
@@ -291,16 +307,20 @@ module OfferCalculator
             dedicated_pricings_only: dedicated_pricings?(user)
           )
 
-          next nil if pricings_by_cargo_class.empty?
+          pricings_by_cargo_classes_and_rate_overviews.each do |pricings_by_cargo_class_and_rate_overview|
+            pricings_by_cargo_class, rate_overview = pricings_by_cargo_class_and_rate_overview
 
-          most_diverse_set, other_pricings = pricings_sets(pricings: pricings_by_cargo_class)
-          result_to_return |= sort_sets(
-            schedules: schedules_array,
-            alpha_set: most_diverse_set,
-            other_sets: other_pricings,
-            dates: dates,
-            rate_overview: rate_overview
-          )
+            next nil if pricings_by_cargo_class.blank?
+
+            most_diverse_set, other_pricings = pricings_sets(pricings: pricings_by_cargo_class)
+            result_to_return |= sort_sets(
+              schedules: schedules_array,
+              alpha_set: most_diverse_set,
+              other_sets: other_pricings,
+              dates: dates,
+              rate_overview: rate_overview
+            )
+          end
         end
         result_to_return
       end
@@ -317,7 +337,7 @@ module OfferCalculator
       end
 
       def sort_pricings(schedules:, user_pricing_id:, cargo_classes:, dates:, dedicated_pricings_only:)
-        pricings_by_cargo_class, pricing_metadata, rate_overview = ::Pricings::Finder.new(
+        pricing_search_results = ::Pricings::Finder.new(
           schedules: schedules,
           user_pricing_id: user_pricing_id,
           cargo_classes: cargo_classes,
@@ -327,9 +347,12 @@ module OfferCalculator
           sandbox: @sandbox
         ).perform
 
-        @metadata_list |= pricing_metadata if pricing_metadata.present?
+        pricing_search_results.map do |pricing_search_result|
+          pricings_by_cargo_class, pricing_metadata, rate_overview = pricing_search_result
+          @metadata_list |= pricing_metadata if pricing_metadata.present?
 
-        [pricings_by_cargo_class, rate_overview]
+          [pricings_by_cargo_class, rate_overview]
+        end
       end
 
       def extract_dates_and_quote(schedules)
@@ -367,16 +390,6 @@ module OfferCalculator
         regular_notes = Legacy::Note.where(transshipment: false, tenant_id: tenant_id)
         regular_notes.where(target: hubs | nexii | countries | legacy_pricings)
                      .or(regular_notes.where(pricings_pricing_id: pricings.ids))
-      end
-
-      def grab_transshipments_notes(pricing_ids:, tenant_id:)
-        legacy_pricings = Legacy::Pricing.where(id: pricing_ids)
-        pricings = Pricings::Pricing.where(id: pricing_ids)
-        transshipment_notes = Legacy::Note.where(transshipment: true, tenant_id: tenant_id)
-
-        transshipment_notes.where(target: legacy_pricings)
-                           .or(transshipment_notes.where(pricings_pricing_id: pricings.ids))
-                           .select(:id, :body)
       end
 
       attr_reader :trucking_data, :user, :shipment
