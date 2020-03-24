@@ -7,7 +7,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Hubs do
   let(:options) { { tenant: tenant, data: input_data, sheet_name: 'Sheet1' } }
 
   before do
-    Geocoder::Lookup::Test.set_default_stub([{
+    Geocoder::Lookup::Test.add_stub([24.806936, 54.644405], [{
                                               'coordinates' => [24.806936, 54.644405],
                                               'geocoded_address' => 'Khalifa Port - Abu Dhabi - United Arab Emirates',
                                               'country' => 'United Arab Emirates',
@@ -44,8 +44,10 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Hubs do
     end
 
     describe '.validate coordinates within the correct country' do
-      let!(:jamaica) { create(:country, name: 'Jamaica', code: 'JM') }
-      let!(:uae) { create(:country, name: 'United Arab Emirates', code: 'AE') }
+      before do
+        create(:legacy_country, name: 'Jamaica', code: 'JM')
+        create(:legacy_country, name: 'United Arab Emirates', code: 'AE')
+      end
 
       it 'catches the wrong country for given coordinates' do
         validator = described_class.new(options)
