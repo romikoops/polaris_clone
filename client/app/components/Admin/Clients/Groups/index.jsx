@@ -63,24 +63,6 @@ class AdminClientGroups extends Component {
     return ''
   }
 
-  deleteGroup () {
-    const { clientsDispatch } = this.props
-    const { groupToDelete } = this.state
-    clientsDispatch.deleteGroup(groupToDelete)
-    this.closeConfirm()
-  }
-
-  confirmDelete (group) {
-    this.setState({
-      confirm: true,
-      groupToDelete: group
-    })
-  }
-
-  closeConfirm () {
-    this.setState({ confirm: false })
-  }
-
   fetchData (tableState) {
     const { clientsDispatch, targetId, targetType } = this.props
 
@@ -147,19 +129,6 @@ class AdminClientGroups extends Component {
               {' '}
               {rowData.row.marginCount}
             </p>
-          </div>
-        )
-      },
-      {
-        id: 'delete',
-        maxWidth: 30,
-        accessor: 'delete',
-        Cell: rowData => (
-          <div
-            className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
-            onClick={() => this.confirmDelete(rowData.original.id)}
-          >
-            <i className="fa fa-trash red" />
           </div>
         )
       }

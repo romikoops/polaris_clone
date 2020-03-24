@@ -47,24 +47,6 @@ class AdminClientCompanies extends PureComponent {
     this.setState({ filters: tableState.filtered })
   }
 
-  deleteCompany () {
-    const { clientsDispatch } = this.props
-    const { companyToDelete } = this.state
-    clientsDispatch.deleteCompany(companyToDelete)
-    this.closeConfirm()
-  }
-
-  confirmDelete (company) {
-    this.setState({
-      confirm: true,
-      companyToDelete: company
-    })
-  }
-
-  closeConfirm () {
-    this.setState({ confirm: false })
-  }
-
   render () {
     const {
       companiesData, t, numPages, isPage, addedMembers, theme
@@ -147,19 +129,6 @@ class AdminClientCompanies extends PureComponent {
               {' '}
               {rowData.row.employeeCount}
             </p>
-          </div>
-        )
-      },
-      {
-        id: 'delete',
-        accessor: 'delete',
-        maxWidth: 30,
-        Cell: rowData => (
-          <div
-            className={`${styles.table_cell} flex layout-row layout-align-center-center pointy`}
-            onClick={() => this.confirmDelete(rowData.original.id)}
-          >
-            <i className="flex-none fa fa-trash red" />
           </div>
         )
       }
