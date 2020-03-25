@@ -166,6 +166,12 @@ export default function clients (state = {}, action) {
 
       return newState
     }
+    case 'EDIT_GROUP_NAME_SUCCESS': {
+      return {
+        ...state,
+        group: action.payload
+      }
+    }
     default:
       return state
   }

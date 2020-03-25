@@ -46,12 +46,11 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
   end
 
   def show
-    group = ::Tenants::Group.find_by(id: params[:id], sandbox: @sandbox)
-    response_handler(for_show_json(group))
+    response_handler(for_show_json(current_group))
   end
 
   def destroy
-    group = Tenants::Group.find(params[:id])
+    group = current_group
     if group
       group.memberships.destroy_all
       group.margins.destroy_all
@@ -60,7 +59,21 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
     response_handler(success: true)
   end
 
+  def update
+    group = current_group
+    group&.update(edit_params) if group
+    response_handler(for_show_json(group))
+  end
+
   private
+
+  def edit_params
+    params.permit(:name)
+  end
+
+  def current_group
+    ::Tenants::Group.find_by(id: params[:id], sandbox: @sandbox)
+  end
 
   def create_member_from_type(group:, type:, member:) # rubocop:disable Metrics/CyclomaticComplexity
     case type
@@ -77,7 +90,7 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
     when 'groups'
       member_group = ::Tenants::Group.find_by(id: member[:id], sandbox: @sandbox)
       return nil unless member_group
-      
+
       ::Tenants::Membership.find_or_create_by(group_id: group.id, member: member_group, sandbox: @sandbox)
     end
   end

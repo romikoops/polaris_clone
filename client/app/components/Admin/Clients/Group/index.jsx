@@ -20,6 +20,7 @@ import PricingButtons from './PricingButtons'
 import LocalChargeButtons from './LocalChargeButtons'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 import { LoadingSpinner } from '../../../LoadingSpinner/LoadingSpinner'
+import GroupName from './GroupName'
 
 class AdminClientGroup extends Component {
   static defaultProps = {
@@ -41,6 +42,7 @@ class AdminClientGroup extends Component {
     this.uploadGroupPricings = this.uploadGroupPricings.bind(this)
     this.uploadGroupLocalCharges = this.uploadGroupLocalCharges.bind(this)
     this.viewMember = this.viewMember.bind(this)
+    this.editGroupName = this.editGroupName.bind(this)
   }
 
   componentDidMount () {
@@ -138,6 +140,11 @@ class AdminClientGroup extends Component {
   uploadGroupLocalCharges (file) {
     const { documentDispatch, id } = this.props
     documentDispatch.uploadLocalCharges(file, '', id)
+  }
+
+  editGroupName (name) {
+    const { clientsDispatch, id } = this.props
+    clientsDispatch.editGroupName(id, name)
   }
 
   render () {
@@ -241,11 +248,7 @@ class AdminClientGroup extends Component {
             <h2 className="flex-none">
               {`${t('admin:groupName')}: `}
             </h2>
-            <h1 className="flex-none">
-              {' '}
-              {name}
-              {' '}
-            </h1>
+            <GroupName name={name} onEdit={this.editGroupName} />
           </div>
           <Tabs
             wrapperTabs="layout-row flex margin_bottom"

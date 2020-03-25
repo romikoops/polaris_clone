@@ -106,7 +106,7 @@ Rails.application.routes.draw do
       resources :vehicle_types, only: [:index]
       resources :clients, only: %i(index show create destroy)
       resources :companies, only: %i(index show create destroy)
-      resources :groups, only: %i(index show create destroy) do
+      resources :groups, only: %i[index show create destroy update] do
         member do
           post :edit_members
         end

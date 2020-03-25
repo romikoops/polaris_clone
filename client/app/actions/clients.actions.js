@@ -40,6 +40,38 @@ function testMargins (args) {
   }
 }
 
+function editGroupName (id, value) {
+  function request () {
+    return { type: clientsConstants.EDIT_GROUP_NAME_REQUEST }
+  }
+  function success (payload) {
+    return { type: clientsConstants.EDIT_GROUP_NAME_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: clientsConstants.EDIT_GROUP_NAME_ERROR, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    return fetch(
+      `${getTenantApiUrl()}/admin/groups/${id}`,
+      requestOptions(
+        'PATCH',
+        { 'Content-Type': 'application/json' },
+        JSON.stringify({ name: value })
+      )
+    )
+      .then((resp) => resp.json())
+      .then((resp) => {
+        dispatch(success(resp.data))
+      })
+      .catch((error) => {
+        dispatch(failure(error))
+      })
+  }
+}
+
 function removeMembership (membershipID) {
   function request () {
     return { type: clientsConstants.REMOVE_MEMBERSHIP_REQUEST }
@@ -760,7 +792,8 @@ export const clientsActions = {
   getLocalChargesForList,
   removeLocalCharge,
   clearMarginsList,
-  clearMarginPreview
+  clearMarginPreview,
+  editGroupName
 }
 
 export default clientsActions

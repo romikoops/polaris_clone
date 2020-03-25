@@ -6,7 +6,7 @@ export function requestOptions (method, headers = {}, body = {}) {
     method: upcaseMethod,
     headers: { ...authHeader(), ...headers }
   }
-  if (upcaseMethod === 'POST') {
+  if (upcaseMethod !== 'GET') {
     options.body = body
   }
 
