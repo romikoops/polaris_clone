@@ -22,14 +22,17 @@ module Api
 
     def create_rows
       tender.line_items.group_by(&:section).each do |section, items|
+        charge_category_id = applicable_charge_category_id(section: section)
         section_row = {
           id: SecureRandom.uuid,
           description: section_description(section: section),
-          value: "#{items.sum(&:amount).format} *",
+          value: value(items: items, charge_category_id: charge_category_id),
           lineItemId: nil,
           tenderId: tender.id,
           order: section_order(section: section),
-          chargeCategoryId: applicable_charge_category_id(section: section)
+          section: section,
+          level: 0,
+          chargeCategoryId: charge_category_id
         }
         @rows << section_row
         create_cargo_section_rows(row: section_row, items: items)
@@ -38,15 +41,18 @@ module Api
 
     def create_cargo_section_rows(row:, items:)
       items.group_by(&:cargo).each do |cargo, items_by_cargo|
+        charge_category_id = applicable_charge_category_id(cargo: cargo)
         cargo_row = {
           id: SecureRandom.uuid,
           editId: cargo&.id,
           description: cargo_description(cargo: cargo),
-          value: "#{items_by_cargo.sum(&:amount).format} *",
+          value: value(items: items_by_cargo, charge_category_id: charge_category_id),
           order: 0,
           parentId: row[:id],
           lineItemId: nil,
           tenderId: tender.id,
+          section: items_by_cargo.first.section,
+          level: 1,
           chargeCategoryId: applicable_charge_category_id(cargo: cargo)
         }
         @rows << cargo_row
@@ -60,11 +66,13 @@ module Api
         currency_row = {
           id: SecureRandom.uuid,
           description: currency_description(currency: currency),
-          value: items_by_currency.sum(&:amount).format,
+          value: value(items: items_by_currency, charge_category_id: nil),
           order: 0,
           parentId: row[:id],
           lineItemId: nil,
           tenderId: tender.id,
+          section: items_by_currency.first.section,
+          level: 2,
           chargeCategoryId: nil
         }
         @rows << currency_row
@@ -84,6 +92,8 @@ module Api
           parentId: row[:id],
           lineItemId: item.id,
           tenderId: tender.id,
+          section: item.section,
+          level: 3,
           chargeCategoryId: applicable_charge_category_id(item: item)
         }
       end
@@ -141,6 +151,15 @@ module Api
 
     def section_order(section:)
       SECTIONS.zip([3, 1, 5, 2, 4]).to_h.fetch(section)
+    end
+
+    def value(items:, charge_category_id:)
+      edited_price = charge_breakdown.charges.find_by(children_charge_category_id: charge_category_id)&.edited_price
+
+      formatted_value = (edited_price&.money || items.sum(&:amount)).format
+      single_currency = items.pluck(:amount_currency).uniq.length == 1
+      formatted_value += ' *' unless single_currency
+      formatted_value
     end
 
     attr_reader :tender, :rows, :scope, :charge_breakdown

@@ -7,7 +7,7 @@ module Quotations
     def initialize(tender:, line_item_id:, charge_category_id:, value:, section:)
       @tender = tender
       @line_item = Quotations::LineItem.find(line_item_id) if line_item_id.present?
-      @section = section
+      @section = section.gsub('_section', '')
       @value = value
       @charge_category_id = charge_category_id
       @charge = charge_to_edit

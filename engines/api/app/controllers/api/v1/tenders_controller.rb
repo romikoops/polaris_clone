@@ -8,7 +8,7 @@ module Api
       def update
         updated_tender = tender_updater.perform
 
-        decorated_tender = TenderDecorator.decorate(updated_tender)
+        decorated_tender = TenderDecorator.decorate(updated_tender, context: { scope: current_scope })
         render json: QuotationTenderSerializer.new(decorated_tender, params: { scope: current_scope })
       end
 
