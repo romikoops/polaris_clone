@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'will_paginate/array'
+
 class Admin::ShipmentsController < Admin::AdminBaseController
   before_action :do_for_show, only: :show
 
@@ -8,22 +10,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def delta_page_handler
-    case params[:target]
-    when 'requested'
-      shipment_association = requested_shipments
-    when 'open'
-      shipment_association = open_shipments
-    when 'finished'
-      shipment_association = finished_shipments
-    when 'quoted'
-      shipment_association = quoted_shipments
-    when 'rejected'
-      shipment_association = rejected_shipments
-    when 'archived'
-      shipment_association = archived_shipments
-    end
     per_page = params.fetch(:per_page, 4).to_f
-    shipments = shipment_association.order(updated_at: :desc).paginate(page: params[:page], per_page: per_page)
+    shipments = target_shipments.order(updated_at: :desc).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
       shipments: shipments.map(&:with_address_index_json),
@@ -54,23 +42,12 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def search_shipments
-    case params[:target]
-    when 'requested'
-      shipment_association = requested_shipments
-    when 'open'
-      shipment_association = open_shipments
-    when 'finished'
-      shipment_association = finished_shipments
-    when 'quoted'
-      shipment_association = quoted_shipments
-    when 'rejected'
-      shipment_association = rejected_shipments
-    when 'archived'
-      shipment_association = archived_shipments
-    end
-    results = shipment_association.index_search(params[:query])
+    index_search_results = Shipment.where(id: target_shipments).index_search(params[:query])
+    user_search_results = target_shipments.user_search(params[:query])
+    results = index_search_results | user_search_results
     per_page = params.fetch(:per_page, 4).to_f
-    shipments = results.order(:updated_at).paginate(page: params[:page], per_page: per_page)
+    shipments = results.sort_by(&:updated_at).paginate(page: params[:page], per_page: per_page)
+
     response_handler(
       shipments: shipments.map(&:with_address_index_json),
       num_shipment_pages: shipments.total_pages,
@@ -387,18 +364,18 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def shipment_as_json
     hidden_args = Pdf::HiddenValueService.new(user: @shipment.user).admin_args
     options = {
-      methods: %i(mode_of_transport cargo_count company_name client_name),
+      methods: %i[mode_of_transport cargo_count company_name client_name],
       include: [
         :destination_nexus,
         :origin_nexus,
         {
           destination_hub: {
-            include: { address: { only: %i(geocoded_address latitude longitude) } }
+            include: { address: { only: %i[geocoded_address latitude longitude] } }
           }
         },
         {
           origin_hub: {
-            include: { address: { only: %i(geocoded_address latitude longitude) } }
+            include: { address: { only: %i[geocoded_address latitude longitude] } }
           }
         }
       ]
@@ -591,6 +568,10 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         sandbox: @sandbox
       ).group_by(&:doc_type)
     }
+  end
+
+  def target_shipments
+    @target_shipments ||= send("#{params[:target]}_shipments".to_sym)
   end
 
   def shipment_params

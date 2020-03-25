@@ -5,10 +5,10 @@ require 'rails_helper'
 RSpec.describe Admin::ShipmentsController, type: :controller do
   let!(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:user) { create(:legacy_user, tenant: tenant, email: 'user@itsmycargo.com', role: role) }
+  let!(:user) { create(:legacy_user, tenant: tenant, email: 'user@itsmycargo.com', role: role, with_profile: true) }
   let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
   let!(:role) { create(:role, name: 'shipper') }
-  let(:shipment) { FactoryBot.create(:shipment, with_breakdown: true) }
+  let!(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, tenant: tenant, user: user, status: 'requested') }
   let(:charge_breakdown) { shipment.charge_breakdowns.selected }
   let(:breakdown) { FactoryBot.build(:pricings_breakdown) }
   let(:user_breakdown) { FactoryBot.build(:pricings_breakdown, target: tenants_user) }
@@ -24,6 +24,28 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
       get :index, params: { tenant_id: tenant }
 
       expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'GET #search_shipments' do
+    it 'returns the matching shipments for the guest user' do
+      get :search_shipments, params: { target: 'requested', query: tenants_user.profile.first_name, tenant_id: tenant.id }
+      expected_client_name = "#{tenants_user.profile.first_name} #{tenants_user.profile.last_name}"
+      expect(json.dig(:data, :shipments).first[:client_name]).to eq(expected_client_name)
+    end
+
+    context 'when searching via POL' do
+      it 'returns matching shipments with origin matching the query' do
+        get :search_shipments, params: { target: 'requested', query: shipment.origin_hub.name, tenant_id: tenant.id }
+        expect(json.dig(:data, :shipments).first[:id]).to eq(shipment.id)
+      end
+    end
+
+    context "when searching via user's company name/Agency" do
+      it 'returns matching shipments with users matching the company name in query' do
+        get :search_shipments, params: { target: 'requested', query: tenants_user.profile.company_name, tenant_id: tenant.id }
+        expect(json.dig(:data, :shipments).first[:id]).to eq(shipment.id)
+      end
     end
   end
 
@@ -114,6 +136,15 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
         expect(response).to have_http_status(:success)
         expect(Legacy::File.find_by(id: file.id)).to be_nil
       end
+    end
+  end
+
+  describe 'GET #delta_page_handler' do
+    before { shipment.update(status: 'quoted') }
+
+    it 'returns shipments matching the target in params' do
+      get :delta_page_handler, params: { target: 'quoted', tenant_id: tenant.id }
+      expect(json.dig(:data, :shipments).count).to eq(1)
     end
   end
 end

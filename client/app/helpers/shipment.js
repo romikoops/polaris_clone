@@ -91,7 +91,7 @@ export function loadDestinationNexus (nexuses) {
 }
 export function loadClients (clients) {
   const clientArr = clients.map(client => ({
-    label: `${client.first_name} ${client.last_name}`,
+    label: `${client.firstName} ${client.lastName}`,
     value: client.id
   }))
 

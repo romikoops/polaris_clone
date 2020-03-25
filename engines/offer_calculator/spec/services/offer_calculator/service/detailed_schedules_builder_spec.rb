@@ -635,7 +635,6 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
           metadatum = Pricings::Metadatum.find_by(id: target_result.dig(:meta, :metadata_id))
           expect(metadatum).to be_present
           expect(metadatum.breakdowns.pluck(:charge_category_id).uniq).to match_array(lcl_pricing.fees.pluck(:charge_category_id))
-          expect(metadatum.breakdowns.map { |b| b.source&.operator }.compact.uniq).to match_array(['&'])
         end
       end
     end
