@@ -20,8 +20,9 @@ class Admin::MembershipsController < Admin::AdminBaseController
     response_handler(active_memberships)
   end
 
-  def membership_data
-    memberships = Tenants::Membership.where(member: target_member, sandbox: @sandbox)
+  def index
+    memberships = Tenants::Membership.where(sandbox: @sandbox)
+    memberships = memberships.where(member: target_member) if target_member
     response_handler(memberships.map { |m| for_list_json(m) })
   end
 

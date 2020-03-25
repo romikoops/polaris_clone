@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Admin::MembershipsController, type: :controller do
   let!(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { create(:legacy_user, tenant: tenant) }
+  let(:user) { create(:legacy_user, tenant: tenant, with_profile: true) }
   let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
 
   before do
@@ -75,6 +75,21 @@ RSpec.describe Admin::MembershipsController, type: :controller do
 
       delete :destroy, params: { id: membership.id, tenant_id: tenant.id }
       expect(JSON.parse(response.body)['data']).to eq(['error'])
+    end
+  end
+
+  describe 'GET #index' do
+    let(:group) { create(:tenants_group, tenant: tenants_tenant, name: 'Discount') }
+    let(:membership_user) { Tenants::User.find_by(legacy_id: user.id) }
+    let!(:membership) { create(:tenants_membership, group: group, member: membership_user) }
+
+    it 'returns the memberships for a specific user' do
+      get :index, params: { targetId: user.id, targetType: 'user', tenant_id: tenant.id }
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        json = JSON.parse(response.body)
+        expect(json['data'].pluck('id')).to match_array([membership.id])
+      end
     end
   end
 end

@@ -282,7 +282,7 @@ function membershipData (args) {
   }
   const query = toQueryString(args, true)
 
-  return fetch(`${getTenantApiUrl()}/admin/memberships/membership_data?${query}`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/admin/memberships?${query}`, requestOptions)
     .then(handleResponse)
 }
 

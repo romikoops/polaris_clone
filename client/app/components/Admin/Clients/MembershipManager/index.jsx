@@ -11,23 +11,24 @@ import styles from '../index.scss'
 import RoundButton from '../../../RoundButton/RoundButton'
 
 class AdminClientMembershipManager extends Component {
+
+  static defaultProps = {
+    memberships: [],
+    groupData: []
+  }
+
   static getDerivedStateFromProps (nextProps, prevState) {
     const { memberships, groupData } = nextProps
     const nextState = {}
-    const prioritiesSet = groupData.some(g => g.priority)
-    if (!prioritiesSet && memberships && memberships.length > 1) {
-      nextState.groups = groupData.map((g) => {
-        const targetMembership = memberships.filter(m => m.group_id === g.id)[0]
-        const editedGroup = g
-        if (targetMembership) {
-          editedGroup.priority = targetMembership.priority
-        }
+    nextState.groups = groupData.map((g) => {
+      const targetMembership = memberships.filter((m) => m.group_id === g.id)[0]
+      const editedGroup = g
+      if (targetMembership) {
+        editedGroup.priority = targetMembership.priority
+      }
 
-        return editedGroup
-      }).sort((a,b) => a.priority - b.priority).map((g, i)=> {
-        return { ...g, priority: i }
-      })
-    }
+      return editedGroup
+    }).sort((a, b) => a.priority - b.priority).map((g, i) => ({ ...g, priority: i }))
 
     return nextState
   }
@@ -44,7 +45,6 @@ class AdminClientMembershipManager extends Component {
     this.fetchData = this.fetchData.bind(this)
     this.getPriorityOptions = this.getPriorityOptions.bind(this)
     this.handlePriorityChange = this.handlePriorityChange.bind(this)
-    this.handleTargetUpdate = this.handleTargetUpdate.bind(this)
     this.saveChanges = this.saveChanges.bind(this)
   }
 
@@ -83,7 +83,7 @@ class AdminClientMembershipManager extends Component {
   removeMember (id) {
     this.setState((prevState) => {
       const { addedGroups } = prevState
-      const updatedMembers = addedGroups.filter(c => c !== id)
+      const updatedMembers = addedGroups.filter((c) => c !== id)
 
       return { addedGroups: updatedMembers }
     })
@@ -91,17 +91,17 @@ class AdminClientMembershipManager extends Component {
 
   getPriorityOptions (id) {
     const { memberships } = this.state
-    const targetMembership = memberships.filter(m => m.group_id === id)[0]
+    const targetMembership = memberships.filter((m) => m.group_id === id)[0]
     if (targetMembership) {
-      return range(15).filter(n => n !== targetMembership.priority).map(n => ({ label: n, value: n }))
+      return range(15).filter((n) => n !== targetMembership.priority).map((n) => ({ label: n, value: n }))
     }
 
-    return range(15).map(n => ({ label: n, value: n }))
+    return range(15).map((n) => ({ label: n, value: n }))
   }
 
   getSelectedOption (id) {
     const { memberships } = this.state
-    const targetMembership = memberships.filter(m => m.group_id === id)[0]
+    const targetMembership = memberships.filter((m) => m.group_id === id)[0]
 
     return {
       label: get(targetMembership, ['priority'], ''),
@@ -118,47 +118,26 @@ class AdminClientMembershipManager extends Component {
     }
   }
 
-  handleTargetUpdate () {
-    const { clientsDispatch, targetId, targetType } = this.props
-    switch (targetType) {
-      case 'user':
-        clientsDispatch.viewClient(targetId)
-        break
-      case 'group':
-        clientsDispatch.viewGroup(targetId)
-        break
-      case 'company':
-        clientsDispatch.viewCompany(targetId)
-        break
-
-      default:
-        break
-    }
-  }
-
   saveChanges () {
     const { addedGroups, groups } = this.state
     const {
       clientsDispatch, targetId, targetType, toggleEdit
     } = this.props
-    const membershipOrder = groups.map(g => ({id: g.id, priority: g.priority}))
+    const membershipOrder = groups.map((g) => ({ id: g.id, priority: g.priority }))
     clientsDispatch.editMemberships({
       addedGroups, targetId, targetType, memberships: membershipOrder
     })
-    this.handleTargetUpdate()
     toggleEdit()
   }
 
   handlePriorityChange (id, delta) {
     const { groups } = this.state
-    const targetGroupIndex = groups.findIndex(g => g.id === id)
+    const targetGroupIndex = groups.findIndex((g) => g.id === id)
     const indexToChange = targetGroupIndex + delta
     if (indexToChange < 0 || indexToChange >= groups.length) { return }
     groups[targetGroupIndex].priority += delta
     groups[indexToChange].priority -= delta
-    const sortedGroups = groups.sort((a,b) => a.priority - b.priority).map((g, i)=> {
-      return { ...g, priority: i }
-    })
+    const sortedGroups = groups.sort((a, b) => a.priority - b.priority).map((g, i) => ({ ...g, priority: i }))
     this.setState({ groups: sortedGroups })
   }
 
@@ -169,12 +148,12 @@ class AdminClientMembershipManager extends Component {
     const {
       groups, addedGroups, memberships
     } = this.state
-    const isButtonActive = addedGroups.length > 0 && (groupData.map(e => e.id) !== addedGroups.map(m => m.id))
+    const isButtonActive = addedGroups.length > 0 && (groupData.map((e) => e.id) !== addedGroups.map((m) => m.id))
     const columns = [
       {
         Header: t('admin:groupName'),
         accessor: 'name',
-        Cell: rowData => (
+        Cell: (rowData) => (
           <div
             className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
             onClick={() => this.handleMemberChange(rowData.original.id)}
@@ -190,7 +169,7 @@ class AdminClientMembershipManager extends Component {
         id: 'memberCount',
         Header: t('admin:userCount'),
         accessor: 'memberCount',
-        Cell: rowData => (
+        Cell: (rowData) => (
           <div
             className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
             onClick={() => this.handleMemberChange(rowData.original.id)}
@@ -206,7 +185,7 @@ class AdminClientMembershipManager extends Component {
         id: 'marginCount',
         Header: t('admin:marginCount'),
         accessor: 'marginCount',
-        Cell: rowData => (
+        Cell: (rowData) => (
           <div
             className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
             onClick={() => this.handleMemberChange(rowData.original.id)}
@@ -225,21 +204,21 @@ class AdminClientMembershipManager extends Component {
         Header: t('admin:priority'),
         accessor: 'priority',
         className: styles.select_row,
-        Cell: rowData => (
+        Cell: (rowData) => (
           <div
             className={`${styles.table_cell} ${styles.dpb} flex layout-row layout-align-start-center pointy`}
           >
             { addedGroups.includes(rowData.original.id) ? [
               (<div
                 className="flex layout-row layout-align-center-center"
-                style={{visibility: rowData.original.priority === 0 ? 'hidden' : 'visible'}}
+                style={{ visibility: rowData.original.priority === 0 ? 'hidden' : 'visible' }}
                 onClick={() => this.handlePriorityChange(rowData.original.id, -1)}
               >
                 <i className="flex-none fa fa-arrow-up" />
               </div>),
               (<div
                 className="flex layout-row layout-align-center-center"
-                style={{visibility: rowData.original.priority === addedGroups.length - 1 ? 'hidden' : 'visible'}}
+                style={{ visibility: rowData.original.priority === addedGroups.length - 1 ? 'hidden' : 'visible' }}
                 onClick={() => this.handlePriorityChange(rowData.original.id, 1)}
               >
                 <i className="flex-none fa fa-arrow-down" />
@@ -253,8 +232,8 @@ class AdminClientMembershipManager extends Component {
       columns.push({
         id: 'added',
         Header: t('admin:added'),
-        accessor: d => addedGroups.includes(d.id),
-        Cell: rowData => (
+        accessor: (d) => addedGroups.includes(d.id),
+        Cell: (rowData) => (
           <div
             className={`${styles.table_cell} flex layout-row layout-align-start-center pointy`}
           >
@@ -268,6 +247,7 @@ class AdminClientMembershipManager extends Component {
         maxWidth: 75
       })
     }
+
     const table = (
       <ReactTable
         className="flex-100 height_100"
