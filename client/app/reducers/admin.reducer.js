@@ -898,7 +898,7 @@ export default function admin (state = {}, action) {
       if (!pricings) { return state }
       const index = pricings.findIndex(p => p.id === action.payload.id)
       pricings[index] = action.payload
-      
+
       return {
         ...state,
         pricings: {
@@ -1587,15 +1587,25 @@ export default function admin (state = {}, action) {
     case adminConstants.EDIT_LOCAL_CHARGES_REQUEST:
       return state
     case adminConstants.EDIT_LOCAL_CHARGES_SUCCESS: {
-      const newCharges = state.hub.charges.filter(c => c.id !== action.payload.id)
-      newCharges.push(action.payload)
+      const hubId = state.hub.hub.id
+
+      const hubCharges = state.localCharges[hubId] || { charges: [] }
+      const newCharges = [...hubCharges.charges]
+      const index = newCharges.findIndex((item) => item.id === action.payload.id)
+
+      newCharges.splice(index, 1, action.payload)
+
+      const newLocalCharges = {
+        ...state.localCharges,
+        [hubId]: {
+          ...hubCharges,
+          charges: newCharges
+        }
+      }
 
       return {
         ...state,
-        hub: {
-          ...state.hub,
-          charges: newCharges
-        },
+        localCharges: newLocalCharges,
         loading: false
       }
     }
