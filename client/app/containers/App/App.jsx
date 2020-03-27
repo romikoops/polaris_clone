@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import {
   Switch, Route, Redirect, withRouter
 } from 'react-router-dom'
-import { get } from 'lodash'
+import { get, isEmpty } from 'lodash'
 
 import UserAccount from '../UserAccount/UserAccount'
 import Landing from '../Landing/Landing'
@@ -76,14 +76,18 @@ class App extends Component {
       user,
       loggedIn,
       appDispatch,
+      error,
       loading
     } = this.props
     if (this.hasFatalError()) {
       return <FatalError error={get(app, 'error')} />
     }
-
     if (!tenant) {
       return null // Wait until tenant is fetched
+    }
+
+    if (!isEmpty(error)) {
+      appDispatch.clearLoading()
     }
 
     const { theme } = tenant
@@ -192,7 +196,7 @@ App.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    selectedSubdomain, authentication, admin, users, app
+    selectedSubdomain, authentication, admin, users, app, error
   } = state
   const { tenant, tenants } = app
   const { user, loggedIn, loggingIn } = authentication
@@ -210,7 +214,8 @@ function mapStateToProps (state) {
     loggingIn,
     isFetching,
     loading,
-    app
+    app,
+    error
   }
 }
 function mapDispatchToProps (dispatch) {

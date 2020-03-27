@@ -1,6 +1,7 @@
 import { documentConstants } from '../constants/document.constants'
 import { documentService } from '../services/document.service'
 import { alertActions, adminActions, clientsActions } from '.'
+import { errorActions } from './error.actions'
 
 function uploadPricings (file) {
   function request (uploadData) {
@@ -24,6 +25,7 @@ function uploadPricings (file) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ uploadPricings: error }))
       }
     )
   }
@@ -50,6 +52,7 @@ function uploadGeneratorSheet (file) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ uploadGeneratorSheet: error }))
       }
     )
   }
@@ -77,6 +80,7 @@ function uploadHubs (file) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ uploadHubs: error }))
       }
     )
   }
@@ -103,6 +107,7 @@ function uploadMargins (args) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ uploadMargins: error }))
       }
     )
   }
@@ -130,6 +135,7 @@ function uploadGroupPricings (args) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ uploadGroupPricings: error }))
       }
     )
   }
@@ -156,6 +162,7 @@ function uploadChargeCategories (file) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ uploadChargeCategories: error }))
       }
     )
   }
@@ -182,6 +189,7 @@ function downloadPricings (options) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ downloadChargeCategories: error }))
       }
     )
   }
@@ -208,6 +216,7 @@ function downloadLocalCharges (options) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ downloadLocalCharges: error }))
       }
     )
   }
@@ -234,6 +243,7 @@ function downloadSchedules (options) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ downloadSchedules: error }))
       }
     )
   }
@@ -259,6 +269,7 @@ function downloadQuotations (options) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ downloadQuotations: error }))
       }
     )
   }
@@ -284,6 +295,7 @@ function downloadQuote (options) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ downloadQuote: error }))
       }
     )
   }
@@ -309,6 +321,7 @@ function downloadShipment (options) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ downloadShipment: error }))
       }
     )
   }
@@ -335,6 +348,7 @@ function downloadTrucking (options) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ downloadTrucking: error }))
       }
     )
   }
@@ -362,6 +376,7 @@ function downloadHubs () {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ downloadHubs: error }))
       }
     )
   }
@@ -389,6 +404,7 @@ function downloadChargeCategories () {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ downloadChargeCategories: error }))
       }
     )
   }
@@ -414,6 +430,7 @@ function downloadGdpr (options) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ downloadGdpr: error }))
       }
     )
   }
@@ -443,6 +460,7 @@ function downloadDocument (id) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ downloadDocument: error }))
       }
     )
   }
@@ -470,6 +488,7 @@ function uploadSchedules (file, target) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ uploadSchedules: error }))
       }
     )
   }
@@ -497,6 +516,7 @@ function uploadLocalCharges (file, mot, groupId = null) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ uploadLocalCharges: error }))
       }
     )
   }
@@ -523,6 +543,7 @@ function uploadNotes (file) {
       (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
+        dispatch(errorActions.setActionError({ uploadNotes: error }))
       }
     )
   }

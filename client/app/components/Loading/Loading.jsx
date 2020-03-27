@@ -14,7 +14,7 @@ class Loading extends Component {
     }
     this.timer = setTimeout(() => {
       this.showClose()
-    }, 20000)
+    }, 2000)
   }
 
   componentWillUnmount () {
@@ -26,29 +26,31 @@ class Loading extends Component {
   }
 
   closeLoading () {
-    this.props.appDispatch.clearLoading()
+    const { appDispatch } = this.props
+    appDispatch.clearLoading()
   }
 
   render () {
-
-    if (!this.props.tenant || !this.props.tenant.theme){
-      return null;
-    }
-    
+    const { tenant } = this.props
     const { showClose } = this.state
-    const { theme } = this.props.tenant
+
+    if (!tenant || !tenant.theme) {
+      return null
+    }
+
+    const { theme } = tenant
 
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: '#E0E0E0' }
 
-    if (this.props.tenant && this.props.tenant.scope && this.props.tenant.scope.loading_image){
+    if (tenant && tenant.scope && tenant.scope.loading_image) {
       return (
         <div className={`layout-row layout-align-center-center ccb_loading ${styles.loader_box}`}>
-          <img src={this.props.tenant.scope.loading_image} className="loading-image" />
+          <img src={tenant.scope.loading_image} className="loading-image" />
         </div>
-      );
+      )
     }
 
     return (
