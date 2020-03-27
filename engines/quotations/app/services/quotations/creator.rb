@@ -22,10 +22,13 @@ module Quotations
 
     def find_or_create_quotation
       tenant = Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
-      @quotation = Quotations::Quotation.create(tenant: tenant,
-                                                user: @user,
-                                                origin_nexus: @origin_nexus,
-                                                destination_nexus: @destination_nexus)
+      args = { tenant: tenant,
+               user: @user,
+               origin_nexus: @origin_nexus,
+               destination_nexus: @destination_nexus,
+               pickup_address_id: @shipment.trucking.dig('pre_carriage', 'address_id'),
+               delivery_address_id: @shipment.trucking.dig('on_carriage', 'address_id') }
+      @quotation = Quotations::Quotation.create(args)
     end
 
     def create_tenders

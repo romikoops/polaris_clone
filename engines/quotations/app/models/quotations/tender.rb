@@ -14,6 +14,7 @@ module Quotations
     monetize :amount_cents
 
     delegate :mode_of_transport, to: :tenant_vehicle
+    delegate :pickup_address, :delivery_address, :cargo, to: :quotation
   end
 end
 

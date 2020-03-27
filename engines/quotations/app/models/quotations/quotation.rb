@@ -9,6 +9,8 @@ module Quotations
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_many :tenders, inverse_of: :quotation
     has_one :cargo, class_name: 'Cargo::Cargo'
+    belongs_to :pickup_address, class_name: 'Legacy::Address', optional: true
+    belongs_to :delivery_address, class_name: 'Legacy::Address', optional: true
   end
 end
 
@@ -20,8 +22,10 @@ end
 #  selected_date        :datetime
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  delivery_address_id  :integer
 #  destination_nexus_id :integer
 #  origin_nexus_id      :integer
+#  pickup_address_id    :integer
 #  sandbox_id           :bigint
 #  tenant_id            :uuid
 #  user_id              :bigint

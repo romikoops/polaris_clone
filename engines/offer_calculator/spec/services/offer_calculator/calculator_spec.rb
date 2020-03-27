@@ -110,6 +110,7 @@ RSpec.describe OfferCalculator::Calculator do
 
   let(:pickup_location) { FactoryBot.create(:trucking_location, zipcode: pickup_address.zip_code, country_code: pickup_address.country.code) }
   let(:delivery_location) { FactoryBot.create(:trucking_location, zipcode: delivery_address.zip_code, country_code: delivery_address.country.code) }
+  let(:quotation) { Quotations::Quotation.first }
 
   before do
     [origin_airport, origin_hub].each do |hub|
@@ -279,22 +280,28 @@ RSpec.describe OfferCalculator::Calculator do
     let(:service) { described_class.new(shipment: trucking_shipment, params: port_to_port_params, user: user, sandbox: nil) }
 
     before do
-      # rubocop:disable RSpec/AnyInstance
       allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params).with(:origin).and_return(origin_address_params)
       allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params).with(:destination).and_return(destination_address_params)
       allow_any_instance_of(OfferCalculator::Service::TruckingDataBuilder).to receive(:calc_distance).and_return(10)
       allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
-      # rubocop:enable RSpec/AnyInstance
     end
 
     describe '.perform' do
+      let!(:results) { service.perform }
+
       it 'perform a booking calulation' do
-        results = service.perform
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.keys).to match_array(%i[quote schedules meta notes])
           expect(results.first.dig(:quote, :total, :value)).to eq(270.82)
+        end
+      end
+
+      it 'creates the Quotation correctly' do
+        aggregate_failures do
           expect(Quotations::Quotation.count).to be(1)
+          expect(quotation.pickup_address_id).to eq(service.shipment.pickup_address.id)
+          expect(quotation.delivery_address_id).to eq(service.shipment.delivery_address.id)
         end
       end
     end
