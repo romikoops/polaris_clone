@@ -31,21 +31,27 @@ module Trucking
         @trucking_truckings = []
       end
 
-      def find_locations_locations
-        @locations_locations = Locations::Location.contains(lat: @latitude, lon: @longitude)
+      def locations_locations
+        Locations::Location.contains(lat: @latitude, lon: @longitude)
       end
 
       def distance_hubs
-        @distance_hubs ||= ::Legacy::Hub.where(hubs_condition)
-                                        .joins(trucking_hub_availabilities: :type_availability)
-                                        .where(trucking_type_availabilities: { query_method: 1 })
-                                        .distinct
+        ::Legacy::Hub.where(tenant_id: @tenant_id)
+                     .joins(trucking_hub_availabilities: :type_availability)
+                     .where(trucking_type_availabilities: { query_method: 1 })
+                     .distinct
       end
 
-      def find_trucking_locations
+      def trucking_locations
         locations = ::Trucking::Location.where(sandbox: @sandbox, country_code: @country_code)
-        @trucking_locations = locations.where(location_id: @locations_locations.select(:id))
-                                       .or(locations.where(zipcode: @zipcode))
+        locations.where(location: locations_locations).or(locations.where(zipcode: @zipcode))
+      end
+
+      def truckings_for_locations
+        ::Trucking::Trucking.where(tenant_id: @tenant_id, location_id: trucking_locations)
+                            .where(cargo_class_condition)
+                            .where(truck_type_condition)
+                            .where(carriage_condition)
       end
 
       def truck_type_condition
@@ -58,6 +64,10 @@ module Trucking
 
       def load_type_condition
         @load_type ? { 'load_type': @load_type } : {}
+      end
+
+      def carriage_condition
+        @carriage ? { 'carriage': @carriage } : {}
       end
 
       def nexuses_condition

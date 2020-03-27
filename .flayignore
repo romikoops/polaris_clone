@@ -12,3 +12,4 @@ engines/*/Gemfile
 engines/*/lib/*/engine.rb
 engines/*/spec/dummy/*
 scripts/
+config/routes.rb

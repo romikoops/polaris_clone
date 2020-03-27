@@ -4,7 +4,6 @@ module Trucking
   module Queries
     class Hubs < ::Trucking::Queries::Base
       def perform
-        find_locations_locations
         find_hubs_from_truckings
       end
 
@@ -23,7 +22,7 @@ module Trucking
 
       def other_hubs
         ::Legacy::Hub.where(tenant_id: @tenant_id).joins(:truckings)
-                     .where(trucking_truckings: { location_id: find_trucking_locations })
+                     .merge(truckings_for_locations)
       end
     end
   end

@@ -338,7 +338,6 @@ end
 #                  tenant_admin_margins_form_itineraries GET    /tenants/:tenant_id/admin/margins/form/itineraries(.:format)                             admin/margins#itinerary_list
 #                     tenant_admin_margins_form_fee_data GET    /tenants/:tenant_id/admin/margins/form/fee_data(.:format)                                admin/margins#fee_data
 #                   tenant_admin_margins_update_multiple POST   /tenants/:tenant_id/admin/margins/update/multiple(.:format)                              admin/margins#update_multiple
-#               tenant_admin_memberships_membership_data GET    /tenants/:tenant_id/admin/memberships/membership_data(.:format)                          admin/memberships#membership_data
 #                     tenant_admin_memberships_bulk_edit POST   /tenants/:tenant_id/admin/memberships/bulk_edit(.:format)                                admin/memberships#bulk_edit
 #                      tenant_admin_maps_editor_map_data GET    /tenants/:tenant_id/admin/maps/editor_map_data(.:format)                                 admin/maps#editor_map_data
 #                             tenant_admin_maps_geojsons GET    /tenants/:tenant_id/admin/maps/geojsons(.:format)                                        admin/maps#geojsons
@@ -370,6 +369,8 @@ end
 #                                    tenant_admin_groups GET    /tenants/:tenant_id/admin/groups(.:format)                                               admin/groups#index
 #                                                        POST   /tenants/:tenant_id/admin/groups(.:format)                                               admin/groups#create
 #                                     tenant_admin_group GET    /tenants/:tenant_id/admin/groups/:id(.:format)                                           admin/groups#show
+#                                                        PATCH  /tenants/:tenant_id/admin/groups/:id(.:format)                                           admin/groups#update
+#                                                        PUT    /tenants/:tenant_id/admin/groups/:id(.:format)                                           admin/groups#update
 #                                                        DELETE /tenants/:tenant_id/admin/groups/:id(.:format)                                           admin/groups#destroy
 #                             tenant_admin_open_pricings GET    /tenants/:tenant_id/admin/open_pricings(.:format)                                        admin/open_pricings#index
 # tenant_admin_open_main_lcl_carriage_pricings_overwrite POST   /tenants/:tenant_id/admin/open_pricings/ocean_lcl_pricings/process_csv(.:format)         admin/open_pricings#overwrite_main_lcl_carriage
@@ -493,26 +494,26 @@ end
 #                                     rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show
 #                              update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                      active_storage/disk#update
 #                                   rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                           active_storage/direct_uploads#create
-#
+# 
 # Routes for GoogleSignIn::Engine:
 # authorization POST /authorization(.:format) google_sign_in/authorizations#create
 #      callback GET  /callback(.:format)      google_sign_in/callbacks#show
-#
+# 
 # Routes for Easymon::Engine:
 #        GET  /(.:format)       easymon/checks#index
 #   root GET  /                 easymon/checks#index
 #        GET  /:check(.:format) easymon/checks#show
-#
+# 
 # Routes for ApiAuth::Engine:
 #      oauth_token POST   /oauth/token(.:format)      api_auth/tokens#create
 #     oauth_revoke POST   /oauth/revoke(.:format)     api_auth/tokens#revoke
 # oauth_introspect POST   /oauth/introspect(.:format) api_auth/tokens#introspect
 # oauth_token_info GET    /oauth/token/info(.:format) api_auth/token_info#show
 #    oauth_signout DELETE /oauth/signout(.:format)    api_auth/auth#destroy
-#
+# 
 # Routes for ApiDocs::Engine:
 # raddocs_app      /docs       Raddocs::App
-#
+# 
 # Routes for Api::Engine:
 #                       api_auth        /                                                    ApiAuth::Engine
 #                          v1_me GET    /v1/me(.:format)                                     api/v1/users#show
@@ -551,17 +552,17 @@ end
 #                                GET    /v1/itineraries/ports/:tenant_uuid(.:format)         api/v1/itineraries#ports
 #                 v1_itineraries GET    /v1/itineraries(.:format)                            api/v1/itineraries#index
 #                       api_docs        /                                                    ApiDocs::Engine
-#
+# 
 # Routes for AdmiraltyAuth::Engine:
 #        login GET    /login(.:format)        admiralty_auth/logins#new
 # create_login GET    /login/create(.:format) admiralty_auth/logins#create
 # delete_login DELETE /login(.:format)        admiralty_auth/logins#destroy
-#
+# 
 # Routes for AdmiraltyReports::Engine:
 #        reports GET  /reports(.:format)        admiralty_reports/reports#index
 #         report GET  /reports/:id(.:format)    admiralty_reports/reports#show
 # download_stats GET  /stats/download(.:format) admiralty_reports/stats#download
-#
+# 
 # Routes for AdmiraltyTenants::Engine:
 #     tenants GET   /tenants(.:format)          admiralty_tenants/tenants#index
 #             POST  /tenants(.:format)          admiralty_tenants/tenants#create
@@ -570,7 +571,7 @@ end
 #      tenant GET   /tenants/:id(.:format)      admiralty_tenants/tenants#show
 #             PATCH /tenants/:id(.:format)      admiralty_tenants/tenants#update
 #             PUT   /tenants/:id(.:format)      admiralty_tenants/tenants#update
-#
+# 
 # Routes for Admiralty::Engine:
 #    admiralty_auth      /           AdmiraltyAuth::Engine
 # admiralty_reports      /           AdmiraltyReports::Engine
