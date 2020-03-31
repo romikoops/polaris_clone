@@ -2,23 +2,15 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import PropTypes from '../../../prop-types'
-import { AdminHubsIndex, AdminHubView, AdminHubForm } from '..'
+import { AdminHubsIndex, AdminHubView } from '..'
 import AdminUploadsSuccess from '../Uploads/Success'
 import { adminActions, documentActions, appActions } from '../../../actions'
-import { Modal } from '../../Modal/Modal'
 import GenericError from '../../ErrorHandling/Generic'
 
 class AdminHubs extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      newHub: false
-    }
     this.viewHub = this.viewHub.bind(this)
-    this.toggleNewHub = this.toggleNewHub.bind(this)
-    this.saveNewHub = this.saveNewHub.bind(this)
-    this.closeModal = this.closeModal.bind(this)
     this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
   }
 
@@ -35,19 +27,6 @@ class AdminHubs extends Component {
   closeSuccessDialog () {
     const { documentDispatch } = this.props
     documentDispatch.closeViewer()
-  }
-
-  toggleNewHub () {
-    this.setState({ newHub: !this.state.newHub })
-  }
-
-  closeModal () {
-    this.setState({ newHub: false })
-  }
-
-  saveNewHub (hub, address) {
-    const { adminDispatch } = this.props
-    adminDispatch.saveNewHub(hub, address)
   }
 
   render () {
@@ -78,19 +57,6 @@ class AdminHubs extends Component {
       <GenericError theme={theme}>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
           {uploadStatus}
-          {this.state.newHub ? (
-            <Modal
-              component={
-                <AdminHubForm theme={theme} close={this.toggleNewHub} saveHub={this.saveNewHub} />
-              }
-              verticalPadding="30px"
-              horizontalPadding="40px"
-              parentToggle={this.toggleNewHub}
-            />
-
-          ) : (
-            ''
-          )}
           <Switch className="flex">
             <Route
               exact
@@ -101,7 +67,6 @@ class AdminHubs extends Component {
                   adminDispatch={adminDispatch}
                   {...props}
                   user={user}
-                  toggleNewHub={this.toggleNewHub}
                   viewHub={this.viewHub}
                   scope={scope}
                   documentDispatch={documentDispatch}

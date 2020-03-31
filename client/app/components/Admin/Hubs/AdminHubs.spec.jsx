@@ -26,8 +26,7 @@ const propsBase = {
     fetchCountries: identity
   },
   adminDispatch: {
-    getHubs: identity,
-    saveNewHub: identity
+    getHubs: identity
   },
   documentDispatch: {
     uploadPricings: identity

@@ -1435,33 +1435,6 @@ function deleteDocument (docId) {
     )
   }
 }
-
-function saveNewHub (hub, address) {
-  function request (hubData) {
-    return { type: adminConstants.NEW_HUB_REQUEST, payload: hubData }
-  }
-  function success (hubData) {
-    return { type: adminConstants.NEW_HUB_SUCCESS, payload: hubData.data }
-  }
-  function failure (error) {
-    return { type: adminConstants.NEW_HUB_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request())
-
-    adminService.saveNewHub(hub, address).then(
-      (data) => {
-        dispatch(success(data))
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
-
 function saveNewTrucking (obj) {
   function request (truckingData) {
     return { type: adminConstants.NEW_TRUCKING_REQUEST, payload: truckingData }
@@ -1769,31 +1742,6 @@ function uploadAgents (file) {
   }
 }
 
-function newHubImage (id, file) {
-  function request (hubData) {
-    return { type: adminConstants.UPLOAD_HUB_IMAGE_REQUEST, payload: hubData }
-  }
-  function success (hubData) {
-    return { type: adminConstants.UPLOAD_HUB_IMAGE_SUCCESS, payload: hubData.data }
-  }
-  function failure (error) {
-    return { type: adminConstants.UPLOAD_HUB_IMAGE_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request())
-
-    adminService.newHubImage(id, file).then(
-      (data) => {
-        dispatch(success(data))
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
 function updateHubMandatoryCharges (id, charges) {
   function request (hubData) {
     return { type: adminConstants.UPDATE_MANDATORY_CHARGE_REQUEST, payload: hubData }
@@ -1861,7 +1809,6 @@ function goTo (path) {
 
 export const adminActions = {
   getHubs,
-  newHubImage,
   uploadDocument,
   getItineraries,
   updateServiceCharge,
@@ -1895,7 +1842,6 @@ export const adminActions = {
   viewTrucking,
   newClient,
   activateHub,
-  saveNewHub,
   getDashShipments,
   newRoute,
   clearLoading,

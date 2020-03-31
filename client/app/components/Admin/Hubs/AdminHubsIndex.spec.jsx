@@ -9,7 +9,6 @@ const propsBase = {
   hubs: [hub],
   scope: {},
   viewHub: identity,
-  toggleNewHub: identity,
   documentDispatch: {
     closeViewer: identity,
     uploadHubs: identity

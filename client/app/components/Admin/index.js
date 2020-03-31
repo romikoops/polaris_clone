@@ -8,7 +8,6 @@ export * from './AdminNexusTile'
 export * from './AdminHubCardContent'
 export * from './AdminHubCard'
 export { default as AdminHubView } from './Hubs/AdminHubView'
-export { default as AdminHubForm } from './Hubs/AdminHubForm'
 
 export * from './AdminNav'
 export * from './AdminNavItem'

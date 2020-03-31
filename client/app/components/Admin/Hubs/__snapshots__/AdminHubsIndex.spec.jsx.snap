@@ -120,7 +120,6 @@ exports[`shallow render 1`] = `
                 }
                 wrapperContentClasses=""
               />
-              
             </div>
           }
           flexOptions="flex"
@@ -394,69 +393,6 @@ exports[`user.internal is truthy 1`] = `
                   }
                 }
                 text="Download Data"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-                wrapperContentClasses=""
-              />
-              <CollapsingBar
-                collapsed={true}
-                content={
-                  <div
-                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
-                  >
-                    <div
-                      className="flex-none layout-row"
-                    >
-                      <RoundButton
-                        active={true}
-                        back={false}
-                        classNames=""
-                        disabled={false}
-                        flexContainer="100"
-                        handleDisabled={null}
-                        handleNext={[Function]}
-                        icon=""
-                        iconClass="fa-plus"
-                        inverse={false}
-                        size="small"
-                        text="New Hub"
-                        theme={
-                          Object {
-                            "colors": Object {
-                              "primary": "#333",
-                              "secondary": "#fafafa",
-                            },
-                          }
-                        }
-                      />
-                    </div>
-                  </div>
-                }
-                contentHeader=""
-                faClass="fa fa-plus-circle"
-                handleCollapser={[Function]}
-                headerWrapClasses=""
-                hideIcon={false}
-                mainWrapperStyle={Object {}}
-                minHeight=""
-                overflow={false}
-                parentClass=""
-                showArrow={true}
-                showArrowSpacer={false}
-                startCollapsed={false}
-                styleHeader={
-                  Object {
-                    "background": "#E0E0E0",
-                    "color": "#4F4F4F",
-                  }
-                }
-                text="Create New Hub"
                 theme={
                   Object {
                     "colors": Object {

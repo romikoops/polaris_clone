@@ -517,16 +517,6 @@ function deleteDocument (documentId) {
 
   return fetch(`${getTenantApiUrl()}/admin/documents/${documentId}`, requestOptions).then(handleResponse)
 }
-
-function saveNewHub (hub, address) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ hub, address })
-  }
-
-  return fetch(`${getTenantApiUrl()}/admin/hubs`, requestOptions).then(handleResponse)
-}
 function deleteHub (hubId) {
   const requestOptions = {
     method: 'POST',
@@ -797,7 +787,6 @@ export const adminService = {
   newClient,
   activateHub,
   documentAction,
-  saveNewHub,
   newRoute,
   getLayovers,
   saveNewTrucking,

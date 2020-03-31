@@ -33,7 +33,6 @@ const propsBase = {
   },
   adminDispatch: {
     getHubs: identity,
-    saveNewHub: identity
   },
   actionNodes: [
     <div>a</div>,

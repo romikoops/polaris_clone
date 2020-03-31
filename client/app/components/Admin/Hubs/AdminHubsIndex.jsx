@@ -31,23 +31,11 @@ export class AdminHubsIndex extends Component {
   render () {
     const { expander } = this.state
     const {
-      t, theme, viewHub, toggleNewHub, documentDispatch, user, scope
+      t, theme, viewHub, documentDispatch, user, scope
     } = this.props
 
     const hubUrl = '/admin/hubs/process_csv'
     const scUrl = '/admin/service_charges/process_csv'
-    const newButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text={t('admin:newHub')}
-          active
-          handleNext={() => toggleNewHub()}
-          iconClass="fa-plus"
-        />
-      </div>
-    )
 
     if (!this.props.hubs) {
       return ''
@@ -188,26 +176,6 @@ export class AdminHubsIndex extends Component {
               </div>
             )}
           />
-          { user.internal || scope.feature_uploaders ? (
-            <CollapsingBar
-              showArrow
-              collapsed={!expander.new}
-              theme={theme}
-              styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-              handleCollapser={() => this.toggleExpander('new')}
-              text={t('admin:createNewHub')}
-              faClass="fa fa-plus-circle"
-              content={(
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  {newButton}
-                </div>
-              )}
-            />
-          ) : '' }
         </div>
       )}
     />]
