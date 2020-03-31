@@ -99,12 +99,18 @@ class RouteSection extends React.PureComponent {
         motLookup[target][hub.nexusId].mots.push(mot)
       }
 
+      const definedLookupHubs = (hubIds, directionHubs) => {
+        const filteredByLookup = hubIds.filter((hubId) => lookupTablesForRoutes[directionHubs][hubId] !== undefined)
+
+        return filteredByLookup
+      }
+
       // update origins (for react state)
       if (!onCarriage && destination.nexusId) {
         originIndeces = lookupTablesForRoutes.destinationNexus[destination.nexusId]
         originIndeces.map((idx) => prepareHub('origin', routes[idx]))
       } else if (onCarriage && destination.hubIds) {
-        originIndeces = destination.hubIds.reduce((indeces, hubId) => (
+        originIndeces = definedLookupHubs(destination.hubIds, 'destinationHub').reduce((indeces, hubId) => (
           [...indeces, ...lookupTablesForRoutes.destinationHub[hubId]]
         ), []).filter(onlyUnique)
         originIndeces.map((idx) => prepareHub('origin', routes[idx]))
@@ -119,7 +125,7 @@ class RouteSection extends React.PureComponent {
         destinationIndeces = lookupTablesForRoutes.originNexus[origin.nexusId]
         destinationIndeces.map((idx) => prepareHub('destination', routes[idx]))
       } else if (preCarriage && origin.hubIds) {
-        destinationIndeces = origin.hubIds.reduce((indeces, hubId) => (
+        destinationIndeces = definedLookupHubs(origin.hubIds, 'originHub').reduce((indeces, hubId) => (
           [...indeces, ...lookupTablesForRoutes.originHub[hubId]]
         ), []).filter(onlyUnique)
         destinationIndeces.map((idx) => prepareHub('destination', routes[idx]))
