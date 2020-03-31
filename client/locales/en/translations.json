@@ -622,7 +622,6 @@
       "localChargesExpiring": "Local Charges Expiring at",
       "noLocalCharges": "No Local Charges",
       "locode": "LOCODE",
-
       "expired": "Expired",
       "status": "Status",
       "no_data": "No Data",
@@ -639,7 +638,8 @@
       "metadata": "Metadata",
       "initialRate": "Initial Rate",
       "noMarginsApplied": "No Margins Applied",
-      "sourceData": "Data source"
+      "sourceData": "Data source",
+      "saveChanges": "Save Changes"
 
   },
   "itbox": {
