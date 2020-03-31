@@ -25,6 +25,9 @@ fixer:
 google:
   api_key:
 
+open_exchange_rate:
+  app_id:
+
 google_sign_in:
   client_id:
   client_secret:

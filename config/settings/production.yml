@@ -11,8 +11,8 @@ emails:
   booking: bookingemails@itsmycargo.com
   domain: itsmycargo.shop
 
-fixer:
-  api_key: <%= Rails.application.credentials.dig(:production, :fixer, :api_key) %>
+open_exchange_rate:
+  app_id: <%= Rails.application.credentials.dig(:production, :open_exchange_rate, :app_id) %>
 
 google:
   api_key: <%= Rails.application.credentials.dig(:production, :google, :api_key) %>

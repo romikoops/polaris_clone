@@ -3,8 +3,8 @@ emails:
   domain: itsmycargo.test
   support: support@itsmycargo.tech
 
-fixer:
-  api_key: FAKEKEY
+open_exchange_rate:
+  app_id: FAKEKEY
 
 google:
   api_key: FAKEKEY

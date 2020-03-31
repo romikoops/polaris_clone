@@ -770,9 +770,6 @@ GEM
       faraday
       multi_json
     erubi (1.9.0)
-    eu_central_bank (1.4.2)
-      money (~> 6.13)
-      nokogiri (~> 1.8)
     execjs (2.7.0)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
@@ -888,6 +885,8 @@ GEM
       money (~> 6.12)
     money (6.13.4)
       i18n (>= 0.6.4, <= 2)
+    money-open-exchange-rates (1.3.0)
+      money (~> 6.12)
     money-rails (1.13.3)
       activesupport (>= 3.0)
       monetize (~> 1.9.0)
@@ -1174,7 +1173,6 @@ DEPENDENCIES
   devise_token_auth (~> 0.1.43)
   dotenv-rails
   easymon
-  eu_central_bank
   factory_bot_rails (~> 4.0, < 5)
   filterrific
   font-awesome-rails
@@ -1228,6 +1226,7 @@ DEPENDENCIES
   mobility (~> 0.8.6)
   monetize
   money
+  money-open-exchange-rates
   money-rails
   nokogiri
   omniauth

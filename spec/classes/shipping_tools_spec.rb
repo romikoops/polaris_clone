@@ -7,8 +7,6 @@ RSpec.describe ShippingTools do
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
-    stub_request(:get, 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
-      .to_return(status: 200, body: file_fixture('ecb_rates.xml'), headers: {})
   end
 
   let(:tenant) { create(:tenant) }

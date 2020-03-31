@@ -6,8 +6,8 @@ aws:
 emails:
   domain: itsmycargo.tech
 
-fixer:
-  api_key: <%= ENV.fetch('FIXER_API_KEY') { Rails.application.credentials.dig(:development, :fixer, :api_key) } %>
+open_exchange_rate:
+  app_id: <%= ENV.fetch('OXR_APP_ID') { Rails.application.credentials.dig(:development, :open_exchange_rate, :app_id) } %>
 
 google:
   api_key: <%= ENV.fetch('GOOGLE_MAPS_SERVER_API_KEY') { Rails.application.credentials.dig(:development, :google, :api_key) } %>

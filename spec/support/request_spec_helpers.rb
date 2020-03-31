@@ -12,7 +12,7 @@ module RequestSpecHelpers
 
     module Includables
       HTTP_HELPERS_TO_OVERRIDE =
-        %i(get post patch put delete).freeze
+        %i[get post patch put delete].freeze
       # Override helpers for Rails 5.0
       # see http://api.rubyonrails.org/v5.0/classes/ActionDispatch/Integration/RequestHelpers.html
       HTTP_HELPERS_TO_OVERRIDE.each do |helper|
@@ -38,4 +38,13 @@ module RequestSpecHelpers
       JSON.parse(response.body).deep_symbolize_keys
     end
   end
+end
+
+RSpec.configure do |config|
+  config.include RequestSpecHelpers::AuthHelpers::Includables, type: :request
+  config.extend RequestSpecHelpers::AuthHelpers::Extensions, type: :request
+  config.include RequestSpecHelpers::FormatHelpers, type: :request
+  config.include RequestSpecHelpers::FormatHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Rails.application.routes.url_helpers
 end

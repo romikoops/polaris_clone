@@ -10,8 +10,8 @@ elasticsearch:
 emails:
   domain: itsmycargo.tech
 
-fixer:
-  api_key: <%= Rails.application.credentials.dig(:review, :fixer, :api_key) %>
+open_exchange_rate:
+  app_id: <%= Rails.application.credentials.dig(:review, :open_exchange_rate, :app_id) %>
 
 google:
   api_key: <%= Rails.application.credentials.dig(:review, :google, :api_key) %>

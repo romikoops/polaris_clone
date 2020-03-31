@@ -1,16 +1,21 @@
 # frozen_string_literal: true
 
 require 'money/rates_store/memory'
-require 'eu_central_bank'
+require 'money/bank/open_exchange_rates_bank'
 
 class MoneyCache
-  BASE_CURRENCIES = %w[GBP USD EUR CNY].freeze
+  BASE_CURRENCIES = %w[GBP USD EUR CNY AED].freeze
   def initialize(ttl: 6.hours)
     @ttl = ttl
     @last_updated_at = Time.zone.now
   end
 
-  delegate :get_rate, :add_rate, to: :store
+  delegate :add_rate, to: :store
+
+  def get_rate(from_currency, to_currency, opts = {})
+    rate = get_rate_or_calc_inverse(from_currency, to_currency, opts)
+    rate || calc_pair_rate_using_base(from_currency, to_currency, opts)
+  end
 
   def store
     return create_store if @current_store.nil?
@@ -18,52 +23,67 @@ class MoneyCache
     @current_store
   end
 
-  def update_store
-    ExchangeRate.current.each do |exchange_rate|
-      add_rate(exchange_rate.from, exchange_rate.to, exchange_rate.rate)
-    end
-  end
+  private
 
-  def update_rates
-    bank = EuCentralBank.new
-    created_at = Time.zone.now
-    bank.update_rates
-    new_rates = bank.rates.map do |key, rate|
-      from, to = key.split('_TO_')
-      { from: from, to: to, rate: rate, created_at: created_at, updated_at: bank.last_updated }
-    end
-    expanded_rates = expand_rates(rates: new_rates.dup).compact
-    ExchangeRate.import(expanded_rates)
-    @last_updated_at = bank.last_updated
-  end
-
-  def expand_rates(rates:)
-    BASE_CURRENCIES.flat_map do |base|
-      base_rate = rates.find { |exchange_rate| exchange_rate.slice(:from, :to) == { to: base, from: 'EUR' } }
-      rates_for_base = rates.map do |exchange_rate|
-        next if exchange_rate[:from] == exchange_rate[:to]
-
-        if base == 'EUR'
-          exchange_rate
-        else
-          adjusted_rate = exchange_rate.dup
-          adjusted_rate[:rate] = adjusted_rate[:from] == base ? 1 : (1 / base_rate[:rate]) * adjusted_rate[:rate]
-          adjusted_rate[:from] = base
-          adjusted_rate
-        end
-      end
-      rates_for_base << base_rate.merge(from: base_rate[:to], to: base_rate[:from], rate: (1 / base_rate[:rate]))
-      rates_for_base
-    end
+  def bank
+    @bank ||= Money::Bank::OpenExchangeRatesBank.new(store)
   end
 
   def create_store
-    update_rates
     @current_store = Money::RatesStore::Memory.new
+    refresh_rates
     update_store
 
     @current_store
   end
 
-  attr_accessor :current_store, :last_updated_at
+  def update_store
+    ExchangeRate.current.each do |exchange_rate|
+      @current_store.add_rate(exchange_rate.from, exchange_rate.to, exchange_rate.rate)
+    end
+  end
+
+  def refresh_rates
+    bank.app_id = Settings.open_exchange_rate.app_id
+    bank.update_rates
+    new_rates = bank.rates.map do |key, rate|
+      from, to = key.split('_TO_')
+      expand_rate(from_currency: from, to_currency: to, rate: rate)
+    end
+    ExchangeRate.import(new_rates)
+    @last_updated_at = Time.zone.now
+  end
+
+  def expand_rate(from_currency:, to_currency:, rate:)
+    {
+      from: from_currency,
+      to: to_currency,
+      rate: rate,
+      created_at: @last_updated_at,
+      updated_at: @last_updated_at
+    }
+  end
+
+  def get_rate_or_calc_inverse(from_currency, to_currency, _opts = {})
+    rate = store.get_rate(from_currency, to_currency)
+    unless rate
+      inverse_rate = store.get_rate(to_currency, from_currency)
+      if inverse_rate
+        rate = 1.0 / inverse_rate
+        add_rate(from_currency, to_currency, rate)
+      end
+    end
+    rate
+  end
+
+  def calc_pair_rate_using_base(from_currency, to_currency, opts)
+    from_base_rate = get_rate_or_calc_inverse(bank.source, from_currency, opts)
+    to_base_rate   = get_rate_or_calc_inverse(bank.source, to_currency, opts)
+    return unless to_base_rate
+    return unless from_base_rate
+
+    rate = BigDecimal(to_base_rate.to_s) / from_base_rate
+    add_rate(from_currency, to_currency, rate)
+    rate
+  end
 end
