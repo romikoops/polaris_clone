@@ -39,7 +39,7 @@ RSpec.resource 'Quotations', acceptance: true do
 
     with_options scope: :shipment_info, with_example: true do
       parameter :cargo_item_attributes, 'An array containing the attributes belonging to each cargo'
-      parameter :container_attributes, 'An array containing the attributes belonging to each container'
+      parameter :containers_attributes, 'An array containing the attributes belonging to each container'
       parameter :trucking_info, 'Object containing pre/on carriage keys with truck_type as values (required for trucking)'
     end
 

@@ -39,8 +39,8 @@ module Api
                                     dimension_z quantity total_weight total_volume
                                     stackable cargo_item_type_id dangerous_goods cargo_class]
         params.require(:shipment_info).permit(cargo_items_attributes: cargo_items_attributes,
-                                              container_attributes: %i[size_class quantity
-                                                                       payload_in_kg dangerous_goods cargo_class],
+                                              containers_attributes: %i[size_class quantity
+                                                                        payload_in_kg dangerous_goods cargo_class],
                                               trucking_info: [pre_carriage: [:truck_type], on_carriage: [:truck_type]])
       end
 
