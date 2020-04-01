@@ -3,6 +3,7 @@
 **/spec/**/*_spec.rb
 **/spec/*_helper.rb
 **/spec/factories/*
+**/spec/factories/**/*.rb
 *.rake
 Gemfile
 app/classes/**/*.rb

@@ -9,7 +9,7 @@ FactoryBot.define do
     country_code { 'de' }
     initialize_with do
       new(
-        bounds: FactoryBot.build(:bounds, lat: lat, lng: lng, delta: delta),
+        bounds: FactoryBot.build(:legacy_bounds, lat: lat, lng: lng, delta: delta),
         center: FactoryBot.build(:point, lat: lat,lng: lng),
         locode: locode,
         name: name,

@@ -21,5 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'imc-core'
 
+  s.add_development_dependency 'imc-legacy'
+
   Gemhelper.common(s)
 end

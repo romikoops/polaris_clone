@@ -17,8 +17,6 @@ module Api
     let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
     let(:tenant) { FactoryBot.create(:tenants_tenant, legacy: legacy_tenant) }
     let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
-    let(:itinerary_2) { FactoryBot.create(:felixstowe_shanghai_itinerary, tenant: legacy_tenant) }
-    let(:itinerary_3) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: legacy_tenant) }
     let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
     let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
     let(:origin_nexus) { origin_hub.nexus }
@@ -31,8 +29,8 @@ module Api
 
         get :origins, params: { id: destination_hub.nexus_id }
 
-        origins = %w[Gothenburg Felixstowe Hamburg]
-        expect(response_data.map { |origin| origin.dig('attributes', 'name') }).to eq(origins)
+        origins = legacy_tenant.itineraries.map { |itin| itin.first_nexus.name }
+        expect(response_data.map { |origin| origin.dig('attributes', 'name') }).to match_array(origins)
       end
 
       it 'Renders a json of origins when query matches origin' do

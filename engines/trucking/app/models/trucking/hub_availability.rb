@@ -1,8 +1,12 @@
+# frozen_string_literal: true
+
 module Trucking
   class HubAvailability < ApplicationRecord
     belongs_to :hub, class_name: 'Legacy::Hub'
     belongs_to :type_availability, class_name: 'Trucking::TypeAvailability'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+
+    delegate :truck_type, to: :type_availability
   end
 end
 

@@ -1,7 +1,54 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :trucking_hub_availability, class: 'Trucking::HubAvailability' do
     association :hub, factory: :legacy_hub
     association :type_availability, factory: :trucking_type_availability
+
+    transient do
+      custom_truck_type { nil }
+    end
+
+    trait :lcl_pre_carriage do
+      association :type_availability, factory: :cargo_item_pre_carriage
+      before(:create) do |availability, evaluator|
+        if evaluator.custom_truck_type.present?
+          availability.type_availability = FactoryBot.create(:cargo_item_pre_carriage, custom_truck_type: evaluator.custom_truck_type)
+        end
+      end
+    end
+
+    trait :fcl_pre_carriage do
+      association :type_availability, factory: :container_pre_carriage
+      before(:create) do |availability, evaluator|
+        if evaluator.custom_truck_type.present?
+          availability.type_availability = FactoryBot.create(:container_pre_carriage, custom_truck_type: evaluator.custom_truck_type)
+        end
+      end
+    end
+
+    trait :lcl_on_carriage do
+      association :type_availability, factory: :cargo_item_on_carriage
+      before(:create) do |availability, evaluator|
+        if evaluator.custom_truck_type.present?
+          availability.type_availability = FactoryBot.create(:cargo_item_on_carriage, custom_truck_type: evaluator.custom_truck_type)
+        end
+      end
+    end
+
+    trait :fcl_on_carriage do
+      association :type_availability, factory: :cargo_item_on_carriage
+      before(:create) do |availability, evaluator|
+        if evaluator.custom_truck_type.present?
+          availability.type_availability = FactoryBot.create(:container_on_carriage, custom_truck_type: evaluator.custom_truck_type)
+        end
+      end
+    end
+
+    factory :lcl_pre_carriage_availability, traits: [:lcl_pre_carriage]
+    factory :fcl_pre_carriage_availability, traits: [:fcl_pre_carriage]
+    factory :lcl_on_carriage_availability, traits: [:lcl_on_carriage]
+    factory :fcl_on_carriage_availability, traits: [:fcl_on_carriage]
   end
 end
 

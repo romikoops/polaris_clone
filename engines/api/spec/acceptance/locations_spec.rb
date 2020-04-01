@@ -16,6 +16,7 @@ RSpec.resource 'Locations', acceptance: true do
   let(:address) { FactoryBot.build(:gothenburg_address) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
+  let(:load_type) { 'cargo_item' }
 
   get '/v1/locations/origins' do
     parameter :q, 'a text to search for through all available origins'
@@ -24,7 +25,7 @@ RSpec.resource 'Locations', acceptance: true do
       parameter :id, 'the id of the origin'
 
       example 'Renders a json of origins avaialable for the chosen destination' do
-        request = { id: destination_hub.nexus_id }
+        request = { id: destination_hub.nexus_id, load_type: load_type }
 
         do_request(request)
 
@@ -49,7 +50,7 @@ RSpec.resource 'Locations', acceptance: true do
       parameter :lng, 'the Longitude of the chosen address'
 
       example 'Renders a json of origins available for the chosen destination address' do
-        request = { lat: address.latitude, lng: address.longitude }
+        request = { lat: address.latitude, lng: address.longitude, load_type: load_type }
 
         do_request(request)
 
@@ -66,7 +67,7 @@ RSpec.resource 'Locations', acceptance: true do
       end
 
       example 'Renders a json of origins' do
-        request = { q: 'goth' }
+        request = { q: 'goth', load_type: load_type }
 
         do_request(request)
 
@@ -85,7 +86,7 @@ RSpec.resource 'Locations', acceptance: true do
       parameter :id, 'the id of the origin'
 
       example 'Renders a json of destinations avaialable for the chosen origin' do
-        request = { id: origin_hub.nexus_id }
+        request = { id: origin_hub.nexus_id, load_type: load_type }
 
         do_request(request)
         aggregate_failures do
@@ -115,7 +116,7 @@ RSpec.resource 'Locations', acceptance: true do
       parameter :lng, 'the Longitude of the chosen address'
 
       example 'Renders a json of destinations available for the chosen origin' do
-        request = { lat: address.latitude, lng: address.longitude }
+        request = { lat: address.latitude, lng: address.longitude, load_type: load_type }
 
         do_request(request)
 
@@ -132,7 +133,7 @@ RSpec.resource 'Locations', acceptance: true do
       end
 
       example 'Renders a json of destinations' do
-        request = { q: 'shang' }
+        request = { q: 'shang', load_type: load_type }
 
         do_request(request)
 

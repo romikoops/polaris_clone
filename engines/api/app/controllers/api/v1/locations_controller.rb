@@ -5,118 +5,65 @@ require_dependency 'api/application_controller'
 module Api
   module V1
     class LocationsController < ApiController
-      ORIGIN_INDEX = 0
-      DESTINATION_INDEX = 1
-
       def origins
-        origin_nexuses = nexuses(direction: :origin_destination)
+        origin_nexuses = nexuses(target: :origin_destination)
         decorated_nexuses = NexusDecorator.decorate_collection(origin_nexuses)
         render json: NexusSerializer.new(decorated_nexuses)
       end
 
       def destinations
-        destination_nexuses = nexuses(direction: :destination_origin)
+        destination_nexuses = nexuses(target: :destination_origin)
         decorated_nexuses = NexusDecorator.decorate_collection(destination_nexuses)
         render json: NexusSerializer.new(decorated_nexuses)
       end
 
       private
 
-      def nexuses(direction:)
-        if direction == :origin_destination
-          index = ORIGIN_INDEX
-          counterpart_index = DESTINATION_INDEX
-          carriage = 'on'
+      def nexuses(target:)
+        if location_params[:lat].present? && location_params[:lng].present?
+          geo_routing(target: target)
+        elsif location_params[:id].present?
+          nexus_routing(target: target)
         else
-          index = DESTINATION_INDEX
-          counterpart_index = ORIGIN_INDEX
-          carriage = 'pre'
+          open_routing(target: target)
         end
-
-        itineraries = location_itineraries(itineraries: tenant_itineraries,
-                                           index: counterpart_index, carriage: carriage)
-        itineraries_nexuses(itineraries, index)
       end
 
-      def itineraries_nexuses(itineraries, index)
-        hubs = Legacy::Hub.joins(:stops)
-                          .where(stops: { itinerary: itineraries, index: index })
-                          .order(:name)
-        hubs_nexuses(hubs)
-      end
-
-      def hubs_nexuses(hubs)
-        nexuses = Legacy::Nexus.where(id: hubs.pluck(:nexus_id))
-        nexuses = nexuses.name_search(location_params[:q]) if location_params[:q].present?
-        nexuses
-      end
-
-      def tenant_itineraries
-        Legacy::Itinerary.joins(stops: :hub)
-                         .where(sandbox: @sandbox,
-                                tenant_id: current_tenant.legacy_id)
-      end
-
-      def location_itineraries(itineraries:, index:, carriage:)
-        if params[:id].present?
-          hubs = Legacy::Hub.where(nexus_id: params[:id])
-          itineraries = itineraries.where(stops: { index: index, hub_id: hubs.ids })
-        elsif params[:lat].present? && params[:lng].present?
-          hubs = carriage_hubs_for(lat: params[:lat], lng: params[:lng], carriage: carriage)
-          itineraries = itineraries.where(stops: { index: index, hub_id: hubs })
-        end
-        itineraries
-      end
-
-      def carriage_hubs_for(lat:, lng:, carriage:)
-        trucking_params = trucking_args(lat: lat, lng: lng, carriage: carriage)
-
-        trucking_pricings ||= begin
-          area_results = ::Trucking::Queries::Availability.new(trucking_params).perform
-          distance_results = ::Trucking::Queries::Distance.new(trucking_params).perform
-          area_results | distance_results
-        end
-
-        trucking_pricings.pluck(:hub_id)
-      end
-
-      def trucking_args(lat:, lng:, carriage:)
-        {
-          tenant_id: current_tenant.legacy_id,
-          address: address(lat: lat, lng: lng),
-          carriage: carriage,
-          klass: Trucking::Trucking,
-          sandbox: @sandbox,
-          order_by: base_pricing_enabled ? 'group_id' : 'user_id'
-        }
-      end
-
-      def address(lat:, lng:)
-        address = Geocoder.search([lat.to_f, lng.to_f]).first
-        return unless address
-
-        OpenStruct.new(
-          latitude: lat.to_f,
-          longitude: lng.to_f,
-          get_zip_code: address.postal_code,
-          city_name: address.city,
-          country: OpenStruct.new(code: address.country_code)
+      def open_routing(target:)
+        Api::Routing::RoutingService.nexuses(
+          tenant: current_tenant,
+          target: target,
+          load_type: location_params[:load_type],
+          query: location_params[:q]
         )
       end
 
-      def base_pricing_enabled
-        Tenants::ScopeService.new(
-          target: current_user,
-          tenant: current_tenant
-        ).fetch(:base_pricing)
+      def nexus_routing(target:)
+        Api::Routing::NexusRoutingService.nexuses(
+          tenant: current_tenant,
+          target: target,
+          load_type: location_params[:load_type],
+          query: location_params[:q],
+          nexus_id: location_params[:id]
+        )
+      end
+
+      def geo_routing(target:)
+        Api::Routing::GeoRoutingService.nexuses(
+          tenant: current_tenant,
+          target: target,
+          load_type: location_params[:load_type],
+          query: location_params[:q],
+          coordinates: coordinates
+        )
+      end
+
+      def coordinates
+        location_params.slice(:lat, :lng)
       end
 
       def location_params
-        params.permit(:q, :id, :lat, :lng)
-      end
-
-      def location?
-        params[:id] || (params[:lat] && params[:lat])
+        params.permit(:q, :id, :lat, :lng, :load_type)
       end
     end
   end

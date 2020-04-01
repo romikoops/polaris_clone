@@ -122,7 +122,7 @@ RSpec.describe Pricings::Preview do
         FactoryBot.create(:trucking_location,
                           country_code: 'CN',
                           location: FactoryBot.create(:locations_location,
-                                                      bounds: FactoryBot.build(:bounds,
+                                                      bounds: FactoryBot.build(:legacy_bounds,
                                                                                lat: delivery_address.latitude,
                                                                                lng: delivery_address.longitude)))
       end

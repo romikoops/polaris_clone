@@ -22,7 +22,8 @@ Api::Engine.routes.draw do
     end
     resources :tenders, only: :update
     resources :cargo_item_types, only: :index
-    resources :trucking_availability, controller: :trucking_availability, only: %i[index]
+    resources :trucking_availabilities, only: :index
+    resources :trucking_counterparts, only: :index
     resources :groups, controller: :tenants_groups, only: :index
     resources :locations do
       collection do
