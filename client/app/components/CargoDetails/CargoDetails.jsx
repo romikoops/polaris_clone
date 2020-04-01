@@ -440,7 +440,7 @@ class CargoDetails extends Component {
               'layout-row layout-wrap layout-align-center'
             }
           >
-            {scope.has_customs && (
+            {scope.has_customs && (customs.export || customs.import) && (
               <CustomsClearance
                 tenant={tenant}
                 theme={theme}
