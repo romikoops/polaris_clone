@@ -34,7 +34,7 @@ module Legacy
     end
 
     def set_validity
-      self.validity ||= Range.new(effective_date.to_date, expiration_date.to_date)
+      self.validity = Range.new(effective_date.to_date, expiration_date.to_date)
     end
   end
 end
