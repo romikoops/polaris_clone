@@ -327,9 +327,8 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
         [value, min].max
       when 'PER_CBM_RANGE'
-        target = target_in_range(ranges: fee['range'], value: volume, max: true)
-
-        target['rate'] * volume
+        target = target_in_range(ranges: fee['range'], value: volume, max: false)
+        target.fetch('cbm', 0)
       when 'PER_WM_RANGE'
         target = target_in_range(ranges: fee['range'], value: weight_measure, max: false)
         target.dig('rate')

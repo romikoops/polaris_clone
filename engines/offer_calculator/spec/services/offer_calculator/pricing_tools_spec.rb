@@ -372,7 +372,7 @@ RSpec.describe OfferCalculator::PricingTools do
         'rate_basis' => 'PER_CBM_RANGE',
         'currency' => 'EUR',
         'min' => 0.5e1,
-        'range' => [{ 'max' => 10.0, 'min' => 0.0, 'rate' => 5.0 }, { 'max' => 100.0, 'min' => 10.0, 'rate' => 10.0 }]
+        'range' => [{ 'max' => 10.0, 'min' => 0.0, 'cbm' => 20 }, { 'max' => 100.0, 'min' => 10.0, 'cbm' => 110.0 }]
       }.with_indifferent_access
     end
     let(:metadata_id) { SecureRandom.uuid }
