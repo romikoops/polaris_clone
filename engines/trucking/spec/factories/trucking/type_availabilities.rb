@@ -9,10 +9,12 @@ FactoryBot.define do
 
     transient do
       custom_truck_type { nil }
+      custom_query_method { nil }
     end
 
     before(:create) do |availability, evaluator|
       availability.truck_type = evaluator.custom_truck_type if evaluator.custom_truck_type.present?
+      availability.query_method = evaluator.custom_query_method if evaluator.custom_query_method.present?
     end
 
     trait :pre_carriage do

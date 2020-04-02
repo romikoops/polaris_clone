@@ -111,15 +111,19 @@ RSpec.describe OfferCalculator::Calculator do
   let(:pickup_location) { FactoryBot.create(:trucking_location, zipcode: pickup_address.zip_code, country_code: pickup_address.country.code) }
   let(:delivery_location) { FactoryBot.create(:trucking_location, zipcode: delivery_address.zip_code, country_code: delivery_address.country.code) }
   let(:quotation) { Quotations::Quotation.first }
+  let(:zipcode_pre_availability) { FactoryBot.create(:trucking_type_availability, query_method: :zipcode, carriage: 'pre', load_type: 'cargo_item') }
+  let(:zipcode_on_availability) { FactoryBot.create(:trucking_type_availability, query_method: :zipcode, carriage: 'on', load_type: 'cargo_item') }
 
   before do
     [origin_airport, origin_hub].each do |hub|
+      FactoryBot.create(:trucking_hub_availability, hub: hub, type_availability: zipcode_pre_availability)
       FactoryBot.create(:trucking_trucking,
                         hub: hub,
                         tenant: tenant,
                         location: pickup_location)
     end
     [destination_airport, destination_hub].each do |hub|
+      FactoryBot.create(:trucking_hub_availability, hub: hub, type_availability: zipcode_on_availability)
       FactoryBot.create(:trucking_trucking,
                         hub: hub,
                         tenant: tenant,

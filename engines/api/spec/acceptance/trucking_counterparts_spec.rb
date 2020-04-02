@@ -22,7 +22,7 @@ RSpec.resource 'TruckingCounterparts' do
   let(:origin_trucking_location) { FactoryBot.create(:trucking_location, location: origin_location, country_code: 'SE') }
   before do
     FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: origin_hub, location: origin_trucking_location)
-    FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub)
+    FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
     Geocoder::Lookup::Test.add_stub([origin_hub.latitude, origin_hub.longitude], [
                                       'address_components' => [{ 'types' => ['premise'] }],
                                       'address' => 'Göteborg, Sweden',

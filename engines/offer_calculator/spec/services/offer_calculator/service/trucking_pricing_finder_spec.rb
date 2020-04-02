@@ -22,6 +22,7 @@ RSpec.describe OfferCalculator::Service::TruckingPricingFinder do
 
   describe '.perform (no base pricing)', :vcr do
     before do
+      FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :zipcode)
       FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
     end
 
@@ -54,6 +55,7 @@ RSpec.describe OfferCalculator::Service::TruckingPricingFinder do
 
   describe '.perform (base pricing)', :vcr do
     before do
+      FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :zipcode)
       FactoryBot.create(:tenants_membership, member: tenants_user, group: group)
     end
 

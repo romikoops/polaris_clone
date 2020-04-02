@@ -26,7 +26,7 @@ module Api
       end
 
       def perform
-        itineraries_nexuses(target_index: index)
+        itineraries_nexuses(target_index: index).uniq
       end
 
       private
@@ -36,7 +36,7 @@ module Api
       def itineraries_from_lat_lng
         tenant_itineraries.where(
           stops: { index: counterpart_index },
-          hubs: { id: carriage_hubs_for(lat: lat, lng: lng, carriage: carriage).select(:id) }
+          hubs: { id: carriage_hubs.select(:id) }
         )
       end
 
@@ -73,15 +73,15 @@ module Api
       end
 
       def itineraries_nexuses(target_index:)
-        nexuses = Legacy::Nexus.joins(:hubs).merge(itineraries_hubs(target_index: target_index))
+        nexuses = Legacy::Nexus.joins(:hubs).where(hubs: itineraries_hubs(target_index: target_index))
         nexuses = nexuses.name_search(query) if query.present?
         nexuses
       end
 
-      def carriage_hubs_for(lat:, lng:, carriage:)
+      def carriage_hubs
         ::Trucking::Queries::Hubs.new(
           tenant_id: legacy_tenant_id,
-          address: address(lat: lat, lng: lng),
+          address: address,
           carriage: carriage,
           klass: ::Trucking::Trucking,
           order_by: 'group_id',
@@ -89,7 +89,7 @@ module Api
         ).perform
       end
 
-      def address(lat:, lng:)
+      def address
         address = Geocoder.search([lat.to_f, lng.to_f]).first
         return unless address
 

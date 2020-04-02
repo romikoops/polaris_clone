@@ -39,7 +39,9 @@ end
 #
 # Indexes
 #
-#  index_stops_on_sandbox_id  (sandbox_id)
+#  index_stops_on_hub_id        (hub_id)
+#  index_stops_on_itinerary_id  (itinerary_id)
+#  index_stops_on_sandbox_id    (sandbox_id)
 #
 # Foreign Keys
 #

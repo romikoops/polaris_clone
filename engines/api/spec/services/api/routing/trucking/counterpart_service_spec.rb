@@ -24,8 +24,8 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
   let(:wrong_lat) { 10.00 }
   let(:wrong_lng) { 60.50 }
   let(:trucking_service) { described_class.new(tenant: tenant, arguments: params, target: target) }
-  let!(:origin_hub_availability) { FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub) }
-  let!(:destination_hub_availability) { FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, custom_truck_type: 'default2') }
+  let!(:origin_hub_availability) { FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location) }
+  let!(:destination_hub_availability) { FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, custom_truck_type: 'default2', query_type: :location) }
   let(:coordinates) { { lat: lat, lng: lng } }
   let(:default_args) { { load_type: 'cargo_item', tenant: tenant, target: target } }
 

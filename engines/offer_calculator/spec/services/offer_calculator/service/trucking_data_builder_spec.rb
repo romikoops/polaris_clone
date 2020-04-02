@@ -33,6 +33,7 @@ RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
   let(:hub_result) { { origin: [hub] } }
 
   before do
+    FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :zipcode)
     stub_request(:get, 'https://maps.googleapis.com/maps/api/directions/xml?alternative=false&departure_time=1576800000&destination=57.694253,11.854048&key=&language=en&mode=driving&origin=57.694253,11.854048&traffic_model=pessimistic')
       .to_return(status: 200, body: FactoryBot.create(:google_directions_response), headers: {})
     FactoryBot.create(:puf_charge, tenant: tenant)

@@ -151,8 +151,12 @@ RSpec.describe Pricings::Preview do
       let!(:import_margin) { FactoryBot.create(:import_margin, destination_hub: destination_hub, tenant: tenants_tenant, applicable: tenants_user) }
       let!(:trucking_pre_margin) { FactoryBot.create(:trucking_pre_margin, destination_hub: origin_hub, tenant: tenants_tenant, applicable: tenants_user) }
       let!(:trucking_on_margin) { FactoryBot.create(:trucking_on_margin, origin_hub: destination_hub, tenant: tenants_tenant, applicable: tenants_user) }
+      let(:zipcode_pre_availability) { FactoryBot.create(:trucking_type_availability, query_method: :zipcode, carriage: 'pre', load_type: 'cargo_item') }
+      let(:location_on_availability) { FactoryBot.create(:trucking_type_availability, query_method: :location, carriage: 'on', load_type: 'cargo_item') }
 
       before do
+        FactoryBot.create(:trucking_hub_availability, hub: origin_hub, type_availability: zipcode_pre_availability)
+        FactoryBot.create(:trucking_hub_availability, hub: destination_hub, type_availability: location_on_availability)
         Geocoder::Lookup::Test.add_stub([pickup_address.latitude, pickup_address.longitude], [
                                           'address_components' => [{ 'types' => ['premise'] }],
                                           'address' => 'Göteborg, Sweden',
@@ -169,14 +173,6 @@ RSpec.describe Pricings::Preview do
                                           'country_code' => delivery_address.country.code,
                                           'postal_code' => delivery_address.zip_code
                                         ])
-
-        FactoryBot.create(:trucking_hub_availability,
-                          hub: origin_hub,
-                          type_availability: FactoryBot.create(:trucking_type_availability, query_method: 2))
-
-        FactoryBot.create(:trucking_hub_availability,
-                          hub: destination_hub,
-                          type_availability: FactoryBot.create(:trucking_type_availability, query_method: 3, carriage: 'on'))
       end
 
       it 'generates the preview for port-to-port with one pricing available' do

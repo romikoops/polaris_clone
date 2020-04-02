@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
+RSpec.describe TruckingAvailabilityController, type: :controller do
+  let(:tenant) { FactoryBot.create(:legacy_tenant) }
+  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
   let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
   let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
-  let(:user) { FactoryBot.create(:tenants_user, tenant: tenant) }
+  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
   let(:origin_location) do
     FactoryBot.create(:locations_location,
                       bounds: FactoryBot.build(:legacy_bounds, lat: origin_hub.latitude, lng: origin_hub.longitude, delta: 0.4),
@@ -23,13 +23,16 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
   let(:destination_trucking_location) { FactoryBot.create(:trucking_location, location: destination_location, country_code: 'CN') }
   let(:wrong_lat) { 10.00 }
   let(:wrong_lng) { 60.50 }
-  let!(:origin_hub_availability) { FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location) }
-  let!(:destination_hub_availability) { FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, custom_truck_type: 'default2', query_type: :location) }
-  let(:args) { { coordinates: { lat: lat, lng: lng }, load_type: 'cargo_item', tenant: tenant, target: target } }
+  let(:hub_ids) { origin_hub.id.to_s }
+  let(:response_body) { JSON.parse(response.body) }
+  let(:data) { response_body['data'] }
 
   before do
-    FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: origin_hub, location: origin_trucking_location)
-    FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
+    FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
+    FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, query_type: :location)
+    FactoryBot.create(:trucking_trucking, tenant: tenant, hub: origin_hub, location: origin_trucking_location)
+    FactoryBot.create(:trucking_trucking, tenant: tenant, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
     Geocoder::Lookup::Test.add_stub([wrong_lat, wrong_lng], [
                                       'address_components' => [{ 'types' => ['premise'] }],
                                       'address' => 'Helsingborg, Sweden',
@@ -54,61 +57,44 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
                                       'country_code' => 'CN',
                                       'postal_code' => '210001'
                                     ])
+    allow(controller).to receive(:current_user).at_least(:once).and_return(user)
+    allow(controller).to receive(:current_tenant).at_least(:once).and_return(tenant)
   end
 
-  describe '.availability (origin)' do
+  describe 'GET #index' do
     let(:lat) { origin_hub.latitude }
     let(:lng) { origin_hub.longitude }
-    let(:target) { :origin }
 
     context 'when trucking is available' do
-      let!(:data) { described_class.availability(args) }
+      before do
+        params = { lat: lat, lng: lng, load_type: 'cargo_item', tenant_id: tenant.id, carriage: 'pre', hub_ids: hub_ids }
+        get :index, params: params, as: :json
+      end
 
       it 'returns available trucking options' do
         aggregate_failures do
-          expect(data[:truckingAvailable]).to eq true
-          expect(data[:truckTypes]).to eq([origin_hub_availability.truck_type])
+          expect(response).to be_successful
+          expect(data['truckingAvailable']).to eq true
+          expect(data['truckTypeObject']).to eq({ origin_hub.id.to_s => ['default'] })
+          expect(data['nexusIds']).to eq([origin_hub.nexus_id])
+          expect(data['hubIds']).to eq([origin_hub.id])
         end
       end
     end
 
     context 'when trucking is not available' do
-      let(:args) { { coordinates: { lat: wrong_lat, lng: wrong_lng }, load_type: 'container', tenant: tenant, target: target } }
-      let!(:data) { described_class.availability(args) }
+      before do
+        params = { lat: wrong_lat, lng: wrong_lng, load_type: 'container', tenant_id: tenant.id, carriage: 'on', hub_ids: hub_ids }
+        get :index, params: params, as: :json
+      end
 
       it 'returns empty keys when no trucking is available' do
         aggregate_failures do
-          expect(data[:truckingAvailable]).to eq false
-          expect(data[:truckTypes]).to be_empty
-        end
-      end
-    end
-  end
-
-  describe '.availability (destination)' do
-    let(:lat) { destination_hub.latitude }
-    let(:lng) { destination_hub.longitude }
-    let(:target) { :destination }
-
-    context 'when trucking is available' do
-      let!(:data) { described_class.availability(args) }
-
-      it 'returns available trucking options' do
-        aggregate_failures do
-          expect(data[:truckingAvailable]).to eq true
-          expect(data[:truckTypes]).to eq([destination_hub_availability.truck_type])
-        end
-      end
-    end
-
-    context 'when trucking is not available' do
-      let(:args) { { coordinates: { lat: wrong_lat, lng: wrong_lng }, load_type: 'container', tenant: tenant, target: :destination } }
-      let!(:data) { described_class.availability(args) }
-
-      it 'returns empty keys when no trucking is available' do
-        aggregate_failures do
-          expect(data[:truckingAvailable]).to eq false
-          expect(data[:truckTypes]).to be_empty
+          expect(response).to be_successful
+          expect(data['truckingAvailable']).to eq false
+          expect(data['truckTypeObject']).to be_empty
+          expect(data['nexusIds']).to be_empty
+          expect(data['hubIds']).to be_empty
         end
       end
     end

@@ -36,6 +36,7 @@ RSpec.resource 'Locations', acceptance: true do
     context 'when a destination address is chosen' do
       before do
         itinerary
+        FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
         Geocoder::Lookup::Test.add_stub([57.694253, 11.854048], [
                                           'address_components' => [{ 'types' => ['premise'] }],
                                           'address' => 'Göteborg, Sweden',
@@ -99,6 +100,7 @@ RSpec.resource 'Locations', acceptance: true do
     context 'when an origin address is chosen' do
       before do
         itinerary
+        FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :zipcode)
         Geocoder::Lookup::Test.add_stub([57.694253, 11.854048], [
                                           'address_components' => [{ 'types' => ['premise'] }],
                                           'address' => 'Göteborg, Sweden',

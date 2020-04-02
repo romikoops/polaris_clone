@@ -67,8 +67,13 @@ end
 #
 # Indexes
 #
-#  index_local_charges_on_sandbox_id  (sandbox_id)
-#  index_local_charges_on_tenant_id   (tenant_id)
-#  index_local_charges_on_uuid        (uuid) UNIQUE
-#  index_local_charges_on_validity    (validity) USING gist
+#  index_local_charges_on_direction          (direction)
+#  index_local_charges_on_group_id           (group_id)
+#  index_local_charges_on_hub_id             (hub_id)
+#  index_local_charges_on_load_type          (load_type)
+#  index_local_charges_on_sandbox_id         (sandbox_id)
+#  index_local_charges_on_tenant_id          (tenant_id)
+#  index_local_charges_on_tenant_vehicle_id  (tenant_vehicle_id)
+#  index_local_charges_on_uuid               (uuid) UNIQUE
+#  index_local_charges_on_validity           (validity) USING gist
 #

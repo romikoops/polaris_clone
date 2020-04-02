@@ -148,7 +148,7 @@ module Pricings
           address: ::Legacy::Address.new(latitude: target[:lat], longitude: target[:lng]).reverse_geocode,
           carriage: carriage
         )
-        results = Trucking::Queries::Availability.new(adjusted_args).perform | Trucking::Queries::Distance.new(adjusted_args).perform
+        results = Trucking::Queries::Availability.new(adjusted_args).perform
         next if results.empty?
 
         hub_truckings = []

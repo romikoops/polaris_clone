@@ -45,9 +45,6 @@ class TruckingAvailabilityController < ApplicationController
       sandbox: @sandbox,
       order_by: @base_pricing_enabled ? 'group_id' : 'user_id'
     }
-    reg_results = Trucking::Queries::Availability.new(args).perform
-    distance_results = Trucking::Queries::Distance.new(args).perform
-
-    reg_results | distance_results
+    Trucking::Queries::Availability.new(args).perform
   end
 end

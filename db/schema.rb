@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_27_115222) do
+ActiveRecord::Schema.define(version: 2020_04_02_111236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -737,8 +737,13 @@ ActiveRecord::Schema.define(version: 2020_03_27_115222) do
     t.integer "user_id"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }
     t.daterange "validity"
+    t.index ["direction"], name: "index_local_charges_on_direction"
+    t.index ["group_id"], name: "index_local_charges_on_group_id"
+    t.index ["hub_id"], name: "index_local_charges_on_hub_id"
+    t.index ["load_type"], name: "index_local_charges_on_load_type"
     t.index ["sandbox_id"], name: "index_local_charges_on_sandbox_id"
     t.index ["tenant_id"], name: "index_local_charges_on_tenant_id"
+    t.index ["tenant_vehicle_id"], name: "index_local_charges_on_tenant_vehicle_id"
     t.index ["uuid"], name: "index_local_charges_on_uuid", unique: true
     t.index ["validity"], name: "index_local_charges_on_validity", using: :gist
   end
@@ -1665,6 +1670,8 @@ ActiveRecord::Schema.define(version: 2020_03_27_115222) do
     t.integer "itinerary_id"
     t.uuid "sandbox_id"
     t.datetime "updated_at", null: false
+    t.index ["hub_id"], name: "index_stops_on_hub_id"
+    t.index ["itinerary_id"], name: "index_stops_on_itinerary_id"
     t.index ["sandbox_id"], name: "index_stops_on_sandbox_id"
   end
 
@@ -2063,8 +2070,11 @@ ActiveRecord::Schema.define(version: 2020_03_27_115222) do
     t.string "truck_type"
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.index ["cargo_class"], name: "index_trucking_truckings_on_cargo_class"
+    t.index ["carriage"], name: "index_trucking_truckings_on_carriage"
     t.index ["group_id"], name: "index_trucking_truckings_on_group_id"
     t.index ["hub_id"], name: "index_trucking_truckings_on_hub_id"
+    t.index ["load_type"], name: "index_trucking_truckings_on_load_type"
     t.index ["location_id"], name: "index_trucking_truckings_on_location_id"
     t.index ["rate_id", "location_id", "hub_id"], name: "trucking_foreign_keys", unique: true
     t.index ["sandbox_id"], name: "index_trucking_truckings_on_sandbox_id"

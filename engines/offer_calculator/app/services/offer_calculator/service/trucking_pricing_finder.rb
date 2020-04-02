@@ -27,7 +27,7 @@ module OfferCalculator
           order_by: @scope['base_pricing'] ? 'group_id' : 'user_id'
         }
 
-        results = Trucking::Queries::Availability.new(args).perform | Trucking::Queries::Distance.new(args).perform
+        results = Trucking::Queries::Availability.new(args).perform
 
         return [] if results.empty?
 

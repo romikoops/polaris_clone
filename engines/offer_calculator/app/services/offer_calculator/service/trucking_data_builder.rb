@@ -66,7 +66,7 @@ module OfferCalculator
           no_fees = trucking_data[:trucking_charge_data].values.map do |cc_value|
             cc_value.nil? || cc_value.except('metadata_id').values.flat_map(&:keys).empty?
           end
-          valid = trucking_data[:trucking_charge_data].has_value?(nil) || no_fees.include?(true)
+          valid = trucking_data[:trucking_charge_data].value?(nil) || no_fees.include?(true)
           valid_data[hub_id] = trucking_data unless valid
         end
       end

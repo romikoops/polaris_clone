@@ -26,32 +26,65 @@ module Trucking
         @distance = args[:distance]
         @sandbox = args[:sandbox]
         @order_by = args[:order_by]
-        @locations_locations = []
-        @trucking_locations = []
-        @trucking_truckings = []
       end
 
       def locations_locations
         Locations::Location.contains(lat: @latitude, lon: @longitude)
       end
 
-      def distance_hubs
-        ::Legacy::Hub.where(tenant_id: @tenant_id)
-                     .joins(trucking_hub_availabilities: :type_availability)
-                     .where(trucking_type_availabilities: { query_method: 1 })
-                     .distinct
+      def distance_based_locations
+        @distance_based_locations ||= trucking_locations.where(
+          trucking_location_where_statement, trucking_location_conditions_binds
+        )
+      end
+
+      def location_based_locations
+        @location_based_locations ||= trucking_locations.where(location: locations_locations)
+      end
+
+      def zipcode_based_locations
+        @zipcode_based_locations ||= trucking_locations.where(zipcode: @zipcode)
       end
 
       def trucking_locations
-        locations = ::Trucking::Location.where(sandbox: @sandbox, country_code: @country_code)
-        locations.where(location: locations_locations).or(locations.where(zipcode: @zipcode))
+        @trucking_locations ||= ::Trucking::Location.where(country_code: @country_code)
       end
 
-      def truckings_for_locations
-        ::Trucking::Trucking.where(tenant_id: @tenant_id, location_id: trucking_locations)
+      def query_types
+        @query_types ||= ::Trucking::TypeAvailability
+                         .joins(:hub_availabilities)
+                         .where(
+                           trucking_hub_availabilities: {
+                             hub_id: tenant_hubs.select(:id)
+                           },
+                           load_type: @load_type,
+                           carriage: @carriage
+                         ).where.not(query_method: [nil, 0])
+                         .select(:query_method)
+                         .distinct
+                         .pluck(:query_method)
+      end
+
+      def valid_trucking_locations
+        return [] if query_types.empty?
+
+        base_query_type = query_types.first
+        base_query = send("#{base_query_type}_based_locations")
+
+        query_types.drop(1).inject(base_query) do |query, query_type|
+          query.or(send("#{query_type}_based_locations"))
+        end
+      end
+
+      def truckings_for_query
+        ::Trucking::Trucking.joins(:hub)
+                            .merge(tenant_hubs)
+                            .where(tenant_id: @tenant_id)
                             .where(cargo_class_condition)
+                            .where(load_type_condition)
                             .where(truck_type_condition)
                             .where(carriage_condition)
+                            .where(location: valid_trucking_locations)
       end
 
       def truck_type_condition
@@ -75,12 +108,12 @@ module Trucking
       end
 
       def hubs_condition
-        @hub_ids ? { 'tenant_id': @tenant_id, 'hub_id': @hub_ids } : { 'tenant_id': @tenant_id }
+        @hub_ids ? { tenant_id: @tenant_id, id: @hub_ids } : { tenant_id: @tenant_id }
       end
 
       def trucking_location_where_statement
         if @distance
-          { trucking_locations: { distance: @distance, sandbox_id: @sandbox&.id } }
+          { trucking_locations: { distance: @distance } }
         else
           <<-SQL
             trucking_locations.distance = ROUND(ST_Distance(
@@ -105,6 +138,10 @@ module Trucking
         else
           postal_code
         end
+      end
+
+      def tenant_hubs
+        @tenant_hubs ||= Legacy::Hub.where(hubs_condition)
       end
       # Argument Errors
 

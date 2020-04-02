@@ -7,13 +7,14 @@ FactoryBot.define do
 
     transient do
       custom_truck_type { nil }
+      query_type { nil }
     end
 
     trait :lcl_pre_carriage do
       association :type_availability, factory: :cargo_item_pre_carriage
       before(:create) do |availability, evaluator|
-        if evaluator.custom_truck_type.present?
-          availability.type_availability = FactoryBot.create(:cargo_item_pre_carriage, custom_truck_type: evaluator.custom_truck_type)
+        if evaluator.custom_truck_type.present? || evaluator.query_type.present?
+          availability.type_availability = FactoryBot.create(:cargo_item_pre_carriage, custom_query_method: evaluator.query_type, custom_truck_type: evaluator.custom_truck_type)
         end
       end
     end
@@ -21,8 +22,8 @@ FactoryBot.define do
     trait :fcl_pre_carriage do
       association :type_availability, factory: :container_pre_carriage
       before(:create) do |availability, evaluator|
-        if evaluator.custom_truck_type.present?
-          availability.type_availability = FactoryBot.create(:container_pre_carriage, custom_truck_type: evaluator.custom_truck_type)
+        if evaluator.custom_truck_type.present? || evaluator.query_type.present?
+          availability.type_availability = FactoryBot.create(:container_pre_carriage, custom_query_method: evaluator.query_type, custom_truck_type: evaluator.custom_truck_type)
         end
       end
     end
@@ -30,8 +31,8 @@ FactoryBot.define do
     trait :lcl_on_carriage do
       association :type_availability, factory: :cargo_item_on_carriage
       before(:create) do |availability, evaluator|
-        if evaluator.custom_truck_type.present?
-          availability.type_availability = FactoryBot.create(:cargo_item_on_carriage, custom_truck_type: evaluator.custom_truck_type)
+        if evaluator.custom_truck_type.present? || evaluator.query_type.present?
+          availability.type_availability = FactoryBot.create(:cargo_item_on_carriage, custom_query_method: evaluator.query_type, custom_truck_type: evaluator.custom_truck_type)
         end
       end
     end
@@ -39,8 +40,8 @@ FactoryBot.define do
     trait :fcl_on_carriage do
       association :type_availability, factory: :cargo_item_on_carriage
       before(:create) do |availability, evaluator|
-        if evaluator.custom_truck_type.present?
-          availability.type_availability = FactoryBot.create(:container_on_carriage, custom_truck_type: evaluator.custom_truck_type)
+        if evaluator.custom_truck_type.present? || evaluator.query_type.present?
+          availability.type_availability = FactoryBot.create(:container_on_carriage, custom_query_method: evaluator.query_type, custom_truck_type: evaluator.custom_truck_type)
         end
       end
     end

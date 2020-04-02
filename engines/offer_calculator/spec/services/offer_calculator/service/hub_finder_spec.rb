@@ -33,6 +33,9 @@ RSpec.describe OfferCalculator::Service::HubFinder do
                       itinerary: itinerary,
                       has_pre_carriage: true)
   end
+  before do
+    FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :zipcode)
+  end
 
   context 'class methods' do
     describe '.perform', :vcr do

@@ -12,8 +12,6 @@ RSpec.describe Trucking::Queries::Hubs do
   let(:trucking_location_geometry)  { FactoryBot.create(:trucking_location, :with_location) }
   let(:trucking_location_distance)  { FactoryBot.create(:trucking_location, distance: distance) }
 
-  let(:trucking_availablity_distance) { FactoryBot.create(:trucking_type_availability, query_method: :distance) }
-
   let(:zipcode)      { '15211' }
   let(:latitude)     { '57.000000' }
   let(:longitude)    { '11.100000' }
@@ -27,7 +25,11 @@ RSpec.describe Trucking::Queries::Hubs do
   end
 
   before do
-    FactoryBot.create(:trucking_hub_availability, hub: distance_hub, type_availability: trucking_availablity_distance)
+    %i[distance location zipcode].each do |query_method|
+      FactoryBot.create(:trucking_hub_availability,
+                        hub: distance_hub,
+                        type_availability: FactoryBot.create(:trucking_type_availability, query_method: query_method))
+    end
   end
 
   describe '.perform' do
@@ -69,7 +71,7 @@ RSpec.describe Trucking::Queries::Hubs do
     end
 
     it 'returns the distance in a hash when it exists' do
-      expect(klass.trucking_location_where_statement).to eq(trucking_locations: { distance: 20, sandbox_id: nil })
+      expect(klass.trucking_location_where_statement).to eq(trucking_locations: { distance: 20 })
     end
   end
 end

@@ -19,6 +19,7 @@ Layout/LineLength:
     - qa/features/**/*_steps.rb
     - qa/features/**/*.feature
     - engines/legacy/config/devise.rb
+    - config/routes.rb
 
 Metrics/AbcSize:
   Max: 25

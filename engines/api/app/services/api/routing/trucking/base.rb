@@ -17,7 +17,7 @@ module Api
               },
               load_type: load_type,
               carriage: truck_type_carriage
-            ).pluck(:truck_type)
+            ).select(:truck_type).distinct.pluck(:truck_type)
         end
 
         def country_codes(target_index:)
