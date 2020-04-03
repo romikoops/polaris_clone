@@ -53,6 +53,7 @@ module ExcelDataServices
           tenant: tenant,
           name: "#{origin_hub.nexus.name} - #{destination_hub.nexus.name}",
           mode_of_transport: row.mot,
+          transshipment: row.transshipment,
           sandbox: @sandbox
         )
       end

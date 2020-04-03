@@ -28,9 +28,10 @@ RSpec.describe OfferCalculator::Calculator do
                       user: user,
                       tenant: tenant)
   end
+  let(:trip_itineraries) { [itinerary, air_itinerary] }
 
   let(:trips) do
-    [itinerary, air_itinerary].flat_map do |it|
+    trip_itineraries.flat_map do |it|
       [
         FactoryBot.create(:trip_with_layovers, itinerary: it, load_type: 'cargo_item', tenant_vehicle: tenant_vehicle),
         FactoryBot.create(:trip_with_layovers,
@@ -196,7 +197,9 @@ RSpec.describe OfferCalculator::Calculator do
     end
 
     describe '.perform with transshipments' do
-      let!(:transshipment_pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle, transshipment: 'via ZACPT') }
+      let(:transshipment_itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: tenant, transshipment: 'ZACPT') }
+      let!(:transshipment_pricing) { FactoryBot.create(:lcl_pricing, itinerary: transshipment_itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle, transshipment: 'ZACPT') }
+      let(:trip_itineraries) { [itinerary, air_itinerary, transshipment_itinerary] }
 
       it 'perform a booking calulation' do
         results = service.perform

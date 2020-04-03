@@ -11,7 +11,7 @@ RSpec.describe ShippingTools do
 
   let(:tenant) { create(:tenant) }
   let!(:itinerary) { create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let(:itinerary_2) { create(:itinerary, tenant: tenant) }
+  let(:itinerary_2) { create(:hamburg_shanghai_itinerary, tenant: tenant) }
   let(:trip) { create(:trip, itinerary_id: itinerary.id) }
   let(:origin_hub) { Hub.find(itinerary.hubs.find_by(name: 'Gothenburg Port').id) }
   let(:destination_hub) { Hub.find(itinerary.hubs.find_by(name: 'Shanghai Port').id) }
@@ -394,7 +394,7 @@ RSpec.describe ShippingTools do
   describe '.update_shipment' do
     let(:current_user) { FactoryBot.create(:user, tenant: tenant) }
     let(:address) { create(:address, country: create(:country)) }
-    let(:itinerary_2) { create(:itinerary, tenant: tenant) }
+    let(:itinerary_2) { create(:itinerary, name: 'A - B', tenant: tenant) }
     let(:contact) { create(:contact, user: current_user, address: address) }
     let(:trip) { FactoryBot.create(:trip, itinerary: itinerary_2, tenant_vehicle: tenant_vehicle) }
     let(:user_params) do
@@ -481,7 +481,7 @@ RSpec.describe ShippingTools do
     end
 
     context 'when basic fcl example' do
-      let(:trip) { FactoryBot.create(:trip, itinerary: itinerary_2, tenant_vehicle: tenant_vehicle) }
+      let(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary_2, tenant_vehicle: tenant_vehicle) }
       let(:schedule) { OfferCalculator::Schedule.from_trip(trip) }
       let(:params) do
         {
@@ -561,16 +561,18 @@ RSpec.describe ShippingTools do
   end
 
   describe '.view_more_schedules' do
-    let(:trip) { FactoryBot.create(:trip, itinerary: itinerary_2, tenant_vehicle: tenant_vehicle) }
+    let(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary_2, tenant_vehicle: tenant_vehicle) }
 
     context 'with a positive delta' do
       let(:delta) { 1 }
+      let!(:later_trip) do
+        create(:legacy_trip, itinerary: itinerary_2,
+                             tenant_vehicle: tenant_vehicle,
+                             start_date: trip.start_date + 7,
+                             end_date: trip.end_date + 14)
+      end
 
       it 'generates schedules from trips later than the specified trip' do
-        later_trip = Trip.create(itinerary: itinerary_2,
-                                 tenant_vehicle: tenant_vehicle,
-                                 start_date: trip.start_date + 7,
-                                 end_date: trip.end_date + 14)
         result = described_class.view_more_schedules(trip.id, delta)
         expect(result[:schedules].first[:eta].to_date).to eq(later_trip.end_date.to_date)
       end
@@ -578,19 +580,21 @@ RSpec.describe ShippingTools do
 
     context 'with a negative delta' do
       let(:delta) { -1 }
+      let!(:earlier_trip) do
+        create(:legacy_trip, itinerary: itinerary_2,
+                             tenant_vehicle: tenant_vehicle,
+                             start_date: trip.start_date - 14,
+                             end_date: trip.end_date - 7)
+      end
 
       it 'generates schedules from trips earlier than the specified trip' do
-        earlier_trip = Trip.create(itinerary: itinerary_2,
-                                   tenant_vehicle: tenant_vehicle,
-                                   start_date: trip.start_date - 14,
-                                   end_date: trip.end_date - 7)
         result = described_class.view_more_schedules(trip.id, delta)
         expect(result[:schedules].first[:eta].to_date).to eq(earlier_trip.end_date.to_date)
       end
     end
 
     context 'when we create_shipment_from_result (FCL)' do
-      let(:old_trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
+      let(:old_trip) { FactoryBot.create(:legacy_trip, itinerary_id: itinerary.id, tenant_vehicle: tenant_vehicle) }
       let(:old_shipment) do
         create(:legacy_shipment,
                trip: old_trip,

@@ -23,6 +23,7 @@ module ExcelDataServices
         Itinerary.find_by(
           tenant: tenant,
           name: "#{params[:from]} - #{params[:to]}",
+          transshipment: params[:transshipment],
           mode_of_transport: params[:mode_of_transport]
         )
       end

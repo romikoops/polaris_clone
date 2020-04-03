@@ -49,7 +49,7 @@ RSpec.describe Pricings::Finder do
   end
   let!(:tenants_scope) { FactoryBot.create(:tenants_scope, content: { base_pricing: true }, target: tenants_tenant) }
   let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
-  let(:itinerary_2) { FactoryBot.create(:default_itinerary, tenant: tenant) }
+  let(:itinerary_2) { FactoryBot.create(:felixstowe_shanghai_itinerary, tenant: tenant) }
   let(:group) do
     FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'Test1').tap do |tapped_group|
       FactoryBot.create(:tenants_membership, member: tenants_user, group: tapped_group)
@@ -130,10 +130,9 @@ RSpec.describe Pricings::Finder do
       end
 
       it 'returns an object containing pricings grouped by transport category (lcl)' do
-        found = results.first
         aggregate_failures do
-          expect(found.first.keys.length).to eq(1)
-          expect(found.first.values.first.first['id']).to eq(pricing_1.id)
+          expect(results.first.keys.length).to eq(1)
+          expect(results.first.values.first.first['id']).to eq(pricing_1.id)
         end
       end
     end
@@ -171,10 +170,9 @@ RSpec.describe Pricings::Finder do
       end
 
       it 'returns an object containing group pricings grouped by transport category (lcl)' do
-        found = results.first
         aggregate_failures do
-          expect(found.first.keys.length).to eq(1)
-          expect(found.first.values.first.first['id']).to eq(pricing_1.id)
+          expect(results.first.keys.length).to eq(1)
+          expect(results.first.values.first.first['id']).to eq(pricing_1.id)
         end
       end
     end
@@ -220,12 +218,11 @@ RSpec.describe Pricings::Finder do
       end
 
       it 'returns an object containing pricings grouped by transport category (fcl)' do
-        found = results.first
         aggregate_failures do
-          expect(found.first.keys.length).to eq(3)
-          expect(found.first['fcl_40_hq'].first['id']).to eq(pricing_3.id)
-          expect(found.first['fcl_40'].first['id']).to eq(pricing_2.id)
-          expect(found.first['fcl_20'].first['id']).to eq(pricing_1.id)
+          expect(results.first.keys.length).to eq(3)
+          expect(results.first['fcl_40_hq'].first['id']).to eq(pricing_3.id)
+          expect(results.first['fcl_40'].first['id']).to eq(pricing_2.id)
+          expect(results.first['fcl_20'].first['id']).to eq(pricing_1.id)
         end
       end
     end
@@ -272,11 +269,10 @@ RSpec.describe Pricings::Finder do
       end
 
       it 'returns an object containing pricings grouped by transport category (fcl)' do
-        found = results.first
         aggregate_failures do
-          expect(found.first.keys.length).to eq(1)
-          expect(found.first['fcl_20'].first['id']).to eq(pricing_1.id)
-          expect(found.last.keys).to match_array(%w[fcl_20 fcl_40 fcl_40_hq])
+          expect(results.first.keys.length).to eq(1)
+          expect(results.first['fcl_20'].first['id']).to eq(pricing_1.id)
+          expect(results.last.keys).to match_array(%w[fcl_20 fcl_40 fcl_40_hq])
         end
       end
     end
@@ -318,10 +314,9 @@ RSpec.describe Pricings::Finder do
 
       it 'returns pricings valid for closing_dates if departure dates return nil' do
         Timecop.freeze(Date.parse('2019/01/25')) do
-          found = results.first
           aggregate_failures do
-            expect(found.first.keys.length).to eq(1)
-            expect(found.first.values.first.first['id']).to eq(pricing_1.id)
+            expect(results.first.keys.length).to eq(1)
+            expect(results.first.values.first.first['id']).to eq(pricing_1.id)
           end
         end
       end

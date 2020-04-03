@@ -37,7 +37,7 @@ RSpec.describe Quotations::Creator do
         schedules: [Legacy::Schedule.from_trip(trip_2)],
         pricings_by_cargo_class: {
           'lcl': {
-            'transshipment': 'via ZACPT'
+            'transshipment': 'ZACPT'
           }
         }
       }

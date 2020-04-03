@@ -8,6 +8,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
 
     name { 'Gothenburg - Shanghai' }
     mode_of_transport { 'ocean' }
+    transshipment { nil }
     association :tenant, factory: :legacy_tenant
 
     trait :default do
@@ -220,6 +221,7 @@ end
 #  id                :bigint           not null, primary key
 #  mode_of_transport :string
 #  name              :string
+#  transshipment     :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  sandbox_id        :uuid

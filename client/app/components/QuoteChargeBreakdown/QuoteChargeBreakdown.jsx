@@ -39,18 +39,6 @@ class QuoteChargeBreakdown extends Component {
 
   static contextType = UserContext
 
-  toggleExpander (key) {
-    const { scope } = this.props
-    if (get(scope, ['quote_card', 'sections', key], false)) {
-      this.setState({
-        expander: {
-          ...this.state.expander,
-          [key]: !this.state.expander[key]
-        }
-      })
-    }
-  }
-
   determineSubKey (charge) {
     const { scope, mot, t } = this.props
     let effectiveCharge
@@ -245,7 +233,7 @@ class QuoteChargeBreakdown extends Component {
   determineContentToGenerate (key) {
     const { scope } = this.props
     if (key === 'cargo' && scope.fine_fee_detail) { return this.generateUnitContent(key) }
-    if (['import', 'export'].includes(key)) return this.generateUnitContent(key)
+    if (['import', 'export'].includes(key)) { return this.generateUnitContent(key) }
 
     return this.generateContent(key)
   }
@@ -261,11 +249,8 @@ class QuoteChargeBreakdown extends Component {
       .map((array) => array.filter((value) => !this.unbreakableKeys.includes(value)))
       .filter((value) => value.length !== 1)
 
-    const filteredUnitSections = unitSections.filter((unitSection) => !unitSection.includes(null))
-
-    return filteredUnitSections.map((unitArray) => {
+    return unitSections.map((unitArray) => {
       const cargo = this.fetchCargoData(unitArray[0])
-
       const contentSections = Object.entries(unitArray[1])
         .map((array) => array.filter((value) => !this.unbreakableKeys.includes(value)))
         .filter((value) => value.length !== 1)
@@ -311,6 +296,7 @@ class QuoteChargeBreakdown extends Component {
 
       return (
         <div
+          key={key}
           className={`flex layout-row layout-wrap ${styles.cargo_price_section}`}
         >
           <div

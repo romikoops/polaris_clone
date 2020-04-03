@@ -2714,6 +2714,7 @@ FactoryBot.define do
            mode_of_transport: 'ocean',
            transit_time: 38,
            carrier: nil,
+           transshipment: nil,
            service_level: 'standard',
            vessel: 'Cap San Diego',
            voyage_code: '1010101',
@@ -2729,11 +2730,28 @@ FactoryBot.define do
            mode_of_transport: 'air',
            transit_time: 38,
            carrier: nil,
+           transshipment: nil,
            service_level: 'standard',
            vessel: 'Cap San Diego',
            voyage_code: '1010101',
            load_type: 'cargo_item',
            row_nr: 3
+         },
+         {
+           from: 'Dalian',
+           to: 'Felixstowe',
+           closing_date: Date.parse('2020/01/01'),
+           etd: Date.parse('2020/01/04'),
+           eta: Date.parse('2020/02/11'),
+           mode_of_transport: 'ocean',
+           transit_time: 38,
+           carrier: 'msc',
+           transshipment: 'ZACPT',
+           service_level: 'standard',
+           vessel: 'Cap San Diego',
+           voyage_code: '1010101',
+           load_type: 'container',
+           row_nr: 4
          }]
       end
     end

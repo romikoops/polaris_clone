@@ -23,7 +23,11 @@ module Api
       end
 
       before do
-        FactoryBot.create_list(:legacy_itinerary, 5, :default, tenant: legacy_tenant, name: 'Ningbo - Gothenburg')
+        FactoryBot.create(:legacy_itinerary, :default, tenant: legacy_tenant, name: 'Ningbo - Gothenburg')
+        FactoryBot.create(:legacy_itinerary, :default, tenant: legacy_tenant, name: 'Shanghai - Gothenburg')
+        FactoryBot.create(:legacy_itinerary, :default, tenant: legacy_tenant, name: 'Qingdao - Gothenburg')
+        FactoryBot.create(:legacy_itinerary, :default, tenant: legacy_tenant, name: 'Bangkok - Gothenburg')
+        FactoryBot.create(:legacy_itinerary, :default, tenant: legacy_tenant, name: 'Tokyo - Gothenburg')
       end
 
       it 'has a successful respoonse' do

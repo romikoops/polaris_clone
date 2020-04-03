@@ -36,6 +36,7 @@ module OfferCalculator
           SELECT
             MAX(itineraries.id)                AS itinerary_id,
             MAX(itineraries.name)              AS itinerary_name,
+            MAX(itineraries.transshipment)     AS itinerary_transshipment,
             MAX(itineraries.mode_of_transport) AS mode_of_transport,
             MAX(origin_stops.id)               AS origin_stop_id,
             MAX(destination_stops.id)          AS destination_stop_id,
@@ -116,6 +117,7 @@ module OfferCalculator
           SELECT
             MAX(itineraries.id)                AS itinerary_id,
             MAX(itineraries.name)              AS itinerary_name,
+            MAX(itineraries.transshipment)     AS itinerary_transshipment,
             MAX(itineraries.mode_of_transport) AS mode_of_transport,
             MAX(origin_stops.id)               AS origin_stop_id,
             MAX(destination_stops.id)          AS destination_stop_id,

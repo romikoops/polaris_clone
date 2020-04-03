@@ -12,6 +12,7 @@ RSpec.describe ExcelDataServices::Inserters::Schedules do
     let!(:tenant_vehicle_3) { create(:tenant_vehicle, name: 'standard', tenant: tenant, mode_of_transport: 'air') }
 
     let!(:itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe') }
+    let!(:transshipment_itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe', transshipment: 'ZACPT') }
     let!(:air_itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe', mode_of_transport: 'air') }
 
     context 'when uploading a schedules sheet' do
@@ -23,7 +24,7 @@ RSpec.describe ExcelDataServices::Inserters::Schedules do
 
       it 'creates correct stats' do
         aggregate_failures do
-          expect(stats.dig(:"legacy/trips", :number_created)).to eq(3)
+          expect(stats.dig(:"legacy/trips", :number_created)).to eq(4)
         end
       end
 
@@ -31,6 +32,7 @@ RSpec.describe ExcelDataServices::Inserters::Schedules do
         aggregate_failures do
           expect(air_itinerary.trips.where(load_type: 'cargo_item').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_3.id])
           expect(itinerary.trips.where(load_type: 'cargo_item').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_1.id])
+          expect(transshipment_itinerary.trips.where(load_type: 'container').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_2.id])
           expect(itinerary.trips.where(load_type: 'container').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_2.id])
           expect(itinerary.trips.pluck(:closing_date).compact).to be_present
           expect(itinerary.trips.pluck(:start_date).compact).to be_present

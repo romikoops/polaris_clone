@@ -134,6 +134,10 @@ module ExcelDataServices
           cargo_class
         ].freeze
 
+        OPTIONAL_SCHEDULE_GENERATOR = %i[
+          transshipment
+        ].freeze
+
         SCHEDULES = %i[
           from
           to
@@ -147,6 +151,10 @@ module ExcelDataServices
           vessel
           voyage_code
           load_type
+        ].freeze
+
+        OPTIONAL_SCHEDULES = %i[
+          transshipment
         ].freeze
 
         CHARGE_CATEGORIES = %i[

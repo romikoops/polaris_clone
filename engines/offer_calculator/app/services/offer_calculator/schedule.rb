@@ -7,7 +7,7 @@ module OfferCalculator
     attr_accessor :id, :origin_hub_id, :destination_hub_id,
                   :origin_hub_name, :destination_hub_name, :mode_of_transport,
                   :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,
-                  :quote, :carrier_name, :load_type, :voyage_code, :vessel
+                  :quote, :carrier_name, :load_type, :voyage_code, :vessel, :transshipment
 
     def origin_hub
       Legacy::Hub.find origin_hub_id
@@ -42,7 +42,7 @@ module OfferCalculator
 
     def to_detailed_hash
       keys = %i(id mode_of_transport total_price eta etd closing_date vehicle_name
-                carrier_name voyage_code vessel trip_id)
+                carrier_name voyage_code vessel trip_id transshipment)
 
       as_json.symbolize_keys.slice(*keys).merge(origin_hub: detailed_hash_hub_data_for(:origin),
                                                 destination_hub: detailed_hash_hub_data_for(:destination))
@@ -58,6 +58,7 @@ module OfferCalculator
           origin_hubs.name              AS origin_hub_name,
           destination_hubs.name         AS destination_hub_name,
           itineraries.mode_of_transport AS mode_of_transport,
+          itineraries.transshipment     AS transshipment,
           destination_layovers.eta      AS eta,
           origin_layovers.etd           AS etd,
           origin_layovers.closing_date  AS closing_date,
@@ -113,6 +114,7 @@ module OfferCalculator
       new(
         id: SecureRandom.uuid,
         mode_of_transport: trip.itinerary.mode_of_transport,
+        transshipment: trip.itinerary.transshipment,
         eta: trip.end_date,
         etd: trip.start_date,
         closing_date: trip.closing_date,

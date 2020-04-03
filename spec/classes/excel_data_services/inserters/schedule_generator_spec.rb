@@ -8,7 +8,8 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
       [
         { origin: 'DALIAN', destination: 'FELIXSTOWE', transit_time: 38, carrier: 'Hapag Lloyd', service_level: nil, mot: 'ocean', cargo_class: 'container', row_nr: 2, ordinals: [4] },
         { origin: 'DALIAN', destination: 'FELIXSTOWE', transit_time: 38, carrier: nil, service_level: nil, mot: 'ocean', cargo_class: 'cargo_item', row_nr: 2, ordinals: [4] },
-        { origin: 'SHANGHAI', destination: 'FELIXSTOWE', transit_time: 38, carrier: nil, service_level: nil, mot: nil, cargo_class: 'cargo_item', row_nr: 2, ordinals: [4] }
+        { origin: 'SHANGHAI', destination: 'FELIXSTOWE', transit_time: 38, carrier: nil, service_level: nil, mot: nil, cargo_class: 'cargo_item', row_nr: 2, ordinals: [4] },
+        { origin: 'SHANGHAI', destination: 'FELIXSTOWE', transshipment: 'ZACPT', transit_time: 38, carrier: nil, service_level: nil, mot: nil, cargo_class: 'cargo_item', row_nr: 2, ordinals: [4] }
       ]
     end
     let(:tenant) { create(:tenant) }
@@ -43,6 +44,7 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
     let!(:multi_mot_itineraries) do
       [
         create(:itinerary, tenant: tenant, name: 'Shanghai - Felixstowe', mode_of_transport: 'ocean'),
+        create(:itinerary, tenant: tenant, name: 'Shanghai - Felixstowe', mode_of_transport: 'ocean', transshipment: 'ZACPT'),
         create(:itinerary, tenant: tenant, name: 'Sahnghai - Felixstowe', mode_of_transport: 'air')
       ]
     end
@@ -63,7 +65,7 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
           described_class.insert(tenant: tenant, data: data, options: {})
         end
         aggregate_failures do
-          expect(stats.dig(:trips, :number_created)).to eq(36)
+          expect(stats.dig(:trips, :number_created)).to eq(48)
           expect(itinerary.trips.where(load_type: 'cargo_item').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_1.id])
           expect(itinerary.trips.where(load_type: 'container').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_2.id])
           expect(itinerary.trips.pluck(:start_date).map { |d| d.strftime('%^A') }.uniq).to eq(['THURSDAY'])
@@ -89,7 +91,7 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
         end
 
         aggregate_failures do
-          expect(stats.dig(:trips, :number_created)).to eq(36)
+          expect(stats.dig(:trips, :number_created)).to eq(48)
           expect(itinerary.trips.where(load_type: 'cargo_item').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_1.id])
           expect(itinerary.trips.where(load_type: 'container').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_2.id])
           expect(itinerary.trips.pluck(:start_date).map { |d| d.strftime('%^A') }.uniq).to eq(['THURSDAY'])

@@ -20,13 +20,14 @@ module Legacy
     scope :for_tenant, ->(tenant_id) { where(tenant_id: tenant_id) }
 
     validate :must_have_stops
-    pg_search_scope :list_search, against: %i(name), using: {
+    pg_search_scope :list_search, against: %i[name], using: {
       tsearch: { prefix: true }
     }
-    pg_search_scope :mot_search, against: %i(mode_of_transport), using: {
+    pg_search_scope :mot_search, against: %i[mode_of_transport], using: {
       tsearch: { prefix: true }
     }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
+    validates :name, uniqueness: { scope: %i[tenant_id transshipment mode_of_transport] }
 
     def generate_schedules_from_sheet(stops:, # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
                                       start_date:,
@@ -80,20 +81,20 @@ module Legacy
     end
 
     def parse_load_type(raw_load_type)
-      if %w(cargo_item lcl).include?(raw_load_type.downcase.strip)
+      if %w[cargo_item lcl].include?(raw_load_type.downcase.strip)
         'cargo_item'
       else
         'container'
       end
     end
 
-    def default_generate_schedules(end_date:, base_pricing: true, sandbox: nil) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def default_generate_schedules(end_date:, base_pricing: true, sandbox: nil) # rubocop:disable Metrics/AbcSize
       finish_date = end_date || DateTime.now + 21.days
       association = base_pricing ? rates : pricings
       tenant_vehicle_ids = association.where(sandbox_id: sandbox&.id).pluck(:tenant_vehicle_id).uniq
       stops_in_order = stops.where(sandbox_id: sandbox&.id).order(:index)
       tenant_vehicle_ids.each do |tv_id|
-        %w(container cargo_item).each do |load_type|
+        %w[container cargo_item].each do |load_type|
           existing_trip = trips.where(tenant_vehicle_id: tv_id, load_type: load_type, sandbox_id: sandbox&.id).first
           steps_in_order = if existing_trip
                              (existing_trip.end_date - existing_trip.start_date) / 86_400
@@ -370,30 +371,6 @@ module Legacy
       end
     end
 
-    def ordered_nexus_ids
-      stops.order(index: :asc).joins(:hub).pluck('hubs.nexus_id')
-    end
-
-    def has_route?(origin_nexus_id, destination_nexus_id)
-      ordered_nexus_ids.include?(origin_nexus_id) &&
-        ordered_nexus_ids.include?(destination_nexus_id) &&
-        ordered_nexus_ids.index(origin_nexus_id) < ordered_nexus_ids.index(destination_nexus_id)
-    end
-
-    def available_counterpart_hub_ids_for_target_hub_ids(target, target_hub_ids)
-      raise ArgumentError unless %w(origin destination).include?(target)
-
-      target_hub_ids.map do |target_hub_id|
-        next unless ordered_hub_ids.include?(target_hub_id)
-
-        target_idx = ordered_hub_ids.index(target_hub_id)
-
-        target_range = target == 'origin' ? 0...target_idx : (target_idx + 1)..-1
-
-        ordered_hub_ids[target_range]
-      end.compact.flatten.uniq
-    end
-
     def self.filter_by_hubs(origin_hub_ids, destination_hub_ids)
       where("
         id IN (
@@ -456,16 +433,16 @@ module Legacy
             include: {
               hub: {
                 include: {
-                  nexus: { only: %i(id name) },
-                  address: { only: %i(longitude latitude geocoded_address) }
+                  nexus: { only: %i[id name] },
+                  address: { only: %i[longitude latitude geocoded_address] }
                 },
-                only: %i(id name)
+                only: %i[id name]
               }
             },
-            only: %i(id index)
+            only: %i[id index]
           }
         },
-        only: %i(id name mode_of_transport)
+        only: %i[id name mode_of_transport]
       )
       as_json(new_options)
     end
@@ -500,6 +477,7 @@ end
 #  id                :bigint           not null, primary key
 #  mode_of_transport :string
 #  name              :string
+#  transshipment     :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  sandbox_id        :uuid

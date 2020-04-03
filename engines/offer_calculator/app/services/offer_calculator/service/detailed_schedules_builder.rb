@@ -299,7 +299,7 @@ module OfferCalculator
         schedule_groupings.each do |_key, schedules_array|
           schedules_array.sort_by!(&:eta)
           dates = extract_dates_and_quote(schedules_array)
-          pricings_by_cargo_classes_and_rate_overviews = sort_pricings(
+          pricings_by_cargo_class, rate_overview = sort_pricings(
             schedules: schedules_array,
             user_pricing_id: user_pricing_id,
             cargo_classes: cargo_classes,
@@ -307,20 +307,16 @@ module OfferCalculator
             dedicated_pricings_only: dedicated_pricings?(user)
           )
 
-          pricings_by_cargo_classes_and_rate_overviews.each do |pricings_by_cargo_class_and_rate_overview|
-            pricings_by_cargo_class, rate_overview = pricings_by_cargo_class_and_rate_overview
+          next nil if pricings_by_cargo_class.empty?
 
-            next nil if pricings_by_cargo_class.blank?
-
-            most_diverse_set, other_pricings = pricings_sets(pricings: pricings_by_cargo_class)
-            result_to_return |= sort_sets(
-              schedules: schedules_array,
-              alpha_set: most_diverse_set,
-              other_sets: other_pricings,
-              dates: dates,
-              rate_overview: rate_overview
-            )
-          end
+          most_diverse_set, other_pricings = pricings_sets(pricings: pricings_by_cargo_class)
+          result_to_return |= sort_sets(
+            schedules: schedules_array,
+            alpha_set: most_diverse_set,
+            other_sets: other_pricings,
+            dates: dates,
+            rate_overview: rate_overview
+          )
         end
         result_to_return
       end
@@ -330,6 +326,7 @@ module OfferCalculator
           [schedule.mode_of_transport,
            schedule.vehicle_name,
            schedule.carrier_name,
+           schedule.transshipment,
            schedule.load_type,
            schedule.origin_hub_id,
            schedule.destination_hub_id].join('_')
@@ -337,7 +334,7 @@ module OfferCalculator
       end
 
       def sort_pricings(schedules:, user_pricing_id:, cargo_classes:, dates:, dedicated_pricings_only:)
-        pricing_search_results = ::Pricings::Finder.new(
+        pricings_by_cargo_class, pricing_metadata, rate_overview = ::Pricings::Finder.new(
           schedules: schedules,
           user_pricing_id: user_pricing_id,
           cargo_classes: cargo_classes,
@@ -347,12 +344,9 @@ module OfferCalculator
           sandbox: @sandbox
         ).perform
 
-        pricing_search_results.map do |pricing_search_result|
-          pricings_by_cargo_class, pricing_metadata, rate_overview = pricing_search_result
-          @metadata_list |= pricing_metadata if pricing_metadata.present?
+        @metadata_list |= pricing_metadata if pricing_metadata.present?
 
-          [pricings_by_cargo_class, rate_overview]
-        end
+        [pricings_by_cargo_class, rate_overview]
       end
 
       def extract_dates_and_quote(schedules)
@@ -378,7 +372,8 @@ module OfferCalculator
       end
 
       def invalid_quote?(charge:)
-        charge.price.value.zero?
+        charge.price.value.zero? ||
+          charge.charge_breakdown.charges.where(detail_level: 3).empty?
       end
 
       def grab_notes(pricing_ids:, tenant_id:, schedule:)

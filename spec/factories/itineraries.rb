@@ -8,6 +8,7 @@ FactoryBot.define do
 
     name { 'Gothenburg - Shanghai' }
     mode_of_transport { 'ocean' }
+    transshipment { nil }
     association :tenant
 
     after(:build) do |itinerary, evaluator|
@@ -42,6 +43,7 @@ end
 #  id                :bigint           not null, primary key
 #  mode_of_transport :string
 #  name              :string
+#  transshipment     :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  sandbox_id        :uuid

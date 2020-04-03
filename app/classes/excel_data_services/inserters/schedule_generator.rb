@@ -18,6 +18,7 @@ module ExcelDataServices
       def generate_schedules(params)
         itineraries = Itinerary.where(
           tenant_id: tenant.id,
+          transshipment: params[:transshipment],
           name: "#{params[:origin].titleize} - #{params[:destination].titleize}",
           sandbox: @sandbox
         )

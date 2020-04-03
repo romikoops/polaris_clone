@@ -22,21 +22,40 @@ RSpec.describe OfferCalculator::Schedule do
     ]
   end
   let(:current_etd) { 2.days.from_now }
+  let(:required_keys) do
+    %i[
+      id
+      mode_of_transport
+      eta
+      etd
+      closing_date
+      vehicle_name
+      carrier_name
+      trip_id
+      origin_hub
+      destination_hub
+      transshipment
+    ]
+  end
 
   context 'class methods' do
     describe '.from_routes', :vcr do
       it 'returns the schedules for the route' do
         results = described_class.from_routes(routes, current_etd, 60, 'cargo_item')
-        expect(results.length).to eq(1)
-        expect(results.first.trip).to eq(trip)
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.trip).to eq(trip)
+        end
       end
     end
 
     describe '.from_trips', :vcr do
       it 'returns a hash of schedule values' do
         results = described_class.from_trips([trip])
-        expect(results.length).to eq(1)
-        expect(results.first.keys).to match_array(%i(id mode_of_transport eta etd closing_date vehicle_name carrier_name trip_id origin_hub destination_hub))
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.keys).to match_array(required_keys)
+        end
       end
     end
   end

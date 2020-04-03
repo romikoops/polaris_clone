@@ -86,6 +86,7 @@ end
 #  id                :bigint           not null, primary key
 #  mode_of_transport :string
 #  name              :string
+#  transshipment     :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  sandbox_id        :uuid
