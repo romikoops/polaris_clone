@@ -26,7 +26,7 @@ module Api
         section_row = {
           id: SecureRandom.uuid,
           description: section_description(section: section),
-          value: value(items: items, charge_category_id: charge_category_id),
+          value: value_with_currency(value(items: items, charge_category_id: charge_category_id)),
           lineItemId: nil,
           tenderId: tender.id,
           order: section_order(section: section),
@@ -42,11 +42,12 @@ module Api
     def create_cargo_section_rows(row:, items:)
       items.group_by(&:cargo).each do |cargo, items_by_cargo|
         charge_category_id = applicable_charge_category_id(cargo: cargo)
+        fee_value = value(items: items_by_cargo, charge_category_id: charge_category_id)
         cargo_row = {
           id: SecureRandom.uuid,
           editId: cargo&.id,
           description: cargo_description(cargo: cargo),
-          value: value(items: items_by_cargo, charge_category_id: charge_category_id),
+          value: value_with_currency(fee_value),
           order: 0,
           parentId: row[:id],
           lineItemId: nil,
@@ -63,10 +64,11 @@ module Api
     def create_cargo_currency_section_rows(row:, items:, cargo:)
       items.group_by { |line_item| line_item.amount.currency.iso_code }
            .each do |currency, items_by_currency|
+        fee_value = value(items: items_by_currency, charge_category_id: nil)
         currency_row = {
           id: SecureRandom.uuid,
           description: currency_description(currency: currency),
-          value: value(items: items_by_currency, charge_category_id: nil),
+          value: value_with_currency(fee_value),
           order: 0,
           parentId: row[:id],
           lineItemId: nil,
@@ -87,7 +89,7 @@ module Api
           id: SecureRandom.uuid,
           editId: item.id,
           description: decorated_line_item.description,
-          value: decorated_line_item.total,
+          value: value_with_currency(decorated_line_item.total),
           order: 0,
           parentId: row[:id],
           lineItemId: item.id,
@@ -156,10 +158,16 @@ module Api
     def value(items:, charge_category_id:)
       edited_price = charge_breakdown.charges.find_by(children_charge_category_id: charge_category_id)&.edited_price
 
-      formatted_value = (edited_price&.money || items.sum(&:amount)).format
-      single_currency = items.pluck(:amount_currency).uniq.length == 1
-      formatted_value += ' *' unless single_currency
-      formatted_value
+      (edited_price&.money || items.sum(&:amount))
+    end
+
+    def value_with_currency(value)
+      return nil unless value
+
+      {
+        amount: value.amount,
+        currency: value.currency.iso_code
+      }
     end
 
     attr_reader :tender, :rows, :scope, :charge_breakdown

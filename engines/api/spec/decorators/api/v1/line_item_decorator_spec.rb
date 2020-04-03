@@ -19,7 +19,7 @@ RSpec.describe Api::V1::LineItemDecorator do
 
       it 'returns the right total amount for the line item' do
         aggregate_failures do
-          expect(decorated_line_item.total).to eq('$0.30')
+          expect(decorated_line_item.total.amount).to eq(0.30)
         end
       end
     end

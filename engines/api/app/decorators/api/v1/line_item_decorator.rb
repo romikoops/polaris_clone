@@ -8,7 +8,7 @@ module Api
       delegate :mode_of_transport, to: :tender
 
       def total
-        amount_cents.zero? ? '-' : amount.format
+        amount
       end
 
       def description
