@@ -107,10 +107,10 @@ class QuoteChargeBreakdown extends Component {
       'trucking_on'
     ]
     const availableQuoteKeys = Object.keys(this.props.quote).filter(
-      key => !this.unbreakableKeys.includes(key)
+      (key) => !this.unbreakableKeys.includes(key)
     )
 
-    return keysInOrder.filter(key => availableQuoteKeys.includes(key))
+    return keysInOrder.filter((key) => availableQuoteKeys.includes(key))
   }
 
   motName (name) {
@@ -129,7 +129,7 @@ class QuoteChargeBreakdown extends Component {
     let value
     if (key.includes('trucking') && (user.guest || scope.hide_grand_total)) {
       const targetKey = Object.keys(price[1]).filter(
-        pKey => !this.unbreakableKeys.includes(pKey)
+        (pKey) => !this.unbreakableKeys.includes(pKey)
       )[0]
       currency = get(price, ['1', targetKey, 'currency'])
       value = get(price, ['1', targetKey, 'value'])
@@ -177,8 +177,8 @@ class QuoteChargeBreakdown extends Component {
     const { quote } = this.props
 
     const contentSections = Object.entries(quote[`${key}`])
-      .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
-      .filter(value => value.length !== 1)
+      .map((array) => array.filter((value) => !this.unbreakableKeys.includes(value)))
+      .filter((value) => value.length !== 1)
 
     const currencySections = {}
     const includedSections = []
@@ -239,7 +239,7 @@ class QuoteChargeBreakdown extends Component {
       return consolidatedCargo
     }
 
-    return cargo.filter(cargo => String(cargo.id) === String(id))[0]
+    return cargo.filter((item) => String(item.id) === String(id))[0]
   }
 
   determineContentToGenerate (key) {
@@ -251,23 +251,24 @@ class QuoteChargeBreakdown extends Component {
   }
 
   generateUnitContent (key) {
-    const { quote, t, scope } = this.props
+    const { quote, scope } = this.props
 
     if (quote[`${key}`] == null) {
-      return
+      return ''
     }
 
     const unitSections = Object.entries(quote[`${key}`])
-      .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
-      .filter(value => value.length !== 1)
+      .map((array) => array.filter((value) => !this.unbreakableKeys.includes(value)))
+      .filter((value) => value.length !== 1)
 
     const filteredUnitSections = unitSections.filter((unitSection) => !unitSection.includes(null))
-    filteredUnitSections.map((unitArray) => {
+
+    return filteredUnitSections.map((unitArray) => {
       const cargo = this.fetchCargoData(unitArray[0])
 
       const contentSections = Object.entries(unitArray[1])
-        .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
-        .filter(value => value.length !== 1)
+        .map((array) => array.filter((value) => !this.unbreakableKeys.includes(value)))
+        .filter((value) => value.length !== 1)
       const currencySections = {}
       const includedSections = []
       const excludedSections = []
@@ -334,7 +335,7 @@ class QuoteChargeBreakdown extends Component {
   }
 
   togglePricingBreakdownModal () {
-    this.setState(prevState => ({ showPricingBreakdownModal: !prevState.showPricingBreakdownModal }))
+    this.setState((prevState) => ({ showPricingBreakdownModal: !prevState.showPricingBreakdownModal }))
   }
 
   toggleExpander (key) {
@@ -377,7 +378,7 @@ class QuoteChargeBreakdown extends Component {
   renderContent (key, currencySections, currencyTotals, includedSections, excludedSections, showSubTotal, cargo) {
     const { t, scope } = this.props
 
-    const feeSections = Object.entries(currencySections).map(currencyFees => (
+    const feeSections = Object.entries(currencySections).map((currencyFees) => (
       <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
         {scope.detailed_billing
           ? currencyFees[1].map((price, i) => {
@@ -388,12 +389,13 @@ class QuoteChargeBreakdown extends Component {
                 <div className="flex-45 layout-row layout-align-start-center">
                   {
                     this.pricingBreakdownExists(cargo, price[0]) &&
-                  (<div
-                    className={`flex-none layout-row layout-align-center-center pointy ${styles.view_breakdown}`}
-                    onClick={() => this.showPricingBreakdown(key, price, cargo)}
-                  >
-                    <i className="fa fa-info-circle" />
-                  </div>
+                  (
+                    <div
+                      className={`flex-none layout-row layout-align-center-center pointy ${styles.view_breakdown}`}
+                      onClick={() => this.showPricingBreakdown(key, price, cargo)}
+                    >
+                      <i className="fa fa-info-circle" />
+                    </div>
                   )
                   }
                   <span className={this.pricingBreakdownExists(cargo, price[0]) && styles.padding_adjust}>
@@ -601,7 +603,7 @@ class QuoteChargeBreakdown extends Component {
     )
 
     return [
-      this.quoteKeys().map(key => (
+      this.quoteKeys().map((key) => (
         <CollapsingBar
           showArrow={get(scope, ['quote_card', 'sections', key], false)}
           showArrowSpacer={!get(scope, ['quote_card', 'sections', key], false)}
