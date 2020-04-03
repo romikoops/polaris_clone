@@ -44,7 +44,7 @@ class EngineGenerator < Rails::Generators::NamedBase
         remove_file 'spec/dummy/config/routes.rb', verbose: false
       end
 
-      remove_dir 'app/models', verbose: false
+      remove_dir 'app/models', verbose: false unless @engine_type == 'data'
       remove_dir 'app/services', verbose: false unless @engine_type == 'service'
 
       Dir['**/*engine_template*'].each do |item|
