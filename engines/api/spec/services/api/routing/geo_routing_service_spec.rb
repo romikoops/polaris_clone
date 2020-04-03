@@ -82,6 +82,22 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
       end
     end
 
+    context 'when targeting the origin with destination lat lng and query and multiple hubs' do
+      before do
+        hub_name = origin_hub.name.split(' ').first + ' Airport'
+        FactoryBot.create(:legacy_hub, name: hub_name, hub_type: 'air', nexus: origin_hub.nexus)
+      end
+
+      let(:lat) { destination_hub.latitude }
+      let(:lng) { destination_hub.longitude }
+      let(:query) { origin_hub.nexus.name.first(5) }
+      let(:target) { :origin_destination }
+
+      it 'Renders a json of origins for given a destination lat lng' do
+        expect(result.pluck(:name)).to match_array([origin_hub.nexus.name])
+      end
+    end
+
     context 'when targeting the destination with origin lat lng' do
       let(:lat) { origin_hub.latitude }
       let(:lng) { origin_hub.longitude }

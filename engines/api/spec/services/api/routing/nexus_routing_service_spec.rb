@@ -48,6 +48,21 @@ RSpec.describe Api::Routing::NexusRoutingService, type: :service do
       end
     end
 
+    context 'when targeting the origin with destination id and query and multiple hubs' do
+      before do
+        hub_name = origin_hub.name.split(' ').first + ' Airport'
+        FactoryBot.create(:legacy_hub, name: hub_name, hub_type: 'air', nexus: origin_hub.nexus)
+      end
+
+      let(:nexus_id) { destination_hub.nexus_id }
+      let(:query) { origin_hub.nexus.name.first(5) }
+      let(:target) { :origin_destination }
+
+      it 'Renders a json of origins for given a destination lat lng' do
+        expect(result.pluck(:name)).to match_array([origin_hub.nexus.name])
+      end
+    end
+
     context 'when targeting the destination with origin id ' do
       let(:target) { :destination_origin }
       let(:nexus_id) { origin_hub.nexus_id }
