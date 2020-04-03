@@ -4,9 +4,9 @@ require 'rails_helper'
 
 module Api
   RSpec.describe FeeTableService, type: :service do
-    let(:tenant) { FactoryBot.create(:tenants_tenant) }
+    let!(:tenant) { FactoryBot.create(:legacy_tenant) }
     let(:scope) { {} }
-    let(:shipment) { FactoryBot.create(:legacy_shipment, with_full_breakdown: true, with_tenders: true) }
+    let(:shipment) { FactoryBot.create(:legacy_shipment, with_full_breakdown: true, with_tenders: true, tenant: tenant) }
     let(:tender) { shipment.charge_breakdowns.first.tender }
 
     describe '.perform' do
@@ -46,7 +46,7 @@ module Api
       end
 
       context 'with cargo_item load type' do
-        let(:shipment) { FactoryBot.create(:legacy_shipment, load_type: 'cargo_item', with_full_breakdown: true, with_tenders: true) }
+        let(:shipment) { FactoryBot.create(:legacy_shipment, load_type: 'cargo_item', with_full_breakdown: true, with_tenders: true, tenant: tenant) }
         let(:expected_descriptions) do
           ['Pre-Carriage',
            '1 x Pallet',

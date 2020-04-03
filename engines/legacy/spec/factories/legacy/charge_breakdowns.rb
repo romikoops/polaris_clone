@@ -5,6 +5,7 @@ FactoryBot.define do
     association :shipment, factory: :legacy_shipment
     transient do
       with_tender { false }
+      quotation { nil }
       sections { ['cargo'] }
     end
 
@@ -20,7 +21,8 @@ FactoryBot.define do
                                    origin_hub: charge_breakdown.trip.itinerary.hubs.first,
                                    destination_hub: charge_breakdown.trip.itinerary.hubs.last,
                                    tenant_vehicle: charge_breakdown.trip.tenant_vehicle,
-                                   amount: charge_breakdown&.grand_total&.price&.money)
+                                   amount: charge_breakdown&.grand_total&.price&.money,
+                                   quotation: evaluator.quotation)
         charge_breakdown.tender = tender
       end
       evaluator.sections.each do |section|

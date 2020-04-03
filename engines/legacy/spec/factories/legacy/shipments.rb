@@ -85,7 +85,15 @@ FactoryBot.define do
       shipment.itinerary_id = shipment.trip.itinerary_id if shipment.itinerary.nil?
       shipment.origin_nexus = shipment.origin_hub.nexus if shipment.origin_hub.present?
       shipment.destination_nexus = shipment.destination_hub.nexus if shipment.destination_hub.present?
-
+      if evaluator.with_tenders
+        quotation = FactoryBot.create(:quotations_quotation,
+                                      origin_nexus: shipment.origin_nexus,
+                                      destination_nexus: shipment.destination_nexus,
+                                      user: shipment.user,
+                                      created_at: shipment.created_at,
+                                      tenants_user: Tenants::User.find_by(legacy_id: shipment.user_id),
+                                      tenant: Tenants::Tenant.find_by(legacy_id: shipment.tenant_id))
+      end
       if evaluator.with_aggregated_cargo
         create(:legacy_aggregated_cargo, shipment: shipment)
       else
@@ -98,7 +106,8 @@ FactoryBot.define do
                                              trip: shipment.trip,
                                              shipment: shipment,
                                              with_tender: evaluator.with_tenders,
-                                             sections: sections)
+                                             sections: sections,
+                                             quotation: quotation)
       end
     end
 

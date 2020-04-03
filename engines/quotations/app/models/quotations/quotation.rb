@@ -4,6 +4,7 @@ module Quotations
   class Quotation < ApplicationRecord
     belongs_to :tenant, class_name: 'Tenants::Tenant'
     belongs_to :user, optional: true, class_name: 'Legacy::User'
+    belongs_to :tenants_user, optional: true, class_name: 'Tenants::User'
     belongs_to :origin_nexus, class_name: 'Legacy::Nexus'
     belongs_to :destination_nexus, class_name: 'Legacy::Nexus'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
@@ -28,6 +29,7 @@ end
 #  pickup_address_id    :integer
 #  sandbox_id           :bigint
 #  tenant_id            :uuid
+#  tenants_user_id      :uuid
 #  user_id              :bigint
 #
 # Indexes

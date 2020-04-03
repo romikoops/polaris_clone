@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
+  s.add_dependency 'imc-analytics'
   s.add_dependency 'imc-api_auth'
   s.add_dependency 'imc-api_docs'
   s.add_dependency 'imc-core'

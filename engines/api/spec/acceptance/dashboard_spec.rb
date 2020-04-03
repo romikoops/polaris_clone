@@ -15,18 +15,22 @@ RSpec.resource 'Dashboard' do
   let(:user) { Tenants::User.find_by(legacy_id: legacy_user.id) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
-
-
-  before(:each) do
-    allow_any_instance_of(Api::ApiController).to receive(:current_user).and_return(user)
-  end
+  let(:start_date) { DateTime.new(2020, 2, 10) }
+  let(:shipment_date) { DateTime.new(2020, 2, 20) }
+  let(:end_date) { DateTime.new(2020, 3, 10) }
 
   get '/v1/dashboard' do
-    example_request 'Returns information of current user' do
-      explanation <<-DOC
-        Use this endpoint to fetch information of currently signed in user.
-      DOC
+    parameter :user, 'The user who is accessing their dashboard'
+    parameter :widget, 'The widget specific widget that they are trying to access on the dashboard'
+    parameter :start_date, 'The start date provided by the filtering of the user'
+    parameter :end_date, 'The end date provided by the filtering of the user'
 
+    example 'Returns information for a provided widget' do
+      explanation <<-DOC
+        The user attempts to access the data needed for a given widget while logging on to the bridge dashboard
+      DOC
+      request = { user: user, widget: 'activeClientCount', start_date: end_date, end_date: end_date }
+      do_request(request)
       expect(status).to eq 200
     end
   end

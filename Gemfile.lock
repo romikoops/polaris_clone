@@ -107,6 +107,22 @@ PATH
       strong_migrations (~> 0.6)
 
 PATH
+  remote: engines/analytics
+  specs:
+    imc-analytics (1)
+      activerecord-postgis-adapter (= 5.2.2)
+      config (~> 2.2)
+      imc-legacy
+      imc-pricings
+      imc-quotations
+      imc-shipments
+      imc-tenants
+      paper_trail (~> 10.3)
+      pg (>= 0.18, < 2.0)
+      rails (= 5.2.2)
+      strong_migrations (~> 0.6)
+
+PATH
   remote: engines/api_auth
   specs:
     imc-api_auth (1)
@@ -143,6 +159,7 @@ PATH
       config (~> 2.2)
       draper (~> 4.0)
       fast_jsonapi
+      imc-analytics
       imc-api_auth
       imc-api_docs
       imc-core
@@ -1187,6 +1204,7 @@ DEPENDENCIES
   imc-admiralty_auth!
   imc-admiralty_reports!
   imc-admiralty_tenants!
+  imc-analytics!
   imc-api!
   imc-api_auth!
   imc-api_docs!

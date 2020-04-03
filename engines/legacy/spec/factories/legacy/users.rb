@@ -10,6 +10,7 @@ FactoryBot.define do
       with_profile { false }
       first_name { 'Guest' }
       last_name { 'User' }
+      company { nil }
     end
 
     after(:create) do |user, evaluator|
@@ -17,6 +18,7 @@ FactoryBot.define do
                                        first_name: evaluator.first_name,
                                        last_name: evaluator.last_name,
                                        user_id: Tenants::User.find_by(legacy_id: user.id).id)
+      Tenants::User.find_by(legacy_id: user.id).update(company_id: company.id) if evaluator.company.present?
     end
   end
 end

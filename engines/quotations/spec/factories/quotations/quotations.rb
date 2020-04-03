@@ -8,6 +8,7 @@ FactoryBot.define do
     association :destination_nexus, factory: :legacy_nexus
     association :user, factory: :legacy_user, with_profile: true
     association :tenant, factory: :tenants_tenant
+    association :tenants_user, factory: :tenants_user
   end
 end
 
@@ -25,6 +26,7 @@ end
 #  pickup_address_id    :integer
 #  sandbox_id           :bigint
 #  tenant_id            :uuid
+#  tenants_user_id      :uuid
 #  user_id              :bigint
 #
 # Indexes

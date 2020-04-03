@@ -6,6 +6,7 @@ RSpec.describe Quotations::TenderUpdater do
   describe '#perform' do
     let(:tender) { FactoryBot.create(:quotations_tender) }
     let(:charge_breakdown) { FactoryBot.create(:legacy_charge_breakdown, tender_id: tender.id) }
+    let(:tenant) { FactoryBot.create(:legacy_tenant) }
 
     context 'when the charge is of detail level 0' do
       subject(:updater) do
@@ -132,7 +133,7 @@ RSpec.describe Quotations::TenderUpdater do
     context 'when there are two charges of the same charge category' do
       let(:container_1) { FactoryBot.build(:fcl_40_container) }
       let(:container_2) { FactoryBot.build(:fcl_20_container) }
-      let(:shipment) { FactoryBot.create(:legacy_shipment, with_tenders: true, with_breakdown: true, containers: [container_1, container_2]) }
+      let(:shipment) { FactoryBot.create(:legacy_shipment, with_tenders: true, tenant: tenant, with_breakdown: true, containers: [container_1, container_2]) }
       let(:breakdown) { shipment.charge_breakdowns.first }
       let(:tender) { breakdown.tender }
       let(:line_item) { tender.line_items.find_by(cargo: container_1) }

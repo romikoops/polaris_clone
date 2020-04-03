@@ -15,6 +15,8 @@ module Shipments
     has_one    :consignee, class_name: 'ShipmentRequestContacts::Consignee'
     has_one    :consignor, class_name: 'ShipmentRequestContacts::Consignor'
 
+    delegate :itinerary, :mode_of_transport, :carrier, to: :tender
+
     aasm column: :status do
       state :created, initial: true
     end

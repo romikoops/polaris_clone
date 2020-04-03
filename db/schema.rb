@@ -1265,6 +1265,7 @@ ActiveRecord::Schema.define(version: 2020_04_02_173954) do
     t.bigint "sandbox_id"
     t.datetime "selected_date"
     t.uuid "tenant_id"
+    t.uuid "tenants_user_id"
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["destination_nexus_id"], name: "index_quotations_quotations_on_destination_nexus_id"

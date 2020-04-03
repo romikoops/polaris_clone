@@ -33,6 +33,7 @@ end
 #  pickup_address_id    :integer
 #  sandbox_id           :bigint
 #  tenant_id            :uuid
+#  tenants_user_id      :uuid
 #  user_id              :bigint
 #
 # Indexes

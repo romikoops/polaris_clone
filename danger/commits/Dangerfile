@@ -3,7 +3,7 @@
 # rubocop:disable all
 
 # Ensure all commits have ticket number
-COMMIT_REGEXP = /\A(IMC-\d+)|ci|chore|(hot)?fix|revert|merge branch/i
+COMMIT_REGEXP = /\A(IMC-\d+)|ci|chore|(hot)?fix|revert|merge (remote-tracking )?branch/i
 unless git.commits.all? { |c| COMMIT_REGEXP.match?(c.message) }
   title = ':bookmark: Invalid Commit Message'
   body = <<-END_OF_HELP

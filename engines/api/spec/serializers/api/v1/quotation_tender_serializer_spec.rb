@@ -4,7 +4,7 @@ require 'rails_helper'
 
 module Api
   RSpec.describe V1::QuotationTenderSerializer do
-    let(:tenant) { FactoryBot.create(:legacy_tenant) }
+    let!(:tenant) { FactoryBot.create(:legacy_tenant) }
 
     let(:charge_category) { FactoryBot.create(:bas_charge) }
     let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary) }
