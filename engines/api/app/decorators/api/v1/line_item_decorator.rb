@@ -15,10 +15,22 @@ module Api
         determine_render_string
       end
 
+      def total_and_currency
+        {
+          included: included_fee?,
+          amount: amount.amount,
+          currency: amount.currency.iso_code
+        }
+      end
+
       private
 
       def scope
         context[:scope]
+      end
+
+      def included_fee?
+        charge_category.code.include? 'included'
       end
 
       def adjusted_key

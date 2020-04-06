@@ -94,5 +94,33 @@ RSpec.describe Api::V1::LineItemDecorator do
         end
       end
     end
+
+    context 'with included fee (no value for calculation)' do
+      before do
+        line_item.charge_category = FactoryBot.create(:legacy_charge_categories, code: 'included_baf', name: 'BAF')
+      end
+
+      let(:expected_result) do
+        { currency: line_item.amount.currency.iso_code, amount: line_item.amount.amount, included: true }
+      end
+
+      it 'decorates the line item and returns included when the fee is included' do
+        aggregate_failures do
+          expect(decorated_line_item.total_and_currency).to eq(expected_result)
+        end
+      end
+    end
+
+    context 'with normal fee (vaue used in calculation)' do
+      let(:expected_result) do
+        { currency: line_item.amount.currency.iso_code, amount: line_item.amount.amount, included: false }
+      end
+
+      it 'decorates the line item and returns included false when the fee isnt included' do
+        aggregate_failures do
+          expect(decorated_line_item.total_and_currency).to eq(expected_result)
+        end
+      end
+    end
   end
 end

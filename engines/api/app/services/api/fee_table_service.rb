@@ -83,13 +83,13 @@ module Api
     end
 
     def create_fee_rows(row:, items:)
-      items.each do |item|
+      items.sort_by { |item| -item.amount }.each do |item|
         decorated_line_item = Api::V1::LineItemDecorator.new(item, context: { scope: scope })
         @rows << {
           id: SecureRandom.uuid,
           editId: item.id,
           description: decorated_line_item.description,
-          value: value_with_currency(decorated_line_item.total),
+          value: decorated_line_item.total_and_currency,
           order: 0,
           parentId: row[:id],
           lineItemId: item.id,
