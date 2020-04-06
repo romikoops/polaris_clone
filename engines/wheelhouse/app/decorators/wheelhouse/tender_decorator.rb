@@ -22,7 +22,7 @@ module Wheelhouse
     end
 
     def transshipment
-      '-' # pending new transshipment data
+      object.transshipment || 'direct'
     end
 
     def transit_time

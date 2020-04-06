@@ -35,8 +35,24 @@ RSpec.describe Wheelhouse::TenderDecorator do
       aggregate_failures do
         expect(decorated_tender.total).to eq('€250.00')
         expect(decorated_tender.transit_time).to eq((trip.end_date.to_date - trip.start_date.to_date).to_i)
-        expect(decorated_tender.transshipment).to eq('-')
+        expect(decorated_tender.transshipment).to eq('direct')
         expect(decorated_tender.service_level).to eq(tenant_vehicle.name)
+      end
+    end
+
+    context 'with transshipment' do
+      let(:tender) do
+        FactoryBot.create(:quotations_tender,
+                          itinerary: itinerary,
+                          origin_hub: origin_hub,
+                          destination_hub: destination_hub,
+                          tenant_vehicle: tenant_vehicle,
+                          transshipment: 'ZACPT',
+                          amount: Money.new(25_000, 'EUR'))
+      end
+
+      it 'returns the transshipment LOCODE' do
+        expect(decorated_tender.transshipment).to eq('ZACPT')
       end
     end
   end

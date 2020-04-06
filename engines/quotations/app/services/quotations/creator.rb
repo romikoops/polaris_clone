@@ -59,7 +59,7 @@ module Quotations
         destination_hub: destination_hub,
         amount: quote_total.value,
         amount_currency: quote_total.currency,
-        transshipment: extract_transshipment(result: result)
+        transshipment: extract_transshipment(itinerary: schedule.trip.itinerary, result: result)
       }
     end
 
@@ -86,7 +86,9 @@ module Quotations
       shipment.cargo_units.find(charge_category.cargo_unit_id)
     end
 
-    def extract_transshipment(result:)
+    def extract_transshipment(itinerary:, result:)
+      return itinerary.transshipment if itinerary.transshipment.present?
+
       result[:pricings_by_cargo_class].values.pluck(:transshipment).first
     end
 
