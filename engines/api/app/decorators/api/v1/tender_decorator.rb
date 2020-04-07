@@ -8,7 +8,7 @@ module Api
       delegate :vessel, to: :trip
 
       def route
-        charge_breakdown.trip.itinerary.name
+        itinerary.name
       end
 
       def charges
