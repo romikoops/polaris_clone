@@ -33,6 +33,10 @@ http {
 
     root /usr/share/nginx/html;
 
+    if ($http_x_forwarded_proto = "http") {
+      return 301 https://$host$request_uri;
+    }
+
     location = /version.json {
       try_files $uri =404;
       expires 1m;
