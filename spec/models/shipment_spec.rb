@@ -104,6 +104,7 @@ end
 #  closing_date                        :datetime
 #  customs                             :jsonb
 #  customs_credit                      :boolean          default(FALSE)
+#  deleted_at                          :datetime
 #  desired_start_date                  :datetime
 #  direction                           :string
 #  eori                                :string
@@ -143,10 +144,9 @@ end
 #
 # Indexes
 #
-#  index_shipments_on_sandbox_id             (sandbox_id)
-#  index_shipments_on_tenant_id              (tenant_id)
-#  index_shipments_on_tender_id              (tender_id)
-#  index_shipments_on_transport_category_id  (transport_category_id)
+#  index_shipments_on_sandbox_id  (sandbox_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tenant_id   (tenant_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tender_id   (tender_id)
 #
 # Foreign Keys
 #

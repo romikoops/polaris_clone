@@ -19,6 +19,8 @@ module Legacy
     LOAD_TYPES = %w[cargo_item container].freeze
     DIRECTIONS = %w[import export].freeze
 
+    acts_as_paranoid
+
     belongs_to :user, -> { with_deleted }
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :tenant, class_name: 'Legacy::Tenant'
@@ -84,9 +86,6 @@ module Legacy
       end
     end
 
-    before_validation :generate_imc_reference,
-                      :set_default_trucking, :set_tenant,
-                      on: :create
     before_validation :update_carriage_properties!, :set_default_destination_dates
 
     def set_trucking_chargeable_weight(target, weight)
@@ -231,7 +230,7 @@ module Legacy
       hour_as_letter = ('A'..'Z').to_a[now.hour - 1]
       year = now.year.to_s[-2..-1]
       first_part = day_of_the_year + hour_as_letter + year
-      last_shipment_in_this_hour = Shipment.where('imc_reference LIKE ?', first_part + '%').last
+      last_shipment_in_this_hour = Legacy::Shipment.with_deleted.where('imc_reference LIKE ?', first_part + '%').last
       if last_shipment_in_this_hour
         last_serial_number = last_shipment_in_this_hour.imc_reference[first_part.length..-1].to_i
         new_serial_number = last_serial_number + 1
@@ -285,6 +284,7 @@ end
 #  closing_date                        :datetime
 #  customs                             :jsonb
 #  customs_credit                      :boolean          default(FALSE)
+#  deleted_at                          :datetime
 #  desired_start_date                  :datetime
 #  direction                           :string
 #  eori                                :string
@@ -324,10 +324,9 @@ end
 #
 # Indexes
 #
-#  index_shipments_on_sandbox_id             (sandbox_id)
-#  index_shipments_on_tenant_id              (tenant_id)
-#  index_shipments_on_tender_id              (tender_id)
-#  index_shipments_on_transport_category_id  (transport_category_id)
+#  index_shipments_on_sandbox_id  (sandbox_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tenant_id   (tenant_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tender_id   (tender_id)
 #
 # Foreign Keys
 #

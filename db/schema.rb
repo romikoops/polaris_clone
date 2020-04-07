@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_02_173954) do
+ActiveRecord::Schema.define(version: 2020_04_06_150952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1471,6 +1471,7 @@ ActiveRecord::Schema.define(version: 2020_04_02_173954) do
     t.datetime "created_at", null: false
     t.jsonb "customs"
     t.boolean "customs_credit", default: false
+    t.datetime "deleted_at"
     t.datetime "desired_start_date"
     t.integer "destination_hub_id"
     t.integer "destination_nexus_id"
@@ -1506,10 +1507,9 @@ ActiveRecord::Schema.define(version: 2020_04_02_173954) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.string "uuid"
-    t.index ["sandbox_id"], name: "index_shipments_on_sandbox_id"
-    t.index ["tenant_id"], name: "index_shipments_on_tenant_id"
+    t.index ["sandbox_id"], name: "index_shipments_on_sandbox_id", where: "(deleted_at IS NULL)"
+    t.index ["tenant_id"], name: "index_shipments_on_tenant_id", where: "(deleted_at IS NULL)"
     t.index ["tender_id"], name: "index_shipments_on_tender_id"
-    t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
   create_table "shipments_cargos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
