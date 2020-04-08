@@ -22,38 +22,48 @@ RSpec.describe ExcelDataServices::Inserters::ChargeCategories do
     end
     let(:tenant) { create(:tenant) }
 
-    it 'creates the correct number of charge categories' do
-      stats = described_class.insert(tenant: tenant, data: data, options: {})
-      expect(stats.dig(:charge_categories, :number_created)).to be(14)
-      expect(ChargeCategory.where(tenant_id: tenant.id).count).to be(14)
-      expect(ChargeCategory.find_by(tenant_id: tenant.id, code: 'export').name).to eq('Origin Local Charges')
+    context 'when no charge categories exist' do
+      it 'creates the correct number of charge categories' do
+        stats = described_class.insert(tenant: tenant, data: data, options: {})
+        aggregate_failures do
+          expect(stats.dig('legacy/charge_categories'.to_sym, :number_created)).to be(14)
+          expect(Legacy::ChargeCategory.where(tenant_id: tenant.id).count).to be(14)
+          expect(Legacy::ChargeCategory.find_by(tenant_id: tenant.id, code: 'export').name).to eq('Origin Local Charges')
+        end
+      end
     end
 
-    it 'finds and replaces all other Charge Categories for that tenant' do
-      charges = [
-        create(
-          :charge,
-          charge_category: create(:charge_category,
-                                  code: 'ams',
-                                  name: 'test',
-                                  tenant_id: tenant.id),
-          children_charge_category: create(:charge_category,
-                                           code: 'thc',
-                                           name: 'test',
-                                           tenant_id: tenant.id)
-        )
-      ]
+    context 'when updating existing charge categories and charges' do
+      let!(:existing_charges) do
+        [
+          create(
+            :charge,
+            charge_category: create(:charge_category,
+                                    code: 'ams',
+                                    name: 'test',
+                                    tenant_id: tenant.id),
+            children_charge_category: create(:charge_category,
+                                             code: 'thc',
+                                             name: 'test',
+                                             tenant_id: tenant.id)
+          )
+        ]
+      end
+      let(:new_ams_charge) { Legacy::ChargeCategory.find_by(code: 'ams', tenant_id: tenant.id) }
+      let(:new_thc_charge) { Legacy::ChargeCategory.find_by(code: 'thc', tenant_id: tenant.id) }
+      let(:charge_ids) { existing_charges.map(&:id) }
+      let(:charges) { Legacy::Charge.where(id: charge_ids) }
 
-      stats = described_class.insert(tenant: tenant, data: data, options: {})
-      new_ams_charge = ChargeCategory.find_by(code: 'ams', tenant_id: tenant.id)
-      new_thc_charge = ChargeCategory.find_by(code: 'thc', tenant_id: tenant.id)
-      charge_ids = charges.map(&:id)
-      expect(stats.dig(:charge_categories, :number_created)).to be(12)
-      expect(ChargeCategory.where(code: 'ams', tenant_id: tenant.id).count).to eq(1)
-      expect(ChargeCategory.where(code: 'thc', tenant_id: tenant.id).count).to eq(1)
-      charges = Charge.where(id: charge_ids)
-      expect(charges.pluck(:charge_category_id).uniq).to eq([new_ams_charge.id])
-      expect(charges.pluck(:children_charge_category_id).uniq).to eq([new_thc_charge.id])
+      it 'finds and replaces all other Charge Categories for that tenant' do
+        stats = described_class.insert(tenant: tenant, data: data, options: {})
+        aggregate_failures do
+          expect(stats.dig('legacy/charge_categories'.to_sym, :number_created)).to be(12)
+          expect(Legacy::ChargeCategory.where(code: 'ams', tenant_id: tenant.id).count).to eq(1)
+          expect(Legacy::ChargeCategory.where(code: 'thc', tenant_id: tenant.id).count).to eq(1)
+          expect(charges.pluck(:charge_category_id).uniq).to eq([new_ams_charge.id])
+          expect(charges.pluck(:children_charge_category_id).uniq).to eq([new_thc_charge.id])
+        end
+      end
     end
   end
 end

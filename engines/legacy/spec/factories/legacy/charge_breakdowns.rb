@@ -38,14 +38,20 @@ FactoryBot.define do
         base_charge = create(
           :legacy_charge,
           charge_breakdown: charge_breakdown,
-          charge_category: Legacy::ChargeCategory.base_node,
-          children_charge_category: Legacy::ChargeCategory.grand_total
+          charge_category: Legacy::ChargeCategory.from_code(
+            code: 'base_node', name: 'Base Node', tenant_id: shipment.tenant_id
+          ),
+          children_charge_category: Legacy::ChargeCategory.from_code(
+            code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+          )
         )
 
         grand_total_charge = create(
           :legacy_charge,
           charge_breakdown: charge_breakdown,
-          charge_category: Legacy::ChargeCategory.grand_total,
+          charge_category: Legacy::ChargeCategory.from_code(
+            code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+          ),
           children_charge_category: section_charge_category,
           parent_id: base_charge.id,
           detail_level: 1

@@ -176,9 +176,9 @@ class ShippingTools
     quote = if scope['open_quotation_tool'] || scope['closed_quotation_tool']
               Skylight.instrument title: 'Create Shipments From Quote' do
                 ShippingTools.create_shipments_from_quotation(
-                    offer_calculator.shipment,
-                    offer_calculator.detailed_schedules.map(&:deep_stringify_keys!)
-                  )
+                  offer_calculator.shipment,
+                  offer_calculator.detailed_schedules.map(&:deep_stringify_keys!)
+                )
               end
             end
 
@@ -192,7 +192,6 @@ class ShippingTools
       cargoUnits: cargo_units,
       aggregatedCargo: offer_calculator.shipment.aggregated_cargo
     }
-
   rescue OfferCalculator::TruckingTools::LoadMeterageExceeded
     raise ApplicationError::LoadMeterageExceeded
   rescue OfferCalculator::Calculator::MissingTruckingData
@@ -290,28 +289,44 @@ class ShippingTools
 
     # TBD - Adjust for itinerary logic
     if shipment_data[:insurance][:isSelected]
-      insurance_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code(code: 'insurance', tenant_id: shipment.tenant_id),
-        charge_category: ChargeCategory.grand_total,
+      insurance_charge = Legacy::Charge.create(
+        children_charge_category: Legacy::ChargeCategory.from_code(
+          code: 'insurance', tenant_id: shipment.tenant_id
+        ),
+        charge_category: Legacy::ChargeCategory.from_code(
+          code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+        ),
         charge_breakdown: charge_breakdown,
-        price: Legacy::Price.create(currency: shipment[:total_goods_value]['currency'], value: shipment_data[:insurance][:val]),
+        price: Legacy::Price.create(
+          currency: shipment[:total_goods_value]['currency'], value: shipment_data[:insurance][:val]
+        ),
         parent: charge_breakdown.charge('grand_total'),
         sandbox: sandbox
       )
-      Charge.create(
-        children_charge_category: ChargeCategory.from_code(code: 'freight_insurance', tenant_id: shipment.tenant_id),
-        charge_category: ChargeCategory.grand_total,
+      Legacy::Charge.create(
+        children_charge_category: Legacy::ChargeCategory.from_code(
+          code: 'freight_insurance', tenant_id: shipment.tenant_id
+        ),
+        charge_category: Legacy::ChargeCategory.from_code(
+          code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+        ),
         charge_breakdown: charge_breakdown,
-        price: Legacy::Price.create(currency: shipment[:total_goods_value]['currency'], value: shipment_data[:insurance][:val]),
+        price: Legacy::Price.create(
+          currency: shipment[:total_goods_value]['currency'], value: shipment_data[:insurance][:val]
+        ),
         parent: insurance_charge,
         sandbox: sandbox
       )
     end
 
     if shipment_data[:customs][:total][:val].to_d.positive? || shipment_data[:customs][:total][:hasUnknown]
-      @customs_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code(code: 'customs', tenant_id: shipment.tenant_id),
-        charge_category: ChargeCategory.grand_total,
+      @customs_charge = Legacy::Charge.create(
+        children_charge_category: Legacy::ChargeCategory.from_code(
+          code: 'customs', tenant_id: shipment.tenant_id
+        ),
+        charge_category: Legacy::ChargeCategory.from_code(
+          code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+        ),
         charge_breakdown: charge_breakdown,
         price: Legacy::Price.create(
           currency: shipment_data[:customs][:total][:currency],
@@ -321,9 +336,13 @@ class ShippingTools
         sandbox: sandbox
       )
       if shipment_data[:customs][:import][:bool]
-        @import_customs_charge = Charge.create(
-          children_charge_category: ChargeCategory.from_code(code: 'import_customs', tenant_id: shipment.tenant_id),
-          charge_category: ChargeCategory.grand_total,
+        @import_customs_charge = Legacy::Charge.create(
+          children_charge_category: ChargeCategory.from_code(
+            code: 'import_customs', tenant_id: shipment.tenant_id
+          ),
+          charge_category: ChargeCategory.from_code(
+            code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+          ),
           charge_breakdown: charge_breakdown,
           price: Legacy::Price.create(
             currency: shipment_data[:customs][:import][:currency],
@@ -334,9 +353,13 @@ class ShippingTools
         )
       end
       if shipment_data[:customs][:export][:bool]
-        @export_customs_charge = Charge.create(
-          children_charge_category: ChargeCategory.from_code(code: 'export_customs', tenant_id: shipment.tenant_id),
-          charge_category: ChargeCategory.grand_total,
+        @export_customs_charge = Legacy::Charge.create(
+          children_charge_category: Legacy::ChargeCategory.from_code(
+            code: 'export_customs', tenant_id: shipment.tenant_id
+          ),
+          charge_category: Legacy::ChargeCategory.from_code(
+            code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+          ),
           charge_breakdown: charge_breakdown,
           price: Legacy::Price.create(
             currency: shipment_data[:customs][:total][:currency],
@@ -350,9 +373,13 @@ class ShippingTools
       @customs_charge.update_price!
     end
     if shipment_data[:addons][:customs_export_paper]
-      @addons_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code(code: 'addons', tenant_id: shipment.tenant_id),
-        charge_category: ChargeCategory.grand_total,
+      @addons_charge = Legacy::Charge.create(
+        children_charge_category: Legacy::ChargeCategory.from_code(
+          code: 'addons', tenant_id: shipment.tenant_id
+        ),
+        charge_category: Legacy::ChargeCategory.from_code(
+          code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+        ),
         charge_breakdown: charge_breakdown,
         price: Legacy::Price.create(
           currency: shipment_data[:addons][:customs_export_paper][:currency],
@@ -362,9 +389,13 @@ class ShippingTools
         parent: charge_breakdown.charge('grand_total'),
         sandbox: sandbox
       )
-      @customs_export_paper = Charge.create(
-        children_charge_category: ChargeCategory.from_code(code: 'customs_export_paper', tenant_id: shipment.tenant_id),
-        charge_category: ChargeCategory.grand_total,
+      @customs_export_paper = Legacy::Charge.create(
+        children_charge_category: Legacy::ChargeCategory.from_code(
+          code: 'customs_export_paper', tenant_id: shipment.tenant_id
+        ),
+        charge_category: Legacy::ChargeCategory.from_code(
+          code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+        ),
         charge_breakdown: charge_breakdown,
         price: Legacy::Price.create(
           currency: shipment_data[:addons][:customs_export_paper][:currency],
@@ -831,7 +862,12 @@ class ShippingTools
     new_charge_breakdown = original_charge_breakdown.dup
     new_charge_breakdown.update(shipment: new_shipment)
     metadatum = Pricings::Metadatum.find_by(charge_breakdown_id: original_charge_breakdown.id)
-    new_metadatum = metadatum.dup.tap {|meta| meta.charge_breakdown_id = new_charge_breakdown.id; meta.save } if metadatum
+    if metadatum
+      new_metadatum = metadatum.dup.tap do |meta|
+        meta.charge_breakdown_id = new_charge_breakdown.id
+        meta.save
+      end
+    end
 
     new_charge_breakdown.dup_charges(charge_breakdown: original_charge_breakdown)
     %w[import export cargo].each do |charge_key|
@@ -859,7 +895,6 @@ class ShippingTools
         new_charge.children_charge_category = new_charge_category
         new_charge.save!
       end
-
     end
 
     new_shipment.save!

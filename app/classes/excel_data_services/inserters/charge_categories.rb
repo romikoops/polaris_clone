@@ -14,11 +14,12 @@ module ExcelDataServices
       private
 
       def update_or_create_charge_category(params)
-        correct_charge_category = ChargeCategory.find_or_initialize_by(
+        correct_charge_category = Legacy::ChargeCategory.find_or_initialize_by(
           tenant_id: @tenant.id,
           code: params[:fee_code].downcase,
-          sandbox: @sandbox
+          sandbox_id: @sandbox&.id
         )
+
         correct_charge_category.name = params[:fee_name] if correct_charge_category.name != params[:fee_name]
         add_stats(correct_charge_category)
         correct_charge_category.save!
@@ -27,17 +28,17 @@ module ExcelDataServices
 
       def validate_and_correct_existing_charges(charge_category)
         other_charge_category_ids =
-          ChargeCategory.where.not(id: charge_category.id)
-                        .where(
-                          tenant_id: @tenant.id,
-                          code: [charge_category.code.upcase, charge_category.code.downcase]
-                        ).ids
+          Legacy::ChargeCategory.where.not(id: charge_category.id)
+                                .where(
+                                  tenant_id: @tenant.id,
+                                  code: [charge_category.code.upcase, charge_category.code.downcase]
+                                ).select(:id)
         Charge.where(charge_category_id: other_charge_category_ids)
               .update_all(charge_category_id: charge_category.id)
         Charge.where(children_charge_category_id: other_charge_category_ids)
               .update_all(children_charge_category_id: charge_category.id)
 
-        ChargeCategory.where(id: other_charge_category_ids).destroy_all
+        Legacy::ChargeCategory.where(id: other_charge_category_ids).destroy_all
       end
     end
   end

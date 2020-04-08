@@ -6,8 +6,9 @@ module Legacy
   RSpec.describe ChargeBreakdown, type: :model do
     context 'instance methods' do
       let(:charge_breakdown) { FactoryBot.create(:legacy_charge_breakdown) }
+      let(:shipment) { charge_breakdown.shipment }
       let(:price) { FactoryBot.create(:legacy_price) }
-      let(:grand_total_category) { ChargeCategory.find_by(code: 'grand_total') }
+      let(:grand_total_category) { Legacy::ChargeCategory.find_by(code: 'grand_total', tenant_id: shipment.tenant_id) }
       let(:hidden_args) do
         {
           hidden_grand_total: false,
@@ -20,15 +21,15 @@ module Legacy
         FactoryBot.create(
           :legacy_charge,
           charge_breakdown: charge_breakdown,
-          charge_category: ChargeCategory.base_node,
-          children_charge_category: ChargeCategory.grand_total,
+          charge_category: Legacy::ChargeCategory.from_code(code: 'base_node', name: 'Base Node', tenant_id: shipment.tenant_id),
+          children_charge_category: Legacy::ChargeCategory.from_code(code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id),
           price: price
         )
       end
 
       describe '.charges.from_category' do
         it 'returns a collection of charges' do
-          result = charge_breakdown.charges.from_category(ChargeCategory.base_node.code)
+          result = charge_breakdown.charges.from_category(Legacy::ChargeCategory.from_code(code: 'base_node', name: 'Base Node', tenant_id: shipment.tenant_id).code)
 
           expect(result).not_to be_empty
           expect(result).to all be_a Charge
@@ -40,7 +41,7 @@ module Legacy
           result = charge_breakdown.charge_categories.detail(0)
 
           expect(result).not_to be_empty
-          expect(result).to all be_a ChargeCategory
+          expect(result).to all be_a Legacy::ChargeCategory
         end
       end
 
@@ -65,7 +66,7 @@ module Legacy
         it 'gets grand_total' do
           result = charge_breakdown.grand_total
           expect(result).to eq(
-            Charge.find_by(
+            Legacy::Charge.find_by(
               charge_breakdown_id: charge_breakdown.id,
               children_charge_category: grand_total_category
             )

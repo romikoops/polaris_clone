@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe OfferCalculator::TruckingTools, :aggregate_failures do
   let(:fees) do
     {
-      'ZZB' => { value: 11.0, currency: 'USD', rate_basis: 'PER_SHIPMENT' },
-      'ZZC' => { value: 22.0, currency: 'USD', rate_basis: 'PER_BILL' }
+      'ZZB' => { value: 11.0, currency: 'USD', rate_basis: 'PER_SHIPMENT', name: 'ZZB' },
+      'ZZC' => { value: 22.0, currency: 'USD', rate_basis: 'PER_BILL', name: 'ZZC' }
     }
   end
   let(:modifier) { 'kg' }

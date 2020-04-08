@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-FactoryBot.define do # rubocop:disable Metrics/BlockLength
-  factory :legacy_charge_categories, class: 'Legacy::ChargeCategory' do # rubocop:disable Metrics/BlockLength
+FactoryBot.define do
+  factory :legacy_charge_categories, class: 'Legacy::ChargeCategory' do
     name { 'Grand Total' }
     code { 'grand_total' }
+    cargo_unit_id { nil }
+    association :tenant, factory: :legacy_tenant
 
     trait :bas do
       name { 'Basic Ocean Freight' }
@@ -60,6 +62,16 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       code { 'trucking_on' }
     end
 
+    to_create do |instance|
+      instance.attributes = Legacy::ChargeCategory.create_with(code: instance.code)
+                                                  .find_or_create_by(
+                                                    tenant: instance.tenant,
+                                                    name: instance.name,
+                                                    cargo_unit_id: instance.cargo_unit_id
+                                                  )
+                                                  .attributes
+      instance.reload
+    end
 
     factory :bas_charge, traits: [:bas]
     factory :solas_charge, traits: [:solas]

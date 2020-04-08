@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Shipments::BookingProcessController do
   let(:tenant) { create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:shipment) { create(:legacy_shipment, tenant: tenant, trip: trip, itinerary: itinerary, with_breakdown: true) }
+  let(:shipment) { create(:legacy_shipment, tenant: tenant, trip: trip, user: user, itinerary: itinerary, with_breakdown: true) }
   let(:shipments_shipment) { Shipment.find(shipment.id) }
   let(:user) { create(:legacy_user, tenant: tenant) }
   let(:itinerary) { create(:gothenburg_shanghai_itinerary, tenant: tenant) }
@@ -56,7 +56,7 @@ RSpec.describe Shipments::BookingProcessController do
 
     before do
       quote_mailer = object_double('Mailer')
-      create(:legacy_quotation, original_shipment_id: shipment.id)
+      create(:legacy_quotation, user: user, original_shipment_id: shipment.id)
       allow(QuoteMailer).to receive(:quotation_admin_email).at_least(:once).and_return(quote_mailer)
       allow(QuoteMailer).to receive(:quotation_email).at_least(:once).and_return(quote_mailer)
       allow(quote_mailer).to receive(:deliver_later).at_least(:twice)

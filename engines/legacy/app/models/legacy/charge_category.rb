@@ -5,22 +5,8 @@ module Legacy
     self.table_name = 'charge_categories'
     has_many :charges
     belongs_to :tenant, class_name: 'Legacy::Tenant', optional: true
-
-    def self.grand_total
-      find_or_create_by(code: 'grand_total', name: 'Grand Total')
-    end
-
-    def self.base_node
-      find_or_create_by(code: 'base_node', name: 'Base Node')
-    end
-
-    def self.grand_total
-      find_or_create_by(code: 'grand_total', name: 'Grand Total')
-    end
-  
-    def self.base_node
-      find_or_create_by(code: 'base_node', name: 'Base Node')
-    end
+    validates :name, :code, presence: true
+    validates_uniqueness_of :name, scope: %i[code tenant_id cargo_unit_id]
 
     def self.from_code(code:, tenant_id: nil, name: nil, sandbox: nil)
       name ||= code
@@ -34,6 +20,13 @@ module Legacy
         tenant_id: tenant_id,
         sandbox_id: sandbox&.id
       )
+    end
+
+    def cargo_unit
+      return nil if cargo_unit_id.nil?
+
+      klass = "Legacy::#{code.camelize}".safe_constantize
+      klass.find_by(id: cargo_unit_id)
     end
   end
 end

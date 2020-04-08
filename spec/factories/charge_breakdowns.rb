@@ -36,13 +36,13 @@ FactoryBot.define do
           base_charge = build(
             :charge,
             charge_breakdown: charge_breakdown,
-            charge_category: ChargeCategory.base_node,
-            children_charge_category: ChargeCategory.grand_total
+            charge_category: ChargeCategory.from_code(code: 'base_node', name: 'Base Node', tenant_id: shipment.tenant_id),
+            children_charge_category: ChargeCategory.from_code(code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id)
           )
           grand_total_charge = build(
             :charge,
             charge_breakdown: charge_breakdown,
-            charge_category: ChargeCategory.grand_total,
+            charge_category: ChargeCategory.from_code(code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id),
             children_charge_category: cargo_charge_category,
             parent_id: base_charge.id
           )

@@ -12,17 +12,21 @@ FactoryBot.define do
     name { 'NAME' }
 
     after(:create) do |quotation, evaluator|
-      original_shipment = create(:legacy_shipment,
-                                 user: quotation.user,
-                                 tenant: quotation.user.tenant,
-                                 load_type: evaluator.load_type,
-                                 with_breakdown: true)
-      quotation.shipments = create_list(:legacy_shipment, evaluator.shipment_count,
-                                        user: quotation.user,
-                                        tenant: quotation.user.tenant,
-                                        load_type: evaluator.load_type,
-                                        with_breakdown: true)
-      quotation.original_shipment_id = original_shipment.id
+      if quotation.original_shipment_id.nil?
+        original_shipment = create(:legacy_shipment,
+                                   user: quotation.user,
+                                   tenant: quotation.user.tenant,
+                                   load_type: evaluator.load_type,
+                                   with_breakdown: true)
+        quotation.original_shipment_id = original_shipment.id
+      end
+      if quotation.shipments.empty?
+        quotation.shipments = create_list(:legacy_shipment, evaluator.shipment_count,
+                                          user: quotation.user,
+                                          tenant: quotation.user.tenant,
+                                          load_type: evaluator.load_type,
+                                          with_breakdown: true)
+      end
     end
   end
 end
