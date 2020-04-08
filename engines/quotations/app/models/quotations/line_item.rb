@@ -11,6 +11,7 @@ module Quotations
                     import_section: 4, trucking_on_section: 5 }
 
     monetize :amount_cents
+    monetize :original_amount_cents
   end
 end
 
@@ -18,16 +19,18 @@ end
 #
 # Table name: quotations_line_items
 #
-#  id                 :uuid             not null, primary key
-#  amount_cents       :integer
-#  amount_currency    :string
-#  cargo_type         :string
-#  section            :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  cargo_id           :integer
-#  charge_category_id :bigint
-#  tender_id          :uuid
+#  id                       :uuid             not null, primary key
+#  amount_cents             :integer
+#  amount_currency          :string
+#  cargo_type               :string
+#  original_amount_cents    :integer
+#  original_amount_currency :string
+#  section                  :integer
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  cargo_id                 :integer
+#  charge_category_id       :bigint
+#  tender_id                :uuid
 #
 # Indexes
 #

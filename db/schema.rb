@@ -1248,6 +1248,8 @@ ActiveRecord::Schema.define(version: 2020_04_07_160751) do
     t.string "cargo_type"
     t.bigint "charge_category_id"
     t.datetime "created_at", null: false
+    t.integer "original_amount_cents"
+    t.string "original_amount_currency"
     t.integer "section"
     t.uuid "tender_id"
     t.datetime "updated_at", null: false
@@ -1285,6 +1287,8 @@ ActiveRecord::Schema.define(version: 2020_04_07_160751) do
     t.string "load_type"
     t.string "name"
     t.integer "origin_hub_id"
+    t.integer "original_amount_cents"
+    t.string "original_amount_currency"
     t.uuid "quotation_id"
     t.bigint "tenant_vehicle_id"
     t.string "transshipment"

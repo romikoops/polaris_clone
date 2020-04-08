@@ -59,6 +59,8 @@ module Quotations
         destination_hub: destination_hub,
         amount: quote_total.value,
         amount_currency: quote_total.currency,
+        original_amount: quote_total.value,
+        original_amount_currency: quote_total.currency,
         transshipment: extract_transshipment(itinerary: schedule.trip.itinerary, result: result)
       }
     end
@@ -74,7 +76,9 @@ module Quotations
                         section: line_item_section,
                         cargo: extract_cargo_from_charge(charge_category: child_charge.charge_category),
                         amount_cents: price.value.to_d * 100,
-                        amount_currency: price.currency)
+                        amount_currency: price.currency,
+                        original_amount_cents: price.value.to_d * 100,
+                        original_amount_currency: price.currency)
       end
     end
 

@@ -95,6 +95,19 @@ RSpec.describe Api::V1::LineItemDecorator do
       end
     end
 
+    context 'with edited value' do
+      let(:original_total) { Money.new(500, 'EUR') }
+      let(:line_item) do
+        FactoryBot.create(:quotations_line_item,
+                          charge_category: charge_category,
+                          original_amount: original_total)
+      end
+
+      it 'decorates the line item with the correct name' do
+        expect(decorated_line_item.original_total).to eq(original_total)
+      end
+    end
+
     context 'with included fee (no value for calculation)' do
       before do
         line_item.charge_category = FactoryBot.create(:legacy_charge_categories, code: 'included_baf', name: 'BAF')

@@ -12,6 +12,7 @@ module Quotations
     has_many :line_items, inverse_of: :tender
 
     monetize :amount_cents
+    monetize :original_amount_cents
 
     delegate :mode_of_transport, to: :tenant_vehicle
     delegate :pickup_address, :delivery_address, :cargo, to: :quotation
@@ -22,20 +23,22 @@ end
 #
 # Table name: quotations_tenders
 #
-#  id                 :uuid             not null, primary key
-#  amount_cents       :integer
-#  amount_currency    :string
-#  carrier_name       :string
-#  load_type          :string
-#  name               :string
-#  transshipment      :string
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  destination_hub_id :integer
-#  itinerary_id       :integer
-#  origin_hub_id      :integer
-#  quotation_id       :uuid
-#  tenant_vehicle_id  :bigint
+#  id                       :uuid             not null, primary key
+#  amount_cents             :integer
+#  amount_currency          :string
+#  carrier_name             :string
+#  load_type                :string
+#  name                     :string
+#  original_amount_cents    :integer
+#  original_amount_currency :string
+#  transshipment            :string
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  destination_hub_id       :integer
+#  itinerary_id             :integer
+#  origin_hub_id            :integer
+#  quotation_id             :uuid
+#  tenant_vehicle_id        :bigint
 #
 # Indexes
 #

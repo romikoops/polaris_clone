@@ -27,6 +27,7 @@ module Api
           id: SecureRandom.uuid,
           description: section_description(section: section),
           value: value_with_currency(value(items: items, charge_category_id: charge_category_id)),
+          originalValue: value_with_currency(original_value(items: items)),
           lineItemId: nil,
           tenderId: tender.id,
           order: section_order(section: section),
@@ -43,11 +44,13 @@ module Api
       items.group_by(&:cargo).each do |cargo, items_by_cargo|
         charge_category_id = applicable_charge_category_id(cargo: cargo)
         fee_value = value(items: items_by_cargo, charge_category_id: charge_category_id)
+        original_fee_value = original_value(items: items_by_cargo)
         cargo_row = {
           id: SecureRandom.uuid,
           editId: cargo&.id,
           description: cargo_description(cargo: cargo),
           value: value_with_currency(fee_value),
+          originalValue: value_with_currency(original_fee_value),
           order: 0,
           parentId: row[:id],
           lineItemId: nil,
@@ -65,10 +68,12 @@ module Api
       items.group_by { |line_item| line_item.amount.currency.iso_code }
            .each do |currency, items_by_currency|
         fee_value = value(items: items_by_currency, charge_category_id: nil)
+        original_fee_value = original_value(items: items_by_currency)
         currency_row = {
           id: SecureRandom.uuid,
           description: currency_description(currency: currency),
           value: value_with_currency(fee_value),
+          originalValue: value_with_currency(original_fee_value),
           order: 0,
           parentId: row[:id],
           lineItemId: nil,
@@ -89,6 +94,7 @@ module Api
           id: SecureRandom.uuid,
           editId: item.id,
           description: decorated_line_item.description,
+          originalValue: value_with_currency(decorated_line_item.original_total),
           value: decorated_line_item.total_and_currency,
           order: 0,
           parentId: row[:id],
@@ -161,8 +167,12 @@ module Api
       (edited_price&.money || items.sum(&:amount))
     end
 
+    def original_value(items:)
+      items.sum(&:original_amount)
+    end
+
     def value_with_currency(value)
-      return nil unless value
+      return nil if value.nil?
 
       {
         amount: value.amount,

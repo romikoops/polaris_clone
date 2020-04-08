@@ -11,6 +11,10 @@ module Api
         amount
       end
 
+      def original_total
+        original_amount
+      end
+
       def description
         determine_render_string
       end

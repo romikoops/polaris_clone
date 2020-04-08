@@ -25,11 +25,18 @@ module Quotations
     end
 
     def update_line_items
-      @line_item.update!(amount: amount) if @line_item.present?
+      return if line_item.nil?
+
+      line_item.update!(amount: amount)
     end
 
     def update_tender
-      tender.update!(amount: charge_breakdown.grand_total.edited_price.money)
+      new_amount = if line_item.present?
+                     tender.line_items.sum(&:amount)
+                   else
+                     charge_breakdown.grand_total.edited_price.money
+                   end
+      tender.update!(amount: new_amount)
     end
 
     def update_charge
