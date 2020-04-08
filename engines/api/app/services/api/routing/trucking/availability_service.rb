@@ -24,7 +24,7 @@ module Api
         private
 
         def available_truck_types
-          @available_truck_types ||= truck_types(target_index: counterpart_index)
+          @available_truck_types ||= ::Trucking::Queries::TruckTypes.new(carriage_arguments).perform
         end
       end
     end

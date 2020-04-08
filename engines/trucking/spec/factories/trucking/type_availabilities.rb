@@ -59,5 +59,8 @@ end
 #
 # Indexes
 #
-#  index_trucking_type_availabilities_on_sandbox_id  (sandbox_id)
+#  index_trucking_type_availabilities_on_load_type     (load_type)
+#  index_trucking_type_availabilities_on_query_method  (query_method)
+#  index_trucking_type_availabilities_on_sandbox_id    (sandbox_id)
+#  index_trucking_type_availabilities_on_truck_type    (truck_type)
 #

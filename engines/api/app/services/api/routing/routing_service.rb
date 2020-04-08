@@ -81,14 +81,17 @@ module Api
       end
 
       def carriage_hubs
-        ::Trucking::Queries::Hubs.new(
+        ::Trucking::Queries::Hubs.new(carriage_arguments).perform
+      end
+
+      def carriage_arguments
+        {
           tenant_id: legacy_tenant_id,
           address: address,
           carriage: carriage,
-          klass: ::Trucking::Trucking,
           order_by: 'group_id',
           load_type: load_type
-        ).perform
+        }
       end
 
       def address

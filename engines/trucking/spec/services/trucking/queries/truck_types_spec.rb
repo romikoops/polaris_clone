@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Trucking::Queries::Hubs do
+RSpec.describe Trucking::Queries::TruckTypes do
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:distance_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Distance Port', tenant: tenant) }
   let(:zipcode_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Zipcode Port', tenant: tenant) }
@@ -17,7 +17,7 @@ RSpec.describe Trucking::Queries::Hubs do
   let(:longitude)    { '11.100000' }
   let(:load_type)    { 'cargo_item' }
   let(:carriage)     { 'pre' }
-  let(:distance)     { 55 }
+  let(:distance)     { 179 }
   let(:country_code) { 'SE' }
 
   let(:address) do
@@ -56,22 +56,8 @@ RSpec.describe Trucking::Queries::Hubs do
           address: address, cargo_classes: ['lcl'], order_by: 'group_id'
         ).perform
 
-        expect(hubs).to match_array([distance_hub, zipcode_hub, location_hub])
+        expect(hubs).to match_array(['default'])
       end
-    end
-  end
-
-  describe '.trucking_location_where_statement' do
-    let(:klass) do
-      described_class.new(
-        klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
-        carriage: carriage, country_code: country_code, distance: 20,
-        address: address, cargo_classes: ['lcl'], order_by: 'group_id'
-      )
-    end
-
-    it 'returns the distance in a hash when it exists' do
-      expect(klass.trucking_location_where_statement).to eq(trucking_locations: { distance: [20] })
     end
   end
 end

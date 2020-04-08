@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_06_150952) do
+ActiveRecord::Schema.define(version: 2020_04_07_160751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1979,7 +1979,9 @@ ActiveRecord::Schema.define(version: 2020_04_06_150952) do
     t.uuid "sandbox_id"
     t.uuid "type_availability_id"
     t.datetime "updated_at", null: false
+    t.index ["hub_id"], name: "index_trucking_hub_availabilities_on_hub_id"
     t.index ["sandbox_id"], name: "index_trucking_hub_availabilities_on_sandbox_id"
+    t.index ["type_availability_id"], name: "index_trucking_hub_availabilities_on_type_availability_id"
   end
 
   create_table "trucking_locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -2091,7 +2093,10 @@ ActiveRecord::Schema.define(version: 2020_04_06_150952) do
     t.uuid "sandbox_id"
     t.string "truck_type"
     t.datetime "updated_at", null: false
+    t.index ["load_type"], name: "index_trucking_type_availabilities_on_load_type"
+    t.index ["query_method"], name: "index_trucking_type_availabilities_on_query_method"
     t.index ["sandbox_id"], name: "index_trucking_type_availabilities_on_sandbox_id"
+    t.index ["truck_type"], name: "index_trucking_type_availabilities_on_truck_type"
   end
 
   create_table "user_addresses", force: :cascade do |t|

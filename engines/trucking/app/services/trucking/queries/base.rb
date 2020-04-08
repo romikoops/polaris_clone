@@ -9,11 +9,11 @@ module Trucking
         argument_errors(args)
 
         @klass = args[:klass] || ::Trucking::Trucking
-
-        @latitude     = args[:latitude]     || args[:address].try(:latitude)  || 0
-        @longitude    = args[:longitude]    || args[:address].try(:longitude) || 0
-        @zipcode      = sanitized_postal_code(args: args)
-        @city_name    = args[:city_name]    || args[:address].try(:city)
+        @address = args[:address]
+        @latitude = args[:latitude] || args[:address].try(:latitude) || 0
+        @longitude = args[:longitude] || args[:address].try(:longitude) || 0
+        @zipcode = sanitized_postal_code(args: args)
+        @city_name = args[:city_name] || args[:address].try(:city)
         @country_code = args[:country_code] || args[:address].try(:country).try(:code)
 
         @tenant_id    = args[:tenant_id]
@@ -34,7 +34,7 @@ module Trucking
 
       def distance_based_locations
         @distance_based_locations ||= trucking_locations.where(
-          trucking_location_where_statement, trucking_location_conditions_binds
+          trucking_location_where_statement, distances
         )
       end
 
@@ -51,18 +51,34 @@ module Trucking
       end
 
       def query_types
-        @query_types ||= ::Trucking::TypeAvailability
-                         .joins(:hub_availabilities)
-                         .where(
-                           trucking_hub_availabilities: {
-                             hub_id: tenant_hubs.select(:id)
-                           },
-                           load_type: @load_type,
-                           carriage: @carriage
-                         ).where.not(query_method: [nil, 0])
+        @query_types ||= type_availabilities
+                         .where.not(query_method: [nil, 0])
                          .select(:query_method)
                          .distinct
                          .pluck(:query_method)
+      end
+
+      def distance_hubs
+        @distance_hubs ||= tenant_hubs.where(id: distance_hub_ids)
+      end
+
+      def type_availabilities
+        @type_availabilities ||= ::Trucking::TypeAvailability
+                                 .joins(:hub_availabilities)
+                                 .where(
+                                   trucking_hub_availabilities: {
+                                     hub_id: tenant_hubs.select(:id)
+                                   },
+                                   load_type: @load_type,
+                                   carriage: @carriage
+                                 )
+      end
+
+      def distance_hub_ids
+        type_availabilities
+          .where(query_method: 1)
+          .select('trucking_hub_availabilities.hub_id')
+          .distinct
       end
 
       def valid_trucking_locations
@@ -73,6 +89,14 @@ module Trucking
 
         query_types.drop(1).inject(base_query) do |query, query_type|
           query.or(send("#{query_type}_based_locations"))
+        end
+      end
+
+      def distances
+        if @distance.present?
+          [@distance]
+        else
+          distance_hubs.map { |hub| hub.distance_to(@address) }
         end
       end
 
@@ -112,16 +136,7 @@ module Trucking
       end
 
       def trucking_location_where_statement
-        if @distance
-          { trucking_locations: { distance: @distance } }
-        else
-          <<-SQL
-            trucking_locations.distance = ROUND(ST_Distance(
-              hubs.point::geography,
-              ST_Point(:longitude, :latitude)::geography
-            ) / 500)
-          SQL
-        end
+        { trucking_locations: { distance: distances } }
       end
 
       def trucking_location_conditions_binds

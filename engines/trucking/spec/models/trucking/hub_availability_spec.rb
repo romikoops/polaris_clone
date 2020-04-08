@@ -23,5 +23,7 @@ end
 #
 # Indexes
 #
-#  index_trucking_hub_availabilities_on_sandbox_id  (sandbox_id)
+#  index_trucking_hub_availabilities_on_hub_id                (hub_id)
+#  index_trucking_hub_availabilities_on_sandbox_id            (sandbox_id)
+#  index_trucking_hub_availabilities_on_type_availability_id  (type_availability_id)
 #
