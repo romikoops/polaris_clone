@@ -112,7 +112,7 @@ module Pdf
         quotation: nil,
         shipments: shipments,
         admin: true,
-        tender_ids: tenders.pluck(:chargeTripId)
+        tender_ids: tenders.pluck(:id)
       )
       note_remarks = get_note_remarks(quotes.first['trip_id'])
       file = generate_quote_pdf(
@@ -167,7 +167,7 @@ module Pdf
         trip = shipment.trip
         charge_breakdowns = quotation.present? ? [shipment.charge_breakdowns.selected] : shipment.charge_breakdowns
         if tender_ids.present?
-          charge_breakdowns = charge_breakdowns.select { |c_breakdown| tender_ids.include?(c_breakdown.trip_id) }
+          charge_breakdowns = charge_breakdowns.select { |c_breakdown| tender_ids.include?(c_breakdown.tender_id) }
         end
         offers = charge_breakdowns.map { |charge_breakdown| charge_breakdown.to_nested_hash(hidden_args) }
         offers.map { |offer| offer_manipulation_block(offer: offer, shipment: shipment, trip: trip) }

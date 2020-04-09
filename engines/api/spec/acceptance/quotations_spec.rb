@@ -85,12 +85,12 @@ RSpec.resource 'Quotations', acceptance: true do
     end
 
     context 'when downloading a pdf' do
-      let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, tenant: tenant, user: user) }
+      let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, tenant: tenant, user: user) }
       let(:request) do
         {
           quotation_id: shipment.id,
           tenders: [
-            { shipmentId: shipment.id, chargeTripId: shipment.charge_breakdowns.first.trip_id }
+            { id: Quotations::Tender.first.id }
           ]
         }
       end

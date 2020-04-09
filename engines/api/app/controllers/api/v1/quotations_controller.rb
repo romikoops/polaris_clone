@@ -49,7 +49,7 @@ module Api
       end
 
       def download_params
-        params.permit(tenders: %i[shipmentId chargeTripId])
+        params.permit(tenders: %i[id])
       end
     end
   end

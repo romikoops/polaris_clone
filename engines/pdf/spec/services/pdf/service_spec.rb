@@ -200,14 +200,13 @@ RSpec.describe Pdf::Service do
     end
 
     let(:tender_ids) do
-      [shipment.charge_breakdowns.first.trip_id]
+      [shipment.charge_breakdowns.first.tender_id]
     end
 
     it 'limits the quotes returned when tender ids are provided' do
       quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
       aggregate_failures do
         expect(quotes.length).to eq(1)
-        expect(quotes.pluck('trip_id')).to eq(tender_ids)
       end
     end
   end

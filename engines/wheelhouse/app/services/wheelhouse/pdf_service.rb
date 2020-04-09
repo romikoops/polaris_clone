@@ -4,7 +4,7 @@ module Wheelhouse
   class PdfService
     def initialize(tenders:)
       @tenders = tenders
-      @shipment = Legacy::Shipment.find(tenders.first[:shipmentId])
+      @shipment = Legacy::ChargeBreakdown.find_by(tender_id: tenders.first[:id]).shipment
     end
 
     def download
