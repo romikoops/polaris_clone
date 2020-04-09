@@ -41,10 +41,10 @@ RSpec.resource 'Equipments', acceptance: true do
     end
 
     context 'when a origin is chosen' do
-      parameter :origin, 'the id of the origin'
+      parameter :origin_nexus_id, 'the id of the origin'
 
       example 'Renders a json of equipments avaialable for the chosen origin' do
-        request = { origin: shanghai.nexus_id }
+        request = { origin_nexus_id: shanghai.nexus_id }
 
         do_request(request)
 
@@ -53,10 +53,10 @@ RSpec.resource 'Equipments', acceptance: true do
     end
 
     context 'when a destination is chosen' do
-      parameter :destination, 'the id of the destination'
+      parameter :destination_nexus_id, 'the id of the destination'
 
       example 'Renders a json of equipments avaialable for the chosen origin' do
-        request = { destination: gothenburg.nexus_id }
+        request = { destination_nexus_id: gothenburg.nexus_id }
 
         do_request(request)
 
@@ -65,13 +65,13 @@ RSpec.resource 'Equipments', acceptance: true do
     end
 
     context 'when a origin and a destination are chosen' do
-      parameter :origin, 'the id of the origin'
-      parameter :destination, 'the id of the destination'
+      parameter :origin_nexus_id, 'the id of the origin'
+      parameter :destination_nexus_id, 'the id of the destination'
 
       example 'Renders a json of equipments avaialable for the chosen origin' do
         request = {
-          origin: shanghai.nexus_id,
-          destination: hamburg.nexus_id
+          origin_nexus_id: shanghai.nexus_id,
+          destination_nexus_id: hamburg.nexus_id
         }
 
         do_request(request)

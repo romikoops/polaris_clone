@@ -2,6 +2,8 @@
 
 module Wheelhouse
   class QuotationService
+    attr_reader :estimated
+
     def initialize(quotation_details:, shipping_info:)
       @user_id = quotation_details.fetch(:user_id)
       @origin = quotation_details.fetch(:origin)
@@ -13,6 +15,7 @@ module Wheelhouse
       @legacy_user = @user.legacy
       @legacy_tenant_id = @legacy_user.tenant_id
       @shipment = Legacy::Shipment.new(user_id: @user.legacy_id, load_type: @load_type, tenant_id: @legacy_tenant_id)
+      @estimated = false
     end
 
     def result
@@ -53,13 +56,13 @@ module Wheelhouse
 
     def tenders
       result.tenders.map do |tender|
-        Wheelhouse::TenderDecorator.new(tender)
+        Wheelhouse::TenderDecorator.new(tender, context: { estimated: estimated })
       end
     end
 
     private
 
-    attr_reader :shipment, :shipping_info, :selected_date
+    attr_reader :shipment, :shipping_info, :selected_date, :user, :origin, :destination
 
     def shipping_params
       {
@@ -68,7 +71,7 @@ module Wheelhouse
         origin: @origin,
         destination: @destination,
         trucking: trucking_info
-      }.merge(shipping_info)
+      }
     end
 
     def trucking_info
@@ -96,20 +99,28 @@ module Wheelhouse
     end
 
     def container_default
-      {
+      requested_containers = @shipping_info.slice(:containers_attributes)
+      default_containers = {
         containers_attributes: [
           {
-            cargo_class: 'fcl_20',
+            cargo_class: default_equipment,
             payload_in_kg: 1,
             quantity: 1,
-            size_class: 'fcl_20'
+            size_class: default_equipment
           }
         ]
-      }.merge(@shipping_info.slice(:containers_attributes))
+      }
+      if requested_containers[:containers_attributes].blank?
+        @estimated = true
+        return default_containers
+      end
+
+      default_containers.merge(requested_containers)
     end
 
     def cargo_item_default
-      {
+      requested_cargo_items = @shipping_info.slice(:cargo_items_attributes)
+      default_cargo_items = {
         cargo_items_attributes: [{
           payload_in_kg: 1,
           dimension_x: 1,
@@ -123,11 +134,31 @@ module Wheelhouse
           cargo_class: 'lcl',
           dangerous_goods: false
         }]
-      }.merge(@shipping_info.slice(:cargo_items_attributes))
+      }
+      if requested_cargo_items[:cargo_items_attributes].blank?
+        @estimated = true
+        return default_cargo_items
+      end
+
+      default_cargo_items.merge(requested_cargo_items)
+    end
+
+    def default_equipment
+      @default_equipment ||= Wheelhouse::EquipmentService.new(
+        user: user,
+        origin: origin,
+        destination: destination,
+        dedicated_pricings_only: dedicated_pricings_only
+      ).perform.first || 'fcl_20'
     end
 
     def default_cargo_item_type
-      shipment.tenant.cargo_item_types.take
+      cargo_item_types = shipment.tenant.cargo_item_types
+      cargo_item_types.find_by(description: 'Pallet') || cargo_item_types.take
+    end
+
+    def dedicated_pricings_only
+      Tenants::ScopeService.new(target: user, tenant: user.tenant).fetch(:dedicated_pricings_only)
     end
   end
 end

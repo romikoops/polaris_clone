@@ -21,7 +21,6 @@ module Api
       let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
       let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
       let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'quickly') }
-      let(:cargo_transport_category) { FactoryBot.create(:legacy_transport_category, cargo_class: 'fcl_20', load_type: 'container') }
       let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
       let(:trip_1) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle) }
       let(:trip_2) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle_2) }
@@ -46,11 +45,11 @@ module Api
       context 'with available tenders' do
         before do
           [tenant_vehicle, tenant_vehicle_2].each do |t_vehicle|
-            FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, transport_category: cargo_transport_category, tenant: tenant)
+            FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, tenant: tenant)
           end
           OfferCalculator::Schedule.from_trips(trips)
-          FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
-          FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, transport_category: cargo_transport_category, tenant: tenant)
+          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, tenant: tenant)
+          FactoryBot.create(:freight_margin, default_for: 'ocean', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
         end
 
         it 'returns results successfully' do

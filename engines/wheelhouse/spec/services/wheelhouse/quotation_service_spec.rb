@@ -38,6 +38,17 @@ RSpec.describe Wheelhouse::QuotationService do
       }
     ]
   end
+  let(:containers_attributes) do
+    [
+      {
+        'payload_in_kg' => 120,
+        'size_class' => 'fcl_20',
+        'cargo_class' => 'fcl_20',
+        'quantity' => 1,
+        'dangerous_goods' => false
+      }
+    ]
+  end
   let(:input) do
     { tenant_id: tenant.id,
       user_id: tenants_user.id,
@@ -51,6 +62,41 @@ RSpec.describe Wheelhouse::QuotationService do
     input[:destination] = { nexus_id: destination_hub.nexus_id }
     input
   end
+  let(:shanghai_address) { FactoryBot.create(:shanghai_address) }
+  let(:hamburg_address) { FactoryBot.create(:hamburg_address) }
+  let(:door_to_door_input) do
+    input[:origin] = {
+      latitude: hamburg_address.latitude,
+      longitude: hamburg_address.longitude,
+      fullAddress: hamburg_address.geocoded_address,
+      country: hamburg_address.country.name,
+      number: hamburg_address.street_number,
+      street: hamburg_address.street,
+      zip_code: hamburg_address.zip_code
+    }
+    input[:destination] = {
+      latitude: shanghai_address.latitude,
+      longitude: shanghai_address.longitude,
+      fullAddress: shanghai_address.geocoded_address,
+      country: shanghai_address.country.name,
+      number: shanghai_address.street_number,
+      street: shanghai_address.street,
+      zip_code: shanghai_address.zip_code
+    }
+    input
+  end
+  let(:origin_location) do
+    FactoryBot.create(:locations_location,
+                      bounds: FactoryBot.build(:legacy_bounds, lat: hamburg_address.latitude, lng: hamburg_address.longitude, delta: 0.4),
+                      country_code: 'de')
+  end
+  let(:destination_location) do
+    FactoryBot.create(:locations_location,
+                      bounds: FactoryBot.build(:legacy_bounds, lat: shanghai_address.latitude, lng: shanghai_address.longitude, delta: 0.4),
+                      country_code: 'cn')
+  end
+  let(:origin_trucking_location) { FactoryBot.create(:trucking_location, location: origin_location, country_code: 'DE') }
+  let(:destination_trucking_location) { FactoryBot.create(:trucking_location, location: destination_location, country_code: 'CN') }
 
   before do
     [itinerary, air_itinerary].product(%w[container cargo_item]).each do |it, load|
@@ -86,6 +132,65 @@ RSpec.describe Wheelhouse::QuotationService do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.amount_cents).to eq(100)
+        end
+      end
+    end
+
+    context 'when port to port (containers provided)' do
+      let(:fcl_shipping_info) { shipping_info.merge(containers_attributes: containers_attributes) }
+      let(:load_type) { 'container' }
+      let(:service) { described_class.new(quotation_details: port_to_port_input.with_indifferent_access, shipping_info: fcl_shipping_info) }
+
+      it 'perform a booking calulation' do
+        results = service.tenders
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.amount_cents).to eq(25_000)
+        end
+      end
+    end
+
+    context 'when door to door (defaults & container)' do
+      before do
+        FactoryBot.create(:fcl_20_trucking, tenant: tenant, hub: origin_hub, location: origin_trucking_location)
+        FactoryBot.create(:fcl_20_trucking, tenant: tenant, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+        FactoryBot.create(:legacy_local_charge, hub: origin_hub, direction: 'export', load_type: 'fcl_20', tenant_vehicle: tenant_vehicle, tenant: tenant)
+        FactoryBot.create(:legacy_local_charge, hub: destination_hub, direction: 'import', load_type: 'fcl_20', tenant_vehicle: tenant_vehicle, tenant: tenant)
+        FactoryBot.create(:fcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
+        FactoryBot.create(:fcl_on_carriage_availability, hub: destination_hub, query_type: :location)
+        Geocoder::Lookup::Test.add_stub([hamburg_address.latitude, hamburg_address.longitude], [
+                                          'address_components' => [{ 'types' => ['premise'] }],
+                                          'address' => 'Brooktorkai 7, Hamburg, 20457, Germany',
+                                          'city' => 'Hamburg',
+                                          'country' => 'Germany',
+                                          'country_code' => 'DE',
+                                          'postal_code' => '20457'
+                                        ])
+        Geocoder::Lookup::Test.add_stub([shanghai_address.latitude, shanghai_address.longitude], [
+                                          'address_components' => [{ 'types' => ['premise'] }],
+                                          'address' => 'Shanghai, China',
+                                          'city' => 'Shanghai',
+                                          'country' => 'China',
+                                          'country_code' => 'CN',
+                                          'postal_code' => '210001'
+                                        ])
+        allow_any_instance_of(OfferCalculator::Service::TruckingDataBuilder).to receive(:calc_distance).and_return(10)
+        allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
+      end
+
+      let(:load_type) { 'container' }
+      let(:shipping_info) do
+        {
+          trucking_info: { pre_carriage: { truck_type: 'chassis' }, on_carriage: { truck_type: 'chassis' } }
+        }
+      end
+      let(:service) { described_class.new(quotation_details: door_to_door_input.with_indifferent_access, shipping_info: shipping_info) }
+
+      it 'perform a booking calulation' do
+        results = service.tenders
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.amount_cents).to eq(38_500)
         end
       end
     end

@@ -25,6 +25,10 @@ module Wheelhouse
       object.transshipment || 'direct'
     end
 
+    def estimated
+      context.fetch(:estimated, false)
+    end
+
     def transit_time
       trip = itinerary.trips.find_by(tenant_vehicle: tenant_vehicle, load_type: load_type)
       return '-' if trip.blank?

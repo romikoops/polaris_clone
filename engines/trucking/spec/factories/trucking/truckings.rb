@@ -13,7 +13,7 @@ FactoryBot.define do
           {
             rate: { base: 100.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_X_KG' },
             max_kg: '200.0',
-            min_kg: '100.0',
+            min_kg: '0.0',
             min_value: 400.0
           },
           {

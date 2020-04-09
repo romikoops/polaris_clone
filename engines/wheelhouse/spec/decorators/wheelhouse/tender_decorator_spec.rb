@@ -55,5 +55,15 @@ RSpec.describe Wheelhouse::TenderDecorator do
         expect(decorated_tender.transshipment).to eq('ZACPT')
       end
     end
+
+    context 'when estimated' do
+      let(:decorated_tender) do
+        described_class.new(tender, context: { estimated: true })
+      end
+
+      it 'returns estimated as true' do
+        expect(decorated_tender.estimated).to be_truthy
+      end
+    end
   end
 end

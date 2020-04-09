@@ -23,84 +23,85 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
   end
 
   let(:cargo_item_attributes) do
-  [
-    {
-      "payload_in_kg"=>120,
-      "total_volume"=>0,
-      "total_weight"=>0,
-      "dimension_x"=>120,
-      "dimension_y"=>80,
-      "dimension_z"=>120,
-      "quantity"=>1,
-      "cargo_item_type_id"=> pallet.id,
-      "dangerous_goods"=>false,
-      "stackable"=>true
-    }
-  ]
+    [
+      {
+        'payload_in_kg' => 120,
+        'total_volume' => 0,
+        'total_weight' => 0,
+        'dimension_x' => 120,
+        'dimension_y' => 80,
+        'dimension_z' => 120,
+        'quantity' => 1,
+        'cargo_item_type_id' => pallet.id,
+        'dangerous_goods' => false,
+        'stackable' => true
+      }
+    ]
   end
 
   let(:aggregated_cargo_attributes) do
     {
-      "volume"=>2.0,
-      "weight"=>1000
+      'volume' => 2.0,
+      'weight' => 1000
     }
   end
 
   let(:container_attributes) do
     [
       {
-      "payload_in_kg"=>12000,
-      "size_class"=>'fcl_20',
-      "quantity"=>1,
-      "dangerous_goods"=>false
-    },
+        'payload_in_kg' => 12_000,
+        'size_class' => 'fcl_20',
+        'quantity' => 1,
+        'dangerous_goods' => false
+      },
       {
-      "payload_in_kg"=>12000,
-      "size_class"=>'fcl_40',
-      "quantity"=>1,
-      "dangerous_goods"=>false
-    },
+        'payload_in_kg' => 12_000,
+        'size_class' => 'fcl_40',
+        'quantity' => 1,
+        'dangerous_goods' => false
+      },
       {
-      "payload_in_kg"=>12000,
-      "size_class"=>'fcl_40_hq',
-      "quantity"=>1,
-      "dangerous_goods"=>false
-    }
-  ]
+        'payload_in_kg' => 12_000,
+        'size_class' => 'fcl_40_hq',
+        'quantity' => 1,
+        'dangerous_goods' => false
+      }
+    ]
   end
 
   let(:params) do
     {
       shipment: {
-        "id"=> base_shipment.id,
-        "direction"=>"export",
-        "selected_day"=> 4.days.from_now.beginning_of_day.to_s,
-        "cargo_items_attributes"=>[],
-        "containers_attributes"=>[],
-        "trucking"=>{
-          "pre_carriage"=>{"truck_type"=>""},
-          "on_carriage"=>{"truck_type"=>""}
+        'id' => base_shipment.id,
+        'direction' => 'export',
+        'selected_day' => 4.days.ago.beginning_of_day.to_s,
+        'cargo_items_attributes' => [],
+        'containers_attributes' => [],
+        'trucking' => {
+          'pre_carriage' => { 'truck_type' => '' },
+          'on_carriage' => { 'truck_type' => '' }
         },
-        "incoterm"=>{},
-        "aggregated_cargo_attributes"=>nil}
+        'incoterm' => {},
+        'aggregated_cargo_attributes' => nil
+      }
     }
   end
 
   context 'port to port' do
     let(:port_to_port_params) do
       params[:shipment]['origin'] = {
-        "latitude"=> origin_hub.latitude,
-        "longitude"=> origin_hub.longitude,
-        "nexus_id"=> origin_hub.nexus_id,
-        "nexus_name"=> origin_hub.nexus.name,
-        "country"=> origin_hub.nexus.country.code
+        'latitude' => origin_hub.latitude,
+        'longitude' => origin_hub.longitude,
+        'nexus_id' => origin_hub.nexus_id,
+        'nexus_name' => origin_hub.nexus.name,
+        'country' => origin_hub.nexus.country.code
       }
       params[:shipment]['destination'] = {
-        "latitude"=> destination_hub.latitude,
-        "longitude"=> destination_hub.longitude,
-        "nexus_id"=> destination_hub.nexus_id,
-        "nexus_name"=> destination_hub.nexus.name,
-        "country"=> destination_hub.nexus.country.code
+        'latitude' => destination_hub.latitude,
+        'longitude' => destination_hub.longitude,
+        'nexus_id' => destination_hub.nexus_id,
+        'nexus_name' => destination_hub.nexus.name,
+        'country' => destination_hub.nexus.country.code
       }
       params[:shipment]['cargo_items_attributes'] = cargo_item_attributes
       ActionController::Parameters.new(params)
@@ -118,7 +119,7 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
     describe '.update_trucking' do
       it 'updates the trucking' do
         service.update_trucking
-        expect(base_shipment.trucking).to eq({"pre_carriage"=>{"truck_type"=>""}, "on_carriage"=>{"truck_type"=>""}})
+        expect(base_shipment.trucking).to eq('pre_carriage' => { 'truck_type' => '' }, 'on_carriage' => { 'truck_type' => '' })
       end
     end
 
@@ -150,14 +151,13 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
         aggregated_cargo = base_shipment.aggregated_cargo
         expect(aggregated_cargo.weight).to eq(aggregated_cargo_attributes['weight'])
         expect(aggregated_cargo.volume).to eq(aggregated_cargo_attributes['volume'])
-
       end
     end
 
     describe '.update_selected_day' do
       it 'updates the desired_start_date with the minimum' do
         service.update_selected_day
-        expect(base_shipment.desired_start_date).to eq(5.days.from_now.beginning_of_day)
+        expect(base_shipment.desired_start_date).to eq(Time.zone.today.beginning_of_day)
       end
     end
 
@@ -172,36 +172,36 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
   context 'door to door' do
     let(:door_to_door_params) do
       params[:shipment]['origin'] = {
-        "number"=> gothenburg_address.street_number,
-        "street"=> gothenburg_address.street,
-        "zip_code"=> gothenburg_address.zip_code,
-        "city"=> gothenburg_address.city,
-        "country"=> gothenburg_address.country.name,
-        "full_address"=> gothenburg_address.geocoded_address,
-        "latitude"=> gothenburg_address.latitude,
-        "longitude"=> gothenburg_address.longitude,
-        "hub_ids"=>[origin_hub.id]
+        'number' => gothenburg_address.street_number,
+        'street' => gothenburg_address.street,
+        'zip_code' => gothenburg_address.zip_code,
+        'city' => gothenburg_address.city,
+        'country' => gothenburg_address.country.name,
+        'full_address' => gothenburg_address.geocoded_address,
+        'latitude' => gothenburg_address.latitude,
+        'longitude' => gothenburg_address.longitude,
+        'hub_ids' => [origin_hub.id]
       }
       params[:shipment]['destination'] = {
-        "number"=> shanghai_address.street_number,
-        "street"=> shanghai_address.street,
-        "zip_code"=> shanghai_address.zip_code,
-        "city"=> shanghai_address.city,
-        "country"=> shanghai_address.country.name,
-        "full_address"=> shanghai_address.geocoded_address,
-        "latitude"=> shanghai_address.latitude,
-        "longitude"=> shanghai_address.longitude,
-        "hub_ids"=>[destination_hub.id]
+        'number' => shanghai_address.street_number,
+        'street' => shanghai_address.street,
+        'zip_code' => shanghai_address.zip_code,
+        'city' => shanghai_address.city,
+        'country' => shanghai_address.country.name,
+        'full_address' => shanghai_address.geocoded_address,
+        'latitude' => shanghai_address.latitude,
+        'longitude' => shanghai_address.longitude,
+        'hub_ids' => [destination_hub.id]
       }
-      params[:shipment]["trucking"] = {
-        "pre_carriage"=>{
-          "truck_type"=>"chassis"
-          },
-          "on_carriage"=>{
-            "truck_type"=>"side_lifter"
-          }
+      params[:shipment]['trucking'] = {
+        'pre_carriage' => {
+          'truck_type' => 'chassis'
+        },
+        'on_carriage' => {
+          'truck_type' => 'side_lifter'
         }
-      params[:shipment]["selected_day"] = 10.days.from_now.beginning_of_day.to_s
+      }
+      params[:shipment]['selected_day'] = 10.days.from_now.beginning_of_day.to_s
       params[:shipment]['containers_attributes'] = container_attributes
       ActionController::Parameters.new(params)
     end
@@ -240,7 +240,7 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
       it 'creates the containers' do
         service.update_cargo_units
         expect(base_shipment.containers.count).to eq(3)
-        expect(base_shipment.containers.map(&:size_class)).to match_array(['fcl_20', 'fcl_40', 'fcl_40_hq'])
+        expect(base_shipment.containers.map(&:size_class)).to match_array(%w[fcl_20 fcl_40 fcl_40_hq])
       end
     end
 
@@ -276,22 +276,22 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
     describe '.update_trucking' do
       let(:pickup_params) do
         params[:shipment]['origin'] = {
-          "number"=> gothenburg_address.street_number,
-          "street"=> gothenburg_address.street,
-          "zip_code"=> gothenburg_address.zip_code,
-          "city"=> gothenburg_address.city,
-          "country"=> gothenburg_address.country.name,
-          "full_address"=> gothenburg_address.geocoded_address,
-          "latitude"=> gothenburg_address.latitude,
-          "longitude"=> gothenburg_address.longitude,
-          "hub_ids"=>[origin_hub.id]
+          'number' => gothenburg_address.street_number,
+          'street' => gothenburg_address.street,
+          'zip_code' => gothenburg_address.zip_code,
+          'city' => gothenburg_address.city,
+          'country' => gothenburg_address.country.name,
+          'full_address' => gothenburg_address.geocoded_address,
+          'latitude' => gothenburg_address.latitude,
+          'longitude' => gothenburg_address.longitude,
+          'hub_ids' => [origin_hub.id]
         }
-        params[:shipment]["trucking"] = {
-          "pre_carriage"=>{
-            "truck_type"=>"chassis"
-            }
+        params[:shipment]['trucking'] = {
+          'pre_carriage' => {
+            'truck_type' => 'chassis'
           }
-        params[:shipment]["selected_day"] = 10.days.from_now.beginning_of_day.to_s
+        }
+        params[:shipment]['selected_day'] = 10.days.from_now.beginning_of_day.to_s
         params[:shipment]['containers_attributes'] = container_attributes
         ActionController::Parameters.new(params)
       end
@@ -302,29 +302,29 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
       end
       let(:dropoff_params) do
         params[:shipment]['origin'] = {
-          "latitude"=> origin_hub.latitude,
-          "longitude"=> origin_hub.longitude,
-          "nexus_id"=> origin_hub.nexus_id,
-          "nexus_name"=> origin_hub.nexus.name,
-          "country"=> origin_hub.nexus.country.code
+          'latitude' => origin_hub.latitude,
+          'longitude' => origin_hub.longitude,
+          'nexus_id' => origin_hub.nexus_id,
+          'nexus_name' => origin_hub.nexus.name,
+          'country' => origin_hub.nexus.country.code
         }
         params[:shipment]['destination'] = {
-          "number"=> gothenburg_address.street_number,
-          "street"=> gothenburg_address.street,
-          "zip_code"=> gothenburg_address.zip_code,
-          "city"=> gothenburg_address.city,
-          "country"=> gothenburg_address.country.name,
-          "full_address"=> gothenburg_address.geocoded_address,
-          "latitude"=> gothenburg_address.latitude,
-          "longitude"=> gothenburg_address.longitude,
-          "hub_ids"=>[origin_hub.id]
+          'number' => gothenburg_address.street_number,
+          'street' => gothenburg_address.street,
+          'zip_code' => gothenburg_address.zip_code,
+          'city' => gothenburg_address.city,
+          'country' => gothenburg_address.country.name,
+          'full_address' => gothenburg_address.geocoded_address,
+          'latitude' => gothenburg_address.latitude,
+          'longitude' => gothenburg_address.longitude,
+          'hub_ids' => [origin_hub.id]
         }
-        params[:shipment]["trucking"] = {
-          "on_carriage"=>{
-            "truck_type"=>"chassis"
-            }
+        params[:shipment]['trucking'] = {
+          'on_carriage' => {
+            'truck_type' => 'chassis'
           }
-        params[:shipment]["selected_day"] = 10.days.from_now.beginning_of_day.to_s
+        }
+        params[:shipment]['selected_day'] = 10.days.from_now.beginning_of_day.to_s
         params[:shipment]['containers_attributes'] = container_attributes
         ActionController::Parameters.new(params)
       end
@@ -333,7 +333,6 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
         base_shipment.update(has_on_carriage: true, load_type: 'container')
         described_class.new(shipment: base_shipment, params: dropoff_params, sandbox: nil)
       end
-
 
       it 'raises error when the pickup addresses arent found' do
         allow(Legacy::Address).to receive(:new_from_raw_params).and_return(Legacy::Address.new)
