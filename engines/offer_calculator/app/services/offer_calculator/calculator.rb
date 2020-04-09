@@ -64,7 +64,7 @@ module OfferCalculator
       @shipment_update_handler.update_incoterm
       @shipment_update_handler.update_cargo_units
       @shipment_update_handler.update_selected_day
-      @shipment_update_handler.update_updated_at
+      @shipment.save!
     end
 
     def schedules

@@ -24,7 +24,7 @@ module OfferCalculator
         results_for_quotation = filter_results_for_quotation(charges_and_result: charges_and_result)
 
         if results_for_quotation.present?
-          quotation = Quotations::Creator.new(results: results_for_quotation, user: user).perform
+          quotation = Quotations::Creator.new(results: results_for_quotation, shipment: @shipment, user: user).perform
         end
 
         return quotation if @wheelhouse.present? && quotation.present?

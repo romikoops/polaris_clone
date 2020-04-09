@@ -2,9 +2,9 @@
 
 module Quotations
   class Creator
-    def initialize(results:, user:)
+    def initialize(results:, shipment:, user:)
       @results = results
-      @shipment = results.first[:total].charge_breakdown.shipment
+      @shipment = shipment
       @origin_nexus = results.dig(0, :schedules, 0).origin_hub.nexus
       @destination_nexus = results.dig(0, :schedules, 0).destination_hub.nexus
       @user = user
@@ -25,6 +25,7 @@ module Quotations
       @quotation = Quotations::Quotation.create(tenant: tenant,
                                                 user: @user,
                                                 tenants_user: Tenants::User.find_by(legacy_id: @user.id),
+                                                selected_date: @shipment.desired_start_date,
                                                 origin_nexus: @origin_nexus,
                                                 destination_nexus: @destination_nexus,
                                                 pickup_address_id: @shipment.trucking.dig('pre_carriage', 'address_id'),

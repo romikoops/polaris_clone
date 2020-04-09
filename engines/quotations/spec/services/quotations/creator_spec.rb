@@ -13,7 +13,8 @@ RSpec.describe Quotations::Creator do
   let(:destination_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: legacy_tenant, nexus: destination_nexus) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'express', tenant: legacy_tenant) }
   let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slow', tenant: legacy_tenant) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, tenant: legacy_tenant) }
+  let(:desired_start_date) { 1.month.from_now.to_date }
+  let(:shipment) { FactoryBot.create(:legacy_shipment, tenant: legacy_tenant, desired_start_date: desired_start_date) }
   let(:charge_breakdown) { FactoryBot.create(:legacy_charge_breakdown, shipment: shipment) }
   let(:charge) { charge_breakdown.grand_total }
   let(:charge_breakdown_2) { FactoryBot.create(:legacy_charge_breakdown, shipment: shipment) }
@@ -45,7 +46,7 @@ RSpec.describe Quotations::Creator do
   end
 
   describe '#perform' do
-    let!(:klass) { described_class.new(results: results, user: legacy_user) }
+    let!(:klass) { described_class.new(results: results, shipment: shipment, user: legacy_user) }
     let(:result) { klass.perform }
 
     before { Tenants::Tenant.create(legacy: legacy_tenant) }
@@ -56,6 +57,10 @@ RSpec.describe Quotations::Creator do
           expect(result).to be_a(Quotations::Quotation)
           expect(result.tenders.count).to eq(2)
         end
+      end
+
+      it 'creates a quotation with the selected date' do
+        expect(result.selected_date.to_date).to eq(desired_start_date)
       end
     end
 
