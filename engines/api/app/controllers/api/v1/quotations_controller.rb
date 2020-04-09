@@ -30,7 +30,13 @@ module Api
       end
 
       def quotation_service
-        Wheelhouse::QuotationService.new(quotation_details: quotation_params, shipping_info: shipment_params)
+        Wheelhouse::QuotationService.new(quotation_details: quotation_details, shipping_info: shipment_params)
+      end
+
+      def quotation_details
+        details = quotation_params.to_h
+        details[:user_id] = current_user.id if details[:user_id].blank?
+        details
       end
 
       def quotation_params

@@ -52,16 +52,30 @@ module Api
           FactoryBot.create(:freight_margin, default_for: 'ocean', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
         end
 
-        it 'returns results successfully' do
-          post :create, params: params
+        context 'when client is provided' do
+          it 'returns results successfully' do
+            post :create, params: params
 
-          expect(response).to be_successful
+            expect(response).to be_successful
+          end
+
+          it 'returns 3 available tenders' do
+            post :create, params: params
+
+            expect(response_data.count).to eq 3
+          end
         end
 
-        it 'returns 3 available tenders' do
-          post :create, params: params
+        context 'when no client is provided' do
+          before do
+            params[:quote][:user_id] = nil
+          end
 
-          expect(response_data.count).to eq 3
+          it 'returns prices with default margins' do
+            post :create, params: params
+
+            expect(response_data.count).to eq 3
+          end
         end
       end
 
