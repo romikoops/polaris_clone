@@ -66,46 +66,38 @@ module Pricings
     end
 
     def handle_range_fee(fee, cargo_hash) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
-      weight_kg = cargo_hash.fetch(:weight)
-      raw_weight_kg = cargo_hash.fetch(:raw_weight)
-      volume = cargo_hash.fetch(:volume)
-      weight_measure = cargo_hash.fetch(:weight_measure)
-      quantity = cargo_hash.fetch(:quantity, 1)
+      measures = { kg: cargo_hash.fetch(:weight),
+                   cbm: cargo_hash.fetch(:volume),
+                   ton: cargo_hash.fetch(:raw_weight, cargo_hash.fetch(:weight)) / 1000.0,
+                   wm: cargo_hash.fetch(:weight_measure),
+                   unit: cargo_hash.fetch(:quantity, 1) }
       min = fee['min'] || 0
       max = fee['max'] || DEFAULT_MAX
       rate_basis = Pricings::RateBasis.get_internal_key(fee['rate_basis'])
-      case rate_basis
-      when 'PER_KG_RANGE'
-        target = target_in_range(ranges: fee['range'], value: weight_kg, max: true)
-        value = target['rate'] * weight_kg
-
-        res = [value, min].max
-      when 'PER_CBM_RANGE'
-        target = target_in_range(ranges: fee['range'], value: volume, max: true)
-
-        res = target['rate'] * volume
-      when 'PER_WM_RANGE'
-        target = target_in_range(ranges: fee['range'], value: weight_measure, max: false)
-        res = target.dig('rate')
-      when 'PER_UNIT_TON_CBM_RANGE'
-        ratio = volume / (raw_weight_kg / 1000)
-        target = target_in_range(ranges: fee['range'], value: ratio, max: false)
-        value = if target['ton']
-                  target['ton'] * raw_weight_kg / 1000
+      key = rate_basis[/PER_(.*?)_RANGE/m, 1]&.downcase
+      key = 'unit' if key == 'container'
+      value = case rate_basis
+              when 'PER_UNIT_TON_CBM_RANGE'
+                ratio = measures[:cbm] / measures[:ton]
+                target = target_in_range(ranges: fee['range'], value: ratio, max: false)
+                if target['ton']
+                  target['ton'] * measures[:ton]
                 elsif target['cbm']
-                  target['cbm'] * volume
+                  target['cbm'] * measures[:cbm]
                 else
                   target.fetch('rate', 0)
                 end
-
-        res = [value, min].max
-      when 'PER_CONTAINER_RANGE', 'PER_UNIT_RANGE'
-        target = target_in_range(ranges: fee['range'], value: quantity, max: true)
-        value = target.nil? ? 0 : target['rate']
-        res = [value, min].max
-      end
+              when /FLAT/
+                measure = measures[key.to_sym]
+                target = target_in_range(ranges: fee['range'], value: measure, max: false)
+                target.fetch('rate', 0)
+              else
+                measure = measures[key.to_sym]
+                target = target_in_range(ranges: fee['range'], value: measure, max: true)
+                target.fetch('rate', 0) * measure
+              end
       update_range_fee_metadata(key: fee[:key], final_range: target) if target.present?
-
+      res = [value, min].max
       [res, max].min
     end
 

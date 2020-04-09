@@ -343,23 +343,14 @@ module OfferCalculator
 
       def cargo_unit_charge_result(cargo_unit:)
         cargo_class = cargo_unit.is_a?(Legacy::Container) ? cargo_unit.cargo_class : 'lcl'
-        if @scope['base_pricing']
-          Pricings::Calculator.new(
-            cargo: cargo_unit,
-            pricing: @data.dig(:pricings_by_cargo_class, cargo_class),
-            user: @user,
-            mode_of_transport: @schedule.mode_of_transport,
-            date: @shipment.planned_pickup_date,
-            metadata: @metadata_list
-          ).perform
-        else
-          @pricing_tools.determine_cargo_freight_price(
-            cargo: cargo_unit,
-            pricing: @data.dig(:pricings_by_cargo_class, cargo_class, 'data'),
-            user: @user,
-            mode_of_transport: @schedule.mode_of_transport
-          )
-        end
+        Pricings::Calculator.new(
+          cargo: cargo_unit,
+          pricing: @data.dig(:pricings_by_cargo_class, cargo_class),
+          user: @user,
+          mode_of_transport: @schedule.mode_of_transport,
+          date: @shipment.planned_pickup_date,
+          metadata: @metadata_list
+        ).perform
       end
 
       def build_children_charge_category(cargo_unit_model:, cargo_unit_id:)

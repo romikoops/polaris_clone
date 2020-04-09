@@ -65,6 +65,11 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       external_code { 'PER_KG_RANGE' }
     end
 
+    trait :kg_range_flat do
+      internal_code { 'PER_KG_RANGE_FLAT' }
+      external_code { 'PER_KG_RANGE_FLAT' }
+    end
+
     trait :unit_ton_cbm_range do
       internal_code { 'PER_UNIT_TON_CBM_RANGE' }
       external_code { 'PER_UNIT_TON_CBM_RANGE' }
@@ -89,6 +94,26 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       internal_code { 'PER_WM_RANGE' }
       external_code { 'PER_WM_RANGE' }
     end
+    \
+    trait :container_range_flat do
+      internal_code { 'PER_CONTAINER_RANGE_FLAT' }
+      external_code { 'PER_CONTAINER_RANGE_FLAT' }
+    end
+
+    trait :unit_range_flat do
+      internal_code { 'PER_UNIT_RANGE_FLAT' }
+      external_code { 'PER_UNIT_RANGE_FLAT' }
+    end
+
+    trait :cbm_range_flat do
+      internal_code { 'PER_CBM_RANGE_FLAT' }
+      external_code { 'PER_CBM_RANGE_FLAT' }
+    end
+
+    trait :wm_range_flat do
+      internal_code { 'PER_WM_RANGE_FLAT' }
+      external_code { 'PER_WM_RANGE_FLAT' }
+    end
 
     factory :per_wm_rate_basis, traits: [:wm]
     factory :per_container, traits: [:container]
@@ -102,11 +127,16 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     factory :per_cbm_ton, traits: [:cbm_ton]
     factory :per_ton, traits: [:ton]
     factory :per_kg_range, traits: [:kg_range]
+    factory :per_kg_range_flat, traits: [:kg_range_flat]
     factory :per_unit_ton_cbm_range, traits: [:unit_ton_cbm_range]
     factory :per_container_range, traits: [:container_range]
     factory :per_unit_range, traits: [:unit_range]
     factory :per_cbm_range, traits: [:cbm_range]
     factory :per_wm_range, traits: [:wm_range]
+    factory :per_container_range_flat, traits: [:container_range_flat]
+    factory :per_unit_range_flat, traits: [:unit_range_flat]
+    factory :per_cbm_range_flat, traits: [:cbm_range_flat]
+    factory :per_wm_range_flat, traits: [:wm_range_flat]
   end
 end
 

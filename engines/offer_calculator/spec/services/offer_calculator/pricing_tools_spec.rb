@@ -369,10 +369,10 @@ RSpec.describe OfferCalculator::PricingTools do
       {
         'key' => 'THC',
         'rate' => 0.5e1,
-        'rate_basis' => 'PER_CBM_RANGE',
+        'rate_basis' => 'PER_CBM_RANGE_FLAT',
         'currency' => 'EUR',
         'min' => 0.5e1,
-        'range' => [{ 'max' => 10.0, 'min' => 0.0, 'cbm' => 20 }, { 'max' => 100.0, 'min' => 10.0, 'cbm' => 110.0 }]
+        'range' => [{ 'max' => 10.0, 'min' => 0.0, 'cbm' => 20 }, { 'max' => 100.0, 'min' => 10.0, 'cbm' => 11.0 }]
       }.with_indifferent_access
     end
     let(:metadata_id) { SecureRandom.uuid }
@@ -386,7 +386,7 @@ RSpec.describe OfferCalculator::PricingTools do
                 {
                   adjusted_rate: {
                     range: [
-                      { 'max' => 100.0, 'min' => 10.0, 'rate' => 15.0 }
+                      { 'max' => 100.0, 'min' => 10.0, 'cbm' => 15.0 }
                     ]
                   }
                 }
@@ -399,11 +399,11 @@ RSpec.describe OfferCalculator::PricingTools do
 
     subject { described_class.new(user: user, shipment: shipment) }
 
-    context 'PER_CBM_RANGE' do
+    context 'with PER_CBM_RANGE_FLAT' do
       it 'returns the correct fee_range for the larger volume' do
         cargo_hash = { weight_measure: 11, volume: 11, weight: 11_000, raw_weight: 11_000, quantity: 9 }
         value = subject.handle_range_fee(fee: fee, cargo: cargo_hash, metadata_id: metadata_id)
-        expect(value).to eq(110)
+        expect(value).to eq(11)
       end
 
       it 'returns the correct fee_range for the smaller volume' do
@@ -413,230 +413,22 @@ RSpec.describe OfferCalculator::PricingTools do
       end
     end
 
-    context 'PER_WM_RANGE' do
+    context 'with PER_WM_RANGE' do
       let(:fee) do
         {
           'rate' => 0.5e1,
           'rate_basis' => 'PER_WM_RANGE',
           'currency' => 'EUR',
           'min' => 0.5e1,
-          'range' => [{ 'max' => 10.0, 'min' => 0.0, 'rate' => 5.0 }, { 'max' => 100.0, 'min' => 10.0, 'rate' => 10.0 }]
+          'range' => [{ 'max' => 10.0, 'min' => 0.0, 'wm' => 5.0 }, { 'max' => 100.0, 'min' => 10.0, 'wm' => 10.0 }]
         }
       end
 
       it 'returns the correct fee_range for the weight_measure' do
         cargo_hash = { weight_measure: 11, volume: 11, weight: 11_000, raw_weight: 11_000, quantity: 9 }
         value = subject.handle_range_fee(fee: fee, cargo: cargo_hash, metadata_id: metadata_id)
-        expect(value).to eq(10)
+        expect(value).to eq(110)
       end
-    end
-  end
-
-  describe '.determine_cargo_freight_price' do
-    let(:agg_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-    let(:lcl_cargo) { FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id) }
-    let(:fcl_20_cargo) { FactoryBot.create(:legacy_container, shipment_id: shipment.id) }
-    let(:overweight_cargo) { FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id, cargo_item_type_id: pallet.id, payload_in_kg: 3000) }
-    let(:agg_cargo) { FactoryBot.create(:legacy_aggregated_cargo, shipment_id: agg_shipment.id) }
-    let(:consolidated_cargo) do
-      {
-        id: 'ids',
-        dimension_x: 240,
-        dimension_y: 160,
-        dimension_z: 240,
-        volume: 3.748,
-        payload_in_kg: 600,
-        cargo_class: 'lcl',
-        chargeable_weight: 3748,
-        num_of_items: 2,
-        quantity: 1
-      }
-    end
-    let!(:per_container_range_rate_basis) { FactoryBot.create(:legacy_rate_basis, external_code: 'PER_CONTAINER_RANGE', internal_code: 'PER_UNIT_RANGE') }
-    let(:fat_cargo) { FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id, cargo_item_type_id: pallet.id, payload_in_kg: 2200) }
-
-    it 'it calculates the correct price for PER_WM' do
-      wm_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_wm, priceable: wm_pricing, tenant: tenant)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(
-        cargo: lcl_cargo,
-        pricing: wm_pricing.as_json.dig('data'),
-        user: user,
-        mode_of_transport: 'ocean'
-      )
-      expect(result.dig('total', 'value')).to eq(222.2)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_hbl' do
-      hbl_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_hbl, tenant: tenant, priceable: hbl_pricing)
-      FactoryBot.create(:legacy_rate_basis, external_code: 'PER_HBL', internal_code: 'PER_SHIPMENT')
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: lcl_cargo,
-                                                                                                 pricing: hbl_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(1111)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_shipment' do
-      shipment_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_shipment, tenant: tenant, priceable: shipment_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: lcl_cargo,
-                                                                                                 pricing: shipment_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(1111)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_item' do
-      item_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_item, tenant: tenant, priceable: item_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: lcl_cargo,
-                                                                                                 pricing: item_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(1111)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_cbm' do
-      cbm_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_cbm, tenant: tenant, priceable: cbm_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: lcl_cargo,
-                                                                                                 pricing: cbm_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(8.888)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_kg' do
-      kg_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_kg, tenant: tenant, priceable: kg_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: lcl_cargo,
-                                                                                                 pricing: kg_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(222_200)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_ton' do
-      ton_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_ton, tenant: tenant, priceable: ton_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: lcl_cargo,
-                                                                                                 pricing: ton_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(222.2)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_kg_range' do
-      kg_range_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_kg_range, tenant: tenant, priceable: kg_range_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: lcl_cargo,
-                                                                                                 pricing: kg_range_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(1600)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_kg_range when out of range' do
-      kg_range_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_kg_range, tenant: tenant, priceable: kg_range_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: overweight_cargo,
-                                                                                                 pricing: kg_range_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(18_000)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_cbm_kg_heavy' do
-      cbm_kg_heavy_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_cbm_kg_heavy, tenant: tenant, priceable: cbm_kg_heavy_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: overweight_cargo,
-                                                                                                 pricing: cbm_kg_heavy_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(12)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_item_heavy below limit' do
-      item_heavy_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_cbm_kg_heavy, tenant: tenant, priceable: item_heavy_pricing, hw_threshold: 50_000)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(
-        cargo: lcl_cargo,
-        pricing: item_heavy_pricing.as_json.dig('data'),
-        user: user,
-        mode_of_transport: 'ocean'
-      )
-      expect(result.dig('total', 'value')).to eq(0)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_item_heavy' do
-      item_heavy_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_item_heavy, tenant: tenant, priceable: item_heavy_pricing)
-
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: fat_cargo,
-                                                                                                 pricing: item_heavy_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(250)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_item_heavy beyond range' do
-      item_heavy_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_item_heavy, tenant: tenant, priceable: item_heavy_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: overweight_cargo,
-                                                                                                 pricing: item_heavy_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(250)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_container_range' do
-      container_range_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_container_range, tenant: tenant, priceable: container_range_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: fcl_20_cargo,
-                                                                                                 pricing: container_range_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(100)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_container_range above range' do
-      fat_fcl_20_cargo = FactoryBot.create(:legacy_container, cargo_class: 'fcl_20', shipment_id: shipment.id, payload_in_kg: 24_000, quantity: 25)
-      container_range_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_container_range, tenant: tenant, priceable: container_range_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: fat_fcl_20_cargo,
-                                                                                                 pricing: container_range_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(60)
-      expect(result.dig('total', 'currency')).to eq('EUR')
-    end
-
-    it 'it calculates the correct price for per_unit_range above range' do
-      fat_fcl_20_cargo = FactoryBot.create(:legacy_container, cargo_class: 'fcl_20', shipment_id: shipment.id, payload_in_kg: 24_000)
-      unit_range_pricing = FactoryBot.create(:legacy_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
-      FactoryBot.create(:pd_per_unit_range, tenant: tenant, priceable: unit_range_pricing)
-      result = described_class.new(user: user, shipment: shipment).determine_cargo_freight_price(cargo: fcl_20_cargo,
-                                                                                                 pricing: unit_range_pricing.as_json.dig('data'),
-                                                                                                 user: user,
-                                                                                                 mode_of_transport: 'ocean')
-      expect(result.dig('total', 'value')).to eq(100)
-      expect(result.dig('total', 'currency')).to eq('EUR')
     end
   end
 

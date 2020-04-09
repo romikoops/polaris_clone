@@ -104,10 +104,10 @@ RSpec.describe Pricings::Calculator do
       wm_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_wm, pricing: wm_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: wm_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: wm_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
 
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 222.2, 'currency' => 'EUR')
     end
@@ -116,10 +116,10 @@ RSpec.describe Pricings::Calculator do
       hbl_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_hbl, pricing: hbl_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: hbl_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: hbl_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
 
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 1111, 'currency' => 'EUR')
     end
@@ -128,10 +128,10 @@ RSpec.describe Pricings::Calculator do
       shipment_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_shipment, pricing: shipment_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: shipment_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: shipment_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
 
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 1111, 'currency' => 'EUR')
     end
@@ -140,10 +140,10 @@ RSpec.describe Pricings::Calculator do
       item_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_item, pricing: item_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: item_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: item_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
 
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 1111, 'currency' => 'EUR')
     end
@@ -152,10 +152,10 @@ RSpec.describe Pricings::Calculator do
       cbm_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_cbm, pricing: cbm_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: cbm_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: cbm_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
 
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 8.888, 'currency' => 'EUR')
     end
@@ -164,10 +164,10 @@ RSpec.describe Pricings::Calculator do
       kg_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_kg, pricing: kg_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: kg_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: kg_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 222_200, 'currency' => 'EUR')
     end
 
@@ -175,10 +175,10 @@ RSpec.describe Pricings::Calculator do
       ton_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_ton, pricing: ton_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: ton_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: ton_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 222.2, 'currency' => 'EUR')
     end
 
@@ -186,10 +186,10 @@ RSpec.describe Pricings::Calculator do
       x_kg_flat_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_x_kg_flat, pricing: x_kg_flat_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: x_kg_flat_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: x_kg_flat_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 5000, 'currency' => 'EUR')
     end
 
@@ -197,22 +197,46 @@ RSpec.describe Pricings::Calculator do
       cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_cbm_range, pricing: cbm_range_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: cbm_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: cbm_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
 
-      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 0.064, 'currency' => 'EUR')
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 1, 'currency' => 'EUR')
     end
 
     it 'calculates the correct price for per_wm_range' do
       wm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_wm_range, pricing: wm_range_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: wm_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: wm_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
+
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 1.6, 'currency' => 'EUR')
+    end
+
+    it 'calculates the correct price for per_cbm_range_flat' do
+      cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      FactoryBot.create(:fee_per_cbm_range_flat, pricing: cbm_range_pricing)
+      result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              pricing: cbm_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
+
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 8, 'currency' => 'EUR')
+    end
+
+    it 'calculates the correct price for per_wm_range_flat' do
+      wm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      FactoryBot.create(:fee_per_wm_range_flat, pricing: wm_range_pricing)
+      result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              pricing: wm_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
 
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 8, 'currency' => 'EUR')
     end
@@ -222,10 +246,10 @@ RSpec.describe Pricings::Calculator do
       cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_cbm_range, pricing: cbm_range_pricing)
       result, _metadata = described_class.new(cargo: overcbm_cargo,
-                                   pricing: cbm_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: cbm_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 156, 'currency' => 'EUR')
     end
 
@@ -233,12 +257,12 @@ RSpec.describe Pricings::Calculator do
       container_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_container_range, pricing: container_range_pricing)
       result, _metadata = described_class.new(cargo: fcl_20_cargo,
-                                   pricing: container_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: container_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
 
-      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 100, 'currency' => 'EUR')
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 10, 'currency' => 'EUR')
     end
 
     it 'calculates the correct price for per_container_range above range' do
@@ -246,22 +270,22 @@ RSpec.describe Pricings::Calculator do
       container_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_container_range, pricing: container_range_pricing)
       result, _metadata = described_class.new(cargo: fat_fcl_20_cargo,
-                                   pricing: container_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
-      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 60, 'currency' => 'EUR')
+                                              pricing: container_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 144, 'currency' => 'EUR')
     end
 
     it 'calculates the correct price for per_unit_range' do
       unit_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_unit_range, pricing: unit_range_pricing)
       result, _metadata = described_class.new(cargo: fcl_20_cargo,
-                                   pricing: unit_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
-      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 100, 'currency' => 'EUR')
+                                              pricing: unit_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 10, 'currency' => 'EUR')
     end
 
     it 'calculates the correct price for per_unit_range above range' do
@@ -269,11 +293,11 @@ RSpec.describe Pricings::Calculator do
       unit_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_unit_range, pricing: unit_range_pricing)
       result, _metadata = described_class.new(cargo: over_quantity_container,
-                                   pricing: unit_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
-      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 60, 'currency' => 'EUR')
+                                              pricing: unit_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
+      expect(result.dig('total').slice('value', 'currency')).to eq('value' => 144, 'currency' => 'EUR')
     end
 
     it 'calculates the correct price for per_unit_ton_cbm_range (CBM)' do
@@ -287,10 +311,10 @@ RSpec.describe Pricings::Calculator do
                                         dimension_z: 100)
       FactoryBot.create(:fee_per_unit_ton_cbm_range, pricing: unit_ton_cbm_range_pricing)
       result, _metadata = described_class.new(cargo: cbm_lcl_cargo,
-                                   pricing: unit_ton_cbm_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: unit_ton_cbm_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 100, 'currency' => 'EUR')
     end
 
@@ -300,10 +324,10 @@ RSpec.describe Pricings::Calculator do
 
       FactoryBot.create(:fee_per_unit_ton_cbm_range, pricing: unit_ton_cbm_range_pricing)
       result, _metadata = described_class.new(cargo: overcbm_cargo,
-                                   pricing: unit_ton_cbm_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: unit_ton_cbm_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 1, 'currency' => 'EUR')
     end
 
@@ -318,10 +342,10 @@ RSpec.describe Pricings::Calculator do
                                         dimension_z: 300)
       FactoryBot.create(:fee_per_unit_ton_cbm_range, pricing: unit_ton_cbm_range_pricing)
       result, _metadata = described_class.new(cargo: ton_lcl_cargo,
-                                   pricing: unit_ton_cbm_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: unit_ton_cbm_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 400, 'currency' => 'EUR')
     end
 
@@ -329,10 +353,10 @@ RSpec.describe Pricings::Calculator do
       kg_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_kg_range, pricing: kg_range_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: kg_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: kg_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 1600, 'currency' => 'EUR')
     end
 
@@ -340,10 +364,10 @@ RSpec.describe Pricings::Calculator do
       kg_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_kg_range, pricing: kg_range_pricing)
       result, _metadata = described_class.new(cargo: overweight_cargo,
-                                   pricing: kg_range_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: kg_range_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 18_000, 'currency' => 'EUR')
     end
 
@@ -351,10 +375,10 @@ RSpec.describe Pricings::Calculator do
       cbm_kg_heavy_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_cbm_kg_heavy, pricing: cbm_kg_heavy_pricing)
       result, _metadata = described_class.new(cargo: overweight_cargo,
-                                   pricing: cbm_kg_heavy_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: cbm_kg_heavy_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 12, 'currency' => 'EUR')
     end
 
@@ -364,10 +388,10 @@ RSpec.describe Pricings::Calculator do
       fat_cargo = FactoryBot.create(:legacy_cargo_item, shipment_id: lcl_shipment.id, cargo_item_type_id: pallet.id, payload_in_kg: 2200)
 
       result, _metadata = described_class.new(cargo: fat_cargo,
-                                   pricing: item_heavy_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: item_heavy_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 250, 'currency' => 'EUR')
     end
 
@@ -375,10 +399,10 @@ RSpec.describe Pricings::Calculator do
       item_heavy_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
       FactoryBot.create(:fee_per_item_heavy, pricing: item_heavy_pricing)
       result, _metadata = described_class.new(cargo: overweight_cargo,
-                                   pricing: item_heavy_pricing.as_json,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Time.zone.today + 10.days).perform
+                                              pricing: item_heavy_pricing.as_json,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total').slice('value', 'currency')).to eq('value' => 250, 'currency' => 'EUR')
     end
   end
@@ -389,17 +413,16 @@ RSpec.describe Pricings::Calculator do
       FactoryBot.create(:fee_per_wm, pricing: wm_pricing)
       pricing_with_margins = wm_pricing.as_json.merge('flat_margins' => { 'bas' => 100 })
       result, _metadata = described_class.new(cargo: lcl_cargo,
-                                   pricing: pricing_with_margins,
-                                   user: user,
-                                   mode_of_transport: 'ocean',
-                                   date: Date.today + 10.days).perform
+                                              pricing: pricing_with_margins,
+                                              user: user,
+                                              mode_of_transport: 'ocean',
+                                              date: Time.zone.today + 10.days).perform
       expect(result.dig('total', 'value')).to eq(322.2)
       expect(result.dig('total', 'currency')).to eq('EUR')
     end
   end
 
   describe '.handle_range_fee' do
-
     let(:metadata_id) { SecureRandom.uuid }
     let(:metadata) do
       [
@@ -424,25 +447,21 @@ RSpec.describe Pricings::Calculator do
 
     let(:kg_range_pricing) do
       FactoryBot.create(:pricings_pricing,
-        tenant_vehicle: tenant_vehicle_1,
-        tenant: tenant,
-        fees: [
-            FactoryBot.build(:fee_per_kg_range)
-        ]
-      )
-
+                        tenant_vehicle: tenant_vehicle_1,
+                        tenant: tenant,
+                        fees: [
+                          FactoryBot.build(:fee_per_kg_range)
+                        ])
     end
 
     context 'PER_KG_RANGE' do
       it 'returns the correct fee_range for the larger volume' do
-
         result, result_metadata = described_class.new(cargo: lcl_cargo,
-                                     pricing: kg_range_pricing.as_json.merge(metadata_id: metadata_id),
-                                     user: user,
-                                     mode_of_transport: 'ocean',
-                                     date: Time.zone.today + 10.days,
-                                     metadata: metadata
-                                   ).perform
+                                                      pricing: kg_range_pricing.as_json.merge(metadata_id: metadata_id),
+                                                      user: user,
+                                                      mode_of_transport: 'ocean',
+                                                      date: Time.zone.today + 10.days,
+                                                      metadata: metadata).perform
 
         expect(result.dig('total').slice('value', 'currency')).to eq('value' => 1600, 'currency' => 'EUR')
         expect(result_metadata.dig(0, :metadata_id)).to eq(metadata_id)

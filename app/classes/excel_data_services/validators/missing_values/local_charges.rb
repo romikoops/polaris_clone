@@ -18,8 +18,13 @@ module ExcelDataServices
           PER_BILL_CONTAINER
           PER_CBM_KG
           PER_KG_RANGE
+          PER_KG_RANGE_FLAT
           PER_CBM_RANGE
+          PER_CBM_RANGE_FLAT
           PER_WM_RANGE
+          PER_WM_RANGE_FLAT
+          PER_UNIT_RANGE
+          PER_UNIT_RANGE_FLAT
           PER_X_KG_FLAT
           PER_UNIT_TON_CBM_RANGE
           PER_SHIPMENT_TON
