@@ -95,7 +95,7 @@ module Legacy
             cargo_unit_id.to_s =>
             { 'total' => { 'value' => 0.999e1, 'currency' => 'EUR' },
               'edited_total' => nil,
-              'name' => 'Legacy::container',
+              'name' => 'Container',
               'bas' => { 'currency' => 'EUR', 'sandbox_id' => nil, 'value' => 0.999e1, 'name' => 'Basic Freight' } } },
             'trip_id' => 2107
           }

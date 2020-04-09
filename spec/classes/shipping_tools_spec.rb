@@ -29,7 +29,7 @@ RSpec.describe ShippingTools do
   let(:tenant_vehicle) { create(:tenant_vehicle, tenant: tenant) }
   let(:transport_category) { create(:transport_category, load_type: 'container') }
   let(:shipment) do
-    create(:shipment,
+    create(:legacy_shipment,
            user: user,
            trip: trip,
            tenant: tenant,

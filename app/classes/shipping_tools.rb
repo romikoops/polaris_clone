@@ -504,7 +504,7 @@ class ShippingTools
   end
 
   def self.request_shipment(params, current_user, sandbox = nil)
-    shipment = Shipment.find_by(id: params[:shipment_id], sandbox: sandbox)
+    shipment = Legacy::Shipment.find_by(id: params[:shipment_id], sandbox: sandbox)
     shipment.status = current_user.confirmed? ? 'requested' : 'requested_by_unconfirmed_account'
     shipment.booking_placed_at = DateTime.now
     shipment.save!

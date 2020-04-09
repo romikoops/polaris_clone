@@ -171,5 +171,54 @@ RSpec.describe Quotations::TenderUpdater do
         expect(breakdown.charges.where(detail_level: 3, charge_category: unupdated_charge_category).first.edited_price).to be_nil
       end
     end
+
+    context 'when the charge is of detail level 3 and consolidated cargo' do
+      subject(:updater) do
+        described_class.new(tender: line_item.tender,
+                            line_item_id: line_item.id,
+                            charge_category_id: line_item.charge_category_id,
+                            value: 50,
+                            section: level_3_charge.parent.charge_category.code)
+      end
+
+      let(:level_3_charge) { charge_breakdown.charges.find_by(detail_level: 3) }
+      let(:original_value) { Money.new(1000, 'EUR') }
+      let!(:original_tender_value) { tender.amount }
+      let(:line_item) do
+        FactoryBot.create(:quotations_line_item,
+                          tender: tender,
+                          amount: original_value,
+                          original_amount: original_value,
+                          charge_category: level_3_charge.children_charge_category,
+                          cargo: nil)
+      end
+
+      before do
+        charge_breakdown.charge_categories.where(code: 'container').update_all(cargo_unit_id: nil)
+        updater.perform
+      end
+
+      it 'updates the edited price of the charge' do
+        expect(updater.charge.edited_price.money).to eq Money.new(5000.0, level_3_charge.price.currency)
+      end
+
+      it 'updates grand total of the breakdown' do
+        expect(charge_breakdown.grand_total.edited_price.money).to eq Money.new(5000.0, level_3_charge.price.currency)
+      end
+
+      it 'updates the tender amount' do
+        aggregate_failures do
+          expect(tender.amount).to eq Money.new(5000.0, level_3_charge.price.currency)
+          expect(tender.original_amount).to eq original_tender_value
+        end
+      end
+
+      it 'updates the specified line item' do
+        aggregate_failures do
+          expect(updater.line_item.amount).to eq Money.new(5000.0, level_3_charge.price.currency)
+          expect(updater.line_item.original_amount).to eq Money.new(original_value)
+        end
+      end
+    end
   end
 end

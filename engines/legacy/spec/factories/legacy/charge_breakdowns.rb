@@ -14,6 +14,11 @@ FactoryBot.define do
 
       charge_breakdown.update!(trip_id: shipment.trip_id) if charge_breakdown.trip_id.nil?
       cargo_units = shipment.aggregated_cargo.present? ? [shipment.aggregated_cargo] : shipment.cargo_units
+      cargo_unit_charge_category_code = if shipment.aggregated_cargo.present?
+                                          'aggregated_cargo'
+                                        else
+                                          shipment.load_type
+                                        end
       if evaluator.with_tender
         tender = FactoryBot.create(:quotations_tender,
                                    carrier_name: charge_breakdown.trip.tenant_vehicle.carrier&.name,
@@ -59,8 +64,8 @@ FactoryBot.define do
 
         cargo_units.each do |cargo_unit|
           cargo_unit_charge_category = create(:legacy_charge_categories,
-                                              name: cargo_unit.class.name.humanize,
-                                              code: cargo_unit.class.name.underscore.downcase,
+                                              name: cargo_unit_charge_category_code.humanize,
+                                              code: cargo_unit_charge_category_code,
                                               cargo_unit_id: cargo_unit[:id],
                                               tenant_id: shipment.tenant_id)
 

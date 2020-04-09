@@ -62,7 +62,7 @@ module Quotations
     end
 
     def charge_category_by_cargo
-      charge_breakdown.charge_categories.find_by(cargo_unit_id: line_item.cargo_id)
+      charge_breakdown.charge_categories.find_by(code: tender.load_type, cargo_unit_id: line_item.cargo_id)
     end
 
     def section_charge
