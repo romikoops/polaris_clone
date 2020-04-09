@@ -27,7 +27,7 @@ module ExcelDataServices
         def check_carrier_exists(row)
           return if row.carrier.blank?
 
-          carrier = Carrier.find_by(name: row.carrier)
+          carrier = Legacy::Carrier.find_by(code: row.carrier.downcase)
 
           if carrier.blank?# rubocop:disable Style/GuardClause
             add_to_errors(

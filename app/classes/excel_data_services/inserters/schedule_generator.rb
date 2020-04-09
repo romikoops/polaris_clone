@@ -19,7 +19,7 @@ module ExcelDataServices
         itineraries = Itinerary.where(
           tenant_id: tenant.id,
           transshipment: params[:transshipment],
-          name: "#{params[:origin].titleize} - #{params[:destination].titleize}",
+          name: "#{params[:origin]} - #{params[:destination]}",
           sandbox: @sandbox
         )
         itineraries = itineraries.where(mode_of_transport: params[:mot]) if params[:mot]
