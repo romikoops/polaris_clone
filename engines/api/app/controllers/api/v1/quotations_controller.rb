@@ -12,12 +12,22 @@ module Api
         render json: { error: e.message }, status: 422
       end
 
+      def show
+        decorated_quotation = QuotationDecorator.decorate(quotation)
+
+        render json: QuotationSerializer.new(decorated_quotation, params: { scope: current_scope })
+      end
+
       def download
         document = Wheelhouse::PdfService.new(tenders: download_params[:tenders]).download
         render json: PdfSerializer.new(document)
       end
 
       private
+
+      def quotation
+        Quotations::Quotation.find(params[:id])
+      end
 
       def quotation_service
         Wheelhouse::QuotationService.new(quotation_details: quotation_params, shipping_info: shipment_params)

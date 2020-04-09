@@ -14,8 +14,7 @@ Api::Engine.routes.draw do
       end
     end
     resource :dashboard, controller: :dashboard, only: %i[show]
-    resources :quotations do
-      post :create
+    resources :quotations, only: %i[create show] do
       post :download
       resources :charges, only: %i[show]
       resources :schedules, only: %i[show]

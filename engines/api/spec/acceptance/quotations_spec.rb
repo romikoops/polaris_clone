@@ -78,6 +78,36 @@ RSpec.resource 'Quotations', acceptance: true do
     end
   end
 
+  get 'v1/quotations/:quotation_id' do
+    context 'when a quotation exists' do
+      let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, tenant: tenant, user: user) }
+
+      let(:quotation) do
+        FactoryBot.create(:quotations_quotation, tenants_user: tenants_user, tenders:
+        FactoryBot.create_list(:quotations_tender, 5))
+      end
+      let(:request) do
+        {
+          quotation_id: quotation.id
+        }
+      end
+
+      before do
+        shipment.charge_breakdowns.update(tender_id: quotation.tenders.first.id)
+      end
+
+      with_options with_example: true do
+        parameter :quotation_id, 'The Id of the quotation to show', required: true
+      end
+
+      example 'returns a quotation with the given id' do
+        do_request(request)
+
+        expect(status).to eq(200)
+      end
+    end
+  end
+
   post '/v1/quotations/:quotation_id/download' do
     with_options scope: :quote, with_example: true do
       parameter :tenders, 'The selected tenders for download', required: true
