@@ -71,13 +71,13 @@ module AdmiraltyReports
                                                       .where('created_at < ?', NON_LEGACY_QUOTATIONS_DATE))
       non_legacy_quotations = filtered(non_flagged_quotations)
       quotations = legacy_quotations | non_legacy_quotations
-      quotations.sort_by(&:updated_at).reverse.uniq
+      quotations.sort_by(&:created_at).reverse.uniq
     end
 
     def uniq_shipments_by_original_shipments
       shipments = original_shipments.where.not(status: 'booking_process_started')
       shipments = filtered(shipments)
-      shipments.order(updated_at: :desc).uniq(&:id)
+      shipments.order(created_at: :desc).uniq(&:id)
     end
 
     def filtered(shipments)
@@ -104,7 +104,7 @@ module AdmiraltyReports
 
     def group_by_date(bundle)
       bundle.group_by do |shipment_type, _shipment|
-        shipment_type.updated_at.to_date
+        shipment_type.created_at.to_date
       end
     end
 
