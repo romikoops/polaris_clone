@@ -10,6 +10,12 @@ module Api
         render json: TripSerializer.new(decorated_trips, params: {})
       end
 
+      def enabled
+        scope = Tenants::ScopeService.new(tenant: current_tenant).fetch
+        schedules_enabled = !(scope['closed_quotation_tool'] || scope['open_quotation_tool'])
+        render json: { data: { enabled: schedules_enabled } }
+      end
+
       private
 
       def schedule_params

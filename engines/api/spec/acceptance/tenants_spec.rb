@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.resource 'Tenants' do
+RSpec.resource 'Tenants', acceptance: true do
   header 'Accept', 'application/json'
   header 'Content-Type', 'application/json'
   header 'Authorization', :token_header

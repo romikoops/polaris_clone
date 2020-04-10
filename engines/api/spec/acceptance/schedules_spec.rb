@@ -53,4 +53,31 @@ RSpec.resource 'Schedules', acceptance: true do
       end
     end
   end
+
+  get '/v1/itineraries/:id/schedules/enabled' do
+    let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: tenant) }
+    let(:request) { { id: itinerary.id } }
+
+    context 'when tenant runs a quote shop' do
+      before do
+        FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { closed_quotation_tool: true })
+      end
+
+      example 'getting schedules enabled for a tenant' do
+        do_request(request)
+        aggregate_failures do
+          expect(response_data['enabled']).to eq(false)
+        end
+      end
+    end
+
+    context 'when tenant runs a booking shop' do
+      example 'getting enableds status for tenant schedules' do
+        do_request(request)
+        aggregate_failures do
+          expect(response_data['enabled']).to eq(true)
+        end
+      end
+    end
+  end
 end

@@ -41,6 +41,12 @@ Api::Engine.routes.draw do
       collection do
         get 'ports/:tenant_uuid', action: :ports
       end
+
+      resources :schedules, only: :index do
+        collection do
+          get 'enabled'
+        end
+      end
     end
   end
 

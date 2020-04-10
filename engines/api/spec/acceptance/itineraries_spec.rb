@@ -22,7 +22,7 @@ RSpec.resource 'Itineraries', acceptance: true do
   get '/v1/itineraries' do
     response_field :id, 'Unique identifier', Type: String
     response_field :tenant_id, "User's tenant id", Type: Integer
-    %w(name mode_of_transport).each do |field|
+    %w[name mode_of_transport].each do |field|
       response_field field, "each itinerary's #{field}", Type: :String
     end
 
