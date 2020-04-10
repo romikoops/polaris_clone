@@ -72,7 +72,7 @@ RSpec.resource 'Quotations', acceptance: true do
         do_request(request)
         aggregate_failures do
           expect(status).to eq(200)
-          expect(response_data.dig(0, 'attributes', 'total')).to eq('€250.00')
+          expect(response_data.dig(0, 'attributes', 'total')).to eq('amount' => 250.00, 'currency' => 'EUR')
         end
       end
     end

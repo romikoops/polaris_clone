@@ -37,9 +37,12 @@ module Wheelhouse
     end
 
     def total
-      return '' if amount_cents.zero?
+      return nil if amount_cents.zero?
 
-      amount.format
+      {
+        amount: amount_cents / 100.to_f,
+        currency: amount_currency
+      }
     end
 
     def uuid
