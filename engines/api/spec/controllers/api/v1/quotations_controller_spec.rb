@@ -10,11 +10,14 @@ module Api
       request.headers['Authorization'] = token_header
     end
 
+    let(:tenant) { FactoryBot.create(:legacy_tenant) }
+    let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+    let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}, with_profile: true) }
+    let(:tenants_user) { Tenants::User.find_by(legacy: user) }
+    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenants_user.id, scopes: 'public') }
+    let(:token_header) { "Bearer #{access_token.token}" }
+
     describe 'POST #create' do
-      let(:tenant) { FactoryBot.create(:legacy_tenant) }
-      let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-      let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}, with_profile: true) }
-      let(:tenants_user) { Tenants::User.find_by(legacy: user) }
       let(:origin_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
       let(:destination_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
       let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
@@ -24,8 +27,6 @@ module Api
       let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
       let(:trip_1) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle) }
       let(:trip_2) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle_2) }
-      let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenants_user.id, scopes: 'public') }
-      let(:token_header) { "Bearer #{access_token.token}" }
       let(:trips) { [trip_1, trip_2] }
 
       let(:params) do
@@ -84,6 +85,55 @@ module Api
           post :create, params: params
 
           expect(response_error).to eq 'There are no departures for this timeframe.'
+        end
+      end
+    end
+
+    describe 'GET #show' do
+      before do
+        FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, tenant: tenant, user: user)
+      end
+
+      context 'when origin and destinations are nexuses' do
+        let(:quotation) { Quotations::Quotation.last }
+
+        it 'renders origin and destination as nexus objects' do
+          get :show, params: { id: quotation.id }
+
+          aggregate_failures do
+            expect(response_data.dig('attributes', 'origin', 'data', 'id').to_i).to eq quotation.origin_nexus_id
+            expect(response_data.dig('attributes', 'destination', 'data', 'id').to_i).to eq quotation.destination_nexus_id
+          end
+        end
+      end
+
+      context 'when origin and destination are addresses' do
+        let(:address) { FactoryBot.create(:legacy_address) }
+        let(:quotation) do
+          quotation = Quotations::Quotation.last
+          quotation.update!(pickup_address: address,
+                            delivery_address: address)
+          quotation
+        end
+
+        it 'renders origin and destination as address objects' do
+          get :show, params: { id: quotation.id }
+
+          aggregate_failures do
+            expect(response_data.dig('attributes', 'origin', 'data', 'id').to_i).to eq quotation.pickup_address_id
+            expect(response_data.dig('attributes', 'destination', 'data', 'id').to_i).to eq quotation.delivery_address_id
+          end
+        end
+      end
+
+      context 'when cargo is lcl' do
+        let(:quotation) { Quotations::Quotation.last }
+        let!(:cargo_item) { FactoryBot.create(:legacy_cargo_item, shipment: Legacy::Shipment.last) }
+
+        it 'returns the cargo items' do
+          get :show, params: { id: quotation.id }
+
+          expect(response_data.dig('attributes', 'cargoItems', 'data', 0, 'id').to_i).to eq cargo_item.id
         end
       end
     end

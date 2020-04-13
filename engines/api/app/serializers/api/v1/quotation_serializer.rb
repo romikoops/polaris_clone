@@ -6,19 +6,27 @@ module Api
       attributes :selected_date
 
       attribute :load_type do |quotation|
-        quotation.tenders.first.load_type
+        quotation.tenders.first&.load_type
       end
 
       attribute :user do |quotation|
         UserSerializer.new(quotation.tenants_user)
       end
 
-      attribute :pickup_address do |quotation|
-        AddressSerializer.new(quotation.pickup_address)
+      attribute :origin do |quotation|
+        if quotation.pickup_address.present?
+          AddressSerializer.new(quotation.pickup_address)
+        else
+          NexusSerializer.new(quotation.origin_nexus)
+        end
       end
 
-      attribute :delivery_address do |quotation|
-        AddressSerializer.new(quotation.delivery_address)
+      attribute :destination do |quotation|
+        if quotation.delivery_address.present?
+          AddressSerializer.new(quotation.delivery_address)
+        else
+          NexusSerializer.new(quotation.destination_nexus)
+        end
       end
 
       attribute :containers do |quotation|
