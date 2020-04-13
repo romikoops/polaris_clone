@@ -6,12 +6,15 @@ module Api
   module V1
     class DashboardController < ApiController
       def show
-        render json: Api::DashboardService.data(
-          user: current_user,
-          widget_name: widget_param,
-          start_date: optional_params[:startDate],
-          end_date: optional_params[:endDate]
-        )
+        render json:
+        {
+          data: Api::DashboardService.data(
+            user: current_user,
+            widget_name: widget_param,
+            start_date: optional_params[:startDate],
+            end_date: optional_params[:endDate]
+          )
+        }
       end
 
       def widget_param
