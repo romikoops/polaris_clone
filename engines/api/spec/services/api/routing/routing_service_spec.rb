@@ -31,10 +31,10 @@ RSpec.describe Api::Routing::RoutingService, type: :service do
     context 'when targeting the origin with no params ' do
       let(:args) { default_args.merge(target: :origin_destination) }
       let!(:result) { described_class.nexuses(args) }
-      let(:origins) { legacy_tenant.itineraries.map { |itin| itin.first_nexus.name } }
+      let(:origins) { legacy_tenant.itineraries.map { |itin| itin.first_nexus.name }.sort }
 
       it 'Renders an array of all origins when location params are empty' do
-        expect(result.map(&:name)).to match_array(origins)
+        expect(result.map(&:name)).to eq(origins)
       end
     end
 

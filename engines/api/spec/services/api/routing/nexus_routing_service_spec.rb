@@ -31,10 +31,10 @@ RSpec.describe Api::Routing::NexusRoutingService, type: :service do
     context 'when targeting the origin with destination id' do
       let(:nexus_id) { destination_hub.nexus_id }
       let(:target) { :origin_destination }
-      let(:origins) { legacy_tenant.itineraries.map { |itin| itin.first_nexus.name } }
+      let(:origins) { legacy_tenant.itineraries.map { |itin| itin.first_nexus.name }.sort }
 
       it 'Renders a json of origins for given a destination id' do
-        expect(result.pluck(:name)).to match_array(origins)
+        expect(result.pluck(:name)).to eq(origins)
       end
     end
 

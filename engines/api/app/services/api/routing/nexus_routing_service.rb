@@ -4,7 +4,7 @@ module Api
   module Routing
     class NexusRoutingService < Api::Routing::RoutingService
       def perform
-        itineraries_nexuses(target_index: index)
+        itineraries_nexuses(target_index: index).reorder('name')
       end
 
       private

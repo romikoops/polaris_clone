@@ -26,7 +26,7 @@ module Api
       end
 
       def perform
-        itineraries_nexuses(target_index: index).uniq
+        itineraries_nexuses(target_index: index).reorder('name')
       end
 
       private
