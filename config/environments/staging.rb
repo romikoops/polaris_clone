@@ -5,6 +5,8 @@ require_relative './production'
 Rails.application.configure do
   config.active_job.queue_adapter = :async
 
+  config.active_storage.service = :staging
+
   Mail.register_interceptor(
     RecipientInterceptor.new(
       ENV.fetch('EMAIL_RECIPIENTS', 'development+qa@itsmycargo.com'),

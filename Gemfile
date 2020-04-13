@@ -16,6 +16,8 @@ gem 'puma', '~> 3.11'
 gem 'activerecord-import'
 # Strong Migrations - Prevent Non Zero-Down time Migrations
 gem 'strong_migrations'
+# ActiveStorage
+gem 'activestorage-cascade'
 
 # i18n support
 gem 'rails-i18n'
