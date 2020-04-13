@@ -15,9 +15,10 @@ module Cargo
     }
 
     validates :tenant_id, presence: true
-    validates :weight, measured: { units: :kg }
+    validates :weight, measured: { units: :kg, greater_than: 0 }
     validates :volume, measured: { units: :m3 }
     validates :width, :length, :height, measured: { units: :m }
+    validates :width, :length, :height, measured: { greater_than: 0 }, if: :requires_dimensions?
 
     before_validation :ensure_si_units
 
@@ -52,6 +53,10 @@ module Cargo
       self.width = width.convert_to('m')
       self.length = length.convert_to('m')
       self.height = height.convert_to('m')
+    end
+
+    def requires_dimensions?
+      cargo_class_00? && cargo_type_LCL?
     end
 
     def set_volume_and_height

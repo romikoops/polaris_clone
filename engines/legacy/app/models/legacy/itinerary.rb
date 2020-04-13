@@ -286,6 +286,14 @@ module Legacy
       destination_stops.pluck(:hub_id)
     end
 
+    def origin_hub
+      origin_stops.first.hub
+    end
+
+    def destination_hub
+      destination_stops.first.hub
+    end
+
     def origin_nexuses
       Nexus.where(id: origin_nexus_ids)
     end

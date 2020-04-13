@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-analytics'
   s.add_dependency 'imc-api_auth'
   s.add_dependency 'imc-api_docs'
+  s.add_dependency 'imc-cargo'
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-profiles'
   s.add_dependency 'imc-tenants'

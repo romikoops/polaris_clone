@@ -193,3 +193,50 @@ en:
       http_code: 422
       code: 1023
       message: 'Shipper and Consignee cannot be the same contacts'
+
+    #Validation errors
+    weight_exceeded:
+      code: 4001
+      message: 'Weight has exceeded the maximum allowed'
+    height_exceeded:
+      code: 4002
+      message: 'Height has exceeded the maximum allowed'
+    width_exceeded:
+      code: 4003
+      message: 'Width has exceeded the maximum allowed'
+    length_exceeded:
+      code: 4004
+      message: 'Length has exceeded the maximum allowed'
+    chargeable_weight_exceeded:
+      code: 4005
+      message: 'Chargeable Weight has exceeded the maximum allowed'
+    aggregate_chargeable_weight_exceeded:
+      code: 4006
+      message: 'Aggregate chargeable Weight has exceeded the maximum allowed'
+    aggregate_weight_exceeded:
+      code: 4007
+      message: 'Aggregate weight has exceeded the maximum allowed'
+    no_pricings_available:
+      code: 4008
+      message: 'No pricings available along your chosen route'
+    no_group_pricings_available:
+      code: 4009
+      message: 'No pricings available for your groups along your chosen route'
+    weight_missing:
+      code: 4010
+      message: 'Weight is missing.'
+    height_missing:
+      code: 4011
+      message: 'Height is missing.'
+    width_missing:
+      code: 4012
+      message: 'Width is missing.'
+    length_missing:
+      code: 4013
+      message: 'Length is missing.'
+    cargo_missing:
+      code: 4014
+      message: 'Cargo is required to make a booking.'
+    negative_value:
+      code: 4015
+      message: 'All attributes must be positive'

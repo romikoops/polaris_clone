@@ -162,6 +162,7 @@ PATH
       imc-analytics
       imc-api_auth
       imc-api_docs
+      imc-cargo
       imc-core
       imc-profiles
       imc-tenants
@@ -562,6 +563,7 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       draper (~> 4.0)
+      imc-cargo
       imc-core
       imc-legacy
       imc-offer_calculator

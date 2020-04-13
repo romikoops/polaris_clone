@@ -27,8 +27,11 @@ module Api
       let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
       let(:trip_1) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle) }
       let(:trip_2) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle_2) }
+      let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenants_user.id, scopes: 'public') }
+      let(:token_header) { "Bearer #{access_token.token}" }
+      let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
       let(:trips) { [trip_1, trip_2] }
-
+      let(:cargo_items_attributes) { [] }
       let(:params) do
         {
           quote: {
@@ -39,7 +42,10 @@ module Api
             origin: { nexus_id: origin_hub.nexus_id },
             destination: { nexus_id: destination_hub.nexus_id }
           },
-          shipment_info: { trucking_info: { pre_carriage: :pre } }
+          shipment_info: {
+            trucking_info: { pre_carriage: :pre },
+            cargo_items_attributes: cargo_items_attributes
+          }
         }
       end
 
@@ -76,6 +82,62 @@ module Api
             post :create, params: params
 
             expect(response_data.count).to eq 3
+          end
+        end
+
+        context 'when cargo items are invalid' do
+          let(:cargo_items_attributes) do
+            [
+              {
+                'id' => SecureRandom.uuid,
+                'payload_in_kg' => 120,
+                'total_volume' => 0,
+                'total_weight' => 0,
+                'dimension_x' => 0,
+                'dimension_y' => 80,
+                'dimension_z' => 1200,
+                'quantity' => 1,
+                'cargo_item_type_id' => pallet.id,
+                'dangerous_goods' => false,
+                'stackable' => true
+              }
+            ]
+          end
+
+          it 'returns prices with default margins' do
+            post :create, params: params
+            aggregate_failures do
+              expect(response.code).to eq '422'
+              expect(response_data.count).to eq 2
+            end
+          end
+        end
+
+        context 'when cargo items are valid' do
+          let(:cargo_items_attributes) do
+            [
+              {
+                'id' => SecureRandom.uuid,
+                'payload_in_kg' => 120,
+                'total_volume' => 0,
+                'total_weight' => 0,
+                'dimension_x' => 120,
+                'dimension_y' => 80,
+                'dimension_z' => 120,
+                'quantity' => 1,
+                'cargo_item_type_id' => pallet.id,
+                'dangerous_goods' => false,
+                'stackable' => true
+              }
+            ]
+          end
+
+          it 'returns prices with default margins' do
+            post :create, params: params
+            aggregate_failures do
+              expect(response.code).to eq '200'
+              expect(response_data.count).to eq 3
+            end
           end
         end
       end

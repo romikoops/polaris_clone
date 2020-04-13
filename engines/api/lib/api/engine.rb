@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'api_auth'
+require 'cargo'
 require 'core'
 require 'profiles'
 require 'tenants'

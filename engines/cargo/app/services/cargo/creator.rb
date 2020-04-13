@@ -35,6 +35,7 @@ module Cargo
           quantity: container.quantity,
           cargo_class: cargo_class,
           cargo_type: 'GP',
+          weight_value: container.payload_in_kg,
           goods_value_cents: legacy_shipment.total_goods_value['value'] / container.quantity,
           goods_value_currency: legacy_shipment.total_goods_value['currency'],
           dangerous_goods: (container.dangerous_goods ? :unspecified : nil)
@@ -45,9 +46,9 @@ module Cargo
         cargo.units << Unit.new(
           tenant_id: quotation.tenant_id,
           weight_value: item.payload_in_kg,
-          width_value: item.dimension_x,
-          length_value: item.dimension_y,
-          height_value: item.dimension_z,
+          width_value: item.dimension_x.to_f / 100,
+          length_value: item.dimension_y.to_f / 100,
+          height_value: item.dimension_z.to_f / 100,
           quantity: item.quantity,
           cargo_class: '00',
           cargo_type: 'LCL',

@@ -16,21 +16,35 @@ module Legacy
       end
     end
 
-    describe '.destination_hub_ids' do
+    context 'when finding hubs' do
       let(:tenant) { FactoryBot.create(:legacy_tenant) }
       let(:o_hub) { FactoryBot.create(:legacy_hub, tenant: tenant) }
       let(:d_hub) { FactoryBot.create(:legacy_hub, tenant: tenant) }
       let(:itinerary) do
         FactoryBot.create(:default_itinerary,
-          tenant: tenant,
-          stops: [
-            FactoryBot.build(:legacy_stop, hub: o_hub, index: 0),
-            FactoryBot.build(:legacy_stop, hub: d_hub, index: 1)
-          ]
-        )
+                          tenant: tenant,
+                          stops: [
+                            FactoryBot.build(:legacy_stop, hub: o_hub, index: 0),
+                            FactoryBot.build(:legacy_stop, hub: d_hub, index: 1)
+                          ])
       end
-      it 'returns the hub ids for the destination' do
-        expect(itinerary.destination_hub_ids).to eq([d_hub.id])
+
+      describe '.destination_hub_ids' do
+        it 'returns the hub ids for the destination' do
+          expect(itinerary.destination_hub_ids).to eq([d_hub.id])
+        end
+      end
+
+      describe '.destination_hub' do
+        it 'returns the hub ids for the destination' do
+          expect(itinerary.destination_hub).to eq(d_hub)
+        end
+      end
+
+      describe '.origin_hub' do
+        it 'returns the hub ids for the destination' do
+          expect(itinerary.origin_hub).to eq(o_hub)
+        end
       end
     end
 
@@ -56,15 +70,13 @@ module Legacy
       context 'with existing trips' do
         before do
           FactoryBot.create(:legacy_trip,
-            itinerary: itinerary,
-            tenant_vehicle_id: lcl_pricing.tenant_vehicle_id,
-            load_type: 'cargo_item'
-          )
+                            itinerary: itinerary,
+                            tenant_vehicle_id: lcl_pricing.tenant_vehicle_id,
+                            load_type: 'cargo_item')
           FactoryBot.create(:legacy_trip,
-            itinerary: itinerary,
-            tenant_vehicle_id: fcl_20_pricing.tenant_vehicle_id,
-            load_type: 'conatiner'
-          )
+                            itinerary: itinerary,
+                            tenant_vehicle_id: fcl_20_pricing.tenant_vehicle_id,
+                            load_type: 'conatiner')
         end
 
         it 'generates trips for all the pricings' do

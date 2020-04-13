@@ -11,6 +11,7 @@ module Trucking
     belongs_to :courier, class_name: 'Trucking::Courier'
     validates :hub_id, :location_id, presence: true
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+    belongs_to :group, class_name: 'Tenants::Group', optional: true
     validates :hub_id,
               uniqueness: {
                 scope: %i(

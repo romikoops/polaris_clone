@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'cargo'
 require 'core'
 require 'legacy'
 require 'offer_calculator'

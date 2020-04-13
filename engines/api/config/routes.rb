@@ -37,6 +37,8 @@ Api::Engine.routes.draw do
       end
     end
 
+    resource :validation, only: [:create]
+
     resources :itineraries, only: %i[index] do
       collection do
         get 'ports/:tenant_uuid', action: :ports

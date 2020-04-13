@@ -25,7 +25,7 @@ module Trucking
         @hub_ids = args[:hub_ids]
         @distance = args[:distance]
         @sandbox = args[:sandbox]
-        @order_by = args[:order_by]
+        @groups = args[:groups]
       end
 
       def locations_locations
@@ -108,23 +108,28 @@ module Trucking
                             .where(load_type_condition)
                             .where(truck_type_condition)
                             .where(carriage_condition)
+                            .where(group_condition)
                             .where(location: valid_trucking_locations)
       end
 
       def truck_type_condition
-        @truck_type ? { 'truck_type': @truck_type } : {}
+        @truck_type ? { truck_type: @truck_type } : {}
+      end
+
+      def group_condition
+        @groups ? { group_id: @groups.ids | [nil] } : {}
       end
 
       def cargo_class_condition
-        @cargo_classes ? { 'cargo_class': @cargo_classes } : {}
+        @cargo_classes ? { cargo_class: @cargo_classes } : {}
       end
 
       def load_type_condition
-        @load_type ? { 'load_type': @load_type } : {}
+        @load_type ? { load_type: @load_type } : {}
       end
 
       def carriage_condition
-        @carriage ? { 'carriage': @carriage } : {}
+        @carriage ? { carriage: @carriage } : {}
       end
 
       def nexuses_condition

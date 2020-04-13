@@ -6,7 +6,7 @@ RSpec.describe Trucking::Queries::Availability do
   describe '.perform' do
     let(:tenant) { FactoryBot.create(:legacy_tenant) }
     let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: tenant) }
-
+    let(:group) { FactoryBot.create(:tenants_group) }
     let(:trucking_location_zipcode) { FactoryBot.create(:trucking_location, :zipcode) }
     let(:trucking_location_geometry)  { FactoryBot.create(:trucking_location, :with_location) }
     let(:trucking_location_distance)  { FactoryBot.create(:trucking_location, :distance) }
@@ -191,6 +191,35 @@ RSpec.describe Trucking::Queries::Availability do
         ).perform
 
         expect(trucking_rates).to match([])
+      end
+    end
+    context 'with group_ids geometry identifier' do
+      let!(:trucking_trucking_geometry) do
+        FactoryBot.create(:trucking_trucking,
+                          hub: hub,
+                          tenant: tenant,
+                          location: trucking_location_geometry)
+      end
+      let!(:group_trucking_trucking_geometry) do
+        FactoryBot.create(:trucking_trucking,
+                          hub: hub,
+                          tenant: tenant,
+                          group: group,
+                          location: trucking_location_geometry)
+      end
+
+      before do
+        FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :location)
+      end
+
+      it 'finds the correct trucking_rate with avulsed address filters' do
+        trucking_rates = described_class.new(
+          klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
+          carriage: carriage,   country_code: country_code,
+          latitude: latitude,   longitude: longitude, order_by: 'group_id', group_ids: [group.id]
+        ).perform
+
+        expect(trucking_rates).to match_array([trucking_trucking_geometry, group_trucking_trucking_geometry])
       end
     end
   end
