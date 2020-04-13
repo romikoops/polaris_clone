@@ -14,6 +14,7 @@ module Legacy
     scope :for_dates, (lambda do |start_date, end_date|
       where('validity && daterange(?::date, ?::date)', start_date, end_date)
     end)
+    scope :current, -> { where('expiration_date > ?', 7.days.ago) }
 
     before_validation :set_validity
 
