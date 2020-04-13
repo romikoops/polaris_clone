@@ -59,7 +59,7 @@ module Legacy
 
     def update_edited_price!
       self.edited_price = Price.new(currency: price.currency) if edited_price.nil?
-      new_total = children.reduce(0) do |sum, charge|
+      new_total = children.reduce(Money.new(0, price.currency)) do |sum, charge|
         sum + (charge.edited_price || charge.price).money
       end
 

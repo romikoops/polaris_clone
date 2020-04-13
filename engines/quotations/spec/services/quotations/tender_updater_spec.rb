@@ -102,7 +102,7 @@ RSpec.describe Quotations::TenderUpdater do
       end
 
       let(:level_3_charge) { charge_breakdown.charges.find_by(detail_level: 3) }
-      let(:original_value) { Money.new(1000, 'EUR') }
+      let(:original_value) { charge_breakdown.grand_total.price.money }
       let!(:original_tender_value) { tender.amount }
       let(:line_item) do
         FactoryBot.create(:quotations_line_item,
@@ -114,6 +114,7 @@ RSpec.describe Quotations::TenderUpdater do
       end
 
       before do
+        level_3_charge.price.update(currency: 'USD')
         updater.perform
       end
 
@@ -122,12 +123,12 @@ RSpec.describe Quotations::TenderUpdater do
       end
 
       it 'updates grand total of the breakdown' do
-        expect(charge_breakdown.grand_total.edited_price.money).to eq Money.new(5000.0, level_3_charge.price.currency)
+        expect(charge_breakdown.grand_total.edited_price.money).to eq Money.new(5000.0, level_3_charge.price.currency).exchange_to(original_value.currency)
       end
 
       it 'updates the tender amount' do
         aggregate_failures do
-          expect(tender.amount).to eq Money.new(5000.0, level_3_charge.price.currency)
+          expect(tender.amount).to eq Money.new(5000.0, level_3_charge.price.currency).exchange_to('USD')
           expect(tender.original_amount).to eq original_tender_value
         end
       end

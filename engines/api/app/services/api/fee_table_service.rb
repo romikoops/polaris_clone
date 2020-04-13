@@ -10,6 +10,7 @@ module Api
 
     def initialize(tender:, scope:)
       @tender = tender
+      @base_currency = tender.amount.currency
       @charge_breakdown = @tender.charge_breakdown
       @rows = []
       @scope = scope
@@ -20,13 +21,17 @@ module Api
       @rows
     end
 
+    private
+
+    attr_reader :tender, :rows, :scope, :charge_breakdown, :base_currency
+
     def create_rows
       tender.line_items.group_by(&:section).each do |section, items|
         charge_category_id = applicable_charge_category_id(section: section)
         section_row = {
           id: SecureRandom.uuid,
           description: section_description(section: section),
-          value: value_with_currency(value(items: items, charge_category_id: charge_category_id)),
+          value: value_with_currency(value(items: items)),
           originalValue: value_with_currency(original_value(items: items)),
           lineItemId: nil,
           tenderId: tender.id,
@@ -42,8 +47,7 @@ module Api
 
     def create_cargo_section_rows(row:, items:)
       items.group_by(&:cargo).each do |cargo, items_by_cargo|
-        charge_category_id = applicable_charge_category_id(cargo: cargo)
-        fee_value = value(items: items_by_cargo, charge_category_id: charge_category_id)
+        fee_value = value(items: items_by_cargo)
         original_fee_value = original_value(items: items_by_cargo)
         cargo_row = {
           id: SecureRandom.uuid,
@@ -67,7 +71,7 @@ module Api
     def create_cargo_currency_section_rows(row:, items:, cargo:)
       items.group_by { |line_item| line_item.amount.currency.iso_code }
            .each do |currency, items_by_currency|
-        fee_value = value(items: items_by_currency, charge_category_id: nil)
+        fee_value = value(items: items_by_currency, currency: currency)
         original_fee_value = original_value(items: items_by_currency)
         currency_row = {
           id: SecureRandom.uuid,
@@ -161,14 +165,12 @@ module Api
       SECTIONS.zip([3, 1, 5, 2, 4]).to_h.fetch(section)
     end
 
-    def value(items:, charge_category_id:)
-      edited_price = charge_breakdown.charges.find_by(children_charge_category_id: charge_category_id)&.edited_price
-
-      (edited_price&.money || items.sum(&:amount))
+    def value(items:, currency: base_currency)
+      items.sum(Money.new(0, currency), &:amount)
     end
 
-    def original_value(items:)
-      items.sum(&:original_amount)
+    def original_value(items:, currency: base_currency)
+      items.sum(Money.new(0, currency), &:original_amount)
     end
 
     def value_with_currency(value)
@@ -179,7 +181,5 @@ module Api
         currency: value.currency.iso_code
       }
     end
-
-    attr_reader :tender, :rows, :scope, :charge_breakdown
   end
 end

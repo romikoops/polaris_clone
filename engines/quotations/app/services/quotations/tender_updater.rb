@@ -32,7 +32,10 @@ module Quotations
 
     def update_tender
       new_amount = if line_item.present?
-                     tender.line_items.sum(&:amount)
+                     tender.line_items
+                           .inject(Money.new(0, tender.amount.currency.iso_code)) do |total, item|
+                             total + item.amount
+                           end
                    else
                      charge_breakdown.grand_total.edited_price.money
                    end
