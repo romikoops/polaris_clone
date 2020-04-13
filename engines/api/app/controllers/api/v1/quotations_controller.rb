@@ -7,7 +7,7 @@ module Api
     class QuotationsController < ApiController
       def create
         if validation.errors.present?
-          render json: ValidationErrorSerializer.new(validation.errors), status: 422
+          render json: ValidationErrorSerializer.new(validation.errors), status: 417
         else
           tenders = quotation_service.tenders
           render json: TenderSerializer.new(tenders, params: { scope: current_scope })

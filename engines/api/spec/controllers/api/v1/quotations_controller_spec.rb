@@ -107,7 +107,7 @@ module Api
           it 'returns prices with default margins' do
             post :create, params: params
             aggregate_failures do
-              expect(response.code).to eq '422'
+              expect(response.code).to eq '417'
               expect(response_data.count).to eq 2
             end
           end
