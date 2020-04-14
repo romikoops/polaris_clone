@@ -21,6 +21,7 @@ module Quotations
         update_parent(charge.parent) if charge.parent.present?
         update_tender
       end
+      @charge.charge_breakdown.shipment.update(updated_at: DateTime.now)
       tender
     end
 

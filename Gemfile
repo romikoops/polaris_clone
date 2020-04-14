@@ -17,7 +17,7 @@ gem 'activerecord-import'
 # Strong Migrations - Prevent Non Zero-Down time Migrations
 gem 'strong_migrations'
 # ActiveStorage
-gem 'activestorage-cascade'
+gem 'activestorage-cascade', '~> 0.1.1'
 
 # i18n support
 gem 'rails-i18n'

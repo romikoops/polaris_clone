@@ -387,6 +387,7 @@
                           elsif charge_key == 'cargo' && !scope['fine_fee_detail']
                             "#{'%.2f' % sub_charges.sum{|c| c['total']['value']}} #{currency_key}"
                           else
+
                             "#{'%.2f' % sub_charges.sum{|c| c['value']}} #{currency_key}"
                           end
                           %>

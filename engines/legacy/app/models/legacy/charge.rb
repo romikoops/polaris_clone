@@ -19,8 +19,8 @@ module Legacy
 
     def deconstruct_tree_into_schedule_charge(args,
                                               sub_total_charge: false)
-
-      return price.given_attributes.merge(name: children_charge_category.name) if children.empty?
+      price_to_return = edited_price || price
+      return price_to_return.given_attributes.merge(name: children_charge_category.name) if children.empty?
 
       children_charges = children.map do |charge|
         children_charge_category = charge.children_charge_category
@@ -37,7 +37,7 @@ module Legacy
                                 (hide_converted_grand_total && charge_breakdown.currency_count > 1)
 
       should_hide = should_hide_grand_total || (guest || (hidden_sub_total && sub_total_charge))
-      total = should_hide ? nil : price.rounded_attributes
+      total = should_hide ? nil : (edited_price.try(:rounded_attributes) || price.rounded_attributes)
 
       {
         total: total,
