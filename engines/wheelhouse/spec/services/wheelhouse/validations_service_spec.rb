@@ -31,8 +31,9 @@ module Wheelhouse
     let(:destination) { { nexus_id: destination_hub.nexus_id } }
     let(:routing) { { origin: origin, destination: destination } }
     let(:load_type) { 'cargo_item' }
+    let(:final) { false }
     let(:validator) do
-      described_class.new(user: tenants_user, routing: routing, cargo: cargo, load_type: load_type)
+      described_class.new(user: tenants_user, routing: routing, cargo: cargo, load_type: load_type, final: final)
     end
     let(:result) do
       validator.validate
@@ -44,6 +45,20 @@ module Wheelhouse
         let(:expected_error_codes) do
           [4008]
         end
+
+        it 'returns an array of one error' do
+          aggregate_failures do
+            expect(result.map(&:code)).to match_array(expected_error_codes)
+          end
+        end
+      end
+
+      context 'when port to port (no routing)' do
+        let(:expected_error_codes) do
+          [4016]
+        end
+        let(:routing) { { origin: nil, destination: nil } }
+        let(:final) { true }
 
         it 'returns an array of one error' do
           aggregate_failures do

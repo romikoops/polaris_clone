@@ -16,6 +16,7 @@ module Wheelhouse
     end
 
     def validate
+      @errors << routing_info_errors if final.present?
       @errors << pricing_validations
       @errors |= cargo_validations
       @errors = errors.compact
@@ -72,6 +73,18 @@ module Wheelhouse
         pricing_assocation = pricing_assocation.where(group: user.all_groups) if scope[:dedicated_pricings_only]
         pricing_assocation
       end
+    end
+
+    def routing_info_errors
+      return if routing[:origin].present? && routing[:destination].present?
+
+      Wheelhouse::Validations::Error.new(
+        id: 'routing',
+        message: 'Origin and destination are required to make a request',
+        attribute: 'routing',
+        section: 'routing',
+        code: 4016
+      )
     end
 
     def routes

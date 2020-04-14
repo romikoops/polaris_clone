@@ -240,3 +240,6 @@ en:
     negative_value:
       code: 4015
       message: 'All attributes must be positive'
+    routing_info_missing:
+      code: 4016
+      message: 'Origin and destination are required.'
