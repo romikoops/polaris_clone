@@ -66,10 +66,10 @@ module Api
             expect(response).to be_successful
           end
 
-          it 'returns 3 available tenders' do
+          it 'returns 2 available tenders' do
             post :create, params: params
 
-            expect(response_data.count).to eq 3
+            expect(response_data.count).to eq 2
           end
         end
 
@@ -81,7 +81,7 @@ module Api
           it 'returns prices with default margins' do
             post :create, params: params
 
-            expect(response_data.count).to eq 3
+            expect(response_data.count).to eq 2
           end
         end
 
@@ -136,7 +136,7 @@ module Api
             post :create, params: params
             aggregate_failures do
               expect(response.code).to eq '200'
-              expect(response_data.count).to eq 3
+              expect(response_data.count).to eq 2
             end
           end
         end

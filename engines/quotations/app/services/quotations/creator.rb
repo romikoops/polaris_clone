@@ -35,6 +35,8 @@ module Quotations
 
     def create_tenders
       results.each do |result|
+        next unless result[:total].charge_breakdown.valid?
+
         tender = Tender.create(tender_attributes_from_result(result: result))
         charge_breakdown = result[:total].charge_breakdown
         charge_breakdown.update(tender_id: tender.id)
