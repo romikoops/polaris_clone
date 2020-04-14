@@ -23,6 +23,7 @@ Api::Engine.routes.draw do
     resources :cargo_item_types, only: :index
     resources :trucking_availabilities, only: :index
     resources :trucking_counterparts, only: :index
+    resources :trucking_capabilities, only: [:index]
     resources :groups, controller: :tenants_groups, only: :index
     resources :locations do
       collection do
