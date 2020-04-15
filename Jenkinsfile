@@ -6,8 +6,6 @@ pipeline {
   agent none
 
   options {
-    ansiColor('xterm')
-    buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '10'))
     podTemplate(inheritFrom: 'default')
     preserveStashes()
     skipDefaultCheckout()
@@ -198,6 +196,13 @@ pipeline {
     } // Report
 
     stage('Build') {
+      when {
+        anyOf {
+          branch 'master'
+          changeRequest()
+        }
+      }
+
       parallel {
         stage('Backend') {
           steps {
@@ -267,11 +272,19 @@ pipeline {
                     bucket: env.DIPPER_BUCKET,
                     workingDir: "client/dist",
                     includePathPattern: "**",
-                    excludePathPattern: "index.html,config*.js,*.map*",
-                    metadatas: ["Revision:${env.GIT_COMMIT}"],
+                    excludePathPattern: "index.html,config*.js",
+                    metadatas: ["Revision:${env.GIT_COMMIT}", "Jenkins-Build:${env.BUILD_URL}"],
                     verbose: true
                   )
                 }
+              }
+            }
+
+            stage('Sentry Release') {
+              when { branch 'master' }
+
+              steps {
+                sentryRelease()
               }
             }
           }
@@ -282,7 +295,7 @@ pipeline {
 
   post {
     always {
-      jiraBuildInfo(site: 'itsmycargo.atlassian.net', issues: env.BUILD_ISSUES)
+      jiraBuildInfo()
     }
   }
 }
