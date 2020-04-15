@@ -11,6 +11,10 @@ module Api
       def profile
         @profile ||= Profiles::Profile.find_by(user_id: id)
       end
+
+      def role
+        legacy&.role&.name
+      end
     end
   end
 end

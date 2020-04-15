@@ -7,7 +7,8 @@ RSpec.resource 'Tenants', acceptance: true do
   header 'Content-Type', 'application/json'
   header 'Authorization', :token_header
 
-  let(:tenant) { FactoryBot.create(:tenants_tenant) }
+  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
+  let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
   let(:user) { FactoryBot.create(:tenants_user, tenant: tenant) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
