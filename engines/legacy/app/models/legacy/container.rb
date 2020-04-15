@@ -84,6 +84,7 @@ end
 #
 #  id              :bigint           not null, primary key
 #  cargo_class     :string
+#  contents        :string
 #  customs_text    :string
 #  dangerous_goods :boolean
 #  gross_weight    :decimal(, )

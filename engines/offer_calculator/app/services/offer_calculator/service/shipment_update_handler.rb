@@ -78,6 +78,7 @@ module OfferCalculator
           cargo_items_attributes: %i(
             payload_in_kg dimension_x dimension_y dimension_z
             quantity cargo_item_type_id dangerous_goods stackable
+            contents
           )
         )[:cargo_items_attributes]
       end
@@ -85,7 +86,7 @@ module OfferCalculator
       def containers_params
         @params.require(:shipment).permit(
           containers_attributes: %i(
-            payload_in_kg size_class tareWeight quantity dangerous_goods
+            payload_in_kg size_class tareWeight quantity dangerous_goods contents
           )
         )[:containers_attributes].map do |container_attributes|
           container_attributes.to_h.deep_transform_keys { |k| k.to_s.underscore }

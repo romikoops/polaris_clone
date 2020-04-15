@@ -23,6 +23,7 @@ end
 #  id                 :bigint           not null, primary key
 #  cargo_class        :string
 #  chargeable_weight  :decimal(, )
+#  contents           :string
 #  customs_text       :string
 #  dangerous_goods    :boolean
 #  dimension_x        :decimal(, )

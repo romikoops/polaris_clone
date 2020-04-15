@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_07_160751) do
+ActiveRecord::Schema.define(version: 2020_04_15_071530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -162,6 +162,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_160751) do
     t.string "cargo_class"
     t.integer "cargo_item_type_id"
     t.decimal "chargeable_weight"
+    t.string "contents"
     t.datetime "created_at", null: false
     t.string "customs_text"
     t.boolean "dangerous_goods"
@@ -274,6 +275,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_160751) do
 
   create_table "containers", force: :cascade do |t|
     t.string "cargo_class"
+    t.string "contents"
     t.datetime "created_at", null: false
     t.string "customs_text"
     t.boolean "dangerous_goods"
