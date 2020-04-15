@@ -72,7 +72,7 @@ module Api
       items.group_by { |line_item| line_item.amount.currency.iso_code }
            .each do |currency, items_by_currency|
         fee_value = value(items: items_by_currency, currency: currency)
-        original_fee_value = original_value(items: items_by_currency)
+        original_fee_value = original_value(items: items_by_currency, currency: currency)
         currency_row = {
           id: SecureRandom.uuid,
           description: currency_description(currency: currency),
