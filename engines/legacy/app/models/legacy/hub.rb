@@ -4,7 +4,6 @@ module Legacy
   class Hub < ApplicationRecord
     include PgSearch::Model
     self.table_name = 'hubs'
-    LOCAL_CHARGE_DATE_RANGE = (Date.today...2.days.from_now)
 
     has_paper_trail
 
@@ -17,7 +16,7 @@ module Legacy
     has_many :stops,    dependent: :destroy
     has_many :layovers, through: :stops
     has_many :hub_truckings
-    has_many :local_charges
+    has_many :local_charges, class_name: 'Legacy::LocalCharge', dependent: :destroy
     has_many :customs_fees
     has_many :notes, dependent: :destroy
     has_many :hub_truck_type_availabilities
@@ -30,12 +29,12 @@ module Legacy
 
     delegate :locode, to: :nexus
 
-    pg_search_scope :name_search, against: %i(name), using: {
+    pg_search_scope :name_search, against: %i[name], using: {
       tsearch: { prefix: true }
     }
-    pg_search_scope :locode_search, against: %i(hub_code),
+    pg_search_scope :locode_search, against: %i[hub_code],
                                     associated_against: {
-                                      nexus: %i(locode)
+                                      nexus: %i[locode]
                                     },
                                     using: {
                                       tsearch: { prefix: true }
@@ -43,14 +42,14 @@ module Legacy
 
     pg_search_scope :country_search,
                     associated_against: {
-                      country: %i(name code)
+                      country: %i[name code]
                     },
                     using: {
                       tsearch: { prefix: true }
                     }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
 
-    pg_search_scope :list_search, against: %i(name), using: {
+    pg_search_scope :list_search, against: %i[name], using: {
       tsearch: { prefix: true }
     }
 
@@ -91,8 +90,10 @@ module Legacy
 
     def earliest_expiration
       Legacy::LocalCharge.where(hub_id: id)
-                         .for_dates(LOCAL_CHARGE_DATE_RANGE.first, LOCAL_CHARGE_DATE_RANGE.last)
-                         .order(expiration_date: :asc).first&.expiration_date
+                         .for_dates(Time.zone.today, 2.days.from_now)
+                         .order(expiration_date: :asc)
+                         .first
+                         &.expiration_date
     end
   end
 end

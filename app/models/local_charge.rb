@@ -1,15 +1,6 @@
 # frozen_string_literal: true
 
 class LocalCharge < Legacy::LocalCharge
-  has_paper_trail
-  belongs_to :hub
-  belongs_to :tenant
-  belongs_to :tenant_vehicle, optional: true
-  belongs_to :counterpart_hub, class_name: 'Hub', optional: true
-  has_many :notes, dependent: :destroy, as: :target
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-
-  before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
 end
 
 # == Schema Information

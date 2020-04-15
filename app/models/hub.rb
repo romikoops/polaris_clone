@@ -11,7 +11,7 @@ class Hub < Legacy::Hub
   has_many :layovers, through: :stops
   has_many :hub_truckings
   has_many :trucking_pricings, -> { distinct }, through: :hub_truckings
-  has_many :local_charges
+  has_many :local_charges, dependent: :destroy
   has_many :customs_fees
   has_many :notes, dependent: :destroy, as: :target
   has_many :hub_truck_type_availabilities

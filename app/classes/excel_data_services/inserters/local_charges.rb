@@ -82,10 +82,10 @@ module ExcelDataServices
 
       def find_or_create_local_charges(params, tenant_vehicle_id)
         local_charge_params = prepare_params(params, tenant_vehicle_id)
-        old_local_charges = LocalCharge.where(
+        old_local_charges = ::Legacy::LocalCharge.where(
           local_charge_params.except(:fees, :effective_date, :expiration_date, :internal, :metadata)
         )
-        new_local_charge = LocalCharge.new(local_charge_params)
+        new_local_charge = ::Legacy::LocalCharge.new(local_charge_params)
 
         local_charges_with_actions =
           ExcelDataServices::Inserters::DateOverlapHandler.new(old_local_charges, new_local_charge).perform

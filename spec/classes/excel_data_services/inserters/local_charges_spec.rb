@@ -12,10 +12,10 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
   let(:options) { { tenant: tenant, data: input_data, options: {} } }
 
   describe '.insert' do
-    let!(:carriers) {
+    let!(:carriers) do
       [create(:carrier, code: 'saco shipping', name: 'SACO Shipping'),
        create(:carrier, code: 'msc', name: 'MSC')]
-    }
+    end
     let!(:tenant_vehicles) do
       [create(:tenant_vehicle, tenant: tenant, carrier: carriers.first),
        create(:tenant_vehicle, tenant: tenant, carrier: carriers.second)]
@@ -39,7 +39,7 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
     end
     let(:input_data) { build(:excel_data_restructured_correct_local_charges) }
     let(:expected_stats) do
-      { local_charges: { number_created: 4, number_updated: 0, number_deleted: 1 } }
+      { 'legacy/local_charges': { number_created: 4, number_updated: 0, number_deleted: 1 } }
     end
     let(:expected_partial_db_data) do
       [
@@ -73,7 +73,7 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
     it 'inserts correctly and returns correct stats' do
       stats = described_class.insert(options)
 
-      expect(LocalCharge.all.map { |lc| lc.slice(:effective_date, :expiration_date, :mode_of_transport, :load_type, :direction, :fees).values }).to match_array(expected_partial_db_data)
+      expect(::Legacy::LocalCharge.all.map { |lc| lc.slice(:effective_date, :expiration_date, :mode_of_transport, :load_type, :direction, :fees).values }).to match_array(expected_partial_db_data)
       expect(stats).to eq(expected_stats)
     end
   end

@@ -32,13 +32,13 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
   def edit
     data = params[:data].as_json
     id = data.delete('id')
-    local_charge = LocalCharge.find_by(id: id, sandbox: @sandbox)
+    local_charge = ::Legacy::LocalCharge.find_by(id: id, sandbox: @sandbox)
     local_charge.update(fees: data['fees'])
     response_handler(local_charge)
   end
 
   def destroy
-    result = LocalCharge.find(params[:id]).destroy
+    result = ::Legacy::LocalCharge.find(params[:id]).destroy
     response_handler(success: result)
   end
 
@@ -119,11 +119,11 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
   end
 
   def handle_search
-    query = LocalCharge.all
+    query = ::Legacy::LocalCharge.where(tenant: current_tenant)
     query = query.where(group_id: search_params[:group_id]) if search_params[:group_id]
     query = query.search(search_params[:query]) if search_params[:query]
     if search_params[:name_desc]
-      query = query.joins(:hub).order(hub: { name: search_params[:name_desc] == 'true' ? :desc : :asc })
+      query = query.joins(:hub).order("hubs.name #{search_params[:name_desc] == 'true' ? 'DESC' : 'ASC'}")
     end
     query
   end
@@ -132,7 +132,8 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
     params.permit(:group_id,
                   :page_size,
                   :per_page,
-                  :page)
+                  :page,
+                  :name_desc)
   end
 
   def pagination_options

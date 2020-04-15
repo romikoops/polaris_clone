@@ -3,11 +3,15 @@
 module Legacy
   class LocalCharge < ApplicationRecord
     self.table_name = 'local_charges'
+
+    has_paper_trail
+
     belongs_to :hub, class_name: 'Legacy::Hub'
     belongs_to :tenant, class_name: 'Legacy::Tenant'
     belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
     belongs_to :counterpart_hub, class_name: 'Legacy::Hub', optional: true
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+    has_many :notes, dependent: :destroy, as: :target
 
     scope :for_mode_of_transport, ->(mot) { where(mode_of_transport: mot.downcase) }
     scope :for_load_type, ->(load_type) { where(load_type: load_type.downcase) }
@@ -16,6 +20,7 @@ module Legacy
     end)
     scope :current, -> { where('expiration_date > ?', 7.days.ago) }
 
+    before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
     before_validation :set_validity
 
     def hub_name

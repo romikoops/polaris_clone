@@ -13,6 +13,45 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
     allow(controller).to receive(:current_user).at_least(:once).and_return(user)
   end
 
+  describe 'GET #index' do
+    before do
+      create(:legacy_local_charge,
+             tenant: tenant,
+             effective_date: Date.parse('Thu, 24 Jan 2019'),
+             expiration_date: Date.parse('Fri, 24 Jan 2020'))
+    end
+
+    it 'returns an http status of success' do
+      get :index, params: { tenant_id: tenant.id }
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'returns the correct data given the params' do
+      get :index, params: { tenant_id: tenant.id, per_page: 10, name_desc: 'true' }
+      json_response = JSON.parse(response.body)
+      expect(json_response.dig('data', 'localChargeData', 0, 'id')).to eq(::Legacy::LocalCharge.first.id)
+    end
+  end
+
+  describe 'POST #edit' do
+    let(:local_charge) do
+      create(:legacy_local_charge,
+             tenant: tenant,
+             effective_date: Date.parse('Thu, 24 Jan 2019'),
+             expiration_date: Date.parse('Fri, 24 Jan 2020'))
+    end
+    let(:fees) { { 'ABC' => 123 } }
+
+    it 'edits the fees correctly' do
+      post :edit, params: { tenant_id: tenant.id, id: local_charge.id, data: { id: local_charge.id, fees: fees } }
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        expect(local_charge.reload.fees.values.first.to_i).to eq(fees.values.first)
+      end
+    end
+  end
+
   describe 'POST #upload' do
     context 'with errors' do
       let(:errors_arr) do
@@ -42,7 +81,6 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
   end
 
   describe 'GET #download' do
-    let(:tenant) { create(:tenant) }
     let(:hubs) do
       [
         create(:hub,
@@ -87,6 +125,25 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
         expect(response).to have_http_status(:success)
         expect(json_response.dig('data', 'url')).to include('demo__local_charges_.xlsx')
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let(:local_charge) do
+      create(:legacy_local_charge,
+             tenant: tenant,
+             effective_date: Date.parse('Thu, 24 Jan 2019'),
+             expiration_date: Date.parse('Fri, 24 Jan 2020'))
+    end
+
+    it 'returns an http status of success' do
+      delete :destroy, params: { tenant_id: tenant, id: local_charge.id }
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'removes the local_charge' do
+      delete :destroy, params: { tenant_id: tenant, id: local_charge.id }
+      expect(::Legacy::LocalCharge.find_by(id: local_charge.id)).to be(nil)
     end
   end
 end

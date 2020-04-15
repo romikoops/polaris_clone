@@ -72,7 +72,7 @@ module ExcelDataServices
         when 'Pricings::Pricing'
           after_new_obj.fees << old_obj.fees.map(&:dup)
           after_new_obj.transient_marked_as_old = true
-        when 'LocalCharge'
+        when 'Legacy::LocalCharge', 'LocalCharge'
           after_new_obj.uuid = SecureRandom.uuid
         end
 
