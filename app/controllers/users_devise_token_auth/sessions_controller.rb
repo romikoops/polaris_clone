@@ -28,8 +28,20 @@ module UsersDeviseTokenAuth
       @resource = resource_class.where(query, params[:tenant_id], email).first
     end
 
+    def inactivity_limit
+      time = current_scope[:session_length]
+      return 1.hour.seconds if time.nil?
+
+      length = [time.to_i.seconds, 10.minutes].max
+      length.seconds
+    end
+
     def render_create_success
-      render json: { data: ProfileTools.merge_profile(target: @resource.token_validation_response) }
+      render json: {
+        data: ProfileTools.merge_profile(
+          target: @resource.token_validation_response
+        ).merge(inactivityLimit: inactivity_limit)
+      }
     end
   end
 end

@@ -47,14 +47,28 @@ class App extends Component {
   }
 
   componentDidMount () {
-    this.isUserExpired()
+    this.expiryWatcher()
+  }
+
+  componentWillUnmount () {
+    const { interval } = this.state
+    clearInterval(interval)
+  }
+
+  expiryWatcher () {
+    const interval = setInterval(this.isUserExpired, 30 * 1000)
+    this.setState({ interval })
   }
 
   isUserExpired () {
-    const { appDispatch, user } = this.props
+    const { appDispatch, user, lastActivity } = this.props
     const { localStorage } = window
+    const { inactivityLimit } = user
     const auth = JSON.parse(localStorage.getItem('authHeader'))
-    if (auth && moment.unix(auth.expiry).isBefore(moment())) {
+    const authExpired = auth && moment.unix(auth.expiry).isBefore(moment())
+    const inactive = moment.unix(lastActivity + inactivityLimit).isBefore(moment())
+    const sessionExpired = authExpired || inactive
+    if (sessionExpired) {
       appDispatch.goTo('/signout')
     }
     if ((user && !user.role) || (user && user.role && !user.role.name)) {
@@ -198,7 +212,7 @@ function mapStateToProps (state) {
   const {
     selectedSubdomain, authentication, admin, users, app, error
   } = state
-  const { tenant, tenants } = app
+  const { tenant, tenants, lastActivity } = app
   const { user, loggedIn, loggingIn } = authentication
   const { isFetching } = tenant || {
     isFetching: true
@@ -215,7 +229,8 @@ function mapStateToProps (state) {
     isFetching,
     loading,
     app,
-    error
+    error,
+    lastActivity
   }
 }
 function mapDispatchToProps (dispatch) {

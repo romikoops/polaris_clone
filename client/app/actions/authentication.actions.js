@@ -64,7 +64,6 @@ function login (data) {
         dispatch(success(response.data))
         dispatch(setUser({ data: response.data }))
         dispatch(shipmentActions.checkLoginOnBookingProcess())
-
         if (data.redirectUrl) {
           dispatch(appActions.goTo(data.redirectUrl))
 

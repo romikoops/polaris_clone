@@ -1,8 +1,15 @@
 import merge from 'lodash/merge'
 import { appConstants } from '../constants'
 
+
 export default function app (state = {}, action) {
   switch (action.type) {
+    case appConstants.LAST_ACTIVITY: {
+      return {
+        ...state,
+        lastActivity: action.payload
+      }
+    }
     case appConstants.SET_TENANT_REQUEST: {
       return state
     }

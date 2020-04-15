@@ -10,6 +10,7 @@ import createSentryMiddleware from '../helpers/sentry-middleware'
 
 import { saveState, loadState } from '../helpers'
 import rootReducer from '../reducers'
+import createActivityMiddleware from '../helpers/activity-middleware'
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
@@ -18,6 +19,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 export const history = createHistory()
 let middleware = [
   createSentryMiddleware(Sentry),
+  createActivityMiddleware(),
   thunkMiddleware,
   routerMiddleware(history),
   beaconMiddleWare

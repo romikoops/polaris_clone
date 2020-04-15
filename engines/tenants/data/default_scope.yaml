@@ -166,3 +166,4 @@ insurance:
     decline: ''
 saml_text: ''
 exclude_analytics: false
+session_length: 86400

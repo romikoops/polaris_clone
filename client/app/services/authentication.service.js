@@ -35,6 +35,7 @@ function login (data) {
       if (!response.ok) {
         return Promise.reject(response.json())
       }
+
       if (response.headers.get('access-token')) {
         const accessToken = response.headers.get('access-token')
         const client = response.headers.get('client')
@@ -50,6 +51,7 @@ function login (data) {
         }
         localStorage.setItem('authHeader', JSON.stringify(aHeader))
       }
+
       return response.json()
     })
     .then((response) => {
@@ -57,6 +59,7 @@ function login (data) {
       if (response) {
         // store user details and jwt token in local storage to keep
         // user logged in between page refreshes
+
         localStorage.setItem(cookieKey(), JSON.stringify(response.data))
       }
 
@@ -66,6 +69,7 @@ function login (data) {
 
 function getStoredUser () {
   const sortedUser = JSON.parse(localStorage.getItem(cookieKey()))
+
   return sortedUser || {}
 }
 
@@ -97,6 +101,7 @@ function register (user) {
         }
         localStorage.setItem('authHeader', JSON.stringify(aHeader))
       }
+
       return response.json()
     })
     .then((response) => {
@@ -106,6 +111,7 @@ function register (user) {
         // user logged in between page refreshes
         localStorage.setItem(cookieKey(), JSON.stringify(response.data))
       }
+
       return response
     })
 }
@@ -122,6 +128,7 @@ function updateUser (user, req) {
       if (!response.ok) {
         return Promise.reject(response.statusText)
       }
+
       return response.json()
     })
     .then((response) => {
@@ -134,6 +141,7 @@ function updateUser (user, req) {
         // user logged in between page refreshes
         localStorage.setItem(cookieKey(), JSON.stringify(response.data.user))
       }
+
       return response
     })
 }
