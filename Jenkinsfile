@@ -279,14 +279,18 @@ pipeline {
                 }
               }
             }
+          }
+        }
+      }
+    }
 
-            stage('Sentry Release') {
-              when { branch 'master' }
+    stage('Deploy') {
+      when { branch 'master' }
 
-              steps {
-                sentryRelease()
-              }
-            }
+      stages {
+        stage('Sentry Release') {
+          steps {
+            sentryRelease(projects: ['api', 'dipper'])
           }
         }
       }

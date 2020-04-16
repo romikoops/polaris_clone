@@ -28,25 +28,6 @@ ARG RELEASE=""
 ENV RELEASE $RELEASE
 RUN npm run build
 
-# Sentry Uploader
-FROM getsentry/sentry-cli AS sentry
-
-ARG SENTRY_AUTH_TOKEN=""
-ARG SENTRY_URL=https://sentry.itsmycargo.tech
-ARG SENTRY_ORG=itsmycargo
-ARG SENTRY_PROJECT=frontend
-
-ENV SENTRY_URL $SENTRY_URL
-ENV SENTRY_ORG $SENTRY_ORG
-ENV SENTRY_PROJECT $SENTRY_PROJECT
-ENV SENTRY_AUTH_TOKEN $SENTRY_AUTH_TOKEN
-
-COPY --from=builder /src/dist /work
-ARG RELEASE=""
-ENV RELEASE $RELEASE
-
-RUN sentry-cli releases files $RELEASE upload-sourcemaps --rewrite --validate /work/ || true
-
 # Deployment Image
 FROM nginx:alpine AS app
 

@@ -45,7 +45,6 @@ COPY --chown=app:app Gemfile Gemfile.lock .build/docker/ .
 
 RUN bundle config --global frozen 1 \
     && bundle install -j4 --retry 3 \
-    # Remove unneeded files (cached *.gem, *.o, *.c)
     && rm -rf /usr/local/bundle/cache/*.gem \
     && find /usr/local/bundle/gems/ -name "*.c" -delete \
     && find /usr/local/bundle/gems/ -name "*.o" -delete
