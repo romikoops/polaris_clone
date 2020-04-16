@@ -2,7 +2,7 @@
 
 module Locations
   class Location < ApplicationRecord
-    validates :osm_id, uniqueness: true
+    validates :osm_id, uniqueness: true, if: :osm_data?
 
     def self.contains(lat:, lon:)
       where(arel_table[:bounds].st_contains("POINT(#{lon} #{lat})"))
@@ -14,6 +14,10 @@ module Locations
 
     def geojson
       RGeo::GeoJSON.encode(RGeo::GeoJSON::Feature.new(bounds))
+    end
+
+    def osm_data?
+      osm_id.present?
     end
   end
 end
