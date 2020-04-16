@@ -297,6 +297,22 @@ pipeline {
     always {
       jiraBuildInfo()
     }
+
+    success {
+      slackNotify("success")
+    }
+
+    unsuccessful {
+      slackNotify("failure")
+    }
+
+    fixed {
+      slackNotify("fixed")
+    }
+
+    notBuilt {
+      slackNotify("failure")
+    }
   }
 }
 
