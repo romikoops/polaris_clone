@@ -27,7 +27,7 @@ module Api
           client = Legacy::User.create!(email: client_params[:email],
                                         tenant_id: current_tenant.legacy_id,
                                         addresses_attributes: [address_from_params],
-                                        role: Legacy::Role.find_by(name: client_params[:role]))
+                                        role: Legacy::Role.find_by(name: client_params.fetch(:role, 'shipper')))
           tenants_user = Tenants::User.create!(legacy_id: client.id,
                                                email: client.email,
                                                tenant_id: current_tenant.id).tap do |user|

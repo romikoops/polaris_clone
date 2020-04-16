@@ -82,6 +82,22 @@ module Api
         end
       end
 
+      context 'when creating clients without role' do
+        let(:request_object) do
+          post :create, params: { client: { **user_info, **profile_info, **address_info } }
+        end
+
+        before do
+          FactoryBot.create(:legacy_role, name: 'shipper')
+        end
+
+        it 'assigns the default role (shipper) to the new user' do
+          perform_request
+          user = Legacy::User.find_by(email: user_info[:email])
+          expect(user.role.name).to eq('shipper')
+        end
+      end
+
       context 'when request is unsuccessful (bad or missing data)' do
         let(:request_object) do
           post :create, params: { client: { **user_info, **profile_info, **address_info, role: role.name, email: nil } }, as: :json
