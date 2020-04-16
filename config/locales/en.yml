@@ -243,3 +243,8 @@ en:
     routing_info_missing:
       code: 4016
       message: 'Origin and destination are required.'
+
+  #forbidden actions
+    uneditable_fee:
+      code: 5001
+      message: 'This fee is not available for editing.'

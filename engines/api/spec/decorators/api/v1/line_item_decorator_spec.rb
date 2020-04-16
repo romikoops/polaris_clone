@@ -79,6 +79,7 @@ RSpec.describe Api::V1::LineItemDecorator do
       it 'decorates the line item with the correct name' do
         aggregate_failures do
           expect(decorated_line_item.description).to eq('BAS - Ocean Freight')
+          expect(decorated_line_item.total_and_currency[:excluded]).to be_truthy
         end
       end
     end
@@ -114,7 +115,7 @@ RSpec.describe Api::V1::LineItemDecorator do
       end
 
       let(:expected_result) do
-        { currency: line_item.amount.currency.iso_code, amount: line_item.amount.amount, included: true }
+        { currency: line_item.amount.currency.iso_code, amount: line_item.amount.amount, included: true, excluded: false }
       end
 
       it 'decorates the line item and returns included when the fee is included' do
@@ -126,7 +127,7 @@ RSpec.describe Api::V1::LineItemDecorator do
 
     context 'with normal fee (vaue used in calculation)' do
       let(:expected_result) do
-        { currency: line_item.amount.currency.iso_code, amount: line_item.amount.amount, included: false }
+        { currency: line_item.amount.currency.iso_code, amount: line_item.amount.amount, included: false, excluded: false }
       end
 
       it 'decorates the line item and returns included false when the fee isnt included' do

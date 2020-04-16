@@ -2,6 +2,8 @@
 
 module Quotations
   class TenderUpdater
+    UneditableFee = Class.new(StandardError)
+
     attr_reader :tender, :line_item, :section, :value, :charge_category_id, :charge
 
     def initialize(tender:, line_item_id:, charge_category_id:, value:, section:)
@@ -14,6 +16,8 @@ module Quotations
     end
 
     def perform
+      raise Quotations::TenderUpdater::UneditableFee unless fee_editable?
+
       ActiveRecord::Base.transaction do
         update_line_items if charge.detail_level == 3
 
@@ -23,6 +27,15 @@ module Quotations
       end
       @charge.charge_breakdown.shipment.update(updated_at: DateTime.now)
       tender
+    end
+
+    private
+
+    def fee_editable?
+      return true if line_item.blank?
+      return false if line_item.charge_category.code.match?(/\A(included|excluded|unknown)/)
+
+      true
     end
 
     def update_line_items
@@ -54,8 +67,6 @@ module Quotations
       parent_charge.update_edited_price!
       update_parent(parent_charge.parent)
     end
-
-    private
 
     def charge_breakdown
       Legacy::ChargeBreakdown.find_by(tender_id: tender.id)

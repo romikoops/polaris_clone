@@ -22,6 +22,7 @@ module Api
       def total_and_currency
         {
           included: included_fee?,
+          excluded: excluded_fee?,
           amount: amount.amount,
           currency: amount.currency.iso_code
         }
@@ -34,7 +35,11 @@ module Api
       end
 
       def included_fee?
-        charge_category.code.include? 'included'
+        code.include? 'included'
+      end
+
+      def excluded_fee?
+        code.include? 'unknown'
       end
 
       def adjusted_key

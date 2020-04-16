@@ -7,6 +7,7 @@ RSpec.describe Quotations::TenderUpdater do
     let(:tender) { FactoryBot.create(:quotations_tender) }
     let(:charge_breakdown) { FactoryBot.create(:legacy_charge_breakdown, tender_id: tender.id) }
     let(:tenant) { FactoryBot.create(:legacy_tenant) }
+    let(:level_3_charge) { charge_breakdown.charges.find_by(detail_level: 3) }
 
     context 'when the charge is of detail level 0' do
       subject(:updater) do
@@ -100,8 +101,6 @@ RSpec.describe Quotations::TenderUpdater do
                             value: 50,
                             section: level_3_charge.parent.charge_category.code)
       end
-
-      let(:level_3_charge) { charge_breakdown.charges.find_by(detail_level: 3) }
       let(:original_value) { charge_breakdown.grand_total.price.money }
       let!(:original_tender_value) { tender.amount }
       let(:line_item) do
@@ -219,6 +218,82 @@ RSpec.describe Quotations::TenderUpdater do
           expect(updater.line_item.amount).to eq Money.new(5000.0, level_3_charge.price.currency)
           expect(updater.line_item.original_amount).to eq Money.new(original_value)
         end
+      end
+    end
+
+    context 'when the charge is of detail level 3 and uneditable (included)' do
+      subject(:updater) do
+        described_class.new(tender: line_item.tender,
+                            line_item_id: line_item.id,
+                            charge_category_id: line_item.charge_category_id,
+                            value: 50,
+                            section: level_3_charge.parent.charge_category.code)
+      end
+
+      let(:invalid_charge_category) { FactoryBot.create(:legacy_charge_categories, tenant: tenant, code: 'included_baf') }
+      let(:line_item) do
+        FactoryBot.create(:quotations_line_item,
+                          tender: tender,
+                          charge_category: invalid_charge_category,
+                          cargo: charge_breakdown.shipment.cargo_units.first)
+      end
+
+      before do
+        level_3_charge.update(children_charge_category: invalid_charge_category)
+      end
+
+      it 'raises an error' do
+        expect { updater.perform }.to raise_error Quotations::TenderUpdater::UneditableFee
+      end
+    end
+
+    context 'when the charge is of detail level 3 and uneditable (excluded)' do
+      subject(:updater) do
+        described_class.new(tender: line_item.tender,
+                            line_item_id: line_item.id,
+                            charge_category_id: line_item.charge_category_id,
+                            value: 50,
+                            section: level_3_charge.parent.charge_category.code)
+      end
+
+      let(:line_item) do
+        FactoryBot.create(:quotations_line_item,
+                          tender: tender,
+                          charge_category: level_3_charge.children_charge_category,
+                          cargo: charge_breakdown.shipment.cargo_units.first)
+      end
+
+      before do
+        level_3_charge.children_charge_category.update(code: 'excluded_baf')
+      end
+
+      it 'raises an error' do
+        expect { updater.perform }.to raise_error Quotations::TenderUpdater::UneditableFee
+      end
+    end
+
+    context 'when the charge is of detail level 3 and uneditable (unknown)' do
+      subject(:updater) do
+        described_class.new(tender: line_item.tender,
+                            line_item_id: line_item.id,
+                            charge_category_id: line_item.charge_category_id,
+                            value: 50,
+                            section: level_3_charge.parent.charge_category.code)
+      end
+
+      let(:line_item) do
+        FactoryBot.create(:quotations_line_item,
+                          tender: tender,
+                          charge_category: level_3_charge.children_charge_category,
+                          cargo: charge_breakdown.shipment.cargo_units.first)
+      end
+
+      before do
+        level_3_charge.children_charge_category.update(code: 'unknown_baf')
+      end
+
+      it 'raises an error' do
+        expect { updater.perform }.to raise_error Quotations::TenderUpdater::UneditableFee
       end
     end
   end
