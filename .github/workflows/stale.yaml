@@ -1,0 +1,15 @@
+name: "Close stale pull requests"
+on:
+  schedule:
+  - cron: "0 0 * * *"
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/stale@v1.1.0
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        stale-pr-message: 'This pull request is stale because it has been open 3 days with no activity. Remove stale label or comment or this will be closed in 2 days'
+        days-before-stale: 3
+        days-before-close: 2
