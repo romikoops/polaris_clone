@@ -100,7 +100,7 @@ class App extends Component {
       return null // Wait until tenant is fetched
     }
 
-    if (!isEmpty(error)) {
+    if (!isEmpty(error) && loading) {
       appDispatch.clearLoading()
     }
 
