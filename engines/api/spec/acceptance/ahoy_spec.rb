@@ -7,6 +7,7 @@ RSpec.resource 'Ahoy' do
   header 'Content-Type', 'application/json'
 
   let(:tenant) { FactoryBot.create(:tenants_tenant) }
+  before { FactoryBot.create(:tenants_domain, tenant: tenant, default: true) }
 
   get '/v1/ahoy/:id/settings' do
     response_field :id, 'Tenant Id', Type: String

@@ -6,6 +6,7 @@ module Tenants
     belongs_to :tenant
 
     validates :domain, uniqueness: true
+    validates :default, inclusion: { in: [true, false] }, uniqueness: { scope: :tenant_id, if: :default? }
   end
 end
 

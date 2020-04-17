@@ -7,18 +7,22 @@ module Api
     routes { Engine.routes }
     let(:tenant) { FactoryBot.create(:tenants_tenant) }
 
+    before { FactoryBot.create(:tenants_domain, tenant: tenant, default: true) }
+
     describe 'GET #settings' do
-      it 'should return the settings of the tenant' do
+      it 'returns the settings of the tenant' do
         get :settings, params: { id: tenant.id }, as: :json
 
-        expect(response).to be_successful
-        expect(response.body).not_to be_empty
+        aggregate_failures do
+          expect(response).to be_successful
+          expect(response.body).not_to be_empty
 
-        data = JSON.parse(response.body)
-        expect(data).not_to be_nil
+          data = JSON.parse(response.body)
+          expect(data).not_to be_nil
+        end
       end
 
-      it 'should not return 404 if tenant does not exist' do
+      it 'returns 404 if tenant does not exist' do
         get :settings, params: { id: 'Invalid Tenant UUID' }, as: :json
 
         expect(response).to have_http_status(:not_found)

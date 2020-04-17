@@ -15,8 +15,6 @@ module Tenants
 
     validates :slug, presence: true, uniqueness: true
 
-    after_create :ensure_domain
-
     accepts_nested_attributes_for :theme
 
     has_paper_trail
@@ -29,13 +27,6 @@ module Tenants
       slug
     end
     deprecate :subdomain, deprecator: ActiveSupport::Deprecation.new('', Rails.application.railtie_name)
-
-    private
-
-    def ensure_domain
-      domains.create(domain: "#{slug}.itsmycargo.com") unless domains.exists?(domain: "#{slug}.itsmycargo.com")
-      domains.first.update(default: true) unless domains.exists?(default: true)
-    end
   end
 end
 

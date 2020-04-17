@@ -37,7 +37,7 @@ RSpec.describe Tenants::CreatorService do
 
       aggregate_failures do
         expect(legacy_tenant.subdomain).to eq('tester')
-        expect(tenant.domains.count).to eq(2)
+        expect(tenant.domains.count).to eq(1)
         expect(tenant.domains.exists?(domain: 'tester.itsmycargo.shop')).to eq(true)
       end
     end
