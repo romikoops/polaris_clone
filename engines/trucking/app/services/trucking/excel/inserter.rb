@@ -373,6 +373,7 @@ module Trucking
               value: row[:shipment],
               rate_basis: row[:rate_basis],
               key: row[:fee_code],
+              min: row[:minimum],
               name: row[:fee]
             }
           when 'PER_CONTAINER'
@@ -383,6 +384,7 @@ module Trucking
               value: row[:container],
               rate_basis: row[:rate_basis],
               key: row[:fee_code],
+              min: row[:minimum],
               name: row[:fee]
             }
           when 'PER_BILL'
@@ -393,6 +395,7 @@ module Trucking
               value: row[:bill],
               rate_basis: row[:rate_basis],
               key: row[:fee_code],
+              min: row[:minimum],
               name: row[:fee]
             }
           when 'PERCENTAGE'
@@ -403,6 +406,7 @@ module Trucking
               value: row[:percentage],
               rate_basis: row[:rate_basis],
               key: row[:fee_code],
+              min: row[:minimum],
               name: row[:fee]
             }
           when 'PER_CBM'
@@ -413,6 +417,7 @@ module Trucking
               value: row[:cbm],
               rate_basis: row[:rate_basis],
               key: row[:fee_code],
+              min: row[:minimum],
               name: row[:fee]
             }
           when 'PER_KG'
@@ -422,6 +427,7 @@ module Trucking
               currency: row[:currency],
               value: row[:kg],
               rate_basis: row[:rate_basis],
+              min: row[:minimum],
               key: row[:fee_code],
               name: row[:fee]
             }
@@ -432,6 +438,7 @@ module Trucking
               currency: row[:currency],
               value: row[:wm],
               rate_basis: row[:rate_basis],
+              min: row[:minimum],
               key: row[:fee_code],
               name: row[:fee]
             }
@@ -442,6 +449,7 @@ module Trucking
               currency: row[:currency],
               value: row[:item],
               rate_basis: row[:rate_basis],
+              min: row[:minimum],
               key: row[:fee_code],
               name: row[:fee]
             }
@@ -465,6 +473,7 @@ module Trucking
               shipment: row[:shipment],
               container: row[:container],
               rate_basis: row[:rate_basis],
+              min: row[:minimum],
               key: row[:fee_code],
               name: row[:fee]
             }
@@ -477,6 +486,7 @@ module Trucking
               container: row[:container],
               rate_basis: row[:rate_basis],
               key: row[:fee_code],
+              min: row[:minimum],
               name: row[:fee]
             }
           when 'PER_CBM_KG'

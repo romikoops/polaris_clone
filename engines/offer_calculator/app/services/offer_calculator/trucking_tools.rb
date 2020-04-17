@@ -93,7 +93,7 @@ module OfferCalculator
       extra_fees_results = {}
 
       total_fees.each do |tk, tfee|
-        extra_fees_results[tk] = tfee[:value] * fees[:rate][:value]
+        extra_fees_results[tk] = [(tfee[:value] * fees[:rate][:value]), tfee[:min]].max
       end
 
       extra_fees_results.each do |_ek, evalue|
@@ -113,7 +113,7 @@ module OfferCalculator
       fee = fee.with_indifferent_access
 
       value = (fee['value'] || fee['rate'] || 0).to_d
-      min = (fee[:min_value] || 0).to_d
+      min = (fee[:min] || 0).to_d
       weight_value = fee[:rate_basis].include?('TON') ? cargo['weight'] / 1000 : cargo['weight']
       fare = case fee[:rate_basis]
              when 'PER_KG'
@@ -149,8 +149,8 @@ module OfferCalculator
              when /RANGE/
                handle_range_fare(fee: fee, cargo: cargo)
              end
-
-      final_result = round_fare(fare, scope['continuous_rounding'])
+      final_fare = [fare, min].max
+      final_result = round_fare(final_fare, scope['continuous_rounding'])
       { currency: fee[:currency], value: final_result, key: key }
     end
 

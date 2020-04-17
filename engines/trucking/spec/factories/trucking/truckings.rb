@@ -85,6 +85,7 @@ FactoryBot.define do
           'key' => 'PUF',
           'name' => 'Pickup Fee',
           'value' => 250.0,
+          'min' => 250.0,
           'currency' => 'CNY',
           'rate_basis' => 'PER_SHIPMENT'
         }
@@ -110,6 +111,7 @@ FactoryBot.define do
             'key' => 'AFEE',
             'name' => 'A Fee',
             'value' => 250.0,
+            'min' => 250.0,
             'currency' => 'CNY',
             'rate_basis' => 'PER_SHIPMENT'
           },
@@ -117,6 +119,7 @@ FactoryBot.define do
             'key' => 'BFEE',
             'name' => 'B Fee',
             'value' => 250.0,
+            'min' => 250.0,
             'currency' => 'CNY',
             'rate_basis' => 'PER_CONTAINER'
           },
@@ -124,6 +127,7 @@ FactoryBot.define do
             'key' => 'CFEE',
             'name' => 'C Fee',
             'value' => 250.0,
+            'min' => 250.0,
             'currency' => 'CNY',
             'rate_basis' => 'PER_BILL'
           },
@@ -149,6 +153,7 @@ FactoryBot.define do
             'key' => 'FFEE',
             'name' => 'F Fee',
             'value' => 25.0,
+            'min' => 25.0,
             'currency' => 'CNY',
             'rate_basis' => 'PER_WM'
           },
@@ -156,6 +161,7 @@ FactoryBot.define do
             'key' => 'GFEE',
             'name' => 'G Fee',
             'value' => 25.0,
+            'min' => 25.0,
             'currency' => 'CNY',
             'rate_basis' => 'PERCENTAGE'
           },
@@ -163,6 +169,7 @@ FactoryBot.define do
             'key' => 'HFEE',
             'name' => 'H Fee',
             'value' => 25.0,
+            'min' => 25.0,
             'currency' => 'CNY',
             'rate_basis' => 'PER_ITEM'
           },
@@ -170,6 +177,7 @@ FactoryBot.define do
             'key' => 'IFEE',
             'name' => 'I Fee',
             'value' => 1,
+            'min' => 10,
             'currency' => 'CNY',
             'rate_basis' => 'PER_KG'
           },
@@ -177,6 +185,7 @@ FactoryBot.define do
             'key' => 'JFEE',
             'name' => 'J Fee',
             'value' => 1,
+            'min' => 10,
             'base' => 100,
             'currency' => 'CNY',
             'rate_basis' => 'PER_X_KG'
@@ -185,6 +194,7 @@ FactoryBot.define do
             'key' => 'KFEE',
             'name' => 'K Fee',
             'value' => 1,
+            'min' => 10,
             'x_base' => 100,
             'base_value' => 100,
             'currency' => 'CNY',
@@ -194,6 +204,7 @@ FactoryBot.define do
             'key' => 'LFEE',
             'name' => 'L Fee',
             'unit' => 10,
+            'min' => 10,
             'km' => 1,
             'currency' => 'CNY',
             'rate_basis' => 'PER_CONTAINER_KM'
@@ -201,6 +212,7 @@ FactoryBot.define do
           'MFEE' => {
             'key' => 'MFEE',
             'name' => 'M Fee',
+            'min' => 10,
             'kgr' => 10,
             'kg' => 1,
             'currency' => 'CNY',
@@ -209,6 +221,7 @@ FactoryBot.define do
           'NFEE' => {
             'key' => 'NFEE',
             'name' => 'N Fee',
+            'min' => 15,
             'currency' => 'CNY',
             'rate_basis' => 'PER_UNIT_RANGE',
             'range' => [
@@ -222,6 +235,7 @@ FactoryBot.define do
             'key' => 'OFEE',
             'name' => 'O Fee',
             'currency' => 'CNY',
+            'min' => 15,
             'rate_basis' => 'PER_KG_RANGE',
             'range' => [
               { 'min' => 0, 'max' => 1000, 'rate' => 100 },
@@ -234,6 +248,7 @@ FactoryBot.define do
             'key' => 'PFEE',
             'name' => 'P Fee',
             'value' => 25.0,
+            'min' => 25,
             'currency' => 'CNY',
             'rate_basis' => 'PER_CBM'
           }
