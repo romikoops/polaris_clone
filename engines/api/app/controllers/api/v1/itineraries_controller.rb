@@ -8,7 +8,7 @@ module Api
       ORIGIN_INDEX = 0
       DESTINATION_INDEX = 1
 
-      skip_before_action :doorkeeper_authorize!, only: :ports
+      skip_before_action :doorkeeper_authorize!, only: :ports, raise: false
 
       def index
         itineraries = Legacy::Itinerary.where(tenant_id: current_tenant.legacy_id)

@@ -33,5 +33,9 @@ module Api
         tenant: current_tenant
       ).fetch
     end
+
+    def doorkeeper_authorize!
+      super(:public, :admin)
+    end
   end
 end

@@ -6,13 +6,19 @@
 
   # This block will be called to check whether the resource owner is authenticated or not.
   # resource_owner_authenticator do
-  #   raise "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
-  #   # Put your resource owner authentication logic here.
-  #   # Example implementation:
-  #   #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
+  # raise "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
+  # Put your resource owner authentication logic here.
+  # Example implementation:
+  #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
   # end
+
   resource_owner_from_credentials do
-    ::Tenants::User.authenticate(params[:email], params[:password]) || nil
+    user = ::Tenants::User.authenticate(params[:email], params[:password]) || nil
+    if user && server.client.present? && server.client.name[/bridge/]
+      user = nil if user.legacy&.role&.name != 'admin'
+    end
+
+    user
   end
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for
@@ -110,7 +116,7 @@
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
   #
   default_scopes  :public
-  optional_scopes :write, :update
+  optional_scopes :write, :update, :admin
 
   # Change the way client credentials are retrieved from the request object.
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then
@@ -185,7 +191,7 @@
   #   http://tools.ietf.org/html/rfc6819#section-4.4.2
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
-  grant_flows %w(password authorization_code client_credentials)
+  grant_flows %w[password authorization_code client_credentials]
 
   # Hook into the strategies' request & response life-cycle in case your
   # application needs advanced customization or logging:

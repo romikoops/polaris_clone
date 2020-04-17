@@ -16,6 +16,8 @@ RSpec.resource 'Authentication' do
     parameter :grant_type, 'OAuth Grant type to use, always `password`', required: true
     parameter :email, "User's email address", required: true
     parameter :password, "User's Password", required: true
+    parameter :client_id, 'Oauth application client id', required: false
+    parameter :client_secret, 'Oauth application secret', required: false
 
     context :success do
       response_field :access_token, 'OAuth token to be used in further connections'
@@ -53,6 +55,41 @@ RSpec.resource 'Authentication' do
         do_request password: 'secret'
         expect(status).to eq 401
         expect(JSON.parse(response_body)['error']).to eq 'invalid_grant'
+      end
+    end
+
+    context :authenticating_with_client do
+      let(:legacy_user) { FactoryBot.create(:legacy_user, role: role, password: password) }
+      let(:role) { FactoryBot.create(:legacy_role, name: 'admin') }
+      let(:admin_user) { Tenants::User.find_by(legacy_id: legacy_user.id) }
+      let(:application) { FactoryBot.create(:application, name: 'bridge', scopes: 'admin public') }
+      let(:request) do
+        {
+          email: email,
+          password: password,
+          client_id: application.uid,
+          client_secret: application.secret,
+          scope: 'admin',
+          grant_type: 'password'
+        }
+      end
+
+      context :success do
+        let(:email) { admin_user.email }
+
+        example 'SUCCESS - Sign in successfully with admin scope' do
+          do_request(request)
+          expect(status).to eq 200
+        end
+      end
+
+      context :errors do
+        let(:email) { user.email }
+
+        example 'FAIL - logging into admin application without proper roles' do
+          do_request(request)
+          expect(JSON.parse(response_body)['error']).to eq 'invalid_grant'
+        end
       end
     end
   end
