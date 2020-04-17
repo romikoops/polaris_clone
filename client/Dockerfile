@@ -2,7 +2,7 @@
 FROM node:12-slim AS builder
 LABEL maintainer="development@itsmycargo.com"
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --allow-unauthenticated \
   build-essential \
   gifsicle \
   libgl1-mesa-glx \
