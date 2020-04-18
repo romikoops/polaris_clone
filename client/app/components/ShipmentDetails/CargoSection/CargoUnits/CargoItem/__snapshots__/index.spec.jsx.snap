@@ -60,16 +60,16 @@ exports[`renders correcly 1`] = `
         i={0}
         image={
           <img
-            alt="width"
+            alt="length"
             border="0"
             data-for="UUID_MOCK_KEY_0"
-            data-tip="Width"
+            data-tip="Length"
           />
         }
-        labelText="Width"
-        maxDimension={590}
-        maxDimensionsErrorText="Maximum length is"
-        name="0-dimensionX"
+        labelText="Length"
+        maxDimension={234.2}
+        maxDimensionsErrorText="Maximum width is"
+        name="0-dimensionY"
         onBlur={[Function]}
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
@@ -82,7 +82,7 @@ exports[`renders correcly 1`] = `
             "totalShipmentChargeableWeight": [Function],
           }
         }
-        value={5}
+        value={132}
       />
       <CargoUnitNumberInput
         cargoItem={
@@ -108,16 +108,16 @@ exports[`renders correcly 1`] = `
         i={0}
         image={
           <img
-            alt="length"
+            alt="width"
             border="0"
             data-for="UUID_MOCK_KEY_1"
-            data-tip="Length"
+            data-tip="Width"
           />
         }
-        labelText="Length"
-        maxDimension={234.2}
-        maxDimensionsErrorText="Maximum width is"
-        name="0-dimensionY"
+        labelText="Width"
+        maxDimension={590}
+        maxDimensionsErrorText="Maximum length is"
+        name="0-dimensionX"
         onBlur={[Function]}
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
@@ -130,7 +130,7 @@ exports[`renders correcly 1`] = `
             "totalShipmentChargeableWeight": [Function],
           }
         }
-        value={132}
+        value={5}
       />
       <CargoUnitNumberInput
         cargoItem={
