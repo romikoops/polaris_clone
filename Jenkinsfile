@@ -204,7 +204,7 @@ pipeline {
       }
 
       parallel {
-        stage('Backend') {
+        stage("Polaris") {
           steps {
             dockerBuild(
               dir: '.',
@@ -216,7 +216,7 @@ pipeline {
           }
         }
 
-        stage("Frontend / Docker") {
+        stage("Dipper") {
           stages {
             stage('Build') {
               steps {
@@ -224,10 +224,7 @@ pipeline {
                   dir: 'client/',
                   image: "dipper",
                   memory: 2000,
-                  args: [
-                    RELEASE: env.GIT_COMMIT,
-                    SENTRY_AUTH_TOKEN: "env:SENTRY_AUTH_TOKEN"
-                  ],
+                  args: [ RELEASE: env.GIT_COMMIT ],
                   stash: 'frontend'
                 )
               }
@@ -235,7 +232,7 @@ pipeline {
           }
         }
 
-        stage("Frontend / S3") {
+        stage("Dipper / S3") {
           agent {
             kubernetes {
               yaml podSpec(

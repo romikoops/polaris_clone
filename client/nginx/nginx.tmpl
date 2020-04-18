@@ -61,7 +61,7 @@ appName: \'{{ .Env.APP_NAME }}\'
     }
 
     location ~ \.map(\.gz)?$ {
-      if ($http_x_requested_by !~* "X-Sentry-Token: 551d82a6c71211e884000a580a281e11") {
+      if ($http_x_sentry_token !~* "c60c8618c27c11e99e284e16e2be11ee") {
         return 403;
       }
 
