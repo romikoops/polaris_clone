@@ -877,8 +877,12 @@ class ShippingTools
         old_charge_category = new_charge&.children_charge_category
         next if old_charge_category&.cargo_unit_id.nil?
 
-        new_charge_category = old_charge_category.dup
-        new_charge_category.cargo_unit_id = charge_category_map[old_charge_category.cargo_unit_id]
+        new_charge_category = Legacy::ChargeCategory.find_or_initialize_by(
+          code: old_charge_category.code,
+          name: old_charge_category.name,
+          tenant_id: old_charge_category.tenant_id,
+          cargo_unit_id: charge_category_map[old_charge_category.cargo_unit_id]
+        )
         new_charge_category.save!
 
         if metadatum && new_metadatum
