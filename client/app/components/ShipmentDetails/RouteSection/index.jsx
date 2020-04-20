@@ -661,7 +661,8 @@ class RouteSection extends React.PureComponent {
       origins,
       originTrucking,
       requiresFullAddress,
-      truckTypes
+      truckTypes,
+      truckingAvailability
     } = this.state
 
     return (
@@ -696,7 +697,7 @@ class RouteSection extends React.PureComponent {
                       requiresFullAddress={requiresFullAddress}
                       showAddress={originTrucking}
                       value={origin}
-
+                      foundTrucking={truckingAvailability.origin}
                       onBlur={() => this.onRouteSelectionBlur('origin')}
                       onChange={(item, field) => this.onRouteSelectionChange('origin', item, field)}
                       onFocus={() => this.onRouteSelectionFocus('origin')}
@@ -739,7 +740,7 @@ class RouteSection extends React.PureComponent {
                       requiresFullAddress={requiresFullAddress}
                       showAddress={destinationTrucking}
                       value={destination}
-
+                      foundTrucking={truckingAvailability.destination}
                       onBlur={() => this.onRouteSelectionBlur('destination')}
                       onChange={(item, field) => this.onRouteSelectionChange('destination', item, field)}
                       onFocus={() => this.onRouteSelectionFocus('destination')}

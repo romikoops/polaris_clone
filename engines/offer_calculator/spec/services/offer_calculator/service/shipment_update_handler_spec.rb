@@ -335,13 +335,17 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
       end
 
       it 'raises error when the pickup addresses arent found' do
-        allow(Legacy::Address).to receive(:new_from_raw_params).and_return(Legacy::Address.new)
+        address = instance_double('Legacy::Address')
+        allow(address).to receive(:valid?).and_return(false)
+        allow(Legacy::Address).to receive(:new_from_raw_params).and_return(address)
 
         expect { pickup_service.update_trucking }.to raise_error(OfferCalculator::Calculator::InvalidPickupAddress)
       end
 
       it 'raises error when the delivery addresses arent found' do
-        allow(Legacy::Address).to receive(:new_from_raw_params).and_return(Legacy::Address.new)
+        address = instance_double('Legacy::Address')
+        allow(address).to receive(:valid?).and_return(false)
+        allow(Legacy::Address).to receive(:new_from_raw_params).and_return(address)
 
         expect { dropoff_service.update_trucking }.to raise_error(OfferCalculator::Calculator::InvalidDeliveryAddress)
       end

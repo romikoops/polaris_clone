@@ -13,7 +13,8 @@ function Fields (props) {
     onClear,
     onFocus,
     requiresFullAddress,
-    disabled
+    disabled,
+    foundTrucking
   } = props
 
   if (hide) return null
@@ -35,7 +36,7 @@ function Fields (props) {
       return true
     }
 
-    return !!fieldValue
+    return foundTrucking || !!fieldValue
   }
 
   const requiresFullAddressValidation = (_, fieldValue) => {
@@ -43,7 +44,7 @@ function Fields (props) {
       return true
     }
 
-    return (requiresFullAddress && !!fieldValue) || (!requiresFullAddress)
+    return foundTrucking || (requiresFullAddress && !!fieldValue) || (!requiresFullAddress)
   }
 
   return (

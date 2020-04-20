@@ -48,7 +48,8 @@ class Form extends Component {
     onChange: () => {},
     onFocus: () => {},
     requiresFullAddress: false,
-    showAddress: false
+    showAddress: false,
+    foundTrucking: false
   }
 
   constructor (props) {
@@ -254,7 +255,7 @@ class Form extends Component {
 
   render () {
     const { disabledAddress, results } = this.state
-    const { showAddress, loading, requiresFullAddress, value: propsValue } = this.props
+    const { showAddress, loading, requiresFullAddress, value: propsValue, foundTrucking } = this.props
 
     const value = propsValue || this.getEmptyValue()
 
@@ -282,6 +283,7 @@ class Form extends Component {
           onClear={this.onAddressFieldsCleared}
           onFocus={this.onChildFocus}
           requiresFullAddress={requiresFullAddress}
+          foundTrucking={foundTrucking}
           value={value}
         />
       </div>
