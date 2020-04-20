@@ -62,7 +62,7 @@ module OfferCalculator
       end
 
       def filter_results_for_quotation(charges_and_result:)
-        results_for_quotation = charges_and_result.flat_map do |result|
+        results_for_quotation = charges_and_result.compact.flat_map do |result|
           result[:valid_charges].map do |valid_charge|
             valid_charge.merge(result[:grouped_result].slice(:pricings_by_cargo_class))
           end
