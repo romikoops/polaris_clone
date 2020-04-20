@@ -16,7 +16,7 @@ RSpec.describe ExcelDataServices::Inserters::MaxDimensions do
   describe '.insert' do
     let(:input_data) { build(:excel_data_restructured_max_dimensions) }
     let(:expected_stats) do
-      { "legacy/max_dimensions_bundles": { number_created: 2, number_updated: 0, number_deleted: 0 } }
+      { "legacy/max_dimensions_bundles": { number_created: 3, number_updated: 0, number_deleted: 0 } }
     end
 
     it 'returns correct stats and creates correct data' do

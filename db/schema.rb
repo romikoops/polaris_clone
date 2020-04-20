@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_16_075518) do
+ActiveRecord::Schema.define(version: 2020_04_16_154326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -844,6 +844,7 @@ ActiveRecord::Schema.define(version: 2020_04_16_075518) do
 
   create_table "max_dimensions_bundles", force: :cascade do |t|
     t.boolean "aggregate"
+    t.string "cargo_class"
     t.bigint "carrier_id"
     t.decimal "chargeable_weight"
     t.datetime "created_at", null: false
@@ -856,6 +857,7 @@ ActiveRecord::Schema.define(version: 2020_04_16_075518) do
     t.integer "tenant_id"
     t.bigint "tenant_vehicle_id"
     t.datetime "updated_at", null: false
+    t.index ["cargo_class"], name: "index_max_dimensions_bundles_on_cargo_class"
     t.index ["carrier_id"], name: "index_max_dimensions_bundles_on_carrier_id"
     t.index ["mode_of_transport"], name: "index_max_dimensions_bundles_on_mode_of_transport"
     t.index ["sandbox_id"], name: "index_max_dimensions_bundles_on_sandbox_id"
@@ -2077,6 +2079,7 @@ ActiveRecord::Schema.define(version: 2020_04_16_075518) do
     t.jsonb "rates"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
+    t.integer "tenant_vehicle_id"
     t.string "truck_type"
     t.datetime "updated_at", null: false
     t.integer "user_id"
@@ -2089,6 +2092,7 @@ ActiveRecord::Schema.define(version: 2020_04_16_075518) do
     t.index ["rate_id", "location_id", "hub_id"], name: "trucking_foreign_keys", unique: true
     t.index ["sandbox_id"], name: "index_trucking_truckings_on_sandbox_id"
     t.index ["tenant_id"], name: "index_trucking_truckings_on_tenant_id"
+    t.index ["tenant_vehicle_id"], name: "index_trucking_truckings_on_tenant_vehicle_id"
   end
 
   create_table "trucking_type_availabilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

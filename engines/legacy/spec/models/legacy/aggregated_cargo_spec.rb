@@ -11,6 +11,13 @@ module Legacy
       end
     end
 
+    describe '#cargo_class' do
+      it 'returns the cargo class' do
+        cargo = FactoryBot.create(:legacy_aggregated_cargo)
+        expect(cargo.cargo_class).to eq('lcl')
+      end
+    end
+
     describe '#set_chargeable_weight!' do
       it 'calculates the chargeableweight and set it' do
         cargo = FactoryBot.create(:legacy_aggregated_cargo)

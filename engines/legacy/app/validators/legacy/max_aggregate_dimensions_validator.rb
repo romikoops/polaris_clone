@@ -3,6 +3,8 @@
 module Legacy
   class MaxAggregateDimensionsValidator < ActiveModel::Validator
     def validate(record)
+      return true if record.fcl?
+
       dimension_names = Legacy::CargoItem::DIMENSIONS.dup
       mode_of_transport = record.itinerary&.mode_of_transport&.to_sym
 
@@ -30,7 +32,6 @@ module Legacy
                  end
                end
              end
-
       dimension_names.each do |dimension_name|
         max = max_dimensions[dimension_name]
         next unless sums[dimension_name].present? && sums[dimension_name] > max && max.positive?

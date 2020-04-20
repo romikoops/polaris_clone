@@ -28,6 +28,10 @@ module Legacy
     def dangerous_goods?
       false
     end
+
+    def cargo_class
+      'lcl'
+    end
   end
 end
 

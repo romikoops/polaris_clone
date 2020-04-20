@@ -218,6 +218,7 @@ module ExcelDataServices
           payload_in_kg
           chargeable_weight
           aggregate
+          load_type
         ].freeze
       end
 

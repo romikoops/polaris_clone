@@ -141,7 +141,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
       let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: false, mode_of_transport: route.mode_of_transport) }
 
       it 'finds the corrrect max dimension for the mot' do
-        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: false)).to eq(target_mdb)
+        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: false, cargo_class: 'lcl')).to eq(target_mdb)
       end
     end
 
@@ -149,7 +149,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
       let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: true, mode_of_transport: route.mode_of_transport) }
 
       it 'finds the corrrect max dimension for the mot' do
-        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: true)).to eq(target_mdb)
+        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: true, cargo_class: 'lcl')).to eq(target_mdb)
       end
     end
 
@@ -157,7 +157,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
       let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: true, mode_of_transport: route.mode_of_transport, tenant_vehicle_id: route.tenant_vehicle_id) }
 
       it 'finds the corrrect max dimension for the mot' do
-        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: true)).to eq(target_mdb)
+        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: true, cargo_class: 'lcl')).to eq(target_mdb)
       end
     end
 
@@ -165,7 +165,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
       let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: false, mode_of_transport: route.mode_of_transport, tenant_vehicle_id: route.tenant_vehicle_id) }
 
       it 'finds the corrrect max dimension for the mot' do
-        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: false)).to eq(target_mdb)
+        expect(klass.send(:target_max_dimension, route: routes.first, aggregate: false, cargo_class: 'lcl')).to eq(target_mdb)
       end
     end
   end

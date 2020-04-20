@@ -45,20 +45,37 @@ module Api
       def cargo
         Cargo::Cargo.new(
           tenant: current_tenant,
-          units: cargo_params[:cargo_items_attributes].map do |attrs|
-            Cargo::Unit.new(
-              id: attrs[:id],
-              cargo_class: '00',
-              cargo_type: 'LCL',
-              tenant: current_tenant,
-              width_value: attrs[:dimension_x].to_f / 100,
-              height_value: attrs[:dimension_z].to_f / 100,
-              length_value: attrs[:dimension_y].to_f / 100,
-              weight_value: attrs[:payload_in_kg].to_f,
-              quantity: attrs[:quantity]
-            )
-          end
+          units: load_type == 'container' ? containers : cargo_items
         )
+      end
+
+      def cargo_items
+        cargo_params[:cargo_items_attributes].map do |attrs|
+          Cargo::Unit.new(
+            id: attrs[:id],
+            cargo_class: '00',
+            cargo_type: 'LCL',
+            tenant: current_tenant,
+            width_value: attrs[:dimension_x].to_f / 100,
+            height_value: attrs[:dimension_z].to_f / 100,
+            length_value: attrs[:dimension_y].to_f / 100,
+            weight_value: attrs[:payload_in_kg].to_f,
+            quantity: attrs[:quantity]
+          )
+        end
+      end
+
+      def containers
+        cargo_params[:containers_attributes].map do |attrs|
+          Cargo::Unit.new(
+            id: attrs[:id],
+            cargo_class: Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER[attrs[[:cargo_class]]],
+            cargo_type: 'GP',
+            tenant: current_tenant,
+            weight_value: attrs[:payload_in_kg].to_f,
+            quantity: attrs[:quantity]
+          )
+        end
       end
 
       def cargo_params
@@ -66,7 +83,7 @@ module Api
                                     dimension_z quantity total_weight total_volume
                                     stackable cargo_item_type_id dangerous_goods cargo_class]
         params.require(:shipment_info).permit(cargo_items_attributes: cargo_items_attributes,
-                                              containers_attributes: %i[size_class quantity
+                                              containers_attributes: %i[id size_class quantity
                                                                         payload_in_kg dangerous_goods cargo_class])
       end
 

@@ -70,6 +70,7 @@ end
 #
 #  id                :bigint           not null, primary key
 #  aggregate         :boolean
+#  cargo_class       :string
 #  chargeable_weight :decimal(, )
 #  dimension_x       :decimal(, )
 #  dimension_y       :decimal(, )
@@ -85,6 +86,7 @@ end
 #
 # Indexes
 #
+#  index_max_dimensions_bundles_on_cargo_class        (cargo_class)
 #  index_max_dimensions_bundles_on_carrier_id         (carrier_id)
 #  index_max_dimensions_bundles_on_mode_of_transport  (mode_of_transport)
 #  index_max_dimensions_bundles_on_sandbox_id         (sandbox_id)

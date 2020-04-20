@@ -18,8 +18,7 @@ module OfferCalculator
       private
 
       def tenant_max_dimensions_bundles
-        query = { tenant_id: @shipment.tenant_id }
-        query[:aggregate] = true if @shipment.aggregated_cargo
+        query = { tenant_id: @shipment.tenant_id, cargo_class: @shipment.cargo_classes }
         Legacy::MaxDimensionsBundle.where(query)
       end
 
@@ -40,7 +39,7 @@ module OfferCalculator
       def valid_for_mode_of_transport?(cargo:, route:, aggregate:)
         mode_of_transport = route.mode_of_transport
         cargo.chargeable_weight = cargo.calc_chargeable_weight(mode_of_transport)
-        max_dimensions = target_max_dimension(route: route, aggregate: aggregate)
+        max_dimensions = target_max_dimension(route: route, aggregate: aggregate, cargo_class: cargo.cargo_class)
         exceeded_dimensions = validate_cargo_dimensions(
           max_dimensions: max_dimensions,
           cargo: cargo,
@@ -68,11 +67,12 @@ module OfferCalculator
         value <= limit
       end
 
-      def target_max_dimension(route:, aggregate:)
+      def target_max_dimension(route:, aggregate:, cargo_class:)
         args = {
           carrier_id: route.carrier_id,
           tenant_vehicle_id: route.tenant_vehicle_id,
           mode_of_transport: route.mode_of_transport,
+          cargo_class: cargo_class,
           aggregate: aggregate
         }
         mot_filtered_max_dimensions = tenant_max_dimensions_bundles.exists?(args.slice(:mode_of_transport))

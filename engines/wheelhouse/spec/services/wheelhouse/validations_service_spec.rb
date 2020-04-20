@@ -18,7 +18,7 @@ module Wheelhouse
     let(:cargo) { FactoryBot.build(:cargo_cargo, tenant: tenants_tenant, units: cargos) }
     let(:cargos) do
       [
-        FactoryBot.build(:cargo_unit,
+        FactoryBot.build(:lcl_unit,
                          id: SecureRandom.uuid,
                          weight_value: 120,
                          width_value: 1.20,
@@ -86,7 +86,7 @@ module Wheelhouse
       context 'when port to port complete request (invalid cargo)' do
         let(:cargos) do
           [
-            FactoryBot.build(:cargo_unit,
+            FactoryBot.build(:lcl_unit,
                              id: SecureRandom.uuid,
                              weight_value: 120,
                              width_value: 1.20,
@@ -100,6 +100,32 @@ module Wheelhouse
         end
 
         before do
+          FactoryBot.create(:lcl_pricing, tenant: tenant, itinerary: itinerary)
+        end
+
+        it 'returns an array of one error' do
+          aggregate_failures do
+            expect(result.map(&:code)).to match_array(expected_error_codes)
+          end
+        end
+      end
+
+      context 'when port to port complete request (invalid fcl cargo)' do
+        let(:cargos) do
+          [
+            FactoryBot.build(:fcl_20_unit,
+                             id: SecureRandom.uuid,
+                             weight_value: 999_999,
+                             quantity: 1)
+          ]
+        end
+        let(:load_type) { 'container' }
+        let(:expected_error_codes) do
+          [4001]
+        end
+
+        before do
+          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'fcl_20', tenant: tenant, payload_in_kg: 30_000)
           FactoryBot.create(:lcl_pricing, tenant: tenant, itinerary: itinerary)
         end
 

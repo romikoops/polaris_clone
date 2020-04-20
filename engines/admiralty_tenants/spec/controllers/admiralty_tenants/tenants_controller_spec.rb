@@ -31,6 +31,7 @@ module AdmiraltyTenants
     let!(:max_bundle) do
       Legacy::MaxDimensionsBundle.create(mode_of_transport: 'general',
                                          tenant_id: tenant.legacy_id,
+                                         cargo_class: 'lcl',
                                          aggregate: false,
                                          dimension_x: 0.59e3,
                                          dimension_y: 0.2342e3,

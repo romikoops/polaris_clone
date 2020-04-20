@@ -455,6 +455,7 @@ FactoryBot.define do
              dimension_z: 0.12e4,
              payload_in_kg: 0.1e5,
              chargeable_weight: 0.1e5,
+             load_type: 'lcl',
              aggregate: nil,
              row_nr: 2 },
            { carrier: 'msc',
@@ -465,8 +466,19 @@ FactoryBot.define do
              dimension_z: 0.12e4,
              payload_in_kg: 0.1e5,
              chargeable_weight: 0.1e5,
+             load_type: 'lcl',
              aggregate: true,
-             row_nr: 3 }] }]
+             row_nr: 3 },
+           { carrier: 'msc',
+             service_level: 'faster',
+             mode_of_transport: 'ocean',
+             dimension_x: 0,
+             dimension_y: 0,
+             dimension_z: 0,
+             payload_in_kg: 0.1e6,
+             load_type: 'fcl_20',
+             aggregate: false,
+             row_nr: 4 }] }]
       end
     end
 

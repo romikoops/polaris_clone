@@ -12,7 +12,7 @@ module Legacy
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     validates :mode_of_transport, presence: true, uniqueness: {
-      scope: %i[tenant_id aggregate tenant_vehicle_id carrier_id],
+      scope: %i[tenant_id aggregate tenant_vehicle_id carrier_id cargo_class],
       message: lambda do |obj, _|
         max_dimensions_name = "max#{aggregate ? '_aggregate' : ''}_dimensions"
 
@@ -27,9 +27,10 @@ module Legacy
               allow_nil: true
     validates :dimension_x, :dimension_y, :dimension_z, :payload_in_kg, :chargeable_weight,
               numericality: true, allow_nil: true
+    validates :cargo_class, presence: true
 
-    scope :aggregate,  -> { where(aggregate: true) }
-    scope :unit,       -> { where(aggregate: false) }
+    scope :aggregate,  -> { where(aggregate: true, cargo_class: 'lcl') }
+    scope :unit,       -> { where(aggregate: false, cargo_class: 'lcl') }
 
     CARGO_ITEM_DEFAULTS = {
       general: {
@@ -66,7 +67,7 @@ module Legacy
     }.freeze
 
     def self.to_max_dimensions_hash
-      all.reduce({}) do |return_h, max_dimensions_bundle|
+      where(cargo_class: 'lcl').reduce({}) do |return_h, max_dimensions_bundle|
         return_h.merge(max_dimensions_bundle.to_max_dimension_hash)
       end
     end
@@ -81,7 +82,7 @@ module Legacy
         next if excluded_in_options?(options, mode_of_transport)
 
         find_or_initialize_by(
-          tenant: tenant, mode_of_transport: mode_of_transport, aggregate: aggregate
+          tenant: tenant, mode_of_transport: mode_of_transport, aggregate: aggregate, cargo_class: 'lcl'
         ).update(max_dimensions_hash)
       end.compact
     end
@@ -122,6 +123,7 @@ end
 #
 #  id                :bigint           not null, primary key
 #  aggregate         :boolean
+#  cargo_class       :string
 #  chargeable_weight :decimal(, )
 #  dimension_x       :decimal(, )
 #  dimension_y       :decimal(, )
@@ -137,6 +139,7 @@ end
 #
 # Indexes
 #
+#  index_max_dimensions_bundles_on_cargo_class        (cargo_class)
 #  index_max_dimensions_bundles_on_carrier_id         (carrier_id)
 #  index_max_dimensions_bundles_on_mode_of_transport  (mode_of_transport)
 #  index_max_dimensions_bundles_on_sandbox_id         (sandbox_id)

@@ -97,12 +97,19 @@ module Api
       end
 
       def cargo
-        units = shipment_params.fetch(:cargo_items_attributes, []).map do |attrs|
+        Cargo::Cargo.new(
+          tenant: current_tenant,
+          units: load_type == 'container' ? containers : cargo_items
+        )
+      end
+
+      def cargo_items
+        shipment_params.fetch(:cargo_items_attributes, []).map do |attrs|
           Cargo::Unit.new(
             id: attrs[:id],
-            tenant: current_tenant,
-            cargo_type: 'LCL',
             cargo_class: '00',
+            cargo_type: 'LCL',
+            tenant: current_tenant,
             width_value: attrs[:dimension_x].to_f / 100,
             height_value: attrs[:dimension_z].to_f / 100,
             length_value: attrs[:dimension_y].to_f / 100,
@@ -110,10 +117,19 @@ module Api
             quantity: attrs[:quantity]
           )
         end
-        Cargo::Cargo.new(
-          tenant: current_tenant,
-          units: units
-        )
+      end
+
+      def containers
+        shipment_params.fetch(:containers_attributes, []).map do |attrs|
+          Cargo::Unit.new(
+            id: attrs[:id],
+            cargo_class: Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER[attrs[[:cargo_class]]],
+            cargo_type: 'GP',
+            tenant: current_tenant,
+            weight_value: attrs[:payload_in_kg].to_f,
+            quantity: attrs[:quantity]
+          )
+        end
       end
 
       def user

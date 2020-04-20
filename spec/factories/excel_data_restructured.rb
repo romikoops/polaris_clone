@@ -2764,6 +2764,7 @@ FactoryBot.define do
           carrier: 'msc',
           service_level: 'standard',
           mode_of_transport: 'ocean',
+          load_type: 'lcl',
           dimension_x: 0.1e4,
           dimension_y: 0.9e3,
           dimension_z: 0.12e4,
@@ -2778,6 +2779,7 @@ FactoryBot.define do
            carrier: 'msc',
            service_level: 'faster',
            mode_of_transport: 'ocean',
+           load_type: 'lcl',
            dimension_x: 0.1e4,
            dimension_y: 0.9e3,
            dimension_z: 0.12e4,
@@ -2785,6 +2787,20 @@ FactoryBot.define do
            chargeable_weight: 0.1e5,
            aggregate: true,
            row_nr: 3
+         },
+         {
+           sheet_name: 'Sheet1',
+           restructurer_name: 'max_dimensions',
+           carrier: 'msc',
+           service_level: 'faster',
+           mode_of_transport: 'ocean',
+           load_type: 'fcl_20',
+           dimension_x: 0,
+           dimension_y: 0,
+           dimension_z: 0,
+           payload_in_kg: 0.1e6,
+           aggregate: false,
+           row_nr: 4
          }]
       end
     end

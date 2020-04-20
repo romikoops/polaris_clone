@@ -20,12 +20,13 @@ module Api
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:shipping_info) { { trucking_info: { pre_carriage: :pre } } }
     let(:cargo_item_id) { SecureRandom.uuid }
+    let(:load_type) { 'cargo_item' }
     let(:params) do
       {
         quote: {
           tenant_id: tenant.id,
           user_id: tenants_user.id,
-          load_type: 'container',
+          load_type: load_type,
           origin: origin,
           destination: destination
         },
@@ -204,6 +205,59 @@ module Api
         end
 
         before do
+          FactoryBot.create(:lcl_pricing, tenant: tenant, itinerary: itinerary)
+          request.headers['Authorization'] = token_header
+          post :create, params: params
+        end
+
+        it 'returns an array of one error' do
+          aggregate_failures do
+            expect(response).to be_successful
+            expect(response_data.pluck('attributes')).to eq(expected_errors)
+          end
+        end
+      end
+
+      context 'when port to port complete request (invalid fcl cargo)' do
+        let(:containers_attributes) do
+          [
+            {
+              'id' => cargo_item_id,
+              'payload_in_kg' => 999_999,
+              'total_volume' => 0,
+              'total_weight' => 0,
+              'dimension_x' => 0,
+              'dimension_y' => 0,
+              'dimension_z' => 0,
+              'quantity' => 1,
+              'dangerous_goods' => false,
+              'stackable' => true
+            }
+          ]
+        end
+        let(:origin) { { nexus_id: origin_hub.nexus_id } }
+        let(:load_type) { 'container' }
+        let(:destination) { { nexus_id: destination_hub.nexus_id } }
+        let(:shipping_info) { { containers_attributes: containers_attributes } }
+        let(:expected_errors) do
+          [
+            {
+              'id' => cargo_item_id,
+              'message' => 'Weight exceeds the limit of 10000 kg',
+              'limit' => '10000 kg',
+              'attribute' => 'payload_in_kg',
+              'section' => 'cargo_item',
+              'code' => 4001
+            }
+          ]
+        end
+
+        before do
+          FactoryBot.create(:legacy_max_dimensions_bundle,
+                            tenant: tenant,
+                            mode_of_transport: 'ocean',
+                            payload_in_kg: 10_000,
+                            cargo_class: 'fcl_20')
           FactoryBot.create(:lcl_pricing, tenant: tenant, itinerary: itinerary)
           request.headers['Authorization'] = token_header
           post :create, params: params

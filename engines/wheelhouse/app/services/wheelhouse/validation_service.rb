@@ -30,7 +30,10 @@ module Wheelhouse
     def cargo_validations
       return [] if cargo.units.empty?
 
-      Wheelhouse::Validations::CargoValidationService.errors(
+      validation_klass = "Wheelhouse::Validations::#{load_type.camelize}ValidationService".safe_constantize
+      return [] if validation_klass.nil?
+
+      validation_klass.errors(
         cargo: cargo,
         tenant: tenant,
         modes_of_transport: modes_of_transport,

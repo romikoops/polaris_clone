@@ -30,21 +30,31 @@ module Api
       let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenants_user.id, scopes: 'public') }
       let(:token_header) { "Bearer #{access_token.token}" }
       let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
-      let(:trips) { [trip_1, trip_2] }
+      let(:trips) do
+        [tenant_vehicle, tenant_vehicle_2].flat_map do |tv|
+          [
+            FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tv),
+            FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'cargo_item', tenant_vehicle: tv)
+          ]
+        end
+      end
       let(:cargo_items_attributes) { [] }
+      let(:containers_attributes) { [] }
+      let(:load_type) { 'container' }
       let(:params) do
         {
           quote: {
             selected_date: Time.zone.now,
             tenant_id: tenant.id,
             user_id: tenants_user.id,
-            load_type: 'container',
+            load_type: load_type,
             origin: { nexus_id: origin_hub.nexus_id },
             destination: { nexus_id: destination_hub.nexus_id }
           },
           shipment_info: {
             trucking_info: { pre_carriage: :pre },
-            cargo_items_attributes: cargo_items_attributes
+            cargo_items_attributes: cargo_items_attributes,
+            containers_attributes: containers_attributes
           }
         }
       end
@@ -53,6 +63,7 @@ module Api
         before do
           [tenant_vehicle, tenant_vehicle_2].each do |t_vehicle|
             FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, tenant: tenant)
+            FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, tenant: tenant)
           end
           OfferCalculator::Schedule.from_trips(trips)
           FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, tenant: tenant)
@@ -86,6 +97,7 @@ module Api
         end
 
         context 'when cargo items are invalid' do
+          let(:load_type) { 'cargo_item' }
           let(:cargo_items_attributes) do
             [
               {
@@ -104,7 +116,7 @@ module Api
             ]
           end
 
-          it 'returns prices with default margins' do
+          it 'returns validations errors' do
             post :create, params: params
             aggregate_failures do
               expect(response.code).to eq '417'
@@ -113,7 +125,41 @@ module Api
           end
         end
 
+        context 'when containers are invalid' do
+          let(:containers_attributes) do
+            [
+              {
+                'id' => SecureRandom.uuid,
+                'payload_in_kg' => 999_999,
+                'size_class' => 'fcl_20',
+                'total_weight' => 0,
+                'dimension_x' => 0,
+                'dimension_y' => 0,
+                'dimension_z' => 0,
+                'quantity' => 1
+              }
+            ]
+          end
+
+          before do
+            FactoryBot.create(:legacy_max_dimensions_bundle,
+                              tenant: tenant,
+                              mode_of_transport: 'ocean',
+                              payload_in_kg: 10_000,
+                              cargo_class: 'fcl_20')
+          end
+
+          it 'returns validation errors' do
+            post :create, params: params
+            aggregate_failures do
+              expect(response.code).to eq '417'
+              expect(response_data.count).to eq 1
+            end
+          end
+        end
+
         context 'when cargo items are valid' do
+          let(:load_type) { 'cargo_item' }
           let(:cargo_items_attributes) do
             [
               {
