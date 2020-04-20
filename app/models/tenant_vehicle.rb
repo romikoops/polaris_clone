@@ -18,14 +18,6 @@ class TenantVehicle < Legacy::TenantVehicle
     tvt.is_default = true unless default_tvt
     tvt.save!
   end
-
-  def with_carrier
-    as_json(include: { carrier: { only: %i(id name) } })
-  end
-
-  def full_name
-    carrier_id ? "#{carrier&.name} - #{name}" : name
-  end
 end
 
 # == Schema Information

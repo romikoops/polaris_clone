@@ -12,6 +12,10 @@ module Legacy
     def full_name
       carrier_id ? "#{carrier&.name} - #{name}" : name
     end
+
+    def with_carrier
+      as_json(include: { carrier: { only: %i[id name] } })
+    end
   end
 end
 
