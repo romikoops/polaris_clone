@@ -4,17 +4,17 @@ module Locations
   class NameFinder
     MultipleResultsFound = Class.new(StandardError)
 
-    def self.seeding(*terms)
+    def self.seeding(*terms, country_code)
       results = Locations::Name
                 .search(
                   terms,
                   fields: %i(name display_name alternative_names city postal_code),
                   match: :word_middle,
                   limit: 30,
-                  operator: 'or'
+                  operator: 'or',
+                  where: { country_code: country_code }
                 )
                 .results
-      
       result_with_location = results.select(&:location_id).first
 
       return result_with_location if result_with_location
@@ -22,8 +22,9 @@ module Locations
       results.first
     end
 
-    def self.location_seeding(*terms)
+    def self.location_seeding(*terms, country_code)
       results = Locations::Name
+                .where(country_code: country_code)
                 .search(
                   terms,
                   fields: %i(name display_name alternative_names city postal_code),
@@ -32,7 +33,7 @@ module Locations
                   operator: 'or'
                 )
                 .results
-      
+
       results.select(&:location_id).first
     end
 

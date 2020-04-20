@@ -14,7 +14,7 @@ module Trucking
 
       def initialize(_args)
         super
-        raise InvalidSheet unless xlsx&.sheets.present?
+        raise InvalidSheet if xlsx&.sheets.blank?
 
         @defaults = {}
         @trucking_rate_by_zone = {}
@@ -167,7 +167,7 @@ module Trucking
           )
 
           tl.city_name = ident_and_country[:sub_ident] if ident_and_country[:sub_ident]
-          tl.city_name = ident_and_country[:ident] if %w(zipcode distance).include?(@identifier_type)
+          tl.city_name = ident_and_country[:ident] if %w[zipcode distance].include?(@identifier_type)
 
           tl.id ||= SecureRandom.uuid
           next if @all_trucking_locations.include?(tl)
@@ -320,7 +320,7 @@ module Trucking
           all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
             if current_country[:code] != idents_and_country[:country]
               current_country = {
-                name: Legacy::Country.find_by_code(idents_and_country[:country]).name,
+                name: Legacy::Country.find_by(code: idents_and_country[:country]).name,
                 code: idents_and_country[:country]
               }
               @valid_postal_codes = ::Trucking::PostalCodes.for(country_code: idents_and_country[:country])
@@ -329,7 +329,7 @@ module Trucking
               postal_code_range(postal_codes_data: idents_and_country).compact
             elsif identifier_type == 'location_id'
               resp = find_and_prep_geometry(geometry_data: idents_and_country)
-              next unless resp.present?
+              next if resp.blank?
 
               resp
             else
@@ -526,7 +526,9 @@ module Trucking
         modifier_position_objs = {}
 
         modifier_row.uniq.each do |mod|
-          modifier_position_objs[mod] = modifier_row.each_index.select { |index| modifier_row[index] == mod } unless mod.nil?
+          unless mod.nil?
+            modifier_position_objs[mod] = modifier_row.each_index.select { |index| modifier_row[index] == mod }
+          end
         end
         modifier_position_objs
       end
@@ -567,7 +569,7 @@ module Trucking
           file_name: document&.file&.filename&.to_s,
           document_id: document&.id
         }
-        return meta_data unless document.present?
+        return meta_data if document.blank?
 
         meta_data[:document_id] = document.id
         return meta_data unless document.file.attached?
@@ -605,7 +607,7 @@ module Trucking
       end
 
       def modify_charges(trucking_rate, row_truck_type, direction)
-        direction_str = if %w(import export).include?(direction)
+        direction_str = if %w[import export].include?(direction)
                           direction
                         else
                           direction == 'pre' ? 'export' : 'import'
@@ -657,11 +659,11 @@ module Trucking
         if identifier_type == 'CITY'
           'location_id'
         elsif identifier_type == 'POSTAL_CODE'
-          %w(location_id postal_code)
+          %w[location_id postal_code]
         elsif identifier_type == 'LOCODE'
-          %w(location_id locode)
+          %w[location_id locode]
         elsif identifier_type == 'POSTAL_CITY'
-          %w(location_id postal_city)
+          %w[location_id postal_city]
         elsif identifier_type.include?('_')
           identifier_type.split('_').map(&:downcase)
         elsif identifier_type.include?(' ')
@@ -698,10 +700,12 @@ module Trucking
                      )
                    else
                      Locations::LocationSeeder.seeding(
-                       idents_and_country[:ident],
-                       idents_and_country[:sub_ident]
+                       [idents_and_country[:ident],
+                        idents_and_country[:sub_ident]],
+                       idents_and_country[:country].downcase
                      )
                   end
+
         puts idents_and_country if geometry.nil?
         if geometry.nil?
           geocoder_results = Geocoder.search(

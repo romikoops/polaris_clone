@@ -17,18 +17,21 @@ RSpec.describe Locations::NameFinder do
                             osm_id: 1,
                             city: 'Shanghai',
                             name: 'Baoshun',
+                            country_code: 'cn',
                             alternative_names: '宝山城市工业园区', place_rank: 50),
           FactoryBot.create(:locations_name,
                             :reindex,
                             osm_id: 2,
                             city: 'Taicung',
                             name: 'Baoshun',
+                            country_code: 'cn',
                             place_rank: 80),
           FactoryBot.create(:locations_name,
                             :reindex,
                             osm_id: 3,
                             city: 'Qingdao',
                             name: 'Baoshun',
+                            country_code: 'cn',
                             place_rank: 60)
         ]
       end
@@ -41,6 +44,7 @@ RSpec.describe Locations::NameFinder do
                             city: '',
                             name: 'AB10',
                             postal_code: 'AB10',
+                            country_code: 'gb',
                             place_rank: 80),
           FactoryBot.create(:locations_name,
                             :reindex,
@@ -49,6 +53,7 @@ RSpec.describe Locations::NameFinder do
                             city: '',
                             name: 'AB',
                             postal_code: 'AB',
+                            country_code: 'gb',
                             place_rank: 60)
         ]
       end
@@ -60,12 +65,14 @@ RSpec.describe Locations::NameFinder do
                             location: location_4,
                             city: 'Altenberg',
                             name: 'Bårenfels',
+                            country_code: 'de',
                             place_rank: 80),
           FactoryBot.create(:locations_name,
                             :reindex,
                             osm_id: 120,
                             city: 'Alterneberg',
                             name: 'Barenheld',
+                            country_code: 'de',
                             place_rank: 80),
           FactoryBot.create(:locations_name,
                             :reindex,
@@ -73,6 +80,7 @@ RSpec.describe Locations::NameFinder do
                             city: 'Dresden',
                             name: 'Altstadt',
                             postal_code: 'AB',
+                            country_code: 'de',
                             place_rank: 60),
           FactoryBot.create(:locations_name,
                             :reindex,
@@ -80,6 +88,7 @@ RSpec.describe Locations::NameFinder do
                             city: 'Dresden',
                             name: 'Innere Altstadt',
                             postal_code: 'AB',
+                            country_code: 'de',
                             place_rank: 40)
         ]
       end
@@ -90,13 +99,13 @@ RSpec.describe Locations::NameFinder do
 
       it 'finds the correct location name through autocomplete search' do
         cn_target_location_name = cn_location_names.first
-        result = Locations::NameFinder.seeding('Baoshun', 'Shanghai')
+        result = Locations::NameFinder.seeding(['Baoshun', 'Shanghai'], 'cn')
         expect(result).to eq(cn_target_location_name)
       end
 
       it 'finds the correct location name through autocomplete search' do
         uk_target_location_name = uk_location_names.last
-        result = Locations::NameFinder.seeding('AB')
+        result = Locations::NameFinder.seeding(['AB'], 'gb')
         expect(result).to eq(uk_target_location_name)
       end
 
@@ -104,19 +113,19 @@ RSpec.describe Locations::NameFinder do
 
       it 'finds the correct location name through autocomplete search in Chinese' do
         cn_target_location_name = cn_location_names.first
-        result = Locations::NameFinder.seeding('宝山城市工业园区', 'Shanghai')
+        result = Locations::NameFinder.seeding(['宝山城市工业园区', 'Shanghai'], 'cn')
         expect(result).to eq(cn_target_location_name)
       end
 
       it 'finds the correct location name with umlauts' do
         de_target_location_name = de_location_names.first
-        result = Locations::NameFinder.seeding('ALTENBERG', 'BAERENFELS')
+        result = Locations::NameFinder.seeding(['ALTENBERG', 'BAERENFELS'], 'de')
         expect(result).to eq(de_target_location_name)
       end
 
       it 'finds the correct location name with nested areas' do
         de_target_location_name = de_location_names.first
-        result = Locations::NameFinder.seeding('innere altstadt', 'dresden')
+        result = Locations::NameFinder.seeding(['innere altstadt', 'dresden'], 'de')
         expect(result).to eq(de_location_names.last)
       end
     end

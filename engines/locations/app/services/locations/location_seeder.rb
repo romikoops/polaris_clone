@@ -4,16 +4,16 @@ module Locations
   class LocationSeeder
     MultipleResultsFound = Class.new(StandardError)
 
-    def self.seeding(*terms)
+    def self.seeding(*terms, country_code)
       name = Locations::NameFinder.location_seeding(
-        terms
+        terms, country_code
       )
       unless name
         upper_term = terms.is_a?(Array) ? terms.last : terms.split(' ').last
-        name = Locations::NameFinder.location_seeding(upper_term)
+        name = Locations::NameFinder.location_seeding(upper_term, country_code)
       end
 
-      name ||= Locations::NameFinder.seeding(terms)
+      name ||= Locations::NameFinder.seeding(terms, country_code)
 
       return nil unless name.present?
 
