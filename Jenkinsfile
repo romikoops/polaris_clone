@@ -3,8 +3,6 @@
 prettyBuild()
 
 pipeline {
-  agent none
-
   options {
     podTemplate(inheritFrom: 'default')
     preserveStashes()
@@ -12,145 +10,54 @@ pipeline {
     timeout(45)
   }
 
+  agent {
+    kubernetes {
+      yaml podSpec(
+        containers: [
+          [
+            name: 'ruby', image: 'itsmycargo/builder:ruby-2.6', interactive: true,
+            requests: [ memory: '1500Mi', cpu: '1000m' ],
+            env: [
+              [ name: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test' ],
+              [ name: 'ELASTICSEARCH_URL', value: 'localhost:9200']
+            ]
+          ],
+          [ name: 'node', image: 'itsmycargo/builder:node-12', command: 'cat', tty: true,
+            requests: [ memory: '3000Mi', cpu: '1000m' ],
+          ],
+          [ name: 'postgis', image: 'mdillon/postgis',
+            requests: [ memory: '500Mi', cpu: '250m' ]
+          ],
+          [ name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:7.1.1',
+            requests: [ memory: '1500Mi', cpu: '250m' ],
+            env: [ [ name: "discovery.type", value: "single-node" ] ]
+          ]
+        ]
+      )
+    }
+  }
+
   stages {
-    stage('Test') {
-      parallel {
-        stage('App') {
-          agent {
-            kubernetes {
-              yaml podSpec(
-                containers: [
-                  [
-                    name: 'ruby', image: 'itsmycargo/builder:ruby-2.6', interactive: true,
-                    requests: [ memory: '1500Mi', cpu: '1000m' ],
-                    env: [ [ name: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test' ] ]
-                  ],
-                  [ name: 'postgis', image: 'mdillon/postgis', requests: [ memory: '500Mi', cpu: '500m' ] ]
-                ]
-              )
-            }
+    stage("Prepare") {
+      stages {
+        stage("Checkout") {
+          steps {
+            defaultCheckout()
+
+            stash(name: 'backend', excludes: 'client/**/*,qa/**/*')
+            stash(name: 'frontend', includes: 'client/**/*')
           }
+        }
 
-          stages {
-            stage('Checkout') {
-              steps {
-                defaultCheckout()
-
-                stash(name: 'backend', excludes: 'client/**/*,qa/**/*')
-              }
-            }
-
-            stage('Prepare') {
+        stage("Prepare") {
+          parallel {
+            stage("Ruby") {
               steps {
                 container('ruby') { appPrepare() }
               }
             }
 
-            stage('RSpec') {
-              steps {
-                defaultCheckout()
-                container('ruby') { appRunner('app') }
-              }
-
-              post {
-                always {
-                  junit allowEmptyResults: true, testResults: '**/junit.xml'
-                  stash(name: 'app-lcov', includes: 'coverage/lcov/*.lcov')
-                }
-
-                success {
-                  publishCoverage adapters: [
-                    istanbulCoberturaAdapter(mergeToOneReport: true, path: 'coverage/coverage.xml')
-                  ]
-                }
-              }
-            }
-          }
-        }
-
-        stage('Engines') {
-          agent {
-            kubernetes {
-              yaml podSpec(
-                containers: [
-                  [
-                    name: 'ruby', image: 'itsmycargo/builder:ruby-2.6', interactive: true,
-                    requests: [ memory: '1500Mi', cpu: '1000m' ],
-                    env: [
-                      [ name: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test' ],
-                      [ name: 'ELASTICSEARCH_URL', value: 'localhost:9200']
-                    ]
-                  ],
-                  [ name: 'postgis', image: 'mdillon/postgis',
-                    requests: [ memory: '500Mi', cpu: '250m' ]
-                  ],
-                  [ name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:7.1.1',
-                    requests: [ memory: '1500Mi', cpu: '250m' ],
-                    env: [ [ name: "discovery.type", value: "single-node" ] ]
-                  ]
-                ]
-              )
-            }
-          }
-
-          stages {
-            stage('Checkout') {
-              steps {
-                defaultCheckout()
-              }
-            }
-
-            stage('Prepare') {
-              steps {
-                container('ruby') { appPrepare() }
-              }
-            }
-
-            stage('RSpec') {
-              steps {
-                container('ruby') { appRunner('engines') }
-              }
-
-              post {
-                always {
-                  junit allowEmptyResults: true, testResults: '**/junit.xml'
-                  stash(name: 'engines-lcov', includes: 'coverage/lcov/*.lcov', allowEmpty: true)
-                }
-
-                success {
-                  publishCoverage adapters: [
-                    istanbulCoberturaAdapter(mergeToOneReport: true, path: 'coverage/coverage.xml')
-                  ]
-                }
-              }
-            }
-          }
-        }
-
-        stage('Client') {
-          agent {
-            kubernetes {
-              yaml podSpec(
-                containers: [
-                  [ name: 'node', image: 'itsmycargo/builder:node-12', command: 'cat', tty: true,
-                    requests: [ memory: '3000Mi', cpu: '1000m' ],
-                  ]
-                ]
-              )
-            }
-          }
-
-          stages {
-            stage('Checkout') {
-              steps {
-                defaultCheckout()
-
-                stash(name: 'frontend', includes: 'client/**/*')
-                stash(name: 'qa', includes: 'qa/**/*')
-              }
-            }
-
-            stage('Prepare') {
+            stage("NPM") {
               steps {
                 container('node') {
                   withCache(['client/node_modules=client/package-lock.json']) {
@@ -161,7 +68,35 @@ pipeline {
                 }
               }
             }
+          }
+        }
+      }
+    }
 
+    stage('Test') {
+      parallel {
+        stage('App') {
+          stages {
+            stage('RSpec') {
+              steps {
+                container('ruby') { appRunner('app') }
+              }
+            }
+          }
+        }
+
+        stage('Engines') {
+          stages {
+            stage('RSpec') {
+              steps {
+                container('ruby') { appRunner('engines') }
+              }
+            }
+          }
+        }
+
+        stage('Client') {
+          stages {
             stage('Jest') {
               steps {
                 container('node') {
@@ -170,30 +105,35 @@ pipeline {
                   }
                 }
               }
-
-              post {
-                always {
-                  junit 'client/**/junit.xml'
-                }
-
-                success {
-                  publishCoverage adapters: [istanbulCoberturaAdapter(mergeToOneReport: true, path: '**/cobertura-coverage.xml')]
-                }
-              }
             }
           }
         }
 
-      } // parallel
-    } // Test
+      }
 
-    stage('Report') {
+      post {
+        always {
+          junit(allowEmptyResults: true, testResults: '**/junit.xml')
+
+          publishCoverage(
+            adapters: [
+              istanbulCoberturaAdapter(mergeToOneReport: true, path: 'coverage/coverage.xml'),
+              istanbulCoberturaAdapter(mergeToOneReport: true, path: 'client/**/cobertura-coverage.xml')
+            ],
+            calculateDiffForChangeRequests: true,
+            failBuildIfCoverageDecreasedInChangeRequest: true
+          )
+        }
+      }
+    }
+
+    stage("Report") {
       when { changeRequest() }
 
       steps {
-        underCover(stashes: ['app-lcov', 'engines-lcov'])
+        underCover(glob: 'coverage/lcov/*.lcov')
       }
-    } // Report
+    }
 
     stage('Build') {
       when {
@@ -232,36 +172,20 @@ pipeline {
           }
         }
 
-        stage("Dipper / S3") {
-          agent {
-            kubernetes {
-              yaml podSpec(
-                containers: [
-                  [ name: 'node', image: 'node:12-slim', command: 'cat', tty: true,
-                    requests: [ memory: '3000Mi', cpu: '1000m' ],
-                  ]
-                ]
-              )
-            }
-          }
-
+        stage("S3") {
           stages {
-            stage('Build') {
+            stage("Build") {
               steps {
-                defaultCheckout()
-                container('node') {
-                  withCache(['client/node_modules=client/package-lock.json']) {
-                    dir('client') {
-                      sh(label: 'NPM Install', script: "npm install --no-progress")
-                      sh("npm run build")
-                    }
+                container("node") {
+                  dir("client") {
+                    sh("npm run build")
                   }
                 }
               }
             }
 
-            stage('Deploy') {
-              when { branch 'master' }
+            stage("Deploy") {
+              when { branch "master" }
 
               steps {
                 withSecrets {
@@ -281,13 +205,13 @@ pipeline {
       }
     }
 
-    stage('Deploy') {
-      when { branch 'master' }
+    stage("Deploy") {
+      when { branch "master" }
 
       stages {
-        stage('Sentry Release') {
+        stage("Sentry Release") {
           steps {
-            sentryRelease(projects: ['api', 'dipper'])
+            sentryRelease(projects: ["api", "dipper"])
           }
         }
       }
@@ -311,7 +235,19 @@ void appPrepare() {
       "LC_ALL=C.UTF-8",
     ]) {
       withCache(['vendor/ruby=Gemfile.lock']) {
-        sh(label: 'Install Gems', script: "scripts/ci-prepare")
+        sh(label: "Bundle Install", script: """
+          for gemfile in Gemfile engines/*/Gemfile;
+          do
+            BUNDLE_GEMFILE="\${gemfile}" bundle check || \
+              BUNDLE_GEMFILE="\${gemfile}" bundle --retry=2
+          done
+        """)
+        withEnv(["RAILS_ENV=test"]) {
+          sh(label: "Test Database", script: """
+            bin/rails db:test:prepare
+            bin/rails db:migrate
+          """)
+        }
       }
     }
   }
