@@ -129,7 +129,8 @@ module.exports = (env, options) => ({
     new Dotenv(),
     new webpack.EnvironmentPlugin({
       BASE_URL: '//localhost:3000',
-      SEGMENT_KEY: JSON.stringify(process.env.SEGMENT_KEY)
+      SEGMENT_KEY: JSON.stringify(process.env.SEGMENT_KEY),
+      ZENDESK_KEY: JSON.stringify(process.env.ZENDESK_KEY)
     }),
 
     new CleanWebpackPlugin(

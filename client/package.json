@@ -95,6 +95,7 @@
     "react-day-picker": "^7.0.7",
     "react-dom": "^16.12.0",
     "react-google-maps-loader": "^4.2.3",
+    "react-helmet": "^6.0.0",
     "react-hot-loader": "^4.2.0",
     "react-i18next": "^8.3.8",
     "react-mailcheck": "^1.2.0",

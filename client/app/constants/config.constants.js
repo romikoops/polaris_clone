@@ -11,10 +11,18 @@ export default function getConfig () {
     production: 'BjuhWZe2ju14ux35VnoC8YsqWGtcgkjY'
   }
 
+  const zendeskKey = {
+    development: '627ad638-a13b-4f53-bb1d-ca7a7e36f3f1',
+    test: '627ad638-a13b-4f53-bb1d-ca7a7e36f3f1',
+    review: '627ad638-a13b-4f53-bb1d-ca7a7e36f3f1',
+    production: '627ad638-a13b-4f53-bb1d-ca7a7e36f3f1'
+  }
+
   if (!config.apiUrl) {
     config = {
       apiUrl: ((process.env.NODE_ENV !== 'production' && process.env.BASE_URL) || keel.apiUrl),
-      segment: ((process.env.NODE_ENV !== 'production' && process.env.SEGMENT_KEY) || segmentKey[environment])
+      segment: ((process.env.NODE_ENV !== 'production' && process.env.SEGMENT_KEY) || segmentKey[environment]),
+      zendesk: ((process.env.NODE_ENV !== 'production' && process.env.ZENDESK_KEY) || zendeskKey[environment])
     }
   }
 

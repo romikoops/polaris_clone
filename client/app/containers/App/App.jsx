@@ -23,6 +23,7 @@ import { moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import ConsentManager from '../../components/ConsentManager'
+import { ZenDeskWidget } from '../../components/ZenDeskWidget/ZenDeskWidget'
 import GenericError from '../../components/ErrorHandling/Generic'
 import SamlRedirect from '../../components/Redirects/SamlRedirect'
 import ContextProvider from '../../hocs/ContextProvider'
@@ -37,7 +38,6 @@ class App extends Component {
 
   componentWillMount () {
     const { appDispatch, authDispatch, shipmentDispatch, location, user } = this.props
-
     appDispatch.getTenantId()
     appDispatch.setTenants()
     if (user) {
@@ -118,6 +118,7 @@ class App extends Component {
         <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
           { displayTenantsMenu && <TenantMenu tenant={tenant} tenants={tenants} appDispatch={appDispatch} /> }
           <ConsentManager writeKey={getConfig().segment} />
+          <ZenDeskWidget zenDeskKey={getConfig().zendesk} user={user} />
           <div className="flex-100 mc layout-row layout-align-start">
             {loading ? <Loading tenant={tenant} text="loading..." /> : ''}
             {user &&
