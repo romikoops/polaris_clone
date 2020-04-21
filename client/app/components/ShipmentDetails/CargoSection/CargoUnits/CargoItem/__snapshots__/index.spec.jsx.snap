@@ -67,9 +67,9 @@ exports[`renders correcly 1`] = `
           />
         }
         labelText="Length"
-        maxDimension={234.2}
-        maxDimensionsErrorText="Maximum width is"
-        name="0-dimensionY"
+        maxDimension={590}
+        maxDimensionsErrorText="Maximum length is"
+        name="0-dimensionX"
         onBlur={[Function]}
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
@@ -82,7 +82,7 @@ exports[`renders correcly 1`] = `
             "totalShipmentChargeableWeight": [Function],
           }
         }
-        value={132}
+        value={5}
       />
       <CargoUnitNumberInput
         cargoItem={
@@ -115,9 +115,9 @@ exports[`renders correcly 1`] = `
           />
         }
         labelText="Width"
-        maxDimension={590}
-        maxDimensionsErrorText="Maximum length is"
-        name="0-dimensionX"
+        maxDimension={234.2}
+        maxDimensionsErrorText="Maximum width is"
+        name="0-dimensionY"
         onBlur={[Function]}
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
@@ -130,7 +130,7 @@ exports[`renders correcly 1`] = `
             "totalShipmentChargeableWeight": [Function],
           }
         }
-        value={5}
+        value={132}
       />
       <CargoUnitNumberInput
         cargoItem={
