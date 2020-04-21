@@ -6,6 +6,7 @@ module Api
       decorates 'Legacy::Nexus'
 
       delegate_all
+      delegate :name, to: :country, prefix: true
 
       def modes_of_transport
         hubs.pluck(:hub_type)
