@@ -71,7 +71,7 @@ module OfferCalculator
         end
         handle_errors(errors: results_for_quotation) if results_for_quotation.all? { |result| result[:error].present? }
 
-        results_for_quotation
+        results_for_quotation.reject { |result| result[:error].present? }
       end
 
       def handle_group_result(grouped_result:)
@@ -373,7 +373,7 @@ module OfferCalculator
       end
 
       def invalid_quote?(charge:)
-        charge.price.value.zero? ||
+        charge.nil? || charge.price.value.zero? ||
           charge.charge_breakdown.charges.where(detail_level: 3).empty?
       end
 
