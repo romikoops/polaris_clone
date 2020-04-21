@@ -296,7 +296,7 @@ RSpec.describe OfferCalculator::Service::DetailedSchedulesBuilder do
 
         it 'returns three pricing objects with unique pricing_ids and cargo classes by closing_date (base_pricing)' do
           aggregate_failures do
-            expect(results.length).to eq(2)
+            expect(results.length).to eq(1)
             expect(results.any? { |r| r.dig(:pricings_by_cargo_class, 'fcl_20').nil? }).to eq(false)
             expect(results.any? { |r| r.dig(:pricings_by_cargo_class, 'fcl_40').nil? }).to eq(false)
             expect(results.any? { |r| r.dig(:pricings_by_cargo_class, 'fcl_40_hq').nil? }).to eq(false)

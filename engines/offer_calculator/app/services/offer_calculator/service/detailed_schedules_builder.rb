@@ -21,6 +21,8 @@ module OfferCalculator
           { grouped_result: grouped_result, valid_charges: handle_group_result(grouped_result: grouped_result) }
         end
 
+        charges_and_result = charges_and_result.compact
+
         results_for_quotation = filter_results_for_quotation(charges_and_result: charges_and_result)
 
         if results_for_quotation.present?
@@ -82,7 +84,6 @@ module OfferCalculator
           sandbox: @sandbox,
           metadata_list: @metadata_list
         ).perform
-
         return grand_total_charges if grand_total_charges.all? { |charge| charge[:error].present? }
 
         grand_total_charges.reject { |charge| charge[:error].present? }
@@ -288,7 +289,8 @@ module OfferCalculator
           result = filter_other_sets(sets: other_sets, result: result, dates: dates)
           result_to_return << result
         end
-        result_to_return
+
+        result_to_return.reject { |result| result[:schedules].empty? }
       end
 
       def grouped_schedules(schedules:, shipment:, user:)
@@ -306,7 +308,6 @@ module OfferCalculator
             dates: dates,
             dedicated_pricings_only: dedicated_pricings?(user)
           )
-
           next nil if pricings_by_cargo_class.empty?
 
           most_diverse_set, other_pricings = pricings_sets(pricings: pricings_by_cargo_class)
@@ -318,7 +319,7 @@ module OfferCalculator
             rate_overview: rate_overview
           )
         end
-        result_to_return
+        result_to_return.compact
       end
 
       def sort_schedule_permutations(schedules:)
