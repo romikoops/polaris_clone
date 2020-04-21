@@ -62,6 +62,9 @@ class App extends Component {
 
   isUserExpired () {
     const { appDispatch, user, lastActivity } = this.props
+    if (!user) {
+      return
+    }
     const { localStorage } = window
     const { inactivityLimit } = user
     const auth = JSON.parse(localStorage.getItem('authHeader'))
