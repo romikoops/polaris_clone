@@ -17,6 +17,7 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
     FactoryBot.create(:legacy_shipment,
                       load_type: 'cargo_item',
                       user: user,
+                      desired_start_date: Time.zone.tomorrow,
                       tenant: tenant)
   end
   let!(:pricings) do
@@ -27,23 +28,52 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
       FactoryBot.create(:legacy_fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant)
     ]
   end
+  let(:hubs) do
+    {
+      origin: Legacy::Hub.where(id: origin_hub.id),
+      destination: Legacy::Hub.where(id: destination_hub.id)
+    }
+  end
+  let(:routes) do
+    [
+      OfferCalculator::Route.new(
+        itinerary_id: itinerary.id,
+        origin_stop_id: itinerary.stops.first.id,
+        destination_stop_id: itinerary.stops.last.id
+      )
+    ]
+  end
+  let(:results) { described_class.new(shipment: shipment).perform(routes, hubs) }
 
-  context 'class methods' do
-    describe '.perform', :vcr do
+  describe '.perform', :vcr do
+    context 'without trucking' do
       it 'return the route detail hashes' do
-        routes = [
-          OfferCalculator::Route.new(
-            itinerary_id: itinerary.id,
-            origin_stop_id: itinerary.stops.first.id,
-            destination_stop_id: itinerary.stops.last.id
-          )
-        ]
-        results = described_class.new(shipment: shipment).perform(routes)
+        aggregate_failures do
+          expect(results.length).to eq(4)
+          expect(results.map { |sched| sched.trip.tenant_vehicle_id }).to match_array(pricings.map(&:tenant_vehicle_id))
+          expect(results.map(&:etd).uniq).to match_array([OfferCalculator::Schedule.quote_trip_start_date])
+          expect(results.map(&:eta).uniq).to match_array([OfferCalculator::Schedule.quote_trip_end_date])
+        end
+      end
+    end
 
-        expect(results.length).to eq(4)
-        expect(results.map { |sched| sched.trip.tenant_vehicle_id }).to match_array(pricings.map(&:tenant_vehicle_id))
-        expect(results.map(&:etd).uniq).to match_array([OfferCalculator::Schedule.quote_trip_start_date])
-        expect(results.map(&:eta).uniq).to match_array([OfferCalculator::Schedule.quote_trip_end_date])
+    context  'with trucking' do
+      before do
+        google_directions = instance_double('OfferCalculator::GoogleDirections', driving_time_in_seconds: 10_000, driving_time_in_seconds_for_trucks: 14_000)
+        allow(OfferCalculator::GoogleDirections).to receive(:new).and_return(google_directions)
+        allow(shipment).to receive(:has_pre_carriage?).and_return(true)
+        allow(shipment).to receive(:pickup_address).and_return(pickup_address)
+      end
+
+      let(:pickup_address) { FactoryBot.create(:gothenburg_address) }
+
+      it 'return the route detail hashes' do
+        aggregate_failures do
+          expect(results.length).to eq(4)
+          expect(results.map { |sched| sched.trip.tenant_vehicle_id }).to match_array(pricings.map(&:tenant_vehicle_id))
+          expect(results.map(&:etd).uniq).to match_array([OfferCalculator::Schedule.quote_trip_start_date])
+          expect(results.map(&:eta).uniq).to match_array([OfferCalculator::Schedule.quote_trip_end_date])
+        end
       end
     end
   end

@@ -572,7 +572,7 @@ class ShippingTools
     end
     @origin_hub = Hub.find_by(id: @schedule['origin_hub']['id'], sandbox: sandbox)
     @destination_hub = Hub.find_by(id: @schedule['destination_hub']['id'], sandbox: sandbox)
-    if shipment.has_pre_carriage
+    if shipment.has_pre_carriage?
       trucking_seconds = shipment.trucking['pre_carriage']['trucking_time_in_seconds'].seconds
       shipment.planned_pickup_date = shipment.trip.closing_date - 1.day - trucking_seconds
     else
@@ -809,8 +809,6 @@ class ShippingTools
   def self.create_shipment_from_result(main_quote:, original_shipment:, result:, sandbox: nil)
     schedule = result['schedules'].first
     trip = Trip.find(schedule['trip_id'])
-    on_carriage_hash = (original_shipment.trucking['on_carriage'] if result['quote']['trucking_on'])
-    pre_carriage_hash = (original_shipment.trucking['pre_carriage'] if result['quote']['trucking_pre'])
     original_charge_breakdown = original_shipment.charge_breakdowns.find_by(trip: trip)
     origin_hub = Legacy::Hub.find(schedule['origin_hub']['id'])
     destination_hub = Legacy::Hub.find(schedule['destination_hub']['id'])
@@ -826,12 +824,9 @@ class ShippingTools
       trip_id: trip.id,
       booking_placed_at: DateTime.now,
       closing_date: original_shipment.closing_date,
-      planned_eta: original_shipment.planned_eta,
-      planned_etd: original_shipment.planned_etd,
-      trucking: {
-        pre_carriage: pre_carriage_hash,
-        on_carriage: on_carriage_hash
-      },
+      planned_eta: trip.end_date,
+      planned_etd: trip.start_date,
+      trucking: original_shipment.trucking,
       tender_id: original_charge_breakdown.tender_id,
       load_type: original_shipment.load_type,
       itinerary_id: trip.itinerary_id,
@@ -857,6 +852,13 @@ class ShippingTools
       new_shipment.aggregated_cargo.set_chargeable_weight!
     elsif new_shipment.lcl? && new_shipment.aggregated_cargo.nil?
       new_shipment.cargo_units.map(&:set_chargeable_weight!)
+    end
+
+    if new_shipment.has_pre_carriage?
+      trucking_seconds = original_shipment.trucking['pre_carriage']['trucking_time_in_seconds'].seconds
+      new_shipment.planned_pickup_date = trip.closing_date - 1.day - trucking_seconds
+    else
+      new_shipment.planned_origin_drop_off_date = trip.closing_date - 1.day
     end
 
     new_charge_breakdown = original_charge_breakdown.dup

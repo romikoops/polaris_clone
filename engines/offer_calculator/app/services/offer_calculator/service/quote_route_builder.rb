@@ -2,9 +2,10 @@
 
 module OfferCalculator
   module Service
-    class QuoteRouteBuilder < Base
-      def perform(routes)
+    class QuoteRouteBuilder < OfferCalculator::Service::ScheduleFinder
+      def perform(routes, hubs)
         @routes = routes
+        current_etd_in_search(hubs)
         build_route_objs
       end
 

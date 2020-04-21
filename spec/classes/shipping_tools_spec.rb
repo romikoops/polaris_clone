@@ -388,6 +388,25 @@ RSpec.describe ShippingTools do
           expect(result[:results]).to eq(mock_offer_calculator.detailed_schedules)
         end
       end
+
+      context 'with trucking, quote and breakdowns' do
+        before do
+          shipment.update(trucking: { 'pre_carriage' => { 'truck_type' => 'default', 'trucking_time_in_seconds' => 10_000 } })
+          FactoryBot.create(:pricings_metadatum, charge_breakdown: shipment.charge_breakdowns.first, tenant: tenants_tenant)
+        end
+
+        it 'returns the correct response including the cargo units for a quote setup with trucking' do
+          Tenants::Scope.find_by(target_id: tenants_tenant.id).update(content: { closed_quotation_tool: true })
+
+          result = described_class.get_offers(params, user)
+          aggregate_failures do
+            expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
+            expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
+            expect(result[:destinationHubs]).to eq(mock_offer_calculator.hubs[:destination])
+            expect(result[:results]).to eq(mock_offer_calculator.detailed_schedules)
+          end
+        end
+      end
     end
   end
 

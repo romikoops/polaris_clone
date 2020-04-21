@@ -69,7 +69,7 @@ module OfferCalculator
 
     def schedules
       @schedules ||= if quotation_tool?
-                       @quote_route_builder.perform(@routes)
+                       @quote_route_builder.perform(@routes, @hubs)
                      else
                        @schedule_finder.perform(@routes, @delay, @hubs)
                      end
