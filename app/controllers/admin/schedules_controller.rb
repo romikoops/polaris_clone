@@ -130,7 +130,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
     itinerary
       .trips
       .lastday_today
-      .joins(tenant_vehicle: :carrier)
+      .left_joins(tenant_vehicle: :carrier)
       .select('trips.*, tenant_vehicles.name AS service_level, carriers.name AS carrier')
       .order(:start_date)
       .limit(limit)

@@ -46,10 +46,11 @@ RSpec.describe Admin::SchedulesController, type: :controller do
     let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
     let(:carrier) { FactoryBot.create(:legacy_carrier, name: 'MSC') }
     let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier) }
+    let(:tenant_vehicle_no_carrier) { FactoryBot.create(:legacy_tenant_vehicle, carrier: nil) }
     let(:closing_date) { Time.zone.today }
     let(:start_date) { Time.zone.today + 4.days }
     let(:end_date) { Time.zone.today + 30.days }
-    let(:edit_params) do
+    let(:show_params) do
       {
         id: itinerary.id,
         tenant_id: user.tenant_id
@@ -65,7 +66,13 @@ RSpec.describe Admin::SchedulesController, type: :controller do
                           end_date: end_date + delta.days,
                           tenant_vehicle: tenant_vehicle)
       end
-      get :show, params: edit_params
+      FactoryBot.create(:legacy_trip,
+                        itinerary: itinerary,
+                        closing_date: closing_date + 2.days,
+                        start_date: start_date + 2.days,
+                        end_date: end_date + 2.days,
+                        tenant_vehicle: tenant_vehicle_no_carrier)
+      get :show, params: show_params
     end
 
     it 'returns http success' do
@@ -74,7 +81,7 @@ RSpec.describe Admin::SchedulesController, type: :controller do
 
     it 'returns the edited data' do
       aggregate_failures do
-        expect(JSON.parse(response.body).dig('data', 'schedules').length).to eq 10
+        expect(JSON.parse(response.body).dig('data', 'schedules').length).to eq 11
         expect(JSON.parse(response.body).dig('data', 'schedules', 0, 'carrier')).to eq 'MSC'
         expect(JSON.parse(response.body).dig('data', 'schedules', 0, 'service_level')).to eq 'standard'
       end
