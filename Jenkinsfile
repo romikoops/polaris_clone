@@ -124,7 +124,7 @@ pipeline {
       when { changeRequest() }
 
       steps {
-        underCover(glob: 'coverage/lcov/*.lcov')
+        underCover(glob: '**/*.lcov')
       }
     }
 
