@@ -115,14 +115,7 @@ pipeline {
         always {
           junit(allowEmptyResults: true, testResults: '**/junit.xml')
 
-          publishCoverage(
-            adapters: [
-              istanbulCoberturaAdapter(mergeToOneReport: true, path: 'coverage/coverage.xml'),
-              istanbulCoberturaAdapter(mergeToOneReport: true, path: 'client/**/cobertura-coverage.xml')
-            ],
-            calculateDiffForChangeRequests: true,
-            failBuildIfCoverageDecreasedInChangeRequest: true
-          )
+          reportCoverage()
         }
       }
     }
@@ -236,11 +229,9 @@ void appPrepare() {
     ]) {
       withCache(['vendor/ruby=Gemfile.lock']) {
         sh(label: "Bundle Install", script: """
-          for gemfile in Gemfile engines/*/Gemfile;
-          do
-            BUNDLE_GEMFILE="\${gemfile}" bundle check || \
-              BUNDLE_GEMFILE="\${gemfile}" bundle --retry=2
-          done
+          ls Gemfile engines/*/Gemfile \
+            | xargs -P 4 -I {} sh -c "BUNDLE_GEMFILE={} bundle check 1>&2 || echo {}" \
+            | xargs -I {} sh -c "BUNDLE_GEMFILE={} bundle install --retry=2 --jobs=2"
         """)
         withEnv(["RAILS_ENV=test"]) {
           sh(label: "Test Database", script: """

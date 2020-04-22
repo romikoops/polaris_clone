@@ -26,7 +26,10 @@ SimpleCov.configure do
     merge_timeout 3600
   end
 
-  if ENV['CI']
+  if ENV['CONTINUOUS_INTEGRATION']
+    coverage_dir 'coverage'
+    merge_timeout 3600
+
     require 'simplecov-cobertura'
     require 'simplecov-workspace-lcov'
 
