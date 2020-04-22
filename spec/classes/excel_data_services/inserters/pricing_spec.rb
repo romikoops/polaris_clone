@@ -8,6 +8,8 @@ RSpec.shared_examples 'Pricing .insert' do
     stats = described_class.insert(options)
     itinerary = Itinerary.last
     expect(itinerary.slice(:name, :mode_of_transport).values).to eq(['Gothenburg - Shanghai', 'ocean'])
+    expect(itinerary.map_data[0][:origin]).to eq itinerary.stops[0].hub.lng_lat_array
+    expect(itinerary.map_data[0][:destination]).to eq itinerary.stops[1].hub.lng_lat_array
     expect(Stop.pluck(:itinerary_id).uniq.first).to eq(itinerary.id)
     pricings = base_pricing ? ::Pricings::Pricing.all : ::Pricing.all
     expect(stats).to eq(expected_stats)

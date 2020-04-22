@@ -26,6 +26,9 @@ module ExcelDataServices
           itinerary.stops << stops - itinerary.stops
 
           add_stats(itinerary)
+
+          itinerary.generate_map_data
+
           itinerary.save!
 
           tenant_vehicle = find_or_create_tenant_vehicle(row)
