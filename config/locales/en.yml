@@ -243,6 +243,9 @@ en:
     routing_info_missing:
       code: 4016
       message: 'Origin and destination are required.'
+    quantity_missing:
+      code: 4017
+      message: 'Quantity is missing.'
 
   #forbidden actions
     uneditable_fee:

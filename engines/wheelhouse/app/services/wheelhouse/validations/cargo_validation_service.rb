@@ -120,6 +120,17 @@ module Wheelhouse
             code: MISSING_DIMENSION_LOOKUP[attribute]
           )
         end
+
+        return if cargo_unit.quantity&.positive?
+
+        @errors << Wheelhouse::Validations::Error.new(
+          id: cargo_unit.id,
+          message: 'Quantity is required.',
+          attribute: :quantity,
+          limit: nil,
+          section: 'cargo_item',
+          code: 4017
+        )
       end
 
       def validate_attribute(id:, attribute:, measurement:, cargo_class:, aggregate: false)

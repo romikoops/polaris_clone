@@ -15,6 +15,7 @@ module Cargo
     }
 
     validates :tenant_id, presence: true
+    validates :quantity, presence: true, numericality: { greater_than: 0 }
     validates :weight, measured: { units: :kg, greater_than: 0 }
     validates :volume, measured: { units: :m3 }
     validates :width, :length, :height, measured: { units: :m }

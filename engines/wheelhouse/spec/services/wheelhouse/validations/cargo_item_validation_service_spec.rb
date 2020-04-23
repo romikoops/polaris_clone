@@ -67,7 +67,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
         [FactoryBot.build(:lcl_unit,
                           tenant: tenants_tenant,
                           id: SecureRandom.uuid,
-                          quantity: 1,
+                          quantity: 0,
                           width_value: 1.2,
                           length_value: 0,
                           height_value: 0,
@@ -77,16 +77,16 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
       let(:final) { true }
       let(:expected_help_text) do
         ['Length is required.',
+         'Quantity is required.',
          'Height is required.',
          'Weight is required.']
       end
       let(:expected_error_codes) do
-        [4010, 4011, 4013]
+        [4010, 4011, 4013, 4017]
       end
 
-      it 'returns an an arrya of missing values' do
+      it 'returns an an array of missing values' do
         aggregate_failures do
-          expect(result.length).to eq(3)
           expect(result.map(&:message)).to match_array(expected_help_text)
           expect(result.map(&:code).uniq).to match_array(expected_error_codes)
         end
@@ -116,7 +116,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
         [4015]
       end
 
-      it 'returns an an arrya of missing values' do
+      it 'returns an an array of missing values' do
         aggregate_failures do
           expect(result.length).to eq(5)
           expect(result.map(&:message)).to match_array(expected_help_text)
