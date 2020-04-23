@@ -116,15 +116,8 @@ pipeline {
           junit(allowEmptyResults: true, testResults: '**/junit.xml')
 
           reportCoverage()
+          coverDiff(glob: "**/coverage.xml,**/cobertura-coverage.xml")
         }
-      }
-    }
-
-    stage("Report") {
-      when { changeRequest() }
-
-      steps {
-        underCover(glob: '**/*.lcov')
       }
     }
 
