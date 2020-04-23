@@ -13,7 +13,7 @@ export function getTotalShipmentErrors ({
 
   if (hasTrucking) {
     payloadInKg = getErrorObj(
-      getFilteredMaxDimensions(['truckCarriage'], maxDimensions),
+      getFilteredMaxDimensions(['truckCarriage', 'general', ...modesOfTransport], maxDimensions),
       'payloadInKg',
       cargoItems.reduce((sum, cargoItem) => sum + (cargoItem.payloadInKg * cargoItem.quantity), 0),
       ['truckCarriage']
