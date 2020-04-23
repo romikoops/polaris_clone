@@ -223,6 +223,14 @@ module Api
               'attribute' => 'dimension_z',
               'section' => 'cargo_item',
               'code' => 4002
+            },
+            {
+              'attribute' => 'chargeable_weight',
+              'code' => 4005,
+              'id' => cargo_item_id,
+              'limit' => '10000 kg',
+              'message' => 'Chargeable Weight exceeds the limit of 10000 kg',
+              'section' => 'cargo_item'
             }
           ]
         end

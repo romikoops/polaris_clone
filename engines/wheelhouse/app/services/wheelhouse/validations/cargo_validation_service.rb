@@ -80,7 +80,7 @@ module Wheelhouse
             id: cargo_unit.id,
             attribute: attribute,
             measurement: cargo_unit.send(CARGO_DIMENSION_LOOKUP[attribute]),
-            cargo_class: Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER.key(cargo_unit.cargo_class) || 'lcl'
+            cargo_class: cargo_unit_class(cargo_unit: cargo_unit)
           )
         end
         if attributes == STANDARD_ATTRIBUTES && load_type == :cargo_item
@@ -93,6 +93,12 @@ module Wheelhouse
         end
 
         final_validation(cargo_unit: cargo_unit) if final.present?
+      end
+
+      def cargo_unit_class(cargo_unit:)
+        return 'lcl' if cargo_unit.cargo_class_00?
+
+        Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER.key(cargo_unit.cargo_class) || 'fcl_20'
       end
 
       def load_type
@@ -148,6 +154,7 @@ module Wheelhouse
           attribute: attribute,
           cargo_class: cargo_class
         )
+
         if %i[chargeable_weight payload_in_kg].include?(attribute)
           Measured::Weight.new(validation_limit, 'kg')
         elsif validation_limit
@@ -179,6 +186,7 @@ module Wheelhouse
             mode_of_transport: DEFAULT_MOT
           )
         end
+
         for_comparison = effective_max_dimensions.order("#{attribute} DESC").select(attribute).first
         for_comparison[attribute] || DEFAULT_MAX
       end

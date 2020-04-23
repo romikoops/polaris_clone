@@ -63,7 +63,9 @@ module Wheelhouse
     end
 
     def modes_of_transport
-      @modes_of_transport ||= routes.select(:mode_of_transport)
+      @modes_of_transport ||= routes.where(id: pricings.select(:itinerary_id))
+                                    .select(:mode_of_transport)
+                                    .distinct
     end
 
     def tenant_vehicle_ids
@@ -72,7 +74,7 @@ module Wheelhouse
 
     def pricings
       @pricings ||= begin
-        pricing_assocation = Pricings::Pricing.where(itinerary: routes)
+        pricing_assocation = Pricings::Pricing.where(itinerary: routes, load_type: load_type)
         pricing_assocation = pricing_assocation.where(group: user.all_groups) if scope[:dedicated_pricings_only]
         pricing_assocation
       end

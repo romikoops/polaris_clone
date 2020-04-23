@@ -258,7 +258,7 @@ module Api
                             mode_of_transport: 'ocean',
                             payload_in_kg: 10_000,
                             cargo_class: 'fcl_20')
-          FactoryBot.create(:lcl_pricing, tenant: tenant, itinerary: itinerary)
+          FactoryBot.create(:fcl_20_pricing, tenant: tenant, itinerary: itinerary)
           request.headers['Authorization'] = token_header
           post :create, params: params
         end

@@ -74,8 +74,8 @@ module Integrations
           end
 
           it 'has the correct containers' do
-            expect(json_shipment['containers']).to match [{ container_number: '', delivery_mode: '', size_code: '20GP', type_code: '20GP' },
-                                                          { container_number: '', delivery_mode: '', size_code: '20GP', type_code: '20GP' }]
+            expect(json_shipment['containers']).to match [{ container_number: '', delivery_mode: '', size_code: '22GP', type_code: '22GP' },
+                                                          { container_number: '', delivery_mode: '', size_code: '22GP', type_code: '22GP' }]
           end
 
           it 'has the correct created_by date' do

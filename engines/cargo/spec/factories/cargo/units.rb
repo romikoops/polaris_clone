@@ -30,11 +30,11 @@ FactoryBot.define do
     end
 
     trait :fcl_20 do
-      cargo_class { '20' }
+      cargo_class { '22' }
     end
 
     trait :fcl_40 do
-      cargo_class { '40' }
+      cargo_class { '42' }
     end
 
     trait :fcl_40_hq do
@@ -42,7 +42,7 @@ FactoryBot.define do
     end
 
     trait :fcl_45 do
-      cargo_class { 'L0' }
+      cargo_class { 'L2' }
     end
 
     factory :lcl_unit, traits: %i(lcl)
