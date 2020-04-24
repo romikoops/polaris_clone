@@ -37,10 +37,12 @@ RSpec.describe UsersController do
 
     it 'returns an http status of success' do
       get :show, params: { tenant_id: user.tenant, user_id: user.id }
-
-      expect(response).to have_http_status(:success)
-      body = JSON.parse(response.body)
-      expect(body.dig('data', 'id')).to eq(user.id)
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        body = JSON.parse(response.body)
+        expect(body.dig('data', 'id')).to eq(user.id)
+        expect(body.dig('data', 'inactivityLimit')).to eq(86_400)
+      end
     end
   end
 

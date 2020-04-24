@@ -19,7 +19,7 @@ class UsersController < ApplicationController
         { user: ul, address: ul.address.to_custom_hash } if ul.address.sandbox == @sandbox
       end
 
-      resp = {
+      {
         shipments: shipments_hash,
         contacts: @contacts,
         num_contact_pages: (current_user.contacts.count.to_f / 6).to_f.ceil,
@@ -30,7 +30,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    response_handler(merge_profile(user: current_user))
+    response_handler(merge_profile(user: current_user).merge(inactivityLimit: inactivity_limit))
   end
 
   def account

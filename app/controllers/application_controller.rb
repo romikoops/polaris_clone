@@ -61,6 +61,14 @@ class ApplicationController < ActionController::API
     payload[:user_id] = current_user&.id
   end
 
+  def inactivity_limit
+    time = current_scope[:session_length]
+    return 1.hour.seconds if time.nil?
+
+    length = [time.to_i.seconds, 10.minutes].max
+    length.seconds
+  end
+
   def set_raven_context
     Raven.user_context(
       email: current_user&.email,
