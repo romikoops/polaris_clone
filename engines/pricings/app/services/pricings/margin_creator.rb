@@ -61,7 +61,7 @@ module Pricings
     end
 
     def get_margin_value(operator, value)
-      return value.to_d / 100.0 if operator == '%' && value.to_d > 1
+      return value.to_d / 100.0 if operator == '%'
 
       value
     end
