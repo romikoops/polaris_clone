@@ -111,14 +111,15 @@ module AdmiraltyReports
     def shipments_per_agent(bundle)
       bundle.tally_by do |shipment_type, _shipment|
         user = ::Legacy::User.with_deleted.find_by(id: shipment_type.user_id)
-        agency = ::Legacy::Agency.find_by(id: user.agency_id) if user
-        [user&.email, agency&.name]
+        tenants_user = ::Tenants::User.find_by(legacy_id: user&.id)
+        company = ::Tenants::Company.find_by(id: tenants_user.company) if tenants_user
+        [user&.email, company&.name]
       end
     end
 
     def transform_agent_counts(agent_counts)
-      agent_counts.each_with_object([]) do |((email, agency_name), count), arr|
-        arr << { email: email, agency_name: agency_name, count: count }
+      agent_counts.each_with_object([]) do |((email, company_name), count), arr|
+        arr << { email: email, company_name: company_name, count: count }
       end
     end
 

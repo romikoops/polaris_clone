@@ -26,7 +26,7 @@ module AdmiraltyReports
       context 'when custom fields are not specified' do
         subject { described_class.generate(raw_request_data: raw_request_data).process_excel_file }
 
-        let(:expected_headers) { ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Agency', 'Status'] }
+        let(:expected_headers) { ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Company', 'Status'] }
 
         let(:expected_shipment) { ['Test Tenant', DateTime.new(2020, 2, 3), 'imc@imc.com', nil, 'accepted'] }
 

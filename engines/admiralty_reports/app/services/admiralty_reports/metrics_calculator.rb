@@ -18,12 +18,12 @@ module AdmiraltyReports
     def result
       alter_result_keys(
         total_shipments: total_shipments,
-        total_active_agents_companies: total_active(:agency_name),
+        total_active_companies: total_active(:company_name),
         total_active_users: total_active(:email),
-        average_shipments_per_agent_company: average_shipments(:agency_name),
+        average_shipments_per_agent_company: average_shipments(:company_name),
         average_shipments_per_user: average_shipments(:email),
         shipments_per_day_without_weekends: (total_shipments / weekdays.length),
-        most_active_agent_company: data_per_month[:agencies].first,
+        most_active_agent_company: data_per_month[:companies].first,
         most_active_user: data_per_month[:users].first,
         weekdays_without_activity: weekdays_without_activity.length,
         three_most_active_days: days_sorted_by_activity(order: :asc, days: 3),
@@ -52,7 +52,7 @@ module AdmiraltyReports
 
     def data_per_month
       users_data = {}
-      agencies_data = {}
+      companies_data = {}
 
       overview.each do |stat|
         stat.second[:data_per_agent].each do |agent_data|
@@ -65,17 +65,17 @@ module AdmiraltyReports
             users_data[email] += count
           end
 
-          agency_name = agent_data[:agency_name]
-          if agencies_data[agency_name].nil?
-            agencies_data[agency_name] = count
+          company_name = agent_data[:company_name]
+          if companies_data[company_name].nil?
+            companies_data[company_name] = count
           else
-            agencies_data[agency_name] += count
+            companies_data[company_name] += count
           end
         end
       end
 
       { users: sort_by_count(users_data),
-        agencies: sort_by_count(agencies_data) }
+        companies: sort_by_count(companies_data) }
     end
 
     def sort_by_count(data)

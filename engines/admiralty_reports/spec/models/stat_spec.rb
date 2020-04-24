@@ -23,7 +23,7 @@ module AdmiraltyReports
           combined_data: { avg_time_for_booking_process: '2 days',
                            n_individual_agents: 1,
                            n_shipments: 1 },
-          data_per_agent: [{ agency_name: nil,
+          data_per_agent: [{ company_name: nil,
                              count: 1,
                              email: 'test@test.com' }]
         } }
@@ -51,7 +51,7 @@ module AdmiraltyReports
           combined_data: { avg_time_for_booking_process: '2 days',
                            n_individual_agents: 1,
                            n_shipments: 1 },
-          data_per_agent: [{ agency_name: nil,
+          data_per_agent: [{ company_name: nil,
                              count: 1,
                              email: 'test@test.com' }]
         } }
@@ -80,7 +80,7 @@ module AdmiraltyReports
           combined_data: { avg_time_for_booking_process: '1 day',
                            n_individual_agents: 1,
                            n_shipments: 1 },
-          data_per_agent: [{ agency_name: nil,
+          data_per_agent: [{ company_name: nil,
                              count: 1,
                              email: 'test@test.com' }]
         } }

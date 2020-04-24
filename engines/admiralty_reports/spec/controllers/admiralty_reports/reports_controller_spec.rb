@@ -43,10 +43,31 @@ module AdmiraltyReports
         end
       end
 
-      context 'filtered results ' do
+      context 'when the results are filtered' do
+        before do
+          tenants_user.update(company: company)
+          tenants_user_two.update(company: company)
+          FactoryBot.create(:legacy_quotation,
+                            original_shipment_id: shipments.first.id,
+                            user_id: user.id,
+                            updated_at: DateTime.new(2019, 2, 3),
+                            created_at: DateTime.new(2019, 2, 2))
+          FactoryBot.create(:legacy_quotation,
+                            original_shipment_id: shipments.last.id,
+                            user_id: user_two.id,
+                            updated_at: DateTime.new(2019, 2, 3),
+                            created_at: DateTime.new(2019, 2, 2))
+          ::Quotations::Quotation.create(user_id: user.id, updated_at: DateTime.new(2020, 1, 2), created_at: DateTime.new(2020, 1, 1))
+          ::Quotations::Quotation.create(user_id: user_two.id, updated_at: DateTime.new(2020, 1, 2), created_at: DateTime.new(2020, 1, 1))
+        end
+
         let!(:tenant) { quote_tenant }
-        let!(:agency) { FactoryBot.create(:legacy_agency) }
-        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id, agency: agency) }
+        let(:company) { FactoryBot.create(:tenants_company) }
+        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id) }
+        let!(:user_two) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id) }
+        let!(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
+        let!(:tenants_user_two) { Tenants::User.find_by(legacy_id: user_two.id) }
+
         let!(:shipments) do
           [
             FactoryBot.create(:legacy_shipment,
@@ -55,22 +76,10 @@ module AdmiraltyReports
                               updated_at: DateTime.new(2019, 2, 3),
                               created_at: DateTime.new(2019, 2, 2)),
             FactoryBot.create(:legacy_shipment,
-                              user_id: user.id,
+                              user_id: user_two.id,
                               tenant_id: quote_tenant.id,
                               updated_at: DateTime.new(2019, 2, 5),
                               created_at: DateTime.new(2019, 2, 4))
-          ]
-        end
-        let!(:quotations) do
-          [
-            FactoryBot.create(:legacy_quotation,
-                              original_shipment_id: shipments.first.id,
-                              user_id: user.id,
-                              updated_at: DateTime.new(2019, 2, 3),
-                              created_at: DateTime.new(2019, 2, 2)),
-            ::Quotations::Quotation.create(user_id: user.id,
-                                           updated_at: DateTime.new(2020, 1, 2),
-                                           created_at: DateTime.new(2020, 1, 1))
           ]
         end
 
@@ -79,7 +88,7 @@ module AdmiraltyReports
 
           expect(response).to be_successful
           expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
-          expect(response.body).to include('Total Quotations')
+          expect(response.body).to include('Quotations')
         end
 
         it 'renders page if it is current month' do

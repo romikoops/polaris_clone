@@ -22,7 +22,7 @@ module AdmiraltyReports
 
     def xlsx_content(workbook)
       workbook.add_worksheet(name: 'Stat Overview') do |sheet|
-        sheet.add_row ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Agency', 'Status']
+        sheet.add_row ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Company', 'Status']
         @raw_request_data.each do |request|
           request_user = request&.user
           request_tenant = request.try(:tenant) || Legacy::Shipment.find(request.original_shipment_id).tenant
@@ -30,7 +30,7 @@ module AdmiraltyReports
             [request_tenant.try(:name) || request_tenant.try(:slug),
              request.updated_at.to_date,
              request_user&.email,
-             request_user&.agency&.name,
+             request_user&.company&.name,
              request.try(:status)]
           )
         end
