@@ -38,33 +38,29 @@ pipeline {
   }
 
   stages {
-    stage("Prepare") {
-      stages {
-        stage("Checkout") {
-          steps {
-            defaultCheckout()
+    stage("Checkout") {
+      steps {
+        defaultCheckout()
 
-            stash(name: 'backend', excludes: 'client/**/*,qa/**/*')
-            stash(name: 'frontend', includes: 'client/**/*')
+        stash(name: 'backend', excludes: 'client/**/*,qa/**/*')
+        stash(name: 'frontend', includes: 'client/**/*')
+      }
+    }
+
+    stage("Prepare") {
+      parallel {
+        stage("Ruby") {
+          steps {
+            container('ruby') { appPrepare() }
           }
         }
 
-        stage("Prepare") {
-          parallel {
-            stage("Ruby") {
-              steps {
-                container('ruby') { appPrepare() }
-              }
-            }
-
-            stage("NPM") {
-              steps {
-                container('node') {
-                  withCache(['client/node_modules=client/package-lock.json']) {
-                    dir('client') {
-                      sh(label: 'NPM Install', script: "npm install --no-progress")
-                    }
-                  }
+        stage("NPM") {
+          steps {
+            container('node') {
+              withCache(['client/node_modules=client/package-lock.json']) {
+                dir('client') {
+                  sh(label: 'NPM Install', script: "npm install --no-progress")
                 }
               }
             }
@@ -131,27 +127,31 @@ pipeline {
 
       parallel {
         stage("Polaris") {
-          steps {
-            dockerBuild(
-              dir: '.',
-              image: "polaris",
-              memory: 1500,
-              stash: 'backend',
-              pre_script: "scripts/docker-prepare.sh"
-            )
+          stages {
+            stage("Docker") {
+              steps {
+                dockerBuild(
+                  dir: '.',
+                  image: "polaris",
+                  memory: 1500,
+                  stash: 'backend',
+                  pre_script: "scripts/docker-prepare.sh"
+                )
+              }
+            }
           }
         }
 
         stage("Dipper") {
           stages {
-            stage('Build') {
+            stage("Docker") {
               steps {
                 dockerBuild(
-                  dir: 'client/',
+                  dir: "client/",
                   image: "dipper",
                   memory: 2000,
                   args: [ RELEASE: env.GIT_COMMIT ],
-                  stash: 'frontend'
+                  stash: "frontend"
                 )
               }
             }
@@ -191,15 +191,11 @@ pipeline {
       }
     }
 
-    stage("Deploy") {
+    stage("Sentry") {
       when { branch "master" }
 
-      stages {
-        stage("Sentry Release") {
-          steps {
-            sentryRelease(projects: ["api", "dipper"])
-          }
-        }
+      steps {
+        sentryRelease(projects: ["api", "dipper"])
       }
     }
   }
@@ -226,11 +222,9 @@ void appPrepare() {
             | xargs -P 4 -I {} sh -c "BUNDLE_GEMFILE={} bundle check 1>&2 || echo {}" \
             | xargs -I {} sh -c "BUNDLE_GEMFILE={} bundle install --retry=2 --jobs=2"
         """)
+
         withEnv(["RAILS_ENV=test"]) {
-          sh(label: "Test Database", script: """
-            bin/rails db:test:prepare
-            bin/rails db:migrate
-          """)
+          sh(label: "Test Database", script: "bin/rails db:test:prepare && bin/rails db:migrate")
         }
       }
     }
