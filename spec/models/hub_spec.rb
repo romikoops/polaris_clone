@@ -64,7 +64,7 @@ end
 #  longitude           :float
 #  name                :string
 #  photo               :string
-#  point               :geometry({:srid= geometry, 4326
+#  point               :geometry         geometry, 4326
 #  trucking_type       :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null

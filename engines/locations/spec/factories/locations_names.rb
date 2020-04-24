@@ -44,7 +44,7 @@ end
 #  osm_class         :string
 #  osm_type          :string
 #  place_rank        :bigint
-#  point             :geometry({:srid= geometry, 0
+#  point             :geometry         geometry, 0
 #  postal_code       :string
 #  state             :string
 #  street            :string

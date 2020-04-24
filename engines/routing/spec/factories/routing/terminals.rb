@@ -80,7 +80,7 @@ end
 # Table name: routing_terminals
 #
 #  id                :uuid             not null, primary key
-#  center            :geometry({:srid= geometry, 0
+#  center            :geometry         geometry, 0
 #  default           :boolean          default(FALSE)
 #  mode_of_transport :integer          default(NULL)
 #  terminal_code     :string

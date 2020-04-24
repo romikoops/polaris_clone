@@ -494,26 +494,26 @@ end
 #                                     rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show
 #                              update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                      active_storage/disk#update
 #                                   rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                           active_storage/direct_uploads#create
-# 
+#
 # Routes for GoogleSignIn::Engine:
 # authorization POST /authorization(.:format) google_sign_in/authorizations#create
 #      callback GET  /callback(.:format)      google_sign_in/callbacks#show
-# 
+#
 # Routes for Easymon::Engine:
 #        GET  /(.:format)       easymon/checks#index
 #   root GET  /                 easymon/checks#index
 #        GET  /:check(.:format) easymon/checks#show
-# 
+#
 # Routes for ApiAuth::Engine:
 #      oauth_token POST   /oauth/token(.:format)      api_auth/tokens#create
 #     oauth_revoke POST   /oauth/revoke(.:format)     api_auth/tokens#revoke
 # oauth_introspect POST   /oauth/introspect(.:format) api_auth/tokens#introspect
 # oauth_token_info GET    /oauth/token/info(.:format) api_auth/token_info#show
 #    oauth_signout DELETE /oauth/signout(.:format)    api_auth/auth#destroy
-# 
+#
 # Routes for ApiDocs::Engine:
 # raddocs_app      /docs       Raddocs::App
-# 
+#
 # Routes for Api::Engine:
 #                       api_auth        /                                                         ApiAuth::Engine
 #                          v1_me GET    /v1/me(.:format)                                          api/v1/users#show
@@ -552,17 +552,17 @@ end
 #         v1_itinerary_schedules GET    /v1/itineraries/:itinerary_id/schedules(.:format)         api/v1/schedules#index
 #                 v1_itineraries GET    /v1/itineraries(.:format)                                 api/v1/itineraries#index
 #                       api_docs        /                                                         ApiDocs::Engine
-# 
+#
 # Routes for AdmiraltyAuth::Engine:
 #        login GET    /login(.:format)        admiralty_auth/logins#new
 # create_login GET    /login/create(.:format) admiralty_auth/logins#create
 # delete_login DELETE /login(.:format)        admiralty_auth/logins#destroy
-# 
+#
 # Routes for AdmiraltyReports::Engine:
 #        reports GET  /reports(.:format)        admiralty_reports/reports#index
 #         report GET  /reports/:id(.:format)    admiralty_reports/reports#show
 # download_stats GET  /stats/download(.:format) admiralty_reports/stats#download
-# 
+#
 # Routes for AdmiraltyTenants::Engine:
 #     tenants GET   /tenants(.:format)          admiralty_tenants/tenants#index
 #             POST  /tenants(.:format)          admiralty_tenants/tenants#create
@@ -571,7 +571,7 @@ end
 #      tenant GET   /tenants/:id(.:format)      admiralty_tenants/tenants#show
 #             PATCH /tenants/:id(.:format)      admiralty_tenants/tenants#update
 #             PUT   /tenants/:id(.:format)      admiralty_tenants/tenants#update
-# 
+#
 # Routes for Admiralty::Engine:
 #    admiralty_auth      /           AdmiraltyAuth::Engine
 # admiralty_reports      /           AdmiraltyReports::Engine

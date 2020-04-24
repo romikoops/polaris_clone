@@ -24,7 +24,7 @@ end
 #  geocoded_address :string
 #  last_name        :string
 #  phone            :string
-#  point            :geometry({:srid= geometry, 0
+#  point            :geometry         geometry, 0
 #  postal_code      :string
 #  premise          :string
 #  province         :string

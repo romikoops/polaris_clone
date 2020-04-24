@@ -13,8 +13,8 @@ end
 # Table name: routing_locations
 #
 #  id           :uuid             not null, primary key
-#  bounds       :geometry({:srid= geometry, 0
-#  center       :geometry({:srid= geometry, 0
+#  bounds       :geometry         geometry, 0
+#  center       :geometry         geometry, 0
 #  country_code :string
 #  locode       :string
 #  name         :string

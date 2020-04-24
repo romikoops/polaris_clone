@@ -28,7 +28,7 @@ end
 #
 #  id           :uuid             not null, primary key
 #  admin_level  :integer
-#  bounds       :geometry({:srid= geometry, 0
+#  bounds       :geometry         geometry, 0
 #  country_code :string
 #  name         :string
 #  created_at   :datetime         not null

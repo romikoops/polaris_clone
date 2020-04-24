@@ -12,7 +12,7 @@ end
 # Table name: trucking_coverages
 #
 #  id         :uuid             not null, primary key
-#  bounds     :geometry({:srid= geometry, 0
+#  bounds     :geometry         geometry, 0
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  hub_id     :integer
