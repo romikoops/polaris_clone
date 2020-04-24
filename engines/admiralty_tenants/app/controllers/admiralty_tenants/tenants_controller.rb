@@ -10,8 +10,7 @@ module AdmiraltyTenants
       @tenants = ::AdmiraltyTenants::TenantDecorator.decorate_collection(::Tenants::Tenant.order(:subdomain))
     end
 
-    def show
-    end
+    def show; end
 
     def new
       @tenant = ::AdmiraltyTenants::TenantDecorator.new(Tenants::Tenant.new)
@@ -36,8 +35,7 @@ module AdmiraltyTenants
       render :new
     end
 
-    def edit
-    end
+    def edit; end
 
     def update
       @tenant.update(slug: tenant_params[:slug])
@@ -64,14 +62,9 @@ module AdmiraltyTenants
 
     def update_max_dimensions
       @max_dimensions.each do |md|
-        md_params_id = params[:max_dimensions][md.id.to_s]
-        @max_dimensions.find(md.id).update(
-          dimension_x: md_params_id[:dimension_x],
-          dimension_y: md_params_id[:dimension_y],
-          dimension_z: md_params_id[:dimension_z],
-          payload_in_kg: md_params_id[:payload_in_kg],
-          chargeable_weight: md_params_id[:chargeable_weight]
-        )
+        md_params_id = max_dimensions_params[:max_dimensions][md.id.to_s]
+        update_hash = md_params_id.to_h.compact
+        @max_dimensions.find(md.id).update(update_hash)
       end
     end
 
@@ -95,6 +88,10 @@ module AdmiraltyTenants
       edited_scope.keys.each_with_object({}) do |key, hash|
         hash[key] = edited_scope[key] if edited_scope[key] != ::Tenants::DEFAULT_SCOPE[key]
       end
+    end
+
+    def max_dimensions_params
+      params.permit(max_dimensions: {})
     end
   end
 end

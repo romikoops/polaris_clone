@@ -25,8 +25,10 @@ module Legacy
                 message: "must be included in #{MODES_OF_TRANSPORT}"
               },
               allow_nil: true
-    validates :dimension_x, :dimension_y, :dimension_z, :payload_in_kg, :chargeable_weight,
-              numericality: true, allow_nil: true
+    validates :payload_in_kg, :chargeable_weight,
+              numericality: { greater_than: 0 }
+    validates :dimension_x, :dimension_y, :dimension_z,
+              numericality: { greater_than: 0 }, if: :dimensions_required?
     validates :cargo_class, presence: true
 
     scope :aggregate,  -> { where(aggregate: true, cargo_class: 'lcl') }
@@ -51,16 +53,16 @@ module Legacy
 
     CARGO_ITEM_AGGREGATE_DEFAULTS = {
       general: {
-        dimension_x: 0,
-        dimension_y: 0,
-        dimension_z: 0,
-        payload_in_kg: 0,
-        chargeable_weight: 0
+        dimension_x: 590,
+        dimension_y: 590,
+        dimension_z: 590,
+        payload_in_kg: 40_000,
+        chargeable_weight: 40_000
       },
       air: {
-        dimension_x: 0,
-        dimension_y: 0,
-        dimension_z: 0,
+        dimension_x: 590,
+        dimension_y: 590,
+        dimension_z: 590,
         payload_in_kg: 1_000.0,
         chargeable_weight: 1_000.0
       }
@@ -100,6 +102,10 @@ module Legacy
     end
 
     private
+
+    def dimensions_required?
+      aggregate.blank? || cargo_class == 'lcl'
+    end
 
     def self.excluded_in_options?(options, mode_of_transport)
       return false if options[:modes_of_transport].nil?
