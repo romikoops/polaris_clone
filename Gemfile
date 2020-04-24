@@ -162,6 +162,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 4.0', '< 5'
   gem 'fuubar'
   gem 'rails-erd'
+  gem 'rspec', '~> 3.9'
   gem 'rspec-rails'
   gem 'rspec_junit_formatter'
 
@@ -177,10 +178,10 @@ group :development, :test do
 end
 
 group :test do
+  gem 'rspec-retry'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'simplecov-cobertura', require: false
-  gem 'simplecov-workspace-lcov', require: false
   gem 'timecop'
   gem 'webmock'
 end

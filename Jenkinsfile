@@ -39,6 +39,8 @@ pipeline {
 
   stages {
     stage("Checkout") {
+      options { retry(2) }
+
       steps {
         defaultCheckout()
 
@@ -50,12 +52,16 @@ pipeline {
     stage("Prepare") {
       parallel {
         stage("Ruby") {
+          options { retry(2) }
+
           steps {
             container('ruby') { appPrepare() }
           }
         }
 
         stage("NPM") {
+          options { retry(2) }
+
           steps {
             container('node') {
               withCache(['client/node_modules=client/package-lock.json']) {
@@ -74,6 +80,8 @@ pipeline {
         stage('App') {
           stages {
             stage('RSpec') {
+              options { retry(2) }
+
               steps {
                 container('ruby') { appRunner('app') }
               }
@@ -84,6 +92,8 @@ pipeline {
         stage('Engines') {
           stages {
             stage('RSpec') {
+              options { retry(2) }
+
               steps {
                 container('ruby') { appRunner('engines') }
               }
@@ -94,6 +104,8 @@ pipeline {
         stage('Client') {
           stages {
             stage('Jest') {
+              options { retry(2) }
+
               steps {
                 container('node') {
                   dir('client') {
@@ -129,6 +141,8 @@ pipeline {
         stage("Polaris") {
           stages {
             stage("Docker") {
+              options { retry(2) }
+
               steps {
                 dockerBuild(
                   dir: '.',
@@ -145,6 +159,8 @@ pipeline {
         stage("Dipper") {
           stages {
             stage("Docker") {
+              options { retry(2) }
+
               steps {
                 dockerBuild(
                   dir: "client/",
@@ -161,6 +177,8 @@ pipeline {
         stage("S3") {
           stages {
             stage("Build") {
+              options { retry(2) }
+
               steps {
                 container("node") {
                   dir("client") {
@@ -172,6 +190,7 @@ pipeline {
 
             stage("Deploy") {
               when { branch "master" }
+              options { retry(2) }
 
               steps {
                 withSecrets {
@@ -193,6 +212,7 @@ pipeline {
 
     stage("Sentry") {
       when { branch "master" }
+      options { retry(2) }
 
       steps {
         sentryRelease(projects: ["api", "dipper"])

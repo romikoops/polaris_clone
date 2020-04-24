@@ -31,13 +31,7 @@ SimpleCov.configure do
     merge_timeout 3600
 
     require 'simplecov-cobertura'
-    require 'simplecov-workspace-lcov'
 
-    SimpleCov::Formatter::WorkspaceLcovFormatter.config.report_with_single_file = true
-    SimpleCov::Formatter::WorkspaceLcovFormatter.config.workspace_path = ENV['WORKSPACE_ROOT']
-    formatter SimpleCov::Formatter::MultiFormatter.new([
-                                                         SimpleCov::Formatter::CoberturaFormatter,
-                                                         SimpleCov::Formatter::WorkspaceLcovFormatter
-                                                       ])
+    formatter SimpleCov::Formatter::CoberturaFormatter
   end
 end
