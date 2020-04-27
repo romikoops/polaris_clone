@@ -138,9 +138,8 @@ export class AdminPricingsIndex extends Component {
     )
     const tabs = [(
       <Tab
-        tabTitle={t('admin:freight')}
+        tabTitle={t('admin:mainCarriage')}
         theme={theme}
-        mot="ocean"
       >
         <div className="flex-100 layout-row">
           <div className="flex-80 layout-row layout-align-center-start">
@@ -186,9 +185,8 @@ export class AdminPricingsIndex extends Component {
       </Tab>
     )]
     tabs.push(<Tab
-      tabTitle={t('admin:trucking')}
+      tabTitle={t('admin:preOnCarriage')}
       theme={theme}
-      mot="truck"
     >
       <AdminTrucking
         theme={theme}

@@ -18,10 +18,10 @@ exports[`pricingData is falsy 1`] = `
         isActive={false}
         isUniq={false}
         linkClassName=""
-        mot="ocean"
+        mot=""
         onClick={null}
         tabIndex={0}
-        tabTitle="Freight"
+        tabTitle="Main Carriage"
         theme={
           Object {
             "colors": Object {
@@ -157,10 +157,10 @@ exports[`pricingData is falsy 1`] = `
         isActive={false}
         isUniq={false}
         linkClassName=""
-        mot="truck"
+        mot=""
         onClick={null}
         tabIndex={0}
-        tabTitle="Trucking"
+        tabTitle="Pre/On-Carriage"
         theme={
           Object {
             "colors": Object {
@@ -204,10 +204,10 @@ exports[`scope.modes_of_transport is true 1`] = `
         isActive={false}
         isUniq={false}
         linkClassName=""
-        mot="ocean"
+        mot=""
         onClick={null}
         tabIndex={0}
-        tabTitle="Freight"
+        tabTitle="Main Carriage"
         theme={
           Object {
             "colors": Object {
@@ -343,10 +343,10 @@ exports[`scope.modes_of_transport is true 1`] = `
         isActive={false}
         isUniq={false}
         linkClassName=""
-        mot="truck"
+        mot=""
         onClick={null}
         tabIndex={0}
-        tabTitle="Trucking"
+        tabTitle="Pre/On-Carriage"
         theme={
           Object {
             "colors": Object {
@@ -390,10 +390,10 @@ exports[`shallow render 1`] = `
         isActive={false}
         isUniq={false}
         linkClassName=""
-        mot="ocean"
+        mot=""
         onClick={null}
         tabIndex={0}
-        tabTitle="Freight"
+        tabTitle="Main Carriage"
         theme={
           Object {
             "colors": Object {
@@ -529,10 +529,10 @@ exports[`shallow render 1`] = `
         isActive={false}
         isUniq={false}
         linkClassName=""
-        mot="truck"
+        mot=""
         onClick={null}
         tabIndex={0}
-        tabTitle="Trucking"
+        tabTitle="Pre/On-Carriage"
         theme={
           Object {
             "colors": Object {
@@ -576,10 +576,10 @@ exports[`state.state.redirectClients is true 1`] = `
         isActive={false}
         isUniq={false}
         linkClassName=""
-        mot="ocean"
+        mot=""
         onClick={null}
         tabIndex={0}
-        tabTitle="Freight"
+        tabTitle="Main Carriage"
         theme={
           Object {
             "colors": Object {
@@ -715,10 +715,10 @@ exports[`state.state.redirectClients is true 1`] = `
         isActive={false}
         isUniq={false}
         linkClassName=""
-        mot="truck"
+        mot=""
         onClick={null}
         tabIndex={0}
-        tabTitle="Trucking"
+        tabTitle="Pre/On-Carriage"
         theme={
           Object {
             "colors": Object {
@@ -762,10 +762,10 @@ exports[`state.state.redirectRoutes is true 1`] = `
         isActive={false}
         isUniq={false}
         linkClassName=""
-        mot="ocean"
+        mot=""
         onClick={null}
         tabIndex={0}
-        tabTitle="Freight"
+        tabTitle="Main Carriage"
         theme={
           Object {
             "colors": Object {
@@ -901,10 +901,10 @@ exports[`state.state.redirectRoutes is true 1`] = `
         isActive={false}
         isUniq={false}
         linkClassName=""
-        mot="truck"
+        mot=""
         onClick={null}
         tabIndex={0}
-        tabTitle="Trucking"
+        tabTitle="Pre/On-Carriage"
         theme={
           Object {
             "colors": Object {

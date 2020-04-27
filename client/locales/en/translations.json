@@ -596,6 +596,8 @@
       "noFees": "This pricing has no fees",
       "counterpartHub" : "Counterpart Hub",
       "freight": "Freight",
+      "mainCarriage": "Main Carriage",
+      "preOnCarriage": "Pre/On-Carriage",
       "localCharges": "Local Charges",
       "chooseHub": "Choose Hub",
       "typeOfMargin": "Type of Margin",
