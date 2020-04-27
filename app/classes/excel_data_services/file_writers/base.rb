@@ -27,6 +27,7 @@ module ExcelDataServices
       PRICING_COMMON_LOOKUP = {
         group_id: :group_id,
         group_name: :group_name,
+        transshipment: :transshipment,
         effective_date: :effective_date,
         expiration_date: :expiration_date,
         customer_email: :customer_email,

@@ -7,7 +7,6 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
   let(:tenant) { FactoryBot.create(:tenant) }
   let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:itinerary) { create(:gothenburg_shanghai_itinerary) }
-  let!(:trips) { create(:trip, itinerary_id: itinerary.id) }
   let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
   let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
   let(:static_pricing_headers) do
@@ -16,7 +15,11 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
       .map { |header| header.to_s.upcase }
   end
 
-  context 'container' do
+  before { create(:trip, itinerary_id: itinerary.id) }
+
+  context 'when container' do
+    before { pricing_row }
+
     let(:dynamic_pricing_headers) do
       %w[
         TRANSIT_TIME
@@ -25,8 +28,9 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
     let(:pricing_row) do
       [
-        pricing.respond_to?(:group_id) ? pricing.group_id : nil,
-        pricing.respond_to?(:group_id) ? Tenants::Group.find_by(id: pricing.group_id).name : nil,
+        pricing.group_id,
+        Tenants::Group.find_by(id: pricing.group_id)&.name,
+        pricing.transshipment,
         pricing.effective_date.to_date,
         pricing.expiration_date.to_date,
         nil,
@@ -46,12 +50,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
 
     context 'when all pricings are valid' do
-      before do
-        create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
-      end
-
-      let!(:charge_category) { create(:charge_category, :bas, tenant: tenant) }
-      let!(:pricing) { create(:legacy_fcl_20_pricing, tenant: tenant, itinerary: itinerary) }
+      let(:pricing) { create(:fcl_20_pricing, tenant: tenant, itinerary: itinerary) }
       let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean' }) }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
@@ -61,7 +60,6 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           aggregate_failures 'testing sheet values' do
             headers = first_sheet.row(1)
             static_headers = headers[0..-3]
-            dynamic_headers = headers[-2..-1]
             expect(static_headers).to eq(static_pricing_headers)
             expect(first_sheet.row(2)).to eq(pricing_row)
           end
@@ -71,7 +69,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
 
     context 'when all pricings are valid with attached group' do
       let(:group_id) { create(:tenants_group, tenant: tenants_tenant, name: 'TEST').id }
-      let!(:pricing) { create(:fcl_20_pricing, tenant: tenant, group_id: group_id, itinerary: itinerary) }
+      let(:pricing) { create(:fcl_20_pricing, tenant: tenant, group_id: group_id, itinerary: itinerary) }
       let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean', group_id: group_id }) }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
@@ -91,7 +89,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
   end
 
-  context 'cargo_item' do
+  context 'with cargo_item' do
     let(:dynamic_pricing_headers) do
       %w[
         TRANSIT_TIME
@@ -100,12 +98,9 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
 
     context 'when all pricings are valid' do
-      before do
-        create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
-      end
-
       let(:pricing_row) do
         [
+          nil,
           nil,
           nil,
           pricing.effective_date.to_date,
@@ -125,8 +120,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           25
         ]
       end
-      let!(:charge_category) { create(:charge_category, :bas, tenant: tenant) }
-      let!(:pricing) { create(:legacy_lcl_pricing, tenant: tenant, itinerary: itinerary) }
+
+      let!(:pricing) { create(:lcl_pricing, tenant: tenant, itinerary: itinerary) }
       let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean' }) }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
@@ -147,12 +142,12 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
 
     context 'when some pricings are expired' do
       before do
-        create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
-        create(:legacy_lcl_pricing, tenant: tenant, itinerary: itinerary, expiration_date: Time.zone.now - 10.days, effective_date: Time.zone.now - 30.days, transport_category: transport_category)
+        create(:lcl_pricing, tenant: tenant, itinerary: itinerary, expiration_date: Time.zone.now - 10.days, effective_date: Time.zone.now - 30.days)
       end
 
       let(:pricing_row) do
         [
+          nil,
           nil,
           nil,
           pricing.effective_date.to_date,
@@ -172,8 +167,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           25
         ]
       end
-      let(:transport_category) { create(:ocean_lcl) }
-      let!(:pricing) { create(:legacy_lcl_pricing, tenant: tenant, itinerary: itinerary, transport_category: transport_category) }
+      let!(:pricing) { create(:lcl_pricing, tenant: tenant, itinerary: itinerary) }
       let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean' }) }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
@@ -194,11 +188,12 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
            described_class::HEADER_COLLECTION::PRICING_ONE_FEE_COL_AND_RANGES).map { |header| header.to_s.upcase }
       end
       let(:group_id) { create(:tenants_group, tenant: tenants_tenant, name: 'TEST').id }
-      let(:pricing) { create(:pricings_pricing, tenant: tenant, group_id: group_id, itinerary: itinerary) }
+      let(:pricing) { create(:pricings_pricing, tenant: tenant, group_id: group_id, itinerary: itinerary, transshipment: 'ZACPT') }
       let(:pricing_row) do
         [
           pricing.group_id,
           Tenants::Group.find_by(id: pricing.group_id).name,
+          pricing.transshipment,
           pricing.effective_date.to_date,
           pricing.expiration_date.to_date,
           nil,
@@ -220,7 +215,11 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           8
         ]
       end
-      let!(:fee) do
+      let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean', group_id: group_id }) }
+      let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
+      let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
+
+      before do
         create(:pricings_fee, pricing_id: pricing.id,
                               range: [
                                 { min: 0.0, max: 4.9, rate: 8 },
@@ -228,11 +227,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
                               ],
                               rate_basis: create(:per_wm_rate_basis),
                               rate: 25,
-                              charge_category: create(:bas_charge))
+                              charge_category: create(:bas_charge, tenant: tenant))
       end
-      let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean', group_id: group_id }) }
-      let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
-      let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
       describe '.perform' do
         it 'writes all pricings to the sheet' do

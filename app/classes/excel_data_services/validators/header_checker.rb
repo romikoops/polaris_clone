@@ -64,6 +64,7 @@ module ExcelDataServices
         OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES = %i[
           group_id
           group_name
+          transshipment
         ].freeze
 
         PRICING_ONE_FEE_COL_AND_RANGES = %i[
@@ -91,6 +92,7 @@ module ExcelDataServices
         OPTIONAL_PRICING_ONE_FEE_COL_AND_RANGES = %i[
           group_id
           group_name
+          transshipment
         ].freeze
 
         SACO_SHIPPING = %i[
@@ -236,7 +238,6 @@ module ExcelDataServices
         mandatory_headers = headers_for_restructurer(restructurer_name: restructurer_name, header_type: :mandatory)
         matching_headers = mandatory_headers & parsed_headers
         missing_headers = mandatory_headers - matching_headers
-
         if below_threshold?(matching_size: matching_headers.size, mandatory_size: mandatory_headers.size)
           add_to_errors(
             type: :error,
@@ -281,10 +282,13 @@ module ExcelDataServices
       end
 
       def restructurer_names
-        self.class::StaticHeadersForRestructurers.constants(false).each_with_object([]) do |constant, constants|
+        names = self.class::StaticHeadersForRestructurers.constants(false).each_with_object([]) do |constant, constants|
           name = constant.to_s.downcase
           constants << name unless name.starts_with?('optional')
         end
+
+        names -= ['pricing_one_fee_col_and_ranges'] unless parsed_headers.include?(:fee_code)
+        names
       end
 
       def all_headers_for_restructurer(restructurer_name:)
