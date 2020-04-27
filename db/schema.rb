@@ -1310,6 +1310,74 @@ ActiveRecord::Schema.define(version: 2020_04_21_091851) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "rates_cargos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "applicable_to", default: 0
+    t.integer "cargo_class", default: 0
+    t.integer "cargo_type", default: 0
+    t.integer "category", default: 0
+    t.decimal "cbm_ratio"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.integer "operator"
+    t.integer "order", default: 0
+    t.uuid "section_id"
+    t.datetime "updated_at", null: false
+    t.integer "valid_at"
+    t.index ["cargo_class"], name: "index_rates_cargos_on_cargo_class"
+    t.index ["cargo_type"], name: "index_rates_cargos_on_cargo_type"
+    t.index ["category"], name: "index_rates_cargos_on_category"
+    t.index ["section_id"], name: "index_rates_cargos_on_section_id"
+  end
+
+  create_table "rates_fees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "amount_cents", default: 0, null: false
+    t.string "amount_currency", null: false
+    t.uuid "cargo_id"
+    t.numrange "cbm_range"
+    t.decimal "cbm_ratio", default: "1000.0"
+    t.datetime "created_at", null: false
+    t.numrange "kg_range"
+    t.numrange "km_range"
+    t.integer "level", default: 0, null: false
+    t.bigint "max_amount_cents", default: 0, null: false
+    t.string "max_amount_currency", null: false
+    t.bigint "min_amount_cents", default: 0, null: false
+    t.string "min_amount_currency", null: false
+    t.integer "operator", default: 0, null: false
+    t.integer "rate_basis", default: 0, null: false
+    t.jsonb "rule"
+    t.numrange "stowage_range"
+    t.numrange "unit_range"
+    t.datetime "updated_at", null: false
+    t.daterange "validity"
+    t.numrange "wm_range"
+    t.index ["cargo_id"], name: "index_rates_fees_on_cargo_id"
+  end
+
+  create_table "rates_sections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "carrier_id"
+    t.datetime "created_at", null: false
+    t.boolean "disabled"
+    t.decimal "ldm_area_divisor"
+    t.integer "ldm_measurement"
+    t.decimal "ldm_ratio", default: "0.0"
+    t.decimal "ldm_threshold", default: "0.0"
+    t.integer "ldm_threshold_applicable"
+    t.uuid "location_id"
+    t.integer "mode_of_transport"
+    t.uuid "target_id"
+    t.string "target_type"
+    t.uuid "tenant_id"
+    t.uuid "terminal_id"
+    t.decimal "truck_height"
+    t.datetime "updated_at", null: false
+    t.index ["carrier_id"], name: "index_rates_sections_on_carrier_id"
+    t.index ["location_id"], name: "index_rates_sections_on_location_id"
+    t.index ["target_type", "target_id"], name: "index_rates_sections_on_target_type_and_target_id"
+    t.index ["tenant_id"], name: "index_rates_sections_on_tenant_id"
+    t.index ["terminal_id"], name: "index_rates_sections_on_terminal_id"
+  end
+
   create_table "remarks", force: :cascade do |t|
     t.string "body"
     t.string "category"
@@ -2202,6 +2270,12 @@ ActiveRecord::Schema.define(version: 2020_04_21_091851) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "profiles_profiles", "tenants_users", column: "user_id", on_delete: :cascade
   add_foreign_key "quotations_tenders", "quotations_quotations", column: "quotation_id"
+  add_foreign_key "rates_cargos", "rates_sections", column: "section_id"
+  add_foreign_key "rates_fees", "rates_cargos", column: "cargo_id"
+  add_foreign_key "rates_sections", "carriers"
+  add_foreign_key "rates_sections", "routing_locations", column: "location_id"
+  add_foreign_key "rates_sections", "routing_terminals", column: "terminal_id"
+  add_foreign_key "rates_sections", "tenants_tenants", column: "tenant_id"
   add_foreign_key "remarks", "tenants"
   add_foreign_key "shipments", "transport_categories"
   add_foreign_key "shipments_cargos", "tenants_sandboxes", column: "sandbox_id"
