@@ -98,6 +98,20 @@ module Api
         end
       end
 
+      context 'when creating clients without group_id params' do
+        let(:user_info) { FactoryBot.attributes_for(:legacy_user) }
+
+        before do
+          FactoryBot.create(:tenants_group, tenant: tenant, name: 'default')
+        end
+
+        it 'assigns the default group of the tenant to the new user membership' do
+          perform_request
+          user = Legacy::User.find_by(email: user_info.dig(:email))
+          expect(user.all_groups.pluck(:name)).to include('default')
+        end
+      end
+
       context 'when request is unsuccessful (bad or missing data)' do
         let(:request_object) do
           post :create, params: { client: { **user_info, **profile_info, **address_info, role: role.name, email: nil } }, as: :json

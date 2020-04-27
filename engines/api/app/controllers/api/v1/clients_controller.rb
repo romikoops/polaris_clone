@@ -76,6 +76,8 @@ module Api
       end
 
       def create_user_group(tenants_user:)
+        return if params[:group_id].nil?
+
         Tenants::Membership.create!(member: tenants_user, group_id: client_params[:group_id])
       end
     end
