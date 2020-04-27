@@ -69,7 +69,9 @@ module OfferCalculator
             valid_charge.merge(result[:grouped_result].slice(:pricings_by_cargo_class))
           end
         end
-        handle_errors(errors: results_for_quotation) if results_for_quotation.all? { |result| result[:error].present? }
+        if results_for_quotation.present? && results_for_quotation.all? { |result| result[:error].present? }
+          handle_errors(errors: results_for_quotation)
+        end
 
         results_for_quotation.reject { |result| result[:error].present? }
       end
@@ -209,6 +211,8 @@ module OfferCalculator
       end
 
       def filter_rate_overview(rate_overview:, valid_until:)
+        return {} if @scope[:show_rate_overview].blank?
+
         rate_overview.each_with_object({}) do |(key, rates), result|
           correct_rate = rates.find do |rate|
             valid_until.between?(rate['effective_date'], rate['expiration_date'])
