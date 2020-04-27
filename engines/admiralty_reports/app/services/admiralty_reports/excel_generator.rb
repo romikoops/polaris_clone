@@ -28,7 +28,7 @@ module AdmiraltyReports
           request_tenant = request.try(:tenant) || Legacy::Shipment.find(request.original_shipment_id).tenant
           sheet.add_row(
             [request_tenant.try(:name) || request_tenant.try(:slug),
-             request.updated_at.to_date,
+             request.created_at.to_date,
              request_user&.email,
              request_user&.company&.name,
              request.try(:status)]

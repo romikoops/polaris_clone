@@ -13,7 +13,7 @@ module AdmiraltyReports
                            user: user,
                            tenant: tenant,
                            updated_at: Date.new(2020, 2, 3),
-                           created_at: Date.new(2020, 2, 2),
+                           created_at: Date.new(2020, 2, 1),
                            status: 'accepted'),
           FactoryBot.build(:quotations_quotation,
                            tenant: quotation_tenant,
@@ -28,9 +28,9 @@ module AdmiraltyReports
 
         let(:expected_headers) { ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Company', 'Status'] }
 
-        let(:expected_shipment) { ['Test Tenant', DateTime.new(2020, 2, 3), 'imc@imc.com', nil, 'accepted'] }
+        let(:expected_shipment) { ['Test Tenant', Date.new(2020, 2, 1), 'imc@imc.com', nil, 'accepted'] }
 
-        let(:expected_quotation) { ['quotetenant', DateTime.new(2020, 2, 3), 'imc@imc.com', nil, nil] }
+        let(:expected_quotation) { ['quotetenant', Date.new(2020, 2, 1), 'imc@imc.com', nil, nil] }
 
         let(:generated_file) { Roo::Excelx.new(subject.to_stream) }
 
