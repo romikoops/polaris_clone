@@ -83,13 +83,13 @@ module RmsSync
               when 'EXPIRATION_DATE'
                 fee.pricing.expiration_date
               when 'ORIGIN'
-                hub_name(fee.pricing.itinerary&.first_stop&.hub)
+                hub_name(fee.pricing.itinerary&.origin_hub)
               when 'COUNTRY_ORIGIN'
-                fee.pricing.itinerary&.first_stop&.hub&.address&.country&.name
+                fee.pricing.itinerary&.origin_hub&.address&.country&.name
               when 'DESTINATION'
-                hub_name(fee.pricing.itinerary&.last_stop&.hub)
+                hub_name(fee.pricing.itinerary&.destination_hub)
               when 'COUNTRY_DESTINATION'
-                fee.pricing.itinerary&.last_stop&.hub&.address&.country&.name
+                fee.pricing.itinerary&.destination_hub&.address&.country&.name
               when 'MOT'
                 fee.pricing.itinerary&.mode_of_transport
               when 'CARRIER'

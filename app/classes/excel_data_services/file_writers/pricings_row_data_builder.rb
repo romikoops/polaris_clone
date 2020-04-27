@@ -31,10 +31,10 @@ module ExcelDataServices
         customer_email = pricing.user&.email
         itinerary = pricing.itinerary
         mot = itinerary.mode_of_transport
-        origin_hub = itinerary.origin_stops.first.hub
+        origin_hub = itinerary.origin_hub
         origin_hub_name = remove_hub_suffix(origin_hub.name, mot)
         origin_country_name = origin_hub.address.country.name
-        destination_hub = itinerary.destination_stops.first.hub
+        destination_hub = itinerary.destination_hub
         destination_hub_name = remove_hub_suffix(destination_hub.name, mot)
         destination_country_name = destination_hub.address.country.name
         carrier_name = pricing.carrier

@@ -47,8 +47,8 @@ module RmsSync
                 cell_data(
                   itinerary: itinerary,
                   tenant_vehicle: tenant_vehicle,
-                  header: head, 
-                  row: row_index, 
+                  header: head,
+                  row: row_index,
                   index: header_index,
                   cargo_classes: cargo_classes
                 )
@@ -83,13 +83,13 @@ module RmsSync
 
         value = case header
                 when 'ORIGIN'
-                  hub_name(itinerary&.first_stop&.hub)
+                  hub_name(itinerary&.origin_hub)
                 when 'COUNTRY_ORIGIN'
-                  itinerary&.first_stop&.hub&.address&.country&.name
+                  itinerary&.origin_hub&.address&.country&.name
                 when 'DESTINATION'
-                  hub_name(itinerary&.last_stop&.hub)
+                  hub_name(itinerary&.destination_hub)
                 when 'COUNTRY_DESTINATION'
-                  itinerary&.last_stop&.hub&.address&.country&.name
+                  itinerary&.destination_hub&.address&.country&.name
                 when 'MOT'
                   itinerary&.mode_of_transport
                 when 'CARRIER'

@@ -5,7 +5,6 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
   include ItineraryTools
 
   belongs_to :tenant
-  has_many :stops,     dependent: :destroy
   has_many :layovers,  dependent: :destroy
   has_many :shipments, dependent: :destroy
   has_many :trips,     dependent: :destroy
@@ -208,14 +207,6 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     stops.order(index: :desc).limit(1).first
   end
 
-  def origin_stops
-    stops.where.not(id: last_stop.id).order(index: :asc)
-  end
-
-  def destination_stops
-    stops.where.not(id: first_stop.id).order(index: :desc)
-  end
-
   def first_nexus
     first_stop.hub.nexus
   end
@@ -238,14 +229,6 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
 
   def destination_nexus_ids
     destination_stops.joins(:hub).pluck('hubs.nexus_id')
-  end
-
-  def origin_hub_ids
-    origin_stops.pluck(:hub_id)
-  end
-
-  def destination_hub_ids
-    destination_stops.pluck(:hub_id)
   end
 
   def origin_nexuses

@@ -5,7 +5,7 @@ module Legacy
     include PgSearch::Model
     self.table_name = 'itineraries'
     belongs_to :tenant
-    has_many :stops,     dependent: :destroy
+    has_many :stops, dependent: :destroy
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_many :layovers,  dependent: :destroy
     has_many :shipments, dependent: :destroy
@@ -239,19 +239,19 @@ module Legacy
     end
 
     def first_stop
-      stops.order(index: :asc).limit(1).first
+      stops.reorder(index: :asc).limit(1).first
     end
 
     def last_stop
-      stops.order(index: :desc).limit(1).first
+      stops.reorder(index: :desc).limit(1).first
     end
 
     def origin_stops
-      stops.where.not(id: last_stop.id).order(index: :asc)
+      stops.where(index: 0)
     end
 
     def destination_stops
-      stops.where.not(id: first_stop.id).order(index: :desc)
+      stops.where(index: 1)
     end
 
     def first_nexus
