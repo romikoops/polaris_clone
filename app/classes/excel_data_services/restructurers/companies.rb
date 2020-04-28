@@ -5,7 +5,7 @@ module ExcelDataServices
     class Companies < ExcelDataServices::Restructurers::Base
       def perform
         restructured_data = data[:rows_data].map do |row|
-          row[:address_id] = Legacy::Address.geocoded_address(row[:address])
+          row[:address_id] = Legacy::Address.geocoded_address(row[:address])&.id
 
           row
         end

@@ -33,7 +33,7 @@ module ExcelDataServices
 
       def update_or_create_address(params:)
         address = Legacy::Address.find_or_initialize_by(params)
-        add_stats(address)
+        add_stats(address, params[:row_nr])
         address.save
 
         address
@@ -42,7 +42,7 @@ module ExcelDataServices
       def update_or_create_hub(params:)
         hub = Legacy::Hub.find_or_initialize_by(params.slice(:name, :hub_code, :tenant_id))
         hub.assign_attributes(params)
-        add_stats(hub)
+        add_stats(hub, params[:row_nr])
         hub.save
 
         hub
@@ -51,7 +51,7 @@ module ExcelDataServices
       def update_or_create_nexus(params:)
         nexus = Legacy::Nexus.find_or_initialize_by(params.slice(:name, :locode, :tenant_id))
         nexus.assign_attributes(params)
-        add_stats(nexus)
+        add_stats(nexus, params[:row_nr])
         nexus.save
 
         nexus

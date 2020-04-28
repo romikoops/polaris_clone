@@ -9,7 +9,7 @@ module ExcelDataServices
           next if itinerary.blank?
 
           trip = init_trip_with_layovers(params, itinerary)
-          add_stats(trip)
+          add_stats(trip, params[:row_nr])
 
           trip.save
         end

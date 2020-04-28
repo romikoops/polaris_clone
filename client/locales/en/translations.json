@@ -229,6 +229,7 @@
       "shipmentAccepted": "Shipment accepted!",
       "continue": "Continue",
       "uploadSuccessful": "Upload Successful!",
+      "uploadCompleted": "Upload Completed!",
       "uploadFailed": "Upload Failed!",
       "numberCreated": "No. created:",
       "numberUpdated": "No. updated:",

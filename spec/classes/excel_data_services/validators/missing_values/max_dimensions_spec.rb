@@ -20,7 +20,7 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::MaxDimensions do
           dimension_z: nil,
           payload_in_kg: 10_000,
           chargeable_weight: nil,
-          load_type: 'fcl_20',
+          cargo_class: 'fcl_20',
           aggregate: nil,
           row_nr: 2
         },
@@ -35,7 +35,7 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::MaxDimensions do
           dimension_z: nil,
           payload_in_kg: nil,
           chargeable_weight: nil,
-          load_type: nil,
+          cargo_class: nil,
           aggregate: nil,
           row_nr: 3
         }

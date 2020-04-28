@@ -25,8 +25,8 @@ module Legacy
                 message: "must be included in #{MODES_OF_TRANSPORT}"
               },
               allow_nil: true
-    validates :payload_in_kg, :chargeable_weight,
-              numericality: { greater_than: 0 }
+    validates :payload_in_kg, numericality: { greater_than: 0 }
+    validates :chargeable_weight, numericality: { greater_than: 0 }, if: :lcl?
     validates :dimension_x, :dimension_y, :dimension_z,
               numericality: { greater_than: 0 }, if: :dimensions_required?
     validates :cargo_class, presence: true
@@ -104,7 +104,11 @@ module Legacy
     private
 
     def dimensions_required?
-      aggregate.blank? || cargo_class == 'lcl'
+      aggregate.blank? && cargo_class == 'lcl'
+    end
+
+    def lcl?
+      cargo_class == 'lcl'
     end
 
     def self.excluded_in_options?(options, mode_of_transport)

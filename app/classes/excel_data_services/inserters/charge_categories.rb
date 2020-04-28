@@ -21,7 +21,7 @@ module ExcelDataServices
         )
 
         correct_charge_category.name = params[:fee_name] if correct_charge_category.name != params[:fee_name]
-        add_stats(correct_charge_category)
+        add_stats(correct_charge_category, params[:row_nr])
         correct_charge_category.save!
         validate_and_correct_existing_charges(correct_charge_category)
       end

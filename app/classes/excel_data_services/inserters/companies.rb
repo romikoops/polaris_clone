@@ -20,13 +20,13 @@ module ExcelDataServices
           email: params[:email]
         )
 
-        add_stats(company)
+        add_stats(company, params[:row_nr])
         company.update(
           vat_number: params[:vat_number],
           external_id: params[:external_id],
           phone: params[:phone],
           email: params[:email],
-          address_id: params[:address_id]&.id,
+          address_id: params[:address_id],
           sandbox: @sandbox
         )
       end

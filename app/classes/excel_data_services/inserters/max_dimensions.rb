@@ -34,12 +34,16 @@ module ExcelDataServices
 
       def update_or_create_max_dimensions_bundle(params:, carrier:, tenant_vehicle:)
         max_dimension = Legacy::MaxDimensionsBundle.find_or_initialize_by(
-          carrier: carrier, tenant_vehicle: tenant_vehicle, tenant: @tenant, cargo_class: params[:cargo_class]
+          mode_of_transport: params[:mode_of_transport],
+          carrier: carrier,
+          tenant_vehicle: tenant_vehicle,
+          tenant: @tenant,
+          cargo_class: params[:cargo_class]
         )
         max_dimension.assign_attributes(
           params.slice(:payload_in_kg, :dimension_x, :dimension_y, :dimension_z, :chargeable_weight)
         )
-        add_stats(max_dimension)
+        add_stats(max_dimension, params[:row_nr])
         max_dimension.save
 
         max_dimension

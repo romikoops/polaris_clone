@@ -27,7 +27,7 @@ module ExcelDataServices
         tenants_user = Tenants::User.find_by(legacy_id: legacy_user)
         tenants_user.update(company: params[:company])
         update_or_create_employee_profile(employee: tenants_user, params: params)
-        add_stats(tenants_user, true)
+        add_stats(tenants_user, params[:row_nr], true)
       end
 
       def update_or_create_employee_profile(employee:, params:)

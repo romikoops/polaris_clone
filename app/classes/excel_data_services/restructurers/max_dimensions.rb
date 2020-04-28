@@ -8,6 +8,7 @@ module ExcelDataServices
         restructurer_name = data[:restructurer_name]
         restructured_data = replace_nil_equivalents_with_nil(data[:rows_data])
         restructured_data = downcase_load_types(restructured_data)
+        restructured_data = rename_load_types_to_cargo_class(restructured_data)
         restructured_data = enforce_numerics(restructured_data)
         restructured_data = sanitize_service_level_and_carrier(restructured_data)
         restructured_data = expand_fcl_to_all_sizes(restructured_data)

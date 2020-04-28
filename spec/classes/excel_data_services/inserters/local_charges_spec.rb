@@ -39,7 +39,7 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
     end
     let(:input_data) { build(:excel_data_restructured_correct_local_charges) }
     let(:expected_stats) do
-      { 'legacy/local_charges': { number_created: 4, number_updated: 0, number_deleted: 1 } }
+      { 'legacy/local_charges': { number_created: 4, number_updated: 0, number_deleted: 1 }, errors: [] }
     end
     let(:expected_partial_db_data) do
       [

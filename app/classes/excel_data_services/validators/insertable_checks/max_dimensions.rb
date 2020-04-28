@@ -13,7 +13,7 @@ module ExcelDataServices
         end
 
         def check_load_type(row)
-          return if VALID_LOAD_TYPES.include?(row[:load_type])
+          return if VALID_LOAD_TYPES.include?(row[:cargo_class])
 
           add_to_errors(
             type: :error,

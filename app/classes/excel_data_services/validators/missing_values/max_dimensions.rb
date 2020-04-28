@@ -18,17 +18,17 @@ module ExcelDataServices
               type: :error,
               row_nr: row.nr,
               sheet_name: sheet_name,
-              reason: "Missing value for #{row_key.upcase}.",
+              reason: "Missing value for #{row_key == :cargo_class ? 'LOAD_TYPE' : row_key.upcase}.",
               exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues
             )
           end
         end
 
         def row_requirements(row)
-          if row[:load_type]&.include?('fcl')
-            %i[payload_in_kg load_type]
+          if row[:cargo_class]&.include?('fcl')
+            %i[payload_in_kg cargo_class]
           else
-            %i[dimension_z dimension_x dimension_y payload_in_kg chargeable_weight load_type]
+            %i[dimension_z dimension_x dimension_y payload_in_kg chargeable_weight cargo_class]
           end
         end
       end

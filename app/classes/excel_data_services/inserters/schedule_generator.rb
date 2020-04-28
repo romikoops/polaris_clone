@@ -43,7 +43,7 @@ module ExcelDataServices
                 load_type: params[:cargo_class].to_s,
                 sandbox: @sandbox
               )
-              trip_results.each { |trip| add_stats(trip, true) }
+              trip_results.each { |trip| add_stats(trip, params[:row_nr], true) }
             end
           end
         end

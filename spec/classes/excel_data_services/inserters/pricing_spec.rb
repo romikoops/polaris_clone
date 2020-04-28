@@ -16,24 +16,13 @@ RSpec.shared_examples 'Pricing .insert' do
     dates = pricings.pluck(:effective_date, :expiration_date)
     expect(dates).to match_array(expected_dates)
     pricing_details = base_pricing ? ::Pricings::Fee.where(pricing: pricings) : ::PricingDetail.where(priceable: pricings)
-    pricing_details_values =
-      if base_pricing
-        pricing_details.joins(:rate_basis).pluck(
-          :rate,
-          'pricings_rate_bases.external_code',
-          :min,
-          :range,
-          :currency_name
-        )
-      else
-        pricing_details.pluck(
-          :rate,
-          :rate_basis,
-          :min,
-          :range,
-          :currency_name
-        )
-      end
+    pricing_details_values = pricing_details.joins(:rate_basis).pluck(
+      :rate,
+      'pricings_rate_bases.external_code',
+      :min,
+      :range,
+      :currency_name
+    )
     expect(pricing_details_values).to match_array(expected_pricing_details_values)
   end
 end
@@ -143,22 +132,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 3 },
-            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 } }
-        end
-
-        include_examples 'Pricing .insert'
-      end
-
-      context 'with scope attribute \'base_pricing\' set to >>> false <<<' do
-        let!(:scope) do
-          ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
-                                             content: { 'base_pricing' => false })
-        end
-        let!(:expected_stats) do
-          { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "legacy/pricings": { number_created: 21, number_updated: 3, number_deleted: 0 },
-            "legacy/pricing_details": { number_created: 28, number_deleted: 0, number_updated: 0 } }
+            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 },
+            errors: [] }
         end
 
         include_examples 'Pricing .insert'
@@ -250,36 +225,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 4 },
-            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 } }
-        end
-
-        include_examples 'Pricing .insert'
-      end
-
-      context 'with scope attribute \'base_pricing\' set to >>> false <<<' do
-        let!(:pricings) do
-          [
-            create(:pricing,
-                   wm_rate: 0.1e4,
-                   effective_date: DateTime.new(2018, 3, 1),
-                   expiration_date: DateTime.new(2019, 3, 16, 23, 59, 59),
-                   tenant: tenant,
-                   transport_category: TransportCategory.find_by(cargo_class: 'fcl_20'),
-                   user_id: nil,
-                   itinerary: itineraries.first,
-                   tenant_vehicle: tenant_vehicle,
-                   pricing_detail_attrs: { rate: 1111, rate_basis: 'PER_CONTAINER' })
-          ]
-        end
-        let!(:scope) do
-          ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
-                                             content: { 'base_pricing' => false })
-        end
-        let!(:expected_stats) do
-          { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 21, number_deleted: 0, number_updated: 4 },
-            "legacy/pricing_details": { number_created: 28, number_deleted: 0, number_updated: 0 },
-            "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
+            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 },
+            errors: [] }
         end
 
         include_examples 'Pricing .insert'
@@ -371,36 +318,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 3 },
-            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 } }
-        end
-
-        include_examples 'Pricing .insert'
-      end
-
-      context 'with scope attribute \'base_pricing\' set to >>> false <<<' do
-        let!(:pricings) do
-          [
-            create(:pricing,
-                   wm_rate: 0.1e4,
-                   effective_date: DateTime.new(2019, 6, 20),
-                   expiration_date: DateTime.new(2019, 7, 20, 23, 59, 59),
-                   tenant: tenant,
-                   transport_category: TransportCategory.find_by(cargo_class: 'lcl'),
-                   user_id: nil,
-                   itinerary: itineraries.first,
-                   tenant_vehicle: tenant_vehicle,
-                   pricing_detail_attrs: { rate_basis: 'PER_WM', rate: 11 })
-          ]
-        end
-        let!(:scope) do
-          ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
-                                             content: { 'base_pricing' => false })
-        end
-        let!(:expected_stats) do
-          { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 21, number_deleted: 0, number_updated: 3 },
-            "legacy/pricing_details": { number_created: 28, number_deleted: 0, number_updated: 0 },
-            "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
+            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 },
+            errors: [] }
         end
 
         include_examples 'Pricing .insert'
@@ -494,36 +413,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 8 },
-            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 } }
-        end
-
-        include_examples 'Pricing .insert'
-      end
-
-      context 'with scope attribute \'base_pricing\' set to >>> false <<<' do
-        let!(:pricings) do
-          [
-            create(:pricing,
-                   wm_rate: 0.1e4,
-                   effective_date: DateTime.new(2017, 6, 1),
-                   expiration_date: DateTime.new(2019, 7, 20, 23, 59, 59),
-                   tenant: tenant,
-                   transport_category: TransportCategory.find_by(cargo_class: 'lcl'),
-                   user_id: nil,
-                   itinerary: itineraries.first,
-                   tenant_vehicle: tenant_vehicle,
-                   pricing_detail_attrs: { rate_basis: 'PER_WM', rate: 11 })
-          ]
-        end
-        let!(:scope) do
-          ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
-                                             content: { 'base_pricing' => false })
-        end
-        let!(:expected_stats) do
-          { "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 22, number_deleted: 0, number_updated: 8 },
-            "legacy/pricing_details": { number_created: 28, number_deleted: 0, number_updated: 0 },
-            "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 } }
+            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 },
+            errors: [] }
         end
 
         include_examples 'Pricing .insert'
@@ -613,36 +504,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "pricings/pricings": { number_created: 21, number_deleted: 1, number_updated: 6 },
-            "pricings/fees": { number_created: 28, number_deleted: 1, number_updated: 0 } }
-        end
-
-        include_examples 'Pricing .insert'
-      end
-
-      context 'with scope attribute \'base_pricing\' set to >>> false <<<' do
-        let!(:pricings) do
-          [
-            create(:pricing,
-                   wm_rate: 0.1e4,
-                   effective_date: DateTime.new(2018, 3, 16),
-                   expiration_date: DateTime.new(2019, 3, 20, 23, 59, 59),
-                   tenant: tenant,
-                   transport_category: TransportCategory.find_by(cargo_class: 'lcl'),
-                   user_id: nil,
-                   itinerary: itineraries.first,
-                   tenant_vehicle: tenant_vehicle,
-                   pricing_detail_attrs: { rate_basis: 'PER_WM', rate: 11 })
-          ]
-        end
-        let!(:scope) do
-          ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
-                                             content: { 'base_pricing' => false })
-        end
-        let!(:expected_stats) do
-          { "legacy/stops": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/itineraries": { number_created: 0, number_deleted: 0, number_updated: 0 },
-            "legacy/pricings": { number_created: 21, number_deleted: 1, number_updated: 6 },
-            "legacy/pricing_details": { number_created: 28, number_deleted: 1, number_updated: 0 } }
+            "pricings/fees": { number_created: 28, number_deleted: 1, number_updated: 0 },
+            errors: [] }
         end
 
         include_examples 'Pricing .insert'

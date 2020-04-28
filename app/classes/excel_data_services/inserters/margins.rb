@@ -62,11 +62,10 @@ module ExcelDataServices
 
         old_margins = Pricings::Margin.where(margin_params.except(:effective_date, :expiration_date))
         new_margin = Pricings::Margin.new(margin_params)
-
         overlap_handler = ExcelDataServices::Inserters::DateOverlapHandler.new(old_margins, new_margin)
         margins_with_actions = overlap_handler.perform
 
-        margins_for_new_margin_details = act_on_overlapping_margins(margins_with_actions)
+        margins_for_new_margin_details = act_on_overlapping_margins(margins_with_actions, row[:row_nr])
 
         return if margin_applies_to_all_fees
 
@@ -75,7 +74,7 @@ module ExcelDataServices
           margins_for_new_margin_details.each do |margin|
             new_margin_detail = margin.details.new(margin_detail_params)
 
-            add_stats(new_margin_detail)
+            add_stats(new_margin_detail, row[:row_nr])
             new_margin_detail.save!
           end
         end
@@ -85,15 +84,15 @@ module ExcelDataServices
         group_size == 1 && (fee_code.nil? || fee_code.casecmp('all').zero?)
       end
 
-      def act_on_overlapping_margins(margins_with_actions)
+      def act_on_overlapping_margins(margins_with_actions, row_nr)
         margins_with_actions.slice(:destroy).values.each do |margins|
           margins.each do |margin|
             margin.details.each do |margin_detail|
               margin_detail.destroy
-              add_stats(margin_detail)
+              add_stats(margin_detail, row_nr)
             end
             margin.destroy
-            add_stats(margin)
+            add_stats(margin, row_nr)
           end
         end
 
@@ -101,7 +100,7 @@ module ExcelDataServices
         margins_with_actions.slice(:save).values.each do |margins|
           margins.map do |margin|
             new_margins << margin if margin.new_record? && !margin.transient_marked_as_old
-            add_stats(margin)
+            add_stats(margin, row_nr)
             margin.save!
           end
         end

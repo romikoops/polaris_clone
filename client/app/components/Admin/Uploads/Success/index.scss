@@ -33,8 +33,10 @@
     padding: 10px 5px;
     font-size: 14px;
   }
-  .error_box {
+  .error_box.total_failure {
     height: 400px;
+  }
+  .error_box {
     table {
       max-height: 400px;
       overflow-y: scroll;

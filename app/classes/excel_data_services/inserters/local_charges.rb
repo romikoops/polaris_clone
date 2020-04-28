@@ -90,7 +90,7 @@ module ExcelDataServices
         local_charges_with_actions =
           ExcelDataServices::Inserters::DateOverlapHandler.new(old_local_charges, new_local_charge).perform
 
-        act_on_overlapping_local_charges(local_charges_with_actions)
+        act_on_overlapping_local_charges(local_charges_with_actions, params[:row_nr])
       end
 
       def prepare_params(params, tenant_vehicle_id)
@@ -114,18 +114,18 @@ module ExcelDataServices
         )
       end
 
-      def act_on_overlapping_local_charges(local_charges_with_actions)
+      def act_on_overlapping_local_charges(local_charges_with_actions, row_nr)
         local_charges_with_actions.slice(:destroy).values.each do |local_charges|
           local_charges.each do |local_charge|
             local_charge.destroy
-            add_stats(local_charge)
+            add_stats(local_charge, row_nr)
           end
         end
 
         local_charges_with_actions.slice(:save).values.flat_map do |local_charges|
           local_charges.map do |local_charge|
-            add_stats(local_charge)
-            local_charge.save!
+            add_stats(local_charge, row_nr)
+            local_charge.save
             local_charge
           end
         end

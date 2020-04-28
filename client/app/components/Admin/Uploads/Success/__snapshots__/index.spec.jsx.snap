@@ -38,7 +38,7 @@ exports[`shallow render 1`] = `
           color="black"
           fontWeight="normal"
           size={3}
-          text="Upload Successful!"
+          text="Upload Completed!"
           theme={
             Object {
               "colors": Object {

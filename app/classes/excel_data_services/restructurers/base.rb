@@ -74,6 +74,12 @@ module ExcelDataServices
         end
       end
 
+      def rename_load_types_to_cargo_class(rows_data)
+        rows_data.each do |row_data|
+          row_data[:cargo_class] = row_data.delete(:load_type)
+        end
+      end
+
       def expand_fcl_to_all_sizes(rows_data)
         plain_fcl_local_charges_params = rows_data.select { |row_data| row_data[:load_type] == 'fcl' }
 
@@ -139,7 +145,7 @@ module ExcelDataServices
         end
       end
 
-      def parse_cargo_class(rows_data: ,key:)
+      def parse_cargo_class(rows_data:, key:)
         rows_data.each do |row_data|
           row_data[key] =
             case row_data[key].downcase
@@ -152,7 +158,7 @@ module ExcelDataServices
       end
 
       def strip_and_downcase(string)
-        return unless string.present?
+        return if string.blank?
 
         string.strip.downcase
       end

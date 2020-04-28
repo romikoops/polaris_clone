@@ -28,7 +28,7 @@ module ExcelDataServices
                                 target: target,
                                 tenant: tenant)
 
-        add_stats(note)
+        add_stats(note, params[:row_nr])
         note.save
 
         note

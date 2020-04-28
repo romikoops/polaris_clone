@@ -23,7 +23,7 @@ module ExcelDataServices
         @options = options
         @sandbox = options[:sandbox]
         @group_id = options[:group_id]
-        @stats = {}
+        @stats = { errors: [] }
       end
 
       def perform
@@ -59,7 +59,7 @@ module ExcelDataServices
         end
       end
 
-      def add_stats(data_record, force_new_record = false)
+      def add_stats(data_record, row_nr, force_new_record = false)
         descriptor = data_record.class.name.underscore.pluralize.to_sym
         @stats[descriptor] ||= {
           number_created: 0,
@@ -67,13 +67,25 @@ module ExcelDataServices
           number_deleted: 0
         }
 
-        if data_record.new_record? || force_new_record
+        if data_record.destroyed?
+          @stats[descriptor][:number_deleted] += 1
+        elsif !data_record.valid?
+          add_error_to_stats(data_record: data_record, row_nr: row_nr)
+        elsif data_record.new_record? || force_new_record
           @stats[descriptor][:number_created] += 1
         elsif data_record.changed?
           @stats[descriptor][:number_updated] += 1
-        elsif data_record.destroyed?
-          @stats[descriptor][:number_deleted] += 1
         end
+      end
+
+      def add_error_to_stats(data_record:, row_nr:)
+        @stats[:errors] << {
+          reason: data_record.errors.full_messages.join(', '),
+          row_nr: row_nr,
+          sheet_name: @data.dig(0, 0, :sheet_name)
+        }
+
+        @stats[:has_errors] = true if @stats[:has_errors].blank?
       end
     end
   end
