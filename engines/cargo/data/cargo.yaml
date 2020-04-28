@@ -1,0 +1,48 @@
+fcl_20:
+  class: '22'
+  type: 'GP'
+fcl_40:
+  class: '42'
+  type: 'GP'
+fcl_40_hq:
+  class: '45'
+  type: 'GP'
+fcl_45:
+  class: 'L2'
+  type: 'GP'
+fcl_10:
+  class: '10'
+  type: 'GP'
+fcl_20_ot:
+  class: '22'
+  type: 'U0'
+fcl_20_rf:
+  class: '22'
+  type: 'R0'
+fcl_20_frs:
+  class: '22'
+  type: 'PC'
+fcl_20_frw:
+  class: '22'
+  type: 'PF'
+fcl_40_ot:
+  class: '42'
+  type: 'U0'
+fcl_40_rf:
+  class: '42'
+  type: 'R0'
+fcl_40_hq_rf:
+  class: '45'
+  type: 'R0'
+fcl_40_frs:
+  class: '42'
+  type: 'PC'
+fcl_40_frw:
+  class: '42'
+  type: 'PF'
+fcl_45_hq:
+  class: 'L2'
+  type: 'GP'
+fcl_45_r:
+  class: 'L2'
+  type: 'R0'

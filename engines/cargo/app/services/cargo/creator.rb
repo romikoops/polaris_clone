@@ -4,12 +4,9 @@ module Cargo
   class Creator
     attr_reader :legacy_shipment, :quotation, :errors
 
-    CARGO_CLASS_LEGACY_MAPPER = {
-      fcl_20: '22',
-      fcl_40: '42',
-      fcl_40_hq: '45',
-      fcl_45: 'L2'
-    }.freeze
+    LEGACY_CARGO_MAP = YAML.load_file(File.expand_path('../../../data/cargo.yaml', __dir__)).freeze
+    CARGO_CLASS_LEGACY_MAPPER = LEGACY_CARGO_MAP.map { |k, v| [k, v['class']] }.to_h
+    CARGO_TYPE_LEGACY_MAPPER = LEGACY_CARGO_MAP.map { |k, v| [k, v['type']] }.to_h
 
     def initialize(legacy_shipment:)
       @legacy_shipment = legacy_shipment
@@ -29,12 +26,14 @@ module Cargo
       )
 
       containers.find_each do |container|
-        cargo_class = CARGO_CLASS_LEGACY_MAPPER[container.cargo_class.to_sym]
+        cargo_class = CARGO_CLASS_LEGACY_MAPPER[container.cargo_class]
+        cargo_type = CARGO_TYPE_LEGACY_MAPPER[container.cargo_class]
+
         cargo.units << Unit.new(
           tenant_id: quotation.tenant_id,
           quantity: container.quantity,
           cargo_class: cargo_class,
-          cargo_type: 'GP',
+          cargo_type: cargo_type,
           weight_value: container.payload_in_kg,
           goods_value_cents: legacy_shipment.total_goods_value['value'] / container.quantity,
           goods_value_currency: legacy_shipment.total_goods_value['currency'],
