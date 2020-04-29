@@ -11,7 +11,6 @@ module Itineraries
     private
 
     def last_available_date_params
-      params.require(%i(itinerary_ids country))
       params.permit(:itinerary_ids, :country)
     end
 
