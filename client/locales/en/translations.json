@@ -1300,5 +1300,16 @@
     "postalCode": "Postal Code",
     "city": "City",
     "country": "Country"
+  },
+  "login" : {
+    "emailLogin": "Login with email and password",
+    "signIn": "Sign In",
+    "forgotPassword": "forgot password?",
+    "enterPassword": "Enter your password",
+    "enterEmail": "Enter your email",
+    "mustNotBeBlank" : "Must not be blank",
+    "password": "Password",
+    "email": "Email",
+    "samlText": "Sign in with {{text}}"
   }
 }

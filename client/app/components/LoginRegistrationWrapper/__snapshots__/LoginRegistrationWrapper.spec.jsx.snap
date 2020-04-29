@@ -2,7 +2,9 @@
 
 exports[`shallow render 1`] = `
 Array [
-  <Connect(LoginPage) />,
+  <Connect(LoginPage)
+    t={[Function]}
+  />,
   <hr
     className="toggle_prompt_separator"
   />,

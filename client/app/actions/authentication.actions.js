@@ -57,12 +57,38 @@ function login (data) {
   }
 
   return (dispatch) => {
-    dispatch(request({ email: data.email, password: data.password }))
-    authenticationService.login(data).then(
-      (response) => {
+    dispatch(request({ email: data.email }))
+
+    return fetch(
+      `${getTenantApiUrl()}/auth/sign_in`,
+      requestOptions('POST', { 'Content-Type': 'application/json' }, JSON.stringify(data))
+    )
+      .then((response) => {
+        if (!response.ok) {
+          return Promise.reject(response.json())
+        }
+
+        if (response.headers.get('access-token')) {
+          const accessToken = response.headers.get('access-token')
+          const client = response.headers.get('client')
+          const expiry = response.headers.get('expiry')
+          const tokenType = response.headers.get('token-type')
+          const uid = response.headers.get('uid')
+          const aHeader = {
+            client,
+            expiry,
+            uid,
+            'access-token': accessToken,
+            'token-type': tokenType
+          }
+          localStorage.setItem('authHeader', JSON.stringify(aHeader))
+        }
+
+        return response.json()
+      }).then((response) => {
         const shipmentReq = data.req
         dispatch(success(response.data))
-        dispatch(setUser({ data: response.data }))
+        dispatch(setUser(response.data))
         dispatch(shipmentActions.checkLoginOnBookingProcess())
         if (data.redirectUrl) {
           dispatch(appActions.goTo(data.redirectUrl))
@@ -96,16 +122,15 @@ function login (data) {
           dispatch(closeLogin())
         }
         dispatch(appActions.getScope())
-      },
-      (error) => {
+      })
+      .catch((error) => {
         error.then((errorData) => {
           dispatch(failure({
             error: errorData,
             persistState: !!data.req || !!data.noRedirect
           }))
         })
-      }
-    )
+      })
   }
 }
 
@@ -168,9 +193,9 @@ function registerGuest (tenant, target = '/') {
 }
 
 function setUser (user) {
-  localStorage.setItem(cookieKey(), JSON.stringify(user.data))
+  localStorage.setItem(cookieKey(), JSON.stringify(user))
 
-  return { type: authenticationConstants.SET_USER, user: user.data }
+  return { type: authenticationConstants.SET_USER, user }
 }
 
 function updateUser (user, req, shipmentReq) {
@@ -260,13 +285,13 @@ function toggleSandbox (id) {
       (response) => {
         dispatch(success(response))
       },
-      error => dispatch(failure(error))
+      (error) => dispatch(failure(error))
     )
   }
 }
 
 function updateReduxStore (payload) {
-  return dispatch => dispatch({ type: 'GENERAL_UPDATE', payload })
+  return (dispatch) => dispatch({ type: 'GENERAL_UPDATE', payload })
 }
 
 function postSamlActions (payload) {
@@ -289,9 +314,9 @@ function postSamlActions (payload) {
     dispatch(request())
 
     return fetch(`${getTenantApiUrl()}/users/${userId}/show`, requestOptions('GET'))
-      .then(resp => resp.json())
+      .then((resp) => resp.json())
       .then((response) => {
-        dispatch(success(response))
+        dispatch(success(response.data))
         dispatch(userActions.getDashboard(userId, true))
       })
       .catch((error) => {

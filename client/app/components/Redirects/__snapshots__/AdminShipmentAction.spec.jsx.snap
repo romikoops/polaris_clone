@@ -20,7 +20,7 @@ exports[`happy path 1`] = `
           name="form"
         >
           <div
-            class="form-group"
+            class="form-group form "
           >
             <label
               for="email"
@@ -33,7 +33,7 @@ exports[`happy path 1`] = `
               <input
                 class="form_control"
                 name="email"
-                placeholder="enter your email"
+                placeholder="Enter your email"
                 type="text"
                 value=""
               />
@@ -44,7 +44,7 @@ exports[`happy path 1`] = `
             <hr />
           </div>
           <div
-            class="form-group"
+            class="form-group form "
           >
             <label
               for="password"
@@ -57,7 +57,7 @@ exports[`happy path 1`] = `
               <input
                 class="form_control"
                 name="password"
-                placeholder="enter your password"
+                placeholder="Enter your password"
                 type="password"
                 value=""
               />
@@ -67,13 +67,14 @@ exports[`happy path 1`] = `
             </div>
             <hr />
             <a
-              class="forget_password_link"
+              class="forgotPassword forget_password_link"
             >
               forgot password?
             </a>
           </div>
           <div
-            class="form-group form_group_submit_btn"
+            class="form-group form_group_submit_btn
+            form "
           >
             <div
               class="flex-100 ccb_signin"
@@ -101,6 +102,7 @@ exports[`happy path 1`] = `
             />
           </div>
         </form>
+        <div />
       </div>
     </div>
   </div>

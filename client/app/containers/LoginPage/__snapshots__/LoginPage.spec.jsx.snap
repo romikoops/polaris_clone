@@ -1,0 +1,277 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div>
+  <Formsy
+    className="login_form "
+    disabled={false}
+    getErrorMessage={[Function]}
+    getErrorMessages={[Function]}
+    getValue={[Function]}
+    hasValue={[Function]}
+    isFormDisabled={[Function]}
+    isFormSubmitted={[Function]}
+    isPristine={[Function]}
+    isRequired={[Function]}
+    isValid={[Function]}
+    isValidValue={[Function]}
+    mapping={null}
+    name="form"
+    onChange={[Function]}
+    onError={[Function]}
+    onInvalid={[Function]}
+    onInvalidSubmit={[Function]}
+    onReset={[Function]}
+    onSubmit={[Function]}
+    onValid={[Function]}
+    onValidSubmit={[Function]}
+    preventExternalInvalidation={false}
+    resetValue={[Function]}
+    setValidations={[Function]}
+    setValue={[Function]}
+    showError={[Function]}
+    showRequired={[Function]}
+    validationErrors={null}
+  >
+    <div
+      className="form-group form "
+    >
+      <label
+        htmlFor="email"
+      >
+        Email
+      </label>
+      <Formsy(FormsyInput)
+        className="form_control"
+        innerRef={[Function]}
+        name="email"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        placeholder="Enter your email"
+        required={true}
+        submitAttempted={false}
+        type="text"
+        validationError=""
+        validationErrors={
+          Object {
+            "isDefaultRequiredValue": "Must not be blank",
+          }
+        }
+        validations={null}
+      />
+      <hr
+        style={Object {}}
+      />
+    </div>
+    <div
+      className="form-group form "
+    >
+      <label
+        htmlFor="password"
+      >
+        Password
+      </label>
+      <Formsy(FormsyInput)
+        className="form_control"
+        innerRef={[Function]}
+        name="password"
+        placeholder="Enter your password"
+        required={true}
+        submitAttempted={false}
+        type="password"
+        validationError=""
+        validationErrors={
+          Object {
+            "isDefaultRequiredValue": "Must not be blank",
+          }
+        }
+        validations={null}
+      />
+      <hr
+        style={Object {}}
+      />
+      <a
+        className="forgotPassword forget_password_link"
+        onClick={[Function]}
+      >
+        forgot password?
+      </a>
+    </div>
+    <div
+      className="form-group form_group_submit_btn
+            form "
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        classNames="ccb_signin"
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={null}
+        icon=""
+        iconClass=""
+        inverse={false}
+        size=""
+        text="Sign In"
+        theme={null}
+      />
+      <div
+        className="spinner"
+      />
+    </div>
+  </Formsy>
+  <div />
+</div>
+`;
+
+exports[`shallow render with saml login 1`] = `
+<div>
+  <div
+    className="form-group samlPadding"
+  >
+    <RoundButton
+      active={true}
+      back={false}
+      classNames="ccb_saml_signin"
+      disabled={false}
+      flexContainer="100"
+      handleDisabled={null}
+      handleNext={[Function]}
+      icon=""
+      iconClass=""
+      inverse={false}
+      size=""
+      text="Sign in with {{text}}"
+      theme={null}
+    />
+  </div>
+  <Formsy
+    className="login_form "
+    disabled={false}
+    getErrorMessage={[Function]}
+    getErrorMessages={[Function]}
+    getValue={[Function]}
+    hasValue={[Function]}
+    isFormDisabled={[Function]}
+    isFormSubmitted={[Function]}
+    isPristine={[Function]}
+    isRequired={[Function]}
+    isValid={[Function]}
+    isValidValue={[Function]}
+    mapping={null}
+    name="form"
+    onChange={[Function]}
+    onError={[Function]}
+    onInvalid={[Function]}
+    onInvalidSubmit={[Function]}
+    onReset={[Function]}
+    onSubmit={[Function]}
+    onValid={[Function]}
+    onValidSubmit={[Function]}
+    preventExternalInvalidation={false}
+    resetValue={[Function]}
+    setValidations={[Function]}
+    setValue={[Function]}
+    showError={[Function]}
+    showRequired={[Function]}
+    validationErrors={null}
+  >
+    <div
+      className="form-group form hideForm"
+    >
+      <label
+        htmlFor="email"
+      >
+        Email
+      </label>
+      <Formsy(FormsyInput)
+        className="form_control"
+        innerRef={[Function]}
+        name="email"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        placeholder="Enter your email"
+        required={true}
+        submitAttempted={false}
+        type="text"
+        validationError=""
+        validationErrors={
+          Object {
+            "isDefaultRequiredValue": "Must not be blank",
+          }
+        }
+        validations={null}
+      />
+      <hr
+        style={Object {}}
+      />
+    </div>
+    <div
+      className="form-group form hideForm"
+    >
+      <label
+        htmlFor="password"
+      >
+        Password
+      </label>
+      <Formsy(FormsyInput)
+        className="form_control"
+        innerRef={[Function]}
+        name="password"
+        placeholder="Enter your password"
+        required={true}
+        submitAttempted={false}
+        type="password"
+        validationError=""
+        validationErrors={
+          Object {
+            "isDefaultRequiredValue": "Must not be blank",
+          }
+        }
+        validations={null}
+      />
+      <hr
+        style={Object {}}
+      />
+      <a
+        className="forgotPassword forget_password_link"
+        onClick={[Function]}
+      >
+        forgot password?
+      </a>
+    </div>
+    <div
+      className="form-group form_group_submit_btn
+            form hideForm"
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        classNames="ccb_signin"
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={null}
+        icon=""
+        iconClass=""
+        inverse={false}
+        size=""
+        text="Sign In"
+        theme={null}
+      />
+      <div
+        className="spinner"
+      />
+    </div>
+  </Formsy>
+  <div>
+    <a
+      className="showLogin admin_login_text"
+      onClick={[Function]}
+    >
+      Login with email and password
+    </a>
+  </div>
+</div>
+`;

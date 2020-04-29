@@ -23,50 +23,6 @@ function toggleSandbox (id) {
   localStorage.setItem('sandbox', id)
 }
 
-function login (data) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: data.email, password: data.password })
-  }
-
-  return fetch(`${getTenantApiUrl()}/auth/sign_in`, requestOptions)
-    .then((response) => {
-      if (!response.ok) {
-        return Promise.reject(response.json())
-      }
-
-      if (response.headers.get('access-token')) {
-        const accessToken = response.headers.get('access-token')
-        const client = response.headers.get('client')
-        const expiry = response.headers.get('expiry')
-        const tokenType = response.headers.get('token-type')
-        const uid = response.headers.get('uid')
-        const aHeader = {
-          client,
-          expiry,
-          uid,
-          'access-token': accessToken,
-          'token-type': tokenType
-        }
-        localStorage.setItem('authHeader', JSON.stringify(aHeader))
-      }
-
-      return response.json()
-    })
-    .then((response) => {
-      // login successful if there's a jwt token in the response
-      if (response) {
-        // store user details and jwt token in local storage to keep
-        // user logged in between page refreshes
-
-        localStorage.setItem(cookieKey(), JSON.stringify(response.data))
-      }
-
-      return response
-    })
-}
-
 function getStoredUser () {
   const sortedUser = JSON.parse(localStorage.getItem(cookieKey()))
 
@@ -160,7 +116,6 @@ function changePassword (email, redirect) {
 }
 
 const authenticationService = {
-  login,
   logout,
   register,
   getStoredUser,

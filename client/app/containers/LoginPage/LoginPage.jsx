@@ -3,6 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Formsy from 'formsy-react'
 import { get } from 'lodash'
+import { withNamespaces } from 'react-i18next'
 import { authenticationActions } from '../../actions'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner'
@@ -20,7 +21,8 @@ class LoginPage extends React.Component {
 
     this.state = {
       submitAttempted: false,
-      focus: {}
+      focus: {},
+      showLoginForm: !props.authMethods.includes('saml')
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -55,12 +57,16 @@ class LoginPage extends React.Component {
     })
   }
 
+  toggleShowLoginForm () {
+    this.setState((prevState) => ({ showLoginForm: !prevState.showLoginForm }))
+  }
+
   renderForgotPassword () {
     this.setState({ forgotPassword: true })
   }
 
   render () {
-    const { loggingIn, theme, scope, authMethods } = this.props
+    const { loggingIn, theme, scope, authMethods, t } = this.props
     const focusStyles = {
       borderColor: theme && theme.colors ? theme.colors.primary : 'black',
       borderWidth: '1.5px',
@@ -76,21 +82,21 @@ class LoginPage extends React.Component {
     const ie11Positioning =
       navigator.userAgent.includes('MSIE') || document.documentMode ? styles.login_ie_11 : ''
     const hasSamlLogin = authMethods.includes('saml')
-    const { focus, submitAttempted } = this.state
+    const { focus, submitAttempted, showLoginForm } = this.state
     const { email, password } = focus
 
     return (
       <div>
         {hasSamlLogin && (
-          <div className="form-group">
+          <div className={`form-group ${showLoginForm ? '' : styles.samlPadding}`}>
             <RoundButton
               handleNext={() => LoginPage.redirectToSamlLogin()}
               classNames="ccb_saml_signin"
-              text={`Sign In with ${scope.saml_text}`}
+              text={t('login:samlText', { text: scope.saml_text })}
               theme={theme}
               active
             />
-            <hr className={styles.saml_border} />
+            { showLoginForm && <hr className={styles.saml_border} /> }
           </div>
         )}
         <Formsy
@@ -99,44 +105,57 @@ class LoginPage extends React.Component {
           onValidSubmit={this.handleSubmit}
           onInvalidSubmit={this.handleInvalidSubmit}
         >
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
+          <div className={`form-group ${styles.form} ${showLoginForm ? '' : styles.hideForm}`}>
+            <label htmlFor="email">{t('login:email')}</label>
             <FormsyInput
               type="text"
               className={styles.form_control}
               onFocus={this.handleFocus}
               onBlur={this.handleFocus}
               name="email"
-              placeholder="enter your email"
+              placeholder={t('login:enterEmail')}
               submitAttempted={submitAttempted}
-              validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
+              validationErrors={{ isDefaultRequiredValue: t('login:mustNotBeBlank') }}
               required
             />
             <hr style={email ? focusStyles : {}} />
           </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
+          <div className={`form-group ${styles.form} ${showLoginForm ? '' : styles.hideForm}`}>
+            <label htmlFor="password">{t('login:password')}</label>
             <FormsyInput
               type="password"
               className={styles.form_control}
               name="password"
-              placeholder="enter your password"
+              placeholder={t('login:enterPassword')}
               submitAttempted={submitAttempted}
-              validationErrors={{ isDefaultRequiredValue: 'Must not be blank' }}
+              validationErrors={{ isDefaultRequiredValue: t('login:mustNotBeBlank') }}
               required
             />
             <hr style={password ? focusStyles : {}} />
             {allowForgotPassword && (
-              <a onClick={() => this.renderForgotPassword()} className={styles.forget_password_link}>
-                forgot password?
+              <a
+                onClick={() => this.renderForgotPassword()}
+                className={`forgotPassword ${styles.forget_password_link}`}
+              >
+                {t('login:forgotPassword')}
               </a>
             )}
           </div>
-          <div className={`form-group ${styles.form_group_submit_btn}`}>
-            <RoundButton classNames="ccb_signin" text="Sign In" theme={theme} active />
+          <div
+            className={`form-group ${styles.form_group_submit_btn}
+            ${styles.form} ${showLoginForm ? '' : styles.hideForm}`}
+          >
+            <RoundButton classNames="ccb_signin" text={t('login:signIn')} theme={theme} active />
             <div className={styles.spinner}>{loggingIn && <LoadingSpinner />}</div>
           </div>
         </Formsy>
+        <div>
+          {(hasSamlLogin && !showLoginForm) && (
+            <a onClick={() => this.toggleShowLoginForm()} className={`showLogin ${styles.admin_login_text}`}>
+              {t('login:emailLogin')}
+            </a>
+          )}
+        </div>
       </div>
     )
   }
@@ -171,6 +190,7 @@ LoginPage.defaultProps = {
 }
 
 const connectedLoginPage = connect(mapStateToProps)(LoginPage)
-export { connectedLoginPage as LoginPage }
+const translatedLoginPage = withNamespaces(['login'])(connectedLoginPage)
+export { translatedLoginPage as LoginPage }
 
-export default connectedLoginPage
+export default translatedLoginPage

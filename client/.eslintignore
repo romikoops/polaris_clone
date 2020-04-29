@@ -4,4 +4,3 @@ coverage
 webpack.*.js
 package*.json
 e2e/**
-*.spec.*
