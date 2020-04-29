@@ -5,15 +5,15 @@ module Cargo
     belongs_to :tenant, class_name: 'Tenants::Tenant'
     has_many :units, class_name: 'Cargo::Unit'
 
-    def area
+    def total_area
       units.map(&:total_area).sum(Measured::Area.new(0, :m2))
     end
 
-    def weight
+    def total_weight
       units.map(&:total_weight).sum(Measured::Weight.new(0, :kg))
     end
 
-    def volume
+    def total_volume
       units.map(&:total_volume).sum(Measured::Volume.new(0, :m3))
     end
 
@@ -22,9 +22,13 @@ module Cargo
     end
 
     def stowage_factor
-      factor = volume.value / weight.convert_to(:t).value
+      factor = total_volume.value / total_weight.convert_to(:t).value
       Measured::StowageFactor.new(factor.round(6), 'm3/t')
     end
+
+    alias area total_area
+    alias weight total_weight
+    alias volume total_volume
   end
 end
 

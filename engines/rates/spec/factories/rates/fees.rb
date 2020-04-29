@@ -5,7 +5,7 @@ FactoryBot.define do
     association :cargo, factory: :rates_cargo
     amount_cents { 2500 }
     level { 0 }
-    operator { :addition }
+    operator { 0 }
     amount_currency { 'USD' }
     rate_basis { 0 }
     kg_range { (0..Float::INFINITY) }
@@ -23,14 +23,17 @@ FactoryBot.define do
 
     trait :kg_basis do
       rate_basis { 4 }
+      kg_range { 5..10 }
     end
 
     trait :stowage_basis do
-      rate_basis { 16 }
+      rate_basis { 5 }
+      stowage_range { 5..10 }
     end
 
     trait :wm_basis do
-      rate_basis { 6 }
+      rate_basis { 1 }
+      wm_range { 5..10 }
     end
 
     trait :max do
@@ -39,10 +42,12 @@ FactoryBot.define do
 
     trait :cbm_basis do
       rate_basis { 3 }
+      cbm_range { 5..10 }
     end
 
     trait :unit_basis do
-      rate_basis { 17 }
+      rate_basis { 6 }
+      unit_range { 5..10 }
     end
 
     trait :shipment_basis do
@@ -50,12 +55,20 @@ FactoryBot.define do
     end
 
     trait :km_basis do
-      rate_basis { 18 }
+      rate_basis { 7 }
+      km_range { (0..Float::INFINITY) }
     end
 
     trait :percentage do
-      operator { :percentage }
+      operator { 1 }
     end
+
+    factory :unit_based_fee, traits: %i[unit_basis]
+    factory :km_based_fee, traits: %i[km_basis]
+    factory :cbm_based_fee, traits: %i[cbm_basis]
+    factory :wm_based_fee, traits: %i[wm_basis]
+    factory :stowage_based_fee, traits: %i[stowage_basis]
+    factory :kg_based_fee, traits: %i[kg_basis]
   end
 end
 

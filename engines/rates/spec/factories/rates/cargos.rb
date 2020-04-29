@@ -5,6 +5,7 @@ FactoryBot.define do
     association :section, factory: :rates_section
 
     cargo_class { '00' }
+    cargo_type { 'GP' }
     code { 'BAS' }
     operator { :min_value }
 
@@ -16,24 +17,25 @@ FactoryBot.define do
       applicable_to { 2 }
     end
 
-    trait :cargo_item do
-      cargo_class { Cargo::Specification::CLASS_ENUM.key('00') }
+    trait :lcl do
+      cargo_class { '00' }
+      cargo_type { 'LCL' }
     end
 
     trait :container_20 do
-      cargo_class { Cargo::Specification::CLASS_ENUM.key('20') }
+      cargo_class { '22' }
     end
 
     trait :container_40 do
-      cargo_class { Cargo::Specification::CLASS_ENUM.key('40') }
+      cargo_class { '42' }
     end
 
     trait :container_40_hq do
-      cargo_class { Cargo::Specification::CLASS_ENUM.key('45') }
+      cargo_class { '45' }
     end
 
     trait :container_45 do
-      cargo_class { Cargo::Specification::CLASS_ENUM.key('L0') }
+      cargo_class { 'L0' }
     end
   end
 end

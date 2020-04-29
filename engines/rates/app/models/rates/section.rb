@@ -10,7 +10,7 @@ module Rates
     belongs_to :location, class_name: 'Routing::Location', optional: true
     belongs_to :terminal, class_name: 'Routing::Terminal', optional: true
 
-    has_many :cargo_rates
+    has_many :cargos
   end
 end
 

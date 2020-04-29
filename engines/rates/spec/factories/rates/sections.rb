@@ -2,11 +2,33 @@
 
 FactoryBot.define do
   factory :rates_section, class: 'Rates::Section' do
-    association :location, factory: :routing_location
     association :tenant, factory: :tenants_tenant
     association :target, factory: :routing_route_line_service
     ldm_area_divisor { 2.4 }
     truck_height { 2.6 }
+
+    ldm_ratio { 1000 }
+
+    trait :with_lcl_cargo_rate do
+      after(:build) do |section|
+        create :rates_cargo, :lcl, section: section
+      end
+    end
+
+    trait :with_fcl_20_cargo_rate do
+      after(:build) do |section|
+        create :rates_cargo, :container_20, section: section
+      end
+    end
+
+    trait :with_fcl_40_cargo_rate do
+      after(:build) do |section|
+        create :rates_cargo, :container_40, section: section
+      end
+    end
+
+    factory :section_lcl_rate, traits: %i[with_lcl_cargo_rate]
+    factory :section_for_multiple_cargo_classes, traits: %i[with_lcl_cargo_rate with_fcl_20_cargo_rate with_fcl_40_cargo_rate]
   end
 end
 
@@ -26,7 +48,7 @@ end
 #  truck_height             :decimal(, )
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
-#  carrier_id               :bigint
+#  carrier_id               :uuid
 #  location_id              :uuid
 #  target_id                :uuid
 #  tenant_id                :uuid
@@ -42,7 +64,6 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (carrier_id => carriers.id)
 #  fk_rails_...  (location_id => routing_locations.id)
 #  fk_rails_...  (tenant_id => tenants_tenants.id)
 #  fk_rails_...  (terminal_id => routing_terminals.id)
