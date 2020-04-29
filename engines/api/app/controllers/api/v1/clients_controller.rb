@@ -41,6 +41,12 @@ module Api
         render(json: { error: e.message }, status: :bad_request)
       end
 
+      def password_reset
+        random_password = SecureRandom.alphanumeric(16)
+        client.update(password: random_password)
+        render json: { data: { password: random_password } }
+      end
+
       private
 
       def client_params
@@ -79,6 +85,10 @@ module Api
         return if params[:group_id].nil?
 
         Tenants::Membership.create!(member: tenants_user, group_id: client_params[:group_id])
+      end
+
+      def client
+        @client ||= Tenants::User.find(params[:id])
       end
     end
   end

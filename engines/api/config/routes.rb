@@ -5,7 +5,11 @@ Api::Engine.routes.draw do
 
   namespace :v1 do
     resource :me, controller: :users, only: :show
-    resources :clients, only: %i[index show create]
+    resources :clients, only: %i[index show create] do
+      member do
+        patch 'password_reset'
+      end
+    end
     resources :equipments, only: :index
     resources :tenants, only: :index do
       member do

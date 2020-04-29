@@ -113,4 +113,15 @@ RSpec.resource 'Clients', acceptance: true do
       end
     end
   end
+
+  patch 'v1/clients/:id/password_reset' do
+    parameter :id, 'The ID of client requiring a new password'
+    let(:id) { user.id }
+    response_field :password, 'The newly generated password', Type: String
+
+    example_request 'Generating a new password for a client' do
+      expect(status).to eq(200)
+      expect(response_data.dig('password')).not_to be_nil
+    end
+  end
 end
