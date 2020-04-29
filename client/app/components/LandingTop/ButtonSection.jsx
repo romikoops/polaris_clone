@@ -4,18 +4,18 @@ import { push } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
 import { withNamespaces } from 'react-i18next'
 import styles from './LandingTop.scss'
-import PropTypes from '../../prop-types'
+import { get } from 'lodash'
 import SquareButton from '../SquareButton'
 import { adminActions } from '../../actions'
 
-const MyAccount = connect(null, dispatch => (
+const MyAccount = connect(null, (dispatch) => (
   { toAccount: () => dispatch(push('/account')) }
 ))(withNamespaces(['common'])(({
   user, tenant, theme, toAccount, t
 }) => (
-  user && user.role && ['shipper', 'agent', 'agency_manager'].includes(user.role.name) &&
+  ['shipper', 'agent', 'agency_manager'].includes(get(user, ['role', 'name'])) &&
     !user.guest &&
-    !(tenant && tenant.scope && tenant.scope.closed_quotation_tool) && (
+    !(get(tenant, 'scope.closed_quotation_tool')) && (
     <div className="layout-row flex-100 flex-gt-sm-50 margin_bottom">
       <SquareButton
         text={t('common:accountTitle')}
@@ -28,12 +28,12 @@ const MyAccount = connect(null, dispatch => (
   )
 )))
 
-const ToAdmin = connect(null, dispatch => (
+const ToAdmin = connect(null, (dispatch) => (
   { adminDispatch: bindActionCreators(adminActions, dispatch) }
 ))(withNamespaces(['landing'])(({
   user, theme, adminDispatch, t
 }) => (
-  user && user.role && ['admin', 'sub_admin', 'super_admin'].includes(user.role.name) && (
+  ['admin', 'sub_admin', 'super_admin'].includes(get(user, ['role', 'name'])) && (
     <div className="layout-row flex-100 flex-gt-sm-50 margin_bottom">
       <SquareButton
         text={t('landing:adminDashboard')}
@@ -49,7 +49,7 @@ const ToAdmin = connect(null, dispatch => (
 const FindRates = withNamespaces(['landing'])(({
   user, theme, bookNow, t
 }) => (
-  (!user || ['shipper', 'agent', 'agency_manager'].includes(user.role.name)) && (
+  (!user || ['shipper', 'agent', 'agency_manager'].includes(get(user, ['role', 'name']))) && (
     <div className="layout-row flex-100 flex-gt-sm-50 margin_bottom">
       <SquareButton text={t('landing:callToAction')} classNames="ccb_find_rates" theme={theme} handleNext={bookNow} size="small" active />
     </div>

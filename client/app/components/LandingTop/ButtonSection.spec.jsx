@@ -16,3 +16,20 @@ const propsBase = {
 test('shallow render', () => {
   expect(shallow(<ButtonSection {...propsBase} />)).toMatchSnapshot()
 })
+
+test('shallow render with no user', () => {
+  const props = {
+    ...propsBase,
+    user: null
+  }
+  expect(shallow(<ButtonSection {...props} />)).toMatchSnapshot()
+})
+test('shallow render with user and no role', () => {
+  const props = {
+    ...propsBase,
+    user: {
+      role: null
+    }
+  }
+  expect(shallow(<ButtonSection {...props} />)).toMatchSnapshot()
+})
