@@ -10,7 +10,7 @@ unless git.commits.all? { |c| COMMIT_REGEXP.match?(c.message) }
     Please prefix commit messages with either JIRA ticket number or category
     (ci, chore, hotfix, fix or revert).
   END_OF_HELP
-  failure("#{title} - #{body}")
+  warn("#{title} - #{body}")
 end
 
 # Ensure commit messages has upcase ticket

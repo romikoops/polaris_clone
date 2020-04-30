@@ -18,7 +18,7 @@ if pr_title_issues.empty? && !fix_chore_pr
     important code to production at right time.
   MESSAGE
 
-  failure("#{title} - #{message}")
+  warn("#{title} - #{message}")
 end
 
 if !pr_title_issues.empty? && !(pr_title_issues - jira_issues).empty?
@@ -28,7 +28,7 @@ if !pr_title_issues.empty? && !(pr_title_issues - jira_issues).empty?
     Please make sure that correct ticket numbers are mentioned in commits and title.
   MESSAGE
 
-  failure("#{title} - #{message}")
+  warn("#{title} - #{message}")
 end
 
 if pr_title_issues.any? { |t| t.start_with?('imc') }

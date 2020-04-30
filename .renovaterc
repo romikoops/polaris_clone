@@ -11,6 +11,10 @@
     {
       "packagePatterns": [ "react" ],
       "groupName": "react"
+    },
+    {
+      "updateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
     }
   ]
 }
