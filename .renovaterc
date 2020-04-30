@@ -1,4 +1,7 @@
 {
+  "extends": [
+    ":disableMajorUpdates"
+  ],
   "packageRules": [
     {
       "packagePatterns": [ "babel" ],
