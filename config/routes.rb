@@ -198,6 +198,7 @@ Rails.application.routes.draw do
     resources :incoterms, only: [:index]
     resources :locations, only: [:index]
     resources :nexuses, only: [:index]
+    resources :max_dimensions, only: [:index]
     get 'currencies/base/:currency', to: 'currencies#currencies_for_base'
     get 'countries', to: 'countries#index'
     get 'currencies/refresh/:currency', to: 'currencies#refresh_for_base'
@@ -453,6 +454,7 @@ end
 #                                       tenant_incoterms GET    /tenants/:tenant_id/incoterms(.:format)                                                  incoterms#index
 #                                       tenant_locations GET    /tenants/:tenant_id/locations(.:format)                                                  locations#index
 #                                         tenant_nexuses GET    /tenants/:tenant_id/nexuses(.:format)                                                    nexuses#index
+#                                  tenant_max_dimensions GET    /tenants/:tenant_id/max_dimensions(.:format)                                             max_dimensions#index
 #                                                        GET    /tenants/:tenant_id/currencies/base/:currency(.:format)                                  currencies#currencies_for_base
 #                                       tenant_countries GET    /tenants/:tenant_id/countries(.:format)                                                  countries#index
 #                                                        GET    /tenants/:tenant_id/currencies/refresh/:currency(.:format)                               currencies#refresh_for_base

@@ -36,6 +36,7 @@ module ExcelDataServices
         max_dimension = Legacy::MaxDimensionsBundle.find_or_initialize_by(
           mode_of_transport: params[:mode_of_transport],
           carrier: carrier,
+          aggregate: params[:aggregate],
           tenant_vehicle: tenant_vehicle,
           tenant: @tenant,
           cargo_class: params[:cargo_class]

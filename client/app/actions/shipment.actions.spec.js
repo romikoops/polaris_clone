@@ -1,8 +1,15 @@
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import shipmentActions from './shipment.actions'
-import { shipmentConstants } from '../constants/shipment.constants'
-import { errorConstants } from '../constants/error.constants'
+import {
+  shipmentConstants
+} from '../constants/shipment.constants'
+import {
+  errorConstants
+} from '../constants/error.constants'
+import {
+  maxDimensionsToApply
+} from '../components/ShipmentDetails/mocks'
 
 const { fetch } = global
 
@@ -39,16 +46,74 @@ describe('async actions', () => {
 
   it('creates GET_OFFERS_SUCCESS when fetching the offers is successful', () => {
     expect.assertions(1)
-    fetch.once(() => new Promise((resolve) => setTimeout(() => resolve(
-      { body: JSON.stringify({ success: true, data: JSON.stringify({ shipment: { id: 1 } }) }) }
-    ),
+    fetch.once(() => new Promise((resolve) => setTimeout(() => resolve({
+      body: JSON.stringify({
+        success: true,
+        data: JSON.stringify({
+          shipment: {
+            id: 1
+          }
+        })
+      })
+    }),
     10)))
-    const expectedActions = [
-      { type: shipmentConstants.GET_OFFERS_REQUEST, shipmentData: { shipment: { id: 1 } } },
-      { type: shipmentConstants.GET_OFFERS_SUCCESS, shipmentData: { shipment: { id: 1 } } }
+
+    const expectedActions = [{
+      type: shipmentConstants.GET_OFFERS_REQUEST,
+      shipmentData: {
+        shipment: {
+          id: 1
+        }
+      }
+    },
+    {
+      type: shipmentConstants.GET_OFFERS_SUCCESS,
+      shipmentData: {
+        shipment: {
+          id: 1
+        }
+      }
+    }
     ]
 
-    return store.dispatch(shipmentActions.getOffers({ shipment: { id: 1 } }, false)).then(() => {
+    return store.dispatch(shipmentActions.getOffers({
+      shipment: {
+        id: 1
+      }
+    }, false)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions)
+    })
+  })
+
+  it('creates REFRESH_MAX_DIMENSIONS_SUCCESS when fetching the offers is successful', () => {
+    expect.assertions(1)
+    const mdbResponse = {
+      maxDimensions: {
+        ocean: maxDimensionsToApply
+      },
+      maxAggregateDimensions: {
+        ocean: maxDimensionsToApply
+      }
+    }
+    fetch.once(() => new Promise((resolve) => setTimeout(() => resolve({
+      body: JSON.stringify({
+        success: true,
+        data: mdbResponse
+      })
+    }),
+    10)))
+
+    const expectedActions = [{
+      type: shipmentConstants.REFRESH_MAX_DIMENSIONS_REQUEST,
+      payload: [1]
+    },
+    {
+      type: shipmentConstants.REFRESH_MAX_DIMENSIONS_SUCCESS,
+      payload: mdbResponse
+    }
+    ]
+
+    return store.dispatch(shipmentActions.refreshMaxDimensions([1])).then(() => {
       expect(store.getActions()).toEqual(expectedActions)
     })
   })

@@ -20,7 +20,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::MaxDimensions do
         payload_in_kg: 0.1e5,
         chargeable_weight: 0.1e5,
         load_type: 'blah',
-        aggregate: nil,
+        aggregate: 'blues',
         row_nr: 2
       }].map { |row| ExcelDataServices::Rows::MaxDimensions.new(tenant: tenant, row_data: row) }
     end
@@ -35,6 +35,11 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::MaxDimensions do
         [
           { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
             reason: 'The provided load type is invalid',
+            row_nr: 2,
+            sheet_name: 'Sheet1',
+            type: :error },
+          { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
+            reason: 'Aggregate can only be either True/False',
             row_nr: 2,
             sheet_name: 'Sheet1',
             type: :error }

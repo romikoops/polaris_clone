@@ -50,7 +50,7 @@ class ShipmentDetails extends React.PureComponent {
     props.bookingProcessDispatch.updateShipment('id', props.shipmentId)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     if (this.props.shipment.ahoyRequest) {
       delay(() => scrollTo('dayPicker'), 1000)
     }

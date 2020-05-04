@@ -616,6 +616,27 @@ export default function shipment (state = {}, action) {
         error: null
       }
     }
+    case shipmentConstants.REFRESH_MAX_DIMENSIONS_REQUEST:
+      return state
+    case shipmentConstants.REFRESH_MAX_DIMENSIONS_SUCCESS:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage1: {
+            ...state.response.stage1,
+            ...action.payload
+          }
+        }
+      }
+    case shipmentConstants.REFRESH_MAX_DIMENSIONS_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          stage1: [action.error]
+        }
+      }
     default:
       return state
   }

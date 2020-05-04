@@ -187,6 +187,9 @@ class RouteSection extends React.PureComponent {
         const country = preCarriage ? availableRoutes[0].origin.country : origin.country
         shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })
       }
+      if (!isEmpty(origin) && !isEmpty(destination) && availableRoutes.length > 0) {
+        shipmentDispatch.refreshMaxDimensions(itineraryIds)
+      }
     }
     if (origin === prevState.origin &&
       destination === prevState.destination &&

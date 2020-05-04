@@ -12,6 +12,7 @@ module ExcelDataServices
         restructured_data = enforce_numerics(restructured_data)
         restructured_data = sanitize_service_level_and_carrier(restructured_data)
         restructured_data = expand_fcl_to_all_sizes(restructured_data)
+        restructured_data = ensure_aggregate_booleans(restructured_data)
 
         restructured_data = restructured_data.map do |row_data|
           { sheet_name: sheet_name,
@@ -30,6 +31,13 @@ module ExcelDataServices
             datum[:dimension_y] = datum[:dimension_y].to_d
             datum[:dimension_z] = datum[:dimension_z].to_d
           end
+          datum
+        end
+      end
+
+      def ensure_aggregate_booleans(data)
+        data.map do |datum|
+          datum[:aggregate] = datum[:aggregate].nil? ? false : datum[:aggregate]
           datum
         end
       end

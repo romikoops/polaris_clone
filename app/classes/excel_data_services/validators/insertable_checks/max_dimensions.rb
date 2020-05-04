@@ -10,6 +10,7 @@ module ExcelDataServices
 
         def check_single_data(row)
           check_load_type(row)
+          check_aggregate(row)
         end
 
         def check_load_type(row)
@@ -20,6 +21,18 @@ module ExcelDataServices
             row_nr: row.nr,
             sheet_name: sheet_name,
             reason: 'The provided load type is invalid',
+            exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
+          )
+        end
+
+        def check_aggregate(row)
+          return if [true, false, nil].include?(row[:aggregate])
+
+          add_to_errors(
+            type: :error,
+            row_nr: row.nr,
+            sheet_name: sheet_name,
+            reason: 'Aggregate can only be either True/False',
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
           )
         end

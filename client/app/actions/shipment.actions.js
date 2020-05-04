@@ -37,7 +37,7 @@ function getOffers (data, redirect) {
       `${getTenantApiUrl()}/shipments/${get(data, 'shipment.id')}/get_offers`,
       requestOptions('POST', { 'Content-Type': 'application/json' }, JSON.stringify(deepSnakefyKeys(data)))
     )
-      .then(resp => resp.json())
+      .then((resp) => resp.json())
       .then((resp) => {
         if (resp.success) {
           const responseData = JSON.parse(resp.data)
@@ -86,7 +86,7 @@ function refreshQuotes (shipmentId) {
       `${getTenantApiUrl()}/shipments/${shipmentId}/refresh_quotes`,
       requestOptions('GET', { 'Content-Type': 'application/json' }, JSON.stringify(deepSnakefyKeys(shipmentId)))
     )
-      .then(resp => resp.json())
+      .then((resp) => resp.json())
       .then((resp) => {
         if (resp.success) {
           dispatch(success(resp.data))
@@ -104,8 +104,8 @@ function refreshQuotes (shipmentId) {
           if (resp.error) console.error(resp.exception)
         }
       })
-    }
   }
+}
 
 function setShipmentContacts (data) {
   function request (shipmentData) {
@@ -131,7 +131,7 @@ function setShipmentContacts (data) {
       `${getTenantApiUrl()}/shipments/${data.shipment.id}/update_shipment`,
       requestOptions('POST', { 'Content-Type': 'application/json' }, JSON.stringify(data))
     )
-      .then(resp => resp.json())
+      .then((resp) => resp.json())
       .then((resp) => {
         if (!resp.success) {
           dispatch(failure(resp.message))
@@ -142,6 +142,44 @@ function setShipmentContacts (data) {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
         dispatch(push(`/booking/${shipmentData.shipment.id}/finish_booking`))
+      })
+  }
+}
+
+function refreshMaxDimensions (itineraryIds) {
+  function request (payload) {
+    return {
+      type: shipmentConstants.REFRESH_MAX_DIMENSIONS_REQUEST,
+      payload
+    }
+  }
+  function success (payload) {
+    return {
+      type: shipmentConstants.REFRESH_MAX_DIMENSIONS_SUCCESS,
+      payload
+    }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.REFRESH_MAX_DIMENSIONS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request(itineraryIds))
+
+    return fetch(
+      `${getTenantApiUrl()}/max_dimensions?itinerary_ids=${itineraryIds.join(',')}`,
+      requestOptions('GET', { 'Content-Type': 'application/json' })
+    )
+      .then((resp) => resp.json())
+      .then((resp) => {
+        if (!resp.success) {
+          dispatch(failure(resp.message))
+
+          return
+        }
+
+        const maxDimensions = resp.data
+        dispatch(success(maxDimensions))
       })
   }
 }
@@ -203,7 +241,7 @@ function newAhoyShipment (params) {
         originId = parseInt(originId, 10)
         destinationId = parseInt(destinationId, 10)
 
-        const itineraryData = find(shipmentData.routes, route => route.origin.hubId === originId && route.destination.hubId === destinationId)
+        const itineraryData = find(shipmentData.routes, (route) => route.origin.hubId === originId && route.destination.hubId === destinationId)
 
         if (itineraryData) {
           shipmentData.shipment.origin = itineraryData.origin
@@ -431,7 +469,7 @@ function getAll () {
 
     shipmentService
       .getAll()
-      .then(shipments => dispatch(success(shipments)), error => dispatch(failure(error)))
+      .then((shipments) => dispatch(success(shipments)), (error) => dispatch(failure(error)))
   }
 }
 
@@ -451,7 +489,7 @@ function getShipments () {
 
     shipmentService
       .getAll()
-      .then(shipments => dispatch(success(shipments)), error => dispatch(failure(error)))
+      .then((shipments) => dispatch(success(shipments)), (error) => dispatch(failure(error)))
   }
 }
 
@@ -471,7 +509,7 @@ function getShipment (id) {
 
     shipmentService
       .getShipment(id)
-      .then(shipment => dispatch(success(shipment)), error => dispatch(failure(error)))
+      .then((shipment) => dispatch(success(shipment)), (error) => dispatch(failure(error)))
   }
 }
 
@@ -521,9 +559,9 @@ function fetchShipment (id) {
 
     return window
       .fetch(`http://localhost:3000/shipments/${id}`)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(
-        json => dispatch(success(id, json)),
+        (json) => dispatch(success(id, json)),
         (error) => {
           dispatch(failure(id, error))
         }
@@ -816,7 +854,8 @@ export const shipmentActions = {
   checkAhoyShipment,
   newAhoyShipment,
   checkLoginOnBookingProcess,
-  refreshQuotes
+  refreshQuotes,
+  refreshMaxDimensions
 }
 
 export default shipmentActions

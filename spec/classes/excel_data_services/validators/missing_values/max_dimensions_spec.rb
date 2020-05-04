@@ -21,7 +21,7 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::MaxDimensions do
           payload_in_kg: 10_000,
           chargeable_weight: nil,
           cargo_class: 'fcl_20',
-          aggregate: nil,
+          aggregate: false,
           row_nr: 2
         },
         {

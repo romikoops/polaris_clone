@@ -2770,7 +2770,7 @@ FactoryBot.define do
           dimension_z: 0.12e4,
           payload_in_kg: 0.1e5,
           chargeable_weight: 0.1e5,
-          aggregate: nil,
+          aggregate: false,
           row_nr: 2
         },
          {
