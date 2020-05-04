@@ -2,8 +2,9 @@
   "extends": [
     "config:base",
     ":disableMajorUpdates",
-    "monorepo:react",
-    "monorepo:jest"
+    ":semanticCommits",
+    "monorepo:jest",
+    "monorepo:react"
   ],
   "packageRules": [
     {
