@@ -1,6 +1,9 @@
 {
   "extends": [
     "config:base",
+    ":automergeDigest",
+    ":automergeMinor",
+    ":automergePr",
     ":disableMajorUpdates",
     ":semanticCommits",
     "monorepo:jest",
