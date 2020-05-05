@@ -7,7 +7,7 @@ pipeline {
     podTemplate(inheritFrom: 'default')
     preserveStashes()
     skipDefaultCheckout()
-    timeout(45)
+    timeout(60)
   }
 
   agent {
@@ -38,78 +38,34 @@ pipeline {
   }
 
   stages {
-    stage("Checkout") {
-      options { retry(2) }
-
-      steps {
-        defaultCheckout()
-
-        stash(name: 'backend', excludes: 'client/**/*,qa/**/*')
-        stash(name: 'frontend', includes: 'client/**/*')
-      }
-    }
-
-    stage("Prepare") {
-      parallel {
-        stage("Ruby") {
-          options { retry(2) }
-
+    stage("Test") {
+      stages {
+        stage("Checkout") {
           steps {
-            container('ruby') { appPrepare() }
+            checkpoint(10)
+
+            defaultCheckout()
+
+            stash(name: "backend", excludes: "client/**/*,qa/**/*")
+            stash(name: "frontend", includes: "client/**/*")
           }
         }
 
-        stage("NPM") {
-          options { retry(2) }
-
-          steps {
-            container('node') {
-              withCache(['client/node_modules=client/package-lock.json']) {
-                dir('client') {
-                  sh(label: 'NPM Install', script: "npm install --no-progress")
-                }
+        stage("Prepare") {
+          parallel {
+            stage("Ruby") {
+              steps {
+                container("ruby") { appPrepare() }
               }
             }
-          }
-        }
-      }
-    }
 
-    stage('Test') {
-      parallel {
-        stage('App') {
-          stages {
-            stage('RSpec') {
-              options { retry(2) }
-
+            stage("NPM") {
               steps {
-                container('ruby') { appRunner('app') }
-              }
-            }
-          }
-        }
-
-        stage('Engines') {
-          stages {
-            stage('RSpec') {
-              options { retry(2) }
-
-              steps {
-                container('ruby') { appRunner('engines') }
-              }
-            }
-          }
-        }
-
-        stage('Client') {
-          stages {
-            stage('Jest') {
-              options { retry(2) }
-
-              steps {
-                container('node') {
-                  dir('client') {
-                    sh(label: 'Run Tests', script: 'npm run test:ci')
+                container("node") {
+                  withCache(["client/node_modules=client/package-lock.json"]) {
+                    dir("client") {
+                      sh(label: "NPM Install", script: "npm install --no-progress")
+                    }
                   }
                 }
               }
@@ -117,93 +73,86 @@ pipeline {
           }
         }
 
-      }
+        stage("Test") {
+          parallel {
+            stage("App") {
+              steps {
+                container("ruby") { appRunner("app") }
+              }
+            }
 
-      post {
-        always {
-          junit(allowEmptyResults: true, testResults: '**/junit.xml')
+            stage("Engines") {
+              steps {
+                container("ruby") { appRunner("engines") }
+              }
+            }
 
-          reportCoverage()
-          coverDiff(glob: "**/coverage.xml,**/cobertura-coverage.xml")
+            stage("Client") {
+              steps {
+                container("node") {
+                  dir("client") {
+                    sh(label: "Run Tests", script: "npm run test:ci")
+                  }
+                }
+              }
+            }
+          }
+
+          post {
+            always {
+              junit(allowEmptyResults: true, testResults: '**/junit.xml')
+
+              reportCoverage()
+              coverDiff()
+            }
+          }
         }
       }
     }
 
-    stage('Build') {
+    stage("Build") {
       when {
         anyOf {
-          branch 'master'
+          branch "master"
           changeRequest()
         }
       }
 
-      parallel {
+      stages {
         stage("Polaris") {
-          stages {
-            stage("Docker") {
-              options { retry(2) }
-
-              steps {
-                dockerBuild(
-                  dir: '.',
-                  image: "polaris",
-                  memory: 1500,
-                  stash: 'backend',
-                  pre_script: "scripts/docker-prepare.sh"
-                )
-              }
+          steps {
+            checkpoint(20) {
+              dockerBuild(
+                dir: '.',
+                image: "polaris",
+                memory: 1500,
+                stash: 'backend',
+                pre_script: "scripts/docker-prepare.sh"
+              )
             }
           }
         }
 
         stage("Dipper") {
-          stages {
-            stage("Docker") {
-              options { retry(2) }
+          steps {
+            checkpoint(30) {
+              dockerBuild(
+                dir: "client/",
+                image: "dipper",
+                memory: 2000,
+                args: [ RELEASE: env.GIT_COMMIT ],
+                stash: "frontend",
+                artifacts: [source: "/usr/share/nginx/html", destination: "client/dist"]
+              )
 
-              steps {
-                dockerBuild(
-                  dir: "client/",
-                  image: "dipper",
-                  memory: 2000,
-                  args: [ RELEASE: env.GIT_COMMIT ],
-                  stash: "frontend"
-                )
-              }
-            }
-          }
-        }
-
-        stage("S3") {
-          stages {
-            stage("Build") {
-              options { retry(2) }
-
-              steps {
-                container("node") {
-                  dir("client") {
-                    sh("npm run build")
-                  }
-                }
-              }
-            }
-
-            stage("Deploy") {
-              when { branch "master" }
-              options { retry(2) }
-
-              steps {
-                withSecrets {
-                  s3Upload(
-                    bucket: env.DIPPER_BUCKET,
-                    workingDir: "client/dist",
-                    includePathPattern: "**",
-                    excludePathPattern: "index.html,config*.js",
-                    metadatas: ["Revision:${env.GIT_COMMIT}", "Jenkins-Build:${env.BUILD_URL}"],
-                    verbose: true
-                  )
-                }
-              }
+              s3Upload(
+                bucket: env.DIPPER_BUCKET,
+                workingDir: "client/dist",
+                includePathPattern: "**",
+                excludePathPattern: "index.html,config*.js",
+                metadatas: ["Revision:${env.GIT_COMMIT}", "Jenkins-Build:${env.BUILD_URL}"],
+                verbose: true
+              )
             }
           }
         }
@@ -212,10 +161,11 @@ pipeline {
 
     stage("Sentry") {
       when { branch "master" }
-      options { retry(2) }
 
       steps {
-        sentryRelease(projects: ["api", "dipper"])
+        checkpoint(40) {
+          sentryRelease(projects: ["api", "dipper"])
+        }
       }
     }
   }
