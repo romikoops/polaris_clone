@@ -113,7 +113,7 @@ gem 'table_print'
 gem 'filterrific'
 
 # Pagination library
-gem 'will_paginate', '~> 3.1.5'
+gem 'will_paginate', '~> 3.3.0'
 
 # Email support
 gem 'mailgun-ruby', '~> 1.2.0'

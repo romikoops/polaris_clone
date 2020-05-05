@@ -1199,7 +1199,7 @@ GEM
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
-    will_paginate (3.1.8)
+    will_paginate (3.3.0)
     wkhtmltopdf-binary (0.12.4)
     write_xlsx (0.85.7)
       rubyzip (>= 1.0.0)
@@ -1332,7 +1332,7 @@ DEPENDENCIES
   traceroute
   tzinfo-data
   webmock
-  will_paginate (~> 3.1.5)
+  will_paginate (~> 3.3.0)
   wkhtmltopdf-binary
   write_xlsx
 
