@@ -93,7 +93,7 @@ module OfferCalculator
       extra_fees_results = {}
 
       total_fees.each do |tk, tfee|
-        extra_fees_results[tk] = [(tfee[:value] * fees[:rate][:value]), tfee.fetch(:min, 0)].max
+        extra_fees_results[tk] = [(tfee[:value] * fees[:rate][:value]), (tfee.dig(:min) || 0)].max
       end
 
       extra_fees_results.each do |_ek, evalue|
