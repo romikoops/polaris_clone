@@ -45,7 +45,7 @@ gem 'sprockets', '~> 3.7.2'
 # AWS SDK
 gem 'aws-sdk-cloudfront', '~> 1.11.0'
 gem 'aws-sdk-route53', '~> 1.17.0'
-gem 'aws-sdk-s3', '~> 1.30.1'
+gem 'aws-sdk-s3', '~> 1.63.0'
 gem 'aws-sdk-sqs', '~> 1.10.0'
 
 gem 'font-awesome-rails'
