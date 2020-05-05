@@ -1,15 +1,8 @@
-import merge from 'lodash/merge'
+import { merge } from 'lodash'
 import { userConstants } from '../constants'
-import { cookieKey } from '../helpers'
+import { reducerInitialState } from '../helpers'
 
-const { localStorage } = window
-
-const userCookie = localStorage.getItem(cookieKey())
-const userData = (typeof (userCookie) !== 'undefined') && userCookie !== 'undefined' ? JSON.parse(userCookie) : {}
-
-const initialState = userData ? { loggedIn: true, userData } : {}
-
-export default function users (state = initialState, action) {
+export default function users (state = reducerInitialState('user'), action) {
   switch (action.type) {
     case userConstants.GETALL_REQUEST:
       return {

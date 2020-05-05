@@ -1,15 +1,8 @@
 import i18next from 'i18next'
 import { authenticationConstants } from '../constants'
-import { cookieKey } from '../helpers'
+import { reducerInitialState } from '../helpers'
 
-const localStorage = window.localStorage || { getItem (key) { return null } }
-
-const userCookie = localStorage.getItem(cookieKey())
-const user = (typeof (userCookie) !== 'undefined') && userCookie !== 'undefined' ? JSON.parse(userCookie) : {}
-
-const initialState = user ? { loggedIn: true, user } : {}
-
-export default function (state = initialState, action) {
+export default function (state = reducerInitialState('authentication'), action) {
   if (typeof state !== 'object') {
     throw new Error('invalid state')
   }
