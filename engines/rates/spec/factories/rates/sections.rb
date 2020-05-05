@@ -48,7 +48,7 @@ end
 #  truck_height             :decimal(, )
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
-#  carrier_id               :uuid
+#  carrier_id               :bigint
 #  location_id              :uuid
 #  target_id                :uuid
 #  tenant_id                :uuid
@@ -64,6 +64,7 @@ end
 #
 # Foreign Keys
 #
+#  fk_rails_...  (carrier_id => carriers.id)
 #  fk_rails_...  (location_id => routing_locations.id)
 #  fk_rails_...  (tenant_id => tenants_tenants.id)
 #  fk_rails_...  (terminal_id => routing_terminals.id)

@@ -38,6 +38,10 @@ module ExcelDataServices
       def origin_locode
         @origin_locode ||= data[:origin_locode]
       end
+
+      def transit_time
+        @transit_time ||= data[:transit_time]&.to_i
+      end
     end
   end
 end

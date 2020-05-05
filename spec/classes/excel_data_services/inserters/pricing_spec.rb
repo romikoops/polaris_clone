@@ -4,18 +4,19 @@ require 'rails_helper'
 
 RSpec.shared_examples 'Pricing .insert' do
   it 'returns correct stats and creates correct data' do
-    base_pricing = scope.content['base_pricing']
     stats = described_class.insert(options)
-    itinerary = Itinerary.last
+    itinerary = Legacy::Itinerary.find_by(name: 'Gothenburg - Shanghai', mode_of_transport: 'ocean', transshipment: nil)
     expect(itinerary.slice(:name, :mode_of_transport).values).to eq(['Gothenburg - Shanghai', 'ocean'])
     expect(itinerary.map_data[0][:origin]).to eq itinerary.stops[0].hub.lng_lat_array
     expect(itinerary.map_data[0][:destination]).to eq itinerary.stops[1].hub.lng_lat_array
-    expect(Stop.pluck(:itinerary_id).uniq.first).to eq(itinerary.id)
-    pricings = base_pricing ? ::Pricings::Pricing.all : ::Pricing.all
+    expect(Legacy::Stop.pluck(:itinerary_id).uniq.first).to eq(itinerary.id)
+    pricings = ::Pricings::Pricing.all
     expect(stats).to eq(expected_stats)
     dates = pricings.pluck(:effective_date, :expiration_date)
     expect(dates).to match_array(expected_dates)
-    pricing_details = base_pricing ? ::Pricings::Fee.where(pricing: pricings) : ::PricingDetail.where(priceable: pricings)
+    expect(Legacy::TransitTime.count).to eq(2)
+    expect(Legacy::ChargeCategory.where(code: %w[transit_time transshipment]).count).to be_zero
+    pricing_details = ::Pricings::Fee.where(pricing: pricings)
     pricing_details_values = pricing_details.joins(:rate_basis).pluck(
       :rate,
       'pricings_rate_bases.external_code',
@@ -49,6 +50,11 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                          stops: [
                            build(:stop, itinerary_id: nil, index: 0, hub: hubs.first),
                            build(:stop, itinerary_id: nil, index: 1, hub: hubs.second)
+                         ]),
+      create(:itinerary, tenant: tenant, transshipment: 'ZACPT',
+                         stops: [
+                           build(:stop, itinerary_id: nil, index: 0, hub: hubs.first),
+                           build(:stop, itinerary_id: nil, index: 1, hub: hubs.second)
                          ])
     ]
   end
@@ -67,6 +73,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
     context 'with overlap case: no_old_record' do
       let!(:expected_dates) do
         [
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 11, 15, 23, 59, 59)],
           [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
@@ -92,6 +99,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       end
       let!(:expected_pricing_details_values) do
         [
+          [0.17e2, 'PER_WM', 0.17e2, [], 'USD'],
           [0.2e2, 'PER_WM', 0.2e2, [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD'],
           [0.17e2, 'PER_WM', 0.17e2, [], 'USD'],
           [0.2e2, 'PER_WM', 0.2e2, [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD'],
@@ -131,8 +139,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 3 },
-            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 },
+            "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 3 },
+            "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
         end
 
@@ -143,6 +151,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
     context 'with overlap case: new_starts_after_old_and_stops_at_or_after_old' do
       let!(:expected_dates) do
         [
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 11, 15, 23, 59, 59)],
           [DateTime.new(2018, 3, 1), DateTime.new(2018, 3, 14, 23, 59, 59)],
           [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
@@ -169,6 +178,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       end
       let!(:expected_pricing_details_values) do
         [
+          [0.17e2, 'PER_WM', 0.17e2, [], 'USD'],
           [0.1111e4, 'PER_CONTAINER', nil, [], 'EUR'],
           [0.2e2, 'PER_WM', 0.2e2, [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD'],
           [0.17e2, 'PER_WM', 0.17e2, [], 'USD'],
@@ -224,8 +234,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 4 },
-            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 },
+            "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 4 },
+            "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
         end
 
@@ -236,6 +246,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
     context 'with overlap case: no_overlap' do
       let!(:expected_dates) do
         [
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 11, 15, 23, 59, 59)],
           [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
@@ -262,6 +273,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       end
       let!(:expected_pricing_details_values) do
         [
+          [0.17e2, 'PER_WM', 0.17e2, [], 'USD'],
           [0.11e2, 'PER_WM', nil, [], 'EUR'],
           [0.2e2, 'PER_WM', 0.2e2, [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD'],
           [0.17e2, 'PER_WM', 0.17e2, [], 'USD'],
@@ -317,8 +329,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 21, number_deleted: 0, number_updated: 3 },
-            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 },
+            "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 3 },
+            "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
         end
 
@@ -329,6 +341,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
     context 'with overlap case: new_is_covered_by_old' do
       let!(:expected_dates) do
         [
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 11, 15, 23, 59, 59)],
           [DateTime.new(2017, 6, 1), DateTime.new(2018, 3, 10, 23, 59, 59)],
           [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
@@ -356,6 +369,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       end
       let!(:expected_pricing_details_values) do
         [
+          [0.17e2, 'PER_WM', 0.17e2, [], 'USD'],
           [0.11e2, 'PER_WM', nil, [], 'EUR'],
           [0.11e2, 'PER_WM', nil, [], 'EUR'],
           [0.17e2, 'PER_WM', 0.17e2, [], 'USD'],
@@ -412,8 +426,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 8 },
-            "pricings/fees": { number_created: 28, number_deleted: 0, number_updated: 0 },
+            "pricings/pricings": { number_created: 23, number_deleted: 0, number_updated: 8 },
+            "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
         end
 
@@ -424,6 +438,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
     context 'with overlap case: new_starts_before_old_and_stops_before_old_ends' do
       let!(:expected_dates) do
         [
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 11, 15, 23, 59, 59)],
           [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
@@ -449,6 +464,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       end
       let!(:expected_pricing_details_values) do
         [
+          [0.17e2, 'PER_WM', 0.17e2, [], 'USD'],
           [0.17e2, 'PER_WM', 0.17e2, [], 'USD'],
           [0.2e2, 'PER_WM', 0.2e2, [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }], 'USD'],
           [0.17e2, 'PER_WM', 0.17e2, [], 'USD'],
@@ -503,8 +519,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 21, number_deleted: 1, number_updated: 6 },
-            "pricings/fees": { number_created: 28, number_deleted: 1, number_updated: 0 },
+            "pricings/pricings": { number_created: 22, number_deleted: 1, number_updated: 6 },
+            "pricings/fees": { number_created: 29, number_deleted: 1, number_updated: 0 },
             errors: [] }
         end
 

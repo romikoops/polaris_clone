@@ -122,6 +122,7 @@ voyage_info:
   voyage_code: true
   vessel: true
   service_level: true
+  transit_time: false
   transshipmentVia: true
 side_nav:
   agent:

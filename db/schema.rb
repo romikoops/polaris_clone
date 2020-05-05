@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_21_091851) do
+ActiveRecord::Schema.define(version: 2020_05_04_113519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -707,6 +707,16 @@ ActiveRecord::Schema.define(version: 2020_04_21_091851) do
   create_table "legacy_tenant_vehicles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_transit_times", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "duration"
+    t.integer "itinerary_id"
+    t.integer "tenant_vehicle_id"
+    t.datetime "updated_at", null: false
+    t.index ["itinerary_id"], name: "index_legacy_transit_times_on_itinerary_id"
+    t.index ["tenant_vehicle_id"], name: "index_legacy_transit_times_on_tenant_vehicle_id"
   end
 
   create_table "legacy_trips", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -2266,6 +2276,8 @@ ActiveRecord::Schema.define(version: 2020_04_21_091851) do
   add_foreign_key "address_book_contacts", "tenants_users", column: "user_id"
   add_foreign_key "cargo_cargos", "quotations_quotations", column: "quotation_id"
   add_foreign_key "cargo_units", "cargo_cargos", column: "cargo_id"
+  add_foreign_key "legacy_transit_times", "itineraries"
+  add_foreign_key "legacy_transit_times", "tenant_vehicles"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "profiles_profiles", "tenants_users", column: "user_id", on_delete: :cascade

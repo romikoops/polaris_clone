@@ -27,10 +27,11 @@ module OfferCalculator
       def attributes(route, itinerary, tenant_vehicle_id)
         origin_hub = Legacy::Stop.find_by(id: route.origin_stop_id, sandbox: @sandbox).hub
         destination_hub = Legacy::Stop.find_by(id: route.destination_stop_id, sandbox: @sandbox).hub
+        transit_time = Legacy::TransitTime.find_by(itinerary: itinerary, tenant_vehicle_id: tenant_vehicle_id)
         faux_trip = itinerary.trips.find_or_create_by!(tenant_vehicle_id: tenant_vehicle_id,
                                                        load_type: @shipment.load_type,
                                                        start_date: OfferCalculator::Schedule.quote_trip_start_date,
-                                                       end_date: OfferCalculator::Schedule.quote_trip_end_date,
+                                                       end_date: end_date(transit_time: transit_time),
                                                        closing_date: OfferCalculator::Schedule.quote_trip_closing_date,
                                                        sandbox: @sandbox)
         {
@@ -46,6 +47,14 @@ module OfferCalculator
           vehicle_name: faux_trip.tenant_vehicle.name,
           carrier_name: faux_trip.tenant_vehicle&.carrier&.name
         }
+      end
+
+      def end_date(transit_time:)
+        if transit_time
+          OfferCalculator::Schedule.quote_trip_start_date + transit_time.duration.days
+        else
+          OfferCalculator::Schedule.quote_trip_end_date
+        end
       end
     end
   end

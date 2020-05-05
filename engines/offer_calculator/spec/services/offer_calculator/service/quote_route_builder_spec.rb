@@ -57,6 +57,25 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
       end
     end
 
+    context 'with transit_time' do
+      before do
+        pricings.pluck(:tenant_vehicle_id).map do |tenant_vehicle_id|
+          FactoryBot.create(:legacy_transit_time, itinerary: itinerary, tenant_vehicle_id: tenant_vehicle_id, duration: 35)
+        end
+      end
+
+      let(:desired_end_date) { OfferCalculator::Schedule.quote_trip_start_date + 35.days }
+
+      it 'return the route detail hashes' do
+        aggregate_failures do
+          expect(results.length).to eq(4)
+          expect(results.map { |sched| sched.trip.tenant_vehicle_id }).to match_array(pricings.map(&:tenant_vehicle_id))
+          expect(results.map(&:etd).uniq).to match_array([OfferCalculator::Schedule.quote_trip_start_date])
+          expect(results.map(&:eta).uniq).to match_array([desired_end_date])
+        end
+      end
+    end
+
     context  'with trucking' do
       before do
         google_directions = instance_double('OfferCalculator::GoogleDirections', driving_time_in_seconds: 10_000, driving_time_in_seconds_for_trucks: 14_000)

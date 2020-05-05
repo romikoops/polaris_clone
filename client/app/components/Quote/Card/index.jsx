@@ -360,6 +360,11 @@ class QuoteCard extends PureComponent {
                 {t('quote:service', { serviceLevel: capitalize(result.meta.service_level) })}
               </div>
             )}
+            {voyageInfo.transit_time && result.meta.transit_time && (
+              <div>
+                {t('quote:transitTime', { transitTime: result.meta.transit_time })}
+              </div>
+            )}
             {meta.validUntil && (
               <div>
                 <i className="flex-none fa fa-clock-o" />

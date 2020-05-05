@@ -16,10 +16,9 @@ module ExcelDataServices
 
         restructured_data = restructured_data.flat_map do |row_data|
           row_nr = row_data.delete(:row_nr)
-          standard_keys, fee_keys = row_data.keys.slice_after(:currency).to_a
+          fee_keys = row_data.keys - standard_keys
           standard_part = row_data.slice(*standard_keys)
           fee_part = row_data.slice(*fee_keys)
-
           expand_dynamic_fees_to_individual_fees(standard_part, fee_part, row_nr)
         end
 
@@ -40,6 +39,12 @@ module ExcelDataServices
       end
 
       private
+
+      def standard_keys
+        ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
+          ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
+          IGNORED_KEYS
+      end
 
       def expand_dynamic_fees_to_individual_fees(standard_part, fee_part, row_nr)
         result = fee_part.map do |fee_key, fee_value|

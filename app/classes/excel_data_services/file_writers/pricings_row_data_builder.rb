@@ -41,13 +41,10 @@ module ExcelDataServices
         service_level = pricing.tenant_vehicle.name
         transshipment = pricing.transshipment || itinerary.transshipment
         load_type = pricing.cargo_class.upcase # TODO: load_type is called cargo_class...
-        trip = itinerary.trips.first if itinerary.trips
-        if trip&.end_date && trip&.start_date
-          transit_time = ((trip.end_date - trip.start_date).seconds / 1.day).round(0)
-        end
-        transit_time = nil if transit_time&.zero?
+        transit_time = ::Legacy::TransitTime.find_by(
+          itinerary: itinerary, tenant_vehicle_id: pricing.tenant_vehicle_id
+        )&.duration
         group_name = Tenants::Group.find_by(id: pricing.group_id)&.name
-
         pricing_attributes.merge(
           customer_email: customer_email,
           mot: mot,

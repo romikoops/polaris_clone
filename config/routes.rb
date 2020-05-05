@@ -519,6 +519,7 @@ end
 # Routes for Api::Engine:
 #                       api_auth        /                                                         ApiAuth::Engine
 #                          v1_me GET    /v1/me(.:format)                                          api/v1/users#show
+#       password_reset_v1_client PATCH  /v1/clients/:id/password_reset(.:format)                  api/v1/clients#password_reset
 #                     v1_clients GET    /v1/clients(.:format)                                     api/v1/clients#index
 #                                POST   /v1/clients(.:format)                                     api/v1/clients#create
 #                      v1_client GET    /v1/clients/:id(.:format)                                 api/v1/clients#show

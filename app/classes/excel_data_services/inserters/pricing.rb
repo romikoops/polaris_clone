@@ -30,6 +30,7 @@ module ExcelDataServices
           next unless itinerary.save
 
           tenant_vehicle = find_or_create_tenant_vehicle(row)
+          find_or_create_transit_time(row: row, itinerary: itinerary, tenant_vehicle: tenant_vehicle)
           itinerary.generate_map_data
           notes = row.notes&.uniq || []
 
@@ -189,23 +190,18 @@ module ExcelDataServices
               sandbox: @sandbox,
               hw_threshold: row.hw_threshold }
 
-          if scope['base_pricing']
-            charge_category = Legacy::ChargeCategory.from_code(
-              tenant_id: tenant.id,
-              code: fee_code,
-              name: row.fee_name || fee_code,
-              sandbox: @sandbox
-            )
+          charge_category = Legacy::ChargeCategory.from_code(
+            tenant_id: tenant.id,
+            code: fee_code,
+            name: row.fee_name || fee_code,
+            sandbox: @sandbox
+          )
 
-            pricing_detail_params[:rate_basis] = Pricings::RateBasis.create_from_external_key(row.rate_basis)
-            pricing_detail_params[:hw_rate_basis] = Pricings::RateBasis.create_from_external_key(row.hw_rate_basis)
-            pricing_detail_params[:charge_category] = charge_category
-            pricing_detail_params[:metadata] = metadata(row: row_data)
-          else
-            pricing_detail_params[:rate_basis] = row.rate_basis
-            pricing_detail_params[:hw_rate_basis] = row.hw_rate_basis
-            pricing_detail_params[:shipping_type] = fee_code
-          end
+          pricing_detail_params[:rate_basis] = Pricings::RateBasis.create_from_external_key(row.rate_basis)
+          pricing_detail_params[:hw_rate_basis] = Pricings::RateBasis.create_from_external_key(row.hw_rate_basis)
+          pricing_detail_params[:charge_category] = charge_category
+          pricing_detail_params[:metadata] = metadata(row: row_data)
+
 
           if row.range.blank?
             pricing_detail_params[:rate] = row.fee

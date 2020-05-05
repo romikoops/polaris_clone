@@ -59,6 +59,18 @@ module ExcelDataServices
         end
       end
 
+      def find_or_create_transit_time(row:, itinerary:, tenant_vehicle:)
+        return if row.transit_time.blank?
+
+        Legacy::TransitTime.find_or_initialize_by(
+          itinerary: itinerary,
+          tenant_vehicle: tenant_vehicle
+        ).tap do |transit_time|
+          transit_time.duration = row.transit_time
+          transit_time.save
+        end
+      end
+
       def add_stats(data_record, row_nr, force_new_record = false)
         descriptor = data_record.class.name.underscore.pluralize.to_sym
         @stats[descriptor] ||= {

@@ -1212,6 +1212,7 @@
     "viewSchedules": "View Schedules",
     "carrier": "Carrier: {{carrierName}}",
     "service": "Service: {{serviceLevel}}",
+    "transitTime": "Estimated T/T: {{transitTime}}",
     "estimatedTT": "Estimated T/T",
     "validUntil": "Valid Until: {{date}}",
     "transshipmentVia": "Transshipment Via: {{transshipment}}"

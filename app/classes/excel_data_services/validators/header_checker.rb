@@ -65,6 +65,7 @@ module ExcelDataServices
           group_id
           group_name
           transshipment
+          transit_time
         ].freeze
 
         PRICING_ONE_FEE_COL_AND_RANGES = %i[
@@ -93,6 +94,7 @@ module ExcelDataServices
           group_id
           group_name
           transshipment
+          transit_time
         ].freeze
 
         SACO_SHIPPING = %i[

@@ -19,9 +19,11 @@ module ExcelDataServices
         origin
         origin_locode
         service_level
+        transshipment
       ].freeze
 
       ROWS_BY_MARGIN_PARAMS_GROUPING_KEYS = ROWS_BY_PRICING_PARAMS_GROUPING_KEYS.without(:customer_email).freeze
+      IGNORED_KEYS = %i[sheet_name restructurer_name].freeze
 
       def self.get(klass_identifier)
         "#{parent}::#{klass_identifier.titleize.delete(' ')}".constantize
