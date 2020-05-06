@@ -72,7 +72,7 @@
     "i18next": "11.10.2",
     "i18next-browser-languagedetector": "2.2.3",
     "image-webpack-loader": "4.6.0",
-    "intersection-observer": "0.7.0",
+    "intersection-observer": "0.10.0",
     "isomorphic-fetch": "2.2.1",
     "lodash": "4.17.13",
     "mailcheck": "1.1.1",
