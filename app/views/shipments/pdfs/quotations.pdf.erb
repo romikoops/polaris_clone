@@ -99,6 +99,12 @@
                 <%= quote['transshipment'] %>
               </p>
             <% end %>
+            <% if quote['transit_time'].present? && scope.dig('voyage_info', 'transit_time').present?%>
+              <p class="voyage-info">
+                <strong>Estimated T/T:</strong>
+                <%= "#{quote['transit_time']} days" %>
+              </p>
+            <% end %>
             <% if quote['carrier'].present? && scope.dig('voyage_info', 'carrier').present? %>
               <p class="voyage-info">
                 <strong>Carrier:</strong>

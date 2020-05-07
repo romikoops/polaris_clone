@@ -262,7 +262,11 @@ module Pdf
         load_type: shipment.load_type,
         carrier: trip.tenant_vehicle.carrier&.name&.upcase,
         service_level: trip.tenant_vehicle.name,
-        transshipment: transshipment(trip: trip)
+        transshipment: transshipment(trip: trip),
+        transit_time: ::Legacy::TransitTime.find_by(
+          tenant_vehicle: trip.tenant_vehicle,
+          itinerary: trip.itinerary
+        )&.duration
       }
     end
 
