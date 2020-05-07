@@ -48,7 +48,7 @@ module UsersDeviseTokenAuth
 
       render json: {
         status: 'success',
-        data: @resource.token_validation_response
+        data: @resource.token_validation_response.merge(inactivityLimit: inactivity_limit)
       }
     end
 
