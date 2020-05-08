@@ -159,7 +159,7 @@
     "friendly-errors-webpack-plugin": "1.7.0",
     "identity-obj-proxy": "3.0.0",
     "jest": "24.1.0",
-    "jest-enzyme": "7.0.1",
+    "jest-enzyme": "7.1.2",
     "jest-fetch-mock": "2.1.2",
     "jest-junit": "6.4.0",
     "jest-tobetype": "1.2.3",
