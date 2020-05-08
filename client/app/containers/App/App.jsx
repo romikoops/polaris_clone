@@ -41,7 +41,7 @@ class App extends Component {
     appDispatch.getTenantId()
     appDispatch.setTenants()
     if (user) {
-      authDispatch.setUser({ data: user })
+      authDispatch.setUser(user)
     }
     shipmentDispatch.checkAhoyShipment(location)
   }
