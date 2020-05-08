@@ -44,7 +44,7 @@
     "@babel/polyfill": "7.0.0",
     "@babel/preset-env": "7.1.6",
     "@babel/preset-react": "7.0.0",
-    "@fullstory/browser": "1.2.1",
+    "@fullstory/browser": "1.4.4",
     "@itsmycargo/consent-manager": "4.3.2",
     "@redux-beacon/logger": "1.0.0",
     "@redux-beacon/offline-web": "1.0.0",
