@@ -12,28 +12,17 @@ module OfferCalculator
       private
 
       def build_route_objs
-        schedules = []
-        @routes.each do |route|
-          itinerary = Legacy::Itinerary.find(route.itinerary_id)
-          pricings = @scope['base_pricing'] ? itinerary.rates : itinerary.pricings
-          tenant_vehicle_ids = pricings.pluck(:tenant_vehicle_id).uniq
-          tenant_vehicle_ids.each do |tv_id|
-            schedules << OfferCalculator::Schedule.new(attributes(route, itinerary, tv_id).merge(id: SecureRandom.uuid))
-          end
+        @routes.map do |route|
+          OfferCalculator::Schedule.new(attributes(route: route).merge(id: SecureRandom.uuid))
         end
-        schedules
       end
 
-      def attributes(route, itinerary, tenant_vehicle_id)
+      def attributes(route:)
+        itinerary = Legacy::Itinerary.find(route.itinerary_id)
         origin_hub = Legacy::Stop.find_by(id: route.origin_stop_id, sandbox: @sandbox).hub
         destination_hub = Legacy::Stop.find_by(id: route.destination_stop_id, sandbox: @sandbox).hub
-        transit_time = Legacy::TransitTime.find_by(itinerary: itinerary, tenant_vehicle_id: tenant_vehicle_id)
-        faux_trip = itinerary.trips.find_or_create_by!(tenant_vehicle_id: tenant_vehicle_id,
-                                                       load_type: @shipment.load_type,
-                                                       start_date: OfferCalculator::Schedule.quote_trip_start_date,
-                                                       end_date: end_date(transit_time: transit_time),
-                                                       closing_date: OfferCalculator::Schedule.quote_trip_closing_date,
-                                                       sandbox: @sandbox)
+        faux_trip = generate_trip(itinerary: itinerary, tenant_vehicle_id: route.tenant_vehicle_id)
+
         {
           origin_hub_id: origin_hub.id,
           destination_hub_id: destination_hub.id,
@@ -45,8 +34,19 @@ module OfferCalculator
           trip_id: faux_trip.id,
           mode_of_transport: route.mode_of_transport,
           vehicle_name: faux_trip.tenant_vehicle.name,
-          carrier_name: faux_trip.tenant_vehicle&.carrier&.name
+          carrier_name: faux_trip.tenant_vehicle&.carrier&.name,
+          transshipment: itinerary.transshipment
         }
+      end
+
+      def generate_trip(itinerary:, tenant_vehicle_id:)
+        transit_time = Legacy::TransitTime.find_by(itinerary: itinerary, tenant_vehicle_id: tenant_vehicle_id)
+        itinerary.trips.find_or_create_by!(tenant_vehicle_id: tenant_vehicle_id,
+                                           load_type: @shipment.load_type,
+                                           start_date: OfferCalculator::Schedule.quote_trip_start_date,
+                                           end_date: end_date(transit_time: transit_time),
+                                           closing_date: OfferCalculator::Schedule.quote_trip_closing_date,
+                                           sandbox: @sandbox)
       end
 
       def end_date(transit_time:)

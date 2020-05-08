@@ -20,14 +20,7 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
                       desired_start_date: Time.zone.tomorrow,
                       tenant: tenant)
   end
-  let!(:pricings) do
-    [
-      FactoryBot.create(:legacy_lcl_pricing, itinerary: itinerary, tenant: tenant),
-      FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant: tenant),
-      FactoryBot.create(:legacy_fcl_40_pricing, itinerary: itinerary, tenant: tenant),
-      FactoryBot.create(:legacy_fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant)
-    ]
-  end
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, tenant: tenant) }
   let(:hubs) do
     {
       origin: Legacy::Hub.where(id: origin_hub.id),
@@ -39,7 +32,8 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
       OfferCalculator::Route.new(
         itinerary_id: itinerary.id,
         origin_stop_id: itinerary.stops.first.id,
-        destination_stop_id: itinerary.stops.last.id
+        destination_stop_id: itinerary.stops.last.id,
+        tenant_vehicle_id: tenant_vehicle.id
       )
     ]
   end
@@ -49,29 +43,27 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
     context 'without trucking' do
       it 'return the route detail hashes' do
         aggregate_failures do
-          expect(results.length).to eq(4)
-          expect(results.map { |sched| sched.trip.tenant_vehicle_id }).to match_array(pricings.map(&:tenant_vehicle_id))
-          expect(results.map(&:etd).uniq).to match_array([OfferCalculator::Schedule.quote_trip_start_date])
-          expect(results.map(&:eta).uniq).to match_array([OfferCalculator::Schedule.quote_trip_end_date])
+          expect(results.length).to eq(1)
+          expect(results.first.trip.tenant_vehicle_id).to eq(tenant_vehicle.id)
+          expect(results.first.etd).to eq(OfferCalculator::Schedule.quote_trip_start_date)
+          expect(results.first.eta).to eq(OfferCalculator::Schedule.quote_trip_end_date)
         end
       end
     end
 
     context 'with transit_time' do
       before do
-        pricings.pluck(:tenant_vehicle_id).map do |tenant_vehicle_id|
-          FactoryBot.create(:legacy_transit_time, itinerary: itinerary, tenant_vehicle_id: tenant_vehicle_id, duration: 35)
-        end
+        FactoryBot.create(:legacy_transit_time, itinerary: itinerary, tenant_vehicle_id: tenant_vehicle.id, duration: 35)
       end
 
       let(:desired_end_date) { OfferCalculator::Schedule.quote_trip_start_date + 35.days }
 
       it 'return the route detail hashes' do
         aggregate_failures do
-          expect(results.length).to eq(4)
-          expect(results.map { |sched| sched.trip.tenant_vehicle_id }).to match_array(pricings.map(&:tenant_vehicle_id))
-          expect(results.map(&:etd).uniq).to match_array([OfferCalculator::Schedule.quote_trip_start_date])
-          expect(results.map(&:eta).uniq).to match_array([desired_end_date])
+          expect(results.length).to eq(1)
+          expect(results.first.trip.tenant_vehicle_id).to eq(tenant_vehicle.id)
+          expect(results.first.etd).to eq(OfferCalculator::Schedule.quote_trip_start_date)
+          expect(results.first.eta).to eq(desired_end_date)
         end
       end
     end
@@ -88,10 +80,10 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
 
       it 'return the route detail hashes' do
         aggregate_failures do
-          expect(results.length).to eq(4)
-          expect(results.map { |sched| sched.trip.tenant_vehicle_id }).to match_array(pricings.map(&:tenant_vehicle_id))
-          expect(results.map(&:etd).uniq).to match_array([OfferCalculator::Schedule.quote_trip_start_date])
-          expect(results.map(&:eta).uniq).to match_array([OfferCalculator::Schedule.quote_trip_end_date])
+          expect(results.length).to eq(1)
+          expect(results.first.trip.tenant_vehicle_id).to eq(tenant_vehicle.id)
+          expect(results.first.etd).to eq(OfferCalculator::Schedule.quote_trip_start_date)
+          expect(results.first.eta).to eq(OfferCalculator::Schedule.quote_trip_end_date)
         end
       end
     end
