@@ -51,7 +51,7 @@
     "@redux-beacon/segment": "1.1.0",
     "@segment/in-eu": "0.3.0",
     "@sentry/browser": "5.15.5",
-    "@sentry/webpack-plugin": "1.6.1",
+    "@sentry/webpack-plugin": "1.11.1",
     "autoprefixer": "9.7.6",
     "babel-eslint": "10.1.0",
     "babel-loader": "8.1.0",
