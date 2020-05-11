@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::ItinerariesController < Admin::AdminBaseController
-  include ItineraryTools
 
   def index
     paginated_itineraries = handle_search.paginate(pagination_options)

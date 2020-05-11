@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
   before do
-    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
+    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
   end
 
   let(:tenant) { FactoryBot.create(:legacy_tenant) }

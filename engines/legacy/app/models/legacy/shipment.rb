@@ -29,7 +29,6 @@ module Legacy
     belongs_to :origin_hub, class_name: 'Legacy::Hub', optional: true
     belongs_to :destination_hub, class_name: 'Legacy::Hub', optional: true
     belongs_to :itinerary, optional: true, class_name: 'Legacy::Itinerary'
-    belongs_to :transport_category, optional: true, class_name: 'Legacy::TransportCategory'
     belongs_to :trip, optional: true, class_name: 'Legacy::Trip'
     belongs_to :quotation, optional: true
     has_many :shipment_contacts, class_name: 'Legacy::ShipmentContact'
@@ -330,5 +329,5 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (transport_category_id => transport_categories.id)
+#  fk_rails_...  (transport_category_id => transport_categories_20200504.id)
 #

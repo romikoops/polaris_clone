@@ -89,15 +89,6 @@ module ExcelDataServices
         ) # returns a `TenantVehicle`!
       end
 
-      def find_transport_category(tenant_vehicle, cargo_class)
-        # FIX: what is called 'load_type' in the excel file is actually a cargo_class!
-        tenant_vehicle.vehicle.transport_categories.find_by(
-          name: 'any',
-          cargo_class: cargo_class.downcase,
-          sandbox_id: @sandbox&.id
-        )
-      end
-
       def create_pricing_with_pricing_details(group_of_row_data, row, tenant_vehicle, itinerary, notes) # rubocop:disable Metrics/AbcSize
         load_type = row.load_type == 'lcl' ? 'cargo_item' : 'container'
         pricing_params =

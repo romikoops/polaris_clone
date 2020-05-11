@@ -75,64 +75,46 @@ class ShippingTools
     shipment.save!
 
     tenant_itineraries = Itinerary.where(tenant_id: tenant.id, sandbox: sandbox)
-    if scope['base_pricing']
-      if scope[:display_itineraries_with_rates]
-        cargo_classes = [nil] + (load_type == 'cargo_item' ? ['lcl'] : Container::CARGO_CLASSES)
-        no_general_margins = Pricings::Margin.where(
-          itinerary_id: nil,
-          applicable: current_user.all_groups,
-          cargo_class: cargo_classes,
-          sandbox: sandbox
-        ).empty?
-        itinerary_ids = tenant_itineraries.ids.reject do |id|
-          no_pricings = Pricings::Pricing.where(
-            sandbox: sandbox,
-            itinerary_id: id,
-            load_type: load_type,
-            group_id: current_user.all_groups.ids,
-            internal: false
-          ).where('expiration_date > ?', Time.zone.tomorrow).empty?
-          no_margins = if no_general_margins
-                         Pricings::Margin.where(
-                           itinerary_id: id,
-                           applicable: current_user.all_groups,
-                           cargo_class: cargo_classes,
-                           sandbox: sandbox
-                         ).empty?
-                       else
-                         no_general_margins
-                       end
-          no_pricings && no_margins
-        end
-      else
-        itinerary_ids = tenant_itineraries.ids.reject do |id|
-          Pricings::Pricing.where(
-            sandbox: sandbox,
-            itinerary_id: id,
-            load_type: load_type,
-            internal: false
-          ).where('expiration_date > ?', Time.zone.tomorrow).empty?
-        end
+
+    if scope[:display_itineraries_with_rates]
+      cargo_classes = [nil] + (load_type == 'cargo_item' ? ['lcl'] : Container::CARGO_CLASSES)
+      no_general_margins = Pricings::Margin.where(
+        itinerary_id: nil,
+        applicable: current_user.all_groups,
+        cargo_class: cargo_classes,
+        sandbox: sandbox
+      ).empty?
+      itinerary_ids = tenant_itineraries.ids.reject do |id|
+        no_pricings = Pricings::Pricing.where(
+          sandbox: sandbox,
+          itinerary_id: id,
+          load_type: load_type,
+          group_id: current_user.all_groups.ids,
+          internal: false
+        ).where('expiration_date > ?', Time.zone.tomorrow).empty?
+        no_margins = if no_general_margins
+                       Pricings::Margin.where(
+                         itinerary_id: id,
+                         applicable: current_user.all_groups,
+                         cargo_class: cargo_classes,
+                         sandbox: sandbox
+                       ).empty?
+                     else
+                       no_general_margins
+                     end
+        no_pricings && no_margins
       end
     else
-      if scope[:closed_quotation_tool]
-        raise ApplicationError::NonAgentUser if current_user.agency.nil?
-
-        user_pricing_id = current_user.agency.agency_manager_id
-        itinerary_ids = tenant_itineraries.ids.reject do |id|
-          Pricing.where(sandbox: sandbox, itinerary_id: id, user_id: user_pricing_id, internal: false)
-                 .for_load_type(load_type)
-                 .where('expiration_date > ?', Time.zone.tomorrow).empty?
-        end
-      else
-        itinerary_ids = tenant_itineraries.ids.reject do |id|
-          Pricing.where(sandbox: sandbox, itinerary_id: id, internal: false)
-                 .for_load_type(load_type)
-                 .where('expiration_date > ?', Time.zone.tomorrow)
-                 .empty?
-        end
+      itinerary_ids = tenant_itineraries.ids.reject do |id|
+        Pricings::Pricing.where(
+          sandbox: sandbox,
+          itinerary_id: id,
+          load_type: load_type,
+          internal: false
+        ).where('expiration_date > ?', Time.zone.tomorrow).empty?
       end
     end
+
     routes_data = OfferCalculator::Route.detailed_hashes_from_itinerary_ids(
       itinerary_ids,
       with_truck_types: { load_type: load_type },
@@ -609,12 +591,6 @@ class ShippingTools
       customsKey = 'lcl'
       cargos = cargo_items.presence || [aggregated_cargo]
     end
-
-    shipment.transport_category = shipment
-                                  .trip
-                                  .vehicle
-                                  .transport_categories
-                                  .find_by(name: 'any', cargo_class: cargoKey, sandbox_id: sandbox&.id)
     shipment.save!
 
     origin_customs_fee = @origin_hub.get_customs(

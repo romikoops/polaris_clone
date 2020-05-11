@@ -2,7 +2,6 @@
 
 class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metrics/ClassLength
   include ExcelTools
-  include ItineraryTools
   include Response
   include AwsConfig
 

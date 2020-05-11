@@ -12,14 +12,6 @@ RSpec.describe OfferCalculator::Queries:: FullAttributesFromItineraryIds do
   let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
   let!(:default_trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: {}, hub: origin_hub, tenant: tenant) }
   let(:current_etd) { 2.days.from_now }
-  let!(:legacy_pricings) do
-    [
-      FactoryBot.create(:legacy_lcl_pricing, itinerary: itinerary, tenant: tenant),
-      FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant: tenant),
-      FactoryBot.create(:legacy_fcl_40_pricing, itinerary: itinerary, tenant: tenant),
-      FactoryBot.create(:legacy_fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant)
-    ]
-  end
   let!(:pricings) do
     [
       FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant),
@@ -27,19 +19,6 @@ RSpec.describe OfferCalculator::Queries:: FullAttributesFromItineraryIds do
       FactoryBot.create(:fcl_40_pricing, itinerary: itinerary, tenant: tenant),
       FactoryBot.create(:fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant)
     ]
-  end
-
-  context 'legacy' do
-    describe '.perform', :vcr do
-      it 'return the route detail hashes for cargo_item' do
-        results = described_class.new(itinerary_ids: [itinerary.id, itinerary_2.id], options: { with_truck_types: { load_type: 'cargo_item' } }).perform
-
-        expect(results.length).to eq(1)
-        expect(results.first['itinerary_id']).to eq(itinerary.id)
-        expect(results.first['origin_hub_id']).to eq(origin_hub.id)
-        expect(results.first['destination_hub_id']).to eq(destination_hub.id)
-      end
-    end
   end
 
   context 'base_pricing' do

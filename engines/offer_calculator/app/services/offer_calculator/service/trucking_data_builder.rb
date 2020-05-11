@@ -28,7 +28,7 @@ module OfferCalculator
           address: address,
           carriage: carriage,
           shipment: @shipment,
-          user_id: @scope['base_pricing'] ? @shipment.user_id : @shipment.user.pricing_id,
+          user_id: @shipment.user_id,
           sandbox: @sandbox
         )
 
@@ -100,11 +100,7 @@ module OfferCalculator
         cargo_units = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : cargo_unit_array
         return nil if cargo_units.empty?
 
-        manipulated_trucking_pricing = if @scope['base_pricing']
-                                         get_manipulated_trucking_pricing(trucking_pricing)
-                                       else
-                                         trucking_pricing
-                                       end
+        manipulated_trucking_pricing = get_manipulated_trucking_pricing(trucking_pricing)
 
         return nil if manipulated_trucking_pricing.nil?
 

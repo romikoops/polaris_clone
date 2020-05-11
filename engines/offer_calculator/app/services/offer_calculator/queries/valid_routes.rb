@@ -63,7 +63,7 @@ module OfferCalculator
             AND destination_stops.itinerary_id = itineraries.id
           #{pricings_section}
           JOIN tenant_vehicles AS tenant_vehicles
-            ON tenant_vehicles.id = #{pricing_table}.tenant_vehicle_id
+            ON tenant_vehicles.id = pricings_pricings.tenant_vehicle_id
           #{origin_local_charges}
           #{destination_local_charges}
           #{trip_restriction}
@@ -73,22 +73,12 @@ module OfferCalculator
       end
 
       def pricings_section
-        if @scope[:base_pricing]
           "JOIN pricings_pricings
             ON itineraries.id = pricings_pricings.itinerary_id
             AND pricings_pricings.cargo_class IN (:cargo_classes)
             AND pricings_pricings.internal = false
             AND pricings_pricings.validity && daterange(:start::date, :end::date)
             #{group_restriction}"
-        else
-          "JOIN pricings
-              ON itineraries.id = pricings.itinerary_id
-              AND pricings.internal = false
-              AND pricings.validity && daterange(:start::date, :end::date)
-            JOIN transport_categories
-              ON pricings.transport_category_id = transport_categories.id
-              AND transport_categories.cargo_class IN (:cargo_classes)"
-        end
       end
 
       def group_restriction
@@ -100,13 +90,9 @@ module OfferCalculator
 
         "JOIN trips AS trips
           ON trips.itinerary_id = itineraries.id
-          AND trips.tenant_vehicle_id = #{pricing_table}.tenant_vehicle_id
+          AND trips.tenant_vehicle_id = pricings_pricings.tenant_vehicle_id
           AND trips.load_type = :load_type
           AND trips.start_date > :start"
-      end
-
-      def pricing_table
-        @scope[:base_pricing] ? 'pricings_pricings' : 'pricings'
       end
 
       def origin_local_charges

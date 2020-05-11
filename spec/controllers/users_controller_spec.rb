@@ -112,18 +112,4 @@ RSpec.describe UsersController do
       expect(user.currency).to eq('BRL')
     end
   end
-
-  describe 'POST #opt_out' do
-    let(:user) { create(:user, with_profile: true) }
-
-    before do
-      allow(controller).to receive(:user_signed_in?).and_return(true)
-      allow(controller).to receive(:current_user).and_return(user)
-    end
-
-    it 'updates opt in status successfully' do
-      post :opt_out, params: { tenant_id: user.tenant.id, user_id: user.id, target: 'cookies' }
-      expect(response).to have_http_status(:success)
-    end
-  end
 end

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
-  extend ItineraryTools
-  include ItineraryTools
 
   belongs_to :tenant
   has_many :layovers,  dependent: :destroy
@@ -297,12 +295,6 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     return_h[:next_departure]       = next_departure                       if options[:next_departure]
     return_h[:dedicated]            = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
     return_h
-  end
-
-  def load_types
-    TransportCategory::LOAD_TYPES.reject do |load_type|
-      pricings.where(transport_category_id: TransportCategory.load_type(load_type).ids).none?
-    end
   end
 
   def ordered_hub_ids

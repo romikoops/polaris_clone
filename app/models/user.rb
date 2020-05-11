@@ -33,7 +33,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   has_many :consignees, through: :contacts
   has_many :notifyees, through: :contacts
   has_many :user_managers
-  has_many :pricings
+
   has_many :rates, class_name: 'Pricings::Pricing'
   has_one :tenants_user, class_name: 'Tenants::User', foreign_key: 'legacy_id'
 
@@ -46,13 +46,13 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   PERMITTED_PARAMS = %i(
     email password guest tenant_id confirm_password password_confirmation
     company_name vat_number VAT_number first_name last_name phone
-    optin_status_id cookies company_number
+    cookies company_number
   ).freeze
 
   acts_as_paranoid
 
   # Basic associations
-  has_many :documents, dependent: :destroy
+  has_many :documents, class_name: 'Legacy::File', dependent: :destroy
 
   has_paper_trail
 
@@ -121,12 +121,9 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   end
 
   def sanitized_user(options)
-    to_include = {
-      optin_status: { except: %i(created_at updated_at) }
-    }.merge(options)
     render_options = {
       except: %i(tokens encrypted_password),
-      include: to_include
+      include: options
     }
     as_json(render_options)
   end
@@ -154,14 +151,6 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
 
   def secondary_addresses
     addresses.where('user_addresses.primary': false)
-  end
-
-  def expanded
-    as_json(include: :optin_status)
-  end
-
-  def expand!
-    as_json(include: :optin_status)
   end
 
   def external_id
@@ -199,7 +188,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   end
 
   def has_pricings
-    !pricings.empty?
+    !rates.empty?
   end
 
   def pricing_id

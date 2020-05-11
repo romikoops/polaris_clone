@@ -45,10 +45,10 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
   Timecop.freeze(Time.utc(2020, 1, 1, 0, 0, 0)) do
     before do
       FactoryBot.create(:trip_with_layovers, itinerary: itinerary, tenant_vehicle: tenant_vehicle)
-      FactoryBot.create(:legacy_lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-      FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-      FactoryBot.create(:legacy_fcl_40_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-      FactoryBot.create(:legacy_fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+      FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+      FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+      FactoryBot.create(:fcl_40_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+      FactoryBot.create(:fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
     end
 
     context 'with success' do

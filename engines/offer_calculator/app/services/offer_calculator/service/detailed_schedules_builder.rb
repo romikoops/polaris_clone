@@ -228,13 +228,8 @@ module OfferCalculator
         end
       end
 
-      def dedicated_pricings?(user)
-        if @scope['base_pricing']
-          @scope['dedicated_pricings_only']
-        else
-          legacy_pricing = Legacy::Pricing.where(user: user, internal: false, sandbox: @sandbox)
-          legacy_pricing.exists? && @scope['dedicated_pricings_only']
-        end
+      def dedicated_pricings?
+        @scope['dedicated_pricings_only']
       end
 
       def pricings_sets(pricings:)
@@ -301,7 +296,7 @@ module OfferCalculator
         result_to_return = []
         cargo_classes = shipment.aggregated_cargo ? ['lcl'] : shipment.cargo_units.pluck(:cargo_class)
         schedule_groupings = sort_schedule_permutations(schedules: schedules)
-        user_pricing_id = @scope['base_pricing'] ? user.id : user.pricing_id
+        user_pricing_id = user.id
         schedule_groupings.each do |_key, schedules_array|
           schedules_array.sort_by!(&:eta)
           dates = extract_dates_and_quote(schedules_array)
@@ -310,7 +305,7 @@ module OfferCalculator
             user_pricing_id: user_pricing_id,
             cargo_classes: cargo_classes,
             dates: dates,
-            dedicated_pricings_only: dedicated_pricings?(user)
+            dedicated_pricings_only: dedicated_pricings?
           )
           next nil if pricings_by_cargo_class.empty?
 
@@ -385,10 +380,9 @@ module OfferCalculator
         hubs = [schedule.origin_hub, schedule.destination_hub]
         nexii = hubs.map(&:nexus)
         countries = nexii.map(&:country)
-        legacy_pricings = Legacy::Pricing.where(id: pricing_ids)
         pricings = Pricings::Pricing.where(id: pricing_ids)
         regular_notes = Legacy::Note.where(transshipment: false, tenant_id: tenant_id)
-        regular_notes.where(target: hubs | nexii | countries | legacy_pricings)
+        regular_notes.where(target: hubs | nexii | countries)
                      .or(regular_notes.where(pricings_pricing_id: pricings.ids))
       end
 

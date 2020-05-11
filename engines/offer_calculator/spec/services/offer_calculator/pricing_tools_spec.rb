@@ -8,27 +8,8 @@ RSpec.describe OfferCalculator::PricingTools do
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let!(:tenants_scope) { FactoryBot.create(:tenants_scope, target: tenants_tenant) }
-  let(:cargo_transport_category) do
-    FactoryBot.create(:transport_category, cargo_class: 'lcl', load_type: 'cargo_item')
-  end
-  let(:fcl_20_transport_category) do
-    FactoryBot.create(:transport_category, cargo_class: 'fcl_20', load_type: 'container')
-  end
-  let(:fcl_40_transport_category) do
-    FactoryBot.create(:transport_category, cargo_class: 'fcl_40', load_type: 'container')
-  end
-  let(:fcl_40_hq_transport_category) do
-    FactoryBot.create(:transport_category, cargo_class: 'fcl_40_hq', load_type: 'container')
-  end
   let(:vehicle) do
-    FactoryBot.create(:vehicle,
-                      transport_categories: [
-                        fcl_20_transport_category,
-                        fcl_40_transport_category,
-                        fcl_40_hq_transport_category,
-                        cargo_transport_category
-                      ],
-                      tenant_vehicles: [tenant_vehicle_1, tenant_vehicle_2])
+    FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle_1, tenant_vehicle_2])
   end
   let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
   let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'express') }

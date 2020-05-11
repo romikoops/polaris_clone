@@ -12,7 +12,6 @@ module Pricings
     belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle'
     belongs_to :user, optional: true
     has_many :fees, class_name: 'Pricings::Fee', dependent: :destroy
-    has_many :pricing_requests, dependent: :destroy
     has_many :margins, class_name: 'Pricings::Margin'
     belongs_to :group, class_name: 'Tenants::Group', optional: true
     has_many :notes, foreign_key: 'pricings_pricing_id', dependent: :destroy

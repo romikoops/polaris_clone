@@ -9,11 +9,10 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
   let!(:pricings) do
     [
       create(
-        :pricing,
+        :lcl_pricing,
         tenant: tenant,
         effective_date: Date.parse('Thu, 15 Mar 2018').beginning_of_day,
         expiration_date: Date.parse('Sun, 17 Mar 2019').end_of_day.change(usec: 0),
-        transport_category: cargo_transport_category,
         itinerary: itineraries.first,
         tenant_vehicle: tenant_vehicle
       )
@@ -41,14 +40,8 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
       create(:nexus, tenant: tenant, name: 'Shanghai')
     ]
   end
-  let(:cargo_transport_category) do
-    create(:transport_category, cargo_class: 'lcl', load_type: 'cargo_item')
-  end
   let(:vehicle) do
     create(:vehicle,
-           transport_categories: [
-             cargo_transport_category
-           ],
            tenant_vehicles: [tenant_vehicle])
   end
   let(:tenant_vehicle) { create(:tenant_vehicle, tenant: tenant) }

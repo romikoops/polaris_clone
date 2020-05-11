@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::DashboardController < Admin::AdminBaseController
-  include ItineraryTools
   before_action :initialize_variables, only: :index
 
   # Number of shipments to be displayed on dashboard

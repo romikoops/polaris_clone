@@ -47,47 +47,6 @@ module Legacy
         end
       end
     end
-
-    describe '.default_generate_schedules' do
-      let(:tenant) { FactoryBot.create(:legacy_tenant) }
-      let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-      let!(:lcl_pricing) { FactoryBot.create(:legacy_lcl_pricing, itinerary: itinerary) }
-      let!(:fcl_20_pricing) { FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary) }
-
-      context 'without existing trips' do
-        before do
-          itinerary.default_generate_schedules(end_date: Date.today + 10.days, base_pricing: false, sandbox: nil)
-        end
-
-        it 'generates trips for all the pricings' do
-          aggregate_failures do
-            expect(itinerary.trips.where(tenant_vehicle_id: lcl_pricing.tenant_vehicle_id).length).to be_positive
-            expect(itinerary.trips.where(tenant_vehicle_id: fcl_20_pricing.tenant_vehicle_id).length).to be_positive
-          end
-        end
-      end
-
-      context 'with existing trips' do
-        before do
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary,
-                            tenant_vehicle_id: lcl_pricing.tenant_vehicle_id,
-                            load_type: 'cargo_item')
-          FactoryBot.create(:legacy_trip,
-                            itinerary: itinerary,
-                            tenant_vehicle_id: fcl_20_pricing.tenant_vehicle_id,
-                            load_type: 'conatiner')
-        end
-
-        it 'generates trips for all the pricings' do
-          itinerary.default_generate_schedules(end_date: Date.today + 10.days, base_pricing: false, sandbox: nil)
-          aggregate_failures do
-            expect(itinerary.trips.where(tenant_vehicle_id: lcl_pricing.tenant_vehicle_id).length).to be_positive
-            expect(itinerary.trips.where(tenant_vehicle_id: fcl_20_pricing.tenant_vehicle_id).length).to be_positive
-          end
-        end
-      end
-    end
   end
 end
 

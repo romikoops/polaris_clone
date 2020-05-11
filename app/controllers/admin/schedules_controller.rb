@@ -2,7 +2,6 @@
 
 class Admin::SchedulesController < Admin::AdminBaseController
   before_action :initialize_variables, only: %i(index auto_generate_schedules)
-  include ItineraryTools
 
   def index
     map_data = current_tenant.map_data

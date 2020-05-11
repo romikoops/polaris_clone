@@ -173,5 +173,5 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (transport_category_id => transport_categories.id)
+#  fk_rails_...  (transport_category_id => transport_categories_20200504.id)
 #

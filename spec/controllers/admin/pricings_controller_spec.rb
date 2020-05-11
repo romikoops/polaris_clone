@@ -65,7 +65,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
           'itinerary_id' => itinerary.id,
           'sandbox_id' => nil,
           'updated_at' => first_stop.updated_at,
-          'hub' => { 'id' => first_stop.hub_id, 'name' => 'Gothenburg Port', 'available_trucking' => [], 'nexus' => { 'id' => first_stop.hub.nexus.id, 'name' => 'Gothenburg' }, 'address' => { 'geocoded_address' => '438 80 Landvetter, Sweden', 'latitude' => 57.694253, 'longitude' => 11.854048 } } },
+          'hub' => { 'id' => first_stop.hub_id, 'name' => 'Gothenburg Port', 'nexus' => { 'id' => first_stop.hub.nexus.id, 'name' => 'Gothenburg' }, 'address' => { 'geocoded_address' => '438 80 Landvetter, Sweden', 'latitude' => 57.694253, 'longitude' => 11.854048 } } },
         { 'id' => second_stop.id,
           'created_at' => second_stop.created_at,
           'hub_id' => second_stop.hub_id,
@@ -73,7 +73,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
           'itinerary_id' => itinerary.id,
           'sandbox_id' => nil,
           'updated_at' => second_stop.updated_at,
-          'hub' => { 'id' => second_stop.hub_id, 'name' => 'Gothenburg Port', 'available_trucking' => [], 'nexus' => { 'id' => second_stop.hub.nexus.id, 'name' => 'Gothenburg' }, 'address' => { 'geocoded_address' => '438 80 Landvetter, Sweden', 'latitude' => 57.694253, 'longitude' => 11.854048 } } }
+          'hub' => { 'id' => second_stop.hub_id, 'name' => 'Gothenburg Port', 'nexus' => { 'id' => second_stop.hub.nexus.id, 'name' => 'Gothenburg' }, 'address' => { 'geocoded_address' => '438 80 Landvetter, Sweden', 'latitude' => 57.694253, 'longitude' => 11.854048 } } }
       ]
 
       JSON.parse({ pricings: pricings_table_jsons,
@@ -186,22 +186,6 @@ RSpec.describe Admin::PricingsController, type: :controller do
         aggregate_failures do
           expect(response).to have_http_status(:success)
           expect(Pricings::Pricing.exists?(id: base_pricing.id)).to eq(false)
-        end
-      end
-    end
-
-    context 'with legacy_pricing' do
-      let(:legacy_pricing) { create(:legacy_pricing, tenant: tenant) }
-
-      before do
-        allow(controller).to receive(:current_scope).at_least(:once).and_return({ base_pricing: false }.with_indifferent_access)
-        delete :destroy, params: { 'id' => legacy_pricing.id, tenant_id: tenant.id }
-      end
-
-      it 'deletes the Pricings::Pricing' do
-        aggregate_failures do
-          expect(response).to have_http_status(:success)
-          expect(Legacy::Pricing.exists?(id: legacy_pricing.id)).to eq(false)
         end
       end
     end

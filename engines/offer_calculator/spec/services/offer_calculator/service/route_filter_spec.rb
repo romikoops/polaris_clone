@@ -31,10 +31,10 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
   end
 
   before do
-    FactoryBot.create(:legacy_lcl_pricing, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:legacy_fcl_40_pricing, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:legacy_fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant)
+    FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant)
+    FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant: tenant)
+    FactoryBot.create(:fcl_40_pricing, itinerary: itinerary, tenant: tenant)
+    FactoryBot.create(:fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant)
   end
 
   describe '.perform', :vcr do

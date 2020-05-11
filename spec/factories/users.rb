@@ -8,7 +8,6 @@ FactoryBot.define do
     sandbox { false }
     association :tenant
     association :role
-    association :optin_status
 
     transient do
       with_profile { false }

@@ -84,7 +84,6 @@ module Pdf
 
       nexii = hubs.map(&:nexus)
       countries = nexii.map(&:country)
-      legacy_pricings = shipment.itinerary&.pricings&.for_cargo_classes(shipment.cargo_classes)
       pricings = shipment.itinerary&.rates&.for_cargo_classes(shipment.cargo_classes)
       notes_association = Legacy::Note.where(
         tenant_id: shipment.tenant_id,
@@ -92,7 +91,7 @@ module Pdf
         remarks: false
       )
       @notes[shipment.id] = notes_association
-                            .where(target: hubs | nexii | countries | legacy_pricings)
+                            .where(target: hubs | nexii | countries)
                             .or(notes_association.where(pricings_pricing_id: pricings.ids))
     end
 

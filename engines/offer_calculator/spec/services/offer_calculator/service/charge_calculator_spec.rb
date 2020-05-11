@@ -7,27 +7,8 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
   let(:direction) { 'export' }
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:cargo_transport_category) do
-    FactoryBot.create(:legacy_transport_category, cargo_class: 'lcl', load_type: 'cargo_item')
-  end
-  let(:fcl_20_transport_category) do
-    FactoryBot.create(:legacy_transport_category, cargo_class: 'fcl_20', load_type: 'container')
-  end
-  let(:fcl_40_transport_category) do
-    FactoryBot.create(:legacy_transport_category, cargo_class: 'fcl_40', load_type: 'container')
-  end
-  let(:fcl_40_hq_transport_category) do
-    FactoryBot.create(:legacy_transport_category, cargo_class: 'fcl_40_hq', load_type: 'container')
-  end
   let(:vehicle) do
-    FactoryBot.create(:legacy_vehicle,
-                      transport_categories: [
-                        fcl_20_transport_category,
-                        fcl_40_transport_category,
-                        fcl_40_hq_transport_category,
-                        cargo_transport_category
-                      ],
-                      tenant_vehicles: [tenant_vehicle1, tenant_vehicle2])
+    FactoryBot.create(:legacy_vehicle, tenant_vehicles: [tenant_vehicle1, tenant_vehicle2])
   end
   let(:tenant_vehicle1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
   let(:tenant_vehicle2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'express') }
@@ -130,10 +111,9 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
   let(:lcl_trucking_data) { FactoryBot.build(:lcl_trucking_data, hub: hub) }
   let(:fcl_trucking_data) { FactoryBot.build(:all_fcl_trucking_data, hub: hub) }
   let(:default_pricing) do
-    FactoryBot.create(:legacy_lcl_pricing,
+    FactoryBot.create(:lcl_pricing,
                       itinerary: itinerary1,
-                      tenant_vehicle: tenant_vehicle1,
-                      transport_category: cargo_transport_category)
+                      tenant_vehicle: tenant_vehicle1)
   end
   let(:default_data) do
     {

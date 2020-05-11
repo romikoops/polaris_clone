@@ -96,23 +96,6 @@ RSpec.describe Pricings::Finder do
   end
 
   describe '.perform' do
-    context 'with legacy pricing (lcl)' do
-      let!(:pricing_1) do
-        FactoryBot.create(:legacy_lcl_pricing,
-                          tenant: tenant,
-                          itinerary: itinerary_1,
-                          tenant_vehicle: tenant_vehicle_1)
-      end
-
-      before { tenants_scope.update(content: { base_pricing: false }) }
-
-      it 'returns an object containing pricings grouped by transport category (lcl)' do
-        aggregate_failures do
-          expect(results.first.keys.length).to eq(1)
-          expect(results.first.values.first.first['id']).to eq(pricing_1.id)
-        end
-      end
-    end
 
     context 'with base pricing (lcl)' do
       before do

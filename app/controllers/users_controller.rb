@@ -80,18 +80,6 @@ class UsersController < ApplicationController
     response_handler(@hubs)
   end
 
-  def opt_out
-    new_status = current_user.optin_status.as_json
-    new_status[params[:target]] = !new_status[params[:target]]
-    new_status.delete('id')
-    new_status.delete('updated_at')
-    new_status.delete('created_at')
-    optin_status = OptinStatus.find_by(new_status)
-    current_user.optin_status = optin_status
-    current_user.save!
-    response_handler(user: merge_profile(user: current_user))
-  end
-
   private
 
   def user_params

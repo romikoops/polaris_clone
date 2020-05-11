@@ -34,8 +34,6 @@ module Pricings
     def perform
       pricings_by_cargo_class_and_dates = relevant_pricings_for_journey
 
-      return legacy_result(pricings: pricings_by_cargo_class_and_dates) unless @scope[:base_pricing]
-
       margin_pricings_with_meta_by_cargo_class_and_dates =
         manipulate_pricings_results(pricings: pricings_by_cargo_class_and_dates)
 
@@ -80,14 +78,6 @@ module Pricings
       end
     end
 
-    def legacy_result(pricings:)
-      all_pricings = pricings.map { |pricing| pricing.as_json.with_indifferent_access }
-                             .group_by { |pricing| pricing[:cargo_class] }
-      pricings_to_return, rate_overview = separate_rate_overview(pricings: all_pricings)
-
-      [pricings_to_return, [], rate_overview]
-    end
-
     def separate_rate_overview(pricings:)
       rate_overview = pricings.dup
       pricings_to_return = pricings.slice(*cargo_classes)
@@ -100,7 +90,7 @@ module Pricings
     end
 
     def all_cargo_classes
-      @all_cargo_classes ||= pricings_association
+      @all_cargo_classes ||= ::Pricings::Pricing
                              .where(itinerary: @itinerary, tenant_vehicle_id: @tenant_vehicle_id)
                              .map(&:cargo_class)
     end
@@ -122,12 +112,8 @@ module Pricings
       [pricings_by_cargo_class, metadata]
     end
 
-    def pricings_association
-      @scope[:base_pricing] ? ::Pricings::Pricing : ::Legacy::Pricing
-    end
-
     def pricings_for_cargo_classes_and_groups
-      query = pricings_association.where(
+      query = ::Pricings::Pricing.where(
         internal: false,
         tenant_vehicle_id: tenant_vehicle_id,
         itinerary_id: schedules.first.trip.itinerary_id,

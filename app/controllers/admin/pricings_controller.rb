@@ -2,7 +2,6 @@
 
 class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable Metrics/ClassLength, Style/ClassAndModuleChildren
   include ExcelTools
-  include ItineraryTools
 
   def index
     paginated_pricing_itineraries = handle_search.paginate(pagination_options)
@@ -34,14 +33,12 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     query[:mode_of_transport] = params[:mot] if params[:mot]
     itineraries = Itinerary.where(query).order('name ASC')
     itinerary_results = itineraries.where('name ILIKE ?', "%#{params[:text]}%")
-    @transports = TransportCategory.all.where(sandbox: @sandbox).uniq
     detailed_itineraries = itinerary_results.paginate(page: params[:page])
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
 
     response_handler(
       detailedItineraries: detailed_itineraries.map(&:as_pricing_json),
       numItineraryPages: detailed_itineraries.total_pages,
-      transportCategories: @transports,
       lastUpdate: last_updated,
       mode_of_transport: params[:mot]
     )
@@ -84,90 +81,8 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     )
   end
 
-  def assign_dedicated # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    new_pricings = params[:clientIds].map do |client_id| # rubocop:disable Metrics/BlockLength
-      itinerary_id = params[:pricing][:itinerary_id]
-      ex_pricing = Pricing.where(user_id: client_id, itinerary_id: itinerary_id, sandbox: @sandbox).first
-      pricing_to_update = ex_pricing || Pricing.new
-
-      new_pricing_data = params[:pricing].as_json
-      new_pricing_data.except!(
-        'action',
-        'controller',
-        'created_at',
-        'id',
-        'load_type',
-        'subdomain_id',
-        'updated_at'
-      )
-      pricing_details = new_pricing_data.delete('data')
-      pricing_exceptions = new_pricing_data.delete('exceptions')
-      new_pricing_data['user_id'] = client_id.to_i
-      pricing_to_update.update(new_pricing_data)
-
-      pricing_details.each do |shipping_type, pricing_detail_data|
-        currency = pricing_detail_data.delete('currency')
-        pricing_detail_params = pricing_detail_data.merge(
-          shipping_type: shipping_type,
-          tenant: current_tenant
-        )
-        range = pricing_detail_params.delete('range')
-        pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
-          shipping_type: shipping_type,
-          tenant: current_tenant,
-          sandbox: @sandbox
-        )
-        pricing_detail.update!(pricing_detail_params)
-        pricing_detail.update!(range: range, currency_name: currency)
-      end
-
-      pricing_exceptions.each do |pricing_exception_data|
-        pricing_details = pricing_exception_data.delete('data')
-        pricing_exception = pricing_to_update
-                            .pricing_exceptions
-                            .where(pricing_exception_data)
-                            .first_or_create(pricing_exception_data.merge(tenant: current_tenant))
-
-        pricing_details.each do |shipping_type, pricing_detail_data|
-          currency = pricing_detail_data.delete('currency')
-          range = pricing_detail_data.delete('range')
-          pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type,
-                                                            tenant: current_tenant)
-          pricing_detail = pricing_exception.pricing_details
-                                            .where(pricing_detail_params)
-                                            .first_or_create!(pricing_detail_params)
-          pricing_detail.update!(range: range, currency_name: currency)
-        end
-      end
-
-      {
-        pricing: pricing_to_update.as_json,
-        transport_category: pricing_to_update.transport_category,
-        user_id: client_id.to_i
-      }
-    end
-
-    response_handler(new_pricings)
-  end
-
-  def update_price
-    pricing_to_update = Pricing.find_by(id: params[:id], sandbox: @sandbox)
-    new_pricing_data = sanitized_params
-    new_pricing_data.delete('cargo_class')
-    new_pricing_data.delete('data')
-    pricing_to_update.update(new_pricing_data)
-    update_pricing_details(pricing_to_update)
-    update_pricing_exception_data(pricing_to_update)
-
-    response_handler(
-      pricing: pricing_to_update.as_json,
-      transport_category: pricing_to_update.transport_category
-    )
-  end
-
   def destroy
-    association = current_scope[:base_pricing] ? Pricings::Pricing : Legacy::Pricing
-    association.find_by(
+    Pricings::Pricing.find_by(
       tenant_id: current_tenant.id,
       id: params[:id],
       sandbox: @sandbox
@@ -347,7 +262,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def pricings_based_on_scope(itinerary)
-    pricings = current_scope['base_pricing'] ? itinerary.rates : itinerary.pricings
+    pricings = itinerary.rates
     pricings.current.where(sandbox: @sandbox)
   end
 end

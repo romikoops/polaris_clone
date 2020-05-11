@@ -35,7 +35,7 @@ RSpec.describe Admin::ClientsController do
 
     before do
       users.each do |user_details|
-        user = FactoryBot.create(:user,
+        user = FactoryBot.create(:legacy_user,
                                  email: user_details[:email],
                                  tenant: tenant_2,
                                  with_profile: false)

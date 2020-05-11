@@ -369,12 +369,6 @@ module Legacy
       return_h
     end
 
-    def load_types
-      TransportCategory::LOAD_TYPES.reject do |load_type|
-        pricings.where(transport_category_id: TransportCategory.load_type(load_type).ids).none?
-      end
-    end
-
     def ordered_hub_ids
       stops.order(index: :asc).pluck(:hub_id)
     end

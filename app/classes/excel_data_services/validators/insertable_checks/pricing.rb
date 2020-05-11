@@ -90,7 +90,7 @@ module ExcelDataServices
         def check_overlapping_effective_periods(row, user, itinerary)
           return if itinerary.nil?
 
-          pricings = itinerary.pricings
+          pricings = itinerary.rates
                               .where(user: user, tenant_vehicle: find_tenant_vehicle(row))
                               .for_cargo_classes([row.load_type])
                               .for_dates(row.effective_date, row.expiration_date)

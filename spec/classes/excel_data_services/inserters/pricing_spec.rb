@@ -58,15 +58,14 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                          ])
     ]
   end
-  let!(:transport_categories) do
-    [create(:transport_category, load_type: 'cargo_item', cargo_class: 'lcl')] +
-      Container::CARGO_CLASSES.map { |cc| create(:transport_category, load_type: 'container', cargo_class: cc) }
-  end
   let(:tenant_vehicle) do
     create(:tenant_vehicle, tenant: tenant)
   end
   let(:options) { { tenant: tenant, data: input_data, options: {} } }
-
+  before  do
+    ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
+                                       content: { 'base_pricing' => true })
+  end
   describe '.insert' do
     let(:input_data) { build(:excel_data_restructured_correct_pricings_one_fee_col_and_ranges) }
 
@@ -132,10 +131,6 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       end
 
       context 'with scope attribute \'base_pricing\' set to >>> true <<<' do
-        let!(:scope) do
-          ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
-                                             content: { 'base_pricing' => true })
-        end
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
@@ -227,10 +222,6 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    fee_attrs: { rate: 1111, rate_basis: :per_container, min: nil })
           ]
         end
-        let!(:scope) do
-          ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
-                                             content: { 'base_pricing' => true })
-        end
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
@@ -321,10 +312,6 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    tenant_vehicle: tenant_vehicle,
                    fee_attrs: { rate_basis: :per_wm_rate_basis, rate: 11, min: nil })
           ]
-        end
-        let!(:scope) do
-          ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
-                                             content: { 'base_pricing' => true })
         end
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
@@ -419,10 +406,6 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    fee_attrs: { rate_basis: :per_wm_rate_basis, rate: 11, min: nil })
           ]
         end
-        let!(:scope) do
-          ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
-                                             content: { 'base_pricing' => true })
-        end
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
@@ -511,10 +494,6 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    tenant_vehicle: tenant_vehicle,
                    fee_attrs: { rate_basis: :per_wm_rate_basis, rate: 11, min: nil })
           ]
-        end
-        let!(:scope) do
-          ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
-                                             content: { 'base_pricing' => true })
         end
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },

@@ -37,33 +37,6 @@ RSpec.describe OfferCalculator::Queries:: ValidRoutes do
   end
 
   describe '.perform', :vcr do
-    context 'when legacy' do
-      before do
-        FactoryBot.create(:legacy_lcl_pricing,
-                          itinerary: itinerary,
-                          tenant: tenant,
-                          tenant_vehicle: tenant_vehicle_1,
-                          transport_category: lcl_transport_category)
-        FactoryBot.create(:legacy_lcl_pricing,
-                          itinerary: itinerary_2,
-                          tenant: tenant,
-                          tenant_vehicle: tenant_vehicle_2,
-                          transport_category: lcl_transport_category)
-        FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant: tenant)
-        FactoryBot.create(:legacy_fcl_40_pricing, itinerary: itinerary, tenant: tenant)
-        FactoryBot.create(:legacy_fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant)
-      end
-
-      it 'return the route detail hashes for cargo_item' do
-        results = described_class.new(args).perform
-
-        aggregate_failures do
-          expect(results.length).to eq(2)
-          expect(results.pluck('itinerary_id')).to match_array([itinerary.id, itinerary_2.id])
-          expect(results.pluck('tenant_vehicle_id')).to match_array([tenant_vehicle_1.id, tenant_vehicle_2.id])
-        end
-      end
-    end
 
     context 'with base_pricing' do
       before do

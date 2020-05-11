@@ -4,14 +4,14 @@ require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::RouteFinder do
   before do
-    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
+    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
 
     FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle)
     FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle, load_type: 'container')
-    FactoryBot.create(:legacy_lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-    FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-    FactoryBot.create(:legacy_fcl_40_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-    FactoryBot.create(:legacy_fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:fcl_40_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
   end
 
   let(:tenant) { FactoryBot.create(:legacy_tenant) }

@@ -13,27 +13,9 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
       ]
     end
     let(:tenant) { create(:tenant) }
-    let(:cargo_transport_category) do
-      create(:transport_category, cargo_class: 'lcl', load_type: 'cargo_item')
-    end
-    let(:fcl_20_transport_category) do
-      create(:transport_category, cargo_class: 'fcl_20', load_type: 'container')
-    end
-    let(:fcl_40_transport_category) do
-      create(:transport_category, cargo_class: 'fcl_40', load_type: 'container')
-    end
-    let(:fcl_40_hq_transport_category) do
-      create(:transport_category, cargo_class: 'fcl_40_hq', load_type: 'container')
-    end
+
     let(:vehicle) do
-      create(:vehicle,
-             transport_categories: [
-               fcl_20_transport_category,
-               fcl_40_transport_category,
-               fcl_40_hq_transport_category,
-               cargo_transport_category
-             ],
-             tenant_vehicles: [tenant_vehicle_1])
+      create(:vehicle, tenant_vehicles: [tenant_vehicle_1])
     end
     let(:carrier) { create(:carrier, code: 'hapag lloyd', name: 'Hapag LLoyd') }
     let(:tenant_vehicle_1) { create(:tenant_vehicle, name: 'cargo_item', tenant: tenant) }
@@ -48,41 +30,6 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
         create(:itinerary, tenant: tenant, name: 'Shanghai - Felixstowe', mode_of_transport: 'ocean', transshipment: 'ZACPT'),
         create(:itinerary, tenant: tenant, name: 'Shanghai - Felixstowe', mode_of_transport: 'air')
       ]
-    end
-
-    context 'without base pricing' do
-      before do
-        ([itinerary] | multi_mot_itineraries).each do |it|
-          create(:pricing, itinerary: it, tenant_vehicle: tenant_vehicle_1, transport_category: cargo_transport_category)
-          create(:pricing, itinerary: it, tenant_vehicle: tenant_vehicle_2, transport_category: fcl_20_transport_category)
-          create(:pricing, itinerary: it, tenant_vehicle: tenant_vehicle_2, transport_category: fcl_40_transport_category)
-          create(:pricing, itinerary: it, tenant_vehicle: tenant_vehicle_2, transport_category: fcl_40_hq_transport_category)
-        end
-        FactoryBot.create(:tenants_scope, target: Tenants::Tenant.find_by(legacy_id: tenant.id), content: { base_pricing: false })
-      end
-
-      let!(:stats) do
-        Timecop.freeze(Time.utc(2019, 2, 22, 11, 54, 0)) do
-          described_class.insert(tenant: tenant, data: data, options: {})
-        end
-      end
-
-      it 'creates the trips for the correct itineraries' do
-        aggregate_failures do
-          expect(stats.dig(:trips, :number_created)).to eq(60)
-          expect(itinerary.trips.where(load_type: 'cargo_item').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_1.id])
-          expect(itinerary.trips.where(load_type: 'container').pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_2.id])
-          expect(itinerary.trips.pluck(:start_date).map { |d| d.strftime('%^A') }.uniq).to eq(['THURSDAY'])
-          expect(multi_mot_itineraries.map { |it| it.trips.count }.sum).to be_positive
-        end
-      end
-
-      it 'ignores the itineraries not listed and misspelled' do
-        aggregate_failures do
-          expect(ignored_itinerary.trips).to be_empty
-          expect(misspelled_itinerary.trips).to be_empty
-        end
-      end
     end
 
     context 'with base pricing' do

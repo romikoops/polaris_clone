@@ -12,7 +12,6 @@ class Stop < Legacy::Stop
     new_options = options.reverse_merge(
       include: {
         hub: {
-          methods: %i(available_trucking),
           include: {
             nexus: { only: %i(id name) },
             address: { only: %i(longitude latitude geocoded_address) }

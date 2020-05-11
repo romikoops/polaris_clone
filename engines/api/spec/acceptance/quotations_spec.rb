@@ -17,7 +17,6 @@ RSpec.resource 'Quotations', acceptance: true do
   let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
   let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'quickly') }
-  let(:cargo_transport_category) { FactoryBot.create(:legacy_transport_category, cargo_class: 'fcl_20', load_type: 'container') }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
   let(:trip_1) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle) }
   let(:trip_2) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle_2) }
@@ -26,6 +25,7 @@ RSpec.resource 'Quotations', acceptance: true do
 
   before do
     FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
+    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
   end
 
   post '/v1/quotations' do
@@ -61,11 +61,11 @@ RSpec.resource 'Quotations', acceptance: true do
 
       before do
         [tenant_vehicle, tenant_vehicle_2].each do |t_vehicle|
-          FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, transport_category: cargo_transport_category, tenant: tenant)
+          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, tenant: tenant)
         end
         OfferCalculator::Schedule.from_trips(trips)
-        FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
-        FactoryBot.create(:legacy_fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, transport_category: cargo_transport_category, tenant: tenant)
+        FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, tenant: tenant)
+        FactoryBot.create(:freight_margin, default_for: 'ocean', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
       end
 
       example 'getting a quotation with port to port parameters' do
