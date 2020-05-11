@@ -31,14 +31,15 @@ module Api
          'On-Carriage',
          '1 x Fcl 20',
          'Fees charged in EUR:',
-         'Trucking Rate']
+         'Trucking Rate',
+         nil]
       end
 
       context 'with container load type' do
         it 'returns rows for each level of charge table' do
           results = klass.perform
           aggregate_failures do
-            expect(results.length).to eq(20)
+            expect(results.length).to eq(21)
             expect(results.pluck(:description)).to match_array(expected_descriptions)
             expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
           end
@@ -67,13 +68,14 @@ module Api
            'On-Carriage',
            '1 x Pallet',
            'Fees charged in EUR:',
-           'Trucking Rate']
+           'Trucking Rate',
+           nil]
         end
 
         it 'returns rows for each level of charge table' do
           results = klass.perform
           aggregate_failures do
-            expect(results.length).to eq(20)
+            expect(results.length).to eq(21)
             expect(results.pluck(:description)).to match_array(expected_descriptions)
             expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
           end

@@ -12,7 +12,20 @@ module Api
       @tender = tender
       @base_currency = tender.amount.currency
       @charge_breakdown = @tender.charge_breakdown
-      @rows = []
+      @rows = [
+        {
+          id: SecureRandom.uuid,
+          description: nil,
+          value: value_with_currency(tender.amount),
+          originalValue: value_with_currency(tender.original_amount),
+          lineItemId: nil,
+          tenderId: tender.id,
+          order: 0,
+          section: nil,
+          level: 0,
+          chargeCategoryId: nil
+        }
+      ]
       @scope = scope
     end
 
@@ -37,7 +50,7 @@ module Api
           tenderId: tender.id,
           order: section_order(section: section),
           section: section,
-          level: 0,
+          level: 1,
           chargeCategoryId: charge_category_id
         }
         @rows << section_row
@@ -60,7 +73,7 @@ module Api
           lineItemId: nil,
           tenderId: tender.id,
           section: items_by_cargo.first.section,
-          level: 1,
+          level: 2,
           chargeCategoryId: applicable_charge_category_id(cargo: cargo)
         }
         @rows << cargo_row
@@ -83,7 +96,7 @@ module Api
           lineItemId: nil,
           tenderId: tender.id,
           section: items_by_currency.first.section,
-          level: 2,
+          level: 3,
           chargeCategoryId: nil
         }
         @rows << currency_row
@@ -105,7 +118,7 @@ module Api
           lineItemId: item.id,
           tenderId: tender.id,
           section: item.section,
-          level: 3,
+          level: 4,
           chargeCategoryId: applicable_charge_category_id(item: item)
         }
       end
