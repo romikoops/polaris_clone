@@ -6,6 +6,10 @@ RSpec.describe ExcelDataServices::Restructurers::MaxDimensions do
   let(:tenant) { create(:tenant) }
   let(:options) { { tenant: tenant, data: input_data } }
 
+  before do
+    FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant)
+  end
+
   describe '.restructure' do
     let(:input_data) { build(:excel_data_parsed_correct_max_dimensions).first }
     let(:output_data) { { 'MaxDimensions' => build(:excel_data_restructured_max_dimensions) } }

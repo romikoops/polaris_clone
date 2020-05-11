@@ -3,6 +3,13 @@
 module Legacy
   class Itinerary < ApplicationRecord # rubocop:disable Metrics/ClassLength
     include PgSearch::Model
+
+    MODES_OF_TRANSPORT = %w[
+      ocean
+      air
+      rail
+      truck
+    ].freeze
     self.table_name = 'itineraries'
     belongs_to :tenant
     has_many :stops, dependent: :destroy

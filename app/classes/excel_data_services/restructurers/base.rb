@@ -142,8 +142,16 @@ module ExcelDataServices
 
       def sanitize_service_level_and_carrier(rows_data)
         rows_data.each do |row_data|
-          row_data[:service_level] = strip_and_downcase(row_data[:service_level])
+          row_data[:service_level] = strip_and_enforce_case(value: row_data[:service_level], desired_case: :down)
           row_data[:carrier] = row_data[:carrier]&.strip
+        end
+      end
+
+      def sanitize_locodes(rows_data)
+        rows_data.each do |row_data|
+          row_data[:origin_locode] = strip_and_enforce_case(value: row_data[:origin_locode], desired_case: :up)
+          row_data[:destination_locode] =
+            strip_and_enforce_case(value: row_data[:destination_locode], desired_case: :up)
         end
       end
 
@@ -159,10 +167,11 @@ module ExcelDataServices
         end
       end
 
-      def strip_and_downcase(string)
-        return if string.blank?
+      def strip_and_enforce_case(value:, desired_case: :down)
+        return if value.blank?
 
-        string.strip.downcase
+        stripped_string = value.strip
+        desired_case == :down ? stripped_string.downcase : stripped_string.upcase
       end
     end
   end

@@ -11,6 +11,7 @@ RSpec.describe ExcelDataServices::Inserters::MaxDimensions do
   before do
     create(:tenant_vehicle, tenant: tenant, name: 'standard', carrier: carrier)
     create(:tenant_vehicle, tenant: tenant, name: 'faster', carrier: carrier)
+    create(:gothenburg_shanghai_itinerary, tenant: tenant)
   end
 
   describe '.insert' do

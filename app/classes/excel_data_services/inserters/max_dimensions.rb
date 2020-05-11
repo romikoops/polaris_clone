@@ -6,12 +6,14 @@ module ExcelDataServices
       def perform
         data.each do |params|
           carrier = find_carrier(name: params.dig(:carrier))
+          itinerary = find_itinerary(params.slice(:origin_locode, :destination_locode, :mode_of_transport))
           tenant_vehicle = find_service_level(name: params.dig(:service_level), carrier: carrier)
 
           update_or_create_max_dimensions_bundle(
             params: params,
             tenant_vehicle: tenant_vehicle,
-            carrier: carrier
+            carrier: carrier,
+            itinerary: itinerary
           )
         end
 
@@ -32,10 +34,22 @@ module ExcelDataServices
         Legacy::TenantVehicle.find_by(name: name, carrier: carrier, tenant_id: @tenant.id)
       end
 
-      def update_or_create_max_dimensions_bundle(params:, carrier:, tenant_vehicle:)
+      def find_itinerary(mode_of_transport:, origin_locode: nil, destination_locode: nil)
+        return if origin_locode.blank? && destination_locode.blank?
+
+        origin_stops = ::Legacy::Stop.joins(:hub)
+                                     .where(hubs: { hub_code: origin_locode, tenant_id: tenant.id })
+        destination_stops = ::Legacy::Stop.joins(:hub)
+                                          .where(hubs: { hub_code: destination_locode, tenant_id: tenant.id })
+        itinerary_ids = origin_stops.pluck(:itinerary_id) | destination_stops.pluck(:itinerary_id)
+        ::Legacy::Itinerary.find_by(tenant_id: tenant.id, mode_of_transport: mode_of_transport, id: itinerary_ids)
+      end
+
+      def update_or_create_max_dimensions_bundle(params:, carrier:, tenant_vehicle:, itinerary:)
         max_dimension = Legacy::MaxDimensionsBundle.find_or_initialize_by(
           mode_of_transport: params[:mode_of_transport],
           carrier: carrier,
+          itinerary: itinerary,
           aggregate: params[:aggregate],
           tenant_vehicle: tenant_vehicle,
           tenant: @tenant,

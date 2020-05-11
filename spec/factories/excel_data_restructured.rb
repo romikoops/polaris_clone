@@ -2906,6 +2906,8 @@ FactoryBot.define do
           payload_in_kg: 0.1e5,
           chargeable_weight: 0.1e5,
           aggregate: false,
+          origin_locode: nil,
+          destination_locode: nil,
           row_nr: 2
         },
          {
@@ -2921,6 +2923,8 @@ FactoryBot.define do
            payload_in_kg: 0.1e5,
            chargeable_weight: 0.1e5,
            aggregate: true,
+           origin_locode: nil,
+           destination_locode: nil,
            row_nr: 3
          },
          {
@@ -2935,6 +2939,8 @@ FactoryBot.define do
            dimension_z: 0,
            payload_in_kg: 0.1e6,
            aggregate: false,
+           origin_locode: 'SEGOT',
+           destination_locode: 'CNSHA',
            row_nr: 4
          }]
       end

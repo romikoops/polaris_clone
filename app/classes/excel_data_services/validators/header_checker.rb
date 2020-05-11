@@ -226,6 +226,11 @@ module ExcelDataServices
         ].freeze
       end
 
+      OPTIONAL_MAX_DIMENSIONS = %i[
+        origin_locode
+        destination_locode
+      ].freeze
+
       attr_reader :restructurer_name, :errors
 
       def initialize(sheet_name, parsed_headers)

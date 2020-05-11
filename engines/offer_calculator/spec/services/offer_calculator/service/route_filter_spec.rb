@@ -127,6 +127,37 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
         end
       end
     end
+
+    context 'with route specfic max dimensions (success)' do
+      before do
+        FactoryBot.create(:legacy_cargo_item,
+                          dimension_x: 990,
+                          dimension_z: 990,
+                          dimension_y: 990,
+                          payload_in_kg: 10_000,
+                          chargeable_weight: 10_000,
+                          shipment: shipment)
+        FactoryBot.create(:legacy_max_dimensions_bundle,
+                          dimension_x: 1000,
+                          dimension_z: 1000,
+                          dimension_y: 1000,
+                          payload_in_kg: 1_000_000,
+                          chargeable_weight: 1_000_000,
+                          tenant_vehicle_id: nil,
+                          carrier_id: nil,
+                          itinerary_id: itinerary.id,
+                          mode_of_transport: 'ocean',
+                          tenant: tenant)
+      end
+
+      it 'returns the valid routes' do
+        results = described_class.new(shipment: shipment).perform(routes)
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results).to match_array(routes)
+        end
+      end
+    end
   end
 
   describe '.target_max_dimension' do

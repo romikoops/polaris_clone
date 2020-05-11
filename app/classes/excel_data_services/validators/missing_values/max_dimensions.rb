@@ -8,6 +8,7 @@ module ExcelDataServices
 
         def check_single_data(row)
           check_row_requirements(row)
+          check_locodes(row)
         end
 
         def check_row_requirements(row)
@@ -22,6 +23,18 @@ module ExcelDataServices
               exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues
             )
           end
+        end
+
+        def check_locodes(row)
+          return if row[:origin_locode].present? == row[:destination_locode].present?
+
+          add_to_errors(
+            type: :error,
+            row_nr: row.nr,
+            sheet_name: sheet_name,
+            reason: 'Both LOCODES must be present',
+            exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues
+          )
         end
 
         def row_requirements(row)

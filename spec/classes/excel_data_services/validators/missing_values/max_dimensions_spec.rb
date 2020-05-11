@@ -22,6 +22,8 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::MaxDimensions do
           chargeable_weight: nil,
           cargo_class: 'fcl_20',
           aggregate: false,
+          origin_locode: nil,
+          destination_locode: nil,
           row_nr: 2
         },
         {
@@ -37,6 +39,8 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::MaxDimensions do
           chargeable_weight: nil,
           cargo_class: nil,
           aggregate: nil,
+          origin_locode: nil,
+          destination_locode: 'SEGOT',
           row_nr: 3
         }
       ].map { |row| ExcelDataServices::Rows::MaxDimensions.new(tenant: tenant, row_data: row) }
@@ -77,6 +81,11 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::MaxDimensions do
              type: :error },
           {  exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues,
              reason: 'Missing value for LOAD_TYPE.',
+             row_nr: 3,
+             sheet_name: 'Sheet1',
+             type: :error },
+          {  exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues,
+             reason: 'Both LOCODES must be present',
              row_nr: 3,
              sheet_name: 'Sheet1',
              type: :error }

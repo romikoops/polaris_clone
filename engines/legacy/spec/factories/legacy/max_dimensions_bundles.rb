@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :legacy_max_dimensions_bundle, class: 'Legacy::MaxDimensionsBundle' do
     association :tenant, factory: :legacy_tenant
+
     mode_of_transport { 'general' }
     cargo_class { 'lcl' }
     aggregate { false }
@@ -42,6 +43,7 @@ end
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  carrier_id        :bigint
+#  itinerary_id      :bigint
 #  sandbox_id        :uuid
 #  tenant_id         :integer
 #  tenant_vehicle_id :bigint
@@ -50,6 +52,7 @@ end
 #
 #  index_max_dimensions_bundles_on_cargo_class        (cargo_class)
 #  index_max_dimensions_bundles_on_carrier_id         (carrier_id)
+#  index_max_dimensions_bundles_on_itinerary_id       (itinerary_id)
 #  index_max_dimensions_bundles_on_mode_of_transport  (mode_of_transport)
 #  index_max_dimensions_bundles_on_sandbox_id         (sandbox_id)
 #  index_max_dimensions_bundles_on_tenant_id          (tenant_id)

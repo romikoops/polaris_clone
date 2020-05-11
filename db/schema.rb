@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_04_113519) do
+ActiveRecord::Schema.define(version: 2020_05_11_114249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -861,6 +861,7 @@ ActiveRecord::Schema.define(version: 2020_05_04_113519) do
     t.decimal "dimension_x"
     t.decimal "dimension_y"
     t.decimal "dimension_z"
+    t.bigint "itinerary_id"
     t.string "mode_of_transport"
     t.decimal "payload_in_kg"
     t.uuid "sandbox_id"
@@ -869,6 +870,7 @@ ActiveRecord::Schema.define(version: 2020_05_04_113519) do
     t.datetime "updated_at", null: false
     t.index ["cargo_class"], name: "index_max_dimensions_bundles_on_cargo_class"
     t.index ["carrier_id"], name: "index_max_dimensions_bundles_on_carrier_id"
+    t.index ["itinerary_id"], name: "index_max_dimensions_bundles_on_itinerary_id"
     t.index ["mode_of_transport"], name: "index_max_dimensions_bundles_on_mode_of_transport"
     t.index ["sandbox_id"], name: "index_max_dimensions_bundles_on_sandbox_id"
     t.index ["tenant_id"], name: "index_max_dimensions_bundles_on_tenant_id"

@@ -516,6 +516,8 @@ FactoryBot.define do
              chargeable_weight: 0.1e5,
              load_type: 'lcl',
              aggregate: nil,
+             origin_locode: nil,
+             destination_locode: nil,
              row_nr: 2 },
            { carrier: 'msc',
              service_level: 'faster',
@@ -527,6 +529,8 @@ FactoryBot.define do
              chargeable_weight: 0.1e5,
              load_type: 'lcl',
              aggregate: true,
+             origin_locode: nil,
+             destination_locode: nil,
              row_nr: 3 },
            { carrier: 'msc',
              service_level: 'faster',
@@ -537,6 +541,8 @@ FactoryBot.define do
              payload_in_kg: 0.1e6,
              load_type: 'fcl_20',
              aggregate: false,
+             origin_locode: 'SEGOT',
+             destination_locode: 'cnsha',
              row_nr: 4 }] }]
       end
     end

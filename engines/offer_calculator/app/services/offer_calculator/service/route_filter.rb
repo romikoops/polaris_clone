@@ -73,12 +73,15 @@ module OfferCalculator
           tenant_vehicle_id: route.tenant_vehicle_id,
           mode_of_transport: route.mode_of_transport,
           cargo_class: cargo_class,
+          itinerary_id: route.itinerary_id,
           aggregate: aggregate
         }
         mot_filtered_max_dimensions = tenant_max_dimensions_bundles.exists?(args.slice(:mode_of_transport))
         args[:mode_of_transport] = 'general' if mot_filtered_max_dimensions.blank?
         bundle = tenant_max_dimensions_bundles.find_by(args)
+        bundle ||= tenant_max_dimensions_bundles.find_by(args.except(:itinerary_id))
         bundle ||= tenant_max_dimensions_bundles.find_by(args.except(:tenant_vehicle_id))
+        bundle ||= tenant_max_dimensions_bundles.find_by(args.except(:tenant_vehicle_id, :itinerary_id))
         bundle || tenant_max_dimensions_bundles.find_by(args.slice(:mode_of_transport, :aggregate))
       end
     end
