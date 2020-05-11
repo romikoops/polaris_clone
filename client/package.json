@@ -61,7 +61,7 @@
     "copy-webpack-plugin": "4.6.0",
     "css-loader": "1.0.1",
     "d3-geo": "1.10.0",
-    "dotenv-webpack": "1.5.7",
+    "dotenv-webpack": "1.7.0",
     "es6-promise-promise": "1.0.0",
     "file-loader": "3.0.1",
     "formsy-react": "1.1.4",
