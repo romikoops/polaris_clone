@@ -19,6 +19,7 @@ end
 #  updated_at           :datetime         not null
 #  delivery_address_id  :integer
 #  destination_nexus_id :integer
+#  legacy_shipment_id   :integer
 #  origin_nexus_id      :integer
 #  pickup_address_id    :integer
 #  sandbox_id           :bigint

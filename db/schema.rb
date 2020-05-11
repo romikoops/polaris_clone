@@ -1278,6 +1278,7 @@ ActiveRecord::Schema.define(version: 2020_05_11_114249) do
     t.datetime "created_at", null: false
     t.integer "delivery_address_id"
     t.integer "destination_nexus_id"
+    t.integer "legacy_shipment_id"
     t.integer "origin_nexus_id"
     t.integer "pickup_address_id"
     t.bigint "sandbox_id"
