@@ -2,8 +2,8 @@
 
 module Legacy
   class TransitTime < ApplicationRecord
-    belongs_to :itinerary, class_name: 'Legacy::Itinerary'
-    belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle'
+    belongs_to :itinerary, class_name: 'Legacy::Itinerary', dependent: :destroy
+    belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle', dependent: :destroy
 
     validates :itinerary_id, uniqueness: { scope: :tenant_vehicle }
   end
