@@ -154,7 +154,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "23.6.0",
     "enzyme": "3.11.0",
-    "enzyme-adapter-react-16": "1.7.0",
+    "enzyme-adapter-react-16": "1.15.2",
     "enzyme-to-json": "3.3.4",
     "friendly-errors-webpack-plugin": "1.7.0",
     "identity-obj-proxy": "3.0.0",
