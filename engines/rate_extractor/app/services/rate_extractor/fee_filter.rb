@@ -36,7 +36,8 @@ module RateExtractor
               .where('stowage_range @> ?::numeric', chargeable_cargo.stowage_factor.value)
               .where('unit_range @> ?::numeric', chargeable_cargo.quantity)
         )
-        # to add cargo to fee and fee to cargo as targets
+        # to add cargo as target on the cargo rate
+        @cargo_rate.targets << chargeable_cargo if range_filtered_fees.any?
       end
       range_filtered_fees
     end

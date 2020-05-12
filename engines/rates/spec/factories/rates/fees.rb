@@ -51,7 +51,9 @@ FactoryBot.define do
     end
 
     trait :shipment_basis do
-      rate_basis { 0 }
+      min_amount_cents { 0 }
+      max_amount_cents { 100 }
+      rate_basis { :shipment }
     end
 
     trait :km_basis do
@@ -89,6 +91,7 @@ end
 #  min_amount_cents    :bigint           default(0), not null
 #  min_amount_currency :string           not null
 #  operator            :integer          default("addition"), not null
+#  percentage          :decimal(, )
 #  rate_basis          :integer          default("shipment"), not null
 #  rule                :jsonb
 #  stowage_range       :numrange

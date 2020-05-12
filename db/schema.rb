@@ -1363,6 +1363,7 @@ ActiveRecord::Schema.define(version: 2020_05_11_114249) do
     t.bigint "min_amount_cents", default: 0, null: false
     t.string "min_amount_currency", null: false
     t.integer "operator", default: 0, null: false
+    t.decimal "percentage"
     t.integer "rate_basis", default: 0, null: false
     t.jsonb "rule"
     t.numrange "stowage_range"

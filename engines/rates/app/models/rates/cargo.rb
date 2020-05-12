@@ -4,8 +4,8 @@ module Rates
   class Cargo < ApplicationRecord
     enum cargo_class: ::Cargo::Specification::CLASS_ENUM, _prefix: true
     enum cargo_type: ::Cargo::Specification::TYPE_ENUM, _prefix: true
-    enum operator: { min_value: 0, max_value: 1, sum_values: 2 }
-    enum applicable_to: { self: 0, route_rate: 1, shipment: 2 }
+    enum operator: { min_value: 0, max_value: 1, sum_values: 2, default: 3 }
+    enum applicable_to: { cargo: 0, section: 1, shipment: 2 }
     enum valid_at: { vatos: 0, vatoa: 1, vatob: 2 }
 
     belongs_to :section
@@ -19,7 +19,7 @@ end
 # Table name: rates_cargos
 #
 #  id            :uuid             not null, primary key
-#  applicable_to :integer          default("self")
+#  applicable_to :integer          default("cargo")
 #  cargo_class   :integer          default("00")
 #  cargo_type    :integer          default("LCL")
 #  category      :integer          default(0)

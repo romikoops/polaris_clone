@@ -27,6 +27,7 @@ end
 #  min_amount_cents    :bigint           default(0), not null
 #  min_amount_currency :string           not null
 #  operator            :integer          default("addition"), not null
+#  percentage          :decimal(, )
 #  rate_basis          :integer          default("shipment"), not null
 #  rule                :jsonb
 #  stowage_range       :numrange

@@ -7,7 +7,8 @@ FactoryBot.define do
     cargo_class { '00' }
     cargo_type { 'GP' }
     code { 'BAS' }
-    operator { :min_value }
+    cbm_ratio { 200 }
+    operator { :default }
 
     trait :section do
       applicable_to { 1 }
@@ -45,7 +46,7 @@ end
 # Table name: rates_cargos
 #
 #  id            :uuid             not null, primary key
-#  applicable_to :integer          default("self")
+#  applicable_to :integer          default("cargo")
 #  cargo_class   :integer          default("00")
 #  cargo_type    :integer          default("LCL")
 #  category      :integer          default(0)

@@ -15,7 +15,7 @@ end
 # Table name: rates_cargos
 #
 #  id            :uuid             not null, primary key
-#  applicable_to :integer          default("self")
+#  applicable_to :integer          default("cargo")
 #  cargo_class   :integer          default("00")
 #  cargo_type    :integer          default("LCL")
 #  category      :integer          default(0)
