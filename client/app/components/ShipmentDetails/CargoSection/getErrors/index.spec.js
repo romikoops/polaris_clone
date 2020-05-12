@@ -4,9 +4,9 @@ const cargoItems = [
     payloadInKg: 1200,
     totalVolume: 0,
     totalWeight: 0,
-    dimensionX: 100,
-    dimensionY: 100,
-    dimensionZ: 100,
+    width: 100,
+    length: 100,
+    height: 100,
     quantity: 1,
     cargoItemTypeId: '',
     dangerousGoods: false,
@@ -18,16 +18,16 @@ test('no errors', () => {
     modesOfTransport: ['air', 'ocean'],
     maxDimensions: {
       general: {
-        dimensionX: '0.0',
-        dimensionY: '0.0',
-        dimensionZ: '0.0',
+        width: '0.0',
+        length: '0.0',
+        height: '0.0',
         payloadInKg: '0.0',
         chargeableWeight: '0.0'
       },
       air: {
-        dimensionX: '0.0',
-        dimensionY: '0.0',
-        dimensionZ: '0.0',
+        width: '0.0',
+        length: '0.0',
+        height: '0.0',
         payloadInKg: '1000.0',
         chargeableWeight: '1000.0'
       }
@@ -37,9 +37,9 @@ test('no errors', () => {
         payloadInKg: 500,
         totalVolume: 0,
         totalWeight: 0,
-        dimensionX: 100,
-        dimensionY: 100,
-        dimensionZ: 100,
+        width: 100,
+        length: 100,
+        height: 100,
         quantity: 1,
         cargoItemTypeId: '',
         dangerousGoods: false,
@@ -59,16 +59,16 @@ test('warnings', () => {
     modesOfTransport: ['air', 'ocean'],
     maxDimensions: {
       general: {
-        dimensionX: '0.0',
-        dimensionY: '0.0',
-        dimensionZ: '0.0',
+        width: '0.0',
+        length: '0.0',
+        height: '0.0',
         payloadInKg: '0.0',
         chargeableWeight: '0.0'
       },
       air: {
-        dimensionX: '0.0',
-        dimensionY: '0.0',
-        dimensionZ: '0.0',
+        width: '0.0',
+        length: '0.0',
+        height: '0.0',
         payloadInKg: '1000.0',
         chargeableWeight: '1000.0'
       }
@@ -90,23 +90,23 @@ test('trucking errors', () => {
     modesOfTransport: ['air', 'ocean'],
     maxDimensions: {
       general: {
-        dimensionX: '0.0',
-        dimensionY: '0.0',
-        dimensionZ: '0.0',
+        width: '0.0',
+        length: '0.0',
+        height: '0.0',
         payloadInKg: '0.0',
         chargeableWeight: '0.0'
       },
       air: {
-        dimensionX: '0.0',
-        dimensionY: '0.0',
-        dimensionZ: '0.0',
+        width: '0.0',
+        length: '0.0',
+        height: '0.0',
         payloadInKg: '0.0',
         chargeableWeight: '0.0'
       },
       truckCarriage: {
-        dimensionX: '0.0',
-        dimensionY: '0.0',
-        dimensionZ: '0.0',
+        width: '0.0',
+        length: '0.0',
+        height: '0.0',
         payloadInKg: '1000.0',
         chargeableWeight: '1000.0'
       }
@@ -127,9 +127,9 @@ test('defaulting to general errors', () => {
     modesOfTransport: ['air', 'ocean'],
     maxDimensions: {
       general: {
-        dimensionX: '0.0',
-        dimensionY: '0.0',
-        dimensionZ: '0.0',
+        width: '0.0',
+        length: '0.0',
+        height: '0.0',
         payloadInKg: '1000.0',
         chargeableWeight: '0.0'
       }
@@ -150,9 +150,9 @@ test('ocean errors', () => {
     modesOfTransport: ['air', 'ocean'],
     maxDimensions: {
       ocean: {
-        dimensionX: '0.0',
-        dimensionY: '0.0',
-        dimensionZ: '0.0',
+        width: '0.0',
+        length: '0.0',
+        height: '0.0',
         payloadInKg: '1000.0',
         chargeableWeight: '0.0'
       }

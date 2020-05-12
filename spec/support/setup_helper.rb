@@ -22,9 +22,9 @@ module SetupHelper
       _pricing_detail = pricing_detail(tenant: _user.tenant, pricing: _pricing,
                                        currency: args[:target_currency], rate: args[:rate]['BAS'] ? args[:rate]['BAS']['rate'] : nil,
                                        min: args[:rate]['BAS'] ? args[:rate]['BAS']['min'] : nil)
-      _cargo_item = cargo_item(quantity: args[:quantity], dimension_x: args[:dimension_x],
-                               dimension_y: args[:dimension_y], dimension_z: args[:dimension_z],
-                               payload_in_kg: args[:payload_in_kg], cargo_class: args[:cargo_class])
+      cargo_item = cargo_item(quantity: args[:quantity], width: args[:width],
+                              length: args[:length], height: args[:height],
+                              payload_in_kg: args[:payload_in_kg], cargo_class: args[:cargo_class])
 
       destination_country = create(:country)
       origin_country = create(:country)
@@ -52,7 +52,7 @@ module SetupHelper
                                          latitude: args[:destination_latitude], longitude: args[:destination_longitude],
                                          mandatory_charge: _mandatory_charge_type, address: destination, tenant: _user.tenant)
 
-      _shipment = shipment(cargo_items: [_cargo_item], user: _user, shipment_status: args[:shipment_status],
+      _shipment = shipment(cargo_items: [cargo_item], user: _user, shipment_status: args[:shipment_status], # rubocop:disable Lint/UnderscorePrefixedVariableName
                            trip: _trip, load_type: args[:load_type], direction: args[:direction], origin_hub: _origin_hub,
                            origin_nexus: _origin_nexus, destination_hub: _destination_hub, destination_nexus:  _destination_nexus,
                            trucking: args[:trucking], eta: args[:eta], etd: args[:etd], closing_date: args[:closing_date])
@@ -187,8 +187,8 @@ module SetupHelper
     end
 
     def cargo_item(arg = {})
-      create(:cargo_item, quantity: arg[:quantity] || 1, dimension_x: arg[:dimension_x] || 20,
-                          dimension_y: arg[:dimension_y] || 20, dimension_z: arg[:dimension_z] || 20,
+      create(:cargo_item, quantity: arg[:quantity] || 1, width: arg[:width] || 20,
+                          length: arg[:length] || 20, height: arg[:height] || 20,
                           payload_in_kg: arg[:payload_in_kg] || 200, cargo_class: arg[:cargo_class] || 'lcl')
     end
 
@@ -385,9 +385,9 @@ module SetupHelper
         load_type: 'load_type',
         mode_of_transport: 'mode_of_transport',
         quantity: 'quantity',
-        dimension_x: 'dimension_x',
-        dimension_y: 'dimension_y',
-        dimension_z: 'dimension_z',
+        width: 'width',
+        length: 'length',
+        height: 'height',
         payload_in_kg: 'payload_in_kg',
         eta: 'eta',
         etd: 'etd',

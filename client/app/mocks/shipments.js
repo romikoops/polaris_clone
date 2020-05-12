@@ -23,9 +23,9 @@ const trucking = {
   on_carriage: { trucking_time_in_seconds: 28 }
 }
 const cargo_units = [{
-  dimension_x: 107.0,
-  dimension_y: 63.0,
-  dimension_z: 67.0,
+  width: 107.0,
+  length: 63.0,
+  height: 67.0,
   quantity: 2
 }]
 const origin_hub = {

@@ -19,8 +19,8 @@ describe('correctly determines whether to display subtotals based on currencies 
     const key = 'cargo'
     const quote = selectedOffer
     const contentSections = Object.entries(quote[key])
-      .map(array => array.filter(value => !instance.unbreakableKeys.includes(value)))
-      .filter(value => value.length !== 1)
+      .map((array) => array.filter((value) => !instance.unbreakableKeys.includes(value)))
+      .filter((value) => value.length !== 1)
     const currencySections = {}
     const scope = { hide_sub_totals: false }
     const currencyTotals = {}
@@ -48,6 +48,32 @@ describe('correctly determines whether to display subtotals based on currencies 
     })
   })
 
+  it('should render the total when more than one cargo item', () => {
+    const wrapper = mount(
+      <UserContext.Provider value={user}>
+        <QuoteChargeBreakdown
+          quote={selectedOffer}
+          scope={{ hide_sub_totals: false }}
+          cargo={cargoItems}
+        />
+      </UserContext.Provider>
+    )
+
+    const instance = wrapper.instance()
+
+    const consolidatedCargo = instance.fetchCargoData('cargo_item')
+    const expectedCargo = {
+      cargo_class: undefined,
+      cargo_item_type: undefined,
+      height: 110,
+      length: 110,
+      payload_in_kg: 300,
+      quantity: 12,
+      width: 110
+    }
+    expect(consolidatedCargo).toEqual(expectedCargo)
+  })
+
   it('should not render the total due to scope', () => {
     const wrapper = mount(
       <UserContext.Provider value={user}>
@@ -62,8 +88,8 @@ describe('correctly determines whether to display subtotals based on currencies 
     const key = 'cargo'
     const quote = selectedOffer
     const contentSections = Object.entries(quote[key])
-      .map(array => array.filter(value => !instance.unbreakableKeys.includes(value)))
-      .filter(value => value.length !== 1)
+      .map((array) => array.filter((value) => !instance.unbreakableKeys.includes(value)))
+      .filter((value) => value.length !== 1)
     const currencySections = {}
     const scope = { hide_sub_totals: true }
 

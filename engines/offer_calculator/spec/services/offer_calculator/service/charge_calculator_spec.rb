@@ -402,6 +402,23 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
         end
       end
 
+      context 'with consolidated backend cargo' do
+        before do
+          allow(Tenants::ScopeService).to receive(:new).and_return(scope_service)
+          allow(scope_service).to receive(:fetch).and_return('validity_logic' => 'vatos', 'consolidation' => { 'cargo' => { 'backend' => true } })
+        end
+
+        let!(:scope_service) { instance_double(Tenants::ScopeService) }
+        let!(:current_results) { results }
+
+        it 'returns an object with calculated totals and schedules for aggregated cargo' do
+          aggregate_failures do
+            expect(current_results.count).to eq(1)
+            expect(current_results.first.keys).to match_array(%i[total schedules metadata])
+          end
+        end
+      end
+
       context 'with absolute margins' do
         before do
           FactoryBot.create(:export_margin,

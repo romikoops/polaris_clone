@@ -223,9 +223,9 @@ class QuoteCard extends PureComponent {
       ? aggregatedCargo.volume
       : cargo.reduce((sum, cargoUnit) => (
         sum +
-        (+cargoUnit.dimension_x *
-        +cargoUnit.dimension_y *
-        +cargoUnit.dimension_z /
+        (+cargoUnit.width *
+        +cargoUnit.length *
+        +cargoUnit.height /
         1000000) *
         +cargoUnit.quantity), 0)
 

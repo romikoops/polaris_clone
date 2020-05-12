@@ -69,8 +69,8 @@ export const ShipmentDetails = {
 export const cargoItemTypes = [
   {
     id: 25,
-    dimension_x: null,
-    dimension_y: null,
+    width: null,
+    length: null,
     description: 'Pallet',
     area: null,
     created_at: '2018-06-27T17:28:28.431Z',
@@ -79,8 +79,8 @@ export const cargoItemTypes = [
   },
   {
     id: 22,
-    dimension_x: null,
-    dimension_y: null,
+    width: null,
+    length: null,
     description: 'Carton',
     area: null,
     created_at: '2018-06-27T17:28:28.417Z',
@@ -89,8 +89,8 @@ export const cargoItemTypes = [
   },
   {
     id: 23,
-    dimension_x: null,
-    dimension_y: null,
+    width: null,
+    length: null,
     description: 'Crate',
     area: null,
     created_at: '2018-06-27T17:28:28.422Z',
@@ -99,8 +99,8 @@ export const cargoItemTypes = [
   },
   {
     id: 26,
-    dimension_x: null,
-    dimension_y: null,
+    width: null,
+    length: null,
     description: 'Bottle',
     area: null,
     created_at: '2018-06-27T17:28:28.436Z',
@@ -109,8 +109,8 @@ export const cargoItemTypes = [
   },
   {
     id: 27,
-    dimension_x: null,
-    dimension_y: null,
+    width: null,
+    length: null,
     description: 'Stack',
     area: null,
     created_at: '2018-06-27T17:28:28.440Z',
@@ -119,8 +119,8 @@ export const cargoItemTypes = [
   },
   {
     id: 28,
-    dimension_x: null,
-    dimension_y: null,
+    width: null,
+    length: null,
     description: 'Drum',
     area: null,
     created_at: '2018-06-27T17:28:28.445Z',
@@ -129,8 +129,8 @@ export const cargoItemTypes = [
   },
   {
     id: 29,
-    dimension_x: null,
-    dimension_y: null,
+    width: null,
+    length: null,
     description: 'Skid',
     area: null,
     created_at: '2018-06-27T17:28:28.450Z',
@@ -139,8 +139,8 @@ export const cargoItemTypes = [
   },
   {
     id: 30,
-    dimension_x: null,
-    dimension_y: null,
+    width: null,
+    length: null,
     description: 'Barrel',
     area: null,
     created_at: '2018-06-27T17:28:28.454Z',
@@ -151,10 +151,10 @@ export const cargoItemTypes = [
 
 export const maxDimensions = {
   general: {
-    dimensionX: '590.0', dimensionY: '234.2', dimensionZ: '228.0', payloadInKg: '21770.0', chargeableWeight: '21770.0'
+    width: '590.0', length: '234.2', height: '228.0', payloadInKg: '21770.0', chargeableWeight: '21770.0'
   },
   air: {
-    dimensionX: '120.0', dimensionY: '100.0', dimensionZ: '150.0', payloadInKg: '1000.0', chargeableWeight: '1000.0'
+    width: '120.0', length: '100.0', height: '150.0', payloadInKg: '1000.0', chargeableWeight: '1000.0'
   }
 }
 
@@ -230,9 +230,9 @@ export const cargoItem = {
   payloadInKg: 223,
   totalVolume: 0,
   totalWeight: 0,
-  dimensionX: 5,
-  dimensionY: 132,
-  dimensionZ: 12,
+  width: 5,
+  length: 132,
+  height: 12,
   quantity: 6,
   cargoItemTypeId: 23,
   dangerousGoods: false,
@@ -243,9 +243,9 @@ export const cargoItemAggregated = {
   payloadInKg: 0,
   totalVolume: 122,
   totalWeight: 346,
-  dimensionX: 0,
-  dimensionY: 0,
-  dimensionZ: 0,
+  width: 0,
+  length: 0,
+  height: 0,
   quantity: 1,
   cargoItemTypeId: '',
   dangerousGoods: false,
@@ -258,7 +258,7 @@ export const cargoItemContainer = {
 
 
 export const maxDimensionsToApply = {
-  dimensionX: '590.0', dimensionY: '234.2', dimensionZ: '228.0', payloadInKg: '21770.0', chargeableWeight: '21770.0'
+  width: '590.0', length: '234.2', height: '228.0', payloadInKg: '21770.0', chargeableWeight: '21770.0'
 }
 
 export const cargoUnits = [cargoItem]

@@ -19,7 +19,7 @@ module Integrations
         tonage_per_cbm = Legacy::CargoItem::EFFECTIVE_TONNAGE_PER_CUBIC_METER[mode_of_transport.to_sym]
 
         cargo_items.sum do |cargo_item|
-          volume = cargo_item.dimension_x * cargo_item.dimension_y * cargo_item.dimension_z / 1_000_000.0
+          volume = cargo_item.width * cargo_item.length * cargo_item.height / 1_000_000.0
           volume * tonage_per_cbm * 1000
         end
       end

@@ -43,8 +43,8 @@ class CargoItem extends React.PureComponent {
     return nonPalletTypes.map(cargoItemType => ({
       label: cargoItemType.description,
       key: cargoItemType.id,
-      dimension_x: cargoItemType.dimension_x,
-      dimension_y: cargoItemType.dimension_y
+      width: cargoItemType.width,
+      length: cargoItemType.length
     }))
   }
 
@@ -158,19 +158,6 @@ class CargoItem extends React.PureComponent {
           >
 
             <CargoUnitNumberInput
-              image={this.getImage('length')}
-              labelText={t('common:length')}
-              maxDimensionsErrorText={t('errors:maxLength')}
-              unit="cm"
-              validations={{
-                totalShipmentChargeableWeight: () => (
-                  totalShipmentErrors.chargeableWeight.type !== 'error'
-                )
-              }}
-              {...this.getSharedProps('dimensionX')}
-            />
-
-            <CargoUnitNumberInput
               image={this.getImage('width')}
               labelText={t('common:width')}
               maxDimensionsErrorText={t('errors:maxWidth')}
@@ -180,7 +167,20 @@ class CargoItem extends React.PureComponent {
                   totalShipmentErrors.chargeableWeight.type !== 'error'
                 )
               }}
-              {...this.getSharedProps('dimensionY')}
+              {...this.getSharedProps('width')}
+            />
+
+            <CargoUnitNumberInput
+              image={this.getImage('length')}
+              labelText={t('common:length')}
+              maxDimensionsErrorText={t('errors:maxLength')}
+              unit="cm"
+              validations={{
+                totalShipmentChargeableWeight: () => (
+                  totalShipmentErrors.chargeableWeight.type !== 'error'
+                )
+              }}
+              {...this.getSharedProps('length')}
             />
 
             <CargoUnitNumberInput
@@ -193,7 +193,7 @@ class CargoItem extends React.PureComponent {
                   totalShipmentErrors.chargeableWeight.type !== 'error'
                 )
               }}
-              {...this.getSharedProps('dimensionZ')}
+              {...this.getSharedProps('height')}
             />
 
             {

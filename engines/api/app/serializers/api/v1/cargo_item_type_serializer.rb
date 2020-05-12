@@ -3,7 +3,7 @@
 module Api
   module V1
     class CargoItemTypeSerializer < Api::ApplicationSerializer
-      attributes %i[dimension_x dimension_y description]
+      attributes %i[width length description]
     end
   end
 end

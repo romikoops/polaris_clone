@@ -33,13 +33,13 @@ module Legacy
 
       describe '#max_dimensions' do
         it 'has max dimensions' do
-          expect(tenant.max_dimensions).to eq general: { chargeable_weight: 0.1e5, dimension_x: 0.5e3, dimension_y: 0.5e3, dimension_z: 0.5e3, payload_in_kg: 0.1e5 }
+          expect(tenant.max_dimensions).to eq general: { chargeable_weight: 0.1e5, width: 0.5e3, length: 0.5e3, height: 0.5e3, payload_in_kg: 0.1e5 }
         end
       end
 
       describe '#max_aggregate_dimensions' do
         it 'has max aggregated dimensions' do
-          expect(tenant.max_aggregate_dimensions).to eq general: { chargeable_weight: 0.2177e5, dimension_x: 0.5e4, dimension_y: 0.5e4, dimension_z: 0.5e4, payload_in_kg: 0.2177e5 }
+          expect(tenant.max_aggregate_dimensions).to eq general: { chargeable_weight: 0.2177e5, width: 0.5e4, length: 0.5e4, height: 0.5e4, payload_in_kg: 0.2177e5 }
         end
       end
     end

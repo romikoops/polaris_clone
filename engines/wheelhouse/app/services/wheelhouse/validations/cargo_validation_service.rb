@@ -4,9 +4,9 @@ module Wheelhouse
   module Validations
     class CargoValidationService
       STANDARD_ATTRIBUTES = %i[
-        dimension_x
-        dimension_y
-        dimension_z
+        width
+        length
+        height
         payload_in_kg
       ].freeze
       AGGREGATE_ATTRIBUTES = %i[
@@ -16,30 +16,30 @@ module Wheelhouse
         payload_in_kg
       ].freeze
       HUMANIZED_DIMENSION_LOOKUP = {
-        dimension_x: 'Width',
-        dimension_y: 'Length',
-        dimension_z: 'Height',
+        width: 'Width',
+        length: 'Length',
+        height: 'Height',
         payload_in_kg: 'Weight',
         chargeable_weight: 'Chargeable Weight'
       }.freeze
       CARGO_DIMENSION_LOOKUP = {
-        dimension_x: 'width',
-        dimension_y: 'length',
-        dimension_z: 'height',
+        width: 'width',
+        length: 'length',
+        height: 'height',
         payload_in_kg: 'weight'
       }.freeze
 
       ERROR_CODE_DIMENSION_LOOKUP = {
-        dimension_x: 4003,
-        dimension_y: 4004,
-        dimension_z: 4002,
+        width: 4003,
+        length: 4004,
+        height: 4002,
         payload_in_kg: 4001,
         chargeable_weight: 4005
       }.freeze
       MISSING_DIMENSION_LOOKUP = {
-        dimension_x: 4012,
-        dimension_y: 4013,
-        dimension_z: 4011,
+        width: 4012,
+        length: 4013,
+        height: 4011,
         payload_in_kg: 4010
       }.freeze
 

@@ -36,9 +36,9 @@ RSpec.describe Pricings::Finder do
   let(:consolidated_cargo) do
     {
       id: 'ids',
-      dimension_x: 240,
-      dimension_y: 160,
-      dimension_z: 240,
+      width: 240,
+      length: 160,
+      height: 240,
       volume: 3.748,
       payload_in_kg: 600,
       cargo_class: 'lcl',

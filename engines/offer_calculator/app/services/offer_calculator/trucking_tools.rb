@@ -437,9 +437,9 @@ module OfferCalculator
     def consolidate_cargo(cargo_array) # rubocop:disable Metrics/AbcSize
       cargo = {
         id: 'ids',
-        dimension_x: 0,
-        dimension_y: 0,
-        dimension_z: 0,
+        width: 0,
+        length: 0,
+        height: 0,
         volume: 0,
         payload_in_kg: 0,
         cargo_class: '',
@@ -449,9 +449,9 @@ module OfferCalculator
 
       cargo_array.each do |cargo_unit|
         cargo[:id] += "-#{cargo_unit.id}"
-        cargo[:dimension_x] += (cargo_unit.dimension_x * cargo_unit.quantity)
-        cargo[:dimension_y] += (cargo_unit.dimension_y * cargo_unit.quantity)
-        cargo[:dimension_z] += (cargo_unit.dimension_z * cargo_unit.quantity)
+        cargo[:width] += (cargo_unit.width * cargo_unit.quantity)
+        cargo[:length] += (cargo_unit.length * cargo_unit.quantity)
+        cargo[:height] += (cargo_unit.height * cargo_unit.quantity)
         cargo[:volume] += (cargo_unit.volume * cargo_unit.quantity)
         cargo[:payload_in_kg] += (cargo_unit.payload_in_kg * cargo_unit.quantity)
         cargo[:cargo_class] = cargo_unit.cargo_class
@@ -468,7 +468,7 @@ module OfferCalculator
         non_stackable = false
       else
         total_area =  cargos.sum do |cargo|
-          cargo_data_value(:dimension_x, cargo) * cargo_data_value(:dimension_y, cargo) * cargo.quantity
+          cargo_data_value(:width, cargo) * cargo_data_value(:length, cargo) * cargo.quantity
         end
         non_stackable = cargos.select(&:stackable).empty?
       end
@@ -525,12 +525,12 @@ module OfferCalculator
     end
 
     def determine_load_meterage(trucking_pricing, cargo_object, cargo) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-      total_area = (cargo.try(:dimension_x) || 1) * (cargo.try(:dimension_y) || 1) * (cargo.try(:quantity) || 1)
+      total_area = (cargo.try(:width) || 1) * (cargo.try(:length) || 1) * (cargo.try(:quantity) || 1)
       if trucking_pricing['load_meterage'] && trucking_pricing['load_meterage']['ratio']
         if cargo.is_a? Legacy::AggregatedCargo
           calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
         elsif (trucking_pricing['load_meterage']['height_limit'] &&
-            (cargo[:dimension_z] > trucking_pricing['load_meterage']['height_limit'])) ||
+            (cargo[:height] > trucking_pricing['load_meterage']['height_limit'])) ||
               (!cargo[:stackable] && trucking_pricing['load_meterage']['height_limit'])
           calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
         elsif (trucking_pricing['load_meterage']['area_limit'] &&
@@ -629,7 +629,7 @@ module OfferCalculator
     end
 
     def trucking_chargeable_weight_by_stacked_area(trucking_pricing, cargo)
-      items_per_stack = (TRUCKING_CONTAINER_HEIGHT / cargo_data_value(:dimension_z, cargo)).floor
+      items_per_stack = (TRUCKING_CONTAINER_HEIGHT / cargo_data_value(:height, cargo)).floor
       num_stacks = (cargo_quantity(cargo) / items_per_stack.to_d).ceil
       stacked_area = cargo_unit_area(cargo) * num_stacks
       load_meter_var = stacked_area / LOAD_METERAGE_AREA_DIVISOR
@@ -656,7 +656,7 @@ module OfferCalculator
       elsif cargo.is_a?(Hash)
         cargo[:volume]
       else
-        (cargo[:dimension_x] * cargo[:dimension_y] * cargo[:dimension_z]) / CBM_VOLUME_DIVISOR
+        (cargo[:width] * cargo[:length] * cargo[:height]) / CBM_VOLUME_DIVISOR
       end
     end
 
@@ -674,7 +674,7 @@ module OfferCalculator
       if cargo.is_a?(Legacy::AggregatedCargo)
         Legacy::AggregatedCargo::DEFAULT_HEIGHT
       else
-        cargo_data_value(:dimension_x, cargo) * cargo_data_value(:dimension_y, cargo)
+        cargo_data_value(:width, cargo) * cargo_data_value(:length, cargo)
       end
     end
 
@@ -689,7 +689,7 @@ module OfferCalculator
 
     def trucking_payload_area(cargo)
       quantity = cargo.try(:quantity) || 1
-      (cargo.try(:dimension_x) || cargo[:dimension_x]) * (cargo.try(:dimension_y) || cargo[:dimension_y]) * quantity
+      (cargo.try(:width) || cargo[:width]) * (cargo.try(:length) || cargo[:length]) * quantity
     end
 
     def round_fare(result, rounding_scope)

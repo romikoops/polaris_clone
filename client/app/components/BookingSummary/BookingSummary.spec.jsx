@@ -1,11 +1,15 @@
+import configureMockStore from 'redux-mock-store'
+import { Provider } from 'react-redux'
 import '../../mocks/libraries/react-redux'
 import '../../mocks/libraries/react-router-dom'
 
 import * as React from 'react'
-import { render } from 'enzyme'
+import { render, mount } from 'enzyme'
 import { theme, scope } from '../../mocks/index'
 
 import BookingSummary from './BookingSummary'
+
+const mockStore = configureMockStore()
 
 const propsBase = {
   theme,
@@ -79,4 +83,36 @@ test('loadType is cargo_item', () => {
     loadType: 'cargo_item'
   }
   expect(render(<BookingSummary {...props} />)).toMatchSnapshot()
+})
+
+describe('BookingSummary', () => {
+  let wrapper,
+    store
+
+  beforeEach(() => {
+    const initialState = {
+      cities: {},
+      hubs: {
+        destination: '',
+        origin: ''
+      },
+      loadType: 'cargo_item',
+      modeOfTransport: '',
+      nexuses: {},
+      selectedDay: undefined,
+      totalVolume: 0.002,
+      totalWeight: 200,
+      trucking: undefined
+    }
+    store = mockStore(initialState)
+    wrapper = mount(
+      <Provider store={store}>
+        <BookingSummary {...propsBase} />
+      </Provider>
+    )
+  })
+
+  it('render with shipment state', () => {
+    expect(wrapper).toMatchSnapshot()
+  })
 })

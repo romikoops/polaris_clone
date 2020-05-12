@@ -155,7 +155,9 @@ ActiveRecord::Schema.define(version: 2020_05_11_114249) do
     t.string "description"
     t.decimal "dimension_x"
     t.decimal "dimension_y"
+    t.decimal "length"
     t.datetime "updated_at", null: false
+    t.decimal "width"
   end
 
   create_table "cargo_items", force: :cascade do |t|
@@ -169,7 +171,9 @@ ActiveRecord::Schema.define(version: 2020_05_11_114249) do
     t.decimal "dimension_x"
     t.decimal "dimension_y"
     t.decimal "dimension_z"
+    t.decimal "height"
     t.string "hs_codes", default: [], array: true
+    t.decimal "length"
     t.decimal "payload_in_kg"
     t.integer "quantity"
     t.uuid "sandbox_id"
@@ -177,6 +181,7 @@ ActiveRecord::Schema.define(version: 2020_05_11_114249) do
     t.boolean "stackable", default: true
     t.jsonb "unit_price"
     t.datetime "updated_at", null: false
+    t.decimal "width"
     t.index ["sandbox_id"], name: "index_cargo_items_on_sandbox_id"
   end
 
@@ -860,13 +865,16 @@ ActiveRecord::Schema.define(version: 2020_05_11_114249) do
     t.decimal "dimension_x"
     t.decimal "dimension_y"
     t.decimal "dimension_z"
+    t.decimal "height"
     t.bigint "itinerary_id"
+    t.decimal "length"
     t.string "mode_of_transport"
     t.decimal "payload_in_kg"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.bigint "tenant_vehicle_id"
     t.datetime "updated_at", null: false
+    t.decimal "width"
     t.index ["cargo_class"], name: "index_max_dimensions_bundles_on_cargo_class"
     t.index ["carrier_id"], name: "index_max_dimensions_bundles_on_carrier_id"
     t.index ["itinerary_id"], name: "index_max_dimensions_bundles_on_itinerary_id"

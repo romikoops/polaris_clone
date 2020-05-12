@@ -8,7 +8,7 @@ exports[`shallow render 1`] = `
     className="flex-25 layout-row layout-align-center-center"
   >
     <input
-      name="dimension_x"
+      name="width"
       type="number"
       value={10}
     />
@@ -17,7 +17,7 @@ exports[`shallow render 1`] = `
     className="flex-25 layout-row layout-align-center-center"
   >
     <input
-      name="dimension_y"
+      name="length"
       type="number"
       value={20}
     />
@@ -26,7 +26,7 @@ exports[`shallow render 1`] = `
     className="flex-25 layout-row layout-align-center-center"
   >
     <input
-      name="dimension_z"
+      name="height"
       type="number"
       value={30}
     />

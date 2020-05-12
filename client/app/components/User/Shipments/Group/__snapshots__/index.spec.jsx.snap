@@ -27,10 +27,10 @@ exports[`shallow render 1`] = `
             "cargo_notes": "SHIPMENT_CARGO_NOTES",
             "cargo_units": Array [
               Object {
-                "dimension_x": 107,
-                "dimension_y": 63,
-                "dimension_z": 67,
+                "height": 67,
+                "length": 63,
                 "quantity": 2,
+                "width": 107,
               },
             ],
             "clientName": "John Doe",

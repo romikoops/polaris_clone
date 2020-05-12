@@ -89,8 +89,8 @@ class ChargeableProperties extends React.PureComponent {
       ) ||
       (
         maxDimensions[mot] && (
-          +cargoItem.dimensionZ > +maxDimensions[mot].dimensionZ ||
-          +cargoItem.dimensionY > +maxDimensions[mot].dimensionY ||
+          +cargoItem.height > +maxDimensions[mot].height ||
+          +cargoItem.length > +maxDimensions[mot].length ||
           chargeableWeight(convertedItem, mot) > +maxDimensions[mot].chargeableWeight
         )
       )

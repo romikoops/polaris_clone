@@ -33,9 +33,9 @@ module AdmiraltyTenants
                                          tenant_id: tenant.legacy_id,
                                          cargo_class: 'lcl',
                                          aggregate: false,
-                                         dimension_x: 0.59e3,
-                                         dimension_y: 0.2342e3,
-                                         dimension_z: 0.228e3,
+                                         width: 0.59e3,
+                                         length: 0.2342e3,
+                                         height: 0.228e3,
                                          payload_in_kg: 0.2177e5,
                                          chargeable_weight: 0.2177e5)
     end
@@ -80,13 +80,14 @@ module AdmiraltyTenants
 
     describe 'PATCH #update' do
       let(:tenant_params) { tenant.attributes.slice('name', 'slug').merge(scope: { foo: true }.to_json, saml_metadatum: { content: '' }) }
-      let(:updated_max_bundle) { { max_bundle.id => { dimension_x: 10 } } }
+      let(:updated_max_bundle) { { max_bundle.id => { width: 10 } } }
+
       it 'renders page' do
         patch :update, params: { id: tenant.id, tenant: tenant_params, max_dimensions: updated_max_bundle }
 
         expect(response).to redirect_to("/tenants/#{tenant.id}")
         expect(::Tenants::Tenant.find(tenant.id).scope.content).to eq('foo' => true)
-        expect(::Legacy::MaxDimensionsBundle.find(max_bundle.id).dimension_x).to eq(10)
+        expect(::Legacy::MaxDimensionsBundle.find(max_bundle.id).width).to eq(10)
       end
     end
 

@@ -6,9 +6,9 @@ class CreateCargoGroups < ActiveRecord::Migration[5.2]
       t.uuid :user_id, index: true
       t.uuid :tenant_id, index: true
       t.decimal :weight, default: 0.0
-      t.decimal :dimension_x, default: 0.0
-      t.decimal :dimension_y, default: 0.0
-      t.decimal :dimension_z, default: 0.0
+      t.decimal :width, default: 0.0
+      t.decimal :length, default: 0.0
+      t.decimal :height, default: 0.0
       t.integer :quantity, default: 0
       t.bigint :cargo_class, default: 0, index: true
       t.bigint :cargo_type, default: 0, index: true

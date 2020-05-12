@@ -216,9 +216,6 @@ module ExcelDataServices
           carrier
           service_level
           mode_of_transport
-          dimension_x
-          dimension_y
-          dimension_z
           payload_in_kg
           chargeable_weight
           aggregate
@@ -229,6 +226,12 @@ module ExcelDataServices
       OPTIONAL_MAX_DIMENSIONS = %i[
         origin_locode
         destination_locode
+        width
+        length
+        height
+        dimension_x
+        dimension_y
+        dimension_z
       ].freeze
 
       attr_reader :restructurer_name, :errors

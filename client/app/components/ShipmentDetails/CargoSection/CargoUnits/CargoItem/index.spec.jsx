@@ -39,28 +39,28 @@ test('getAvailableCargoItemTypes with undefined input', () => {
 test('getAvailableCargoItemTypes returns correct value', () => {
   const result = CargoItem.getAvailableCargoItemTypes(cargoItemTypes)
   const expected = [{
-    label: 'Pallet', key: 25, dimension_x: null, dimension_y: null
+    label: 'Pallet', key: 25, width: null, length: null
   },
   {
-    label: 'Carton', key: 22, dimension_x: null, dimension_y: null
+    label: 'Carton', key: 22, width: null, length: null
   },
   {
-    label: 'Crate', key: 23, dimension_x: null, dimension_y: null
+    label: 'Crate', key: 23, width: null, length: null
   },
   {
-    label: 'Bottle', key: 26, dimension_x: null, dimension_y: null
+    label: 'Bottle', key: 26, width: null, length: null
   },
   {
-    label: 'Stack', key: 27, dimension_x: null, dimension_y: null
+    label: 'Stack', key: 27, width: null, length: null
   },
   {
-    label: 'Drum', key: 28, dimension_x: null, dimension_y: null
+    label: 'Drum', key: 28, width: null, length: null
   },
   {
-    label: 'Skid', key: 29, dimension_x: null, dimension_y: null
+    label: 'Skid', key: 29, width: null, length: null
   },
   {
-    label: 'Barrel', key: 30, dimension_x: null, dimension_y: null
+    label: 'Barrel', key: 30, width: null, length: null
   }]
   expect(result).toEqual(expected)
 })

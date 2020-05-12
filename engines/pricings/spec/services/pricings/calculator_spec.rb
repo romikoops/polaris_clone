@@ -33,9 +33,9 @@ RSpec.describe Pricings::Calculator do
   let(:consolidated_cargo) do
     {
       id: 'ids',
-      dimension_x: 240,
-      dimension_y: 160,
-      dimension_z: 240,
+      width: 240,
+      length: 160,
+      height: 240,
       volume: 3.748,
       payload_in_kg: 600,
       cargo_class: 'lcl',
@@ -306,9 +306,9 @@ RSpec.describe Pricings::Calculator do
                                         shipment_id: lcl_shipment.id,
                                         cargo_item_type_id: pallet.id,
                                         payload_in_kg: 1000,
-                                        dimension_x: 100,
-                                        dimension_y: 100,
-                                        dimension_z: 100)
+                                        width: 100,
+                                        length: 100,
+                                        height: 100)
       FactoryBot.create(:fee_per_unit_ton_cbm_range, pricing: unit_ton_cbm_range_pricing)
       result, _metadata = described_class.new(cargo: cbm_lcl_cargo,
                                               pricing: unit_ton_cbm_range_pricing.as_json,
@@ -337,9 +337,9 @@ RSpec.describe Pricings::Calculator do
                                         shipment_id: lcl_shipment.id,
                                         cargo_item_type_id: pallet.id,
                                         payload_in_kg: 5000,
-                                        dimension_x: 300,
-                                        dimension_y: 300,
-                                        dimension_z: 300)
+                                        width: 300,
+                                        length: 300,
+                                        height: 300)
       FactoryBot.create(:fee_per_unit_ton_cbm_range, pricing: unit_ton_cbm_range_pricing)
       result, _metadata = described_class.new(cargo: ton_lcl_cargo,
                                               pricing: unit_ton_cbm_range_pricing.as_json,

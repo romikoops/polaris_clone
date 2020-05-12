@@ -99,9 +99,9 @@ RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
                           itinerary: itinerary,
                           cargo_items: [
                             FactoryBot.build(:legacy_cargo_item,
-                                             dimension_x: 240,
-                                             dimension_y: 160,
-                                             dimension_z: 230,
+                                             width: 240,
+                                             length: 160,
+                                             height: 230,
                                              payload_in_kg: 1000,
                                              quantity: 2)
                           ],

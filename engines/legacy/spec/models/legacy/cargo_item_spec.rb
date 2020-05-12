@@ -78,11 +78,14 @@ end
 #  dimension_x        :decimal(, )
 #  dimension_y        :decimal(, )
 #  dimension_z        :decimal(, )
+#  height             :decimal(, )
 #  hs_codes           :string           default([]), is an Array
+#  length             :decimal(, )
 #  payload_in_kg      :decimal(, )
 #  quantity           :integer
 #  stackable          :boolean          default(TRUE)
 #  unit_price         :jsonb
+#  width              :decimal(, )
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  cargo_item_type_id :integer

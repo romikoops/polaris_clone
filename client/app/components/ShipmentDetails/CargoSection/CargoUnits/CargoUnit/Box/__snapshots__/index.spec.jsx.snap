@@ -30,14 +30,14 @@ exports[`renders correctly 1`] = `
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 5,
-            "dimensionY": 132,
-            "dimensionZ": 12,
+            "height": 12,
+            "length": 132,
             "payloadInKg": 223,
             "quantity": 6,
             "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
+            "width": 5,
           }
         }
         i={0}

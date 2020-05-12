@@ -41,7 +41,7 @@ module ExcelDataServices
           if row[:cargo_class]&.include?('fcl')
             %i[payload_in_kg cargo_class]
           else
-            %i[dimension_z dimension_x dimension_y payload_in_kg chargeable_weight cargo_class]
+            %i[height width length payload_in_kg chargeable_weight cargo_class]
           end
         end
       end

@@ -11,11 +11,13 @@ export class CargoItemDetails extends Component {
     }
     this.viewHsCodes = this.viewHsCodes.bind(this)
   }
+
   viewHsCodes () {
     this.setState({
       viewer: !this.state.viewer
     })
   }
+
   render () {
     const {
       index, item, hsCodes, theme, viewHSCodes
@@ -35,33 +37,55 @@ export class CargoItemDetails extends Component {
     return (
       <div className={`${styles.info} layout-row flex-100 layout-wrap layout-align-center`}>
         <div className="flex-100">
-          <h4>Unit {index + 1}</h4>
+          <h4>
+            Unit
+            {index + 1}
+          </h4>
         </div>
         <hr />
         <div className="flex-100 layout-row layout-align-space-between">
           <p>Gross Weight</p>
-          <p>{item.payload_in_kg} kg</p>
+          <p>
+            {item.payload_in_kg}
+            {' '}
+            kg
+          </p>
         </div>
         <hr className="flex-100" />
         <div className="flex-100 layout-row layout-align-space-between">
           <p>Length</p>
-          <p>{item.dimension_y} cm</p>
+          <p>
+            {item.length}
+            {' '}
+            cm
+          </p>
         </div>
         <hr className="flex-100" />
         <div className="flex-100 layout-row layout-align-space-between">
           <p>Width</p>
-          <p>{item.dimension_x} cm</p>
+          <p>
+            {item.width}
+            {' '}
+            cm
+          </p>
         </div>
         <hr className="flex-100" />
         <div className="flex-100 layout-row layout-align-space-between">
           <p>Height</p>
-          <p>{item.dimension_z} cm</p>
+          <p>
+            {item.height}
+            {' '}
+            cm
+          </p>
         </div>
         <hr className="flex-100" />
         <div className="flex-100 layout-row layout-align-space-between">
           <p>Volume</p>
           <p>
-            {(item.dimension_y * item.dimension_x * item.dimension_y / 1000000).toFixed(2)} m<sup>
+            {(item.length * item.width * item.length / 1000000).toFixed(2)}
+            {' '}
+            m
+            <sup>
               3
             </sup>
           </p>
@@ -70,7 +94,9 @@ export class CargoItemDetails extends Component {
         <div className="flex-100 layout-row layout-align-space-between">
           <p>Chargeable Weight</p>
           <p>
-            {(item.chargeable_weight).toFixed(2)} kg
+            {(item.chargeable_weight).toFixed(2)}
+            {' '}
+            kg
           </p>
         </div>
         <hr className="flex-100" />

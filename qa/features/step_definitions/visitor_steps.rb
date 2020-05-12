@@ -74,13 +74,13 @@ When('I have shipment of {int} {string} with length {int}cm, width {int}cm, heig
   find('.ccb_colli_type .Select-option', text: colli).click
 
   # Length
-  fill_in '0-dimensionX', with: length
+  fill_in '0-width', with: length
 
   # Width
-  fill_in '0-dimensionY', with: width
+  fill_in '0-length', with: width
 
   # Height
-  fill_in '0-dimensionZ', with: height
+  fill_in '0-height', with: height
 
   # Weight
   fill_in '0-payloadInKg', with: weight

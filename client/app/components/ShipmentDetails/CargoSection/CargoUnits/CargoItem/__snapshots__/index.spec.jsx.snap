@@ -6,14 +6,14 @@ exports[`renders correcly 1`] = `
     Object {
       "cargoItemTypeId": 23,
       "dangerousGoods": false,
-      "dimensionX": 5,
-      "dimensionY": 132,
-      "dimensionZ": 12,
+      "height": 12,
+      "length": 132,
       "payloadInKg": 223,
       "quantity": 6,
       "stackable": true,
       "totalVolume": 0,
       "totalWeight": 0,
+      "width": 5,
     }
   }
   i={0}
@@ -41,14 +41,14 @@ exports[`renders correcly 1`] = `
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 5,
-            "dimensionY": 132,
-            "dimensionZ": 12,
+            "height": 12,
+            "length": 132,
             "payloadInKg": 223,
             "quantity": 6,
             "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
+            "width": 5,
           }
         }
         className="flex-20"
@@ -60,16 +60,16 @@ exports[`renders correcly 1`] = `
         i={0}
         image={
           <img
-            alt="length"
+            alt="width"
             border="0"
             data-for="UUID_MOCK_KEY_0"
-            data-tip="Length"
+            data-tip="Width"
           />
         }
-        labelText="Length"
+        labelText="Width"
         maxDimension={590}
-        maxDimensionsErrorText="Maximum length is"
-        name="0-dimensionX"
+        maxDimensionsErrorText="Maximum width is"
+        name="0-width"
         onBlur={[Function]}
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
@@ -89,14 +89,14 @@ exports[`renders correcly 1`] = `
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 5,
-            "dimensionY": 132,
-            "dimensionZ": 12,
+            "height": 12,
+            "length": 132,
             "payloadInKg": 223,
             "quantity": 6,
             "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
+            "width": 5,
           }
         }
         className="flex-20"
@@ -108,16 +108,16 @@ exports[`renders correcly 1`] = `
         i={0}
         image={
           <img
-            alt="width"
+            alt="length"
             border="0"
             data-for="UUID_MOCK_KEY_1"
-            data-tip="Width"
+            data-tip="Length"
           />
         }
-        labelText="Width"
+        labelText="Length"
         maxDimension={234.2}
-        maxDimensionsErrorText="Maximum width is"
-        name="0-dimensionY"
+        maxDimensionsErrorText="Maximum length is"
+        name="0-length"
         onBlur={[Function]}
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
@@ -137,14 +137,14 @@ exports[`renders correcly 1`] = `
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 5,
-            "dimensionY": 132,
-            "dimensionZ": 12,
+            "height": 12,
+            "length": 132,
             "payloadInKg": 223,
             "quantity": 6,
             "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
+            "width": 5,
           }
         }
         className="flex-20"
@@ -165,7 +165,7 @@ exports[`renders correcly 1`] = `
         labelText="Height"
         maxDimension={228}
         maxDimensionsErrorText="Maximum height is"
-        name="0-dimensionZ"
+        name="0-height"
         onBlur={[Function]}
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
@@ -185,14 +185,14 @@ exports[`renders correcly 1`] = `
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 5,
-            "dimensionY": 132,
-            "dimensionZ": 12,
+            "height": 12,
+            "length": 132,
             "payloadInKg": 223,
             "quantity": 6,
             "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
+            "width": 5,
           }
         }
         className="flex-30 offset-5"
@@ -264,52 +264,52 @@ exports[`renders correcly 1`] = `
             options={
               Array [
                 Object {
-                  "dimension_x": null,
-                  "dimension_y": null,
                   "key": 25,
                   "label": "Pallet",
+                  "length": null,
+                  "width": null,
                 },
                 Object {
-                  "dimension_x": null,
-                  "dimension_y": null,
                   "key": 22,
                   "label": "Carton",
+                  "length": null,
+                  "width": null,
                 },
                 Object {
-                  "dimension_x": null,
-                  "dimension_y": null,
                   "key": 23,
                   "label": "Crate",
+                  "length": null,
+                  "width": null,
                 },
                 Object {
-                  "dimension_x": null,
-                  "dimension_y": null,
                   "key": 26,
                   "label": "Bottle",
+                  "length": null,
+                  "width": null,
                 },
                 Object {
-                  "dimension_x": null,
-                  "dimension_y": null,
                   "key": 27,
                   "label": "Stack",
+                  "length": null,
+                  "width": null,
                 },
                 Object {
-                  "dimension_x": null,
-                  "dimension_y": null,
                   "key": 28,
                   "label": "Drum",
+                  "length": null,
+                  "width": null,
                 },
                 Object {
-                  "dimension_x": null,
-                  "dimension_y": null,
                   "key": 29,
                   "label": "Skid",
+                  "length": null,
+                  "width": null,
                 },
                 Object {
-                  "dimension_x": null,
-                  "dimension_y": null,
                   "key": 30,
                   "label": "Barrel",
+                  "length": null,
+                  "width": null,
                 },
               ]
             }
@@ -336,14 +336,14 @@ exports[`renders correcly 1`] = `
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 5,
-            "dimensionY": 132,
-            "dimensionZ": 12,
+            "height": 12,
+            "length": 132,
             "payloadInKg": 223,
             "quantity": 6,
             "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
+            "width": 5,
           }
         }
         disabled={true}
@@ -373,14 +373,14 @@ exports[`renders correcly 1`] = `
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 5,
-            "dimensionY": 132,
-            "dimensionZ": 12,
+            "height": 12,
+            "length": 132,
             "payloadInKg": 223,
             "quantity": 6,
             "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
+            "width": 5,
           }
         }
         checkedTransform={[Function]}
@@ -429,24 +429,24 @@ exports[`renders correcly 1`] = `
         Object {
           "cargoItemTypeId": 23,
           "dangerousGoods": false,
-          "dimensionX": 5,
-          "dimensionY": 132,
-          "dimensionZ": 12,
+          "height": 12,
+          "length": 132,
           "payloadInKg": 223,
           "quantity": 6,
           "stackable": true,
           "totalVolume": 0,
           "totalWeight": 0,
+          "width": 5,
         }
       }
       maxDimensions={
         Object {
           "chargeableWeight": "21770.0",
-          "dimensionX": "590.0",
-          "dimensionY": "234.2",
-          "dimensionZ": "228.0",
+          "height": "228.0",
+          "length": "234.2",
           "payloadInKg": "21770.0",
           "volume": 31.504584,
+          "width": "590.0",
         }
       }
       scope={

@@ -123,7 +123,7 @@ export function chargeableString (volumeVal, weightVal, showVolume, t, scope) {
 }
 export function chargeableWeightValue (cargoItem, mot) {
   if (!cargoItem) return undefined
-  const item = cargoItem.dimensionX ? convertCargoItemAttributes(cargoItem) : cargoItem
+  const item = cargoItem.width ? convertCargoItemAttributes(cargoItem) : cargoItem
 
   return Math.max(
     +volume(item) * effectiveKgPerCubicMeter[mot],
@@ -134,9 +134,9 @@ export function chargeableWeightValue (cargoItem, mot) {
 
 export function convertCargoItemAttributes (cargoItem) {
   return {
-    dimension_x: cargoItem.dimensionX,
-    dimension_y: cargoItem.dimensionY,
-    dimension_z: cargoItem.dimensionZ,
+    width: cargoItem.width,
+    length: cargoItem.length,
+    height: cargoItem.height,
     payload_in_kg: cargoItem.payloadInKg,
     quantity: cargoItem.quantity
   }
@@ -168,7 +168,7 @@ export function volume (cargoItem) {
   if (!cargoItem) return undefined
 
   const unitVolume =
-    +cargoItem.dimension_x * +cargoItem.dimension_y * +cargoItem.dimension_z / 100 ** 3
+    +cargoItem.width * +cargoItem.length * +cargoItem.height / 100 ** 3
 
   return (unitVolume * cargoItem.quantity)
 }
@@ -176,7 +176,7 @@ export function singleVolume (cargoItem) {
   if (!cargoItem) return undefined
 
   const unitVolume =
-    +cargoItem.dimension_x * +cargoItem.dimension_y * +cargoItem.dimension_z / 100 ** 3
+    +cargoItem.width * +cargoItem.length * +cargoItem.height / 100 ** 3
 
   return unitVolume
 }

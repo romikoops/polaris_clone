@@ -21,7 +21,7 @@ module Legacy
       end
 
       it 'return all max dimensions' do
-        expect(described_class.to_max_dimensions_hash).to eq(general: { chargeable_weight: 0.1e5, dimension_x: 0.5e3, dimension_y: 0.5e3, dimension_z: 0.5e3, payload_in_kg: 0.1e5 })
+        expect(described_class.to_max_dimensions_hash).to eq(general: { chargeable_weight: 0.1e5, width: 0.5e3, length: 0.5e3, height: 0.5e3, payload_in_kg: 0.1e5 })
       end
     end
 
@@ -75,8 +75,11 @@ end
 #  dimension_x       :decimal(, )
 #  dimension_y       :decimal(, )
 #  dimension_z       :decimal(, )
+#  height            :decimal(, )
+#  length            :decimal(, )
 #  mode_of_transport :string
 #  payload_in_kg     :decimal(, )
+#  width             :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  carrier_id        :bigint

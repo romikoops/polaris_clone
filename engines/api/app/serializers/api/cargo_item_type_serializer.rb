@@ -2,6 +2,6 @@
 
 module Api
   class CargoItemTypeSerializer < Api::ApplicationSerializer
-    attribute :description, :dimension_x, :dimension_y
+    attribute :description, :width, :length
   end
 end

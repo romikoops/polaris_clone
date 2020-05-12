@@ -6,9 +6,9 @@ FactoryBot.define do
     association :cargo_item_type, factory: :cargo_item_type
 
     payload_in_kg { 200 }
-    dimension_x { 20 }
-    dimension_y { 20 }
-    dimension_z { 20 }
+    width { 20 }
+    length { 20 }
+    height { 20 }
     quantity { 1 }
     dangerous_goods { false }
     stackable { true }
@@ -29,11 +29,14 @@ end
 #  dimension_x        :decimal(, )
 #  dimension_y        :decimal(, )
 #  dimension_z        :decimal(, )
+#  height             :decimal(, )
 #  hs_codes           :string           default([]), is an Array
+#  length             :decimal(, )
 #  payload_in_kg      :decimal(, )
 #  quantity           :integer
 #  stackable          :boolean          default(TRUE)
 #  unit_price         :jsonb
+#  width              :decimal(, )
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  cargo_item_type_id :integer

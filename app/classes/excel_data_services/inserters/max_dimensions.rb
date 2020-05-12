@@ -56,7 +56,7 @@ module ExcelDataServices
           cargo_class: params[:cargo_class]
         )
         max_dimension.assign_attributes(
-          params.slice(:payload_in_kg, :dimension_x, :dimension_y, :dimension_z, :chargeable_weight)
+          params.slice(:payload_in_kg, :width, :length, :height, :chargeable_weight)
         )
         add_stats(max_dimension, params[:row_nr])
         max_dimension.save

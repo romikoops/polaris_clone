@@ -28,9 +28,9 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
         'payload_in_kg' => 120,
         'total_volume' => 0,
         'total_weight' => 0,
-        'dimension_x' => 120,
-        'dimension_y' => 80,
-        'dimension_z' => 120,
+        'width' => 120,
+        'length' => 80,
+        'height' => 120,
         'quantity' => 1,
         'cargo_item_type_id' => pallet.id,
         'dangerous_goods' => false,
@@ -135,9 +135,9 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
         service.update_cargo_units
         expect(base_shipment.cargo_items.count).to eq(1)
         cargo_item = base_shipment.cargo_items.first
-        expect(cargo_item.dimension_x).to eq(cargo_item_attributes.first['dimension_x'])
-        expect(cargo_item.dimension_y).to eq(cargo_item_attributes.first['dimension_y'])
-        expect(cargo_item.dimension_z).to eq(cargo_item_attributes.first['dimension_z'])
+        expect(cargo_item.width).to eq(cargo_item_attributes.first['width'])
+        expect(cargo_item.length).to eq(cargo_item_attributes.first['length'])
+        expect(cargo_item.height).to eq(cargo_item_attributes.first['height'])
         expect(cargo_item.payload_in_kg).to eq(cargo_item_attributes.first['payload_in_kg'])
       end
 

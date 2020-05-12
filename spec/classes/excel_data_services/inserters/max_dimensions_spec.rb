@@ -42,9 +42,9 @@ RSpec.describe ExcelDataServices::Inserters::MaxDimensions do
           service_level: 'faster',
           mode_of_transport: nil,
           cargo_class: 'fcl_20',
-          dimension_x: 0,
-          dimension_y: 0,
-          dimension_z: 0,
+          width: 0,
+          length: 0,
+          height: 0,
           payload_in_kg: 0.1e6,
           aggregate: false,
           row_nr: 2

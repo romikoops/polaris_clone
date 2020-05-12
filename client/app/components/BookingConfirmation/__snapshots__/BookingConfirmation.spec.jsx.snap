@@ -161,10 +161,10 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
                 "cargo_notes": "SHIPMENT_CARGO_NOTES",
                 "cargo_units": Array [
                   Object {
-                    "dimension_x": 107,
-                    "dimension_y": 63,
-                    "dimension_z": 67,
+                    "height": 67,
+                    "length": 63,
                     "quantity": 2,
+                    "width": 107,
                   },
                 ],
                 "clientName": "SHIPMENT_CLIENT_NAME",
@@ -524,10 +524,10 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
                     "cargo_notes": "SHIPMENT_CARGO_NOTES",
                     "cargo_units": Array [
                       Object {
-                        "dimension_x": 107,
-                        "dimension_y": 63,
-                        "dimension_z": 67,
+                        "height": 67,
+                        "length": 63,
                         "quantity": 2,
+                        "width": 107,
                       },
                     ],
                     "clientName": "SHIPMENT_CLIENT_NAME",
@@ -985,22 +985,22 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
                 "chargeable_weight": 250,
                 "dangerous_goods": false,
                 "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                "dimension_x": 10,
-                "dimension_y": 60,
-                "dimension_z": 40,
                 "gross_weight": 76,
+                "height": 40,
                 "hs_codes": Array [
                   4,
                 ],
                 "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
                 "id": 1,
                 "key": "FOO_CARGO_ITEM_KEY",
+                "length": 60,
                 "payload_in_kg": 200,
                 "quantity": 5,
                 "stackable": true,
                 "tare_weight": 20,
                 "volume": 12,
                 "weight": 220,
+                "width": 10,
               }
             }
             t={[Function]}
@@ -1611,10 +1611,10 @@ exports[`shallow render 1`] = `
                 "cargo_notes": "SHIPMENT_CARGO_NOTES",
                 "cargo_units": Array [
                   Object {
-                    "dimension_x": 107,
-                    "dimension_y": 63,
-                    "dimension_z": 67,
+                    "height": 67,
+                    "length": 63,
                     "quantity": 2,
+                    "width": 107,
                   },
                 ],
                 "clientName": "SHIPMENT_CLIENT_NAME",
@@ -1960,10 +1960,10 @@ exports[`shallow render 1`] = `
                     "cargo_notes": "SHIPMENT_CARGO_NOTES",
                     "cargo_units": Array [
                       Object {
-                        "dimension_x": 107,
-                        "dimension_y": 63,
-                        "dimension_z": 67,
+                        "height": 67,
+                        "length": 63,
                         "quantity": 2,
+                        "width": 107,
                       },
                     ],
                     "clientName": "SHIPMENT_CLIENT_NAME",
@@ -2421,22 +2421,22 @@ exports[`shallow render 1`] = `
                 "chargeable_weight": 250,
                 "dangerous_goods": false,
                 "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                "dimension_x": 10,
-                "dimension_y": 60,
-                "dimension_z": 40,
                 "gross_weight": 76,
+                "height": 40,
                 "hs_codes": Array [
                   4,
                 ],
                 "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
                 "id": 1,
                 "key": "FOO_CARGO_ITEM_KEY",
+                "length": 60,
                 "payload_in_kg": 200,
                 "quantity": 5,
                 "stackable": true,
                 "tare_weight": 20,
                 "volume": 12,
                 "weight": 220,
+                "width": 10,
               }
             }
             t={[Function]}
@@ -3047,10 +3047,10 @@ exports[`shipment.cargo_notes is falsy 1`] = `
                 "cargo_notes": null,
                 "cargo_units": Array [
                   Object {
-                    "dimension_x": 107,
-                    "dimension_y": 63,
-                    "dimension_z": 67,
+                    "height": 67,
+                    "length": 63,
                     "quantity": 2,
+                    "width": 107,
                   },
                 ],
                 "clientName": "SHIPMENT_CLIENT_NAME",
@@ -3396,10 +3396,10 @@ exports[`shipment.cargo_notes is falsy 1`] = `
                     "cargo_notes": null,
                     "cargo_units": Array [
                       Object {
-                        "dimension_x": 107,
-                        "dimension_y": 63,
-                        "dimension_z": 67,
+                        "height": 67,
+                        "length": 63,
                         "quantity": 2,
+                        "width": 107,
                       },
                     ],
                     "clientName": "SHIPMENT_CLIENT_NAME",
@@ -3857,22 +3857,22 @@ exports[`shipment.cargo_notes is falsy 1`] = `
                 "chargeable_weight": 250,
                 "dangerous_goods": false,
                 "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                "dimension_x": 10,
-                "dimension_y": 60,
-                "dimension_z": 40,
                 "gross_weight": 76,
+                "height": 40,
                 "hs_codes": Array [
                   4,
                 ],
                 "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
                 "id": 1,
                 "key": "FOO_CARGO_ITEM_KEY",
+                "length": 60,
                 "payload_in_kg": 200,
                 "quantity": 5,
                 "stackable": true,
                 "tare_weight": 20,
                 "volume": 12,
                 "weight": 220,
+                "width": 10,
               }
             }
             t={[Function]}
@@ -4467,10 +4467,10 @@ exports[`shipment.eori is falsy 1`] = `
                 "cargo_notes": "SHIPMENT_CARGO_NOTES",
                 "cargo_units": Array [
                   Object {
-                    "dimension_x": 107,
-                    "dimension_y": 63,
-                    "dimension_z": 67,
+                    "height": 67,
+                    "length": 63,
                     "quantity": 2,
+                    "width": 107,
                   },
                 ],
                 "clientName": "SHIPMENT_CLIENT_NAME",
@@ -4816,10 +4816,10 @@ exports[`shipment.eori is falsy 1`] = `
                     "cargo_notes": "SHIPMENT_CARGO_NOTES",
                     "cargo_units": Array [
                       Object {
-                        "dimension_x": 107,
-                        "dimension_y": 63,
-                        "dimension_z": 67,
+                        "height": 67,
+                        "length": 63,
                         "quantity": 2,
+                        "width": 107,
                       },
                     ],
                     "clientName": "SHIPMENT_CLIENT_NAME",
@@ -5277,22 +5277,22 @@ exports[`shipment.eori is falsy 1`] = `
                 "chargeable_weight": 250,
                 "dangerous_goods": false,
                 "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                "dimension_x": 10,
-                "dimension_y": 60,
-                "dimension_z": 40,
                 "gross_weight": 76,
+                "height": 40,
                 "hs_codes": Array [
                   4,
                 ],
                 "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
                 "id": 1,
                 "key": "FOO_CARGO_ITEM_KEY",
+                "length": 60,
                 "payload_in_kg": 200,
                 "quantity": 5,
                 "stackable": true,
                 "tare_weight": 20,
                 "volume": 12,
                 "weight": 220,
+                "width": 10,
               }
             }
             t={[Function]}
@@ -5887,10 +5887,10 @@ exports[`shipment.incoterm_text is falsy 1`] = `
                 "cargo_notes": "SHIPMENT_CARGO_NOTES",
                 "cargo_units": Array [
                   Object {
-                    "dimension_x": 107,
-                    "dimension_y": 63,
-                    "dimension_z": 67,
+                    "height": 67,
+                    "length": 63,
                     "quantity": 2,
+                    "width": 107,
                   },
                 ],
                 "clientName": "SHIPMENT_CLIENT_NAME",
@@ -6236,10 +6236,10 @@ exports[`shipment.incoterm_text is falsy 1`] = `
                     "cargo_notes": "SHIPMENT_CARGO_NOTES",
                     "cargo_units": Array [
                       Object {
-                        "dimension_x": 107,
-                        "dimension_y": 63,
-                        "dimension_z": 67,
+                        "height": 67,
+                        "length": 63,
                         "quantity": 2,
+                        "width": 107,
                       },
                     ],
                     "clientName": "SHIPMENT_CLIENT_NAME",
@@ -6697,22 +6697,22 @@ exports[`shipment.incoterm_text is falsy 1`] = `
                 "chargeable_weight": 250,
                 "dangerous_goods": false,
                 "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                "dimension_x": 10,
-                "dimension_y": 60,
-                "dimension_z": 40,
                 "gross_weight": 76,
+                "height": 40,
                 "hs_codes": Array [
                   4,
                 ],
                 "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
                 "id": 1,
                 "key": "FOO_CARGO_ITEM_KEY",
+                "length": 60,
                 "payload_in_kg": 200,
                 "quantity": 5,
                 "stackable": true,
                 "tare_weight": 20,
                 "volume": 12,
                 "weight": 220,
+                "width": 10,
               }
             }
             t={[Function]}
@@ -7307,10 +7307,10 @@ exports[`shipment.notes is falsy 1`] = `
                 "cargo_notes": "SHIPMENT_CARGO_NOTES",
                 "cargo_units": Array [
                   Object {
-                    "dimension_x": 107,
-                    "dimension_y": 63,
-                    "dimension_z": 67,
+                    "height": 67,
+                    "length": 63,
                     "quantity": 2,
+                    "width": 107,
                   },
                 ],
                 "clientName": "SHIPMENT_CLIENT_NAME",
@@ -7656,10 +7656,10 @@ exports[`shipment.notes is falsy 1`] = `
                     "cargo_notes": "SHIPMENT_CARGO_NOTES",
                     "cargo_units": Array [
                       Object {
-                        "dimension_x": 107,
-                        "dimension_y": 63,
-                        "dimension_z": 67,
+                        "height": 67,
+                        "length": 63,
                         "quantity": 2,
+                        "width": 107,
                       },
                     ],
                     "clientName": "SHIPMENT_CLIENT_NAME",
@@ -8117,22 +8117,22 @@ exports[`shipment.notes is falsy 1`] = `
                 "chargeable_weight": 250,
                 "dangerous_goods": false,
                 "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                "dimension_x": 10,
-                "dimension_y": 60,
-                "dimension_z": 40,
                 "gross_weight": 76,
+                "height": 40,
                 "hs_codes": Array [
                   4,
                 ],
                 "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
                 "id": 1,
                 "key": "FOO_CARGO_ITEM_KEY",
+                "length": 60,
                 "payload_in_kg": 200,
                 "quantity": 5,
                 "stackable": true,
                 "tare_weight": 20,
                 "volume": 12,
                 "weight": 220,
+                "width": 10,
               }
             }
             t={[Function]}
@@ -8727,10 +8727,10 @@ exports[`shipment.total_goods_value is falsy 1`] = `
                 "cargo_notes": "SHIPMENT_CARGO_NOTES",
                 "cargo_units": Array [
                   Object {
-                    "dimension_x": 107,
-                    "dimension_y": 63,
-                    "dimension_z": 67,
+                    "height": 67,
+                    "length": 63,
                     "quantity": 2,
+                    "width": 107,
                   },
                 ],
                 "clientName": "SHIPMENT_CLIENT_NAME",
@@ -9073,10 +9073,10 @@ exports[`shipment.total_goods_value is falsy 1`] = `
                     "cargo_notes": "SHIPMENT_CARGO_NOTES",
                     "cargo_units": Array [
                       Object {
-                        "dimension_x": 107,
-                        "dimension_y": 63,
-                        "dimension_z": 67,
+                        "height": 67,
+                        "length": 63,
                         "quantity": 2,
+                        "width": 107,
                       },
                     ],
                     "clientName": "SHIPMENT_CLIENT_NAME",
@@ -9531,22 +9531,22 @@ exports[`shipment.total_goods_value is falsy 1`] = `
                 "chargeable_weight": 250,
                 "dangerous_goods": false,
                 "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                "dimension_x": 10,
-                "dimension_y": 60,
-                "dimension_z": 40,
                 "gross_weight": 76,
+                "height": 40,
                 "hs_codes": Array [
                   4,
                 ],
                 "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
                 "id": 1,
                 "key": "FOO_CARGO_ITEM_KEY",
+                "length": 60,
                 "payload_in_kg": 200,
                 "quantity": 5,
                 "stackable": true,
                 "tare_weight": 20,
                 "volume": 12,
                 "weight": 220,
+                "width": 10,
               }
             }
             t={[Function]}
@@ -10147,10 +10147,10 @@ exports[`shipmentData.notifyees is falsy 1`] = `
                 "cargo_notes": "SHIPMENT_CARGO_NOTES",
                 "cargo_units": Array [
                   Object {
-                    "dimension_x": 107,
-                    "dimension_y": 63,
-                    "dimension_z": 67,
+                    "height": 67,
+                    "length": 63,
                     "quantity": 2,
+                    "width": 107,
                   },
                 ],
                 "clientName": "SHIPMENT_CLIENT_NAME",
@@ -10496,10 +10496,10 @@ exports[`shipmentData.notifyees is falsy 1`] = `
                     "cargo_notes": "SHIPMENT_CARGO_NOTES",
                     "cargo_units": Array [
                       Object {
-                        "dimension_x": 107,
-                        "dimension_y": 63,
-                        "dimension_z": 67,
+                        "height": 67,
+                        "length": 63,
                         "quantity": 2,
+                        "width": 107,
                       },
                     ],
                     "clientName": "SHIPMENT_CLIENT_NAME",
@@ -10819,22 +10819,22 @@ exports[`shipmentData.notifyees is falsy 1`] = `
                 "chargeable_weight": 250,
                 "dangerous_goods": false,
                 "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                "dimension_x": 10,
-                "dimension_y": 60,
-                "dimension_z": 40,
                 "gross_weight": 76,
+                "height": 40,
                 "hs_codes": Array [
                   4,
                 ],
                 "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
                 "id": 1,
                 "key": "FOO_CARGO_ITEM_KEY",
+                "length": 60,
                 "payload_in_kg": 200,
                 "quantity": 5,
                 "stackable": true,
                 "tare_weight": 20,
                 "volume": 12,
                 "weight": 220,
+                "width": 10,
               }
             }
             t={[Function]}
@@ -11451,10 +11451,10 @@ exports[`state.acceptTerms is true 1`] = `
                 "cargo_notes": "SHIPMENT_CARGO_NOTES",
                 "cargo_units": Array [
                   Object {
-                    "dimension_x": 107,
-                    "dimension_y": 63,
-                    "dimension_z": 67,
+                    "height": 67,
+                    "length": 63,
                     "quantity": 2,
+                    "width": 107,
                   },
                 ],
                 "clientName": "SHIPMENT_CLIENT_NAME",
@@ -11800,10 +11800,10 @@ exports[`state.acceptTerms is true 1`] = `
                     "cargo_notes": "SHIPMENT_CARGO_NOTES",
                     "cargo_units": Array [
                       Object {
-                        "dimension_x": 107,
-                        "dimension_y": 63,
-                        "dimension_z": 67,
+                        "height": 67,
+                        "length": 63,
                         "quantity": 2,
+                        "width": 107,
                       },
                     ],
                     "clientName": "SHIPMENT_CLIENT_NAME",
@@ -12261,22 +12261,22 @@ exports[`state.acceptTerms is true 1`] = `
                 "chargeable_weight": 250,
                 "dangerous_goods": false,
                 "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                "dimension_x": 10,
-                "dimension_y": 60,
-                "dimension_z": 40,
                 "gross_weight": 76,
+                "height": 40,
                 "hs_codes": Array [
                   4,
                 ],
                 "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
                 "id": 1,
                 "key": "FOO_CARGO_ITEM_KEY",
+                "length": 60,
                 "payload_in_kg": 200,
                 "quantity": 5,
                 "stackable": true,
                 "tare_weight": 20,
                 "volume": 12,
                 "weight": 220,
+                "width": 10,
               }
             }
             t={[Function]}
@@ -12884,10 +12884,10 @@ exports[`tenant.scope.terms.length is 0 1`] = `
                 "cargo_notes": "SHIPMENT_CARGO_NOTES",
                 "cargo_units": Array [
                   Object {
-                    "dimension_x": 107,
-                    "dimension_y": 63,
-                    "dimension_z": 67,
+                    "height": 67,
+                    "length": 63,
                     "quantity": 2,
+                    "width": 107,
                   },
                 ],
                 "clientName": "SHIPMENT_CLIENT_NAME",
@@ -13230,10 +13230,10 @@ exports[`tenant.scope.terms.length is 0 1`] = `
                     "cargo_notes": "SHIPMENT_CARGO_NOTES",
                     "cargo_units": Array [
                       Object {
-                        "dimension_x": 107,
-                        "dimension_y": 63,
-                        "dimension_z": 67,
+                        "height": 67,
+                        "length": 63,
                         "quantity": 2,
+                        "width": 107,
                       },
                     ],
                     "clientName": "SHIPMENT_CLIENT_NAME",
@@ -13688,22 +13688,22 @@ exports[`tenant.scope.terms.length is 0 1`] = `
                 "chargeable_weight": 250,
                 "dangerous_goods": false,
                 "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                "dimension_x": 10,
-                "dimension_y": 60,
-                "dimension_z": 40,
                 "gross_weight": 76,
+                "height": 40,
                 "hs_codes": Array [
                   4,
                 ],
                 "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
                 "id": 1,
                 "key": "FOO_CARGO_ITEM_KEY",
+                "length": 60,
                 "payload_in_kg": 200,
                 "quantity": 5,
                 "stackable": true,
                 "tare_weight": 20,
                 "volume": 12,
                 "weight": 220,
+                "width": 10,
               }
             }
             t={[Function]}
@@ -14320,10 +14320,10 @@ exports[`theme is falsy 1`] = `
                 "cargo_notes": "SHIPMENT_CARGO_NOTES",
                 "cargo_units": Array [
                   Object {
-                    "dimension_x": 107,
-                    "dimension_y": 63,
-                    "dimension_z": 67,
+                    "height": 67,
+                    "length": 63,
                     "quantity": 2,
+                    "width": 107,
                   },
                 ],
                 "clientName": "SHIPMENT_CLIENT_NAME",
@@ -14641,10 +14641,10 @@ exports[`theme is falsy 1`] = `
                     "cargo_notes": "SHIPMENT_CARGO_NOTES",
                     "cargo_units": Array [
                       Object {
-                        "dimension_x": 107,
-                        "dimension_y": 63,
-                        "dimension_z": 67,
+                        "height": 67,
+                        "length": 63,
                         "quantity": 2,
+                        "width": 107,
                       },
                     ],
                     "clientName": "SHIPMENT_CLIENT_NAME",
@@ -15095,22 +15095,22 @@ exports[`theme is falsy 1`] = `
                 "chargeable_weight": 250,
                 "dangerous_goods": false,
                 "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                "dimension_x": 10,
-                "dimension_y": 60,
-                "dimension_z": 40,
                 "gross_weight": 76,
+                "height": 40,
                 "hs_codes": Array [
                   4,
                 ],
                 "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
                 "id": 1,
                 "key": "FOO_CARGO_ITEM_KEY",
+                "length": 60,
                 "payload_in_kg": 200,
                 "quantity": 5,
                 "stackable": true,
                 "tare_weight": 20,
                 "volume": 12,
                 "weight": 220,
+                "width": 10,
               }
             }
             t={[Function]}

@@ -32,14 +32,14 @@ RSpec.describe MaxDimensionsController, type: :controller do
         FactoryBot.create(:lcl_pricing, tenant: tenant, tenant_vehicle: tenant_vehicle, itinerary: itinerary)
       end
 
-      let!(:carrier_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: tenant, carrier: carrier, dimension_x: 100, mode_of_transport: 'ocean') }
+      let!(:carrier_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: tenant, carrier: carrier, width: 100, mode_of_transport: 'ocean') }
 
       it 'returns the default max dimensions' do
         get :index, params: { tenant_id: tenant.id, itinerary_ids: [itinerary.id].join(',') }
 
         aggregate_failures do
           expect(response).to have_http_status(:success)
-          expect(response_data.dig('maxDimensions', 'ocean', 'dimensionX')).to eq(carrier_mdb.dimension_x.to_s)
+          expect(response_data.dig('maxDimensions', 'ocean', 'width')).to eq(carrier_mdb.width.to_s)
         end
       end
     end
@@ -49,14 +49,14 @@ RSpec.describe MaxDimensionsController, type: :controller do
         FactoryBot.create(:lcl_pricing, tenant: tenant, tenant_vehicle: tenant_vehicle, itinerary: itinerary)
       end
 
-      let!(:tenant_vehicle_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: tenant, tenant_vehicle: tenant_vehicle, dimension_x: 100, mode_of_transport: 'ocean') }
+      let!(:tenant_vehicle_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: tenant, tenant_vehicle: tenant_vehicle, width: 100, mode_of_transport: 'ocean') }
 
       it 'returns the default max dimensions' do
         get :index, params: { tenant_id: tenant.id, itinerary_ids: [itinerary.id].join(',') }
 
         aggregate_failures do
           expect(response).to have_http_status(:success)
-          expect(response_data.dig('maxDimensions', 'ocean', 'dimensionX')).to eq(tenant_vehicle_mdb.dimension_x.to_s)
+          expect(response_data.dig('maxDimensions', 'ocean', 'width')).to eq(tenant_vehicle_mdb.width.to_s)
         end
       end
     end

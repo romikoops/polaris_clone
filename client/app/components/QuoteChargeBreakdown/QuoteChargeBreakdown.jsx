@@ -208,18 +208,18 @@ class QuoteChargeBreakdown extends Component {
     const { cargo } = this.props
     if (id === 'cargo_item') {
       const consolidatedCargo = {
-        dimension_x: 0,
-        dimension_y: 0,
-        dimension_z: 0,
+        width: 0,
+        length: 0,
+        height: 0,
         payload_in_kg: 0,
         quantity: 0,
         cargo_item_type: cargo[0].cargo_item_type,
         cargo_class: cargo[0].cargo_class
       }
       cargo.forEach((cargoItem) => {
-        consolidatedCargo.dimension_x += parseFloat(cargoItem.dimension_x)
-        consolidatedCargo.dimension_y += parseFloat(cargoItem.dimension_y)
-        consolidatedCargo.dimension_z += parseFloat(cargoItem.dimension_z)
+        consolidatedCargo.width += parseFloat(cargoItem.width)
+        consolidatedCargo.length += parseFloat(cargoItem.length)
+        consolidatedCargo.height += parseFloat(cargoItem.height)
         consolidatedCargo.payload_in_kg += parseFloat(cargoItem.payload_in_kg)
         consolidatedCargo.quantity += parseFloat(cargoItem.quantity)
       })

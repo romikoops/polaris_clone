@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :legacy_cargo_item_type, class: 'Legacy::CargoItemType' do
-    dimension_x { 101 }
-    dimension_y { 121 }
+    width { 101 }
+    length { 121 }
     description { 'Pallet' }
     area { '' }
     category { 'Pallet' }
@@ -20,6 +20,8 @@ end
 #  description :string
 #  dimension_x :decimal(, )
 #  dimension_y :decimal(, )
+#  length      :decimal(, )
+#  width       :decimal(, )
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #

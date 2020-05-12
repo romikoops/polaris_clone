@@ -623,9 +623,9 @@ function prepCargoItemGroups (cargos, props) {
 
   return uniqCargos.map((singleCargo, i) => {
     const parsedQuantity = parseInt(singleCargo.quantity, 10)
-    const parsedX = parseFloat(singleCargo.dimension_x)
-    const parsedY = parseFloat(singleCargo.dimension_y)
-    const parsedZ = parseFloat(singleCargo.dimension_z)
+    const parsedX = parseFloat(singleCargo.width)
+    const parsedY = parseFloat(singleCargo.length)
+    const parsedZ = parseFloat(singleCargo.height)
     const parsedPayload = parseFloat(singleCargo.payload_in_kg)
     const parsedChargable = parseFloat(singleCargo.chargeable_weight)
 
@@ -647,9 +647,9 @@ function prepCargoItemGroups (cargos, props) {
       cargoType,
       cargo_group_id: singleCargo.id,
       chargeable_weight: chargable,
-      dimension_x: x,
-      dimension_y: y,
-      dimension_z: z,
+      width: x,
+      length: y,
+      height: z,
       groupAlias: i + 1,
       hsCodes: singleCargo.hs_codes,
       hsText: singleCargo.hs_text,

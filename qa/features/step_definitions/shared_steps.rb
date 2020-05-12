@@ -39,9 +39,9 @@ When 'I have LCL shipment of {int} units {int} x {int} x {int} with weight of {i
   fill_in '0-quantity', with: count
 
   # Dimensions
-  fill_in '0-dimensionX', with: dim_x
-  fill_in '0-dimensionY', with: dim_y
-  fill_in '0-dimensionZ', with: dim_z
+  fill_in '0-width', with: dim_x
+  fill_in '0-length', with: dim_y
+  fill_in '0-height', with: dim_z
 
   # Weight
   fill_in '0-payloadInKg', with: weight

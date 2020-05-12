@@ -11,9 +11,9 @@ class RenameModels < ActiveRecord::Migration[5.2]
       remove_column :cargo_loads, :quantity, :integer
       remove_column :cargo_loads, :user_id
       remove_column :cargo_groups, :weight
-      remove_column :cargo_groups, :dimension_x
-      remove_column :cargo_groups, :dimension_y
-      remove_column :cargo_groups, :dimension_z
+      remove_column :cargo_groups, :width
+      remove_column :cargo_groups, :length
+      remove_column :cargo_groups, :height
       remove_column :cargo_groups, :user_id
 
       rename_table :cargo_groups, :cargo_units
@@ -53,9 +53,9 @@ class RenameModels < ActiveRecord::Migration[5.2]
       rename_table :cargo_cargos, :cargo_loads
 
       add_column :cargo_groups, :weight, :decimal, default: 0.0
-      add_column :cargo_groups, :dimension_x, :decimal, default: 0.0
-      add_column :cargo_groups, :dimension_y, :decimal, default: 0.0
-      add_column :cargo_groups, :dimension_z, :decimal, default: 0.0
+      add_column :cargo_groups, :width, :decimal, default: 0.0
+      add_column :cargo_groups, :length, :decimal, default: 0.0
+      add_column :cargo_groups, :height, :decimal, default: 0.0
       add_column :cargo_groups, :user_id, :uuid, index: true
       add_column :cargo_loads, :weight, :decimal, default: 0.0
       add_column :cargo_loads, :volume, :decimal, default: 0.0

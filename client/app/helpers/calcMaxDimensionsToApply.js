@@ -3,7 +3,7 @@ function maxDimensionsKey (mots) {
 }
 
 function calculateMaxVolume (maxDimensions) {
-  const setVolume = maxDimensions.dimensionX * maxDimensions.dimensionY * maxDimensions.dimensionZ / 1000000
+  const setVolume = maxDimensions.width * maxDimensions.length * maxDimensions.height / 1000000
   const volume = setVolume > 0 ? setVolume : 1000
   
   return {

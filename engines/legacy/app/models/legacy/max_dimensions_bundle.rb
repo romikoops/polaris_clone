@@ -28,7 +28,7 @@ module Legacy
               allow_nil: true
     validates :payload_in_kg, numericality: { greater_than: 0 }
     validates :chargeable_weight, numericality: { greater_than: 0 }, if: :lcl?
-    validates :dimension_x, :dimension_y, :dimension_z,
+    validates :width, :length, :height,
               numericality: { greater_than: 0 }, if: :dimensions_required?
     validates :cargo_class, presence: true
 
@@ -37,16 +37,16 @@ module Legacy
 
     CARGO_ITEM_DEFAULTS = {
       general: {
-        dimension_x: 590.0,
-        dimension_y: 234.2,
-        dimension_z: 228.0,
+        width: 590.0,
+        length: 234.2,
+        height: 228.0,
         payload_in_kg: 21_770.0,
         chargeable_weight: 21_770.0
       },
       air: {
-        dimension_x: 120.0,
-        dimension_y: 100.0,
-        dimension_z: 150.0,
+        width: 120.0,
+        length: 100.0,
+        height: 150.0,
         payload_in_kg: 1_000.0,
         chargeable_weight: 1_000.0
       }
@@ -54,16 +54,16 @@ module Legacy
 
     CARGO_ITEM_AGGREGATE_DEFAULTS = {
       general: {
-        dimension_x: 590,
-        dimension_y: 590,
-        dimension_z: 590,
+        width: 590,
+        length: 590,
+        height: 590,
         payload_in_kg: 40_000,
         chargeable_weight: 40_000
       },
       air: {
-        dimension_x: 590,
-        dimension_y: 590,
-        dimension_z: 590,
+        width: 590,
+        length: 590,
+        height: 590,
         payload_in_kg: 1_000.0,
         chargeable_weight: 1_000.0
       }
@@ -93,9 +93,9 @@ module Legacy
     def to_max_dimension_hash
       {
         mode_of_transport.to_sym => {
-          dimension_x: dimension_x,
-          dimension_y: dimension_y,
-          dimension_z: dimension_z,
+          width: width,
+          length: length,
+          height: height,
           payload_in_kg: payload_in_kg,
           chargeable_weight: chargeable_weight
         }
@@ -139,8 +139,11 @@ end
 #  dimension_x       :decimal(, )
 #  dimension_y       :decimal(, )
 #  dimension_z       :decimal(, )
+#  height            :decimal(, )
+#  length            :decimal(, )
 #  mode_of_transport :string
 #  payload_in_kg     :decimal(, )
+#  width             :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  carrier_id        :bigint

@@ -75,7 +75,7 @@ module OfferCalculator
       def cargo_items_params
         @params.require(:shipment).permit(
           cargo_items_attributes: %i(
-            payload_in_kg dimension_x dimension_y dimension_z
+            payload_in_kg width length height
             quantity cargo_item_type_id dangerous_goods stackable
             contents
           )

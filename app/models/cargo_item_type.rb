@@ -10,7 +10,7 @@ class CargoItemType < Legacy::CargoItemType
   private
 
   def set_description
-    dimensions_prefix = dimension_x && dimension_y ? "#{dimension_x}cm × #{dimension_y}cm " : ''
+    dimensions_prefix = width && length ? "#{width}cm × #{length}cm " : ''
     area_suffix = area ? ": #{area}" : ''
     self.description = dimensions_prefix + category + area_suffix
   end
@@ -21,11 +21,13 @@ end
 # Table name: cargo_item_types
 #
 #  id          :bigint           not null, primary key
+#  area        :string
+#  category    :string
+#  description :string
 #  dimension_x :decimal(, )
 #  dimension_y :decimal(, )
-#  description :string
-#  area        :string
+#  length      :decimal(, )
+#  width       :decimal(, )
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category    :string
 #

@@ -32,7 +32,7 @@
                 <td style="padding: 0 15px;"><%= cargo_item.cargo_class.upcase %></td>
                 <td style="padding: 0 15px;"><%= cargo_item.cargo_item_type.description %></td>
                 <td style="padding: 0 15px;">
-                  <%= "#{cargo_item.dimension_x} cm x #{cargo_item.dimension_y} cm x #{cargo_item.dimension_z} cm" %>
+                  <%= "#{cargo_item.length} cm x #{cargo_item.width} cm x #{cargo_item.height} cm" %>
                 </td>
                 <td style="padding: 0 0 0 15px;">
                   <% if @scope.dig('consolidation', 'cargo') %>

@@ -46,9 +46,6 @@ module Legacy
 
     def humanized_dimension_name(dimension_name)
       case dimension_name
-      when :dimension_x   then 'length'
-      when :dimension_y   then 'width'
-      when :dimension_z   then 'height'
       when :payload_in_kg then 'weight'
       else dimension_name.to_s
       end

@@ -56,9 +56,9 @@ module Api
             cargo_class: '00',
             cargo_type: 'LCL',
             tenant: current_tenant,
-            width_value: attrs[:dimension_x].to_f / 100,
-            height_value: attrs[:dimension_z].to_f / 100,
-            length_value: attrs[:dimension_y].to_f / 100,
+            width_value: attrs[:width].to_f / 100,
+            height_value: attrs[:height].to_f / 100,
+            length_value: attrs[:length].to_f / 100,
             weight_value: attrs[:payload_in_kg].to_f,
             quantity: attrs[:quantity]
           )
@@ -79,8 +79,8 @@ module Api
       end
 
       def cargo_params
-        cargo_items_attributes = %i[id payload_in_kg dimension_x dimension_y
-                                    dimension_z quantity total_weight total_volume
+        cargo_items_attributes = %i[id payload_in_kg width length
+                                    height quantity total_weight total_volume
                                     stackable cargo_item_type_id dangerous_goods cargo_class]
         params.require(:shipment_info).permit(cargo_items_attributes: cargo_items_attributes,
                                               containers_attributes: %i[id size_class quantity

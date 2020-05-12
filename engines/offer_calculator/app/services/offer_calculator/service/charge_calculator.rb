@@ -119,7 +119,7 @@ module OfferCalculator
 
       def schedules_by_charges(import_periods:, export_periods:)
         validity = OfferCalculator::ValidityService.new(
-          logic: @scope.fetch('validity_logic'),
+          logic: scope.fetch('validity_logic'),
           direction: '',
           booking_date: @shipment.desired_start_date,
           schedules: []
@@ -303,7 +303,7 @@ module OfferCalculator
       def cargo_unit_array_for_freight
         cargo_unit_array = aggregated_cargo? ? [@shipment.aggregated_cargo] : @shipment.cargo_units
 
-        if @scope.dig('consolidation', 'cargo', 'backend') && cargo_unit_array.first.is_a?(Legacy::CargoItem)
+        if scope.dig('consolidation', 'cargo', 'backend') && cargo_unit_array.first.is_a?(Legacy::CargoItem)
           cargo_unit_array = consolidate_cargo(cargo_unit_array, @schedule.mode_of_transport)
         end
         cargo_unit_array
@@ -518,9 +518,9 @@ module OfferCalculator
       end
 
       def merge_cargo_into_consolidated(consolidated:, cargo_unit:)
-        consolidated[:dimension_x] += (cargo_unit.dimension_x * cargo_unit.quantity)
-        consolidated[:dimension_y] += (cargo_unit.dimension_y * cargo_unit.quantity)
-        consolidated[:dimension_z] += (cargo_unit.dimension_z * cargo_unit.quantity)
+        consolidated[:width] += (cargo_unit.width * cargo_unit.quantity)
+        consolidated[:length] += (cargo_unit.length * cargo_unit.quantity)
+        consolidated[:height] += (cargo_unit.height * cargo_unit.quantity)
         consolidated[:volume] += (cargo_unit.volume * cargo_unit.quantity)
         consolidated[:payload_in_kg] += (cargo_unit.payload_in_kg * cargo_unit.quantity)
         consolidated[:cargo_class] = cargo_unit.cargo_class

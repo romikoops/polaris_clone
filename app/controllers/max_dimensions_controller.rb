@@ -36,9 +36,9 @@ class MaxDimensionsController < ApplicationController
 
   def dimensions
     %i[
-      dimension_y
-      dimension_x
-      dimension_z
+      length
+      width
+      height
       payload_in_kg
       chargeable_weight
     ]

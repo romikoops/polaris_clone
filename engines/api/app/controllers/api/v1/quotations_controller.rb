@@ -46,7 +46,7 @@ module Api
       end
 
       def quotation_service
-        Wheelhouse::QuotationService.new(quotation_details: quotation_details, shipping_info: shipment_params)
+        Wheelhouse::QuotationService.new(quotation_details: quotation_details, shipping_info: modified_shipment_params)
       end
 
       def quotation_details
@@ -66,9 +66,30 @@ module Api
         )
       end
 
+      def dimension_params
+        shipment_params.fetch(:cargo_items_attributes).map do |cargo_item_params|
+          { width: cargo_item_params[:width] || cargo_item_params[:dimension_x],
+            length: cargo_item_params[:length] || cargo_item_params[:dimension_y],
+            height: cargo_item_params[:height] || cargo_item_params[:dimension_z] }
+        end
+      end
+
+      def modified_cargo_item_params
+        shipment_params.fetch(:cargo_items_attributes).map.with_index { |val, i| val.merge(dimension_params[i]) }
+      end
+
+      def modified_shipment_params
+        return shipment_params if shipment_params['cargo_items_attributes'].nil?
+
+        { cargo_items_attributes: modified_cargo_item_params,
+          container_attributes: shipment_params[:container_attributes],
+          trucking_info: shipment_params[:trucking_info] }
+      end
+
       def shipment_params
-        cargo_items_attributes = %i[id payload_in_kg dimension_x dimension_y
-                                    dimension_z quantity total_weight total_volume
+        cargo_items_attributes = %i[id payload_in_kg width length
+                                    dimension_x dimension_z dimension_y
+                                    height quantity total_weight total_volume
                                     stackable cargo_item_type_id dangerous_goods
                                     contents cargo_class]
         params.require(:shipment_info).permit(cargo_items_attributes: cargo_items_attributes,
@@ -104,15 +125,15 @@ module Api
       end
 
       def cargo_items
-        shipment_params.fetch(:cargo_items_attributes, []).map do |attrs|
+        modified_shipment_params.fetch(:cargo_items_attributes, []).map do |attrs|
           Cargo::Unit.new(
             id: attrs[:id],
             cargo_class: '00',
             cargo_type: 'LCL',
             tenant: current_tenant,
-            width_value: attrs[:dimension_x].to_f / 100,
-            height_value: attrs[:dimension_z].to_f / 100,
-            length_value: attrs[:dimension_y].to_f / 100,
+            width_value: attrs[:width].to_f / 100,
+            height_value: attrs[:height].to_f / 100,
+            length_value: attrs[:length].to_f / 100,
             weight_value: attrs[:payload_in_kg].to_f,
             quantity: attrs[:quantity]
           )
@@ -120,7 +141,7 @@ module Api
       end
 
       def containers
-        shipment_params.fetch(:containers_attributes, []).map do |attrs|
+        modified_shipment_params.fetch(:containers_attributes, []).map do |attrs|
           Cargo::Unit.new(
             id: attrs[:id],
             cargo_class: Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER[attrs[[:cargo_class]]],

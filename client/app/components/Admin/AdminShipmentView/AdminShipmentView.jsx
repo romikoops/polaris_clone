@@ -198,9 +198,9 @@ class AdminShipmentView extends Component {
     cargos.forEach((c) => {
       if (!cargoGroups[c.id]) {
         cargoGroups[c.id] = {
-          dimension_y: parseFloat(c.dimension_y) * parseInt(c.quantity, 10),
-          dimension_z: parseFloat(c.dimension_z) * parseInt(c.quantity, 10),
-          dimension_x: parseFloat(c.dimension_x) * parseInt(c.quantity, 10),
+          length: parseFloat(c.length) * parseInt(c.quantity, 10),
+          width: parseFloat(c.width) * parseInt(c.quantity, 10),
+          height: parseFloat(c.height) * parseInt(c.quantity, 10),
           payload_in_kg: parseFloat(c.payload_in_kg) * parseInt(c.quantity, 10),
           quantity: c.quantity,
           groupAlias: groupCount,
@@ -210,9 +210,9 @@ class AdminShipmentView extends Component {
           hsText: c.hs_text,
           cargoType: cargoItemTypes[c.cargo_item_type_id],
           volume:
-            parseFloat(c.dimension_y) *
-            parseFloat(c.dimension_x) *
-            parseFloat(c.dimension_z) /
+            parseFloat(c.length) *
+            parseFloat(c.width) *
+            parseFloat(c.height) /
             1000000 *
             parseInt(c.quantity, 10),
           items: []

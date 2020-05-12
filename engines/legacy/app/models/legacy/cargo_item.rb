@@ -12,7 +12,7 @@ module Legacy
       truck: 0.333
     }.freeze
 
-    DIMENSIONS = %i[dimension_x dimension_y dimension_z payload_in_kg chargeable_weight].freeze
+    DIMENSIONS = %i[width length height payload_in_kg chargeable_weight].freeze
 
     has_paper_trail
 
@@ -37,7 +37,7 @@ module Legacy
 
     # Instance Methods
     def volume
-      dimension_x * dimension_y * dimension_z / 1_000_000
+      width * length * height / 1_000_000
     end
 
     def with_cargo_type
@@ -87,11 +87,14 @@ end
 #  dimension_x        :decimal(, )
 #  dimension_y        :decimal(, )
 #  dimension_z        :decimal(, )
+#  height             :decimal(, )
 #  hs_codes           :string           default([]), is an Array
+#  length             :decimal(, )
 #  payload_in_kg      :decimal(, )
 #  quantity           :integer
 #  stackable          :boolean          default(TRUE)
 #  unit_price         :jsonb
+#  width              :decimal(, )
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  cargo_item_type_id :integer

@@ -4,9 +4,9 @@ function reuseCargoItems (cargoItems) {
   return cargoItems.map(ci => (
     {
       payload_in_kg: ci.payload_in_kg,
-      dimension_z: ci.dimension_z,
-      dimension_x: ci.dimension_x,
-      dimension_y: ci.dimension_y,
+      height: ci.height,
+      width: ci.width,
+      length: ci.length,
       dangerous_goods: ci.dangerous_goods,
       cargo_item_type_id: ci.cargo_item_type_id,
       cargo_class: ci.cargo_class,
@@ -21,7 +21,7 @@ function reuseContainers (containers) {
       payload_in_kg: ci.payload_in_kg,
       gross_weight: ci.gross_weight,
       size_class: ci.size_class,
-      dimension_y: ci.dimension_y,
+      length: ci.length,
       dangerous_goods: ci.dangerous_goods,
       cargo_class: ci.cargo_class,
       quantity: ci.quantity

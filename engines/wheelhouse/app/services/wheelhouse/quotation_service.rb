@@ -123,9 +123,9 @@ module Wheelhouse
       default_cargo_items = {
         cargo_items_attributes: [{
           payload_in_kg: 1,
-          dimension_x: 1,
-          dimension_y: 1,
-          dimension_z: 1,
+          width: 1,
+          length: 1,
+          height: 1,
           quantity: 1,
           total_weight: 1,
           total_volume: 1,

@@ -40,8 +40,8 @@ function update (data) {
     payload.totalWeight = data.aggregatedCargo.weight
   } else if (loadType === 'cargo_item' && data.cargoItems) {
     data.cargoItems.forEach((cargoItem) => {
-      payload.totalVolume += cargoItem.quantity * ['x', 'y', 'z'].reduce((product, coordinate) => (
-        product * cargoItem[`dimension_${coordinate}`]
+      payload.totalVolume += cargoItem.quantity * ['width', 'length', 'height'].reduce((product, coordinate) => (
+        product * cargoItem[coordinate]
       ), 1) / 1000000
       payload.totalWeight += cargoItem.quantity * cargoItem.payload_in_kg
     })

@@ -302,9 +302,9 @@ export const shipment = {
   selected_offer: { cargo: {}, total: { value: 77 } },
   id: 654,
   cargo_units: [{
-    dimension_x: 107.0,
-    dimension_y: 63.0,
-    dimension_z: 67.0,
+    width: 107.0,
+    length: 63.0,
+    height: 67.0,
     quantity: 2
   }],
   status: 'FOO_STATUS',

@@ -313,10 +313,10 @@ exports[`shallow render 1`] = `
             "cargo_count": 2,
             "cargo_units": Array [
               Object {
-                "dimension_x": 107,
-                "dimension_y": 63,
-                "dimension_z": 67,
+                "height": 67,
+                "length": 63,
                 "quantity": 2,
+                "width": 107,
               },
             ],
             "clientName": "FOO_CLIENT_NAME",
@@ -587,10 +587,10 @@ exports[`tenant is falsy 1`] = `
             "cargo_count": 2,
             "cargo_units": Array [
               Object {
-                "dimension_x": 107,
-                "dimension_y": 63,
-                "dimension_z": 67,
+                "height": 67,
+                "length": 63,
                 "quantity": 2,
+                "width": 107,
               },
             ],
             "clientName": "FOO_CLIENT_NAME",
@@ -854,10 +854,10 @@ exports[`theme is falsy 1`] = `
             "cargo_count": 2,
             "cargo_units": Array [
               Object {
-                "dimension_x": 107,
-                "dimension_y": 63,
-                "dimension_z": 67,
+                "height": 67,
+                "length": 63,
                 "quantity": 2,
+                "width": 107,
               },
             ],
             "clientName": "FOO_CLIENT_NAME",

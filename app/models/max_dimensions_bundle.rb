@@ -14,8 +14,11 @@ end
 #  dimension_x       :decimal(, )
 #  dimension_y       :decimal(, )
 #  dimension_z       :decimal(, )
+#  height            :decimal(, )
+#  length            :decimal(, )
 #  mode_of_transport :string
 #  payload_in_kg     :decimal(, )
+#  width             :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  carrier_id        :bigint

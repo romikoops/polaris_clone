@@ -6,9 +6,9 @@ FactoryBot.define do
     mode_of_transport { 'general' }
     cargo_class { 'lcl' }
     aggregate { false }
-    dimension_x { '500' }
-    dimension_y { '500' }
-    dimension_z { '500' }
+    width { '500' }
+    length { '500' }
+    height { '500' }
     payload_in_kg { '10_000' }
     chargeable_weight { '10_000' }
   end
@@ -25,8 +25,11 @@ end
 #  dimension_x       :decimal(, )
 #  dimension_y       :decimal(, )
 #  dimension_z       :decimal(, )
+#  height            :decimal(, )
+#  length            :decimal(, )
 #  mode_of_transport :string
 #  payload_in_kg     :decimal(, )
+#  width             :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  carrier_id        :bigint

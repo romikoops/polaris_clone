@@ -4,9 +4,9 @@ import { shallow } from 'enzyme'
 import ContainerInputs from './ContainerInputs'
 
 const propsBase = {
-  dimension_x: 10,
-  dimension_y: 20,
-  dimension_z: 30,
+  width: 10,
+  length: 20,
+  height: 30,
   payload_in_kg: 40,
   quantity: 50
 }

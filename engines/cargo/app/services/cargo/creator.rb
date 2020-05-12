@@ -45,9 +45,9 @@ module Cargo
         cargo.units << Unit.new(
           tenant_id: quotation.tenant_id,
           weight_value: item.payload_in_kg,
-          width_value: item.dimension_x.to_f / 100,
-          length_value: item.dimension_y.to_f / 100,
-          height_value: item.dimension_z.to_f / 100,
+          width_value: item.width.to_f / 100,
+          length_value: item.length.to_f / 100,
+          height_value: item.height.to_f / 100,
           quantity: item.quantity,
           cargo_class: '00',
           cargo_type: 'LCL',

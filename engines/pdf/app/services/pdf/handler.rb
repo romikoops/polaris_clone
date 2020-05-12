@@ -175,9 +175,9 @@ module Pdf
               else
                 shipment.cargo_units.inject(0) do |sum, hash|
                   sum + (hash[:quantity].to_f *
-                    hash[:dimension_x].to_f *
-                    hash[:dimension_y].to_f *
-                    hash[:dimension_z].to_f / 1_000_000)
+                    hash[:width].to_f *
+                    hash[:length].to_f *
+                    hash[:height].to_f / 1_000_000)
                 end
               end
         chargeable_value = if shipment.aggregated_cargo

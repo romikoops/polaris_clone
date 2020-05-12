@@ -8,9 +8,9 @@ function CargoItemSummary ({
   items, t, mot, scope
 }) {
   const volume = items.reduce((product, item) => (
-    product + (parseFloat(item.dimension_y) *
-    parseFloat(item.dimension_x) *
-    parseFloat(item.dimension_z) /
+    product + (parseFloat(item.length) *
+    parseFloat(item.width) *
+    parseFloat(item.height) /
     1000000 *
     parseInt(item.quantity, 10))
   ), 0)

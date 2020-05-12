@@ -37,16 +37,16 @@ RSpec.describe OfferCalculator::TruckingTools do
     [
       FactoryBot.create(:legacy_cargo_item,
                         shipment_id: shipment.id,
-                        dimension_x: 120,
-                        dimension_y: 80,
-                        dimension_z: 140,
+                        width: 120,
+                        length: 80,
+                        height: 140,
                         payload_in_kg: 200,
                         quantity: 1),
       FactoryBot.create(:legacy_cargo_item,
                         shipment_id: shipment.id,
-                        dimension_x: 120,
-                        dimension_y: 80,
-                        dimension_z: 150,
+                        width: 120,
+                        length: 80,
+                        height: 150,
                         payload_in_kg: 400,
                         quantity: 2)
     ]
@@ -60,27 +60,27 @@ RSpec.describe OfferCalculator::TruckingTools do
   let!(:ldm_cargo) do
     FactoryBot.create(:legacy_cargo_item,
                       shipment_id: shipment.id,
-                      dimension_x: 120,
-                      dimension_y: 80,
-                      dimension_z: 140,
+                      width: 120,
+                      length: 80,
+                      height: 140,
                       payload_in_kg: 200,
                       quantity: 5)
   end
   let!(:outsized_cargo) do
     FactoryBot.create(:legacy_cargo_item,
                       shipment_id: shipment.id,
-                      dimension_x: 240,
-                      dimension_y: 160,
-                      dimension_z: 230,
+                      width: 240,
+                      length: 160,
+                      height: 230,
                       payload_in_kg: 1000,
                       quantity: 10)
   end
   let!(:mini_cargo) do
     FactoryBot.create(:legacy_cargo_item,
                       shipment_id: shipment.id,
-                      dimension_x: 1,
-                      dimension_y: 1,
-                      dimension_z: 1,
+                      width: 1,
+                      length: 1,
+                      height: 1,
                       payload_in_kg: 1,
                       quantity: 1)
   end
@@ -89,9 +89,9 @@ RSpec.describe OfferCalculator::TruckingTools do
   let!(:consolidated_cargo) do
     {
       id: 'ids',
-      dimension_x: 300,
-      dimension_y: 240,
-      dimension_z: 300,
+      width: 300,
+      length: 240,
+      height: 300,
       volume: 21.6,
       payload_in_kg: 4000,
       cargo_class: 'lcl',
@@ -124,16 +124,16 @@ RSpec.describe OfferCalculator::TruckingTools do
         [
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 120,
-                            dimension_y: 80,
-                            dimension_z: 140,
+                            width: 120,
+                            length: 80,
+                            height: 140,
                             payload_in_kg: 200,
                             quantity: 1),
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 120,
-                            dimension_y: 80,
-                            dimension_z: 150,
+                            width: 120,
+                            length: 80,
+                            height: 150,
                             payload_in_kg: 400,
                             quantity: 2)
         ]
@@ -155,23 +155,23 @@ RSpec.describe OfferCalculator::TruckingTools do
         [
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 10,
-                            dimension_y: 15,
-                            dimension_z: 20,
+                            width: 10,
+                            length: 15,
+                            height: 20,
                             payload_in_kg: 30.0 / 45.0,
                             quantity: 45),
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 30,
-                            dimension_y: 30,
-                            dimension_z: 25,
+                            width: 30,
+                            length: 30,
+                            height: 25,
                             payload_in_kg: 36.0 / 15.0,
                             quantity: 15),
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 25,
-                            dimension_y: 25,
-                            dimension_z: 20,
+                            width: 25,
+                            length: 25,
+                            height: 20,
                             payload_in_kg: 168.0 / 32.0,
                             quantity: 32)
         ]
@@ -201,25 +201,25 @@ RSpec.describe OfferCalculator::TruckingTools do
         [
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 10,
-                            dimension_y: 15,
-                            dimension_z: 20,
+                            width: 10,
+                            length: 15,
+                            height: 20,
                             payload_in_kg: 30.0 / 45.0,
                             stackable: false,
                             quantity: 45),
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 30,
-                            dimension_y: 30,
-                            dimension_z: 25,
+                            width: 30,
+                            length: 30,
+                            height: 25,
                             payload_in_kg: 36.0 / 15.0,
                             stackable: false,
                             quantity: 15),
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 25,
-                            dimension_y: 25,
-                            dimension_z: 20,
+                            width: 25,
+                            length: 25,
+                            height: 20,
                             payload_in_kg: 168.0 / 32.0,
                             stackable: false,
                             quantity: 32)
@@ -266,16 +266,16 @@ RSpec.describe OfferCalculator::TruckingTools do
         [
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 120,
-                            dimension_y: 80,
-                            dimension_z: 140,
+                            width: 120,
+                            length: 80,
+                            height: 140,
                             payload_in_kg: 200,
                             quantity: 1),
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 120,
-                            dimension_y: 80,
-                            dimension_z: 150,
+                            width: 120,
+                            length: 80,
+                            height: 150,
                             payload_in_kg: 400,
                             quantity: 2)
         ]
@@ -297,16 +297,16 @@ RSpec.describe OfferCalculator::TruckingTools do
         [
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 120,
-                            dimension_y: 80,
-                            dimension_z: 140,
+                            width: 120,
+                            length: 80,
+                            height: 140,
                             payload_in_kg: 200,
                             quantity: 1),
           FactoryBot.create(:legacy_cargo_item,
                             shipment_id: shipment.id,
-                            dimension_x: 120,
-                            dimension_y: 80,
-                            dimension_z: 150,
+                            width: 120,
+                            length: 80,
+                            height: 150,
                             payload_in_kg: 400,
                             quantity: 2)
         ]
@@ -385,14 +385,14 @@ RSpec.describe OfferCalculator::TruckingTools do
     end
 
     describe '.cargo_data_value' do
-      it 'correctly returns the dimension_x of an item' do
-        dimension_x = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_data_value(:dimension_x, default_cargos.last)
-        expect(dimension_x).to eq(120)
+      it 'correctly returns the width of an item' do
+        width = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_data_value(:width, default_cargos.last)
+        expect(width).to eq(120)
       end
 
-      it 'correctly returns the dimension_x of an hash item' do
-        dimension_x = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_data_value(:dimension_x, consolidated_cargo)
-        expect(dimension_x).to eq(300)
+      it 'correctly returns the width of an hash item' do
+        width = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_data_value(:width, consolidated_cargo)
+        expect(width).to eq(300)
       end
     end
 
