@@ -85,7 +85,7 @@
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "postcss-loader": "3.0.0",
     "prop-types": "15.6.1",
-    "query-string": "6.10.1",
+    "query-string": "6.12.1",
     "rc-slider": "8.6.1",
     "react": "16.13.1",
     "react-bootstrap": "0.32.1",
