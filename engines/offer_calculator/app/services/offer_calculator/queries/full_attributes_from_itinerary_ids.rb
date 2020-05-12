@@ -24,10 +24,6 @@ module OfferCalculator
       end
 
       def raw_query
-        raw_query_with_truck_types_base_pricing
-      end
-
-      def raw_query_with_truck_types_base_pricing
         <<-SQL
           SELECT
             MAX(itineraries.id)                AS itinerary_id,
@@ -44,6 +40,8 @@ module OfferCalculator
             MAX(destination_nexuses.id)        AS destination_nexus_id,
             MAX(origin_nexuses.name)           AS origin_nexus_name,
             MAX(destination_nexuses.name)      AS destination_nexus_name,
+            MAX(origin_nexuses.locode)         AS origin_locode,
+            MAX(destination_nexuses.locode)    AS destination_locode,
             MAX(origin_nexuses.latitude)       AS origin_latitude,
             MAX(origin_nexuses.longitude)      AS origin_longitude,
             MAX(destination_nexuses.latitude)  AS destination_latitude,

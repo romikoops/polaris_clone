@@ -111,7 +111,10 @@ exports[`contactData.address is falsy 1`] = `
               },
               "zipCode": "FOO_ADDRESS_ZIP_CODE",
             },
+            "country": "DE",
+            "locode": "DEHAM",
             "name": "FOO_HUB_NAME",
+            "nexusName": "Hamburg",
           },
         ]
       }
@@ -362,7 +365,10 @@ exports[`shallow render 1`] = `
               },
               "zipCode": "FOO_ADDRESS_ZIP_CODE",
             },
+            "country": "DE",
+            "locode": "DEHAM",
             "name": "FOO_HUB_NAME",
+            "nexusName": "Hamburg",
           },
         ]
       }
@@ -647,7 +653,10 @@ exports[`state.editBool is true 1`] = `
               },
               "zipCode": "FOO_ADDRESS_ZIP_CODE",
             },
+            "country": "DE",
+            "locode": "DEHAM",
             "name": "FOO_HUB_NAME",
+            "nexusName": "Hamburg",
           },
         ]
       }

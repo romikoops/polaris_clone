@@ -19,7 +19,8 @@ class Form extends Component {
         latitude: result.latitude,
         longitude: result.longitude,
         mots: result.mots,
-        name: result.nexusName
+        name: result.nexusName,
+        locode: result.locode
       },
       type: 'hub'
     }))
@@ -240,7 +241,7 @@ class Form extends Component {
     distance: 100,
     maxPatternLength: 32,
     minMatchCharLength: 1,
-    keys: ['label']
+    keys: ['label', 'rawResult.locode']
   };
 
   static fuseAddressOptions = {
