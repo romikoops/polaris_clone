@@ -18,7 +18,6 @@ module Legacy
     has_many :shipments, dependent: :destroy
     has_many :trips,     dependent: :destroy
     has_many :notes,     dependent: :destroy
-    has_many :pricings,  dependent: :destroy, class_name: 'Legacy::Pricing'
     has_many :margins,   dependent: :destroy, class_name: 'Pricings::Margin'
     has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
     has_many :hubs,      through: :stops
@@ -310,25 +309,11 @@ module Legacy
     end
 
     def users_with_pricing
-      pricings.where.not(user_id: nil).count
-    end
-
-    def user_has_pricing(user)
-      ids = [user.id, user&.agency&.agency_manager_id].compact
-      pricings.exists?(user_id: ids)
+      rates.where.not(user_id: nil).count
     end
 
     def pricing_count
-      pricings.count
-    end
-
-    def dedicated_pricing_count(user)
-      dedicated_pricings_count = pricings.where(user_id: user.id).count
-      open_pricings_count = pricings.where(user_id: nil).count
-      {
-        dedicated_pricings_count: dedicated_pricings_count,
-        open_pricings_count: (dedicated_pricings_count - open_pricings_count).abs
-      }
+      rates.count
     end
 
     def routes # rubocop:disable Metrics/AbcSize
@@ -462,13 +447,6 @@ module Legacy
         pricing_count: pricing_count
       }.merge(attributes)
       as_json(new_options)
-    end
-
-    def as_user_pricing_json(user, options = {})
-      new_options = {
-        user_has_pricing: user_has_pricing(user)
-      }.merge(dedicated_pricing_count(user))
-      as_options_json(options).merge(new_options)
     end
 
     private
