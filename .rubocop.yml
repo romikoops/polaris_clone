@@ -1,5 +1,11 @@
+---
+inherit_from: .rubocop_strict.yml
+
 inherit_gem:
-  rubocop-itsmycargo: config/default.yml
+  rubocop-itsmycargo:
+    - config/base.yml
+    - config/rails.yml
+    - config/rspec.yml
 
 AllCops:
   TargetRubyVersion: 2.5
@@ -7,44 +13,31 @@ AllCops:
     - '**/bin/*'
     - 'client/**/*'
     - 'db/schema.rb'
-    - '**/Rakefile'
 
 Layout/LineLength:
   Max: 120
   IgnoreCopDirectives: true
-  Exclude:
-    - '**/*_spec.rb'
-    - '**/*/factories/**/*.rb'
-    - db/custom_seeds/*.rb
-    - qa/features/**/*_steps.rb
-    - qa/features/**/*.feature
-    - engines/legacy/config/devise.rb
-    - config/routes.rb
 
 Metrics/AbcSize:
   Max: 25
   Exclude:
-    - db/migrate/*.rb
-    - engines/*/db/migrate/*.rb
+    - '**/migrate/*.rb'
 
 Metrics/BlockLength:
   Max: 25
   Exclude:
-    - '**/*_spec.rb'
     - '**/*.gemspec'
     - '**/*.rake'
     - '**/*/factories/**/*.rb'
+    - '**/*_spec.rb'
+    - '**/migrate/*.rb'
     - config/**/*.rb
-    - db/migrate/*.rb
-    - engines/*/db/migrate/*.rb
-    - Gemfile
 
 Metrics/MethodLength:
   Max: 25
   Exclude:
     - '**/*_spec.rb'
-    - db/migrate/*.rb
-    - engines/*/db/migrate/*.rb
+    - '**/migrate/*.rb'
 
 Metrics/ModuleLength:
   Max: 100
@@ -55,8 +48,3 @@ Metrics/ParameterLists:
   Max: 5
   Exclude:
     - qa/features/**/*_steps.rb
-
-# Disable Time over DateTime for legacy specs
-Style/DateTime:
-  Exclude:
-    - spec/*

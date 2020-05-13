@@ -1,10 +1,9 @@
-name: Wolfhound
-
+---
+name: Pronto
 on: pull_request
-
 jobs:
-  wolfhound:
-    name: Wolfhound
+  pronto:
+    name: pronto
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
