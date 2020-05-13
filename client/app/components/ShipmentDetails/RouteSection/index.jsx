@@ -89,14 +89,15 @@ class RouteSection extends React.PureComponent {
         const mot = route.modeOfTransport
 
         if (!has(motLookup, [target, hub.nexusId])) {
-          motLookup[target][hub.nexusId] = { ...hub, mots: [] }
+          motLookup[target][hub.nexusId] = { ...hub, mots: [], hubIds: [] }
         }
 
-        if (motLookup[target][hub.nexusId].mots.includes(mot)) {
-          return
+        if (!motLookup[target][hub.nexusId].mots.includes(mot)) {
+          motLookup[target][hub.nexusId].mots.push(mot)
         }
-
-        motLookup[target][hub.nexusId].mots.push(mot)
+        if (!motLookup[target][hub.nexusId].hubIds.includes(hub.hubId)) {
+          motLookup[target][hub.nexusId].hubIds.push(hub.hubId)
+        }
       }
 
       const definedLookupHubs = (hubIds, directionHubs) => {
@@ -349,7 +350,7 @@ class RouteSection extends React.PureComponent {
 
     const prefix = target === 'origin' ? 'pre' : 'on'
     const targets = target === 'origin' ? origins : destinations
-    const availableHubIds = targets.map((targetData) => targetData.hubId)
+    const availableHubIds = targets.flatMap((targetData) => targetData.hubIds)
 
     const onTruckingAvailable = (hubIds) => {
       this.updateTruckingAvailability(target, true)
