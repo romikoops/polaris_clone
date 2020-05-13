@@ -14,6 +14,7 @@ module ExcelDataServices
             mot: row.mot,
             locode: row.origin_locode
           )[:hub]
+
           destination_hub = find_hub_by_name_or_locode_with_info(
             raw_name: row.destination,
             mot: row.mot,

@@ -36,12 +36,12 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
              tenant: tenant,
              name: 'Gothenburg Port',
              hub_type: 'ocean',
-             nexus: create(:nexus, name: 'Gothenburg')),
+             nexus: create(:nexus, name: 'Gothenburg', locode: 'SEGOT', tenant: tenant)),
       create(:hub,
              tenant: tenant,
              name: 'Shanghai Port',
              hub_type: 'ocean',
-             nexus: create(:nexus, name: 'Shanghai'))
+             nexus: create(:nexus, name: 'Shanghai', locode: 'CNSHG', tenant: tenant))
     ]
   end
   let!(:itineraries) do
@@ -505,6 +505,22 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
 
         include_examples 'Pricing .insert'
       end
+    end
+  end
+
+  context 'when locode is present instead of the name' do
+    let(:input_data) { build(:excel_data_restructured, :only_locode_pricings_one_fee_col_and_ranges) }
+    let(:expected_stats) do
+      { errors: [],
+        "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
+        "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
+        "pricings/pricings": { number_created: 1, number_updated: 0, number_deleted: 0 },
+        "pricings/fees": { number_created: 1, number_updated: 0, number_deleted: 0 } }
+    end
+    let(:options) { { tenant: tenant, data: input_data, options: {} } }
+
+    it 'finds the hub by the locode and inserts successfully' do
+      expect(described_class.insert(options)).to eq(expected_stats)
     end
   end
 end

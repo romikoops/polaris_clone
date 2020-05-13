@@ -18,6 +18,7 @@ FactoryBot.define do
 
     trait :shanghai do
       name { 'Shanghai' }
+      locode { 'CNSHG' }
       latitude { '31.2231338' }
       longitude { '120.9162975' }
       association :country, factory: :country_cn

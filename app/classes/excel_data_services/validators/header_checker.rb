@@ -62,6 +62,8 @@ module ExcelDataServices
         ].freeze
 
         OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES = %i[
+          origin_locode
+          destination_locode
           group_id
           group_name
           transshipment
@@ -91,6 +93,8 @@ module ExcelDataServices
         ].freeze
 
         OPTIONAL_PRICING_ONE_FEE_COL_AND_RANGES = %i[
+          origin_locode
+          destination_locode
           group_id
           group_name
           transshipment

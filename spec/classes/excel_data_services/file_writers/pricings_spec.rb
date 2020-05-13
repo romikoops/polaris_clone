@@ -27,6 +27,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
     let(:pricing_row) do
       [
+        itinerary.origin_hub.locode,
+        itinerary.destination_hub.locode,
         pricing.group_id,
         Tenants::Group.find_by(id: pricing.group_id)&.name,
         pricing.transshipment,
@@ -98,6 +100,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     context 'when all pricings are valid' do
       let(:pricing_row) do
         [
+          itinerary.origin_hub.locode,
+          itinerary.destination_hub.locode,
           nil,
           nil,
           nil,
@@ -145,6 +149,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
 
       let(:pricing_row) do
         [
+          itinerary.origin_hub.locode,
+          itinerary.destination_hub.locode,
           nil,
           nil,
           nil,
@@ -189,6 +195,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
       let(:pricing) { create(:pricings_pricing, tenant: tenant, group_id: group_id, tenant_vehicle: tenant_vehicle, itinerary: itinerary, transshipment: 'ZACPT') }
       let(:pricing_row) do
         [
+          itinerary.origin_hub.locode,
+          itinerary.destination_hub.locode,
           pricing.group_id,
           Tenants::Group.find_by(id: pricing.group_id).name,
           pricing.transshipment,

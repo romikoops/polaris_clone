@@ -735,6 +735,38 @@ FactoryBot.define do
       end
     end
 
+    trait :only_locode_pricings_one_fee_col_and_ranges do
+      data do
+        [[{ sheet_name: 'Sheet1',
+            restructurer_name: 'pricing_one_fee_col_and_ranges',
+            effective_date: Date.parse('Thu, 15 Mar 2018'),
+            expiration_date: Date.parse('Fri, 15 Nov 2019'),
+            customer_email: nil,
+            origin: '',
+            origin_locode: 'SEGOT',
+            country_origin: 'Sweden',
+            destination: '',
+            destination_locode: 'CNSHG',
+            country_destination: 'China',
+            mot: 'ocean',
+            carrier: nil,
+            service_level: 'standard',
+            load_type: 'lcl',
+            rate_basis: 'PER_WM',
+            fee_code: 'BAS',
+            fee_name: 'Bas',
+            currency: 'USD',
+            fee_min: 17,
+            fee: 17,
+            transit_time: 24,
+            transshipment: nil,
+            row_nr: 2,
+            internal: false,
+            origin_name: 'Gothenburg Port',
+            destination_name: 'Shanghai Port' }]]
+      end
+    end
+
     trait :faulty_pricings_one_fee_col_and_ranges do
       data do
         [[{ sheet_name: 'Sheet1',
