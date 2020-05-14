@@ -127,10 +127,42 @@ BookingSummary.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { app, bookingSummary } = state
+  const { app, bookingProcess } = state
   const { tenant } = app
   const { theme } = tenant
-  const { loadType, trucking, modeOfTransport, totalWeight, totalVolume, cities, nexuses } = bookingSummary
+  const { shipment } = bookingProcess
+
+  let totalWeight = 0
+  let totalVolume = 0
+
+  const { loadType, trucking, modeOfTransport } = shipment
+
+  if (loadType === 'container') {
+    shipment.cargoUnits.forEach((container) => {
+      totalWeight += container.quantity * container.payloadInKg
+    })
+  } else if (shipment.aggregatedCargo) {
+    totalVolume = (shipment.cargoUnits[0] && shipment.cargoUnits[0].totalVolume) || 0
+    totalWeight = (shipment.cargoUnits[0] && shipment.cargoUnits[0].totalWeight) || 0
+  } else if (loadType === 'cargo_item') {
+    shipment.cargoUnits.forEach((cargoItem) => {
+      totalVolume += cargoItem.quantity * ['width', 'length', 'height'].reduce((product, coordinate) => (
+        product * cargoItem[coordinate]
+      ), 1) / 1000000
+      totalWeight += cargoItem.quantity * cargoItem.payloadInKg
+    })
+  }
+
+  const cities = {}
+  if (has(shipment, ['origin', 'city'])) {
+    cities.origin = shipment.origin.city
+  }
+  if (has(shipment, ['destination', 'city'])) {
+    cities.destination = shipment.destination.city
+  }
+  const nexuses = {}
+  if (shipment.origin) nexuses.origin = shipment.origin.nexusName
+  if (shipment.destination) nexuses.destination = shipment.destination.nexusName
 
   return {
     totalWeight, totalVolume, cities, nexuses, loadType, trucking, modeOfTransport, theme
