@@ -244,6 +244,12 @@ class RouteSection extends React.PureComponent {
     })
   }
 
+  get addressFields () {
+    const { scope } = this.props
+
+    return scope.address_fields
+  }
+
   setGoogleApi = (gMaps, map, setMarker, adjustMapBounds) => {
     this.gmaps = { gMaps, map, setMarker, adjustMapBounds }
   }
@@ -699,7 +705,7 @@ class RouteSection extends React.PureComponent {
                       hubs={origins}
                       loading={loading.origin}
                       requiresFullAddress={requiresFullAddress}
-                      showAddress={originTrucking}
+                      showAddress={this.addressFields && originTrucking}
                       value={origin}
                       foundTrucking={truckingAvailability.origin}
                       onBlur={() => this.onRouteSelectionBlur('origin')}
@@ -742,7 +748,7 @@ class RouteSection extends React.PureComponent {
                       hubs={destinations}
                       loading={loading.destination}
                       requiresFullAddress={requiresFullAddress}
-                      showAddress={destinationTrucking}
+                      showAddress={this.addressFields && destinationTrucking}
                       value={destination}
                       foundTrucking={truckingAvailability.destination}
                       onBlur={() => this.onRouteSelectionBlur('destination')}

@@ -243,6 +243,7 @@ exports[`load type is cargo item 1`] = `
   preCarriage={false}
   scope={
     Object {
+      "address_fields": true,
       "cargo_info_level": "hs_codes",
       "carriage_options": Object {
         "on_carriage": Object {
@@ -576,6 +577,7 @@ exports[`load type is cargo item aggregated 1`] = `
   preCarriage={false}
   scope={
     Object {
+      "address_fields": true,
       "cargo_info_level": "hs_codes",
       "carriage_options": Object {
         "on_carriage": Object {
@@ -903,6 +905,7 @@ exports[`load type is container 1`] = `
   preCarriage={false}
   scope={
     Object {
+      "address_fields": true,
       "cargo_info_level": "hs_codes",
       "carriage_options": Object {
         "on_carriage": Object {

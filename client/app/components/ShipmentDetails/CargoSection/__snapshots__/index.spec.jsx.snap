@@ -198,6 +198,7 @@ exports[`cargoUnits is empty 1`] = `
       onDeleteUnit={[Function]}
       scope={
         Object {
+          "address_fields": true,
           "cargo_info_level": "hs_codes",
           "carriage_options": Object {
             "on_carriage": Object {
@@ -514,6 +515,7 @@ exports[`renders correctly 1`] = `
       onDeleteUnit={[Function]}
       scope={
         Object {
+          "address_fields": true,
           "cargo_info_level": "hs_codes",
           "carriage_options": Object {
             "on_carriage": Object {

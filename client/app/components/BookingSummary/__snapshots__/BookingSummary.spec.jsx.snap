@@ -36,6 +36,7 @@ exports[`BookingSummary render with shipment state 1`] = `
     }
     scope={
       Object {
+        "address_fields": true,
         "cargo_info_level": "hs_codes",
         "carriage_options": Object {
           "on_carriage": Object {

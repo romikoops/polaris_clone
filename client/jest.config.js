@@ -2,7 +2,7 @@ module.exports = {
   testRegex: '.spec.(jsx|js)$',
   collectCoverage: true,
   collectCoverageFrom: ['app/**/*.(jsx|js)'],
-  coverageReporters: ['text-summary'],
+  coverageReporters: ['lcov', 'html', 'text-summary'],
   setupFiles: ['./jest.init.js'],
   setupFilesAfterEnv: ['./node_modules/jest-enzyme/lib/index.js'],
   snapshotSerializers: ['enzyme-to-json/serializer'],

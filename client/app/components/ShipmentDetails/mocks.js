@@ -2,6 +2,7 @@ export const trucking = { preCarriage: { truckType: '' }, onCarriage: { truckTyp
 export const id = 4606
 export const selectedDay = '2019-01-24T10:00:00.000Z'
 export const lastAvailableDate = '2019-03-12T12:00:00.000Z'
+
 export const ShipmentDetailsAvailableRoutes = [{
   itineraryId: 2863,
   itineraryName: 'Gothenburg - Qingdao',
@@ -206,7 +207,8 @@ export const scope = {
   customs_export_paper: false,
   fixed_exchange_rates: false,
   require_full_address: true,
-  closed_quotation_tool: false
+  closed_quotation_tool: false,
+  address_fields: true
 }
 
 export const theme = {
@@ -4993,3 +4995,119 @@ export const lookupTablesForRoutes = {
     ]
   }
 }
+
+export const routeSelectionStateMock = () => ({
+  app: { tenant: { ...tenant, scope } },
+  bookingData: {
+    response: {
+      stage1: {
+        lookupTablesForRoutes: {
+          originHub: { 18513: [1] },
+          destinationHub: { 18513: [13] },
+          originNexus: {},
+          destinationNexus: {},
+          tenantVehicleId: { '': [0] }
+        },
+        routes: [
+          {
+            itineraryId: 23879,
+            itineraryName: 'Ningbo - Ipswich',
+            transshipment: null,
+            modeOfTransport: 'ocean',
+            cargoClasses: ['fcl_20', 'lcl', 'fcl_40', 'fcl_40_hq'],
+            origin: {
+              stopId: 50385,
+              hubId: 18516,
+              hubName: 'Ningbo Port',
+              nexusId: 12794,
+              nexusName: 'Ningbo',
+              latitude: 29.826602,
+              longitude: 121.462084,
+              country: 'CN',
+              locode: 'CNNBO',
+              truckTypes: ['default']
+            },
+            destination: {
+              stopId: 50386,
+              hubId: 18518,
+              hubName: 'Ipswich Port',
+              nexusId: 12796,
+              nexusName: 'Ipswich',
+              latitude: 52.05,
+              longitude: 1.14,
+              country: 'GB',
+              locode: 'FEO1',
+              truckTypes: ['default']
+            }
+          }
+        ]
+      }
+    }
+  },
+  bookingProcess: {
+    shipment: {
+      aggregatedCargo: false,
+      onCarriage: false,
+      preCarriage: false,
+      origin: {},
+      destination: {},
+      cargoUnits: [
+        {
+          payloadInKg: 0,
+          totalVolume: 0,
+          totalWeight: 0,
+          width: 0,
+          length: 0,
+          height: 0,
+          quantity: 1,
+          cargoItemTypeId: '',
+          dangerousGoods: false,
+          stackable: true
+        }
+      ],
+      trucking: {
+        preCarriage: { truckType: '' },
+        onCarriage: { truckType: '' }
+      },
+      loadType: 'cargo_item',
+      direction: 'export',
+      id: 48443
+    },
+    ShipmentDetails: {
+      availableMots: ['ocean', 'air'],
+      availableRoutes: [
+        {
+          itineraryId: 23879,
+          itineraryName: 'Ningbo - Ipswich',
+          transshipment: null,
+          modeOfTransport: 'ocean',
+          cargoClasses: ['fcl_20', 'lcl', 'fcl_40', 'fcl_40_hq'],
+          origin: {
+            stopId: 50385,
+            hubId: 18516,
+            hubName: 'Ningbo Port',
+            nexusId: 12794,
+            nexusName: 'Ningbo',
+            latitude: 29.826602,
+            longitude: 121.462084,
+            country: 'CN',
+            locode: 'CNNBO',
+            truckTypes: []
+          },
+          destination: {
+            stopId: 50386,
+            hubId: 18518,
+            hubName: 'Ipswich Port',
+            nexusId: 12796,
+            nexusName: 'Ipswich',
+            latitude: 52.05,
+            longitude: 1.14,
+            country: 'GB',
+            locode: 'FEO1',
+            truckTypes: ['default']
+          }
+        }
+      ]
+    }
+  }
+})

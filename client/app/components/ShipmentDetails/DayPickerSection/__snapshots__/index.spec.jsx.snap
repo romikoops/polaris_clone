@@ -126,6 +126,7 @@ exports[`pre carriage is true 1`] = `
         t={[Function]}
         tenantScope={
           Object {
+            "address_fields": true,
             "cargo_info_level": "hs_codes",
             "carriage_options": Object {
               "on_carriage": Object {
@@ -333,6 +334,7 @@ exports[`renders correctly 1`] = `
         t={[Function]}
         tenantScope={
           Object {
+            "address_fields": true,
             "cargo_info_level": "hs_codes",
             "carriage_options": Object {
               "on_carriage": Object {
@@ -540,6 +542,7 @@ exports[`selected day is falsy 1`] = `
         t={[Function]}
         tenantScope={
           Object {
+            "address_fields": true,
             "cargo_info_level": "hs_codes",
             "carriage_options": Object {
               "on_carriage": Object {

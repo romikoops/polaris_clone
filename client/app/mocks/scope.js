@@ -39,5 +39,6 @@ export const scope = {
       company: false,
       password: false
     }
-  }
+  },
+  address_fields: true
 }
