@@ -479,7 +479,7 @@ exports[`renders correcly 1`] = `
           "incoterm_info_level": "text",
           "links": Object {
             "about": "",
-            "legal": "",
+            "imprint": "",
           },
           "modes_of_transport": Object {
             "air": Object {

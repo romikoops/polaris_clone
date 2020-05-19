@@ -1,5 +1,5 @@
 export const scope = {
-  links: { about: '', legal: '' },
+  links: { about: '', imprint: '' },
   terms: ['You verify that all the information provided above is true', 'You agree to the presented terms and conditions.', 'Demo is to discuss the validity of the presented prices with the product owners.'],
   fee_detail: 'key_and_name',
   closed_shop: false,

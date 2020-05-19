@@ -271,7 +271,7 @@ exports[`load type is cargo item 1`] = `
       "incoterm_info_level": "text",
       "links": Object {
         "about": "",
-        "legal": "",
+        "imprint": "",
       },
       "modes_of_transport": Object {
         "air": Object {
@@ -605,7 +605,7 @@ exports[`load type is cargo item aggregated 1`] = `
       "incoterm_info_level": "text",
       "links": Object {
         "about": "",
-        "legal": "",
+        "imprint": "",
       },
       "modes_of_transport": Object {
         "air": Object {
@@ -933,7 +933,7 @@ exports[`load type is container 1`] = `
       "incoterm_info_level": "text",
       "links": Object {
         "about": "",
-        "legal": "",
+        "imprint": "",
       },
       "modes_of_transport": Object {
         "air": Object {

@@ -324,7 +324,7 @@ module SetupHelper
         },
         links: {
           about: 'https://freightservices.greencarrier.com/about-us/',
-          legal: 'https://freightservices.greencarrier.com/contact/'
+          imprint: 'https://freightservices.greencarrier.com/contact/'
         },
         customs_export_paper: arg[:customs_export_paper],
         consolidate_cargo: arg[:consolidate_cargo],

@@ -160,7 +160,7 @@ export const maxDimensions = {
 }
 
 export const scope = {
-  links: { about: '', legal: '' },
+  links: { about: '', imprint: '' },
   terms: [
     'You verify that all the information provided above is true',
     'You agree to the presented terms and conditions.',
@@ -337,7 +337,7 @@ export const tenant = {
   scope: {
     links: {
       about: '',
-      legal: ''
+      imprint: ''
     },
     terms: [
       'You verify that all the information provided above is true',

@@ -11,7 +11,7 @@ function FooterLinks (props) {
   const defaultLinks = {
     privacy: 'https://www.itsmycargo.com/en/privacy',
     about: 'https://www.itsmycargo.com/en/ourstory',
-    legal: 'https://www.itsmycargo.com/en/contact',
+    imprint: 'https://www.itsmycargo.com/en/contact',
     terms: 'https://www.itsmycargo.com/legal/terms-of-service'
   }
 
@@ -22,7 +22,7 @@ function FooterLinks (props) {
   }
 
   const aboutLink = links && !isEmpty(links.about) ? links.about : defaultLinks.about
-  const legalLink = links && !isEmpty(links.legal) ? links.legal : defaultLinks.legal
+  const imprintLink = links && !isEmpty(links.imprint) ? links.imprint : defaultLinks.imprint
   const privacyLink = links && !isEmpty(links.privacy) ? links.privacy : defaultLinks.privacy
 
   const openConsent = (event) => {
@@ -41,7 +41,7 @@ function FooterLinks (props) {
         </a>
       </li>
       <li>
-        <a target="_parent" href={legalLink}>
+        <a target="_parent" href={imprintLink}>
           {t('footer:imprint')}
         </a>
       </li>
