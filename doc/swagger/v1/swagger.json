@@ -1,0 +1,2357 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ItsMyCargo API V1",
+    "description": "This is an API for accessing ItsMyCargo.",
+    "termsOfService": "https://www.itsmycargo.com/terms",
+    "contact": {
+      "name": "API Support",
+      "url": "https://support.itsmycargo.com",
+      "email": "support@itsmycargo.com"
+    },
+    "version": "v1"
+  },
+  "components": {
+    "schemas": {
+      "cargo_item_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Unique identifier of the given cargo item type",
+            "type": "string"
+          },
+          "type": {
+            "description": "Generic type of the cargo item",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "Descriptive attributes of the cargo item",
+            "type": "object",
+            "properties": {
+              "width": {
+                "description": "Width of the given cargo item type",
+                "type": "string"
+              },
+              "length": {
+                "description": "Length of the given cargo item type",
+                "type": "string"
+              },
+              "description": {
+                "description": "Descriptive information of the cargo item type",
+                "type": "string"
+              }
+            },
+            "required": [
+              "width",
+              "length",
+              "description"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      },
+      "client": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "company_name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "house_number": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "group_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "first_name",
+          "last_name",
+          "role",
+          "company_name",
+          "phone",
+          "house_number",
+          "street",
+          "postal_code",
+          "country",
+          "group_id"
+        ]
+      },
+      "charge": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "lineItemId": {
+            "type": "string"
+          },
+          "tenderId": {
+            "type": "string"
+          },
+          "chargeCategoryId": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          },
+          "value": {
+            "$ref": "#/components/schemas/money"
+          },
+          "originalValue": {
+            "$ref": "#/components/schemas/money"
+          },
+          "order": {
+            "type": "integer"
+          },
+          "section": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "lineItemId",
+          "tenderId",
+          "chargeCategoryId",
+          "description",
+          "value",
+          "originalValue",
+          "order",
+          "section",
+          "level"
+        ]
+      },
+      "country": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "flag": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "code",
+              "flag"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      },
+      "group": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      },
+      "money": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "description": "Monetary amount in given currency"
+          },
+          "currency": {
+            "type": "string",
+            "description": "ISO 4217 code for currency"
+          }
+        },
+        "required": [
+          "amount",
+          "currency"
+        ]
+      },
+      "nexus": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "nexus"
+          },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "name": {
+                "type": "string"
+              },
+              "latitude": {
+                "type": "number"
+              },
+              "longitude": {
+                "type": "number"
+              },
+              "modesOfTransport": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "countryName": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "latitude",
+              "longitude",
+              "modesOfTransport",
+              "countryName"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      },
+      "tenant": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "slug": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "slug",
+              "name"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      },
+      "user": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "tenantId": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "companyName": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "email",
+              "tenantId",
+              "firstName",
+              "lastName",
+              "phone",
+              "companyName",
+              "role"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "oauth": {
+        "type": "oauth2",
+        "description": "This API uses OAuth2 with the password grant flow.",
+        "flows": {
+          "password": {
+            "tokenUrl": "/oauth/tokens",
+            "refreshUrl": "/oauth/refresh",
+            "scopes": {
+              "public": "Public Access"
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/v1/ahoy/{id}/settings": {
+      "get": {
+        "summary": "Fetch Settings",
+        "tags": [
+          "Ahoy"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Customer UUID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "endpoint": {
+                      "description": "Endpoint url that Ahoy will redirect to start the booking process",
+                      "type": "string"
+                    },
+                    "pre_carriage": {
+                      "description": "Determines if pre-carriage is enabled",
+                      "type": "boolean"
+                    },
+                    "on_carriage": {
+                      "description": "Determines if on-carriage is enabled",
+                      "type": "boolean"
+                    },
+                    "modes_of_transport": {
+                      "description": "Supported modes of transports",
+                      "type": "object",
+                      "properties": {
+                        "air": {
+                          "description": "Supported cargo types for Air Cargo",
+                          "type": "object",
+                          "properties": {
+                            "fcl": {
+                              "description": "Determines if FCL is supported",
+                              "type": "boolean"
+                            },
+                            "lcl": {
+                              "description": "Determines if LCL is supported",
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "rail": {
+                          "description": "Supported cargo types for Rail Cargo",
+                          "type": "object",
+                          "properties": {
+                            "fcl": {
+                              "description": "Determines if FCL is supported",
+                              "type": "boolean"
+                            },
+                            "lcl": {
+                              "description": "Determines if LCL is supported",
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "ocean": {
+                          "description": "Supported cargo types for Ocean Cargo",
+                          "type": "object",
+                          "properties": {
+                            "fcl": {
+                              "description": "Determines if FCL is supported",
+                              "type": "boolean"
+                            },
+                            "lcl": {
+                              "description": "Determines if LCL is supported",
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "truck": {
+                          "description": "Supported cargo types for Trucking Cargo",
+                          "type": "object",
+                          "properties": {
+                            "fcl": {
+                              "description": "Determines if FCL is supported",
+                              "type": "boolean"
+                            },
+                            "lcl": {
+                              "description": "Determines if LCL is supported",
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "endpoint",
+                    "pre_carriage",
+                    "on_carriage",
+                    "modes_of_transport"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Invalid Customer UUID",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/cargo_item_types": {
+      "get": {
+        "summary": "Fetch all available cargo types",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/cargo_item_type"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/quotations/{quotation_id}/charges/{id}": {
+      "get": {
+        "summary": "Fetch tender charges",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Trip ID of the tender",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "quotation_id",
+            "in": "path",
+            "description": "The selected quotation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "attributes": {
+                          "type": "object",
+                          "properties": {
+                            "charges": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "route": {
+                                    "type": "string"
+                                  },
+                                  "vessel": {
+                                    "type": "string"
+                                  },
+                                  "transitTime": {
+                                    "type": "integer"
+                                  },
+                                  "charges": {
+                                    "type": "array",
+                                    "items": {
+                                      "$ref": "#/components/schemas/charge"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "required": [
+                            "charges"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "attributes"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Invalid Charge ID",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/clients": {
+      "get": {
+        "summary": "Fetch all clients",
+        "tags": [
+          "Clients"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/user"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new client",
+        "tags": [
+          "Clients"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "content": {
+            }
+          },
+          "400": {
+            "description": "invalid request",
+            "content": {
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client": {
+                    "$ref": "#/components/schemas/client"
+                  }
+                },
+                "required": [
+                  "client"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/clients/{id}": {
+      "get": {
+        "summary": "Fetch specific client",
+        "tags": [
+          "Clients"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Client ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/user"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          },
+          "404": {
+            "description": "Invalid Client ID",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/clients/{id}/password_reset": {
+      "patch": {
+        "summary": "Password Reset",
+        "tags": [
+          "Clients"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Client ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "password": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "password"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          },
+          "404": {
+            "description": "Invalid Client ID",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/dashboard": {
+      "get": {
+        "summary": "Fetch Dashboard Widget",
+        "tags": [
+          "Dashboard"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "widget",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/equipments": {
+      "get": {
+        "summary": "Fetch all available equipment",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "origin_nexus_id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "the id of the origin"
+          },
+          {
+            "name": "destination_nexus_id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "the id of the destination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/groups": {
+      "get": {
+        "summary": "Fetch all groups",
+        "tags": [
+          "Groups"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/group"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/itineraries": {
+      "get": {
+        "summary": "Fetch list of itineraries belonging to a tenant",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "modeOfTransport": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "modeOfTransport",
+                              "name"
+                            ]
+                          },
+                          "relationships": {
+                            "type": "object",
+                            "properties": {
+                              "stops": {
+                                "type": "object",
+                                "properties": {
+                                  "data": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "type": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "type"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "data"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes",
+                          "relationships"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/itineraries/ports/{tenant_id}": {
+      "get": {
+        "summary": "Fetch list of ports",
+        "tags": [
+          "Ahoy"
+        ],
+        "parameters": [
+          {
+            "name": "tenant_id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "location_type",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Location Type of request origin/destination"
+          },
+          {
+            "name": "location_id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of selected location"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Text input for query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "hubType": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "hubType"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/locations/origins": {
+      "get": {
+        "summary": "Fetch available origins",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/nexus"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/locations/destinations": {
+      "get": {
+        "summary": "Fetch available destinations",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/nexus"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/quotations": {
+      "post": {
+        "summary": "Create new quotation",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "carrier": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "destination": {
+                                "type": "string"
+                              },
+                              "estimated": {
+                                "type": "boolean"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "modeOfTransport": {
+                                "type": "string"
+                              },
+                              "origin": {
+                                "type": "string"
+                              },
+                              "quotationId": {
+                                "type": "string"
+                              },
+                              "serviceLevel": {
+                                "type": "string"
+                              },
+                              "total": {
+                                "$ref": "#/components/schemas/money"
+                              },
+                              "transitTime": {
+                                "type": "number"
+                              },
+                              "transshipment": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "carrier",
+                              "destination",
+                              "estimated",
+                              "id",
+                              "modeOfTransport",
+                              "origin",
+                              "quotationId",
+                              "serviceLevel",
+                              "total",
+                              "transitTime",
+                              "transshipment"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tenant_id": {
+                    "type": "string"
+                  },
+                  "quote": {
+                    "type": "object",
+                    "properties": {
+                      "selected_date": {
+                        "type": "date"
+                      },
+                      "tenant_id": {
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "type": "string"
+                      },
+                      "origin": {
+                        "type": "string"
+                      },
+                      "destination": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "shipment_info": {
+                    "type": "object",
+                    "properties": {
+                      "cargo_item_attributes": {
+                        "type": "object",
+                        "properties": {
+                        }
+                      },
+                      "containers_attributes": {
+                        "type": "object",
+                        "properties": {
+                        }
+                      },
+                      "trucking_info": {
+                        "type": "object",
+                        "properties": {
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/quotations/{id}": {
+      "get": {
+        "summary": "Fetch existing quotation",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/quotations/{id}/download": {
+      "post": {
+        "summary": "Download quotation as PDF",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tenders": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/quotations/{quotation_id}/schedules/{id}": {
+      "get": {
+        "summary": "Fetch available schedules",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "quotation_id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "carrier": {
+                                "type": "string"
+                              },
+                              "closing": {
+                                "type": "string"
+                              },
+                              "end": {
+                                "type": "string"
+                              },
+                              "service": {
+                                "type": "string"
+                              },
+                              "start": {
+                                "type": "string"
+                              },
+                              "tenderId": {
+                                "type": "string"
+                              },
+                              "vessel": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "voyageCode": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "carrier",
+                              "closing",
+                              "end",
+                              "service",
+                              "start",
+                              "tenderId",
+                              "vessel",
+                              "voyageCode"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/itineraries/{id}/schedules/enabled": {
+      "get": {
+        "summary": "Fetch status of schedules",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "enabled"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tenants": {
+      "get": {
+        "summary": "Fetch all tenants",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/tenant"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/tenants/{id}/countries": {
+      "get": {
+        "summary": "Fetch enabled countries for tenant",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Tenant ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/country"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/tenders/{id}": {
+      "put": {
+        "summary": "Update Tenders",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "attributes": {
+                          "type": "object",
+                          "properties": {
+                            "charges": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "chargeCategoryId": {
+                                    "type": "integer",
+                                    "nullable": true
+                                  },
+                                  "description": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "level": {
+                                    "type": "integer"
+                                  },
+                                  "lineItemId": {
+                                    "type": "integer",
+                                    "nullable": true
+                                  },
+                                  "order": {
+                                    "type": "integer"
+                                  },
+                                  "originalValue": {
+                                    "$ref": "#/components/schemas/money"
+                                  },
+                                  "section": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "tenderId": {
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "$ref": "#/components/schemas/money"
+                                  }
+                                },
+                                "required": [
+                                  "chargeCategoryId",
+                                  "description",
+                                  "id",
+                                  "level",
+                                  "lineItemId",
+                                  "order",
+                                  "originalValue",
+                                  "section",
+                                  "tenderId",
+                                  "value"
+                                ]
+                              }
+                            },
+                            "route": {
+                              "type": "string"
+                            },
+                            "vessel": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "transitTime": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "attributes"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "line_item_id": {
+                    "type": "string"
+                  },
+                  "charge_category_id": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "section": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trucking_availabilities": {
+      "get": {
+        "summary": "Fetch Available Truckings",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "target",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "truckTypes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "truckingAvailable": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "truckTypes",
+                    "truckingAvailable"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trucking_counterparts": {
+      "get": {
+        "summary": "Fetch counterparts fgor trucking",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "target",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "countryCodes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "truckTypes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "truckingAvailable": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "countryCodes",
+                    "truckTypes",
+                    "truckingAvailable"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me": {
+      "get": {
+        "summary": "Fetch information of current user",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "attributes": {
+                          "type": "object",
+                          "properties": {
+                            "email": {
+                              "type": "string"
+                            },
+                            "tenantId": {
+                              "type": "string"
+                            },
+                            "firstName": {
+                              "type": "string"
+                            },
+                            "lastName": {
+                              "type": "string"
+                            },
+                            "phone": {
+                              "type": "string"
+                            },
+                            "companyName": {
+                              "type": "string"
+                            },
+                            "role": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "email",
+                            "tenantId",
+                            "firstName",
+                            "lastName",
+                            "phone",
+                            "companyName",
+                            "role"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "attributes"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{host}",
+      "variables": {
+        "host": {
+          "default": "api.itsmycargo.com"
+        }
+      }
+    }
+  ]
+}

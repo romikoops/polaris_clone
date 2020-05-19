@@ -14,6 +14,5 @@ end
 # Declare your development engines here
 path '..' do
   # Add your development engines here
-  gem 'imc-api_docs'
   gem 'imc-legacy'
 end

@@ -16,7 +16,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'imc-analytics'
   s.add_dependency 'imc-api_auth'
-  s.add_dependency 'imc-api_docs'
   s.add_dependency 'imc-cargo'
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-profiles'
@@ -29,5 +28,5 @@ Gem::Specification.new do |s|
 
   Gemhelper.common(s)
 
-  s.add_development_dependency 'rspec_api_documentation'
+  s.add_development_dependency 'rswag-specs'
 end

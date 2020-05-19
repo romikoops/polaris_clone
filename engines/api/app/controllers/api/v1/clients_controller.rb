@@ -4,22 +4,19 @@ module Api
   module V1
     class ClientsController < ApiController
       def index
-        blocked_roles = Legacy::Role.where(name: %w[admin super_admin])
         client_ids = Legacy::User
-                     .where(tenant_id: current_tenant.legacy_id)
-                     .where(guest: false)
-                     .where.not(role: blocked_roles)
-                     .ids
+          .where(tenant_id: current_tenant.legacy_id)
+          .where(guest: false)
+          .where.not(role: Legacy::Role.where(name: %w[admin super_admin]))
+          .ids
         clients = Tenants::User.where(legacy_id: client_ids)
         clients = clients.search(params[:q]) if params[:q].present?
-        decorated_clients = UserDecorator.decorate_collection(clients)
-        render json: UserSerializer.new(decorated_clients)
+
+        render json: UserSerializer.new(UserDecorator.decorate_collection(clients))
       end
 
       def show
-        client = Tenants::User.find_by(legacy_id: params[:id])
-        decorated_client = UserDecorator.decorate(client)
-        render json: UserSerializer.new(decorated_client)
+        render json: UserSerializer.new(UserDecorator.decorate(client))
       end
 
       def create
@@ -35,33 +32,37 @@ module Api
             create_user_group(tenants_user: user)
           end
           decorated_user = UserDecorator.decorate(tenants_user)
-          render json: UserSerializer.new(decorated_user)
+          render json: UserSerializer.new(decorated_user), status: :created
         end
       rescue ActiveRecord::RecordInvalid => e
-        render(json: { error: e.message }, status: :bad_request)
+        render(json: {error: e.message}, status: :bad_request)
       end
 
       def password_reset
         random_password = SecureRandom.alphanumeric(16)
         client.update(password: random_password)
-        render json: { data: { password: random_password } }
+        render json: {data: {password: random_password}}
       end
 
       private
 
+      def client
+        @client ||= Tenants::User.find(params[:id])
+      end
+
       def client_params
         client_keys = %i[email
-                         first_name
-                         last_name
-                         company_name
-                         role
-                         phone
-                         house_number
-                         street
-                         city
-                         postal_code
-                         group_id
-                         country]
+          first_name
+          last_name
+          company_name
+          role
+          phone
+          house_number
+          street
+          city
+          postal_code
+          group_id
+          country]
         params.require(:client).permit(*client_keys)
       end
 
@@ -85,10 +86,6 @@ module Api
         return if params[:group_id].nil?
 
         Tenants::Membership.create!(member: tenants_user, group_id: client_params[:group_id])
-      end
-
-      def client
-        @client ||= Tenants::User.find(params[:id])
       end
     end
   end

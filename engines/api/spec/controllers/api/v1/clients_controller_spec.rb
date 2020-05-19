@@ -38,13 +38,14 @@ module Api
 
     describe 'Get #show' do
       let(:user) { FactoryBot.create(:legacy_user) }
-      let(:request_object) { get :show, params: { id: user.id }, as: :json }
+      let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
+      let(:request_object) { get :show, params: { id: tenants_user.id }, as: :json }
 
       before do
         FactoryBot.create(:profiles_profile,
                           first_name: 'Max',
                           last_name: 'Muster',
-                          user_id: Tenants::User.find_by(legacy_id: user.id).id)
+                          user_id: tenants_user.id)
       end
 
       it 'returns the requested client correctly' do

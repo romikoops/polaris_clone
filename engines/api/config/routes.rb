@@ -56,6 +56,4 @@ Api::Engine.routes.draw do
       end
     end
   end
-
-  mount ApiDocs::Engine, at: '/'
 end

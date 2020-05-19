@@ -5,9 +5,11 @@ FactoryBot.define do
     transient do
       activate { true }
     end
-
     sequence(:email) { |n| "test#{n}@itsmycargo.test" }
+
+    association :tenant, factory: :tenants_tenant
     association :legacy, factory: :legacy_user
+
     after(:create) do |user, evaluator|
       user.activate! if evaluator.activate
     end

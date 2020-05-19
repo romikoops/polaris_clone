@@ -21,7 +21,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'doorkeeper', '~> 5.0.2'
   s.add_dependency 'sorcery', '~> 0.13.0'
 
-  s.add_development_dependency 'rspec_api_documentation'
-
   Gemhelper.common(s)
 end

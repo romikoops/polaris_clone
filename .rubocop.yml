@@ -48,3 +48,7 @@ Metrics/ParameterLists:
   Max: 5
   Exclude:
     - qa/features/**/*_steps.rb
+
+RSpec/EmptyExampleGroup:
+  Exclude:
+    - '**/spec/api/*_spec.rb'

@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   mount Easymon::Engine, at: '/up'
   mount Api::Engine, at: '/'
   mount Admiralty::Engine, at: '/admiralty'
+  mount Rswag::Ui::Engine => '/docs'
+  mount Rswag::Api::Engine => '/docs'
 
   mount_devise_token_auth_for 'User', at: 'tenants/:tenant_id/auth', controllers: {
     sessions: 'users_devise_token_auth/sessions',
@@ -240,6 +242,8 @@ end
 #
 #                                                 Prefix Verb   URI Pattern                                                                              Controller#Action
 #                                         google_sign_in        /google_sign_in                                                                          GoogleSignIn::Engine
+#                                               rswag_ui        /docs                                                                                Rswag::Ui::Engine
+#                                              rswag_api        /docs                                                                                Rswag::Api::Engine
 #                                                easymon        /up                                                                                      Easymon::Engine
 #                                                    api        /                                                                                        Api::Engine
 #                                              admiralty        /admiralty                                                                               Admiralty::Engine
@@ -501,6 +505,12 @@ end
 # authorization POST /authorization(.:format) google_sign_in/authorizations#create
 #      callback GET  /callback(.:format)      google_sign_in/callbacks#show
 #
+# Routes for Rswag::Ui::Engine:
+#
+#
+# Routes for Rswag::Api::Engine:
+#
+#
 # Routes for Easymon::Engine:
 #        GET  /(.:format)       easymon/checks#index
 #   root GET  /                 easymon/checks#index
@@ -512,9 +522,6 @@ end
 # oauth_introspect POST   /oauth/introspect(.:format) api_auth/tokens#introspect
 # oauth_token_info GET    /oauth/token/info(.:format) api_auth/token_info#show
 #    oauth_signout DELETE /oauth/signout(.:format)    api_auth/auth#destroy
-#
-# Routes for ApiDocs::Engine:
-# raddocs_app      /docs       Raddocs::App
 #
 # Routes for Api::Engine:
 #                       api_auth        /                                                         ApiAuth::Engine
@@ -554,7 +561,6 @@ end
 # enabled_v1_itinerary_schedules GET    /v1/itineraries/:itinerary_id/schedules/enabled(.:format) api/v1/schedules#enabled
 #         v1_itinerary_schedules GET    /v1/itineraries/:itinerary_id/schedules(.:format)         api/v1/schedules#index
 #                 v1_itineraries GET    /v1/itineraries(.:format)                                 api/v1/itineraries#index
-#                       api_docs        /                                                         ApiDocs::Engine
 #
 # Routes for AdmiraltyAuth::Engine:
 #        login GET    /login(.:format)        admiralty_auth/logins#new

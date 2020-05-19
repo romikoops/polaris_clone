@@ -156,6 +156,10 @@ gem 'monetize'
 # Use mimemagic
 gem 'mimemagic'
 
+# OpenAPI
+gem 'rswag-api'
+gem 'rswag-ui'
+
 group :development, :test do
   gem 'annotate', '~> 3.0'
   gem 'dotenv-rails', require: 'dotenv/rails-now'
@@ -165,6 +169,7 @@ group :development, :test do
   gem 'rspec', '~> 3.9'
   gem 'rspec-rails'
   gem 'rspec_junit_formatter'
+  gem 'rswag-specs'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

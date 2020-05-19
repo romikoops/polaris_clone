@@ -1,0 +1,110 @@
+# frozen_string_literal: true
+
+require "swagger_helper"
+
+RSpec.describe "Tenders" do
+  let(:tenant) { FactoryBot.create(:legacy_tenant) }
+  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}, with_profile: true) }
+  let(:tenant_user) { Tenants::User.find_by(legacy_id: user.id) }
+  let(:origin_hub) { itinerary.hubs.find_by(name: "Gothenburg Port") }
+  let(:destination_hub) { itinerary.hubs.find_by(name: "Shanghai Port") }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
+  let(:quotation) { FactoryBot.create(:quotations_quotation, tenant: tenants_tenant, user: user) }
+  let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, tenant: tenant, user: user) }
+  let(:charge_category) { shipment.charge_breakdowns.first.charges.first.children_charge_category }
+  let(:tender) do
+    FactoryBot.create(:quotations_tender,
+      quotation: quotation,
+      origin_hub: origin_hub,
+      destination_hub: destination_hub,
+      tenant_vehicle: tenant_vehicle)
+  end
+
+  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+  let(:Authorization) { "Bearer #{access_token.token}" }
+
+  before do
+    shipment.charge_breakdowns.update(tender_id: tender.id)
+  end
+
+  path "/v1/tenders/{id}" do
+    put "Update Tenders" do
+      tags "Quote"
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :id, in: :path, type: :string, schema: {type: :string}
+      parameter name: :tenant_id, in: :query, type: :string, schema: {type: :string}
+      parameter name: :params, in: :body, schema: {
+        type: :object,
+        properties: {
+          line_item_id: {type: :string},
+          charge_category_id: {type: :string},
+          value: {type: :string},
+          section: {type: :string}
+        }
+      }
+
+      let(:id) { tender.id }
+      let(:tenant_id) { tenants_tenant.id }
+      let(:params) do
+        {
+          charge_category_id: charge_category.id,
+          value: 100,
+          section: charge_category.code,
+          line_item_id: nil
+        }
+      end
+
+      response "200", "successful operation" do
+        schema type: :object,
+               properties: {
+                 data: {
+                   type: :object,
+                   properties: {
+                     id: {type: :string},
+                     type: {type: :string},
+                     attributes: {
+                       type: :object,
+                       properties: {
+                         charges: {
+                           type: :array,
+                           items: {
+                             type: :object,
+                             properties: {
+                               chargeCategoryId: {type: :integer, nullable: true},
+                               description: {type: :string, nullable: true},
+                               id: {type: :string},
+                               level: {type: :integer},
+                               lineItemId: {type: :integer, nullable: true},
+                               order: {type: :integer},
+                               originalValue: {"$ref" => "#/components/schemas/money"},
+                               section: {type: :string, nullable: true},
+                               tenderId: {type: :string},
+                               value: {"$ref" => "#/components/schemas/money"}
+                             },
+                             required: %w[chargeCategoryId description id level lineItemId order originalValue section
+                               tenderId value]
+                           }
+                         },
+                         route: {type: :string},
+                         vessel: {type: :string, nullable: true},
+                         id: {type: :string},
+                         transitTime: {type: :integer}
+                       },
+                       required: %w[]
+                     }
+                   },
+                   required: %w[id type attributes]
+                 }
+               },
+               required: ["data"]
+
+        run_test!
+      end
+    end
+  end
+end

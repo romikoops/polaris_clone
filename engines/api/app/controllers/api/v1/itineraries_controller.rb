@@ -56,7 +56,7 @@ module Api
                                               stops: { index: default_stop_index })
 
         hub_id = ports_params[:location_id]
-        itineraries = itineraries.where(stops: { hub_id: hub_id }) if hub_id
+        itineraries = itineraries.where(stops: { hub_id: hub_id }) if hub_id.present?
 
         itineraries
       end
