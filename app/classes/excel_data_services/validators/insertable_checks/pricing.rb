@@ -43,12 +43,14 @@ module ExcelDataServices
           check_customer_email(row, user)
 
           origin_hub_with_info = find_hub_by_name_or_locode_with_info(
-            raw_name: row.origin,
+            name: row.origin,
+            country: row.origin_country,
             mot: row.mot,
             locode: row.origin_locode
           )
           destination_hub_with_info = find_hub_by_name_or_locode_with_info(
-            raw_name: row.destination,
+            name: row.destination,
+            country: row.destination_country,
             mot: row.mot,
             locode: row.destination_locode
           )

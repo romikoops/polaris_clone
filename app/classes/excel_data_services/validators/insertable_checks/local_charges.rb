@@ -10,7 +10,8 @@ module ExcelDataServices
           check_correct_individual_effective_period(row)
 
           origin_hub_with_info = find_hub_by_name_or_locode_with_info(
-            raw_name: row.hub,
+            name: row.hub,
+            country: row.hub_country,
             mot: row.mot,
             locode: row.hub_locode
           )
@@ -22,7 +23,8 @@ module ExcelDataServices
 
           if row.counterpart_hub || row.counterpart_hub_locode
             counterpart_hub_with_info = find_hub_by_name_or_locode_with_info(
-              raw_name: row.counterpart_hub,
+              name: row.counterpart_hub,
+              country: row.counterpart_country,
               mot: row.mot,
               locode: row.counterpart_hub_locode
             )

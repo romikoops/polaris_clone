@@ -7,6 +7,10 @@ module ExcelDataServices
         @destination ||= data[:destination]
       end
 
+      def destination_country
+        @destination_country ||= data[:destination_country]
+      end
+
       def destination_locode
         @destination_locode ||= data[:destination_locode]
       end
@@ -33,6 +37,10 @@ module ExcelDataServices
 
       def origin
         @origin ||= data[:origin]
+      end
+
+      def origin_country
+        @origin_country ||= data[:origin_country]
       end
 
       def origin_locode

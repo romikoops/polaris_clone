@@ -3,6 +3,10 @@
 module ExcelDataServices
   module Rows
     class LocalCharges < ExcelDataServices::Rows::Base
+      def counterpart_country
+        @counterpart_country ||= data[:counterpart_country]
+      end
+
       def counterpart_hub
         @counterpart_hub ||= data[:counterpart_hub]
       end
@@ -21,6 +25,10 @@ module ExcelDataServices
 
       def hub
         @hub ||= data[:hub]
+      end
+
+      def hub_country
+        @hub_country ||= data[:hub_country]
       end
 
       def hub_locode
