@@ -18,6 +18,9 @@ RSpec.describe Analytics::Base, type: :service do
   let(:clients) do
     FactoryBot.create_list(:legacy_user, 2, tenant: legacy_tenant, role: shipper_role, with_profile: true)
   end
+
+  let(:blacklisted_client) { FactoryBot.create(:legacy_user, tenant: legacy_tenant, role: shipper_role, with_profile: true) }
+
   let!(:requests) do
     itineraries.product(clients).map do |itinerary, client|
       FactoryBot.create(:legacy_shipment,
@@ -28,6 +31,20 @@ RSpec.describe Analytics::Base, type: :service do
                         with_tenders: true)
     end
   end
+
+  let!(:blacklisted_request) do
+    itineraries.product([blacklisted_client]).map do |itinerary, client|
+      FactoryBot.create(:legacy_shipment,
+                        itinerary: itinerary,
+                        user: client,
+                        tenant: legacy_tenant,
+                        with_breakdown: true,
+                        with_tenders: true)
+    end
+  end
+
+  let!(:tenants_scope) { Tenants::Scope.create(target: tenant, content: { blacklisted_emails: [blacklisted_client.email] }) }
+
   let(:start_date) { 1.month.ago }
   let(:end_date) { Time.zone.now }
 
@@ -70,7 +87,7 @@ RSpec.describe Analytics::Base, type: :service do
   end
 
   context 'when a quote shop' do
-    before { FactoryBot.create(:tenants_scope, target: tenant, content: { closed_quotation_tool: true }) }
+    before { tenants_scope.update(content: { closed_quotation_tool: true, blacklisted_emails: [blacklisted_client.email] }) }
 
     describe 'tender_or_request' do
       it 'returns a collection of tenders' do

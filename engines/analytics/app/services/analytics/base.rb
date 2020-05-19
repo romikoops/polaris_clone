@@ -11,11 +11,16 @@ module Analytics
     end
 
     def quotations
-      Quotations::Quotation.where(tenant: tenant).where(created_at: start_date..end_date)
+      Quotations::Quotation.where(tenant: tenant)
+        .where(created_at: start_date..end_date)
+        .where(tenants_user: clients)
     end
 
     def shipment_requests
-      Shipments::ShipmentRequest.where(tenant: tenant).where(created_at: start_date..end_date)
+      Shipments::ShipmentRequest
+        .where(tenant: tenant)
+        .where(created_at: start_date..end_date)
+        .where(user: clients)
     end
 
     def tenders
@@ -47,7 +52,9 @@ module Analytics
     end
 
     def legacy_clients
-      @legacy_clients ||= Legacy::User.where(tenant_id: tenant.legacy_id).where.not(role: admin_roles)
+      @legacy_clients ||= Legacy::User.where(tenant_id: tenant.legacy_id)
+        .where.not(role: admin_roles)
+        .where.not(email: blacklisted_emails)
     end
 
     def clients
@@ -60,6 +67,10 @@ module Analytics
 
     def admin_roles
       Legacy::Role.where(name: %w[admin sub_admin super_admin])
+    end
+
+    def blacklisted_emails
+      scope['blacklisted_emails']
     end
 
     def quotation_tool?

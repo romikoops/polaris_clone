@@ -8,6 +8,7 @@ RSpec.describe Analytics::Dashboard::AverageBookingValue, type: :service do
   let(:admin_role) { FactoryBot.create(:legacy_role, name: 'admin') }
   let(:shipper_role) { FactoryBot.create(:legacy_role, name: 'shipper') }
   let(:legacy_user) { FactoryBot.create(:legacy_user, tenant: legacy_tenant, role: admin_role, with_profile: true) }
+  let(:legacy_client) { FactoryBot.create(:legacy_user, tenant: legacy_tenant, role: shipper_role, with_profile: true) }
   let(:user) { Tenants::User.find_by(legacy_id: legacy_user.id) }
   let(:start_date) { Time.zone.now - 1.month }
   let(:end_date) { Time.zone.now }
@@ -17,6 +18,7 @@ RSpec.describe Analytics::Dashboard::AverageBookingValue, type: :service do
   before do
     FactoryBot.create_list(:legacy_shipment,
                            2,
+                           user: legacy_client,
                            tenant: legacy_tenant,
                            with_breakdown: true,
                            with_tenders: true)

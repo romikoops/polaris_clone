@@ -28,9 +28,10 @@ RSpec.describe Analytics::Dashboard::MostActiveRoutes, type: :service do
   let(:result) { described_class.data(user: user, start_date: start_date, end_date: end_date) }
 
   before do
-    itineraries.map do |itinerary|
+    itineraries.product(clients).map do |itinerary, client|
       FactoryBot.create(:legacy_shipment,
                         itinerary: itinerary,
+                        user: client,
                         tenant: legacy_tenant,
                         with_breakdown: true,
                         with_tenders: true)
@@ -42,7 +43,7 @@ RSpec.describe Analytics::Dashboard::MostActiveRoutes, type: :service do
 
     describe '.data' do
       it 'returns an array with the itinerary count for the time period' do
-        expect(result).to eq([{ count: 2, label: 'Gothenburg - Shanghai' }])
+        expect(result).to eq([{ count: 4, label: 'Gothenburg - Shanghai' }])
       end
     end
   end
@@ -60,7 +61,7 @@ RSpec.describe Analytics::Dashboard::MostActiveRoutes, type: :service do
 
     describe '.data' do
       it 'returns an array with the itinerary count for the time period' do
-        expect(result).to eq([{ count: 2, label: 'Gothenburg - Shanghai' }])
+        expect(result).to eq([{ count: 4, label: 'Gothenburg - Shanghai' }])
       end
     end
   end
