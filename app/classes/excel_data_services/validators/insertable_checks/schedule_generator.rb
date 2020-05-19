@@ -13,7 +13,7 @@ module ExcelDataServices
         def check_carrier_exists(row)
           return if row.carrier.nil?
 
-          if Carrier.find_by(name: row.carrier).blank? # rubocop:disable Style/GuardClause
+          if Legacy::Carrier.find_by(code: row.carrier).blank? # rubocop:disable Style/GuardClause
             add_to_errors(
               type: :error,
               row_nr: row.nr,
