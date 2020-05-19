@@ -22,7 +22,9 @@ module ExcelDataServices
           row_data[:internal] ||= false
         end
 
-        grouped_data = group_by_connected_ranges(restructured_data)
+        restructured_data = trim_based_on_effective_date(restructured_data)
+
+        grouped_data = group_by_params(restructured_data, ROWS_BY_CONNECTED_RANGES_GROUPING_KEYS)
 
         restructured_data = grouped_data.map do |group|
           result_row_data = group.first
@@ -56,8 +58,20 @@ module ExcelDataServices
 
       private
 
-      def group_by_connected_ranges(rows_data)
-        rows_data.group_by { |row_data| row_data.slice(*ROWS_BY_CONNECTED_RANGES_GROUPING_KEYS) }.values
+      def trim_based_on_effective_date(restructured_data)
+        grouped = group_by_params(
+          restructured_data, ROWS_BY_CONNECTED_RANGES_GROUPING_KEYS - %i[effective_date expiration_date]
+        )
+
+        grouped.each do |group|
+          group.sort_by { |row| row[:effective_date] }.each_cons(2) do |this_row, next_row|
+            next if this_row[:expiration_date] < next_row[:effective_date] || this_row[:range_min].present?
+
+            this_row[:expiration_date] = next_row[:effective_date] - 1.day
+          end
+        end
+
+        grouped.flatten
       end
 
       def range_values?(row_data)

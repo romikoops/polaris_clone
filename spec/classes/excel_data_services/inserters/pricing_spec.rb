@@ -4,27 +4,29 @@ require 'rails_helper'
 
 RSpec.shared_examples 'Pricing .insert' do
   it 'returns correct stats and creates correct data' do
-    stats = described_class.insert(options)
-    itinerary = Legacy::Itinerary.find_by(name: 'Gothenburg - Shanghai', mode_of_transport: 'ocean', transshipment: nil)
-    expect(itinerary.slice(:name, :mode_of_transport).values).to eq(['Gothenburg - Shanghai', 'ocean'])
-    expect(itinerary.map_data[0][:origin]).to eq itinerary.stops[0].hub.lng_lat_array
-    expect(itinerary.map_data[0][:destination]).to eq itinerary.stops[1].hub.lng_lat_array
-    expect(Legacy::Stop.pluck(:itinerary_id).uniq.first).to eq(itinerary.id)
-    pricings = ::Pricings::Pricing.all
-    expect(stats).to eq(expected_stats)
-    dates = pricings.pluck(:effective_date, :expiration_date)
-    expect(dates).to match_array(expected_dates)
-    expect(Legacy::TransitTime.count).to eq(2)
-    expect(Legacy::ChargeCategory.where(code: %w[transit_time transshipment]).count).to be_zero
-    pricing_details = ::Pricings::Fee.where(pricing: pricings)
-    pricing_details_values = pricing_details.joins(:rate_basis).pluck(
-      :rate,
-      'pricings_rate_bases.external_code',
-      :min,
-      :range,
-      :currency_name
-    )
-    expect(pricing_details_values).to match_array(expected_pricing_details_values)
+    aggregate_failures do
+      stats = described_class.insert(options)
+      itinerary = Legacy::Itinerary.find_by(name: 'Gothenburg - Shanghai', mode_of_transport: 'ocean', transshipment: nil)
+      expect(itinerary.slice(:name, :mode_of_transport).values).to eq(['Gothenburg - Shanghai', 'ocean'])
+      expect(itinerary.map_data[0][:origin]).to eq itinerary.stops[0].hub.lng_lat_array
+      expect(itinerary.map_data[0][:destination]).to eq itinerary.stops[1].hub.lng_lat_array
+      expect(Legacy::Stop.pluck(:itinerary_id).first).to eq(itinerary.id)
+      pricings = ::Pricings::Pricing.all
+      expect(stats).to eq(expected_stats)
+      dates = pricings.pluck(:effective_date, :expiration_date)
+      expect(dates).to match_array(expected_dates)
+      expect(Legacy::TransitTime.count).to eq(2)
+      expect(Legacy::ChargeCategory.where(code: %w[transit_time transshipment]).count).to be_zero
+      pricing_details = ::Pricings::Fee.where(pricing: pricings)
+      pricing_details_values = pricing_details.joins(:rate_basis).pluck(
+        :rate,
+        'pricings_rate_bases.external_code',
+        :min,
+        :range,
+        :currency_name
+      )
+      expect(pricing_details_values).to match_array(expected_pricing_details_values)
+    end
   end
 end
 
@@ -73,27 +75,27 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       let!(:expected_dates) do
         [
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 11, 15, 23, 59, 59)],
-          [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 16), DateTime.new(2018, 11, 14, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2018, 11, 14, 23, 59, 59)],
           [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 30, 23, 59, 59)],
+          [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)],
           [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
-          [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)]
+          [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 14, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)]
         ]
       end
       let!(:expected_pricing_details_values) do
@@ -134,7 +136,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 3 },
+            "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 2 },
             "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
         end
@@ -147,28 +149,28 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       let!(:expected_dates) do
         [
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 11, 15, 23, 59, 59)],
-          [DateTime.new(2018, 3, 1), DateTime.new(2018, 3, 14, 23, 59, 59)],
-          [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 16), DateTime.new(2018, 11, 14, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2018, 11, 14, 23, 59, 59)],
           [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 30, 23, 59, 59)],
+          [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)],
           [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
-          [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)]
+          [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 14, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 1), DateTime.new(2018, 3, 14, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)]
         ]
       end
       let!(:expected_pricing_details_values) do
@@ -225,7 +227,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 4 },
+            "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 3 },
             "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
         end
@@ -237,29 +239,29 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
     context 'with overlap case: no_overlap' do
       let!(:expected_dates) do
         [
+          [DateTime.new(2019, 6, 20), DateTime.new(2019, 7, 20, 23, 59, 59)],
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 11, 15, 23, 59, 59)],
-          [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 16), DateTime.new(2018, 11, 14, 23, 59, 59)],
           [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 30, 23, 59, 59)],
-          [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2018, 11, 14, 23, 59, 59)],
           [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)],
-          [DateTime.new(2019, 6, 20), DateTime.new(2019, 7, 20, 23, 59, 59)]
+          [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
+          [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 14, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)]
         ]
       end
       let!(:expected_pricing_details_values) do
@@ -316,7 +318,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 3 },
+            "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 2 },
             "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
         end
@@ -329,29 +331,29 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       let!(:expected_dates) do
         [
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 11, 15, 23, 59, 59)],
-          [DateTime.new(2017, 6, 1), DateTime.new(2018, 3, 10, 23, 59, 59)],
-          [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 16), DateTime.new(2018, 11, 14, 23, 59, 59)],
           [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 30, 23, 59, 59)],
-          [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2018, 11, 14, 23, 59, 59)],
           [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)],
-          [DateTime.new(2019, 3, 29), DateTime.new(2019, 7, 20, 23, 59, 59)]
+          [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
+          [DateTime.new(2019, 3, 29), DateTime.new(2019, 7, 20, 23, 59, 59)],
+          [DateTime.new(2017, 6, 1), DateTime.new(2018, 3, 10, 23, 59, 59)],
+          [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 14, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)]
         ]
       end
       let!(:expected_pricing_details_values) do
@@ -409,7 +411,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 23, number_deleted: 0, number_updated: 8 },
+            "pricings/pricings": { number_created: 23, number_deleted: 0, number_updated: 7 },
             "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
         end
@@ -422,27 +424,27 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       let!(:expected_dates) do
         [
           [DateTime.new(2018, 3, 15), DateTime.new(2019, 11, 15, 23, 59, 59)],
-          [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 15, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
-          [DateTime.new(2018, 3, 16), DateTime.new(2018, 11, 14, 23, 59, 59)],
           [DateTime.new(2018, 11, 15), DateTime.new(2018, 11, 30, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2018, 11, 14, 23, 59, 59)],
+          [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)],
           [DateTime.new(2018, 12, 1), DateTime.new(2019, 3, 16, 23, 59, 59)],
-          [DateTime.new(2019, 3, 17), DateTime.new(2019, 3, 28, 23, 59, 59)]
+          [DateTime.new(2018, 3, 11), DateTime.new(2018, 3, 14, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)],
+          [DateTime.new(2018, 3, 15), DateTime.new(2019, 3, 17, 23, 59, 59)]
         ]
       end
       let!(:expected_pricing_details_values) do
@@ -498,7 +500,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         let!(:expected_stats) do
           { "legacy/stops": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
-            "pricings/pricings": { number_created: 22, number_deleted: 1, number_updated: 6 },
+            "pricings/pricings": { number_created: 22, number_deleted: 1, number_updated: 5 },
             "pricings/fees": { number_created: 29, number_deleted: 1, number_updated: 0 },
             errors: [] }
         end
