@@ -130,7 +130,9 @@ module Pdf
     end
 
     def extract_name(section_key:, name:, mot:)
-      if section_key == 'cargo' && @scope['consolidated_cargo']
+      if section_key == 'cargo' && @scope['consolidated_cargo'] && mot == 'ocean'
+        'Ocean Freight'
+      elsif section_key == 'cargo' && @scope['consolidated_cargo']
         'Consolidated Freight Rate'
       elsif section_key == 'cargo' && !@scope['fine_fee_detail']
         "#{mot&.capitalize} Freight Rate"

@@ -89,9 +89,31 @@ RSpec.describe Api::V1::LineItemDecorator do
         { fee_detail: 'key_and_name', consolidated_cargo: true }.with_indifferent_access
       end
 
+      let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, mode_of_transport: 'air') }
+      let(:tender) { FactoryBot.create(:quotations_tender, tenant_vehicle: tenant_vehicle) }
+      let(:air_line_item) { FactoryBot.create(:quotations_line_item, charge_category: charge_category, tender: tender) }
+      let(:decorated_air_line_item) { described_class.new(air_line_item, context: { scope: scope }) }
+
       it 'decorates the line item with the correct name' do
         aggregate_failures do
-          expect(decorated_line_item.description).to eq('BAS - Consolidated Freight Rate')
+          expect(decorated_air_line_item.description).to eq('BAS - Consolidated Freight Rate')
+        end
+      end
+    end
+
+    context 'with fee_detail = key and name and consolidated cargo scope and ocean mot' do
+      let(:scope) do
+        { fee_detail: 'key_and_name', consolidated_cargo: true }.with_indifferent_access
+      end
+
+      let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle) }
+      let(:tender) { FactoryBot.create(:quotations_tender, tenant_vehicle: tenant_vehicle) }
+      let(:ocean_line_item) { FactoryBot.create(:quotations_line_item, charge_category: charge_category, tender: tender) }
+      let(:decorated_ocean_line_item) { described_class.new(line_item, context: { scope: scope }) }
+
+      it 'decorates the line item with the correct name' do
+        aggregate_failures do
+          expect(decorated_ocean_line_item.description).to eq('BAS - Ocean Freight')
         end
       end
     end

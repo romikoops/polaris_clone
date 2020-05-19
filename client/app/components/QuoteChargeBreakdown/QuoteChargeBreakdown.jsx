@@ -135,20 +135,28 @@ class QuoteChargeBreakdown extends Component {
     if (get(scope, ['quote_card', 'sub_totals', key], true) && has(quote, [key, 'total', 'value'])) {
       return `${formattedPriceValue(get(quote, [key, 'total', 'value']))} ${
         get(quote, [key, 'total', 'currency'])
-      }`
+        }`
     }
 
     return ''
   }
 
   dynamicSubKey (key, price, i) {
-    const { t, scope } = this.props
+    const { t, scope, mot } = this.props
     if (
       key === 'cargo' &&
       !get(scope, ['consolidation', 'cargo', 'backend']) &&
       !scope.fine_fee_detail
     ) {
       return t('cargo:unitFreightRate', { unitNo: i + 1 })
+    }
+    if (
+      key === 'cargo' &&
+      get(scope, ['consolidation', 'cargo', 'backend']) &&
+      !get(scope, ['quote_card', 'consolidated_fees'], false) &&
+      mot === 'ocean'
+    ) {
+      return t('cargo:oceanFreight')
     }
     if (
       key === 'cargo' &&
@@ -239,7 +247,7 @@ class QuoteChargeBreakdown extends Component {
   }
 
   generateUnitContent (key) {
-    const { quote, scope } = this.props
+    const { quote, scope, t } = this.props
 
     if (quote[`${key}`] == null) {
       return ''
@@ -289,10 +297,11 @@ class QuoteChargeBreakdown extends Component {
         showSubTotal
       )
 
-      const description = cargo
-        ? CONTAINER_DESCRIPTIONS[cargo.size_class] ||
-        get(cargo, ['cargo_item_type', 'description'])
-        : capitalize(unitArray[0])
+      const cargoDescription = cargo && cargo.quantity
+        ? CONTAINER_DESCRIPTIONS[cargo.size_class] || get(cargo, ['cargo_item_type', 'description'])
+        : t('cargo:consolidatedFees')
+
+      const description = cargo ? cargoDescription : capitalize(unitArray[0])
 
       return (
         <div
@@ -302,7 +311,7 @@ class QuoteChargeBreakdown extends Component {
           <div
             className={`flex-100 layout-row layout-align-start-center ${styles.cargo_title}`}
           >
-            {cargo ? `${cargo.quantity} x ${description}` : `${description}`}
+            {cargo && cargo.quantity ? `${cargo.quantity} x ${description}` : `${description}`}
           </div>
           {sections}
         </div>
@@ -375,14 +384,14 @@ class QuoteChargeBreakdown extends Component {
                 <div className="flex-45 layout-row layout-align-start-center">
                   {
                     this.pricingBreakdownExists(cargo, price[0]) &&
-                  (
-                    <div
-                      className={`flex-none layout-row layout-align-center-center pointy ${styles.view_breakdown}`}
-                      onClick={() => this.showPricingBreakdown(key, price, cargo)}
-                    >
-                      <i className="fa fa-info-circle" />
-                    </div>
-                  )
+                    (
+                      <div
+                        className={`flex-none layout-row layout-align-center-center pointy ${styles.view_breakdown}`}
+                        onClick={() => this.showPricingBreakdown(key, price, cargo)}
+                      >
+                        <i className="fa fa-info-circle" />
+                      </div>
+                    )
                   }
                   <span className={this.pricingBreakdownExists(cargo, price[0]) && styles.padding_adjust}>
                     {this.dynamicSubKey(key, price, i)}

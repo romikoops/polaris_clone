@@ -48,7 +48,9 @@ module Api
       end
 
       def adjusted_name
-        if section == 'cargo_section' && scope['consolidated_cargo']
+        if section == 'cargo_section' && scope['consolidated_cargo'] && mode_of_transport == 'ocean'
+          'Ocean Freight'
+        elsif section == 'cargo_section' && scope['consolidated_cargo']
           'Consolidated Freight Rate'
         elsif section == 'cargo_section' && !scope['fine_fee_detail']
           "#{mode_of_transport&.capitalize} Freight Rate"

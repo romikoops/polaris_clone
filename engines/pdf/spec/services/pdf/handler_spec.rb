@@ -80,9 +80,15 @@ RSpec.describe Pdf::Handler do
         expect(result).to eq('Trucking Rate')
       end
 
-      it 'returns Consolidated Freight Rate as the name' do
+      it 'returns Ocean Freight as the name' do
         scope.update(content: scope.content.merge(consolidated_cargo: true))
         result = klass.extract_name(section_key: 'cargo', name: 'Basic Ocean Freight', mot: 'ocean')
+        expect(result).to eq('Ocean Freight')
+      end
+
+      it 'returns Consolidated Freight Rate as the name' do
+        scope.update(content: scope.content.merge(consolidated_cargo: true))
+        result = klass.extract_name(section_key: 'cargo', name: 'Basic Trucking Freight', mot: 'depot')
         expect(result).to eq('Consolidated Freight Rate')
       end
 
