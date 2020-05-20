@@ -206,6 +206,24 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
               }
             },
             required: %w[id type attributes]
+          },
+          pagination: {
+            type: :object,
+            properties: {
+              page: {type: :number},
+              perPage: {type: :number},
+              totalPages: {type: :number}
+            },
+            required: %w[page perPage totalPages]
+          },
+          paginationLinks: {
+            type: :object,
+            properties: {
+              first: {type: :string, nullable: true},
+              prev: {type: :string, nullable: true},
+              next: {type: :string, nullable: true},
+              last: {type: :string, nullable: true}
+            }
           }
         },
         securitySchemes: {

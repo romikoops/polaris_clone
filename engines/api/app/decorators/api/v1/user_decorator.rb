@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class UserDecorator < Draper::Decorator
+    class UserDecorator < ApplicationDecorator
       decorates 'Tenants::User'
 
       delegate_all

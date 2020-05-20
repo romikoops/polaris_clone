@@ -10,6 +10,7 @@ require 'wheelhouse'
 
 require 'draper'
 require 'fast_jsonapi'
+require 'kaminari'
 
 module Api
   class Engine < ::Rails::Engine
@@ -45,6 +46,12 @@ module Api
     if defined?(FactoryBot)
       initializer 'model_core.factories', after: 'factory_bot.set_factory_paths' do
         FactoryBot.definition_file_paths << Pathname.new(File.expand_path('../../spec/factories', __dir__))
+      end
+    end
+
+    initializer :kaminari do
+      Kaminari.configure do |config|
+        config.page_method_name = :paginate_api
       end
     end
   end

@@ -27,8 +27,12 @@ RSpec.describe "Clients" do
       produces "application/json"
 
       parameter name: :q, in: :query, type: :string, schema: {type: :string}, description: "Search query"
+      parameter name: :page, in: :query, type: :number, schema: {type: :number}, description: "Page number"
+      parameter name: :per_page, in: :query, type: :number, schema: {type: :number}, description: "Results per page"
 
       let(:q) { "" }
+      let(:page) { 1 }
+      let(:per_page) { 1 }
 
       response "200", "successful operation" do
         schema type: :object,
@@ -36,7 +40,11 @@ RSpec.describe "Clients" do
                  data: {
                    type: :array,
                    items: {"$ref" => "#/components/schemas/user"}
-                 }
+                 },
+                 meta: {
+                   pagination: {"$ref" => "#/components/schemas/pagination"}
+                 },
+                 links: {"$ref" => "#/components/schemas/paginationLinks"}
                },
                required: ["data"]
 

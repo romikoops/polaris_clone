@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'draper', '~> 4.0'
   s.add_dependency 'fast_jsonapi'
+  s.add_dependency 'kaminari'
 
   Gemhelper.common(s)
 

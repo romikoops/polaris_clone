@@ -5,6 +5,7 @@ require_dependency 'api/application_controller'
 module Api
   class ApiController < ApplicationController
     include ErrorHandler
+    include Pagination
 
     rescue_from ActiveRecord::RecordNotFound, ActionController::ParameterMissing, with: :error_handler
 

@@ -10,6 +10,10 @@ module Requests
       response_json.fetch("data")
     end
 
+    def response_meta
+      response_json.fetch('meta')
+    end
+
     def response_error
       response_json.fetch("error")
     end
