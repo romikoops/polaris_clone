@@ -257,7 +257,7 @@ class UserShipmentContent extends Component {
               <div className="layout-row flex-100 flex-gt-sm-20 layout-align-center-center padd_20">
                 <div className={`layout-column flex layout-align-center-center ${styles.font_adjustaments}`}>
                   <div className="layout-align-center-center layout-row" style={gradientStyle}>
-                    {switchIcon(shipment)}
+                    {switchIcon(shipment.mode_of_transport)}
                   </div>
                   <p>{t('shipment:estimatedTimeDelivery')}</p>
                   <h5>
