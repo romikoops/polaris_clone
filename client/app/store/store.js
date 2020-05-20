@@ -3,7 +3,6 @@ import { applyMiddleware, createStore, compose } from 'redux'
 import { routerMiddleware } from 'react-router-redux'
 import thunkMiddleware from 'redux-thunk'
 import throttle from 'lodash/throttle'
-import { createLogger } from 'redux-logger'
 import * as Sentry from '@sentry/browser'
 import beaconMiddleWare from '../helpers/beacon'
 import createSentryMiddleware from '../helpers/sentry-middleware'
@@ -12,11 +11,12 @@ import { saveState, loadState } from '../helpers'
 import rootReducer from '../reducers'
 import createActivityMiddleware from '../helpers/activity-middleware'
 
+export const history = createHistory()
+
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 /* eslint-enable */
 
-export const history = createHistory()
 let middleware = [
   createSentryMiddleware(Sentry),
   createActivityMiddleware(),
@@ -25,35 +25,26 @@ let middleware = [
   beaconMiddleWare
 ]
 
-if (process.env.NODE_ENV !== 'production') {
-  middleware = [...middleware, createLogger({ diff: false })]
-}
-
-export function configureStore () {
-  const store =
-  createStore(
-    rootReducer,
-    loadState(),
-    composeEnhancers(
-      applyMiddleware(...middleware)
-    )
+export const store = createStore(
+  rootReducer,
+  loadState(),
+  composeEnhancers(
+    applyMiddleware(...middleware)
   )
+)
 
-  store.subscribe(
-    throttle(() => {
-      const oldState = store.getState()
-      const bData = oldState.bookingData
-      saveState({
-        bookingData: bData,
-        bookingProcess: oldState.bookingProcess,
-        tenant: oldState.tenant,
-        admin: oldState.admin,
-        bookingSummary: oldState.bookingSummary,
-        clients: oldState.clients
-      })
-    }),
-    1000
-  )
-
-  return store
-}
+store.subscribe(
+  throttle(() => {
+    const oldState = store.getState()
+    const bData = oldState.bookingData
+    saveState({
+      bookingData: bData,
+      bookingProcess: oldState.bookingProcess,
+      tenant: oldState.tenant,
+      admin: oldState.admin,
+      bookingSummary: oldState.bookingSummary,
+      clients: oldState.clients
+    })
+  }),
+  1000
+)

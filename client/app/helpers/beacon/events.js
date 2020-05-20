@@ -1,5 +1,37 @@
 import { get } from 'lodash'
 
+const genericEvents = {
+  CONSENT_RECEIVED: (action, state) => {
+    if (get(state, 'authentication.user.uuid')) {
+      return [
+        { hitType: 'alias', userId: get(state, 'authentication.user.uuid') },
+        {
+          hitType: 'identify',
+          userId: get(state, 'authentication.user.uuid'),
+          traits: {
+            tenant_id: get(state, 'app.tenant.id'),
+            tenant: get(state, 'app.tenant.slug'),
+
+            email: get(state, 'authentication.user.email'),
+            firstName: get(state, 'authentication.user.first_name'),
+            lastName: get(state, 'authentication.user.last_name'),
+            role: get(state, 'authentication.user.role.name'),
+            companyName: get(state, 'authentication.user.company_name')
+          }
+        }
+      ]
+    } else {
+      return {
+        hitType: 'identify',
+        traits: {
+          tenant_id: get(state, 'app.tenant.id'),
+          tenant: get(state, 'app.tenant.slug')
+        }
+      }
+    }
+  }
+}
+
 const tenantEvents = {
   SET_TENANT_SUCCESS: (action, state) => ({
     hitType: 'identify',
@@ -12,7 +44,7 @@ const tenantEvents = {
 
 const userEvents = {
   SET_USER: (action, state) => {
-    if (get(state, 'authentication.user.uuid')) { return null }
+    if (!get(state, 'authentication.user.uuid')) { return null }
 
     return [
       { hitType: 'alias', userId: get(state, 'authentication.user.uuid') },
@@ -20,6 +52,9 @@ const userEvents = {
         hitType: 'identify',
         userId: get(state, 'authentication.user.uuid'),
         traits: {
+          tenant_id: get(state, 'app.tenant.id'),
+          tenant: get(state, 'app.tenant.slug'),
+
           email: get(state, 'authentication.user.email'),
           firstName: get(state, 'authentication.user.first_name'),
           lastName: get(state, 'authentication.user.last_name'),
@@ -82,6 +117,7 @@ const adminEvents = {
 }
 
 const eventsMap = {
+  ...genericEvents,
   ...adminEvents,
   ...navigationEvents,
   ...offerEvents,

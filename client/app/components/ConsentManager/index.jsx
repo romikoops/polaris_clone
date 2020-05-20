@@ -1,6 +1,5 @@
 import React from 'react'
 import { ConsentManager, openConsentManager } from '@itsmycargo/consent-manager'
-import inEU from '@segment/in-eu'
 import styles from './index.scss'
 
 export default function (props) {
@@ -46,13 +45,15 @@ export default function (props) {
   const cancelDialogTitle = 'Are you sure you want to cancel?'
   const cancelDialogContent = 'Your preferences have not been saved. By continuing to use our website, you՚re agreeing to our Website Data Collection Policy.'
 
+  const cookieDomain = process.env.NODE_ENV === "production" ? host : null
+
   return (
     <div className={styles.ConsentManager}>
       <ConsentManager
         writeKey={writeKey}
-        shouldRequireConsent={inEU}
+        defaultDestinationBehavior="imply"
         closeBehavior="accept"
-        cookieDomain={host}
+        cookieDomain={cookieDomain}
         bannerContent={bannerContent}
         bannerSubContent={bannerSubContent}
         preferencesDialogTitle={preferencesDialogTitle}

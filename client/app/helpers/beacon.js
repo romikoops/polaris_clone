@@ -1,28 +1,33 @@
 import { createMiddleware } from 'redux-beacon'
-import logger from '@redux-beacon/logger'
-import OfflineWeb from '@redux-beacon/offline-web'
 import { loadPreferences, onPreferencesSaved } from '@itsmycargo/consent-manager'
 import { has, get } from 'lodash'
-import Segment from './beacon/segment'
 import eventsMap from './beacon/events'
+import Segment from './beacon/segment'
+import { store } from '../store/store'
 
 // Track consent state
 let consent = has(loadPreferences(), 'customPreferences.functional')
 onPreferencesSaved((preferences) => {
   consent = has(preferences, 'customPreferences.functional')
+  if (consent) {
+    store.dispatch({ type: 'CONSENT_RECEIVED' })
+  }
 })
 
-// Enable buffering of events before consent
-const offlineStorage = OfflineWeb((state) => consent)
-
 const eventsHandler = (action) => (_action, _prevState, _nextState) => {
+  if (!consent) { return null }
   if (!eventsMap[action.type]) { return null }
-  if (get(_nextState, 'app.tenant.scope.exclude_analytics', false) === true) { return null }
-  if (get(_nextState, 'authentication.user.email', '').indexOf("itsmycargo.com") != -1) { return null }
+
+  if (get(_nextState, 'app.tenant.scope.exclude_analytics', false) === true) {
+    return null
+  }
+  if (get(_nextState, 'authentication.user.email', '').indexOf("itsmycargo") != -1) {
+    return null
+  }
 
   return eventsMap[action.type](_action, _nextState)
 }
 
-const beaconMiddleWare = createMiddleware(eventsHandler, Segment, { logger, offlineStorage })
+const beaconMiddleWare = createMiddleware(eventsHandler, Segment)
 
 export default beaconMiddleWare

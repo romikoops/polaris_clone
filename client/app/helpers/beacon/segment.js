@@ -1,15 +1,4 @@
-import { uniqBy, omit } from 'lodash'
-
 const Segment = (events) => {
-  const currentEvents = uniqBy(events, (value) => omit(events, ['timeSaved'])).filter((event) => {
-    if (event.timeSaved === undefined || event.hitType === 'identify') {
-      return true
-    }
-
-    return false
-  })
-
-  // Send events to Segment
   if (!window) { return }
   if (!window.analytics) {
     throw new Error(
@@ -19,10 +8,14 @@ const Segment = (events) => {
 
   const analytics = window.analytics
 
-  currentEvents.forEach((event) => {
+  events.forEach((event) => {
     switch (event.hitType) {
       case 'identify':
-        analytics.identify(event.userId, event.traits, event.options)
+        if (event.userId) {
+          analytics.identify(event.userId, event.traits, event.options)
+        } else {
+          analytics.identify(event.traits, event.options)
+        }
         break
       case 'group':
         analytics.group(event.groupId, event.traits, event.options)

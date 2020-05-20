@@ -4,7 +4,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import * as Sentry from '@sentry/browser'
 import { I18nextProvider } from 'react-i18next'
-import { configureStore, history } from './store/configureStore'
+import { store, history } from './store/store'
 import i18n from './i18next'
 import Root from './containers/Root'
 import getConfig from './constants/config.constants'
@@ -18,8 +18,6 @@ Sentry.init({
   release: window.keel.release || process.env.RELEASE,
   whitelistUrls: [window.location.origin]
 })
-
-const store = configureStore()
 
 render(
   <I18nextProvider i18n={i18n}>
