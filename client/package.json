@@ -123,7 +123,7 @@
     "style-it": "2.1.4",
     "style-loader": "0.23.1",
     "styled-components": "3.3.2",
-    "topojson-client": "3.0.0",
+    "topojson-client": "3.1.0",
     "uglifyjs-webpack-plugin": "2.0.1",
     "url-loader": "1.1.2",
     "uuid": "3.2.1",
