@@ -124,7 +124,7 @@
     "style-loader": "0.23.1",
     "styled-components": "3.3.2",
     "topojson-client": "3.1.0",
-    "uglifyjs-webpack-plugin": "2.0.1",
+    "uglifyjs-webpack-plugin": "2.2.0",
     "url-loader": "1.1.2",
     "uuid": "3.4.0",
     "webpack": "4.26.1",
