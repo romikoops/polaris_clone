@@ -29,6 +29,7 @@ exports[`displayOnly is true 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
           FOO_DOCUMENT_TEXT
            
@@ -99,6 +100,7 @@ exports[`multiple is true 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
           FOO_DOCUMENT_TEXT
            
@@ -195,6 +197,7 @@ exports[`shallow render 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
           FOO_DOCUMENT_TEXT
            
@@ -296,6 +299,7 @@ exports[`theme is falsy 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
           FOO_DOCUMENT_TEXT
            
@@ -397,6 +401,7 @@ exports[`viewer is true 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
           FOO_DOCUMENT_TEXT
            

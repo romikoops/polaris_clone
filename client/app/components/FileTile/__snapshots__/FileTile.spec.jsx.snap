@@ -29,6 +29,7 @@ exports[`doc.approved === null 1`] = `
             ellipsis="…"
             lines={1}
             trimWhitespace={false}
+            width={0}
           >
             FOO_DOCUMENT_TEXT
              
@@ -200,6 +201,7 @@ exports[`doc.approved === rejected 1`] = `
             ellipsis="…"
             lines={1}
             trimWhitespace={false}
+            width={0}
           >
             FOO_DOCUMENT_TEXT
              
@@ -371,6 +373,7 @@ exports[`doc.signed_url is falsy 1`] = `
             ellipsis="…"
             lines={1}
             trimWhitespace={false}
+            width={0}
           >
             FOO_DOCUMENT_TEXT
              
@@ -526,6 +529,7 @@ exports[`isAdmin is true 1`] = `
             ellipsis="…"
             lines={1}
             trimWhitespace={false}
+            width={0}
           >
             FOO_DOCUMENT_TEXT
              
@@ -687,6 +691,7 @@ exports[`shallow render 1`] = `
             ellipsis="…"
             lines={1}
             trimWhitespace={false}
+            width={0}
           >
             FOO_DOCUMENT_TEXT
              
@@ -928,6 +933,7 @@ exports[`state.showDenialDetails is true 1`] = `
             ellipsis="…"
             lines={1}
             trimWhitespace={false}
+            width={0}
           >
             FOO_DOCUMENT_TEXT
              
@@ -1099,6 +1105,7 @@ exports[`theme is falsy 1`] = `
             ellipsis="…"
             lines={1}
             trimWhitespace={false}
+            width={0}
           >
             FOO_DOCUMENT_TEXT
              

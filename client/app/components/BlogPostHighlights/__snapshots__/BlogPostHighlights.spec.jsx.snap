@@ -50,6 +50,7 @@ exports[`shallow render 1`] = `
                 ellipsis="…"
                 lines={1}
                 trimWhitespace={false}
+                width={0}
               >
                 How Digitalisation is changing shipping
                  
@@ -73,6 +74,7 @@ exports[`shallow render 1`] = `
                 ellipsis="…"
                 lines={4}
                 trimWhitespace={false}
+                width={0}
               >
                 With the sheer amount of freight crossing the globe on a daily basis, 
       our means of co-ordinating the massive flow of information ahs had to continuously
@@ -138,6 +140,7 @@ exports[`shallow render 1`] = `
                 ellipsis="…"
                 lines={1}
                 trimWhitespace={false}
+                width={0}
               >
                 With greater supply and even higher demand, efficiency gains have never been more important
                  
@@ -161,6 +164,7 @@ exports[`shallow render 1`] = `
                 ellipsis="…"
                 lines={4}
                 trimWhitespace={false}
+                width={0}
               >
                 With the global freight market under pressure from both supply and demand sides,
        it has become increasingly important to eek out every last bit of productivity
@@ -225,6 +229,7 @@ exports[`shallow render 1`] = `
                 ellipsis="…"
                 lines={1}
                 trimWhitespace={false}
+                width={0}
               >
                 Blockchain is coming: How you can begin to get ready for the next big leap in freight
                  
@@ -248,6 +253,7 @@ exports[`shallow render 1`] = `
                 ellipsis="…"
                 lines={4}
                 trimWhitespace={false}
+                width={0}
               >
                 The global shipping industry is the backbone upon which the modern world is built. 
       However, fraud, theft and other problems continue to drive up prices for consumers 

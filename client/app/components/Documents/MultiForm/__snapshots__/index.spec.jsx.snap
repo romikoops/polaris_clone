@@ -31,6 +31,7 @@ exports[`documents contains empty object 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
            
         </Truncate>
@@ -209,6 +210,7 @@ exports[`shallow render 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
           FOO_DOCUMENT_TEXT
            
@@ -234,6 +236,7 @@ exports[`shallow render 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
           BAR_DOCUMENT_TEXT
            
@@ -336,6 +339,7 @@ exports[`state.error is true 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
           FOO_DOCUMENT_TEXT
            
@@ -361,6 +365,7 @@ exports[`state.error is true 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
           BAR_DOCUMENT_TEXT
            
@@ -463,6 +468,7 @@ exports[`theme is falsy 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
           FOO_DOCUMENT_TEXT
            
@@ -488,6 +494,7 @@ exports[`theme is falsy 1`] = `
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
+          width={0}
         >
           BAR_DOCUMENT_TEXT
            

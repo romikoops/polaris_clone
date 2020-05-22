@@ -55,6 +55,7 @@ exports[`contactData.address is falsy 1`] = `
             ellipsis="…"
             lines={1}
             trimWhitespace={true}
+            width={0}
           >
              
             CONTACT_COMPANY_NAME
@@ -194,6 +195,7 @@ exports[`shallow render 1`] = `
             ellipsis="…"
             lines={1}
             trimWhitespace={true}
+            width={0}
           >
              
             CONTACT_COMPANY_NAME
