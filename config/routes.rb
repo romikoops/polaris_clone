@@ -242,11 +242,11 @@ end
 #
 #                                                 Prefix Verb   URI Pattern                                                                              Controller#Action
 #                                         google_sign_in        /google_sign_in                                                                          GoogleSignIn::Engine
-#                                               rswag_ui        /docs                                                                                Rswag::Ui::Engine
-#                                              rswag_api        /docs                                                                                Rswag::Api::Engine
 #                                                easymon        /up                                                                                      Easymon::Engine
 #                                                    api        /                                                                                        Api::Engine
 #                                              admiralty        /admiralty                                                                               Admiralty::Engine
+#                                               rswag_ui        /docs                                                                                    Rswag::Ui::Engine
+#                                              rswag_api        /docs                                                                                    Rswag::Api::Engine
 #                                       new_user_session GET    /tenants/:tenant_id/auth/sign_in(.:format)                                               users_devise_token_auth/sessions#new
 #                                           user_session POST   /tenants/:tenant_id/auth/sign_in(.:format)                                               users_devise_token_auth/sessions#create
 #                                   destroy_user_session DELETE /tenants/:tenant_id/auth/sign_out(.:format)                                              users_devise_token_auth/sessions#destroy
@@ -505,12 +505,6 @@ end
 # authorization POST /authorization(.:format) google_sign_in/authorizations#create
 #      callback GET  /callback(.:format)      google_sign_in/callbacks#show
 #
-# Routes for Rswag::Ui::Engine:
-#
-#
-# Routes for Rswag::Api::Engine:
-#
-#
 # Routes for Easymon::Engine:
 #        GET  /(.:format)       easymon/checks#index
 #   root GET  /                 easymon/checks#index
@@ -586,3 +580,8 @@ end
 # admiralty_reports      /           AdmiraltyReports::Engine
 # admiralty_tenants      /           AdmiraltyTenants::Engine
 #              root GET  /           admiralty/dashboard#index
+#
+# Routes for Rswag::Ui::Engine:
+#
+#
+# Routes for Rswag::Api::Engine:

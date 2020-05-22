@@ -45,8 +45,11 @@ module AdmiraltyTenants
       @scope.update(content: remove_default_values)
       @saml_metadatum.update(content: tenant_params[:saml_metadatum][:content])
       update_max_dimensions
-
-      redirect_to tenant_path(@tenant)
+      if @max_dimensions.all?(&:valid?)
+        redirect_to tenant_path(@tenant)
+      else
+        render :edit
+      end
     end
 
     private
@@ -64,7 +67,7 @@ module AdmiraltyTenants
       @max_dimensions.each do |md|
         md_params_id = max_dimensions_params[:max_dimensions][md.id.to_s]
         update_hash = md_params_id.to_h.compact
-        @max_dimensions.find(md.id).update(update_hash)
+        md.update(update_hash)
       end
     end
 

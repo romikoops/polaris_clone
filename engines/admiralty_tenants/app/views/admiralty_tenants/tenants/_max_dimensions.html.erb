@@ -1,24 +1,34 @@
 <% @max_dimensions.each do |md| %>
   <%= fields_for 'max_dimensions[]', md do |field| %>
-      <dl class="row">
-        <dt class="col-sm-12">Max <%= md.aggregate ? 'Aggregated' : ''%>
-                              dimensions for <%=md.mode_of_transport.capitalize %>
-                              Bookings
-        </dt>
-        <dt class="col-sm-5">Max Dimension Length</dt>
-        <dd class="col-sm-7"><%= field.text_field :width %> cm</dd>
+    <dl class="row">
+      <dt class="col-sm-12">Max <%= md.aggregate ? 'Aggregated' : ''%>
+        dimensions for <%= md.mode_of_transport.capitalize %>
+        Bookings
+      </dt>
+      <dd class="col-sm-12">
+        <% if md.errors.full_messages.any? %>
+          <ul>
+            <% md.errors.full_messages.each do |error_message| %>
+              <li class="text-danger"><%= error_message %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </dd>
 
-        <dt class="col-sm-5">Max Dimension Width</dt>
-        <dd class="col-sm-7"><%= field.text_field :length %> cm</dd>
+      <dt class="col-sm-5">Max Dimension Length</dt>
+      <dd class="col-sm-7"><%= field.text_field :width %> cm</dd>
 
-        <dt class="col-sm-5">Max Dimension Height</dt>
-        <dd class="col-sm-7"><%= field.text_field :height %> cm</dd>
+      <dt class="col-sm-5">Max Dimension Width</dt>
+      <dd class="col-sm-7"><%= field.text_field :length %> cm</dd>
 
-        <dt class="col-sm-5">Max Dimension Weight</dt>
-        <dd class="col-sm-7"><%= field.text_field :payload_in_kg %> kg</dd>
+      <dt class="col-sm-5">Max Dimension Height</dt>
+      <dd class="col-sm-7"><%= field.text_field :height %> cm</dd>
 
-        <dt class="col-sm-5">Chargeable Weight</dt>
-        <dd class="col-sm-7"><%= field.text_field :chargeable_weight %> kg</dd>
-      </dl>
-    <% end %>
-  <% end%>
+      <dt class="col-sm-5">Max Dimension Weight</dt>
+      <dd class="col-sm-7"><%= field.text_field :payload_in_kg %> kg</dd>
+
+      <dt class="col-sm-5">Chargeable Weight</dt>
+      <dd class="col-sm-7"><%= field.text_field :chargeable_weight %> kg</dd>
+    </dl>
+  <% end %>
+<% end%>

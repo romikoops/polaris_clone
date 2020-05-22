@@ -91,6 +91,17 @@ module AdmiraltyTenants
       end
     end
 
+    describe 'PATCH #update with invalid max dimensions' do
+      let(:tenant_params) { tenant.attributes.slice('name', 'slug').merge(scope: { foo: true }.to_json, saml_metadatum: { content: '' }) }
+      let(:updated_max_bundle) { { max_bundle.id => { width: -10 } } }
+
+      it 'renders page without update' do
+        patch :update, params: { id: tenant.id, tenant: tenant_params, max_dimensions: updated_max_bundle }
+
+        expect(::Legacy::MaxDimensionsBundle.find(max_bundle.id).width).to eq(max_bundle.width)
+      end
+    end
+
     describe 'POST #create' do
       let(:tenant_params) do
         {

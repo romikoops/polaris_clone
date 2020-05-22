@@ -32,6 +32,8 @@ module Legacy
               numericality: { greater_than: 0 }, if: :dimensions_required?
     validates :cargo_class, presence: true
 
+    has_paper_trail
+
     scope :aggregate,  -> { where(aggregate: true, cargo_class: 'lcl') }
     scope :unit,       -> { where(aggregate: false, cargo_class: 'lcl') }
 
