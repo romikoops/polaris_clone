@@ -17,7 +17,6 @@ RSpec.describe ExcelDataServices::FileWriters::Hubs do
        longitude
        country
        full_address
-       photo
        free_out
        import_charges
        export_charges
@@ -35,7 +34,6 @@ RSpec.describe ExcelDataServices::FileWriters::Hubs do
       11.854048,
       'Sweden',
       '438 80 Landvetter, Sweden',
-      nil,
       'false',
       'false',
       'false',

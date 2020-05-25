@@ -207,7 +207,6 @@ module ExcelDataServices
           longitude
           country
           full_address
-          photo
           free_out
           import_charges
           export_charges

@@ -26,7 +26,6 @@ module ExcelDataServices
             longitude: hub.longitude,
             country: address.country&.name,
             full_address: address.geocoded_address,
-            photo: hub.photo,
             free_out: hub.free_out.to_s,
             import_charges: mandatory_charge&.import_charges.to_s,
             export_charges: mandatory_charge&.export_charges.to_s,

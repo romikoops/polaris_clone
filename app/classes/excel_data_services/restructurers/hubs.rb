@@ -76,7 +76,6 @@ module ExcelDataServices
           name: row[:name],
           latitude: row[:latitude],
           longitude: row[:longitude],
-          photo: row[:photo],
           locode: row[:locode],
           country: { name: row[:country] },
           tenant_id: tenant.id,
@@ -100,7 +99,6 @@ module ExcelDataServices
           latitude: row[:latitude],
           longitude: row[:longitude],
           name: append_hub_suffix(row[:name], row[:type]),
-          photo: row[:photo],
           sandbox: @sandbox,
           hub_code: row[:locode]
         }
