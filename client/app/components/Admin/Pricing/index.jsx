@@ -87,25 +87,6 @@ class AdminPricingList extends PureComponent {
           },
           {
             Header: (<div className="flex layout-row layout-center-center">
-              <p className="flex-none">{t('admin:pricingsSC')}</p>
-            </div>),
-            maxWidth: 150,
-            accessor: 'pricingCount',
-            Cell: rowData => (
-              <div 
-                className={`pointy flex layout-row layout-align-start-center ${styles.pricing_cell}`}
-                onClick={() => viewPricings(rowData.original)}
-              >
-                <p className="flex-none">
-                  {rowData.row.pricingCount}
-                  {' '}
-                </p>
-              </div>
-            ),
-            Filter: () => false
-          },
-          {
-            Header: (<div className="flex layout-row layout-center-center">
               <p className="flex-none">{t('admin:nextExpiry')}</p>
             </div>),
             id: 'lastExpiry',
