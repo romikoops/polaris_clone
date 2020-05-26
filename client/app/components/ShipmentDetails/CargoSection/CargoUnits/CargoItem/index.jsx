@@ -158,19 +158,6 @@ class CargoItem extends React.PureComponent {
           >
 
             <CargoUnitNumberInput
-              image={this.getImage('width')}
-              labelText={t('common:width')}
-              maxDimensionsErrorText={t('errors:maxWidth')}
-              unit="cm"
-              validations={{
-                totalShipmentChargeableWeight: () => (
-                  totalShipmentErrors.chargeableWeight.type !== 'error'
-                )
-              }}
-              {...this.getSharedProps('width')}
-            />
-
-            <CargoUnitNumberInput
               image={this.getImage('length')}
               labelText={t('common:length')}
               maxDimensionsErrorText={t('errors:maxLength')}
@@ -181,6 +168,19 @@ class CargoItem extends React.PureComponent {
                 )
               }}
               {...this.getSharedProps('length')}
+            />
+
+            <CargoUnitNumberInput
+              image={this.getImage('width')}
+              labelText={t('common:width')}
+              maxDimensionsErrorText={t('errors:maxWidth')}
+              unit="cm"
+              validations={{
+                totalShipmentChargeableWeight: () => (
+                  totalShipmentErrors.chargeableWeight.type !== 'error'
+                )
+              }}
+              {...this.getSharedProps('width')}
             />
 
             <CargoUnitNumberInput

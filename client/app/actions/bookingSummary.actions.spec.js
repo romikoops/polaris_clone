@@ -14,8 +14,8 @@ describe('booking summary actions', () => {
       load_type: 'cargo_item'
     },
     cargoItems: [{
-      width: 10.0,
       length: 10.0,
+      width: 10.0,
       height: 10.0,
       quantity: 2,
       payload_in_kg: 100

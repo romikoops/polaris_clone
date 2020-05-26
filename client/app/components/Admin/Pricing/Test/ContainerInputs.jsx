@@ -20,10 +20,10 @@ class ContainerInputs extends PureComponent {
     return (
       <div className="flex-100 layout-row layout-align-start-start">
         <div className="flex-25 layout-row layout-align-center-center">
-          <input type="number" onChange={handleChange} name="width" value={width} />
+          <input type="number" onChange={handleChange} name="length" value={length} />
         </div>
         <div className="flex-25 layout-row layout-align-center-center">
-          <input type="number" onChange={handleChange} name="length" value={length} />
+          <input type="number" onChange={handleChange} name="width" value={width} />
         </div>
         <div className="flex-25 layout-row layout-align-center-center">
           <input type="number" onChange={handleChange} name="height" value={height} />

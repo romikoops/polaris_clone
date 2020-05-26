@@ -29,10 +29,10 @@ class CargoItemInputs extends PureComponent {
           </p>
         </div>
         <div className="flex-25 layout-row layout-align-center-center input_box_full">
-          <input type="number" onChange={handleChange} placeholder={t('common:width')} name="width" value={width} />
+          <input type="number" onChange={handleChange} placeholder={t('common:length')} name="length" value={length} />
         </div>
         <div className="flex-25 layout-row layout-align-center-center input_box_full">
-          <input type="number" onChange={handleChange} placeholder={t('common:length')} name="length" value={length} />
+          <input type="number" onChange={handleChange} placeholder={t('common:width')} name="width" value={width} />
         </div>
         <div className="flex-25 layout-row layout-align-center-center input_box_full">
           <input type="number" onChange={handleChange} placeholder={t('common:height')} name="height" value={height} />
