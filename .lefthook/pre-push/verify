@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+PATTERN = %r{\A((IMC)-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test)(.*)?): .*}
+
+remote, * = ARGV
+
+app_dir = File.expand_path("../..", __dir__)
+ENV["BUNDLE_GEMFILE"] ||= File.join(app_dir, "Gemfile")
+require "bundler/setup"
+
+require "git"
+git = Git.open(app_dir)
+
+log = git.log.between(remote, "HEAD")
+commits = log.reject { |commit| PATTERN.match?(commit.message) }
+
+unless commits.count.zero?
+  warn "Found invalid commits, prevent pushing"
+  commits.each do |commit|
+    warn "  • #{commit.sha[0..8]} #{commit.message}"
+  end
+  exit 1
+end
+
+exit 0

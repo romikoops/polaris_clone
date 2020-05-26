@@ -165,6 +165,7 @@ group :development, :test do
   gem 'dotenv-rails', require: 'dotenv/rails-now'
   gem 'factory_bot_rails', '~> 4.0', '< 5'
   gem 'fuubar'
+  gem 'git'
   gem 'rails-erd'
   gem 'rspec', '~> 3.9'
   gem 'rspec-rails'
@@ -180,6 +181,8 @@ group :development, :test do
   gem 'ruby-debug-ide'
 
   gem 'rubocop-itsmycargo'
+
+  gem 'lefthook'
 end
 
 group :test do

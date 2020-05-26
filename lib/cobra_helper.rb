@@ -3,35 +3,42 @@
 require 'bundler'
 
 class CobraHelper
+  def self.graphviz(output: Pathname.new("../doc/engines").expand_path(__dir__))
+    output.join("graph.dot").open('w') do |io|
+      io.puts new.graphviz
+    end
+    system("dot -Tpdf -o#{output.join("graph.pdf")} #{output.join("graph.dot")}")
+  end
+
   def graphviz # rubocop:disable Metrics/AbcSize
     dot = []
 
     dot << 'digraph G {'
-    dot << 'compound=true;'
+    dot << '  compound=true;'
 
-    dot << 'subgraph cluster0 {'
-    dot << 'app [shape=box];'
-    dot << '}'
+    dot << '  subgraph cluster0 {'
+    dot << '    app [shape=box];'
+    dot << '  }'
 
     groups.each_with_index do |(type, group), index|
-      dot << "subgraph cluster#{index + 1} {"
-      dot << "label = \"#{type}\";"
+      dot << "  subgraph cluster#{index + 1} {"
+      dot << "    label = \"#{type}\";"
 
       group.each do |_, s|
         name = s.name.gsub(/\Aimc-/, '')
 
-        dot << "\"#{name}\" [shape=ellipse];"
+        dot << "    \"#{name}\" [shape=ellipse];"
 
         # Direct Requirements (Gem driven)
-        dot << "app -> \"#{name}\"" if s.metadata['direct'] == 'true'
+        dot << "    app -> \"#{name}\"" if s.metadata['direct'] == 'true'
 
         # Dependencies
         s.dependencies.select { |d| specs.key?(d.name) }.each do |d|
-          dot << "\"#{name}\" -> \"#{d.name.gsub(/\Aimc-/, '')}\" [color=grey];"
+          dot << "    \"#{name}\" -> \"#{d.name.gsub(/\Aimc-/, '')}\" [color=grey];"
         end
       end
 
-      dot << '};'
+      dot << '  };'
     end
 
     dot << '}'

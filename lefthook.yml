@@ -1,0 +1,22 @@
+pre-commit:
+  scripts:
+    cobra-docs:
+      tags: default
+    verify:
+      tags: default
+commit-msg:
+  scripts:
+    template-checker:
+      tags: default
+pre-push:
+  scripts:
+    verify:
+      tags: default
+post-checkout:
+  scripts:
+    ensure-branch-name:
+      tags: default
+    01-bundle-checkinstall:
+      tags: default
+    02-db-migrate:
+      tags: default

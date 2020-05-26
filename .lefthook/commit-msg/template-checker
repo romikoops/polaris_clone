@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -euo pipefail
+
+INPUT_FILE=$1
+START_LINE=$(head -n1 "$INPUT_FILE")
+
+TIME_PATTERN="((IMC)-[[:digit:]]+).*#time (([[:digit:]]+[wdhm]) ?)+"
+if ! [[ "$START_LINE" =~ $TIME_PATTERN ]]; then
+  echo "• Consider using smart commits to log spend time"
+  echo "  IMC-1234: <ignored text> #time <value>w <value>d <value>h <value>m <comment_string>"
+  echo ""
+fi
+
+# Ensure ticket numbers are upcase
+PATTERN="(imc)-[[:digit:]]+"
+if [[ "$INPUT_FILE" =~ $PATTERN ]]; then
+  echo "• Use only upper case ticket numbers in commit messages."
+  echo "  IMC-1234: description #time 2h 30m"
+  echo ""
+  exit 1
+fi
+
+# Ensure commits have ticket number (or category)
+PATTERN="^((IMC)-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test|wip)(\\(.*\\))?): .*"
+if ! [[ "$START_LINE" =~ $PATTERN ]]; then
+  echo "• Invalid commit message, see examples:"
+  echo "    * Ticket Tracking (with time)"
+  echo "        IMC-1234: some text #time 2h 30m"
+  echo "    * Conventional Commits (https://www.conventionalcommits.org/en/v1.0.0/#summary)"
+  echo "        chore(deps): some text"
+  echo "    * Work in Progress Commits"
+  echo "        wip: some text"
+  echo ""
+  exit 1
+fi

@@ -843,6 +843,8 @@ GEM
       rspec-core (~> 3.0)
       ruby-progressbar (~> 1.4)
     geocoder (1.5.1)
+    git (1.6.0)
+      rchardet (~> 1.8)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     google-cloud-core (1.3.1)
@@ -900,6 +902,7 @@ GEM
     kaminari-core (1.2.0)
     launchy (2.4.3)
       addressable (~> 2.3)
+    lefthook (0.7.2)
     letter_opener (1.7.0)
       launchy (~> 2.2)
     listen (3.2.1)
@@ -1037,6 +1040,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rchardet (1.8.0)
     recipient_interceptor (0.2.0)
       mail
     redis (4.1.3)
@@ -1243,6 +1247,7 @@ DEPENDENCIES
   font-awesome-rails
   fuubar
   geocoder
+  git
   google-cloud-translate
   googleauth
   holidays
@@ -1283,6 +1288,7 @@ DEPENDENCIES
   imc-trucking!
   imc-validator!
   imc-wheelhouse!
+  lefthook
   letter_opener (~> 1.6)
   listen (>= 3.0.5, < 3.3)
   lograge

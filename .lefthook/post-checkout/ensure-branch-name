@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -euo pipefail
+
+ref=$(git symbolic-ref HEAD 2>/dev/null)
+branch="${ref#refs/heads/}"
+
+if [[ "${branch}" =~ [A-Z] ]];
+then
+  echo '!!! Please only use lower case branch name.'
+  echo '!!! Mixing lowercase and uppercase branch names confuses git.'
+  echo ''
+fi
+
+if ! [[ "${branch}" =~ (imc)[-_][[:digit:]]+ ]];
+then
+  echo '!!! Consider having ticket number in your branch name'
+  echo '!!! for example chore/imc-1234 or imc-1234-lefthook'
+  echo ''
+fi
+
+exit 0

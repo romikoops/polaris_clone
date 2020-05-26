@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+
+PATTERN="@itsmycargo.com$"
+
+if ! [[ "$(git config user.email)" =~ $PATTERN ]]
+then
+  echo "Invalid email address, please use @itsmycargo.com email for commits." >&2
+  echo ""
+  echo "git config --local user.name <YOURNAME>"
+  echo "git config --local user.email <YOURNAME>@itsmycargo.com"
+
+	exit 1
+fi

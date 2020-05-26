@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -euo pipefail
+
+ruby -r./lib/cobra_helper -e "CobraHelper.graphviz"
+
+git add doc/engines/graph.{dot,pdf}

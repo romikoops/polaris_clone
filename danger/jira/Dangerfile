@@ -4,38 +4,33 @@
 JIRA_REGEXP = Regexp.new(/((?:IMC)-[0-9]+)/i)
 
 # Search Commits
-jira_issues = git.commits.map { |commit| commit.message.scan(JIRA_REGEXP) }.flatten.compact.map(&:upcase).uniq
+jira_issues = git.commits.map { |commit| commit.message.scan(JIRA_REGEXP) }.flatten.compact.map(&:upcase).sort.uniq
 
-# MR Tickets
+chore_commits = git.commits.any? { |commit| commit.message[/chore(\(.*\))?:/] }
+fix_commits = git.commits.any? { |commit| commit.message[/(hot)?fix(\(.*\))?:/] }
+hotfix_commits = git.commits.any? { |commit| commit.message[/hotfix(\(.*\))?:/] }
+
+# PR Tickets
 pr_title_issues = github.pr_title.scan(JIRA_REGEXP).flatten.map(&:upcase).uniq
 fix_chore_pr = /\A(chore|(hot)?fix)/i.match?(github.pr_title)
 
-if pr_title_issues.empty? && !fix_chore_pr
-  title = ':ticket: Missing JIRA Ticket'
-  message = <<~MESSAGE
-    Please add JIRA Ticket numer to pull request title as this makes it easy to track open
-    merge requests and keep JIRA Board in sync, as well to make sure we always deploy most
-    important code to production at right time.
-  MESSAGE
+# Fix common issues on PR title
+pr_title = github.pr_title.gsub(/imc-(\d+)/, 'IMC-\1')
 
-  warn("#{title} - #{message}")
+# Check title has all issues
+unless (pr_title_issues - jira_issues).empty?
+  missing_issues = (pr_title_issues - jira_issues)
+  pr_title = "#{missing_issues.join(' ')} #{pr_title}"
 end
 
-if !pr_title_issues.empty? && !(pr_title_issues - jira_issues).empty?
-  title = ':ticket: Inconsistent JIRA Ticket'
-  message = <<~MESSAGE
-    This pull request mentions different JIRA tickets in commit messages and title.
-    Please make sure that correct ticket numbers are mentioned in commits and title.
-  MESSAGE
-
-  warn("#{title} - #{message}")
+# Check title for chore
+if chore_commits && !pr_title[/chore/i]
+  pr_title = "CHORE: #{pr_title}"
 end
 
-if pr_title_issues.any? { |t| t.start_with?('imc') }
-  title = ':ticket: Lowercase ticket number'
-  message = <<~MESSAGE
-    Please write all JIRA ticket numbers as upper case.
-  MESSAGE
-
-  failure("#{title} - #{message}")
+if fix_commits && !pr_title[/(hot)?fix/i]
+  pr_title = "#{hotfix_commits ? "HOTFIX" : "FIX"}: #{pr_title}"
 end
+
+# Update PR Title
+github.api.update_pull_request(github.pr_json[:base][:repo][:full_name], github.pr_json['number'], title: pr_title)
