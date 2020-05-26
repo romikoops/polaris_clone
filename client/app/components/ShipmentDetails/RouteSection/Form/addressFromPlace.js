@@ -17,7 +17,7 @@ export default function addressFromPlace (place, gMaps, map, callback) {
       tmpAddress.street = ac.long_name
     }
 
-    if (ac.types.includes('locality') || ac.types.includes('administrative_area_level_3')) {
+    if (ac.types.includes('locality') || ac.types.includes('administrative_area_level_3' && !tmpAddress.city)) {
       tmpAddress.city = ac.long_name
     }
 
