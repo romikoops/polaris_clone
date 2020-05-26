@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-PATTERN = %r{\A((IMC)-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test)(.*)?): .*}
+PATTERN = %r{\A((IMC)-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test)(.*)?): .*|^Merge branch.*}
 
 remote, * = ARGV
 

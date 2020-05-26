@@ -22,7 +22,7 @@ if [[ "$INPUT_FILE" =~ $PATTERN ]]; then
 fi
 
 # Ensure commits have ticket number (or category)
-PATTERN="^((IMC)-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test|wip)(\\(.*\\))?): .*"
+PATTERN="^((IMC)-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test|wip)(\\(.*\\))?): .*|^Merge branch.*"
 if ! [[ "$START_LINE" =~ $PATTERN ]]; then
   echo "• Invalid commit message, see examples:"
   echo "    * Ticket Tracking (with time)"
