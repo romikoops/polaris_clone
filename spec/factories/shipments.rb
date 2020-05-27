@@ -99,7 +99,6 @@ end
 #  sandbox_id                          :uuid
 #  tenant_id                           :integer
 #  tender_id                           :uuid
-#  transport_category_id               :bigint
 #  trip_id                             :integer
 #  user_id                             :integer
 #
@@ -108,8 +107,4 @@ end
 #  index_shipments_on_sandbox_id  (sandbox_id) WHERE (deleted_at IS NULL)
 #  index_shipments_on_tenant_id   (tenant_id) WHERE (deleted_at IS NULL)
 #  index_shipments_on_tender_id   (tender_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (transport_category_id => transport_categories_20200504.id)
 #

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_25_120535) do
+ActiveRecord::Schema.define(version: 2020_05_26_101919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1597,7 +1597,6 @@ ActiveRecord::Schema.define(version: 2020_05_25_120535) do
     t.integer "tenant_id"
     t.uuid "tender_id"
     t.jsonb "total_goods_value"
-    t.bigint "transport_category_id"
     t.integer "trip_id"
     t.jsonb "trucking"
     t.datetime "updated_at", null: false
@@ -2299,7 +2298,6 @@ ActiveRecord::Schema.define(version: 2020_05_25_120535) do
   add_foreign_key "rates_sections", "routing_terminals", column: "terminal_id"
   add_foreign_key "rates_sections", "tenants_tenants", column: "tenant_id"
   add_foreign_key "remarks", "tenants"
-  add_foreign_key "shipments", "transport_categories_20200504", column: "transport_category_id"
   add_foreign_key "shipments_cargos", "tenants_sandboxes", column: "sandbox_id"
   add_foreign_key "shipments_cargos", "tenants_tenants", column: "tenant_id"
   add_foreign_key "shipments_contacts", "tenants_sandboxes", column: "sandbox_id"
