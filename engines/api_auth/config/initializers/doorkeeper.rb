@@ -13,12 +13,12 @@
   # end
 
   resource_owner_from_credentials do
-    user = ::Tenants::User.authenticate(params[:email], params[:password]) || nil
-    if user && server.client.present? && server.client.name[/bridge/]
-      user = nil if user.legacy&.role&.name != 'admin'
+    resource = if server.client.present? && server.client.name[/bridge/]
+      ::Tenants::User.joins(:legacy).where('role_id = 1')
+    else
+      ::Tenants::User
     end
-
-    user
+    resource.authenticate(params[:email], params[:password]) || nil
   end
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for
