@@ -1,36 +1,35 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 
-set -euo pipefail
+COMMIT_PATTERN = %r{\A(((IMC-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test|wip)(\(.*\))?))(: | - )(.*))|(Merge .*)}
+TIME_PATTERN = %r{\A((IMC)-[[:digit:]]+).*#time (([[:digit:]]+[wdhm]) ?)+}
 
-INPUT_FILE=$1
-START_LINE=$(head -n1 "$INPUT_FILE")
+input_file, * = ARGV
+commit_message = File.read(input_file)
 
-TIME_PATTERN="((IMC)-[[:digit:]]+).*#time (([[:digit:]]+[wdhm]) ?)+"
-if ! [[ "$START_LINE" =~ $TIME_PATTERN ]]; then
-  echo "• Consider using smart commits to log spend time"
-  echo "  IMC-1234: <ignored text> #time <value>w <value>d <value>h <value>m <comment_string>"
-  echo ""
-fi
+unless TIME_PATTERN.match?(commit_message)
+  warn "• Consider using smart commits to log spend time"
+  warn "  IMC-1234: <ignored text> #time <value>w <value>d <value>h <value>m <comment_string>"
+  warn ""
+end
 
-# Ensure ticket numbers are upcase
-PATTERN="(imc)-[[:digit:]]+"
-if [[ "$INPUT_FILE" =~ $PATTERN ]]; then
-  echo "• Use only upper case ticket numbers in commit messages."
-  echo "  IMC-1234: description #time 2h 30m"
-  echo ""
+if %r{(imc)-[[:digit]]}.match?(commit_message)
+  warn "• Use only upper case ticket numbers in commit messages."
+  warn "  IMC-1234: description #time 2h 30m"
+  warn ""
+
   exit 1
-fi
+end
 
-# Ensure commits have ticket number (or category)
-PATTERN="^((IMC)-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test|wip)(\\(.*\\))?): .*|^Merge branch.*"
-if ! [[ "$START_LINE" =~ $PATTERN ]]; then
-  echo "• Invalid commit message, see examples:"
-  echo "    * Ticket Tracking (with time)"
-  echo "        IMC-1234: some text #time 2h 30m"
-  echo "    * Conventional Commits (https://www.conventionalcommits.org/en/v1.0.0/#summary)"
-  echo "        chore(deps): some text"
-  echo "    * Work in Progress Commits"
-  echo "        wip: some text"
-  echo ""
+unless COMMIT_PATTERN.match?(commit_message)
+  warn "• Invalid commit message, see examples:"
+  warn "    * Ticket Tracking (with time)"
+  warn "        IMC-1234: some text #time 2h 30m"
+  warn "    * Conventional Commits (https://www.conventionalcommits.org/en/v1.0.0/#summary)"
+  warn "        chore(deps): some text"
+  warn "    * Work in Progress Commits"
+  warn "        wip: some text"
+  warn ""
+
   exit 1
-fi
+end
+exit 0

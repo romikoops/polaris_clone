@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-PATTERN = %r{\A((IMC)-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test)(.*)?): .*|^Merge branch.*}
+COMMIT_PATTERN = %r{\A(((IMC-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test)(\(.*\))?))(: | - )(.*))|(Merge .*)}
 
 remote, * = ARGV
 
@@ -12,7 +12,7 @@ require "git"
 git = Git.open(app_dir)
 
 log = git.log.between(remote, "HEAD")
-commits = log.reject { |commit| PATTERN.match?(commit.message) }
+commits = log.reject { |commit| COMMIT_PATTERN.match?(commit.message) }
 
 unless commits.count.zero?
   warn "Found invalid commits, prevent pushing"

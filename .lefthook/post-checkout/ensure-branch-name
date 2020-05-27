@@ -1,22 +1,32 @@
 #!/bin/bash
 
-set -euo pipefail
+BRANCH_CHANGE=$3
+[[ $BRANCH_CHANGE -eq 0 ]] && exit
+
+PREV_HEAD=$1
+CURR_HEAD=$2
+[ "$PREV_HEAD" == "$CURR_HEAD" ] && exit
 
 ref=$(git symbolic-ref HEAD 2>/dev/null)
+[[ -z "${ref}" ]] && exit
+
 branch="${ref#refs/heads/}"
+[[ "${branch}" == "master" ]] && exit
 
 if [[ "${branch}" =~ [A-Z] ]];
 then
-  echo '!!! Please only use lower case branch name.'
-  echo '!!! Mixing lowercase and uppercase branch names confuses git.'
-  echo ''
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "!!! Please only use lower case branch name.                   !!!"
+  echo "!!! Mixing lowercase and uppercase branch names confuses git. !!!"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 fi
 
 if ! [[ "${branch}" =~ (imc)[-_][[:digit:]]+ ]];
 then
-  echo '!!! Consider having ticket number in your branch name'
-  echo '!!! for example chore/imc-1234 or imc-1234-lefthook'
-  echo ''
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "!!! Consider having ticket number in your branch name !!!"
+  echo "!!! for example chore/imc-1234 or imc-1234-lefthook   !!!"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 fi
 
 exit 0

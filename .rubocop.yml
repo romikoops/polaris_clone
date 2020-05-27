@@ -17,6 +17,8 @@ AllCops:
 Layout/LineLength:
   Max: 120
   IgnoreCopDirectives: true
+  Exclude:
+    - '.lefthook/**/*'
 
 Metrics/AbcSize:
   Max: 25

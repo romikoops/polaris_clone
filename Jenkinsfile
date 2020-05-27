@@ -139,7 +139,7 @@ pipeline {
               dockerBuild(
                 dir: "client/",
                 image: "dipper",
-                memory: 2000,
+                memory: 3000,
                 args: [ RELEASE: env.GIT_COMMIT ],
                 stash: "frontend",
                 artifacts: [source: "/usr/share/nginx/html", destination: "client/dist"]
