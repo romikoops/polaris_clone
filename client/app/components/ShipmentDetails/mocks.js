@@ -208,7 +208,8 @@ export const scope = {
   fixed_exchange_rates: false,
   require_full_address: true,
   closed_quotation_tool: false,
-  address_fields: true
+  address_fields: true,
+  default_total_dimensions: false
 }
 
 export const theme = {

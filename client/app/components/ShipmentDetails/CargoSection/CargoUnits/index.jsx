@@ -5,7 +5,7 @@ import CargoItemAggregated from './CargoItemAggregated'
 import Container from './Container'
 
 function CargoUnits ({
-  aggregatedCargo,
+  aggregateSection,
   cargoUnits,
   loadType,
   scope,
@@ -18,7 +18,7 @@ function CargoUnits ({
     ...otherProps
   }
 
-  if (loadType === 'cargo_item' && !aggregatedCargo) {
+  if (loadType === 'cargo_item' && !aggregateSection) {
     return cargoUnits.map((cargoItem, i) => (
       <CargoItem
         cargoItem={cargoItem}
@@ -28,7 +28,7 @@ function CargoUnits ({
       />
     ))
   }
-  if (loadType === 'cargo_item' && aggregatedCargo && cargoUnits.length > 0) {
+  if (loadType === 'cargo_item' && aggregateSection && cargoUnits.length > 0) {
     return (
       <CargoItemAggregated cargoItem={cargoUnits[0]} {...sharedProps} />
     )

@@ -7,12 +7,29 @@ import CargoUnits from './CargoUnits'
 import CargoUnitToggleMode from './CargoUnits/CargoUnit/ToggleMode'
 import AddUnitButton from './AddUnitButton'
 import { debounce } from '../../../helpers'
-import { getTotalShipmentErrors } from './getErrors'
 
 class CargoSection extends React.PureComponent {
+  static getDerivedStateFromProps (props, state) {
+    const newState = { ...state }
+    const { scope, shipment, bookingProcessDispatch } = props
+    if (scope.default_total_dimensions && !shipment.aggregatedCargo) {
+      bookingProcessDispatch.updateShipment(
+        'aggregatedCargo',
+        !shipment.aggregatedCargo
+      )
+
+      newState.aggregateSection = true
+    }
+
+    return newState
+  }
+
   constructor (props) {
     super(props)
 
+    this.state = {
+      aggregateSection: false
+    }
     this.handleAddUnit = this.handleAddUnit.bind(this)
     this.handleToggleAggregated = debounce(this.handleToggleAggregated.bind(this), 200)
     this.handleDeleteUnit = this.handleDeleteUnit.bind(this)
@@ -138,6 +155,7 @@ class CargoSection extends React.PureComponent {
 
   handleToggleAggregated () {
     const { bookingProcessDispatch, shipment } = this.props
+    const { aggregateSection } = this.state
     bookingProcessDispatch.updateShipment(
       'aggregatedCargo',
       !shipment.aggregatedCargo
@@ -146,6 +164,8 @@ class CargoSection extends React.PureComponent {
       'cargoUnits',
       [this.getNewUnit()]
     )
+
+    this.setState({ aggregateSection: !aggregateSection })
   }
 
   getPropValue (prop, cargoUnit) {
@@ -177,7 +197,8 @@ class CargoSection extends React.PureComponent {
       theme, scope, cargoItemTypes, maxDimensions, maxAggregateDimensions, shipment, ShipmentDetails, toggleModal, totalShipmentErrors
     } = this.props
 
-    const { loadType, aggregatedCargo } = shipment
+    const { aggregateSection } = this.state
+    const { loadType } = shipment
     const contentWidthClass = loadType === 'cargo_item' ? 'content_width_booking' : 'content_width_booking_half'
 
     return (
@@ -186,7 +207,7 @@ class CargoSection extends React.PureComponent {
           {loadType === 'cargo_item' && (
             <CargoUnitToggleMode
               disabled={!scope.total_dimensions}
-              checked={shipment.aggregatedCargo}
+              checked={aggregateSection}
               onToggleAggregated={this.handleToggleAggregated}
             />
           )}
@@ -204,12 +225,13 @@ class CargoSection extends React.PureComponent {
             getPropStep={this.getPropStep}
             scope={scope}
             theme={theme}
+            aggregateSection={aggregateSection}
             totalShipmentErrors={totalShipmentErrors}
             {...shipment}
           />
 
           {
-            !aggregatedCargo && (
+            !aggregateSection && (
               <div className="flex-100 layout-row layout-align-start">
                 <AddUnitButton theme={theme} onClick={this.handleAddUnit} />
               </div>

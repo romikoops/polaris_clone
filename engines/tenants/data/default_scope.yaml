@@ -169,3 +169,4 @@ saml_text: ''
 exclude_analytics: false
 session_length: 86400
 address_fields: true
+default_total_dimensions: false

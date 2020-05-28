@@ -11,7 +11,7 @@ test('load type is cargo item aggregated', () => {
   const props = {
     ...cargoUnitProps,
     cargoUnits: [cargoItemAggregated],
-    aggregatedCargo: true
+    aggregateSection: true
   }
   expect(shallow(<CargoUnits {...props} />)).toMatchSnapshot()
 })

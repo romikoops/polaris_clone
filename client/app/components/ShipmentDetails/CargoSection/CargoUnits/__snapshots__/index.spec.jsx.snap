@@ -79,6 +79,7 @@ exports[`load type is cargo item 1`] = `
       ],
     }
   }
+  aggregatedCargo={false}
   cargoItem={
     Object {
       "cargoItemTypeId": 23,
@@ -262,6 +263,7 @@ exports[`load type is cargo item 1`] = `
       "continuous_rounding": false,
       "customs_export_paper": false,
       "dangerous_goods": false,
+      "default_total_dimensions": false,
       "detailed_billing": false,
       "fee_detail": "key_and_name",
       "fixed_currency": false,
@@ -414,6 +416,7 @@ exports[`load type is cargo item aggregated 1`] = `
       ],
     }
   }
+  aggregatedCargo={false}
   cargoItem={
     Object {
       "cargoItemTypeId": "",
@@ -596,6 +599,7 @@ exports[`load type is cargo item aggregated 1`] = `
       "continuous_rounding": false,
       "customs_export_paper": false,
       "dangerous_goods": false,
+      "default_total_dimensions": false,
       "detailed_billing": false,
       "fee_detail": "key_and_name",
       "fixed_currency": false,
@@ -747,6 +751,7 @@ exports[`load type is container 1`] = `
       ],
     }
   }
+  aggregatedCargo={false}
   cargoItemTypes={
     Array [
       Object {
@@ -924,6 +929,7 @@ exports[`load type is container 1`] = `
       "continuous_rounding": false,
       "customs_export_paper": false,
       "dangerous_goods": false,
+      "default_total_dimensions": false,
       "detailed_billing": false,
       "fee_detail": "key_and_name",
       "fixed_currency": false,
