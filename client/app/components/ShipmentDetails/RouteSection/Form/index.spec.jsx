@@ -24,5 +24,18 @@ test('it finds the hub by locode', () => {
   const instance = wrapper.instance()
   const normalisedHubs = Form.normalizeHubResults([hub])
 
-  expect(instance.searchHub('DEHAM')).resolves.toEqual(normalisedHubs)
+  return expect(instance.searchHub('DEHAM')).resolves.toEqual(normalisedHubs)
+})
+
+test('it finds the hub by secondary name', () => {
+  const adjustedHub = { ...hub, nexusName: 'Ho Chi Minh - Cat Lai' }
+  const adjustedProps = {
+    ...propsBase,
+    hubs: [adjustedHub]
+  }
+  const wrapper = shallow(<Form {...adjustedProps} />)
+  const instance = wrapper.instance()
+  const normalisedHubs = Form.normalizeHubResults([adjustedHub])
+
+  return expect(instance.searchHub('Cat Lai')).resolves.toEqual(normalisedHubs)
 })

@@ -9,6 +9,16 @@ import styles from './index.scss'
 import LoadingBackfill from '../../../LoadingBackfill/LoadingBackfill'
 
 class Form extends Component {
+  static fuseOptions = {
+    shouldSort: true,
+    threshold: 0.4,
+    location: 0,
+    distance: 100,
+    maxPatternLength: 32,
+    minMatchCharLength: 1,
+    keys: ['label', 'rawResult.locode']
+  };
+
   static normalizeHubResults (results) {
     const normalizedResults = (results || []).map((result) => ({
       value: result.nexusId,
@@ -233,16 +243,6 @@ class Form extends Component {
       </div>
     )
   }
-
-  static fuseOptions = {
-    shouldSort: true,
-    threshold: 0.1,
-    location: 0,
-    distance: 100,
-    maxPatternLength: 32,
-    minMatchCharLength: 1,
-    keys: ['label', 'rawResult.locode']
-  };
 
   static fuseAddressOptions = {
     shouldSort: true,
