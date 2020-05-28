@@ -10,6 +10,17 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     mode_of_transport { 'ocean' }
     transshipment { nil }
     association :tenant, factory: :legacy_tenant
+    association :origin_hub, factory: :legacy_hub
+    association :destination_hub, factory: :legacy_hub
+
+    trait :with_hubs do
+      after(:build) do |itinerary, evaluator|
+        if itinerary.stops.length >= 2
+          itinerary.origin_hub = itinerary.stops.find { |stop| stop.index == 0 }.hub
+          itinerary.destination_hub = itinerary.stops.find { |stop| stop.index == 1 }.hub
+        end
+      end
+    end
 
     trait :default do
       after(:build) do |itinerary, evaluator|
@@ -53,8 +64,9 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(name: 'Shanghai Port')
-        gothenburg = Legacy::Hub.find_by(name: 'Gothenburg Port')
+        shanghai = Legacy::Hub.find_by(hub_code: 'CNSHA', tenant: itinerary.tenant)
+        gothenburg = Legacy::Hub.find_by(hub_code: 'SEGOT', tenant: itinerary.tenant)
+
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
                                  index: 0,
@@ -79,8 +91,8 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(name: 'Shanghai Port')
-        gothenburg = Legacy::Hub.find_by(name: 'Gothenburg Port')
+        shanghai = Legacy::Hub.find_by(name: 'Shanghai Port', tenant: itinerary.tenant)
+        gothenburg = Legacy::Hub.find_by(name: 'Gothenburg Port', tenant: itinerary.tenant)
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
                                  index: 0,
@@ -105,8 +117,8 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(name: 'Shanghai Port')
-        felixstowe = Legacy::Hub.find_by(name: 'Felixstowe Port')
+        shanghai = Legacy::Hub.find_by(name: 'Shanghai Port', tenant: itinerary.tenant)
+        felixstowe = Legacy::Hub.find_by(name: 'Felixstowe Port', tenant: itinerary.tenant)
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
                                  index: 0,
@@ -131,8 +143,8 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(name: 'Shanghai Port')
-        felixstowe = Legacy::Hub.find_by(name: 'Felixstowe Port')
+        shanghai = Legacy::Hub.find_by(name: 'Shanghai Port', tenant: itinerary.tenant)
+        felixstowe = Legacy::Hub.find_by(name: 'Felixstowe Port', tenant: itinerary.tenant)
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
                                  index: 0,
@@ -157,8 +169,8 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(name: 'Shanghai Port')
-        hamburg = Legacy::Hub.find_by(name: 'Hamburg Port')
+        shanghai = Legacy::Hub.find_by(name: 'Shanghai Port', tenant: itinerary.tenant)
+        hamburg = Legacy::Hub.find_by(name: 'Hamburg Port', tenant: itinerary.tenant)
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
                                  index: 0,
@@ -183,8 +195,8 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(name: 'Shanghai Port')
-        hamburg = Legacy::Hub.find_by(name: 'Hamburg Port')
+        shanghai = Legacy::Hub.find_by(name: 'Shanghai Port', tenant: itinerary.tenant)
+        hamburg = Legacy::Hub.find_by(name: 'Hamburg Port', tenant: itinerary.tenant)
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,
                                  index: 0,
@@ -204,13 +216,13 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       end
     end
 
-    factory :gothenburg_shanghai_itinerary, traits: [:gothenburg_shanghai]
-    factory :shanghai_gothenburg_itinerary, traits: [:shanghai_gothenburg]
-    factory :felixstowe_shanghai_itinerary, traits: [:felixstowe_shanghai]
-    factory :shanghai_felixstowe_itinerary, traits: [:shanghai_felixstowe]
-    factory :hamburg_shanghai_itinerary, traits: [:hamburg_shanghai]
-    factory :shanghai_hamburg_itinerary, traits: [:shanghai_hamburg]
-    factory :default_itinerary, traits: [:default]
+    factory :gothenburg_shanghai_itinerary, traits: [:gothenburg_shanghai, :with_hubs]
+    factory :shanghai_gothenburg_itinerary, traits: [:shanghai_gothenburg, :with_hubs]
+    factory :felixstowe_shanghai_itinerary, traits: [:felixstowe_shanghai, :with_hubs]
+    factory :shanghai_felixstowe_itinerary, traits: [:shanghai_felixstowe, :with_hubs]
+    factory :hamburg_shanghai_itinerary, traits: [:hamburg_shanghai, :with_hubs]
+    factory :shanghai_hamburg_itinerary, traits: [:shanghai_hamburg, :with_hubs]
+    factory :default_itinerary, traits: [:default, :with_hubs]
   end
 end
 
@@ -218,19 +230,28 @@ end
 #
 # Table name: itineraries
 #
-#  id                :bigint           not null, primary key
-#  mode_of_transport :string
-#  name              :string
-#  transshipment     :string
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  sandbox_id        :uuid
-#  tenant_id         :integer
+#  id                 :bigint           not null, primary key
+#  mode_of_transport  :string
+#  name               :string
+#  transshipment      :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  destination_hub_id :bigint
+#  origin_hub_id      :bigint
+#  sandbox_id         :uuid
+#  tenant_id          :integer
 #
 # Indexes
 #
-#  index_itineraries_on_mode_of_transport  (mode_of_transport)
-#  index_itineraries_on_name               (name)
-#  index_itineraries_on_sandbox_id         (sandbox_id)
-#  index_itineraries_on_tenant_id          (tenant_id)
+#  index_itineraries_on_destination_hub_id  (destination_hub_id)
+#  index_itineraries_on_mode_of_transport   (mode_of_transport)
+#  index_itineraries_on_name                (name)
+#  index_itineraries_on_origin_hub_id       (origin_hub_id)
+#  index_itineraries_on_sandbox_id          (sandbox_id)
+#  index_itineraries_on_tenant_id           (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (destination_hub_id => hubs.id)
+#  fk_rails_...  (origin_hub_id => hubs.id)
 #

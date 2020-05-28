@@ -32,32 +32,10 @@ end
 
 RSpec.describe ExcelDataServices::Inserters::Pricing do
   let(:tenant) { create(:tenant) }
-  let(:hubs) do
-    [
-      create(:hub,
-             tenant: tenant,
-             name: 'Gothenburg Port',
-             hub_type: 'ocean',
-             nexus: create(:nexus, name: 'Gothenburg', locode: 'SEGOT', tenant: tenant)),
-      create(:hub,
-             tenant: tenant,
-             name: 'Shanghai Port',
-             hub_type: 'ocean',
-             nexus: create(:nexus, name: 'Shanghai', locode: 'CNSHG', tenant: tenant))
-    ]
-  end
   let!(:itineraries) do
     [
-      create(:itinerary, tenant: tenant,
-                         stops: [
-                           build(:stop, itinerary_id: nil, index: 0, hub: hubs.first),
-                           build(:stop, itinerary_id: nil, index: 1, hub: hubs.second)
-                         ]),
-      create(:itinerary, tenant: tenant, transshipment: 'ZACPT',
-                         stops: [
-                           build(:stop, itinerary_id: nil, index: 0, hub: hubs.first),
-                           build(:stop, itinerary_id: nil, index: 1, hub: hubs.second)
-                         ])
+      create(:gothenburg_shanghai_itinerary, tenant: tenant),
+      create(:gothenburg_shanghai_itinerary, tenant: tenant, transshipment: 'ZACPT')
     ]
   end
   let(:tenant_vehicle) do

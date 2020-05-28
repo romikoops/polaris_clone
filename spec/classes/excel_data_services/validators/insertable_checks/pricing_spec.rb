@@ -20,26 +20,10 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
   end
   let(:itineraries) do
     [
-      create(
-        :itinerary,
-        tenant: tenant,
-        name: 'Gothenburg - Shanghai',
-        hubs: hubs
-      )
+      create(:gothenburg_shanghai_itinerary, tenant: tenant)
     ]
   end
-  let(:hubs) do
-    [
-      create(:hub, tenant: tenant, name: 'Gothenburg Port', hub_type: 'ocean', nexus: nexuses.first),
-      create(:hub, tenant: tenant, name: 'Shanghai Port', hub_type: 'ocean', nexus: nexuses.second)
-    ]
-  end
-  let(:nexuses) do
-    [
-      create(:nexus, tenant: tenant, name: 'Gothenburg'),
-      create(:nexus, tenant: tenant, name: 'Shanghai')
-    ]
-  end
+
   let(:vehicle) do
     create(:vehicle,
            tenant_vehicles: [tenant_vehicle])
@@ -60,46 +44,47 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
     let(:input_data) { build(:excel_data_restructured_faulty_pricings_one_fee_col_and_ranges) }
 
     describe '.validate' do
+      let(:expected_results) do
+        [{ type: :error, row_nr: 2,
+           sheet_name: 'Sheet1',
+           reason: 'Effective date must lie before before expiration date!',
+           exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
+        { type: :error,
+          row_nr: 2,
+          sheet_name: 'Sheet1',
+          reason: 'Hub "GothenERRORburg, Sweden" (Ocean) not found!',
+          exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
+        { type: :error,
+          row_nr: 3,
+          sheet_name: 'Sheet1',
+          reason: "The Group with ID 'other-000-gr0up-a-id-123' does not exist!",
+          exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
+        { type: :error,
+          row_nr: 3,
+          sheet_name: 'Sheet1',
+          reason: 'A user with email "Non.Existent@email.address" does not exist.',
+          exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
+        { type: :warning,
+          row_nr: 3,
+          sheet_name: 'Sheet1',
+          reason: "There exist rates (in the system or this file) with an overlapping effective period.\n(Old is covered by new: [2018-03-15 00:00 - 2019-03-17 23:59] <-> [2018-03-15 00:00 - 2019-03-17 23:59]).",
+          exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
+        { type: :error,
+          row_nr: 3,
+          sheet_name: 'Sheet1',
+          reason: "The Group with name 'OTHER GROUP B' does not exist!",
+          exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
+        { type: :error,
+          row_nr: 3,
+          sheet_name: 'Sheet1',
+          reason: "The Group with ID '000-gr0up-a-id-123' is not the same as the group with name 'GROUP B'!",
+          exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks }]
+      end
+
       it 'logs the errors' do
         validator = described_class.new(options)
         validator.perform
-
-        expect(validator.results).to match_array(
-          [{ type: :error, row_nr: 2,
-             sheet_name: 'Sheet1',
-             reason: 'Effective date must lie before before expiration date!',
-             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
-           { type: :error,
-             row_nr: 2,
-             sheet_name: 'Sheet1',
-             reason: 'Hub "GothenERRORburg" (Ocean) not found!',
-             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
-           { type: :error,
-             row_nr: 3,
-             sheet_name: 'Sheet1',
-             reason: "The Group with ID 'other-000-gr0up-a-id-123' does not exist!",
-             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
-           { type: :error,
-             row_nr: 3,
-             sheet_name: 'Sheet1',
-             reason: 'A user with email "Non.Existent@email.address" does not exist.',
-             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
-           { type: :warning,
-             row_nr: 3,
-             sheet_name: 'Sheet1',
-             reason: "There exist rates (in the system or this file) with an overlapping effective period.\n(Old is covered by new: [2018-03-15 00:00 - 2019-03-17 23:59] <-> [2018-03-15 00:00 - 2019-03-17 23:59]).",
-             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
-           { type: :error,
-             row_nr: 3,
-             sheet_name: 'Sheet1',
-             reason: "The Group with name 'OTHER GROUP B' does not exist!",
-             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
-           { type: :error,
-             row_nr: 3,
-             sheet_name: 'Sheet1',
-             reason: "The Group with ID '000-gr0up-a-id-123' is not the same as the group with name 'GROUP B'!",
-             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks }]
-        )
+        expect(validator.results).to match_array(expected_results)
       end
     end
   end

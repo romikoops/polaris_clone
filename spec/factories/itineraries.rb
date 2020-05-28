@@ -10,18 +10,26 @@ FactoryBot.define do
     mode_of_transport { 'ocean' }
     transshipment { nil }
     association :tenant
+    association :origin_hub, factory: :hub
+    association :destination_hub, factory: :hub
 
     after(:build) do |itinerary, evaluator|
       next if itinerary.stops.length >= 2
 
       evaluator.num_stops.times do |i|
-        itinerary.stops << build(:stop,
+        stop = build(:stop,
                                  itinerary: itinerary,
                                  index: i,
                                  hub: build(:hub,
                                             tenant: itinerary.tenant,
                                             nexus: build(:nexus,
                                                          tenant: itinerary.tenant)))
+        itinerary.stops << stop
+        if i == 1
+          itinerary.origin_hub = stop.hub
+        else
+          itinerary.destination_hub = stop.hub
+        end
       end
     end
 
@@ -40,19 +48,28 @@ end
 #
 # Table name: itineraries
 #
-#  id                :bigint           not null, primary key
-#  mode_of_transport :string
-#  name              :string
-#  transshipment     :string
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  sandbox_id        :uuid
-#  tenant_id         :integer
+#  id                 :bigint           not null, primary key
+#  mode_of_transport  :string
+#  name               :string
+#  transshipment      :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  destination_hub_id :bigint
+#  origin_hub_id      :bigint
+#  sandbox_id         :uuid
+#  tenant_id          :integer
 #
 # Indexes
 #
-#  index_itineraries_on_mode_of_transport  (mode_of_transport)
-#  index_itineraries_on_name               (name)
-#  index_itineraries_on_sandbox_id         (sandbox_id)
-#  index_itineraries_on_tenant_id          (tenant_id)
+#  index_itineraries_on_destination_hub_id  (destination_hub_id)
+#  index_itineraries_on_mode_of_transport   (mode_of_transport)
+#  index_itineraries_on_name                (name)
+#  index_itineraries_on_origin_hub_id       (origin_hub_id)
+#  index_itineraries_on_sandbox_id          (sandbox_id)
+#  index_itineraries_on_tenant_id           (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (destination_hub_id => hubs.id)
+#  fk_rails_...  (origin_hub_id => hubs.id)
 #

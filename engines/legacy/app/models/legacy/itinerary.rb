@@ -21,6 +21,8 @@ module Legacy
     has_many :margins,   dependent: :destroy, class_name: 'Pricings::Margin'
     has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
     has_many :hubs,      through: :stops
+    belongs_to :origin_hub, class_name: 'Legacy::Hub'
+    belongs_to :destination_hub, class_name: 'Legacy::Hub'
     has_many :map_data,  dependent: :destroy
     scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
     scope :for_tenant, ->(tenant_id) { where(tenant_id: tenant_id) }
@@ -33,7 +35,7 @@ module Legacy
       tsearch: { prefix: true }
     }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
-    validates :name, uniqueness: { scope: %i[tenant_id transshipment mode_of_transport] }
+    validates :origin_hub_id, uniqueness: { scope: %i[destination_hub_id tenant_id transshipment mode_of_transport] }
 
     def generate_schedules_from_sheet(stops:, # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
                                       start_date:,
@@ -253,11 +255,11 @@ module Legacy
     end
 
     def origin_stops
-      stops.where(index: 0)
+      stops.where(hub: origin_hub)
     end
 
     def destination_stops
-      stops.where(index: 1)
+      stops.where(hub: destination_hub)
     end
 
     def first_nexus
@@ -285,19 +287,11 @@ module Legacy
     end
 
     def origin_hub_ids
-      origin_stops.pluck(:hub_id)
+      [origin_hub_id]
     end
 
     def destination_hub_ids
-      destination_stops.pluck(:hub_id)
-    end
-
-    def origin_hub
-      origin_stops.first.hub
-    end
-
-    def destination_hub
-      destination_stops.first.hub
+      [destination_hub_id]
     end
 
     def origin_nexuses
@@ -461,19 +455,28 @@ end
 #
 # Table name: itineraries
 #
-#  id                :bigint           not null, primary key
-#  mode_of_transport :string
-#  name              :string
-#  transshipment     :string
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  sandbox_id        :uuid
-#  tenant_id         :integer
+#  id                 :bigint           not null, primary key
+#  mode_of_transport  :string
+#  name               :string
+#  transshipment      :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  destination_hub_id :bigint
+#  origin_hub_id      :bigint
+#  sandbox_id         :uuid
+#  tenant_id          :integer
 #
 # Indexes
 #
-#  index_itineraries_on_mode_of_transport  (mode_of_transport)
-#  index_itineraries_on_name               (name)
-#  index_itineraries_on_sandbox_id         (sandbox_id)
-#  index_itineraries_on_tenant_id          (tenant_id)
+#  index_itineraries_on_destination_hub_id  (destination_hub_id)
+#  index_itineraries_on_mode_of_transport   (mode_of_transport)
+#  index_itineraries_on_name                (name)
+#  index_itineraries_on_origin_hub_id       (origin_hub_id)
+#  index_itineraries_on_sandbox_id          (sandbox_id)
+#  index_itineraries_on_tenant_id           (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (destination_hub_id => hubs.id)
+#  fk_rails_...  (origin_hub_id => hubs.id)
 #

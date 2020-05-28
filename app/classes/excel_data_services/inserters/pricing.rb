@@ -29,7 +29,6 @@ module ExcelDataServices
           itinerary.stops << stops - itinerary.stops
 
           add_stats(itinerary, row[:row_nr])
-
           next unless itinerary.save
 
           tenant_vehicle = find_or_create_tenant_vehicle(row)
@@ -53,12 +52,15 @@ module ExcelDataServices
 
       def find_or_initialize_itinerary(origin_hub, destination_hub, row)
         Legacy::Itinerary.find_or_initialize_by(
+          origin_hub: origin_hub,
+          destination_hub: destination_hub,
           tenant: tenant,
-          name: "#{origin_hub.nexus.name} - #{destination_hub.nexus.name}",
           mode_of_transport: row.mot,
           transshipment: row.transshipment,
           sandbox: @sandbox
-        )
+        ).tap do |itinerary|
+          itinerary.update(name: "#{origin_hub.nexus.name} - #{destination_hub.nexus.name}") if itinerary.name.blank?
+        end
       end
 
       def find_or_initialize_stops(hubs, itinerary, row_nr)
@@ -110,6 +112,7 @@ module ExcelDataServices
         old_pricings = itinerary.rates.where(pricing_params.except(:effective_date,
                                                                    :expiration_date,
                                                                    :internal))
+
         overlap_handler = ExcelDataServices::Inserters::DateOverlapHandler.new(old_pricings, new_pricing)
         pricings_with_actions = overlap_handler.perform
         pricings_for_new_pricing_details = act_on_overlapping_pricings(pricings_with_actions, notes, row[:row_nr])

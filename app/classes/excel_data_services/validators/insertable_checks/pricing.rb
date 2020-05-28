@@ -63,7 +63,9 @@ module ExcelDataServices
           return unless origin_hub && destination_hub
 
           itinerary = Itinerary.find_by(
-            name: "#{origin_hub.nexus.name} - #{destination_hub.nexus.name}",
+            origin_hub: origin_hub,
+            destination_hub: destination_hub,
+            transshipment: row.transshipment,
             mode_of_transport: row.mot,
             tenant: tenant
           )

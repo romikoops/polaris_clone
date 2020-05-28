@@ -505,14 +505,18 @@ ActiveRecord::Schema.define(version: 2020_05_26_101919) do
 
   create_table "itineraries", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.bigint "destination_hub_id"
     t.string "mode_of_transport"
     t.string "name"
+    t.bigint "origin_hub_id"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.string "transshipment"
     t.datetime "updated_at", null: false
+    t.index ["destination_hub_id"], name: "index_itineraries_on_destination_hub_id"
     t.index ["mode_of_transport"], name: "index_itineraries_on_mode_of_transport"
     t.index ["name"], name: "index_itineraries_on_name"
+    t.index ["origin_hub_id"], name: "index_itineraries_on_origin_hub_id"
     t.index ["sandbox_id"], name: "index_itineraries_on_sandbox_id"
     t.index ["tenant_id"], name: "index_itineraries_on_tenant_id"
   end
@@ -2285,6 +2289,8 @@ ActiveRecord::Schema.define(version: 2020_05_26_101919) do
   add_foreign_key "address_book_contacts", "tenants_users", column: "user_id"
   add_foreign_key "cargo_cargos", "quotations_quotations", column: "quotation_id"
   add_foreign_key "cargo_units", "cargo_cargos", column: "cargo_id"
+  add_foreign_key "itineraries", "hubs", column: "destination_hub_id"
+  add_foreign_key "itineraries", "hubs", column: "origin_hub_id"
   add_foreign_key "legacy_transit_times", "itineraries"
   add_foreign_key "legacy_transit_times", "tenant_vehicles"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"

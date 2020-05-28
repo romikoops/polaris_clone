@@ -8,7 +8,7 @@ module ExcelDataServices
       end
 
       def destination_country
-        @destination_country ||= data[:destination_country]
+        @destination_country ||= data[:country_destination]
       end
 
       def destination_locode
@@ -40,7 +40,7 @@ module ExcelDataServices
       end
 
       def origin_country
-        @origin_country ||= data[:origin_country]
+        @origin_country ||= data[:country_origin]
       end
 
       def origin_locode
