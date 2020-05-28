@@ -9,6 +9,7 @@ exports[`shallow render 1`] = `
   }
 >
   <CSSTransition
+    classNames=""
     transitionEnter={false}
     transitionLeaveTimeout={1000}
     transitionName="alerts"
