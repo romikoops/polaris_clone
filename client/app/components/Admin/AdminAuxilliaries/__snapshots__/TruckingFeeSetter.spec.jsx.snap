@@ -1044,7 +1044,7 @@ exports[`shallow render 1`] = `
                         onTouchMove={[Function]}
                         onTouchStart={[Function]}
                       >
-                        <span
+                        <div
                           className="Select-multi-value-wrapper"
                           id="react-select-2--value"
                         >
@@ -1130,7 +1130,7 @@ exports[`shallow render 1`] = `
                               />
                             </div>
                           </AutosizeInput>
-                        </span>
+                        </div>
                         <span
                           aria-label="Clear value"
                           className="Select-clear-zone"
@@ -1461,7 +1461,7 @@ exports[`shallow render 1`] = `
                       onTouchMove={[Function]}
                       onTouchStart={[Function]}
                     >
-                      <span
+                      <div
                         className="Select-multi-value-wrapper"
                         id="react-select-3--value"
                       >
@@ -1548,7 +1548,7 @@ exports[`shallow render 1`] = `
                             />
                           </div>
                         </AutosizeInput>
-                      </span>
+                      </div>
                       <span
                         aria-label="Clear value"
                         className="Select-clear-zone"
@@ -2474,7 +2474,7 @@ exports[`state.globalFees is truthy 1`] = `
                       onTouchMove={[Function]}
                       onTouchStart={[Function]}
                     >
-                      <span
+                      <div
                         className="Select-multi-value-wrapper"
                         id="react-select-6--value"
                       >
@@ -2561,7 +2561,7 @@ exports[`state.globalFees is truthy 1`] = `
                             />
                           </div>
                         </AutosizeInput>
-                      </span>
+                      </div>
                       <span
                         aria-label="Clear value"
                         className="Select-clear-zone"
@@ -3114,7 +3114,7 @@ exports[`state.globalFees is truthy 1`] = `
                         onTouchMove={[Function]}
                         onTouchStart={[Function]}
                       >
-                        <span
+                        <div
                           className="Select-multi-value-wrapper"
                           id="react-select-7--value"
                         >
@@ -3200,7 +3200,7 @@ exports[`state.globalFees is truthy 1`] = `
                               />
                             </div>
                           </AutosizeInput>
-                        </span>
+                        </div>
                         <span
                           aria-label="Clear value"
                           className="Select-clear-zone"
@@ -3798,7 +3798,7 @@ exports[`state.globalFees is truthy 1`] = `
                         onTouchMove={[Function]}
                         onTouchStart={[Function]}
                       >
-                        <span
+                        <div
                           className="Select-multi-value-wrapper"
                           id="react-select-4--value"
                         >
@@ -3884,7 +3884,7 @@ exports[`state.globalFees is truthy 1`] = `
                               />
                             </div>
                           </AutosizeInput>
-                        </span>
+                        </div>
                         <span
                           aria-label="Clear value"
                           className="Select-clear-zone"
@@ -4215,7 +4215,7 @@ exports[`state.globalFees is truthy 1`] = `
                       onTouchMove={[Function]}
                       onTouchStart={[Function]}
                     >
-                      <span
+                      <div
                         className="Select-multi-value-wrapper"
                         id="react-select-5--value"
                       >
@@ -4302,7 +4302,7 @@ exports[`state.globalFees is truthy 1`] = `
                             />
                           </div>
                         </AutosizeInput>
-                      </span>
+                      </div>
                       <span
                         aria-label="Clear value"
                         className="Select-clear-zone"
@@ -5442,7 +5442,7 @@ exports[`state.selectOptions is falsy 1`] = `
                         onTouchMove={[Function]}
                         onTouchStart={[Function]}
                       >
-                        <span
+                        <div
                           className="Select-multi-value-wrapper"
                           id="react-select-8--value"
                         >
@@ -5507,7 +5507,7 @@ exports[`state.selectOptions is falsy 1`] = `
                               />
                             </div>
                           </AutosizeInput>
-                        </span>
+                        </div>
                         <span
                           className="Select-arrow-zone"
                           onMouseDown={[Function]}
@@ -5795,7 +5795,7 @@ exports[`state.selectOptions is falsy 1`] = `
                       onTouchMove={[Function]}
                       onTouchStart={[Function]}
                     >
-                      <span
+                      <div
                         className="Select-multi-value-wrapper"
                         id="react-select-9--value"
                       >
@@ -5860,7 +5860,7 @@ exports[`state.selectOptions is falsy 1`] = `
                             />
                           </div>
                         </AutosizeInput>
-                      </span>
+                      </div>
                       <span
                         className="Select-arrow-zone"
                         onMouseDown={[Function]}
