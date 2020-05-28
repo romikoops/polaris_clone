@@ -46,6 +46,7 @@ exports[`countries is truthy 1`] = `
               "Header": undefined,
               "Pivot": undefined,
               "PivotValue": undefined,
+              "Placeholder": undefined,
               "aggregate": undefined,
               "className": "",
               "filterAll": false,
@@ -58,6 +59,7 @@ exports[`countries is truthy 1`] = `
               "getProps": [Function],
               "headerClassName": "",
               "headerStyle": Object {},
+              "minResizeWidth": 11,
               "minWidth": 100,
               "resizable": undefined,
               "show": true,
@@ -126,6 +128,7 @@ exports[`countries is truthy 1`] = `
           defaultExpanded={Object {}}
           defaultFilterMethod={[Function]}
           defaultFiltered={Array []}
+          defaultPage={0}
           defaultPageSize={15}
           defaultResized={Array []}
           defaultSortDesc={false}
@@ -182,6 +185,7 @@ exports[`countries is truthy 1`] = `
           ofText="of"
           onFetchData={[Function]}
           originalKey="_original"
+          pageJumpText="jump to page"
           pageSize={15}
           pageSizeOptions={
             Array [
@@ -200,6 +204,7 @@ exports[`countries is truthy 1`] = `
           previousText="Previous"
           resizable={true}
           resolveData={[Function]}
+          rowsSelectorText="rows per page"
           rowsText="rows"
           showPageJump={true}
           showPageSizeOptions={true}
@@ -280,6 +285,7 @@ exports[`hubs is falsy 1`] = `
               "Header": undefined,
               "Pivot": undefined,
               "PivotValue": undefined,
+              "Placeholder": undefined,
               "aggregate": undefined,
               "className": "",
               "filterAll": false,
@@ -292,6 +298,7 @@ exports[`hubs is falsy 1`] = `
               "getProps": [Function],
               "headerClassName": "",
               "headerStyle": Object {},
+              "minResizeWidth": 11,
               "minWidth": 100,
               "resizable": undefined,
               "show": true,
@@ -342,6 +349,7 @@ exports[`hubs is falsy 1`] = `
           defaultExpanded={Object {}}
           defaultFilterMethod={[Function]}
           defaultFiltered={Array []}
+          defaultPage={0}
           defaultPageSize={15}
           defaultResized={Array []}
           defaultSortDesc={false}
@@ -398,6 +406,7 @@ exports[`hubs is falsy 1`] = `
           ofText="of"
           onFetchData={[Function]}
           originalKey="_original"
+          pageJumpText="jump to page"
           pageSize={15}
           pageSizeOptions={
             Array [
@@ -416,6 +425,7 @@ exports[`hubs is falsy 1`] = `
           previousText="Previous"
           resizable={true}
           resolveData={[Function]}
+          rowsSelectorText="rows per page"
           rowsText="rows"
           showPageJump={true}
           showPageSizeOptions={true}
@@ -496,6 +506,7 @@ exports[`shallow render 1`] = `
               "Header": undefined,
               "Pivot": undefined,
               "PivotValue": undefined,
+              "Placeholder": undefined,
               "aggregate": undefined,
               "className": "",
               "filterAll": false,
@@ -508,6 +519,7 @@ exports[`shallow render 1`] = `
               "getProps": [Function],
               "headerClassName": "",
               "headerStyle": Object {},
+              "minResizeWidth": 11,
               "minWidth": 100,
               "resizable": undefined,
               "show": true,
@@ -576,6 +588,7 @@ exports[`shallow render 1`] = `
           defaultExpanded={Object {}}
           defaultFilterMethod={[Function]}
           defaultFiltered={Array []}
+          defaultPage={0}
           defaultPageSize={15}
           defaultResized={Array []}
           defaultSortDesc={false}
@@ -632,6 +645,7 @@ exports[`shallow render 1`] = `
           ofText="of"
           onFetchData={[Function]}
           originalKey="_original"
+          pageJumpText="jump to page"
           pageSize={15}
           pageSizeOptions={
             Array [
@@ -650,6 +664,7 @@ exports[`shallow render 1`] = `
           previousText="Previous"
           resizable={true}
           resolveData={[Function]}
+          rowsSelectorText="rows per page"
           rowsText="rows"
           showPageJump={true}
           showPageSizeOptions={true}
@@ -730,6 +745,7 @@ exports[`state.page > 0 1`] = `
               "Header": undefined,
               "Pivot": undefined,
               "PivotValue": undefined,
+              "Placeholder": undefined,
               "aggregate": undefined,
               "className": "",
               "filterAll": false,
@@ -742,6 +758,7 @@ exports[`state.page > 0 1`] = `
               "getProps": [Function],
               "headerClassName": "",
               "headerStyle": Object {},
+              "minResizeWidth": 11,
               "minWidth": 100,
               "resizable": undefined,
               "show": true,
@@ -810,6 +827,7 @@ exports[`state.page > 0 1`] = `
           defaultExpanded={Object {}}
           defaultFilterMethod={[Function]}
           defaultFiltered={Array []}
+          defaultPage={0}
           defaultPageSize={15}
           defaultResized={Array []}
           defaultSortDesc={false}
@@ -866,6 +884,7 @@ exports[`state.page > 0 1`] = `
           ofText="of"
           onFetchData={[Function]}
           originalKey="_original"
+          pageJumpText="jump to page"
           pageSize={15}
           pageSizeOptions={
             Array [
@@ -884,6 +903,7 @@ exports[`state.page > 0 1`] = `
           previousText="Previous"
           resizable={true}
           resolveData={[Function]}
+          rowsSelectorText="rows per page"
           rowsText="rows"
           showPageJump={true}
           showPageSizeOptions={true}
@@ -964,6 +984,7 @@ exports[`state.searchFilters.hubType is truthy 1`] = `
               "Header": undefined,
               "Pivot": undefined,
               "PivotValue": undefined,
+              "Placeholder": undefined,
               "aggregate": undefined,
               "className": "",
               "filterAll": false,
@@ -976,6 +997,7 @@ exports[`state.searchFilters.hubType is truthy 1`] = `
               "getProps": [Function],
               "headerClassName": "",
               "headerStyle": Object {},
+              "minResizeWidth": 11,
               "minWidth": 100,
               "resizable": undefined,
               "show": true,
@@ -1044,6 +1066,7 @@ exports[`state.searchFilters.hubType is truthy 1`] = `
           defaultExpanded={Object {}}
           defaultFilterMethod={[Function]}
           defaultFiltered={Array []}
+          defaultPage={0}
           defaultPageSize={15}
           defaultResized={Array []}
           defaultSortDesc={false}
@@ -1100,6 +1123,7 @@ exports[`state.searchFilters.hubType is truthy 1`] = `
           ofText="of"
           onFetchData={[Function]}
           originalKey="_original"
+          pageJumpText="jump to page"
           pageSize={15}
           pageSizeOptions={
             Array [
@@ -1118,6 +1142,7 @@ exports[`state.searchFilters.hubType is truthy 1`] = `
           previousText="Previous"
           resizable={true}
           resolveData={[Function]}
+          rowsSelectorText="rows per page"
           rowsText="rows"
           showPageJump={true}
           showPageSizeOptions={true}
