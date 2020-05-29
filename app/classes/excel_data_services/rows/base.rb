@@ -93,6 +93,30 @@ module ExcelDataServices
         @transshipment ||= data[:transshipment] || data[:transshipment_via]
       end
 
+      def origin
+        @origin ||= data[:origin]
+      end
+
+      def destination
+        @destination ||= data[:destination]
+      end
+
+      def mode_of_transport
+        @mode_of_transport ||= data[:mode_of_transport]
+      end
+
+      def transit_time
+        @transit_time ||= data[:transit_time]
+      end
+
+      def itinerary_name
+        @itinerary_name ||= [data[:origin], data[:destination]].join(' - ')
+      end
+
+      def cargo_class
+        @cargo_class ||= data[:cargo_class]
+      end
+
       private
 
       attr_reader :data, :tenant

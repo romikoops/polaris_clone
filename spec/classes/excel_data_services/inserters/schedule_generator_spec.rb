@@ -4,23 +4,12 @@ require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
   describe '.perform' do
-    let(:data) do
-      [
-        { origin: 'Dalian', destination: 'Felixstowe', transit_time: 38, carrier: 'Hapag Lloyd', service_level: nil, mot: 'ocean', cargo_class: 'container', row_nr: 2, ordinals: [4] },
-        { origin: 'Dalian', destination: 'Felixstowe', transit_time: 38, carrier: nil, service_level: nil, mot: 'ocean', cargo_class: 'cargo_item', row_nr: 2, ordinals: [4] },
-        { origin: 'Shanghai', destination: 'Felixstowe', transit_time: 38, carrier: nil, service_level: nil, mot: nil, cargo_class: 'cargo_item', row_nr: 2, ordinals: [4] },
-        { origin: 'Shanghai', destination: 'Felixstowe', transshipment: 'ZACPT', transit_time: 38, carrier: nil, service_level: nil, mot: nil, cargo_class: 'cargo_item', row_nr: 2, ordinals: [4] }
-      ]
-    end
+    let(:data) { FactoryBot.build(:excel_data_restructured_schedule_generator) }
     let(:tenant) { create(:tenant) }
-
-    let(:vehicle) do
-      create(:vehicle, tenant_vehicles: [tenant_vehicle_1])
-    end
+    let(:vehicle) { create(:vehicle, tenant_vehicles: [tenant_vehicle_1]) }
     let(:carrier) { create(:carrier, code: 'hapag lloyd', name: 'Hapag LLoyd') }
-    let(:tenant_vehicle_1) { create(:tenant_vehicle, name: 'cargo_item', tenant: tenant) }
-    let(:tenant_vehicle_2) { create(:tenant_vehicle, name: 'container', tenant: tenant, carrier: carrier) }
-
+    let(:tenant_vehicle_1) { create(:tenant_vehicle, name: 'lcl_service', tenant: tenant) }
+    let(:tenant_vehicle_2) { create(:tenant_vehicle, name: 'fcl_service', tenant: tenant, carrier: carrier) }
     let!(:itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe') }
     let!(:ignored_itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe', mode_of_transport: 'rail') }
     let!(:misspelled_itinerary) { create(:itinerary, tenant: tenant, name: 'Sahnghai - Felixstowe', mode_of_transport: 'air') }

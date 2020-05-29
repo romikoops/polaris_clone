@@ -20,7 +20,8 @@ module ExcelDataServices
       def build_charge_params
         restructured_data = sanitize_service_level_and_carrier(data[:rows_data])
         restructured_data = parse_cargo_class(rows_data: restructured_data, key: :cargo_class)
-        convert_days_to_ordinals(rows_data: restructured_data)
+        restructured_data = convert_days_to_ordinals(rows_data: restructured_data)
+        rename_mot(rows_data: restructured_data)
       end
 
       def convert_days_to_ordinals(rows_data:)
@@ -29,6 +30,12 @@ module ExcelDataServices
             row_data.delete(:etd_days)
                     .split(',')
                     .map { |string| ORDINALS_LOOKUP[string.strip.upcase.to_sym] }
+        end
+      end
+
+      def rename_mot(rows_data:)
+        rows_data.each do |row_data|
+          row_data[:mode_of_transport] = row_data.delete(:mot)
         end
       end
     end

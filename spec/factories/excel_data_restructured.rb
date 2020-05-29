@@ -2855,6 +2855,49 @@ FactoryBot.define do
       end
     end
 
+    trait :restructured_schedule_generator do
+      data do
+        [
+          { origin: 'Dalian',
+            destination: 'Felixstowe',
+            transit_time: 38,
+            carrier: 'Hapag Lloyd',
+            service_level: 'fcl_service',
+            mode_of_transport: 'ocean',
+            cargo_class: 'container',
+            row_nr: 2,
+            ordinals: [4]},
+          { origin: 'Dalian',
+            destination: 'Felixstowe',
+            transit_time: 38,
+            carrier: nil,
+            service_level: 'lcl_service',
+            mode_of_transport: 'ocean',
+            cargo_class: 'cargo_item',
+            row_nr: 2,
+            ordinals: [4]},
+          { origin: 'Shanghai',
+            destination: 'Felixstowe',
+            transit_time: 38,
+            carrier: nil,
+            service_level: 'lcl_service',
+            mode_of_transport: nil,
+            cargo_class: 'cargo_item',
+            row_nr: 2,
+            ordinals: [4]},
+          { origin: 'Shanghai',
+            destination: 'Felixstowe',
+            transshipment: 'ZACPT',
+            transit_time: 38,
+            carrier: nil,
+            service_level: 'lcl_service',
+            mode_of_transport: nil,
+            cargo_class: 'cargo_item',
+            row_nr: 2,
+            ordinals: [4]}
+        ]
+      end
+    end
     trait :restructured_schedules do
       data do
         [{
@@ -2989,6 +3032,7 @@ FactoryBot.define do
     factory :excel_data_restructured_correct_saco_shipping_pricings, traits: %i[correct_saco_shipping_pricings]
     factory :excel_data_restructured_correct_saco_shipping_local_charges, traits: %i[correct_saco_shipping_local_charges]
     factory :excel_data_restructured_schedules, traits: %i[restructured_schedules]
+    factory :excel_data_restructured_schedule_generator, traits: %i[restructured_schedule_generator]
     factory :excel_data_restructured_max_dimensions, traits: %i[restructured_max_dimensions]
   end
 end

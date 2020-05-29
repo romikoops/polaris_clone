@@ -3,9 +3,6 @@
 module ExcelDataServices
   module Rows
     class Pricing < ExcelDataServices::Rows::Base
-      def destination
-        @destination ||= data[:destination]
-      end
 
       def destination_country
         @destination_country ||= data[:country_destination]
@@ -13,10 +10,6 @@ module ExcelDataServices
 
       def destination_locode
         @destination_locode ||= data[:destination_locode]
-      end
-
-      def itinerary_name
-        @itinerary_name ||= [data[:origin], data[:destination]].join(' - ')
       end
 
       def hw_rate_basis
@@ -33,10 +26,6 @@ module ExcelDataServices
 
       def notes
         @notes ||= data[:notes]
-      end
-
-      def origin
-        @origin ||= data[:origin]
       end
 
       def origin_country
