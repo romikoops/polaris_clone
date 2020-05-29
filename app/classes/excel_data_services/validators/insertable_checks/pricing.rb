@@ -59,6 +59,7 @@ module ExcelDataServices
 
           check_hub_existence(origin_hub_with_info, row)
           check_hub_existence(destination_hub_with_info, row)
+          check_rate_basis(row)
 
           return unless origin_hub && destination_hub
 
@@ -89,6 +90,19 @@ module ExcelDataServices
               exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
             )
           end
+        end
+
+        def check_rate_basis(row)
+          rate_basis = row.rate_basis.upcase
+          return if Pricings::RateBasis.exists?(internal_code: rate_basis) || VALID_RATE_BASES.include?(rate_basis)
+
+          add_to_errors(
+            type: :error,
+            row_nr: row.nr,
+            sheet_name: sheet_name,
+            reason: "\"#{rate_basis}\" is not a valid Rate Basis.",
+            exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
+          )
         end
 
         def check_overlapping_effective_periods(row, user, itinerary)

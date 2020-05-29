@@ -856,7 +856,7 @@ FactoryBot.define do
             carrier: nil,
             service_level: 'standard',
             load_type: 'lcl',
-            rate_basis: 'PER_WM',
+            rate_basis: 'W/M',
             fee_code: 'BAS',
             fee_name: 'Bas',
             currency: 'USD',

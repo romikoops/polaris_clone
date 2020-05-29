@@ -4,31 +4,6 @@ module ExcelDataServices
   module Validators
     module MissingValues
       class LocalCharges < ExcelDataServices::Validators::MissingValues::Base
-        VALID_RATE_BASES = %w[
-          PER_SHIPMENT
-          PER_CONTAINER
-          PER_BILL
-          PER_CBM
-          PER_KG
-          PER_TON
-          PER_WM
-          PER_ITEM
-          PER_CBM_TON
-          PER_SHIPMENT_CONTAINER
-          PER_BILL_CONTAINER
-          PER_CBM_KG
-          PER_KG_RANGE
-          PER_KG_RANGE_FLAT
-          PER_CBM_RANGE
-          PER_CBM_RANGE_FLAT
-          PER_WM_RANGE
-          PER_WM_RANGE_FLAT
-          PER_UNIT_RANGE
-          PER_UNIT_RANGE_FLAT
-          PER_X_KG_FLAT
-          PER_UNIT_TON_CBM_RANGE
-          PER_SHIPMENT_TON
-        ].freeze
 
         USER_FRIENDLY_FEE_COMP_LOOKUP = {
           key: 'FEE_CODE',

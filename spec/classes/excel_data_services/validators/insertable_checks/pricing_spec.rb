@@ -78,6 +78,11 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
           row_nr: 3,
           sheet_name: 'Sheet1',
           reason: "The Group with ID '000-gr0up-a-id-123' is not the same as the group with name 'GROUP B'!",
+          exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
+        { type: :error,
+          row_nr: 3,
+          sheet_name: 'Sheet1',
+          reason: "\"W/M\" is not a valid Rate Basis.",
           exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks }]
       end
 
