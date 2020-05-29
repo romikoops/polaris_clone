@@ -30,6 +30,7 @@ rollback_migration_files = diff.select { |file| file.type == "deleted" }
 if rollback_migration_files.any?
   require "tmpdir"
 
+  ENV["ANNOTATE_SKIP_ON_DB_MIGRATE"] = "1"
   versions = []
   Dir.mktmpdir do |directory|
     rollback_migration_files.each do |diff_file|

@@ -4202,7 +4202,6 @@ Style/StringLiterals:
     - 'lib/spec/support/simplecov.rb'
     - 'lib/spec/support/timecop.rb'
     - 'lib/spec/support/webmock.rb'
-    - 'lib/tasks/auto_annotate_models.rake'
     - 'lib/tasks/cleanup/carriers.rake'
     - 'lib/tasks/content/update.rake'
     - 'lib/tasks/custom_seeds.rake'
