@@ -534,6 +534,7 @@ exports[`shallow render 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -551,6 +552,7 @@ exports[`shallow render 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -1240,6 +1242,7 @@ exports[`theme is falsy 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -1257,6 +1260,7 @@ exports[`theme is falsy 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {

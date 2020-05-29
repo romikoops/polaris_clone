@@ -939,6 +939,7 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -956,6 +957,7 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -2224,6 +2226,7 @@ exports[`customsData[target].unknown 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -2241,6 +2244,7 @@ exports[`customsData[target].unknown 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -4049,6 +4053,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -4066,6 +4071,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -5340,6 +5346,7 @@ exports[`shallow render 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -5357,6 +5364,7 @@ exports[`shallow render 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -6631,6 +6639,7 @@ exports[`shipment.has_pre_carriage ? 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -6648,6 +6657,7 @@ exports[`shipment.has_pre_carriage ? 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -7952,6 +7962,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -7969,6 +7980,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -9243,6 +9255,7 @@ exports[`state.customsView is true 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -9260,6 +9273,7 @@ exports[`state.customsView is true 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -10534,6 +10548,7 @@ exports[`state.insuranceView is false 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -10551,6 +10566,7 @@ exports[`state.insuranceView is false 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -12119,6 +12135,7 @@ exports[`state.showModal is true 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -12136,6 +12153,7 @@ exports[`state.showModal is true 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -13410,6 +13428,7 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -13427,6 +13446,7 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -15323,6 +15343,7 @@ exports[`tenant.scope.has_insurance is false 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -15340,6 +15361,7 @@ exports[`tenant.scope.has_insurance is false 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {
@@ -16530,6 +16552,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                 },
                 "service_level": "FOO_SERVICE_LEVEL",
                 "service_level_count": 1,
+                "transit_time": 1,
               },
               "quote": Object {
                 "total": Object {
@@ -16547,6 +16570,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
             Object {
               "meta": Object {
                 "mode_of_transport": "ocean",
+                "transit_time": 2,
               },
               "quote": Object {
                 "total": Object {

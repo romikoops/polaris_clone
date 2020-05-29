@@ -5,14 +5,11 @@ import { withNamespaces } from 'react-i18next'
 import
 {
   has,
-  get,
-  minBy,
-  values
+  get
 } from 'lodash'
 import RouteFilterBox from '../RouteFilterBox/RouteFilterBox'
 import { moment } from '../../constants'
 import styles from './ChooseOffer.scss'
-import { numberSpacing, isQuote } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import { RoundButton } from '../RoundButton/RoundButton'
 import QuoteCard from '../Quote/Card'
@@ -20,25 +17,9 @@ import { Modal } from '../Modal/Modal'
 import ScrollTracking from '../Addons/ScrollTracking'
 import { trackingConstants } from '../../constants/tracking.constants'
 import ShowTotal from '../ShowTotal/ShowTotal'
+import { offerSorter, isQuote } from '../../helpers'
 
 class ChooseOffer extends Component {
-  static dynamicSort (property) {
-    let sortOrder = 1
-    let prop
-    if (property[0] === '-') {
-      sortOrder = -1
-      prop = property.substr(1)
-    } else {
-      prop = property
-    }
-
-    return (a, b) => {
-      const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
-      const result2 = result1 ? 1 : 0
-
-      return result2 * sortOrder
-    }
-  }
 
   static getDerivedStateFromProps (nextProps, prevState) {
     const quoteTool = isQuote(nextProps.tenant)
@@ -243,7 +224,7 @@ class ChooseOffer extends Component {
     const { scope } = tenant
     if (user.guest || scope.hide_grand_total) return routes
 
-    return routes.sort((a, b) => parseFloat(get(a, 'quote.total.value')) - parseFloat(get(b, 'quote.total.value')))
+    return offerSorter(routes, scope)
   }
 
   render () {

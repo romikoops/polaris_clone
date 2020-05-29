@@ -4,6 +4,7 @@ export const firstResult = {
     service_level_count: 1,
     carrier_name: 'FOO_CARRIER_NAME',
     mode_of_transport: 'air',
+    transit_time: 1,
     origin_hub: {
       name: 'Gothenburg'
     },
@@ -68,7 +69,7 @@ export const firstResult = {
 }
 
 export const secondResult = {
-  meta: { mode_of_transport: 'ocean' },
+  meta: { mode_of_transport: 'ocean', transit_time: 2 },
   quote: {
     total: {
       value: 309
