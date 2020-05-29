@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should not render the edit button 1`] = `
+<div
+  className="flex-100 layout-row layout-align-space-between-center layout-wrap padd_20"
+>
+  <Connect(AdminClientMargins)
+    editable={true}
+    targetId={123}
+    targetType="tenant"
+    toggleEdit={[Function]}
+  />
+</div>
+`;
+
+exports[`should render the edit button 1`] = `
+<div
+  className="flex-100 layout-row layout-align-space-between-center layout-wrap padd_20"
+>
+  <div
+    className="flex-100 layout-row layout-align-end buffer_10"
+  >
+    <GreyBox
+      borderStyle=""
+      content={
+        Array [
+          "",
+        ]
+      }
+      contentClassName="flex layout-row layout-align-center-center pointy"
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      id="editButton"
+      isBox={false}
+      onClick={[Function]}
+      padding={false}
+      style={Object {}}
+      title=""
+      titleAction={false}
+      wrapperClassName="flex-20 layout-row pointy"
+    >
+      <i
+        className="flex-none fa fa-pencil"
+      />
+      <p
+        className="flex-none"
+      >
+        Edit
+      </p>
+    </GreyBox>
+  </div>
+  <Connect(AdminClientMargins)
+    editable={false}
+    targetId={123}
+    targetType="tenant"
+    toggleEdit={[Function]}
+  />
+</div>
+`;

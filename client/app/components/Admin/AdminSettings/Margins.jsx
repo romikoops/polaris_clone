@@ -11,7 +11,6 @@ class AdminMargins extends Component {
       editable: false
     }
     this.toggleEditable = this.toggleEditable.bind(this)
-    
   }
 
   toggleEditable () {
@@ -24,16 +23,19 @@ class AdminMargins extends Component {
 
     return (
       <div className="flex-100 layout-row layout-align-space-between-center layout-wrap padd_20">
-        <div className="flex-100 layout-row layout-align-end buffer_10">
-          <GreyBox
-            wrapperClassName="flex-20 layout-row pointy "
-            contentClassName="flex layout-row layout-align-center-center pointy"
-            onClick={this.toggleEditable}
-          >
-            <i className="flex-none fa fa-pencil" />
-            <p className="flex-none">{t('admin:edit')}</p>
-          </GreyBox>
-        </div>
+        { !editable && (
+          <div className="flex-100 layout-row layout-align-end buffer_10">
+            <GreyBox
+              id="editButton"
+              wrapperClassName="flex-20 layout-row pointy"
+              contentClassName="flex layout-row layout-align-center-center pointy"
+              onClick={this.toggleEditable}
+            >
+              <i className="flex-none fa fa-pencil" />
+              <p className="flex-none">{t('admin:edit')}</p>
+            </GreyBox>
+          </div>
+        ) }
         <AdminClientMargins
           toggleEdit={this.toggleEditable}
           editable={editable}
