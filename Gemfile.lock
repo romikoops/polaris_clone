@@ -697,7 +697,7 @@ GEM
       aws-sdk-core (~> 3, >= 3.96.1)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
-    aws-sdk-sqs (1.25.0)
+    aws-sdk-sqs (1.26.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.4)
@@ -1231,7 +1231,7 @@ DEPENDENCIES
   aws-sdk-cloudfront (~> 1.28.0)
   aws-sdk-route53 (~> 1.35.0)
   aws-sdk-s3 (~> 1.67.0)
-  aws-sdk-sqs (~> 1.25.0)
+  aws-sdk-sqs (~> 1.26.0)
   better_errors
   binding_of_caller
   bootsnap (>= 1.1.0)
