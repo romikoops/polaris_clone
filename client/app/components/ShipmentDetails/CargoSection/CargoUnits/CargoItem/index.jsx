@@ -1,7 +1,7 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import uuid from 'uuid'
-import { get } from 'lodash'
+import { get, max } from 'lodash'
 import CargoUnitBox from '../CargoUnit/Box'
 import styles from './index.scss'
 import CargoUnitNumberInput from '../CargoUnit/NumberInput'
@@ -12,7 +12,6 @@ import length from '../../../../../assets/images/cargo/length.png'
 import width from '../../../../../assets/images/cargo/width.png'
 import height from '../../../../../assets/images/cargo/height.png'
 import calcMaxDimensionsToApply from '../../../../../helpers/calcMaxDimensionsToApply'
-
 import CheckboxWrapper from './checkboxWrapper'
 import ChargeableProperties from './ChargeableProperties'
 
@@ -70,6 +69,14 @@ class CargoItem extends React.PureComponent {
     )
   }
 
+  getMaxDimensions () {
+    const { ShipmentDetails, maxDimensions } = this.props
+    const maxValues = ShipmentDetails.availableMots.map((key) => maxDimensions[key] || maxDimensions.general)
+      .filter((maxDimension) => !!maxDimension)
+
+    return maxValues
+  }
+
   getImage (prop) {
     const { t } = this.props
 
@@ -93,9 +100,10 @@ class CargoItem extends React.PureComponent {
       getPropValue,
       getPropStep
     } = this.props
-    const maxDimension = Number(
-      this.getMaxDimensionsToApply()[prop === 'collectiveWeight' ? 'payloadInKg' : prop]
-    )
+
+    const key = prop === 'collectiveWeight' ? 'payloadInKg' : prop
+    const maxDimension = max(this.getMaxDimensions()
+      .map((item) => Number(item[key])))
 
     return {
       cargoItem,

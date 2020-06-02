@@ -830,7 +830,7 @@
     "totalDimensions": "Total Dimensions",
     "cargoReadyDate": "Cargo Ready Date",
     "availableAtTerm": "Available at appointed terminal",
-    "excessChargeableWeight": "Please note that the total chargeable weight for Air Freight shipments",
+    "excessChargeableWeight": "Please note that the total chargeable weight for {mot} Freight shipments ({actual} Kg) exceeds the maximum ({max} Kg).",
     "excessWeight": "The total weight of the specified cargo",
     "exceedsMaximum": "exceeds the maximum",
     "excessDimensionsRequest": "Request oversized cargo",

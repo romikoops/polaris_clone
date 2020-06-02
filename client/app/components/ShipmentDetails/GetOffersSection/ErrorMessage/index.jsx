@@ -1,17 +1,27 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
+import interpolate from '../../../../helpers/interpolate'
+import styles from './index.scss'
 
 function ErrorMessage ({
   error, type, name, tenant, t
 }) {
-  const { max, actual } = error
+  const { max, actual, allMotsExceeded } = error
 
   if (name === 'chargeableWeight') {
-    return `
-      ${t('cargo:excessChargeableWeight')}
-      (${actual} ${t('acronym:kg')}) ${t('cargo:exceedsMaximum')}
-      (${max} ${t('acronym:kg')}).
-    `
+    let className = styles.error
+    let mot = t('common:all')
+
+    if (!allMotsExceeded) {
+      mot = t(`shipment:${error.modeOfTransport}`)
+      className = styles.warning
+    }
+
+    return (
+      <div className={className}>
+        {interpolate(t('cargo:excessChargeableWeight'), { mot, actual, max })}
+      </div>
+    )
   }
 
   if (type === 'error' && name === 'payloadInKg') {

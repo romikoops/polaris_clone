@@ -7,7 +7,7 @@ import Checkboxes from './Checkboxes'
 import ButtonWrapper from './ButtonWrapper'
 import { isQuote } from '../../../helpers'
 import styles from './index.scss'
-import ErrorMessage from './ErrorMessage';
+import ErrorMessage from './ErrorMessage'
 import ScrollTracking from "../../Addons/ScrollTracking";
 import { trackingConstants } from "../../../constants/tracking.constants";
 
@@ -113,7 +113,7 @@ class GetOffersSection extends React.PureComponent {
     if (loadType === 'cargo_item') {
       Object.entries(totalShipmentErrors).forEach(([name, obj]) => {
         if (!obj.errors) return
-  
+
         obj.errors.forEach((error) => {
           subTexts.push(
             <ErrorMessage
@@ -180,7 +180,7 @@ class GetOffersSection extends React.PureComponent {
             </div>
 
             <ScrollTracking type={trackingConstants.SHIPMENTS_DETAILS_SCROLL }/>
-            
+
           </div>
         </div>
       </div>
