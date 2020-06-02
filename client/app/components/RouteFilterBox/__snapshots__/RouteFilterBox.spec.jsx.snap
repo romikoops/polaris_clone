@@ -115,7 +115,7 @@ exports[`availableMotKeys is empty object 1`] = `
         }
       }
     >
-      * Transit time (T/T) not guaranteed
+      * Estimated Transit time (T/T)
     </p>
     <p
       style={
@@ -349,7 +349,7 @@ exports[`pickup is false 1`] = `
         }
       }
     >
-      * Transit time (T/T) not guaranteed
+      * Estimated Transit time (T/T)
     </p>
     <p
       style={
@@ -572,7 +572,7 @@ exports[`shallow rendering 1`] = `
         }
       }
     >
-      * Transit time (T/T) not guaranteed
+      * Estimated Transit time (T/T)
     </p>
     <p
       style={

@@ -1003,7 +1003,7 @@ exports[`selectedOffers is truthy 1`] = `
           }
         }
       >
-        * Transit time (T/T) not guaranteed
+        * Estimated Transit time (T/T)
       </p>
       <p
         style={
@@ -2083,7 +2083,7 @@ exports[`shallow render 1`] = `
           }
         }
       >
-        * Transit time (T/T) not guaranteed
+        * Estimated Transit time (T/T)
       </p>
       <p
         style={
@@ -3167,7 +3167,7 @@ exports[`shipmentData.results[].meta.pricing_rate_data is falsy 1`] = `
           }
         }
       >
-        * Transit time (T/T) not guaranteed
+        * Estimated Transit time (T/T)
       </p>
       <p
         style={
@@ -4247,7 +4247,7 @@ exports[`shipmentData.results[].meta.pricing_rate_data is truthy 1`] = `
           }
         }
       >
-        * Transit time (T/T) not guaranteed
+        * Estimated Transit time (T/T)
       </p>
       <p
         style={
@@ -5327,7 +5327,7 @@ exports[`shipmentData.schedules is falsy 1`] = `
           }
         }
       >
-        * Transit time (T/T) not guaranteed
+        * Estimated Transit time (T/T)
       </p>
       <p
         style={
@@ -6518,7 +6518,7 @@ exports[`state.showModal is true 1`] = `
           }
         }
       >
-        * Transit time (T/T) not guaranteed
+        * Estimated Transit time (T/T)
       </p>
       <p
         style={
@@ -7578,7 +7578,7 @@ exports[`tenant.scope.hide_grand_total is false 1`] = `
           }
         }
       >
-        * Transit time (T/T) not guaranteed
+        * Estimated Transit time (T/T)
       </p>
       <p
         style={
