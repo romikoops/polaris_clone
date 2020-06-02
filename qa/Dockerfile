@@ -1,4 +1,4 @@
-FROM ruby:2.6.2-alpine
+FROM ruby:2.6.2-alpine@sha256:4beb57148565625f3b0b66eb57ef6a300e1522799ee4ab1a2674cf4b584bb477
 
 LABEL maintainer="development@itsmycargo.com"
 

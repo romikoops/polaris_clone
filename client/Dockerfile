@@ -29,7 +29,7 @@ ENV RELEASE $RELEASE
 RUN npm run build
 
 # Deployment Image
-FROM nginx:alpine AS app
+FROM nginx:alpine@sha256:678fd4ece211f3cadea51b1e768e4955bd4a948c684d02ad766054934c4f3b26 AS app
 
 ENV DOCKERIZE_VERSION v0.6.1
 RUN wget -q https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \

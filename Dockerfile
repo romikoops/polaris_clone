@@ -1,4 +1,4 @@
-FROM ruby:2.6 AS builder
+FROM ruby:2.6@sha256:28b7fbc607b4948390b73044dbf2bf578714ed66c88863a618fee43d81df6b35 AS builder
 LABEL maintainer="development@itsmycargo.com"
 
 ARG BUNDLE_WITHOUT="development test"
@@ -66,7 +66,7 @@ RUN RAILS_ENV=production bin/rails assets:precompile
 #
 #
 #
-FROM ruby:2.6-slim AS app
+FROM ruby:2.6-slim@sha256:ac6142fe4c4ec6af90b95db3a0f30c5a151f6a0b09d3920746fad2b611e3dd0a AS app
 LABEL maintainer="development@itsmycargo.com"
 
 ENV MALLOC_ARENA_MAX 2
