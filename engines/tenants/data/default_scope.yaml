@@ -59,8 +59,8 @@ require_full_address: true
 closed_quotation_tool: false
 quote_notes:
 - 1) Prices subject to change
-- 2) All fees are converted at the time of quotation using that day's European Central bank exchange rates and are an
-   approximation of the final amount ot be paid. The amount paid at the time of settlement will reflect the exchange
+- 2) All fees are converted at the time of quotation using that day's Open Exchange Rates Ltd. exchange rates and are an
+   approximation of the final amount to be paid. The amount paid at the time of settlement will reflect the exchange
    rates of the day.
 fine_fee_detail: true
 hide_sub_totals: false
