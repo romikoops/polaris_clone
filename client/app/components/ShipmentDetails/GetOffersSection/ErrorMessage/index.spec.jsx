@@ -23,13 +23,13 @@ describe('Context: Functional', () => {
   })
 
   it('change the mot to all when all mots were exceeded ', () => {
-    const error = { modesOfTransport: ['air', 'ocen'], max: 1000, actual: 1100, allMotsExceeded: true }
+    const error = { modesOfTransport: ['air', 'ocean'], max: 1000.10, actual: 25919.9999999996, allMotsExceeded: true }
 
     wrapper = shallow(<ErrorMessage {...props} error={error} />)
 
     const text = wrapper.text()
 
     expect(text).toContain('Please note that the total chargeable weight for')
-    expect(text).toContain('All Freight shipments (1100 Kg) exceeds the maximum (1000 Kg).')
+    expect(text).toContain('All Freight shipments (25920 Kg) exceeds the maximum (1000 Kg).')
   })
 })

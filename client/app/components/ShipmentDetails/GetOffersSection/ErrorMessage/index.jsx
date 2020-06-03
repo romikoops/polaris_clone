@@ -19,7 +19,7 @@ function ErrorMessage ({
 
     return (
       <div className={className}>
-        {interpolate(t('cargo:excessChargeableWeight'), { mot, actual, max })}
+        {interpolate(t('cargo:excessChargeableWeight'), { mot, actual: Math.round(actual), max: Math.round(max) })}
       </div>
     )
   }
