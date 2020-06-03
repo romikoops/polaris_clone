@@ -12,14 +12,12 @@ export function getTotalShipmentErrors ({
 }) {
   let payloadInKg = {}
 
-  if (hasTrucking) {
-    payloadInKg = getPayloadInKgErrors(
-      getFilteredMaxDimensions(['truckCarriage', 'general', ...modesOfTransport], maxDimensions),
-      'payloadInKg',
-      cargoItems.reduce((sum, cargoItem) => sum + (cargoItem.payloadInKg * cargoItem.quantity), 0),
-      ['truckCarriage']
-    )
-  }
+  payloadInKg = getPayloadInKgErrors(
+    getFilteredMaxDimensions(['truckCarriage', 'general', ...modesOfTransport], maxDimensions),
+    'payloadInKg',
+    cargoItems.reduce((sum, cargoItem) => sum + (cargoItem.payloadInKg * cargoItem.quantity), 0),
+    ['truckCarriage']
+  )
 
   const chargeableWeightValues = {}
 

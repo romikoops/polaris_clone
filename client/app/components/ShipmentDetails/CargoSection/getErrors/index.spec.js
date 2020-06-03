@@ -82,7 +82,12 @@ test('warnings', () => {
       errors: [{ modeOfTransport: 'air', max: 1000, actual: 1200 }],
       type: 'warning'
     },
-    payloadInKg: {}
+    payloadInKg: {
+      errors: [
+        { modeOfTransport: 'air', max: 1000, actual: 1200 }
+      ],
+      type: 'error'
+    }
   })
 })
 
@@ -178,14 +183,14 @@ test('chargableWeight one mot with error', () => {
         width: '200.0',
         length: '200.0',
         height: '200.0',
-        payloadInKg: '200.0',
+        payloadInKg: '1200.0',
         chargeableWeight: '200.0'
       },
       air: {
         width: '100.0',
         length: '100.0',
         height: '100.0',
-        payloadInKg: '100.0',
+        payloadInKg: '1200.0',
         chargeableWeight: '5000.0'
       }
     },
@@ -224,7 +229,13 @@ test('chargableWeight all mots with error exceeded', () => {
     hasTrucking: false
   })
   expect(result).toEqual({
-    payloadInKg: {},
+    payloadInKg: {
+      type: 'error',
+      errors: [
+        { modeOfTransport: 'general', max: 200, actual: 1200 },
+        { modeOfTransport: 'air', max: 100, actual: 1200 }
+      ]
+    },
     chargeableWeight: {
       type: 'error',
       errors: [{ allMotsExceeded: true, modesOfTransport: ['air', 'ocean'], max: 200, actual: 1200 }]
