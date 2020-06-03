@@ -174,3 +174,4 @@ sorting:
   offers:
     primary: 'total'
     secondary: 'duration'
+validity_period: null

@@ -15,14 +15,16 @@ RSpec.describe Pdf::Service do
       quotes: pdf_service.quotes_with_trip_id(nil, [shipment])
     }
   end
+  let!(:scope) {
+    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: {
+      show_chargeable_weight: true
+    })
+  }
   let(:klass) { described_class.new(tenant: tenant, user: user) }
 
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png')
       .to_return(status: 200, body: '', headers: {})
-    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: {
-                        show_chargeable_weight: true
-                      })
     FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
   end
 

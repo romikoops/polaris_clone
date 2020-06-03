@@ -538,6 +538,9 @@ module OfferCalculator
       end
 
       def valid_until(periods)
+        override = scope.dig(:validity_period)
+        return Date.current + override.days if override.present?
+
         export_date_limit = periods[:export].keys.pluck('expiration_date').min if periods[:export].present?
         freight_date_limit = @data[:pricings_by_cargo_class].values.pluck('expiration_date').min
 

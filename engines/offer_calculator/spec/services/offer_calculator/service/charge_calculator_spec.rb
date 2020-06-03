@@ -513,6 +513,51 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
     end
   end
 
+  describe '.valid_until' do
+    before { allow(klass).to receive(:scope).and_return(scope) }
+
+    let(:valid_for) { 14 }
+    let(:scope) { {validity_period: valid_for} }
+    let(:shipment) { FactoryBot.create(:complete_legacy_shipment, load_type: "cargo_item", with_breakdown: true) }
+    let(:charge_breakdown) { shipment.charge_breakdowns.first }
+    let(:trip) { charge_breakdown.trip }
+    let(:args) do
+      {
+        shipment: shipment,
+        user: shipment.user,
+        data: default_data,
+        trucking_data: {},
+        sandbox: nil,
+        metadata_list: []
+      }
+    end
+    let(:klass) { described_class.new(args) }
+
+    context "with custom validity" do
+      it "returns the custom validity period over the trips" do
+        valid_until = klass.send(:valid_until, {})
+
+        aggregate_failures do
+          expect(valid_until).to eq(Time.zone.today + valid_for.days)
+          expect(valid_until).not_to eq(default_pricing.expiration_date)
+        end
+      end
+    end
+
+    context "without custom validity" do
+      let(:scope) { {} }
+
+      it "returns the breakdown validity period over the trips" do
+        valid_until = klass.send(:valid_until, {})
+
+        aggregate_failures do
+          expect(valid_until).not_to eq(Time.zone.today + valid_for.days)
+          expect(valid_until).to eq(default_pricing.expiration_date.beginning_of_day)
+        end
+      end
+    end
+  end
+
   describe 'errors' do
     let(:args) do
       {
