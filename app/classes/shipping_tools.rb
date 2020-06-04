@@ -328,7 +328,7 @@ class ShippingTools
           charge_breakdown: charge_breakdown,
           price: Legacy::Price.create(
             currency: shipment_data[:customs][:import][:currency],
-            value: shipment_data[:customs][:import][:value]
+            value: shipment_data[:customs][:import][:val]
           ),
           parent: @customs_charge,
           sandbox: sandbox
@@ -345,7 +345,7 @@ class ShippingTools
           charge_breakdown: charge_breakdown,
           price: Legacy::Price.create(
             currency: shipment_data[:customs][:total][:currency],
-            value: shipment_data[:customs][:export][:value],
+            value: shipment_data[:customs][:export][:val],
             sandbox: sandbox
           ),
           parent: @customs_charge,

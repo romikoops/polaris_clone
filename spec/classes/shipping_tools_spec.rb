@@ -405,7 +405,11 @@ RSpec.describe ShippingTools do
         ),
         notifyees: [user_params],
         insurance: { isSelected: true, val: 1000 },
-        customs: { total: { val: 34, currency: 'USD' }, import: { bool: true, value: '22', currency: 'USD' }, export: { bool: true, value: 12, currency: 'USD' } },
+        customs: {
+          total: { val: 34, currency: 'USD' },
+          import: { bool: true, val: '22', currency: 'USD' },
+          export: { bool: true, val: 12, currency: 'USD' }
+        },
         addons: { customs_export_paper: { value: 12, currency: 'USD' } },
         consignee: ActionController::Parameters.new(
           address: { street: 'Avenyen', streetNumber: '7', zipCode: '', city: 'Gothenburg', country: 'Sweden' },

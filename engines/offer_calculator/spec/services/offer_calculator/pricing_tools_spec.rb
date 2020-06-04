@@ -428,8 +428,11 @@ RSpec.describe OfferCalculator::PricingTools do
                                 user: user,
                                 mode_of_transport: 'ocean'
                               )
-      expect(result.dig('total', 'value')).to eq(75)
-      expect(result.dig('total', 'currency')).to eq('EUR')
+      aggregate_failures do
+        expect(result.dig('total', 'value')).to eq(75)
+        expect(result.dig('total', 'currency')).to eq('EUR')
+        expect(result.dig('total', 'currency')).to be_a(String)
+      end
     end
 
     it 'calculates the addon charge for cargo item w/ unknown fee' do
@@ -440,8 +443,11 @@ RSpec.describe OfferCalculator::PricingTools do
                                 user: user,
                                 mode_of_transport: 'ocean'
                               )
-      expect(result.dig('total', 'value')).to eq(0)
-      expect(result.dig('total', 'currency')).to eq('EUR')
+      aggregate_failures do
+        expect(result.dig('total', 'value')).to eq(0)
+        expect(result.dig('total', 'currency')).to eq('EUR')
+        expect(result.dig('total', 'currency')).to be_a(String)
+      end
     end
 
     it 'calculates the addon charge for container' do
@@ -452,8 +458,11 @@ RSpec.describe OfferCalculator::PricingTools do
                                 user: user,
                                 mode_of_transport: 'ocean'
                               )
-      expect(result.dig('total', 'value')).to eq(75)
-      expect(result.dig('total', 'currency')).to eq('EUR')
+      aggregate_failures do
+        expect(result.dig('total', 'value')).to eq(75)
+        expect(result.dig('total', 'currency')).to eq('EUR')
+        expect(result.dig('total', 'currency')).to be_a(String)
+      end
     end
   end
 

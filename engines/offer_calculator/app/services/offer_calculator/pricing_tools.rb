@@ -258,7 +258,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
     converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(totals, user.currency)
     value = converted.cents / 100.0
-    totals['total'] = { 'value' => value, 'currency' => converted.currency }
+    totals['total'] = { 'value' => value, 'currency' => converted.currency.iso_code }
     totals
   end
 
