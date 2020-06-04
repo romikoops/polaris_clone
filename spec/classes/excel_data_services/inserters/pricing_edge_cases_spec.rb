@@ -48,8 +48,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       ]
     end
     let!(:expected_stats) do
-      {"legacy/stops": {number_created: 0, number_updated: 0, number_deleted: 0},
-       "legacy/itineraries": {number_created: 0, number_updated: 0, number_deleted: 0},
+      {"legacy/itineraries": {number_created: 0, number_updated: 0, number_deleted: 0},
        "pricings/pricings": {number_created: 1, number_deleted: 0, number_updated: 0},
        "pricings/fees": {number_created: 1, number_deleted: 0, number_updated: 0},
        errors: []}

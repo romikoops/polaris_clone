@@ -67,7 +67,6 @@ module ExcelDataServices
         hubs.map.with_index do |hub, i|
           stop = itinerary.stops.find_by(hub_id: hub.id, index: i, sandbox: @sandbox)
           stop ||= ::Legacy::Stop.new(hub_id: hub.id, index: i, sandbox: @sandbox)
-          add_stats(stop, row_nr)
 
           stop
         end
