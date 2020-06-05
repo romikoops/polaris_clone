@@ -14,7 +14,7 @@ module ExcelDataServices
         sheet_name = data[:sheet_name]
         restructurer_name = data[:restructurer_name]
         restructured_data = replace_nil_equivalents_with_nil(data[:rows_data])
-        restructured_data = downcase_load_types(restructured_data)
+        restructured_data = downcase_values(rows_data: restructured_data, keys: [:load_type, :mot])
         restructured_data.reject! { |row_data| row_data[:fee].blank? }
         restructured_data.each do |row_data|
           row_data.reverse_merge!(sheet_name: sheet_name,

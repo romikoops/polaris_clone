@@ -39,6 +39,7 @@ module Legacy
     }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
     validates :origin_hub_id, uniqueness: { scope: %i[destination_hub_id tenant_id transshipment mode_of_transport] }
+    validates :mode_of_transport, inclusion: { in: MODES_OF_TRANSPORT }
 
     def generate_schedules_from_sheet(stops:, # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
                                       start_date:,

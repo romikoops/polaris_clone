@@ -5,7 +5,6 @@ module Pricings
     attr_accessor :transient_marked_as_old
     self.ignored_columns = ['disabled']
 
-    include ::Pricings::Legacy
     has_paper_trail
     belongs_to :itinerary, class_name: 'Legacy::Itinerary'
     belongs_to :tenant, class_name: 'Legacy::Tenant'

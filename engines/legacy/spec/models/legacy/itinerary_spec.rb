@@ -4,6 +4,12 @@ require 'rails_helper'
 
 module Legacy
   RSpec.describe Itinerary, type: :model do
+    context 'when invalid' do
+      it 'is invalid with uppercase mot' do
+        expect(FactoryBot.build(:default_itinerary, mode_of_transport: 'Ocean')).to be_invalid
+      end
+    end
+
     describe '.parse_load_type' do
       it 'returns the cargo_item for lcl' do
         itinerary = FactoryBot.create(:default_itinerary)

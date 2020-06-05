@@ -70,9 +70,11 @@ module ExcelDataServices
         end
       end
 
-      def downcase_load_types(rows_data)
+      def downcase_values(rows_data:, keys: [])
         rows_data.each do |row_data|
-          row_data[:load_type].downcase!
+          keys.each do |key|
+            row_data[key].downcase!
+          end
         end
       end
 
