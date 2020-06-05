@@ -14,9 +14,14 @@ const propsBase = {
     getItineraries: identity
   },
   toggleNewRoute: identity,
-  itineraries: {
-    filter: identity
-  },
+  itineraries: [
+    {
+      id: 1,
+      name: 'Gothenburg - Shanghai',
+      transshipment: 'direct',
+      mode_of_transport: 'air'
+    }
+  ],
   tenant
 }
 

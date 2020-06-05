@@ -63,6 +63,24 @@ class AdminRoutesIndex extends PureComponent {
           },
           {
             Header: (<div className="flex layout-row layout-center-center">
+              <p className="flex-none">{t('admin:transshipmentVia')}</p>
+            </div>),
+            id: 'transshipment',
+            accessor: (d) => d.transshipment,
+            Cell: (rowData) => (
+              <div
+                className={`pointy flex layout-row layout-align-start-center ${styles.pricing_cell}`}
+                onClick={() => this.viewRoute(rowData.original.id)}
+              >
+                <p className="flex-none">
+                  {' '}
+                  {rowData.row.transshipment}
+                </p>
+              </div>
+            )
+          },
+          {
+            Header: (<div className="flex layout-row layout-center-center">
               <p className="flex-none">{t('common:modeOfTransport')}</p>
             </div>),
             id: 'mot',

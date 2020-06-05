@@ -82,6 +82,20 @@ exports[`itineraries is falsy 1`] = `
               },
               Object {
                 "Cell": [Function],
+                "Header": <div
+                  className="flex layout-row layout-center-center"
+                >
+                  <p
+                    className="flex-none"
+                  >
+                    Transshipment Via
+                  </p>
+                </div>,
+                "accessor": [Function],
+                "id": "transshipment",
+              },
+              Object {
+                "Cell": [Function],
                 "Filter": [Function],
                 "Header": <div
                   className="flex layout-row layout-center-center"
@@ -275,6 +289,20 @@ exports[`shallow render 1`] = `
               },
               Object {
                 "Cell": [Function],
+                "Header": <div
+                  className="flex layout-row layout-center-center"
+                >
+                  <p
+                    className="flex-none"
+                  >
+                    Transshipment Via
+                  </p>
+                </div>,
+                "accessor": [Function],
+                "id": "transshipment",
+              },
+              Object {
+                "Cell": [Function],
                 "Filter": [Function],
                 "Header": <div
                   className="flex layout-row layout-center-center"
@@ -293,9 +321,14 @@ exports[`shallow render 1`] = `
         ]
       }
       data={
-        Object {
-          "filter": [Function],
-        }
+        Array [
+          Object {
+            "id": 1,
+            "mode_of_transport": "air",
+            "name": "Gothenburg - Shanghai",
+            "transshipment": "direct",
+          },
+        ]
       }
       defaultExpanded={Object {}}
       defaultFilterMethod={[Function]}

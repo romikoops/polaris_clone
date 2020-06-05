@@ -34,6 +34,9 @@ module Legacy
     pg_search_scope :mot_search, against: %i[mode_of_transport], using: {
       tsearch: { prefix: true }
     }
+    pg_search_scope :transshipment_search, against: %i[transshipment], using: {
+      tsearch: { prefix: true }
+    }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
     validates :origin_hub_id, uniqueness: { scope: %i[destination_hub_id tenant_id transshipment mode_of_transport] }
 

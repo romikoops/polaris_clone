@@ -114,6 +114,7 @@ export class AdminRouteView extends Component {
       { value: 'pricings', label: 'Pricings' },
       { value: 'schedules', label: 'Schedules' }
     ]
+    const itineraryName = itinerary.transshipment ? `${itinerary.name} (${itinerary.transshipment})` : itinerary.name
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
@@ -121,8 +122,8 @@ export class AdminRouteView extends Component {
         <div
           className={`flex-95 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
-          <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-            {itinerary.name}
+          <p className={` ${styles.sec_title_text} flex-none ccb_itinerary_name`} style={textStyle}>
+            {itineraryName}
           </p>
           <div className="flex-40 layout-row layout-align-space-between-center">
             <div className="flex-40 layout-row layout-align-end-center">

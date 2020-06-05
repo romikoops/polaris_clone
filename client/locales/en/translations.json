@@ -639,8 +639,8 @@
       "initialRate": "Initial Rate",
       "noMarginsApplied": "No Margins Applied",
       "sourceData": "Data source",
-      "saveChanges": "Save Changes"
-
+      "saveChanges": "Save Changes",
+      "transshipmentVia": "Transshipment Via"
   },
   "itbox": {
     "component": "IncotermBox",

@@ -79,3 +79,19 @@ test('itineraryData is falsy', () => {
   }
   expect(shallow(<AdminRouteView {...props} />)).toMatchSnapshot()
 })
+
+test('itinerary has a transshipment', () => {
+  const props = {
+    ...propsBase,
+    itineraryData: {
+      ...propsBase.itineraryData,
+      itinerary: {
+        ...propsBase.itineraryData.itinerary,
+        transshipment: 'direct'
+      }
+    }
+  }
+  const wrapper = shallow(<AdminRouteView {...props} />)
+  expect(wrapper).toMatchSnapshot()
+  expect(wrapper.find('.ccb_itinerary_name').text()).toEqual('NAME (direct)')
+})

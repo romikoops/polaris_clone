@@ -54,6 +54,8 @@ class Admin::ItinerariesController < Admin::AdminBaseController
       name_desc: ->(query, param) { query.ordered_by(:name, param) },
       mot: ->(query, param) { query.where(mode_of_transport: param) },
       mot_desc: ->(query, param) { query.ordered_by(:mode_of_transport, param) },
+      transshipment: ->(query, param) { query.transshipment_search(param) },
+      transshipment_desc: ->(query, param) { query.ordered_by(:transshipment, param) },
     }.each do |key, lambd|
       itinerary_relation = lambd.call(itinerary_relation, search_params[key]) if search_params[key]
     end
@@ -76,6 +78,8 @@ class Admin::ItinerariesController < Admin::AdminBaseController
     params.permit(
       :mot,
       :mot_desc,
+      :transshipment,
+      :transshipment_desc,
       :name_desc,
       :name,
       :page_size,

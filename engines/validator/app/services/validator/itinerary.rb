@@ -61,8 +61,7 @@ module Validator
 
     def path_results
       tenant_vehicle_lookup.map do |group_id, tenant_vehicle_and_cargo_classes|
-        results = tenant_vehicle_and_cargo_classes.map do |tenant_vehicle_and_cargo_class|
-          tenant_vehicle_id, cargo_class = tenant_vehicle_and_cargo_class
+        results = tenant_vehicle_and_cargo_classes.map do |tenant_vehicle_id, cargo_class|
           load_type = %w[cargo_item lcl].include?(cargo_class) ? 'cargo_item' : 'container'
           {
             cargo_class: cargo_class,
