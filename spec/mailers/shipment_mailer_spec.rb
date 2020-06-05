@@ -5,7 +5,13 @@ require 'rails_helper'
 RSpec.describe ShipmentMailer, type: :mailer do
   let(:user) { create(:legacy_user) }
   let(:tenant) { user.tenant }
-  let!(:shipment) { create(:complete_legacy_shipment, user: user, tenant: user.tenant, with_breakdown: true) }
+  let!(:shipment) {
+    create(:complete_legacy_shipment,
+      user: user,
+      tenant: user.tenant,
+      with_breakdown: true,
+      with_tenders: true)
+  }
   let(:profile) { FactoryBot.build(:profiles_profile) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
 

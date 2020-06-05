@@ -663,39 +663,6 @@ br{
     margin: 0;
   }
 }
-.data-table {
-  width: 100%;
-  tr {
-    width: 100%;
-  }
-  .table-title {
-    width: 40%;
-    text-align: start;
-    p {
-      margin: 0;
-      font-size: 12px;
-      font-weight: 400;
-    }
-  }
-  .table-quantity {
-    width: 40%;
-    padding-left: 20px;
-    text-align: start;
-    p {
-      margin: 0;
-      font-size: 12px;
-    }
-  }
-  .table-value {
-    width: 30%;
-    text-align: end;
-    span {
-      margin: 0;
-      font-size: 12px;
-      font-weight: 400;
-    }
-  }
-}
 
 .cargo-row {
   p {
@@ -810,4 +777,79 @@ br{
 
 .voyage-info {
   padding: 5px 0;
+}
+
+.quote-container {
+  flex-flow: "row wrap";
+  .all-row {
+    flex: 1;
+    flex-flow: "row wrap";
+  }
+}
+
+.table-level-1 {
+  background: #CECECE;
+  p {
+    font-size: 18px;
+    font-weight: bold;
+  }
+}
+.table-level-2 {
+  p {
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+.table-level-3 {
+  p {
+    font-size: 14px;
+    font-weight: bold;
+  }
+}
+.table-level-4 {
+  p {
+    font-size: 12px;
+    font-weight: bold;
+  }
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  tr {
+    width: 100%;
+    p {
+      margin: 5px;
+    }
+  }
+  td {
+     padding: 0;
+     margin: 0;
+  }
+  .table-title {
+    width: 40%;
+    text-align: start;
+    p {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+  .table-quantity {
+    width: 40%;
+    padding-left: 20px;
+    text-align: start;
+    p {
+      margin: 0;
+      font-size: 12px;
+    }
+  }
+  .table-value {
+    width: 30%;
+    text-align: end;
+    span {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
 }

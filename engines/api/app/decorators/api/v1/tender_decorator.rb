@@ -12,7 +12,7 @@ module Api
       end
 
       def charges
-        Api::FeeTableService.new(tender: object, scope: context[:scope]).perform
+        ResultFormatter::FeeTableService.new(tender: object, scope: context[:scope]).perform
       end
 
       def transit_time

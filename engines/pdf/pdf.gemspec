@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-pricings'
   s.add_dependency 'imc-profiles'
   s.add_dependency 'imc-quotations'
+  s.add_dependency 'imc-result_formatter'
   s.add_dependency 'imc-tenants'
 
   Gemhelper.common(s)

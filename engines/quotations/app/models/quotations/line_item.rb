@@ -12,6 +12,8 @@ module Quotations
 
     monetize :amount_cents
     monetize :original_amount_cents
+
+    delegate :code, to: :charge_category
   end
 end
 

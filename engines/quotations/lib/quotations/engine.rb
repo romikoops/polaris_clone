@@ -5,6 +5,7 @@ require 'core'
 require 'legacy'
 require 'tenants'
 
+require 'draper'
 require 'money-rails'
 
 module Quotations

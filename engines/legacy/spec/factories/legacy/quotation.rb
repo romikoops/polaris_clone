@@ -17,7 +17,8 @@ FactoryBot.define do
                                    user: quotation.user,
                                    tenant: quotation.user.tenant,
                                    load_type: evaluator.load_type,
-                                   with_breakdown: true)
+                                   with_breakdown: true,
+                                   with_tenders: true)
         quotation.original_shipment_id = original_shipment.id
       end
       if quotation.shipments.empty?
@@ -25,7 +26,8 @@ FactoryBot.define do
                                           user: quotation.user,
                                           tenant: quotation.user.tenant,
                                           load_type: evaluator.load_type,
-                                          with_breakdown: true)
+                                          with_breakdown: true,
+                                          with_tenders: true)
       end
     end
   end

@@ -2,18 +2,10 @@
 
 require 'active_storage'
 module Pdf
-  class Service
+  class Service < Pdf::Base
     BreezyError = Class.new(StandardError)
 
     attr_reader :tenant, :user, :pdf, :url, :sandbox
-
-    def initialize(tenant:, user:, sandbox: nil)
-      @tenant = tenant
-      @tenants_tenant = Tenants::Tenant.find_by(legacy_id: @tenant.id)
-      @theme = @tenants_tenant.theme
-      @user = user
-      @sandbox = sandbox
-    end
 
     def generate_pdf(
       template:,
@@ -162,28 +154,36 @@ module Pdf
     end
 
     def quotes_with_trip_id(quotation:, shipments:, admin: false, tender_ids: [])
-      hidden_args = hidden_value_args(admin: admin)
       shipments.flat_map do |shipment|
         trip = shipment.trip
         charge_breakdowns = quotation.present? ? [shipment.charge_breakdowns.selected] : shipment.charge_breakdowns
         if tender_ids.present?
           charge_breakdowns = charge_breakdowns.select { |c_breakdown| tender_ids.include?(c_breakdown.tender_id) }
         end
-        offers = charge_breakdowns.map { |charge_breakdown| charge_breakdown.to_nested_hash(hidden_args) }
-        offers.map { |offer| offer_manipulation_block(offer: offer, shipment: shipment, trip: trip) }
+        charge_breakdowns.map { |charge_breakdown|
+          offer_manipulation_block(
+            charge_breakdown: charge_breakdown,
+            shipment: shipment,
+            trip: trip,
+            admin: admin
+          )
+        }
       end
     end
 
-    def offer_manipulation_block(offer:, shipment:, trip: nil)
-      trip = Legacy::Trip.find(offer['trip_id']) if trip.nil?
+    def offer_manipulation_block(charge_breakdown:, shipment:, trip: nil, admin: false)
+      hidden_args = hidden_value_args(admin: admin)
+      trip = charge_breakdown.trip if trip.nil?
       origin_hub = trip.itinerary.first_stop.hub
       destination_hub = trip.itinerary.last_stop.hub
-      offer.merge(
+      charge_breakdown.to_nested_hash(hidden_args).merge(
         offer_merge_data(
           trip: trip,
           shipment: shipment,
           origin_hub: origin_hub,
           destination_hub: destination_hub
+        ).merge(
+          fees: ResultFormatter::FeeTableService.new(tender: charge_breakdown.tender, scope: scope).perform
         )
       ).deep_stringify_keys
     end

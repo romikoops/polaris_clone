@@ -3,7 +3,7 @@
 require 'pdfkit'
 require 'open-uri'
 module Pdf
-  class Handler # rubocop:disable Metrics/ClassLength
+  class Handler < Pdf::Base # rubocop:disable Metrics/ClassLength
     BreezyError = Class.new(StandardError)
 
     FEE_DETAIL_LEVEL = 3
@@ -11,8 +11,9 @@ module Pdf
     attr_reader :name, :full_name, :pdf, :url, :path
 
     def initialize(args = {}) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      args.symbolize_keys!
+      super(tenant: args[:shipment].tenant, user: args[:shipment].user)
 
+      args.symbolize_keys!
       @layout                = args[:layout]
       @template              = args[:template]
       @footer                = args[:footer]
@@ -32,12 +33,7 @@ module Pdf
       @content               = {}
       @has_legacy_charges = {}
       @notes = {}
-      tenants_tenant = Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
-      @theme = tenants_tenant.theme
-      @scope = ::Tenants::ScopeService.new(
-        target: ::Tenants::User.find_by(legacy_id: @shipment.user.id),
-        tenant: tenants_tenant
-      ).fetch
+
       @pricing_data = {}
       @fee_keys_and_names = {}
       @cargo_data = {
@@ -61,7 +57,6 @@ module Pdf
         prep_notes(s)
       end
       @content = Legacy::Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
-
       @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
     end
 
@@ -324,7 +319,8 @@ module Pdf
         note_remarks: @note_remarks,
         fee_keys_and_names: @fee_keys_and_names,
         shipper_profile: profile_for_user(legacy_user: @shipment.user),
-        selected_offer: @selected_offer
+        selected_offer: @selected_offer,
+        fees: @fees
       }
     end
 

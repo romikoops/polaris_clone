@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-legacy'
   s.add_dependency 'imc-tenants'
 
+  s.add_dependency 'draper'
   s.add_dependency 'money-rails'
 
   Gemhelper.common(s)

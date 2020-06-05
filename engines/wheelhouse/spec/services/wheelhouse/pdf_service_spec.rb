@@ -6,7 +6,13 @@ RSpec.describe Wheelhouse::PdfService do
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, with_profile: true) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, tenant: tenant, user: user) }
+  let(:shipment) {
+    FactoryBot.create(:legacy_shipment,
+      with_breakdown: true,
+      with_tenders: true,
+      tenant: tenant,
+      user: user)
+  }
   let(:tenders) { [{ id: shipment.charge_breakdowns.first.tender_id }] }
 
   before { FactoryBot.create(:tenants_theme, tenant: tenants_tenant) }

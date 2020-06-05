@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-cargo'
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-profiles'
+  s.add_dependency 'imc-result_formatter'
   s.add_dependency 'imc-tenants'
   s.add_dependency 'imc-trucking'
   s.add_dependency 'imc-wheelhouse'

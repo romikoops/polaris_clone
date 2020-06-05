@@ -151,6 +151,7 @@ PATH
       imc-cargo
       imc-core
       imc-profiles
+      imc-result_formatter
       imc-tenants
       imc-trucking
       imc-wheelhouse
@@ -328,6 +329,7 @@ PATH
       imc-pricings
       imc-profiles
       imc-quotations
+      imc-result_formatter
       imc-tenants
       paper_trail (~> 10.3)
       pdfkit
@@ -371,6 +373,7 @@ PATH
     imc-quotations (1)
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
+      draper
       imc-cargo
       imc-core
       imc-legacy
@@ -406,6 +409,20 @@ PATH
       config (~> 2.2)
       imc-cargo
       imc-routing
+      paper_trail (~> 10.3)
+      pg (>= 0.18, < 2.0)
+      rails (= 5.2.2)
+      strong_migrations (~> 0.6)
+
+PATH
+  remote: engines/result_formatter
+  specs:
+    imc-result_formatter (1)
+      activerecord-postgis-adapter (= 5.2.2)
+      config (~> 2.2)
+      imc-legacy
+      imc-pricings
+      imc-quotations
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -1276,6 +1293,7 @@ DEPENDENCIES
   imc-quotations!
   imc-rate_extractor!
   imc-rates!
+  imc-result_formatter!
   imc-rms_data!
   imc-rms_export!
   imc-rms_sync!

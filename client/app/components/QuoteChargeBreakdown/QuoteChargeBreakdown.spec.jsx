@@ -118,3 +118,51 @@ describe('correctly determines whether to display subtotals based on currencies 
     })
   })
 })
+
+it('should sort the fees with primary fee first', () => {
+  const wrapper = mount(
+    <UserContext.Provider value={user}>
+      <QuoteChargeBreakdown
+        quote={selectedOffer}
+        scope={{ primary_freight_code: 'BAS' }}
+        cargo={cargoItems}
+      />
+    </UserContext.Provider>
+  )
+  const sections = [
+    ['thc', {}],
+    ['baf', {}],
+    ['bas', {}]
+  ]
+
+  const instance = wrapper.instance()
+
+  const sortedSections = instance.sortContentSections(sections, 'cargo')
+  expect(sortedSections[0]).toEqual(sections[2])
+})
+
+it('should sort the collection of fees by currency with primary fee first', () => {
+  const wrapper = mount(
+    <UserContext.Provider value={user}>
+      <QuoteChargeBreakdown
+        quote={selectedOffer}
+        scope={{ primary_freight_code: 'BAS' }}
+        cargo={cargoItems}
+      />
+    </UserContext.Provider>
+  )
+  const sections = {
+    EUR: [
+      ['thc', {}],
+      ['baf', {}]
+    ],
+    USD: [
+      ['bas', {}]
+    ]
+  }
+
+  const instance = wrapper.instance()
+
+  const sortedSections = instance.sortCurrencySections(sections, 'cargo')
+  expect(sortedSections[0]).toEqual(['USD', sections.USD])
+})

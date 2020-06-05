@@ -7,8 +7,21 @@ RSpec.describe Pdf::Handler do
   let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: 'USD') }
   let(:currency) { FactoryBot.create(:legacy_currency, base: 'USD', tenant_id: tenant.id) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:shipment) { FactoryBot.create(:completed_legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_breakdown: true) }
-  let!(:agg_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user, load_type: 'cargo_item', with_aggregated_cargo: true) }
+  let!(:shipment) {
+    FactoryBot.create(:completed_legacy_shipment,
+      tenant: tenant,
+      user: user,
+      load_type: 'cargo_item',
+      with_breakdown: true,
+      with_tenders: true)
+  }
+  let!(:agg_shipment) {
+    FactoryBot.create(:legacy_shipment,
+      tenant: tenant,
+      user: user,
+      load_type: 'cargo_item',
+      with_aggregated_cargo: true)
+  }
   let(:pdf_service) { Pdf::Service.new(tenant: tenant, user: user) }
   let(:default_args) do
     {
@@ -143,7 +156,12 @@ RSpec.describe Pdf::Handler do
     end
 
     describe '.generate_fee_string' do
-      let(:charge_shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true) }
+      let(:charge_shipment) {
+        FactoryBot.create(:legacy_shipment,
+          tenant: tenant,
+          with_breakdown: true,
+          with_tenders: true)
+      }
       let(:quotes) { pdf_service.quotes_with_trip_id(quotation: nil, shipments: [charge_shipment]) }
       let(:string_klass) { described_class.new(default_args.merge(quotes: quotes, shipment: charge_shipment)) }
       let(:tenants_tenant) { FactoryBot.create(:tenants_tenant, legacy_id: charge_shipment.tenant_id) }

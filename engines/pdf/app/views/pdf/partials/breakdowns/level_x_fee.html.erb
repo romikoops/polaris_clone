@@ -1,0 +1,20 @@
+<tr class="table-level-<%= fee['level']%>">
+  <td class="table-title-<%= fee['level']%>">
+    <p>
+        <%= fee['description'] %>
+        <% if
+          scope['show_chargeable_weight'] &&
+          fee['level'] == 1 &&
+          fee['code'].present? &&
+          !['import', 'export'].include?(fee['code']) &&
+          cargo_data.dig(:chargeable_weight, quote['shipment_id'], fee['code'].to_sym).present?
+        %>
+          <%== cargo_data[:chargeable_weight][quote['shipment_id']][fee['code'].to_sym] %>
+        <% end %>
+    </p>
+  </td>
+
+  <td class="table-value">
+    <p><%= [fee.dig('value', 'amount'), fee.dig('value', 'currency')].join(' ') %></p>
+  </td>
+</tr>

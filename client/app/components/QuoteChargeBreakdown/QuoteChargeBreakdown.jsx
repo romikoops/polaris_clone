@@ -201,10 +201,11 @@ class QuoteChargeBreakdown extends Component {
         currencySections[currency].push(overridePrice)
       }
     })
+    const sortedCurrencySections = this.sortCurrencySections(currencySections, key)
 
     return this.renderContent(
       key,
-      currencySections,
+      sortedCurrencySections,
       currencyTotals,
       includedSections,
       excludedSections,
@@ -246,6 +247,33 @@ class QuoteChargeBreakdown extends Component {
     return this.generateContent(key)
   }
 
+  sortContentSections (sections, key) {
+    const { scope } = this.props
+    const primaryCode = get(scope, 'primary_freight_code')?.toString()
+    if (!primaryCode || key !== 'cargo') { return sections }
+
+    const primarySection = sections.find((section) => section[0].toLowerCase() === primaryCode.toLowerCase())
+    const sortedSections = sections.filter((section) => section !== primarySection)
+    if (primarySection) { sortedSections.unshift(primarySection) }
+
+    return sortedSections
+  }
+
+  sortCurrencySections (sections, key) {
+    const { scope } = this.props
+    const primaryCode = get(scope, 'primary_freight_code')?.toString()
+    const entries = Object.entries(sections)
+    if (!primaryCode || key !== 'cargo') { return entries }
+    // eslint-disable-next-line arrow-body-style
+    const primaryEntry = entries.find((entry) => {
+      return entry[1].find((feeEntry) => feeEntry[0].toLowerCase() === primaryCode.toLowerCase())
+    })
+    const sortedEntries = entries.filter((entry) => entry !== primaryEntry)
+    if (primaryEntry) { sortedEntries.unshift(primaryEntry) }
+
+    return sortedEntries
+  }
+
   generateUnitContent (key) {
     const { quote, scope, t } = this.props
 
@@ -266,7 +294,7 @@ class QuoteChargeBreakdown extends Component {
       const includedSections = []
       const excludedSections = []
       const currencyTotals = {}
-      contentSections.forEach((price) => {
+      this.sortContentSections(contentSections, key).forEach((price) => {
         const { currency, value } = price[1]
         if (price[0].includes('included')) {
           includedSections.push(price)
@@ -287,10 +315,10 @@ class QuoteChargeBreakdown extends Component {
         currencySections,
         scope
       )
-
+      const sortedCurrencySections = this.sortCurrencySections(currencySections, key)
       const sections = this.renderContent(
         key,
-        currencySections,
+        sortedCurrencySections,
         currencyTotals,
         includedSections,
         excludedSections,
@@ -373,7 +401,7 @@ class QuoteChargeBreakdown extends Component {
   renderContent (key, currencySections, currencyTotals, includedSections, excludedSections, showSubTotal, cargo) {
     const { t, scope } = this.props
 
-    const feeSections = Object.entries(currencySections).map((currencyFees) => (
+    const feeSections = currencySections.map((currencyFees) => (
       <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
         {scope.detailed_billing
           ? currencyFees[1].map((price, i) => {

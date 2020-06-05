@@ -163,6 +163,7 @@ digraph G {
     "api" -> "cargo" [color=grey];
     "api" -> "core" [color=grey];
     "api" -> "profiles" [color=grey];
+    "api" -> "result_formatter" [color=grey];
     "api" -> "tenants" [color=grey];
     "api" -> "trucking" [color=grey];
     "api" -> "wheelhouse" [color=grey];
@@ -175,12 +176,17 @@ digraph G {
     "analytics" -> "quotations" [color=grey];
     "analytics" -> "shipments" [color=grey];
     "analytics" -> "tenants" [color=grey];
+    "result_formatter" [shape=ellipse];
+    "result_formatter" -> "legacy" [color=grey];
+    "result_formatter" -> "pricings" [color=grey];
+    "result_formatter" -> "quotations" [color=grey];
     "pdf" [shape=ellipse];
     "pdf" -> "core" [color=grey];
     "pdf" -> "legacy" [color=grey];
     "pdf" -> "pricings" [color=grey];
     "pdf" -> "profiles" [color=grey];
     "pdf" -> "quotations" [color=grey];
+    "pdf" -> "result_formatter" [color=grey];
     "pdf" -> "tenants" [color=grey];
     "rate_extractor" [shape=ellipse];
     "rate_extractor" -> "cargo" [color=grey];

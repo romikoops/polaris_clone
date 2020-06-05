@@ -13,6 +13,7 @@ require 'pricings'
 require 'profiles'
 require 'tenants'
 require 'quotations'
+require 'result_formatter'
 
 module Pdf
   class Engine < ::Rails::Engine

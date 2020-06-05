@@ -5,8 +5,14 @@ require 'active_storage'
 
 RSpec.describe ShippingTools do
   before do
-    stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
-    stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
+    stub_request(:get,
+      'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200,
+                                                                                  body: '',
+                                                                                  headers: {})
+    stub_request(:get,
+      'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200,
+                                                                           body: '',
+                                                                           headers: {})
   end
 
   let(:tenant) { create(:tenant) }
@@ -16,8 +22,16 @@ RSpec.describe ShippingTools do
   let(:origin_hub) { Hub.find(itinerary.hubs.find_by(name: 'Gothenburg Port').id) }
   let(:destination_hub) { Hub.find(itinerary.hubs.find_by(name: 'Shanghai Port').id) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:scope) { create(:tenants_scope, target: tenants_tenant, content: { send_email_on_quote_download: true, send_email_on_quote_email: true, base_pricing: true }) }
-  let(:user) { create(:user, tenant: tenant) }
+  let!(:scope) {
+    create(:tenants_scope,
+      target: tenants_tenant,
+      content: {
+        send_email_on_quote_download: true,
+        send_email_on_quote_email: true,
+        base_pricing: true
+      })
+  }
+  let(:user) { create(:legacy_user, tenant: tenant) }
   let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
   let(:group) do
     FactoryBot.create(:tenants_group, name: 'Test', tenant: tenants_tenant).tap do |tapped_group|
@@ -52,7 +66,19 @@ RSpec.describe ShippingTools do
   end
 
   context 'when sending admin emails on quote download' do
-    let!(:charge_breakdown) { create(:legacy_charge_breakdown, shipment: shipment, trip: trip) }
+    let!(:shipment) do
+      create(:legacy_shipment,
+             user: user,
+             trip: trip,
+             tenant: tenant,
+             origin_hub: origin_hub,
+             destination_hub: destination_hub,
+             origin_nexus: origin_hub&.nexus,
+             destination_nexus: destination_hub&.nexus,
+             with_breakdown: true,
+             with_tenders: true)
+    end
+    let(:charge_breakdown) { shipment.charge_breakdowns.first }
     let(:results) do
       [
         {
@@ -71,7 +97,7 @@ RSpec.describe ShippingTools do
 
     before do
       quote_mailer = object_double('Mailer')
-      create(:legacy_quotation, original_shipment_id: shipment.id)
+      create(:legacy_quotation, original_shipment_id: shipment.id, user: user)
       FactoryBot.create(:legacy_content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
       allow(QuoteMailer).to receive(:quotation_admin_email).at_least(:once).and_return(quote_mailer)
       allow(QuoteMailer).to receive(:quotation_email).at_least(:once).and_return(quote_mailer)

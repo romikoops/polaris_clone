@@ -5,7 +5,7 @@ module AdmiraltyReports
   RSpec.describe Stats, type: :model do
     let!(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
     let!(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-    let!(:user) { FactoryBot.create(:legacy_user, email: 'test@test.com') }
+    let!(:user) { FactoryBot.create(:legacy_user, tenant: legacy_tenant, email: 'test@test.com') }
 
     let(:created_date) { DateTime.new(2020, 2, 1) }
     let(:updated_date) { DateTime.new(2020, 2, 3) }

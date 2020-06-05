@@ -174,4 +174,5 @@ sorting:
   offers:
     primary: 'total'
     secondary: 'duration'
+primary_freight_code: 'BAS'
 validity_period: null

@@ -3,9 +3,17 @@
 require 'rails_helper'
 
 RSpec.describe Shipments::BookingProcessController do
-  let(:tenant) { create(:legacy_tenant) }
+  let!(:tenant) { create(:legacy_tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:shipment) { create(:legacy_shipment, tenant: tenant, trip: trip, user: user, itinerary: itinerary, with_breakdown: true) }
+  let(:shipment) {
+    create(:legacy_shipment,
+      tenant: tenant,
+      trip: trip,
+      user: user,
+      itinerary: itinerary,
+      with_breakdown: true,
+      with_tenders: true)
+  }
   let(:shipments_shipment) { Shipment.find(shipment.id) }
   let(:user) { create(:legacy_user, tenant: tenant) }
   let(:itinerary) { create(:gothenburg_shanghai_itinerary, tenant: tenant) }
@@ -14,7 +22,10 @@ RSpec.describe Shipments::BookingProcessController do
   before do
     allow(controller).to receive(:user_signed_in?).and_return(true)
     allow(controller).to receive(:current_user).and_return(user)
-    stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
+    stub_request(:get,
+      'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200,
+                                                                           body: '',
+                                                                           headers: {})
     FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
     FactoryBot.create(:shipment_contact, shipment: shipments_shipment, contact_type: 'shipper')
     FactoryBot.create(:shipment_contact, shipment: shipments_shipment, contact_type: 'consignee')
