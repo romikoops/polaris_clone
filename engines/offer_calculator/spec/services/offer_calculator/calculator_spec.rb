@@ -38,6 +38,7 @@ RSpec.describe OfferCalculator::Calculator do
                           itinerary: it,
                           load_type: 'cargo_item',
                           tenant_vehicle: tenant_vehicle,
+                          closing_date: 5.days.from_now,
                           start_date: 10.days.from_now,
                           end_date: 30.days.from_now)
       ]

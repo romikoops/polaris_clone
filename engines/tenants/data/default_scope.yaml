@@ -176,3 +176,4 @@ sorting:
     secondary: 'duration'
 primary_freight_code: 'BAS'
 validity_period: null
+departure_query_type: 'closing_date'

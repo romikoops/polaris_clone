@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::ScheduleFinder do
   let(:tenant) { FactoryBot.create(:legacy_tenant) }
-
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
@@ -40,20 +39,23 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
       destination: Legacy::Hub.where(id: destination_hub.id)
     }
   end
+  let(:departure_type) { 'departure' }
   let(:results) { klass.perform(routes, 5, hubs) }
+  let!(:trip) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
+  let(:start_date) { shipment.desired_start_date + 1000.seconds }
 
   Timecop.freeze(Time.utc(2020, 1, 1, 0, 0, 0)) do
     before do
-      FactoryBot.create(:trip_with_layovers, itinerary: itinerary, tenant_vehicle: tenant_vehicle)
       FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
       FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
       FactoryBot.create(:fcl_40_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
       FactoryBot.create(:fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
+      FactoryBot.create(:tenants_scope, target: tenants_tenant, content: {departure_query_type: departure_type})
     end
 
-    context 'with success' do
+    describe '.perform', :vcr do
       before do
-        allow(klass).to receive(:current_etd_in_search).and_return(shipment.desired_start_date + 1000.seconds)
+        allow(klass).to receive(:current_etd_in_search).and_return(start_date)
       end
 
       let(:routes) do
@@ -68,7 +70,31 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
         ]
       end
 
-      describe '.perform', :vcr do
+      context 'when filtered by closing date with trip available' do
+        let(:departure_type) { 'closing_date' }
+        let(:start_date) { trip.closing_date - 1.day }
+
+        it 'return the valid schedules' do
+          aggregate_failures do
+            expect(results.length).to eq(1)
+            expect(results.first.origin_hub).to eq(origin_hub)
+            expect(results.first.destination_hub).to eq(destination_hub)
+          end
+        end
+      end
+
+      context 'when filtered by closing date with no trip available' do
+        let(:departure_type) { 'closing_date' }
+        let(:start_date) { trip.closing_date + 1.day }
+
+        it 'return the valid schedules' do
+          aggregate_failures do
+            expect(results).to be_empty
+          end
+        end
+      end
+
+      context 'when filtered by departure date' do
         it 'return the valid schedules' do
           aggregate_failures do
             expect(results.length).to eq(1)

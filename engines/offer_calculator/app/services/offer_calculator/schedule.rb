@@ -48,9 +48,9 @@ module OfferCalculator
                                                 destination_hub: detailed_hash_hub_data_for(:destination))
     end
 
-    def self.from_routes(routes, current_etd_in_search, delay_in_days, load_type) # rubocop:disable Metrics/MethodLength
+    def self.from_routes(routes, current_etd_in_search, delay_in_days, load_type, date_type) # rubocop:disable Metrics/MethodLength
       grouped_data_from_routes = OfferCalculator::Route.group_data_by_attribute(routes)
-
+      date_attr = date_type == 'closing_date' ? 'closing_date' : 'etd'
       raw_query = "
         SELECT DISTINCT
           origin_hubs.id                AS origin_hub_id,
@@ -83,8 +83,8 @@ module OfferCalculator
         AND   destination_stops.id IN (:destination_stop_ids)
         AND   tenant_vehicles.id IN (:tenant_vehicle_ids)
         AND   origin_layovers.trip_id = destination_layovers.trip_id
-        AND   origin_layovers.etd < :end_date
-        AND   origin_layovers.etd > :start_date
+        AND   origin_layovers.#{date_attr} < :end_date
+        AND   origin_layovers.#{date_attr} > :start_date
         AND   trips.load_type = :load_type
         ORDER BY origin_layovers.etd
       "

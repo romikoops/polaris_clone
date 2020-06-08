@@ -15,8 +15,10 @@ FactoryBot.define do
                                trip: trip,
                                stop: trip.itinerary.stops.first,
                                itinerary: trip.itinerary,
-                               etd: trip.start_date)
+                               etd: trip.start_date,
+                               closing_date: trip.closing_date)
         trip.layovers << build(:legacy_layover,
+                               closing_date: nil,
                                stop_index: 1,
                                trip: trip,
                                stop: trip.itinerary.stops.last,

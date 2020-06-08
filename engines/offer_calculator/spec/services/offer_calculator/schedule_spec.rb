@@ -41,7 +41,7 @@ RSpec.describe OfferCalculator::Schedule do
   context 'class methods' do
     describe '.from_routes', :vcr do
       it 'returns the schedules for the route' do
-        results = described_class.from_routes(routes, current_etd, 60, 'cargo_item')
+        results = described_class.from_routes(routes, current_etd, 60, 'cargo_item', 'depature')
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.trip).to eq(trip)
