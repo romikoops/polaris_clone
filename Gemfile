@@ -43,8 +43,7 @@ gem 'sprockets-rails', require: 'sprockets/railtie'
 gem 'sprockets', '~> 3.7.2'
 
 # AWS SDK
-gem 'aws-sdk-cloudfront', '~> 1.28.0'
-gem 'aws-sdk-route53', '~> 1.35.0'
+gem 'aws-sdk-elasticbeanstalk', '~> 1.31.0'
 gem 'aws-sdk-s3', '~> 1.67.0'
 gem 'aws-sdk-sqs', '~> 1.26.0'
 

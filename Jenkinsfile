@@ -56,7 +56,7 @@ pipeline {
         stage("Wolfhound") {
           steps {
             wolfhound(
-              required: ["rubocop"]
+              required: ["eslintnpm", "rubocop"]
             )
           }
         }
@@ -133,10 +133,10 @@ pipeline {
           steps {
             checkpoint(20) {
               dockerBuild(
-                dir: '.',
+                dir: ".",
                 image: "polaris",
                 memory: 1500,
-                stash: 'backend',
+                stash: "backend",
                 pre_script: "scripts/docker-prepare.sh"
               )
             }
@@ -172,12 +172,18 @@ pipeline {
       }
     }
 
-    stage("Sentry") {
+    stage("Deploy") {
       when { branch "master" }
 
-      steps {
-        checkpoint(40) {
-          sentryRelease(projects: ["api", "dipper"])
+      stages {
+        stage("Elastic Beanstalk") {
+          steps { checkpoint(40) { createApplicationVersion() } }
+        }
+
+        stage("Sentry") {
+          steps {
+            checkpoint(50) { sentryRelease(projects: ["api", "dipper"]) }
+          }
         }
       }
     }
@@ -199,7 +205,7 @@ void appPrepare() {
       "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby",
       "LC_ALL=C.UTF-8",
     ]) {
-      withCache(['vendor/ruby=Gemfile.lock']) {
+      withCache(["vendor/ruby=Gemfile.lock"]) {
         sh(label: "Bundle Install", script: """
           ls Gemfile engines/*/Gemfile \
             | xargs -P 4 -I {} sh -c "BUNDLE_GEMFILE={} bundle check 1>&2 || echo {}" \
@@ -216,6 +222,57 @@ void appPrepare() {
 
 void appRunner(String name) {
   withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}", "LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby"]) {
-    sh(label: 'Test', script: "scripts/ci-test ${name}")
+    sh(label: "Test", script: "scripts/ci-test ${name}")
+  }
+}
+
+void createApplicationVersion() {
+  // Build Elastic Beanstalk archive
+  podTemplate(
+    containers: [
+      containerTemplate(name: "deploy", image: "itsmycargo/deploy:latest",
+            ttyEnabled: true, command: "cat", alwaysPullImage: true,
+            resourceRequestCpu: "250m", resourceRequestMemory: "500Mi")
+    ]
+  ) {
+    node(POD_LABEL) {
+      checkout(scm)
+
+      container("deploy") {
+        sh(label: "Create Archive", script: """
+          zip -r "${env.GIT_COMMIT}.zip" . \
+            -x '*/spec/*' \
+            -x '*/test/*' \
+            -x '.git/*' \
+            -x '.github/*' \
+            -x '.lefthook/*' \
+            -x 'client/*' \
+            -x 'danger/*' \
+            -x 'qa/*' \
+            -x 'spec/*' \
+            -x 'test/*'
+        """)
+        archiveArtifacts(artifacts: "${env.GIT_COMMIT}.zip", allowEmptyArchive: false, fingerprint: true)
+
+        // Upload Archive
+        s3Upload(
+          bucket: env.ELASTIC_BEANSTALK_BUCKET,
+          path: "${jobName()}/",
+          file: "${env.GIT_COMMIT}.zip"
+        )
+
+        // Create EB Application Version
+        sh(label: "Create Application Version", script: """
+        aws elasticbeanstalk \
+          create-application-version \
+          --region ${env.AWS_REGION} \
+          --application-name imcr-staging \
+          --version-label ${env.GIT_COMMIT} \
+          --description "\$(git log --format="%s" -n 1)" \
+          --source-bundle "S3Bucket=${env.ELASTIC_BEANSTALK_BUCKET},S3Key=${jobName()}/${env.GIT_COMMIT}.zip" \
+          --process
+        """)
+      }
+    }
   }
 }
