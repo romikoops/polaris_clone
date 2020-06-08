@@ -36,6 +36,7 @@ module DocumentService
         @trips = find_trip
         @filename = build_file_name
       end
+      @trips = @trips.includes(:layovers)
     end
 
     def find_trip
@@ -93,7 +94,7 @@ module DocumentService
     def write_schedule_to_sheet
       row = 1
       trips.each do |trip|
-        layovers = trip.layovers.order(:stop_index)
+        layovers = trip.layovers.sort_by(&:stop_index)
         next if layovers.length < 2
 
         write_schedule_data(row, layovers, trip)
