@@ -10,35 +10,37 @@ pipeline {
     timeout(60)
   }
 
-  agent {
-    kubernetes {
-      yaml podSpec(
-        containers: [
-          [
-            name: 'ruby', image: 'itsmycargo/builder:ruby-2.6', interactive: true,
-            requests: [ memory: '1500Mi', cpu: '1000m' ],
-            env: [
-              [ name: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test' ],
-              [ name: 'ELASTICSEARCH_URL', value: 'localhost:9200']
-            ]
-          ],
-          [ name: 'node', image: 'itsmycargo/builder:node-12', command: 'cat', tty: true,
-            requests: [ memory: '3000Mi', cpu: '1000m' ],
-          ],
-          [ name: 'postgis', image: 'mdillon/postgis',
-            requests: [ memory: '500Mi', cpu: '250m' ]
-          ],
-          [ name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:7.1.1',
-            requests: [ memory: '1500Mi', cpu: '250m' ],
-            env: [ [ name: "discovery.type", value: "single-node" ] ]
-          ]
-        ]
-      )
-    }
-  }
+  agent none
 
   stages {
     stage("Test") {
+      agent {
+        kubernetes {
+          yaml podSpec(
+            containers: [
+              [
+                name: 'ruby', image: 'itsmycargo/builder:ruby-2.6', interactive: true,
+                requests: [ memory: '1500Mi', cpu: '1000m' ],
+                env: [
+                  [ name: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test' ],
+                  [ name: 'ELASTICSEARCH_URL', value: 'localhost:9200']
+                ]
+              ],
+              [ name: 'node', image: 'itsmycargo/builder:node-12', command: 'cat', tty: true,
+                requests: [ memory: '3000Mi', cpu: '1000m' ],
+              ],
+              [ name: 'postgis', image: 'mdillon/postgis',
+                requests: [ memory: '500Mi', cpu: '250m' ]
+              ],
+              [ name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:7.1.1',
+                requests: [ memory: '1500Mi', cpu: '250m' ],
+                env: [ [ name: "discovery.type", value: "single-node" ] ]
+              ]
+            ]
+          )
+        }
+      }
+
       stages {
         stage("Checkout") {
           steps {
@@ -48,6 +50,14 @@ pipeline {
 
             stash(name: "backend", excludes: "client/**/*,qa/**/*")
             stash(name: "frontend", includes: "client/**/*")
+          }
+        }
+
+        stage("Wolfhound") {
+          steps {
+            wolfhound(
+              required: ["rubocop"]
+            )
           }
         }
 
@@ -134,6 +144,8 @@ pipeline {
         }
 
         stage("Dipper") {
+          agent { kubernetes {} }
+
           steps {
             checkpoint(30) {
               dockerBuild(
@@ -142,16 +154,17 @@ pipeline {
                 memory: 3000,
                 args: [ RELEASE: env.GIT_COMMIT ],
                 stash: "frontend",
-                artifacts: [source: "/usr/share/nginx/html", destination: "client/dist"]
-              )
-
-              s3Upload(
-                bucket: env.DIPPER_BUCKET,
-                workingDir: "client/dist",
-                includePathPattern: "**",
-                excludePathPattern: "index.html,config*.js",
-                metadatas: ["Revision:${env.GIT_COMMIT}", "Jenkins-Build:${env.BUILD_URL}"],
-                verbose: true
+                artifacts: [source: "/usr/share/nginx/html", destination: "client/dist"],
+                postAction: {
+                  s3Upload(
+                    bucket: env.DIPPER_BUCKET,
+                    workingDir: "client/dist",
+                    includePathPattern: "**",
+                    excludePathPattern: "index.html,config*.js",
+                    metadatas: ["Revision:${env.GIT_COMMIT}", "Jenkins-Build:${env.BUILD_URL}"],
+                    verbose: true
+                  )
+                }
               )
             }
           }
