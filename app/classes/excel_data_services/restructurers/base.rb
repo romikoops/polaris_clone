@@ -78,6 +78,14 @@ module ExcelDataServices
         end
       end
 
+      def upcase_values(rows_data:, keys: [])
+        rows_data.each do |row_data|
+          keys.each do |key|
+            row_data[key].upcase!
+          end
+        end
+      end
+
       def rename_load_types_to_cargo_class(rows_data)
         rows_data.each do |row_data|
           row_data[:cargo_class] = row_data.delete(:load_type)
