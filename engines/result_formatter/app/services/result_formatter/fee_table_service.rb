@@ -179,7 +179,7 @@ module ResultFormatter
       return nil if value.nil?
 
       {
-        amount: value.amount,
+        amount: value.format(symbol: false),
         currency: value.currency.iso_code
       }
     end

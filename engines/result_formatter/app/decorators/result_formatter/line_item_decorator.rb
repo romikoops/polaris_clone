@@ -22,7 +22,7 @@ module ResultFormatter
       {
         included: included_fee?,
         excluded: excluded_fee?,
-        amount: amount.amount,
+        amount: amount.format(symbol: false),
         currency: amount.currency.iso_code
       }
     end

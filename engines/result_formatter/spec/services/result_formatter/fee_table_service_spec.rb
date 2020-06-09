@@ -14,9 +14,9 @@ module ResultFormatter
     }
     let(:tender) { shipment.charge_breakdowns.first.tender }
     let(:line_item) { tender.line_items.find { |li| li.code == "bas" } }
+    let(:klass) { described_class.new(tender: tender, scope: scope) }
 
     describe ".perform" do
-      let(:klass) { described_class.new(tender: tender, scope: scope) }
       let(:expected_descriptions) do
         ["Pre-Carriage",
           "1 x Fcl 20",
@@ -108,6 +108,19 @@ module ResultFormatter
 
         it "returns rows for each level of charge table" do
           expect(main_fee_item_index < second_fee_item_index).to be_truthy
+        end
+      end
+    end
+
+    describe ".value_with_currency" do
+      let(:amount) { 10000 }
+      let(:currency) { "USD" }
+      let(:money) { Money.new(amount, currency) }
+      let(:result) { klass.send(:value_with_currency, money) }
+
+      context "with complete dollar value" do
+        it "returns the value with suffix .00" do
+          expect(result[:amount]).to eq("100.00")
         end
       end
     end

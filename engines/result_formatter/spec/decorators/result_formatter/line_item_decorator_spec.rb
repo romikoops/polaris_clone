@@ -137,7 +137,12 @@ RSpec.describe ResultFormatter::LineItemDecorator do
       end
 
       let(:expected_result) do
-        {currency: line_item.amount.currency.iso_code, amount: line_item.amount.amount, included: true, excluded: false}
+        {
+          currency: line_item.amount.currency.iso_code,
+          amount: line_item.amount.format(symbol: false),
+          included: true,
+          excluded: false
+        }
       end
 
       it "decorates the line item and returns included when the fee is included" do
@@ -151,7 +156,7 @@ RSpec.describe ResultFormatter::LineItemDecorator do
       let(:expected_result) do
         {
           currency: line_item.amount.currency.iso_code,
-          amount: line_item.amount.amount,
+          amount: line_item.amount.format(symbol: false),
           included: false,
           excluded: false
         }
