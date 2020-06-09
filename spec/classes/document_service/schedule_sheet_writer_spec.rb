@@ -14,13 +14,14 @@ RSpec.describe DocumentService::ScheduleSheetWriter do
 
     let(:xlsx) { Roo::Spreadsheet.open("tmp/#{subject.filename}") }
     let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
+    let!(:trip) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary) }
     let(:schedule_row) do
       [
         "Gothenburg",
         "Shanghai",
-        "2020-06-13 05:00:00 UTC",
-        "2020-06-15 00:00:00 UTC",
-        "2020-06-29 00:00:00 UTC",
+        trip.layovers.first.closing_date.to_s,
+        trip.layovers.first.etd.to_s,
+        trip.layovers.last.eta.to_s,
         14,
         "standard",
         nil,
@@ -32,7 +33,6 @@ RSpec.describe DocumentService::ScheduleSheetWriter do
     end
 
     before do
-      FactoryBot.create(:trip_with_layovers, itinerary: itinerary)
       allow(subject).to receive(:write_to_aws).and_return("http://AWS")
 
       subject.perform
