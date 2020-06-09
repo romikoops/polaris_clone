@@ -250,6 +250,22 @@ class RouteSection extends React.PureComponent {
     return scope.address_fields
   }
 
+  get showOriginAddressFields () {
+    const { shipment } = this.props
+    const { origin } = shipment
+    const { originTrucking } = this.state
+
+    return origin && origin.street && this.addressFields && originTrucking
+  }
+
+  get showDestinationAddressFields () {
+    const { shipment } = this.props
+    const { destination } = shipment
+    const { destinationTrucking } = this.state
+
+    return destination && destination.street && this.addressFields && destinationTrucking
+  }
+
   setGoogleApi = (gMaps, map, setMarker, adjustMapBounds) => {
     this.gmaps = { gMaps, map, setMarker, adjustMapBounds }
   }
@@ -665,11 +681,9 @@ class RouteSection extends React.PureComponent {
 
     const {
       destinations,
-      destinationTrucking,
       loading,
       newRoute,
       origins,
-      originTrucking,
       requiresFullAddress,
       truckTypes,
       truckingAvailability
@@ -705,7 +719,7 @@ class RouteSection extends React.PureComponent {
                       hubs={origins}
                       loading={loading.origin}
                       requiresFullAddress={requiresFullAddress}
-                      showAddress={this.addressFields && originTrucking}
+                      showAddress={this.showOriginAddressFields}
                       value={origin}
                       foundTrucking={truckingAvailability.origin}
                       onBlur={() => this.onRouteSelectionBlur('origin')}
@@ -748,7 +762,7 @@ class RouteSection extends React.PureComponent {
                       hubs={destinations}
                       loading={loading.destination}
                       requiresFullAddress={requiresFullAddress}
-                      showAddress={this.addressFields && destinationTrucking}
+                      showAddress={this.showDestinationAddressFields}
                       value={destination}
                       foundTrucking={truckingAvailability.destination}
                       onBlur={() => this.onRouteSelectionBlur('destination')}

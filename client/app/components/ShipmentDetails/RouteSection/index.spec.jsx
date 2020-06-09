@@ -6,9 +6,18 @@ import createMockStore from 'redux-mock-store'
 import { routeSelectionStateMock } from '../mocks'
 import AddressFields from './Form/AddressFields/fields'
 import RouteSectionConnected from './index'
+import { address, address2 } from '../../../mock'
 
 let wrapper
 const mockStore = createMockStore()
+const mockState = (origin = address, destination = address2) => {
+  const state = routeSelectionStateMock()
+
+  state.bookingProcess.shipment.origin = origin
+  state.bookingProcess.shipment.destination = destination
+
+  return state
+}
 describe('Address fields visibility', () => {
   const addressFields = () => wrapper.find(AddressFields)
   const mount = (store) => {
@@ -16,7 +25,7 @@ describe('Address fields visibility', () => {
   }
 
   it('render address fields', () => {
-    mount(mockStore(routeSelectionStateMock()))
+    mount(mockStore(mockState()))
 
     const fields = addressFields()
 
@@ -24,8 +33,8 @@ describe('Address fields visibility', () => {
     expect(fields.at(1).prop('hide')).toBeFalsy()
   })
 
-  it('not render address fields', () => {
-    const state = routeSelectionStateMock()
+  it('not render address fields based on scope', () => {
+    const state = mockState()
     state.app.tenant.scope.address_fields = false
     mount(mockStore(state))
 
@@ -46,3 +55,18 @@ const RouteSectionWrapper = (store) => ({ children }) => (
 
 jest.mock('./Map', () => ({ children }) => children(jest.fn(), jest.fn(), jest.fn(), jest.fn()))
 jest.mock('uuid', () => ({ v1: () => '6199642e-95d2-11ea-bb37-0242ac130002' }))
+
+jest.mock('redux', () => {
+  const actual = jest.requireActual('redux')
+
+  return {
+    ...actual,
+    bindActionCreators: () => ({
+      getLastAvailableDate: jest.fn(),
+      refreshMaxDimensions: jest.fn(),
+      updatePageData: jest.fn(),
+      updateShipment: jest.fn(),
+      clearError: jest.fn()
+    })
+  }
+})

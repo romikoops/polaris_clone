@@ -5005,8 +5005,8 @@ export const routeSelectionStateMock = () => ({
         lookupTablesForRoutes: {
           originHub: { 18513: [1] },
           destinationHub: { 18513: [13] },
-          originNexus: {},
-          destinationNexus: {},
+          originNexus: { 18513: [13] },
+          destinationNexus: { 18513: [13] },
           tenantVehicleId: { '': [0] }
         },
         routes: [

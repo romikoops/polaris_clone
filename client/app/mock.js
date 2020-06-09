@@ -24,7 +24,7 @@ const isObject = (x) => {
  */
 export const change = (origin, pathRaw, rules) => {
   const willReturn = cloneDeep(origin)
-  
+
   if (!isObject(rules)) {
     set(willReturn, pathRaw, rules)
 
@@ -330,6 +330,15 @@ export const address2 = {
   city: 'Hamburg',
   zip_code: '22848',
   country: 'Germany'
+}
+
+export const locationNexusMock = {
+  country: 'DE',
+  fullAddress: 'Hamburg, DE',
+  latitude: 53.536975,
+  longitude: 9.918213,
+  nexusId: 18513,
+  nexusName: 'Hamburg'
 }
 
 export const hub = {
