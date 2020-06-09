@@ -31,9 +31,9 @@ module OfferCalculator
 
     def perform
       @hubs               = @hub_finder.perform
-      @routes             = @route_finder.perform(hubs: @hubs, date_range: date_range)
+      @trucking_data      = @trucking_data_builder.perform(hubs: @hubs)
+      @routes             = @route_finder.perform(hubs: hubs_filtered_by_trucking, date_range: date_range)
       @routes             = @route_filter.perform(@routes)
-      @trucking_data = @trucking_data_builder.perform(hubs: @hubs)
       @detailed_schedules = @detailed_schedules_builder.perform(schedules, @trucking_data, @user, @wheelhouse)
     end
 
@@ -94,6 +94,17 @@ module OfferCalculator
 
     def default_delay_in_days
       60
+    end
+
+    def hubs_filtered_by_trucking
+      @hubs.each_with_object({}) do |(direction, hubs), result|
+        trucking_carriage = direction == :origin ? 'pre' : 'on'
+        result[direction] = if @shipment.has_carriage?(trucking_carriage)
+          hubs.select { |hub| @trucking_data.dig(:trucking_pricings, trucking_carriage, hub.id) }
+        else
+          hubs
+        end
+      end
     end
   end
 end
