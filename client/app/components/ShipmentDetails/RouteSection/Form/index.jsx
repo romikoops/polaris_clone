@@ -7,6 +7,7 @@ import AddressFields from './AddressFields/fields'
 import Autocomplete from './Autocomplete/autocomplete'
 import styles from './index.scss'
 import LoadingBackfill from '../../../LoadingBackfill/LoadingBackfill'
+import IconWarehouse from '../../../IconWarehouse'
 
 class Form extends Component {
   static fuseOptions = {
@@ -220,24 +221,14 @@ class Form extends Component {
   }
 
   autocompleteItemTemplate = (item) => {
-    if (item.type === 'address') {
-      return item.label
-    }
-
-    const mots = item.rawResult.mots || []
-    const motIconMap = {
-      ocean: 'fa fa-ship',
-      truck: 'fa fa-truck',
-      air: 'fa fa-plane',
-      rail: 'fa fa-train'
-    }
-
-    const icons = mots.sort().map((mot) => <i className={motIconMap[mot]} />)
+    const icon = item.type === 'address'
+      ? <i className={`fa fa-map-marker ${styles.autocompleteIcon}`} />
+      : <IconWarehouse className={styles.autocompleteIcon} />
 
     return (
       <div className={styles.autocompleteItem}>
         <strong>
-          { icons }
+          { icon }
         </strong>
         <span>{item.label}</span>
       </div>

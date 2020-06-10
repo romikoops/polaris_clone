@@ -1,8 +1,11 @@
 import * as React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import Form from '.'
 import { hub, theme, identity } from '../../../../mocks/index'
+import { address, locationNexusMock } from '../../../../mock'
+import AutocompleteResults from './Autocomplete/results'
 
+let wrapper
 const propsBase = {
   theme,
   hubs: [hub],
@@ -20,7 +23,7 @@ const propsBase = {
 }
 
 test('it finds the hub by locode', () => {
-  const wrapper = shallow(<Form {...propsBase} />)
+  wrapper = shallow(<Form {...propsBase} />)
   const instance = wrapper.instance()
   const normalisedHubs = Form.normalizeHubResults([hub])
 
@@ -33,9 +36,34 @@ test('it finds the hub by secondary name', () => {
     ...propsBase,
     hubs: [adjustedHub]
   }
-  const wrapper = shallow(<Form {...adjustedProps} />)
+  wrapper = shallow(<Form {...adjustedProps} />)
   const instance = wrapper.instance()
   const normalisedHubs = Form.normalizeHubResults([adjustedHub])
 
   return expect(instance.searchHub('Cat Lai')).resolves.toEqual(normalisedHubs)
 })
+
+describe('Context: Autocomplete Items', () => {
+  const autocompleteResults = () => wrapper.find(AutocompleteResults)
+
+  beforeAll(() => {
+    wrapper = mount(<Form {...propsBase} />)
+    wrapper.setState({ results: [address, locationNexusMock] })
+  })
+
+  it('renders the address icon', () => {
+    const item = autocompleteResults().invoke('itemTemplate')({ ...address, type: 'address' })
+
+    expect(item).toMatchSnapshot()
+  })
+
+  it('renders the port icon', () => {
+    const item = autocompleteResults().invoke('itemTemplate')(locationNexusMock)
+
+    expect(item).toMatchSnapshot()
+  })
+})
+
+jest.mock('uuid', () => ({
+  v1: () => '123456'
+}))
