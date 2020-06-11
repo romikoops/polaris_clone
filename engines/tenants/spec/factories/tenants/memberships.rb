@@ -5,7 +5,7 @@ FactoryBot.define do
     association :group, factory: :tenants_group
     association :member, factory: :tenants_users
     trait :user do
-      association :member, factory: :tenants_users
+      association :member, factory: [:tenants_user, :with_profile]
     end
     trait :company do
       association :member, factory: :tenants_companies

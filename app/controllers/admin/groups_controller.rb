@@ -129,8 +129,10 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
     end
     query = query.order(name: search_params[:name_desc] == 'true' ? :desc : :asc) if search_params[:name_desc]
     if search_params[:member_count_desc]
+      sorting_direction = search_params[:member_count_desc] == 'true' ? 'DESC' : 'ASC'
       query = query.left_joins(:memberships)
-              .order("COUNT(tenants_memberships.id) #{search_params[:member_count_desc] == 'true' ? 'DESC' : 'ASC'}")
+                   .group('tenants_groups.id')
+                   .order("COUNT(tenants_memberships.id) #{sorting_direction}")
     end
     query = query.search(search_params[:query]) if search_params[:query]
     query = query.search(search_params[:name]) if search_params[:name]

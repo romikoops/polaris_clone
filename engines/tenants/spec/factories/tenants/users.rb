@@ -13,6 +13,15 @@ FactoryBot.define do
     after(:create) do |user, evaluator|
       user.activate! if evaluator.activate
     end
+
+    trait :with_profile do
+      after(:create) do |user, evaluator|
+        create(:profiles_profile,
+          first_name: '',
+          last_name: '',
+          user_id: user.id)
+      end
+    end
   end
 end
 
