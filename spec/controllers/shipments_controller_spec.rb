@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ShipmentsController do
-  let(:tenant) { create(:tenant) }
-  let(:shipment) { create(:shipment, tenant: tenant, user: user) }
-  let(:user) { create(:user, tenant: tenant) }
+  let(:tenant) { FactoryBot.create(:tenant) }
+  let(:user) { FactoryBot.create(:user, tenant: tenant) }
+  let(:shipment) { FactoryBot.create(:shipment, user: user, tenant: tenant) }
   let(:json_response) { JSON.parse(response.body) }
 
   before do
@@ -18,6 +18,28 @@ RSpec.describe ShipmentsController do
       get :index, params: { tenant_id: tenant.id }
 
       expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET #show" do
+    let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, with_profile: true) }
+    let(:shipment) { FactoryBot.create(:legacy_shipment, user: user, tenant: tenant, with_breakdown: true) }
+    let(:tender) { FactoryBot.create(:quotations_tender, amount: tender_amount) }
+    let(:tender_amount) { Money.new(100, "EUR") }
+    let(:rate) { 1.24 }
+
+    before do
+      Legacy::ExchangeRate.create(from: tender_amount.currency.iso_code, to: "USD", rate: rate)
+      shipment.charge_breakdowns.update_all(tender_id: tender.id)
+      FactoryBot.create_list(:quotations_line_item, 5, tender: tender)
+    end
+
+    it 'returns requested shipment' do
+      get :show, params: { id: shipment.id, tenant_id: tenant.id }
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        expect(json_response.dig('data', 'exchange_rates')).to include("base" => "EUR", "usd" => rate.to_s)
+      end
     end
   end
 

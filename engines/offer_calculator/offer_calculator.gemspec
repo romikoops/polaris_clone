@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-legacy'
   s.add_dependency 'imc-pricings'
   s.add_dependency 'imc-quotations'
+  s.add_dependency 'imc-result_formatter'
   s.add_dependency 'imc-tenants'
   s.add_dependency 'imc-trucking'
 

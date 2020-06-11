@@ -186,7 +186,6 @@ module OfferCalculator
                                        .or(note_association.where(target: shipment.tenant))
                                        .pluck(:body)
         valid_until = shipment.valid_until(schedule.trip)
-
         {
           shipment_id: shipment.id,
           transit_time: transit_time,
@@ -206,7 +205,8 @@ module OfferCalculator
           validUntil: valid_until,
           remarkNotes: remark_notes,
           metadata_id: result[:metadata].id,
-          pricing_rate_data: filter_rate_overview(rate_overview: rate_overview, valid_until: valid_until)
+          pricing_rate_data: filter_rate_overview(rate_overview: rate_overview, valid_until: valid_until),
+          exchange: format_exchange_rate(tender: result[:total].charge_breakdown.tender)
         }
       end
 
@@ -384,6 +384,10 @@ module OfferCalculator
         regular_notes = Legacy::Note.where(transshipment: false, tenant_id: tenant_id)
         regular_notes.where(target: hubs | nexii | countries)
                      .or(regular_notes.where(pricings_pricing_id: pricings.ids))
+      end
+
+      def format_exchange_rate(tender:)
+        ::ResultFormatter::ExchangeRateService.new(tender: tender).perform
       end
 
       attr_reader :trucking_data, :user, :shipment

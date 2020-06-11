@@ -373,6 +373,46 @@
           "type",
           "attributes"
         ]
+      },
+      "pagination": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "perPage": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "page",
+          "perPage",
+          "totalPages"
+        ]
+      },
+      "paginationLinks": {
+        "type": "object",
+        "properties": {
+          "first": {
+            "type": "string",
+            "nullable": true
+          },
+          "prev": {
+            "type": "string",
+            "nullable": true
+          },
+          "next": {
+            "type": "string",
+            "nullable": true
+          },
+          "last": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -682,6 +722,24 @@
               "type": "string"
             },
             "description": "Search query"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number",
+            "schema": {
+              "type": "number"
+            },
+            "description": "Page number"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "type": "number",
+            "schema": {
+              "type": "number"
+            },
+            "description": "Results per page"
           }
         ],
         "responses": {
@@ -697,6 +755,14 @@
                       "items": {
                         "$ref": "#/components/schemas/user"
                       }
+                    },
+                    "meta": {
+                      "pagination": {
+                        "$ref": "#/components/schemas/pagination"
+                      }
+                    },
+                    "links": {
+                      "$ref": "#/components/schemas/paginationLinks"
                     }
                   },
                   "required": [
@@ -1455,6 +1521,14 @@
                               },
                               "transshipment": {
                                 "type": "string"
+                              },
+                              "exchangeRates": {
+                                "type": "object",
+                                "properties": {
+                                  "base": {
+                                    "type": "string"
+                                  }
+                                }
                               }
                             },
                             "required": [

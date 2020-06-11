@@ -49,6 +49,7 @@ digraph G {
     "offer_calculator" -> "legacy" [color=grey];
     "offer_calculator" -> "pricings" [color=grey];
     "offer_calculator" -> "quotations" [color=grey];
+    "offer_calculator" -> "result_formatter" [color=grey];
     "offer_calculator" -> "tenants" [color=grey];
     "offer_calculator" -> "trucking" [color=grey];
     "wheelhouse" [shape=ellipse];

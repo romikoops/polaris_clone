@@ -15,6 +15,9 @@ module Api
                     transshipment
                     estimated]
       attribute :transit_time, if: proc { |_, params| !quotation_tool?(scope: params.dig(:scope)) }
+      attribute :exchange_rates do |tender|
+        ::ResultFormatter::ExchangeRateService.new(tender: tender).perform
+      end
     end
   end
 end

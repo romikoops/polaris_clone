@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 
-class ExchangeRate < ApplicationRecord
-  def self.current
-    find_by_sql(
-      arel_table.project(arel_table[Arel.star])
-                .distinct_on([arel_table[:from], arel_table[:to]])
-                .order(arel_table[:from], arel_table[:to], arel_table[:created_at].desc)
-    )
-  end
+class ExchangeRate < Legacy::ExchangeRate
 end
 
 # == Schema Information

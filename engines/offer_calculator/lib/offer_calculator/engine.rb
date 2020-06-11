@@ -3,6 +3,7 @@
 require 'core'
 require 'legacy'
 require 'pricings'
+require 'result_formatter'
 require 'tenants'
 require 'trucking'
 require 'quotations'

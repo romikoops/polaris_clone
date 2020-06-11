@@ -310,6 +310,7 @@ PATH
       imc-legacy
       imc-pricings
       imc-quotations
+      imc-result_formatter
       imc-tenants
       imc-trucking
       paper_trail (~> 10.3)
