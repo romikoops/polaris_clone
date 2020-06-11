@@ -25,10 +25,10 @@ module ExcelDataServices
       ].freeze
 
       def perform
-        restructured_data = data[:rows_data].map do |row|
+        restructured_data = downcase_values(rows_data: data[:rows_data], keys: COLS_TO_DOWNCASE)
+        restructured_data = upcase_values(rows_data: restructured_data, keys: COLS_TO_UPCASE)
+        restructured_data = restructured_data.map do |row|
           row = confirm_lat_lngs(row: row)
-          row = apply_downcase(row: row)
-          row = apply_upcase(row: row)
           row = apply_booleans(row: row)
           {
             address: address_section(row: row),

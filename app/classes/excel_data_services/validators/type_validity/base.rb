@@ -10,6 +10,8 @@ module ExcelDataServices
           fee: Validators::TypeValidity::TypeValidators::FeeValidator,
           load_type: Validators::TypeValidity::TypeValidators::LoadTypeValidator,
           locode: Validators::TypeValidity::TypeValidators::LocodeValidator,
+          origin_locode: Validators::TypeValidity::TypeValidators::LocodeValidator,
+          destination_locode: Validators::TypeValidity::TypeValidators::LocodeValidator,
           date: Validators::TypeValidity::TypeValidators::DateValidator,
           required_string: Validators::TypeValidity::TypeValidators::StringValidator,
           optional_string: Validators::TypeValidity::TypeValidators::OptionalStringValidator,

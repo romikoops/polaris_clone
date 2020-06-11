@@ -14,7 +14,7 @@ module ExcelDataServices
         found_by_info = [name, country].compact.join(', ')
       end
 
-      if !hub && locode
+      if !hub && locode.is_a?(String)
         nexus = ::Legacy::Nexus.find_by(tenant: tenant, locode: locode.delete(' ').upcase, sandbox: @sandbox)
         hub = find_hub_by_name_and_mot(raw_name: nexus.name, country: country, mot: mot) if nexus
         found_by_info = locode
