@@ -216,6 +216,36 @@ FactoryBot.define do
       end
     end
 
+    trait :correct_pricings_one_fee_col_and_ranges_with_remarks do
+      all_sheets_data do
+        [{ sheet_name: 'Sheet1',
+           rows_data:
+            [{ effective_date: Date.parse('Thu, 15 Mar 2018'),
+               expiration_date: Date.parse('Fri, 15 Nov 2019'),
+               customer_email: nil,
+               origin: 'Gothenburg',
+               country_origin: 'Sweden',
+               destination: 'Shanghai',
+               country_destination: 'China',
+               mot: 'ocean',
+               carrier: nil,
+               service_level: 'standard',
+               load_type: 'lcl',
+               rate_basis: 'PER_WM',
+               range_min: nil,
+               range_max: nil,
+               fee_code: 'BAS',
+               fee_name: 'Bas',
+               currency: 'USD',
+               fee_min: 17,
+               fee: 17,
+               transit_time: 24,
+               transshipment: 'ZACPT',
+               remarks: 'test',
+               row_nr: 2 }]}]
+      end
+    end
+
     trait :lowcase_ratebasis_pricings_one_fee_col_and_ranges do
       all_sheets_data do
         [{ sheet_name: 'Sheet1',
@@ -306,6 +336,35 @@ FactoryBot.define do
                 lss: 60,
                 rate: 2550,
                 transshipment: nil,
+                row_nr: 4 }
+            ] }]
+      end
+    end
+
+    trait :correct_pricings_dynamic_fee_cols_no_ranges_with_remarks do
+      all_sheets_data do
+        [{ sheet_name: 'Sheet1',
+           rows_data:
+            [
+              { effective_date: Date.parse('Tue, 01 Jan 2019'),
+                expiration_date: Date.parse('Sun, 31 Mar 2019'),
+                customer_email: nil,
+                origin: 'Hong Kong',
+                country_origin: 'Hong Kong',
+                destination: 'Southampton',
+                country_destination: 'United Kingdom of Great Britain and Northern Ireland',
+                mot: 'ocean',
+                carrier: 'YML',
+                service_level: 'standard',
+                load_type: 'FCL_40_HQ',
+                rate_basis: 'PER_CONTAINER',
+                transit_time: 27,
+                currency: 'USD',
+                bas: nil,
+                lss: 60,
+                rate: 2550,
+                transshipment: nil,
+                remarks: 'Test',
                 row_nr: 4 }
             ] }]
       end
@@ -693,9 +752,14 @@ FactoryBot.define do
 
     factory :default_hubs_row_data, traits: %i[default_hubs]
     factory :excel_data_parsed_correct_pricings_one_fee_col_and_ranges, traits: %i[pricing_one_fee_col_and_ranges correct_pricings_one_fee_col_and_ranges]
+    factory :excel_data_parsed_correct_pricings_one_fee_col_and_ranges_with_remarks,
+      traits: %i[pricing_one_fee_col_and_ranges correct_pricings_one_fee_col_and_ranges_with_remarks]
     factory :excel_data_parsed_lowcase_ratebasis_pricings_one_fee_col_and_ranges,
       traits: %i[pricing_one_fee_col_and_ranges lowcase_ratebasis_pricings_one_fee_col_and_ranges]
     factory :excel_data_parsed_correct_pricings_dynamic_fee_cols_no_ranges, traits: %i[pricing_dynamic_fee_cols_no_ranges correct_pricings_dynamic_fee_cols_no_ranges]
+    factory :excel_data_parsed_correct_pricings_dynamic_fee_cols_no_ranges_with_remarks,
+      traits: %i[pricing_dynamic_fee_cols_no_ranges
+     correct_pricings_dynamic_fee_cols_no_ranges_with_remarks]
     factory :excel_data_parsed_lowcase_ratebasis_pricings_dynamic_fee_cols_no_ranges,
       traits: %i[pricing_dynamic_fee_cols_no_ranges low_case_rate_basis_pricings_dynamic_fee_cols_no_ranges]
     factory :excel_data_parsed_correct_local_charges, traits: %i[local_charges correct_local_charges]

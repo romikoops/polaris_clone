@@ -735,6 +735,38 @@ FactoryBot.define do
       end
     end
 
+    trait :correct_pricings_one_fee_col_and_ranges_with_remarks do
+      data do
+        [[{sheet_name: "Sheet1",
+           restructurer_name: "pricing_one_fee_col_and_ranges",
+           effective_date: Date.parse('Thu, 15 Mar 2018'),
+           expiration_date: Date.parse('Sun, 15 Nov 2019'),
+           customer_email: nil,
+           origin: "Gothenburg",
+           country_origin: "Sweden",
+           destination: "Shanghai",
+           country_destination: "China",
+           mot: "ocean",
+           carrier: nil,
+           service_level: "standard",
+           load_type: "lcl",
+           rate_basis: "PER_WM",
+           fee_code: "BAS",
+           fee_name: "Bas",
+           currency: "USD",
+           fee_min: 17,
+           fee: 17,
+           transit_time: 24,
+           transshipment: "ZACPT",
+           remarks: "test",
+           row_nr: 2,
+           internal: false,
+           notes: [{header: "Gothenburg - Shanghai", body: "test"}],
+           origin_name: "Gothenburg Port",
+           destination_name: "Shanghai Port"}]]
+      end
+    end
+
     trait :only_locode_pricings_one_fee_col_and_ranges do
       data do
         [[{ sheet_name: 'Sheet1',
@@ -1018,6 +1050,65 @@ FactoryBot.define do
             origin_name: 'Hong Kong Port',
             destination_name: 'Southampton Port',
             internal: false }]]
+      end
+    end
+
+    trait :correct_pricings_dynamic_fee_cols_no_ranges_with_remarks do
+      data do
+        [[{effective_date: Date.parse('Tue, 01 Jan 2019'),
+           expiration_date: Date.parse('Sun, 31 Mar 2019'),
+           customer_email: nil,
+           origin: "Hong Kong",
+           country_origin: "Hong Kong",
+           destination: "Southampton",
+           country_destination: "United Kingdom of Great Britain and Northern Ireland",
+           mot: "ocean",
+           carrier: "YML",
+           service_level: "standard",
+           load_type: "fcl_40_hq",
+           rate_basis: "PER_CONTAINER",
+           currency: "USD",
+           transshipment: nil,
+           transit_time: 27,
+           remarks: "Test",
+           sheet_name: "Sheet1",
+           restructurer_name: "pricing_dynamic_fee_cols_no_ranges",
+           fee_code: "LSS",
+           fee_name: "Lss",
+           fee: 60,
+           fee_min: 60,
+           row_nr: 4,
+           origin_name: "Hong Kong Port",
+           destination_name: "Southampton Port",
+           internal: false,
+           notes: [{header: "Hong Kong - Southampton", body: "Test"}]},
+          {effective_date: Date.parse('Tue, 01 Jan 2019'),
+           expiration_date: Date.parse('Sun, 31 Mar 2019'),
+           customer_email: nil,
+           origin: "Hong Kong",
+           country_origin: "Hong Kong",
+           destination: "Southampton",
+           country_destination: "United Kingdom of Great Britain and Northern Ireland",
+           mot: "ocean",
+           carrier: "YML",
+           service_level: "standard",
+           load_type: "fcl_40_hq",
+           rate_basis: "PER_CONTAINER",
+           currency: "USD",
+           transshipment: nil,
+           transit_time: 27,
+           remarks: "Test",
+           sheet_name: "Sheet1",
+           restructurer_name: "pricing_dynamic_fee_cols_no_ranges",
+           fee_code: "RATE",
+           fee_name: "Rate",
+           fee: 2550,
+           fee_min: 2550,
+           row_nr: 4,
+           origin_name: "Hong Kong Port",
+           destination_name: "Southampton Port",
+           internal: false,
+           notes: [{header: "Hong Kong - Southampton", body: "Test"}]}]]
       end
     end
 
@@ -3023,8 +3114,12 @@ FactoryBot.define do
 
     factory :missing_values_hubs_row_data, traits: %i[restructured_hubs_missing_values]
     factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges, traits: %i[correct_pricings_one_fee_col_and_ranges]
+    factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges_with_remarks,
+      traits: %i[correct_pricings_one_fee_col_and_ranges_with_remarks]
     factory :excel_data_restructured_faulty_pricings_one_fee_col_and_ranges, traits: %i[faulty_pricings_one_fee_col_and_ranges]
     factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_ranges, traits: %i[correct_pricings_dynamic_fee_cols_no_ranges]
+    factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_ranges_with_remarks,
+      traits: %i[correct_pricings_dynamic_fee_cols_no_ranges_with_remarks]
     factory :excel_data_restructured_correct_margins, traits: %i[correct_margins]
     factory :excel_data_restructured_faulty_margins, traits: %i[faulty_margins]
     factory :excel_data_restructured_correct_local_charges, traits: %i[correct_local_charges]

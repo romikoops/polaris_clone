@@ -23,4 +23,17 @@ RSpec.describe ExcelDataServices::Restructurers::PricingOneFeeColAndRanges do
       end
     end
   end
+
+  describe '.restructure with remarks' do
+    let(:input_data) { build(:excel_data_parsed_correct_pricings_one_fee_col_and_ranges_with_remarks).first }
+    let(:output_data) {
+      { 'Pricing' =>
+     build(:excel_data_restructured_correct_pricings_one_fee_col_and_ranges_with_remarks) }
+    }
+    let(:result) { described_class.restructure(options) }
+
+    it 'restructures the data correctly' do
+      expect(result['Pricing']).to match_array(output_data['Pricing'])
+    end
+  end
 end

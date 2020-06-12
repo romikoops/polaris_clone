@@ -28,6 +28,9 @@ module ExcelDataServices
 
         restructured_data.each do |row_data|
           row_data[:internal] ||= false
+          if row_data[:remarks]
+            row_data[:notes] = extract_notes(row_data)
+          end
         end
         restructured_data = cut_based_on_date_overlaps(
           restructured_data,

@@ -49,6 +49,13 @@ module ExcelDataServices
 
       attr_reader :tenant, :data
 
+      def extract_notes(row_data)
+        [{
+          header: "#{row_data[:origin]} - #{row_data[:destination]}",
+          body: row_data[:remarks]
+        }]
+      end
+
       def replace_nil_equivalents_with_nil(rows_data)
         rows_data.each do |row_data|
           row_data.each do |k, v|

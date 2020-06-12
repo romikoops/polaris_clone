@@ -21,6 +21,9 @@ module ExcelDataServices
           row_data.reverse_merge!(sheet_name: sheet_name,
                                   restructurer_name: restructurer_name)
           row_data[:internal] ||= false
+          if row_data[:remarks]
+            row_data[:notes] = extract_notes(row_data)
+          end
         end
 
         restructured_data = trim_based_on_effective_date(restructured_data)
