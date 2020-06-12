@@ -263,6 +263,19 @@
           </p>
         </div>
       <% end %>
+      <div class="exchange-row">
+        <table class="exchange-table">
+          <tr class="exchange-table-row">
+            <td class="exchange-table-cell">
+              <p> Exchange Rates: </p> 
+            </td>
+          </tr>
+          <% exchange_rates.each do |currency, rate| %>
+            <% next if currency == 'base' %>
+            <%= render template: "pdf/partials/breakdowns/exchange_rate_row", locals: { rate: rate, base: quote['currency'], currency: currency } %>
+          <% end %>
+        </table>
+      </div>
       <div class="note-remarks-row">
         <% note_remarks.each do |note_remark| %>
           <p class="note-remark-text"><%= note_remark %></p>

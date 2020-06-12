@@ -320,7 +320,8 @@ module Pdf
         fee_keys_and_names: @fee_keys_and_names,
         shipper_profile: profile_for_user(legacy_user: @shipment.user),
         selected_offer: @selected_offer,
-        fees: @fees
+        fees: @fees,
+        exchange_rates: exchange_rates
       }
     end
 
@@ -333,6 +334,13 @@ module Pdf
     def profile_for_user(legacy_user:)
       tenants_user = Tenants::User.find_by(legacy_id: legacy_user.id)
       Profiles::ProfileService.fetch(user_id: tenants_user.id)
+    end
+
+    def exchange_rates
+      @shipments.flat_map(&:charge_breakdowns).reduce({}) do |result, charge_breakdown|
+        rate = ResultFormatter::ExchangeRateService.new(tender: charge_breakdown.tender).perform
+        result.merge(rate)
+      end
     end
   end
 end

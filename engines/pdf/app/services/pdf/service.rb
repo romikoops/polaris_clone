@@ -176,6 +176,7 @@ module Pdf
       trip = charge_breakdown.trip if trip.nil?
       origin_hub = trip.itinerary.first_stop.hub
       destination_hub = trip.itinerary.last_stop.hub
+      tender = charge_breakdown.tender
       charge_breakdown.to_nested_hash(hidden_args).merge(
         offer_merge_data(
           trip: trip,
@@ -183,7 +184,8 @@ module Pdf
           origin_hub: origin_hub,
           destination_hub: destination_hub
         ).merge(
-          fees: ResultFormatter::FeeTableService.new(tender: charge_breakdown.tender, scope: scope).perform
+          fees: ResultFormatter::FeeTableService.new(tender: tender, scope: scope).perform,
+          currency: tender.amount_currency
         )
       ).deep_stringify_keys
     end
