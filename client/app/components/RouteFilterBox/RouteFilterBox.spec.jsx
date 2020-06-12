@@ -2,7 +2,7 @@ import '../../mocks/libraries/momentStatic'
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
-  shipment, identity, theme, cargoItems
+  shipment, identity, theme, cargoItems, eurUsdExchangeRate
 } from '../../mocks/index'
 
 import RouteFilterBox from './RouteFilterBox'
@@ -21,6 +21,7 @@ const propsBase = {
   setDepartureDate: identity,
   setDurationFilter: identity,
   setMoT: identity,
+  exchangeRates: [eurUsdExchangeRate],
   shipment,
   theme
 }

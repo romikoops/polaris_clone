@@ -13,6 +13,11 @@ const thirdCurrency = {
   rate: 0.0078
 }
 
+export const eurUsdExchangeRate = {
+  base: 'EUR',
+  usd: 1.14
+}
+
 export const currencies = [
   firstCurrency,
   secondCurrency,

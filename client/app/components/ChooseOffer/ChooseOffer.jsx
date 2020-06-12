@@ -18,6 +18,7 @@ import ScrollTracking from '../Addons/ScrollTracking'
 import { trackingConstants } from '../../constants/tracking.constants'
 import ShowTotal from '../ShowTotal/ShowTotal'
 import { offerSorter, isQuote } from '../../helpers'
+import ExchangeRatesHolder from '../ExchangeRatesHolder/ExchangeRatesHolder'
 
 class ChooseOffer extends Component {
 
@@ -239,7 +240,7 @@ class ChooseOffer extends Component {
       shipment, results, aggregatedCargo
     } = shipmentData
     if (!shipment || !results) return ''
-
+    const exchangeRates = results.map((result) => result.meta.exchange)
     const availableMoTKeys = {}
     results.forEach((s) => {
       if (tenant.scope.modes_of_transport[s.meta.mode_of_transport][shipment.load_type]) {
@@ -335,6 +336,7 @@ class ChooseOffer extends Component {
                 availableMotKeys={availableMoTKeys}
                 lastAvailableDate={lastAvailableDate}
                 setDepartureDate={this.setDepartureDate}
+                exchangeRates={exchangeRates}
               />
             </div>
           ) : ''}
@@ -390,6 +392,9 @@ class ChooseOffer extends Component {
                   />
                 </div>
               </div>
+              <p style={{ fontSize: '10px', margin: '10px' }}>
+                <ExchangeRatesHolder exchangeRates={exchangeRates} />
+              </p>
               <p style={{ fontSize: '10px', margin: '5px' }}>{t('shipment:ttNoGuarantee')}</p>
               <p style={{ fontSize: '10px', margin: '5px' }}>{t('shipment:invoicedLocalCurrency')}</p>
             </div>

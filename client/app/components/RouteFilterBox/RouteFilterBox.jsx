@@ -8,6 +8,7 @@ import { switchIcon, capitalize } from '../../helpers'
 import styles from './RouteFilterBox.scss'
 import TextHeading from '../TextHeading/TextHeading'
 import Checkbox from '../Checkbox/Checkbox'
+import ExchangeRatesHolder from '../ExchangeRatesHolder/ExchangeRatesHolder'
 
 class RouteFilterBox extends Component {
   constructor (props) {
@@ -27,13 +28,16 @@ class RouteFilterBox extends Component {
     this.handleOptionChange = this.handleOptionChange.bind(this)
     this.setFilterDuration = this.setFilterDuration.bind(this)
   }
+
   setFilterDuration (event) {
     const dur = event.target.value
     this.props.setDurationFilter(dur)
   }
+
   editFilterDay (day) {
     this.props.setDepartureDate(day)
   }
+
   handleOptionChange (changeEvent, target) {
     this.setState({
       selectedOption: {
@@ -43,9 +47,10 @@ class RouteFilterBox extends Component {
     })
     this.props.setMoT(changeEvent, target)
   }
+
   render () {
     const {
-      theme, pickup, shipment, availableMotKeys, cargos, lastAvailableDate, t
+      theme, pickup, shipment, availableMotKeys, cargos, lastAvailableDate, t, exchangeRates
     } = this.props
     const dayPickerProps = {
       disabledDays: {
@@ -64,7 +69,7 @@ class RouteFilterBox extends Component {
     }
 
     const motCheckBoxKeys = Object.keys(availableMotKeys)
-    const motCheckBoxes = motCheckBoxKeys.length > 1 ? motCheckBoxKeys.map(mKey => (
+    const motCheckBoxes = motCheckBoxKeys.length > 1 ? motCheckBoxKeys.map((mKey) => (
       <div className="radio layout-row layout-align-none-center" style={{ margin: '2px 0' }}>
         <Checkbox
           id={mKey}
@@ -85,7 +90,7 @@ class RouteFilterBox extends Component {
     return (
       <div className={styles.filterbox}>
         <div className={styles.pickup_date}>
-          <div classNmae="flex-100 layout-row">
+          <div className="flex-100 layout-row">
             <TextHeading theme={theme} size={4} text={pickup ? t('cargo:cargoReadyDate') : t('cargo:availableAtTerm')} />
           </div>
           <div className={`flex-none layout-row ${styles.dpb}`}>
@@ -104,25 +109,38 @@ class RouteFilterBox extends Component {
             />
           </div>
         </div>
-        {motCheckBoxKeys.length > 1 ? <div className={styles.mode_of_transport}>
-          <div>
-            <TextHeading theme={theme} size={4} text={t('shipment:modeOfTransport')} />
+        {motCheckBoxKeys.length > 1 ? (
+          <div className={styles.mode_of_transport}>
+            <div>
+              <TextHeading theme={theme} size={4} text={t('shipment:modeOfTransport')} />
+            </div>
+            {motCheckBoxes}
           </div>
-          {motCheckBoxes}
-        </div> : '' }
+        ) : '' }
         <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.cargos_recap}`}>
-          {cargos.map(cargo => (
+          {cargos.map((cargo) => (
             <div className="flex-100 layout-row layout-align-start-center">
-              <div>x{cargo.quantity}</div>
+              <div>
+                x
+                {cargo.quantity}
+              </div>
               <div className={styles.cargo_img} style={shipment.load_type === 'cargo_item' ? imgLCL : imgFCL} />
             </div>
           ))}
         </div>
         <div>
+          <p style={{ fontSize: '10px', marginBottom: '10px' }}>
+            <ExchangeRatesHolder exchangeRates={exchangeRates} />
+          </p>
           <p style={{ fontSize: '10px', marginTop: '0' }}>{t('shipment:ttNoGuarantee')}</p>
           <p style={{ fontSize: '10px', marginTop: '0' }}>{t('shipment:invoicedLocalCurrency')}</p>
-          {pickup ?
-           <p style={{ fontSize: '10px', marginTop: '0' }}>***{t('shipment:pickupTakesTwoDays')}</p>
+          {pickup
+            ? (
+              <p style={{ fontSize: '10px', marginTop: '0' }}>
+                ***
+                {t('shipment:pickupTakesTwoDays')}
+              </p>
+            )
             : '' }
         </div>
       </div>
@@ -137,7 +155,8 @@ RouteFilterBox.defaultProps = {
   cargos: [],
   shipment: {},
   availableMotKeys: {},
-  lastAvailableDate: ''
+  lastAvailableDate: '',
+  exchangeRates: []
 }
 
 export default withNamespaces(['shipment', 'cargo'])(RouteFilterBox)
