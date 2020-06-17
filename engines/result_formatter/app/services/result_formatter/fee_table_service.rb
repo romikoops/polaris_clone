@@ -8,7 +8,7 @@ module ResultFormatter
       export_section
       import_section].freeze
 
-    def initialize(tender:, scope:)
+    def initialize(tender:, scope:, type: :table)
       @tender = tender
       @base_currency = tender.amount.currency
       @charge_breakdown = @tender.charge_breakdown
@@ -21,6 +21,7 @@ module ResultFormatter
           level: 0
         )
       ]
+      @type = type
       @scope = scope
     end
 
@@ -100,7 +101,7 @@ module ResultFormatter
           editId: item.id,
           description: decorated_line_item.description,
           originalValue: value_with_currency(decorated_line_item.original_total),
-          value: decorated_line_item.total_and_currency,
+          value: decorated_line_item.fee_context.merge(value_with_currency(item.amount)),
           order: 0,
           parentId: row[:id],
           lineItemId: item.id,
@@ -179,7 +180,7 @@ module ResultFormatter
       return nil if value.nil?
 
       {
-        amount: value.format(symbol: false),
+        amount: @type == :table ? value.amount : value.format(symbol: false),
         currency: value.currency.iso_code
       }
     end

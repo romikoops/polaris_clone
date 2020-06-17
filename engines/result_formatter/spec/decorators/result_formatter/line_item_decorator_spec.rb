@@ -79,7 +79,7 @@ RSpec.describe ResultFormatter::LineItemDecorator do
       it "decorates the line item with the correct name" do
         aggregate_failures do
           expect(decorated_line_item.description).to eq("BAS - Ocean Freight")
-          expect(decorated_line_item.total_and_currency[:excluded]).to be_truthy
+          expect(decorated_line_item.fee_context[:excluded]).to be_truthy
         end
       end
     end
@@ -138,8 +138,6 @@ RSpec.describe ResultFormatter::LineItemDecorator do
 
       let(:expected_result) do
         {
-          currency: line_item.amount.currency.iso_code,
-          amount: line_item.amount.format(symbol: false),
           included: true,
           excluded: false
         }
@@ -147,7 +145,7 @@ RSpec.describe ResultFormatter::LineItemDecorator do
 
       it "decorates the line item and returns included when the fee is included" do
         aggregate_failures do
-          expect(decorated_line_item.total_and_currency).to eq(expected_result)
+          expect(decorated_line_item.fee_context).to eq(expected_result)
         end
       end
     end
@@ -155,8 +153,6 @@ RSpec.describe ResultFormatter::LineItemDecorator do
     context "with normal fee (vaue used in calculation)" do
       let(:expected_result) do
         {
-          currency: line_item.amount.currency.iso_code,
-          amount: line_item.amount.format(symbol: false),
           included: false,
           excluded: false
         }
@@ -164,7 +160,7 @@ RSpec.describe ResultFormatter::LineItemDecorator do
 
       it "decorates the line item and returns included false when the fee isnt included" do
         aggregate_failures do
-          expect(decorated_line_item.total_and_currency).to eq(expected_result)
+          expect(decorated_line_item.fee_context).to eq(expected_result)
         end
       end
     end

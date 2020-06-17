@@ -184,7 +184,7 @@ module Pdf
           origin_hub: origin_hub,
           destination_hub: destination_hub
         ).merge(
-          fees: ResultFormatter::FeeTableService.new(tender: tender, scope: scope).perform,
+          fees: ResultFormatter::FeeTableService.new(tender: tender, scope: scope, type: :pdf).perform,
           currency: tender.amount_currency
         )
       ).deep_stringify_keys

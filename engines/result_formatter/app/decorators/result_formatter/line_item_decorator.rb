@@ -18,12 +18,10 @@ module ResultFormatter
       determine_render_string
     end
 
-    def total_and_currency
+    def fee_context
       {
         included: included_fee?,
-        excluded: excluded_fee?,
-        amount: amount.format(symbol: false),
-        currency: amount.currency.iso_code
+        excluded: excluded_fee?
       }
     end
 

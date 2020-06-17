@@ -12,9 +12,10 @@ module ResultFormatter
         with_tenders: true,
         tenant: tenant)
     }
+    let(:type) { :table }
     let(:tender) { shipment.charge_breakdowns.first.tender }
     let(:line_item) { tender.line_items.find { |li| li.code == "bas" } }
-    let(:klass) { described_class.new(tender: tender, scope: scope) }
+    let(:klass) { described_class.new(tender: tender, scope: scope, type: type) }
 
     describe ".perform" do
       let(:expected_descriptions) do
@@ -119,8 +120,16 @@ module ResultFormatter
       let(:result) { klass.send(:value_with_currency, money) }
 
       context "with complete dollar value" do
+        let(:type) { :pdf }
+
         it "returns the value with suffix .00" do
           expect(result[:amount]).to eq("100.00")
+        end
+      end
+
+      context "with raw value" do
+        it "returns the raw value" do
+          expect(result[:amount]).to eq(100.0)
         end
       end
     end
