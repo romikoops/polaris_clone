@@ -385,14 +385,27 @@ RSpec.describe OfferCalculator::TruckingTools do
     end
 
     describe '.cargo_data_value' do
+      let(:target_cargo) { default_cargos.last }
+      let(:service) { described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user) }
+
       it 'correctly returns the width of an item' do
-        width = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_data_value(:width, default_cargos.last)
-        expect(width).to eq(120)
+        width = service.cargo_data_value(:width, target_cargo)
+        expect(width).to eq(target_cargo.width)
       end
 
       it 'correctly returns the width of an hash item' do
-        width = described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user).cargo_data_value(:width, consolidated_cargo)
-        expect(width).to eq(300)
+        width = service.cargo_data_value(:width, consolidated_cargo)
+        expect(width).to eq(consolidated_cargo[:width])
+      end
+
+      it 'correctly returns the length of an item' do
+        length = service.cargo_data_value(:length, target_cargo)
+        expect(length).to eq(target_cargo.length)
+      end
+
+      it 'correctly returns the length of an hash item' do
+        length = service.cargo_data_value(:length, consolidated_cargo)
+        expect(length).to eq(consolidated_cargo[:length])
       end
     end
 

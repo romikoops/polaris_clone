@@ -402,7 +402,7 @@ module OfferCalculator
         }
       }
       consolidation = ::Tenants::ScopeService.new(
-        target: ::Tenants::User.find_by(legacy_id: cargos.first.shipment.user.id)
+        target: ::Tenants::User.find_by(legacy_id: cargos.first.shipment.user_id)
       ).fetch(:consolidation)
 
       if consolidation.dig('trucking', 'load_meterage_only')
@@ -612,7 +612,7 @@ module OfferCalculator
     end
 
     def cargo_data_value(dim, cargo)
-      cargo.try(dim.to_sym) || cargo[dim.to_sym]
+      cargo[dim.to_sym]
     end
 
     def trucking_chargeable_weight_by_area(trucking_pricing, cargo)
