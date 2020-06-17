@@ -5,6 +5,8 @@ module ExcelDataServices
     module TypeValidity
       class PricingOneFeeColAndRanges < ExcelDataServices::Validators::TypeValidity::Base
         COLUMN_TO_CLASS_LOOKUP = {
+          'origin_locode': :locode,
+          'destination_locode': :locode,
           'load_type': :load_type,
           'transshipment': :optional_string
         }.freeze
