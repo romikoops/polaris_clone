@@ -109,10 +109,10 @@ module Trucking
           rates_sheet = xlsx.sheet(sheet)
           meta = generate_meta_from_sheet(rates_sheet)
           row_truck_type = !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type]
-          direction = meta[:direction] == 'import' ? 'on' : 'pre'
+          direction = meta[:direction].downcase == 'import' ? 'on' : 'pre'
 
-          load_type = meta[:load_type] == 'container' ? 'container' : 'cargo_item'
-          direction = meta[:direction] == 'import' ? 'on' : 'pre'
+          load_type = meta[:load_type].downcase == 'container' ? 'container' : 'cargo_item'
+          direction = meta[:direction].downcase == 'import' ? 'on' : 'pre'
 
           find_availabilities(row_truck_type, direction, load_type, hub)
 
