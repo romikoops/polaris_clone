@@ -68,9 +68,17 @@ RSpec.describe QuoteMailer, type: :mailer do
 
   describe 'quotation_admin_ email for shipment' do
     let(:mail) { described_class.quotation_admin_email(nil, original_shipment).deliver_now }
+    let(:pickup_address) { FactoryBot.create(:gothenburg_address) }
+    let(:delivery_address) { FactoryBot.create(:hamburg_address) }
 
+    before do
+      allow(original_shipment).to receive(:has_pre_carriage?).and_return(true)
+      allow(original_shipment).to receive(:has_on_carriage?).and_return(true)
+      allow(original_shipment).to receive(:pickup_address).and_return(pickup_address)
+      allow(original_shipment).to receive(:delivery_address).and_return(delivery_address)
+    end
     it 'renders', :aggregate_failures do
-      expect(mail.subject).to eq("FCL Quotation: Gothenburg - Gothenburg, Refs: #{original_shipment.imc_reference}")
+      expect(mail.subject).to eq("FCL Quotation: #{pickup_address.city} - #{delivery_address.city}, Refs: #{original_shipment.imc_reference}")
       expect(mail.from).to eq(['no-reply@demo.itsmycargo.shop'])
       expect(mail.reply_to).to eq(['support@itsmycargo.tech'])
       expect(mail.to).to eq(['sales.general@demo.com'])

@@ -26,8 +26,15 @@ class ApplicationMailer < ActionMailer::Base
     noun = type == :quotation ? 'Quotation' : 'Booking'
     [
       "#{shipment.lcl? ? "LCL" : "FCL"} #{noun}:",
-      "#{shipment.origin_nexus.name} - #{shipment.destination_nexus.name},",
+      route_name(shipment: shipment),
       truncate("Refs: #{references.join(", ")}", length: 23, separator: ' ')
     ].join(' ')
+  end
+
+  def route_name(shipment:)
+    [
+      shipment.has_pre_carriage? ? shipment.pickup_address.city : shipment.origin_nexus.name,
+      shipment.has_on_carriage? ? shipment.delivery_address.city : shipment.destination_nexus.name
+    ].join(' - ') + ','
   end
 end
