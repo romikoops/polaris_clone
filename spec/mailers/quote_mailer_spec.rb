@@ -6,7 +6,6 @@ RSpec.describe QuoteMailer, type: :mailer do
   let(:tenant) { create(:tenant) }
   let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
   let(:user) { create(:user, tenant: tenant, with_profile: true) }
-
   let(:original_shipment) do
     create(:legacy_shipment,
       :with_meta,
@@ -17,8 +16,9 @@ RSpec.describe QuoteMailer, type: :mailer do
       shipment.trip_id = nil
     end
   end
+  let(:shipment_count) { 1 }
   let(:quotation) do
-    create(:legacy_quotation, user: user, shipment_count: 1).tap do |quotation|
+    create(:legacy_quotation, user: user, shipment_count: shipment_count).tap do |quotation|
       quotation.original_shipment_id = original_shipment.id
     end
   end
@@ -43,7 +43,9 @@ RSpec.describe QuoteMailer, type: :mailer do
     let(:mail) { described_class.quotation_email(original_shipment, quotation.shipments, user.email, quotation, false).deliver_now }
 
     it 'renders', :aggregate_failures do
-      expect(mail.subject).to eq("Quotation for #{quotation.shipments.pluck(:imc_reference).join(',')}")
+      expect(mail.subject).to eq(
+        "FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotation.shipments.first.imc_reference}"
+      )
       expect(mail.from).to eq(['no-reply@demo.itsmycargo.shop'])
       expect(mail.reply_to).to eq(['support@demo.com'])
       expect(mail.to).to eq([user.email])
@@ -51,10 +53,13 @@ RSpec.describe QuoteMailer, type: :mailer do
   end
 
   describe 'quotation_admin_ email for quotation' do
+    let(:shipment_count) { 2 }
     let(:mail) { described_class.quotation_admin_email(quotation).deliver_now }
 
     it 'renders', :aggregate_failures do
-      expect(mail.subject).to eq("Quotation for #{quotation.shipments.pluck(:imc_reference).join(',')}")
+      expect(mail.subject).to eq(
+        "FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotation.shipments.first.imc_reference},..."
+      )
       expect(mail.from).to eq(['no-reply@demo.itsmycargo.shop'])
       expect(mail.reply_to).to eq(['support@itsmycargo.tech'])
       expect(mail.to).to eq(['sales.general@demo.com'])
@@ -65,7 +70,7 @@ RSpec.describe QuoteMailer, type: :mailer do
     let(:mail) { described_class.quotation_admin_email(nil, original_shipment).deliver_now }
 
     it 'renders', :aggregate_failures do
-      expect(mail.subject).to eq("Quotation for #{original_shipment.imc_reference}")
+      expect(mail.subject).to eq("FCL Quotation: Gothenburg - Gothenburg, Refs: #{original_shipment.imc_reference}")
       expect(mail.from).to eq(['no-reply@demo.itsmycargo.shop'])
       expect(mail.reply_to).to eq(['support@itsmycargo.tech'])
       expect(mail.to).to eq(['sales.general@demo.com'])

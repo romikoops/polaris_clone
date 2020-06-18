@@ -32,7 +32,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
     let(:mail) { described_class.tenant_notification(user, shipment, false).deliver_now }
 
     it 'renders', :aggregate_failures do
-      expect(mail.subject).to eq('Your booking through Demo')
+      expect(mail.subject).to eq("FCL Booking: Gothenburg - Gothenburg, Refs: #{shipment.imc_reference}")
       expect(mail.from).to eq(['no-reply@demo.itsmycargo.shop'])
       expect(mail.reply_to).to eq(['support@itsmycargo.com'])
       expect(mail.to).to eq(['sales.general@demo.com'])
@@ -43,7 +43,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
     let(:mail) { described_class.shipper_notification(user, shipment, false).deliver_now }
 
     it 'renders', :aggregate_failures do
-      expect(mail.subject).to eq('Your booking through Demo')
+      expect(mail.subject).to eq("FCL Booking: Gothenburg - Gothenburg, Refs: #{shipment.imc_reference}")
       expect(mail.from).to eq(['no-reply@demo.itsmycargo.shop'])
       expect(mail.reply_to).to eq(['support@demo.com'])
       expect(mail.to).to eq([user.email])
@@ -54,7 +54,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
     let(:mail) { described_class.shipper_confirmation(user, shipment, false).deliver_now }
 
     it 'renders', :aggregate_failures do
-      expect(mail.subject).to eq('Your booking through Demo')
+      expect(mail.subject).to eq("FCL Booking: Gothenburg - Gothenburg, Refs: #{shipment.imc_reference}")
       expect(mail.from).to eq(['no-reply@demo.itsmycargo.shop'])
       expect(mail.reply_to).to eq(['support@demo.com'])
       expect(mail.to).to eq([user.email])

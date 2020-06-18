@@ -35,15 +35,11 @@ class QuoteMailer < ApplicationMailer
                          .tap { |a| a.display_name = @tenant.name }.format,
       reply_to: @tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, email),
-      subject: subject_line(shipments: @shipments, sandbox: sandbox)
+      subject: subject_line(shipment: @shipment, type: :quotation, references: @shipments.pluck(:imc_reference))
     ) do |format|
       format.html
       format.mjml
     end
-  end
-
-  def subject_line(shipments:, sandbox: false)
-    "#{sandbox ? '[SANDBOX] - ' : ''}Quotation for #{shipments.pluck(:imc_reference).join(',').truncate(100)}"
   end
 
   def quotation_admin_email(quotation, shipment = nil, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -70,7 +66,7 @@ class QuoteMailer < ApplicationMailer
                          .tap { |a| a.display_name = 'ItsMyCargo Quotation Tool' }.format,
       reply_to: Settings.emails.support,
       to: mail_target_interceptor(@user, @tenant.email_for(:sales, @shipment.mode_of_transport)),
-      subject: subject_line(shipments: @shipments, sandbox: sandbox)
+      subject: subject_line(shipment: @shipment, type: :quotation, references: @shipments.pluck(:imc_reference))
     ) do |format|
       format.html
       format.mjml

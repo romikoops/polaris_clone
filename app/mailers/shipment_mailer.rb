@@ -34,7 +34,7 @@ class ShipmentMailer < ApplicationMailer
                          .tap { |a| a.display_name = 'ItsMyCargo Bookings' }.format,
       reply_to: 'support@itsmycargo.com',
       to: mail_target_interceptor(@user, tenant.email_for(:sales, shipment.mode_of_transport)),
-      subject: "#{sandbox ? '[SANDBOX] - ' : ''}Your booking through #{tenant.name}"
+      subject: subject_line(shipment: @shipment, type: :shipment, references: [@shipment.imc_reference])
     }
 
     mail(mail_options, &:html)
@@ -65,7 +65,7 @@ class ShipmentMailer < ApplicationMailer
       reply_to: tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, @user.email.blank? ? 'itsmycargodev@gmail.com' : @user.email),
       bcc: [Settings.emails.booking],
-      subject: "#{sandbox ? '[SANDBOX] - ' : ''}Your booking through #{tenant.name}"
+      subject: subject_line(shipment: @shipment, type: :shipment, references: [@shipment.imc_reference])
     }
 
     mail(mail_options, &:html)
@@ -96,7 +96,7 @@ class ShipmentMailer < ApplicationMailer
       reply_to: tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, user.email.presence || 'itsmycargodev@gmail.com'),
       bcc: [Settings.emails.booking],
-      subject: "#{sandbox ? '[SANDBOX] - ' : ''}Your booking through #{tenant.name}"
+      subject: subject_line(shipment: @shipment, type: :shipment, references: [@shipment.imc_reference])
     }
 
     mail(mail_options, &:html)
