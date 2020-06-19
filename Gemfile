@@ -44,7 +44,7 @@ gem 'sprockets', '~> 3.7.2'
 
 # AWS SDK
 gem 'aws-sdk-elasticbeanstalk', '~> 1.32.0'
-gem 'aws-sdk-s3', '~> 1.67.0'
+gem 'aws-sdk-s3', '~> 1.69.0'
 gem 'aws-sdk-sqs', '~> 1.27.0'
 
 gem 'font-awesome-rails'
