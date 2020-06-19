@@ -156,11 +156,13 @@ module Pdf
     def quotes_with_trip_id(quotation:, shipments:, admin: false, tender_ids: [])
       shipments.flat_map do |shipment|
         trip = shipment.trip
-        charge_breakdowns = quotation.present? ? [shipment.charge_breakdowns.selected] : shipment.charge_breakdowns
+        charge_breakdowns = quotation.present? ? [shipment.charge_breakdowns.selected] : shipment.charge_breakdowns.to_a
         if tender_ids.present?
           charge_breakdowns = charge_breakdowns.select { |c_breakdown| tender_ids.include?(c_breakdown.tender_id) }
         end
-        charge_breakdowns.map { |charge_breakdown|
+        charge_breakdowns
+          .flatten
+          .map { |charge_breakdown|
           offer_manipulation_block(
             charge_breakdown: charge_breakdown,
             shipment: shipment,

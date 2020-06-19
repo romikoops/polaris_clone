@@ -6,6 +6,8 @@ class QuoteMailer < ApplicationMailer
   add_template_helper(ApplicationHelper)
 
   def quotation_email(shipment, shipments, email, quotation, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    return if invalid_records(shipments: [shipment, *shipments])
+
     @shipments = shipments
     @shipment = shipment
     @quotation = quotation
@@ -45,6 +47,8 @@ class QuoteMailer < ApplicationMailer
   def quotation_admin_email(quotation, shipment = nil, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     @shipments = quotation ? quotation.shipments : [shipment]
     @shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
+    return if invalid_records(shipments: [@shipment, *@shipments])
+
     @quotation = quotation
     @tenant = Tenant.find(@shipment.tenant_id)
     @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
@@ -90,5 +94,9 @@ class QuoteMailer < ApplicationMailer
       scope: scope_for(record: @user, sandbox: sandbox)
     )
     quotation.generate
+  end
+
+  def invalid_records(shipments:)
+    shipments.any?(&:deleted?)
   end
 end
