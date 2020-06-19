@@ -14,8 +14,9 @@ module Wheelhouse
         @limit = limit
       end
 
-      def matches?(cargo:, attr:)
-        id == cargo.id && attr == attribute
+      def matches?(cargo:, attr:, aggregate: false)
+        aggregate_match = (aggregate && id == "aggregate")
+        (aggregate_match || id == cargo.id) && attr == attribute
       end
     end
   end

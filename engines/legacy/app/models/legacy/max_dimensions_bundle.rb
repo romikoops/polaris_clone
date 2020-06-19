@@ -145,6 +145,7 @@ end
 #  length            :decimal(, )
 #  mode_of_transport :string
 #  payload_in_kg     :decimal(, )
+#  volume            :decimal(, )      default(1000.0)
 #  width             :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null

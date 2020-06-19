@@ -66,6 +66,8 @@ module Wheelhouse
       @modes_of_transport ||= routes.where(id: pricings.select(:itinerary_id))
                                     .select(:mode_of_transport)
                                     .distinct
+      @modes_of_transport += ['truck_carriage'] if includes_trucking?
+      @modes_of_transport
     end
 
     def tenant_vehicle_ids
@@ -99,6 +101,10 @@ module Wheelhouse
         load_type: load_type,
         user: user
       )
+    end
+
+    def includes_trucking?
+      routing.dig(:origin, :latitude).present? || routing.dig(:destination, :latitude).present?
     end
   end
 end

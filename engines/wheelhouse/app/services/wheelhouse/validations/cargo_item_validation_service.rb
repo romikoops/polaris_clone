@@ -7,6 +7,7 @@ module Wheelhouse
         cargo.units.each do |cargo_unit|
           cargo_unit.valid?
           validate_cargo(cargo_unit: cargo_unit)
+          handle_error_expansion(cargo_unit: cargo_unit)
         end
         if cargo.units.length > 1
           validate_aggregate
@@ -17,19 +18,56 @@ module Wheelhouse
 
       private
 
+      def handle_error_expansion(cargo_unit:)
+        cargo_errors = errors.select { |error| error.id == cargo_unit.id }
+
+        return if cargo_errors.empty?
+
+        volume_error = cargo_errors.find { |error| error.attribute == :volume }
+
+        if volume_error
+          expand_attr_errors(units: [cargo_unit], attributes: VOLUME_DIMENSIONS, error: volume_error)
+        end
+      end
+
+      def expand_attr_errors(units:, attributes:, error:)
+        combinations = units.to_a.product(attributes)
+        combinations.each do |cargo_unit, attribute|
+          next if errors.any? { |error| error.matches?(cargo: cargo_unit, attr: attribute) }
+
+          errors << Wheelhouse::Validations::Error.new(
+            id: cargo_unit.id,
+            message: error.message,
+            attribute: attribute,
+            limit: error.limit,
+            section: 'cargo_item',
+            code: error.code
+          )
+        end
+      end
+
       def expand_aggregate
         return if aggregate_errors.empty?
 
         chargeable_error = aggregate_errors.find { |error| error.attribute == :chargeable_weight }
+        volume_error = aggregate_errors.find { |error| error.attribute == :volume }
+
+        if volume_error
+          expand_attr_errors(units: cargo.units, attributes: VOLUME_DIMENSIONS, error: volume_error)
+        end
+
         if chargeable_error
-          handle_aggregate_chargeable_weight_expansion(chargeable_error: chargeable_error)
+          expand_attr_errors(units: cargo.units, attributes: STANDARD_ATTRIBUTES, error: chargeable_error)
         else
           handle_aggregate_payload_expansion
         end
       end
 
       def handle_aggregate_payload_expansion
-        payload_error = aggregate_errors.first
+        payload_error = aggregate_errors.find { |error| error.attribute == :payload_in_kg }
+
+        return if payload_error.blank?
+
         cargo.units.each do |cargo_unit|
           next if errors.any? { |error| error.matches?(cargo: cargo_unit, attr: :payload_in_kg) }
 
@@ -44,41 +82,26 @@ module Wheelhouse
         end
       end
 
-      def handle_aggregate_chargeable_weight_expansion(chargeable_error:)
-        combinations = cargo.units.to_a.product(STANDARD_ATTRIBUTES)
-        combinations.each do |pairing|
-          cargo_unit, attribute = pairing
-          next if errors.any? { |error| error.matches?(cargo: cargo_unit, attr: attribute) }
-
-          errors << Wheelhouse::Validations::Error.new(
-            id: cargo_unit.id,
-            message: chargeable_error.message,
-            attribute: attribute,
-            limit: chargeable_error.limit,
-            section: 'cargo_item',
-            code: 4006
-          )
-        end
-      end
-
       def validate_aggregate
+        aggregate_max_dimensions = filtered_max_dimensions(aggregate: true).where(cargo_class: 'lcl')
+
         keys_for_aggregate_validation.each do |attribute|
           validate_attribute(
+            max_dimensions: aggregate_max_dimensions,
             id: 'aggregate',
             attribute: attribute,
             measurement: cargo.send(CARGO_DIMENSION_LOOKUP[attribute]),
-            aggregate: true,
-            cargo_class: 'lcl'
+            cargo: cargo
           )
         end
         return unless cargo.units.all?(&:valid?)
 
         validate_attribute(
+          max_dimensions: aggregate_max_dimensions,
           id: 'aggregate',
           attribute: :chargeable_weight,
           measurement: chargeable_weight(object: cargo),
-          aggregate: true,
-          cargo_class: 'lcl'
+          cargo: cargo
         )
       end
 
@@ -99,7 +122,7 @@ module Wheelhouse
                 else
                   Legacy::CargoItem::EFFECTIVE_TONNAGE_PER_CUBIC_METER.values.max
                 end
-        ratio ? (ratio / 1000.0) : DEFAULT_CONVERSION_RATIO
+        ratio ? ratio * 1_000 : DEFAULT_CONVERSION_RATIO
       end
 
       def validation_attributes

@@ -210,12 +210,18 @@ en:
     chargeable_weight_exceeded:
       code: 4005
       message: 'Chargeable Weight has exceeded the maximum allowed'
+    volume_weight_exceeded:
+      code: 4018
+      message: 'Volume has exceeded the maximum allowed'
     aggregate_chargeable_weight_exceeded:
       code: 4006
       message: 'Aggregate chargeable Weight has exceeded the maximum allowed'
     aggregate_weight_exceeded:
       code: 4007
       message: 'Aggregate weight has exceeded the maximum allowed'
+    aggregate_volume_exceeded:
+      code: 4019
+      message: 'Aggregate volume has exceeded the maximum allowed'
     no_pricings_available:
       code: 4008
       message: 'No pricings available along your chosen route'

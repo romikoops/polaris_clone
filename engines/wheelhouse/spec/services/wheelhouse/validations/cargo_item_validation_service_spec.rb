@@ -109,6 +109,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
         ['Length must be positive.',
          'Height must be positive.',
          'Width must be positive.',
+         'Volume must be positive.',
          'Chargeable Weight must be positive.',
          'Weight must be positive.']
       end
@@ -118,7 +119,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
 
       it 'returns an an array of missing values' do
         aggregate_failures do
-          expect(result.length).to eq(5)
+          expect(result.length).to eq(6)
           expect(result.map(&:message)).to match_array(expected_help_text)
           expect(result.map(&:code).uniq).to match_array(expected_error_codes)
         end
@@ -142,15 +143,16 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
          'Length exceeds the limit of 5 m',
          'Height exceeds the limit of 5 m',
          'Weight exceeds the limit of 10000 kg',
+         'Volume exceeds the limit of 1000 m3',
          'Chargeable Weight exceeds the limit of 10000 kg']
       end
       let(:expected_error_codes) do
-        [4001, 4002, 4003, 4004, 4005]
+        [4001, 4002, 4003, 4004, 4005, 4018]
       end
 
       it 'returns an array of 5 errors' do
         aggregate_failures do
-          expect(result.length).to eq(5)
+          expect(result.length).to eq(6)
           expect(result.map(&:message)).to match_array(expected_help_text)
           expect(result.map(&:code).uniq).to match_array(expected_error_codes)
         end
@@ -266,6 +268,52 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
           expect(result.length).to eq(2)
           expect(result.map(&:message).uniq).to match_array(expected_help_text)
           expect(result.map(&:code).uniq).to match_array([4007])
+        end
+      end
+    end
+
+    context 'when the cargos are valid but volume invalid' do
+      before do
+        FactoryBot.create(:legacy_max_dimensions_bundle,
+                          aggregate: true,
+                          tenant: tenant,
+                          mode_of_transport: 'ocean',
+                          tenant_vehicle: tenant_vehicle,
+                          volume: 15)
+      end
+
+      let(:cargos) do
+        [
+          FactoryBot.build(:lcl_unit,
+                           tenant: tenants_tenant,
+                           id: SecureRandom.uuid,
+                           quantity: 1,
+                           width_value: 5,
+                           length_value: 2,
+                           height_value: 1,
+                           weight_value: 1.2),
+          FactoryBot.build(:lcl_unit,
+                           tenant: tenants_tenant,
+                           id: SecureRandom.uuid,
+                           quantity: 1,
+                           width_value: 5,
+                           length_value: 2,
+                           height_value: 1,
+                           weight_value: 1.2)
+        ]
+      end
+      let(:expected_help_text) do
+        [
+          'Aggregate Volume exceeds the limit of 15 m3',
+          'Aggregate Chargeable Weight exceeds the limit of 10000 kg'
+        ]
+      end
+
+      it 'returns an array of errors for each input when aggregate fails validation' do
+        aggregate_failures do
+          expect(result.length).to eq(8)
+          expect(result.map(&:message).uniq).to match_array(expected_help_text)
+          expect(result.map(&:code).uniq).to match_array([4006, 4019])
         end
       end
     end

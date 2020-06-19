@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_26_101919) do
+ActiveRecord::Schema.define(version: 2020_06_17_122950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -879,6 +879,7 @@ ActiveRecord::Schema.define(version: 2020_05_26_101919) do
     t.decimal "width"
     t.decimal "length"
     t.decimal "height"
+    t.decimal "volume", default: "1000.0"
     t.index ["cargo_class"], name: "index_max_dimensions_bundles_on_cargo_class"
     t.index ["carrier_id"], name: "index_max_dimensions_bundles_on_carrier_id"
     t.index ["itinerary_id"], name: "index_max_dimensions_bundles_on_itinerary_id"
