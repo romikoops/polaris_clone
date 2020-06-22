@@ -41,6 +41,7 @@ class MaxDimensionsController < ApplicationController
       height
       payload_in_kg
       chargeable_weight
+      volume
     ]
   end
 

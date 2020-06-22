@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`<GetOffersSection /> renders correctly 1`] = `
 <div
   className="
           get_offers_section layout-row flex-100 layout-wrap
@@ -105,6 +105,9 @@ exports[`renders correctly 1`] = `
               "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
             }
           }
+        />
+        <div
+          className="sub_texts_container"
         />
       </div>
       <ScrollTracking

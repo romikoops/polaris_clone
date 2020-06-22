@@ -96,36 +96,42 @@ class GetOffersSection extends React.PureComponent {
     bookingProcessDispatch.updateModals('dangerousGoodsInfo')
   }
 
+  renderSubtexts () {
+    const { tenant, shipment, totalShipmentErrors } = this.props
+    const { loadType } = shipment
+    const subTexts = []
+
+    if (loadType !== 'cargo_item') { return null }
+
+    Object.entries(totalShipmentErrors).forEach(([name, obj]) => {
+      if (!obj.errors) return
+
+      obj.errors.forEach((error) => {
+        subTexts.push(
+          <ErrorMessage
+            error={error}
+            type={obj.type}
+            name={name}
+            tenant={tenant}
+          />
+        )
+      })
+    })
+
+    return subTexts
+  }
+
   render () {
     const {
-      user, tenant, theme, shipment, totalShipmentErrors, t
+      user, tenant, theme, shipment, t
     } = this.props
 
-    const { aggregatedCargo, loadType } = shipment
+    const { aggregatedCargo } = shipment
 
     const { shakeClass, noDangerousGoodsConfirmed, stackableGoodsConfirmed } = this.state
 
     const active = this.getOffersBtnIsActive()
     const disabled = !active
-
-    const subTexts = []
-
-    if (loadType === 'cargo_item') {
-      Object.entries(totalShipmentErrors).forEach(([name, obj]) => {
-        if (!obj.errors) return
-
-        obj.errors.forEach((error) => {
-          subTexts.push(
-            <ErrorMessage
-              error={error}
-              type={obj.type}
-              name={name}
-              tenant={tenant}
-            />
-          )
-        })
-      })
-    }
 
     return (
       <div
@@ -175,11 +181,13 @@ class GetOffersSection extends React.PureComponent {
                 active={active}
                 disabled={disabled}
                 theme={theme}
-                subTexts={subTexts}
               />
+              <div className={styles.sub_texts_container}>
+                {this.renderSubtexts()}
+              </div>
             </div>
 
-            <ScrollTracking type={trackingConstants.SHIPMENTS_DETAILS_SCROLL }/>
+            <ScrollTracking type={trackingConstants.SHIPMENTS_DETAILS_SCROLL} />
 
           </div>
         </div>

@@ -43,14 +43,16 @@ module Legacy
         length: 234.2,
         height: 228.0,
         payload_in_kg: 21_770.0,
-        chargeable_weight: 21_770.0
+        chargeable_weight: 21_770.0,
+        volume: 1_000.0
       },
       air: {
         width: 120.0,
         length: 100.0,
         height: 150.0,
         payload_in_kg: 1_000.0,
-        chargeable_weight: 1_000.0
+        chargeable_weight: 1_000.0,
+        volume: 1_000.0
       }
     }.freeze
 
@@ -60,14 +62,16 @@ module Legacy
         length: 590,
         height: 590,
         payload_in_kg: 40_000,
-        chargeable_weight: 40_000
+        chargeable_weight: 40_000,
+        volume: 1_000.0
       },
       air: {
         width: 590,
         length: 590,
         height: 590,
         payload_in_kg: 1_000.0,
-        chargeable_weight: 1_000.0
+        chargeable_weight: 1_000.0,
+        volume: 1_000.0
       }
     }.freeze
 
@@ -99,7 +103,8 @@ module Legacy
           length: length,
           height: height,
           payload_in_kg: payload_in_kg,
-          chargeable_weight: chargeable_weight
+          chargeable_weight: chargeable_weight,
+          volume: volume
         }
       }
     end

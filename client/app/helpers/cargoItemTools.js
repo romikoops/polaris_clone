@@ -4,7 +4,8 @@ export const effectiveKgPerCubicMeter = {
   air: 167,
   rail: 550,
   truck: 333,
-  ocean: 1000
+  ocean: 1000,
+  truckCarriage: 333
 }
 export function singleItemChargeableObject (cargoItem, mot, t, scope) {
   if (!cargoItem) return undefined

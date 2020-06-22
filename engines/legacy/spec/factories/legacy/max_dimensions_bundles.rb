@@ -12,6 +12,7 @@ FactoryBot.define do
     height { 500 }
     payload_in_kg { 10_000 }
     chargeable_weight { 10_000 }
+    volume { 10_000 }
 
     trait :aggregated do
       mode_of_transport { 'general' }

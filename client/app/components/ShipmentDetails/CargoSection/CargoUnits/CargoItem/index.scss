@@ -4,8 +4,8 @@
   }
   .cargo_item_info {
     padding: 15px 20px;
-    background: #A2A2A2; 
-    color: white;   
+    background: #A2A2A2;
+    color: white;
     border-radius: 0 0 1px 1px;
 
     .inner_cargo_item_info {
@@ -24,5 +24,10 @@
     }
     font-weight: 650;
     letter-spacing: 1.3px;
+  }
+
+  .volume_exceeded_error {
+    margin: 10px;
+    color: #d36850;
   }
 }

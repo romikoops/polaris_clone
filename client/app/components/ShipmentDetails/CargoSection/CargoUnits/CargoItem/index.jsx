@@ -118,6 +118,43 @@ class CargoItem extends React.PureComponent {
     }
   }
 
+  get hasTrucking () {
+    const { preCarriage, onCarriage } = this.props
+
+    return preCarriage || onCarriage
+  }
+
+  get getVolumeErrors () {
+    const { maxDimensions, ShipmentDetails, cargoItem } = this.props
+    const { availableMots } = ShipmentDetails
+    const volume = +cargoItem.width * +cargoItem.length * +cargoItem.height / 100 ** 3
+
+    const hasError = (modeOfTransport, value) => {
+      const maxDimension = maxDimensions[modeOfTransport] || maxDimensions.general
+
+      return maxDimension && maxDimension.volume && Math.abs(maxDimension.volume) < value
+    }
+
+    if (this.hasTrucking && hasError('truckCarriage', volume)) {
+      return { type: 'error', mots: ['truckCarriage'] }
+    }
+
+    const errors = []
+    availableMots.forEach((modeOfTransport) => {
+      if (hasError(modeOfTransport, volume)) {
+        errors.push(modeOfTransport)
+      }
+    })
+
+    if (!errors.length) {
+      return {}
+    }
+
+    const errorType = availableMots.length === errors.length ? 'error' : 'warning'
+
+    return { type: errorType, mots: errors }
+  }
+
   render () {
     const {
       ShipmentDetails,
@@ -150,6 +187,7 @@ class CargoItem extends React.PureComponent {
     const { values } = scope
     const { weight } = values
     const { unit } = weight
+    const volumeErrors = this.getVolumeErrors
 
     return (
       <CargoUnitBox
@@ -173,7 +211,8 @@ class CargoItem extends React.PureComponent {
               validations={{
                 totalShipmentChargeableWeight: () => (
                   totalShipmentErrors.chargeableWeight.type !== 'error'
-                )
+                ),
+                volumeErrors: () => volumeErrors.type !== 'error' && totalShipmentErrors.volume.type !== 'error'
               }}
               {...this.getSharedProps('length')}
             />
@@ -186,7 +225,8 @@ class CargoItem extends React.PureComponent {
               validations={{
                 totalShipmentChargeableWeight: () => (
                   totalShipmentErrors.chargeableWeight.type !== 'error'
-                )
+                ),
+                volumeErrors: () => volumeErrors.type !== 'error' && totalShipmentErrors.volume.type !== 'error'
               }}
               {...this.getSharedProps('width')}
             />
@@ -199,7 +239,8 @@ class CargoItem extends React.PureComponent {
               validations={{
                 totalShipmentChargeableWeight: () => (
                   totalShipmentErrors.chargeableWeight.type !== 'error'
-                )
+                ),
+                volumeErrors: () => volumeErrors.type !== 'error' && totalShipmentErrors.volume.type !== 'error'
               }}
               {...this.getSharedProps('height')}
             />
@@ -243,7 +284,6 @@ class CargoItem extends React.PureComponent {
                   />
                 )
             }
-
           </div>
           <div className="flex-100 layout-row" />
           <div
@@ -283,6 +323,11 @@ class CargoItem extends React.PureComponent {
               checkedTransform={x => !x}
               {...sharedPropsCheckbox}
             />
+          </div>
+          <div className={`flex-100 layout-row ${styles.volume_exceeded_error}`}>
+            { volumeErrors.type === 'error' && (
+              <div className={styles.volume_exceeded_error}>{t('errors:cargoItemVolumeExceeded')}</div>
+            )}
           </div>
         </div>
         <div className={`${styles.cargo_item_info} flex-100'`}>

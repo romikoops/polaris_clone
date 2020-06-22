@@ -1,85 +1,105 @@
 import { maxBy } from 'lodash'
 import { chargeableWeightValue } from '../../../../helpers'
+import { volume } from '../../../../helpers/cargoItemTools'
 
 function getFilteredMaxDimensions (modesOfTransport, maxDimensions) {
   return modesOfTransport.reduce((obj, mot) => (
     maxDimensions[mot] ? { ...obj, [mot]: maxDimensions[mot] } : obj
-  ), {})
+  ), { general: maxDimensions.general })
 }
 
 export function getTotalShipmentErrors ({
   modesOfTransport, maxDimensions, cargoItems, hasTrucking
 }) {
-  let payloadInKg = {}
+  const updatedMots = hasTrucking ? ['truckCarriage', ...modesOfTransport] : [...modesOfTransport]
+  const filteredMaxDimensions = getFilteredMaxDimensions(updatedMots, maxDimensions)
 
-  payloadInKg = getPayloadInKgErrors(
-    getFilteredMaxDimensions(['truckCarriage', 'general', ...modesOfTransport], maxDimensions),
+  const aggregatedPayload = cargoItems.reduce((sum, cargoItem) => sum + (cargoItem.payloadInKg * cargoItem.quantity), 0)
+  const payloadInKg = buildErrors(
+    filteredMaxDimensions,
+    updatedMots,
     'payloadInKg',
-    cargoItems.reduce((sum, cargoItem) => sum + (cargoItem.payloadInKg * cargoItem.quantity), 0),
-    ['truckCarriage']
+    aggregatedPayload
   )
 
-  const chargeableWeightValues = {}
+  const aggregatedVolume = cargoItems.reduce((sum, cargoItem) => sum + volume(cargoItem), 0)
+  const volumeValue = buildErrors(filteredMaxDimensions, updatedMots, 'volume', aggregatedVolume)
 
-  modesOfTransport.forEach((modeOfTransport) => {
-    chargeableWeightValues[modeOfTransport] = 0
-
-    cargoItems.forEach((cargoItem) => {
-      chargeableWeightValues[modeOfTransport] += +chargeableWeightValue(cargoItem, modeOfTransport)
-    })
-  })
+  const chargeableWeightByMOT = mapChargeableWeightByMOT(updatedMots, cargoItems)
+  const chargeableWeight = buildChargeableWeightErrors(
+    filteredMaxDimensions,
+    updatedMots,
+    chargeableWeightByMOT
+  )
 
   return {
+    chargeableWeight,
     payloadInKg,
-    chargeableWeight: getChargableWeightErrors(
-      getFilteredMaxDimensions(['general', ...modesOfTransport], maxDimensions),
-      'chargeableWeight',
-      chargeableWeightValues,
-      modesOfTransport
-    )
+    volume: volumeValue
   }
 }
 
-export function getPayloadInKgErrors (maxDimensions, name, value, modesOfTransport) {
-  const errors = []
-  Object.entries(maxDimensions).forEach(([modeOfTransport, constraints]) => {
-    const actual = typeof value === 'object' ? +value[modeOfTransport] : +value
-    const max = +constraints[name]
-
-    if (max > 0 && actual > max) errors.push({ modeOfTransport, max, actual })
-  })
-
-  if (errors.length === 0) return {}
-
-  const type = errors.length < modesOfTransport.length ? 'warning' : 'error'
-
-  return { errors, type }
-}
-
-export function getChargableWeightErrors (maxDimensions, name, values, modesOfTransport) {
-  let errors = []
-  Object.entries(values).forEach(([modeOfTransport, value]) => {
-    const maxDimension = maxDimensions[modeOfTransport] || maxDimensions.general
-
-    if (!maxDimension || !maxDimension[name]) { return }
-
-    const actual = Math.abs(value)
-    const max = Math.abs(maxDimension[name])
-
-    if (max > 0 && actual > max) {
-      errors.push({ modeOfTransport, max, actual })
-    }
-  })
-
-  if (errors.length === 0) return {}
+function prepareErrorsResponse (errors, modesOfTransport) {
+  let updatedErrors = errors.filter((error) => !!error)
+  if (!updatedErrors.length) return {}
 
   let type = 'warning'
-  if (errors.length >= modesOfTransport.length) {
-    const { max, actual } = maxBy(errors, 'max')
-    type = 'error'
+  const { max, actual } = maxBy(errors, 'max')
 
-    errors = [{ modesOfTransport, max, actual, allMotsExceeded: true }]
+  if (updatedErrors.length >= modesOfTransport.length) {
+    type = 'error'
+    updatedErrors = [{ modesOfTransport, max, actual, allMotsExceeded: true }]
   }
 
-  return { errors, type }
+  if (isTruckCarriageViolated(updatedErrors)) {
+    type = 'error'
+    updatedErrors = [{ modesOfTransport, max, actual, allMotsExceeded: true }]
+  }
+
+  return { errors: updatedErrors, type }
+}
+
+export function buildError (maxDimensions, modeOfTransport, dimension, actual) {
+  const maxDimension = maxDimensions[modeOfTransport] || maxDimensions.general
+  if (modeOfTransport === 'general' || !maxDimension || !maxDimension[dimension]) { return null }
+
+  const max = Math.abs(maxDimension[dimension])
+  if (max === 0 || actual <= max) { return null }
+
+  return { modeOfTransport, max, actual }
+}
+
+export function buildErrors (maxDimensions, modesOfTransport, dimension, value) {
+  return prepareErrorsResponse(
+    modesOfTransport.map((modeOfTransport) => buildError(maxDimensions, modeOfTransport, dimension, value)),
+    modesOfTransport
+  )
+}
+
+function buildChargeableWeightErrors (maxDimensions, modesOfTransport, chargeableWeightByMOT) {
+  const entries = Object.entries(chargeableWeightByMOT)
+
+  return prepareErrorsResponse(
+    entries.map(([modeOfTransport, value]) => buildError(maxDimensions, modeOfTransport, 'chargeableWeight', value)),
+    modesOfTransport
+  )
+}
+
+function aggregateChargeableWeight (modeOfTransport) {
+  return (sum, cargoItem) => sum + Math.abs(chargeableWeightValue(cargoItem, modeOfTransport) || 0)
+}
+
+function mapChargeableWeightByMOT (modesOfTransport, cargoItems) {
+  const chargeableWeightByMOT = {}
+
+  modesOfTransport.forEach((modeOfTransport) => {
+    chargeableWeightByMOT[modeOfTransport] = cargoItems.reduce(aggregateChargeableWeight(modeOfTransport), 0)
+  })
+
+  return chargeableWeightByMOT
+}
+
+function isTruckCarriageViolated (errors) {
+  return errors.some((error) => error.modeOfTransport === 'truckCarriage' ||
+    (error.modesOfTransport && error.modesOfTransport.includes('truckCarriage')))
 }

@@ -830,8 +830,9 @@
     "totalDimensions": "Total Dimensions",
     "cargoReadyDate": "Cargo Ready Date",
     "availableAtTerm": "Available at appointed terminal",
-    "excessChargeableWeight": "Please note that the total chargeable weight for {mot} Freight shipments ({actual} Kg) exceeds the maximum ({max} Kg).",
-    "excessWeight": "The total weight of the specified cargo",
+    "excessChargeableWeight": "* Please note that the total chargeable weight for {mot} Freight shipments ({actual} Kg) exceeds the maximum ({max} Kg).",
+    "excessVolume": "* Please note that the total volume for {mot} Freight shipments ({actual} m³) exceeds the maximum ({max} m³).",
+    "excessWeight": "* The total weight of the specified cargo",
     "exceedsMaximum": "exceeds the maximum",
     "excessDimensionsRequest": "Request oversized cargo",
     "heightDataTip": "Please note that the maximum height for items in Air Freight shipments is",
@@ -1027,7 +1028,8 @@
     "portOrAddress": "Port or Address...",
     "address": "Address",
     "port": "Port",
-    "exchangeRates": "Exchange Rates"
+    "exchangeRates": "Exchange Rates",
+    "truckCarriage": "Truck Carriage"
   },
   "user": {
     "companyName": "Company Name",
@@ -1114,7 +1116,8 @@
     "salesTeamMot": "Contact the {{mot}} team by {{medium}} at",
     "salesTeamGeneral": "Contact the sales team by {{medium}} at",
     "invalidAddress": "Please check if all address information is correct",
-    "truckingNotAvailable": "Trucking not available for this address Error Code: {{code}}"
+    "truckingNotAvailable": "Trucking not available for this address Error Code: {{code}}",
+    "cargoItemVolumeExceeded": "Volume has exceeded the maximum allowed"
   },
   "trucking": {
     "isNotAvailableLocal": " is not available in ",

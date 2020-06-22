@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
   before do
-    FactoryBot.create(:legacy_max_dimensions_bundle, tenant: tenant, mode_of_transport: 'ocean')
+    FactoryBot.create(:legacy_max_dimensions_bundle, tenant: tenant, mode_of_transport: 'ocean', volume: 1000)
   end
 
   let(:tenant) { FactoryBot.create(:legacy_tenant) }

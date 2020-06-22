@@ -80,6 +80,7 @@ exports[`renders correcly 1`] = `
         validations={
           Object {
             "totalShipmentChargeableWeight": [Function],
+            "volumeErrors": [Function],
           }
         }
         value={132}
@@ -128,6 +129,7 @@ exports[`renders correcly 1`] = `
         validations={
           Object {
             "totalShipmentChargeableWeight": [Function],
+            "volumeErrors": [Function],
           }
         }
         value={5}
@@ -176,6 +178,7 @@ exports[`renders correcly 1`] = `
         validations={
           Object {
             "totalShipmentChargeableWeight": [Function],
+            "volumeErrors": [Function],
           }
         }
         value={12}
@@ -407,6 +410,9 @@ exports[`renders correcly 1`] = `
         }
       />
     </div>
+    <div
+      className="flex-100 layout-row volume_exceeded_error"
+    />
   </div>
   <div
     className="cargo_item_info flex-100'"

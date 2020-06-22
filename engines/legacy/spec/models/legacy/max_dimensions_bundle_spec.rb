@@ -21,7 +21,14 @@ module Legacy
       end
 
       it 'return all max dimensions' do
-        expect(described_class.to_max_dimensions_hash).to eq(general: { chargeable_weight: 0.1e5, width: 0.5e3, length: 0.5e3, height: 0.5e3, payload_in_kg: 0.1e5 })
+        expect(described_class.to_max_dimensions_hash).to eq(general: {
+          chargeable_weight: 0.1e5,
+          width: 0.5e3,
+          length: 0.5e3,
+          height: 0.5e3,
+          payload_in_kg: 0.1e5,
+          volume: 0.1e5
+        })
       end
     end
 
@@ -55,7 +62,7 @@ module Legacy
     end
 
     describe '.creates a valid object' do
-      let!(:max_dimensions_bundle) { FactoryBot.build(:legacy_max_dimensions_bundle) }
+      let!(:max_dimensions_bundle) { FactoryBot.build(:legacy_max_dimensions_bundle, mode_of_transport: 'air') }
 
       it 'builds a valid max dimensions bundle' do
         expect(max_dimensions_bundle).to be_valid
