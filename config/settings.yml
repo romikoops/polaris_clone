@@ -40,7 +40,7 @@ mailgun:
   domain:
 
 sentry:
-  dsn: 'https://9159192f3db04fd3bdb6779d433e1429:995839ef5a0d4b66a4acafb771ccf9d7@sentry.itsmycargo.tech/2'
+  dsn: 'https://bc342488f6d646bf94b880fc5c5dc76a@o410390.ingest.sentry.io/5284300'
 
 smtp:
   host:

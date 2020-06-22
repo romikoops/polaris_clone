@@ -12,7 +12,7 @@ import './index.scss'
 
 Sentry.init({
   debug: (process.env.NODE_ENV !== 'production'),
-  dsn: 'https://3559b4ca079e44c687cd6f4c135426d0@sentry.itsmycargo.tech/3',
+  dsn: 'https://cd3ec8a52c5b4e648a7dbadf50e6d3a2@o410390.ingest.sentry.io/5284807',
   sampleRate: process.env.NODE_ENV === 'production' ? 1 : 0,
   environment: window.keel.environment,
   release: window.keel.release || process.env.RELEASE,
