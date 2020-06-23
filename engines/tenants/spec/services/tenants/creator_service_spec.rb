@@ -52,5 +52,12 @@ RSpec.describe Tenants::CreatorService do
         expect(theme.bright_secondary_color).to eq('#000004')
       end
     end
+
+    it 'creates the default tenant group' do
+      tenant = described_class.new(params: params).perform
+      default_group_exists = Tenants::Group.where(tenant_id: tenant.id,
+                                                  name: Tenants::CreatorService::DEFAULT_GROUP_NAME).exists?
+      expect(default_group_exists).to eq(true)
+    end
   end
 end
