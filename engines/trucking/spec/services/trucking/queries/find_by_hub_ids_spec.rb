@@ -11,8 +11,6 @@ RSpec.describe Trucking::Queries::FindByHubIds do
     let(:trucking_location_geometry)  { FactoryBot.create(:trucking_location, :with_location) }
     let(:trucking_location_distance)  { FactoryBot.create(:trucking_location, :distance) }
 
-    let(:trucking_rate) { FactoryBot.create(:trucking_rate, tenant: tenant) }
-
     let(:zipcode)      { '15211' }
     let(:latitude)     { '57.000000' }
     let(:longitude)    { '11.100000' }
@@ -29,7 +27,6 @@ RSpec.describe Trucking::Queries::FindByHubIds do
       let(:hub)    { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: tenant) }
 
       let(:courier) { FactoryBot.create(:trucking_courier) }
-      let(:trucking_rate) { FactoryBot.create(:trucking_rate, tenant: tenant) }
 
       context 'when basic tests' do
         it 'raises an ArgumentError if no hub_id are provided' do
@@ -39,8 +36,7 @@ RSpec.describe Trucking::Queries::FindByHubIds do
         it 'returns empty array if no pricings were found' do
           FactoryBot.create(:trucking_trucking,
                             hub: hub,
-                            location: FactoryBot.create(:trucking_location, :with_location),
-                            rate: trucking_rate)
+                            location: FactoryBot.create(:trucking_location, :with_location))
           expect(described_class.new(hub_ids: [-1], klass: ::Trucking::Trucking).perform).to eq([])
         end
       end

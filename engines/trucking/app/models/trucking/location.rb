@@ -10,8 +10,7 @@ module Trucking
 
     belongs_to :location, optional: true, class_name: 'Locations::Location'
     has_many :truckings, class_name: 'Trucking::Trucking'
-    has_many :rates, class_name: 'Trucking::Rate', through: :truckings
-    has_many :hubs, through: :hub_truckings
+    has_many :hubs, through: :truckings
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   end
 end

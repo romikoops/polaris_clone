@@ -78,7 +78,6 @@ class RouteSection extends React.PureComponent {
       let originIndeces = [...Array(routes.length).keys()]
       let destinationIndeces = [...Array(routes.length).keys()]
       nextState.newRoute = true
-      nextState.countries = { origin: [], destination: [] }
       const motLookup = {
         origin: {},
         destination: {}
@@ -170,15 +169,6 @@ class RouteSection extends React.PureComponent {
             nextState.truckTypes.destination.push(truckType)
           }
         })
-        const originCountryCode = route.origin.country.toLowerCase()
-        const destinationCountryCode = route.destination.country.toLowerCase()
-
-        if (route.origin.truckTypes.length > 0 && !nextState.countries.origin.includes(originCountryCode)) {
-          nextState.countries.origin.push(originCountryCode)
-        }
-        if (route.destination.truckTypes.length > 0 && !nextState.countries.destination.includes(destinationCountryCode)) {
-          nextState.countries.destination.push(destinationCountryCode)
-        }
       })
 
       bookingProcessDispatch.updatePageData('ShipmentDetails', { availableRoutes, availableMots })
@@ -211,21 +201,13 @@ class RouteSection extends React.PureComponent {
     const origins = []
     const destinations = []
 
-    routes.forEach((route) => {
-      if (route.origin.truckTypes.length > 0) {
-        origins.push(route.origin.country.toLowerCase())
-      }
-      if (route.destination.truckTypes.length > 0) {
-        destinations.push(route.destination.country.toLowerCase())
-      }
-    })
-
     return { origin: origins, destination: destinations }
   }
 
   componentDidMount () {
     const { truckTypes } = this.state
-
+    this.updateCounterpartCountries('origin', {})
+    this.updateCounterpartCountries('destination', {})
     this.setState({
       originTrucking: (truckTypes.origin.length > 0),
       destinationTrucking: truckTypes.destination.length > 0
@@ -376,7 +358,7 @@ class RouteSection extends React.PureComponent {
 
     const onTruckingAvailable = (hubIds) => {
       this.updateTruckingAvailability(target, true)
-
+      this.updateCounterpartCountries(target, { lat: address.latitude, lng: address.longitude })
       this.handleCarriageChange({ target: { name: `${prefix}Carriage`, checked: true } }, { force: true })
       bookingProcessDispatch.updateShipment(target, { ...address, hubIds })
       setMarker(target, { lat: address.latitude, lng: address.longitude, geojson: address.geojson })
@@ -392,13 +374,13 @@ class RouteSection extends React.PureComponent {
       resolve()
     }
 
-    getRequests.findAvailability(
+    return getRequests.findAvailability(
       address.latitude,
       address.longitude,
       loadType,
       prefix,
       availableHubIds,
-      (truckingAvailable, _nexusIds, hubIds) => {
+      (truckingAvailable, hubIds) => {
         if (truckingAvailable) {
           onTruckingAvailable(hubIds)
         } else {
@@ -467,7 +449,7 @@ class RouteSection extends React.PureComponent {
 
     const lat = value.latitude
     const lng = value.longitude
-
+    this.updateCounterpartCountries(target, { nexusId: value.id })
     const targetData = {
       latitude: lat,
       longitude: lng,
@@ -663,6 +645,19 @@ class RouteSection extends React.PureComponent {
         { error }
       </div>
     )
+  }
+
+  updateCounterpartCountries (target, args) {
+    const counterpart = target === 'origin' ? 'destination' : 'origin'
+
+    getRequests.counterpartCountries(
+      target,
+      args
+    ).then((countries) => {
+      const countryCodes = countries.map((code) => code.toLowerCase())
+
+      return this.setState((prevState) => ({ countries: { ...prevState.countries, [counterpart]: countryCodes } }))
+    })
   }
 
   render () {

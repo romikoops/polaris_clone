@@ -4,7 +4,6 @@ require 'will_paginate'
 
 module Trucking
   class Trucking < ApplicationRecord
-    belongs_to :rate, class_name: 'Trucking::Rate', optional: true
     belongs_to :hub, class_name: 'Legacy::Hub'
     belongs_to :tenant, class_name: 'Legacy::Tenant'
     belongs_to :location, class_name: 'Trucking::Location'

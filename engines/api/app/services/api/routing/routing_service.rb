@@ -34,15 +34,15 @@ module Api
       attr_reader :legacy_tenant_id, :lat, :lng, :nexus_id, :load_type, :target, :query
 
       def itineraries_from_lat_lng
-        tenant_itineraries.where(
-          stops: { index: counterpart_index },
-          hubs: { id: carriage_hubs.select(:id) }
-        )
+        return tenant_itineraries.where(origin_hub: carriage_hubs) if index == DESTINATION_INDEX
+
+        tenant_itineraries.where(destination_hub: carriage_hubs)
       end
 
       def itineraries_from_nexus_id
-        hubs = Legacy::Hub.where(nexus_id: nexus_id)
-        tenant_itineraries.where(stops: { index: counterpart_index, hub: hubs })
+        return tenant_itineraries.where(origin_hub: nexus_hubs(nexus_id: nexus_id)) if index == DESTINATION_INDEX
+
+        tenant_itineraries.where(destination_hub: nexus_hubs(nexus_id: nexus_id))
       end
 
       def index
@@ -58,8 +58,7 @@ module Api
       end
 
       def tenant_itineraries
-        @tenant_itineraries ||= Legacy::Itinerary.joins(stops: :hub)
-                                                 .where(tenant_id: legacy_tenant_id)
+        @tenant_itineraries ||= Legacy::Itinerary.where(tenant_id: legacy_tenant_id)
       end
 
       def itineraries
@@ -67,9 +66,9 @@ module Api
       end
 
       def itineraries_hubs(target_index:)
-        Legacy::Hub.joins(:stops)
-                   .where(stops: { itinerary: itineraries, index: target_index })
-                   .order(:name)
+        return Legacy::Hub.where(id: itineraries.select(:origin_hub_id)) if target_index == ORIGIN_INDEX
+
+        Legacy::Hub.where(id: itineraries.select(:destination_hub_id))
       end
 
       def itineraries_nexuses(target_index:)
@@ -78,6 +77,10 @@ module Api
 
         nexuses = nexuses.name_search(query) if query.present?
         nexuses.reorder('').distinct
+      end
+
+      def nexus_hubs(nexus_id:)
+        Legacy::Hub.where(tenant_id: legacy_tenant_id, nexus_id: nexus_id)
       end
 
       def carriage_hubs

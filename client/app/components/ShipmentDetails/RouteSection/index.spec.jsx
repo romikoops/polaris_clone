@@ -18,6 +18,10 @@ const mockState = (origin = address, destination = address2) => {
 
   return state
 }
+
+beforeEach(() => {
+  jest.resetModules()
+})
 describe('Address fields visibility', () => {
   const addressFields = () => wrapper.find(AddressFields)
   const mount = (store) => {

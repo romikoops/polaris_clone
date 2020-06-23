@@ -14,24 +14,44 @@ module Api
     let!(:user) { FactoryBot.create(:tenants_user, tenant: tenant) }
     let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
+    let(:location_1) { FactoryBot.create(:zipcode_location, zipcode: "00001", country_code: "SE") }
+    let(:location_2) { FactoryBot.create(:zipcode_location, zipcode: "00002", country_code: "SE") }
 
     describe "GET #index" do
       let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
       let(:origin_hub) { itinerary.hubs.find_by(name: "Gothenburg Port") }
       let(:destination_hub) { itinerary.hubs.find_by(name: "Shanghai Port") }
+      let(:country_codes) { response_json["data"].map { |country| country["attributes"]["name"] }.uniq }
 
       before do
         FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
         FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, query_type: :location)
+        FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: origin_hub, location: location_1)
+        FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: origin_hub, location: location_2)
 
         FactoryBot.create(:felixstowe_shanghai_itinerary, tenant: legacy_tenant)
       end
 
-      it "renders the list correct list of countries" do
-        get :index, params: {id: tenant.id, load_type: "cargo_item", location_type: "origin"}, as: :json
+      context "with single country trucking" do
+        it "renders the list correct list of countries" do
+          get :index, params: {id: tenant.id, load_type: "cargo_item", location_type: "destination"}, as: :json
 
-        country_codes = response_json["data"].map { |country| country["attributes"]["name"] }
-        expect(country_codes).to match_array(["Sweden"])
+          expect(country_codes).to match_array(["Sweden"])
+        end
+      end
+
+      context "with cross country trucking" do
+        let(:location_2) { FactoryBot.create(:zipcode_location, zipcode: "00002", country_code: "DE") }
+
+        before do
+          FactoryBot.create(:legacy_country, code: "DE", name: "Germany")
+        end
+
+        it "renders the list correct list of countries" do
+          get :index, params: {id: tenant.id, load_type: "cargo_item", location_type: "destination"}, as: :json
+
+          expect(country_codes).to match_array(["Sweden", "Germany"])
+        end
       end
     end
   end

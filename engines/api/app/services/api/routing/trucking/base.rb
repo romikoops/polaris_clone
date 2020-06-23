@@ -26,8 +26,10 @@ module Api
         end
 
         def country_codes(target_index:)
-          itineraries_nexuses(target_index: target_index).joins(:country)
-                                                         .pluck('LOWER(countries.code)')
+          ::Trucking::Location
+            .where(id: trucking_location_ids(target_index: target_index))
+            .select(:country_code)
+            .distinct
         end
 
         def index
@@ -44,6 +46,23 @@ module Api
 
         def truck_type_carriage
           carriage
+        end
+
+        def trucking_location_ids(target_index:)
+          ::Trucking::Trucking.where(
+            tenant_id: legacy_tenant_id,
+            hub: itineraries_hubs(target_index: target_index)
+          ).select(:location_id)
+        end
+
+        def itineraries
+          if lat.present? && lng.present?
+            itineraries_from_lat_lng
+          elsif nexus_id.present?
+            itineraries_from_nexus_id
+          else
+            super
+          end
         end
       end
     end

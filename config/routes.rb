@@ -197,6 +197,7 @@ Rails.application.routes.draw do
     end
 
     resources :trucking_availability, only: [:index]
+    resources :trucking_counterparts, only: [:index]
     resources :incoterms, only: [:index]
     resources :locations, only: [:index]
     resources :nexuses, only: [:index]
@@ -455,6 +456,7 @@ end
 #                                       tenant_shipments GET    /tenants/:tenant_id/shipments(.:format)                                                  shipments#index
 #                                        tenant_shipment GET    /tenants/:tenant_id/shipments/:id(.:format)                                              shipments#show
 #                     tenant_trucking_availability_index GET    /tenants/:tenant_id/trucking_availability(.:format)                                      trucking_availability#index
+#                           tenant_trucking_counterparts GET    /tenants/:tenant_id/trucking_counterparts(.:format)                                      trucking_counterparts#index
 #                                       tenant_incoterms GET    /tenants/:tenant_id/incoterms(.:format)                                                  incoterms#index
 #                                       tenant_locations GET    /tenants/:tenant_id/locations(.:format)                                                  locations#index
 #                                         tenant_nexuses GET    /tenants/:tenant_id/nexuses(.:format)                                                    nexuses#index

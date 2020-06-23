@@ -8,7 +8,7 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
     [create(:legacy_hub, tenant: tenant, name: 'Bremerhaven Port', hub_type: 'ocean'),
      create(:legacy_hub, tenant: tenant, name: 'Antwerp Port', hub_type: 'ocean',
                          address: create(:legacy_address,
-                           country: create(:legacy_country, name: 'Belgium'))),
+                           country: create(:legacy_country, code: 'BE', name: 'Belgium'))),
      create(:legacy_hub, tenant: tenant, name: 'Le Havre Port', hub_type: 'ocean')]
   end
   let(:options) { { tenant: tenant, data: input_data, options: {} } }

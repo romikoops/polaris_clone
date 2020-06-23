@@ -5,6 +5,15 @@ FactoryBot.define do
     name { 'Sweden' }
     code { 'SE' }
     flag { 'https://restcountries.eu/data/swe.svg' }
+
+    to_create do |instance|
+      instance.attributes = Country.create_with(code: instance.code)
+        .find_or_create_by(
+          name: instance.name
+        )
+        .attributes
+      instance.reload
+    end
   end
 end
 

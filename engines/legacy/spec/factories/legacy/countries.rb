@@ -30,10 +30,17 @@ FactoryBot.define do
       flag { 'https://restcountries.eu/data/de.svg' }
     end
 
+    trait :nl do
+      name { 'Netherlands' }
+      code { 'NL' }
+      flag { 'https://restcountries.eu/data/nl.svg' }
+    end
+
     factory :country_cn, traits: [:cn]
     factory :country_uk, traits: [:uk]
     factory :country_de, traits: [:de]
     factory :country_se, traits: [:se]
+    factory :country_nl, traits: [:nl]
   end
 end
 

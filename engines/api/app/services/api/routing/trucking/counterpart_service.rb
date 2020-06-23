@@ -23,7 +23,7 @@ module Api
 
         def perform
           {
-            countryCodes: country_codes(target_index: index),
+            countryCodes: country_codes(target_index: index).pluck(:country_code).map(&:downcase),
             truckTypes: available_truck_types,
             truckingAvailable: available_truck_types.present?
           }
@@ -37,14 +37,6 @@ module Api
 
         def truck_type_carriage
           carriage == 'pre' ? 'on' : 'pre'
-        end
-
-        def itineraries
-          if lat.present? && lng.present?
-            itineraries_from_lat_lng
-          elsif nexus_id.present?
-            itineraries_from_nexus_id
-          end
         end
       end
     end

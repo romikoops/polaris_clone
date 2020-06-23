@@ -115,7 +115,11 @@ RSpec.describe Trucking::Queries::Availability do
                           hub: hub,
                           location: FactoryBot.create(:trucking_location, country_code: 'NL', zipcode: '1802'))
       end
-      let(:nl_address) { FactoryBot.create(:legacy_address, zip_code: '1802 PT', country: FactoryBot.create(:legacy_country, code: 'NL')) }
+      let(:nl_address) {
+        FactoryBot.create(:legacy_address,
+          zip_code: '1802 PT',
+          country: FactoryBot.create(:country_nl))
+      }
 
       before do
         FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :zipcode)
@@ -125,7 +129,7 @@ RSpec.describe Trucking::Queries::Availability do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
           carriage: carriage, country_code: 'NL',
-          zipcode: '1802 PT', order_by: 'user_id'
+          zipcode: '1802 PT', order_by: 'group_id'
         ).perform
 
         expect(trucking_rates).to match([nl_trucking_trucking_zipcode])
@@ -134,7 +138,7 @@ RSpec.describe Trucking::Queries::Availability do
       it 'finds the correct trucking_rate with address' do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
-          carriage: carriage, address: nl_address, order_by: 'user_id'
+          carriage: carriage, address: nl_address, order_by: 'group_id'
         ).perform
 
         expect(trucking_rates).to match([nl_trucking_trucking_zipcode])

@@ -9,7 +9,7 @@ module Api
         countries = Api::Routing::Trucking::CountriesService.new(
           tenant: current_tenant,
           load_type: trucking_params[:load_type],
-          target: trucking_params[:location_type]
+          target: trucking_params[:location_type].to_sym
         ).perform
 
         render json: CountrySerializer.new(countries)
