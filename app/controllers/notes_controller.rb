@@ -4,11 +4,10 @@ class NotesController < ApplicationController
   skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!
 
-  def get_notes
+  def index
     itineraries = Itinerary.where(id: params[:itineraries])
     pricings = Pricings::Pricing.where(itinerary_id: params[:itineraries])
-    legacy_pricings = Legacy::Pricing.where(itinerary_id: params[:itineraries])
-    raw_notes = Note.where(target: itineraries | pricings | legacy_pricings)
+    raw_notes = Note.where(target: itineraries).or(Note.where(pricings_pricing_id: pricings.ids))
     transformed_notes = raw_notes.map { |note| transform_note(note) }
                                  .uniq { |note| note.slice('header', 'body', 'service') }
 

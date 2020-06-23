@@ -163,13 +163,7 @@ module ExcelDataServices
       def update_notes_params(notes, pricing_id)
         notes.each do |note|
           note[:tenant_id] = tenant.id
-
-          if scope['base_pricing']
-            note[:pricings_pricing_id] = pricing_id
-          else
-            note[:target_id] = pricing_id
-            note[:target_type] = 'Legacy::Pricing'
-          end
+          note[:pricings_pricing_id] = pricing_id
         end
       end
 

@@ -179,7 +179,7 @@ Rails.application.routes.draw do
     get 'pricings', to: 'pricings#index'
     get 'pricings/:id', to: 'pricings#show'
     post 'pricings/:id/request', to: 'pricings#request_dedicated_pricing'
-    post 'notes/fetch', to: 'notes#get_notes'
+    post 'notes/fetch', to: 'notes#index'
     get 'search/shipments/:target', to: 'shipments#search_shipments'
     get 'shipments/pages/delta_page_handler', to: 'shipments#delta_page_handler'
     post 'create_shipment', controller: 'shipments/booking_process', action: 'create_shipment'

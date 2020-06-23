@@ -12,8 +12,6 @@ namespace :cleanup do
             # rubocop:disable Rails/SkipsModelValidations
             Legacy::LocalCharge.where(tenant_vehicle_id: service.id)
                                .update_all(tenant_vehicle_id: flagship_service.id)
-            Legacy::Pricing.where(tenant_vehicle_id: service.id)
-                           .update_all(tenant_vehicle_id: flagship_service.id)
             Legacy::Trip.where(tenant_vehicle_id: service.id)
                         .update_all(tenant_vehicle_id: flagship_service.id)
             Legacy::MaxDimensionsBundle.where(tenant_vehicle_id: service.id)

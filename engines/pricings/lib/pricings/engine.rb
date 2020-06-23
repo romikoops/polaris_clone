@@ -26,13 +26,6 @@ module Pricings
       g.view_specs          false
     end
 
-    # initializer :append_legacy_sync do
-    #   config.to_prepare do
-    #     Legacy::Pricing.send(:include, Pricings::LegacySync)
-    #     Legacy::PricingDetail.send(:include, Pricings::LegacySync)
-    #   end
-    # end
-
     initializer :append_migrations do |app|
       config.paths['db/migrate'].expanded.each do |expanded_path|
         app.config.paths['db/migrate'] << expanded_path
