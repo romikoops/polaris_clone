@@ -14,8 +14,8 @@ module Legacy
     belongs_to :tenant
     has_many :stops, dependent: :destroy
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+    has_many :shipments, dependent: :nullify
     has_many :layovers,  dependent: :destroy
-    has_many :shipments, dependent: :destroy
     has_many :trips,     dependent: :destroy
     has_many :notes,     dependent: :destroy
     has_many :margins,   dependent: :destroy, class_name: 'Pricings::Margin'
@@ -481,6 +481,6 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (destination_hub_id => hubs.id)
-#  fk_rails_...  (origin_hub_id => hubs.id)
+#  fk_rails_...  (destination_hub_id => hubs.id) ON DELETE => cascade
+#  fk_rails_...  (origin_hub_id => hubs.id) ON DELETE => cascade
 #

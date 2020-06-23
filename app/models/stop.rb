@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Stop < Legacy::Stop
-  belongs_to :itinerary
+  belongs_to :itinerary, dependent: :destroy
   belongs_to :hub
   has_many :layovers, dependent: :destroy
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true

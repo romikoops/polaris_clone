@@ -8,24 +8,26 @@ module Legacy
     has_paper_trail
 
     belongs_to :tenant, class_name: 'Legacy::Tenant'
-    belongs_to :nexus, class_name: 'Legacy::Nexus'
-    belongs_to :address, class_name: 'Legacy::Address'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-
-    has_many :addons
+    belongs_to :nexus, class_name: 'Legacy::Nexus'
+    belongs_to :mandatory_charge, optional: true
+    belongs_to :address, class_name: 'Legacy::Address'
+    has_one :country, through: :address, class_name: 'Legacy::Country'
+    has_many :addons, dependent: :destroy
+    has_many :as_origin_itineraries, class_name: 'Legacy::Itinerary',
+                                     foreign_key: 'origin_hub_id',
+                                     dependent: :destroy
+    has_many :as_destination_itineraries, class_name: 'Legacy::Itinerary',
+                                          foreign_key: 'destination_hub_id',
+                                          dependent: :destroy
     has_many :stops,    dependent: :destroy
     has_many :layovers, through: :stops
-    has_many :hub_truckings
     has_many :local_charges, class_name: 'Legacy::LocalCharge', dependent: :destroy
-    has_many :customs_fees
+    has_many :customs_fees, dependent: :destroy
     has_many :notes, dependent: :destroy
-    has_many :hub_truck_type_availabilities
-    has_many :truck_type_availabilities, through: :hub_truck_type_availabilities
-    has_many :trucking_hub_availabilities, class_name: 'Trucking::HubAvailability'
-    has_many :truckings, class_name: 'Trucking::Trucking'
+    has_many :trucking_hub_availabilities, class_name: 'Trucking::HubAvailability', dependent: :destroy
+    has_many :truckings, class_name: 'Trucking::Trucking', dependent: :destroy
     has_many :rates, -> { distinct }, through: :truckings
-    belongs_to :mandatory_charge, optional: true
-    has_one :country, through: :address, class_name: 'Legacy::Country'
 
     delegate :locode, to: :nexus
 

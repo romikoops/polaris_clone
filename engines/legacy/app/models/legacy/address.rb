@@ -3,6 +3,7 @@
 module Legacy
   class Address < ApplicationRecord
     self.table_name = 'addresses'
+
     has_one :legacy_hub
     belongs_to :country, class_name: 'Legacy::Country', optional: true
     geocoded_by :geocoded_address

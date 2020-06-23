@@ -19,6 +19,7 @@ Layout/LineLength:
   IgnoreCopDirectives: true
   Exclude:
     - '.lefthook/**/*'
+    - 'config/routes.rb'
 
 Metrics/AbcSize:
   Max: 25

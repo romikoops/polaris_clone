@@ -326,3 +326,10 @@ end
 #  index_shipments_on_tenant_id   (tenant_id) WHERE (deleted_at IS NULL)
 #  index_shipments_on_tender_id   (tender_id)
 #
+# Foreign Keys
+#
+#  fk_rails_...  (destination_hub_id => hubs.id) ON DELETE => nullify
+#  fk_rails_...  (destination_nexus_id => nexuses.id) ON DELETE => nullify
+#  fk_rails_...  (origin_hub_id => hubs.id) ON DELETE => nullify
+#  fk_rails_...  (origin_nexus_id => nexuses.id) ON DELETE => nullify
+#

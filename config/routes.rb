@@ -540,6 +540,7 @@ end
 #     v1_trucking_availabilities GET    /v1/trucking_availabilities(.:format)                     api/v1/trucking_availabilities#index
 #       v1_trucking_counterparts GET    /v1/trucking_counterparts(.:format)                       api/v1/trucking_counterparts#index
 #       v1_trucking_capabilities GET    /v1/trucking_capabilities(.:format)                       api/v1/trucking_capabilities#index
+#          v1_trucking_countries GET    /v1/trucking_countries(.:format)                          api/v1/trucking_countries#index
 #                      v1_groups GET    /v1/groups(.:format)                                      api/v1/tenants_groups#index
 #           origins_v1_locations GET    /v1/locations/origins(.:format)                           api/v1/locations#origins
 #      destinations_v1_locations GET    /v1/locations/destinations(.:format)                      api/v1/locations#destinations

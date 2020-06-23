@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Layover < Legacy::Layover
-  belongs_to :stop
+  belongs_to :stop, dependent: :destroy
   belongs_to :itinerary
   belongs_to :trip
   delegate :hub_id, :hub, to: :stop

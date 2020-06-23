@@ -3,8 +3,10 @@
 module Legacy
   class Nexus < ApplicationRecord
     self.table_name = 'nexuses'
+
     include PgSearch::Model
-    has_many :hubs, class_name: 'Legacy::Hub'
+
+    has_many :hubs, class_name: 'Legacy::Hub', dependent: :destroy
     belongs_to :tenant, class_name: 'Legacy::Tenant'
     belongs_to :country, class_name: 'Legacy::Country'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true

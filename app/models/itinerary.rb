@@ -4,7 +4,6 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
 
   belongs_to :tenant
   has_many :layovers,  dependent: :destroy
-  has_many :shipments, dependent: :destroy
   has_many :trips,     dependent: :destroy
   has_many :notes,     dependent: :destroy, as: :target
   has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
@@ -456,6 +455,6 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (destination_hub_id => hubs.id)
-#  fk_rails_...  (origin_hub_id => hubs.id)
+#  fk_rails_...  (destination_hub_id => hubs.id) ON DELETE => cascade
+#  fk_rails_...  (origin_hub_id => hubs.id) ON DELETE => cascade
 #

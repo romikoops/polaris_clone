@@ -27,6 +27,6 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (itinerary_id => itineraries.id)
-#  fk_rails_...  (tenant_vehicle_id => tenant_vehicles.id)
+#  fk_rails_...  (itinerary_id => itineraries.id) ON DELETE => cascade
+#  fk_rails_...  (tenant_vehicle_id => tenant_vehicles.id) ON DELETE => cascade
 #
