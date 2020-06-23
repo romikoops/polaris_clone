@@ -1148,7 +1148,9 @@
     "direction": "Direction",
     "rates": "Rates",
     "fees": "Fees",
-    "destination": "Destination"
+    "destination": "Destination",
+    "feeCode":"Fee Code",
+    "feeName": "Fee Name"
   },
   "dangerousGoods": {
     "explosives": "Explosives",

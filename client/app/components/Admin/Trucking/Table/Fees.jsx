@@ -26,7 +26,7 @@ class TruckingTableFees extends PureComponent {
           {
             Header: (<div className="flex layout-row layout-center-center">
               {determineSortingCaret('key', sorted)}
-              <p className="flex-none">{t('trucking:rangeMin')}</p>
+              <p className="flex-none">{t('trucking:feeCode')}</p>
             </div>),
             accessor: d => d.key,
             id: 'key',
@@ -43,7 +43,7 @@ class TruckingTableFees extends PureComponent {
           {
             Header: (<div className="flex layout-row layout-center-center">
               {determineSortingCaret('name', sorted)}
-              <p className="flex-none">{t('trucking:rangeMax')}</p>
+              <p className="flex-none">{t('trucking:feeName')}</p>
             </div>),
             accessor: d => d.name,
             id: 'name',
