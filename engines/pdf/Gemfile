@@ -15,4 +15,5 @@ end
 path '..' do
   # Add your development engines here
   # gem 'imc-legacy'
+  gem "money_cache", path: "../../lib/money_cache"
 end

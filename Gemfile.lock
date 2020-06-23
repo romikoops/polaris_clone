@@ -424,6 +424,7 @@ PATH
       imc-legacy
       imc-pricings
       imc-quotations
+      money-open-exchange-rates
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -623,6 +624,15 @@ PATH
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
       strong_migrations (~> 0.6)
+
+PATH
+  remote: lib/money_cache
+  specs:
+    money_cache (0.1.0)
+      activesupport
+      money
+      money-open-exchange-rates
+      rake (~> 13.0)
 
 GEM
   remote: https://rubygems.org/
@@ -1317,6 +1327,7 @@ DEPENDENCIES
   money
   money-open-exchange-rates
   money-rails
+  money_cache!
   nokogiri
   omniauth
   os

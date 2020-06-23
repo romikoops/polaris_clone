@@ -148,6 +148,7 @@ gem 'mobility', '~> 0.8.6'
 gem 'money'
 gem 'money-open-exchange-rates'
 gem 'money-rails'
+gem 'money_cache', path: 'lib/money_cache'
 
 # Use monetize gem to parse strings into Money objects
 gem 'monetize'

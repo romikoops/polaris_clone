@@ -139,8 +139,6 @@ RSpec.describe OfferCalculator::Calculator do
     FactoryBot.create(:legacy_local_charge, tenant: tenant, hub: origin_airport, mode_of_transport: 'air', tenant_vehicle: tenant_vehicle, direction: 'export')
     FactoryBot.create(:legacy_local_charge, tenant: tenant, hub: destination_airport, mode_of_transport: 'air', tenant_vehicle: tenant_vehicle, direction: 'import')
     FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
-    stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
-      .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26, SEK: 8.26 } }.to_json, headers: {})
     %w[ocean trucking local_charge].flat_map do |mot|
       [
         FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
@@ -151,6 +149,9 @@ RSpec.describe OfferCalculator::Calculator do
       ]
     end
     trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) }
+    { USD: 1.26, SEK: 8.26 }.each do |currency, rate|
+      FactoryBot.create(:legacy_exchange_rate, from: currency, to: "EUR", rate: rate)
+    end
   end
 
   context 'with port to port' do

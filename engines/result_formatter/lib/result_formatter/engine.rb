@@ -2,6 +2,7 @@
 
 require "activerecord-postgis-adapter"
 require "config"
+require "money_cache"
 require "paper_trail"
 require "rails"
 require "strong_migrations"

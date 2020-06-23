@@ -12,11 +12,7 @@ module ResultFormatter
       currency_map = currencies.each_with_object({}) { |currency, obj|
         next if currency == base_currency
 
-        exchange_relation = Legacy::ExchangeRate
-          .where("created_at < ?", tender.created_at)
-          .where(from: base_currency, to: currency)
-        rate = exchange_relation.order(created_at: :desc).first&.rate
-        obj[currency.downcase] = rate
+        obj[currency.downcase] = bank.get_rate(base_currency, currency)
       }
       currency_map.blank? ? currency_map : currency_map.merge("base" => base_currency)
     end
@@ -29,6 +25,10 @@ module ResultFormatter
 
     def currencies
       @currencies ||= tender.line_items.pluck(:amount_currency).uniq
+    end
+
+    def bank
+      @bank ||= MoneyCache::Converter.new(klass: Legacy::ExchangeRate, date: tender.created_at)
     end
   end
 end

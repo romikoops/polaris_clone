@@ -45,6 +45,21 @@ ci-engines () {
   return $exitcode
 }
 
+ci-lib () {
+  exitcode=0
+    for lib in $"${ROOTDIR}/lib"/*/;
+  do
+    dir=${lib%*/}
+    dirname=${dir##*/}
+    if [ "${dirname}" = "money_cache" ]; then
+      ci-runner "${dirname}" "lib/${dirname}"
+    fi
+    exitcode=$((exitcode|$?))
+  done
+
+  return $exitcode
+}
+
 ROOTDIR="$(cd "$( dirname "${BASH_SOURCE[0]}/" )/../" >/dev/null 2>&1 && pwd )"
 SCRIPTDIR="$ROOTDIR/scripts"
 REPORTSDIR="$ROOTDIR/reports"
@@ -69,13 +84,19 @@ do
     app )
       ci-app
       exitcode=$((exitcode | $?))
+      ci-lib
+      exitcode=$((exitcode | $?))
       ;;
     engines )
       ci-engines
       exitcode=$((exitcode | $?))
       ;;
+    lib )
+      ci-lib
+      exitcode=$((exitcode | $?))
+      ;;
     * )
-      echo "Usage: $0 [all|app|engines]"
+      echo "Usage: $0 [all|app|lib|engines]"
       exit 1
       ;;
   esac

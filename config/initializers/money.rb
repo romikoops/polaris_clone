@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'money-rails'
-require_relative '../../lib/money/cache'
+require 'money_cache'
 
 MoneyRails.configure do |config|
   # To set the default currency
@@ -12,7 +12,9 @@ MoneyRails.configure do |config|
   # Set default bank object
   #
   # Example:
-  config.default_bank = Money::Bank::VariableExchange.new(MoneyCache.new)
+  store_config = {bank_app_id: Settings.open_exchange_rate.app_id}
+  store = MoneyCache::Converter.new(klass: ExchangeRate, config: store_config)
+  config.default_bank = Money::Bank::VariableExchange.new(store)
 
   # Add exchange rates to current money bank object.
   # (The conversion rate refers to one direction only)

@@ -207,7 +207,7 @@ void appPrepare() {
     ]) {
       withCache(["vendor/ruby=Gemfile.lock"]) {
         sh(label: "Bundle Install", script: """
-          ls Gemfile engines/*/Gemfile \
+            ls Gemfile engines/*/Gemfile lib/money_cache/Gemfile \
             | xargs -P 4 -I {} sh -c "BUNDLE_GEMFILE={} bundle check 1>&2 || echo {}" \
             | xargs -I {} sh -c "BUNDLE_GEMFILE={} bundle install --retry=2 --jobs=2"
         """)

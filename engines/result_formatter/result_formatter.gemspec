@@ -20,5 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-pricings'
   s.add_dependency 'imc-quotations'
 
+  s.add_dependency "money-open-exchange-rates"
+
   Gemhelper.common(s)
 end
