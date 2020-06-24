@@ -712,7 +712,7 @@ GEM
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-elasticbeanstalk (1.32.1)
+    aws-sdk-elasticbeanstalk (1.33.0)
       aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-kms (1.35.0)
@@ -1253,7 +1253,7 @@ DEPENDENCIES
   activerecord-postgis-adapter (~> 5.2.2)
   activestorage-cascade (~> 0.1.1)
   annotate (~> 3.0)
-  aws-sdk-elasticbeanstalk (~> 1.32.0)
+  aws-sdk-elasticbeanstalk (~> 1.33.0)
   aws-sdk-s3 (~> 1.70.0)
   aws-sdk-sqs (~> 1.28.0)
   better_errors
