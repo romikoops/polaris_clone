@@ -182,7 +182,7 @@ pipeline {
 
         stage("Sentry") {
           steps {
-            checkpoint(50) { sentryRelease(projects: ["api", "dipper"]) }
+            checkpoint(50) { sentryRelease(projects: ["polaris", "dipper"]) }
           }
         }
       }
