@@ -648,11 +648,12 @@ class RouteSection extends React.PureComponent {
   }
 
   updateCounterpartCountries (target, args) {
+    const { loadType } = this.props
     const counterpart = target === 'origin' ? 'destination' : 'origin'
 
     getRequests.counterpartCountries(
       target,
-      args
+      { ...args, load_type: loadType }
     ).then((countries) => {
       const countryCodes = countries.map((code) => code.toLowerCase())
 
@@ -794,6 +795,7 @@ function mapStateToProps (state) {
   const { routes, lookupTablesForRoutes } = response.stage1
   const { tenant } = app
   const { theme, scope } = tenant
+  const { loadType } = shipment
 
   return {
     ...ShipmentDetails,
@@ -802,7 +804,8 @@ function mapStateToProps (state) {
     scope,
     shipment,
     tenant,
-    theme
+    theme,
+    loadType
   }
 }
 
