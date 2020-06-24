@@ -46,7 +46,7 @@ class AdminClients extends Component {
         companyName: true,
         firstName: true,
         lastName: true,
-        email: true,
+        email: false,
         phone: true,
         street: true,
         number: true,
@@ -147,6 +147,7 @@ class AdminClients extends Component {
       if (_client.email === client.email) {
         shouldDispatch = false
         invalidate({ email: 'Email already exists.' })
+        this.setState({ errors: { email: true } })
       }
     })
 
@@ -163,7 +164,7 @@ class AdminClients extends Component {
   }
 
   render () {
-    const { newClient, newClientBool, tabReset } = this.state
+    const { newClient, newClientBool, tabReset, email, errors, newClientAttempt } = this.state
     const {
       t, theme, clients, hubs, hubHash, client, adminDispatch, scope, user, document
     } = this.props
@@ -179,20 +180,20 @@ class AdminClients extends Component {
       fontSize: '12px',
       bottom: '10px'
     }
-    const mailCheckCallback = suggestion => (
+    const mailCheckCallback = (suggestion) => (
       <div className="relative width_100">
         <FormsyInput
           wrapperClassName={styles.input_100}
           className={styles.input}
           errorMessageStyles={errorStyle}
           type="text"
-          value={this.state.email}
+          value={email}
           name="email"
           placeholder="Email *"
           onChange={(e) => {
             this.setState({ email: e.target.value })
           }}
-          submitAttempted={this.state.newClientAttempt}
+          submitAttempted={newClientAttempt}
           validations={{
             minLength: 2,
             matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
@@ -204,7 +205,7 @@ class AdminClients extends Component {
           }}
           required
         />
-        {suggestion && (
+        {suggestion && !errors.email && (
           <div style={errorStyle}>
             Did you mean&nbsp;
             <span
@@ -215,7 +216,7 @@ class AdminClients extends Component {
             >
               {suggestion.full}
             </span>
-?
+            ?
           </div>
         )}
       </div>
