@@ -28,10 +28,11 @@ module ResultFormatter
     end
 
     def bank
+      app_id = Settings.open_exchange_rate&.app_id || ""
       @bank ||= MoneyCache::Converter.new(
         klass: Legacy::ExchangeRate,
         date: tender.created_at,
-        config: { bank_app_id: Settings.open_exchange_rate.app_id }
+        config: {bank_app_id: app_id}
       )
     end
   end
