@@ -11,15 +11,15 @@ module Profiles
       }.compact
       return if profile_attributes.blank?
 
-      if Profiles::Profile.exists?(user_id: user.id)
-        Profiles::Profile.find_by(user_id: user.id).update(profile_attributes)
+      if Profiles::Profile.with_deleted.exists?(user_id: user.id)
+        Profiles::Profile.with_deleted.find_by(user_id: user.id).update(profile_attributes)
       else
         Profiles::Profile.create(profile_attributes.merge(user_id: user.id))
       end
     end
 
     def self.fetch(user_id:)
-      user_profile = Profiles::Profile.find_by(user_id: user_id)
+      user_profile = Profiles::Profile.with_deleted.find_by(user_id: user_id)
       Profiles::ProfileDecorator.new(user_profile)
     end
   end

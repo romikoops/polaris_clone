@@ -283,7 +283,7 @@ class Shipment < Legacy::Shipment
 
   def shipment_user_profile
     tenants_user = Tenants::User.with_deleted.find_by(legacy_id: user_id)
-    profile = Profiles::Profile.find_by(user_id: tenants_user.id)
+    profile = Profiles::Profile.with_deleted.find_by(user_id: tenants_user.id)
     Profiles::ProfileDecorator.new(profile)
   end
 

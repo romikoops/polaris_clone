@@ -13,7 +13,7 @@ module Tenants
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :legacy, class_name: 'Legacy::User', optional: true
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
-    has_one :profile, class_name: 'Profiles::Profile', foreign_key: :user_id
+    has_one :profile, class_name: 'Profiles::Profile', foreign_key: :user_id, dependent: :destroy
     belongs_to :tenant, optional: true
     belongs_to :company, optional: true, class_name: 'Tenants::Company'
     has_many :memberships, as: :member, dependent: :destroy

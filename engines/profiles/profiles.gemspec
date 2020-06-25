@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'imc-core'
 
+  s.add_dependency 'paranoia'
   s.add_dependency 'pg_search'
 
   Gemhelper.common(s)

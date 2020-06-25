@@ -2,6 +2,7 @@
 
 require 'core'
 
+require 'paranoia'
 require 'pg_search'
 
 module Profiles

@@ -25,6 +25,18 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
 
       expect(response).to have_http_status(:success)
     end
+
+    context 'when a tenants user has been deleted' do
+      before do
+        tenants_user.destroy
+      end
+
+      it 'returns an http status of success' do
+        get :index, params: { tenant_id: tenant }
+
+        expect(response).to have_http_status(:success)
+      end
+    end
   end
 
   describe 'GET #search_shipments' do

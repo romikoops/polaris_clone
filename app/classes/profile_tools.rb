@@ -7,8 +7,8 @@ class ProfileTools
   end
 
   def self.merge_profile(target:, profile: nil)
-    tenants_user = Tenants::User.find_by(legacy_id: target['id'])
-    profile ||= Profiles::Profile.find_by(user_id: tenants_user.id)
+    tenants_user = Tenants::User.with_deleted.find_by(legacy_id: target['id'])
+    profile ||= Profiles::Profile.with_deleted.find_by(user_id: tenants_user.id)
     target.merge(profile.as_json(except: %i[user_id id]))
   end
 end

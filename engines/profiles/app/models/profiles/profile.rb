@@ -4,6 +4,8 @@ module Profiles
   class Profile < ApplicationRecord
     validates :user_id, uniqueness: true
 
+    acts_as_paranoid
+
     include PgSearch::Model
     pg_search_scope :search, against: %i[first_name last_name company_name phone], using: {
       tsearch: { prefix: true }
@@ -24,6 +26,7 @@ end
 #
 #  id           :uuid             not null, primary key
 #  company_name :string
+#  deleted_at   :datetime
 #  first_name   :string           default(""), not null
 #  last_name    :string           default(""), not null
 #  phone        :string

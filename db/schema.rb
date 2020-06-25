@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_24_131753) do
+ActiveRecord::Schema.define(version: 2020_06_25_091716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1250,6 +1250,7 @@ ActiveRecord::Schema.define(version: 2020_06_24_131753) do
 
   create_table "profiles_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "company_name"
+    t.datetime "deleted_at"
     t.string "first_name", default: "", null: false
     t.string "last_name", default: "", null: false
     t.string "phone"
