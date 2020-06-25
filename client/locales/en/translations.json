@@ -214,7 +214,8 @@
     "cbm": "CBM",
     "enabled": "Enabled",
     "notesAndInfo": "Terms & Restrictions",
-    "freeOut": "Free Out"
+    "freeOut": "Free Out",
+    "provider": "Provider"
   },
   "admin": {
       "savePricings": "Save Pricings",

@@ -13,7 +13,8 @@ class Admin::TruckingController < Admin::AdminBaseController
       cargo_class: params[:cargo_class],
       truck_type: params[:truck_type],
       destination: params[:destination],
-      carriage: params[:direction]
+      carriage: params[:direction],
+      courier_name: params[:courier]
     }
     results = Trucking::Trucking.find_by_hub_id(
       hub_id: params[:id],
@@ -30,12 +31,20 @@ class Admin::TruckingController < Admin::AdminBaseController
       tenant_id: Tenants::Tenant.find_by(legacy_id: current_tenant&.id)&.id,
       sandbox: @sandbox
     )
+
+    trucking_providers = Trucking::Courier
+      .where(id: Trucking::Trucking
+                  .where(hub_id: params[:id], tenant_id: current_tenant.id)
+                  .select(:courier_id).distinct)
+      .pluck(:name)
+
     response_handler(
       hub: hub,
       truckingPricings: results.map(&:as_index_result),
       page: params[:page],
       pages: results.total_pages,
-      groups: groups
+      groups: groups,
+      providers: trucking_providers.select(&:presence)
     )
   end
 

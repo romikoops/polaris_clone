@@ -25,6 +25,9 @@ module Trucking
         if @filters[:destination]
           query = query.joins(:location).where('trucking_locations.city_name ILIKE ?', "#{@filters[:destination]}%")
         end
+        if @filters[:courier_name]
+          query = query.joins(:courier).where('trucking_couriers.name = ?', @filters[:courier_name])
+        end
 
         @result = query
       end

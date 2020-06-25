@@ -8,7 +8,7 @@ import { get } from 'lodash'
 import TruckingTableHeaders from './Headers'
 import { adminActions, appActions, clientsActions } from '../../../../actions'
 import { cargoClassOptions } from '../../../../constants'
-import TruckingCoverageEditor from '../CoverageEditor'
+import TruckingCellItem from './TruckingCellItem'
 import styles from './index.scss'
 import { determineSortingCaret } from '../../../../helpers/sortingCaret'
 import { determineDestinationAccessor } from '../../../../helpers'
@@ -52,10 +52,9 @@ class TruckingTable extends Component {
     })
   }
 
-
   render () {
     const {
-      t, truckingPricings, pages, groups, scope, groupId, toggleEditor
+      t, truckingPricings, pages, groups, scope, groupId, toggleEditor, truckingProviders
     } = this.props
     if (!truckingPricings) return ''
     const {
@@ -90,6 +89,12 @@ class TruckingTable extends Component {
         <option value="side_lifter">{t('trucking:sideLifter')}</option>
       ]
     }
+
+    const truckingProviderOptions = Array.from(new Set(truckingProviders)).map((name) => (
+      <option key={name} value={name}>
+        {name}
+      </option>
+    ))
     const columns = [
       {
 
@@ -232,6 +237,34 @@ class TruckingTable extends Component {
                 <option value="pre">{t('common:export')}</option>
               </select>
             )
+          },
+          {
+            Header: (
+              <div className="flex layout-row layout-center-center">
+                {determineSortingCaret('courier', sorted)}
+                <p className="flex-none">{t('common:provider')}</p>
+              </div>
+            ),
+            id: 'courier',
+            maxWidth: 120,
+            accessor: 'courier',
+            Cell: (row) => (
+              <TruckingCellItem
+                displayText={row.row.courier}
+                id="courier-item"
+                handleClick={() => this.viewPricing(row)}
+              />
+            ),
+            Filter: ({ filter, onChange }) => (
+              <select
+                onChange={(event) => onChange(event.target.value)}
+                style={{ width: '100%' }}
+                value={filter ? filter.value : 'All'}
+                id="provider-select"
+              >
+                {[<option value="all">All</option>, ...truckingProviderOptions]}
+              </select>
+            )
           }
         ].filter(x => x)
       }
@@ -263,7 +296,6 @@ class TruckingTable extends Component {
         toggleEditor={() => toggleEditor()}
       />
     )
-   
 
     const truckingView = selectedTruckingPricing
       ? pricingView
@@ -274,7 +306,6 @@ class TruckingTable extends Component {
         <div className="flex-100 layout-row layout-align-start-start">
           {truckingView}
         </div>
-
       </div>
     )
   }
@@ -289,7 +320,7 @@ function mapStateToProps (state) {
   const { user, loggedIn } = authentication
   const { truckingDetail } = admin
   const {
-    truckingPricings, hub, page, pages
+    truckingPricings, hub, page, pages, providers
   } = truckingDetail
   const { groups } = clients
   const { groupData } = groups || {}
@@ -304,6 +335,7 @@ function mapStateToProps (state) {
     hub,
     page,
     pages,
+    truckingProviders: providers,
     groups: groupData
   }
 }

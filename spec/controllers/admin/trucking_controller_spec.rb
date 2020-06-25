@@ -33,4 +33,24 @@ RSpec.describe Admin::TruckingController, type: :controller do
       end
     end
   end
+
+  describe 'GET #show' do
+    let(:courier_name) { 'Test Courier' }
+    let(:group) { FactoryBot.create(:tenants_group, tenant: tenants_tenant) }
+    let(:courier) { FactoryBot.create(:trucking_courier, name: courier_name, tenant: tenant) }
+
+    before do
+      FactoryBot.create(:trucking_trucking, hub: hub, courier: courier, tenant: tenant, group: group)
+    end
+
+    it 'returns the truckings for the requested hub' do
+      get :show, params: { id: hub.id, tenant_id: tenant.id, group: group.id }
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        expect(json_response.dig('data', 'groups')).not_to be_empty
+        expect(json_response.dig('data', 'truckingPricings').first.dig('truckingPricing', 'hub_id')).to eq(hub.id)
+        expect(json_response.dig('data', 'providers')).to include(courier_name)
+      end
+    end
+  end
 end

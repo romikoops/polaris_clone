@@ -54,7 +54,8 @@ module Trucking
     def as_index_result
       {
         'truckingPricing' => as_json,
-        'countryCode' => location&.country_code
+        'countryCode' => location&.country_code,
+        'courier' => courier&.name
       }.merge(location_info)
     end
 
