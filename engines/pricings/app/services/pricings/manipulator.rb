@@ -29,7 +29,6 @@ module Pricings
       @applicable_margins = find_applicable_margins
       @margins_to_apply = sort_margins
       manipulate_pricings
-
       [pricings_to_return.compact, metadata_list]
     end
 
@@ -37,7 +36,6 @@ module Pricings
       hierarchy = Tenants::HierarchyService.new(target: target, tenant: tenant).fetch
       target_hierarchy = hierarchy.reverse.reject { |hier| hier == tenant }
                                   .map.with_index { |hier, i| { rank: i, data: hier } }
-
       all_margins = apply_hierarchy(hierarchy: target_hierarchy)
 
       return all_margins unless all_margins.empty?
@@ -50,22 +48,17 @@ module Pricings
     end
 
     def apply_hierarchy(hierarchy:, for_tenant: false)
-      # Required due to the differing data points for freight v local_charge v trucking
-      all_margins = []
-      margin_params.each do |args|
-        hierarchy.each do |hierarchy_data|
-          args[:applicable] = hierarchy_data[:data]
-          all_margins = find_margins_for(
-            args: args,
-            target: @target,
-            all_margins: all_margins,
-            rank: hierarchy_data[:rank]
-          )
-        end
-      end
+      permutations = margin_params.product(hierarchy)
+      base_args, base_target = permutations.first
+      base_query = margins.where(base_args.merge(applicable: base_target[:data]))
 
-      all_margins = handle_default_margin(margins: all_margins, for_tenant: for_tenant)
-      all_margins
+      margin_relation = permutations.drop(1).inject(base_query) do |query, (args, hier)|
+        next query unless margins.exists?(args.merge(applicable: hier[:data]))
+
+        query.or(margins.where(args.merge(applicable: hier[:data])))
+      end
+      all_margins = decorate_margins(target_margins: margin_relation.distinct.to_a, target_hierarchy: hierarchy)
+      handle_default_margin(margins: all_margins, for_tenant: for_tenant)
     end
 
     def handle_default_margin(margins:, for_tenant:)
@@ -167,10 +160,13 @@ module Pricings
       final_margin_periods(margin_periods: margin_periods)
     end
 
-    def find_margins_for(args:, target:, all_margins:, rank:)
-      margins.where(args).order(application_order: :asc).inject(all_margins) do |margin_collection, margin|
-        priority = target.is_a?(::Tenants::Membership) ? target.priority : 0
-        margin_collection << { priority: priority, margin: margin, rank: rank }
+    def decorate_margins(target_margins:, target_hierarchy:)
+      target_margins.map do |margin|
+        priority = target.is_a?(::Tenants::Membership) ? margin.priority : 0
+        hierarchy_data = target_hierarchy.find { |hier| hier[:data] == margin.applicable }
+        rank = hierarchy_data ? hierarchy_data[:rank] : 0
+
+        { priority: priority, margin: margin, rank: rank }
       end
     end
 
@@ -555,7 +551,6 @@ module Pricings
 
     def apply_percentage(value:, rate:)
       return rate.to_d if value.zero?
-
       rate.to_d * (1 + value)
     end
 

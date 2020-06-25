@@ -848,12 +848,12 @@ class ShippingTools
     end
 
     new_charge_breakdown.dup_charges(charge_breakdown: original_charge_breakdown)
-    %w[import export cargo].each do |charge_key|
+    %w[import export cargo trucking_pre trucking_on].each do |charge_key|
       next if new_charge_breakdown.charge(charge_key).nil?
 
       new_charge_breakdown.charge(charge_key).children.each do |new_charge|
         old_charge_category = new_charge&.children_charge_category
-        next if old_charge_category&.cargo_unit_id.nil?
+        next if old_charge_category.nil?
 
         new_charge_category = Legacy::ChargeCategory.find_or_initialize_by(
           code: old_charge_category.code,
