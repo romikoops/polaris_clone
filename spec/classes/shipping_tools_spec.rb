@@ -418,6 +418,19 @@ RSpec.describe ShippingTools do
         contact: { companyName: 'ItsMyCargo', firstName: 'Test2', lastName: 'shipper', email: 'test@itsmycargo.com', phone: '123' }
       }
     end
+    let(:shipment) do
+      create(:legacy_shipment,
+             user: user,
+             trip: trip,
+             tenant: tenant,
+             origin_hub: origin_hub,
+             destination_hub: destination_hub,
+             origin_nexus: origin_hub&.nexus,
+             destination_nexus: destination_hub&.nexus,
+             with_tenders: true,
+             with_breakdown: true,
+             total_goods_value: {currency: 'USD', value: '1000.00'})
+    end
     let(:shipment_data) do
       {
         hsCodes: {},
@@ -448,12 +461,30 @@ RSpec.describe ShippingTools do
     let(:contact_params) do
       ActionController::Parameters.new(
         address: { street: 'Brooktorkai', streetNumber: '7', zipCode: '', city: 'Hamburg', country: 'Germany' },
-        contact: { companyName: 'ItsMyCargo', firstName: 'Test', lastName: 'shipper', email: 'shipper_test@itsmycargo.com', phone: '123' }
+        contact: {
+          companyName: 'ItsMyCargo',
+          firstName: 'Test',
+          lastName: 'shipper',
+          email: 'shipper_test@itsmycargo.com',
+          phone: '123'
+        }
       )
     end
+    let(:expected_keys) {
+      %i[cargoItems
+        containers
+        aggregatedCargo
+        addresses
+        consignee
+        notifyees
+        shipper
+        documents
+        cargoItemTypes
+        shipment]
+    }
+    let(:tender) { shipment.charge_breakdowns.selected.tender }
 
     before do
-      FactoryBot.create(:charge_breakdown, shipment: shipment, trip: trip)
       FactoryBot.create(:legacy_file, :with_file, shipment: shipment, doc_type: 'packing_sheet')
       allow(Address).to receive(:create_and_geocode).and_return(address)
       %w[EUR USD].each do |currency|
@@ -464,8 +495,13 @@ RSpec.describe ShippingTools do
 
     it 'updates the shipment appropriately with the attributes in the parameters' do
       result = described_class.update_shipment(params, current_user)
-      %i[cargoItems containers aggregatedCargo addresses consignee notifyees shipper documents cargoItemTypes shipment].each do |key|
-        expect(result.key?(key)).to be(true)
+      aggregate_failures do
+        expected_keys.each do |key|
+          expect(result.key?(key)).to be(true)
+        end
+        expect(tender.line_items.where(section: :insurance_section).count).to eq(1)
+        expect(tender.line_items.where(section: :customs_section).count).to eq(2)
+        expect(tender.line_items.where(section: :addons_section).count).to eq(1)
       end
     end
 

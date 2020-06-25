@@ -8,7 +8,11 @@ module Quotations
     enum section: { trucking_pre_section: 1,
                     export_section: 2,
                     cargo_section: 3,
-                    import_section: 4, trucking_on_section: 5 }
+                    import_section: 4,
+                    trucking_on_section: 5,
+                    customs_section: 6,
+                    insurance_section: 7,
+                    addons_section: 8}
 
     monetize :amount_cents
     monetize :original_amount_cents
