@@ -828,9 +828,9 @@ class ShippingTools
           )
           tender.line_items.create(
             section: "customs_section",
-            charge_category: insurance_charge.children_charge_category,
-            original_amount: insurance_charge.price.money,
-            amount: insurance_charge.price.money
+            charge_category: customs_charge.children_charge_category,
+            original_amount: customs_charge.price.money,
+            amount: customs_charge.price.money
           )
         end
       end

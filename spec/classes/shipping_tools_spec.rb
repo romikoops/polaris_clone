@@ -500,7 +500,11 @@ RSpec.describe ShippingTools do
           expect(result.key?(key)).to be(true)
         end
         expect(tender.line_items.where(section: :insurance_section).count).to eq(1)
+        expect(tender.line_items.where(section: :insurance_section).map(&:code)).to eq(["freight_insurance"])
         expect(tender.line_items.where(section: :customs_section).count).to eq(2)
+        expect(
+          tender.line_items.where(section: :customs_section).map(&:code)
+        ).to match_array(["export_customs", "import_customs"])
         expect(tender.line_items.where(section: :addons_section).count).to eq(1)
       end
     end
