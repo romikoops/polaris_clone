@@ -46,7 +46,7 @@
     "@babel/preset-react": "7.10.1",
     "@fullstory/browser": "1.4.4",
     "@itsmycargo/consent-manager": "4.3.2",
-    "@sentry/browser": "5.18.0",
+    "@sentry/browser": "5.18.1",
     "@sentry/webpack-plugin": "1.11.1",
     "autoprefixer": "9.8.4",
     "babel-eslint": "10.1.0",
