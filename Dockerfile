@@ -1,4 +1,4 @@
-FROM ruby:2.6@sha256:2a95b401a111efd299862d1a83bcb845d009c86124d4a6982bf9e6a3c65a8c29 AS builder
+FROM ruby:2.6@sha256:51ffdb09a2769cf3635fdf3838a501d737c42612ae8930ab7739c109f011cf59 AS builder
 LABEL maintainer="development@itsmycargo.com"
 
 ARG BUNDLE_WITHOUT="development test"
