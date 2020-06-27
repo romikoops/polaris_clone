@@ -66,7 +66,7 @@ RUN RAILS_ENV=production bin/rails assets:precompile
 #
 #
 #
-FROM ruby:2.6-slim@sha256:d5216b4a814d0565d16df7d1409f9684de55c271045e1373f163920ada09584f AS app
+FROM ruby:2.6-slim@sha256:3a68690b80fdef858ea5bc42249ebd399fef02b428bce3c9ee1230f8c9211e5c AS app
 LABEL maintainer="development@itsmycargo.com"
 
 ENV MALLOC_ARENA_MAX 2
