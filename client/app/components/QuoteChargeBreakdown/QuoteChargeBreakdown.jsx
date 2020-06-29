@@ -222,8 +222,8 @@ class QuoteChargeBreakdown extends Component {
         height: 0,
         payload_in_kg: 0,
         quantity: 0,
-        cargo_item_type: cargo[0].cargo_item_type,
-        cargo_class: cargo[0].cargo_class
+        cargo_item_type: cargo[0]?.cargo_item_type,
+        cargo_class: cargo[0]?.cargo_class
       }
       cargo.forEach((cargoItem) => {
         consolidatedCargo.width += parseFloat(cargoItem.width)
