@@ -2,6 +2,13 @@ import { getTenantApiUrl } from '../constants'
 import { authHeader } from '../helpers'
 
 function splitName (fullName) {
+  if (!fullName) {
+    return {
+      hubType: '',
+      name: ''
+    }
+  }
+
   const fullNameArr = fullName.split(' ')
   const hubType = fullNameArr.pop()
   const name = fullNameArr.join(' ')

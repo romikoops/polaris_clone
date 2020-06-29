@@ -437,7 +437,7 @@ end
 #                                        tenant_pricings GET    /tenants/:tenant_id/pricings(.:format)                                                   pricings#index
 #                                                        GET    /tenants/:tenant_id/pricings/:id(.:format)                                               pricings#show
 #                                                        POST   /tenants/:tenant_id/pricings/:id/request(.:format)                                       pricings#request_dedicated_pricing
-#                                     tenant_notes_fetch POST   /tenants/:tenant_id/notes/fetch(.:format)                                                notes#get_notes
+#                                     tenant_notes_fetch POST   /tenants/:tenant_id/notes/fetch(.:format)                                                notes#index
 #                                                        GET    /tenants/:tenant_id/search/shipments/:target(.:format)                                   shipments#search_shipments
 #              tenant_shipments_pages_delta_page_handler GET    /tenants/:tenant_id/shipments/pages/delta_page_handler(.:format)                         shipments#delta_page_handler
 #                                 tenant_create_shipment POST   /tenants/:tenant_id/create_shipment(.:format)                                            shipments/booking_process#create_shipment

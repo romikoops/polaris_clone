@@ -118,10 +118,8 @@ class ShipmentsController < ApplicationController
     end
 
     shipment_as_json = shipment.with_address_options_json
-    exchange_rates = shipment.charge_breakdowns.reduce({}) do |result, charge_breakdown|
-      rate = ResultFormatter::ExchangeRateService.new(tender: charge_breakdown.tender).perform
-      result = result.merge(rate)
-    end
+    charge_breakdown = shipment.charge_breakdowns.selected
+    exchange_rates = ResultFormatter::ExchangeRateService.new(tender: charge_breakdown.tender).perform
 
     response_handler(
       shipment: shipment_as_json,

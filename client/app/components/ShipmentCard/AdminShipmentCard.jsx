@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import moment from 'moment'
+import { get } from 'lodash'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
 import styles from './ShipmentCard.scss'
@@ -147,8 +148,8 @@ class AdminShipmentCard extends Component {
       </div>
     ) : ''
 
-    const destinationHubObj = splitName(shipment.destination_hub.name)
-    const originHubObj = splitName(shipment.origin_hub.name)
+    const destinationHubObj = splitName(get(shipment, 'destination_hub.name'))
+    const originHubObj = splitName(get(shipment, 'origin_hub.name'))
 
     const timeRow = plannedDate && shipment.planned_etd && shipment.planned_eta
       ? (

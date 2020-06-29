@@ -22,13 +22,13 @@ function ShipmentOverviewShowCard ({
 }) {
   const selectedStyle = { color: get(theme, ['colors', 'primary'], '#058E05') }
   const deselectedStyle = { color: '#DCDBDC' }
-  const hasFTL = hub.available_trucking ? hub.available_trucking.includes('container') : false
-  const hasLTL = hub.available_trucking ? hub.available_trucking.includes('cargo_item') : false
+  const hasFTL = get(hub, 'available_trucking', false) ? hub.available_trucking.includes('container') : false
+  const hasLTL = get(hub, 'available_trucking', false) ? hub.available_trucking.includes('cargo_item') : false
 
   return (
     <div className="flex-100 layout-row">
       <div className={`${styles.info_hub_box} flex-60 layout-column`}>
-        <h3>{hub.name}</h3>
+        <h3>{get(hub, 'name')}</h3>
         {estimatedTime ? (
           <div className="layout-row layout-align-start-center">
             <div className="flex-60 layout-align-center-start">
