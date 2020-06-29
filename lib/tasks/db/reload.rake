@@ -1,40 +1,32 @@
 # frozen_string_literal: true
 
-namespace :db do
-  desc 'Reloads slim database (truncate and pull latest dump)'
-  task :reload do # rubocop:disable Rails/RakeEnvironment
-    Rake::Task['db:reload:full'].invoke
-  end
+if Rails.env.development?
+  require "database_reloader"
 
-  namespace :reload do
-    desc 'Reloads slim database (truncate and pull latest dump)'
-    task :slim, [:date] do |_, args| # rubocop:disable Rails/RakeEnvironment
-      Rake::Task['db:import:fetch'].invoke('slim', args[:date])
-      Rake::Task['db:reload:common'].invoke('slim')
+  namespace :db do
+    desc "Reloads full database (truncate and pull latest dump)"
+    task reload: :environment do
+      Rake::Task["db:reload:full"].invoke
     end
 
-    desc 'Reloads full database (truncate and pull latest dump)'
-    task :full, [:date] do |_, args| # rubocop:disable Rails/RakeEnvironment
-      Rake::Task['db:import:fetch'].invoke('full', args[:date])
-      Rake::Task['db:reload:common'].invoke('full')
-    end
+    namespace :reload do
+      desc "Reloads slim database (truncate and pull latest dump)"
+      task :slim, [:date] => [:environment] do |_, args|
+        DatabaseReloader.perform(profile: "slim", date: args[:date])
+        Rake::Task["db:migrate"] unless ENV["SKIP_MIGRATE"]
+      end
 
-    desc 'Reloads production database (AUTHORIZED ONLY)'
-    task :production, [:date] do |_, args| # rubocop:disable Rails/RakeEnvironment
-      Rake::Task['db:import:fetch'].invoke('production', args[:date])
-      Rake::Task['db:reload:common'].invoke('production')
-    end
+      desc "Reloads full database (truncate and pull latest dump)"
+      task :full, [:date] => [:environment] do |_, args|
+        DatabaseReloader.perform(profile: "full", date: args[:date])
+        Rake::Task["db:migrate"] unless ENV["SKIP_MIGRATE"]
+      end
 
-    task :common, [:profile] do |_, args| # rubocop:disable Rails/RakeEnvironment
-      Rake::Task['db:drop'].invoke
-      Rake::Task['db:create'].invoke
-
-      Rake::Task['db:import:restore'].invoke(args[:profile])
-
-      Rake::Task['db:migrate'].invoke unless ENV['SKIP_MIGRATE']
-      Rake::Task['db:test:prepare'].invoke unless ENV['SKIP_MIGRATE']
-
-      Rake::Task['tenants:domains'].invoke if ENV['SKIP_MIGRATE']
+      desc "Reloads production database (AUTHORIZED ONLY)"
+      task :production, [:date] => [:environment] do |_, args|
+        DatabaseReloader.perform(profile: "production", date: args[:date])
+        Rake::Task["db:migrate"] unless ENV["SKIP_MIGRATE"]
+      end
     end
   end
 end
