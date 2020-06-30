@@ -18,6 +18,7 @@ class SamlController < ApplicationController
     user = user_from_saml(response: saml_response, tenant_id: tenant.legacy_id)
     return error_redirect unless user.save
 
+    attach_to_groups(user: user, group_names: saml_response.attributes[:groups])
     create_or_update_user_profile(user: user, response: saml_response)
     response_params = user.create_new_auth_token.merge(userId: user.id, tenantId: tenant.legacy_id)
 
@@ -81,5 +82,16 @@ class SamlController < ApplicationController
 
   def saml_params
     params.require(:SAMLResponse)
+  end
+
+  def attach_to_groups(user:, group_names:)
+    return if group_names.blank?
+
+    tenants_user = Tenants::User.find_by(legacy_id: user.id)
+    groups = Tenants::Group.where(name: group_names, tenant: tenant)
+    return if groups.empty?
+
+    Tenants::Membership.where(member: tenants_user).where.not(group: groups)&.destroy_all
+    groups.each { |group| Tenants::Membership.find_or_create_by(member: tenants_user, group: group) }
   end
 end
