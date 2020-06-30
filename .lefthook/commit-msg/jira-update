@@ -1,64 +1,7 @@
 #!/usr/bin/env ruby
 
-TRANSITION_ID = {
-  "In Progress" => 21,
-  "To Do" => 11
-}
-
 input_file, * = ARGV
 commit_message = File.read(input_file)
 
-require "bundler/inline"
-
-gemfile do
-  source "https://rubygems.org"
-
-  gem "jira-ruby", "~> 2.0"
-  gem "git"
-  gem "pry"
-end
-
-require "git"
-require "jira-ruby"
-
-git = Git.open(File.expand_path("../..", __dir__))
-
-jira_client = JIRA::Client.new(
-  username: ENV.fetch("JIRA_USER") { git.config["user.email"] },
-  password: ENV.fetch("JIRA_TOKEN") {
-    fail(
-      "Create API Token at https://id.atlassian.com/manage-profile/security/api-tokens" \
-      "" \
-      "Store token to environment as JIRA_TOKEN environment variable."
-    )
-  },
-  site: ENV.fetch("JIRA_URL") { "https://itsmycargo.atlassian.net" },
-  context_path: "",
-  auth_type: :basic,
-  http_debug: false
-)
-
-m = commit_message.match(/(IMC-\d+)/i)
-key = m[1].upcase if m
-
-# Find all In Progress tickets for current user
-jql = "assignee = \"#{jira_client.options[:username]}\" AND issuetype NOT IN (\"Epic\")"
-jql += " AND status IN (\"In Progress\")"
-jql += " AND key != \"#{key}\"" if key
-
-jira_client.Issue.jql(jql).each do |issue|
-  if TRANSITION_ID[issue.status.name]
-    issue_transition = issue.transitions.build
-    issue_transition.save!("transition" => {"id" => TRANSITION_ID[issue.status.name]})
-    puts "Issue #{issue.key}: #{issue.status.name} -> #{jira_client.Issue.find(issue.key).status.name}"
-  end
-end
-
-if key
-  issue = jira_client.Issue.find(key)
-  if issue.status.name != "In Progress"
-    issue_transition = issue.transitions.build
-    issue_transition.save!("transition" => {"id" => TRANSITION_ID[issue.status.name]})
-    puts "Issue #{issue.key}: #{issue.status.name} -> #{jira_client.Issue.find(issue.key).status.name}"
-  end
-end
+require_relative "../jira-update"
+JiraUpdate.run(commit_message)
