@@ -8,6 +8,8 @@ commit-msg:
   scripts:
     template-checker:
       tags: default
+    jira-update:
+      tags: default
 pre-push:
   scripts:
     verify:
@@ -18,5 +20,5 @@ post-checkout:
       tags: default
     01-bundle-checkinstall:
       tags: default
-    02-db-migrate:
+    jira-update:
       tags: default

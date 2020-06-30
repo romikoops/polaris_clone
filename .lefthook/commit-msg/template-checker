@@ -1,20 +1,13 @@
 #!/usr/bin/env ruby
 
 COMMIT_PATTERN = %r{\A(((IMC-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test|wip)(\(.*\))?))(: | - )(.*))|(Merge .*)}
-TIME_PATTERN = %r{\A((IMC)-[[:digit:]]+).*#time (([[:digit:]]+[wdhm]) ?)+}
 
 input_file, * = ARGV
 commit_message = File.read(input_file)
 
-unless TIME_PATTERN.match?(commit_message)
-  warn "• Consider using smart commits to log spend time"
-  warn "  IMC-1234: <ignored text> #time <value>w <value>d <value>h <value>m <comment_string>"
-  warn ""
-end
-
 if %r{(imc)-[[:digit]]}.match?(commit_message)
   warn "• Use only upper case ticket numbers in commit messages."
-  warn "  IMC-1234: description #time 2h 30m"
+  warn "  IMC-1234: summary"
   warn ""
 
   exit 1
@@ -22,8 +15,8 @@ end
 
 unless COMMIT_PATTERN.match?(commit_message)
   warn "• Invalid commit message, see examples:"
-  warn "    * Ticket Tracking (with time)"
-  warn "        IMC-1234: some text #time 2h 30m"
+  warn "    * Ticket Tracking"
+  warn "        IMC-1234: short summary"
   warn "    * Conventional Commits (https://www.conventionalcommits.org/en/v1.0.0/#summary)"
   warn "        chore(deps): some text"
   warn "    * Work in Progress Commits"

@@ -4,12 +4,16 @@ COMMIT_PATTERN = %r{\A(((IMC-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|
 
 remote, * = ARGV
 
-app_dir = File.expand_path("../..", __dir__)
-ENV["BUNDLE_GEMFILE"] ||= File.join(app_dir, "Gemfile")
-require "bundler/setup"
+require "bundler/inline"
+
+gemfile do
+  source "https://rubygems.org"
+
+  gem "git"
+end
 
 require "git"
-git = Git.open(app_dir)
+git = Git.open(File.expand_path("../..", __dir__))
 
 log = git.log.between(remote, "HEAD")
 commits = log.reject { |commit| COMMIT_PATTERN.match?(commit.message) }
