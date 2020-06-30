@@ -8,13 +8,14 @@ module ExcelDataServices
           mandatory_charge = find_mandatory_charge(params: params.dig(:mandatory_charge))
           country = find_country(params: params.dig(:address, :country))
           address = update_or_create_address(params: params[:address].merge(country: country))
-          nexus = update_or_create_nexus(params: params[:nexus].merge(country: country))
-          update_or_create_hub(
+          nexus = update_or_create_port_of_call(params: params[:nexus].merge(country: country), type: :nexus)
+          update_or_create_port_of_call(
             params: params[:hub].merge(
               nexus: nexus,
               address: address,
               mandatory_charge: mandatory_charge
-            )
+            ),
+            type: :hub
           )
         end
 
@@ -39,22 +40,21 @@ module ExcelDataServices
         address
       end
 
-      def update_or_create_hub(params:)
-        hub = Legacy::Hub.find_or_initialize_by(params.slice(:name, :hub_code, :tenant_id))
-        hub.assign_attributes(params)
-        add_stats(hub, params[:row_nr])
-        hub.save
+      def update_or_create_port_of_call(params:, type:)
+        association, code_key = association_and_locode_key(type: type)
+        assocation = association.where(params.slice(:tenant_id))
+        port_of_call = assocation.find_by(params.slice(code_key))
+        port_of_call ||= assocation.find_by(params.slice(:name))
+        port_of_call ||= assocation.new(params.slice(:name, code_key))
+        port_of_call.assign_attributes(params)
+        add_stats(port_of_call, params[:row_nr])
+        port_of_call.save
 
-        hub
+        port_of_call
       end
 
-      def update_or_create_nexus(params:)
-        nexus = Legacy::Nexus.find_or_initialize_by(params.slice(:name, :locode, :tenant_id))
-        nexus.assign_attributes(params)
-        add_stats(nexus, params[:row_nr])
-        nexus.save
-
-        nexus
+      def association_and_locode_key(type:)
+        type == :nexus ? [Legacy::Nexus, :locode] : [Legacy::Hub, :hub_code]
       end
     end
   end

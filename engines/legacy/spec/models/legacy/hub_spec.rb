@@ -36,6 +36,14 @@ module Legacy
         expect(hub.point_wkt).to eq("Point (#{hub.address.longitude} #{hub.address.latitude})")
       end
     end
+
+    describe '.valid locode' do
+      let(:hub) { FactoryBot.build(:legacy_hub, hub_code: 'GOO1') }
+
+      it 'builds an invalid object with an invalid locode' do
+        expect(hub).not_to be_valid
+      end
+    end
   end
 end
 

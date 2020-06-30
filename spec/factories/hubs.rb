@@ -10,7 +10,7 @@ FactoryBot.define do
     name { 'Gothenburg Port' }
     hub_type { 'ocean' }
     hub_status { 'active' }
-    hub_code { 'GOO1' }
+    hub_code { 'SEGOT' }
 
     association :tenant
     association :address

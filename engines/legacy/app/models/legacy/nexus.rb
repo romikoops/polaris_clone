@@ -14,6 +14,8 @@ module Legacy
     pg_search_scope :name_search, against: %i[name], using: {
       tsearch: { prefix: true }
     }
+
+    validates :locode, format: { with: /\A[A-Z]{2}[A-Z\d]{3}\z/, message: "Invalid Locode" }, allow_nil: true
   end
 end
 
