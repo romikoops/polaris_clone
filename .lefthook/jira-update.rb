@@ -49,7 +49,7 @@ class JiraUpdate
   def move_active
     return unless issue_key
 
-    issue = jira_client.Issue.find(key, expand: "transitions.fields")
+    issue = jira_client.Issue.find(issue_key, expand: "transitions.fields")
     return unless issue.assignee.nil? || issue.assignee.emailAddress == jira_client.options[:username]
 
     if issue.status.name == "To Do" && (transition = issue.transitions.find { |t| t.name == "In Progress" })
