@@ -1,3 +1,7 @@
+prepare-commit-msg:
+  scripts:
+    prepend-ticket-number:
+      tags: default
 pre-commit:
   scripts:
     cobra-docs:
