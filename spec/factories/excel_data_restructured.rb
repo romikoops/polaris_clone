@@ -1141,7 +1141,7 @@ FactoryBot.define do
            country: 'Belgium',
            effective_date: Date.parse('Thu, 24 Jan 2019'),
            expiration_date: Date.parse('Fri, 24 Jan 2020'),
-           counterpart_hub: 'all',
+           counterpart_hub: nil,
            counterpart_country: nil,
            service_level: 'all',
            carrier: 'SACO Shipping',
@@ -1157,7 +1157,8 @@ FactoryBot.define do
              max: nil,
              name: 'Documentation',
              rate_basis: 'PER_BILL',
-             range: [{ currency: 'EUR', max: 100, min: 0, value: 20 }] } },
+             range: [{ currency: 'EUR', max: 100, min: 0,
+                       value: 20 }] } },
            hub_name: 'Antwerp Port',
            counterpart_hub_name: nil },
          { hub: 'Le Havre',
@@ -1186,6 +1187,98 @@ FactoryBot.define do
       end
     end
 
+    trait :correct_local_charges_with_counterpart_expansion do
+      data do
+        [{hub: "Bremerhaven",
+          country: "Germany",
+          effective_date: Date.parse("Thu, 24 Jan 2019"),
+          expiration_date: Date.parse("Fri, 24 Jan 2020"),
+          counterpart_hub: nil,
+          counterpart_country: nil,
+          service_level: "standard",
+          carrier: "SACO Shipping",
+          mot: "ocean",
+          load_type: "lcl",
+          direction: "export",
+          dangerous: nil,
+          fees: {
+            "DOC" => {
+              currency: "EUR",
+              key: "DOC",
+              min: nil,
+              max: nil,
+              name: "Documentation",
+              rate_basis: "PER_BILL",
+              value: 20
+            }
+          },
+          row_nr: "2",
+          hub_name: "Bremerhaven Port",
+          counterpart_hub_name: nil},
+         {hub: "Bremerhaven",
+          country: "Germany",
+          effective_date: Date.parse("Thu, 24 Jan 2019"),
+          expiration_date: Date.parse("Fri, 24 Jan 2020"),
+          counterpart_hub: "Gothenburg",
+          counterpart_country: "Sweden",
+          service_level: "standard",
+          carrier: "SACO Shipping",
+          mot: "ocean",
+          load_type: "lcl",
+          direction: "export",
+          dangerous: nil,
+          fees: {
+            "THC" => {
+              currency: "EUR",
+              key: "THC",
+              min: nil,
+              max: nil,
+              name: "Terminal Handling Charge",
+              rate_basis: "PER_SHIPMENT",
+              value: 30
+            },
+            "DOC" => {
+              currency: "EUR",
+              key: "DOC",
+              min: nil,
+              max: nil,
+              name: "Documentation",
+              rate_basis: "PER_BILL",
+              value: 20
+            }
+          },
+          row_nr: "3, 2",
+          hub_name: "Bremerhaven Port",
+          counterpart_hub_name: "Gothenburg Port"},
+         {hub: "Le Havre",
+          country: "France",
+          effective_date: Date.parse("Thu, 24 Jan 2019"),
+          expiration_date: Date.parse("Fri, 24 Jan 2020"),
+          counterpart_hub: "Antwerp",
+          counterpart_country: "Belgium",
+          service_level: "standard",
+          carrier: "all",
+          mot: "ocean",
+          load_type: "lcl",
+          direction: "export",
+          dangerous: nil,
+          fees: {
+            "DOC" => {
+              currency: "EUR",
+              key: "DOC",
+              min: nil,
+              max: nil,
+              name: "Documentation",
+              rate_basis: "PER_BILL",
+              value: 20
+            }
+          },
+          row_nr: "4",
+          hub_name: "Le Havre Port",
+          counterpart_hub_name: "Antwerp Port"}]
+      end
+    end
+
     trait :faulty_local_charges do
       data do
         [
@@ -1196,16 +1289,91 @@ FactoryBot.define do
             load_type: 'lcl',
             counterpart_hub: nil,
             direction: 'export',
-            fees: { 'CMP': { 'max': nil, 'min': nil, 'name': 'Compliance Fee', 'value': nil, 'currency': 'EUR', 'rate_basis': 'PER_SHIPMENT' },
-                    'DOC': { 'key': 'DOC', 'max': nil, 'min': nil, 'name': 'Documentation', 'value': 20, 'currency': 'EUR', 'rate_basis': 'PER_WRONG' },
-                    'ISP': { 'key':  'ISP', 'max':  nil, 'min':  nil, 'name': 'ISPS', 'value': nil, 'rate_basis': 'PER_SHIPMENT_CONTAINER' },
-                    'QDF': { 'key':  'QDF', 'max':  125, 'min':  55, 'ton': 40, 'name': 'Quay dues', 'currency': 'EUR', 'rate_basis': 'PER_TON' },
-                    'SOL': { 'key':  nil, 'max': nil, 'min': nil, 'name': 'SOLAS Fee', 'value': 7.5, 'currency': nil, 'rate_basis': 'PER_CBM_KG' },
-                    'ZAP': { 'key':  'ZAP', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_BILL' },
-                    'THC': { 'key':  'THC', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_WM_RANGE' },
-                    'CBM': { 'key':  'CBM', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_CBM_TON' },
-                    'BCL': { 'key':  'BCL', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_BILL_CONTAINER' },
-                    'XKG': { 'key':  'XKG', 'max': nil, 'min': nil, 'name': 'Zapp', 'currency': 'EUR', 'rate_basis': 'PER_X_KG_FLAT' } },
+            fees: {
+              'CMP': {
+                'max': nil,
+                'min': nil,
+                'name': 'Compliance Fee',
+                'value': nil,
+                'currency': 'EUR',
+                'rate_basis': 'PER_SHIPMENT'
+              },
+              'DOC': {
+                'key': 'DOC',
+                'max': nil,
+                'min': nil,
+                'name': 'Documentation',
+                'value': 20,
+                'currency': 'EUR',
+                'rate_basis': 'PER_WRONG'
+              },
+              'ISP': {
+                'key': 'ISP',
+                'max': nil,
+                'min': nil,
+                'name': 'ISPS',
+                'value': nil,
+                'rate_basis': 'PER_SHIPMENT_CONTAINER'
+              },
+              'QDF': {
+                'key': 'QDF',
+                'max': 125,
+                'min': 55,
+                'ton': 40,
+                'name': 'Quay dues',
+                'currency': 'EUR',
+                'rate_basis': 'PER_TON'
+              },
+              'SOL': {
+                'key': nil,
+                'max': nil,
+                'min': nil,
+                'name': 'SOLAS Fee',
+                'value': 7.5,
+                'currency': nil,
+                'rate_basis': 'PER_CBM_KG'
+              },
+              'ZAP': {
+                'key': 'ZAP',
+                'max': nil,
+                'min': nil,
+                'name': 'Zapp',
+                'currency': 'EUR',
+                'rate_basis': 'PER_BILL'
+              },
+              'THC': {
+                'key': 'THC',
+                'max': nil,
+                'min': nil,
+                'name': 'Zapp',
+                'currency': 'EUR',
+                'rate_basis': 'PER_WM_RANGE'
+              },
+              'CBM': {
+                'key': 'CBM',
+                'max': nil,
+                'min': nil,
+                'name': 'Zapp',
+                'currency': 'EUR',
+                'rate_basis': 'PER_CBM_TON'
+              },
+              'BCL': {
+                'key': 'BCL',
+                'max': nil,
+                'min': nil,
+                'name': 'Zapp',
+                'currency': 'EUR',
+                'rate_basis': 'PER_BILL_CONTAINER'
+              },
+              'XKG': {
+                'key': 'XKG',
+                'max': nil,
+                'min': nil,
+                'name': 'Zapp',
+                'currency': 'EUR',
+                'rate_basis': 'PER_X_KG_FLAT'
+              }
+            },
             dangerous: nil,
             effective_date: Date.parse('Thu, 24 Jan 2019'),
             expiration_date: Date.parse('Fri, 24 Jan 2020') },
@@ -2876,9 +3044,19 @@ FactoryBot.define do
             city: 'Abu Dhabi',
             geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
             sandbox: nil },
-          nexus: { name: 'Abu Dhabi', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, tenant_id: tenant.id, sandbox: nil },
+          nexus: {
+            name: 'Abu Dhabi',
+            latitude: 24.806936,
+            longitude: 54.644405,
+            photo: nil,
+            locode: 'AEAUH',
+            country: { name: 'United Arab Emirates' },
+            tenant_id: tenant.id,
+            sandbox: nil
+          },
           mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true },
-          hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Abu Dhabi Port', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
+          hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405,
+                 name: 'Abu Dhabi Port', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
         },
          {
            address:
@@ -2889,9 +3067,18 @@ FactoryBot.define do
              city: 'Adelaide',
              geocoded_address: '202 Victoria Square, Adelaide SA 5000, Australia',
              sandbox: nil },
-           nexus: { name: 'Adelaide', latitude: -34.9284989, longitude: 138.6007456, photo: nil, locode: 'AUADL', country: { name: 'Australia' }, tenant_id: tenant.id, sandbox: nil },
+           nexus: {
+             name: 'Adelaide',
+             latitude: -34.9284989,
+             longitude: 138.6007456,
+             photo: nil, locode: 'AUADL',
+             country: { name: 'Australia' },
+             tenant_id: tenant.id,
+             sandbox: nil
+           },
            mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
-           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456, name: 'Adelaide Port', photo: nil, sandbox: nil, hub_code: 'AUADL' }
+           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456,
+                  name: 'Adelaide Port', photo: nil, sandbox: nil, hub_code: 'AUADL' }
          },
          {
            address:
@@ -2902,9 +3089,19 @@ FactoryBot.define do
              city: 'Sultan Lake',
              geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
              sandbox: nil },
-           nexus: { name: 'Sultan Lake', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, tenant_id: tenant.id, sandbox: nil },
+           nexus: {
+             name: 'Sultan Lake',
+             latitude: 24.806936,
+             longitude: 54.644405,
+             photo: nil,
+             locode: 'AEAUH',
+             country: { name: 'United Arab Emirates' },
+             tenant_id: tenant.id,
+             sandbox: nil
+           },
            mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
-           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Sultan Lake', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
+           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405,
+                  name: 'Sultan Lake', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
          }]
       end
     end
@@ -2924,9 +3121,19 @@ FactoryBot.define do
             geocoded_address: nil,
             sandbox: nil
           },
-          nexus: { name: 'Abu Dhabi', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, tenant_id: tenant.id, sandbox: nil },
+          nexus: {
+            name: 'Abu Dhabi',
+            latitude: 24.806936,
+            longitude: 54.644405,
+            photo: nil,
+            locode: 'AEAUH',
+            country: { name: 'United Arab Emirates' },
+            tenant_id: tenant.id,
+            sandbox: nil
+          },
           mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true },
-          hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Abu Dhabi Port', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
+          hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405,
+                 name: 'Abu Dhabi Port', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
         },
          {
            row_nr: 3,
@@ -2939,9 +3146,19 @@ FactoryBot.define do
              geocoded_address: '202 Victoria Square, Adelaide SA 5000, Australia',
              sandbox: nil
            },
-           nexus: { name: 'Adelaide', latitude: nil, longitude: 138.6007456, photo: nil, locode: 'AUADL', country: { name: 'Australia' }, tenant_id: tenant.id, sandbox: nil },
+           nexus: {
+             name: 'Adelaide',
+             latitude: nil,
+             longitude: 138.6007456,
+             photo: nil,
+             locode: 'AUADL',
+             country: { name: 'Australia' },
+             tenant_id: tenant.id,
+             sandbox: nil
+           },
            mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
-           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456, name: 'Adelaide Port', photo: nil, sandbox: nil, hub_code: nil }
+           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456,
+                  name: 'Adelaide Port', photo: nil, sandbox: nil, hub_code: nil }
          }]
       end
     end
@@ -3113,19 +3330,25 @@ FactoryBot.define do
     end
 
     factory :missing_values_hubs_row_data, traits: %i[restructured_hubs_missing_values]
-    factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges, traits: %i[correct_pricings_one_fee_col_and_ranges]
+    factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges,
+      traits: %i[correct_pricings_one_fee_col_and_ranges]
     factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges_with_remarks,
       traits: %i[correct_pricings_one_fee_col_and_ranges_with_remarks]
-    factory :excel_data_restructured_faulty_pricings_one_fee_col_and_ranges, traits: %i[faulty_pricings_one_fee_col_and_ranges]
-    factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_ranges, traits: %i[correct_pricings_dynamic_fee_cols_no_ranges]
+    factory :excel_data_restructured_faulty_pricings_one_fee_col_and_ranges,
+      traits: %i[faulty_pricings_one_fee_col_and_ranges]
+    factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_ranges,
+      traits: %i[correct_pricings_dynamic_fee_cols_no_ranges]
     factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_ranges_with_remarks,
       traits: %i[correct_pricings_dynamic_fee_cols_no_ranges_with_remarks]
     factory :excel_data_restructured_correct_margins, traits: %i[correct_margins]
     factory :excel_data_restructured_faulty_margins, traits: %i[faulty_margins]
     factory :excel_data_restructured_correct_local_charges, traits: %i[correct_local_charges]
+    factory :excel_data_restructured_correct_local_charges_with_counterpart_expansion,
+      traits: %i[correct_local_charges_with_counterpart_expansion]
     factory :excel_data_restructured_faulty_local_charges, traits: %i[faulty_local_charges]
     factory :excel_data_restructured_correct_saco_shipping_pricings, traits: %i[correct_saco_shipping_pricings]
-    factory :excel_data_restructured_correct_saco_shipping_local_charges, traits: %i[correct_saco_shipping_local_charges]
+    factory :excel_data_restructured_correct_saco_shipping_local_charges,
+      traits: %i[correct_saco_shipping_local_charges]
     factory :excel_data_restructured_schedules, traits: %i[restructured_schedules]
     factory :excel_data_restructured_schedule_generator, traits: %i[restructured_schedule_generator]
     factory :excel_data_restructured_max_dimensions, traits: %i[restructured_max_dimensions]

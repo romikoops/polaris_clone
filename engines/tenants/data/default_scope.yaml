@@ -177,3 +177,4 @@ sorting:
 primary_freight_code: 'BAS'
 validity_period: null
 departure_query_type: 'closing_date'
+expand_non_counterpart_local_charges: false

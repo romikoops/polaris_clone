@@ -41,8 +41,7 @@ module ExcelDataServices
             locode: row.hub_locode
           )
           params[:hub_id] = origin_hub_with_info[:hub].id
-          next params[:counterpart_hub_id] = nil unless row.counterpart_hub &&
-                                                        !row.counterpart_hub.casecmp?('all')
+          next params[:counterpart_hub_id] = nil unless row.counterpart_hub
 
           counterpart_hub_with_info = find_hub_by_name_or_locode_with_info(
             name: row.counterpart_hub,

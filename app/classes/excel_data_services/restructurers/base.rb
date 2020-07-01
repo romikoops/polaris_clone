@@ -47,7 +47,11 @@ module ExcelDataServices
 
       private
 
-      attr_reader :tenant, :data
+      attr_reader :tenant, :tenants_tenant, :data
+
+      def scope
+        @scope ||= ::Tenants::ScopeService.new(tenant: tenants_tenant).fetch
+      end
 
       def extract_notes(row_data)
         [{

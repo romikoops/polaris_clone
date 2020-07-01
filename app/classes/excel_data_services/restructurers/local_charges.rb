@@ -4,8 +4,6 @@ module ExcelDataServices
   module Restructurers
     class LocalCharges < ExcelDataServices::Restructurers::Base # rubocop:disable Metrics/ClassLength
       COLS_CONTAINING_ALL = %i[
-        counterpart_hub
-        counterpart_country
         service_level
         carrier
       ].freeze
@@ -39,6 +37,7 @@ module ExcelDataServices
         rows_data = sanitize_service_level_and_carrier(rows_data)
         sanitize_service_level!(rows_data)
         rows_data = expand_fcl_to_all_sizes(rows_data)
+        rows_data = expand_non_counterparts_to_counterparts(rows_data) if scope["expand_non_counterpart_local_charges"]
         rows_data = cut_based_on_date_overlaps(rows_data, ROW_IDENTIFIERS - %i[effective_date expiration_date])
         rows_chunked_by_identifier = rows_data.group_by { |row| row.slice(*ROW_IDENTIFIERS) }.values
         rows_chunked_by_identifier_and_sorted_ranges = rows_chunked_by_identifier.map do |rows|
@@ -53,6 +52,15 @@ module ExcelDataServices
       end
 
       private
+
+      def replace_nil_equivalents_with_nil(rows_data)
+        rows_data.each do |row_data|
+          row_data[:counterpart_hub] = nil if row_data[:counterpart_hub]&.casecmp?('all')
+          row_data[:counterpart_country] = nil if row_data[:counterpart_country]&.casecmp?('all')
+        end
+
+        super
+      end
 
       def correct_capitalization(rows_data)
         rows_data.map do |row_data|
@@ -71,6 +79,36 @@ module ExcelDataServices
       def sanitize_service_level!(rows_data)
         rows_data.each do |row_data|
           row_data[:service_level] ||= 'standard'
+        end
+      end
+
+      def expand_non_counterparts_to_counterparts(rows_data)
+        grouped = rows_data.group_by do |row_data|
+          row_data.values_at(
+            *(ROW_IDENTIFIERS - %i[
+              effective_date
+              expiration_date
+              counterpart_hub
+              counterpart_country
+            ])
+          )
+        end
+
+        grouped.values.flat_map do |per_group_rows_data|
+          without_counterpart, with_counterpart = per_group_rows_data.partition do |row_data|
+            row_data[:counterpart_hub].blank?
+          end
+
+          counterpart_names_and_countries = with_counterpart.pluck(:counterpart_hub, :counterpart_country).uniq
+
+          per_group_rows_data + counterpart_names_and_countries.flat_map do |counterpart_hub, counterpart_country|
+            without_counterpart.map do |row_data_without_counterpart|
+              row_data_without_counterpart.dup.tap do |row_data|
+                row_data[:counterpart_hub] = counterpart_hub
+                row_data[:counterpart_country] = counterpart_country
+              end
+            end
+          end
         end
       end
 
@@ -165,7 +203,7 @@ module ExcelDataServices
       def add_hub_names(charges_data)
         charges_data.each do |params|
           hub_name = append_hub_suffix(params[:hub], params[:mot])
-          if params[:counterpart_hub] && !params[:counterpart_hub].casecmp?('all')
+          if params[:counterpart_hub]
             counterpart_hub_name = append_hub_suffix(params[:counterpart_hub], params[:mot])
           end
           params[:hub_name] = hub_name
