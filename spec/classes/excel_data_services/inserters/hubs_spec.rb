@@ -122,5 +122,35 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
         end
       end
     end
+
+    context 'with existing hubs wiht same locode, diff mot' do
+      before do
+        create(:hub,
+          name: 'Adelaide Airport',
+          hub_code: 'AUADL',
+          hub_type: 'air',
+          tenant: tenant,
+          address: create(:address, country: countries.first),
+          nexus: create(:nexus,
+                        name: 'ADL',
+                        tenant: tenant,
+                        locode: 'AUADL',
+                        country: countries.first))
+      end
+
+      let(:stats) { described_class.insert(tenant: tenant, data: data, options: {}) }
+      let(:hubs) { Hub.where(tenant_id: tenant.id) }
+      let(:addresses) { Address.all }
+
+      it 'creates the correct number of hubs and updates the rest' do
+        aggregate_failures do
+          expect(stats.dig(:"legacy/hubs", :number_created)).to be(2)
+          expect(stats.dig(:"legacy/nexuses", :number_created)).to be(1)
+          expect(stats.dig(:"legacy/addresses", :number_created)).to be(2)
+          expect(hubs.where(hub_code: 'AUADL').count).to be(2)
+          expect(Nexus.where(tenant_id: tenant.id, locode: 'AUADL').count).to be(1)
+        end
+      end
+    end
   end
 end

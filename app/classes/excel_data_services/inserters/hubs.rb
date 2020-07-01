@@ -41,7 +41,7 @@ module ExcelDataServices
       end
 
       def update_or_create_port_of_call(params:, type:)
-        association, code_key = association_and_locode_key(type: type)
+        association, code_key = association_and_locode_key(type: type, mot: params[:hub_type])
         assocation = association.where(params.slice(:tenant_id))
         port_of_call = assocation.find_by(params.slice(code_key))
         port_of_call ||= assocation.find_by(params.slice(:name))
@@ -53,8 +53,8 @@ module ExcelDataServices
         port_of_call
       end
 
-      def association_and_locode_key(type:)
-        type == :nexus ? [Legacy::Nexus, :locode] : [Legacy::Hub, :hub_code]
+      def association_and_locode_key(type:, mot:)
+        type == :nexus ? [Legacy::Nexus, :locode] : [Legacy::Hub.where(hub_type: mot), :hub_code]
       end
     end
   end
