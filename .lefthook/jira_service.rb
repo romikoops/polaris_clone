@@ -12,18 +12,32 @@ end
 require "git"
 require "jira-ruby"
 
-class JiraUpdate
-  def self.run(issue_source = nil)
-    new(issue_source: issue_source).run
+class JiraService
+  def self.update_tickets(issue_source:)
+    new(issue_source: issue_source).update_tickets
+  end
+
+  def self.fetch_ticket(issue_source:)
+    new(issue_source: issue_source).fetch_ticket
   end
 
   def initialize(issue_source:)
-    @issue_source = issue_source || git.current_branch
+    @issue_source = issue_source
   end
 
-  def run
+  def update_tickets
     move_stale
     move_active
+  end
+
+  def fetch_ticket
+    return unless issue
+
+    {
+      key: issue.key,
+      summary: issue.summary,
+      assignee: issue.assignee.displayName
+    }
   end
 
   private
@@ -49,7 +63,6 @@ class JiraUpdate
   def move_active
     return unless issue_key
 
-    issue = jira_client.Issue.find(issue_key, expand: "transitions.fields")
     return unless issue.assignee.nil? || issue.assignee.emailAddress == jira_client.options[:username]
 
     if issue.status.name == "To Do" && (transition = issue.transitions.find { |t| t.name == "In Progress" })
@@ -59,10 +72,23 @@ class JiraUpdate
     end
   end
 
+  def issue
+    return unless issue_key
+
+    @issue ||= jira_client.Issue.find(issue_key, expand: "transitions.fields")
+  end
+
   def issue_key
     @issue_key ||= begin
-      m = issue_source.match(/(IMC-\d+)/i)
-      m[1].upcase if m
+      data = case issue_source
+      when :commit
+        git.log(1).first.message
+      when :branch
+        git.current_branch
+      end
+
+      m = data.match(/(IMC[_-]\d+)/i)
+      m[1].upcase.tr("_", "-") if m
     end
   end
 

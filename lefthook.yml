@@ -1,19 +1,23 @@
-prepare-commit-msg:
-  scripts:
-    prepend-ticket-number:
-      tags: default
 pre-commit:
   scripts:
     cobra-docs:
-      tags: default
+      runner: bash
     verify:
       tags: default
+prepare-commit-msg:
+  scripts:
+    jira-ticket-info:
+      runner: ruby
 commit-msg:
   scripts:
     template-checker:
       tags: default
     jira-update:
       tags: default
+post-commit:
+  scripts:
+    jira-update:
+      runner: ruby
 pre-push:
   scripts:
     verify:

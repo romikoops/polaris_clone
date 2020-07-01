@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+
+file_path, type, * = ARGV
+
+exit 0 unless type.nil?
+
+require_relative "../jira_service"
+ticket = JiraService.fetch_ticket(issue_source: :branch)
+
+commit_msg = File.read(file_path)
+File.open(file_path, "w") do |io|
+  io.puts "#{ticket[:key]}: #{ticket[:summary]}"
+  io.puts ""
+  io.puts "# Assignee: #{ticket[:assignee]}"
+  io.puts "#"
+  io.puts commit_msg
+end

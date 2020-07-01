@@ -1,7 +1,0 @@
-#!/usr/bin/env ruby
-
-input_file, * = ARGV
-commit_message = File.read(input_file)
-
-require_relative "../jira-update"
-JiraUpdate.run(commit_message)
