@@ -1,5 +1,5 @@
 # Builder Image
-FROM node:12-slim@sha256:43464d08aeb52e0c35b91e32c0ea7a0d12a09429d4f9ac07a0fbb3d8c929861d AS builder
+FROM node:12-slim@sha256:be04a59b3431d47c62b33c66ad5f2d6d96f22aea71dd82c96364da94d106b013 AS builder
 LABEL maintainer="development@itsmycargo.com"
 
 RUN apt-get update && apt-get install -y --allow-unauthenticated \
