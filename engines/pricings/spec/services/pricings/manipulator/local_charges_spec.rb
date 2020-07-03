@@ -3,24 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe Pricings::Manipulator do
-  let!(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle]) }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', organization: organization) }
   let!(:currency) { FactoryBot.create(:legacy_currency) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
-  let!(:tenants_user) do
-    Tenants::User.find_by(legacy_id: user.id).tap do |tapped_user|
-      tapped_user.company = FactoryBot.create(:tenants_company)
-    end
-  end
+  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:group) do
-    FactoryBot.create(:tenants_group, tenant: tenants_tenant).tap do |group|
-      FactoryBot.create(:tenants_membership, member: tenants_user, group: group)
+    FactoryBot.create(:groups_group, organization: organization).tap do |group|
+      FactoryBot.create(:groups_membership, member: user, group: group)
     end
   end
-  let(:lcl_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-  let(:itinerary) { FactoryBot.create(:default_itinerary, tenant: tenant) }
+  let(:lcl_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
+  let(:itinerary) { FactoryBot.create(:default_itinerary, organization: organization) }
   let(:trips) do
     [1, 3, 5, 7, 11, 12].map do |num|
       base_date = num.days.from_now
@@ -34,9 +28,9 @@ RSpec.describe Pricings::Manipulator do
   end
   let(:schedules) { trips.map { |t| Legacy::Schedule.from_trip(t) } }
 
-  let!(:solas_charge_category) { FactoryBot.create(:solas_charge, tenant: tenant) }
-  let(:bas_charge_category) { FactoryBot.create(:bas_charge, tenant: tenant) }
-  let(:baf_charge_category) { FactoryBot.create(:baf_charge, tenant: tenant) }
+  let!(:solas_charge_category) { FactoryBot.create(:solas_charge, organization: organization) }
+  let(:bas_charge_category) { FactoryBot.create(:bas_charge, organization: organization) }
+  let(:baf_charge_category) { FactoryBot.create(:baf_charge, organization: organization) }
   let(:margin_type) { :export_margin }
   let(:args) do
     {
@@ -49,28 +43,28 @@ RSpec.describe Pricings::Manipulator do
   end
   let(:klass) do
     described_class.new(
-      target: tenants_user,
-      tenant: tenants_tenant,
+      target: user,
+      organization: organization,
       type: margin_type,
       args: args
     )
   end
-  let(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, tenant: tenant) }
-  let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, tenant_vehicle: tenant_vehicle, tenant: tenant) }
+  let(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, organization: organization) }
+  let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, tenant_vehicle: tenant_vehicle, organization: organization) }
   let(:target_shipment) { lcl_shipment }
   let(:hub) { itinerary.hubs.first }
 
   before do
-    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
-    FactoryBot.create(:tenants_scope, content: {}, target: tenants_tenant)
-    FactoryBot.create(:thc_charge, tenant: tenant)
+    FactoryBot.create(:profiles_profile, user_id: user.id)
+    FactoryBot.create(:organizations_scope, content: {}, target: organization)
+    FactoryBot.create(:thc_charge, organization: organization)
     %w[ocean trucking local_charge].flat_map do |mot|
       [
-        FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:trucking_on_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:trucking_pre_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:import_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:export_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+        FactoryBot.create(:freight_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:trucking_on_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:trucking_pre_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:import_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:export_margin, default_for: mot, organization: organization, applicable: organization, value: 0)
       ]
     end
   end
@@ -81,8 +75,8 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:export_margin,
                           origin_hub: hub,
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenants_tenant,
-                          applicable: tenants_user)
+                          organization: organization,
+                          applicable: user)
       end
 
       it 'returns the manipulated local_charge (export) attached to the user' do
@@ -101,10 +95,10 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:export_margin,
                           origin_hub: hub,
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenants_tenant,
+                          organization: organization,
                           effective_date: local_charge.effective_date + 10.days,
                           expiration_date: local_charge.effective_date + 20.days,
-                          applicable: tenants_user)
+                          applicable: user)
       end
 
       let!(:results) { klass.perform.first.sort_by! { |m| m['effective_date'] } }
@@ -133,12 +127,12 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:import_margin,
                           destination_hub: hub,
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenants_tenant,
-                          applicable: tenants_user)
+                          organization: organization,
+                          applicable: user)
       end
 
       let(:margin_type) { :import_margin }
-      let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, direction: 'import', tenant_vehicle: tenant_vehicle, tenant: tenant) }
+      let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, direction: 'import', tenant_vehicle: tenant_vehicle, organization: organization) }
 
       it 'returns the manipulated local_charge (import) attached to the user' do
         manipulated_pricings, _metadata = klass.perform
@@ -156,8 +150,8 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:export_margin,
                           origin_hub: hub,
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenants_tenant,
-                          applicable: tenants_user,
+                          organization: organization,
+                          applicable: user,
                           effective_date: (Time.zone.today + 1.day).beginning_of_day,
                           expiration_date: (Time.zone.today + 10.days).end_of_day)
       end
@@ -165,7 +159,7 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:export_margin,
                           origin_hub: hub,
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenants_tenant,
+                          organization: organization,
                           applicable: group,
                           value: 10,
                           operator: '+',
@@ -198,14 +192,14 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:import_margin,
                           destination_hub: hub,
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenants_tenant,
-                          applicable: tenants_user,
+                          organization: organization,
+                          applicable: user,
                           effective_date: (Time.zone.today + 1.day).beginning_of_day,
                           expiration_date: (Time.zone.today + 10.days).end_of_day)
         FactoryBot.create(:import_margin,
                           destination_hub: hub,
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenants_tenant,
+                          organization: organization,
                           applicable: group,
                           value: 10,
                           operator: '+',
@@ -214,7 +208,7 @@ RSpec.describe Pricings::Manipulator do
       end
 
       let(:margin_type) { :import_margin }
-      let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, direction: 'import', tenant_vehicle: tenant_vehicle, tenant: tenant) }
+      let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, direction: 'import', tenant_vehicle: tenant_vehicle, organization: organization) }
 
       it 'returns the manipulated local_charge (import) attached to the user with multiple margins' do
         manipulated_pricings, _metadata = klass.perform
@@ -230,7 +224,7 @@ RSpec.describe Pricings::Manipulator do
 
     context 'with manipulated local_charge attached to the group' do
       before do
-        FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: group)
+        FactoryBot.create(:export_margin, origin_hub: hub, organization: organization, applicable: group)
       end
 
       it 'returns the manipulated local_charge attached to the group' do
@@ -252,7 +246,7 @@ RSpec.describe Pricings::Manipulator do
                             tenant_vehicle: tenant_vehicle,
                             effective_date: (Time.zone.today - 3.days).beginning_of_day,
                             expiration_date: (Time.zone.today + 2.days).end_of_day,
-                            tenant: tenants_tenant,
+                            organization: organization,
                             applicable: group)
         end
         let!(:margin_b) do
@@ -261,7 +255,7 @@ RSpec.describe Pricings::Manipulator do
                             tenant_vehicle: tenant_vehicle,
                             effective_date: (Time.zone.today + 8.days).beginning_of_day,
                             expiration_date: (Time.zone.today + 22.days).end_of_day,
-                            tenant: tenants_tenant,
+                            organization: organization,
                             value: 0.5,
                             applicable: group)
         end
@@ -290,9 +284,10 @@ RSpec.describe Pricings::Manipulator do
 
     context 'with manipulated local_charge attached to the group via company' do
       before do
-        FactoryBot.create(:tenants_group, tenant: tenants_tenant).tap do |company_group|
-          FactoryBot.create(:tenants_membership, member: tenants_user.company, group: company_group)
-          FactoryBot.create(:export_margin, origin_hub: hub, tenant_vehicle: tenant_vehicle, tenant: tenants_tenant, applicable: company_group)
+        company = FactoryBot.create(:companies_company, :with_member, organization: organization, member: user)
+        FactoryBot.create(:groups_group, organization: organization).tap do |company_group|
+          FactoryBot.create(:groups_membership, member: company, group: company_group)
+          FactoryBot.create(:export_margin, origin_hub: hub, tenant_vehicle: tenant_vehicle, organization: organization, applicable: company_group)
         end
       end
 
@@ -309,7 +304,7 @@ RSpec.describe Pricings::Manipulator do
 
     context 'with manipulated local_charge with specific detail attached to the user' do
       before do
-        FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user, value: 0).tap do |tapped_margin|
+        FactoryBot.create(:export_margin, origin_hub: hub, organization: organization, applicable: user, value: 0).tap do |tapped_margin|
           FactoryBot.create(:pricings_detail, margin: tapped_margin, value: 0.25, charge_category: solas_charge_category)
         end
       end
@@ -327,7 +322,7 @@ RSpec.describe Pricings::Manipulator do
 
     context 'with manipulated local_charge with one specific detail and general attached to the user' do
       before do
-        FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user).tap do |tapped_margin|
+        FactoryBot.create(:export_margin, origin_hub: hub, organization: organization, applicable: user).tap do |tapped_margin|
           FactoryBot.create(:pricings_detail, margin: tapped_margin, value: 0.25, charge_category: baf_charge_category)
         end
       end
@@ -337,7 +332,7 @@ RSpec.describe Pricings::Manipulator do
                           hub: hub,
                           direction: 'export',
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenant,
+                          organization: organization,
                           fees: {
                             'SOLAS' => {
                               'key' => 'SOLAS',
@@ -385,7 +380,7 @@ RSpec.describe Pricings::Manipulator do
 
     context 'with manipulated local_charge attached to the user with a range' do
       before do
-        FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user)
+        FactoryBot.create(:export_margin, origin_hub: hub, organization: organization, applicable: user)
       end
 
       let(:fees) do
@@ -404,7 +399,7 @@ RSpec.describe Pricings::Manipulator do
           }
         }
       end
-      let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, direction: 'export', fees: fees, tenant_vehicle: tenant_vehicle, tenant: tenant) }
+      let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, direction: 'export', fees: fees, tenant_vehicle: tenant_vehicle, organization: organization) }
 
       it 'returns the manipulated local_charge attached to the user with a range' do
         manipulated_pricings, _metadata = klass.perform
@@ -420,7 +415,7 @@ RSpec.describe Pricings::Manipulator do
 
     context 'with manipulated local_charge attached to the user for addition margin' do
       before do
-        FactoryBot.create(:export_margin, origin_hub: hub, tenant: tenants_tenant, applicable: tenants_user, value: 10, operator: '+')
+        FactoryBot.create(:export_margin, origin_hub: hub, organization: organization, applicable: user, value: 10, operator: '+')
       end
 
       let!(:results) { klass.perform.first }
@@ -439,7 +434,7 @@ RSpec.describe Pricings::Manipulator do
 
     context 'with manipulated local_charge attached to the tenant with nothing else' do
       before do
-        FactoryBot.create(:export_margin, tenant: tenants_tenant, applicable: tenants_tenant)
+        FactoryBot.create(:export_margin, organization: organization, applicable: organization)
       end
 
       it 'returns the manipulated local_charge attached to the tenant with nothing else' do
@@ -455,10 +450,10 @@ RSpec.describe Pricings::Manipulator do
 
     context 'with manipulated local charge with metadata attached to the user - single margin' do
       before do
-        FactoryBot.create(:export_margin, tenant: tenants_tenant, applicable: tenants_tenant)
+        FactoryBot.create(:export_margin, organization: organization, applicable: organization)
       end
 
-      let!(:margin) { FactoryBot.create(:export_margin, origin_hub: hub, tenant_vehicle: tenant_vehicle, tenant: tenants_tenant, applicable: tenants_user) }
+      let!(:margin) { FactoryBot.create(:export_margin, origin_hub: hub, tenant_vehicle: tenant_vehicle, organization: organization, applicable: user) }
       let(:metadata) { klass.perform.second }
       let(:metadatum) { metadata.first }
 
@@ -484,15 +479,15 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:export_margin,
                           origin_hub: hub,
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenants_tenant,
-                          applicable: tenants_user)
+                          organization: organization,
+                          applicable: user)
       end
       let!(:margin2) do
         FactoryBot.create(:export_margin,
                           origin_hub: hub,
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenants_tenant,
-                          applicable: tenants_user,
+                          organization: organization,
+                          applicable: user,
                           value: 50,
                           operator: '+')
       end
@@ -551,7 +546,7 @@ RSpec.describe Pricings::Manipulator do
                           hub: hub,
                           direction: 'export',
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenant,
+                          organization: organization,
                           fees: fees)
       end
 
@@ -559,15 +554,15 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:export_margin,
                           origin_hub: hub,
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenants_tenant,
-                          applicable: tenants_user)
+                          organization: organization,
+                          applicable: user)
       end
       let!(:margin2) do
         FactoryBot.create(:export_margin,
                           origin_hub: hub,
                           tenant_vehicle: tenant_vehicle,
-                          tenant: tenants_tenant,
-                          applicable: tenants_user,
+                          organization: organization,
+                          applicable: user,
                           value: 50,
                           operator: '+')
       end

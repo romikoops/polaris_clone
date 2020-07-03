@@ -19,7 +19,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-legacy'
   s.add_dependency 'imc-pricings'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
+  s.add_dependency 'imc-organization_manager'
 
   s.add_dependency 'draper'
   s.add_dependency 'jsoneditor-rails'

@@ -3,12 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
-  let(:user) { FactoryBot.create(:tenants_user, tenant: tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:origin_location) do
     FactoryBot.create(:locations_location,
                       bounds: FactoryBot.build(:legacy_bounds, lat: origin_hub.latitude, lng: origin_hub.longitude, delta: 0.4),
@@ -25,11 +24,11 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
   let(:wrong_lng) { 60.50 }
   let!(:origin_hub_availability) { FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location) }
   let!(:destination_hub_availability) { FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, custom_truck_type: 'default2', query_type: :location) }
-  let(:args) { { coordinates: { lat: lat, lng: lng }, load_type: 'cargo_item', tenant: tenant, target: target } }
+  let(:args) { { coordinates: { lat: lat, lng: lng }, load_type: 'cargo_item', organization: organization, target: target } }
 
   before do
-    FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: origin_hub, location: origin_trucking_location)
-    FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: destination_hub, carriage: 'on', location: destination_trucking_location, truck_type: 'default2')
+    FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location)
+    FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location, truck_type: 'default2')
     Geocoder::Lookup::Test.add_stub([wrong_lat, wrong_lng], [
                                       'address_components' => [{ 'types' => ['premise'] }],
                                       'address' => 'Helsingborg, Sweden',
@@ -73,7 +72,7 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
     end
 
     context 'when trucking is not available' do
-      let(:args) { { coordinates: { lat: wrong_lat, lng: wrong_lng }, load_type: 'container', tenant: tenant, target: target } }
+      let(:args) { { coordinates: { lat: wrong_lat, lng: wrong_lng }, load_type: 'container', organization: organization, target: target } }
       let!(:data) { described_class.availability(args) }
 
       it 'returns empty keys when no trucking is available' do
@@ -102,7 +101,7 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
     end
 
     context 'when trucking is not available' do
-      let(:args) { { coordinates: { lat: wrong_lat, lng: wrong_lng }, load_type: 'container', tenant: tenant, target: :destination } }
+      let(:args) { { coordinates: { lat: wrong_lat, lng: wrong_lng }, load_type: 'container', organization: organization, target: :destination } }
       let!(:data) { described_class.availability(args) }
 
       it 'returns empty keys when no trucking is available' do

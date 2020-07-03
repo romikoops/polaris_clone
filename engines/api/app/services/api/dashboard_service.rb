@@ -3,15 +3,15 @@
 module Api
   class DashboardService
     UnknownWidget = Class.new(StandardError)
-    attr_reader :user, :widget_name, :start_date, :end_date
+    attr_reader :user, :organization, :widget_name, :start_date, :end_date
 
-    def self.data(user:, widget_name:, start_date:, end_date:)
-      new(user: user, widget_name: widget_name, start_date: start_date, end_date: end_date).data
+    def self.data(user:, organization:, widget_name:, start_date:, end_date:)
+      new(user: user, organization: organization, widget_name: widget_name, start_date: start_date, end_date: end_date).data
     end
 
-    def initialize(user:, widget_name:, start_date:, end_date:)
+    def initialize(user:, organization:, widget_name:, start_date:, end_date:)
       @user = user
-      @tenant = user.tenant
+      @organization = organization
       @widget_name = widget_name
       @start_date = start_date
       @end_date = end_date
@@ -21,7 +21,7 @@ module Api
       widget_klass = "Analytics::Dashboard::#{widget_name.camelize}".safe_constantize
       raise UnknownWidget, 'Widget does not exist' if widget_klass.nil?
 
-      widget_klass.data(user: user, start_date: start_date, end_date: end_date)
+      widget_klass.data(user: user, organization: organization, start_date: start_date, end_date: end_date)
     end
   end
 end

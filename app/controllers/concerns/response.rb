@@ -1,19 +1,24 @@
 # frozen_string_literal: true
+require 'active_support/concern'
 
 module Response
-  def json_response(object, status = :ok)
-    render json: object.to_json, status: status
-  end
+  extend ActiveSupport::Concern
 
-  def error_handler(e)
-    code = e.config[:http_code] || 500
-    Rails.logger.debug "#{e.class} (#{e.code}): #{e.message}"
+  included do
+    def json_response(object, status = :ok)
+      render json: object.to_json, status: status
+    end
 
-    resp = { success: false, message: e.message, code: e.code }
-    json_response(resp, code)
-  end
+    def error_handler(e)
+      code = e.config[:http_code] || 500
+      Rails.logger.debug "#{e.class} (#{e.code}): #{e.message}"
 
-  def success_handler(res)
-    json_response({ success: true, data: res }, 200)
+      resp = { success: false, message: e.message, code: e.code }
+      json_response(resp, code)
+    end
+
+    def success_handler(res)
+      json_response({ success: true, data: res }, 200)
+    end
   end
 end

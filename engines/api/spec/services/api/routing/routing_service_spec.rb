@@ -3,19 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe Api::Routing::RoutingService, type: :service do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-  let(:user) { FactoryBot.create(:tenants_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', tenant: tenant) }
-  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', organization: organization) }
+  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
   let(:origin_nexus) { origin_hub.nexus }
   let(:destination_nexus) { destination_hub.nexus }
-  let(:default_args) { { tenant: tenant, load_type: 'cargo_item' } }
+  let(:default_args) { { organization: organization, load_type: 'cargo_item' } }
 
   before do
-    FactoryBot.create(:felixstowe_shanghai_itinerary, tenant: legacy_tenant)
-    FactoryBot.create(:hamburg_shanghai_itinerary, tenant: legacy_tenant)
+    FactoryBot.create(:felixstowe_shanghai_itinerary, organization_id: organization.id)
+    FactoryBot.create(:hamburg_shanghai_itinerary, organization_id: organization.id)
   end
 
   describe '.nexuses' do
@@ -31,7 +30,8 @@ RSpec.describe Api::Routing::RoutingService, type: :service do
     context 'when targeting the origin with no params ' do
       let(:args) { default_args.merge(target: :origin_destination) }
       let!(:result) { described_class.nexuses(args) }
-      let(:origins) { legacy_tenant.itineraries.map { |itin| itin.first_nexus.name }.sort }
+
+      let(:origins) { Legacy::Itinerary.where(organization_id: organization.id).map { |itin| itin.first_nexus.name }.sort }
 
       it 'Renders an array of all origins when location params are empty' do
         expect(result.map(&:name)).to eq(origins)

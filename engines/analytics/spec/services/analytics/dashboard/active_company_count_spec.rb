@@ -3,25 +3,19 @@
 require 'rails_helper'
 
 RSpec.describe Analytics::Dashboard::ActiveCompanyCount, type: :service do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-  let(:admin_role) { FactoryBot.create(:legacy_role, name: 'admin') }
-  let(:shipper_role) { FactoryBot.create(:legacy_role, name: 'shipper') }
-  let(:legacy_user) { FactoryBot.create(:legacy_user, tenant: legacy_tenant, role: admin_role, with_profile: true) }
-  let(:user) { Tenants::User.find_by(legacy_id: legacy_user.id) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:start_date) { Time.zone.now - 1.month }
   let(:end_date) { Time.zone.now }
-  let(:company) { FactoryBot.create(:tenants_company, tenant: tenant) }
-  let(:result) { described_class.data(user: user, start_date: start_date, end_date: end_date) }
+  let(:company) { FactoryBot.create(:companies_company, organization: organization) }
+  let(:result) { described_class.data(user: user, organization: organization, start_date: start_date, end_date: end_date) }
 
   before do
-    t = FactoryBot.create(:legacy_user,
-                          tenant: legacy_tenant,
-                          role: shipper_role,
-                          with_profile: true,
-                          first_name: 'Shipper',
-                          last_sign_in_at: 2.days.ago)
-    Tenants::User.find_by(legacy_id: t.id).update(company: company)
+    ::Organizations.current_id = organization.id
+    user = FactoryBot.create(:organizations_user,
+                             organization: organization,
+                             last_login_at: 2.days.ago)
+    FactoryBot.create(:companies_membership, company: company, member: user)
   end
 
   context 'with one active company' do

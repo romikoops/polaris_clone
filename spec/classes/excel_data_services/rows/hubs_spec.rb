@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::Rows::Hubs do
-  let(:tenant) { create(:tenant) }
+  let(:organization) { create(:organizations_organization) }
   let(:input_data) do
     {status: "active",
      type: "ocean",
@@ -22,7 +22,7 @@ RSpec.describe ExcelDataServices::Rows::Hubs do
      alternative_names: nil,
      row_nr: 2}
   end
-  let(:row) { described_class.new(tenant: tenant, row_data: input_data) }
+  let(:row) { described_class.new(organization: organization, row_data: input_data) }
 
   describe ".locode" do
     it "returns the lcoode from the row" do

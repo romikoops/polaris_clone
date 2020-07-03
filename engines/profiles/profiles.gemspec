@@ -10,14 +10,17 @@ Gem::Specification.new do |s|
   s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'An engine for hosting user profiles'
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'imc-core'
+  s.add_dependency 'imc-users'
 
   s.add_dependency 'paranoia'
   s.add_dependency 'pg_search'
+
+  s.add_development_dependency 'imc-organizations'
 
   Gemhelper.common(s)
 end

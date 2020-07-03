@@ -4,11 +4,11 @@ module DocumentService
   class LocalChargesWriter
     include AwsConfig
     include WritingTool
-    attr_reader :options, :tenant, :hubs, :results_by_hub, :filename, :directory, :header_values, :workbook
+    attr_reader :options, :organization, :hubs, :results_by_hub, :filename, :directory, :header_values, :workbook
 
     def initialize(options)
       @options          = options
-      @tenant           = tenant_finder(options[:tenant_id])
+      @organization     = Organizations::Organization.find(options[:organization_id])
       @hubs             = tenant_hubs
       @results_by_hub   = prepare_results_by_hub
       @filename         = filename_formatter(options, 'local_charges_')
@@ -47,7 +47,7 @@ module DocumentService
         end
       end
       workbook.close
-      write_to_aws(directory, tenant, filename, 'local_charges_sheet')
+      write_to_aws(directory, organization, filename, 'local_charges_sheet')
     end
 
     private

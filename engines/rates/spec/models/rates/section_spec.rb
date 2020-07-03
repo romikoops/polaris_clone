@@ -28,6 +28,7 @@ end
 #  updated_at               :datetime         not null
 #  carrier_id               :bigint
 #  location_id              :uuid
+#  organization_id          :uuid
 #  target_id                :uuid
 #  tenant_id                :uuid
 #  terminal_id              :uuid
@@ -36,6 +37,7 @@ end
 #
 #  index_rates_sections_on_carrier_id                 (carrier_id)
 #  index_rates_sections_on_location_id                (location_id)
+#  index_rates_sections_on_organization_id            (organization_id)
 #  index_rates_sections_on_target_type_and_target_id  (target_type,target_id)
 #  index_rates_sections_on_tenant_id                  (tenant_id)
 #  index_rates_sections_on_terminal_id                (terminal_id)
@@ -44,6 +46,7 @@ end
 #
 #  fk_rails_...  (carrier_id => carriers.id)
 #  fk_rails_...  (location_id => routing_locations.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (tenant_id => tenants_tenants.id)
 #  fk_rails_...  (terminal_id => routing_terminals.id)
 #

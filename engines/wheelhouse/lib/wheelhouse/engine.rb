@@ -5,7 +5,7 @@ require 'core'
 require 'legacy'
 require 'offer_calculator'
 require 'pdf'
-require 'tenants'
+require 'organizations'
 
 require 'draper'
 

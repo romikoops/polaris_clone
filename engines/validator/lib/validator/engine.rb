@@ -1,8 +1,8 @@
 # frozen_string_literal: true
-
+require 'groups'
 require 'legacy'
 require 'pricings'
-require 'tenants'
+require 'organizations'
 require 'trucking'
 
 module Validator

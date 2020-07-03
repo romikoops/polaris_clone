@@ -6,7 +6,7 @@ module OfferCalculator
       InvalidPickupAddress = Class.new(StandardError)
       InvalidDeliveryAddress = Class.new(StandardError)
 
-      def initialize(shipment:, params:, sandbox:)
+      def initialize(shipment:, params:, sandbox:, wheelhouse: false)
         @params = params
         super(shipment: shipment, sandbox: sandbox)
       end
@@ -41,6 +41,15 @@ module OfferCalculator
         @shipment.touch
       end
 
+      def update_billing
+        email = @shipment.user&.email || ''
+        return @shipment.billing = :test if email.include?('itsmycargo.com')
+        internal_domain = scope.fetch(:internal_domains).find { |domain|  email.include?(domain) }
+        return @shipment.billing = :internal if internal_domain.present? || wheelhouse
+
+        @shipment.billing = :external
+      end
+
       def update_cargo_units
         destroy_previous_cargo_units
 
@@ -60,6 +69,16 @@ module OfferCalculator
         date = Chronic.parse(@params[:shipment][:selected_day], endian_precedence: :little)
         date_limit = Time.zone.today
         @shipment.desired_start_date = [date, date_limit].max
+      end
+
+      def set_trucking_nexuses(hubs:)
+        %w[origin destination].each do |target|
+          next if @shipment.send("#{target}_nexus_id").present?
+
+          nexus_ids = hubs[target.to_sym].pluck(:nexus_id).uniq
+
+          @shipment.update("#{target}_nexus_id" => nexus_ids.first) if nexus_ids.length == 1
+        end
       end
 
       private

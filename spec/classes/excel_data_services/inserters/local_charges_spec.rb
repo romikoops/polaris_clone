@@ -3,15 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Inserters::LocalCharges do
-  let(:tenant) { create(:tenant) }
+  let(:organization) { create(:organizations_organization) }
   let!(:hubs) do
-    [create(:legacy_hub, tenant: tenant, name: 'Bremerhaven Port', hub_type: 'ocean'),
-     create(:legacy_hub, tenant: tenant, name: 'Antwerp Port', hub_type: 'ocean',
+    [create(:legacy_hub, organization: organization, name: 'Bremerhaven', hub_type: 'ocean'),
+     create(:legacy_hub, organization: organization, name: 'Antwerp', hub_type: 'ocean',
                          address: create(:legacy_address,
                            country: create(:legacy_country, code: 'BE', name: 'Belgium'))),
-     create(:legacy_hub, tenant: tenant, name: 'Le Havre Port', hub_type: 'ocean')]
+     create(:legacy_hub, organization: organization, name: 'Le Havre', hub_type: 'ocean')]
   end
-  let(:options) { { tenant: tenant, data: input_data, options: {} } }
+  let(:options) { { organization: organization, data: input_data, options: {} } }
 
   describe '.insert' do
     let!(:carriers) do
@@ -19,8 +19,8 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
        create(:carrier, code: 'msc', name: 'MSC')]
     end
     let!(:tenant_vehicles) do
-      [create(:tenant_vehicle, tenant: tenant, carrier: carriers.first),
-       create(:tenant_vehicle, tenant: tenant, carrier: carriers.second)]
+      [create(:tenant_vehicle, organization: organization, carrier: carriers.first),
+       create(:tenant_vehicle, organization: organization, carrier: carriers.second)]
     end
     let!(:exising_overlapping_local_charge) do
       create(
@@ -28,7 +28,7 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
         mode_of_transport: 'ocean',
         load_type: 'lcl',
         hub: hubs.first,
-        tenant: tenant,
+        organization: organization,
         tenant_vehicle: tenant_vehicles.first,
         counterpart_hub_id: nil,
         direction: 'export',

@@ -20,8 +20,6 @@ end
 #  description :string
 #  dimension_x :decimal(, )
 #  dimension_y :decimal(, )
-#  length      :decimal(, )
-#  width       :decimal(, )
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #

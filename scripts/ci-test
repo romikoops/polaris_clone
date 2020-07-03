@@ -39,7 +39,10 @@ ci-engines () {
   for engine in $("${SCRIPTDIR}/ci-finder");
   do
     ci-runner "${engine}" "engines/${engine}"
-    exitcode=$((exitcode|$?))
+    ret=$?
+    [[ $ret -ne 0 ]] && FAILURES=( "${FAILURES[@]}" "${engine}" )
+
+    exitcode=$((exitcode|$ret))
   done
 
   return $exitcode
@@ -63,6 +66,7 @@ ci-lib () {
 ROOTDIR="$(cd "$( dirname "${BASH_SOURCE[0]}/" )/../" >/dev/null 2>&1 && pwd )"
 SCRIPTDIR="$ROOTDIR/scripts"
 REPORTSDIR="$ROOTDIR/reports"
+FAILURES=()
 
 # Set Environment
 : "${SEED:=$(((RANDOM % 0xFFFF) + 1))}"
@@ -101,5 +105,8 @@ do
       ;;
   esac
 done
+
+echo "FAILURES:"
+echo "${FAILURES[@]}"
 
 exit $exitcode

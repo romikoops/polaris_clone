@@ -63,7 +63,7 @@ namespace :excel do
 
     tenants.each do |tenant|
       # Create container directory for each tenant
-      tenant_name = ::Tenants::Tenant.find_by(legacy_id: tenant.id).slug
+      tenant_name = ::Organizations::Organization.find_by(legacy_id: tenant.id).slug
       tenant_dir = File.join(dir, tenant_name)
       Dir.mkdir(tenant_dir) unless Dir.exist?(tenant_dir)
       Dir.chdir(tenant_dir)
@@ -91,7 +91,7 @@ namespace :excel do
 
     tenants.each do |tenant|
       # Create container directory for each tenant
-      tenant_name = ::Tenants::Tenant.find_by(legacy_id: tenant.id).slug
+      tenant_name = ::Organizations::Organization.find_by(legacy_id: tenant.id).slug
       tenant_dir = File.join(dir, tenant_name)
       Dir.chdir(tenant_dir)
 

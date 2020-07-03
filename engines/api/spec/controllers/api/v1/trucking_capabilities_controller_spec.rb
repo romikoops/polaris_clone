@@ -5,15 +5,15 @@ require 'rails_helper'
 module Api
   RSpec.describe V1::TruckingCapabilitiesController, type: :controller do
     routes { Engine.routes }
-    let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-    let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
-    let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-    let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
-    let(:user) { FactoryBot.create(:tenants_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', tenant: tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+    let(:origin_hub) { itinerary.origin_hub }
+    let(:destination_hub) { itinerary.destination_hub }
+    let(:user) { FactoryBot.create(:users_user, email: 'test@example.com', organization_id: organization.id) }
+
     let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
     let(:token_header) { "Bearer #{access_token.token}" }
-    let(:params) { { load_type: 'cargo_item', tenant_id: legacy_tenant.id } }
+    let(:params) { { load_type: 'cargo_item', organization_id: organization.id } }
 
     describe 'GET #index' do
       context 'when origin and destination have no trucking' do

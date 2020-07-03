@@ -63,17 +63,17 @@ module OfferCalculator
         )
         @grand_total_charge = Legacy::Charge.create(
           children_charge_category: Legacy::ChargeCategory.from_code(
-            code: 'grand_total', name: 'Grand Total', tenant_id: @shipment.tenant_id
+            code: 'grand_total', name: 'Grand Total', organization_id: @shipment.organization_id
           ),
           charge_category: Legacy::ChargeCategory.from_code(
-            code: 'base_node', name: 'Base Node', tenant_id: @shipment.tenant_id
+            code: 'base_node', name: 'Base Node', organization_id: @shipment.organization_id
           ),
           charge_breakdown: @charge_breakdown,
-          price: Legacy::Price.create(currency: @shipment.user.currency),
+          price: Legacy::Price.create(currency: currency),
           sandbox: @sandbox
         )
         @metadata = Pricings::Metadatum.create(
-          tenant: Tenants::Tenant.find_by(legacy_id: @user.tenant_id),
+          organization: Organizations::Organization.find(@shipment.organization_id),
           charge_breakdown_id: @charge_breakdown.id
         )
       end
@@ -243,7 +243,7 @@ module OfferCalculator
         children_charge_category = Legacy::ChargeCategory.find_or_create_by!(
           name: cargo_unit_model.humanize,
           code: cargo_unit_model.underscore.downcase,
-          tenant_id: @shipment.tenant_id,
+          organization_id: @shipment.organization_id,
           cargo_unit_id: cargo_unit_id(key: charge['key']),
           sandbox_id: @sandbox&.id
         )
@@ -255,7 +255,7 @@ module OfferCalculator
 
       def parent_charge_and_category(code:)
         charge_category = Legacy::ChargeCategory.from_code(code: code.to_s,
-                                                           tenant_id: @user.tenant_id,
+                                                           organization_id: @shipment.organization_id,
                                                            sandbox: @sandbox)
         parent_charge = create_parent_charge(charge_category)
 
@@ -270,7 +270,7 @@ module OfferCalculator
         @trucking_data.each do |carriage, data|
           charge_category = Legacy::ChargeCategory.from_code(
             code: "trucking_#{carriage}",
-            tenant_id: @user.tenant_id,
+            organization_id: @shipment.organization_id,
             sandbox: @sandbox
           )
 
@@ -283,7 +283,7 @@ module OfferCalculator
           hub_data[:trucking_charge_data].each do |cargo_class, trucking_charges|
             children_charge_category = Legacy::ChargeCategory.from_code(
               code: "trucking_#{cargo_class}",
-              tenant_id: @user.tenant_id,
+              organization_id: @shipment.organization_id,
               sandbox: @sandbox
             )
 
@@ -347,6 +347,7 @@ module OfferCalculator
           cargo: cargo_unit,
           pricing: @data.dig(:pricings_by_cargo_class, cargo_class),
           user: @user,
+          organization: @shipment.organization,
           mode_of_transport: @schedule.mode_of_transport,
           date: @shipment.planned_pickup_date,
           metadata: @metadata_list
@@ -357,7 +358,7 @@ module OfferCalculator
         Legacy::ChargeCategory.find_or_create_by!(
           name: cargo_unit_model.humanize,
           code: cargo_unit_model.underscore.downcase,
-          tenant_id: @shipment.tenant_id,
+          organization_id: @shipment.organization_id,
           cargo_unit_id: cargo_unit_id,
           sandbox_id: @sandbox&.id
         )
@@ -367,11 +368,11 @@ module OfferCalculator
         Legacy::Charge.create(
           children_charge_category: children_charge_category,
           charge_category: Legacy::ChargeCategory.from_code(
-            code: 'grand_total', name: 'Grand Total', tenant_id: @shipment.tenant_id
+            code: 'grand_total', name: 'Grand Total', organization_id: @shipment.organization_id
           ),
           charge_breakdown: @charge_breakdown,
           parent: @grand_total_charge,
-          price: Legacy::Price.create(currency: @shipment.user.currency),
+          price: Legacy::Price.create(currency: currency),
           sandbox: @sandbox
         )
       end
@@ -380,7 +381,7 @@ module OfferCalculator
         fees_data,
         children_charge_category,
         charge_category = Legacy::ChargeCategory.from_code(
-          code: 'grand_total', name: 'Grand Total', tenant_id: @shipment.tenant_id
+          code: 'grand_total', name: 'Grand Total', organization_id: @shipment.organization_id
         ),
         parent = @grand_total_charge
       )
@@ -414,7 +415,7 @@ module OfferCalculator
         fees_data:
       )
         charge = Legacy::Charge.create(
-          children_charge_category: Legacy::ChargeCategory.from_code(code: code, tenant_id: @user.tenant_id),
+          children_charge_category: Legacy::ChargeCategory.from_code(code: code, organization_id: @shipment.organization_id),
           charge_category: children_charge_category,
           charge_breakdown: @charge_breakdown,
           parent: parent_charge,
@@ -545,6 +546,11 @@ module OfferCalculator
         freight_date_limit = @data[:pricings_by_cargo_class].values.pluck('expiration_date').min
 
         [export_date_limit, freight_date_limit].compact.min.beginning_of_day
+      end
+
+      def currency
+        @currency = Users::Settings.find_by(user: @user)&.currency
+        @currency ||= scope.fetch('default_currency')
       end
     end
   end

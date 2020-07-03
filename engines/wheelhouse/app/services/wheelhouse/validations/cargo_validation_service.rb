@@ -62,9 +62,9 @@ module Wheelhouse
       DEFAULT_MOT = 'general'
       DEFAULT_CONVERSION_RATIO = 1_000
 
-      def self.errors(tenant:, cargo:, modes_of_transport:, tenant_vehicle_ids:, final: false)
+      def self.errors(organization:, cargo:, modes_of_transport:, tenant_vehicle_ids:, final: false)
         new(
-          tenant: tenant,
+          organization: organization,
           cargo: cargo,
           modes_of_transport: modes_of_transport,
           tenant_vehicle_ids: tenant_vehicle_ids,
@@ -72,10 +72,10 @@ module Wheelhouse
         ).perform
       end
 
-      def initialize(tenant:, cargo:, modes_of_transport: [], tenant_vehicle_ids:, final: false)
-        @tenant = tenant
+      def initialize(organization:, cargo:, modes_of_transport: [], tenant_vehicle_ids:, final: false)
+        @organization = organization
         @cargo = cargo
-        @max_dimensions_bundles = ::Legacy::MaxDimensionsBundle.where(tenant_id: @tenant.legacy_id)
+        @max_dimensions_bundles = ::Legacy::MaxDimensionsBundle.where(organization_id: @organization.id)
         @modes_of_transport = modes_of_transport
         @tenant_vehicle_ids = tenant_vehicle_ids
         @carrier_ids = Legacy::TenantVehicle.where(id: @tenant_vehicle_ids).pluck(:carrier_id)
@@ -86,7 +86,7 @@ module Wheelhouse
 
       private
 
-      attr_reader :max_dimensions_bundles, :tenant, :cargo, :modes_of_transport, :carrier_ids,
+      attr_reader :max_dimensions_bundles, :organization, :cargo, :modes_of_transport, :carrier_ids,
                   :tenant_vehicle_ids, :errors, :aggregate_errors, :final
 
       def validate_cargo(cargo_unit:)

@@ -6,7 +6,7 @@ export function getApiHost () {
 
 export function getTenantApiUrl () {
   const { localStorage } = window
-  const id = localStorage.getItem('tenantId')
+  const id = localStorage.getItem('organizationId')
 
-  return `${getConfig().apiUrl}/tenants/${id}`
+  return `${getConfig().apiUrl}/organizations/${id}`
 }

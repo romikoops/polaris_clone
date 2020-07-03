@@ -8,7 +8,7 @@ FactoryBot.define do
     cargo_type { 'GP' }
     goods_value_cents { 1_000 }
     goods_value_currency { :usd }
-    association :tenant, factory: :tenants_tenant
+    association :organization, factory: :organizations_organization
     association :cargo, factory: :cargo_cargo
 
     trait :fcl do
@@ -79,16 +79,19 @@ end
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  cargo_id             :uuid
+#  organization_id      :uuid
 #  tenant_id            :uuid
 #
 # Indexes
 #
-#  index_cargo_units_on_cargo_class  (cargo_class)
-#  index_cargo_units_on_cargo_id     (cargo_id)
-#  index_cargo_units_on_cargo_type   (cargo_type)
-#  index_cargo_units_on_tenant_id    (tenant_id)
+#  index_cargo_units_on_cargo_class      (cargo_class)
+#  index_cargo_units_on_cargo_id         (cargo_id)
+#  index_cargo_units_on_cargo_type       (cargo_type)
+#  index_cargo_units_on_organization_id  (organization_id)
+#  index_cargo_units_on_tenant_id        (tenant_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (cargo_id => cargo_cargos.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

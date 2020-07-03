@@ -27,14 +27,11 @@ class Admin::TruckingController < Admin::AdminBaseController
         sandbox: @sandbox
       }
     )
-    groups = Tenants::Group.where(
-      tenant_id: Tenants::Tenant.find_by(legacy_id: current_tenant&.id)&.id,
-      sandbox: @sandbox
-    )
 
+    groups = Groups::Group.where(organization_id: current_organization)
     trucking_providers = Trucking::Courier
       .where(id: Trucking::Trucking
-                  .where(hub_id: params[:id], tenant_id: current_tenant.id)
+                  .where(hub_id: params[:id], organization: current_organization)
                   .select(:courier_id).distinct)
       .pluck(:name)
 
@@ -49,7 +46,7 @@ class Admin::TruckingController < Admin::AdminBaseController
   end
 
   def edit
-    tp = Trucking::Trucking.find_by(id: params[:id], sandbox: @sandbox)
+    tp = Trucking::Trucking.find_by(id: params[:id])
     ntp = params[:pricing].as_json
     tp.update_attributes(ntp.except('id', 'cargo_class', 'load_type', 'courier_id', 'truck_type', 'carriage'))
     response_handler(tp)
@@ -65,15 +62,14 @@ class Admin::TruckingController < Admin::AdminBaseController
       document = Legacy::File.create!(
         text: '',
         doc_type: 'truckings',
-        sandbox: @sandbox,
-        tenant: current_tenant,
+        tenant: current_organization,
         file: upload_params[:file]
       )
 
       args = {
         params: { 'xlsx' => upload_params[:file] },
         hub_id: upload_params[:id],
-        user: current_user,
+        user: organization_user,
         group: upload_params[:group] == 'all' ? nil : upload_params[:group],
         sandbox: @sandbox,
         document: document
@@ -89,7 +85,7 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def download
     options = params[:options].as_json.symbolize_keys
-    options[:tenant_id] = current_user.tenant_id
+    options[:organization_id] = current_organization.id
     options[:group_id] = options[:target] == 'all' ? nil : options[:target]
     url = DocumentService::TruckingWriter.new(options).perform
     response_handler(url: url, key: 'trucking')

@@ -3,24 +3,23 @@
 require "rails_helper"
 
 RSpec.describe Api::Routing::Trucking::CountriesService, type: :service do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let!(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-  let!(:user) { FactoryBot.create(:tenants_user, tenant: tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:location_1) { FactoryBot.create(:zipcode_location, zipcode: "00001", country_code: "SE") }
   let(:location_2) { FactoryBot.create(:zipcode_location, zipcode: "00002", country_code: "SE") }
-  let(:results) { described_class.new(target: :destination, tenant: tenant, load_type: "cargo_item").perform }
+  let(:results) { described_class.new(target: :destination, organization: organization, load_type: "cargo_item").perform }
 
   describe ".perform" do
-    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
-    let(:origin_hub) { itinerary.hubs.find_by(name: "Gothenburg Port") }
-    let(:destination_hub) { itinerary.hubs.find_by(name: "Shanghai Port") }
+    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+    let(:origin_hub) { itinerary.origin_hub }
+    let(:destination_hub) { itinerary.destination_hub }
 
     before do
       FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
-      FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: origin_hub, location: location_1)
-      FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: origin_hub, location: location_2)
+      FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: location_1)
+      FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: location_2)
 
-      FactoryBot.create(:felixstowe_shanghai_itinerary, tenant: legacy_tenant)
+      FactoryBot.create(:felixstowe_shanghai_itinerary, organization: organization)
     end
 
     context "with single country trucking" do

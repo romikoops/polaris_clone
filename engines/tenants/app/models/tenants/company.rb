@@ -11,7 +11,7 @@ module Tenants
     has_many :users, class_name: 'Tenants::User'
     has_many :groups, through: :memberships
     belongs_to :address, class_name: 'Legacy::Address', optional: true
-    belongs_to :tenant
+    belongs_to :organization, class_name: 'Organizations::Organization'
     has_one :country, through: :address, class_name: 'Legacy::Country'
 
     pg_search_scope :name_search, against: %i(name), using: {
@@ -32,11 +32,11 @@ module Tenants
                     }
 
     def groups
-      ::Tenants::Group.where(id: memberships.pluck(:group_id))
+      ::Groups::Group.where(id: memberships.pluck(:group_id))
     end
 
     def employees
-      ::Tenants::User.where(company_id: id)
+      ::Organizations::User.where(company_id: id)
     end
 
     def for_table_json(options = {})

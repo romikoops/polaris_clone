@@ -4,7 +4,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   before_action :initialize_variables, only: %i(index auto_generate_schedules)
 
   def index
-    map_data = current_tenant.map_data
+    map_data = MapDatum.where(organization: current_organization)
     response_handler(
       mapData: map_data,
       itineraries: itinerary_route_json
@@ -27,7 +27,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def download_schedules
     options = params[:options].as_json.symbolize_keys
-    options[:tenant_id] = current_user.tenant_id
+    options[:organization_id] = current_organization.id
     url = DocumentService::ScheduleSheetWriter.new(options).perform
     response_handler(url: url, key: 'schedules')
   end
@@ -35,11 +35,11 @@ class Admin::SchedulesController < Admin::AdminBaseController
   def generate_schedules_from_sheet
     handle_upload(
       params: upload_params,
-      text: "#{current_tenant.subdomain}:schedule_generator",
+      text: "#{current_organization.slug}:schedule_generator",
       type: 'schedules_generator',
       options: {
         sandbox: @sandbox,
-        user: current_user
+        user: organization_user
       }
     )
   end
@@ -47,11 +47,11 @@ class Admin::SchedulesController < Admin::AdminBaseController
   def upload
     handle_upload(
       params: upload_params,
-      text: "#{current_tenant.subdomain}:schedules",
+      text: "#{current_organization.slug}:schedules",
       type: 'schedules',
       options: {
         sandbox: @sandbox,
-        user: current_user
+        user: organization_user
       }
     )
   end
@@ -76,17 +76,13 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def mot_schedule(mot)
-    tenant.itineraries.where(mode_of_transport: mot, sandbox: @sandbox).flat_map do |itin|
+    Itinerary.where(organization: current_organization, mode_of_transport: mot, sandbox: @sandbox).flat_map do |itin|
       itin.trips.limit(10).order(:start_date)
     end
   end
 
-  def tenant
-    @tenant ||= Tenant.find_by(id: current_user.tenant_id)
-  end
-
   def itinerary_route_json
-    Itinerary.where(tenant_id: current_user.tenant_id, sandbox: @sandbox).map(&:as_options_json)
+    Itinerary.where(organization_id: current_organization.id, sandbox: @sandbox).map(&:as_options_json)
   end
 
   def stops
@@ -116,7 +112,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def itineraries
-    @itineraries ||= Itinerary.where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
+    @itineraries ||= Itinerary.where(organization_id: current_organization.id, sandbox: @sandbox)
   end
 
   def trip_layovers

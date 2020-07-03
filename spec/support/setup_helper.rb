@@ -10,7 +10,7 @@ module SetupHelper
                    customs_export_paper: args[:extras][:customs_export_paper],
                    consolidate_cargo: args[:extras][:consolidate_cargo])
 
-      _currency = currency(today_value: { USD: 1, SEK: 8.88957, CNY: 6.596105, EUR: 0.8575 }, base: args[:target_currency], tenant_id: _user.tenant.id)
+      _currency = currency(today_value: { USD: 1, SEK: 8.88957, CNY: 6.596105, EUR: 0.8575 }, base: args[:target_currency], organization_id: _user.tenant.id)
       _transport_category = transport_category(cargo_class: args[:cargo_class],
                                                load_type: args[:load_type], mot: args[:mode_of_transport])
       _vehicle = vehicle(categories: [_transport_category], name: args[:vehicle_name])
@@ -107,7 +107,7 @@ module SetupHelper
     end
 
     def currency(arg)
-      create(:currency, today: arg[:today_value], yesterday: arg[:yesterday_value], base: arg[:base], tenant_id: arg[:tenant_id])
+      create(:currency, today: arg[:today_value], yesterday: arg[:yesterday_value], base: arg[:base], organization_id: arg[:organization_id])
     end
 
     def hub_trucking(arg)

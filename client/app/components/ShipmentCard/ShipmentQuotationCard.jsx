@@ -9,7 +9,6 @@ import adminStyles from '../Admin/Admin.scss'
 import {
   gradientTextGenerator,
   switchIcon,
-  splitName,
   humanizeSnakeCase
 } from '../../helpers'
 
@@ -24,6 +23,7 @@ class ShipmentQuotationCard extends Component {
     const { shipment, dispatches } = this.props
     dispatches.getShipment(shipment.id, true)
   }
+
   render () {
     const {
       shipment,
@@ -38,8 +38,6 @@ class ShipmentQuotationCard extends Component {
     const deselectedStyle = {
       ...gradientTextGenerator('#DCDBDC', '#DCDBDC')
     }
-    const destinationHubObj = splitName(get(shipment, 'destination_hub.name'))
-    const originHubObj = splitName(get(shipment, 'origin_hub.name'))
 
     return (
       <div
@@ -63,17 +61,32 @@ class ShipmentQuotationCard extends Component {
           </div>
           <div className={`flex-60 layout-row layout-align-start-center ${styles.hub_name}`}>
             <div className="layout-column layout-align-center-start">
-              <p>{t('common:from')}:&nbsp;<span>{originHubObj.name}</span></p>
-              <p>{t('common:to')}:&nbsp;<span>{destinationHubObj.name}</span></p>
+              <p>
+                {t('common:from')}
+                :&nbsp;
+                <span>{get(shipment, 'origin_hub.name')}</span>
+              </p>
+              <p>
+                {t('common:to')}
+                :&nbsp;
+                <span>{get(shipment, 'destination_hub.name')}</span>
+              </p>
             </div>
           </div>
           <div className={`layout-row flex-20 layout-align-start-center ${styles.ett}`}>
-            { shipment.planned_eta ? (<div>
-              <b>{moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} {t('common:days')}</b><br />
-              <span className={`${styles.grey}`}>
-                {t('shipment:estimatedTransitTime')}
-              </span>
-            </div>) : '' }
+            { shipment.planned_eta ? (
+              <div>
+                <b>
+                  {moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')}
+                  {' '}
+                  {t('common:days')}
+                </b>
+                <br />
+                <span className={`${styles.grey}`}>
+                  {t('shipment:estimatedTransitTime')}
+                </span>
+              </div>
+            ) : '' }
           </div>
         </div>
         <div
@@ -81,8 +94,14 @@ class ShipmentQuotationCard extends Component {
         >
           <div className="layout-row flex-35 layout-align-center-center">
             <div className=" flex-100">
-              <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
-              <p>{t('shipment:placedAt')}&nbsp;
+              <b className={styles.ref_row_card}>
+                {t('common:ref')}
+                :&nbsp;
+                {shipment.imc_reference}
+              </b>
+              <p>
+                {t('shipment:placedAt')}
+&nbsp;
                 {shipment.booking_placed_at
                   ? moment(shipment.booking_placed_at).format('DD/MM/YYYY | HH:mm') : '-'}
               </p>
@@ -111,7 +130,8 @@ class ShipmentQuotationCard extends Component {
             <div className="layout-row flex-10">
               <div className="layout-row layout-align-center-center">
                 <span className={`${styles.smallText}`}>
-                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_count}</span>
+                  <b>x</b>
+                  <span className={`${styles.bigText}`}>{shipment.cargo_count}</span>
                 </span>
               </div>
             </div>

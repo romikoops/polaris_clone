@@ -15,11 +15,14 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'imc-core'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-users'
+  s.add_dependency 'imc-organizations'
+  s.add_dependency 'imc-authentication'
+
 
   s.add_dependency 'active_model_serializers', '~> 0.10', '>= 0.10.8'
   s.add_dependency 'doorkeeper', '~> 5.0.2'
-  s.add_dependency 'sorcery', '~> 0.13.0'
+  # s.add_dependency 'sorcery', '~> 0.13.0'
 
   Gemhelper.common(s)
 end

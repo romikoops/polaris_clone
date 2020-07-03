@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'imc-core'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
 
   Gemhelper.common(s)
 end

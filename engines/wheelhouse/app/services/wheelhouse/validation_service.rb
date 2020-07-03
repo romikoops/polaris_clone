@@ -4,15 +4,15 @@ module Wheelhouse
   class ValidationService
     attr_reader :errors
 
-    def initialize(user:, routing:, cargo:, load_type:, final: false)
+    def initialize(user:, organization:, routing:, cargo:, load_type:, final: false)
       @user = user
-      @tenant = user.tenant
+      @organization = organization
       @routing = routing
       @cargo = cargo
       @load_type = load_type
       @errors = []
       @final = final
-      @scope = Tenants::ScopeService.new(target: user, tenant: @tenant).fetch
+      @scope = OrganizationManager::ScopeService.new(target: user, organization: organization).fetch
     end
 
     def validate
@@ -25,7 +25,7 @@ module Wheelhouse
 
     private
 
-    attr_reader :user, :tenant, :routing, :cargo, :load_type, :scope, :final
+    attr_reader :user, :organization, :routing, :cargo, :load_type, :scope, :final
 
     def cargo_validations
       return [] if cargo.units.empty?
@@ -35,7 +35,7 @@ module Wheelhouse
 
       validation_klass.errors(
         cargo: cargo,
-        tenant: tenant,
+        organization: organization,
         modes_of_transport: modes_of_transport,
         tenant_vehicle_ids: tenant_vehicle_ids,
         final: final
@@ -77,7 +77,7 @@ module Wheelhouse
     def pricings
       @pricings ||= begin
         pricing_assocation = Pricings::Pricing.where(itinerary: routes, load_type: load_type)
-        pricing_assocation = pricing_assocation.where(group: user.all_groups) if scope[:dedicated_pricings_only]
+        pricing_assocation = pricing_assocation.where(group: user_groups) if scope[:dedicated_pricings_only]
         pricing_assocation
       end
     end
@@ -96,6 +96,7 @@ module Wheelhouse
 
     def routes
       @routes ||= Wheelhouse::RouteFinderService.routes(
+        organization: organization,
         origin: routing[:origin],
         destination: routing[:destination],
         load_type: load_type,
@@ -103,6 +104,12 @@ module Wheelhouse
       )
     end
 
+    def user_groups
+      companies = Companies::Membership.where(member: user)
+      membership_ids = Groups::Membership.where(member: user)
+                        .or(Groups::Membership.where(member: companies)).select(:group_id)
+    end
+    
     def includes_trucking?
       routing.dig(:origin, :latitude).present? || routing.dig(:destination, :latitude).present?
     end

@@ -6,21 +6,23 @@ class QuoteMailer < ApplicationMailer
   add_template_helper(ApplicationHelper)
 
   def quotation_email(shipment, shipments, email, quotation, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    set_current_id(organization_id: shipment.organization_id)
     return if invalid_records(shipments: [shipment, *shipments])
 
-    @shipments = shipments
-    @shipment = shipment
+    @scope = scope_for(record: @user)
+    @shipments = Legacy::ShipmentDecorator.decorate_collection(shipments, context: { scope: @scope})
+    @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
     @quotation = quotation
     @user = @shipment.user
-    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
-    pdf_service = Pdf::Service.new(user: @user, tenant: @user.tenant)
+    @user_profile = ProfileTools.profile_for_user(user: @user)
+    @organization = ::Organizations::Organization.current
+    pdf_service = Pdf::Service.new(user: @user, organization: @organization)
     @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)
-    @tenant = Tenant.find(@user.tenant_id)
-    @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
-    @theme = ::Tenants::ThemeDecorator.new(@tenants_tenant.theme).legacy_format
+    @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
+    @theme = @org_theme.legacy_format
     @email = email[/[^@]+/]
-    @content = Legacy::Content.get_component('QuotePdf', @user.tenant.id)
-    @scope = scope_for(record: @user, sandbox: sandbox)
+    @content = Legacy::Content.get_component('QuotePdf', ::Organizations.current_id)
+
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipments.first.mode_of_transport}.png"
     ).read
@@ -28,15 +30,15 @@ class QuoteMailer < ApplicationMailer
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
     document = pdf_service.quotation_pdf(quotation: @quotation)&.attachment
     attachments[pdf_name] = document if document.present?
-    email_logo = @tenants_tenant.theme.email_logo
+    email_logo = @org_theme.email_logo
     attachments.inline['logo.png'] = email_logo.attached? ? email_logo&.download : ''
     attachments.inline['icon.png'] = @mot_icon
 
     mail(
-      from: Mail::Address.new("no-reply@#{@tenants_tenant.slug}.itsmycargo.shop")
-                         .tap { |a| a.display_name = @tenant.name }.format,
-      reply_to: @tenant.emails.dig('support', 'general'),
-      to: mail_target_interceptor(@user, email),
+      from: Mail::Address.new("no-reply@#{@organization.slug}.itsmycargo.shop")
+                         .tap { |a| a.display_name = @org_theme.name }.format,
+      reply_to: @org_theme.emails.dig('support', 'general'),
+      to: mail_target_interceptor(@quotation.billing, email),
       subject: subject_line(shipment: @shipment, type: :quotation, references: @shipments.pluck(:imc_reference))
     ) do |format|
       format.html
@@ -45,31 +47,39 @@ class QuoteMailer < ApplicationMailer
   end
 
   def quotation_admin_email(quotation, shipment = nil, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    user_id = quotation&.user_id || shipment&.user_id
+    @user = Users::User.find_by(id: user_id)
+    @user_profile = Profiles::ProfileService.fetch(user_id: user_id)
+
     @shipments = quotation ? quotation.shipments : [shipment]
     @shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
     return if invalid_records(shipments: [@shipment, *@shipments])
 
+    @scope = scope_for(record: @user)
+    @shipments = Legacy::ShipmentDecorator.decorate_collection(@shipments, context: { scope: @scope})
+    @shipment = Legacy::ShipmentDecorator.new(@shipment, context: { scope: @scope})
     @quotation = quotation
-    @tenant = Tenant.find(@shipment.tenant_id)
-    @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
-    @theme = ::Tenants::ThemeDecorator.new(@tenants_tenant.theme).legacy_format
-    @user = (quotation&.user || shipment&.user)
-    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
 
-    pdf_service = Pdf::Service.new(user: @user, tenant: @tenant)
+    organization_id = (@user&.organization_id || @shipment&.organization_id)
+    set_current_id(organization_id: organization_id)
+    @organization = ::Organizations::Organization.current
+    @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
+    @theme = @org_theme.legacy_format
+
+    pdf_service = Pdf::Service.new(user: @user, organization: @organization)
     @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)
-    @content = Legacy::Content.get_component('QuotePdf', @user.tenant.id)
-    @scope = scope_for(record: @user, sandbox: sandbox)
+    @content = Legacy::Content.get_component('QuotePdf', @organization.id)
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
     document = pdf_service.admin_quotation(quotation: @quotation, shipment: shipment)&.attachment
     attachments[pdf_name] = document if document.present?
-    email_logo = @tenants_tenant.theme.email_logo
+    email_logo = @org_theme.email_logo
+    billing = (quotation&.billing || shipment&.billing)
     attachments.inline['logo.png'] = email_logo.attached? ? email_logo&.download : ''
     mail(
-      from: Mail::Address.new("no-reply@#{@tenants_tenant.slug}.itsmycargo.shop")
+      from: Mail::Address.new("no-reply@#{@organization.slug}.itsmycargo.shop")
                          .tap { |a| a.display_name = 'ItsMyCargo Quotation Tool' }.format,
       reply_to: Settings.emails.support,
-      to: mail_target_interceptor(@user, @tenant.email_for(:sales, @shipment.mode_of_transport)),
+      to: mail_target_interceptor(billing, @org_theme.email_for(:sales, @shipment.mode_of_transport)),
       subject: subject_line(shipment: @shipment, type: :quotation, references: @shipments.pluck(:imc_reference))
     ) do |format|
       format.html
@@ -90,8 +100,8 @@ class QuoteMailer < ApplicationMailer
       quotes: quotes,
       color: @theme['colors']['primary'],
       name: 'quotation',
-      remarks: Legacy::Remark.where(tenant_id: @user.tenant_id, sandbox: sandbox).order(order: :asc),
-      scope: scope_for(record: @user, sandbox: sandbox)
+      remarks: Legacy::Remark.where(organization_id: @organization.id).order(order: :asc),
+      scope: scope_for(record: @user)
     )
     quotation.generate
   end

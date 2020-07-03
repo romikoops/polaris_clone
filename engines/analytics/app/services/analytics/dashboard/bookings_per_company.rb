@@ -6,7 +6,7 @@ module Analytics
       def data
         @data ||= tally(
           requests: requests_with_companies,
-          grouping_attribute: 'tenants_companies.name',
+          grouping_attribute: 'companies_companies.name',
           order_by_count: true,
           order: :desc
         )

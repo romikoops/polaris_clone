@@ -3,16 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Rows::Base do
-  let(:tenant) { create(:tenant) }
-  let(:row) {
-    described_class.new(
-      tenant: tenant,
-      row_data: {
-        row_nr: 1,
-        sheet_name: 'Test'
-      }
-    )
-  }
+  let(:organization) { create(:organizations_organization) }
+  let(:row) { described_class.new(organization: organization, row_data: { row_nr: 1, sheet_name: 'Test' }) }
 
   describe '#[]' do
     it 'finds the corresponding \'.\' method (row[:nr] --> row.nr)' do

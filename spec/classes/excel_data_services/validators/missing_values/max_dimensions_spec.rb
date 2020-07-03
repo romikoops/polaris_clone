@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::MissingValues::MaxDimensions do
-  let(:tenant) { create(:tenant) }
-  let(:options) { { tenant: tenant, sheet_name: 'Sheet1', data: input_data } }
+  let(:organization) { create(:organizations_organization) }
+  let(:options) { { organization: organization, sheet_name: 'Sheet1', data: input_data } }
 
   context 'with faulty data' do
     let(:input_data) do
@@ -43,7 +43,7 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::MaxDimensions do
           destination_locode: 'SEGOT',
           row_nr: 3
         }
-      ].map { |row| ExcelDataServices::Rows::MaxDimensions.new(tenant: tenant, row_data: row) }
+      ].map { |row| ExcelDataServices::Rows::MaxDimensions.new(organization: organization, row_data: row) }
     end
     let(:validator) { described_class.new(options) }
 

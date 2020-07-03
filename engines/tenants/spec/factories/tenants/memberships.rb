@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :tenants_membership, class: 'Tenants::Membership' do
+  factory :tenants_membership, class: 'Groups::Membership' do
     association :group, factory: :tenants_group
     association :member, factory: :tenants_users
     trait :user do

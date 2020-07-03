@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require 'admiralty_auth'
+require 'companies'
 require 'core'
-require 'tenants'
+require 'organizations'
 
 require 'axlsx'
 require 'axlsx_rails'

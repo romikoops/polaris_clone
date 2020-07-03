@@ -2,23 +2,23 @@
 
 module Tenants
   class HierarchyService
-    def initialize(target: nil, tenant: nil)
+    def initialize(target: nil, organization: nil)
       @target = target
-      @tenant = tenant || target&.tenant
+      @organization = organization || target&.organization
     end
 
     def fetch
-      @fetch ||= [tenant_hierarchy, target_hierarchy].flatten.compact
+      @fetch ||= [organization_hierarchy, target_hierarchy].flatten.compact
     end
 
     private
 
-    attr_reader :target, :tenant
+    attr_reader :target, :organization
 
-    def tenant_hierarchy
-      return [] unless tenant
+    def organization_hierarchy
+      return [] unless organization
 
-      [tenant.groups, tenant]
+      [Groups::Group.where(organization_id: organization.id), organization]
     end
 
     def target_hierarchy

@@ -28,7 +28,7 @@ class Admin::MarginsController < Admin::AdminBaseController
       pricing_id: params[:pricing_id],
       selectedHubDirection: params[:selectedHubDirection],
       marginType: params[:marginType],
-      tenant_id: params[:tenant_id],
+      organization_id: params[:organization_id],
       groupId: params[:groupId],
       directions: params[:hub_direction],
       operand: params[:operand],
@@ -92,7 +92,7 @@ class Admin::MarginsController < Admin::AdminBaseController
         hash[:pricings] << pr.as_json
       end
     else
-      hash[:service_levels] = current_tenant.tenant_vehicles.map do |tv|
+      hash[:service_levels] = Legacy::TenantVehicle.where(organization_id: current_organization.id).map do |tv|
         {
           service_level: tv.full_name,
           carrier_id: tv.carrier_id,
@@ -100,12 +100,14 @@ class Admin::MarginsController < Admin::AdminBaseController
         }
       end
     end
-    hash[:groups] = Tenants::Group.where(tenant_id: Tenants::Tenant.find_by(legacy_id: current_tenant.id)&.id)
+    hash[:groups] = Groups::Group.where(organization_id: current_organization.id)
     response_handler(hash)
   end
 
   def itinerary_list
-    list_options = current_tenant.itineraries.list_search(params[:query]).limit(30).map do |it|
+    list_options = Legacy::Itinerary
+                    .where(organization: current_organization)
+                    .list_search(params[:query]).limit(30).map do |it|
       { label: "(#{it.mode_of_transport.capitalize}) #{it.name}", value: it.as_options_json }
     end
     all = { label: 'All', value: nil }
@@ -116,7 +118,7 @@ class Admin::MarginsController < Admin::AdminBaseController
     results = Pricings::Preview.new(
       target: get_target(type: test_params[:targetType], id: test_params[:targetId]),
       params: test_params,
-      tenant: Tenants::Tenant.find_by(legacy_id: current_tenant.id)
+      organization: current_organization
     ).perform
     response_handler(results: results)
   end
@@ -143,7 +145,7 @@ class Admin::MarginsController < Admin::AdminBaseController
         sandbox: @sandbox,
         applicable: applicable,
         group_id: upload_params[:group_id],
-        user: current_user
+        user: organization_user
       }
     )
   end
@@ -157,20 +159,21 @@ class Admin::MarginsController < Admin::AdminBaseController
   def get_target(type: , id:)
     case type
     when 'group'
-      Tenants::Group.find_by(id: id, sandbox: @sandbox)
+      Groups::Group.find_by(id: id)
     when 'company'
-      Tenants::Company.find_by(id: id, sandbox: @sandbox)
+      Companies::Company.find_by(id: id)
     when 'user'
-      Tenants::User.find_by(legacy_id: id, sandbox: @sandbox)
+      Organizations::User.find_by(id: id)
     end
   end
 
   def extract_tenant_vehicle_ids
     if params[:tenant_vehicle_ids] == 'all' && params[:itinerary_id]
-      current_tenant.itineraries.where(sandbox: @sandbox)
-                    .find(params[:itinerary_id]).rates.pluck(:tenant_vehicle_id)
+      Legacy::Itinerary
+      .find_by(id: params[:itinerary_id], organization: current_organization)
+      .rates.pluck(:tenant_vehicle_id)
     elsif params[:tenant_vehicle_ids] == 'all'
-      current_tenant.tenant_vehicles.where(sandbox: @sandbox).ids
+      Legacy::TenantVehicle.where(organization: current_organization, sandbox: @sandbox).ids
     else
       params[:tenant_vehicle_ids].split(',')
     end
@@ -178,7 +181,7 @@ class Admin::MarginsController < Admin::AdminBaseController
 
   def extract_cargo_classes
     if params[:cargo_classes] == 'all' && params[:itinerary_id]
-      current_tenant.itineraries.where(sandbox: @sandbox)
+      Legacy::Itinerary.where(organization: current_organization, sandbox: @sandbox)
                     .find(params[:itinerary_id]).rates.pluck(:cargo_class)
     elsif params[:cargo_classes] == 'all'
       %w(lcl) + Legacy::Container::CARGO_CLASSES
@@ -189,10 +192,11 @@ class Admin::MarginsController < Admin::AdminBaseController
 
   def pricing_fees # rubocop:disable Metrics/AbcSize
     if params[:pricing_id] && params[:pricing_id] != 'null'
-      pricing = current_tenant.rates.where(sandbox: @sandbox).find(params[:pricing_id])
+      pricing = Pricings::Pricing.find_by(organization: current_organization, id: params[:pricing_id])
       pricing&.fees&.map(&:fee_name_and_code)
     else
-      pricings = current_tenant.rates.where(
+      pricings = Pricings::Pricing.where(
+        organization: current_organization,
         tenant_vehicle_id: extract_tenant_vehicle_ids,
         itinerary_id: params[:itinerary_ids],
         cargo_class: extract_cargo_classes
@@ -209,7 +213,8 @@ class Admin::MarginsController < Admin::AdminBaseController
 
   def local_charge_fees
     local_charges =
-      current_tenant.local_charges.where(
+      Legacy::LocalCharge.where(
+        organization: current_organization,
         sandbox: @sandbox,
         hub_id: params[:hub_ids].split(','),
         direction: params[:directions].split(','),
@@ -233,7 +238,7 @@ class Admin::MarginsController < Admin::AdminBaseController
         sandbox: @sandbox,
         hub_id: params[:hub_ids].split(','),
         carriage: carriages,
-        tenant: current_tenant,
+        organization: current_organization,
         cargo_class: extract_cargo_classes
       )
 
@@ -241,8 +246,7 @@ class Admin::MarginsController < Admin::AdminBaseController
   end
 
   def margins
-    tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)
-    @margins ||= ::Pricings::Margin.where(tenant_id: tenant.id, sandbox: @sandbox)
+    @margins ||= ::Pricings::Margin.where(organization_id: current_organization.id)
   end
 
   def pagination_options
@@ -262,19 +266,19 @@ class Admin::MarginsController < Admin::AdminBaseController
       case params[:target_type]
       when 'company'
         query = query.where(
-          applicable: Tenants::Company.find_by(id: params[:target_id], sandbox: @sandbox)
+          applicable: Companies::Company.find_by(id: params[:target_id])
         )
       when 'group'
         query = query.where(
-          applicable: Tenants::Group.find_by(id: params[:target_id], sandbox: @sandbox)
+          applicable: Groups::Group.find_by(id: params[:target_id])
         )
       when 'user'
         query = query.where(
-          applicable: Tenants::User.find_by(legacy_id: params[:target_id], sandbox: @sandbox)
+          applicable: Organizations::User.find_by(id: params[:target_id])
         )
       when 'tenant'
         query = query.where(
-          applicable: Tenants::Tenant.find_by(legacy_id: params[:target_id])
+          applicable: Organizations::Organization.find_by(id: params[:target_id])
         )
       when 'itinerary'
         query = query.where(itinerary_id: params[:target_id])

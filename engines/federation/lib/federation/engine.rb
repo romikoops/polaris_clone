@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'tenants'
+require 'organizations'
 
 module Federation
   class Engine < ::Rails::Engine

@@ -5,24 +5,24 @@ require 'rails_helper'
 RSpec.describe Pricings::Calculator do
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-
+  let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:vehicle) do
     FactoryBot.create(:vehicle,
                       tenant_vehicles: [tenant_vehicle_1])
   end
-  let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
+  let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', organization: organization) }
   let!(:currency) { FactoryBot.create(:legacy_currency) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
+  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
-  let(:lcl_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-  let(:fcl_20_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-  let(:fcl_40_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-  let(:fcl_40_hq_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-  let(:agg_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-  let(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1) }
+  let(:lcl_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
+  let(:fcl_20_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
+  let(:fcl_40_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
+  let(:fcl_40_hq_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:agg_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
+  let(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary) }
   let(:lcl_cargo) { FactoryBot.create(:legacy_cargo_item, shipment_id: lcl_shipment.id, cargo_item_type_id: pallet.id) }
-  let(:fcl_20_pricing) { FactoryBot.create(:fcl_20_pricing, tenant_vehicle: tenant_vehicle_1) }
+  let(:fcl_20_pricing) { FactoryBot.create(:fcl_20_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary) }
   let(:fcl_20_cargo) { FactoryBot.create(:legacy_container, cargo_class: 'fcl_20', shipment_id: fcl_20_shipment.id) }
   let(:fcl_40_pricing) { FactoryBot.create(:fcl_40_pricing, tenant_vehicle: tenant_vehicle_1) }
   let(:fcl_40_cargo) { FactoryBot.create(:legacy_container, cargo_class: 'fcl_40', shipment_id: fcl_20_shipment.id) }
@@ -48,6 +48,7 @@ RSpec.describe Pricings::Calculator do
   describe '.get_cargo_hash' do
     it 'returns the correct cargo weight for a cargo item' do
       hash = described_class.new(cargo: lcl_cargo,
+                                 organization: organization,
                                  pricing: lcl_pricing.as_json,
                                  user: user,
                                  mode_of_transport: 'ocean',
@@ -56,6 +57,7 @@ RSpec.describe Pricings::Calculator do
     end
     it 'returns the correct cargo weight for an agg cargo item' do
       hash = described_class.new(cargo: agg_cargo,
+                                 organization: organization,
                                  pricing: lcl_pricing.as_json,
                                  user: user,
                                  mode_of_transport: 'ocean',
@@ -64,6 +66,7 @@ RSpec.describe Pricings::Calculator do
     end
     it 'returns the correct cargo weight for a container' do
       hash = described_class.new(cargo: fcl_20_cargo,
+                                 organization: organization,
                                  pricing: lcl_pricing.as_json,
                                  user: user,
                                  mode_of_transport: 'ocean',
@@ -72,6 +75,7 @@ RSpec.describe Pricings::Calculator do
     end
     it 'returns the correct cargo weight for a consolidated cargo' do
       hash = described_class.new(cargo: consolidated_cargo,
+                                 organization: organization,
                                  pricing: lcl_pricing.as_json,
                                  user: user,
                                  mode_of_transport: 'ocean',
@@ -83,6 +87,7 @@ RSpec.describe Pricings::Calculator do
   describe '.round_fee' do
     it 'rounds when should_round is true' do
       result = described_class.new(cargo: lcl_cargo,
+                                   organization: organization,
                                    pricing: lcl_pricing.as_json,
                                    user: user,
                                    mode_of_transport: 'ocean',
@@ -91,6 +96,7 @@ RSpec.describe Pricings::Calculator do
     end
     it 'doesn`t round when should_round is false' do
       result = described_class.new(cargo: lcl_cargo,
+                                   organization: organization,
                                    pricing: lcl_pricing.as_json,
                                    user: user,
                                    mode_of_transport: 'ocean',
@@ -101,9 +107,10 @@ RSpec.describe Pricings::Calculator do
 
   describe '.determine_cargo_item_price' do
     it 'calculates the correct price for PER_WM' do
-      wm_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      wm_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_wm, pricing: wm_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: wm_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -113,9 +120,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_hbl' do
-      hbl_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      hbl_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_hbl, pricing: hbl_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: hbl_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -125,9 +133,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_shipment' do
-      shipment_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      shipment_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_shipment, pricing: shipment_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: shipment_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -137,9 +146,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_item' do
-      item_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      item_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_item, pricing: item_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: item_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -149,9 +159,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_cbm' do
-      cbm_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      cbm_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_cbm, pricing: cbm_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: cbm_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -161,9 +172,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_kg' do
-      kg_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      kg_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_kg, pricing: kg_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: kg_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -172,9 +184,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_ton' do
-      ton_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      ton_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_ton, pricing: ton_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: ton_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -183,9 +196,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_x_kg_flat' do
-      x_kg_flat_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      x_kg_flat_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_x_kg_flat, pricing: x_kg_flat_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: x_kg_flat_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -194,9 +208,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_cbm_range' do
-      cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_cbm_range, pricing: cbm_range_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: cbm_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -206,9 +221,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_wm_range' do
-      wm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      wm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_wm_range, pricing: wm_range_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: wm_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -218,9 +234,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_cbm_range_flat' do
-      cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_cbm_range_flat, pricing: cbm_range_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: cbm_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -230,9 +247,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_wm_range_flat' do
-      wm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      wm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_wm_range_flat, pricing: wm_range_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: wm_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -243,9 +261,10 @@ RSpec.describe Pricings::Calculator do
 
     it 'calculates the correct price for per_cbm_range above range' do
       overcbm_cargo = FactoryBot.create(:legacy_aggregated_cargo, shipment_id: agg_shipment.id, weight: 1000, volume: 13)
-      cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_cbm_range, pricing: cbm_range_pricing)
       result, _metadata = described_class.new(cargo: overcbm_cargo,
+                                              organization: organization,
                                               pricing: cbm_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -254,9 +273,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_container_range' do
-      container_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      container_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_container_range, pricing: container_range_pricing)
       result, _metadata = described_class.new(cargo: fcl_20_cargo,
+                                              organization: organization,
                                               pricing: container_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -267,9 +287,10 @@ RSpec.describe Pricings::Calculator do
 
     it 'calculates the correct price for per_container_range above range' do
       fat_fcl_20_cargo = FactoryBot.create(:legacy_container, cargo_class: 'fcl_20', shipment_id: fcl_20_shipment.id, quantity: 24)
-      container_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      container_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_container_range, pricing: container_range_pricing)
       result, _metadata = described_class.new(cargo: fat_fcl_20_cargo,
+                                              organization: organization,
                                               pricing: container_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -278,9 +299,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_unit_range' do
-      unit_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      unit_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_unit_range, pricing: unit_range_pricing)
       result, _metadata = described_class.new(cargo: fcl_20_cargo,
+                                              organization: organization,
                                               pricing: unit_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -290,9 +312,10 @@ RSpec.describe Pricings::Calculator do
 
     it 'calculates the correct price for per_unit_range above range' do
       over_quantity_container = FactoryBot.create(:legacy_container, cargo_class: 'fcl_20', shipment_id: fcl_20_shipment.id, quantity: 24)
-      unit_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      unit_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_unit_range, pricing: unit_range_pricing)
       result, _metadata = described_class.new(cargo: over_quantity_container,
+                                              organization: organization,
                                               pricing: unit_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -301,7 +324,7 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_unit_ton_cbm_range (CBM)' do
-      unit_ton_cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      unit_ton_cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       cbm_lcl_cargo = FactoryBot.create(:legacy_cargo_item,
                                         shipment_id: lcl_shipment.id,
                                         cargo_item_type_id: pallet.id,
@@ -311,6 +334,7 @@ RSpec.describe Pricings::Calculator do
                                         height: 100)
       FactoryBot.create(:fee_per_unit_ton_cbm_range, pricing: unit_ton_cbm_range_pricing)
       result, _metadata = described_class.new(cargo: cbm_lcl_cargo,
+                                              organization: organization,
                                               pricing: unit_ton_cbm_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -320,10 +344,11 @@ RSpec.describe Pricings::Calculator do
 
     it 'calculates the correct price for per_unit_ton_cbm_range (CBM) out of range' do
       overcbm_cargo = FactoryBot.create(:legacy_aggregated_cargo, shipment_id: agg_shipment.id, weight: 10, volume: 13)
-      unit_ton_cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      unit_ton_cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
 
       FactoryBot.create(:fee_per_unit_ton_cbm_range, pricing: unit_ton_cbm_range_pricing)
       result, _metadata = described_class.new(cargo: overcbm_cargo,
+                                              organization: organization,
                                               pricing: unit_ton_cbm_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -332,7 +357,7 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_unit_ton_cbm_range (TON)' do
-      unit_ton_cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      unit_ton_cbm_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       ton_lcl_cargo = FactoryBot.create(:legacy_cargo_item,
                                         shipment_id: lcl_shipment.id,
                                         cargo_item_type_id: pallet.id,
@@ -342,6 +367,7 @@ RSpec.describe Pricings::Calculator do
                                         height: 300)
       FactoryBot.create(:fee_per_unit_ton_cbm_range, pricing: unit_ton_cbm_range_pricing)
       result, _metadata = described_class.new(cargo: ton_lcl_cargo,
+                                              organization: organization,
                                               pricing: unit_ton_cbm_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -350,9 +376,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_kg_range' do
-      kg_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      kg_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_kg_range, pricing: kg_range_pricing)
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: kg_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -361,9 +388,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_kg_range when out of range' do
-      kg_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      kg_range_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_kg_range, pricing: kg_range_pricing)
       result, _metadata = described_class.new(cargo: overweight_cargo,
+                                              organization: organization,
                                               pricing: kg_range_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -372,9 +400,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_cbm_kg_heavy' do
-      cbm_kg_heavy_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      cbm_kg_heavy_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_cbm_kg_heavy, pricing: cbm_kg_heavy_pricing)
       result, _metadata = described_class.new(cargo: overweight_cargo,
+                                              organization: organization,
                                               pricing: cbm_kg_heavy_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -383,11 +412,12 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_item_heavy' do
-      item_heavy_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      item_heavy_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_item_heavy, pricing: item_heavy_pricing)
       fat_cargo = FactoryBot.create(:legacy_cargo_item, shipment_id: lcl_shipment.id, cargo_item_type_id: pallet.id, payload_in_kg: 2200)
 
       result, _metadata = described_class.new(cargo: fat_cargo,
+                                              organization: organization,
                                               pricing: item_heavy_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -396,9 +426,10 @@ RSpec.describe Pricings::Calculator do
     end
 
     it 'calculates the correct price for per_item_heavy beyond range' do
-      item_heavy_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      item_heavy_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_item_heavy, pricing: item_heavy_pricing)
       result, _metadata = described_class.new(cargo: overweight_cargo,
+                                              organization: organization,
                                               pricing: item_heavy_pricing.as_json,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -409,10 +440,11 @@ RSpec.describe Pricings::Calculator do
 
   describe '.determine_cargo_item_price with flat_margins' do
     it 'it calculates the correct price for PER_WM and 100' do
-      wm_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant)
+      wm_pricing = FactoryBot.create(:pricings_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fee_per_wm, pricing: wm_pricing)
       pricing_with_margins = wm_pricing.as_json.merge('flat_margins' => { 'bas' => 100 })
       result, _metadata = described_class.new(cargo: lcl_cargo,
+                                              organization: organization,
                                               pricing: pricing_with_margins,
                                               user: user,
                                               mode_of_transport: 'ocean',
@@ -448,7 +480,8 @@ RSpec.describe Pricings::Calculator do
     let(:kg_range_pricing) do
       FactoryBot.create(:pricings_pricing,
                         tenant_vehicle: tenant_vehicle_1,
-                        tenant: tenant,
+                        organization: organization,
+                        itinerary: itinerary,
                         fees: [
                           FactoryBot.build(:fee_per_kg_range)
                         ])
@@ -457,6 +490,7 @@ RSpec.describe Pricings::Calculator do
     context 'PER_KG_RANGE' do
       it 'returns the correct fee_range for the larger volume' do
         result, result_metadata = described_class.new(cargo: lcl_cargo,
+                                                      organization: organization,
                                                       pricing: kg_range_pricing.as_json.merge(metadata_id: metadata_id),
                                                       user: user,
                                                       mode_of_transport: 'ocean',

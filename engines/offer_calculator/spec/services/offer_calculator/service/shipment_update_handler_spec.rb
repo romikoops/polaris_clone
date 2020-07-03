@@ -3,13 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let!(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
   let(:shanghai_address) { FactoryBot.create(:shanghai_address) }
   let(:gothenburg_address) { FactoryBot.create(:gothenburg_address) }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
@@ -19,8 +18,9 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
                       destination_hub: nil,
                       origin_hub: nil,
                       user: user,
-                      tenant: tenant)
+                      organization: organization)
   end
+  let(:wheelhouse) { false }
 
   let(:cargo_item_attributes) do
     [
@@ -87,6 +87,15 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
     }
   end
 
+  let(:scope_content) { {} }
+
+  before do
+    ::Organizations.current_id = organization.id
+    FactoryBot.create(:organizations_scope, target: organization, content: scope_content)
+    FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
+    FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
+  end
+
   context 'port to port' do
     let(:port_to_port_params) do
       params[:shipment]['origin'] = {
@@ -106,7 +115,14 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
       params[:shipment]['cargo_items_attributes'] = cargo_item_attributes
       ActionController::Parameters.new(params)
     end
-    let(:service) { described_class.new(shipment: base_shipment, params: port_to_port_params, sandbox: nil) }
+    let(:service) {
+      described_class.new(
+        shipment: base_shipment,
+        params: port_to_port_params,
+        sandbox: nil,
+        wheelhouse: wheelhouse
+      )
+    }
 
     describe '.update_nexuses' do
       it 'updates the nexus' do
@@ -119,7 +135,9 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
     describe '.update_trucking' do
       it 'updates the trucking' do
         service.update_trucking
-        expect(base_shipment.trucking).to eq('pre_carriage' => { 'truck_type' => '' }, 'on_carriage' => { 'truck_type' => '' })
+        expect(base_shipment.trucking).to eq(
+          'pre_carriage' => { 'truck_type' => '' }, 'on_carriage' => { 'truck_type' => '' }
+        )
       end
     end
 
@@ -146,7 +164,12 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
         agg_params[:shipment].delete('cargo_items_attributes')
         agg_params[:shipment]['aggregated_cargo_attributes'] = aggregated_cargo_attributes
 
-        agg_service = described_class.new(shipment: base_shipment, params: agg_params, sandbox: nil)
+        agg_service = described_class.new(
+          shipment: base_shipment,
+          params: agg_params,
+          sandbox: nil,
+          wheelhouse: wheelhouse
+        )
         agg_service.update_cargo_units
         aggregated_cargo = base_shipment.aggregated_cargo
         expect(aggregated_cargo.weight).to eq(aggregated_cargo_attributes['weight'])
@@ -165,6 +188,63 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
       it 'updates the desired_start_date with the minimum' do
         service.update_updated_at
         expect(base_shipment.updated_at > 2.seconds.ago).to be_truthy
+      end
+    end
+
+    describe '.set_billing' do
+      context 'when internal' do
+        let(:user) {
+          FactoryBot.create(:organizations_user,
+            organization: organization,
+            email: 'xxxx@internaldomain.com')
+        }
+        let(:scope_content) { { internal_domains: ['internaldomain.com']} }
+
+        it 'updates the billing attribute when internal' do
+          service.update_billing
+          expect(base_shipment.billing).to eq('internal')
+        end
+      end
+
+      context 'when wheelhouse' do
+        let(:user) {
+          FactoryBot.create(:organizations_user,
+            organization: organization,
+            email: 'xxxx@internaldomain.com')
+        }
+        let(:scope_content) { { internal_domains: ['internaldomain.com']} }
+        let(:wheelhouse) { true }
+
+        it 'updates the billing attribute to internal when wheelhouse' do
+          service.update_billing
+          expect(base_shipment.billing).to eq('internal')
+        end
+      end
+
+      context 'when test' do
+        let(:user) {
+          FactoryBot.create(:organizations_user,
+            organization: organization,
+            email: 'xxxx@itsmycargo.com')
+        }
+
+        it 'updates the billing attribute when test' do
+          service.update_billing
+          expect(base_shipment.billing).to eq('test')
+        end
+      end
+
+      context 'when external' do
+        let(:user) {
+          FactoryBot.create(:organizations_user,
+            organization: organization,
+            email: 'xxxx@external.com')
+        }
+
+        it 'updates the billing attribute when external' do
+          service.update_billing
+          expect(base_shipment.billing).to eq('external')
+        end
       end
     end
   end
@@ -208,7 +288,7 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
 
     let(:service) do
       base_shipment.update(has_pre_carriage: true, has_on_carriage: true, load_type: 'container')
-      described_class.new(shipment: base_shipment, params: door_to_door_params, sandbox: nil)
+      described_class.new(shipment: base_shipment, params: door_to_door_params, sandbox: nil, wheelhouse: wheelhouse)
     end
 
     describe '.update_nexuses' do
@@ -270,6 +350,39 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
         expect(base_shipment.trip_id).to be_nil
       end
     end
+
+    describe '.set_trucking_nexuses' do
+      before do
+        service.set_trucking_nexuses(hubs: hubs)
+      end
+
+      context 'with one nexus' do
+        let(:nexus) { FactoryBot.create(:legacy_nexus) }
+        let(:hubs) {
+          {
+            origin: FactoryBot.create_list(:legacy_hub, 2, organization: organization, nexus: nexus),
+            destination: []
+          }
+        }
+
+        it 'sets the nexus id when there is only one nexus' do
+          expect(base_shipment.origin_nexus_id).to eq(nexus.id)
+        end
+      end
+
+      context 'with more than one one nexus' do
+        let(:hubs) {
+          {
+            origin: FactoryBot.create_list(:legacy_hub, 2, organization: organization),
+            destination: []
+          }
+        }
+
+        it 'sets the nexus id when there is only one nexus' do
+          expect(base_shipment.origin_nexus_id).to be_nil
+        end
+      end
+    end
   end
 
   context 'errors' do
@@ -298,7 +411,7 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
 
       let(:pickup_service) do
         base_shipment.update(has_pre_carriage: true, load_type: 'container')
-        described_class.new(shipment: base_shipment, params: pickup_params, sandbox: nil)
+        described_class.new(shipment: base_shipment, params: pickup_params, sandbox: nil, wheelhouse: wheelhouse)
       end
       let(:dropoff_params) do
         params[:shipment]['origin'] = {
@@ -352,7 +465,3 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
     end
   end
 end
-# update_incoterm
-# update_cargo_units
-# update_selected_day
-# update_updated_at

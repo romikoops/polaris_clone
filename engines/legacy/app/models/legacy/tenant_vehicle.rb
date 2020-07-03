@@ -3,7 +3,7 @@
 module Legacy
   class TenantVehicle < ApplicationRecord
     self.table_name = 'tenant_vehicles'
-    belongs_to :tenant
+    belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :vehicle
     belongs_to :carrier, optional: true
     has_many :pricings, class_name: 'Pricings::Pricing'
@@ -30,12 +30,18 @@ end
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  carrier_id        :integer
+#  organization_id   :uuid
 #  sandbox_id        :uuid
 #  tenant_id         :integer
 #  vehicle_id        :integer
 #
 # Indexes
 #
-#  index_tenant_vehicles_on_sandbox_id  (sandbox_id)
-#  index_tenant_vehicles_on_tenant_id   (tenant_id)
+#  index_tenant_vehicles_on_organization_id  (organization_id)
+#  index_tenant_vehicles_on_sandbox_id       (sandbox_id)
+#  index_tenant_vehicles_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

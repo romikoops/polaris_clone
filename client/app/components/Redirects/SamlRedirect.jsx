@@ -14,10 +14,10 @@ class SamlRedirect extends Component {
     }
 
     const newAuthHeaderAndUserId = queryString.parse(location.search)
-    const { userId, tenantId } = newAuthHeaderAndUserId
+    const { userId, organizationId } = newAuthHeaderAndUserId
     delete newAuthHeaderAndUserId.userId
 
-    authenticationDispatch.postSamlActions({ headers: newAuthHeaderAndUserId, userId, tenantId })
+    authenticationDispatch.postSamlActions({ headers: newAuthHeaderAndUserId, userId, organizationId })
   }
 
   render () {

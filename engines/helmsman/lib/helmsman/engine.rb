@@ -3,7 +3,7 @@
 require 'federation'
 require 'ledger'
 require 'routing'
-require 'tenants'
+require 'organizations'
 require 'tenant_routing'
 
 module Helmsman

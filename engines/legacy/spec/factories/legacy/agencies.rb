@@ -4,8 +4,8 @@ FactoryBot.define do
   factory :legacy_agency, class: 'Legacy::Agency' do
     name { 'Agency Name' }
 
-    association :tenant, factory: :legacy_tenant
-    association :agency_manager, factory: :legacy_user
+    association :organization, factory: :organizations_organization
+    association :agency_manager, factory: :organizations_user
   end
 end
 
@@ -18,9 +18,15 @@ end
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  agency_manager_id :integer
+#  organization_id   :uuid
 #  tenant_id         :integer
 #
 # Indexes
 #
-#  index_agencies_on_tenant_id  (tenant_id)
+#  index_agencies_on_organization_id  (organization_id)
+#  index_agencies_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

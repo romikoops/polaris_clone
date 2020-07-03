@@ -3,17 +3,15 @@
 module Api
   module V1
     class AhoyController < ApiController
-      skip_before_action :doorkeeper_authorize!, only: :settings
+      skip_before_action :doorkeeper_authorize!, only: :index
 
-      def settings
-        tenant = Tenants::Tenant.find_by(id: params[:id])
+      def index
+        return render(json: {}, status: :not_found) unless current_organization
 
-        return render(json: {}, status: :not_found) unless tenant
-
-        scope = Tenants::ScopeService.new(tenant: tenant, sandbox: @sandbox).fetch
+        scope = OrganizationManager::ScopeService.new(organization: current_organization).fetch
 
         result = {
-          endpoint: Tenants::Domain.find_by(tenant_id: tenant, default: true).domain,
+          endpoint: Organizations::Domain.find_by(organization_id: current_organization.id, default: true).domain,
           modes_of_transport: normalize_modes_of_transport!(scope[:modes_of_transport]),
           pre_carriage: scope.dig(:carriage_options, :pre_carriage, :export) != 'disabled',
           on_carriage: scope.dig(:carriage_options, :on_carriage, :export) != 'disabled'

@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+gemspec
+
+# Enable access to another engines
+Gem::Specification.load(Dir[File.expand_path('*.gemspec', __dir__)].first).dependencies.each do |dep|
+  next unless File.directory?(File.join('..', dep.name.gsub(/\Aimc-/, '')))
+
+  gem dep.name, path: '..'
+end
+
+# Declare your development engines here
+path '..' do
+  # Add your development engines here
+  # gem 'imc-legacy'
+end

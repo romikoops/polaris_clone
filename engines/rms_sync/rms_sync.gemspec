@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'RMS - Sync rates from legacy to RMS'
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-pricings'
   s.add_dependency 'imc-rms_data'
   s.add_dependency 'imc-routing'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
 
   Gemhelper.common(s)
 end

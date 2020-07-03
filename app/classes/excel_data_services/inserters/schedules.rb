@@ -21,7 +21,7 @@ module ExcelDataServices
 
       def find_itinerary(params)
         Itinerary.find_by(
-          tenant: tenant,
+          organization: organization,
           name: "#{params[:from]} - #{params[:to]}",
           transshipment: params[:transshipment],
           mode_of_transport: params[:mode_of_transport]
@@ -46,7 +46,7 @@ module ExcelDataServices
         carrier = carrier_from_code(name: params[:carrier]) if params[:carrier].present?
 
         TenantVehicle.find_by(
-          tenant: tenant,
+          organization: organization,
           name: params[:service_level],
           carrier: carrier,
           mode_of_transport: params[:mode_of_transport]

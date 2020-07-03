@@ -13,7 +13,7 @@ class BackfillThemes < ActiveRecord::Migration[5.2]
       'welcomeEmailImage' => 'welcome_email_image'
     }
 
-    ::Tenants::Tenant.find_each do |tenant|
+    ::Organizations::Organization.find_each do |tenant|
       legacy_theme = tenant.legacy.theme
       next if legacy_theme.empty?
 

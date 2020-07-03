@@ -6,7 +6,7 @@ module Api
       class Base < Api::Routing::RoutingService
         private
 
-        attr_reader :tenant, :latlng, :load_type, :nexus_id, :target
+        attr_reader :organization, :latlng, :load_type, :nexus_id, :target
 
         def truck_types(target_index:)
           type_availabilities(target_index: target_index)
@@ -50,7 +50,7 @@ module Api
 
         def trucking_location_ids(target_index:)
           ::Trucking::Trucking.where(
-            tenant_id: legacy_tenant_id,
+            organization: organization,
             hub: itineraries_hubs(target_index: target_index)
           ).select(:location_id)
         end

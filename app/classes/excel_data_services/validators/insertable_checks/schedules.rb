@@ -43,7 +43,7 @@ module ExcelDataServices
         end
 
         def check_service_level_exists(row, carrier)
-          tenant_vehicle = TenantVehicle.find_by(name: row.service_level, carrier: carrier, tenant_id: @tenant.id)
+          tenant_vehicle = TenantVehicle.find_by(name: row.service_level, carrier: carrier, organization_id: @organization.id)
           if tenant_vehicle.blank? # rubocop:disable Style/GuardClause
             error_string = "There exists no service level called '#{row.service_level}'"
             error_string += row.carrier.present? ? " for carrier '#{row.carrier}'" : "."

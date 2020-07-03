@@ -116,7 +116,7 @@ module OfferCalculator
           meta: meta_for_result,
           notes: grab_notes(
             schedule: grand_total_charge[:schedules].first,
-            tenant_id: @shipment.tenant_id,
+            organization_id: @shipment.organization_id,
             pricing_ids: current_result[:pricings_by_cargo_class].values.flatten
           )
         }
@@ -131,7 +131,7 @@ module OfferCalculator
           {}
         else
           {
-            guest: user.guest?,
+            guest: user.blank?,
             hidden_grand_total: scope['hide_grand_total'],
             hidden_sub_total: scope['hide_sub_totals']
           }
@@ -181,9 +181,9 @@ module OfferCalculator
         pricing_ids = pricings_by_cargo_class.values.flat_map { |pricing| pricing['id'] }
         transshipment = pricings_by_cargo_class.values.pluck(:transshipment).compact.first
 
-        note_association = Legacy::Note.where(tenant_id: shipment.tenant_id, remarks: true)
+        note_association = Legacy::Note.where(organization_id: shipment.organization_id, remarks: true)
         remark_notes = note_association.where(pricings_pricing_id: pricing_ids)
-                                       .or(note_association.where(target: shipment.tenant))
+                                       .or(note_association.where(target: shipment.organization))
                                        .pluck(:body)
         valid_until = shipment.valid_until(schedule.trip)
         {
@@ -194,10 +194,10 @@ module OfferCalculator
           name: schedule.trip.itinerary.name,
           service_level: schedule.vehicle_name,
           carrier_name: schedule.carrier_name,
-          origin_hub: schedule.origin_hub,
+          origin_hub: decorated_hub(hub: schedule.origin_hub),
           tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
           itinerary_id: schedule.trip.itinerary_id,
-          destination_hub: schedule.destination_hub,
+          destination_hub: decorated_hub(hub: schedule.destination_hub),
           charge_trip_id: schedule.trip_id,
           ocean_chargeable_weight: chargeable_weight,
           pricings_by_cargo_class: pricings_by_cargo_class,
@@ -296,7 +296,7 @@ module OfferCalculator
         result_to_return = []
         cargo_classes = shipment.aggregated_cargo ? ['lcl'] : shipment.cargo_units.pluck(:cargo_class)
         schedule_groupings = sort_schedule_permutations(schedules: schedules)
-        user_pricing_id = user.id
+        user_pricing_id = user&.id
         schedule_groupings.each do |_key, schedules_array|
           schedules_array.sort_by!(&:eta)
           dates = extract_dates_and_quote(schedules_array)
@@ -336,6 +336,7 @@ module OfferCalculator
       def sort_pricings(schedules:, user_pricing_id:, cargo_classes:, dates:, dedicated_pricings_only:)
         pricings_by_cargo_class, pricing_metadata, rate_overview = ::Pricings::Finder.new(
           schedules: schedules,
+          organization: organization,
           user_pricing_id: user_pricing_id,
           cargo_classes: cargo_classes,
           dates: dates,
@@ -376,18 +377,22 @@ module OfferCalculator
           charge.charge_breakdown.charges.where(detail_level: 3).empty?
       end
 
-      def grab_notes(pricing_ids:, tenant_id:, schedule:)
+      def grab_notes(pricing_ids:, organization_id:, schedule:)
         hubs = [schedule.origin_hub, schedule.destination_hub]
         nexii = hubs.map(&:nexus)
         countries = nexii.map(&:country)
         pricings = Pricings::Pricing.where(id: pricing_ids)
-        regular_notes = Legacy::Note.where(transshipment: false, tenant_id: tenant_id)
+        regular_notes = Legacy::Note.where(transshipment: false, organization_id: organization_id)
         regular_notes.where(target: hubs | nexii | countries)
                      .or(regular_notes.where(pricings_pricing_id: pricings.ids))
       end
 
       def format_exchange_rate(tender:)
         ::ResultFormatter::ExchangeRateService.new(tender: tender).perform
+      end
+
+      def decorated_hub(hub:)
+        Legacy::HubDecorator.new(hub, context: {scope: scope})
       end
 
       attr_reader :trucking_data, :user, :shipment

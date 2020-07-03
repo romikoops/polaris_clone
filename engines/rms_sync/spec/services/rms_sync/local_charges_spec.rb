@@ -3,21 +3,19 @@
 require 'rails_helper'
 
 RSpec.describe RmsSync::LocalCharges do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
   let(:tenant_vehicle) do
     FactoryBot.create(:legacy_tenant_vehicle,
                       name: 'faster',
-                      tenant: tenant,
+                      organization: organization,
                       carrier: FactoryBot.build(:legacy_carrier, name: 'MSC'))
   end
   let!(:currency) { FactoryBot.create(:legacy_currency) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
 
   describe '.perform' do
     it 'should create a Book, Sheet and Cells' do
-      local_charge = FactoryBot.create(:legacy_local_charge, tenant: tenant, tenant_vehicle: tenant_vehicle, mode_of_transport: 'ocean')
-      described_class.new(tenant_id: tenants_tenant.id, sheet_type: :local_charges).perform
+      local_charge = FactoryBot.create(:legacy_local_charge, organization: organization, tenant_vehicle: tenant_vehicle, mode_of_transport: 'ocean')
+      described_class.new(organization_id: organization.id, sheet_type: :local_charges).perform
 
       expect(RmsData::Book.where(sheet_type: :local_charges).length).to eq(1)
       book = RmsData::Book.where(sheet_type: :local_charges).first
@@ -88,8 +86,8 @@ RSpec.describe RmsSync::LocalCharges do
     end
 
     it 'should create multiple rows for range fees' do
-      local_charge = FactoryBot.create(:local_charge_range, tenant: tenant, tenant_vehicle: tenant_vehicle)
-      described_class.new(tenant_id: tenants_tenant.id, sheet_type: :local_charges).perform
+      local_charge = FactoryBot.create(:local_charge_range, organization: organization, tenant_vehicle: tenant_vehicle)
+      described_class.new(organization_id: organization.id, sheet_type: :local_charges).perform
       expect(RmsData::Book.where(sheet_type: :local_charges).length).to eq(1)
       book = RmsData::Book.where(sheet_type: :local_charges).first
       expect(RmsData::Sheet.where(book_id: book.id).length).to eq(1)

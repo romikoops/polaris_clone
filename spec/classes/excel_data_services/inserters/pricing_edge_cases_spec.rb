@@ -5,12 +5,11 @@ require "rails_helper"
 RSpec.describe ExcelDataServices::Inserters::Pricing do
   include_context "false_itinerary"
 
-  let!(:itinerary) { create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let(:tenants_tenant) { ::Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let!(:itinerary) { create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:tenant_vehicle) do
-    create(:tenant_vehicle, tenant: tenant)
+    create(:tenant_vehicle, organization: organization)
   end
-  let(:options) { {tenant: tenant, data: input_data, options: {}} }
+  let(:options) { {organization: organization, data: input_data, options: {}} }
   let(:stats) { described_class.insert(options) }
   let!(:expected_stats) do
     {"legacy/itineraries": {number_created: 0, number_updated: 0, number_deleted: 0},
@@ -20,7 +19,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
   end
 
   before do
-    create(:tenants_scope, target: tenants_tenant, content: {"base_pricing" => true})
+    create(:tenants_scope, target: organization, content: {"base_pricing" => true})
   end
 
   describe ".insert with two identical names" do
@@ -49,8 +48,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           transshipment: nil,
           row_nr: 2,
           internal: false,
-          origin_name: "Gothenburg Port",
-          destination_name: "Shanghai Port"}]
+          origin_name: "Gothenburg",
+          destination_name: "Shanghai"}]
       ]
     end
 
@@ -96,8 +95,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
              transshipment: false},
             {header: "Remarks", body: "some remark", remarks: true, transshipment: false}
           ],
-          origin_name: "Gothenburg Port",
-          destination_name: "Shanghai Port"}]
+          origin_name: "Gothenburg",
+          destination_name: "Shanghai"}]
       ]
     end
 

@@ -6,13 +6,14 @@ module AdmiraltyReports
   class Stats
     using ArrayRefinements
     include ActionView::Helpers::DateHelper
-    attr_reader :year, :month, :tenant
+    attr_reader :year, :month, :organization
     NON_LEGACY_QUOTATIONS_DATE = DateTime.new(2019, 11, 25, 14, 31, 47, '+0100')
 
-    def initialize(tenant:, year:, month:)
-      @tenant = tenant
+    def initialize(organization:, year:, month:)
+      @organization = organization
       @month = month.to_i
       @year = year.to_i
+      @scope = ::OrganizationManager::ScopeService.new(organization: @organization).fetch
     end
 
     def overview
@@ -45,30 +46,35 @@ module AdmiraltyReports
     end
 
     def quotation_tool?
-      @quotation_tool ||= tenant.scope.content.values_at('closed_quotation_tool', 'open_quotation_tool').any?
+      @quotation_tool ||= @scope.values_at('closed_quotation_tool', 'open_quotation_tool').any?
     end
 
     private
 
+    def excluded_users
+      Users::User.with_deleted
+                 .select(:id)
+                 .where(email: excluded_emails)
+    end
+
     def original_shipments
-      ::Legacy::Shipment.where(tenant_id: tenant.legacy_id)
-                        .joins(:user)
-                        .where(users: { internal: false })
-                        .where.not(users: { email: excluded_emails })
+      ::Legacy::Shipment.where(organization_id: organization.id)
+                        .includes(:user)
+                        .where.not(user_id: excluded_users.ids, billing: :test)
                         .distinct
     end
 
     def non_flagged_quotations
-      ::Quotations::Quotation.where(tenant: @tenant)
-                             .joins(:user)
-                             .where(users: { internal: false })
-                             .where.not(users: { email: excluded_emails })
+      ::Quotations::Quotation.where(organization: @organization)
+                             .includes(:user)
+                             .where.not(user_id: excluded_users.ids, billing: :test)
                              .distinct
     end
 
     def uniq_quotations_by_original_shipments
       legacy_quotations = filtered(::Legacy::Quotation.where(original_shipment_id: original_shipments.ids)
-                                                      .where('created_at < ?', NON_LEGACY_QUOTATIONS_DATE))
+                                                      .where('created_at < ?', NON_LEGACY_QUOTATIONS_DATE)
+                                                      .where.not(billing: :test))
       non_legacy_quotations = filtered(non_flagged_quotations)
       quotations = legacy_quotations | non_legacy_quotations
       quotations.sort_by(&:created_at).reverse.uniq
@@ -99,7 +105,7 @@ module AdmiraltyReports
     end
 
     def excluded_emails
-      tenant.scope.content['blacklisted_emails']
+      @scope['blacklisted_emails']
     end
 
     def group_by_date(bundle)
@@ -110,9 +116,8 @@ module AdmiraltyReports
 
     def shipments_per_agent(bundle)
       bundle.tally_by do |shipment_type, _shipment|
-        user = ::Legacy::User.with_deleted.find_by(id: shipment_type.user_id)
-        tenants_user = ::Tenants::User.find_by(legacy_id: user&.id)
-        company = ::Tenants::Company.find_by(id: tenants_user.company) if tenants_user
+        user = ::Users::User.with_deleted.find_by(id: shipment_type.user_id)
+        company = Companies::Membership.find_by(member: user)&.company if user
         [user&.email, company&.name]
       end
     end

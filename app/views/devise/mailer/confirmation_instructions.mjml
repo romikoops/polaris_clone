@@ -1,9 +1,9 @@
-<%= render "account_layout", tenant: @resource.tenant do %>
+<%= render "account_layout", organization: @user.organization do %>
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%" padding="0 2.5%">
       <mj-text line-height="24px">
         <p>
-          Thank you for registering a new account in the  <b> <%= @resource.tenant.name%> </b> (powered by ItsMyCargo).
+          Thank you for registering a new account in the  <b> <%= @org_theme.name%> </b> (powered by ItsMyCargo).
         </p>
       </mj-text>
     </mj-column>

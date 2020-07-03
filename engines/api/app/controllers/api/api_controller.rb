@@ -11,27 +11,44 @@ module Api
 
     skip_before_action :verify_authenticity_token
     before_action :doorkeeper_authorize!
-    before_action :set_sandbox
     helper_method :current_user
 
     private
 
     def current_user
-      @current_user ||= ::Tenants::User.find_by(id: doorkeeper_token.resource_owner_id) if doorkeeper_token
+      @current_user ||= ::Authentication::User.find_by(id: doorkeeper_token.resource_owner_id) if doorkeeper_token
     end
 
-    def current_tenant
-      @current_tenant ||= ::Tenants::Tenant.find_by(id: params[:tenant_id] || params[:id]) || current_user.tenant
+    def organization_id
+      params[:organization_id]
     end
 
-    def set_sandbox
-      @sandbox = ::Tenants::Sandbox.find_by(id: request.headers[:sandbox])
+    def organization_user
+      current_user.becomes(::Organizations::User)
     end
+
+    def current_organization
+      ::Organizations.current_id = organization_id
+      @current_organization ||= ::Organizations::Organization.find(organization_id)
+    end
+
+    def user_organization
+      current_user.organization if current_user.is_a? Organizations::User
+    end
+
+    def default_organization
+      organizations = Organizations::Organization.joins(:memberships)
+      .where(organizations_memberships: {user_id: current_user}).first
+    end
+
+    #def set_sandbox
+    #  @sandbox = ::Tenants::Sandbox.find_by(id: request.headers[:sandbox])
+    #end
 
     def current_scope
-      @current_scope ||= ::Tenants::ScopeService.new(
+      @current_scope ||= ::OrganizationManager::ScopeService.new(
         target: current_user,
-        tenant: current_tenant
+        organization: current_organization
       ).fetch
     end
 

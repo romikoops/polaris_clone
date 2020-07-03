@@ -3,24 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe Admin::SchedulesController, type: :controller do
-  let!(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:role) { FactoryBot.create(:legacy_role, name: 'Admin') }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, role: role) }
-  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:users_user) }
+  let(:organizations_membership) { FactoryBot.create(:organizations_membership, role: :admin, organization: organization, member: user) }
 
   before do
-    allow(controller).to receive(:current_user).and_return(user)
-    allow(controller).to receive(:current_tenant).and_return(tenant)
-    allow(controller).to receive(:require_authentication!).and_return(true)
-    allow(controller).to receive(:require_non_guest_authentication!).and_return(true)
-    allow(controller).to receive(:require_login_and_role_is_admin).and_return(true)
+    append_token_header
   end
 
   describe 'GET #index' do
-    let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-    let(:carrier) { FactoryBot.create(:legacy_carrier, name: 'MSC') }
-    let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier) }
+    let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+    let(:carrier) { FactoryBot.create(:carrier, name: 'MSC') }
+    let(:tenant_vehicle) { FactoryBot.create(:tenant_vehicle, carrier: carrier) }
     let(:closing_date) { Time.zone.today }
     let(:start_date) { Time.zone.today + 4.days }
     let(:end_date) { Time.zone.today + 30.days }
@@ -34,7 +28,7 @@ RSpec.describe Admin::SchedulesController, type: :controller do
                           end_date: end_date + delta.days,
                           tenant_vehicle: tenant_vehicle)
       end
-      get :index, params: { tenant_id: user.tenant_id }
+      get :index, params: { organization_id: organization.id }
     end
 
     it 'returns http success' do
@@ -43,17 +37,17 @@ RSpec.describe Admin::SchedulesController, type: :controller do
   end
 
   describe 'GET #show' do
-    let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-    let(:carrier) { FactoryBot.create(:legacy_carrier, name: 'MSC') }
-    let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier) }
-    let(:tenant_vehicle_no_carrier) { FactoryBot.create(:legacy_tenant_vehicle, carrier: nil) }
+    let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+    let(:carrier) { FactoryBot.create(:carrier, name: 'MSC') }
+    let(:tenant_vehicle) { FactoryBot.create(:tenant_vehicle, carrier: carrier) }
+    let(:tenant_vehicle_no_carrier) { FactoryBot.create(:tenant_vehicle, carrier: nil) }
     let(:closing_date) { Time.zone.today }
     let(:start_date) { Time.zone.today + 4.days }
     let(:end_date) { Time.zone.today + 30.days }
     let(:show_params) do
       {
         id: itinerary.id,
-        tenant_id: user.tenant_id
+        organization_id: organization.id
       }
     end
 
@@ -105,7 +99,7 @@ RSpec.describe Admin::SchedulesController, type: :controller do
 
     describe 'POST #upload' do
       it 'returns error with messages when an error is raised' do
-        post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), tenant_id: 1, mot: 'ocean', load_type: 'cargo_item' }
+        post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id, mot: 'ocean', load_type: 'cargo_item' }
         aggregate_failures do
           expect(response).to have_http_status(:success)
           expect(JSON.parse(response.body).dig('data', 'errors')).to eq(JSON.parse(errors_arr.to_json))
@@ -115,7 +109,7 @@ RSpec.describe Admin::SchedulesController, type: :controller do
 
     describe 'POST #generate_schedules_from_sheet' do
       it 'returns error with messages when an error is raised' do
-        post :generate_schedules_from_sheet, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), tenant_id: 1, mot: 'ocean', load_type: 'cargo_item' }
+        post :generate_schedules_from_sheet, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id, mot: 'ocean', load_type: 'cargo_item' }
         aggregate_failures do
           expect(response).to have_http_status(:success)
           expect(JSON.parse(response.body).dig('data', 'errors')).to eq(JSON.parse(errors_arr.to_json))

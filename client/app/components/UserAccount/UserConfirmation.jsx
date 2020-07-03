@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { withRouter } from 'react-router-dom'
 import { userActions } from '../../actions'
 import CircleCompletion from '../CircleCompletion/CircleCompletion'
 
@@ -87,4 +88,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces('user')(UserConfirmation))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withNamespaces('user')(UserConfirmation)))

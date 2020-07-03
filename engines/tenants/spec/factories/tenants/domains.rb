@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :tenants_domain, class: 'Tenants::Domain' do
-    association :tenant, factory: :tenants_tenant
+    association :organization, factory: :organizations_organization
 
     sequence(:domain) { |n| "test#{n}.example" }
     default { false }
@@ -13,14 +13,20 @@ end
 #
 # Table name: tenants_domains
 #
-#  id         :uuid             not null, primary key
-#  default    :boolean
-#  domain     :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  tenant_id  :uuid
+#  id              :uuid             not null, primary key
+#  default         :boolean
+#  domain          :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  organization_id :uuid
+#  tenant_id       :uuid
 #
 # Indexes
 #
-#  index_tenants_domains_on_tenant_id  (tenant_id)
+#  index_tenants_domains_on_organization_id  (organization_id)
+#  index_tenants_domains_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

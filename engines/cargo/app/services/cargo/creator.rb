@@ -20,7 +20,7 @@ module Cargo
 
       cargo = ::Cargo::Cargo.new(
         quotation_id: quotation.id,
-        tenant: quotation.tenant,
+        organization: quotation.organization,
         total_goods_value_cents: legacy_shipment.total_goods_value['value'],
         total_goods_value_currency: legacy_shipment.total_goods_value['currency']
       )
@@ -30,7 +30,7 @@ module Cargo
         cargo_type = CARGO_TYPE_LEGACY_MAPPER[container.cargo_class]
 
         cargo.units << Unit.new(
-          tenant_id: quotation.tenant_id,
+          organization_id: quotation.organization_id,
           quantity: container.quantity,
           cargo_class: cargo_class,
           cargo_type: cargo_type,
@@ -43,7 +43,7 @@ module Cargo
 
       cargo_items.find_each do |item|
         cargo.units << Unit.new(
-          tenant_id: quotation.tenant_id,
+          organization_id: quotation.organization_id,
           weight_value: item.payload_in_kg,
           width_value: item.width.to_f / 100,
           length_value: item.length.to_f / 100,
@@ -59,7 +59,7 @@ module Cargo
 
       if (aggregated_cargo = legacy_shipment.aggregated_cargo)
         cargo.units << Unit.new(
-          tenant_id: quotation.tenant_id,
+          organization_id: quotation.organization_id,
           weight_value: aggregated_cargo.weight,
           volume_value: aggregated_cargo.volume,
           quantity: 1,

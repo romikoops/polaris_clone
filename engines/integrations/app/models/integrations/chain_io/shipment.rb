@@ -36,6 +36,7 @@ end
 # Table name: shipments
 #
 #  id                                  :bigint           not null, primary key
+#  billing                             :integer          default("external")
 #  booking_placed_at                   :datetime
 #  cargo_notes                         :string
 #  closing_date                        :datetime
@@ -67,8 +68,11 @@ end
 #  updated_at                          :datetime         not null
 #  destination_hub_id                  :integer
 #  destination_nexus_id                :integer
+#  distinct_id                         :uuid
 #  incoterm_id                         :integer
 #  itinerary_id                        :integer
+#  legacy_user_id                      :integer
+#  organization_id                     :uuid
 #  origin_hub_id                       :integer
 #  origin_nexus_id                     :integer
 #  quotation_id                        :integer
@@ -76,18 +80,22 @@ end
 #  tenant_id                           :integer
 #  tender_id                           :uuid
 #  trip_id                             :integer
-#  user_id                             :integer
+#  user_id                             :uuid
 #
 # Indexes
 #
-#  index_shipments_on_sandbox_id  (sandbox_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tenant_id   (tenant_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tender_id   (tender_id)
+#  index_shipments_on_organization_id  (organization_id)
+#  index_shipments_on_sandbox_id       (sandbox_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tenant_id        (tenant_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tender_id        (tender_id)
+#  index_shipments_on_user_id          (user_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (destination_hub_id => hubs.id) ON DELETE => nullify
 #  fk_rails_...  (destination_nexus_id => nexuses.id) ON DELETE => nullify
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (origin_hub_id => hubs.id) ON DELETE => nullify
 #  fk_rails_...  (origin_nexus_id => nexuses.id) ON DELETE => nullify
+#  fk_rails_...  (user_id => users_users.id)
 #

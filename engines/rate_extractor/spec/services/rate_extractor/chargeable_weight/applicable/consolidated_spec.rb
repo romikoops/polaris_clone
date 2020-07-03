@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe RateExtractor::ChargeableWeight::Applicable::Consolidated do
   describe 'calculating chargeable weight as consolidated for the whole cargo' do
-    let(:tenant) { FactoryBot.create(:tenants_tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
 
     context 'when ldm weight is the highest' do
       let(:cargo) do
@@ -35,7 +35,7 @@ RSpec.describe RateExtractor::ChargeableWeight::Applicable::Consolidated do
       end
 
       let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: { rate: cargo_rate }) }
-      let(:section_rate) { FactoryBot.create(:rates_section, tenant: tenant, ldm_ratio: 100, ldm_threshold: 1.5, ldm_measurement: :load_meters) }
+      let(:section_rate) { FactoryBot.create(:rates_section, organization: organization, ldm_ratio: 100, ldm_threshold: 1.5, ldm_measurement: :load_meters) }
       let(:cargo_rate) { FactoryBot.create(:rates_cargo, section: section_rate, cbm_ratio: cbm_ratio) }
       let(:cbm_ratio) { 100 }
 

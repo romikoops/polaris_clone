@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class MaxDimensionsController < ApplicationController
-  skip_before_action :require_authentication!, :require_non_guest_authentication!
+  skip_before_action :doorkeeper_authorize!
 
   def index
     response = {
@@ -14,11 +14,12 @@ class MaxDimensionsController < ApplicationController
   private
 
   def max_dimensions_result(aggregate:)
-    max_dimensions(aggregate: aggregate).presence || default_max_dimensions(aggregate: aggregate)
+    max_dimensions(aggregate: aggregate).presence || default_max_dimensions(aggregate: true)
   end
 
   def default_max_dimensions(aggregate:)
-    aggregate ? current_tenant.max_aggregate_dimensions : current_tenant.max_dimensions
+    dimensions = Legacy::MaxDimensionsBundle.where(organization_id: current_organization.id)
+    aggregate ? dimensions.aggregate.to_max_dimensions_hash : dimensions.to_max_dimensions_hash
   end
 
   def max_dimensions(aggregate:)
@@ -47,7 +48,7 @@ class MaxDimensionsController < ApplicationController
 
   def max_dimensions_bundles(aggregate:)
     collection = Legacy::MaxDimensionsBundle.where(
-      tenant: current_tenant, aggregate: aggregate, mode_of_transport: modes_of_transport, cargo_class: cargo_classes
+      organization: current_organization, aggregate: aggregate, mode_of_transport: modes_of_transport, cargo_class: cargo_classes
     )
     collection.where(tenant_vehicle: tenant_vehicles).or(collection.where(carrier: carriers))
   end

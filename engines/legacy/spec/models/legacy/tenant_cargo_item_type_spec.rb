@@ -11,10 +11,10 @@ module Legacy
       end
 
       it 'raises  an error when item type is taken' do
-        tenant = FactoryBot.create(:legacy_tenant)
+        organization = FactoryBot.create(:organizations_organization)
         cargo_item_type = FactoryBot.create(:legacy_cargo_item_type)
-        FactoryBot.create(:legacy_tenant_cargo_item_type, tenant: tenant, cargo_item_type: cargo_item_type)
-        expect(FactoryBot.build(:legacy_tenant_cargo_item_type, tenant: tenant, cargo_item_type: cargo_item_type)).not_to be_valid
+        FactoryBot.create(:legacy_tenant_cargo_item_type, organization: organization, cargo_item_type: cargo_item_type)
+        expect(FactoryBot.build(:legacy_tenant_cargo_item_type, organization: organization, cargo_item_type: cargo_item_type)).not_to be_valid
       end
     end
   end
@@ -28,17 +28,20 @@ end
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  cargo_item_type_id :bigint
+#  organization_id    :uuid
 #  sandbox_id         :uuid
 #  tenant_id          :bigint
 #
 # Indexes
 #
 #  index_tenant_cargo_item_types_on_cargo_item_type_id  (cargo_item_type_id)
+#  index_tenant_cargo_item_types_on_organization_id     (organization_id)
 #  index_tenant_cargo_item_types_on_sandbox_id          (sandbox_id)
 #  index_tenant_cargo_item_types_on_tenant_id           (tenant_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (cargo_item_type_id => cargo_item_types.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (tenant_id => tenants.id)
 #

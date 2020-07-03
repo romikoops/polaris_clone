@@ -1,17 +1,14 @@
-import { moment } from '../constants'
+const AUTH_STORE_KEY = 'authHeader'
 
-const { localStorage } = window
+export const authHeader = () => {
+  const token = JSON.parse(localStorage.getItem(AUTH_STORE_KEY))
 
-export function authHeader () {
-  const aHeader = JSON.parse(localStorage.getItem('authHeader'))
-  const sandbox = localStorage.getItem('sandbox')
-  if (aHeader && moment().isBefore(moment.unix(aHeader.expiry))) {
-    aHeader.sandbox = sandbox
-
-    return aHeader
+  if (!token) {
+    return {}
   }
-
-  return {}
+  return {
+    Authorization: `${token.token_type} ${token.access_token}`
+  }
 }
 
 export default authHeader

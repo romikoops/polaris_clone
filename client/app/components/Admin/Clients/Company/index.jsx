@@ -54,10 +54,10 @@ class AdminClientCompany extends Component {
   }
 
   toggleUserEdit () {
-    const { clientsDispatch, id } = this.props
+    const { clientsDispatch, company } = this.props
     this.setState((prevState) => {
       if (prevState.editUsers) {
-        clientsDispatch.viewGroup(id)
+        clientsDispatch.viewCompany(company.id)
       }
 
       return { editUsers: !prevState.editUsers }
@@ -77,7 +77,7 @@ class AdminClientCompany extends Component {
 
   render () {
     const {
-      employees, t, company, id, groups, theme
+      employees, t, company, groups, theme
     } = this.props
     if (!company) { return '' }
 
@@ -134,7 +134,7 @@ class AdminClientCompany extends Component {
       }
     ]
 
-    const userTable = editUsers ? <AdminClientEmployeeManager close={() => this.toggleUserEdit()} groupId={id} /> : (
+    const userTable = editUsers ? <AdminClientEmployeeManager close={() => this.toggleUserEdit()} company={company} /> : (
       <div className="flex-100 layout-row layout-align-center-center layout-wrap">
         <ReactTable
           className="flex height_100"

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'core'
+require 'users'
 
 require 'paranoia'
 require 'pg_search'

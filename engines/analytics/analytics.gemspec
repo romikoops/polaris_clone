@@ -15,11 +15,13 @@ Gem::Specification.new do |s|
 
   s.metadata = { 'type' => 'service' }
 
+  s.add_dependency 'imc-companies'
   s.add_dependency 'imc-legacy'
+  s.add_dependency 'imc-organizations'
+  s.add_dependency 'imc-organization_manager'
   s.add_dependency 'imc-pricings'
   s.add_dependency 'imc-quotations'
   s.add_dependency 'imc-shipments'
-  s.add_dependency 'imc-tenants'
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 

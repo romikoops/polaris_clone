@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :tenants_theme, class: 'Tenants::Theme' do
-    association :tenant, factory: :tenants_tenant
+    association :organization, factory: :organizations_organization
     primary_color { '#F5F5F5' }
     secondary_color { '#F8F8F8' }
     bright_primary_color { '#F6F6F6' }
@@ -22,9 +22,15 @@ end
 #  welcome_text           :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  organization_id        :uuid
 #  tenant_id              :uuid
 #
 # Indexes
 #
-#  index_tenants_themes_on_tenant_id  (tenant_id)
+#  index_tenants_themes_on_organization_id  (organization_id)
+#  index_tenants_themes_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

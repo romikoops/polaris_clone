@@ -11,7 +11,7 @@
     <ul class="navbar-nav mr-auto">
       <% if defined?(admiralty_tenants) %>
         <li class="nav-item">
-          <%= link_to 'Tenants', admiralty_tenants.tenants_path, class: "nav-link #{controller_namespace == 'admiralty_tenants' ? 'active' : ''}" %>
+          <%= link_to 'Tenants', admiralty_tenants.organizations_path, class: "nav-link #{controller_namespace == 'admiralty_tenants' ? 'active' : ''}" %>
         </li>
       <% end %>
       <% if defined?(admiralty_reports) %>

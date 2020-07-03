@@ -5,9 +5,10 @@ require 'rails_helper'
 RSpec.describe OfferCalculator::PricingTools do
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:tenants_scope) { FactoryBot.create(:tenants_scope, target: tenants_tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let!(:scope) { FactoryBot.create(:organizations_scope, target: organization) }
+
   let(:vehicle) do
     FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle_1, tenant_vehicle_2])
   end
@@ -27,16 +28,14 @@ RSpec.describe OfferCalculator::PricingTools do
   end
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
   let(:all_trips) { lcl_trips | fcl_trips }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
-  let(:group) { FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'TEST') }
-  let(:membership) { FactoryBot.create(:tenants_membership, group: group, member: tenants_user) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, load_type: load_type, direction: direction, user: user, tenant: tenant, origin_nexus: origin_nexus, destination_nexus: destination_nexus, trip: itinerary.trips.first, itinerary: itinerary) }
+  let(:group) { FactoryBot.create(:groups_group, organization: organization, name: 'TEST') }
+  let(:membership) { FactoryBot.create(:groups_membership, group: group, member: user) }
+  let(:shipment) { FactoryBot.create(:legacy_shipment, load_type: load_type, direction: direction, user: user, organization: organization, origin_nexus: origin_nexus, destination_nexus: destination_nexus, trip: itinerary.trips.first, itinerary: itinerary) }
   let(:origin_nexus) { FactoryBot.create(:legacy_nexus, hubs: [origin_hub]) }
   let(:destination_nexus) { FactoryBot.create(:legacy_nexus, hubs: [destination_hub]) }
-  let!(:itinerary) { FactoryBot.create(:legacy_itinerary, tenant: tenant, stops: [origin_stop, destination_stop], layovers: [origin_layover, destination_layover], trips: fcl_trips | lcl_trips) }
-  let(:origin_hub) { FactoryBot.create(:legacy_hub, tenant: tenant) }
-  let(:destination_hub) { FactoryBot.create(:legacy_hub, tenant: tenant) }
+  let!(:itinerary) { FactoryBot.create(:legacy_itinerary, organization: organization, stops: [origin_stop, destination_stop], layovers: [origin_layover, destination_layover], trips: fcl_trips | lcl_trips) }
+  let(:origin_hub) { FactoryBot.create(:legacy_hub, organization: organization) }
+  let(:destination_hub) { FactoryBot.create(:legacy_hub, organization: organization) }
   let(:origin_stop) { FactoryBot.create(:legacy_stop, index: 0, hub_id: origin_hub.id, layovers: [origin_layover]) }
   let(:destination_stop) { FactoryBot.create(:legacy_stop, index: 1, hub_id: destination_hub.id, layovers: [destination_layover]) }
   let(:origin_layover) { FactoryBot.create(:legacy_layover, stop_index: 0, trip: fcl_trips.first) }
@@ -66,10 +65,10 @@ RSpec.describe OfferCalculator::PricingTools do
           }
     }
   end
-  let!(:local_charge_margin) { FactoryBot.create(:export_margin, tenant: tenants_tenant, origin_hub: origin_hub) }
+  let!(:local_charge_margin) { FactoryBot.create(:export_margin, organization: organization, origin_hub: origin_hub) }
   let!(:lcl_local_charge) do
     FactoryBot.create(:legacy_local_charge,
-                      tenant: tenant,
+                      organization: organization,
                       hub: origin_hub,
                       mode_of_transport: 'ocean',
                       load_type: 'lcl',
@@ -81,7 +80,7 @@ RSpec.describe OfferCalculator::PricingTools do
   end
   let!(:group_lcl_local_charge) do
     FactoryBot.create(:legacy_local_charge,
-                      tenant: tenant,
+                      organization: organization,
                       hub: origin_hub,
                       mode_of_transport: 'ocean',
                       load_type: 'lcl',
@@ -94,7 +93,7 @@ RSpec.describe OfferCalculator::PricingTools do
   end
   let!(:fcl_20_local_charge) do
     FactoryBot.create(:legacy_local_charge,
-                      tenant: tenant,
+                      organization: organization,
                       hub: origin_hub,
                       mode_of_transport: 'ocean',
                       load_type: 'fcl_20',
@@ -106,7 +105,7 @@ RSpec.describe OfferCalculator::PricingTools do
   end
   let!(:fcl_40_local_charge) do
     FactoryBot.create(:legacy_local_charge,
-                      tenant: tenant,
+                      organization: organization,
                       hub: origin_hub,
                       mode_of_transport: 'ocean',
                       load_type: 'fcl_40',
@@ -118,7 +117,7 @@ RSpec.describe OfferCalculator::PricingTools do
   end
   let!(:fcl_40_hq_local_charge) do
     FactoryBot.create(:legacy_local_charge,
-                      tenant: tenant,
+                      organization: organization,
                       hub: origin_hub,
                       mode_of_transport: 'ocean',
                       load_type: 'fcl_40_hq',
@@ -154,20 +153,25 @@ RSpec.describe OfferCalculator::PricingTools do
   let!(:default_margins) do
     %w[ocean air rail truck trucking local_charge].flat_map do |mot|
       [
-        FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:trucking_on_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:trucking_pre_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:import_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:export_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+        FactoryBot.create(:freight_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:trucking_on_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:trucking_pre_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:import_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:export_margin, default_for: mot, organization: organization, applicable: organization, value: 0)
       ]
     end
   end
   before do
-    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
+    ::Organizations.current_id = organization.id
+
+    FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
+    FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
+
+    FactoryBot.create(:profiles_profile, user_id: user.id)
     stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
       .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26 } }.to_json, headers: {})
     %w[adi eca qdf fill isps].each do |code|
-      FactoryBot.create(:legacy_charge_categories, code: code, name: code, tenant: tenant)
+      FactoryBot.create(:legacy_charge_categories, code: code, name: code, organization: organization)
     end
   end
 
@@ -184,9 +188,9 @@ RSpec.describe OfferCalculator::PricingTools do
     end
 
     it 'returns the correct number of charges for single cargo classes (LCL & BASE PRICING)' do
-      FactoryBot.create(:tenants_scope, target: tenants_user, content: { base_pricing: true })
-      export_margin = FactoryBot.create(:export_margin, applicable: tenants_user, tenant: tenants_tenant, origin_hub_id: lcl_local_charge.hub_id)
-      FactoryBot.create(:pricings_detail, margin: export_margin, operator: '+', charge_category: FactoryBot.create(:legacy_charge_categories, code: 'isps', tenant: tenant))
+      FactoryBot.create(:organizations_scope, target: user, content: { base_pricing: true })
+      export_margin = FactoryBot.create(:export_margin, applicable: user, organization: organization, origin_hub_id: lcl_local_charge.hub_id)
+      FactoryBot.create(:pricings_detail, margin: export_margin, operator: '+', charge_category: FactoryBot.create(:legacy_charge_categories, code: 'isps', organization: organization))
       lcl = FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id)
 
       local_charges_data = described_class.new(user: user, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user)
@@ -196,22 +200,20 @@ RSpec.describe OfferCalculator::PricingTools do
 
     it 'returns the correct number of charges for single cargo classes (LCL & BASE PRICING & CONSOLIDATION)' do
       lcl = FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id)
-      scope = FactoryBot.create(:tenants_scope, target: tenants_user, content: { base_pricing: true, consolidation: { cargo: { backend: true } } })
-      FactoryBot.create(:export_margin, applicable: tenants_tenant, tenant: tenants_tenant)
+      scope = FactoryBot.create(:organizations_scope, target: user, content: { base_pricing: true, consolidation: { cargo: { backend: true } } })
+      FactoryBot.create(:export_margin, applicable: organization, organization: organization)
       local_charges_data, metadata = described_class.new(user: user, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user)
       expect(local_charges_data.values.first.length).to eq(2)
       expect(local_charges_data.values.length).to eq(1)
     end
 
     it 'returns the correct number of charges for single cargo classes (LCL & BASE PRICING & multiple groups)' do
-      user_mg = FactoryBot.create(:legacy_user, tenant: tenant)
-      tenants_user_mg = Tenants::User.find_by(legacy_id: user_mg.id)
-      group_1 = FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'TEST1')
-      FactoryBot.create(:tenants_membership, group: group_1, member: tenants_user_mg)
-      group_2 = FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'TEST2')
-      FactoryBot.create(:tenants_membership, group: group_2, member: tenants_user_mg)
+      group_1 = FactoryBot.create(:groups_group, organization: organization, name: 'TEST1')
+      FactoryBot.create(:groups_membership, group: group_1, member: user)
+      group_2 = FactoryBot.create(:groups_group, organization: organization, name: 'TEST2')
+      FactoryBot.create(:groups_membership, group: group_2, member: user)
       group_local_charge_1 = FactoryBot.create(:legacy_local_charge,
-                                               tenant: tenant,
+                                               organization: organization,
                                                hub: origin_hub,
                                                mode_of_transport: 'ocean',
                                                load_type: 'lcl',
@@ -222,7 +224,7 @@ RSpec.describe OfferCalculator::PricingTools do
                                                expiration_date: Date.today + 3.months,
                                                group_id: group_1.id)
       FactoryBot.create(:legacy_local_charge,
-                        tenant: tenant,
+                        organization: organization,
                         hub: origin_hub,
                         mode_of_transport: 'ocean',
                         load_type: 'lcl',
@@ -233,9 +235,9 @@ RSpec.describe OfferCalculator::PricingTools do
                         expiration_date: Date.today + 3.months,
                         group_id: group_2.id)
       lcl = FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id)
-      scope = FactoryBot.create(:tenants_scope, target: tenants_user_mg, content: { base_pricing: true })
-      FactoryBot.create(:export_margin, applicable: tenants_tenant, tenant: tenants_tenant)
-      local_charges_data, metadata = described_class.new(user: user_mg, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user_mg)
+      scope = FactoryBot.create(:organizations_scope, target: user, content: { base_pricing: true })
+      FactoryBot.create(:export_margin, applicable: organization, organization: organization)
+      local_charges_data, metadata = described_class.new(user: user, shipment: shipment).find_local_charge(lcl_schedules, [lcl], 'export', user)
       expect(local_charges_data.values.first.length).to eq(2)
       expect(local_charges_data.values.length).to eq(1)
       expect(local_charges_data.values.dig(0, 0, 0)['id']).to eq(group_local_charge_1.id)
@@ -263,8 +265,8 @@ RSpec.describe OfferCalculator::PricingTools do
 
     it 'returns the correct number of charges for single cargo classes (LCL & BASE PRICING)' do
       lcl = FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id)
-      scope = FactoryBot.create(:tenants_scope, target: tenants_user, content: { base_pricing: true })
-      FactoryBot.create(:export_margin, applicable: tenants_tenant, tenant: tenants_tenant)
+      scope = FactoryBot.create(:organizations_scope, target: user, content: { base_pricing: true })
+      FactoryBot.create(:export_margin, applicable: organization, organization: organization)
       local_charges_data, _metadata = described_class.new(user: user, shipment: shipment).determine_local_charges(lcl_schedules, [lcl], 'export', user)
       expect(local_charges_data.values.length).to eq(1)
       expect(local_charges_data.values.first.length).to eq(2)
@@ -272,14 +274,12 @@ RSpec.describe OfferCalculator::PricingTools do
     end
 
     it 'returns the correct number of charges for single cargo classes (LCL & BASE PRICING & multiple groups)' do
-      user_mg = FactoryBot.create(:legacy_user, tenant: tenant)
-      tenants_user_mg = Tenants::User.find_by(legacy_id: user_mg.id)
-      group_1 = FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'TEST1')
-      FactoryBot.create(:tenants_membership, group: group_1, member: tenants_user_mg)
-      group_2 = FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'TEST2')
-      FactoryBot.create(:tenants_membership, group: group_2, member: tenants_user_mg)
+      group_1 = FactoryBot.create(:groups_group, organization: organization, name: 'TEST1')
+      FactoryBot.create(:groups_membership, group: group_1, member: user)
+      group_2 = FactoryBot.create(:groups_group, organization: organization, name: 'TEST2')
+      FactoryBot.create(:groups_membership, group: group_2, member: user)
       group_local_charge_1 = FactoryBot.create(:legacy_local_charge,
-                                               tenant: tenant,
+                                               organization: organization,
                                                hub: origin_hub,
                                                mode_of_transport: 'ocean',
                                                load_type: 'lcl',
@@ -290,7 +290,7 @@ RSpec.describe OfferCalculator::PricingTools do
                                                expiration_date: Date.today + 3.months,
                                                group_id: group_1.id)
       FactoryBot.create(:legacy_local_charge,
-                        tenant: tenant,
+                        organization: organization,
                         hub: origin_hub,
                         mode_of_transport: 'ocean',
                         load_type: 'lcl',
@@ -301,9 +301,9 @@ RSpec.describe OfferCalculator::PricingTools do
                         expiration_date: Date.today + 3.months,
                         group_id: group_2.id)
       lcl = FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id)
-      scope = FactoryBot.create(:tenants_scope, target: tenants_user_mg, content: { base_pricing: true })
-      FactoryBot.create(:export_margin, applicable: tenants_tenant, tenant: tenants_tenant)
-      local_charges_data, _metadata = described_class.new(user: user_mg, shipment: shipment).determine_local_charges(lcl_schedules, [lcl], 'export', user_mg)
+      scope = FactoryBot.create(:organizations_scope, target: user, content: { base_pricing: true })
+      FactoryBot.create(:export_margin, applicable: organization, organization: organization)
+      local_charges_data, _metadata = described_class.new(user: user, shipment: shipment).determine_local_charges(lcl_schedules, [lcl], 'export', user)
       expect(local_charges_data.values.length).to eq(1)
       expect(local_charges_data.values.first.length).to eq(2)
       expect(local_charges_data.values.first.pluck('key')).to match_array([lcl.id, 'shipment'])
@@ -318,7 +318,7 @@ RSpec.describe OfferCalculator::PricingTools do
 
     context 'with backend consolidation' do
       before do
-        Tenants::Scope.find_by(target: tenants_tenant).update(content: { consolidation: { cargo: { backend: true } } })
+        Organizations::Scope.find_by(target: organization).update(content: { consolidation: { cargo: { backend: true } } })
       end
 
       let(:cargos) { FactoryBot.create_list(:legacy_cargo_item, 3, shipment_id: shipment.id) }
@@ -414,9 +414,9 @@ RSpec.describe OfferCalculator::PricingTools do
   end
 
   describe '.calc_addon_charges' do
-    let(:addon) { FactoryBot.create(:legacy_addon, tenant_id: tenant.id, hub: origin_hub) }
-    let(:uknown_addon) { FactoryBot.create(:unknown_fee_addon, tenant_id: tenant.id, hub: origin_hub) }
-    let(:addon_fcl) { FactoryBot.create(:legacy_addon, tenant_id: tenant.id, hub: origin_hub, cargo_class: 'fcl_20') }
+    let(:addon) { FactoryBot.create(:legacy_addon, organization_id: organization.id, hub: origin_hub) }
+    let(:uknown_addon) { FactoryBot.create(:unknown_fee_addon, organization_id: organization.id, hub: origin_hub) }
+    let(:addon_fcl) { FactoryBot.create(:legacy_addon, organization_id: organization.id, hub: origin_hub, cargo_class: 'fcl_20') }
     let(:lcl) { FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id) }
     let(:lcl) { FactoryBot.create(:legacy_cargo_item, shipment_id: shipment.id) }
 
@@ -428,11 +428,8 @@ RSpec.describe OfferCalculator::PricingTools do
                                 user: user,
                                 mode_of_transport: 'ocean'
                               )
-      aggregate_failures do
-        expect(result.dig('total', 'value')).to eq(75)
-        expect(result.dig('total', 'currency')).to eq('EUR')
-        expect(result.dig('total', 'currency')).to be_a(String)
-      end
+      expect(result.dig('total', 'value')).to eq(75)
+      expect(result.dig('total', 'currency')).to eq('EUR')
     end
 
     it 'calculates the addon charge for cargo item w/ unknown fee' do
@@ -443,11 +440,8 @@ RSpec.describe OfferCalculator::PricingTools do
                                 user: user,
                                 mode_of_transport: 'ocean'
                               )
-      aggregate_failures do
-        expect(result.dig('total', 'value')).to eq(0)
-        expect(result.dig('total', 'currency')).to eq('EUR')
-        expect(result.dig('total', 'currency')).to be_a(String)
-      end
+      expect(result.dig('total', 'value')).to eq(0)
+      expect(result.dig('total', 'currency')).to eq('EUR')
     end
 
     it 'calculates the addon charge for container' do
@@ -458,11 +452,8 @@ RSpec.describe OfferCalculator::PricingTools do
                                 user: user,
                                 mode_of_transport: 'ocean'
                               )
-      aggregate_failures do
-        expect(result.dig('total', 'value')).to eq(75)
-        expect(result.dig('total', 'currency')).to eq('EUR')
-        expect(result.dig('total', 'currency')).to be_a(String)
-      end
+      expect(result.dig('total', 'value')).to eq(75)
+      expect(result.dig('total', 'currency')).to eq('EUR')
     end
   end
 

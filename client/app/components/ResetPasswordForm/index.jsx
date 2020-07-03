@@ -1,14 +1,14 @@
+import Formsy from 'formsy-react'
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
-import Formsy from 'formsy-react'
+import { getTenantApiUrl } from '../../constants/api.constants'
+import { queryStringToObj } from '../../helpers'
 import PropTypes from '../../prop-types'
+import FormsyInput from '../FormsyInput/FormsyInput'
+import Header from '../Header/Header'
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './ResetPasswordForm.scss'
-import FormsyInput from '../FormsyInput/FormsyInput'
-import { getTenantApiUrl } from '../../constants/api.constants'
-import { queryStringToObj } from '../../helpers'
-import Header from '../Header/Header'
 
 const { fetch } = window
 
@@ -25,6 +25,7 @@ class ResetPasswordForm extends React.PureComponent {
     super(props)
     this.state = { focus: {}, settingPassword: false }
   }
+
   handleSubmit (model) {
     const queryString = this.props.location.search.substring(1)
     const { t } = this.props
@@ -40,10 +41,11 @@ class ResetPasswordForm extends React.PureComponent {
     }
 
     const queryStringData = queryStringToObj(queryString)
+    const token = queryStringData.reset_password_token
 
     this.setState({ settingPassword: true })
 
-    fetch(`${getTenantApiUrl()}/auth/password`, {
+    fetch(`${getTenantApiUrl()}/password_resets/${token}`, {
       method: 'PUT',
       headers: buildHeaders(queryStringData),
       body: JSON.stringify(model)
@@ -54,6 +56,7 @@ class ResetPasswordForm extends React.PureComponent {
       })
     })
   }
+
   handleInvalidSubmit () {
     if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
   }
@@ -86,16 +89,16 @@ class ResetPasswordForm extends React.PureComponent {
             <Formsy
               className={styles.reset_password_form}
               name="form"
-              onValidSubmit={model => this.handleSubmit(model)}
-              onInvalidSubmit={model => this.handleInvalidSubmit(model)}
+              onValidSubmit={(model) => this.handleSubmit(model)}
+              onInvalidSubmit={(model) => this.handleInvalidSubmit(model)}
             >
               <div className="form-group">
                 <label htmlFor="password">{t('account:password')}</label>
                 <FormsyInput
                   type="password"
                   className={styles.form_control}
-                  onFocus={e => this.handleFocus(e)}
-                  onBlur={e => this.handleFocus(e)}
+                  onFocus={(e) => this.handleFocus(e)}
+                  onBlur={(e) => this.handleFocus(e)}
                   name="password"
                   id="password"
                   submitAttempted={this.state.submitAttempted}
@@ -119,8 +122,8 @@ class ResetPasswordForm extends React.PureComponent {
                 <FormsyInput
                   type="password"
                   className={styles.form_control}
-                  onFocus={e => this.handleFocus(e)}
-                  onBlur={e => this.handleFocus(e)}
+                  onFocus={(e) => this.handleFocus(e)}
+                  onBlur={(e) => this.handleFocus(e)}
                   name="password_confirmation"
                   id="password_confirmation"
                   submitAttempted={this.state.submitAttempted}

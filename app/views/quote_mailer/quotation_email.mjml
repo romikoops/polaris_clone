@@ -3,7 +3,7 @@
     <mj-column>
       <mj-text>
         <p style="display: none;max-height: 0px;overflow: hidden;">
-          Hello <%= @email %>, <%= @user_profile.full_name %> from <%= @shipment.tenant.name %>
+          Hello <%= @email %>, <%= @user_profile.full_name %> from <%= @org_theme.name %>
                 prepared for you a document with the best quotations for the itinerary:
         </p>
       </mj-text>
@@ -19,7 +19,7 @@
   <mj-section padding="20px 5%" background-color="#BDBDBD">
     <mj-column>
       <mj-text>
-        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.name}", style: "width: 150px; max-height: 150px;" %>
+        <%= image_tag attachments['logo.png'].url, alt: "#{@org_theme.name}", style: "width: 150px; max-height: 150px;" %>
       </mj-text>
     </mj-column>
     <mj-column>
@@ -52,7 +52,7 @@
       <mj-text line-height="24px">
         <p>
           <%= @user_profile.full_name %> from <strong>
-            <%= @shipment.tenant.name %></strong>
+            <%= @org_theme.name %></strong>
           prepared for you a document with the best quotations for the itinerary:
         </p>
       </mj-text>

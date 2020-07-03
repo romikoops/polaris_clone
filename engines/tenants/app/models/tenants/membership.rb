@@ -41,7 +41,7 @@ module Tenants
       case member.class.to_s
       when 'Tenants::User'
         'client'
-      when 'Tenants::Group'
+      when 'Groups::Group'
         'group'
       when 'Tenants::Company'
         'company'
@@ -51,7 +51,7 @@ module Tenants
     private
 
     def set_priority
-      existing_memberships = Tenants::Membership
+      existing_memberships = Groups::Membership
                              .where(member: member)
                              .reorder(priority: :desc)
       priority = existing_memberships.empty? ? 0 : existing_memberships.first.priority + 1

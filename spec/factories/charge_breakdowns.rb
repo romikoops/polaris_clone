@@ -17,32 +17,32 @@ FactoryBot.define do
         cargo_charge_category = ChargeCategory.find_by(
           name: evaluator.charge_category_name,
           code: evaluator.charge_category_name.underscore,
-          tenant_id: shipment.tenant_id
+          organization_id: shipment.organization_id
         ) || create(:charge_category,
                     name: evaluator.charge_category_name,
                     code: evaluator.charge_category_name.underscore,
-                    tenant_id: shipment.tenant_id)
+                    organization_id: shipment.organization_id)
         cargo_units.each do |cargo_unit|
           cargo_unit_charge_category = ChargeCategory.find_by(
             name: cargo_unit.class.name.humanize,
             code: cargo_unit.class.name.underscore.downcase,
             cargo_unit_id: cargo_unit[:id],
-            tenant_id: shipment.tenant_id
+            organization_id: shipment.organization_id
           ) || create(:charge_category,
                       name: cargo_unit.class.name.humanize,
                       code: cargo_unit.class.name.underscore.downcase,
                       cargo_unit_id: cargo_unit[:id],
-                      tenant_id: shipment.tenant_id)
+                      organization_id: shipment.organization_id)
           base_charge = build(
             :charge,
             charge_breakdown: charge_breakdown,
-            charge_category: ChargeCategory.from_code(code: 'base_node', name: 'Base Node', tenant_id: shipment.tenant_id),
-            children_charge_category: ChargeCategory.from_code(code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id)
+            charge_category: ChargeCategory.from_code(code: 'base_node', name: 'Base Node', organization_id: shipment.organization_id),
+            children_charge_category: ChargeCategory.from_code(code: 'grand_total', name: 'Grand Total', organization_id: shipment.organization_id)
           )
           grand_total_charge = build(
             :charge,
             charge_breakdown: charge_breakdown,
-            charge_category: ChargeCategory.from_code(code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id),
+            charge_category: ChargeCategory.from_code(code: 'grand_total', name: 'Grand Total', organization_id: shipment.organization_id),
             children_charge_category: cargo_charge_category,
             parent_id: base_charge.id
           )
@@ -69,21 +69,3 @@ FactoryBot.define do
     end
   end
 end
-
-# == Schema Information
-#
-# Table name: charge_breakdowns
-#
-#  id          :bigint           not null, primary key
-#  valid_until :datetime
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  sandbox_id  :uuid
-#  shipment_id :integer
-#  tender_id   :uuid
-#  trip_id     :integer
-#
-# Indexes
-#
-#  index_charge_breakdowns_on_sandbox_id  (sandbox_id)
-#

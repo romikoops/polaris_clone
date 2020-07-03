@@ -63,7 +63,7 @@ module ExcelDataServices
           carrier = Carrier.find_by(name: row.carrier) if row.carrier.present?
 
           TenantVehicle.find_by(
-            tenant: tenant,
+            organization: organization,
             name: row.service_level,
             mode_of_transport: row.mot,
             carrier: carrier

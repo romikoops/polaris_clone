@@ -142,11 +142,17 @@ end
 #  rates               :jsonb
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  organization_id     :uuid
 #  scope_id            :uuid
 #  tenant_id           :integer
 #
 # Indexes
 #
+#  index_trucking_rates_on_organization_id    (organization_id)
 #  index_trucking_rates_on_tenant_id          (tenant_id)
 #  index_trucking_rates_on_trucking_scope_id  (scope_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

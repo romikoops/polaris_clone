@@ -3,16 +3,15 @@
 require "swagger_helper"
 
 RSpec.describe "Tenders" do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}, with_profile: true) }
-  let(:tenant_user) { Tenants::User.find_by(legacy_id: user.id) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: "Gothenburg Port") }
-  let(:destination_hub) { itinerary.hubs.find_by(name: "Shanghai Port") }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:organization_id) { organization.id }
+  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let(:quotation) { FactoryBot.create(:quotations_quotation, tenant: tenants_tenant, user: user) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, tenant: tenant, user: user) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:quotation) { FactoryBot.create(:quotations_quotation, organization: organization, user: user) }
+  let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, organization: organization, user: user) }
   let(:charge_category) { shipment.charge_breakdowns.first.charges.first.children_charge_category }
   let(:tender) do
     FactoryBot.create(:quotations_tender,
@@ -29,15 +28,16 @@ RSpec.describe "Tenders" do
     shipment.charge_breakdowns.update(tender_id: tender.id)
   end
 
-  path "/v1/tenders/{id}" do
+  path "/v1/organizations/{organization_id}/tenders/{id}" do
     put "Update Tenders" do
       tags "Quote"
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :id, in: :path, type: :string, schema: {type: :string}
-      parameter name: :tenant_id, in: :query, type: :string, schema: {type: :string}
+      parameter name: :organization_id, in: :query, type: :string, schema: {type: :string}
       parameter name: :params, in: :body, schema: {
         type: :object,
         properties: {
@@ -49,7 +49,7 @@ RSpec.describe "Tenders" do
       }
 
       let(:id) { tender.id }
-      let(:tenant_id) { tenants_tenant.id }
+      let(:organization_id) { organization.id }
       let(:params) do
         {
           charge_category_id: charge_category.id,

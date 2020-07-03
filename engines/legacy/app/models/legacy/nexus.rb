@@ -5,9 +5,8 @@ module Legacy
     self.table_name = 'nexuses'
 
     include PgSearch::Model
-
+    belongs_to :organization, class_name: 'Organizations::Organization'
     has_many :hubs, class_name: 'Legacy::Hub', dependent: :destroy
-    belongs_to :tenant, class_name: 'Legacy::Tenant'
     belongs_to :country, class_name: 'Legacy::Country'
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
@@ -23,20 +22,26 @@ end
 #
 # Table name: nexuses
 #
-#  id         :bigint           not null, primary key
-#  latitude   :float
-#  locode     :string
-#  longitude  :float
-#  name       :string
-#  photo      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  country_id :integer
-#  sandbox_id :uuid
-#  tenant_id  :integer
+#  id              :bigint           not null, primary key
+#  latitude        :float
+#  locode          :string
+#  longitude       :float
+#  name            :string
+#  photo           :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  country_id      :integer
+#  organization_id :uuid
+#  sandbox_id      :uuid
+#  tenant_id       :integer
 #
 # Indexes
 #
-#  index_nexuses_on_sandbox_id  (sandbox_id)
-#  index_nexuses_on_tenant_id   (tenant_id)
+#  index_nexuses_on_organization_id  (organization_id)
+#  index_nexuses_on_sandbox_id       (sandbox_id)
+#  index_nexuses_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

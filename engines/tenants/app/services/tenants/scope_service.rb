@@ -2,9 +2,9 @@
 
 module Tenants
   class ScopeService
-    def initialize(target: nil, tenant: nil, sandbox: nil)
+    def initialize(target: nil, organization: nil, sandbox: nil)
       @target = target
-      @tenant = tenant || target&.tenant
+      @organization = organization
       @sandbox = sandbox
     end
 
@@ -18,7 +18,7 @@ module Tenants
 
     private
 
-    attr_reader :sandbox, :target, :tenant
+    attr_reader :sandbox, :target, :organization
 
     def scope
       @scope ||= begin
@@ -33,7 +33,7 @@ module Tenants
     end
 
     def hierarchy
-      @hierarchy ||= HierarchyService.new(target: target, tenant: tenant).fetch
+      @hierarchy ||= HierarchyService.new(target: target, organization: organization).fetch
     end
   end
 end

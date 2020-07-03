@@ -13,7 +13,7 @@ module Api
 
       def counterpart
         Api::Routing::Trucking::CounterpartService.counterpart_availabilities(
-          tenant: current_tenant,
+          organization: current_organization,
           load_type: trucking_params[:load_type],
           coordinates: coordinates,
           nexus_id: trucking_params[:id],

@@ -13,8 +13,8 @@ module ExcelDataServices
                             'Insertable Checks',
                             'Smart Assumptions'].freeze
 
-      def initialize(tenant:, file_or_path:, options: {})
-        super(tenant: tenant)
+      def initialize(organization:, file_or_path:, options: {})
+        super(organization: organization)
         @file_or_path = file_or_path
         @options = options
       end
@@ -62,7 +62,7 @@ module ExcelDataServices
           data_by_insertion_types.each do |insertion_type, data_part|
             VALIDATION_FLAVORS.each do |flavor|
               validator_klass = ExcelDataServices::Validators::Base.get(flavor, insertion_type.to_s)
-              validator = validator_klass.new(tenant: tenant,
+              validator = validator_klass.new(organization: organization,
                                               sheet_name: sheet_name,
                                               data: data_part,
                                               options: options)
@@ -118,7 +118,7 @@ module ExcelDataServices
 
       def parse_data(xlsx, headers_for_all_sheets, restructurer_names_for_all_sheets)
         file_parser = ExcelDataServices::FileParser
-        file_parser.parse(tenant: tenant,
+        file_parser.parse(organization: organization,
                           xlsx: xlsx,
                           headers_for_all_sheets: headers_for_all_sheets,
                           restructurer_names_for_all_sheets: restructurer_names_for_all_sheets)
@@ -126,12 +126,12 @@ module ExcelDataServices
 
       def restructure_data(raw_data)
         restructurer = ExcelDataServices::Restructurers::Base
-        restructurer.restructure(tenant: tenant, data: raw_data)
+        restructurer.restructure(organization: organization, data: raw_data)
       end
 
       def insert_into_database(insertion_type, data)
         inserter = ExcelDataServices::Inserters::Base.get(insertion_type)
-        inserter.insert(tenant: tenant, data: data, options: options)
+        inserter.insert(organization: organization, data: data, options: options)
       end
 
       def combine_stats(stats, partial_stats)

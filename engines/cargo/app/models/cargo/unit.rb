@@ -5,7 +5,7 @@ module Cargo
     measured_weight :weight
     measured_volume :volume
     measured_length :width, :length, :height
-    belongs_to :tenant, class_name: 'Tenants::Tenant'
+    belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :cargo, class_name: 'Cargo::Cargo'
 
     enum cargo_class: Specification::CLASS_ENUM, _prefix: true
@@ -14,7 +14,7 @@ module Cargo
       unspecified: 0
     }
 
-    validates :tenant_id, presence: true
+    validates :organization_id, presence: true
     validates :quantity, presence: true, numericality: { greater_than: 0 }
     validates :weight, measured: { units: :kg, greater_than: 0 }
     validates :volume, measured: { units: :m3 }
@@ -97,16 +97,19 @@ end
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  cargo_id             :uuid
+#  organization_id      :uuid
 #  tenant_id            :uuid
 #
 # Indexes
 #
-#  index_cargo_units_on_cargo_class  (cargo_class)
-#  index_cargo_units_on_cargo_id     (cargo_id)
-#  index_cargo_units_on_cargo_type   (cargo_type)
-#  index_cargo_units_on_tenant_id    (tenant_id)
+#  index_cargo_units_on_cargo_class      (cargo_class)
+#  index_cargo_units_on_cargo_id         (cargo_id)
+#  index_cargo_units_on_cargo_type       (cargo_type)
+#  index_cargo_units_on_organization_id  (organization_id)
+#  index_cargo_units_on_tenant_id        (tenant_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (cargo_id => cargo_cargos.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

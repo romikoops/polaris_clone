@@ -43,7 +43,8 @@ class AdminScheduleGenerator extends Component {
         6: false,
         7: false
       },
-      stopIntervals: []
+      closingDateBuffer: 1,
+      stopIntervals: [1]
     }
     this.handleDayChange = this.handleDayChange.bind(this)
     this.setItinerary = this.setItinerary.bind(this)

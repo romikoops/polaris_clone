@@ -1,8 +1,8 @@
 import { push } from 'react-router-redux'
+import { alertActions, shipmentActions } from '.'
 import { userConstants } from '../constants'
-import { userService } from '../services'
 import { history } from '../helpers'
-import { alertActions, authenticationActions, shipmentActions } from './'
+import { userService } from '../services'
 
 function getAll (redirect) {
   function request () {
@@ -29,7 +29,7 @@ function getAll (redirect) {
         }
         dispatch(success(response))
       },
-      error => dispatch(failure(error))
+      (error) => dispatch(failure(error))
     )
   }
 }
@@ -142,7 +142,7 @@ function getAddresss (user, redirect) {
         }
         dispatch(success(response))
       },
-      error => dispatch(failure(error))
+      (error) => dispatch(failure(error))
     )
   }
 }
@@ -172,7 +172,7 @@ function destroyAddress (userId, addressId, redirect) {
         }
         dispatch(success(response))
       },
-      error => dispatch(failure(error))
+      (error) => dispatch(failure(error))
     )
   }
 }
@@ -202,7 +202,7 @@ function makePrimary (userId, addressId, redirect) {
         }
         dispatch(success(response))
       },
-      error => dispatch(failure(error))
+      (error) => dispatch(failure(error))
     )
   }
 }
@@ -467,7 +467,7 @@ function getContacts (params, redirect) {
     userService.getContacts(params).then(
       (data) => {
         if (redirect) {
-          dispatch(push(`/account/contacts`))
+          dispatch(push('/account/contacts'))
         }
         dispatch(success(data))
       },
@@ -651,91 +651,6 @@ function saveAddressEdit (address) {
   }
 }
 
-function getPricings (redirect) {
-  function request (pricingData) {
-    return { type: userConstants.GET_PRICINGS_REQUEST, payload: pricingData }
-  }
-
-  function success (pricingData) {
-    return { type: userConstants.GET_PRICINGS_SUCCESS, payload: pricingData.data }
-  }
-
-  function failure (error) {
-    return { type: userConstants.GET_PRICINGS_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request())
-
-    userService.getPricings().then(
-      (data) => {
-        dispatch(success(data))
-        if (redirect) {
-          dispatch(push('/account/pricings'))
-        }
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
-function getPricingsForItinerary (id) {
-  function request (pricingData) {
-    return { type: userConstants.GET_ITINERARY_PRICINGS_REQUEST, payload: pricingData }
-  }
-
-  function success (pricingData) {
-    return { type: userConstants.GET_ITINERARY_PRICINGS_SUCCESS, payload: pricingData.data }
-  }
-
-  function failure (error) {
-    return { type: userConstants.GET_ITINERARY_PRICINGS_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request())
-
-    userService.getPricingsForItinerary(id).then(
-      (data) => {
-        dispatch(success(data))
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
-function requestPricing (req) {
-  function request (pricingData) {
-    return { type: userConstants.SEND_DEDICATED_PRICINGS_REQUEST, payload: pricingData }
-  }
-
-  function success (pricingData) {
-    return { type: userConstants.SEND_DEDICATED_PRICINGS_SUCCESS, payload: pricingData.data }
-  }
-
-  function failure (error) {
-    return { type: userConstants.SEND_DEDICATED_PRICINGS_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request())
-
-    userService.requestPricing(req).then(
-      (data) => {
-        dispatch(success(data))
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
-
 function confirmAccount (token) {
   function request (userData) {
     return { type: userConstants.CONFIRM_ACCOUNT_REQUEST, payload: userData }
@@ -810,9 +725,6 @@ export const userActions = {
   searchShipments,
   searchContacts,
   deltaShipmentsPage,
-  getPricings,
-  getPricingsForItinerary,
-  requestPricing,
   confirmAccount
 }
 

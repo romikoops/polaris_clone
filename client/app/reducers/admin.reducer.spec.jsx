@@ -1,7 +1,7 @@
-import { get } from 'lodash'
-import { v4 } from 'uuid'
-import reducer from './admin.reducer'
-import { adminConstants } from '../constants'
+import { get } from 'lodash';
+import { v4 } from 'uuid';
+import { adminConstants } from '../constants';
+import reducer from './admin.reducer';
 
 describe('admin.reducer', () => {
   test('exports a (reducer) function', () => {
@@ -12,24 +12,24 @@ describe('admin.reducer', () => {
     const dummyPricing = {
       id: 123,
       group_id: v4(),
-      tenant_id: 1,
+      organization_id: 1,
       itinerary_id: 2
     }
-    const initialState = { 
-      pricings: { 
+    const initialState = {
+      pricings: {
         show: {
           [dummyPricing.itinerary_id]: {
-            pricings: [ dummyPricing ]
+            pricings: [dummyPricing]
           },
           [dummyPricing.group_id]: {
-            pricings: [ dummyPricing ]
+            pricings: [dummyPricing]
           }
         }
       }
     }
-    const resultState = reducer(initialState, { 
+    const resultState = reducer(initialState, {
       type: adminConstants.DELETE_PRICING_SUCCESS,
-      payload: { 
+      payload: {
         fromGroup: true,
         pricing: dummyPricing
       }
@@ -40,28 +40,45 @@ describe('admin.reducer', () => {
     const dummyPricing = {
       id: 123,
       group_id: v4(),
-      tenant_id: 1,
+      organization_id: 1,
       itinerary_id: 2
     }
-    const initialState = { 
-      pricings: { 
+    const initialState = {
+      pricings: {
         show: {
           [dummyPricing.itinerary_id]: {
-            pricings: [ dummyPricing ]
+            pricings: [dummyPricing]
           },
           [dummyPricing.group_id]: {
-            pricings: [ dummyPricing ]
+            pricings: [dummyPricing]
           }
         }
       }
     }
-    const resultState = reducer(initialState, { 
+    const resultState = reducer(initialState, {
       type: adminConstants.DELETE_PRICING_SUCCESS,
-      payload: { 
+      payload: {
         fromGroup: false,
         pricing: dummyPricing
       }
     })
     expect(get(resultState, ['pricings', 'show', dummyPricing.itinerary_id, 'pricings'])).toEqual([])
+  })
+
+  test('it handles ACTIVATE_HUB_SUCCESS', () => {
+    const initialState = {
+      hubs: { hubsData: [{ id: 1, hub_status: 'active' }] },
+      hub: { hub: { id: 1, hub_status: 'active' } },
+      loading: true
+    }
+
+    const resultState = reducer(initialState, {
+      type: adminConstants.ACTIVATE_HUB_SUCCESS,
+      payload: { data: { id: 1, hub_status: 'inactive' } }
+    })
+
+    expect(resultState.hubs.hubsData[0].hub_status).toEqual('inactive')
+    expect(resultState.loading).toBeFalsy()
+    expect(resultState.hub.hub.hub_status).toEqual('inactive')
   })
 })

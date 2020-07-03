@@ -2,11 +2,11 @@
 
 require 'core'
 require 'legacy'
+require 'organizations'
 require 'pricings'
-require 'result_formatter'
-require 'tenants'
-require 'trucking'
 require 'quotations'
+require 'result_formatter'
+require 'trucking'
 
 require 'chronic'
 require 'sentry-raven'

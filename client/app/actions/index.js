@@ -26,7 +26,7 @@ export function filterTable (filter) {
 
 export function setTenant (tenant) {
   return {
-    type: types.SET_TENANT,
+    type: types.SET_ORGANIZATION,
     tenant
   }
 }

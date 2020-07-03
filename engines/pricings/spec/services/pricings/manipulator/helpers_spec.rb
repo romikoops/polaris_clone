@@ -3,19 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Pricings::Manipulator do
-  let!(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle]) }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', organization: organization) }
   let!(:currency) { FactoryBot.create(:legacy_currency) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
-  let!(:tenants_user) do
-    Tenants::User.find_by(legacy_id: user.id).tap do |tapped_user|
-      tapped_user.company = FactoryBot.create(:tenants_company)
-    end
-  end
-  let(:lcl_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-  let(:itinerary) { FactoryBot.create(:default_itinerary, tenant: tenant) }
+  let!(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+  let(:lcl_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
+  let(:itinerary) { FactoryBot.create(:default_itinerary, organization: organization) }
   let(:trips) do
     [1, 3].map do |num|
       base_date = num.days.from_now
@@ -41,19 +35,18 @@ RSpec.describe Pricings::Manipulator do
 
   let(:klass) do
     described_class.new(
-      target: tenants_user,
-      tenant: tenants_tenant,
+      target: user,
+      organization: organization,
       type: :freight_margin,
       args: args
     )
   end
   let(:target_shipment) { lcl_shipment }
-  let(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, tenant: tenant) }
+  let(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, organization: organization) }
 
   before do
-    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
-    FactoryBot.create(:tenants_scope, content: {}, target: tenants_tenant)
-    FactoryBot.create(:freight_margin, default_for: 'ocean', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+    FactoryBot.create(:organizations_scope, content: {}, target: organization)
+    FactoryBot.create(:freight_margin, default_for: 'ocean', organization: organization, applicable: organization, value: 0)
   end
 
   describe 'fee_keys' do
@@ -99,18 +92,14 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'raises an error when there are no schedules and the type is freight margin' do
-        expect { described_class.new(target: tenants_user, tenant: tenants_tenant, type: :freight_margin, args: args) }.to raise_error(Pricings::Manipulator::MissingArgument)
+        expect { described_class.new(target: user, organization: organization, type: :freight_margin, args: args) }.to raise_error(Pricings::Manipulator::MissingArgument)
       end
-    end
-
-    it 'raises an error when there is no target' do
-      expect { described_class.new(target: nil, tenant: tenants_tenant, type: :freight_margin, args: args) }.to raise_error(Pricings::Manipulator::MissingArgument)
     end
   end
 
   describe '.find_applicable_margins' do
     context 'with freight pricings and user margin' do
-      let!(:user_margin) { FactoryBot.create(:freight_margin, pricing: pricing, tenant: tenants_tenant, applicable: tenants_user) }
+      let!(:user_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user) }
 
       it 'returns the applicable margin attached to the user' do
         margins = klass.find_applicable_margins
@@ -119,11 +108,22 @@ RSpec.describe Pricings::Manipulator do
     end
 
     context 'with freight pricings and tenant margin' do
-      let!(:tenant_margin) { FactoryBot.create(:freight_margin, pricing: pricing, tenant: tenants_tenant, applicable: tenants_tenant) }
+      let!(:tenant_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: organization) }
 
       it 'returns the applicable margin attached to the tenant when the user has none' do
         margins = klass.find_applicable_margins
         expect(margins.first[:margin]).to eq(tenant_margin)
+      end
+    end
+  end
+
+  context 'when initializing variables' do
+    context 'when user is nil' do
+      let(:user) { nil }
+      let!(:default_group) { FactoryBot.create(:groups_group, name: 'default', organization: organization) }
+
+      it 'sets the target as the default group' do
+        expect(klass.send(:target)).to eq(default_group)
       end
     end
   end

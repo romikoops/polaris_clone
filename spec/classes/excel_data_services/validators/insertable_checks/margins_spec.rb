@@ -3,32 +3,30 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::InsertableChecks::Margins do
-  let(:tenant) { create(:tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { create(:user, tenant: tenant) }
-  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
+  let(:organization) { create(:organizations_organization) }
+  let(:user) { create(:organizations_user, organization: organization) }
   let(:options) do
     {
-      tenant: tenant,
+      organization: organization,
       data: input_data,
       sheet_name: 'Margins',
       options: {
-        applicable: tenants_user
+        applicable: user
       }
     }
   end
   let(:tenant_vehicle) do
     create(:tenant_vehicle,
-           tenant: tenant,
+           organization: organization,
            name: 'standard',
            carrier: build(:carrier, code: 'consolidation', name: 'Consolidation'))
   end
 
   before do
-    itinerary = create(:itinerary, name: 'Dalian - Gothenburg', tenant: tenant)
+    itinerary = create(:itinerary, name: 'Dalian - Gothenburg', organization: organization)
     create(:pricings_margin,
-           tenant: tenants_tenant,
-           applicable: tenants_user,
+           organization: organization,
+           applicable: user,
            itinerary: itinerary,
            cargo_class: 'lcl',
            tenant_vehicle: tenant_vehicle,

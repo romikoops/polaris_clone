@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :excel_data_restructured, class: 'Array' do
     initialize_with { attributes[:data].deep_dup }
-    association :tenant
+    association :organization, factory: :organizations_organization
 
     trait :correct_pricings_one_fee_col_and_ranges do
       data do
@@ -30,8 +30,8 @@ FactoryBot.define do
             transshipment: 'ZACPT',
             row_nr: 2,
             internal: false,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -55,8 +55,8 @@ FactoryBot.define do
             internal: false,
             transit_time: 24,
             transshipment: nil,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' },
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' },
           { sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -80,8 +80,8 @@ FactoryBot.define do
             transshipment: nil,
             internal: false,
             range: [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }],
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Nov 2018'),
@@ -105,8 +105,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' },
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' },
           { sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Nov 2018'),
@@ -130,8 +130,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' },
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' },
           { sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Nov 2018'),
@@ -155,8 +155,8 @@ FactoryBot.define do
             transshipment: nil,
             transit_time: 24,
             range: [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }],
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Sat, 01 Dec 2018'),
@@ -180,8 +180,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' },
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' },
           { sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Sat, 01 Dec 2018'),
@@ -205,8 +205,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' },
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' },
           { sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Sat, 01 Dec 2018'),
@@ -230,8 +230,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' },
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' },
           { sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Sat, 01 Dec 2018'),
@@ -255,8 +255,8 @@ FactoryBot.define do
             transshipment: nil,
             transit_time: 24,
             range: [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }],
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Sun, 17 Mar 2019'),
@@ -280,8 +280,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Sun, 11 Mar 2018'),
@@ -305,8 +305,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' },
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' },
           { sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Sun, 11 Mar 2018'),
@@ -330,8 +330,8 @@ FactoryBot.define do
             transshipment: nil,
             transit_time: 24,
             range: [{ 'max' => 100, 'min' => 0, 'rate' => 20 }, { 'max' => 500, 'min' => 101, 'rate' => 25 }],
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -355,8 +355,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -380,8 +380,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -405,8 +405,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -430,8 +430,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -455,8 +455,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -480,8 +480,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -505,8 +505,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -530,8 +530,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -555,8 +555,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -580,8 +580,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -605,8 +605,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -630,8 +630,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -655,8 +655,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -680,8 +680,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -705,8 +705,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }],
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_one_fee_col_and_ranges',
             effective_date: Date.parse('Thu, 15 Mar 2018'),
@@ -730,8 +730,8 @@ FactoryBot.define do
             internal: false,
             transshipment: nil,
             transit_time: 24,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }]]
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }]]
       end
     end
 
@@ -762,8 +762,8 @@ FactoryBot.define do
            row_nr: 2,
            internal: false,
            notes: [{header: "Gothenburg - Shanghai", body: "test"}],
-           origin_name: "Gothenburg Port",
-           destination_name: "Shanghai Port"}]]
+           origin_name: "Gothenburg",
+           destination_name: "Shanghai"}]]
       end
     end
 
@@ -794,8 +794,8 @@ FactoryBot.define do
             transshipment: nil,
             row_nr: 2,
             internal: false,
-            origin_name: 'Gothenburg Port',
-            destination_name: 'Shanghai Port' }]]
+            origin_name: 'Gothenburg',
+            destination_name: 'Shanghai' }]]
       end
     end
 
@@ -807,10 +807,10 @@ FactoryBot.define do
             expiration_date: Date.parse('Sun, 17 Mar 2011'),
             customer_email: nil,
             origin: 'GothenERRORburg',
-            origin_name: 'GothenERRORburg Port',
+            origin_name: 'GothenERRORburg',
             country_origin: 'Sweden',
             destination: 'Shanghai',
-            destination_name: 'Shanghai Port',
+            destination_name: 'Shanghai',
             country_destination: 'China',
             mot: 'ocean',
             carrier: nil,
@@ -831,10 +831,10 @@ FactoryBot.define do
             expiration_date: Date.parse('Sun, 17 Mar 2019'),
             customer_email: 'Non.Existent@email.address',
             origin: 'Gothenburg',
-            origin_name: 'Gothenburg Port',
+            origin_name: 'Gothenburg',
             country_origin: 'Sweden',
             destination: 'Shanghai',
-            destination_name: 'Shanghai Port',
+            destination_name: 'Shanghai',
             country_destination: 'China',
             mot: 'ocean',
             carrier: nil,
@@ -855,10 +855,10 @@ FactoryBot.define do
             expiration_date: Date.parse('Sun, 17 Mar 2019'),
             customer_email: 'Non.Existent@email.address',
             origin: 'Gothenburg',
-            origin_name: 'Gothenburg Port',
+            origin_name: 'Gothenburg',
             country_origin: 'Sweden',
             destination: 'Shanghai',
-            destination_name: 'Shanghai Port',
+            destination_name: 'Shanghai',
             country_destination: 'China',
             mot: 'ocean',
             carrier: nil,
@@ -879,16 +879,16 @@ FactoryBot.define do
             expiration_date: Date.parse('Sun, 17 Mar 2019'),
             customer_email: 'Non.Existent@email.address',
             origin: 'Gothenburg',
-            origin_name: 'Gothenburg Port',
+            origin_name: 'Gothenburg',
             country_origin: 'Sweden',
             destination: 'Shanghai',
-            destination_name: 'Shanghai Port',
+            destination_name: 'Shanghai',
             country_destination: 'China',
             mot: 'ocean',
             carrier: nil,
             service_level: 'standard',
             load_type: 'lcl',
-            rate_basis: 'W/M',
+            rate_basis: 'PER_WM',
             fee_code: 'BAS',
             fee_name: 'Bas',
             currency: 'USD',
@@ -922,8 +922,8 @@ FactoryBot.define do
             fee_min: 60,
             row_nr: 2,
             transshipment: 'ZACPT',
-            origin_name: 'Dalian Port',
-            destination_name: 'Gothenburg Port',
+            origin_name: 'Dalian',
+            destination_name: 'Gothenburg',
             internal: false },
           { sheet_name: 'Sheet1',
             restructurer_name: 'pricing_dynamic_fee_cols_no_ranges',
@@ -947,8 +947,8 @@ FactoryBot.define do
             fee_min: 1550,
             row_nr: 2,
             transshipment: 'ZACPT',
-            origin_name: 'Dalian Port',
-            destination_name: 'Gothenburg Port',
+            origin_name: 'Dalian',
+            destination_name: 'Gothenburg',
             internal: false }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_dynamic_fee_cols_no_ranges',
@@ -972,8 +972,8 @@ FactoryBot.define do
             fee_min: 60,
             row_nr: 3,
             transshipment: nil,
-            origin_name: 'Dalian Port',
-            destination_name: 'Gothenburg Port',
+            origin_name: 'Dalian',
+            destination_name: 'Gothenburg',
             internal: false },
           { sheet_name: 'Sheet1',
             restructurer_name: 'pricing_dynamic_fee_cols_no_ranges',
@@ -997,8 +997,8 @@ FactoryBot.define do
             fee_min: 1550,
             row_nr: 3,
             transshipment: nil,
-            origin_name: 'Dalian Port',
-            destination_name: 'Gothenburg Port',
+            origin_name: 'Dalian',
+            destination_name: 'Gothenburg',
             internal: false }],
          [{ sheet_name: 'Sheet1',
             restructurer_name: 'pricing_dynamic_fee_cols_no_ranges',
@@ -1022,8 +1022,8 @@ FactoryBot.define do
             fee_min: 60,
             row_nr: 4,
             transshipment: nil,
-            origin_name: 'Hong Kong Port',
-            destination_name: 'Southampton Port',
+            origin_name: 'Hong Kong',
+            destination_name: 'Southampton',
             internal: false },
           { sheet_name: 'Sheet1',
             restructurer_name: 'pricing_dynamic_fee_cols_no_ranges',
@@ -1047,8 +1047,8 @@ FactoryBot.define do
             fee_min: 2550,
             row_nr: 4,
             transshipment: nil,
-            origin_name: 'Hong Kong Port',
-            destination_name: 'Southampton Port',
+            origin_name: 'Hong Kong',
+            destination_name: 'Southampton',
             internal: false }]]
       end
     end
@@ -1078,8 +1078,8 @@ FactoryBot.define do
            fee: 60,
            fee_min: 60,
            row_nr: 4,
-           origin_name: "Hong Kong Port",
-           destination_name: "Southampton Port",
+           origin_name: "Hong Kong",
+           destination_name: "Southampton",
            internal: false,
            notes: [{header: "Hong Kong - Southampton", body: "Test"}]},
           {effective_date: Date.parse('Tue, 01 Jan 2019'),
@@ -1105,8 +1105,8 @@ FactoryBot.define do
            fee: 2550,
            fee_min: 2550,
            row_nr: 4,
-           origin_name: "Hong Kong Port",
-           destination_name: "Southampton Port",
+           origin_name: "Hong Kong",
+           destination_name: "Southampton",
            internal: false,
            notes: [{header: "Hong Kong - Southampton", body: "Test"}]}]]
       end
@@ -1135,7 +1135,7 @@ FactoryBot.define do
               name: 'Documentation',
               rate_basis: 'PER_BILL',
               value: 20 } },
-           hub_name: 'Bremerhaven Port',
+           hub_name: 'Bremerhaven',
            counterpart_hub_name: nil },
          { hub: 'Antwerp',
            country: 'Belgium',
@@ -1159,7 +1159,7 @@ FactoryBot.define do
              rate_basis: 'PER_BILL',
              range: [{ currency: 'EUR', max: 100, min: 0,
                        value: 20 }] } },
-           hub_name: 'Antwerp Port',
+           hub_name: 'Antwerp',
            counterpart_hub_name: nil },
          { hub: 'Le Havre',
            country: 'France',
@@ -1182,8 +1182,8 @@ FactoryBot.define do
               name: 'Documentation',
               rate_basis: 'PER_BILL',
               value: 20 } },
-           hub_name: 'Le Havre Port',
-           counterpart_hub_name: 'Antwerp Port' }]
+           hub_name: 'Le Havre',
+           counterpart_hub_name: 'Antwerp' }]
       end
     end
 
@@ -1213,7 +1213,7 @@ FactoryBot.define do
             }
           },
           row_nr: "2",
-          hub_name: "Bremerhaven Port",
+          hub_name: "Bremerhaven",
           counterpart_hub_name: nil},
          {hub: "Bremerhaven",
           country: "Germany",
@@ -1248,8 +1248,8 @@ FactoryBot.define do
             }
           },
           row_nr: "3, 2",
-          hub_name: "Bremerhaven Port",
-          counterpart_hub_name: "Gothenburg Port"},
+          hub_name: "Bremerhaven",
+          counterpart_hub_name: "Gothenburg"},
          {hub: "Le Havre",
           country: "France",
           effective_date: Date.parse("Thu, 24 Jan 2019"),
@@ -1274,8 +1274,8 @@ FactoryBot.define do
             }
           },
           row_nr: "4",
-          hub_name: "Le Havre Port",
-          counterpart_hub_name: "Antwerp Port"}]
+          hub_name: "Le Havre",
+          counterpart_hub_name: "Antwerp"}]
       end
     end
 
@@ -3044,19 +3044,9 @@ FactoryBot.define do
             city: 'Abu Dhabi',
             geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
             sandbox: nil },
-          nexus: {
-            name: 'Abu Dhabi',
-            latitude: 24.806936,
-            longitude: 54.644405,
-            photo: nil,
-            locode: 'AEAUH',
-            country: { name: 'United Arab Emirates' },
-            tenant_id: tenant.id,
-            sandbox: nil
-          },
+          nexus: { name: 'Abu Dhabi', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, organization_id: organization.id, sandbox: nil },
           mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true },
-          hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405,
-                 name: 'Abu Dhabi Port', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
+          hub: { organization_id: organization.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Abu Dhabi', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
         },
          {
            address:
@@ -3067,18 +3057,9 @@ FactoryBot.define do
              city: 'Adelaide',
              geocoded_address: '202 Victoria Square, Adelaide SA 5000, Australia',
              sandbox: nil },
-           nexus: {
-             name: 'Adelaide',
-             latitude: -34.9284989,
-             longitude: 138.6007456,
-             photo: nil, locode: 'AUADL',
-             country: { name: 'Australia' },
-             tenant_id: tenant.id,
-             sandbox: nil
-           },
+           nexus: { name: 'Adelaide', latitude: -34.9284989, longitude: 138.6007456, photo: nil, locode: 'AUADL', country: { name: 'Australia' }, organization_id: organization.id, sandbox: nil },
            mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
-           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456,
-                  name: 'Adelaide Port', photo: nil, sandbox: nil, hub_code: 'AUADL' }
+           hub: { organization_id: organization.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456, name: 'Adelaide', photo: nil, sandbox: nil, hub_code: 'AUADL' }
          },
          {
            address:
@@ -3089,19 +3070,9 @@ FactoryBot.define do
              city: 'Sultan Lake',
              geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
              sandbox: nil },
-           nexus: {
-             name: 'Sultan Lake',
-             latitude: 24.806936,
-             longitude: 54.644405,
-             photo: nil,
-             locode: 'AEAUH',
-             country: { name: 'United Arab Emirates' },
-             tenant_id: tenant.id,
-             sandbox: nil
-           },
+           nexus: { name: 'Sultan Lake', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, organization_id: organization.id, sandbox: nil },
            mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
-           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405,
-                  name: 'Sultan Lake', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
+           hub: { organization_id: organization.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Sultan Lake', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
          }]
       end
     end
@@ -3121,19 +3092,9 @@ FactoryBot.define do
             geocoded_address: nil,
             sandbox: nil
           },
-          nexus: {
-            name: 'Abu Dhabi',
-            latitude: 24.806936,
-            longitude: 54.644405,
-            photo: nil,
-            locode: 'AEAUH',
-            country: { name: 'United Arab Emirates' },
-            tenant_id: tenant.id,
-            sandbox: nil
-          },
+          nexus: { name: 'Abu Dhabi', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, organization_id: organization.id, sandbox: nil },
           mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true },
-          hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405,
-                 name: 'Abu Dhabi Port', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
+          hub: { organization_id: organization.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Abu Dhabi', photo: nil, sandbox: nil, hub_code: 'AEAUH' }
         },
          {
            row_nr: 3,
@@ -3146,19 +3107,9 @@ FactoryBot.define do
              geocoded_address: '202 Victoria Square, Adelaide SA 5000, Australia',
              sandbox: nil
            },
-           nexus: {
-             name: 'Adelaide',
-             latitude: nil,
-             longitude: 138.6007456,
-             photo: nil,
-             locode: 'AUADL',
-             country: { name: 'Australia' },
-             tenant_id: tenant.id,
-             sandbox: nil
-           },
+           nexus: { name: 'Adelaide', latitude: nil, longitude: 138.6007456, photo: nil, locode: 'AUADL', country: { name: 'Australia' }, organization_id: organization.id, sandbox: nil },
            mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
-           hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456,
-                  name: 'Adelaide Port', photo: nil, sandbox: nil, hub_code: nil }
+           hub: { organization_id: organization.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456, name: 'Adelaide', photo: nil, sandbox: nil, hub_code: nil }
          }]
       end
     end
@@ -3206,6 +3157,7 @@ FactoryBot.define do
         ]
       end
     end
+
     trait :restructured_schedules do
       data do
         [{
@@ -3350,7 +3302,7 @@ FactoryBot.define do
     factory :excel_data_restructured_correct_saco_shipping_local_charges,
       traits: %i[correct_saco_shipping_local_charges]
     factory :excel_data_restructured_schedules, traits: %i[restructured_schedules]
-    factory :excel_data_restructured_schedule_generator, traits: %i[restructured_schedule_generator]
     factory :excel_data_restructured_max_dimensions, traits: %i[restructured_max_dimensions]
+    factory :excel_data_restructured_schedule_generator, traits: %i[restructured_schedule_generator]
   end
 end

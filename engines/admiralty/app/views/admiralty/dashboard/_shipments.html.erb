@@ -17,7 +17,7 @@
             <td><%= shipment.created_at.strftime('%B %e, %Y, %H:%M') %></td>
             <td><%= link_to(shipment.id, booking_link(shipment), target: '_blank')%></td>
             <td><%= booking_slug(shipment)%></td>
-            <td><%= shipment.user.email %></td>
+            <td><%= Users::User.with_deleted.find(shipment.user_id).email %></td>
           </tr>
         <% end %>
       </tbody>

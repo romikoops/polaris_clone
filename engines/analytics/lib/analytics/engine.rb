@@ -6,11 +6,12 @@ require 'paper_trail'
 require 'rails'
 require 'strong_migrations'
 
+require 'companies'
 require 'legacy'
+require 'organizations'
 require 'pricings'
 require 'quotations'
 require 'shipments'
-require 'tenants'
 
 module Analytics
   class Engine < ::Rails::Engine

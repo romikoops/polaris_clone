@@ -68,23 +68,6 @@ module Legacy
       end
     end
 
-    describe '#user_tenant_match' do
-      it 'returns error if match' do
-        shipment.send('user_tenant_match')
-        expect(shipment.errors.count).to eq 1
-      end
-    end
-
-    describe '#itinerary_trip_match' do
-      let(:shipment) { FactoryBot.create(:legacy_shipment, itinerary_id: trip.itinerary_id) }
-      let(:trip) { FactoryBot.create(:legacy_trip) }
-
-      it 'returns error if match' do
-        shipment.send('itinerary_trip_match')
-        expect(shipment.errors.count).to eq 1
-      end
-    end
-
     describe '#before_validations' do
       it 'set default trucking before validation' do
         expect { shipment.validate! }.not_to raise_error
@@ -168,8 +151,11 @@ end
 #  updated_at                          :datetime         not null
 #  destination_hub_id                  :integer
 #  destination_nexus_id                :integer
+#  distinct_id                         :uuid
 #  incoterm_id                         :integer
 #  itinerary_id                        :integer
+#  old_user_id                         :integer
+#  organization_id                     :uuid
 #  origin_hub_id                       :integer
 #  origin_nexus_id                     :integer
 #  quotation_id                        :integer
@@ -177,11 +163,19 @@ end
 #  tenant_id                           :integer
 #  tender_id                           :uuid
 #  trip_id                             :integer
-#  user_id                             :integer
+#  user_id                             :uuid
 #
 # Indexes
 #
-#  index_shipments_on_sandbox_id  (sandbox_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tenant_id   (tenant_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tender_id   (tender_id)
+#  index_shipments_on_organization_id  (organization_id)
+#  index_shipments_on_sandbox_id       (sandbox_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tenant_id        (tenant_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tender_id        (tender_id)
+#  index_shipments_on_user_id          (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_     (user_id => users_users.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
+#  fk_rails_...  (transport_category_id => transport_categories_20200504.id)
 #

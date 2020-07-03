@@ -6,7 +6,7 @@ FactoryBot.define do
     end_date { Time.zone.tomorrow + 20.days }
     closing_date { Time.zone.today + 2.days }
     association :itinerary
-    association :tenant_vehicle
+    association :tenant_vehicle, factory: :tenant_vehicle
   end
 end
 

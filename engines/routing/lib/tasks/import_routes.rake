@@ -8,7 +8,7 @@ namespace :routing do
     mot_hash = { ocean: 1, air: 2, rail: 3, truck: 4, carriage: 5 }
     default_cargo_types = { lcl: false, fcl_reefer: false, fcl: false }
     Legacy::Itinerary.find_each do |itinerary|
-      next if itinerary.tenant.nil?
+      next if itinerary.organization.nil?
 
       key = [itinerary.name, itinerary.mode_of_transport].join('-')
       time_factor, price_factor = case itinerary.mode_of_transport

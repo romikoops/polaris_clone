@@ -2,23 +2,23 @@
 
 module Analytics
   class Base
-    def initialize(user:, start_date: 30.days.ago, end_date: DateTime.now, sandbox: nil)
+    def initialize(user:, organization:, start_date: 30.days.ago, end_date: DateTime.now, sandbox: nil)
       @user = user
-      @tenant = user.tenant
+      @organization = organization
       @start_date = start_date
       @end_date = end_date
       @sandbox = sandbox
     end
 
     def quotations
-      Quotations::Quotation.where(tenant: tenant)
+      Quotations::Quotation.where(organization: organization)
         .where(created_at: start_date..end_date)
-        .where(tenants_user: clients)
+        .where(user: clients)
     end
 
     def shipment_requests
       Shipments::ShipmentRequest
-        .where(tenant: tenant)
+        .where(organization: organization)
         .where(created_at: start_date..end_date)
         .where(user: clients)
     end
@@ -28,7 +28,7 @@ module Analytics
     end
 
     def itineraries
-      Legacy::Itinerary.where(tenant_id: tenant.legacy_id, sandbox: sandbox)
+      Legacy::Itinerary.where(organization_id: organization.id, sandbox: sandbox)
     end
 
     def requests
@@ -36,11 +36,21 @@ module Analytics
     end
 
     def requests_with_profiles
-      quotation_tool? ? quotations.joins(tenants_user: :profile) : shipment_requests.joins(user: :profile)
+      requests = begin
+          if quotation_tool?
+            quotations.joins(profile_join(reference: 'quotations_quotations'))
+          else
+             shipment_requests.joins(profile_join(reference: 'shipments_shipment_requests'))
+          end
+        end
     end
 
     def requests_with_companies
-      quotation_tool? ? quotations.joins(tenants_user: :company) : shipment_requests.joins(user: :company)
+      if quotation_tool?
+        quotations.joins(companies_join(reference: 'quotations_quotations'))
+      else
+        shipment_requests.joins(companies_join(reference: 'shipments_shipment_requests'))
+      end
     end
 
     def tender_or_request
@@ -51,19 +61,13 @@ module Analytics
       quotation_tool? ? tenders.joins(:itinerary) : shipment_requests.joins(tender: :itinerary)
     end
 
-    def legacy_clients
-      @legacy_clients ||= Legacy::User.where(tenant_id: tenant.legacy_id)
-        .where.not(role: admin_roles)
-        .where.not(email: blacklisted_emails)
-    end
-
     def clients
-      @clients ||= Tenants::User.where(legacy: legacy_clients)
+      @clients ||= Organizations::User.where(organization: organization).where.not(email: blacklisted_emails)
     end
 
     private
 
-    attr_reader :tenant, :user, :sandbox, :start_date, :end_date
+    attr_reader :organization, :user, :sandbox, :start_date, :end_date
 
     def admin_roles
       Legacy::Role.where(name: %w[admin sub_admin super_admin])
@@ -74,14 +78,35 @@ module Analytics
     end
 
     def quotation_tool?
-      scope['open_quotation_tool'] || scope['closed_quotation_tool']
+      @quotation_tool ||= scope['open_quotation_tool'] || scope['closed_quotation_tool']
     end
 
     def scope
-      @scope ||= ::Tenants::ScopeService.new(
+      @scope ||= ::OrganizationManager::ScopeService.new(
         target: user,
-        tenant: tenant
+        organization: organization
       ).fetch
+    end
+
+    def profile_join(reference:)
+      <<~SQL
+        INNER JOIN users_users
+          ON #{reference}.user_id = users_users.id
+        INNER JOIN profiles_profiles
+          ON users_users.id = profiles_profiles.user_id
+      SQL
+    end
+
+    def companies_join(reference:)
+      <<~SQL
+        INNER JOIN users_users
+          ON #{reference}.user_id = users_users.id
+        INNER JOIN companies_memberships
+          ON companies_memberships.member_id = users_users.id
+          AND companies_memberships.member_type = 'Users::User'
+        INNER JOIN companies_companies
+          ON companies_memberships.company_id = companies_companies.id
+      SQL
     end
   end
 end

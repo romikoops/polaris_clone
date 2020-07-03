@@ -2,7 +2,7 @@
 
 require 'bitfields'
 require 'routing'
-require 'tenants'
+require 'organizations'
 
 module TenantRouting
   class Engine < ::Rails::Engine

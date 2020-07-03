@@ -3,26 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe Wheelhouse::TenderDecorator do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: tenant) }
+  let(:itinerary) { FactoryBot.create(:default_itinerary) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: FactoryBot.create(:legacy_carrier, name: 'Maersk')) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Hamburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:origin_hub) { itinerary.hubs.first }
+  let(:destination_hub) { itinerary.hubs.last }
+  let!(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle, load_type: 'container') }
+  let(:amount) { Money.new(25_090, 'EUR') }
+  let(:transshipment) { nil }
+  let(:context) { nil }
   let(:tender) do
     FactoryBot.create(:quotations_tender,
                       itinerary: itinerary,
                       origin_hub: origin_hub,
                       destination_hub: destination_hub,
                       tenant_vehicle: tenant_vehicle,
-                      amount: Money.new(25_000, 'EUR'))
+                      transshipment: transshipment,
+                      amount: amount)
   end
-  let!(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle, load_type: 'container') }
+  let(:decorated_tender) { described_class.new(tender, context: context) }
 
   describe '.decorate' do
-    let(:decorated_tender) do
-      described_class.new(tender)
-    end
-
     it 'decorates the tender with attributes 1/2' do
       aggregate_failures do
         expect(decorated_tender.origin).to eq(origin_hub.name)
@@ -33,7 +33,7 @@ RSpec.describe Wheelhouse::TenderDecorator do
 
     it 'decorates the tender with attributes 2/2' do
       aggregate_failures do
-        expect(decorated_tender.total).to eq(amount: 250.00, currency: 'EUR')
+        expect(decorated_tender.total).to eq(amount: 250.9, currency: 'EUR')
         expect(decorated_tender.transit_time).to eq((trip.end_date.to_date - trip.start_date.to_date).to_i)
         expect(decorated_tender.transshipment).to eq('direct')
         expect(decorated_tender.service_level).to eq(tenant_vehicle.name)
@@ -41,15 +41,7 @@ RSpec.describe Wheelhouse::TenderDecorator do
     end
 
     context 'with transshipment' do
-      let(:tender) do
-        FactoryBot.create(:quotations_tender,
-                          itinerary: itinerary,
-                          origin_hub: origin_hub,
-                          destination_hub: destination_hub,
-                          tenant_vehicle: tenant_vehicle,
-                          transshipment: 'ZACPT',
-                          amount: Money.new(25_000, 'EUR'))
-      end
+      let(:transshipment) { 'ZACPT' }
 
       it 'returns the transshipment LOCODE' do
         expect(decorated_tender.transshipment).to eq('ZACPT')
@@ -57,9 +49,7 @@ RSpec.describe Wheelhouse::TenderDecorator do
     end
 
     context 'when estimated' do
-      let(:decorated_tender) do
-        described_class.new(tender, context: { estimated: true })
-      end
+      let(:context) { { estimated: true } }
 
       it 'returns estimated as true' do
         expect(decorated_tender.estimated).to be_truthy
@@ -68,41 +58,11 @@ RSpec.describe Wheelhouse::TenderDecorator do
   end
 
   describe '.decorate with invalid amount on tender' do
-    let(:invalid_tender) do
-      FactoryBot.create(:quotations_tender,
-                        itinerary: itinerary,
-                        origin_hub: origin_hub,
-                        destination_hub: destination_hub,
-                        tenant_vehicle: tenant_vehicle,
-                        amount: Money.new(nil, nil))
-    end
-    let(:decorated_tender) do
-      described_class.new(invalid_tender)
-    end
+    let(:amount) { Money.new(nil, nil) }
 
     it 'returns nil for a money object' do
       aggregate_failures do
         expect(decorated_tender.total).to eq(nil)
-      end
-    end
-  end
-
-  describe '.decorate with 90 cents on tender and USD' do
-    let(:invalid_tender) do
-      FactoryBot.create(:quotations_tender,
-                        itinerary: itinerary,
-                        origin_hub: origin_hub,
-                        destination_hub: destination_hub,
-                        tenant_vehicle: tenant_vehicle,
-                        amount: Money.new(12_090, 'USD'))
-    end
-    let(:decorated_tender) do
-      described_class.new(invalid_tender)
-    end
-
-    it 'returns nil for a money object' do
-      aggregate_failures do
-        expect(decorated_tender.total).to eq(amount: 120.9, currency: 'USD')
       end
     end
   end

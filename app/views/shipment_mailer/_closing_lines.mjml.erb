@@ -24,8 +24,8 @@
           <mj-column width="100%" padding="0 2.5%">
             <mj-text line-height="24px">
               <p>
-                <span class="bold"><%=user.tenant.name %></span><br>
-                <% user.tenant.addresses["components"].each do |address_line| %>
+                <span class="bold"><%=@org_theme.name %></span><br>
+                <% @org_theme.addresses["components"].each do |address_line| %>
                   <%= address_line %> <br>
                 <% end %>
             </mj-text>

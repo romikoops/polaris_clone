@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Inserters::Hubs do
   describe '.perform' do
-    let(:tenant) { create(:tenant) }
+    let(:organization) { create(:organizations_organization) }
     let(:data) do
       [{ original:
          { status: 'active',
@@ -29,11 +29,10 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
            longitude: 54.644405,
            country: { name: 'United Arab Emirates' },
            city: 'Abu Dhabi',
-           geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
-           sandbox: nil },
-         nexus: { name: 'Abu Dhabi', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, tenant_id: tenant.id, sandbox: nil },
+           geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates' },
+         nexus: { name: 'Abu Dhabi', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, organization_id: organization.id },
          mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true },
-         hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Abu Dhabi Port', photo: nil, sandbox: nil, hub_code: 'AEAUH' } },
+         hub: { organization_id: organization.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Abu Dhabi', photo: nil, hub_code: 'AEAUH' } },
        { original:
          { status: 'active',
            type: 'ocean',
@@ -59,9 +58,9 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
            city: 'Adelaide',
            geocoded_address: '202 Victoria Square, Adelaide SA 5000, Australia',
            sandbox: nil },
-         nexus: { name: 'Adelaide', latitude: -34.9284989, longitude: 138.6007456, photo: nil, locode: 'AUADL', country: { name: 'Australia' }, tenant_id: tenant.id, sandbox: nil },
+         nexus: { name: 'Adelaide', latitude: -34.9284989, longitude: 138.6007456, photo: nil, locode: 'AUADL', country: { name: 'Australia' }, organization_id: organization.id },
          mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
-         hub: { tenant_id: tenant.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456, name: 'Adelaide Port', photo: nil, sandbox: nil, hub_code: 'AUADL' } }]
+         hub: { organization_id: organization.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456, name: 'Adelaide', photo: nil, hub_code: 'AUADL' } }]
     end
 
     let!(:countries) do
@@ -78,15 +77,15 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
     end
 
     it 'creates the correct number of hubs' do
-      stats = described_class.insert(tenant: tenant, data: data, options: {})
-      hubs = Hub.where(tenant_id: tenant.id)
+      stats = described_class.insert(organization: organization, data: data, options: {})
+      hubs = Hub.where(organization_id: organization.id)
       addresses = Address.all
       expect(stats.dig(:"legacy/hubs", :number_created)).to be(2)
       expect(stats.dig(:"legacy/nexuses", :number_created)).to be(2)
       expect(stats.dig(:"legacy/addresses", :number_created)).to be(2)
       expect(hubs.count).to be(2)
       expect(hubs.pluck(:mandatory_charge_id)).to match_array(mandatory_charges.pluck(:id))
-      expect(Nexus.where(tenant_id: tenant.id).count).to be(2)
+      expect(Nexus.where(organization_id: organization.id).count).to be(2)
       expect(addresses.count).to be(2)
       expect(addresses.map(&:country)).to match_array(countries)
     end
@@ -94,19 +93,19 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
     context 'with existing hubs' do
       before do
         create(:hub,
-          name: 'ADL Port',
+          name: 'ADL',
           hub_code: 'AUADL',
-          tenant: tenant,
+          organization: organization,
           address: create(:address, country: countries.first),
           nexus: create(:nexus,
                         name: 'ADL',
-                        tenant: tenant,
+                        organization: organization,
                         locode: 'AUADL',
                         country: countries.first))
       end
 
-      let(:stats) { described_class.insert(tenant: tenant, data: data, options: {}) }
-      let(:hubs) { Hub.where(tenant_id: tenant.id) }
+      let(:stats) { described_class.insert(organization: organization, data: data, options: {}) }
+      let(:hubs) { Hub.where(organization_id: organization.id) }
       let(:addresses) { Address.all }
 
       it 'creates the correct number of hubs and updates the rest' do
@@ -116,7 +115,7 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
           expect(stats.dig(:"legacy/addresses", :number_created)).to be(2)
           expect(hubs.count).to be(2)
           expect(hubs.pluck(:mandatory_charge_id)).to match_array(mandatory_charges.pluck(:id))
-          expect(Nexus.where(tenant_id: tenant.id).count).to be(2)
+          expect(Nexus.where(organization_id: organization.id).count).to be(2)
           expect(addresses.count).to be(3)
           expect(addresses.map(&:country).uniq).to match_array(countries)
         end
@@ -129,17 +128,17 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
           name: 'Adelaide Airport',
           hub_code: 'AUADL',
           hub_type: 'air',
-          tenant: tenant,
+          organization: organization,
           address: create(:address, country: countries.first),
           nexus: create(:nexus,
                         name: 'ADL',
-                        tenant: tenant,
+                        organization: organization,
                         locode: 'AUADL',
                         country: countries.first))
       end
 
-      let(:stats) { described_class.insert(tenant: tenant, data: data, options: {}) }
-      let(:hubs) { Hub.where(tenant_id: tenant.id) }
+      let(:stats) { described_class.insert(organization: organization, data: data, options: {}) }
+      let(:hubs) { Hub.where(organization_id: organization.id) }
       let(:addresses) { Address.all }
 
       it 'creates the correct number of hubs and updates the rest' do
@@ -148,7 +147,7 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
           expect(stats.dig(:"legacy/nexuses", :number_created)).to be(1)
           expect(stats.dig(:"legacy/addresses", :number_created)).to be(2)
           expect(hubs.where(hub_code: 'AUADL').count).to be(2)
-          expect(Nexus.where(tenant_id: tenant.id, locode: 'AUADL').count).to be(1)
+          expect(Nexus.where(organization_id: organization.id, locode: 'AUADL').count).to be(1)
         end
       end
     end

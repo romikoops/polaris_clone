@@ -10,8 +10,8 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
   before_create :set_default_currency
 
-  validates :tenant_id, presence: true
-  validates :email, presence: true, uniqueness: { scope: :tenant_id }, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :organization_id, presence: true
+  validates :email, presence: true, uniqueness: { scope: :organization_id }, format: { with: URI::MailTo::EMAIL_REGEXP }
   pg_search_scope :search, against: %i[email], using: {
     tsearch: { prefix: true }
   }
@@ -20,7 +20,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   }
 
   # Basic associations
-  belongs_to :tenant
+  belongs_to :organization, class_name: 'Organizations::Organization'
   belongs_to :role
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   has_many :shipments
@@ -44,7 +44,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   end
 
   PERMITTED_PARAMS = %i(
-    email password guest tenant_id confirm_password password_confirmation
+    email password guest organization_id confirm_password password_confirmation
     company_name vat_number VAT_number first_name last_name phone
     cookies company_number
   ).freeze
@@ -211,7 +211,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   end
 
   def groups
-    ::Tenants::User.find_by(legacy_id: id)&.groups || []
+    ::Organizations::User.find_by(legacy_id: id)&.groups || []
   end
 
   def company_title
@@ -227,7 +227,7 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   end
 
   def user_margins
-    ::Pricings::Margin.where(applicable: ::Tenants::User.find_by(legacy_id: id))
+    ::Pricings::Margin.where(applicable: ::Organizations::User.find_by(legacy_id: id))
   end
 
   def user_margin_count
@@ -275,52 +275,54 @@ end
 #
 # Table name: users
 #
-#  id                                         :bigint           not null, primary key
-#  allow_password_change                      :boolean          default(FALSE), not null
-#  company_name_20200207                      :string
-#  company_number                             :string
-#  confirmation_sent_at                       :datetime
-#  confirmation_token                         :string
-#  confirmed_at                               :datetime
-#  currency                                   :string           default("EUR")
-#  current_sign_in_at                         :datetime
-#  current_sign_in_ip                         :string
-#  deleted_at                                 :datetime
-#  email(MASKED WITH EmailAddress)            :string
-#  encrypted_password                         :string           default(""), not null
-#  first_name_20200207(MASKED WITH FirstName) :string
-#  guest                                      :boolean          default(FALSE)
-#  image                                      :string
-#  internal                                   :boolean          default(FALSE)
-#  last_name_20200207(MASKED WITH LastName)   :string
-#  last_sign_in_at                            :datetime
-#  last_sign_in_ip                            :string
-#  nickname                                   :string
-#  optin_status                               :jsonb
-#  phone_20200207(MASKED WITH Phone)          :string
-#  provider                                   :string           default("tenant_email"), not null
-#  remember_created_at                        :datetime
-#  reset_password_sent_at                     :datetime
-#  reset_password_token                       :string
-#  sign_in_count                              :integer          default(0), not null
-#  tokens                                     :json
-#  uid                                        :string           default(""), not null
-#  unconfirmed_email                          :string
-#  vat_number                                 :string
-#  created_at                                 :datetime         not null
-#  updated_at                                 :datetime         not null
-#  agency_id                                  :integer
-#  external_id                                :string
-#  optin_status_id                            :integer
-#  role_id                                    :bigint
-#  sandbox_id                                 :uuid
-#  tenant_id                                  :integer
+#  id                     :bigint           not null, primary key
+#  allow_password_change  :boolean          default(FALSE), not null
+#  company_name_20200207  :string
+#  company_number         :string
+#  confirmation_sent_at   :datetime
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  currency               :string           default("EUR")
+#  current_sign_in_at     :datetime
+#  current_sign_in_ip     :string
+#  deleted_at             :datetime
+#  email                  :string
+#  encrypted_password     :string           default(""), not null
+#  first_name_20200207    :string
+#  guest                  :boolean          default(FALSE)
+#  image                  :string
+#  internal               :boolean          default(FALSE)
+#  last_name_20200207     :string
+#  last_sign_in_at        :datetime
+#  last_sign_in_ip        :string
+#  nickname               :string
+#  optin_status           :jsonb
+#  phone_20200207         :string
+#  provider               :string           default("tenant_email"), not null
+#  remember_created_at    :datetime
+#  reset_password_sent_at :datetime
+#  reset_password_token   :string
+#  sign_in_count          :integer          default(0), not null
+#  tokens                 :json
+#  uid                    :string           default(""), not null
+#  unconfirmed_email      :string
+#  vat_number             :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  agency_id              :integer
+#  external_id            :string
+#  optin_status_id        :integer
+#  organization_id        :uuid
+#  role_id                :bigint
+#  sandbox_id             :uuid
+#  tenant_id              :integer
 #
 # Indexes
 #
 #  index_users_on_confirmation_token    (confirmation_token) UNIQUE
 #  index_users_on_deleted_at            (deleted_at)
 #  index_users_on_email                 (email)
+#  index_users_on_organization_id       (organization_id)
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #  index_users_on_role_id               (role_id)
 #  index_users_on_sandbox_id            (sandbox_id)
@@ -329,5 +331,6 @@ end
 #
 # Foreign Keys
 #
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (role_id => roles.id)
 #

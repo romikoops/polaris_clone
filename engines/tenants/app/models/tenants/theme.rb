@@ -2,7 +2,7 @@
 
 module Tenants
   class Theme < ApplicationRecord
-    belongs_to :tenant, class_name: 'Tenants::Tenant'
+    belongs_to :organization, class_name: 'Organizations::Organization'
     has_one_attached :background
     has_one_attached :small_logo
     has_one_attached :large_logo
@@ -12,7 +12,7 @@ module Tenants
     has_one_attached :booking_process_image
     has_one_attached :welcome_email_image
 
-    validates :tenant_id, uniqueness: true
+    validates :organization_id, uniqueness: true
   end
 end
 

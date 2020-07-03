@@ -6,7 +6,7 @@ module ExcelDataServices
       def perform # rubocop:disable Metrics/AbcSize
         data.each do |group_of_row_data| # rubocop:disable Metrics/BlockLength
           row = ExcelDataServices::Rows::Base.get(klass_identifier).new(
-            row_data: group_of_row_data.first, tenant: tenant
+            row_data: group_of_row_data.first, organization: organization
           )
 
           origin_hub = find_hub_by_name_or_locode_with_info(
@@ -54,7 +54,7 @@ module ExcelDataServices
         Legacy::Itinerary.find_or_initialize_by(
           origin_hub: origin_hub,
           destination_hub: destination_hub,
-          tenant: tenant,
+          organization: organization,
           mode_of_transport: row.mot,
           transshipment: row.transshipment,
           sandbox: @sandbox
@@ -76,7 +76,7 @@ module ExcelDataServices
         carrier = carrier_from_code(name: row.carrier) if row.carrier.present?
 
         tenant_vehicle = Legacy::TenantVehicle.find_by(
-          tenant: tenant,
+          organization: organization,
           name: row.service_level,
           mode_of_transport: row.mot,
           carrier: carrier,
@@ -87,7 +87,7 @@ module ExcelDataServices
         tenant_vehicle || Legacy::Vehicle.create_from_name(
           name: row.service_level,
           mot: row.mot,
-          tenant_id: tenant.id,
+          organization_id: organization.id,
           carrier_name: carrier&.name,
           sandbox: @sandbox
         ) # returns a `TenantVehicle`!
@@ -96,7 +96,7 @@ module ExcelDataServices
       def create_pricing_with_pricing_details(group_of_row_data, row, tenant_vehicle, itinerary, notes) # rubocop:disable Metrics/AbcSize
         load_type = row.load_type == 'lcl' ? 'cargo_item' : 'container'
         pricing_params =
-          { tenant: tenant,
+          { organization: organization,
             internal: row.internal,
             transshipment: row.transshipment,
             cargo_class: row.load_type,
@@ -162,26 +162,26 @@ module ExcelDataServices
 
       def update_notes_params(notes, pricing_id)
         notes.each do |note|
-          note[:tenant_id] = tenant.id
+          note[:organization_id] = organization.id
           note[:pricings_pricing_id] = pricing_id
         end
       end
 
       def build_pricing_detail_params_for_pricing(group_of_row_data) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
         group_of_row_data.map do |row_data| # rubocop:disable Metrics/BlockLength
-          row = ExcelDataServices::Rows::Base.get(klass_identifier).new(row_data: row_data, tenant: tenant)
+          row = ExcelDataServices::Rows::Base.get(klass_identifier).new(row_data: row_data, organization: organization)
 
           fee_code = row.fee_code.upcase
 
           pricing_detail_params =
-            { tenant_id: tenant.id,
+            { organization_id: organization.id,
               currency_name: row.currency&.upcase,
               currency_id: nil,
               sandbox: @sandbox,
               hw_threshold: row.hw_threshold }
 
           charge_category = Legacy::ChargeCategory.from_code(
-            tenant_id: tenant.id,
+            organization_id: organization.id,
             code: fee_code,
             name: row.fee_name || fee_code,
             sandbox: @sandbox

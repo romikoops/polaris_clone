@@ -5,9 +5,8 @@ require 'rails_helper'
 module RmsData
   RSpec.describe Sheet, type: :model do
     context 'instance methods' do
-      let!(:tenant) { FactoryBot.create(:legacy_tenant) }
-      let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-      let!(:sheet) { FactoryBot.create(:rms_data_sheet, tenant: tenants_tenant) }
+      let!(:organization) { FactoryBot.create(:organizations_organization) }
+      let!(:sheet) { FactoryBot.create(:rms_data_sheet, organization: organization) }
       let!(:headers) do
         %w(STATUS
            TYPE
@@ -31,7 +30,7 @@ module RmsData
           [0, 1, 2, 3].each do |no|
             results << headers.map.with_index do |header, i|
               FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -50,7 +49,7 @@ module RmsData
             headers.each_with_index do |header, i|
               sub_result << (no.zero? ? header : "#{header} - value - ##{no}")
               FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -68,7 +67,7 @@ module RmsData
           [0, 1, 2, 3].each do |no|
             headers.map.with_index do |header, i|
               results[header] << FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -86,7 +85,7 @@ module RmsData
             headers.each_with_index do |header, i|
               results[header] << (no.zero? ? header : "#{header} - value - ##{no}")
               FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -103,7 +102,7 @@ module RmsData
           [0, 1, 2, 3].each do |no|
             results << headers.map.with_index do |header, i|
               FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -119,7 +118,7 @@ module RmsData
           [0, 1, 2, 3].each do |no|
             headers.map.with_index do |header, i|
               FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -136,7 +135,7 @@ module RmsData
           [0, 1, 2, 3].each do |no|
             headers.map.with_index do |header, i|
               results[header] << FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -154,7 +153,7 @@ module RmsData
             headers.map.with_index do |header, i|
               results[header] << (no.zero? ? header : "#{header} - value - ##{no}")
               FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -171,7 +170,7 @@ module RmsData
           [0, 1, 2, 3].each do |no|
             results << headers.map.with_index do |header, i|
               FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -187,7 +186,7 @@ module RmsData
           [0, 1, 2, 3].each do |no|
             headers.map.with_index do |header, i|
               FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -203,7 +202,7 @@ module RmsData
           [0, 1, 2, 3].each do |no|
             headers.map.with_index do |header, i|
               FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -217,7 +216,7 @@ module RmsData
           [0, 1, 2, 3].each do |no|
             headers.map.with_index do |header, i|
               FactoryBot.create(:rms_data_cell,
-                                tenant_id: tenants_tenant.id,
+                                organization_id: organization.id,
                                 value: no.zero? ? header : "#{header} - value - ##{no}",
                                 row: no,
                                 column: i,
@@ -235,18 +234,24 @@ end
 #
 # Table name: rms_data_sheets
 #
-#  id          :uuid             not null, primary key
-#  metadata    :jsonb
-#  name        :string
-#  sheet_index :integer
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  book_id     :uuid
-#  tenant_id   :uuid
+#  id              :uuid             not null, primary key
+#  metadata        :jsonb
+#  name            :string
+#  sheet_index     :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  book_id         :uuid
+#  organization_id :uuid
+#  tenant_id       :uuid
 #
 # Indexes
 #
-#  index_rms_data_sheets_on_book_id      (book_id)
-#  index_rms_data_sheets_on_sheet_index  (sheet_index)
-#  index_rms_data_sheets_on_tenant_id    (tenant_id)
+#  index_rms_data_sheets_on_book_id          (book_id)
+#  index_rms_data_sheets_on_organization_id  (organization_id)
+#  index_rms_data_sheets_on_sheet_index      (sheet_index)
+#  index_rms_data_sheets_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

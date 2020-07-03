@@ -32,6 +32,7 @@ module OfferCalculator
     def perform
       @hubs               = @hub_finder.perform
       @trucking_data      = @trucking_data_builder.perform(hubs: @hubs)
+      @shipment_update_handler.set_trucking_nexuses(hubs: hubs_filtered_by_trucking)
       @routes             = @route_finder.perform(hubs: hubs_filtered_by_trucking, date_range: date_range)
       @routes             = @route_filter.perform(@routes)
       @detailed_schedules = @detailed_schedules_builder.perform(schedules, @trucking_data, @user, @wheelhouse)
@@ -42,7 +43,8 @@ module OfferCalculator
     def instantiate_service_classes(params)
       @shipment_update_handler = OfferCalculator::Service::ShipmentUpdateHandler.new(shipment: @shipment,
                                                                                      params: params,
-                                                                                     sandbox: @sandbox)
+                                                                                     sandbox: @sandbox,
+                                                                                     wheelhouse: @wheelhouse)
       @hub_finder = OfferCalculator::Service::HubFinder.new(shipment: @shipment, sandbox: @sandbox)
       @trucking_data_builder = OfferCalculator::Service::TruckingDataBuilder.new(shipment: @shipment,
                                                                                  sandbox: @sandbox)
@@ -64,6 +66,7 @@ module OfferCalculator
       @shipment_update_handler.update_incoterm
       @shipment_update_handler.update_cargo_units
       @shipment_update_handler.update_selected_day
+      @shipment_update_handler.update_billing
       @shipment.save!
     end
 
@@ -76,9 +79,9 @@ module OfferCalculator
     end
 
     def quotation_tool?
-      scope = ::Tenants::ScopeService.new(
-        target: Tenants::User.find_by(legacy_id: @shipment.user_id),
-        tenant: Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
+      scope = ::OrganizationManager::ScopeService.new(
+        target: @user || @creator,
+        organization: Organizations::Organization.find(@shipment.organization_id)
       ).fetch
 
       @isQuote || scope['open_quotation_tool'] || scope['closed_quotation_tool']

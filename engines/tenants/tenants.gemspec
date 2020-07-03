@@ -10,19 +10,18 @@ Gem::Specification.new do |s|
   s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'Tenants related services'
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-legacy'
-  s.add_dependency 'imc-mailers'
   s.add_dependency 'imc-profiles'
+  s.add_dependency 'imc-groups'
 
   s.add_dependency 'activerecord-import'
   s.add_dependency 'paranoia'
   s.add_dependency 'pg_search', '~> 2.3.0'
-  s.add_dependency 'sorcery', '~> 0.13.0'
 
   Gemhelper.common(s)
 end

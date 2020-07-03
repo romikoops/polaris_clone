@@ -4,13 +4,14 @@ require 'rails_helper'
 
 RSpec.describe Itineraries::LastAvailableDatesController do
   describe 'GET #show' do
-    let(:user) { create(:user) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:user) { create(:organizations_user, organization: organization) }
     let!(:country) { create(:legacy_country, code: 'DE', name: 'Germany') }
-    let(:tenant_vehicle) { create(:legacy_tenant_vehicle, tenant: user.tenant) }
+    let(:tenant_vehicle) { create(:legacy_tenant_vehicle, organization: organization) }
     let(:itineraries) do
       [
-        create(:gothenburg_shanghai_itinerary, tenant: user.tenant),
-        create(:shanghai_gothenburg_itinerary, tenant: user.tenant)
+        create(:gothenburg_shanghai_itinerary, organization: organization),
+        create(:shanghai_gothenburg_itinerary, organization: organization)
       ]
     end
     let!(:trips) do
@@ -28,11 +29,10 @@ RSpec.describe Itineraries::LastAvailableDatesController do
     end
 
     it 'returns http success, updates the user and send the email' do
-      allow(controller).to receive(:user_signed_in?).and_return(true)
-      allow(controller).to receive(:current_user).and_return(user)
+      append_token_header
 
       params = {
-        tenant_id: user.tenant_id,
+        organization_id: user.organization_id,
         itinerary_ids: itineraries.pluck(:id).join(','),
         country: 'DE'
       }

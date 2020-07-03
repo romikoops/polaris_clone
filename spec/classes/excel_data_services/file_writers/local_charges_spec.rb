@@ -4,12 +4,10 @@ require 'rails_helper'
 require 'roo'
 
 RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
-  let(:tenant) { FactoryBot.create(:tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
-  let!(:hub) { create(:gothenburg_hub, free_out: false, tenant: tenant, mandatory_charge: create(:mandatory_charge), nexus: create(:gothenburg_nexus)) }
-  let(:result) { described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: {}) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let!(:hub) { create(:gothenburg_hub, free_out: false, organization: organization, mandatory_charge: create(:mandatory_charge), nexus: create(:gothenburg_nexus)) }
+  let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', sandbox: nil, options: {}) }
   let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
   let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
@@ -18,7 +16,7 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
       local_charge = ::Legacy::LocalCharge.first
 
       { 'GROUP_ID' => local_charge.group_id,
-        'GROUP_NAME' => Tenants::Group.find_by(id: local_charge.group_id)&.name,
+        'GROUP_NAME' => Groups::Group.find_by(id: local_charge.group_id)&.name,
         'HUB' => 'Gothenburg',
         'COUNTRY' => 'Sweden',
         'EFFECTIVE_DATE' => local_charge.effective_date.strftime('%F'),
@@ -52,7 +50,7 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
 
     context 'without ranges' do
       before do
-        create(:legacy_local_charge, hub: hub, tenant: tenant)
+        create(:legacy_local_charge, hub: hub, organization: organization)
       end
 
       describe '.perform' do
@@ -66,10 +64,10 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
     end
 
     context 'with attached group' do
-      let(:group) { create(:tenants_group, tenant: tenants_tenant, name: 'TEST') }
+      let(:group) { create(:groups_group, organization: organization, name: 'TEST') }
 
       before do
-        create(:legacy_local_charge, hub: hub, tenant: tenant, group_id: group.id)
+        create(:legacy_local_charge, hub: hub, organization: organization, group_id: group.id)
       end
 
       describe '.perform' do
@@ -84,7 +82,7 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
 
     context 'with ranges' do
       before do
-        create(:local_charge_range, hub: hub, tenant: tenant)
+        create(:local_charge_range, hub: hub, organization: organization)
       end
 
       let(:local_charge_data_with_ranges) do

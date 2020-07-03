@@ -324,23 +324,23 @@ function confirmShipment (id, action) {
 }
 
 function getPricings (args) {
+  const queryObj = {}
+  if (args && Object.keys(args).length) {
+    if (args.filters) {
+      args.filters.forEach((filter) => {
+        queryObj[filter.id] = filter.value
+      })
+    }
+    if (args.sorted) {
+      args.sorted.forEach((filter) => {
+        queryObj[`${filter.id}_desc`] = filter.desc
+      })
+    }
+  }
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
-  const queryObj = args
-
-  if (args.filters) {
-    args.filters.forEach((filter) => {
-      queryObj[filter.id] = filter.value
-    })
-  }
-  if (args.sorted) {
-    args.sorted.forEach((filter) => {
-      queryObj[`${filter.id}_desc`] = filter.desc
-    })
-  }
-
   const query = toSnakeQueryString(queryObj, true)
 
   return fetch(`${getTenantApiUrl()}/admin/pricings?${query}`, requestOptions)
@@ -744,7 +744,7 @@ function updateEmails (emails, tenant) {
     body: JSON.stringify({ tenant: { emails } })
   }
 
-  return fetch(`${getTenantApiUrl()}/admin/tenants/${tenant.id}`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/admin/organizations/${tenant.id}`, requestOptions)
     .then(handleResponse)
 }
 

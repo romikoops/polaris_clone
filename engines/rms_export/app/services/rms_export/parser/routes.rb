@@ -5,9 +5,9 @@ require 'csv'
 module RmsExport
   module Parser
     class Routes < RmsExport::Parser::Base
-      def initialize(tenant_id:)
-        super(tenant_id: tenant_id)
-        @book = RmsData::Book.find_by(tenant: @tenant, sheet_type: 'routes')
+      def initialize(organization_id:)
+        super(organization_id: organization_id)
+        @book = RmsData::Book.find_by(organization: @organization, sheet_type: 'routes')
         @routes = []
         @carriers = []
         @line_services = []
@@ -63,7 +63,7 @@ module RmsExport
       def handle_tenant_route_connections(row:)
         @tenant_connections << {
           mode_of_transport: mode_of_transport_enum(row[headers.index('MOT')]),
-          tenant_id: @tenant.id,
+          organization_id: @organization.id,
           origin_name: row[headers.index('ORIGIN')],
           destination_name: row[headers.index('DESTINATION')]
         }

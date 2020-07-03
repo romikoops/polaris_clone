@@ -5,7 +5,7 @@ module Api
     class QuotationDecorator < Draper::Decorator
       delegate_all
 
-      decorates_association :tenants_user, with: UserDecorator
+      decorates_association :user, with: UserDecorator
       decorates_association :origin_nexus, with: NexusDecorator
       decorates_association :destination_nexus, with: NexusDecorator
 

@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Restructurers::MaxDimensions do
-  let(:tenant) { create(:tenant) }
-  let(:options) { { tenant: tenant, data: input_data } }
+  let(:organization) { create(:organizations_organization) }
+  let(:options) { { organization: organization, data: input_data } }
 
   before do
-    FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant)
+    FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization)
   end
 
   describe '.restructure' do

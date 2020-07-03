@@ -15,7 +15,7 @@ module ExcelDataServices
       end
 
       if !hub && locode.is_a?(String)
-        nexus = ::Legacy::Nexus.find_by(tenant: tenant, locode: locode.delete(' ').upcase, sandbox: @sandbox)
+        nexus = ::Legacy::Nexus.find_by(organization: organization, locode: locode.delete(' ').upcase)
         hub = find_hub_by_name_and_mot(raw_name: nexus.name, country: country, mot: mot) if nexus
         found_by_info = locode
       end
@@ -23,18 +23,10 @@ module ExcelDataServices
       { hub: hub, found_by_info: found_by_info }
     end
 
-    def append_hub_suffix(raw_name, mot)
-      return if raw_name.blank?
-
-      return raw_name if mot.blank?
-
-      "#{raw_name} #{MOT_HUB_NAME_LOOKUP[mot.downcase]}"
-    end
-
     private
 
     def find_hub_by_name_and_mot(raw_name:, country:, mot:)
-      hubs = ::Legacy::Hub.where(tenant: tenant, name: append_hub_suffix(raw_name, mot), sandbox: @sandbox)
+      hubs = ::Legacy::Hub.where(organization: organization, hub_type: mot, name: raw_name)
 
       if country.present?
         hubs.joins(:country).find_by(countries: { name: country })

@@ -2,8 +2,6 @@
 
 module Itineraries
   class LastAvailableDatesController < ApplicationController
-    skip_before_action :require_non_guest_authentication!
-
     def show
       response_handler(lastAvailableDate: last_available_date)
     end

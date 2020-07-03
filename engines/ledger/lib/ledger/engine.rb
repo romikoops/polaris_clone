@@ -2,7 +2,7 @@
 
 require 'cargo'
 require 'routing'
-require 'tenants'
+require 'organizations'
 require 'tenant_routing'
 
 require 'money-rails'

@@ -1,15 +1,14 @@
 module Pdf
   class Base
-    attr_reader :tenant, :user, :tenants_tenant, :scope, :theme
+    attr_reader :organization, :user, :scope, :theme
 
-    def initialize(tenant:, user:, sandbox: nil)
-      @tenant = tenant
+    def initialize(organization:, user:, sandbox: nil)
+      @organization = organization
       @user = user
-      @tenants_tenant = Tenants::Tenant.find_by(legacy_id: @tenant.id)
-      @theme = @tenants_tenant.theme
-      @scope = ::Tenants::ScopeService.new(
-        target: ::Tenants::User.find_by(legacy_id: @user.id),
-        tenant: @tenants_tenant
+      @theme = @organization.theme
+      @scope = ::OrganizationManager::ScopeService.new(
+        target: @user,
+        organization: @organization
       ).fetch
       @sandbox = sandbox
     end

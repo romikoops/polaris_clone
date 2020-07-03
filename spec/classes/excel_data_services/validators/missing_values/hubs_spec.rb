@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::MissingValues::Hubs do
-  let(:tenant) { create(:tenant) }
-  let(:validator) { described_class.new(tenant: tenant, data: data, sheet_name: 'Sheet1') }
-  let(:data) { build(:missing_values_hubs_row_data, tenant: tenant) }
+  let(:organization) { create(:organizations_organization) }
+  let(:validator) { described_class.new(organization: organization, data: data, sheet_name: 'Sheet1') }
+  let(:data) { build(:missing_values_hubs_row_data, organization: organization) }
 
   describe '.perform' do
     it 'detects unknown rate basis and missing values rate basis' do

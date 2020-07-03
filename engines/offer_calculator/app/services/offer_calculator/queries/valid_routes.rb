@@ -24,11 +24,11 @@ module OfferCalculator
 
       def binds
         {
-          tenant_id: @shipment.tenant_id,
+          organization_id: @shipment.organization_id,
           origin_hub_ids: @origin_hub_ids,
           destination_hub_ids: @destination_hub_ids,
           cargo_classes: @cargo_classes,
-          group_ids: @user.all_groups.ids,
+          group_ids: user_groups,
           load_type: @shipment.load_type
         }.merge(date_range_values)
       end
@@ -67,7 +67,7 @@ module OfferCalculator
           #{origin_local_charges}
           #{destination_local_charges}
           #{trip_restriction}
-          WHERE itineraries.tenant_id  = :tenant_id
+          WHERE itineraries.organization_id  = :organization_id
           AND origin_stops.index < destination_stops.index
         SQL
       end
@@ -121,6 +121,12 @@ module OfferCalculator
 
       def quotation_tool
         @scope[:closed_quotation_tool] || @scope[:open_quotation_tool]
+      end
+
+      def user_groups
+        companies = Companies::Membership.where(member: @user)
+        membership_ids = Groups::Membership.where(member: @user)
+                          .or(Groups::Membership.where(member: companies)).select(:group_id)
       end
     end
   end

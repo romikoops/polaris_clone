@@ -13,7 +13,7 @@ PATH
       config (~> 2.2)
       geocoder
       imc-core
-      imc-tenants
+      imc-organizations
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       pg_search
@@ -58,9 +58,11 @@ PATH
       config (~> 2.2)
       imc-admiralty_assets
       imc-admiralty_auth
+      imc-companies
       imc-core
+      imc-organization_manager
+      imc-organizations
       imc-quotations
-      imc-tenants
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -78,8 +80,9 @@ PATH
       imc-admiralty_auth
       imc-core
       imc-legacy
+      imc-organization_manager
+      imc-organizations
       imc-pricings
-      imc-tenants
       jsoneditor-rails
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
@@ -98,6 +101,8 @@ PATH
       imc-admiralty_tenants
       imc-core
       imc-legacy
+      imc-organization_manager
+      imc-organizations
       imc-quotations
       imc-shipments
       imc-tenants
@@ -112,11 +117,13 @@ PATH
     imc-analytics (1)
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
+      imc-companies
       imc-legacy
+      imc-organization_manager
+      imc-organizations
       imc-pricings
       imc-quotations
       imc-shipments
-      imc-tenants
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -130,12 +137,13 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       doorkeeper (~> 5.0.2)
+      imc-authentication
       imc-core
-      imc-tenants
+      imc-organizations
+      imc-users
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
-      sorcery (~> 0.13.0)
       strong_migrations (~> 0.6)
 
 PATH
@@ -148,17 +156,36 @@ PATH
       fast_jsonapi
       imc-analytics
       imc-api_auth
+      imc-authentication
       imc-cargo
       imc-core
+      imc-organization_manager
+      imc-organizations
       imc-profiles
       imc-result_formatter
-      imc-tenants
       imc-trucking
+      imc-users
       imc-wheelhouse
       kaminari
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
+      strong_migrations (~> 0.6)
+
+PATH
+  remote: engines/authentication
+  specs:
+    imc-authentication (1)
+      activerecord-postgis-adapter (= 5.2.2)
+      config (~> 2.2)
+      imc-organization_manager
+      imc-organizations
+      imc-users
+      mjml-rails
+      paper_trail (~> 10.3)
+      pg (>= 0.18, < 2.0)
+      rails (= 5.2.2)
+      sorcery (~> 0.15)
       strong_migrations (~> 0.6)
 
 PATH
@@ -168,10 +195,25 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       imc-core
-      imc-tenants
+      imc-organizations
       measured-rails
+      money-rails
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
+      rails (= 5.2.2)
+      strong_migrations (~> 0.6)
+
+PATH
+  remote: engines/companies
+  specs:
+    imc-companies (1)
+      activerecord-postgis-adapter (= 5.2.2)
+      config (~> 2.2)
+      imc-legacy
+      imc-organizations
+      paper_trail (~> 10.3)
+      pg (>= 0.18, < 2.0)
+      pg_search
       rails (= 5.2.2)
       strong_migrations (~> 0.6)
 
@@ -193,7 +235,18 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       imc-core
-      imc-tenants
+      imc-organizations
+      paper_trail (~> 10.3)
+      pg (>= 0.18, < 2.0)
+      rails (= 5.2.2)
+      strong_migrations (~> 0.6)
+
+PATH
+  remote: engines/groups
+  specs:
+    imc-groups (1)
+      activerecord-postgis-adapter (= 5.2.2)
+      config (~> 2.2)
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -208,9 +261,10 @@ PATH
       imc-core
       imc-federation
       imc-ledger
+      imc-organization_manager
+      imc-organizations
       imc-routing
       imc-tenant_routing
-      imc-tenants
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -222,8 +276,10 @@ PATH
     imc-integrations (1)
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
+      imc-companies
       imc-core
       imc-legacy
+      imc-organization_manager
       imc-profiles
       imc-shipments
       paper_trail (~> 10.3)
@@ -239,9 +295,9 @@ PATH
       config (~> 2.2)
       imc-cargo
       imc-core
+      imc-organizations
       imc-routing
       imc-tenant_routing
-      imc-tenants
       money-rails
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
@@ -258,9 +314,11 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       devise_token_auth (~> 0.1.43)
+      draper
       fixer_currency (~> 3.4)
       geocoder
       imc-core
+      imc-organizations
       imc-profiles
       mobility
       money-rails
@@ -288,12 +346,13 @@ PATH
       strong_migrations (~> 0.6)
 
 PATH
-  remote: engines/mailers
+  remote: engines/migrator
   specs:
-    imc-mailers (1)
+    imc-migrator (1)
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
-      imc-core
+      imc-organizations
+      imc-users
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -308,15 +367,42 @@ PATH
       config (~> 2.2)
       imc-core
       imc-legacy
+      imc-organization_manager
+      imc-organizations
       imc-pricings
       imc-quotations
       imc-result_formatter
-      imc-tenants
       imc-trucking
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
       sentry-raven
+      strong_migrations (~> 0.6)
+
+PATH
+  remote: engines/organization_manager
+  specs:
+    imc-organization_manager (1)
+      activerecord-postgis-adapter (= 5.2.2)
+      config (~> 2.2)
+      imc-companies
+      imc-groups
+      imc-organizations
+      paper_trail (~> 10.3)
+      pg (>= 0.18, < 2.0)
+      rails (= 5.2.2)
+      strong_migrations (~> 0.6)
+
+PATH
+  remote: engines/organizations
+  specs:
+    imc-organizations (1)
+      activerecord-postgis-adapter (= 5.2.2)
+      config (~> 2.2)
+      imc-users
+      paper_trail (~> 10.3)
+      pg (>= 0.18, < 2.0)
+      rails (= 5.2.2)
       strong_migrations (~> 0.6)
 
 PATH
@@ -327,11 +413,11 @@ PATH
       config (~> 2.2)
       imc-core
       imc-legacy
+      imc-organization_manager
+      imc-organizations
       imc-pricings
       imc-profiles
       imc-quotations
-      imc-result_formatter
-      imc-tenants
       paper_trail (~> 10.3)
       pdfkit
       pg (>= 0.18, < 2.0)
@@ -346,8 +432,12 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       geocoder
+      imc-companies
       imc-core
+      imc-groups
       imc-legacy
+      imc-organization_manager
+      imc-organizations
       imc-tenants
       imc-trucking
       paper_trail (~> 10.3)
@@ -362,6 +452,7 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       imc-core
+      imc-users
       paper_trail (~> 10.3)
       paranoia
       pg (>= 0.18, < 2.0)
@@ -379,7 +470,7 @@ PATH
       imc-cargo
       imc-core
       imc-legacy
-      imc-tenants
+      imc-organizations
       money-rails
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
@@ -394,6 +485,7 @@ PATH
       config (~> 2.2)
       draper (~> 4.0)
       imc-cargo
+      imc-organization_manager
       imc-quotations
       imc-rates
       imc-routing
@@ -410,6 +502,7 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       imc-cargo
+      imc-organizations
       imc-routing
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
@@ -438,7 +531,7 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       imc-core
-      imc-tenants
+      imc-organizations
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -451,6 +544,8 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       imc-core
+      imc-organization_manager
+      imc-organizations
       imc-routing
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
@@ -467,10 +562,10 @@ PATH
       config (~> 2.2)
       imc-core
       imc-legacy
+      imc-organizations
       imc-pricings
       imc-rms_data
       imc-routing
-      imc-tenants
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -514,10 +609,10 @@ PATH
       imc-address_book
       imc-cargo
       imc-core
+      imc-organizations
       imc-quotations
       imc-routing
       imc-sequential
-      imc-tenants
       money-rails (~> 1.12)
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
@@ -532,8 +627,8 @@ PATH
       bitfields
       config (~> 2.2)
       imc-core
+      imc-organizations
       imc-routing
-      imc-tenants
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -547,15 +642,14 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       imc-core
+      imc-groups
       imc-legacy
-      imc-mailers
       imc-profiles
       paper_trail (~> 10.3)
       paranoia
       pg (>= 0.18, < 2.0)
       pg_search (~> 2.3.0)
       rails (= 5.2.2)
-      sorcery (~> 0.13.0)
       strong_migrations (~> 0.6)
 
 PATH
@@ -583,7 +677,7 @@ PATH
       imc-core
       imc-legacy
       imc-locations
-      imc-tenants
+      imc-organizations
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -593,15 +687,30 @@ PATH
       will_paginate
 
 PATH
+  remote: engines/users
+  specs:
+    imc-users (1)
+      activerecord-postgis-adapter (= 5.2.2)
+      acts_as_paranoid (~> 0.6.3)
+      config (~> 2.2)
+      paper_trail (~> 10.3)
+      pg (>= 0.18, < 2.0)
+      pg_search (~> 2.3.0)
+      rails (= 5.2.2)
+      strong_migrations (~> 0.6)
+
+PATH
   remote: engines/validator
   specs:
     imc-validator (1)
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       imc-core
+      imc-groups
       imc-legacy
+      imc-organization_manager
+      imc-organizations
       imc-pricings
-      imc-tenants
       imc-trucking
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
@@ -619,8 +728,9 @@ PATH
       imc-core
       imc-legacy
       imc-offer_calculator
+      imc-organization_manager
+      imc-organizations
       imc-pdf
-      imc-tenants
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -638,7 +748,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    aasm (5.0.6)
+    aasm (5.0.8)
       concurrent-ruby (~> 1.0)
     actioncable (5.2.2)
       actionpack (= 5.2.2)
@@ -697,6 +807,9 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    acts_as_paranoid (0.6.3)
+      activerecord (>= 4.2, < 7.0)
+      activesupport (>= 4.2, < 7.0)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     annotate (3.1.1)
@@ -704,7 +817,7 @@ GEM
       rake (>= 10.4, < 14.0)
     arel (9.0.0)
     ast (2.4.0)
-    autoprefixer-rails (9.7.4)
+    autoprefixer-rails (9.8.4)
       execjs
     aws-eventstream (1.1.0)
     aws-partitions (1.338.0)
@@ -788,19 +901,19 @@ GEM
     docile (1.3.2)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (5.0.2)
+    doorkeeper (5.0.3)
       railties (>= 4.2)
     dotenv (2.7.5)
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
       railties (>= 3.2, < 6.1)
-    draper (4.0.0)
+    draper (4.0.1)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
       activemodel-serializers-xml (>= 1.0)
       activesupport (>= 5.0)
       request_store (>= 1.0)
-    dry-configurable (0.11.3)
+    dry-configurable (0.11.6)
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.4, >= 0.4.7)
       dry-equalizer (~> 0.2)
@@ -816,28 +929,28 @@ GEM
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.2)
       dry-equalizer (~> 0.2)
-    dry-schema (1.4.3)
+    dry-schema (1.5.2)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.8, >= 0.8.3)
       dry-core (~> 0.4)
       dry-equalizer (~> 0.2)
       dry-initializer (~> 3.0)
       dry-logic (~> 1.0)
-      dry-types (~> 1.2)
-    dry-types (1.3.1)
+      dry-types (~> 1.4)
+    dry-types (1.4.0)
       concurrent-ruby (~> 1.0)
       dry-container (~> 0.3)
       dry-core (~> 0.4, >= 0.4.4)
       dry-equalizer (~> 0.3)
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-logic (~> 1.0, >= 1.0.2)
-    dry-validation (1.4.2)
+    dry-validation (1.5.1)
       concurrent-ruby (~> 1.0)
       dry-container (~> 0.7, >= 0.7.1)
       dry-core (~> 0.4)
       dry-equalizer (~> 0.2)
       dry-initializer (~> 3.0)
-      dry-schema (~> 1.4, >= 1.4.3)
+      dry-schema (~> 1.5)
     easymon (1.4.2)
       redis
     elasticsearch (7.3.0)
@@ -904,7 +1017,7 @@ GEM
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
     jmespath (1.4.0)
-    jquery-rails (4.3.5)
+    jquery-rails (4.4.0)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
@@ -914,23 +1027,24 @@ GEM
     jsoneditor-rails (1.0.3)
       sass-rails
     jwt (2.2.1)
-    kaminari (1.2.0)
+    kaminari (1.2.1)
       activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.2.0)
-      kaminari-activerecord (= 1.2.0)
-      kaminari-core (= 1.2.0)
-    kaminari-actionview (1.2.0)
+      kaminari-actionview (= 1.2.1)
+      kaminari-activerecord (= 1.2.1)
+      kaminari-core (= 1.2.1)
+    kaminari-actionview (1.2.1)
       actionview
-      kaminari-core (= 1.2.0)
-    kaminari-activerecord (1.2.0)
+      kaminari-core (= 1.2.1)
+    kaminari-activerecord (1.2.1)
       activerecord
-      kaminari-core (= 1.2.0)
-    kaminari-core (1.2.0)
+      kaminari-core (= 1.2.1)
+    kaminari-core (1.2.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     lefthook (0.7.2)
     letter_opener (1.7.0)
       launchy (~> 2.2)
+    liquid (4.0.3)
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -1193,7 +1307,7 @@ GEM
       skylight-core (= 4.1.2)
     skylight-core (4.1.2)
       activesupport (>= 4.2.0)
-    sorcery (0.13.0)
+    sorcery (0.15.0)
       bcrypt (~> 3.1)
       oauth (~> 0.4, >= 0.4.4)
       oauth2 (~> 1.0, >= 0.8.0)
@@ -1285,16 +1399,21 @@ DEPENDENCIES
   imc-analytics!
   imc-api!
   imc-api_auth!
+  imc-authentication!
   imc-cargo!
+  imc-companies!
   imc-core!
   imc-federation!
+  imc-groups!
   imc-helmsman!
   imc-integrations!
   imc-ledger!
   imc-legacy!
   imc-locations!
-  imc-mailers!
+  imc-migrator!
   imc-offer_calculator!
+  imc-organization_manager!
+  imc-organizations!
   imc-pdf!
   imc-pricings!
   imc-profiles!
@@ -1312,10 +1431,12 @@ DEPENDENCIES
   imc-tenants!
   imc-tender_calculator!
   imc-trucking!
+  imc-users!
   imc-validator!
   imc-wheelhouse!
   lefthook
   letter_opener (~> 1.6)
+  liquid
   listen (>= 3.0.5, < 3.3)
   lograge
   mailgun-ruby (~> 1.2.0)

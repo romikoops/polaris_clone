@@ -23,7 +23,7 @@ module ExcelDataServices
       end
 
       def filtered_pricings
-        pricings = tenant.rates
+        pricings = ::Pricings::Pricing.where(organization: organization)
         pricings = pricings.current.where(sandbox: @sandbox)
         pricings = pricings.where(group_id: options[:group_id]) if options[:group_id]
         pricings = pricings.for_mode_of_transport(options[:mode_of_transport]) if options[:mode_of_transport]

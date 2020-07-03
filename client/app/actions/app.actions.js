@@ -21,34 +21,34 @@ function getTenantId () {
   const { localStorage } = window
 
   function request () {
-    return { type: appConstants.SET_TENANT_ID_REQUEST }
+    return { type: appConstants.SET_ORGANIZATION_ID_REQUEST }
   }
 
   function success (payload) {
-    return { type: appConstants.SET_TENANT_ID_SUCCESS, payload }
+    return { type: appConstants.SET_ORGANIZATION_ID_SUCCESS, payload }
   }
 
   function failure (error) {
-    return { type: appConstants.SET_TENANT_ID_ERROR, error }
+    return { type: appConstants.SET_ORGANIZATION_ID_ERROR, error }
   }
 
   return (dispatch) => {
     dispatch(request())
 
-    const tenantId = localStorage.getItem('tenantId')
+    const organizationId = localStorage.getItem('organizationId')
 
-    if (tenantId && tenantId !== 'null') {
-      dispatch(success(tenantId))
+    if (organizationId && organizationId !== 'null') {
+      dispatch(success(organizationId))
 
       return dispatch(getTenant())
     }
 
-    return fetch(`${getApiHost()}/tenants/current`, requestOptions('get'))
-      .then(resp => resp.json())
+    return fetch(`${getApiHost()}/organizations/current`, requestOptions('get'))
+      .then((resp) => resp.json())
       .then((res) => {
-        const newTenantId = get(res, ['data', 'tenant_id'], false)
+        const newTenantId = get(res, ['data', 'organization_id'], false)
         if (newTenantId) {
-          localStorage.setItem('tenantId', newTenantId)
+          localStorage.setItem('organizationId', newTenantId)
           dispatch(success(newTenantId))
           dispatch(getTenant())
         } else {
@@ -65,13 +65,13 @@ function getTenantId () {
 
 function setTenants () {
   function request () {
-    return { type: appConstants.SET_TENANTS_REQUEST }
+    return { type: appConstants.SET_ORGANIZATIONS_REQUEST }
   }
   function success (payload) {
-    return { type: appConstants.SET_TENANTS_SUCCESS, payload }
+    return { type: appConstants.SET_ORGANIZATIONS_SUCCESS, payload }
   }
   function failure (error) {
-    return { type: appConstants.SET_TENANTS_ERROR, error }
+    return { type: appConstants.SET_ORGANIZATIONS_ERROR, error }
   }
 
   return (dispatch) => {
@@ -89,16 +89,16 @@ function setTenants () {
   }
 }
 
-function overrideTenant (tenantId) {
+function overrideTenant (organizationId) {
   const { localStorage } = window
 
   function success (payload) {
-    return { type: appConstants.OVERRIDE_TENANT_SUCCESS, payload }
+    return { type: appConstants.OVERRIDE_ORGANIZATION_SUCCESS, payload }
   }
 
   return (dispatch) => {
-    localStorage.setItem('tenantId', tenantId)
-    dispatch(success(tenantId))
+    localStorage.setItem('organizationId', organizationId)
+    dispatch(success(organizationId))
 
     dispatch(getTenant())
   }
@@ -108,23 +108,23 @@ function getTenant () {
   const { localStorage } = window
 
   function request () {
-    return { type: appConstants.SET_TENANT_REQUEST }
+    return { type: appConstants.SET_ORGANIZATION_REQUEST }
   }
 
   function success (payload) {
-    return { type: appConstants.SET_TENANT_SUCCESS, payload }
+    return { type: appConstants.SET_ORGANIZATION_SUCCESS, payload }
   }
 
   function failure (payload) {
-    return { type: appConstants.SET_TENANT_ERROR, payload }
+    return { type: appConstants.SET_ORGANIZATION_ERROR, payload }
   }
 
   return (dispatch) => {
-    const tenantId = localStorage.getItem('tenantId')
+    const organizationId = localStorage.getItem('organizationId')
 
     dispatch(request)
 
-    appService.getTenant(tenantId).then(
+    appService.getTenant(organizationId).then(
       (resp) => {
         dispatch(success(resp.data))
       },
@@ -289,10 +289,11 @@ function setCurrency (type, req) {
 
   return (dispatch) => {
     dispatch(request(type))
-    appService.setCurrency(type).then(
+
+    return appService.setCurrency(type).then(
       (resp) => {
         dispatch(success(resp.data.rates))
-        dispatch(authenticationActions.setUser({ data: resp.data.user }))
+        dispatch(authenticationActions.setUser(resp.data.user))
         if (req) {
           dispatch(shipmentActions.getOffers(req, false))
         }
@@ -360,7 +361,7 @@ function setTenantCurrencyRates (base, rates) {
 
 function receiveTenants (json) {
   return {
-    type: appConstants.RECEIVE_TENANTS,
+    type: appConstants.RECEIVE_ORGANIZATIONS,
     payload: json,
     receivedAt: Date.now()
   }
@@ -375,10 +376,10 @@ function invalidateSubdomain (subdomain) {
 
 function fetchTenants () {
   function failure (error) {
-    return { type: appConstants.RECEIVE_TENANT_ERROR, error }
+    return { type: appConstants.RECEIVE_ORGANIZATION_ERROR, error }
   }
 
-  return dispatch => fetch(`${getApiHost()}/tenants`)
+  return dispatch => fetch(`${getApiHost()}/organizations`)
     .then(response => response.json())
     .then(json => dispatch(receiveTenants(json)), err => dispatch(failure(err)))
 }

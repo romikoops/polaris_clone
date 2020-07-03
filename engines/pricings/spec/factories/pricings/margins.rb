@@ -7,8 +7,8 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     margin_type { :freight_margin }
     effective_date { Date.today.beginning_of_day }
     expiration_date { 6.months.from_now.end_of_day }
-    association :tenant, factory: :tenants_tenant
-    association :applicable, factory: :legacy_user
+    association :organization, factory: :organizations_organization
+    association :applicable, factory: :organizations_user
 
     trait :freight do
       margin_type { :freight_margin }
@@ -31,7 +31,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     end
 
     trait :user do
-      association :applicable, factory: :legacy_user
+      association :applicable, factory: :organizations_user
     end
 
     trait :group do
@@ -43,13 +43,13 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       operator { '+' }
     end
 
-    trait :tenant do
-      association :applicable, factory: :legacy_tenant
+    trait :organization do
+      association :applicable, factory: :organizations_organization
     end
 
     factory :user_margin, traits: [:user]
     factory :group_margin, traits: [:group]
-    factory :tenant_margin, traits: [:tenant]
+    factory :organization_margin, traits: [:organization]
     factory :addition_margin, traits: [:addition]
     factory :freight_margin, traits: [:freight]
     factory :import_margin, traits: [:import]
@@ -79,6 +79,7 @@ end
 #  applicable_id      :uuid
 #  destination_hub_id :integer
 #  itinerary_id       :integer
+#  organization_id    :uuid
 #  origin_hub_id      :integer
 #  pricing_id         :uuid
 #  sandbox_id         :uuid
@@ -95,9 +96,14 @@ end
 #  index_pricings_margins_on_expiration_date                    (expiration_date)
 #  index_pricings_margins_on_itinerary_id                       (itinerary_id)
 #  index_pricings_margins_on_margin_type                        (margin_type)
+#  index_pricings_margins_on_organization_id                    (organization_id)
 #  index_pricings_margins_on_origin_hub_id                      (origin_hub_id)
 #  index_pricings_margins_on_pricing_id                         (pricing_id)
 #  index_pricings_margins_on_sandbox_id                         (sandbox_id)
 #  index_pricings_margins_on_tenant_id                          (tenant_id)
 #  index_pricings_margins_on_tenant_vehicle_id                  (tenant_vehicle_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

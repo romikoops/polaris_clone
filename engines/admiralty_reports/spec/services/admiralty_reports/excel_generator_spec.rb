@@ -1,26 +1,35 @@
 # frozen_string_literal: true
 
+require 'rails_helper'
+
 module AdmiraltyReports
   RSpec.describe ExcelGenerator, type: :service do
     describe '#process_excel_file' do
-      let(:tenant) { FactoryBot.create(:legacy_tenant, name: 'Test Tenant') }
-      let(:quotation_tenant) { FactoryBot.create(:tenants_tenant, slug: 'quotetenant') }
-      let(:user) { FactoryBot.create(:legacy_user, email: 'imc@imc.com') }
+      let(:organization) { FactoryBot.create(:organizations_organization) }
+      let(:user) { FactoryBot.create(:organizations_user, email: 'imc@imc.com', organization: organization) }
+      let(:shipment) do
+        FactoryBot.build(:legacy_shipment,
+                         user: user,
+                         organization: user.organization,
+                         updated_at: Date.new(2020, 2, 3),
+                         created_at: Date.new(2020, 2, 1),
+                         status: 'accepted')
+      end
+      let(:quotation) do
+        FactoryBot.build(:quotations_quotation,
+                         organization: user.organization,
+                         user: user,
+                         updated_at: DateTime.new(2020, 2, 3),
+                         created_at: DateTime.new(2020, 2, 1))
+      end
 
       let(:raw_request_data) do
-        [
-          FactoryBot.build(:legacy_shipment,
-                           user: user,
-                           tenant: tenant,
-                           updated_at: Date.new(2020, 2, 3),
-                           created_at: Date.new(2020, 2, 1),
-                           status: 'accepted'),
-          FactoryBot.build(:quotations_quotation,
-                           tenant: quotation_tenant,
-                           user: user,
-                           updated_at: DateTime.new(2020, 2, 3),
-                           created_at: DateTime.new(2020, 2, 1))
-        ]
+         [shipment, quotation]
+       end
+
+      before do
+        ::Organizations.current_id = organization.id
+        FactoryBot.create(:companies_company, :with_member, organization: organization, member: user)
       end
 
       context 'when custom fields are not specified' do
@@ -28,9 +37,9 @@ module AdmiraltyReports
 
         let(:expected_headers) { ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Company', 'Status'] }
 
-        let(:expected_shipment) { ['Test Tenant', Date.new(2020, 2, 1), 'imc@imc.com', nil, 'accepted'] }
+        let(:expected_shipment) { [shipment.organization.slug, Date.new(2020, 2, 1), 'imc@imc.com', nil, 'accepted'] }
 
-        let(:expected_quotation) { ['quotetenant', Date.new(2020, 2, 1), 'imc@imc.com', nil, nil] }
+        let(:expected_quotation) { [quotation.organization.slug , Date.new(2020, 2, 1), 'imc@imc.com', nil, nil] }
 
         let(:generated_file) { Roo::Excelx.new(subject.to_stream) }
 

@@ -5,19 +5,17 @@ require 'rails_helper'
 RSpec.describe Pricings::MarginCreator do
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }
-  let!(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
   let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle_1]) }
   let!(:tenant_vehicles) do
     %w[slowly fast faster].map do |name|
-      FactoryBot.create(:legacy_tenant_vehicle, name: name, tenant: tenant)
+      FactoryBot.create(:legacy_tenant_vehicle, name: name, organization: organization)
     end
   end
   let!(:currency) { FactoryBot.create(:legacy_currency) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
-  let(:group_1) { FactoryBot.create(:tenants_group, tenant: tenants_tenant) }
-  let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
+  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:group_1) { FactoryBot.create(:groups_group, organization: organization) }
+  let(:itinerary_1) { FactoryBot.create(:default_itinerary, organization: organization) }
   let(:itinerary_ids) { [] }
   let(:tenant_vehicle_ids) { [] }
   let(:cargo_classes) { [] }
@@ -38,7 +36,7 @@ RSpec.describe Pricings::MarginCreator do
       pricing_id: nil,
       selectedHubDirection: nil,
       marginType: marginType,
-      tenant_id: tenant.id,
+      organization_id: organization.id,
       groupId: group_1.id,
       directions: directions,
       operand: operand,
@@ -59,7 +57,7 @@ RSpec.describe Pricings::MarginCreator do
           expect(new_margins.length).to eq(1)
           expect(new_margins.first.value).to eq(0.10)
           expect(new_margins.first.operator).to eq('%')
-          expect(new_margins.first.applicable_type).to eq('Tenants::Group')
+          expect(new_margins.first.applicable_type).to eq('Groups::Group')
           expect(new_margins.first.cargo_class).to eq('All')
         end
       end
@@ -73,7 +71,7 @@ RSpec.describe Pricings::MarginCreator do
           expect(new_margins.length).to eq(1)
           expect(new_margins.first.value).to eq(0.10)
           expect(new_margins.first.operator).to eq('%')
-          expect(new_margins.first.applicable_type).to eq('Tenants::Group')
+          expect(new_margins.first.applicable_type).to eq('Groups::Group')
           expect(new_margins.first.itinerary_id).to eq(itinerary_1.id)
           expect(new_margins.first.cargo_class).to eq('All')
         end
@@ -147,7 +145,7 @@ RSpec.describe Pricings::MarginCreator do
           expect(new_margins.length).to eq(1)
           expect(new_margins.first.value).to eq(0.10)
           expect(new_margins.first.operator).to eq('%')
-          expect(new_margins.first.applicable_type).to eq('Tenants::Group')
+          expect(new_margins.first.applicable_type).to eq('Groups::Group')
           expect(new_margins.first.tenant_vehicle_id).to eq(nil)
           expect(new_margins.first.destination_hub_id).to eq(hub.id)
         end
@@ -200,11 +198,11 @@ RSpec.describe Pricings::MarginCreator do
   end
 
   describe '.create_default_margins' do
-    let(:new_tenant) { FactoryBot.create(:tenants_tenant) }
+    let(:new_tenant) { FactoryBot.create(:organizations_organization) }
 
     it 'creates default margins for new tenants' do
       described_class.create_default_margins(new_tenant)
-      expect(::Pricings::Margin.where(tenant: new_tenant).count).to eq(35)
+      expect(::Pricings::Margin.where(organization: new_tenant).count).to eq(35)
     end
   end
 end

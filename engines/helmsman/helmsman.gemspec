@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'Validating possible routes for tenant.'
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
@@ -19,7 +19,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-ledger'
   s.add_dependency 'imc-routing'
   s.add_dependency 'imc-tenant_routing'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
+  s.add_dependency 'imc-organization_manager'
+
+  s.add_development_dependency 'imc-companies'
+  s.add_development_dependency 'imc-legacy'
 
   Gemhelper.common(s)
 end

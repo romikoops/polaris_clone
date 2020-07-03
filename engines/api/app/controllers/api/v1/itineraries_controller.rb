@@ -11,54 +11,8 @@ module Api
       skip_before_action :doorkeeper_authorize!, only: :ports, raise: false
 
       def index
-        itineraries = Legacy::Itinerary.where(tenant_id: current_tenant.legacy_id)
+        itineraries = Legacy::Itinerary.where(organization: current_organization)
         render json: ItinerarySerializer.new(itineraries, params: { includes: ['stops'] })
-      end
-
-      def ports
-        hub_ids = Legacy::Stop.select(:hub_id)
-                              .where(itinerary_id: ports_itineraries,
-                                     index: stop_index_if_location_selected)
-
-        hubs = Legacy::Hub.where(id: hub_ids)
-                          .order(:name)
-
-        hubs = hubs.name_search(ports_params[:query]) unless ports_params[:query].empty?
-
-        render json: PortSerializer.new(hubs)
-      end
-
-      private
-
-      def ports_params
-        required_params = %i[tenant_uuid location_type]
-
-        params.require(required_params)
-        params.permit(*required_params, :location_id, :query)
-      end
-
-      def default_stop_index
-        ports_params[:location_type] == 'origin' ? ORIGIN_INDEX : DESTINATION_INDEX
-      end
-
-      def stop_index_if_location_selected
-        return default_stop_index unless ports_params[:location_id]
-
-        ports_params[:location_type] == 'origin' ? DESTINATION_INDEX : ORIGIN_INDEX
-      end
-
-      def ports_itineraries
-        tenant = Tenants::Tenant.find(ports_params[:tenant_uuid])
-        itineraries = Legacy::Itinerary.joins(:stops)
-                                       .where(sandbox: @sandbox,
-                                              tenant_id: tenant.legacy_id,
-                                              mode_of_transport: 'ocean',
-                                              stops: { index: default_stop_index })
-
-        hub_id = ports_params[:location_id]
-        itineraries = itineraries.where(stops: { hub_id: hub_id }) if hub_id.present?
-
-        itineraries
       end
     end
   end

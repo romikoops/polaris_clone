@@ -21,6 +21,7 @@ export class AdminDashboard extends Component {
     this.determinePerPage = this.determinePerPage.bind(this)
     this.handleShipmentAction = this.handleShipmentAction.bind(this)
     this.handleRouteHover = this.handleRouteHover.bind(this)
+    this.viewHub = this.viewHub.bind(this)
   }
 
   componentDidMount () {
@@ -71,6 +72,11 @@ export class AdminDashboard extends Component {
     const width = window.innerWidth
     const perPage = width >= 1920 ? 3 : 2
     this.setState({ perPage })
+  }
+
+  viewHub (hub) {
+    const { adminDispatch } = this.props
+    adminDispatch.getHub(hub.id, true)
   }
 
   render () {
@@ -175,7 +181,7 @@ export class AdminDashboard extends Component {
           </div>
           <div className="layout-row layout-wrap flex-100 layout-align-space-between-stretch">
             <div className="flex-gt-md-60 flex-100">
-              <AdminHubsComp showLocalExpiry={false} perPage={10} />
+              <AdminHubsComp showLocalExpiry={false} perPage={10} handleClick={this.viewHub}/>
               <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
                 <span className="flex-15" onClick={() => this.handleViewHubs()}><u><b>{t('admin:seeMore')}</b></u></span>
                 <div className={`flex-85 ${styles.separator}`} />

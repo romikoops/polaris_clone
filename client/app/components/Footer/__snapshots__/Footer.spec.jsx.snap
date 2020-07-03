@@ -60,7 +60,7 @@ exports[`shallow render 1`] = `
           aria-hidden="true"
           className="fa fa-phone"
         />
-        TENANT_SUPPORT_PHONE
+        ORGANIZATION_SUPPORT_PHONE
       </div>
       <div
         className="flex-100 layout-row social_links"
@@ -98,9 +98,9 @@ exports[`shallow render 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -143,7 +143,7 @@ exports[`shallow render 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -248,7 +248,7 @@ exports[`theme is falsy 1`] = `
           aria-hidden="true"
           className="fa fa-phone"
         />
-        TENANT_SUPPORT_PHONE
+        ORGANIZATION_SUPPORT_PHONE
       </div>
       <div
         className="flex-100 layout-row social_links"
@@ -286,9 +286,9 @@ exports[`theme is falsy 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -331,7 +331,7 @@ exports[`theme is falsy 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",

@@ -12,7 +12,8 @@ module Legacy
       # since the mode_of_transport is still not known
       dimension_names.delete(:chargeable_weight) if mode_of_transport.nil?
 
-      max_aggregate_dimensions = record.tenant.max_aggregate_dimensions
+      max_aggregate_dimensions = MaxDimensionsBundle.where(organization_id: record.organization, aggregate: true).to_max_dimensions_hash
+      return true if max_aggregate_dimensions.blank?
       max_dimensions =
         max_aggregate_dimensions[mode_of_transport] ||
         max_aggregate_dimensions[:general]

@@ -3,9 +3,9 @@ require 'csv'
 module RmsExport
   module Parser
     class Carriage < RmsExport::Parser::Base
-      def initialize(tenant_id:)
-        super(tenant_id: tenant_id)
-        @book = RmsData::Book.find_by(tenant: @tenant, sheet_type: 'carriage')
+      def initialize(organization_id:)
+        super(organization_id: organization_id)
+        @book = RmsData::Book.find_by(organization: @organization, sheet_type: 'carriage')
         @carriers = []
         @routes = []
         @line_services = []
@@ -30,7 +30,7 @@ module RmsExport
           line_services: create_csv_file(data: @line_services.uniq, key: 'line_services'),
           route_line_services: create_csv_file(data: @route_line_services.uniq, key: 'route_line_services'),
           routes: create_csv_file(data: @routes.uniq, key: 'routes'),
-          tenant_carriage_connections: create_csv_file(data: @tenant_connections.uniq, key: 'tenant_connections')         
+          tenant_carriage_connections: create_csv_file(data: @tenant_connections.uniq, key: 'tenant_connections')
         }
       end
 
@@ -50,7 +50,7 @@ module RmsExport
       end
 
       def handle_target_ids(cell)
-        @hub = Legacy::Hub.find_by(tenant: @tenant.legacy, name: cell.value, hub_type: 'ocean')
+        @hub = Legacy::Hub.find_by(organization: @organization, name: cell.value, hub_type: 'ocean')
         @hub_loc = Routing::Location.find_by(name: @hub.nexus.name)
         @hub_terminal = @hub_loc.terminals.find_by(mode_of_transport: @hub.hub_type)
         @origin_ids = Routing::Route.where(origin: hub_loc, origin_terminal: hub_terminal).ids
@@ -61,7 +61,7 @@ module RmsExport
         if metadata['courier_name'].present?
           @carriers << {
             name: metadata['courier_name'],
-            abbreviated_name: metadata['courier_name'],
+            abbreviated_name: metadata['courier_name']
           }
         end
       end
@@ -97,14 +97,14 @@ module RmsExport
           @tenant_connections << {
             inbound_id: id,
             outbound_id: nil,
-            tenant_id: @tenant.id
+            organization_id: @organization.id
           }
         end
         @origin_ids.each do |id|
           @tenant_connections << {
             outbound_id: id,
             inbound_id: nil,
-            tenant_id: @tenant.id
+            organization_id: @organization.id
           }
         end
       end

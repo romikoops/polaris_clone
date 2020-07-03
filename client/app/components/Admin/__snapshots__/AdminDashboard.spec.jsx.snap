@@ -166,6 +166,7 @@ exports[`isQuote(tenant) is true 1`] = `
         className="flex-gt-md-60 flex-100"
       >
         <Connect(AdminHubsComp)
+          handleClick={[Function]}
           perPage={10}
           showLocalExpiry={false}
           t={[Function]}
@@ -440,6 +441,7 @@ exports[`shallow render 1`] = `
         className="flex-gt-md-60 flex-100"
       >
         <Connect(AdminHubsComp)
+          handleClick={[Function]}
           perPage={10}
           showLocalExpiry={false}
           t={[Function]}
@@ -714,6 +716,7 @@ exports[`tenant is falsy 1`] = `
         className="flex-gt-md-60 flex-100"
       >
         <Connect(AdminHubsComp)
+          handleClick={[Function]}
           perPage={10}
           showLocalExpiry={false}
           t={[Function]}
@@ -960,6 +963,7 @@ exports[`theme is falsy 1`] = `
         className="flex-gt-md-60 flex-100"
       >
         <Connect(AdminHubsComp)
+          handleClick={[Function]}
           perPage={10}
           showLocalExpiry={false}
           t={[Function]}

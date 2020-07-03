@@ -8,20 +8,19 @@ module Api
 
     before do
       request.headers['Authorization'] = token_header
-      FactoryBot.create(:legacy_tenant_cargo_item_type, tenant: legacy_tenant, cargo_item_type: cargo_item_type)
+      FactoryBot.create(:legacy_tenant_cargo_item_type, organization_id: organization.id, cargo_item_type: cargo_item_type)
     end
 
-    let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenant) { Tenants::Tenant.create(legacy: legacy_tenant, slug: '1234') }
-    let(:tenant_group) { Tenants::Group.create(tenant: tenant) }
-    let(:user) { FactoryBot.create(:tenants_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', tenant: tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:organization_group) { Organizations::Group.create(organization: organization) }
+    let(:user) { FactoryBot.create(:organizations_user, email: 'test@example.com', organization: organization) }
     let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:cargo_item_type) { FactoryBot.create(:legacy_cargo_item_type) }
 
     describe 'GET #index' do
       it 'renders the list of cargo_item_types successfully' do
-        get :index
+        get :index, params: { organization_id: organization.id }
 
         aggregate_failures do
           expect(response).to be_successful

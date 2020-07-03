@@ -16,13 +16,13 @@ export const tenant = (
         ...state,
         didInvalidate: true
       }
-    case tenantConstants.REQUEST_TENANT:
+    case tenantConstants.REQUEST_ORGANIZATION:
       return {
         ...state,
         isFetching: true,
         didInvalidate: false
       }
-    case tenantConstants.RECEIVE_TENANT:
+    case tenantConstants.RECEIVE_ORGANIZATION:
       return {
         ...state,
         isFetching: false,
@@ -31,12 +31,12 @@ export const tenant = (
         data: action.data,
         lastUpdated: action.receivedAt
       }
-    case tenantConstants.RECEIVE_TENANT_ERROR:
+    case tenantConstants.RECEIVE_ORGANIZATION_ERROR:
       return {
         ...state,
         isFetching: false
       }
-    case tenantConstants.CLEAR_TENANT:
+    case tenantConstants.CLEAR_ORGANIZATION:
       return {}
     case tenantConstants.SET_THEME: {
       return {

@@ -60,7 +60,7 @@ class RegistrationPage extends React.PureComponent {
       return
     }
     const user = Object.assign({}, model)
-    user.tenant_id = this.props.tenant.id
+    user.organization_id = this.props.tenant.id
     user.guest = false
 
     const { req, authenticationDispatch } = this.props

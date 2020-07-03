@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Contact, type: :model do
   context 'validations' do
-    let(:user) { build(:user) }
+    let(:user) { build(:organizations_user) }
 
     let!(:contact_one) { create(:contact, user: user, first_name: 'John', last_name: 'Doe', company_name: 'ACME', email: 'john@example.com', phone: '123456') }
     let(:contact_two) { build(:contact, user: user, first_name: 'John', last_name: 'Doe', company_name: 'ACME', email: 'john@example.com', phone: '123456') }
@@ -39,10 +39,16 @@ end
 #  created_at                        :datetime         not null
 #  updated_at                        :datetime         not null
 #  address_id                        :integer
+#  old_user_id                       :integer
 #  sandbox_id                        :uuid
-#  user_id                           :integer
+#  user_id                           :uuid
 #
 # Indexes
 #
 #  index_contacts_on_sandbox_id  (sandbox_id)
+#  index_contacts_on_user_id     (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_  (user_id => users_users.id)
 #

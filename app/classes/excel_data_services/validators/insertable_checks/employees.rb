@@ -12,9 +12,9 @@ module ExcelDataServices
         end
 
         def check_customer_company(row)
-          company = ::Tenants::Company.find_by(
+          company = ::Companies::Company.find_by(
             name: row[:company_name],
-            tenant: ::Tenants::Tenant.find_by(legacy_id: tenant.id)
+            organization: organization
           )
           company_unknown = row[:company_name].present? && company.nil?
 

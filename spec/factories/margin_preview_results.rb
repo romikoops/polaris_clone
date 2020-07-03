@@ -27,8 +27,8 @@ FactoryBot.define do
                   'data' => { 'rate' => '27.5', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.1', 'range' => [] },
                   'target_name' => target_name,
                   'target_id' => target&.id,
-                  'target_type' => target.class.to_s,
-                  'url_id' => target.is_a?(Tenants::User) ? target.legacy_id : target&.id }
+                  'target_type' => target.is_a?(Organizations::User) ? target.class.base_class.to_s : target.class.to_s,
+                  'url_id' => target.id }
               ],
               'flatMargins' => [],
               'final' => { 'rate' => '27.5', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.1', 'range' => [] },

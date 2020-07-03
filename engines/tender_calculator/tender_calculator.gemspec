@@ -21,5 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-rates'
   s.add_dependency 'imc-tenant_routing'
 
+  s.add_development_dependency 'imc-legacy'
+
   Gemhelper.common(s)
 end

@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 class Shipment < Legacy::Shipment
-  include PgSearch::Model
-
   validate :desired_start_date_is_a_datetime?
-  validate :user_tenant_match
-  validate :itinerary_trip_match
+  # validate :itinerary_trip_match
 
   # validates :total_goods_value, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
@@ -14,7 +11,6 @@ class Shipment < Legacy::Shipment
 
   belongs_to :quotation, optional: true
   belongs_to :route, optional: true
-  belongs_to :tenant
 
   belongs_to :origin_nexus, class_name: 'Nexus', optional: true
   belongs_to :destination_nexus, class_name: 'Nexus', optional: true
@@ -39,68 +35,6 @@ class Shipment < Legacy::Shipment
   accepts_nested_attributes_for :cargo_items, allow_destroy: true
   accepts_nested_attributes_for :contacts, allow_destroy: true
   accepts_nested_attributes_for :documents, allow_destroy: true
-  filterrific(
-    default_filter_params: { sorted_by: 'booking_placed_at_desc' },
-    available_filters: %i(
-      user_name
-      company_name
-      reference_number
-      sorted_by
-      user_search
-      requested
-      open
-      finished
-      rejected
-      archived
-      for_tenant
-    )
-  )
-
-  pg_search_scope :index_search,
-                  against: %i(imc_reference),
-                  associated_against: {
-                    user: %i[email],
-                    origin_hub: %i(name),
-                    destination_hub: %i(name)
-                  },
-                  using: {
-                    tsearch: { prefix: true }
-                  }
-
-  scope :user_name, lambda { |query|
-    user_ids = Profiles::Profile
-               .where('first_name ILIKE ? OR last_name ILIKE ?', "%#{query}%", "%#{query}%")
-               .pluck(:user_id)
-    where(user_id: Tenants::User.where(id: user_ids).pluck(:legacy_id))
-  }
-
-  scope :company_name, lambda { |query|
-    user_ids = Profiles::Profile.where('company_name ILIKE ? ', "%#{query}%").pluck(:user_id)
-    where(user_id: Tenants::User.where(id: user_ids).pluck(:legacy_id))
-  }
-
-  scope :reference_number, lambda { |query|
-    where('imc_reference ILIKE ? ', "%#{query}%")
-  }
-
-  scope :hub_names, lambda { |query|
-    hub_ids = Hub.where('name ILIKE ?', "%#{query}%").ids
-    where('origin_hub_id IN (?) OR destination_hub_id IN (?)', hub_ids, hub_ids)
-  }
-
-  scope :for_tenant, lambda { |_query|
-    tenant = Tenant.find_by_subdomain
-    tenant.shipments
-  }
-
-  scope :user_search, lambda { |query|
-    user_name(query).or(Shipment.company_name(query)).or(Shipment.reference_number(query))
-                    .or(Shipment.hub_names(query))
-  }
-
-  # STATUSES.each do |status|
-  #   scope status, -> { where(status: status) }
-  # end
 
   %i(ocean air rail).each do |mot|
     scope mot, -> { joins(:itinerary).where(Itinerary.arel_table[:mode_of_transport].eq(mot)) }
@@ -162,14 +96,6 @@ class Shipment < Legacy::Shipment
 
   def set_trucking_chargeable_weight(target, weight)
     trucking[target]['chargeable_weight'] = weight
-  end
-
-  def pickup_address_with_country
-    pickup_address.as_json(include: :country)
-  end
-
-  def delivery_address_with_country
-    delivery_address.as_json(include: :country)
   end
 
   def import?
@@ -269,83 +195,12 @@ class Shipment < Legacy::Shipment
     update!(status: 'archived')
   end
 
-  def view_offers(index)
-  end
-  deprecate :view_offers, deprecator: ActiveSupport::Deprecation.new('', Rails.application.railtie_name)
-
-  def client_name
-    shipment_user_profile.full_name
-  end
-
-  def company_name
-    shipment_user_profile.company_name
-  end
-
-  def shipment_user_profile
-    tenants_user = Tenants::User.with_deleted.find_by(legacy_id: user_id)
-    profile = Profiles::Profile.with_deleted.find_by(user_id: tenants_user.id)
-    Profiles::ProfileDecorator.new(profile)
-  end
-
-  def as_options_json(options = {})
-    hidden_args = Pdf::HiddenValueService.new(user: user).hide_total_args
-    new_options = options.reverse_merge(
-      methods: %i(mode_of_transport cargo_count company_name client_name),
-      include: [
-        :destination_nexus,
-        :origin_nexus,
-        {
-          destination_hub: {
-            include: { address: { only: %i(geocoded_address latitude longitude) } }
-          }
-        },
-        {
-          origin_hub: {
-            include: { address: { only: %i(geocoded_address latitude longitude) } }
-          }
-        }
-      ]
-    )
-    as_json(new_options).merge(selected_offer: selected_offer(hidden_args))
-  end
-
   def route_notes
     return [] unless itinerary
 
     Note.where(target: itinerary&.pricings)
   end
 
-  def as_index_json(options = {})
-    hidden_args = Pdf::HiddenValueService.new(user: user).hide_total_args
-    new_options = options.reverse_merge(
-      methods: %i[mode_of_transport cargo_units cargo_count edited_total company_name client_name],
-      include: [
-        :destination_nexus,
-        :origin_nexus,
-        {
-          destination_hub: {}
-        },
-        {
-          origin_hub: {}
-        }
-      ]
-    )
-    as_json(new_options).merge(total_price: total_price(hidden_total: hidden_args[:hidden_grand_total]))
-  end
-
-  def with_address_options_json(options = {})
-    as_options_json(options).merge(
-      pickup_address: pickup_address_with_country,
-      delivery_address: delivery_address_with_country
-    )
-  end
-
-  def with_address_index_json(options = {})
-    as_index_json(options).merge(
-      pickup_address: pickup_address_with_country,
-      delivery_address: delivery_address_with_country
-    )
-  end
 
   def self.create_all_empty_charge_breakdowns!
     where.not(id: ChargeBreakdown.pluck(:shipment_id).uniq, schedules_charges: {})
@@ -369,6 +224,7 @@ end
 # Table name: shipments
 #
 #  id                                  :bigint           not null, primary key
+#  billing                             :integer          default("external")
 #  booking_placed_at                   :datetime
 #  cargo_notes                         :string
 #  closing_date                        :datetime
@@ -400,8 +256,11 @@ end
 #  updated_at                          :datetime         not null
 #  destination_hub_id                  :integer
 #  destination_nexus_id                :integer
+#  distinct_id                         :uuid
 #  incoterm_id                         :integer
 #  itinerary_id                        :integer
+#  legacy_user_id                      :integer
+#  organization_id                     :uuid
 #  origin_hub_id                       :integer
 #  origin_nexus_id                     :integer
 #  quotation_id                        :integer
@@ -409,18 +268,22 @@ end
 #  tenant_id                           :integer
 #  tender_id                           :uuid
 #  trip_id                             :integer
-#  user_id                             :integer
+#  user_id                             :uuid
 #
 # Indexes
 #
-#  index_shipments_on_sandbox_id  (sandbox_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tenant_id   (tenant_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tender_id   (tender_id)
+#  index_shipments_on_organization_id  (organization_id)
+#  index_shipments_on_sandbox_id       (sandbox_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tenant_id        (tenant_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tender_id        (tender_id)
+#  index_shipments_on_user_id          (user_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (destination_hub_id => hubs.id) ON DELETE => nullify
 #  fk_rails_...  (destination_nexus_id => nexuses.id) ON DELETE => nullify
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (origin_hub_id => hubs.id) ON DELETE => nullify
 #  fk_rails_...  (origin_nexus_id => nexuses.id) ON DELETE => nullify
+#  fk_rails_...  (user_id => users_users.id)
 #

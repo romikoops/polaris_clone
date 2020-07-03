@@ -5,17 +5,17 @@ require 'rails_helper'
 module Shipments
   RSpec.describe ShipmentRequestCreator do
     describe 'Mapping a legacy shipment to shipment request' do
-      let(:tenant) { FactoryBot.create(:legacy_tenant) }
+      let(:organization) { FactoryBot.create(:organizations_organization) }
       let(:currency) { FactoryBot.create(:legacy_currency) }
-      let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
+      let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+      let(:legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, meta: { tender_id: tender.id }) }
       let(:tender) { FactoryBot.create(:quotations_tender) }
 
       context 'when creating a shipment request' do
         before do
-          FactoryBot.create_list(:legacy_file, 2, :with_file, shipment: legacy_shipment, tenant: tenant)
+          FactoryBot.create_list(:legacy_file, 2, :with_file, shipment: legacy_shipment, organization: organization)
         end
 
-        let(:legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, tenant: tenant, user: user, meta: { tender_id: tender.id }) }
         let(:creator) { described_class.new(legacy_shipment: legacy_shipment, user: user, sandbox: nil) }
         let(:shipment_request) { creator.create.shipment_request }
 
@@ -58,7 +58,7 @@ module Shipments
           consignee = shipment_request.consignee.contact
           legacy_consignee = legacy_shipment.shipment_contacts.find_by(contact_type: 'consignee').contact
           aggregate_failures do
-            expect(consignee.user_id).to eql Tenants::User.find_by(legacy_id: legacy_consignee.user.id).id
+            expect(consignee.user_id).to eql Organizations::User.unscoped.find(legacy_consignee.user_id).id
             expect(consignee.company_name).to eql legacy_consignee.company_name
             expect(consignee.first_name).to eql legacy_consignee.first_name
             expect(consignee.last_name).to eql legacy_consignee.last_name

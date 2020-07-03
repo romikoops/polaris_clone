@@ -3,11 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe Legacy::HubNexusMatchValidator do
+  let(:user) { FactoryBot.create(:organizations_user) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: user.organization) }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
+  let(:tenant_vehicle) { FactoryBot.build(:legacy_tenant_vehicle, organization: user.organization) }
+  let(:trip) { FactoryBot.build(:legacy_trip, tenant_vehicle: tenant_vehicle) }
+  let(:wrong_hub) { FactoryBot.create(:felixstowe_hub, organization: user.organization) }
   let(:args) do
     {
       trip_id: trip.id,
       itinerary_id: itinerary.id,
-      tenant: tenant,
+      organization: user.organization,
       origin_hub_id: origin_hub.id,
       destination_hub_id: destination_hub.id,
       origin_nexus_id: origin_hub.nexus_id,
@@ -16,14 +23,10 @@ RSpec.describe Legacy::HubNexusMatchValidator do
     }
   end
 
-  let!(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
-  let(:tenant_vehicle) { FactoryBot.build(:legacy_tenant_vehicle, tenant: tenant) }
-  let(:trip) { FactoryBot.build(:legacy_trip, tenant_vehicle: tenant_vehicle) }
-  let(:wrong_hub) { FactoryBot.create(:felixstowe_hub, tenant: tenant) }
+  before do
+    FactoryBot.create(:legacy_max_dimensions_bundle, organization: user.organization)
+    FactoryBot.create(:legacy_max_dimensions_bundle, :aggregated, organization: user.organization)
+  end
 
   it 'passes validation' do
     expect(Legacy::Shipment.new(args)).to be_valid

@@ -1,34 +1,30 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import {
-  Switch, Route, Redirect, withRouter
-} from 'react-router-dom'
 import { get, isEmpty } from 'lodash'
-
-import UserAccount from '../UserAccount/UserAccount'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import { appActions, authenticationActions, shipmentActions, userActions } from '../../actions'
+import ConsentManager from '../../components/ConsentManager'
+import FatalError from '../../components/ErrorHandling/FatalError'
+import GenericError from '../../components/ErrorHandling/Generic'
+import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
+import Loading from '../../components/Loading/Loading'
+import AdminShipmentAction from '../../components/Redirects/AdminShipmentAction'
+import SamlRedirect from '../../components/Redirects/SamlRedirect'
+import ResetPasswordForm from '../../components/ResetPasswordForm'
+import { SignOut } from '../../components/SignOut/SignOut'
+import TenantMenu from '../../components/TenantMenu'
+import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
+import UserConfirmation from '../../components/UserAccount/UserConfirmation'
+import { ZenDeskWidget } from '../../components/ZenDeskWidget/ZenDeskWidget'
+import { moment } from '../../constants'
+import getConfig from '../../constants/config.constants'
+import ContextProvider from '../../hocs/ContextProvider'
+import { AdminPrivateRoute, PrivateRoute } from '../../routes/index'
+import Admin from '../Admin/Admin'
 import Landing from '../Landing/Landing'
 import Shop from '../Shop/Shop'
-import TenantMenu from '../../components/TenantMenu'
-import Admin from '../Admin/Admin'
-import AdminShipmentAction from '../../components/Redirects/AdminShipmentAction'
-import { SignOut } from '../../components/SignOut/SignOut'
-import Loading from '../../components/Loading/Loading'
-import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
-import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
-import {
-  appActions, authenticationActions, shipmentActions, userActions
-} from '../../actions'
-import { moment } from '../../constants'
-import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
-import ResetPasswordForm from '../../components/ResetPasswordForm'
-import ConsentManager from '../../components/ConsentManager'
-import { ZenDeskWidget } from '../../components/ZenDeskWidget/ZenDeskWidget'
-import GenericError from '../../components/ErrorHandling/Generic'
-import SamlRedirect from '../../components/Redirects/SamlRedirect'
-import ContextProvider from '../../hocs/ContextProvider'
-import FatalError from '../../components/ErrorHandling/FatalError'
-import getConfig from '../../constants/config.constants'
+import UserAccount from '../UserAccount/UserAccount'
 
 class App extends Component {
   constructor (props) {
@@ -127,7 +123,7 @@ class App extends Component {
             {user &&
               user.id &&
               tenant &&
-              user.tenant_id !== tenant.id &&
+              (user.organization_id && user.organization_id !== tenant.id) &&
               user.role &&
               user.role.name !== 'super_admin' && (<Redirect to="/signout" />)}
             <GenericError theme={theme}>
@@ -186,7 +182,17 @@ class App extends Component {
                   theme={theme}
                 />
 
-                <Route path="/login/saml/success" render={(props) => <SamlRedirect theme={theme} {...props} />} />
+                <GenericError theme={theme}>
+                  <Route
+                    path="/authentication/confirmation/:confirmation_token"
+                    render={(props) => (
+                      <UserConfirmation
+                        theme={theme}
+                      />
+                    )}
+                  />
+                </GenericError>
+                <Route path="/login/saml/success" render={(props) => (<SamlRedirect theme={theme} {...props} />)} />
                 <Route
                   path="/login/saml/error"
                   render={(props) => (

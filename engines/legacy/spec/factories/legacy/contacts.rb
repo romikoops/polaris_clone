@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :legacy_contact, class: 'Legacy::Contact' do
-    association :user, factory: :legacy_user
+    association :user, factory: :organizations_user
     association :address, factory: :legacy_address
     company_name { 'Example Company' }
     sequence(:first_name) { |n| "John#{n}" }
@@ -26,10 +26,16 @@ end
 #  created_at                        :datetime         not null
 #  updated_at                        :datetime         not null
 #  address_id                        :integer
+#  old_user_id                       :integer
 #  sandbox_id                        :uuid
-#  user_id                           :integer
+#  user_id                           :uuid
 #
 # Indexes
 #
 #  index_contacts_on_sandbox_id  (sandbox_id)
+#  index_contacts_on_user_id     (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_  (user_id => users_users.id)
 #

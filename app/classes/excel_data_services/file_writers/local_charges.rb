@@ -31,7 +31,8 @@ module ExcelDataServices
       end
 
       def filtered_local_charges
-        @filtered_local_charges ||= tenant.local_charges
+        @filtered_local_charges ||= Legacy::LocalCharge
+                                          .where(organization: organization)
                                           .current
                                           .where(sandbox: @sandbox)
                                           .yield_self do |result|
@@ -46,13 +47,13 @@ module ExcelDataServices
         rate_basis = fee['rate_basis'].upcase
         effective_date = Date.parse(local_charge.effective_date.to_s) if local_charge.effective_date
         expiration_date = Date.parse(local_charge.expiration_date.to_s) if local_charge.expiration_date
-        counterpart_hub = tenant.hubs.find_by(id: local_charge.counterpart_hub_id)
+        counterpart_hub = Legacy::Hub.where(organization: organization).find_by(id: local_charge.counterpart_hub_id)
         counterpart_hub_name = remove_hub_suffix(counterpart_hub.name, counterpart_hub.hub_type) if counterpart_hub
         counterpart_country_name = counterpart_hub.address.country.name if counterpart_hub
         tenant_vehicle = local_charge.tenant_vehicle
 
         { group_id: local_charge.group_id,
-          group_name: Tenants::Group.find_by(id: local_charge.group_id)&.name,
+          group_name: Groups::Group.find_by(id: local_charge.group_id)&.name,
           hub: remove_hub_suffix(hub.name, hub.hub_type),
           country: hub.address.country.name,
           effective_date: effective_date,

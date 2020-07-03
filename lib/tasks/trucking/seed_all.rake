@@ -143,7 +143,7 @@ namespace :trucking do
           hub: 'Rotterdam Port',
           urls: ['data/berkman/berkman__trucking_ltl__rotterdam_port.xlsx']
         }
-      ],
+      ]
       # schryver: [
       #   {
       #     hub: 'Hamburg Port',

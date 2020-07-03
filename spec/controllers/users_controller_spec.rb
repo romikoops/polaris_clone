@@ -4,39 +4,29 @@ require 'rails_helper'
 
 RSpec.describe UsersController do
   let(:addresses) { create_list(:address, 5) }
-  let(:user) { create(:user, guest: true, with_profile: true) }
+  let(:organization) { create(:organizations_organization) }
+  let(:user) { create(:authentication_user, :organizations_user, organization_id: organization.id) }
 
   before do
-    allow(controller).to receive(:user_signed_in?).and_return(true)
-    allow(controller).to receive(:current_user).and_return(user)
-    user.addresses = addresses
+    ::Organizations.current_id = organization.id
+    append_token_header
+    FactoryBot.create(:profiles_profile, user_id: user.id)
+    addresses.each do |address|
+      FactoryBot.create(:legacy_user_address, user_id: user.id, address: address)
+    end
   end
 
   describe 'GET #home' do
-    let(:user) { create(:user, with_profile: true) }
-
-    before do
-      allow(controller).to receive(:user_signed_in?).and_return(true)
-      allow(controller).to receive(:current_user).and_return(user)
-    end
-
     it 'returns an http status of success' do
-      get :home, params: { tenant_id: user.tenant, user_id: user.id }
+      get :home, params: { organization_id: user.organization_id, user_id: user.id }
 
       expect(response).to have_http_status(:success)
     end
   end
 
   describe 'GET #show' do
-    let(:user) { create(:user, with_profile: true) }
-
-    before do
-      allow(controller).to receive(:user_signed_in?).and_return(true)
-      allow(controller).to receive(:current_user).and_return(user)
-    end
-
     it 'returns an http status of success' do
-      get :show, params: { tenant_id: user.tenant, user_id: user.id }
+      get :show, params: { organization_id: user.organization_id, user_id: user.id }
       aggregate_failures do
         expect(response).to have_http_status(:success)
         body = JSON.parse(response.body)
@@ -46,35 +36,86 @@ RSpec.describe UsersController do
     end
   end
 
+  describe 'POST #create' do
+    before do
+      create(:organizations_theme, organization: organization)
+    end
+
+    it 'creates a new user' do
+      params = {
+        user: {
+          email: 'test@itsmycargo.com',
+          password: '123456789',
+          organization_id: user.organization_id,
+          company_name: 'Person Freight',
+          first_name: 'Test',
+          last_name: 'Person',
+          phone: '01628710344'
+        }
+      }
+      post :create, params: params
+      expect(response).to have_http_status(:success)
+    end
+
+    context 'when creating with no profile attributes' do
+      let(:params) do
+        {
+          user: {
+            email: 'test@itsmycargo.com',
+            password: '123456789',
+            organization_id: user.organization_id
+          }
+        }
+      end
+
+      it 'returns http status and updates the user' do
+        post :create, params: params
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'when creating with wrong params' do
+      let(:params) do
+        {
+          user: {
+            email: nil,
+            password: '123456789',
+            organization_id: user.organization_id
+          }
+        }
+      end
+
+      it 'raises ActiveRecord::RecordInvalid' do
+        post :create, params: params
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
   describe 'POST #update' do
     it 'returns http success, updates the user and send the email' do
-      allow(user).to receive(:send_confirmation_instructions).and_return(true)
       params = {
-        tenant_id: user.tenant_id,
+        organization_id: user.organization_id,
         user_id: user.id,
         update: {
           company_name: 'Person Freight',
           company_number: 'Person Freight',
-          confirm_password: 'testtest',
           email: 'wkbeamish+123@gmail.com',
           first_name: 'Test',
           guest: false,
           last_name: 'Person',
-          password: 'testtest',
           phone: '01628710344',
-          tenant_id: user.tenant_id
+          organization_id: user.organization_id
         }
       }
       post :update, params: params
       expect(response).to have_http_status(:success)
-      expect(user.guest).to eq false
-      expect(user).to have_received(:send_confirmation_instructions).once
     end
 
     context 'when updating with no profile attributes' do
       let(:params) do
         {
-          tenant_id: user.tenant_id,
+          organization_id: user.organization_id,
           user_id: user.id,
           update: {
             guest: true
@@ -89,27 +130,35 @@ RSpec.describe UsersController do
     end
   end
 
-  describe 'POST currencies' do
-    let(:rates) { { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34, USD: 1.3 } } }
+  describe "GET /activate" do
+    it "returns http success" do
+      user.setup_activation
+      user.save
 
-    before do
-      stub_request(:get, 'http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR')
-        .to_return(status: 200, body: rates.to_json, headers: {})
+      get :activate, params: {organization_id: organization.id, id: user.activation_token}
 
-      stub_request(:get, 'http://data.fixer.io/latest?access_key=FAKEKEY&base=BRL')
-        .to_return(status: 200, body: rates.to_json, headers: {})
+      expect(response).to have_http_status(:success)
     end
 
+    context "when user not found by the reset token" do
+      it "returns not found" do
+        get :activate, params: {organization_id: organization.id, id: "123"}
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe 'POST currencies' do
     it 'returns http success' do
-      post :set_currency, params: { tenant_id: user.tenant.id, user_id: user.id, currency: 'EUR' }
+      post :set_currency, params: { organization_id: organization.id, user_id: user.id, currency: 'EUR' }
       expect(response).to have_http_status(:success)
     end
 
     it 'changes the user default currency' do
-      post :set_currency, params: { tenant_id: user.tenant.id, user_id: user.id, currency: 'BRL' }
-
-      user.reload
-      expect(user.currency).to eq('BRL')
+      post :set_currency, params: { organization_id: organization.id, user_id: user.id, currency: 'BRL' }
+      currency = Users::Settings.find_by(user_id: user.id).currency
+      expect(currency).to eq('BRL')
     end
   end
 end

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Address do
-  let(:address) { create(:address) }
+  let(:address) { FactoryBot.create(:address) }
 
   before do
     Geocoder::Lookup::Test.add_stub([57.7072326, 11.9670171], [
@@ -90,13 +90,18 @@ RSpec.describe Address do
   end
 
   describe '.primary_for?' do
-    let(:user) { create(:user) }
+    let(:user) { create(:organizations_user) }
+    let(:addresses) { FactoryBot.create_list(:address, 2) }
+
+    before do
+      addresses.each do |address|
+        FactoryBot.create(:user_addresses, user: user, address: address)
+      end
+    end
 
     it 'successfully' do
-      user.addresses = create_list(:address, 2)
-
-      expect(user.addresses.first).to be_primary_for(user)
-      expect(user.addresses.last).not_to be_primary_for(user)
+      expect(addresses.first).to be_primary_for(user)
+      expect(addresses.last).not_to be_primary_for(user)
     end
   end
 

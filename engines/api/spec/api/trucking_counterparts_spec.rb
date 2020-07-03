@@ -3,11 +3,11 @@
 require "swagger_helper"
 
 RSpec.describe "TruckingCounterparts" do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.find_by(legacy: legacy_tenant) }
-  let(:user) { FactoryBot.create(:tenants_user, tenant: tenant) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: "Gothenburg Port") }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:organization_id) { organization.id }
+  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:origin_hub) { itinerary.origin_hub }
   let(:origin_location) do
     FactoryBot.create(:locations_location,
       bounds: FactoryBot.build(:legacy_bounds, lat: origin_hub.latitude, lng: origin_hub.longitude, delta: 0.4),
@@ -21,7 +21,7 @@ RSpec.describe "TruckingCounterparts" do
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   before do
-    FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: origin_hub, location: origin_trucking_location)
+    FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
     FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
     Geocoder::Lookup::Test.add_stub([origin_hub.latitude, origin_hub.longitude], [
       "address_components" => [{"types" => ["premise"]}],
@@ -33,23 +33,24 @@ RSpec.describe "TruckingCounterparts" do
     ])
   end
 
-  path "/v1/trucking_counterparts" do
+  path "/v1/organizations/{organization_id}/trucking_counterparts" do
     get "Fetch counterparts fgor trucking" do
       tags "Quote"
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :lat, in: :query, type: :string, schema: {type: :string}
       parameter name: :lng, in: :query, type: :string, schema: {type: :string}
       parameter name: :load_type, in: :query, type: :string, schema: {type: :string}
-      parameter name: :tenant_id, in: :query, type: :string, schema: {type: :string}
+      parameter name: :organization_id, in: :query, type: :string, schema: {type: :string}
       parameter name: :target, in: :query, type: :string, schema: {type: :string}
 
       let(:lat) { origin_hub.latitude }
       let(:lng) { origin_hub.longitude }
       let(:load_type) { "cargo_item" }
-      let(:tenant_id) { tenant.id }
+      let(:organization_id) { organization.id }
       let(:target) { "origin" }
 
       response "200", "successful operation" do

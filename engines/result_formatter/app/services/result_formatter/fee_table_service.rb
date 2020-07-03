@@ -2,11 +2,7 @@
 
 module ResultFormatter
   class FeeTableService
-    SECTIONS = %w[cargo_section
-      trucking_pre_section
-      trucking_on_section
-      export_section
-      import_section].freeze
+    SECTIONS = Quotations::LineItem.sections.keys
 
     def initialize(tender:, scope:, type: :table)
       @tender = tender

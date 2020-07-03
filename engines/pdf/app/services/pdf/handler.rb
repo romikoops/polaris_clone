@@ -4,14 +4,12 @@ require 'pdfkit'
 require 'open-uri'
 module Pdf
   class Handler < Pdf::Base # rubocop:disable Metrics/ClassLength
-    BreezyError = Class.new(StandardError)
-
     FEE_DETAIL_LEVEL = 3
 
     attr_reader :name, :full_name, :pdf, :url, :path
 
     def initialize(args = {}) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      super(tenant: args[:shipment].tenant, user: args[:shipment].user)
+      super(organization: args[:organization], user: args[:shipment].user)
 
       args.symbolize_keys!
       @layout                = args[:layout]
@@ -56,12 +54,11 @@ module Pdf
         calculate_pricing_data(s)
         prep_notes(s)
       end
-      @content = Legacy::Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
+      @content = Legacy::Content.get_component('QuotePdf', @shipment.organization_id) if @name == 'quotation'
       @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
     end
 
     def calculate_pricing_data(shipment)
-      currency = shipment.user.currency
       result = shipment.meta['pricing_rate_data']&.each_with_object({}) do |(cargo_class, fees), rate_data|
         fees_values = fees.except('total', 'valid_until').values
         fees['total'] = fees_values.inject(Money.new(0, currency)) do |total, value|
@@ -81,7 +78,7 @@ module Pdf
       countries = nexii.map(&:country)
       pricings = shipment.itinerary&.rates&.for_cargo_classes(shipment.cargo_classes)
       notes_association = Legacy::Note.where(
-        tenant_id: shipment.tenant_id,
+        organization_id: shipment.organization_id,
         transshipment: false,
         remarks: false
       )
@@ -305,7 +302,7 @@ module Pdf
         logo: @logo,
         load_type: @load_type,
         remarks: @remarks,
-        tenant: @shipment.tenant,
+        organization: @organization,
         theme: @theme,
         cargo_data: @cargo_data,
         notes: @notes,
@@ -318,7 +315,7 @@ module Pdf
         hub_names: @hub_names,
         note_remarks: @note_remarks,
         fee_keys_and_names: @fee_keys_and_names,
-        shipper_profile: profile_for_user(legacy_user: @shipment.user),
+        shipper_profile: profile_for_user(user_id: @shipment.user_id),
         selected_offer: @selected_offer,
         fees: @fees,
         exchange_rates: exchange_rates
@@ -331,9 +328,12 @@ module Pdf
       cargo[:quantity] || 1
     end
 
-    def profile_for_user(legacy_user:)
-      tenants_user = Tenants::User.find_by(legacy_id: legacy_user.id)
-      Profiles::ProfileService.fetch(user_id: tenants_user.id)
+    def profile_for_user(user_id:)
+      Profiles::ProfileService.fetch(user_id: user_id)
+    end
+
+    def currency
+      @currency ||= Users::Settings.find_by(user: @shipment.user)&.currency || @organization.scope.currency
     end
 
     def exchange_rates

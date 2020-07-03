@@ -4,22 +4,19 @@ require 'rails_helper'
 
 RSpec.describe Validator::Itinerary do
   describe '#perform' do
-    let!(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-    let!(:legacy_user) { FactoryBot.create(:legacy_user, tenant: legacy_tenant) }
-    let!(:user) { Tenants::User.find_by(legacy_id: legacy_user.id) }
-    let!(:tenant) { user.tenant }
-
-    let!(:scope) { FactoryBot.create(:tenants_scope, target: user, content: { base_pricing: true }) }
-    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let!(:scope) { FactoryBot.create(:organizations_scope, target: user, content: { base_pricing: true }) }
+    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
     let(:carrier_1) { FactoryBot.create(:legacy_carrier, name: 'TCR') }
-    let(:default_tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, tenant: legacy_tenant, name: 'Default', carrier: carrier_1) }
+    let(:default_tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization, name: 'Default', carrier: carrier_1) }
     let(:origin_hub) { itinerary.hubs.first }
     let(:destination_hub) { itinerary.hubs.last }
 
     context 'generating the validity result' do
       let!(:pricing_1) do
         FactoryBot.create(:lcl_pricing,
-                          tenant: legacy_tenant,
+                          organization: organization,
                           tenant_vehicle_id: default_tenant_vehicle.id,
                           itinerary: itinerary,
                           effective_date: DateTime.now.beginning_of_minute,
@@ -27,7 +24,7 @@ RSpec.describe Validator::Itinerary do
       end
       let!(:origin_local_charge) do
         FactoryBot.create(:legacy_local_charge,
-                          tenant: legacy_tenant,
+                          organization: organization,
                           direction: 'export',
                           tenant_vehicle_id: default_tenant_vehicle.id,
                           hub: origin_hub,
@@ -36,7 +33,7 @@ RSpec.describe Validator::Itinerary do
       end
       let!(:destination_local_charge) do
         FactoryBot.create(:legacy_local_charge,
-                          tenant: legacy_tenant,
+                          organization: organization,
                           direction: 'import',
                           tenant_vehicle_id: default_tenant_vehicle.id,
                           hub: destination_hub,
@@ -57,15 +54,15 @@ RSpec.describe Validator::Itinerary do
         end
 
         it 'returns the expected result for one tenant vehicle chain with invalid Local Charges and no Trips' do
-          tenant_vehicle_2 = FactoryBot.create(:legacy_tenant_vehicle, tenant: legacy_tenant)
+          tenant_vehicle_2 = FactoryBot.create(:legacy_tenant_vehicle, organization: organization)
           pricing_2 = FactoryBot.create(:lcl_pricing,
-                                        tenant: legacy_tenant,
+                                        organization: organization,
                                         tenant_vehicle_id: tenant_vehicle_2.id,
                                         itinerary: itinerary,
                                         effective_date: 20.days.ago.beginning_of_minute,
                                         expiration_date: 5.days.ago.beginning_of_minute)
           local_charge_2 = FactoryBot.create(:legacy_local_charge,
-                              tenant: legacy_tenant,
+                              organization: organization,
                               direction: 'export',
                               tenant_vehicle_id: default_tenant_vehicle.id,
                               hub: origin_hub,
@@ -80,9 +77,9 @@ RSpec.describe Validator::Itinerary do
           expect(target_result.dig(:schedules)).to eq(required: true, status: 'no_data', last_expiry: nil)
         end
         it 'returns the expected result for one tenant vehicle chain with invalid Local Charges and good Trips' do
-          tenant_vehicle_3 = FactoryBot.create(:legacy_tenant_vehicle, tenant: legacy_tenant)
+          tenant_vehicle_3 = FactoryBot.create(:legacy_tenant_vehicle, organization: organization)
           pricing_3 = FactoryBot.create(:lcl_pricing,
-                                        tenant: legacy_tenant,
+                                        organization: organization,
                                         tenant_vehicle_id: tenant_vehicle_3.id,
                                         itinerary: itinerary,
                                         effective_date: DateTime.now.beginning_of_minute,
@@ -91,7 +88,7 @@ RSpec.describe Validator::Itinerary do
             itinerary: itinerary,
             tenant_vehicle_id: tenant_vehicle_3.id,
             load_type: 'cargo_item',
-            start_date: 30.days.from_now.beginning_of_minute,
+            start_date: 31.days.from_now.beginning_of_minute,
             end_date: 60.days.from_now.beginning_of_minute
           )
           result = described_class.new(user: user, itinerary: itinerary).perform
@@ -105,11 +102,11 @@ RSpec.describe Validator::Itinerary do
       end
 
       describe 'with groups' do
-        let!(:group_1) { FactoryBot.create(:tenants_group, tenant: tenant, name: 'Test') }
-        let!(:membership_1) { FactoryBot.create(:tenants_membership, group: group_1, member: user) }
+        let!(:group_1) { FactoryBot.create(:groups_group, organization: organization, name: 'Test') }
+        let!(:membership_1) { FactoryBot.create(:groups_membership, group: group_1, member: user) }
         let!(:pricing_3) do
           FactoryBot.create(:lcl_pricing,
-                            tenant: legacy_tenant,
+                            organization: organization,
                             tenant_vehicle_id: default_tenant_vehicle.id,
                             itinerary: itinerary,
                             group_id: group_1.id,
@@ -117,7 +114,7 @@ RSpec.describe Validator::Itinerary do
         end
         let!(:origin_local_charge_2) do
           FactoryBot.create(:legacy_local_charge,
-                            tenant: legacy_tenant,
+                            organization: organization,
                             direction: 'export',
                             tenant_vehicle_id: default_tenant_vehicle.id,
                             hub: origin_hub,
@@ -126,7 +123,7 @@ RSpec.describe Validator::Itinerary do
         end
         let!(:destination_local_charge_2) do
           FactoryBot.create(:legacy_local_charge,
-                            tenant: legacy_tenant,
+                            organization: organization,
                             direction: 'import',
                             tenant_vehicle_id: default_tenant_vehicle.id,
                             hub: destination_hub,
@@ -173,8 +170,8 @@ RSpec.describe Validator::Itinerary do
         end
 
         it 'returns the expected result for one tenant vehicle chain  with invalid Local Charges and no Trips' do
-          tenant_vehicle_2 = FactoryBot.create(:legacy_tenant_vehicle, tenant: legacy_tenant)
-          pricing_4 = FactoryBot.create(:lcl_pricing, tenant: legacy_tenant, tenant_vehicle_id: tenant_vehicle_2.id, itinerary: itinerary, group_id: group_1.id, expiration_date: 10.days.from_now.beginning_of_minute)
+          tenant_vehicle_2 = FactoryBot.create(:legacy_tenant_vehicle, organization: organization,)
+          pricing_4 = FactoryBot.create(:lcl_pricing, organization: organization, tenant_vehicle_id: tenant_vehicle_2.id, itinerary: itinerary, group_id: group_1.id, expiration_date: 10.days.from_now.beginning_of_minute)
           results = described_class.new(user: user, itinerary: itinerary).perform
 
           group_result = results.find { |result| result.dig(:group, :name) == 'Test' }

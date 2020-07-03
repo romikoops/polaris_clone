@@ -2,7 +2,7 @@
 
 module Shipments
   class ShipmentRequestCreator
-    attr_reader :shipment_request, :legacy_shipment, :tenant, :user, :errors
+    attr_reader :shipment_request, :legacy_shipment, :organization, :user, :errors
 
     def initialize(legacy_shipment:, user:, sandbox:)
       @legacy_shipment = legacy_shipment
@@ -25,11 +25,11 @@ module Shipments
     private
 
     def build_shipment_request
-      @tenant = Tenants::Tenant.find_by(legacy_id: legacy_shipment.tenant_id)
-      @user = Tenants::User.find_by(legacy_id: user.id)
+      @organization =  Organizations::Organization.find(legacy_shipment.organization_id)
       @shipment_request = ShipmentRequest.new(
         tender_id: legacy_shipment.meta['tender_id'],
-        tenant_id: tenant.id,
+        billing: legacy_shipment.billing,
+        organization_id: organization.id,
         eta: legacy_shipment.planned_eta,
         etd: legacy_shipment.planned_etd,
         cargo_notes: legacy_shipment.cargo_notes,
@@ -39,7 +39,7 @@ module Shipments
         ref_number: legacy_shipment.imc_reference,
         submitted_at: Time.current,
         sandbox_id: @sandbox_id,
-        user_id: user.id
+        user: @user
       )
     end
 
@@ -89,8 +89,7 @@ module Shipments
     def addressbook_contact(legacy_shipment_contact:)
       legacy_contact = legacy_shipment_contact.contact
       address = legacy_contact.address
-      user_id = Tenants::User.find_by(legacy_id: legacy_contact.user_id).id
-
+      user = Organizations::User.unscoped.find(legacy_contact.user_id)
       legacy_contact_attrs = legacy_contact.attributes
                                            .merge(address.attributes)
                                            .symbolize_keys
@@ -102,7 +101,7 @@ module Shipments
       addressbook_contact = AddressBook::Contact.find_or_initialize_by(
         legacy_contact_attrs.slice(:first_name, :last_name, :email, :phone)
         .merge(
-          user_id: user_id
+          user: user
         )
       )
 
@@ -110,10 +109,11 @@ module Shipments
         legacy_contact_attrs
         .merge(
           postal_code: address.zip_code,
-          user_id: user_id,
+          user_id: user.id,
           country_code: address.country&.code || ''
         )
       )
+
       addressbook_contact
     end
   end

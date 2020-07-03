@@ -23,7 +23,7 @@ export const saveState = (state) => {
 }
 
 export function cookieKey () {
-  const tenantId = localStorage.getItem('tenantId')
+  const organizationId = localStorage.getItem('organizationId')
 
-  return `${tenantId}_user`
+  return `${organizationId}_user`
 }

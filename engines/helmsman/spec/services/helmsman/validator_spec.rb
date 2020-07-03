@@ -3,12 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Helmsman::Validator do
-  context 'validating routes for the target tenant' do
+  context 'validating routes for the target organization' do
     describe 'perform' do
-      let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-      let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-      let(:legacy_user) { FactoryBot.create(:legacy_user, tenant: legacy_tenant) }
-      let(:user) { Tenants::User.find_by(legacy_id: legacy_user.id) }
+      let(:organization) { FactoryBot.create(:organizations_organization) }
+      let(:user) { FactoryBot.create(:organizations_user) }
       let!(:hub_locations) do
         %w(Gothenburg Shanghai Ningbo Hamburg Rotterdam Veracruz).map do |name|
           FactoryBot.create("#{name.downcase}_location".to_sym, all_mots: true)
@@ -19,7 +17,7 @@ RSpec.describe Helmsman::Validator do
         hub_locations.flat_map(&:terminals)
       end
       before(:each) do
-        expect_any_instance_of(Federation::Members).to receive(:list).and_return(Tenants::Tenant.all)
+        expect_any_instance_of(Federation::Members).to receive(:list).and_return(Organizations::Organization.all)
       end
 
       let!(:de_trucking_locations) do
@@ -129,7 +127,7 @@ RSpec.describe Helmsman::Validator do
           FactoryBot.create(:tenant_routing_connection,
                             inbound: route_arr.first,
                             outbound: route_arr.last,
-                            tenant: tenant)
+                            organization: organization)
         end
       end
       let(:valid_freight_ids) { [ocean_route.id, air_route] }
@@ -138,7 +136,7 @@ RSpec.describe Helmsman::Validator do
           FactoryBot.create(:tenant_routing_connection,
                             inbound: route_arr.first,
                             outbound: route_arr.last,
-                            tenant: tenant)
+                            organization: organization)
         end
       end
 
@@ -149,7 +147,7 @@ RSpec.describe Helmsman::Validator do
           de_carriage_route_line_service,
           cn_carriage_route_line_service
         ].map do |rls|
-          FactoryBot.create(:lcl_rate, target: rls, tenant: tenant)
+          FactoryBot.create(:lcl_rate, target: rls, organization: organization)
         end
       end
 
@@ -191,7 +189,7 @@ RSpec.describe Helmsman::Validator do
         ] | valid_target_ids
       end
       it 'finds two valid routes' do
-        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
+        results = described_class.new(organization_id: organization.id, paths: compass_results, user: user).filter
         expect(results).to eq(valid_results)
       end
 
@@ -203,7 +201,7 @@ RSpec.describe Helmsman::Validator do
             [de_carriage_route_line_service, ocean_route_line_service_2, cn_carriage_route_line_service]
           ]
 
-        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
+        results = described_class.new(organization_id: organization.id, paths: compass_results, user: user).filter
 
         expect(results).to eq(valid_results)
       end
@@ -213,42 +211,41 @@ RSpec.describe Helmsman::Validator do
           FactoryBot.create(:tenant_routing_visibility, target: user, connection: conn)
         end
 
-        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
+        results = described_class.new(organization_id: organization.id, paths: compass_results, user: user).filter
 
         expect(results).to eq(vis_valid_results)
       end
 
       it 'finds one valid route with group visibility' do
-        group = FactoryBot.create(:tenants_group, tenant: tenant)
-        FactoryBot.create(:tenants_membership, group: group, member: user)
+        group = FactoryBot.create(:groups_group, organization: organization)
+        FactoryBot.create(:groups_membership, group: group, member: user)
         ocean_connections.each do |conn|
           FactoryBot.create(:tenant_routing_visibility, target: group, connection: conn)
         end
-        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
+        results = described_class.new(organization_id: organization.id, paths: compass_results, user: user).filter
 
         expect(results).to eq(vis_valid_results)
       end
 
       it 'finds one valid route with company visibility' do
-        company = FactoryBot.create(:tenants_company, tenant: tenant)
-        user.update(company: company)
+        company = FactoryBot.create(:companies_company, :with_member, organization: organization, member: user)
+
         ocean_connections.each do |conn|
           FactoryBot.create(:tenant_routing_visibility, target: company, connection: conn)
         end
-        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
+        results = described_class.new(organization_id: organization.id, paths: compass_results, user: user).filter
 
         expect(results).to eq(vis_valid_results)
       end
 
       it 'finds one valid route with company group visibility' do
-        company = FactoryBot.create(:tenants_company, tenant: tenant)
-        user.update(company: company)
-        group = FactoryBot.create(:tenants_group, tenant: tenant)
-        FactoryBot.create(:tenants_membership, group: group, member: company)
+        company = FactoryBot.create(:companies_company, :with_member, organization: organization, member: user)
+        group = FactoryBot.create(:groups_group, organization: organization)
+        FactoryBot.create(:groups_membership, group: group, member: company)
         ocean_connections.each do |conn|
           FactoryBot.create(:tenant_routing_visibility, target: group, connection: conn)
         end
-        results = described_class.new(tenant_id: tenant.id, paths: compass_results, user: user).filter
+        results = described_class.new(organization_id: organization.id, paths: compass_results, user: user).filter
 
         expect(results).to eq(vis_valid_results)
       end

@@ -4,7 +4,7 @@
   <mj-column>
     <mj-text>
       <p style="display: none;max-height: 0px;overflow: hidden;">
-        Hello <%= @user_profile.full_name %> and welcome to the <%= @user.tenant.name %> online shop:
+        Hello <%= @user_profile.full_name %> and welcome to the <%= @org_theme.name %> online shop:
       </p>
     </mj-text>
     <mj-text>
@@ -17,7 +17,7 @@
 <mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
     <mj-text>
-      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.name}", style: "width: 150px" %>
+      <%= image_tag attachments['logo.png'].url, alt: "#{@org_theme.name}", style: "width: 150px" %>
     </mj-text>
   </mj-column>
   <mj-column>
@@ -53,7 +53,7 @@
       <% end %>
       <% if @scope.dig('links', 'shop') %>
         <mj-button font-family="Helvetica" background-color="<%= secondary_color%>" color="white" href="<%=@scope.dig('links','shop')%>">
-            Visit the <%= @tenant.name %> Online Shop
+            Visit the <%= @org_theme.name %> Online Shop
         </mj-button>
       <% end %>
     </mj-column>
@@ -73,7 +73,7 @@
     <mj-section full-width="full-width">
       <mj-column width="100%" padding="0 2.5%">
          <mj-button font-family="Helvetica" background-color="<%= primary_color%>" color="white" href="<%=@scope.dig('links','home')%>">
-          Visit the <%= @tenant.name %> homepage
+          Visit the <%= @org_theme.name %> homepage
          </mj-button>
       </mj-column>
     </mj-section>

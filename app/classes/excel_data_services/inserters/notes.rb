@@ -22,11 +22,11 @@ module ExcelDataServices
           header: target.name,
           target: target,
           body: params[:note],
-          tenant: tenant,
+          organization: organization,
           contains_html: params[:contains_html]
         ).find_or_initialize_by(header: target.name,
                                 target: target,
-                                tenant: tenant)
+                                organization: organization)
 
         add_stats(note, params[:row_nr])
         note.save
@@ -38,7 +38,7 @@ module ExcelDataServices
         if params[:country].present? && params[:unlocode].blank?
           ::Legacy::Country.find_by(code: params[:country].upcase)
         else
-          ::Legacy::Nexus.find_by(locode: params[:unlocode], tenant: tenant)
+          ::Legacy::Nexus.find_by(locode: params[:unlocode], organization: organization)
         end
       end
     end

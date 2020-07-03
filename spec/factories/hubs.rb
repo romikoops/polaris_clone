@@ -7,12 +7,12 @@ FactoryBot.define do
       longitude { '11.854048' }
     end
 
-    name { 'Gothenburg Port' }
+    name { 'Gothenburg' }
     hub_type { 'ocean' }
     hub_status { 'active' }
     hub_code { 'SEGOT' }
 
-    association :tenant
+    association :organization, factory: :organizations_organization
     association :address
     association :nexus
     association :mandatory_charge
@@ -39,12 +39,18 @@ end
 #  address_id          :integer
 #  mandatory_charge_id :integer
 #  nexus_id            :integer
+#  organization_id     :uuid
 #  sandbox_id          :uuid
 #  tenant_id           :integer
 #
 # Indexes
 #
-#  index_hubs_on_point       (point) USING gist
-#  index_hubs_on_sandbox_id  (sandbox_id)
-#  index_hubs_on_tenant_id   (tenant_id)
+#  index_hubs_on_organization_id  (organization_id)
+#  index_hubs_on_point            (point) USING gist
+#  index_hubs_on_sandbox_id       (sandbox_id)
+#  index_hubs_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

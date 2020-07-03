@@ -12,7 +12,7 @@ module ExcelDataServices
         ].freeze
 
         USER_FRIENDLY_KEY_LOOKUP = {
-          tenant_id: 'TENANT',
+          organization_id: 'ORGANIZATION',
           hub_type: 'HUB TYPE',
           latitude: 'LATITUDE',
           longitude: 'LONGITUDE',
@@ -32,7 +32,7 @@ module ExcelDataServices
         end
 
         def check_row_hub(row:)
-          %i[tenant_id
+          %i[organization_id
              hub_type
              latitude
              longitude
@@ -51,7 +51,7 @@ module ExcelDataServices
         end
 
         def check_row_nexus(row:)
-          %i[tenant_id
+          %i[organization_id
              latitude
              longitude
              name

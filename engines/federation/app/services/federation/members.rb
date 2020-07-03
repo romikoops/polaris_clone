@@ -2,8 +2,8 @@
 
 module Federation
   class Members
-    def initialize(tenant: )
-      @tenant = tenant
+    def initialize(organization:)
+      @organization = organization
     end
 
     def list
@@ -13,6 +13,6 @@ module Federation
 
     private
 
-    attr_reader :tenant
+    attr_reader :organization
   end
 end

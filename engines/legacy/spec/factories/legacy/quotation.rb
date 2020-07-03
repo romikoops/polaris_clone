@@ -2,7 +2,8 @@
 
 FactoryBot.define do
   factory :legacy_quotation, class: 'Legacy::Quotation' do
-    association :user, factory: :legacy_user
+    association :user, factory: :organizations_user
+    association :original_shipment, factory: :legacy_shipment
     transient do
       shipment_count { 1 }
       load_type { 'cargo_item' }
@@ -10,12 +11,13 @@ FactoryBot.define do
 
     target_email { 'john@example.test' }
     name { 'NAME' }
+    billing { :external }
 
-    after(:create) do |quotation, evaluator|
+    before(:create) do |quotation, evaluator|
       if quotation.original_shipment_id.nil?
         original_shipment = create(:legacy_shipment,
                                    user: quotation.user,
-                                   tenant: quotation.user.tenant,
+                                   organization: quotation.user.organization,
                                    load_type: evaluator.load_type,
                                    with_breakdown: true,
                                    with_tenders: true)
@@ -24,7 +26,7 @@ FactoryBot.define do
       if quotation.shipments.empty?
         quotation.shipments = create_list(:legacy_shipment, evaluator.shipment_count,
                                           user: quotation.user,
-                                          tenant: quotation.user.tenant,
+                                          organization: quotation.user.organization,
                                           load_type: evaluator.load_type,
                                           with_breakdown: true,
                                           with_tenders: true)

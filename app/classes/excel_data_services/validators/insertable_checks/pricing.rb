@@ -67,14 +67,14 @@ module ExcelDataServices
             destination_hub: destination_hub,
             transshipment: row.transshipment,
             mode_of_transport: row.mot,
-            tenant: tenant
+            organization: organization
           )
 
           check_overlapping_effective_periods(row, user, itinerary)
         end
 
         def get_user(row)
-          User.find_by(tenant: tenant, email: row.customer_email&.downcase)
+          Organizations::User.find_by(organization: organization, email: row.customer_email&.downcase)
         end
 
         def check_customer_email(row, user)
@@ -133,7 +133,7 @@ module ExcelDataServices
           carrier = Carrier.find_by(name: row.carrier) if row.carrier.present?
 
           TenantVehicle.find_by(
-            tenant: tenant,
+            organization: organization,
             name: row.service_level,
             mode_of_transport: row.mot,
             carrier: carrier

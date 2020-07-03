@@ -8,8 +8,8 @@ module Pdf
 
     def hide_total_args
       {
-        hidden_grand_total: @user.nil? || @user.guest || scope['hide_grand_total'],
-        hidden_sub_total: @user.nil? || @user.guest || scope['hide_sub_totals'],
+        hidden_grand_total: @user.nil? || scope['hide_grand_total'],
+        hidden_sub_total: @user.nil? || scope['hide_sub_totals'],
         hide_converted_grand_total: @user.nil? || scope['hide_converted_grand_total']
       }
     end
@@ -23,7 +23,7 @@ module Pdf
     end
 
     def scope
-      @scope ||= Tenants::ScopeService.new(target: Tenants::User.find_by(legacy_id: @user.id)).fetch
+      @scope ||= OrganizationManager::ScopeService.new(target: @user).fetch
     end
   end
 end

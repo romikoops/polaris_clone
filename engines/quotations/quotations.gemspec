@@ -10,14 +10,14 @@ Gem::Specification.new do |s|
   s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'IMC Quotations Engine'
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'imc-cargo'
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-legacy'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
 
   s.add_dependency 'draper'
   s.add_dependency 'money-rails'

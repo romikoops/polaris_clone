@@ -10,7 +10,6 @@ import AdminPromptConfirm from '../Admin/Prompt/Confirm'
 import {
   gradientTextGenerator,
   switchIcon,
-  splitName,
   totalPrice,
   formattedPriceValue,
   cargoPlurals
@@ -148,9 +147,6 @@ class AdminShipmentCard extends Component {
       </div>
     ) : ''
 
-    const destinationHubObj = splitName(get(shipment, 'destination_hub.name'))
-    const originHubObj = splitName(get(shipment, 'origin_hub.name'))
-
     const timeRow = plannedDate && shipment.planned_etd && shipment.planned_eta
       ? (
         <div className={`layout-row flex-100 layout-align-start-center
@@ -248,12 +244,12 @@ class AdminShipmentCard extends Component {
               <p>
                 {t('common:from')}
 :&nbsp;
-                <span>{originHubObj.name}</span>
+                <span>{get(shipment, 'origin_hub.name')}</span>
               </p>
               <p>
                 {t('common:to')}
 :&nbsp;
-                <span>{destinationHubObj.name}</span>
+                <span>{get(shipment, 'destination_hub.name')}</span>
               </p>
             </div>
           </div>

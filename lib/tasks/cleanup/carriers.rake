@@ -7,7 +7,7 @@ namespace :cleanup do
       if flagship
         deprecated_carrier.tenant_vehicles.find_each do |service|
           flagship_service = flagship.tenant_vehicles
-                                     .find_by(name: service.name, tenant_id: service.tenant_id)
+                                     .find_by(name: service.name, organization_id: service.organization_id)
           if flagship_service.exists?
             # rubocop:disable Rails/SkipsModelValidations
             Legacy::LocalCharge.where(tenant_vehicle_id: service.id)

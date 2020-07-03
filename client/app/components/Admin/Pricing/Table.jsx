@@ -90,7 +90,7 @@ class AdminPricesTable extends PureComponent {
     const { adminDispatch, user } = this.props
     const req = {
       pricing_id: data.id,
-      tenant_id: data.tenant_id,
+      organization_id: data.organization_id,
       user_id: user.id
     }
     adminDispatch.requestPricing(req)
@@ -101,8 +101,8 @@ class AdminPricesTable extends PureComponent {
     const { pricingToDelete } = this.state
     const req = {
       pricing_id: pricingToDelete.id,
-      tenant_id: pricingToDelete.tenant_id,
-      action
+      organization_id: pricingToDelete.organization_id,
+      target_action: action
     }
     adminDispatch.disablePricing(req)
     this.closeConfirm()

@@ -6,9 +6,9 @@ module Legacy
 
     has_paper_trail
 
-    has_many :users
-    belongs_to :agency_manager, class_name: 'User', optional: true
-    belongs_to :tenant
+    has_many :users, class_name: 'Organizations::User'
+    belongs_to :agency_manager, class_name: 'Organizations::User', optional: true
+    belongs_to :organization, class_name: 'Organizations::Organization'
   end
 end
 
@@ -21,9 +21,15 @@ end
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  agency_manager_id :integer
+#  organization_id   :uuid
 #  tenant_id         :integer
 #
 # Indexes
 #
-#  index_agencies_on_tenant_id  (tenant_id)
+#  index_agencies_on_organization_id  (organization_id)
+#  index_agencies_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

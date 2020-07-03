@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :customs_fee do
     load_type { 'lcl' }
     mode_of_transport { 'ocean' }
-    association :tenant
+    association :organization, factory: :organizations_organization
     association :tenant_vehicle
     counterpart_hub_id { nil }
     direction { 'export' }
@@ -24,24 +24,3 @@ FactoryBot.define do
     end
   end
 end
-
-# == Schema Information
-#
-# Table name: customs_fees
-#
-#  id                 :bigint           not null, primary key
-#  direction          :string
-#  fees               :jsonb
-#  load_type          :string
-#  mode_of_transport  :string
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  counterpart_hub_id :integer
-#  hub_id             :integer
-#  tenant_id          :integer
-#  tenant_vehicle_id  :integer
-#
-# Indexes
-#
-#  index_customs_fees_on_tenant_id  (tenant_id)
-#

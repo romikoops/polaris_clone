@@ -7,16 +7,16 @@ module AdmiraltyReports
     MONTH_LOOKUP = Date::MONTHNAMES[1..12].zip(1..12).freeze
 
     def index
-      @tenants = Tenant.order(:slug).all
+      @organizations = Organizations::Organization.order(:slug).all
       first_year = Legacy::Shipment.order(:created_at).first&.created_at&.year || Time.now.year
       @possible_years = (first_year..Time.now.year).to_a
     end
 
     def show
-      @tenant = Tenant.find(params[:id])
+      @organization = Organizations::Organization.find(params[:id])
       @month = filter_params[:month]
       @year = filter_params[:year]
-      @stats = Stats.new(tenant: @tenant, month: @month, year: @year)
+      @stats = Stats.new(organization: @organization, month: @month, year: @year)
     end
 
     private

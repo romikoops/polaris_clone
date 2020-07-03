@@ -3,8 +3,8 @@
 module RmsExport
   module Inserter
     class Base
-      def initialize(tenant_id:, data:)
-        @tenant = Tenants::Tenant.find_by(id: tenant_id)
+      def initialize(organization_id:, data:)
+        @organization = Organizations::Organization.find(organization_id)
         @data = data
       end
 
@@ -101,11 +101,11 @@ module RmsExport
           tenant_connections: {
             klass: TenantRouting::Connection,
             import_table: 'tenant_connection_imports',
-            import_schema: 'mode_of_transport bigint, tenant_id uuid, origin_name character varying,
+            import_schema: 'mode_of_transport bigint, organization_id uuid, origin_name character varying,
             destination_name character varying',
             insert_table: 'tenant_routing_connections',
-            insert_schema: 'inbound_id, outbound_id, tenant_id,',
-            insert_select: 'r.id, r.id, li.tenant_id,',
+            insert_schema: 'inbound_id, outbound_id, organization_id,',
+            insert_select: 'r.id, r.id, li.organization_id,',
             entry_clauses: 'left join routing_locations ol on ol.name = li.origin_name
             left join routing_locations dl on dl.name = li.destination_name
             left join routing_terminals otl on otl.location_id = ol.id and otl.mode_of_transport = li.mode_of_transport
@@ -116,10 +116,10 @@ module RmsExport
           tenant_carriage_connections: {
             klass: TenantRouting::Connection,
             import_table: 'tenant_connection_imports',
-            import_schema: 'outbound_id uuid, inbound_id uuid, tenant_id uuid',
+            import_schema: 'outbound_id uuid, inbound_id uuid, organization_id uuid',
             insert_table: 'tenant_routing_connections',
-            insert_schema: 'inbound_id, outbound_id, tenant_id,',
-            insert_select: 'li.inbound_id, li.outbound_id, li.tenant_id,',
+            insert_schema: 'inbound_id, outbound_id, organization_id,',
+            insert_select: 'li.inbound_id, li.outbound_id, li.organization_id,',
             entry_clauses: '',
             on_conflict: 'do nothing'
           }

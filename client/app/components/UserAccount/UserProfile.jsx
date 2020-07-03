@@ -79,7 +79,7 @@ class UserProfile extends Component {
   handleCurrencyUpdate (e) {
     const { value } = e
     const { appDispatch } = this.props
-    this.setState({ currentCurrency: e })
+    this.setState({ currentCurrency: value })
     appDispatch.setCurrency(value)
   }
 

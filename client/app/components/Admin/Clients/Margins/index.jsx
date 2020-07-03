@@ -105,6 +105,7 @@ class AdminClientMargins extends Component {
   renderEditable (cellInfo) {
     const { editable } = this.props
     const { margins } = this.state
+    const rawValue = get(margins, [cellInfo.index, cellInfo.column.id])
     if (!editable) {
       let cellToRender
       if (cellInfo.column.id === 'operator') {
@@ -112,7 +113,7 @@ class AdminClientMargins extends Component {
           <div
             className={`${styles.table_cell} flex layout-row layout-align-start-center center`}
             dangerouslySetInnerHTML={{
-              __html: margins[cellInfo.index][cellInfo.column.id]
+              __html: rawValue
             }}
           />
         )
@@ -121,7 +122,7 @@ class AdminClientMargins extends Component {
           <div
             className={`${styles.table_cell} flex layout-row layout-align-start-center center`}
             dangerouslySetInnerHTML={{
-              __html: moment(margins[cellInfo.index][cellInfo.column.id]).utc().format('DD/MM/YY')
+              __html: moment(rawValue).utc().format('DD/MM/YY')
             }}
           />
         )
@@ -130,13 +131,12 @@ class AdminClientMargins extends Component {
           <div
             className={`${styles.table_cell} flex layout-row layout-align-start-center center`}
             dangerouslySetInnerHTML={{
-              __html: margins[cellInfo.index][cellInfo.column.id]
+              __html: rawValue
             }}
           />
         )
       } else {
         let value
-        const rawValue = margins[cellInfo.index][cellInfo.column.id]
         if (rawValue) {
           const { operator } = margins[cellInfo.index]
           value = operator === '+' ? rawValue : parseFloat(rawValue) * 100
@@ -164,7 +164,7 @@ class AdminClientMargins extends Component {
             margins[cellInfo.index][cellInfo.column.id] = e.target.value
             this.setState({ margins })
           }}
-          value={margins[cellInfo.index][cellInfo.column.id]}
+          value={rawValue}
         >
           <option value="%">%</option>
           <option value="+">+</option>
@@ -225,7 +225,7 @@ class AdminClientMargins extends Component {
             }
             parseDate={parseDate}
             placeholder={`${formatDate(new Date())}`}
-            value={moment(this.state.margins[cellInfo.index][cellInfo.column.id]).format('DD/MM/YYYY')}
+            value={moment(rawValue).format('DD/MM/YYYY')}
             onDayChange={(e) => {
               const margins = [...this.state.margins]
               margins[cellInfo.index][cellInfo.column.id] = e
@@ -290,7 +290,7 @@ class AdminClientMargins extends Component {
             }
             parseDate={parseDate}
             placeholder={`${formatDate(new Date())}`}
-            value={moment(this.state.margins[cellInfo.index][cellInfo.column.id]).format('DD/MM/YYYY')}
+            value={moment(rawValue).format('DD/MM/YYYY')}
             onDayChange={(e) => {
               const margins = [...this.state.margins]
               margins[cellInfo.index][cellInfo.column.id] = e
@@ -302,7 +302,6 @@ class AdminClientMargins extends Component {
       )
     }
     let value
-    const rawValue = margins[cellInfo.index][cellInfo.column.id]
     const { operator } = margins[cellInfo.index]
     if (rawValue) {
       value = operator === '+' ? rawValue : parseFloat(rawValue) * 100

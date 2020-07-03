@@ -3,8 +3,8 @@
 module RmsExport
   module Parser
     class Base
-      def initialize(tenant_id:, sandbox: nil)
-        @tenant = Tenants::Tenant.find_by(id: tenant_id)
+      def initialize(organization_id:, sandbox: nil)
+        @organization = Organizations::Organization.find_by(id: organization_id)
         @sandbox = sandbox
       end
 

@@ -3,7 +3,7 @@
 require 'cargo'
 require 'core'
 require 'legacy'
-require 'tenants'
+require 'organizations'
 
 require 'draper'
 require 'money-rails'

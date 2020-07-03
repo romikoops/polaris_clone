@@ -8,7 +8,7 @@ class AdminMargins extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      editable: false
+      editable: true
     }
     this.toggleEditable = this.toggleEditable.bind(this)
   }

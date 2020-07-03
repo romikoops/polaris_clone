@@ -2,10 +2,10 @@
 
 module RateExtractor
   class Section
-    attr_reader :path, :tenant
+    attr_reader :path, :organization
 
-    def initialize(tenant:, path:, sandbox: nil)
-      @tenant = tenant
+    def initialize(organization:, path:, sandbox: nil)
+      @organization = organization
       @path = path
       @sandbox = sandbox
     end
@@ -20,7 +20,7 @@ module RateExtractor
           query = query.or(rates_for_connections(edge_connections(edge_point_a, edge_point_b)))
         end
 
-        query.where(tenant: tenant)
+        query.where(organization: organization)
       end
     end
 
@@ -32,13 +32,13 @@ module RateExtractor
 
     def edge_connections(edge_point_a, edge_point_b)
       inbound_connection = ::TenantRouting::Connection.where(
-        inbound: nil, outbound: edge_point_a, tenant: tenant
+        inbound: nil, outbound: edge_point_a, organization: organization
       ).limit(1)
       mid_connection = ::TenantRouting::Connection.where(
-        inbound_id: edge_point_a, outbound_id: edge_point_b, tenant: tenant
+        inbound_id: edge_point_a, outbound_id: edge_point_b, organization: organization
       ).limit(1)
       outbound_connection = ::TenantRouting::Connection.where(
-        inbound_id: edge_point_b, outbound: nil, tenant: tenant
+        inbound_id: edge_point_b, outbound: nil, organization: organization
       ).limit(1)
 
       [inbound_connection, mid_connection, outbound_connection]

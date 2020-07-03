@@ -11,7 +11,7 @@ require 'core'
 require 'legacy'
 require 'pricings'
 require 'profiles'
-require 'tenants'
+require 'organizations'
 require 'quotations'
 require 'result_formatter'
 

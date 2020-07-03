@@ -2,10 +2,12 @@
 
 require 'core'
 require 'profiles'
+require 'organizations'
 
 require 'active_model_serializers'
 require 'activerecord-import'
 require 'devise_token_auth'
+require 'draper'
 require 'geocoder'
 require 'mobility'
 require 'money'

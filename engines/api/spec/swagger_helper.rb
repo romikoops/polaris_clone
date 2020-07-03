@@ -71,7 +71,6 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
               email: {type: :string},
               first_name: {type: :string},
               last_name: {type: :string},
-              role: {type: :string},
               company_name: {type: :string},
               phone: {type: :string},
               house_number: {type: :string},
@@ -81,7 +80,7 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
               group_id: {type: :string}
             },
             required: %w[
-              email first_name last_name role company_name phone house_number street postal_code country group_id
+              email first_name last_name company_name phone house_number street postal_code country group_id
             ]
           },
           charge: {
@@ -170,7 +169,7 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
             },
             required: %w[id type attributes]
           },
-          tenant: {
+          organization: {
             type: :object,
             properties: {
               id: {type: :string},
@@ -179,9 +178,8 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
                 type: :object,
                 properties: {
                   slug: {type: :string},
-                  name: {type: :string}
                 },
-                required: %w[slug name]
+                required: %w[slug]
               }
             },
             required: %w[id type attributes]
@@ -195,14 +193,13 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
                 type: :object,
                 properties: {
                   email: {type: :string},
-                  tenantId: {type: :string},
+                  organizationId: {type: :string},
                   firstName: {type: :string},
                   lastName: {type: :string},
                   phone: {type: :string},
                   companyName: {type: :string},
-                  role: {type: :string}
                 },
-                required: %w[email tenantId firstName lastName phone companyName role]
+                required: %w[email organizationId firstName lastName phone companyName]
               }
             },
             required: %w[id type attributes]

@@ -20,17 +20,23 @@ end
 #
 # Table name: legacy_contents
 #
-#  id         :uuid             not null, primary key
-#  component  :string
-#  index      :integer
-#  section    :string
-#  text       :jsonb
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  tenant_id  :integer
+#  id              :uuid             not null, primary key
+#  component       :string
+#  index           :integer
+#  section         :string
+#  text            :jsonb
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  organization_id :uuid
+#  tenant_id       :integer
 #
 # Indexes
 #
-#  index_legacy_contents_on_component  (component)
-#  index_legacy_contents_on_tenant_id  (tenant_id)
+#  index_legacy_contents_on_component        (component)
+#  index_legacy_contents_on_organization_id  (organization_id)
+#  index_legacy_contents_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

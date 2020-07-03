@@ -3,7 +3,7 @@
 require 'bigdecimal'
 module Pricings
   class Calculator # rubocop:disable Metrics/ClassLength
-    def initialize(cargo:, pricing:, user:, mode_of_transport:, date:, metadata: [])
+    def initialize(cargo:, pricing:, user:, organization:, mode_of_transport:, date:, metadata: [])
       @user = user
       @mot = mode_of_transport
       @cargo = cargo
@@ -12,7 +12,7 @@ module Pricings
       @margins = @data[:flat_margins] || {}
       @metadata_id = @data[:metadata_id]
       @metadata = metadata
-      @scope = Tenants::ScopeService.new(tenant: Tenants::Tenant.find_by(legacy_id: user.tenant_id)).fetch
+      @scope = OrganizationManager::ScopeService.new(organization: organization).fetch
       @totals = Hash.new { |h, k| h[k] = { 'value' => 0, 'currency' => nil } unless k.to_s == 'metadata_id' }
       @date = date
     end
@@ -53,7 +53,7 @@ module Pricings
     end
 
     def convert_fees
-      converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(@totals, @user.currency)
+      converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(@totals, currency)
       @totals['total'] = { value: converted.cents / 100.0, currency: converted.currency.to_s }
     end
 
@@ -223,6 +223,11 @@ module Pricings
                         .select { |range| range.slice(:min, :max) == final_range.slice(:min, :max) }
         breakdown[:adjusted_rate][:rate] = target_ranges
       end
+    end
+
+    def currency
+      @currency ||= Users::Settings.find_by(user: @user)&.currency
+      @currency ||= @scope.fetch('default_currency')
     end
 
     attr_accessor :metadata, :metadata_id

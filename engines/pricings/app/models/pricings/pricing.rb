@@ -6,18 +6,20 @@ module Pricings
     self.ignored_columns = ['disabled']
 
     has_paper_trail
+
     belongs_to :itinerary, class_name: 'Legacy::Itinerary'
-    belongs_to :tenant, class_name: 'Legacy::Tenant'
+    belongs_to :organization, class_name: 'Organizations::Organization'
+
     belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle'
-    belongs_to :user, optional: true
+    belongs_to :user, class_name: 'Organizations::User', optional: true
     has_many :fees, class_name: 'Pricings::Fee', dependent: :destroy
     has_many :margins, class_name: 'Pricings::Margin'
-    belongs_to :group, class_name: 'Tenants::Group', optional: true
+    belongs_to :group, class_name: 'Groups::Group', optional: true
     has_many :notes, foreign_key: 'pricings_pricing_id', dependent: :destroy
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     validates :itinerary_id, uniqueness: {
-      scope: %i[ tenant_id
+      scope: %i[ organization_id
                  user_id
                  tenant_vehicle_id
                  effective_date
@@ -48,7 +50,7 @@ module Pricings
         methods: %i[data carrier service_level],
         only: %i[
           effective_date expiration_date wm_rate itinerary_id load_type cargo_class
-          tenant_id id tenant_vehicle_id internal group_id transshipment
+          organization_id id tenant_vehicle_id internal group_id transshipment
         ]
       )
       super(new_options)
@@ -59,7 +61,7 @@ module Pricings
         methods: %i[data load_type cargo_class carrier service_level itinerary_name mode_of_transport],
         only: %i[
           effective_date expiration_date wm_rate itinerary_id
-          tenant_id id tenant_vehicle_id internal group_id
+          organization_id id tenant_vehicle_id internal group_id
         ]
       )
       as_json(new_options)
@@ -109,20 +111,29 @@ end
 #  group_id          :uuid
 #  itinerary_id      :bigint
 #  legacy_id         :integer
+#  legacy_user_id    :bigint
+#  organization_id   :uuid
 #  sandbox_id        :uuid
 #  tenant_id         :bigint
 #  tenant_vehicle_id :integer
-#  user_id           :bigint
+#  user_id           :uuid
 #
 # Indexes
 #
 #  index_pricings_pricings_on_cargo_class        (cargo_class)
 #  index_pricings_pricings_on_group_id           (group_id)
 #  index_pricings_pricings_on_itinerary_id       (itinerary_id)
+#  index_pricings_pricings_on_legacy_user_id     (legacy_user_id)
 #  index_pricings_pricings_on_load_type          (load_type)
+#  index_pricings_pricings_on_organization_id    (organization_id)
 #  index_pricings_pricings_on_sandbox_id         (sandbox_id)
 #  index_pricings_pricings_on_tenant_id          (tenant_id)
 #  index_pricings_pricings_on_tenant_vehicle_id  (tenant_vehicle_id)
 #  index_pricings_pricings_on_user_id            (user_id)
 #  index_pricings_pricings_on_validity           (validity) USING gist
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
+#  fk_rails_...  (user_id => users_users.id)
 #

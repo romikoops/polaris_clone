@@ -4,25 +4,24 @@ require 'rails_helper'
 require "#{Rails.root}/app/classes/application_error"
 
 RSpec.describe 'Authentication by token', type: :request do
-  let(:tenant) { create(:tenant) }
-  let(:user) { create(:user, tenant: tenant) }
+  let(:organization) { create(:organizations_organization) }
+  let(:user) { create(:authentication_user, organization_id: organization.id) }
 
   context 'user logged out' do
     it 'responds correctly, requiring authentication' do
-      get tenant_user_home_path(tenant_id: tenant.id, user_id: user.id)
+      get organization_user_home_path(organization_id: organization.id, user_id: user.id)
 
       expect(response).to have_http_status(:unauthorized)
-      expect(json[:success]).to be_falsy
-      expect(json[:code]).to eq(1050)
-      expect(json[:message]).to eq('You are not signed in.')
     end
   end
 
   context 'user logged in' do
-    sign_in(:user)
+    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
+    let(:headers) { { 'Authorization': 'Bearer ' + access_token.token } }
+
     it 'shows user home page' do
-      get tenant_user_home_path(tenant_id: tenant.id, user_id: user.id)
-      expect(controller.current_user).to eq(user)
+      get organization_user_home_path(organization_id: organization.id, user_id: user.id), headers: headers
+      expect(controller.send(:current_user)).to eq(user)
     end
   end
 end

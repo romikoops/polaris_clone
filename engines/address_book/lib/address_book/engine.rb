@@ -2,7 +2,8 @@
 
 require 'geocoder'
 require 'pg_search'
-require 'tenants'
+
+require 'organizations'
 
 module AddressBook
   class Engine < ::Rails::Engine

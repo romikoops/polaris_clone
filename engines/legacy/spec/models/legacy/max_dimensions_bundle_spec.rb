@@ -4,11 +4,14 @@ require 'rails_helper'
 
 module Legacy
   RSpec.describe MaxDimensionsBundle, type: :model do
-    let(:tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:empty_tenant) { FactoryBot.create(:legacy_tenant, no_max_dimensions: true) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
 
     describe 'mode_of_transport uniqueness' do
-      let(:max_dimensions_bundle_attributes) { FactoryBot.attributes_for(:legacy_max_dimensions_bundle, tenant_id: tenant.id, aggregate: true) }
+      let(:max_dimensions_bundle_attributes) { FactoryBot.attributes_for(:legacy_max_dimensions_bundle, organization_id: organization.id, aggregate: true) }
+
+      before do
+        FactoryBot.create(:legacy_max_dimensions_bundle, organization_id: organization.id, aggregate: true)
+      end
 
       it 'return error' do
         expect { described_class.new(max_dimensions_bundle_attributes).save! }.to raise_exception(ActiveRecord::RecordInvalid)
@@ -17,7 +20,7 @@ module Legacy
 
     describe '.to_max_dimensions_hash' do
       before do
-        FactoryBot.create(:legacy_max_dimensions_bundle, tenant_id: empty_tenant.id, aggregate: true)
+        FactoryBot.create(:legacy_max_dimensions_bundle, organization_id: organization.id, aggregate: true)
       end
 
       it 'return all max dimensions' do
@@ -29,35 +32,6 @@ module Legacy
           payload_in_kg: 0.1e5,
           volume: 0.1e5
         })
-      end
-    end
-
-    describe '.create_defaults_for' do
-      it 'create the default values for tenant' do
-        described_class.create_defaults_for(empty_tenant)
-
-        expect(empty_tenant.max_dimensions_bundles.pluck(:mode_of_transport)).to match_array %w[general air]
-      end
-
-      it 'create the default aggregate values for tenant' do
-        described_class.create_defaults_for(empty_tenant, aggregate: true)
-
-        expect(empty_tenant.max_dimensions_bundles.pluck(:mode_of_transport)).to match_array %w[general air]
-      end
-
-      it 'ignores the modes of transport acording to modes_of_transport param' do
-        described_class.create_defaults_for(empty_tenant, modes_of_transport: 'ocean')
-        expect(empty_tenant.max_dimensions_bundles).to be_empty
-      end
-
-      it 'creates defaults for all' do
-        described_class.create_defaults_for(empty_tenant, all: true)
-
-        bundles = empty_tenant.max_dimensions_bundles.where(aggregate: false)
-        aggregated_bundles = empty_tenant.max_dimensions_bundles.where(aggregate: true)
-
-        expect(bundles.pluck(:mode_of_transport)).to match_array %w[general air]
-        expect(aggregated_bundles.pluck(:mode_of_transport)).to match_array %w[general air]
       end
     end
 
@@ -82,14 +56,12 @@ end
 #  dimension_x       :decimal(, )
 #  dimension_y       :decimal(, )
 #  dimension_z       :decimal(, )
-#  height            :decimal(, )
-#  length            :decimal(, )
 #  mode_of_transport :string
 #  payload_in_kg     :decimal(, )
-#  width             :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  carrier_id        :bigint
+#  organization_id   :uuid
 #  itinerary_id      :bigint
 #  sandbox_id        :uuid
 #  tenant_id         :integer
@@ -99,9 +71,13 @@ end
 #
 #  index_max_dimensions_bundles_on_cargo_class        (cargo_class)
 #  index_max_dimensions_bundles_on_carrier_id         (carrier_id)
-#  index_max_dimensions_bundles_on_itinerary_id       (itinerary_id)
 #  index_max_dimensions_bundles_on_mode_of_transport  (mode_of_transport)
+#  index_max_dimensions_bundles_on_organization_id    (organization_id)
 #  index_max_dimensions_bundles_on_sandbox_id         (sandbox_id)
 #  index_max_dimensions_bundles_on_tenant_id          (tenant_id)
 #  index_max_dimensions_bundles_on_tenant_vehicle_id  (tenant_vehicle_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

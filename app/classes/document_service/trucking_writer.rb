@@ -4,13 +4,13 @@ module DocumentService
   class TruckingWriter
     include AwsConfig
     include WritingTool
-    attr_reader :options, :tenant, :hub, :target_load_type, :filename, :directory, :header_values,
+    attr_reader :options, :organization, :hub, :target_load_type, :filename, :directory, :header_values,
                 :workbook, :trucking_pricings,:results_by_truck_type, :dir_fees,
                 :zone_sheet, :fees_sheet, :header_format, :pages, :zones
 
     def initialize(options)
       @options = options
-      @tenant = tenant_finder(options[:tenant_id])
+      @organization = Organizations::Organization.find(options[:organization_id])
       @hub = Hub.find(options[:hub_id])
       @target_load_type = options[:load_type]
       @filename = _filename
@@ -39,19 +39,14 @@ module DocumentService
         write_rates_to_sheet
       end
       workbook.close
-      write_to_aws(directory, tenant, filename, 'schedules_sheet') if trucking_pricings.present?
+      write_to_aws(directory, organization, filename, 'schedules_sheet') if trucking_pricings.present?
     end
 
     def load_trucking_locations(pricings)
       query = trucking_pricings.where(pricings.first.slice(:carriage, :truck_type, :cargo_class, :load_type))
-      locations = Trucking::Location.where(id: pricings.pluck(:location_id)).order(:city_name)
-      separated_locations = locations.slice_when do |a, b|
-        query.find_by(location_id: a.id)&.parent_id != query.find_by(location_id: b.id)&.parent_id
-      end
-
-      separated_locations.each do |loc_arr|
-        parent_id = query.find_by(location_id: loc_arr.first.id)&.parent_id
-        values = loc_arr.map { |loc| loc.slice(:city_name, :country_code) }
+      query.group_by(&:parent_id).each do |parent_id, truckings|
+        locations = Trucking::Location.where(id: truckings.pluck(:location_id)).order(:city_name)
+        values = locations.map { |loc| loc.slice(:city_name, :country_code) }
         result = case identifier
                  when 'location_id' && identifier_modifier != 'postal_code'
                    values

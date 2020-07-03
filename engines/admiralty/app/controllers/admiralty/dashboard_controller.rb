@@ -9,43 +9,42 @@ module Admiralty
 
     def index
       item_number = dashboard_params[:item_number] || DEFAULT_ITEM_NUMBER
-      @shipments = shipments_from_external_users.first(item_number)
-      @quotations = quotations_from_external_users.first(item_number)
+      @shipments = shipments_from_excluded_users.first(item_number)
+      @quotations = quotations_from_excluded_users.first(item_number)
     end
 
     private
 
-    def external_users
-      Tenants::User.select(:id)
-                   .joins(:legacy)
-                   .where(users: { internal: false })
-                   .where.not(email: excluded_emails)
+    def excluded_users
+      Users::User.with_deleted
+                 .select(:id)
+                 .where(email: excluded_emails)
     end
 
-    def shipments_from_external_users
-      ::Shipments::ShipmentRequest.where(user: external_users)
+    def shipments_from_excluded_users
+      ::Shipments::ShipmentRequest.includes(:user)
+                                  .where.not(user_id: excluded_users.ids, billing: :test)
                                   .order(created_at: :desc)
     end
 
-    def quotations_from_external_users
-      ::Quotations::Quotation.joins(:user)
-                             .where(users: { internal: false })
-                             .where.not(users: { email: excluded_emails })
+    def quotations_from_excluded_users
+      ::Quotations::Quotation.includes(:user)
+                             .where.not(user_id: excluded_users.ids, billing: :test)
                              .order(created_at: :desc)
     end
 
     def booking_slug(booking)
-      Tenants::Tenant.find(booking.tenant_id).slug
+      Organizations::Organization.find(booking.organization_id).slug
     end
 
     def booking_link(booking)
-      domain = Tenants::Domain.find_by(tenant_id: booking.tenant_id, default: true)&.domain
+      domain = Organizations::Domain.find_by(organization_id: booking.organization_id, default: true)&.domain
       "https://#{domain}" if domain
     end
 
     def excluded_emails
-      Tenants::Tenant.all.flat_map do |tenant|
-        Tenants::ScopeService.new(tenant: tenant).fetch('blacklisted_emails')
+      Organizations::Organization.all.flat_map do |organization|
+        ::OrganizationManager::ScopeService.new(organization: organization).fetch('blacklisted_emails')
       end
     end
 

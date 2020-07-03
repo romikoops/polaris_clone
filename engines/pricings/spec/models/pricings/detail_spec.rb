@@ -5,17 +5,17 @@ require 'rails_helper'
 module Pricings
   RSpec.describe Detail, type: :model do
     context 'instance methods' do
-      let!(:tenant) { FactoryBot.create(:legacy_tenant) }
-      let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+      let!(:organization) { FactoryBot.create(:organizations_organization) }
       let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle_1]) }
-      let(:pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant) }
-      let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
+      let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization)}
+      let(:pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary) }
+      let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', organization: organization) }
 
       let!(:margin) do
         FactoryBot.create(:pricings_margin,
                           pricing: pricing,
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
 
       let!(:margin_detail) { FactoryBot.create(:pricings_detail, margin: margin, charge_category_id: pricing.fees.first.charge_category_id) }
@@ -52,6 +52,7 @@ end
 #  updated_at         :datetime         not null
 #  charge_category_id :integer
 #  margin_id          :uuid
+#  organization_id    :uuid
 #  sandbox_id         :uuid
 #  tenant_id          :uuid
 #
@@ -59,6 +60,11 @@ end
 #
 #  index_pricings_details_on_charge_category_id  (charge_category_id)
 #  index_pricings_details_on_margin_id           (margin_id)
+#  index_pricings_details_on_organization_id     (organization_id)
 #  index_pricings_details_on_sandbox_id          (sandbox_id)
 #  index_pricings_details_on_tenant_id           (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

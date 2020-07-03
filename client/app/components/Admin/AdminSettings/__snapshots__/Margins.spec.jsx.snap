@@ -4,19 +4,6 @@ exports[`should not render the edit button 1`] = `
 <div
   className="flex-100 layout-row layout-align-space-between-center layout-wrap padd_20"
 >
-  <Connect(AdminClientMargins)
-    editable={true}
-    targetId={123}
-    targetType="tenant"
-    toggleEdit={[Function]}
-  />
-</div>
-`;
-
-exports[`should render the edit button 1`] = `
-<div
-  className="flex-100 layout-row layout-align-space-between-center layout-wrap padd_20"
->
   <div
     className="flex-100 layout-row layout-align-end buffer_10"
   >
@@ -53,6 +40,19 @@ exports[`should render the edit button 1`] = `
   </div>
   <Connect(AdminClientMargins)
     editable={false}
+    targetId={123}
+    targetType="tenant"
+    toggleEdit={[Function]}
+  />
+</div>
+`;
+
+exports[`should render the edit button 1`] = `
+<div
+  className="flex-100 layout-row layout-align-space-between-center layout-wrap padd_20"
+>
+  <Connect(AdminClientMargins)
+    editable={true}
     targetId={123}
     targetType="tenant"
     toggleEdit={[Function]}

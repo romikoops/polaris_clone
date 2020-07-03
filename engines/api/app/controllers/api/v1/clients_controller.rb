@@ -13,17 +13,12 @@ module Api
 
       def create
         ActiveRecord::Base.transaction do
-          client = Legacy::User.create!(email: client_params[:email],
-                                        tenant_id: current_tenant.legacy_id,
-                                        addresses_attributes: [address_from_params],
-                                        role: Legacy::Role.find_by(name: client_params.fetch(:role, 'shipper')))
-          tenants_user = Tenants::User.create!(legacy_id: client.id,
-                                               email: client.email,
-                                               tenant_id: current_tenant.id).tap do |user|
-            create_user_profile(tenants_user: user)
-            create_user_group(tenants_user: user)
+          client = Organizations::User.create!(email: client_params[:email], organization_id: current_organization.id).tap do |user|
+            create_user_profile(user: user)
+            create_user_group(user: user)
+            Legacy::UserAddress.create(user: user, address: address)
           end
-          decorated_user = UserDecorator.decorate(tenants_user)
+          decorated_user = UserDecorator.decorate(client)
           render json: UserSerializer.new(decorated_user), status: :created
         end
       rescue ActiveRecord::RecordInvalid => e
@@ -32,14 +27,18 @@ module Api
 
       def password_reset
         random_password = SecureRandom.alphanumeric(16)
-        client.update(password: random_password)
+        auth_user.update(password: random_password)
         render json: {data: {password: random_password}}
       end
 
       private
 
+      def auth_user
+        @auth_user ||= Authentication::User.find(params[:id])
+      end
+
       def client
-        @client ||= Tenants::User.find(params[:id])
+        @client ||= Organizations::User.find(params[:id])
       end
 
       def client_params
@@ -47,7 +46,6 @@ module Api
           first_name
           last_name
           company_name
-          role
           phone
           house_number
           street
@@ -72,35 +70,59 @@ module Api
         params.permit(:q, :page, :per_page)
       end
 
-      def create_user_profile(tenants_user:)
-        profile_keys = %i[first_name last_name company_name phone]
-        profile_params = client_params.slice(*profile_keys)
-        Profiles::Profile.create!(profile_params.merge(user_id: tenants_user.id))
+      def query
+        index_params[:q]
       end
 
-      def create_user_group(tenants_user:)
-        return if params[:group_id].nil?
+      def create_user_profile(user:)
+        profile_keys = %i[first_name last_name company_name phone]
+        profile_params = client_params.slice(*profile_keys)
+        Profiles::Profile.create!(profile_params.merge(user_id: user.id))
+      end
 
-        Tenants::Membership.create!(member: tenants_user, group_id: client_params[:group_id])
+      def address
+        address = Legacy::Address.find_or_create_by!(address_from_params)
+      end
+
+      def create_user_group(user:)
+        if params[:group_id].nil?
+          attach_to_default_group(user: user)
+        else
+          Groups::Membership.create!(member: user, group_id: client_params[:group_id])
+        end
+      end
+
+      def attach_to_default_group(user:)
+        default_group = Groups::Group.find_by(organization_id: current_organization.id, name: 'default')
+        return if default_group.blank?
+
+        Groups::Membership.find_or_create_by(
+          member: user,
+          group: default_group
+        )
       end
 
       def decorated_clients
-        query = index_params[:q]
+        clients = Organizations::User.where(id: client_ids)
 
-        clients = Tenants::User.where(legacy_id: client_ids)
-        clients = clients.search(query) if query.present?
+        if query.present?
+          by_profile = filtered_profiles.pluck(:user_id)
+          by_email = clients.search(query).select(:id)
+
+          clients = clients.where(id: by_profile | by_email)
+        end
+
         paginated = paginate(clients)
-
         UserDecorator.decorate_collection(paginated, { context: { links: pagination_links(paginated) }})
       end
 
-      def client_ids
-        blocked_roles = Legacy::Role.where(name: %w[admin super_admin])
+      def filtered_profiles
+        Profiles::Profile.where(user_id: client_ids).search(query)
+      end
 
-        Legacy::User
-          .where(tenant_id: current_tenant.legacy_id)
-          .where(guest: false)
-          .where.not(role: blocked_roles)
+      def client_ids
+        Organizations::User
+          .where(organization_id: current_organization.id)
           .ids
       end
     end

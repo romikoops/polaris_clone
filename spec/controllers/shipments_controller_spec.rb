@@ -3,27 +3,25 @@
 require 'rails_helper'
 
 RSpec.describe ShipmentsController do
-  let(:tenant) { FactoryBot.create(:tenant) }
-  let(:user) { FactoryBot.create(:user, tenant: tenant) }
-  let(:shipment) { FactoryBot.create(:shipment, user: user, tenant: tenant) }
+  let(:user) { FactoryBot.create(:organizations_user_with_profile) }
+  let(:organization) { user.organization }
+  let(:shipment) { FactoryBot.create(:shipment, user: user, organization: organization) }
   let(:json_response) { JSON.parse(response.body) }
 
   before do
-    allow(controller).to receive(:user_signed_in?).and_return(true)
-    allow(controller).to receive(:current_user).and_return(user)
+    append_token_header
   end
 
   describe 'GET #index' do
     it 'returns an http status of success' do
-      get :index, params: { tenant_id: tenant.id }
+      get :index, params: { organization_id: organization.id }
 
       expect(response).to have_http_status(:success)
     end
   end
 
   describe "GET #show" do
-    let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, with_profile: true) }
-    let(:shipment) { FactoryBot.create(:legacy_shipment, user: user, tenant: tenant, with_breakdown: true) }
+    let(:shipment) { FactoryBot.create(:legacy_shipment, user: user, organization: organization, with_breakdown: true) }
     let(:tender) { FactoryBot.create(:quotations_tender, amount: tender_amount) }
     let(:tender_amount) { Money.new(100, "EUR") }
     let(:rate) { 1.24 }
@@ -35,7 +33,7 @@ RSpec.describe ShipmentsController do
     end
 
     it 'returns requested shipment' do
-      get :show, params: { id: shipment.id, tenant_id: tenant.id }
+      get :show, params: { id: shipment.id, organization_id: organization.id }
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(json_response.dig('data', 'exchange_rates')).to include("base" => "EUR", "usd" => rate.to_s)
@@ -45,7 +43,7 @@ RSpec.describe ShipmentsController do
 
   describe 'Patch #update_user' do
     before do
-      patch :update_user, params: { tenant_id: tenant.id, id: shipment.id }
+      patch :update_user, params: { organization_id: organization.id, id: shipment.id }
       shipment.reload
     end
 
@@ -60,7 +58,7 @@ RSpec.describe ShipmentsController do
 
   describe 'POST #upload_document' do
     before do
-      post :upload_document, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../test_sheets/spec_sheet.xlsx', __dir__)), shipment_id: shipment.id, tenant_id: tenant.id, type: 'packing_sheet' }
+      post :upload_document, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../test_sheets/spec_sheet.xlsx', __dir__)), shipment_id: shipment.id, organization_id: organization.id, type: 'packing_sheet' }
     end
 
     it 'returns the document with the signed url' do

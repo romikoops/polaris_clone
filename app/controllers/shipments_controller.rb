@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class ShipmentsController < ApplicationController
-  skip_before_action :require_non_guest_authentication!
-
   def index
     quotation_tool? ? get_quote_index : get_booking_index
   end
@@ -32,7 +30,7 @@ class ShipmentsController < ApplicationController
     shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      shipments: shipments.map(&:with_address_index_json),
+      shipments: shipment_table_list(shipments: shipments),
       num_shipment_pages: shipments.total_pages,
       target: params[:target],
       page: params[:page]
@@ -43,7 +41,7 @@ class ShipmentsController < ApplicationController
   end
 
   def test_email
-    tenant_notification_email(current_user, Shipment.where(status: 'requested').first)
+    tenant_notification_email(organization_user, Shipment.where(status: 'requested').first)
   end
 
   def search_shipments
@@ -68,7 +66,7 @@ class ShipmentsController < ApplicationController
     shipments = results.order(:updated_at).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      shipments: shipments.map(&:with_address_index_json),
+      shipments: shipment_table_list(shipments: shipments),
       num_shipment_pages: shipments.total_pages,
       target: params[:target],
       page: params[:page]
@@ -83,8 +81,8 @@ class ShipmentsController < ApplicationController
         shipment: @shipment,
         text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, '_'),
         doc_type: params[:type],
-        user: current_user,
-        tenant: current_tenant,
+        user: organization_user,
+        organization: current_organization,
         file: params[:file],
         sandbox: @sandbox
       )
@@ -98,34 +96,32 @@ class ShipmentsController < ApplicationController
   end
 
   def update_user
-    Shipment.find_by(id: update_user_params[:id], sandbox: @sandbox).update(user: current_user)
+    Shipment.find_by(id: update_user_params[:id], sandbox: @sandbox).update(user: organization_user)
   end
 
   def show # rubocop:disable Metrics/AbcSize
-    shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
-    cargo_item_types = shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
+    @shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
+    cargo_item_types = @shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
       return_h[cargo_item_type.id] = cargo_item_type
     end
 
-    contacts = shipment.shipment_contacts.where(sandbox: @sandbox).map do |sc|
+    contacts = @shipment.shipment_contacts.where(sandbox: @sandbox).map do |sc|
       { contact: sc.contact, type: sc.contact_type, address: sc.contact.address } if sc.contact
     end
 
-    documents = shipment.files.where(sandbox: @sandbox).select { |doc| doc.file.attached? }.map do |doc|
+    documents = @shipment.files.where(sandbox: @sandbox).select { |doc| doc.file.attached? }.map do |doc|
       doc.as_json.merge(
         signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: 'attachment')
       )
     end
-
-    shipment_as_json = shipment.with_address_options_json
-    charge_breakdown = shipment.charge_breakdowns.selected
+    charge_breakdown = @shipment.charge_breakdowns.selected
     exchange_rates = ResultFormatter::ExchangeRateService.new(tender: charge_breakdown.tender).perform
 
     response_handler(
       shipment: shipment_as_json,
-      cargoItems: shipment.cargo_items.map(&:with_cargo_type),
-      containers: shipment.containers,
-      aggregatedCargo: shipment.aggregated_cargo,
+      cargoItems: @shipment.cargo_items.map(&:with_cargo_type),
+      containers: @shipment.containers,
+      aggregatedCargo: @shipment.aggregated_cargo,
       contacts: contacts,
       documents: documents,
       cargoItemTypes: cargo_item_types,
@@ -160,11 +156,11 @@ class ShipmentsController < ApplicationController
         archived: a_shipments.total_pages
       }
       {
-        requested: r_shipments.map(&:with_address_index_json),
-        open: o_shipments.map(&:with_address_index_json),
-        finished: f_shipments.map(&:with_address_index_json),
-        rejected: rj_shipments.map(&:with_address_index_json),
-        archived: a_shipments.map(&:with_address_index_json),
+        requested: shipment_table_list(shipments: r_shipments),
+        open: shipment_table_list(shipments: o_shipments),
+        finished: shipment_table_list(shipments: f_shipments),
+        rejected: shipment_table_list(shipments: rj_shipments),
+        archived: shipment_table_list(shipments: a_shipments),
         pages: {
           open: params[:open_page],
           finished: params[:finished_page],
@@ -174,24 +170,34 @@ class ShipmentsController < ApplicationController
         },
         nexuses: {
           open: {
-            origin_nexuses: Nexus.where(id: current_user.shipments.open.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: current_user.shipments.open.distinct.pluck(:destination_nexus_id))
+            origin_nexuses: Nexus.where(id: organization_user_shipments.open.distinct.select(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(
+              id: organization_user_shipments.open.distinct.select(:destination_nexus_id)
+            )
           },
           requested: {
-            origin_nexuses: Nexus.where(id: current_user.shipments.requested.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: current_user.shipments.requested.distinct.pluck(:destination_nexus_id))
+            origin_nexuses: Nexus.where(id: organization_user_shipments.requested.distinct.select(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(
+              id: organization_user_shipments.requested.distinct.select(:destination_nexus_id)
+            )
           },
           rejected: {
-            origin_nexuses: Nexus.where(id: current_user.shipments.rejected.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: current_user.shipments.rejected.distinct.pluck(:destination_nexus_id))
+            origin_nexuses: Nexus.where(id: organization_user_shipments.rejected.distinct.select(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(
+              id: organization_user_shipments.rejected.distinct.select(:destination_nexus_id)
+            )
           },
           finished: {
-            origin_nexuses: Nexus.where(id: current_user.shipments.finished.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: current_user.shipments.finished.distinct.pluck(:destination_nexus_id))
+            origin_nexuses: Nexus.where(id: organization_user_shipments.finished.distinct.select(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(
+              id: organization_user_shipments.finished.distinct.select(:destination_nexus_id)
+            )
           },
           archived: {
-            origin_nexuses: Nexus.where(id: current_user.shipments.archived.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: current_user.shipments.archived.distinct.pluck(:destination_nexus_id))
+            origin_nexuses: Nexus.where(id: organization_user_shipments.archived.distinct.select(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(
+              id: organization_user_shipments.archived.distinct.select(:destination_nexus_id)
+            )
           }
         },
         num_shipment_pages: num_pages
@@ -209,7 +215,7 @@ class ShipmentsController < ApplicationController
         quoted: quoted.total_pages
       }
       {
-        quoted: quoted.map(&:with_address_index_json),
+        quoted: shipment_table_list(shipments: quoted),
         pages: {
           quoted: params[:quoted_page]
         },
@@ -219,10 +225,14 @@ class ShipmentsController < ApplicationController
     response_handler(response)
   end
 
+  def shipment_as_json
+    hidden_args = Pdf::HiddenValueService.new(user: @shipment.user).admin_args
+    Legacy::ShipmentDecorator.new(@shipment, context: {scope: current_scope}).legacy_address_json(offer_args: hidden_args)
+  end
+
   def filtered_user_shipments
     @filtered_user_shipments ||= begin
-      @filtered_user_shipments = current_user.shipments.where(sandbox: @sandbox)
-
+      @filtered_user_shipments = organization_user_shipments
       if params[:origin_nexus]
         @filtered_user_shipments = @filtered_user_shipments.where(origin_nexus_id: params[:origin_nexus].split(','))
       end
@@ -269,5 +279,13 @@ class ShipmentsController < ApplicationController
 
   def update_user_params
     params.permit(:id)
+  end
+
+  def organization_user_shipments
+    @organization_user_shipments ||= Legacy::Shipment.where(user: organization_user)
+  end
+
+  def shipment_table_list(shipments:)
+    decorate_shipments(shipments: shipments).map(&:legacy_index_json)
   end
 end

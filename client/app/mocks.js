@@ -409,3 +409,10 @@ export const gMaps = {
   Size: MapMock,
   places: { Autocomplete: MapMock }
 }
+
+export const pricing = {
+  cargo_class: 'cargo item',
+  service_level: 'standard',
+  carrier: 'default',
+  status: 'active'
+}

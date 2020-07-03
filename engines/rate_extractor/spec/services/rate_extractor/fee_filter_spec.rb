@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe RateExtractor::FeeFilter do
-  let(:tenant) { FactoryBot.create(:tenants_tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
 
   context 'when cargo is LCL' do
     let(:cargo_rate) { FactoryBot.create(:rates_cargo, :lcl, cbm_ratio: 50) }

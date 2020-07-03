@@ -5,7 +5,7 @@ FactoryBot.define do
     name { 'Grand Total' }
     code { 'grand_total' }
     cargo_unit_id { nil }
-    association :tenant, factory: :legacy_tenant
+    association :organization, factory: :organizations_organization
 
     trait :bas do
       name { 'Basic Ocean Freight' }
@@ -65,7 +65,7 @@ FactoryBot.define do
     to_create do |instance|
       instance.attributes = Legacy::ChargeCategory.create_with(code: instance.code)
                                                   .find_or_create_by(
-                                                    tenant: instance.tenant,
+                                                    organization: instance.organization,
                                                     name: instance.name,
                                                     cargo_unit_id: instance.cargo_unit_id
                                                   )
@@ -91,19 +91,25 @@ end
 #
 # Table name: charge_categories
 #
-#  id            :bigint           not null, primary key
-#  code          :string
-#  name          :string
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  cargo_unit_id :integer
-#  sandbox_id    :uuid
-#  tenant_id     :integer
+#  id              :bigint           not null, primary key
+#  code            :string
+#  name            :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  cargo_unit_id   :integer
+#  organization_id :uuid
+#  sandbox_id      :uuid
+#  tenant_id       :integer
 #
 # Indexes
 #
-#  index_charge_categories_on_cargo_unit_id  (cargo_unit_id)
-#  index_charge_categories_on_code           (code)
-#  index_charge_categories_on_sandbox_id     (sandbox_id)
-#  index_charge_categories_on_tenant_id      (tenant_id)
+#  index_charge_categories_on_cargo_unit_id    (cargo_unit_id)
+#  index_charge_categories_on_code             (code)
+#  index_charge_categories_on_organization_id  (organization_id)
+#  index_charge_categories_on_sandbox_id       (sandbox_id)
+#  index_charge_categories_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

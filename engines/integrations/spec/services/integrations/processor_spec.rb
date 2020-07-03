@@ -5,13 +5,11 @@ require 'rails_helper'
 module Integrations
   RSpec.describe Processor do
     let(:shipment_request_id) { '123' }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
 
-    let(:tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenants_tenant) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
-
-    context 'when chain.io integration is enabled for the tenant' do
+    context 'when chain.io integration is enabled for the organization' do
       let!(:scope) {
-        FactoryBot.create(:tenants_scope, target: tenants_tenant,
+        FactoryBot.create(:organizations_scope, target: organization,
                                           content: {
                                             integrations: {
                                               chainio: {
@@ -23,15 +21,15 @@ module Integrations
       }
 
       it 'processes the chain_io integration' do
-        expect(ChainIo::Processor).to receive(:process).with(shipment_request_id: shipment_request_id, tenant_id: tenants_tenant.id)
+        expect(ChainIo::Processor).to receive(:process).with(shipment_request_id: shipment_request_id, organization_id: organization.id)
 
-        Processor.process(shipment_request_id: shipment_request_id, tenant_id: tenants_tenant.id)
+        Processor.process(shipment_request_id: shipment_request_id, organization_id: organization.id)
       end
     end
 
-    context 'when chain.io integration is disabled for the tenant' do
+    context 'when chain.io integration is disabled for the organization' do
       let!(:scope) {
-        FactoryBot.create(:tenants_scope, target: tenants_tenant,
+        FactoryBot.create(:organizations_scope, target: organization,
                                           content: {
                                             integrations: {
                                               chainio: {
@@ -43,9 +41,9 @@ module Integrations
       }
 
       it 'does not process the chain_io integration' do
-        allow(ChainIo::Processor).to receive(:process).with(shipment_request_id: shipment_request_id, tenant_id: tenants_tenant.id)
+        allow(ChainIo::Processor).to receive(:process).with(shipment_request_id: shipment_request_id, organization_id: organization.id)
 
-        Processor.process(shipment_request_id: shipment_request_id, tenant_id: tenants_tenant.id)
+        Processor.process(shipment_request_id: shipment_request_id, organization_id: organization.id)
 
         expect(ChainIo::Processor).not_to have_received(:process)
       end

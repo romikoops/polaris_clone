@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Trucking::Queries::Hubs do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:distance_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Distance Port', tenant: tenant) }
-  let(:zipcode_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Zipcode Port', tenant: tenant) }
-  let(:location_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Location Port', tenant: tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:distance_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Distance', organization: organization) }
+  let(:zipcode_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Zipcode', organization: organization) }
+  let(:location_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Location', organization: organization) }
 
   let(:trucking_location_zipcode) { FactoryBot.create(:trucking_location, zipcode: zipcode) }
   let(:trucking_location_geometry)  { FactoryBot.create(:trucking_location, :with_location) }
@@ -36,26 +36,26 @@ RSpec.describe Trucking::Queries::Hubs do
     context 'when finding hubs from truckings' do
       before do
         FactoryBot.create(:trucking_trucking,
-                          tenant: tenant,
+                          organization: organization,
                           hub: zipcode_hub,
                           location: trucking_location_zipcode)
         FactoryBot.create(:trucking_trucking,
-                          tenant: tenant,
+                          organization: organization,
                           hub: location_hub,
                           location: trucking_location_geometry)
         FactoryBot.create(:trucking_trucking,
-                          tenant: tenant,
+                          organization: organization,
                           hub: distance_hub,
                           location: trucking_location_distance)
       end
 
       it 'return empty collection if cargo_class filter does not match any item in db' do
         hubs = described_class.new(
-          klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
+          klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage, country_code: country_code,
           address: address, cargo_classes: ['lcl'], order_by: 'group_id'
         ).perform
-
+        
         expect(hubs).to match_array([distance_hub, zipcode_hub, location_hub])
       end
     end
@@ -64,7 +64,7 @@ RSpec.describe Trucking::Queries::Hubs do
   describe '.trucking_location_where_statement' do
     let(:klass) do
       described_class.new(
-        klass: ::Trucking::Trucking, tenant_id: tenant.id, load_type: load_type,
+        klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
         carriage: carriage, country_code: country_code, distance: 20,
         address: address, cargo_classes: ['lcl'], order_by: 'group_id'
       )

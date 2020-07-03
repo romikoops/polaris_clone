@@ -26,7 +26,6 @@ import defs from '../../styles/default_classes.scss'
 import styles from './UserAccount.scss'
 import NavBar from '../Nav'
 import GenericError from '../../components/ErrorHandling/Generic'
-import UserPricings from '../../components/UserAccount/UserPricings'
 import UserConfirmation from '../../components/UserAccount/UserConfirmation'
 
 class UserAccount extends Component {
@@ -78,9 +77,6 @@ class UserAccount extends Component {
   setUrl (target) {
     const { userDispatch, user } = this.props
     switch (target) {
-      case 'pricing':
-        userDispatch.getPricings(user.id, true)
-        break
       case 'chooseRoutes':
         this.toggleModal()
         break
@@ -129,7 +125,7 @@ class UserAccount extends Component {
           password_confirmation: 'guestpassword',
           first_name: 'Guest',
           last_name: '',
-          tenant_id: tenant.id,
+          organization_id: tenant.id,
           guest: true
         },
         '/booking'
@@ -278,16 +274,6 @@ class UserAccount extends Component {
                     )}
                   />
                   <Route
-                    path="/account/pricings"
-                    render={props => (
-                      <UserPricings
-                        {...props}
-                        setNav={this.setNavLink}
-                        setCurrentUrl={this.setCurrentUrl}
-                      />
-                    )}
-                  />
-                  <Route
                     path="/account/billing"
                     render={props => (
                       <UserBilling setNav={this.setNavLink} theme={theme} user={user} {...props} />
@@ -412,19 +398,6 @@ class UserAccount extends Component {
                       />
                     )}
                   />
-                  <GenericError theme={theme}>
-                    <Route
-                      path="/account/confirmation/:confirmation_token"
-                      render={props => (
-                        <UserConfirmation
-                          user={user}
-                          theme={theme}
-                          {...props}
-                        />
-                      )
-                      }
-                    />
-                  </GenericError>
                 </Switch>
               </GenericError>
             </div>

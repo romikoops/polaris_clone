@@ -5,12 +5,12 @@ module Pricings
     MissingArgument = Class.new(StandardError)
     TRUCKING_QUERY_DAYS = 10
 
-    def initialize(type:, target:, tenant:, args:)
+    def initialize(type:, target:, organization:, args:)
       argument_errors(type, target, args)
       @type = type
-      @target = target
-      @tenant = tenant.is_a?(Tenants::Tenant) ? tenant : Tenants::Tenant.find_by(legacy_id: tenant.id)
-      @scope = Tenants::ScopeService.new(target: target, tenant: tenant).fetch
+      @target = target || Groups::Group.find_by(name: 'default', organization: organization)
+      @organization = organization
+      @scope = OrganizationManager::ScopeService.new(target: target, organization: organization).fetch
       @sandbox = args[:sandbox]
       @cargo_unit_id = args[:cargo_unit_id]
       @meta = {}
@@ -33,21 +33,23 @@ module Pricings
     end
 
     def find_applicable_margins
-      hierarchy = Tenants::HierarchyService.new(target: target, tenant: tenant).fetch
-      target_hierarchy = hierarchy.reverse.reject { |hier| hier == tenant }
+      hierarchy = OrganizationManager::HierarchyService.new(target: target, organization: organization).fetch
+      target_hierarchy = hierarchy.reverse.reject { |hier| hier == organization }
                                   .map.with_index { |hier, i| { rank: i, data: hier } }
       all_margins = apply_hierarchy(hierarchy: target_hierarchy)
 
       return all_margins unless all_margins.empty?
 
-      tenant_hierarchy = [
-        { rank: 0, data: [tenant] }
+      organization_hierarchy = [
+        { rank: 0, data: [organization] }
       ]
 
-      apply_hierarchy(hierarchy: tenant_hierarchy, for_tenant: true)
+      apply_hierarchy(hierarchy: organization_hierarchy, for_organization: true)
     end
 
-    def apply_hierarchy(hierarchy:, for_tenant: false)
+    def apply_hierarchy(hierarchy:, for_organization: false)
+      return [] if hierarchy.empty?
+
       permutations = margin_params.product(hierarchy)
       base_args, base_target = permutations.first
       base_query = margins.where(base_args.merge(applicable: base_target[:data]))
@@ -58,15 +60,15 @@ module Pricings
         query.or(margins.where(args.merge(applicable: hier[:data])))
       end
       all_margins = decorate_margins(target_margins: margin_relation.distinct.to_a, target_hierarchy: hierarchy)
-      handle_default_margin(margins: all_margins, for_tenant: for_tenant)
+      handle_default_margin(margins: all_margins, for_organization: for_organization)
     end
 
-    def handle_default_margin(margins:, for_tenant:)
+    def handle_default_margin(margins:, for_organization:)
       return margins if default_margin.blank?
 
       not_empty_non_dedicated = scope[:dedicated_pricings_only].blank? && !margins.empty?
-      for_tenant_and_empty = for_tenant && margins.empty?
-      margins << { priority: 0, margin: default_margin, rank: 0 } if not_empty_non_dedicated || for_tenant_and_empty
+      for_organization_and_empty = for_organization && margins.empty?
+      margins << { priority: 0, margin: default_margin, rank: 0 } if not_empty_non_dedicated || for_organization_and_empty
       margins
     end
 
@@ -87,7 +89,7 @@ module Pricings
         pricing_targets
       ).map do |product|
         {
-          tenant_id: tenant.id,
+          organization_id: organization.id,
           itinerary_id: product[0],
           origin_hub_id: product[1],
           destination_hub_id: product[2],
@@ -320,7 +322,7 @@ module Pricings
     end
 
     def margin_target_name(applicable)
-      return applicable.try(:name) unless applicable.is_a?(Tenants::User)
+      return applicable.try(:name) unless applicable.is_a?(Organizations::User)
 
       Profiles::ProfileService.fetch(user_id: applicable.id)&.full_name
     end
@@ -380,7 +382,7 @@ module Pricings
       fee_count = fee_hash.keys.count
       result = fee_hash.each_with_object({}) do |(key, fee), hash|
         adjusted_key = key.downcase
-        charge_category = ::Legacy::ChargeCategory.find_by(code: adjusted_key, tenant: tenant.legacy_id)
+        charge_category = ::Legacy::ChargeCategory.find_by(code: adjusted_key, organization: organization.id)
 
         data.each do |mdata|
           hash[adjusted_key] = handle_manipulation(
@@ -657,7 +659,7 @@ module Pricings
       @itinerary = ::Legacy::Itinerary.find_by(id: args[:itinerary_id])
       @pricing =   @itinerary&.rates&.for_dates(start_date, end_date)&.find_by(
         args.slice(:tenant_vehicle_id, :cargo_class, :itinerary_id).merge(
-          tenant_id: @tenant.legacy_id
+          organization_id: @organization.id
         )
       )
       @tenant_vehicle_id = args[:tenant_vehicle_id]
@@ -668,7 +670,7 @@ module Pricings
     def margin_query_args
       {
         margin_type: type,
-        tenant_id: tenant.id,
+        organization_id: organization.id,
         sandbox: sandbox,
         default_for: nil
       }
@@ -692,7 +694,7 @@ module Pricings
       @trucking_pricing = args[:trucking_pricing]
       is_pre_carriage =  type == :trucking_pre_margin
       @trucking_charge_category = ::Legacy::ChargeCategory.from_code(
-        tenant_id: tenant.legacy_id,
+        organization_id: organization.id,
         code: "trucking_#{is_pre_carriage ? 'pre' : 'on'}"
       )
       @cargo_class = trucking_pricing.cargo_class
@@ -704,7 +706,7 @@ module Pricings
       end
       @metadata_charge_category = ::Legacy::ChargeCategory.from_code(
         code: "trucking_#{cargo_class}",
-        tenant_id: trucking_pricing.tenant_id,
+        organization_id: trucking_pricing.organization_id,
         sandbox: sandbox
       )
       find_margins(default_for: 'trucking')
@@ -729,16 +731,14 @@ module Pricings
     def assign_default_margin(default_for:)
       @default_margin = Pricings::Margin.find_by(
         margin_type: type,
-        tenant_id: tenant.id,
-        applicable: tenant,
+        organization_id: organization.id,
+        applicable: organization,
         sandbox: sandbox,
         default_for: default_for
       )
     end
 
     def argument_errors(type, target, args)
-      raise Pricings::Manipulator::MissingArgument unless target
-
       return if (args[:schedules].present? && type == :freight_margin) || type != :freight_margin
 
       raise Pricings::Manipulator::MissingArgument
@@ -746,7 +746,7 @@ module Pricings
 
     private
 
-    attr_reader :target, :tenant, :scope, :shipment, :sandbox, :cargo_unit_id, :meta, :type,
+    attr_reader :target, :organization, :scope, :shipment, :sandbox, :cargo_unit_id, :meta, :type,
                 :applicable_margins, :margins_to_apply, :pricings_to_return, :default_margin, :itinerary,
                 :origin_hub_id, :destination_hub_id, :tenant_vehicle_id, :cargo_class, :pricing, :end_date,
                 :local_charge, :margins, :trucking_pricing, :trucking_charge_category, :direction, :schedules,

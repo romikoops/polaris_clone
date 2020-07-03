@@ -2,19 +2,19 @@
 
 module Wheelhouse
   class QuotationService
-    attr_reader :estimated
+    attr_reader :estimated, :organization
 
-    def initialize(quotation_details:, shipping_info:)
-      @user_id = quotation_details.fetch(:user_id)
+    def initialize(organization:, quotation_details:, shipping_info:)
+      @user_id = quotation_details[:user_id]
+      @creator = quotation_details[:creator]
+      @user = Organizations::User.find_by(id: @user_id)
       @origin = quotation_details.fetch(:origin)
       @destination = quotation_details.fetch(:destination)
       @load_type = quotation_details.fetch(:load_type)
       @selected_date = quotation_details.fetch(:selected_date)
       @shipping_info = shipping_info.to_h.deep_symbolize_keys
-      @user = Tenants::User.find(@user_id)
-      @legacy_user = @user.legacy
-      @legacy_tenant_id = @legacy_user.tenant_id
-      @shipment = Legacy::Shipment.new(user_id: @user.legacy_id, load_type: @load_type, tenant_id: @legacy_tenant_id)
+      @organization = organization
+      @shipment = Legacy::Shipment.new(user_id: @user_id, load_type: @load_type, organization_id: @organization.id)
       @estimated = false
     end
 
@@ -23,7 +23,7 @@ module Wheelhouse
       offer_calculator = OfferCalculator::Calculator.new(
         shipment: @shipment,
         params: params,
-        user: @legacy_user,
+        user: @user,
         wheelhouse: true,
         sandbox: nil
       )
@@ -70,7 +70,8 @@ module Wheelhouse
         selected_day: selected_date.to_s,
         origin: @origin,
         destination: @destination,
-        trucking: trucking_info
+        trucking: trucking_info,
+        creator: @creator
       }
     end
 
@@ -146,6 +147,7 @@ module Wheelhouse
     def default_equipment
       @default_equipment ||= Wheelhouse::EquipmentService.new(
         user: user,
+        organization: organization,
         origin: origin,
         destination: destination,
         dedicated_pricings_only: dedicated_pricings_only
@@ -153,12 +155,13 @@ module Wheelhouse
     end
 
     def default_cargo_item_type
-      cargo_item_types = shipment.tenant.cargo_item_types
+      org_cargo_item_types = Legacy::TenantCargoItemType.where(organization_id: @organization.id).select(:cargo_item_type_id)
+      cargo_item_types = Legacy::CargoItemType.where(id: org_cargo_item_types)
       cargo_item_types.find_by(description: 'Pallet') || cargo_item_types.take
     end
 
     def dedicated_pricings_only
-      Tenants::ScopeService.new(target: user, tenant: user.tenant).fetch(:dedicated_pricings_only)
+      OrganizationManager::ScopeService.new(target: user || @creator, organization: organization).fetch(:dedicated_pricings_only)
     end
   end
 end

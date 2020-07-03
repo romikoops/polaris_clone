@@ -5,7 +5,7 @@ require 'cargo'
 require 'quotations'
 require 'routing'
 require 'sequential'
-require 'tenants'
+require 'organizations'
 
 require 'aasm'
 require 'money-rails'

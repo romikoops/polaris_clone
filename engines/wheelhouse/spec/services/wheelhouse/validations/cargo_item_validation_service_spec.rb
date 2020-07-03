@@ -4,16 +4,18 @@ require 'rails_helper'
 
 RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
   before do
-    FactoryBot.create(:legacy_max_dimensions_bundle, tenant: tenant, mode_of_transport: 'ocean', volume: 1000)
+    FactoryBot.create(:legacy_max_dimensions_bundle,
+      organization: organization,
+      mode_of_transport: 'ocean',
+      volume: 1000
+    )
   end
 
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, with_profile: true) }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, tenant: tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
   let(:result) do
     described_class.errors(
-      tenant: tenants_tenant,
+      organization: organization,
       cargo: cargo,
       modes_of_transport: modes_of_transport,
       tenant_vehicle_ids: tenant_vehicle_ids,
@@ -23,13 +25,13 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
   let(:final) { false }
   let(:modes_of_transport) { ['ocean'] }
   let(:tenant_vehicle_ids) { [tenant_vehicle.id] }
-  let(:cargo) { FactoryBot.build(:cargo_cargo, tenant: tenants_tenant, units: cargos) }
+  let(:cargo) { FactoryBot.build(:cargo_cargo, organization: organization, units: cargos) }
 
   describe '.perform' do
     context 'when the object is complete and valid' do
       let(:cargos) do
         [FactoryBot.build(:lcl_unit,
-                          tenant: tenants_tenant,
+                          organization: organization,
                           id: SecureRandom.uuid,
                           quantity: 1,
                           width_value: 1.2,
@@ -47,7 +49,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
     context 'when the object is incomplete and valid' do
       let(:cargos) do
         [FactoryBot.build(:lcl_unit,
-                          tenant: tenants_tenant,
+                          organization: organization,
                           id: SecureRandom.uuid,
                           quantity: 1,
                           width_value: 1.2,
@@ -65,7 +67,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
     context 'when the object is incomplete and valid (final)' do
       let(:cargos) do
         [FactoryBot.build(:lcl_unit,
-                          tenant: tenants_tenant,
+                          organization: organization,
                           id: SecureRandom.uuid,
                           quantity: 0,
                           width_value: 1.2,
@@ -96,7 +98,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
     context 'when the object is invalid (negative values)' do
       let(:cargos) do
         [FactoryBot.build(:lcl_unit,
-                          tenant: tenants_tenant,
+                          organization: organization,
                           id: SecureRandom.uuid,
                           quantity: 1,
                           width_value: -1.2,
@@ -129,7 +131,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
     context 'when the object is complete and all attrs are invalid' do
       let(:cargos) do
         [FactoryBot.build(:lcl_unit,
-                          tenant: tenants_tenant,
+                          organization: organization,
                           id: SecureRandom.uuid,
                           quantity: 1,
                           width_value: 12,
@@ -162,7 +164,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
     context 'when the object is incomplete and invalid' do
       let(:cargos) do
         [FactoryBot.build(:lcl_unit,
-                          tenant: tenants_tenant,
+                          organization: organization,
                           id: SecureRandom.uuid,
                           quantity: 1,
                           width_value: 12,
@@ -186,7 +188,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
       before do
         FactoryBot.create(:legacy_max_dimensions_bundle,
                           aggregate: true,
-                          tenant: tenant,
+                          organization: organization,
                           mode_of_transport: 'ocean',
                           tenant_vehicle: tenant_vehicle,
                           chargeable_weight: 500)
@@ -195,7 +197,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
       let(:cargos) do
         [
           FactoryBot.build(:lcl_unit,
-                           tenant: tenants_tenant,
+                           organization: organization,
                            id: SecureRandom.uuid,
                            quantity: 1,
                            width_value: 1,
@@ -203,7 +205,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
                            height_value: 1,
                            weight_value: 120),
           FactoryBot.build(:lcl_unit,
-                           tenant: tenants_tenant,
+                           organization: organization,
                            id: SecureRandom.uuid,
                            quantity: 1,
                            width_value: 1,
@@ -231,7 +233,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
       before do
         FactoryBot.create(:legacy_max_dimensions_bundle,
                           aggregate: true,
-                          tenant: tenant,
+                          organization: organization,
                           mode_of_transport: 'ocean',
                           tenant_vehicle: tenant_vehicle,
                           payload_in_kg: 500)
@@ -240,7 +242,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
       let(:cargos) do
         [
           FactoryBot.build(:lcl_unit,
-                           tenant: tenants_tenant,
+                           organization: organization,
                            id: SecureRandom.uuid,
                            quantity: 1,
                            width_value: 1,
@@ -248,7 +250,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
                            height_value: 1,
                            weight_value: 1.2),
           FactoryBot.build(:lcl_unit,
-                           tenant: tenants_tenant,
+                           organization: organization,
                            id: SecureRandom.uuid,
                            quantity: 1,
                            width_value: 1,
@@ -276,7 +278,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
       before do
         FactoryBot.create(:legacy_max_dimensions_bundle,
                           aggregate: true,
-                          tenant: tenant,
+                          organization: organization,
                           mode_of_transport: 'ocean',
                           tenant_vehicle: tenant_vehicle,
                           volume: 15)
@@ -285,7 +287,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
       let(:cargos) do
         [
           FactoryBot.build(:lcl_unit,
-                           tenant: tenants_tenant,
+                           organization: organization,
                            id: SecureRandom.uuid,
                            quantity: 1,
                            width_value: 5,
@@ -293,7 +295,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
                            height_value: 1,
                            weight_value: 1.2),
           FactoryBot.build(:lcl_unit,
-                           tenant: tenants_tenant,
+                           organization: organization,
                            id: SecureRandom.uuid,
                            quantity: 1,
                            width_value: 5,
@@ -321,17 +323,19 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
     context 'when the cargos are invalid for one of two mots' do
       before do
         FactoryBot.create(:legacy_max_dimensions_bundle,
-                          tenant: tenant,
+                          organization: organization,
                           mode_of_transport: 'air',
                           tenant_vehicle: tenant_vehicle,
                           payload_in_kg: 500)
+        FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
+        FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
       end
 
       let(:modes_of_transport) { %w[air ocean] }
       let(:cargos) do
         [
           FactoryBot.build(:lcl_unit,
-                           tenant: tenants_tenant,
+                           organization: organization,
                            id: SecureRandom.uuid,
                            quantity: 1,
                            width_value: 1,
@@ -339,7 +343,7 @@ RSpec.describe Wheelhouse::Validations::CargoItemValidationService do
                            height_value: 1,
                            weight_value: 120),
           FactoryBot.build(:lcl_unit,
-                           tenant: tenants_tenant,
+                           organization: organization,
                            id: SecureRandom.uuid,
                            quantity: 1,
                            width_value: 1,

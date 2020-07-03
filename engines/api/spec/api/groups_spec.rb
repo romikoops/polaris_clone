@@ -3,23 +3,24 @@
 require "swagger_helper"
 
 RSpec.describe "Groups" do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.find_by(legacy: legacy_tenant) }
-
-  let(:user) { FactoryBot.create(:tenants_user, tenant: tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:organization_id) { organization.id }
+  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   before do
-    FactoryBot.create_list(:tenants_group, 5, tenant: tenant)
+    FactoryBot.create_list(:groups_group, 5, organization: organization)
   end
 
-  path "/v1/groups" do
+  path "/v1/organizations/{organization_id}/groups" do
     get "Fetch all groups" do
       tags "Groups"
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
 
       response "200", "successful operation" do
         schema type: :object,

@@ -2,8 +2,7 @@
 
 require 'scientist'
 class TruckingAvailabilityController < ApplicationController
-  skip_before_action :require_authentication!
-  skip_before_action :require_non_guest_authentication!
+  skip_before_action :doorkeeper_authorize!
 
   def index
     @base_pricing_enabled = current_scope.fetch(:base_pricing)
@@ -36,7 +35,7 @@ class TruckingAvailabilityController < ApplicationController
 
   def find_trucking_pricings
     args = {
-      tenant_id: params[:tenant_id],
+      organization_id: params[:organization_id],
       load_type: params[:load_type],
       address: Address.new(latitude: params[:lat], longitude: params[:lng]).reverse_geocode,
       hub_ids: params[:hub_ids].split(',').map(&:to_i),

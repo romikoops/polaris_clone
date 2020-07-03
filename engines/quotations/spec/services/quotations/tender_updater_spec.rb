@@ -6,7 +6,7 @@ RSpec.describe Quotations::TenderUpdater do
   describe '#perform' do
     let(:tender) { FactoryBot.create(:quotations_tender) }
     let(:charge_breakdown) { FactoryBot.create(:legacy_charge_breakdown, tender_id: tender.id) }
-    let(:tenant) { FactoryBot.create(:legacy_tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:level_3_charge) { charge_breakdown.charges.find_by(detail_level: 3) }
 
     context 'when the charge is of detail level 0' do
@@ -143,7 +143,7 @@ RSpec.describe Quotations::TenderUpdater do
     context 'when there are two charges of the same charge category' do
       let(:container_1) { FactoryBot.build(:fcl_40_container) }
       let(:container_2) { FactoryBot.build(:fcl_20_container) }
-      let(:shipment) { FactoryBot.create(:legacy_shipment, with_tenders: true, tenant: tenant, with_breakdown: true, containers: [container_1, container_2]) }
+      let(:shipment) { FactoryBot.create(:legacy_shipment, with_tenders: true, organization: organization, with_breakdown: true, containers: [container_1, container_2]) }
       let(:breakdown) { shipment.charge_breakdowns.first }
       let(:tender) { breakdown.tender }
       let(:line_item) { tender.line_items.find_by(cargo: container_1) }
@@ -230,7 +230,7 @@ RSpec.describe Quotations::TenderUpdater do
                             section: level_3_charge.parent.charge_category.code)
       end
 
-      let(:invalid_charge_category) { FactoryBot.create(:legacy_charge_categories, tenant: tenant, code: 'included_baf') }
+      let(:invalid_charge_category) { FactoryBot.create(:legacy_charge_categories, organization: organization, code: 'included_baf') }
       let(:line_item) do
         FactoryBot.create(:quotations_line_item,
                           tender: tender,

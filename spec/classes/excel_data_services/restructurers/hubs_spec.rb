@@ -46,10 +46,10 @@ RSpec.describe ExcelDataServices::Restructurers::Hubs do
      alternative_names: nil,
      row_nr: 3 }] }
     end
-    let(:tenant) { create(:tenant) }
+    let(:organization) { create(:organizations_organization) }
 
     it 'extracts the row data from the sheet hash' do
-      result = described_class.restructure(tenant: tenant, data: data)
+      result = described_class.restructure(organization: organization, data: data)
       expect(result['Hubs'].map { |hub| hub.dig(:nexus, :locode).upcase }).to eq(result['Hubs'].map { |hub| hub.dig(:nexus, :locode) })
       expect(result['Hubs'].map { |hub| hub.dig(:hub, :hub_type).downcase }).to eq(result['Hubs'].map { |hub| hub.dig(:hub, :hub_type) })
       expect(result['Hubs'].map { |hub| hub.dig(:address, :latitude) }).to match_array([24.806936, -34.9284989])
@@ -59,10 +59,10 @@ RSpec.describe ExcelDataServices::Restructurers::Hubs do
 
     context 'with missing lat lng values' do
       let(:data) { FactoryBot.build(:excel_data_parsed, :hubs_missing_lat_lon).first }
-      let(:expected_result) { FactoryBot.build(:excel_data_restructured, :restructured_hubs_data, tenant: tenant) }
+      let(:expected_result) { FactoryBot.build(:excel_data_restructured, :restructured_hubs_data, organization: organization) }
 
       it 'extracts the row data from the sheet hash' do
-        result = described_class.restructure(tenant: tenant, data: data)
+        result = described_class.restructure(organization: organization, data: data)
         target = expected_result.find { |hub| hub.dig(:hub, :name) == data.dig(:rows_data).first[:name] }
         expect(result['Hubs'].first[:address]).to eq(target[:address])
       end
@@ -79,10 +79,10 @@ RSpec.describe ExcelDataServices::Restructurers::Hubs do
       end
 
       let(:data) { FactoryBot.build(:excel_data_parsed, :hubs_missing_address).first }
-      let(:expected_result) { FactoryBot.build(:excel_data_restructured, :restructured_hubs_data, tenant: tenant) }
+      let(:expected_result) { FactoryBot.build(:excel_data_restructured, :restructured_hubs_data, organization: organization) }
 
       it 'extracts the row data from the sheet hash' do
-        result = described_class.restructure(tenant: tenant, data: data)
+        result = described_class.restructure(organization: organization, data: data)
         target = expected_result.find { |hub| hub.dig(:hub, :name) == data.dig(:rows_data).first[:name] }
         expect(result['Hubs'].first[:address]).to eq(target[:address])
       end

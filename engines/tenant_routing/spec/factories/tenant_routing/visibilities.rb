@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :tenant_routing_visibility, class: 'TenantRouting::Visibility' do
-    association :target, factory: :tenants_tenant
+    association :target, factory: :organizations_organization
     association :connection, factory: :tenant_routing_connection
   end
 end

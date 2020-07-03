@@ -5,9 +5,9 @@ require 'rails_helper'
 module Pricings
   RSpec.describe Fee, type: :model do
     context 'instance methods' do
-      let(:tenant) { FactoryBot.create(:legacy_tenant) }
-      let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-      let!(:pricing) { FactoryBot.create(:pricings_pricing) }
+      let!(:organization) { FactoryBot.create(:organizations_organization) }
+      let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+      let!(:pricing) { FactoryBot.create(:pricings_pricing, organization: organization, itinerary: itinerary) }
       let!(:fee) { FactoryBot.create(:fee_per_wm, pricing: pricing) }
 
       describe '.to_fee_hash' do
@@ -48,6 +48,7 @@ end
 #  currency_id        :bigint
 #  hw_rate_basis_id   :uuid
 #  legacy_id          :integer
+#  organization_id    :uuid
 #  pricing_id         :uuid
 #  rate_basis_id      :uuid
 #  sandbox_id         :uuid
@@ -55,7 +56,12 @@ end
 #
 # Indexes
 #
-#  index_pricings_fees_on_pricing_id  (pricing_id)
-#  index_pricings_fees_on_sandbox_id  (sandbox_id)
-#  index_pricings_fees_on_tenant_id   (tenant_id)
+#  index_pricings_fees_on_organization_id  (organization_id)
+#  index_pricings_fees_on_pricing_id       (pricing_id)
+#  index_pricings_fees_on_sandbox_id       (sandbox_id)
+#  index_pricings_fees_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

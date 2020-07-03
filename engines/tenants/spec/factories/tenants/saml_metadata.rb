@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :tenants_saml_metadatum, class: 'Tenants::SamlMetadatum' do
-    association :tenant, factory: :tenants_tenant
+    association :organization, factory: :organizations_organization
     content do
       <<-METADATA
       <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -44,13 +44,19 @@ end
 #
 # Table name: tenants_saml_metadata
 #
-#  id         :uuid             not null, primary key
-#  content    :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  tenant_id  :uuid
+#  id              :uuid             not null, primary key
+#  content         :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  organization_id :uuid
+#  tenant_id       :uuid
 #
 # Indexes
 #
-#  index_tenants_saml_metadata_on_tenant_id  (tenant_id)
+#  index_tenants_saml_metadata_on_organization_id  (organization_id)
+#  index_tenants_saml_metadata_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

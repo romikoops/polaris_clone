@@ -3,19 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::RouteFilter do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
   let(:carrier) { FactoryBot.create(:legacy_carrier) }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier, tenant: tenant) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier, organization: organization) }
   let(:shipment) do
     FactoryBot.create(:legacy_shipment,
                       load_type: 'cargo_item',
                       user: user,
-                      tenant: tenant)
+                      organization: organization)
   end
   let(:routes) do
     [
@@ -31,10 +30,15 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
   end
 
   before do
-    FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:fcl_40_pricing, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant)
+    ::Organizations.current_id = organization.id
+
+    FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
+    FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
+
+    FactoryBot.create(:lcl_pricing, itinerary: itinerary, organization: organization)
+    FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, organization: organization)
+    FactoryBot.create(:fcl_40_pricing, itinerary: itinerary, organization: organization)
+    FactoryBot.create(:fcl_40_hq_pricing, itinerary: itinerary, organization: organization)
   end
 
   describe '.perform', :vcr do
@@ -86,7 +90,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
                           tenant_vehicle_id: tenant_vehicle.id,
                           carrier_id: carrier.id,
                           mode_of_transport: 'ocean',
-                          tenant: tenant)
+                          organization: organization)
       end
 
       it 'returns the valid routes' do
@@ -116,7 +120,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
                           tenant_vehicle_id: nil,
                           carrier_id: carrier.id,
                           mode_of_transport: 'ocean',
-                          tenant: tenant)
+                          organization: organization)
       end
 
       it 'returns the valid routes' do
@@ -147,7 +151,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
                           carrier_id: nil,
                           itinerary_id: itinerary.id,
                           mode_of_transport: 'ocean',
-                          tenant: tenant)
+                          organization: organization)
       end
 
       it 'returns the valid routes' do
@@ -169,7 +173,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
     end
 
     context 'when non aggregate and mot ' do
-      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: false, mode_of_transport: route.mode_of_transport) }
+      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, organization: shipment.organization, aggregate: false, mode_of_transport: route.mode_of_transport) }
 
       it 'finds the corrrect max dimension for the mot' do
         expect(klass.send(:target_max_dimension, route: routes.first, aggregate: false, cargo_class: 'lcl')).to eq(target_mdb)
@@ -177,7 +181,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
     end
 
     context 'when  aggregate and mot ' do
-      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: true, mode_of_transport: route.mode_of_transport) }
+      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, organization: shipment.organization, aggregate: true, mode_of_transport: route.mode_of_transport) }
 
       it 'finds the corrrect max dimension for the mot' do
         expect(klass.send(:target_max_dimension, route: routes.first, aggregate: true, cargo_class: 'lcl')).to eq(target_mdb)
@@ -185,7 +189,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
     end
 
     context 'when aggregate, mot and tenant_vehicle_id' do
-      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: true, mode_of_transport: route.mode_of_transport, tenant_vehicle_id: route.tenant_vehicle_id) }
+      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, organization: shipment.organization, aggregate: true, mode_of_transport: route.mode_of_transport, tenant_vehicle_id: route.tenant_vehicle_id) }
 
       it 'finds the corrrect max dimension for the mot' do
         expect(klass.send(:target_max_dimension, route: routes.first, aggregate: true, cargo_class: 'lcl')).to eq(target_mdb)
@@ -193,7 +197,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
     end
 
     context 'when non aggregate, mot and tenant_vehicle_id' do
-      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, tenant: shipment.tenant, aggregate: false, mode_of_transport: route.mode_of_transport, tenant_vehicle_id: route.tenant_vehicle_id) }
+      let!(:target_mdb) { FactoryBot.create(:legacy_max_dimensions_bundle, organization: shipment.organization, aggregate: false, mode_of_transport: route.mode_of_transport, tenant_vehicle_id: route.tenant_vehicle_id) }
 
       it 'finds the corrrect max dimension for the mot' do
         expect(klass.send(:target_max_dimension, route: routes.first, aggregate: false, cargo_class: 'lcl')).to eq(target_mdb)

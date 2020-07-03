@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Inserters::Employees do
-  let(:tenant) { FactoryBot.create(:tenant) }
-  let(:options) { { tenant: tenant, data: input_data, options: {} } }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:options) { { organization: organization, data: input_data, options: {} } }
   let(:input_data) do
     [{
       first_name: 'Test',
@@ -15,12 +15,15 @@ RSpec.describe ExcelDataServices::Inserters::Employees do
     }]
   end
 
-  before { FactoryBot.create(:role) }
+  before do
+    FactoryBot.create(:organizations_theme, organization: organization)
+    FactoryBot.create(:role)
+  end
 
   describe '.insert' do
     it 'inserts correctly and returns correct stats' do
       stats = described_class.insert(options)
-      expect(stats[:'tenants/users'][:number_created]).to eq(1)
+      expect(stats[:'organizations/users'][:number_created]).to eq(1)
     end
   end
 end

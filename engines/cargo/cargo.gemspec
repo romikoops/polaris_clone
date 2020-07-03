@@ -10,16 +10,17 @@ Gem::Specification.new do |s|
   s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'Provides information of Cargo.'
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   # External Gems
   s.add_dependency 'measured-rails'
+  s.add_dependency 'money-rails'
 
   # Internal Engines
   s.add_dependency 'imc-core'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
 
   Gemhelper.common(s)
 end

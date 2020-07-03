@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::InsertableChecks::ScheduleGenerator do
-  let(:tenant) { create(:tenant) }
-  let(:options) { { tenant: tenant, sheet_name: 'Sheet1', data: input_data } }
+  let(:organization) { create(:organizations_organization) }
+  let(:options) { { organization: organization, sheet_name: 'Sheet1', data: input_data } }
 
   before do
-    FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant)
+    FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization)
     FactoryBot.create(:legacy_carrier, code: 'msc', name: 'MSC')
   end
 
@@ -32,7 +32,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::ScheduleGenerato
           row_nr: 3,
           mode_of_transport: 'ocean',
           ordinals: [4] }
-      ].map { |data| ExcelDataServices::Rows::ScheduleGenerator.new(row_data: data, tenant: tenant) }
+      ].map { |data| ExcelDataServices::Rows::ScheduleGenerator.new(row_data: data, organization: organization) }
     end
 
     describe '.validate' do

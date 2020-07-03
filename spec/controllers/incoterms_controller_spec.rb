@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe IncotermsController, type: :controller do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
 
   describe 'GET #index' do
     it 'returns an http status of success' do
-      get :index, params: { tenant_id: tenant.id }
+      get :index, params: { organization_id: organization.id }
       expect(response).to have_http_status(:success)
     end
   end

@@ -3,14 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::InsertableChecks::LocalCharges do
-  let(:tenant) { create(:tenant) }
-  let(:options) { { tenant: tenant, sheet_name: 'Sheet1', data: input_data } }
-  let!(:hubs) { [create(:hub, name: 'Bremerhaven Port', tenant: tenant)] }
+  let(:organization) { create(:organizations_organization) }
+  let(:options) { { organization: organization, sheet_name: 'Sheet1', data: input_data } }
+  let!(:hubs) { [create(:hub, name: 'Bremerhaven', organization: organization)] }
   let!(:local_charges) do
     [
       create(
         :local_charge,
-        tenant: tenant,
+        organization: organization,
         hub: hubs.first,
         tenant_vehicle: tenant_vehicle,
         mode_of_transport: 'ocean',
@@ -39,7 +39,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::LocalCharges do
            ],
            tenant_vehicles: [tenant_vehicle])
   end
-  let(:tenant_vehicle) { create(:tenant_vehicle, tenant: tenant) }
+  let(:tenant_vehicle) { create(:tenant_vehicle, organization: organization) }
 
   context 'with faulty data' do
     let(:input_data) { build(:excel_data_restructured_faulty_local_charges) }

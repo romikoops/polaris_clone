@@ -20,15 +20,15 @@ RSpec.describe ExcelDataServices::Inserters::ChargeCategories do
        { internal_code: nil, fee_code: 'THC', fee_name: 'Container Service Charges', row_nr: 14 },
        { internal_code: nil, fee_code: 'IMPORT', fee_name: 'Destination Local Charges', row_nr: 15 }]
     end
-    let(:tenant) { create(:tenant) }
+    let(:organization) { create(:organizations_organization) }
 
     context 'when no charge categories exist' do
       it 'creates the correct number of charge categories' do
-        stats = described_class.insert(tenant: tenant, data: data, options: {})
+        stats = described_class.insert(organization: organization, data: data, options: {})
         aggregate_failures do
           expect(stats.dig('legacy/charge_categories'.to_sym, :number_created)).to be(14)
-          expect(Legacy::ChargeCategory.where(tenant_id: tenant.id).count).to be(14)
-          expect(Legacy::ChargeCategory.find_by(tenant_id: tenant.id, code: 'export').name).to eq('Origin Local Charges')
+          expect(Legacy::ChargeCategory.where(organization_id: organization.id).count).to be(14)
+          expect(Legacy::ChargeCategory.find_by(organization_id: organization.id, code: 'export').name).to eq('Origin Local Charges')
         end
       end
     end
@@ -41,25 +41,25 @@ RSpec.describe ExcelDataServices::Inserters::ChargeCategories do
             charge_category: create(:charge_category,
                                     code: 'ams',
                                     name: 'test',
-                                    tenant_id: tenant.id),
+                                    organization_id: organization.id),
             children_charge_category: create(:charge_category,
                                              code: 'thc',
                                              name: 'test',
-                                             tenant_id: tenant.id)
+                                             organization_id: organization.id)
           )
         ]
       end
-      let(:new_ams_charge) { Legacy::ChargeCategory.find_by(code: 'ams', tenant_id: tenant.id) }
-      let(:new_thc_charge) { Legacy::ChargeCategory.find_by(code: 'thc', tenant_id: tenant.id) }
+      let(:new_ams_charge) { Legacy::ChargeCategory.find_by(code: 'ams', organization_id: organization.id) }
+      let(:new_thc_charge) { Legacy::ChargeCategory.find_by(code: 'thc', organization_id: organization.id) }
       let(:charge_ids) { existing_charges.map(&:id) }
       let(:charges) { Legacy::Charge.where(id: charge_ids) }
 
       it 'finds and replaces all other Charge Categories for that tenant' do
-        stats = described_class.insert(tenant: tenant, data: data, options: {})
+        stats = described_class.insert(organization: organization, data: data, options: {})
         aggregate_failures do
           expect(stats.dig('legacy/charge_categories'.to_sym, :number_created)).to be(12)
-          expect(Legacy::ChargeCategory.where(code: 'ams', tenant_id: tenant.id).count).to eq(1)
-          expect(Legacy::ChargeCategory.where(code: 'thc', tenant_id: tenant.id).count).to eq(1)
+          expect(Legacy::ChargeCategory.where(code: 'ams', organization_id: organization.id).count).to eq(1)
+          expect(Legacy::ChargeCategory.where(code: 'thc', organization_id: organization.id).count).to eq(1)
           expect(charges.pluck(:charge_category_id).uniq).to eq([new_ams_charge.id])
           expect(charges.pluck(:children_charge_category_id).uniq).to eq([new_thc_charge.id])
         end

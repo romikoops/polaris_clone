@@ -243,10 +243,10 @@ export class AdminPriceCreator extends Component {
     const clientTag = client.value !== 'OPEN' ? `_${client.value.id}` : ''
     const pricingId = `${hubRoute.value.origin_stop_id}_${hubRoute.value.destination_stop_id}_${
       transportCategory.value.id
-    }_${route.value.tenant_id}_${cargoClass.value}${clientTag}`
+    }_${route.value.organization_id}_${cargoClass.value}${clientTag}`
     pricing.hub_route_id = hubRoute.value.id
     pricing.itinerary_id = route.value.id
-    pricing.tenant_id = route.value.tenant_id
+    pricing.organization_id = route.value.organization_id
     pricing.transport_category_id = transportCategory.value.id
     this.props.adminDispatch.updatePricing(pricingId, pricing)
     this.props.closeForm()

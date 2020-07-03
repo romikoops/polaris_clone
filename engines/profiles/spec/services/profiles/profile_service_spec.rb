@@ -4,13 +4,13 @@ require 'rails_helper'
 
 RSpec.describe Profiles::ProfileService do
   let(:profile) { FactoryBot.build(:profiles_profile) }
-  let(:user_double) { instance_double('user') }
+  let(:user) { FactoryBot.create(:organizations_user) }
 
   describe '.create_or_update_profile' do
     context 'when creating profiles' do
       let(:attributes) do
         {
-          user: user_double,
+          user: user,
           first_name: 'Test',
           last_name: 'User',
           company_name: 'ItsMyCargo',
@@ -19,7 +19,6 @@ RSpec.describe Profiles::ProfileService do
       end
 
       it 'creates a new profile as specified' do
-        allow(user_double).to receive(:id).and_return(nil)
         expect { described_class.create_or_update_profile(**attributes) }.to(change { Profiles::Profile.count })
       end
     end

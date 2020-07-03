@@ -3,12 +3,11 @@
 module RmsExport
   module Excel
     class Base
-      def initialize(tenant_id:, sheet_type:, options: {})
+      def initialize(organization_id:, sheet_type:, options: {})
         @sheet_type = sheet_type
-        @tenant = Tenants::Tenant.find_by(id: tenant_id)
-        @legacy_tenant = Tenants::Tenant.find_by(id: tenant_id)
-        @scope = ::Tenants::ScopeService.new(tenant: @tenant).fetch
-        file_name = options[:file_name] || "#{@tenant.subdomain}_#{sheet_type}.xlsx"
+        @organization = Organizations::Organization.find_by(id: organization_id)
+        @scope = ::OrganizationManager::ScopeService.new(organization: @organization).fetch
+        file_name = options[:file_name] || "#{@organization.slug}_#{sheet_type}.xlsx"
         @file_name = file_name.remove(/.xlsx$/) + '.xlsx'
         @xlsx = nil
         @sandbox = options[:sandbox]
@@ -19,7 +18,7 @@ module RmsExport
       end
 
       def load_book
-        @book = RmsData::Book.find_by(tenant: @tenant, sheet_type: sheet_type)
+        @book = RmsData::Book.find_by(organization: @organization, sheet_type: sheet_type)
       end
 
       def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -44,7 +43,7 @@ module RmsExport
         Legacy::File.create!(
           text: file_name,
           doc_type: sheet_type,
-          tenant: tenant.legacy,
+          organization: @organization,
           file: {
             io: File.open(tempfile.path),
             filename: file_name,

@@ -2,8 +2,8 @@
 
 class WelcomeMailerPreview < ActionMailer::Preview
   def welcome_email
-    @tenant = Tenant.find_by(subdomain: 'normanglobal')
-    @user = @tenant.users.shipper.last
+    @org = Organizations::Organization.find_by(slug: 'normanglobal')
+    @user = Organizations::User.unscoped.where(organization: @org).last
     WelcomeMailer.welcome_email(@user)
   end
 end

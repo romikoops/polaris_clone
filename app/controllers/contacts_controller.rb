@@ -59,7 +59,7 @@ class ContactsController < ApplicationController
     edited_contact_address[:country] = Country.geo_find_by_name(update_data['country'])
     loc.update_attributes(edited_contact_address)
     edited_contact_data[:address_id] = loc.id
-    edited_contact_data[:user_id] = current_user.id
+    edited_contact_data[:user_id] = organization_user.id
     contact.update_attributes(edited_contact_data)
     contact.save!
     response_handler(contact.as_options_json)
@@ -108,31 +108,16 @@ class ContactsController < ApplicationController
   end
 
   def create
-    contact_data = JSON.parse(params[:new_contact])
-    ncd = {}
-    ncl = {}
-    ncd[:first_name] = contact_data['firstName']
-    ncd[:last_name] = contact_data['lastName']
-    ncd[:company_name] = contact_data['companyName']
-    ncd[:phone] = contact_data['phone']
-    ncd[:email] = contact_data['email']
-    ncd[:sandbox] = @sandbox
+    contact = Contact.new(create_contact_params)
+    contact.address = Address.create!(create_contact_address_params)
 
-    ncl[:street_number] = contact_data['number'] || contact_data['streetNumber']
-    ncl[:street] = contact_data['street']
-    ncl[:city] = contact_data['city']
-    ncl[:zip_code] = contact_data['zipCode']
-    ncl[:sandbox] = @sandbox
-    ncl[:country] = Country.find_by_name(contact_data['country'])
+    contact.save!
 
-    new_loc = Address.create!(ncl)
-    ncd[:address_id] = new_loc.id
-    contact = current_user.contacts.create!(ncd)
     response_handler(contact.as_options_json)
   end
 
   def is_valid
-    valid = !current_user.contacts.where(email: params[:email], sandbox: @sandbox).empty?
+    valid = !Contact.where(user: organization_user, email: params[:email], sandbox: @sandbox).empty?
     response_handler(email: valid)
   end
 
@@ -147,7 +132,7 @@ class ContactsController < ApplicationController
   end
 
   def contacts
-    @contacts ||= current_user.contacts.where(sandbox: @sandbox).order(updated_at: :desc)
+    @contacts ||= Contact.where(user: organization_user, sandbox: @sandbox).order(updated_at: :desc)
   end
 
   def pagination_options
@@ -165,5 +150,31 @@ class ContactsController < ApplicationController
 
   def current_page
     params[:page]&.to_i || 1
+  end
+
+  def contact_params
+    JSON.parse(params[:new_contact])
+  end
+
+  def create_contact_params
+    {
+      first_name: contact_params['firstName'],
+      last_name: contact_params['lastName'],
+      company_name: contact_params['companyName'],
+      phone: contact_params['phone'],
+      email: contact_params['email'],
+      user: organization_user
+    }
+  end
+
+  def create_contact_address_params
+    {
+      street_number: contact_params['number'] || contact_params['streetNumber'],
+      street: contact_params['street'],
+      city: contact_params['city'],
+      zip_code: contact_params['zipCode'],
+      sandbox: @sandbox,
+      country: Country.find_by_name(contact_params['country'])
+    }
   end
 end

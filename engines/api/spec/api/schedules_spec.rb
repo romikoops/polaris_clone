@@ -3,12 +3,11 @@
 require "swagger_helper"
 
 RSpec.describe "Schedules" do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}, with_profile: true) }
-  let(:tenant_user) { Tenants::User.find_by(legacy_id: user.id) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:organization_id) { organization.id }
+  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:tender) {
     FactoryBot.create(:quotations_tender, itinerary: itinerary, tenant_vehicle: tenant_vehicle, load_type: "cargo_item")
   }
@@ -26,16 +25,17 @@ RSpec.describe "Schedules" do
         start_date: base_date,
         end_date: base_date + 30.days)
     end
-    FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
+    FactoryBot.create(:organizations_theme, organization: organization)
   end
 
-  path "/v1/quotations/{quotation_id}/schedules/{id}" do
+  path "/v1/organizations/{organization_id}/quotations/{quotation_id}/schedules/{id}" do
     get "Fetch available schedules" do
       tags "Quote"
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :quotation_id, in: :path, type: :string, schema: {type: :string}
       parameter name: :id, in: :path, type: :string, schema: {type: :string}
 
@@ -78,18 +78,18 @@ RSpec.describe "Schedules" do
     end
   end
 
-  path "/v1/itineraries/{id}/schedules/enabled" do
+  path "/v1/organizations/{organization_id}/itineraries/{id}/schedules/enabled" do
     get "Fetch status of schedules" do
       tags "Quote"
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :id, in: :path, type: :string, schema: {type: :string}
-      parameter name: :tenant_id, in: :query, type: :string, schema: {type: :string}
 
       let(:id) { itinerary.id }
-      let(:tenant_id) { tenants_tenant.id }
+      let(:organization_id) { organization.id }
 
       response "200", "successful operation" do
         schema type: :object,
@@ -110,13 +110,13 @@ RSpec.describe "Schedules" do
   end
 end
 
-#   get "/v1/itineraries/:id/schedules/enabled" do
-#     let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: tenant) }
+#   get "/v1/organizations/{organization_id}/itineraries/:id/schedules/enabled" do
+#     let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
 #     let(:request) { {id: itinerary.id} }
 #
 #     context "when tenant runs a quote shop" do
 #       before do
-#         FactoryBot.create(:tenants_scope, target: tenants_tenant, content: {closed_quotation_tool: true})
+#         FactoryBot.create(:tenants_scope, target: organization, content: {closed_quotation_tool: true})
 #       end
 #
 #       example "getting schedules enabled for a tenant" do

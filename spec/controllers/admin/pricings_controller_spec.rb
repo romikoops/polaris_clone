@@ -3,21 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe Admin::PricingsController, type: :controller do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
-  let(:json_response) { JSON.parse(response.body) }
+  let(:organization) { FactoryBot.create(:organizations_organization, slug: 'demo') }
+  let(:user) { FactoryBot.create(:users_user) }
   let(:itinerary) do
-    FactoryBot.create(:itinerary, tenant_id: tenant.id)
+    FactoryBot.create(:itinerary, organization_id: organization.id)
   end
+  let(:json_response) { JSON.parse(response.body) }
 
   before do
-    allow(controller).to receive(:require_authentication!).and_return(true)
-    allow(controller).to receive(:require_non_guest_authentication!).and_return(true)
-    allow(controller).to receive(:require_login_and_role_is_admin).and_return(true)
-    allow(controller).to receive(:current_tenant).at_least(:once).and_return(tenant)
-    allow(controller).to receive(:current_user).at_least(:once).and_return(user)
+    append_token_header
   end
 
   describe 'GET #route' do
@@ -27,8 +21,8 @@ RSpec.describe Admin::PricingsController, type: :controller do
 
     let!(:pricings) do
       [
-        FactoryBot.create(:pricings_pricing, tenant_id: tenant.id, itinerary_id: itinerary.id),
-        FactoryBot.create(:pricings_pricing, tenant_id: tenant.id,
+        FactoryBot.create(:pricings_pricing, organization_id: organization.id, itinerary_id: itinerary.id),
+        FactoryBot.create(:pricings_pricing, organization_id: organization.id,
                                              itinerary_id: itinerary.id,
                                              effective_date: DateTime.new(2019, 1, 1),
                                              expiration_date: DateTime.new(2019, 1, 31))
@@ -42,7 +36,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
           'group_id' => nil,
           'internal' => false,
           'itinerary_id' => itinerary.id,
-          'tenant_id' => tenant.id,
+          'organization_id' => organization.id,
           'tenant_vehicle_id' => pricings.first.tenant_vehicle_id,
           'wm_rate' => '0.0',
           'data' => {},
@@ -65,7 +59,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
           'itinerary_id' => itinerary.id,
           'sandbox_id' => nil,
           'updated_at' => first_stop.updated_at,
-          'hub' => { 'id' => first_stop.hub_id, 'name' => 'Gothenburg Port', 'nexus' => { 'id' => first_stop.hub.nexus.id, 'name' => 'Gothenburg' }, 'address' => { 'geocoded_address' => '438 80 Landvetter, Sweden', 'latitude' => 57.694253, 'longitude' => 11.854048 } } },
+          'hub' => { 'id' => first_stop.hub_id, 'name' => 'Gothenburg', 'nexus' => { 'id' => first_stop.hub.nexus.id, 'name' => 'Gothenburg' }, 'address' => { 'geocoded_address' => '438 80 Landvetter, Sweden', 'latitude' => 57.694253, 'longitude' => 11.854048 } } },
         { 'id' => second_stop.id,
           'created_at' => second_stop.created_at,
           'hub_id' => second_stop.hub_id,
@@ -73,7 +67,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
           'itinerary_id' => itinerary.id,
           'sandbox_id' => nil,
           'updated_at' => second_stop.updated_at,
-          'hub' => { 'id' => second_stop.hub_id, 'name' => 'Gothenburg Port', 'nexus' => { 'id' => second_stop.hub.nexus.id, 'name' => 'Gothenburg' }, 'address' => { 'geocoded_address' => '438 80 Landvetter, Sweden', 'latitude' => 57.694253, 'longitude' => 11.854048 } } }
+          'hub' => { 'id' => second_stop.hub_id, 'name' => 'Gothenburg', 'nexus' => { 'id' => second_stop.hub.nexus.id, 'name' => 'Gothenburg' }, 'address' => { 'geocoded_address' => '438 80 Landvetter, Sweden', 'latitude' => 57.694253, 'longitude' => 11.854048 } } }
       ]
 
       JSON.parse({ pricings: pricings_table_jsons,
@@ -82,7 +76,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
     end
 
     it 'returns the correct data for the route' do
-      get :route, params: { tenant_id: tenant.id, id: itinerary.id }
+      get :route, params: { organization_id: organization.id, id: itinerary.id }
       expect(JSON.parse(response.body)['data']).to eq(expected_response)
     end
   end
@@ -104,7 +98,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
       end
 
       it 'returns error with messages when an error is raised' do
-        post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), tenant_id: 1 }
+        post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id }
         aggregate_failures do
           expect(response).to have_http_status(:success)
           expect(json_response.dig('data', 'errors')).to eq(JSON.parse(errors_arr.to_json))
@@ -114,40 +108,40 @@ RSpec.describe Admin::PricingsController, type: :controller do
   end
 
   describe 'GET #download' do
-    let(:tenant) { create(:tenant) }
+    let(:organization) { create(:organizations_organization, slug: 'demo') }
     let(:hubs) do
       [
         create(:hub,
-               tenant: tenant,
-               name: 'Gothenburg Port',
+               organization: organization,
+               name: 'Gothenburg',
                hub_type: 'ocean',
                nexus: create(:nexus, name: 'Gothenburg')),
         create(:hub,
-               tenant: tenant,
-               name: 'Shanghai Port',
+               organization: organization,
+               name: 'Shanghai',
                hub_type: 'ocean',
                nexus: create(:nexus, name: 'Shanghai'))
       ]
     end
     let(:itinerary_with_stops) do
-      create(:itinerary, tenant: tenant,
+      create(:itinerary, organization: organization,
                          stops: [
                            build(:stop, itinerary_id: nil, index: 0, hub: hubs.first),
                            build(:stop, itinerary_id: nil, index: 1, hub: hubs.second)
                          ])
     end
     let(:tenant_vehicle) do
-      create(:tenant_vehicle, tenant: tenant)
+      create(:tenant_vehicle, organization: organization)
     end
 
     before do
-      create(:tenants_scope, target: Tenants::Tenant.find_by(legacy_id: tenant.id), content: { 'base_pricing' => true })
+      create(:organizations_scope, target: organization, content: { 'base_pricing' => true })
     end
 
     context 'when calculating cargo_item' do
       before do
         create(:lcl_pricing)
-        get :download, params: { tenant_id: tenant.id, options: { mot: 'ocean', load_type: 'cargo_item', group_id: nil } }
+        get :download, params: { organization_id: organization.id, options: { mot: 'ocean', load_type: 'cargo_item', group_id: nil } }
       end
 
       it 'returns error with messages when an error is raised' do
@@ -161,7 +155,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
     context 'when a container' do
       before do
         create(:fcl_20_pricing)
-        get :download, params: { tenant_id: tenant.id, options: { mot: 'ocean', load_type: 'container', group_id: nil } }
+        get :download, params: { organization_id: organization.id, options: { mot: 'ocean', load_type: 'container', group_id: nil } }
       end
 
       it 'returns error with messages when an error is raised' do
@@ -177,10 +171,10 @@ RSpec.describe Admin::PricingsController, type: :controller do
     context 'when base_pricing' do
       before do
         allow(controller).to receive(:current_scope).at_least(:once).and_return({ base_pricing: true }.with_indifferent_access)
-        delete :destroy, params: { 'id' => base_pricing.id, tenant_id: tenant.id }
+        delete :destroy, params: { 'id' => base_pricing.id, organization_id: organization.id }
       end
 
-      let(:base_pricing) { create(:pricings_pricing, tenant: tenant) }
+      let(:base_pricing) { create(:pricings_pricing, organization: organization) }
 
       it 'deletes the Pricings::Pricing' do
         aggregate_failures do
@@ -193,15 +187,15 @@ RSpec.describe Admin::PricingsController, type: :controller do
 
   describe 'GET #group' do
     let(:group) do
-      FactoryBot.create(:tenants_group, tenant: tenants_tenant).tap do |tapped_group|
-        FactoryBot.create(:tenants_membership, group: tapped_group, member: tenants_user)
+      FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
+        FactoryBot.create(:groups_membership, group: tapped_group, member: user)
       end
     end
     let!(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, group_id: group.id) }
 
     before do
-      FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
-      post :group, params: { id: group.id, tenant_id: tenant.id }
+      FactoryBot.create(:organizations_scope, target: organization, content: { base_pricing: true })
+      post :group, params: { id: group.id, organization_id: organization.id }
     end
 
     it 'returns an http status of success' do
@@ -211,6 +205,40 @@ RSpec.describe Admin::PricingsController, type: :controller do
     it 'returns the pricings for the group' do
       json = JSON.parse(response.body)
       expect(json.dig('data', 'pricings', 0, 'id')).to eq(pricing.id.to_s)
+    end
+  end
+
+  describe 'POST #disable' do
+    let(:pricing) { FactoryBot.create(:pricings_pricing, organization_id: organization.id, itinerary_id: itinerary.id) }
+
+    context "when enabling pricing" do
+      before do
+        pricing.update(internal: true)
+      end
+
+      it "toggles the internal state of the pricing to true" do
+        post :disable, params: {pricing_id: pricing.id, id: pricing.id, organization_id: organization.id, target_action: 'enable'}
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          pricing.reload
+          expect(pricing.internal).to eq(false)
+        end
+      end
+    end
+
+    context "when disabling pricing'" do
+      before do
+        pricing.update(internal: false)
+      end
+
+      it "toggles the internal state of the pricing to true" do
+        post :disable, params: {pricing_id: pricing.id, id: pricing.id, organization_id: organization.id, target_action: 'disable'}
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          pricing.reload
+          expect(pricing.internal).to eq(true)
+        end
+      end
     end
   end
 end

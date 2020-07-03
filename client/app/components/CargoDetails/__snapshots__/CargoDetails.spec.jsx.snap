@@ -1141,9 +1141,9 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -1186,7 +1186,7 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -1230,9 +1230,9 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -1275,7 +1275,7 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -2428,9 +2428,9 @@ exports[`customsData[target].unknown 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -2473,7 +2473,7 @@ exports[`customsData[target].unknown 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -2517,9 +2517,9 @@ exports[`customsData[target].unknown 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -2562,7 +2562,7 @@ exports[`customsData[target].unknown 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -4255,9 +4255,9 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -4300,7 +4300,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -4344,9 +4344,9 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -4389,7 +4389,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -5548,9 +5548,9 @@ exports[`shallow render 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -5593,7 +5593,7 @@ exports[`shallow render 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -5637,9 +5637,9 @@ exports[`shallow render 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -5682,7 +5682,7 @@ exports[`shallow render 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -6841,9 +6841,9 @@ exports[`shipment.has_pre_carriage ? 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -6886,7 +6886,7 @@ exports[`shipment.has_pre_carriage ? 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -6930,9 +6930,9 @@ exports[`shipment.has_pre_carriage ? 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -6975,7 +6975,7 @@ exports[`shipment.has_pre_carriage ? 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -8164,9 +8164,9 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -8209,7 +8209,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -8253,9 +8253,9 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -8298,7 +8298,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -9457,9 +9457,9 @@ exports[`state.customsView is true 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -9502,7 +9502,7 @@ exports[`state.customsView is true 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -9546,9 +9546,9 @@ exports[`state.customsView is true 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -9591,7 +9591,7 @@ exports[`state.customsView is true 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -10750,9 +10750,9 @@ exports[`state.insuranceView is false 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -10795,7 +10795,7 @@ exports[`state.insuranceView is false 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -10839,9 +10839,9 @@ exports[`state.insuranceView is false 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -10884,7 +10884,7 @@ exports[`state.insuranceView is false 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -12337,9 +12337,9 @@ exports[`state.showModal is true 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -12382,7 +12382,7 @@ exports[`state.showModal is true 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -12426,9 +12426,9 @@ exports[`state.showModal is true 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -12471,7 +12471,7 @@ exports[`state.showModal is true 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -13630,9 +13630,9 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -13675,7 +13675,7 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -13719,9 +13719,9 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -13764,7 +13764,7 @@ exports[`tenant.scope.customs_export_paper is false 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -14341,9 +14341,9 @@ exports[`tenant.scope.has_customs is false 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -14386,7 +14386,7 @@ exports[`tenant.scope.has_customs is false 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -15545,9 +15545,9 @@ exports[`tenant.scope.has_insurance is false 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -15590,7 +15590,7 @@ exports[`tenant.scope.has_insurance is false 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -16754,9 +16754,9 @@ exports[`totalGoodsValue.value > 20000 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -16799,7 +16799,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -16843,9 +16843,9 @@ exports[`totalGoodsValue.value > 20000 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -16888,7 +16888,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",

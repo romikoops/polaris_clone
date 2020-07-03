@@ -4,20 +4,20 @@ import { alertActions } from '.'
 
 function requestTenant (subdomain) {
   return {
-    type: tenantConstants.REQUEST_TENANT,
+    type: tenantConstants.REQUEST_ORGANIZATION,
     subdomain
   }
 }
 function logOut () {
   return {
-    type: tenantConstants.CLEAR_TENANT,
+    type: tenantConstants.CLEAR_ORGANIZATION,
     subdomain: ''
   }
 }
 
 function receiveTenant (subdomain, json) {
   return {
-    type: tenantConstants.RECEIVE_TENANT,
+    type: tenantConstants.RECEIVE_ORGANIZATION,
     subdomain,
     data: json,
     receivedAt: Date.now()

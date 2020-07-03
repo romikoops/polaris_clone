@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Restructurers::Schedules do
   describe '.restructure' do
-    let(:tenant) { create(:tenant) }
+    let(:organization) { create(:organizations_organization) }
     let(:data) do
       { sheet_name: 'Sheet1',
         data_restructurer_name: 'schedules',
@@ -43,7 +43,7 @@ RSpec.describe ExcelDataServices::Restructurers::Schedules do
 
 
     it 'extracts the row data from the sheet hash' do
-      result = described_class.restructure(tenant: tenant, data: data)
+      result = described_class.restructure(organization: organization, data: data)
       result = result['Schedules']
       expect(result.length).to be(2)
       expect(result.pluck(:carrier)).to match_array(['MSC', nil])

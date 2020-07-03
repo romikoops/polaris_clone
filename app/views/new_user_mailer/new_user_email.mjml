@@ -17,7 +17,7 @@
   <mj-section padding="20px 5%" background-color="#BDBDBD">
     <mj-column>
       <mj-text>
-        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.name}", style: "width: 150px; max-height: 150px;" %>
+        <%= image_tag attachments['logo.png'].url, alt: "#{@org_theme.name}", style: "width: 150px; max-height: 150px;" %>
       </mj-text>
     </mj-column>
     <mj-column>
@@ -47,7 +47,7 @@
 
       <mj-text line-height="24px">
         <p>
-          <%= @user_profile.full_name %> from <strong><%= @user_profile.company_name %></strong> has signed up for the <%= @tenant.name %> Online Shop: </br>
+          <%= @user_profile.full_name %> from <strong><%= @user_profile.company_name %></strong> has signed up for the <%= @org_theme.name %> Online Shop: </br>
           Go check them out!
         </p>
       </mj-text>

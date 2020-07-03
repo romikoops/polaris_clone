@@ -14,7 +14,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     shipments = target_shipments.order(updated_at: :desc).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      shipments: shipments.map(&:with_address_index_json),
+      shipments: decorate_shipments(shipments: shipments),
       num_shipment_pages: shipments.total_pages,
       target: params[:target],
       page: params[:page]
@@ -49,7 +49,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     shipments = results.sort_by(&:updated_at).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      shipments: shipments.map(&:with_address_index_json),
+      shipments: decorate_shipments(shipments: shipments),
       num_shipment_pages: shipments.total_pages,
       target: params[:target],
       page: params[:page]
@@ -62,13 +62,21 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def edit_service_price
     @shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
-    new_price = Price.new(price_params.merge(sandbox: @sandbox))
+    new_price = Legacy::Price.new(price_params.merge(sandbox: @sandbox))
     charge = edit_service_charge_breakdown.charge(params['charge_category'])
+    tender = edit_service_charge_breakdown.tender
+    tender.amount += (new_price.money - charge.price.money)
     charge.edited_price = new_price
 
     if charge.save
+      tender.save
       update_charge_parent(charge)
-      response_handler(@shipment.as_options_json)
+      response_handler(
+        Legacy::ShipmentDecorator.new(@shipment, context: {scope: current_scope})
+                                 .legacy_json(
+                                   offer_args: Pdf::HiddenValueService.new(user: organization_user).hide_total_args
+                                 )
+      )
     else
       response_handler(resp_error)
     end
@@ -93,7 +101,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, '_'),
         doc_type: params[:type],
         user: @shipment.user,
-        tenant: current_tenant,
+        organization: current_organization,
         file: params[:file],
         sandbox: @sandbox
       )
@@ -132,18 +140,13 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     return [] if metadatum.blank?
 
     metadatum.breakdowns.map do |breakdown|
-      url_id = if breakdown.target_type == 'Tenants::User'
-                 Tenants::User.find_by(id: breakdown.target_id).legacy_id
-               else
-                 breakdown.target_id
-               end
       breakdown.as_json
                .merge(
                  code: breakdown.code,
                  target_name: breakdown.target_name,
                  operator: breakdown.source&.operator,
                  margin_value: breakdown.source&.value,
-                 url_id: url_id
+                 url_id: breakdown.target_id
                )
                .with_indifferent_access
     end
@@ -180,11 +183,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         archived: a_shipments.total_pages
       }
       {
-        requested: r_shipments.map(&:with_address_index_json),
-        open: o_shipments.map(&:with_address_index_json),
-        finished: f_shipments.map(&:with_address_index_json),
-        rejected: rj_shipments.map(&:with_address_index_json),
-        archived: a_shipments.map(&:with_address_index_json),
+        requested: decorate_shipments(shipments: r_shipments),
+        open: decorate_shipments(shipments: o_shipments),
+        finished: decorate_shipments(shipments: f_shipments),
+        rejected: decorate_shipments(shipments: rj_shipments),
+        archived: decorate_shipments(shipments: a_shipments),
         pages: {
           open: params[:open_page],
           finished: params[:finished_page],
@@ -230,7 +233,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         quoted: quoted.total_pages
       }
       {
-        quoted: quoted.map(&:with_address_index_json),
+        quoted: decorate_shipments(shipments: quoted),
         pages: {
           quoted: params[:quoted_page]
         },
@@ -273,7 +276,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     case params[:shipment_action]
     when 'accept'
       @shipment.confirm!
-      ShippingTools.shipper_confirmation_email(@shipment.user, @shipment)
+      ShippingTools.new.shipper_confirmation_email(@shipment.user, @shipment)
       response_handler(@shipment.with_address_options_json)
     when 'decline'
       @shipment.decline!
@@ -363,28 +366,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def shipment_as_json
     hidden_args = Pdf::HiddenValueService.new(user: @shipment.user).admin_args
-    options = {
-      methods: %i[mode_of_transport cargo_count company_name client_name],
-      include: [
-        :destination_nexus,
-        :origin_nexus,
-        {
-          destination_hub: {
-            include: { address: { only: %i[geocoded_address latitude longitude] } }
-          }
-        },
-        {
-          origin_hub: {
-            include: { address: { only: %i[geocoded_address latitude longitude] } }
-          }
-        }
-      ]
-    }
-    @shipment.as_json(options).merge(
-      selected_offer: @shipment.selected_offer(hidden_args),
-      pickup_address: @shipment.pickup_address_with_country,
-      delivery_address: @shipment.delivery_address_with_country
-    )
+    Legacy::ShipmentDecorator.new(@shipment, context: {scope: current_scope}).legacy_address_json(offer_args: hidden_args)
   end
 
   def addresses
@@ -398,9 +380,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @options ||= {
       methods: %i[selected_offer mode_of_transport],
       include: [{ destination_nexus: {} },
-                { origin_nexus: {} },
-                { destination_hub: {} },
-                { origin_hub: {} }]
+                { origin_nexus: {} }]
     }
   end
 
@@ -461,10 +441,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def tenant_shipments
-    @tenant_shipments ||= Shipment.where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
-                                  .joins(:user).where(users: { deleted_at: nil })
-
-    current_user.internal ? @tenant_shipments : @tenant_shipments.external_user
+    @tenant_shipments ||= begin
+      association = Legacy::Shipment.where(organization_id: current_organization.id)
+                                  .joins(:user).where(users_users: { deleted_at: nil })
+      test_user? ? association : association.excluding_tests
+    end
   end
 
   def filtered_tenant_shipments
@@ -636,5 +617,12 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         us through the support channels.",
       shipmentRef: @shipment.imc_reference
     }
+  end
+
+  def decorate_shipments(shipments:)
+    Legacy::ShipmentDecorator.decorate_collection(
+      shipments,
+      context: {scope: current_scope}
+    ).map(&:legacy_index_json)
   end
 end

@@ -16,7 +16,7 @@ RSpec.describe ExcelDataServices::Restructurers::Companies do
           address: 'Brooktorkai 7, 20457, Hamburg, Germany'
         }] }
     end
-    let(:tenant) { create(:tenant) }
+    let(:organization) { create(:organizations_organization) }
 
     before do
       address = instance_double('Legacy::Address', id: 1)
@@ -24,7 +24,7 @@ RSpec.describe ExcelDataServices::Restructurers::Companies do
     end
 
     it 'extracts the row data from the sheet hash' do
-      result = described_class.restructure(tenant: tenant, data: data)
+      result = described_class.restructure(organization: organization, data: data)
       aggregate_failures do
         expect(result).to eq('Companies' => data[:rows_data])
         expect(result['Companies'].length).to be(1)

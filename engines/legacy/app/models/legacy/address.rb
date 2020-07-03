@@ -99,9 +99,7 @@ module Legacy
 
     def primary_for?(user)
       user_address = user_addresses.find_by(user: user)
-
       raise "This 'Location' object is not associated with a user!" if user_address.blank?
-
       user_address.primary
     end
   end

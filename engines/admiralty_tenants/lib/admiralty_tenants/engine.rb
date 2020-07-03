@@ -8,7 +8,7 @@ require 'draper'
 require 'core'
 require 'legacy'
 require 'pricings'
-require 'tenants'
+require 'organizations'
 
 module AdmiraltyTenants
   class Engine < ::Rails::Engine

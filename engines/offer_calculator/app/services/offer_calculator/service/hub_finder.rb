@@ -15,7 +15,8 @@ module OfferCalculator
         if @shipment.has_carriage?(carriage)
           trucking_hubs(carriage)
         else
-          @shipment.tenant.hubs.where(sandbox: @sandbox, nexus_id: @shipment["#{target}_nexus_id"])
+          Legacy::Hub.where(organization_id: @shipment.organization_id, sandbox_id: @sandbox&.id,
+                            nexus_id: @shipment["#{target}_nexus_id"])
         end
       end
 
@@ -25,7 +26,7 @@ module OfferCalculator
         args = {
           address: Legacy::Address.find(trucking_details['address_id']),
           load_type: @shipment.load_type,
-          tenant_id: @shipment.tenant_id,
+          organization_id: @shipment.organization_id,
           truck_type: trucking_details['truck_type'],
           carriage: carriage,
           cargo_classes: @shipment.cargo_classes,

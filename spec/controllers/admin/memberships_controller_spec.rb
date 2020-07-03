@@ -3,26 +3,22 @@
 require 'rails_helper'
 
 RSpec.describe Admin::MembershipsController, type: :controller do
-  let!(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { create(:legacy_user, tenant: tenant, with_profile: true) }
-  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { create(:organizations_user, :with_profile, organization: organization) }
 
   before do
-    allow(controller).to receive(:user_signed_in?).and_return(true)
-    allow(controller).to receive(:current_user).and_return(user)
-    allow(controller).to receive(:require_login_and_role_is_admin).and_return(true)
+    ::Organizations.current_id = organization.id
+    append_token_header
   end
 
   describe 'POST #bulk_edit' do
-    let(:group_a) { create(:tenants_group, tenant: tenants_tenant, name: 'Group A') }
-    let(:group_b) { create(:tenants_group, tenant: tenants_tenant, name: 'Group B') }
-    let!(:user_a) { create(:legacy_user, tenant: tenant) }
-    let!(:tenants_user_a) { Tenants::User.find_by(legacy_id: user_a.id) }
-    let(:company_a) { create(:tenants_company, tenant: tenants_tenant) }
-    let(:company_b) { create(:tenants_company, tenant: tenants_tenant) }
-    let!(:membership_a) { create(:tenants_membership, group: group_a, member: tenants_user_a) }
-    let!(:membership_b) { create(:tenants_membership, group: group_b, member: tenants_user_a) }
+    let(:group_a) { create(:groups_group, organization: organization, name: 'Group A') }
+    let(:group_b) { create(:groups_group, organization: organization, name: 'Group B') }
+    let!(:user_a) { create(:organizations_user, organization: organization) }
+    let(:company_a) { create(:companies_company, organization: organization) }
+    let(:company_b) { create(:companies_company, organization: organization) }
+    let!(:membership_a) { create(:groups_membership, group: group_a, member: user_a) }
+    let!(:membership_b) { create(:groups_membership, group: group_b, member: user_a) }
     let(:edit_params) {
       {
         addedGroups: [group_a.id],
@@ -30,41 +26,39 @@ RSpec.describe Admin::MembershipsController, type: :controller do
         targetType: 'user',
         memberships:
          [{ id: membership_a.id,
-            member_type: 'Tenants::User',
-            member_id: tenants_user.id,
+            member_type: 'Organizations::User',
+            member_id: user.id,
             group_id: group_a.id,
-            priority: 1,
+            priority: 2,
             created_at: '2019-05-09T15:38:08.435Z',
             updated_at: '2019-05-09T15:38:08.435Z',
             member_name: 'Agent IMC',
             human_type: 'client',
             member_email: 'agent@itsmycargo.com',
             original_member_id: user_a.id }],
-        tenant_id: user.tenant_id
+        organization_id: user.organization_id
       }
     }
 
     it 'returns http success' do
-      allow(controller).to receive(:user_signed_in?).and_return(true)
-      allow(controller).to receive(:current_user).and_return(user)
-      expect_any_instance_of(described_class).to receive(:require_login_and_role_is_admin).and_return(true)
       post :bulk_edit, params: edit_params
+
       expect(response).to have_http_status(:success)
       json = JSON.parse(response.body)
       expect(json['success']).to eq true
       expect(json.dig('data').length).to eq 1
-      expect(json.dig('data', 0, 'priority')).to eq 0
+      expect(json.dig('data', 0, 'priority')).to eq 2
     end
   end
 
   describe 'DELETE #destroy' do
-    let(:group) { create(:tenants_group, tenant: tenants_tenant, name: 'Discount') }
-    let(:membership_user) { create(:tenants_user, tenant: tenants_tenant) }
-    let(:membership) { create(:tenants_membership, group: group, member: membership_user) }
+    let(:group) { create(:groups_group, organization: organization, name: 'Discount') }
+    let(:membership_user) { create(:organizations_user, organization: organization) }
+    let(:membership) { create(:groups_membership, group: group, member: membership_user) }
 
     it 'destroys the membership' do
-      delete :destroy, params: { id: membership.id, tenant_id: tenant.id }
-      expect(Tenants::Membership.find_by(id: membership.id)).to be(nil)
+      delete :destroy, params: { id: membership.id, organization_id: organization.id }
+      expect(Groups::Membership.find_by(id: membership.id)).to be(nil)
     end
 
     it 'returns an error when membership is not deleted' do
@@ -73,18 +67,18 @@ RSpec.describe Admin::MembershipsController, type: :controller do
                                                                            group: group,
                                                                            errors: ['error']))
 
-      delete :destroy, params: { id: membership.id, tenant_id: tenant.id }
+      delete :destroy, params: { id: membership.id, organization_id: organization.id }
       expect(JSON.parse(response.body)['data']).to eq(['error'])
     end
   end
 
   describe 'GET #index' do
-    let(:group) { create(:tenants_group, tenant: tenants_tenant, name: 'Discount') }
-    let(:membership_user) { Tenants::User.find_by(legacy_id: user.id) }
-    let!(:membership) { create(:tenants_membership, group: group, member: membership_user) }
+    let(:group) { create(:groups_group, organization: organization, name: 'Discount') }
+    let(:membership_user) { user }
+    let!(:membership) { create(:groups_membership, group: group, member: membership_user) }
 
     it 'returns the memberships for a specific user' do
-      get :index, params: { targetId: user.id, targetType: 'user', tenant_id: tenant.id }
+      get :index, params: { targetId: user.id, targetType: 'user', organization_id: organization.id }
       aggregate_failures do
         expect(response).to have_http_status(:success)
         json = JSON.parse(response.body)

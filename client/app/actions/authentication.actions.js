@@ -1,8 +1,19 @@
 import { push } from 'react-router-redux'
-import { authenticationConstants, getTenantApiUrl } from '../constants'
-import { authenticationService } from '../services'
 import {
-  alertActions, shipmentActions, adminActions, userActions, tenantActions, clientsActions, appActions
+  authenticationConstants,
+  getTenantApiUrl,
+  getApiHost
+} from '../constants'
+import getConfig from '../constants/config.constants'
+import { authenticationService, userService } from '../services'
+import {
+  alertActions,
+  shipmentActions,
+  adminActions,
+  userActions,
+  tenantActions,
+  clientsActions,
+  appActions
 } from '.'
 
 import { requestOptions, cookieKey } from '../helpers'
@@ -58,37 +69,51 @@ function login (data) {
 
   return (dispatch) => {
     dispatch(request({ email: data.email }))
+    const config = getConfig()
+    const organizationId = localStorage.getItem('organizationId')
+
+    const requestData = {
+      ...data,
+      client_id: config.oauthClientId,
+      client_secret: config.oauthClientSecret,
+      scope: 'public',
+      organization_id: organizationId,
+      grant_type: 'password'
+    }
 
     return fetch(
-      `${getTenantApiUrl()}/auth/sign_in`,
-      requestOptions('POST', { 'Content-Type': 'application/json' }, JSON.stringify(data))
+      `${getApiHost()}/oauth/token`,
+      requestOptions(
+        'POST',
+        { 'Content-Type': 'application/json' },
+        JSON.stringify(requestData)
+      )
     )
       .then((response) => {
         if (!response.ok) {
           return Promise.reject(response.json())
         }
 
-        if (response.headers.get('access-token')) {
-          const accessToken = response.headers.get('access-token')
-          const client = response.headers.get('client')
-          const expiry = response.headers.get('expiry')
-          const tokenType = response.headers.get('token-type')
-          const uid = response.headers.get('uid')
-          const aHeader = {
-            client,
-            expiry,
-            uid,
-            'access-token': accessToken,
-            'token-type': tokenType
-          }
-          localStorage.setItem('authHeader', JSON.stringify(aHeader))
-        }
-
         return response.json()
-      }).then((response) => {
+      })
+      .then((token) => {
+        const tokenPayload = {
+          scope: token.scope,
+          token_type: token.token_type,
+          access_token: token.access_token,
+          refresh_token: token.refresh_token,
+          created_at: token.created_at,
+          expires_in: token.expires_in
+        }
+        localStorage.setItem('authHeader', JSON.stringify(tokenPayload))
+
+        return userService.getCurrentUser()
+      })
+      .then((response) => {
+        const { data: user } = response
         const shipmentReq = data.req
-        dispatch(success(response.data))
-        dispatch(setUser(response.data))
+        dispatch(success(user))
+        dispatch(setUser(user))
         dispatch(shipmentActions.checkLoginOnBookingProcess())
         if (data.redirectUrl) {
           dispatch(appActions.goTo(data.redirectUrl))
@@ -97,8 +122,8 @@ function login (data) {
         }
 
         if (shipmentReq) {
-          if (['shipper', 'agent'].includes(response.data.role.name)) {
-            shipmentReq.user_id = response.data.id
+          if (['shipper', 'agent'].includes(user.role.name)) {
+            shipmentReq.user_id = user.id
             const { action } = shipmentReq
             delete shipmentReq.action
             if (action === 'getOffers') {
@@ -113,10 +138,18 @@ function login (data) {
             dispatch(adminActions.getDashboard(true))
           }
         } else if (
-          ['admin', 'super_admin', 'sub_admin'].includes(response.data.role.name) && !data.noRedirect
+          user.role && ['admin', 'super_admin', 'sub_admin'].includes(
+            user.role.name
+          ) &&
+        !data.noRedirect
         ) {
           dispatch(adminActions.getDashboard(true))
-        } else if (['shipper', 'agent', 'agency_manager'].includes(response.data.role.name) && !data.noRedirect) {
+        } else if (
+          user.role && ['shipper', 'agent', 'agency_manager'].includes(
+            user.role.name
+          ) &&
+        !data.noRedirect
+        ) {
           dispatch(push('/account'))
         } else {
           dispatch(closeLogin())
@@ -125,27 +158,42 @@ function login (data) {
       })
       .catch((error) => {
         error.then((errorData) => {
-          dispatch(failure({
-            error: errorData,
-            persistState: !!data.req || !!data.noRedirect
-          }))
+          dispatch(
+            failure({
+              error: errorData,
+              persistState: !!data.req || !!data.noRedirect
+            })
+          )
         })
       })
   }
 }
 
 function registerGuestOrAuthenticate (tenant, target = '') {
-  return (tenant.scope.closed_shop)
+  return tenant.scope.closed_shop
     ? showLogin(target)
     : registerGuest(tenant, target)
 }
 
+function setUser (user) {
+  localStorage.setItem(cookieKey(), JSON.stringify(user))
+
+  return { type: authenticationConstants.SET_USER, user }
+}
+
 function register (user, target) {
   function request (userRequest) {
-    return { type: authenticationConstants.REGISTRATION_REQUEST, user: userRequest, target }
+    return {
+      type: authenticationConstants.REGISTRATION_REQUEST,
+      user: userRequest,
+      target
+    }
   }
   function success (response) {
-    return { type: authenticationConstants.REGISTRATION_SUCCESS, user: response.data }
+    return {
+      type: authenticationConstants.REGISTRATION_SUCCESS,
+      user: response.data
+    }
   }
   function failure (error) {
     return { type: authenticationConstants.REGISTRATION_FAILURE, error }
@@ -154,22 +202,23 @@ function register (user, target) {
   return (dispatch) => {
     dispatch(request(user))
 
-    authenticationService.register(user).then(
-      (response) => {
+    authenticationService.register(user)
+      .then(() => userService.getCurrentUser())
+      .then((response) => {
         dispatch(success(response))
-        if (user.guest) {
+        dispatch(setUser(response.data))
+        if (response.data.guest) {
           target && dispatch(push(target))
         } else if (response.data.role.name === 'admin') {
           dispatch(push('/admin'))
         } else if (response.data.role.name === 'shipper') {
           dispatch(push('/account'))
         }
-      },
-      (error) => {
+      })
+      .catch((error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
-      }
-    )
+      })
   }
 }
 
@@ -185,17 +234,11 @@ function registerGuest (tenant, target = '/') {
     password_confirmation: 'guestpassword',
     first_name: 'Guest',
     last_name: '',
-    tenant_id: tenant.id,
+    organization_id: tenant.id,
     guest: true
   }
 
   return register(guestUser, target)
-}
-
-function setUser (user) {
-  localStorage.setItem(cookieKey(), JSON.stringify(user))
-
-  return { type: authenticationConstants.SET_USER, user }
 }
 
 function updateUser (user, req, shipmentReq) {
@@ -203,7 +246,10 @@ function updateUser (user, req, shipmentReq) {
     return { type: authenticationConstants.UPDATE_USER_REQUEST, payload }
   }
   function success (response) {
-    return { type: authenticationConstants.UPDATE_USER_SUCCESS, user: response.data.user }
+    return {
+      type: authenticationConstants.UPDATE_USER_SUCCESS,
+      user: response.data.user
+    }
   }
   function failure (payload) {
     return { type: authenticationConstants.UPDATE_USER_FAILURE, payload }
@@ -296,24 +342,33 @@ function updateReduxStore (payload) {
 
 function postSamlActions (payload) {
   function request (userData) {
-    return { type: authenticationConstants.SAML_USER_REQUEST, payload: userData }
+    return {
+      type: authenticationConstants.SAML_USER_REQUEST,
+      payload: userData
+    }
   }
   function success (userData) {
     setUser(userData)
 
-    return { type: authenticationConstants.SAML_USER_SUCCESS, payload: userData }
+    return {
+      type: authenticationConstants.SAML_USER_SUCCESS,
+      payload: userData
+    }
   }
   function failure (error) {
     return { type: authenticationConstants.SAML_USER_FAILURE, error }
   }
-  const { userId, headers, tenantId } = payload
+  const { userId, headers, organizationId } = payload
   localStorage.setItem('authHeader', JSON.stringify(headers))
-  localStorage.setItem('tenantId', tenantId)
+  localStorage.setItem('organizationId', organizationId)
 
   return (dispatch) => {
     dispatch(request())
 
-    return fetch(`${getTenantApiUrl()}/users/${userId}/show`, requestOptions('GET'))
+    return fetch(
+      `${getTenantApiUrl()}/users/${userId}/show`,
+      requestOptions('GET')
+    )
       .then((resp) => resp.json())
       .then((response) => {
         dispatch(success(response.data))

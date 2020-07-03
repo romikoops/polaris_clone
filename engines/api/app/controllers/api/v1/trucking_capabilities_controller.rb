@@ -13,7 +13,7 @@ module Api
 
       def capability
         Api::Routing::Trucking::CapabilityService.capability(
-          tenant: current_tenant,
+          organization: current_organization,
           load_type: trucking_params[:load_type]
         )
       end

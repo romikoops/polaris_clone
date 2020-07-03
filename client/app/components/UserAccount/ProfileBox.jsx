@@ -60,24 +60,12 @@ const ProfileBox = ({
     <div className="flex-100 flex-gt-sm-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          {t('user:vatNo')}
-        </sup>
-      </div>
-      <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none">
-          {user.vat_number || '-'}
-        </p>
-      </div>
-    </div>
-    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-start-start layout-wrap">
-      <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className="clip flex-none">
           {t('user:companyNumber')}
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
         <p className="flex-none">
-          {user.company_number || '-'}
+          {user.external_id || '-'}
         </p>
       </div>
     </div>

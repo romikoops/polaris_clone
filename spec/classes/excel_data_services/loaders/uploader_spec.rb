@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Loaders::Uploader do
-  let(:tenant) { create(:tenant) }
+  let(:organization) { create(:organizations_organization) }
   let(:category_identifier) {}
   let(:file_or_path) {}
   let(:uploader) do
     described_class.new(
-      tenant: tenant,
+      organization: organization,
       file_or_path: file_fixture('excel').join('dummy.xlsx')
     )
   end

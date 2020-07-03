@@ -3,12 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe ContentsController do
+
   describe 'GET #component' do
-    let(:tenant) { create(:tenant) }
-    let!(:content) { create(:legacy_content, tenant_id: tenant.id) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let!(:content) { create(:legacy_content, organization_id: organization.id) }
 
     it 'returns http success' do
-      get :component, params: { tenant_id: tenant.id, component: content.component }
+      get :component, params: { organization_id: organization.id, component: content.component }
       expect(response).to have_http_status(:success)
       json = JSON.parse(response.body)
 

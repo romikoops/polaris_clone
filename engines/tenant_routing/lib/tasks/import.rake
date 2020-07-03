@@ -14,21 +14,21 @@ namespace :tenant_routing do
         routes << {
           inbound_id: route.id,
           outbound_id: route.id,
-          tenant_id: it.tenant.tenants_tenant.id
+          organization_id: it.tenant.tenants_tenant.id
         }
 
-        if Trucking::Trucking.exists?(tenant_id: it.tenant_id, hub_id: itinerary.first_stop.hub_id, carriage: 'pre')
+        if Trucking::Trucking.exists?(organization_id: it.organization_id, hub_id: itinerary.first_stop.hub_id, carriage: 'pre')
           routes << {
             inbound_id: nil,
             outbound_id: route.id,
-            tenant_id: it.tenant.tenants_tenant.id
+            organization_id: it.tenant.tenants_tenant.id
           }
         end
-        if Trucking::Trucking.exists?(tenant_id: it.tenant_id, hub_id: itinerary.last_stop.hub_id, carriage: 'on')
+        if Trucking::Trucking.exists?(organization_id: it.organization_id, hub_id: itinerary.last_stop.hub_id, carriage: 'on')
           routes << {
             outbound_id: nil,
             inbound_id: route.id,
-            tenant_id: it.tenant.tenants_tenant.id
+            organization_id: it.tenant.tenants_tenant.id
           }
         end
       end
@@ -41,7 +41,7 @@ namespace :tenant_routing do
         trucking = Trucking::Trucking.where(hub: hamburg).joins(:location).where(trucking_locations: { zipcode: tl.name }).first
         next unless trucking.present?
 
-        hamburg_tenant = ::Tenants::Tenant.find_by(legacy_id: hamburg.tenant.id).id
+        hamburg_tenant = ::Organizations::Organization.find_by(legacy_id: hamburg.tenant.id).id
         route = Routing::Route.find_by(
           origin_id: trucking.carriage == 'pre' ? tl : routing_hamburg,
           destination_id: trucking.carriage == 'pre' ? routing_hamburg : tl
@@ -51,7 +51,7 @@ namespace :tenant_routing do
 
         new_route = {
           route_id: route.id,
-          tenant_id: hamburg_tenant,
+          organization_id: hamburg_tenant,
           time_factor: route.time_factor,
           price_factor: route.price_factor
         }

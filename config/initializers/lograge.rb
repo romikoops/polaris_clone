@@ -13,13 +13,13 @@ Rails.application.configure do
       host: event.payload[:host],
       tenant: event.payload[:tenant],
       user_id: event.payload[:user_id],
-      params: event.payload[:params].except(*exceptions),
+      params: event.payload[:params].except(*exceptions)
     }
   end
 
   config.lograge.custom_payload do |controller|
     {
-      host: controller.request.host,
+      host: controller.request.host
     }
   end
 end

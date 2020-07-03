@@ -10,9 +10,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
 
   def index
     paginated_hubs = handle_search.paginate(pagination_options)
-    response_hubs = paginated_hubs.map do |hub|
-      for_table(hub)
-    end
+    response_hubs = decorate_table_list(hubs: paginated_hubs).map(&:legacy_index_json)
 
     response_handler(
       pagination_options.merge(
@@ -33,17 +31,17 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   def update_mandatory_charges
     hub = create_hub_mandatory_charge
     response_handler(
-      hub: hub.as_options_json,
+      hub: decorated_hub(hub: hub).legacy_json,
       mandatoryCharge: hub.mandatory_charge
     )
   end
 
   def show
-    hub = Hub.find_by(id: params[:id], sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:id])
     resp = {
-      hub: hub.as_options_json,
+      hub: decorated_hub(hub: hub).legacy_json,
       routes: hub_route_map(hub),
-      relatedHubs: hub.nexus.hubs.where(sandbox: @sandbox),
+      relatedHubs: hub.nexus.hubs,
       schedules: hub.layovers.limit(20),
       address: hub.address,
       mandatoryCharge: hub.mandatory_charge
@@ -52,38 +50,36 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def options_search
-    list_options = current_tenant.hubs
-                                 .where(sandbox: @sandbox)
-                                 .name_search(params[:query])
-                                 .limit(30).map do |it|
-      { label: it.name, value: for_table(it) }
-    end
+    list_hubs = Hub.where(organization: current_organization)
+                      .name_search(params[:query])
+                      .limit(30)
+    list_options = decorate_table_list(hubs: list_hubs).map(&:select_option)
     response_handler(list_options)
   end
 
   def set_status
-    hub = Hub.find_by(id: params[:hub_id], sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:hub_id])
     hub.toggle_hub_status!
     response_handler(
-      data: hub.as_options_json, address: hub.address.to_custom_hash
+      data: decorated_hub(hub: hub).legacy_json, address: hub.address.to_custom_hash
     )
   end
 
   def delete
-    hub = Hub.find_by(id: params[:hub_id], sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:hub_id])
     hub.destroy!
     response_handler(id: params[:hub_id])
   end
 
   def update_image
-    hub = Hub.find_by(id: params[:hub_id], sandbox: @sandbox)
-    hub.photo = save_on_aws(hub.tenant_id)
+    hub = Hub.find_by(id: params[:hub_id])
+    hub.photo = save_on_aws(hub.organization_id)
     hub.save!
-    response_handler(hub.as_options_json)
+    response_handler(decorated_hub(hub: hub).legacy_json)
   end
 
   def update
-    hub = Hub.find_by(id: params[:id], sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:id])
     address = hub.address
     new_loc = params[:address].as_json
     new_hub = params[:data].as_json
@@ -92,11 +88,11 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     new_loc[:country_id] = country.id
     hub.update_attributes(new_hub)
     address.update_attributes(new_loc)
-    response_handler(hub: hub.as_options_json, address: address)
+    response_handler(hub: decorated_hub(hub: hub).legacy_json, address: address)
   end
 
   def all_hubs
-    processed_hubs = Hub.where(sandbox: @sandbox, tenant_id: current_tenant.id).map do |hub|
+    processed_hubs = Hub.where(sandbox: @sandbox, organization_id: current_organization.id).map do |hub|
       { data: hub, address: hub.address.to_custom_hash }
     end
     response_handler(hubs: processed_hubs)
@@ -105,23 +101,22 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   def upload
     handle_upload(
       params: upload_params,
-      text: "#{current_tenant.subdomain} hubs upload #{Time.zone.today.strftime('%d/%m/%Y')}",
+      text: "#{current_organization.slug} hubs upload #{Time.zone.today.strftime('%d/%m/%Y')}",
       type: 'hubs',
       options: {
         sandbox: @sandbox,
-        user: current_user,
+        user: organization_user,
         group_id: upload_params[:group_id]
       }
     )
   end
 
   def download
-    tenant_slug = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug
     category_identifier = 'hubs'
-    file_name = "#{tenant_slug}__#{category_identifier}_#{Time.zone.today.strftime('%d/%m/%Y')}"
+    file_name = "#{current_organization.slug}__#{category_identifier}_#{Time.zone.today.strftime('%d/%m/%Y')}"
 
     document = ExcelDataServices::Loaders::Downloader.new(
-      tenant: current_tenant,
+      organization: current_organization,
       category_identifier: category_identifier,
       file_name: file_name,
       sandbox: @sandbox
@@ -136,7 +131,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   private
 
   def handle_search
-    hubs_relation = ::Legacy::Hub.where(tenant_id: current_tenant.id, sandbox: @sandbox)
+    hubs_relation = ::Legacy::Hub.where(organization_id: current_organization.id)
     country_table_ref =
       if search_params[:country].present? && search_params[:country_desc].present?
         'countries_hubs'
@@ -177,6 +172,10 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     )
   end
 
+  def decorate_table_list(hubs:)
+    Legacy::HubDecorator.decorate_collection(hubs, context: { scope: current_scope})
+  end
+
   def pagination_options
     {
       page: current_page,
@@ -210,7 +209,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
 
   def hub_hash
     hub = params[:hub].as_json
-    hub[:tenant_id] = current_user.tenant_id
+    hub[:organization_id] = current_organization.id
     hub[:address_id] = @new_loc.id
     hub[:nexus_id] = @new_nexus.id
     hub[:sandbox] = @sandbox
@@ -227,7 +226,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def nexus
-    Nexus.from_short_name("#{params[:address][:city]} ,#{params[:address][:country]}", current_user.tenant_id)
+    Nexus.from_short_name("#{params[:address][:city]} ,#{params[:address][:country]}", current_organization.id)
   end
 
   def new_mandatory_charge
@@ -236,15 +235,15 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def create_hub_mandatory_charge
-    hub = Hub.find_by(id: params[:id], sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:id])
     hub.mandatory_charge = new_mandatory_charge
     hub.save!
     hub
   end
 
-  def save_on_aws(tenant_id)
+  def save_on_aws(organization_id)
     file = params[:file]
-    obj_key = 'images/' + tenant_id.to_s + '/' + file.original_filename
+    obj_key = 'images/' + organization_id.to_s + '/' + file.original_filename
     save_asset(file, obj_key)
     asset_url + obj_key
   end
@@ -257,5 +256,9 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
 
   def upload_params
     params.permit(:file, :mot, :load_type, :group_id)
+  end
+
+  def decorated_hub(hub:)
+    Legacy::HubDecorator.new(hub, context: {scope: current_scope})
   end
 end

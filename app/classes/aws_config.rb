@@ -24,7 +24,7 @@ module AwsConfig
     end
 
     def path(shipment)
-      slug = ::Tenants::Tenant.find_by(legacy_id: shipment.tenant.id).slug
+      slug = shipment.organization.slug
 
       "#{slug}/documents/#{shipment['uuid']}"
     end

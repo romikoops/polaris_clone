@@ -3,27 +3,32 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::TruckingPricingFinder do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:user_bp) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let!(:tenants_user) { Tenants::User.find_by(legacy_id: user_bp.id) }
-  let(:hub) { FactoryBot.create(:legacy_hub, tenant: tenant) }
-  let(:itinerary) { FactoryBot.create(:legacy_itinerary, :gothenburg_shanghai, tenant: tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user_bp) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:hub) { FactoryBot.create(:legacy_hub, organization: organization) }
+  let(:itinerary) { FactoryBot.create(:legacy_itinerary, :gothenburg_shanghai, organization: organization) }
   let(:trucking_location) { FactoryBot.create(:trucking_location, zipcode: '43813') }
-  let!(:group) { FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'Test') }
-  let!(:group_trucking) { FactoryBot.create(:trucking_trucking, tenant: tenant, hub: hub, group_id: group.id, location: trucking_location) }
-  let!(:common_trucking) { FactoryBot.create(:trucking_trucking, tenant: tenant, hub: hub, location: trucking_location) }
-  let!(:user_trucking) { FactoryBot.create(:trucking_trucking, tenant: tenant, hub: hub, user_id: user.id, location: trucking_location) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, load_type: 'cargo_item', tenant: tenant, user: user, cargo_items: [FactoryBot.create(:legacy_cargo_item)], itinerary: itinerary) }
-  let!(:shipment_bp) { FactoryBot.create(:legacy_shipment, load_type: 'cargo_item', tenant: tenant, user: user_bp, cargo_items: [FactoryBot.create(:legacy_cargo_item)], itinerary: itinerary) }
+  let!(:group) { FactoryBot.create(:groups_group, organization: organization, name: 'Test') }
+  let!(:group_trucking) { FactoryBot.create(:trucking_trucking, organization: organization, hub: hub, group_id: group.id, location: trucking_location) }
+  let!(:common_trucking) { FactoryBot.create(:trucking_trucking, organization: organization, hub: hub, location: trucking_location) }
+  let!(:user_trucking) { FactoryBot.create(:trucking_trucking, organization: organization, hub: hub, user_id: user.id, location: trucking_location) }
+  let(:shipment) { FactoryBot.create(:legacy_shipment, load_type: 'cargo_item', organization: organization, user: user, cargo_items: [FactoryBot.create(:legacy_cargo_item)], itinerary: itinerary) }
+  let(:shipment_bp) { FactoryBot.create(:legacy_shipment, load_type: 'cargo_item', organization: organization, user: user_bp, cargo_items: [FactoryBot.create(:legacy_cargo_item)], itinerary: itinerary) }
   let(:address) { FactoryBot.create(:legacy_address) }
   let!(:address_bp) { FactoryBot.create(:legacy_address) }
+
+  before do
+    ::Organizations.current_id = organization.id
+
+    FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
+    FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
+  end
 
   describe '.perform (no base pricing)', :vcr do
     before do
       FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :zipcode)
-      FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: false })
+      FactoryBot.create(:organizations_scope, target: organization, content: { base_pricing: false })
     end
 
     it 'returns a common trucking pricing for the correct hub with no user' do
@@ -56,7 +61,7 @@ RSpec.describe OfferCalculator::Service::TruckingPricingFinder do
   describe '.perform (base pricing)', :vcr do
     before do
       FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :zipcode)
-      FactoryBot.create(:tenants_membership, member: tenants_user, group: group)
+      FactoryBot.create(:groups_membership, member: user, group: group)
     end
 
     it 'returns a common trucking pricing for the correct hub with no group' do
@@ -78,7 +83,7 @@ RSpec.describe OfferCalculator::Service::TruckingPricingFinder do
         address: address_bp,
         carriage: 'pre',
         shipment: shipment_bp,
-        user_id: user_bp.id,
+        user_id: user.id,
         sandbox: nil
       )
       results = service.perform(hub.id, 0)

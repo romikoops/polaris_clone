@@ -10,7 +10,7 @@ module Api
       end
 
       attribute :user do |quotation|
-        UserSerializer.new(quotation.tenants_user)
+        UserSerializer.new(quotation.user)
       end
 
       attribute :origin do |quotation|

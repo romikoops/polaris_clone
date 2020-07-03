@@ -6,7 +6,7 @@ FactoryBot.define do
     min { 1 }
     association :rate_basis, factory: :pricings_rate_basis
     association :charge_category, factory: :legacy_charge_categories
-    association :tenant, factory: :legacy_tenant
+    association :organization, factory: :organizations_organization
     currency_name { 'EUR' }
     base { 1 }
 
@@ -17,7 +17,7 @@ FactoryBot.define do
 
     trait :per_cbm_kg_heavy do
       association :rate_basis, factory: :per_wm_rate_basis
-      association :hw_rate_basis, factory: :per_kg_per_cbm
+      association :hw_rate_basis, factory: :per_kg_per_cbm_rate_basis
       association :charge_category, factory: :has_charge
       hw_threshold { 550 }
       rate { 4 }
@@ -26,7 +26,7 @@ FactoryBot.define do
 
     trait :per_item_heavy do
       association :rate_basis, factory: :per_wm_rate_basis
-      association :hw_rate_basis, factory: :per_item
+      association :hw_rate_basis, factory: :per_item_rate_basis
       association :charge_category, factory: :has_charge
       hw_threshold { 100 }
       range do
@@ -38,32 +38,32 @@ FactoryBot.define do
     end
 
     trait :per_container do
-      association :rate_basis, factory: :per_container
+      association :rate_basis, factory: :per_container_rate_basis
       association :charge_category, factory: :bas_charge
     end
 
     trait :per_hbl do
-      association :rate_basis, factory: :per_hbl
+      association :rate_basis, factory: :per_hbl_rate_basis
       association :charge_category, factory: :bas_charge
     end
 
     trait :per_shipment do
-      association :rate_basis, factory: :per_shipment
+      association :rate_basis, factory: :per_shipment_rate_basis
       association :charge_category, factory: :bas_charge
     end
 
     trait :per_item do
-      association :rate_basis, factory: :per_item
+      association :rate_basis, factory: :per_item_rate_basis
       association :charge_category, factory: :bas_charge
     end
 
     trait :per_cbm do
-      association :rate_basis, factory: :per_cbm
+      association :rate_basis, factory: :per_cbm_rate_basis
       association :charge_category, factory: :bas_charge
     end
 
     trait :per_kg do
-      association :rate_basis, factory: :per_kg
+      association :rate_basis, factory: :per_kg_rate_basis
       association :charge_category, factory: :bas_charge
     end
 
@@ -71,22 +71,22 @@ FactoryBot.define do
       base { 100 }
       rate { 25 }
       min { 25 }
-      association :rate_basis, factory: :per_x_kg_flat
+      association :rate_basis, factory: :per_x_kg_flat_rate_basis
       association :charge_category, factory: :bas_charge
     end
 
     trait :per_cbm_ton do
-      association :rate_basis, factory: :per_cbm_ton
+      association :rate_basis, factory: :per_cbm_ton_rate_basis
       association :charge_category, factory: :bas_charge
     end
 
     trait :per_ton do
-      association :rate_basis, factory: :per_ton
+      association :rate_basis, factory: :per_ton_rate_basis
       association :charge_category, factory: :bas_charge
     end
 
     trait :per_kg_range do
-      association :rate_basis, factory: :per_kg_range
+      association :rate_basis, factory: :per_kg_range_bases_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
@@ -98,7 +98,7 @@ FactoryBot.define do
     end
 
     trait :per_kg_range_flat do
-      association :rate_basis, factory: :per_kg_range_flat
+      association :rate_basis, factory: :per_kg_range_flat_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
@@ -110,7 +110,7 @@ FactoryBot.define do
     end
 
     trait :per_unit_ton_cbm_range do
-      association :rate_basis, factory: :per_unit_ton_cbm_range
+      association :rate_basis, factory: :per_unit_ton_cbm_range_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
@@ -120,7 +120,7 @@ FactoryBot.define do
       end
     end
     trait :per_container_range do
-      association :rate_basis, factory: :per_container_range
+      association :rate_basis, factory: :per_container_range_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
@@ -131,7 +131,7 @@ FactoryBot.define do
       end
     end
     trait :per_unit_range do
-      association :rate_basis, factory: :per_unit_range
+      association :rate_basis, factory: :per_unit_range_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
@@ -143,7 +143,7 @@ FactoryBot.define do
     end
 
     trait :per_container_range_flat do
-      association :rate_basis, factory: :per_container_range_flat
+      association :rate_basis, factory: :per_container_range_flat_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
@@ -155,7 +155,7 @@ FactoryBot.define do
     end
 
     trait :per_unit_range_flat do
-      association :rate_basis, factory: :per_unit_range_flat
+      association :rate_basis, factory: :per_unit_range_flat_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
@@ -167,7 +167,7 @@ FactoryBot.define do
     end
 
     trait :per_cbm_range do
-      association :rate_basis, factory: :per_cbm_range
+      association :rate_basis, factory: :per_cbm_range_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
@@ -178,7 +178,7 @@ FactoryBot.define do
     end
 
     trait :per_wm_range do
-      association :rate_basis, factory: :per_wm_range
+      association :rate_basis, factory: :per_wm_range_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
@@ -189,7 +189,7 @@ FactoryBot.define do
     end
 
     trait :per_cbm_range_flat do
-      association :rate_basis, factory: :per_cbm_range_flat
+      association :rate_basis, factory: :per_cbm_range_flat_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
@@ -200,7 +200,7 @@ FactoryBot.define do
     end
 
     trait :per_wm_range_flat do
-      association :rate_basis, factory: :per_wm_range_flat
+      association :rate_basis, factory: :per_wm_range_flat_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
@@ -254,6 +254,7 @@ end
 #  currency_id        :bigint
 #  hw_rate_basis_id   :uuid
 #  legacy_id          :integer
+#  organization_id    :uuid
 #  pricing_id         :uuid
 #  rate_basis_id      :uuid
 #  sandbox_id         :uuid
@@ -261,7 +262,12 @@ end
 #
 # Indexes
 #
-#  index_pricings_fees_on_pricing_id  (pricing_id)
-#  index_pricings_fees_on_sandbox_id  (sandbox_id)
-#  index_pricings_fees_on_tenant_id   (tenant_id)
+#  index_pricings_fees_on_organization_id  (organization_id)
+#  index_pricings_fees_on_pricing_id       (pricing_id)
+#  index_pricings_fees_on_sandbox_id       (sandbox_id)
+#  index_pricings_fees_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

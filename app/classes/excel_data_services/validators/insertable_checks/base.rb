@@ -12,7 +12,7 @@ module ExcelDataServices
           check_all_data(flattened_data) if respond_to?(:check_all_data, true)
 
           flattened_data.each do |single_data|
-            row = ExcelDataServices::Rows::Base.get(klass_identifier).new(row_data: single_data, tenant: tenant)
+            row = ExcelDataServices::Rows::Base.get(klass_identifier).new(row_data: single_data, organization: organization)
             check_single_data(row)
           end
         end
@@ -25,13 +25,13 @@ module ExcelDataServices
 
         def check_group(row)
           if row.group_id.present?
-            group_by_id = Tenants::Group.find_by(tenant: @tenants_tenant, id: row.group_id)
+            group_by_id = Groups::Group.find_by(organization: @organization, id: row.group_id)
 
             check_group_by_id(row, group_by_id)
           end
 
           if row.group_name.present?
-            group_by_name = Tenants::Group.find_by(tenant: @tenants_tenant, name: row.group_name)
+            group_by_name = Groups::Group.find_by(organization: @organization, name: row.group_name)
 
             check_group_by_name(row, group_by_name)
           end

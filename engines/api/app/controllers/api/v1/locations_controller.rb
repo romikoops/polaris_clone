@@ -31,7 +31,7 @@ module Api
 
       def open_routing(target:)
         Api::Routing::RoutingService.nexuses(
-          tenant: current_tenant,
+          organization: current_organization,
           target: target,
           load_type: location_params[:load_type],
           query: location_params[:q]
@@ -40,7 +40,7 @@ module Api
 
       def nexus_routing(target:)
         Api::Routing::NexusRoutingService.nexuses(
-          tenant: current_tenant,
+          organization: current_organization,
           target: target,
           load_type: location_params[:load_type],
           query: location_params[:q],
@@ -50,7 +50,7 @@ module Api
 
       def geo_routing(target:)
         Api::Routing::GeoRoutingService.nexuses(
-          tenant: current_tenant,
+          organization: current_organization,
           target: target,
           load_type: location_params[:load_type],
           query: location_params[:q],

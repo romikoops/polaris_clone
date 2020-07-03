@@ -55,14 +55,6 @@ class Shop extends Component {
     props.bookingSummaryDispatch.update()
   }
 
-  componentWillMount () {
-    const { authenticationDispatch, tenant, user } = this.props
-
-    if (!user) {
-      authenticationDispatch.registerGuestOrAuthenticate(tenant, '/booking')
-    }
-  }
-
   componentWillReceiveProps (nextProps) {
     if (Shop.statusRequested(nextProps) && !Shop.statusRequested(this.props)) {
       this.setState({ fakeLoading: true })

@@ -9,11 +9,11 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
 
   context 'with class methods' do
     describe '.find_by_hub_id' do
-      let(:tenant) { FactoryBot.create(:legacy_tenant) }
-      let(:hub)    { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: tenant) }
+      let(:organization) { FactoryBot.create(:organizations_organization) }
+      let(:hub)    { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: organization) }
 
       let(:courier) { FactoryBot.create(:trucking_courier) }
-      let(:trucking_rate) { FactoryBot.create(:trucking_trucking, tenant: tenant) }
+      let(:trucking_rate) { FactoryBot.create(:trucking_trucking, organization: organization) }
 
       context 'basic tests' do
         it 'raises an ArgumentError if no hub_id are provided' do
@@ -121,21 +121,30 @@ end
 #  group_id            :uuid
 #  hub_id              :integer
 #  location_id         :uuid
+#  old_user_id         :integer
+#  organization_id     :uuid
 #  parent_id           :uuid
 #  rate_id             :uuid
 #  sandbox_id          :uuid
 #  tenant_id           :integer
-#  user_id             :integer
+#  user_id             :uuid
 #
 # Indexes
 #
-#  index_trucking_truckings_on_cargo_class  (cargo_class)
-#  index_trucking_truckings_on_carriage     (carriage)
-#  index_trucking_truckings_on_group_id     (group_id)
-#  index_trucking_truckings_on_hub_id       (hub_id)
-#  index_trucking_truckings_on_load_type    (load_type)
-#  index_trucking_truckings_on_location_id  (location_id)
-#  index_trucking_truckings_on_sandbox_id   (sandbox_id)
-#  index_trucking_truckings_on_tenant_id    (tenant_id)
-#  trucking_foreign_keys                    (rate_id,location_id,hub_id) UNIQUE
+#  index_trucking_truckings_on_cargo_class      (cargo_class)
+#  index_trucking_truckings_on_carriage         (carriage)
+#  index_trucking_truckings_on_group_id         (group_id)
+#  index_trucking_truckings_on_hub_id           (hub_id)
+#  index_trucking_truckings_on_load_type        (load_type)
+#  index_trucking_truckings_on_location_id      (location_id)
+#  index_trucking_truckings_on_organization_id  (organization_id)
+#  index_trucking_truckings_on_sandbox_id       (sandbox_id)
+#  index_trucking_truckings_on_tenant_id        (tenant_id)
+#  index_trucking_truckings_on_user_id          (user_id)
+#  trucking_foreign_keys                        (rate_id,location_id,hub_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_     (user_id => users_users.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

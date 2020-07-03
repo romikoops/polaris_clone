@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe Shipments::BookingProcessController do
-  let!(:tenant) { create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { create(:organizations_user, :with_profile, organization: organization) }
   let(:shipment) {
     create(:legacy_shipment,
-      tenant: tenant,
+      organization: organization,
       trip: trip,
       user: user,
       itinerary: itinerary,
@@ -15,32 +15,24 @@ RSpec.describe Shipments::BookingProcessController do
       with_tenders: true)
   }
   let(:shipments_shipment) { Shipment.find(shipment.id) }
-  let(:user) { create(:legacy_user, tenant: tenant) }
-  let(:itinerary) { create(:gothenburg_shanghai_itinerary, tenant: tenant) }
+  let(:itinerary) { create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:trip) { create(:legacy_trip, itinerary: itinerary) }
+  let(:shipping_tools_double) { instance_double('ShippingTools') }
 
   before do
-    allow(controller).to receive(:user_signed_in?).and_return(true)
-    allow(controller).to receive(:current_user).and_return(user)
-    stub_request(:get,
-      'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200,
-                                                                           body: '',
-                                                                           headers: {})
-    FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
-    FactoryBot.create(:shipment_contact, shipment: shipments_shipment, contact_type: 'shipper')
-    FactoryBot.create(:shipment_contact, shipment: shipments_shipment, contact_type: 'consignee')
-    FactoryBot.create(:shipment_contact, shipment: shipments_shipment, contact_type: 'notifyee')
+    ::Organizations.current_id = organization.id
+    append_token_header
+
+    stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
+    FactoryBot.create(:organizations_theme, organization: organization)
+    FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: 'shipper')
+    FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: 'consignee')
+    FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: 'notifyee')
   end
 
   describe 'GET #download_shipment' do
-    let(:profile) { FactoryBot.build(:profiles_profile) }
-
-    before do
-      allow(Profiles::ProfileService).to receive(:fetch).and_return(profile)
-    end
-
     it 'returns an http status of success' do
-      get :download_shipment, params: { tenant_id: shipment.tenant, shipment_id: shipment.id }
+      get :download_shipment, params: { organization_id: organization, shipment_id: shipment.id }
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
@@ -75,16 +67,16 @@ RSpec.describe Shipments::BookingProcessController do
 
     describe '.save_and_send_quotes' do
       it 'successfully calls the mailer and return the quote Document' do
-        post :send_quotes, params: { tenant_id: shipment.tenant, shipment_id: shipment.id, quotes: quotes }
+        post :send_quotes, params: { organization_id: shipment.organization, shipment_id: shipment.id, quotes: quotes }
       end
     end
   end
 
   describe 'POST #get_offers' do
-    let(:itinerary) { create(:gothenburg_shanghai_itinerary, tenant: tenant) }
+    let(:itinerary) { create(:gothenburg_shanghai_itinerary, organization: organization) }
     let(:trip) { create(:trip, itinerary_id: itinerary.id) }
-    let(:origin_hub) { Hub.find(itinerary.hubs.find_by(name: 'Gothenburg Port').id) }
-    let(:destination_hub) { Hub.find(itinerary.hubs.find_by(name: 'Shanghai Port').id) }
+    let(:origin_hub) { itinerary.origin_hub }
+    let(:destination_hub) { itinerary.destination_hub }
     let(:shipment_params) do
       shipment.as_json.merge(
         origin: {
@@ -171,7 +163,7 @@ RSpec.describe Shipments::BookingProcessController do
     end
 
     it 'returns an http status of success' do
-      post :get_offers, params: { tenant_id: shipment.tenant, shipment_id: shipment.id, shipment: shipment_params }
+      post :get_offers, params: { organization_id: shipment.organization, shipment_id: shipment.id, shipment: shipment_params }
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
@@ -185,13 +177,72 @@ RSpec.describe Shipments::BookingProcessController do
 
   describe 'GET #refresh_quotes' do
     it 'returns an http status of success' do
-      get :refresh_quotes, params: { tenant_id: shipment.tenant, shipment_id: shipment.id }
+      get :refresh_quotes, params: { organization_id: shipment.organization, shipment_id: shipment.id }
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
         json_response = JSON.parse(response.body)
         expect(json_response.dig('data').length).to eq(1)
         expect(json_response.dig('data', 0, 'quote', 'total', 'value')).to eq('9.99')
+      end
+    end
+  end
+
+  describe 'POST #choose_offer' do
+    before do
+      allow(ShippingTools).to receive(:new).and_return(shipping_tools_double)
+      allow(shipping_tools_double).to receive(:choose_offer).and_return({shipment: shipment.as_json})
+    end
+
+    it 'returns an http status of success' do
+      post :choose_offer, params: { organization_id: shipment.organization, shipment_id: shipment.id }
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
+  describe 'POST #update_shipment' do
+    before do
+      allow(ShippingTools).to receive(:new).and_return(shipping_tools_double)
+      allow(shipping_tools_double).to receive(:update_shipment).and_return({shipment: shipment.as_json})
+    end
+
+    it 'returns an http status of success' do
+      post :update_shipment, params: { organization_id: shipment.organization, shipment_id: shipment.id }
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
+  describe 'POST #request_shipment' do
+    before do
+      allow(ShippingTools).to receive(:new).and_return(shipping_tools_double)
+      allow(shipping_tools_double).to receive(:request_shipment).and_return(shipment)
+      allow(shipping_tools_double).to receive(:tenant_notification_email).and_return(true)
+      allow(shipping_tools_double).to receive(:shipper_notification_email).and_return(true)
+    end
+
+    it 'returns an http status of success' do
+      post :request_shipment, params: { organization_id: shipment.organization, shipment_id: shipment.id }
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
+  describe 'POST #create_shipment' do
+
+    it 'returns an http status of success' do
+      post :create_shipment, params: { organization_id: shipment.organization, details: {loadType: 'cargo_item', direction: 'import'} }
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        expect(json.dig(:data, :shipment, :id)).to be_present
       end
     end
   end

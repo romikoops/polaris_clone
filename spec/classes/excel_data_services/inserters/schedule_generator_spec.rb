@@ -5,19 +5,19 @@ require 'rails_helper'
 RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
   describe '.perform' do
     let(:data) { FactoryBot.build(:excel_data_restructured_schedule_generator) }
-    let(:tenant) { create(:tenant) }
+    let(:organization) { create(:organizations_organization) }
     let(:vehicle) { create(:vehicle, tenant_vehicles: [tenant_vehicle_1]) }
     let(:carrier) { create(:carrier, code: 'hapag lloyd', name: 'Hapag LLoyd') }
-    let(:tenant_vehicle_1) { create(:tenant_vehicle, name: 'lcl_service', tenant: tenant) }
-    let(:tenant_vehicle_2) { create(:tenant_vehicle, name: 'fcl_service', tenant: tenant, carrier: carrier) }
-    let!(:itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe') }
-    let!(:ignored_itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe', mode_of_transport: 'rail') }
-    let!(:misspelled_itinerary) { create(:itinerary, tenant: tenant, name: 'Sahnghai - Felixstowe', mode_of_transport: 'air') }
+    let(:tenant_vehicle_1) { create(:tenant_vehicle, name: 'lcl_service', organization: organization) }
+    let(:tenant_vehicle_2) { create(:tenant_vehicle, name: 'fcl_service', organization: organization, carrier: carrier) }
+    let!(:itinerary) { create(:itinerary, organization: organization, name: 'Dalian - Felixstowe') }
+    let!(:ignored_itinerary) { create(:itinerary, organization: organization, name: 'Dalian - Felixstowe', mode_of_transport: 'rail') }
+    let!(:misspelled_itinerary) { create(:itinerary, organization: organization, name: 'Sahnghai - Felixstowe', mode_of_transport: 'air') }
     let!(:multi_mot_itineraries) do
       [
-        create(:itinerary, tenant: tenant, name: 'Shanghai - Felixstowe', mode_of_transport: 'ocean'),
-        create(:itinerary, tenant: tenant, name: 'Shanghai - Felixstowe', mode_of_transport: 'ocean', transshipment: 'ZACPT'),
-        create(:itinerary, tenant: tenant, name: 'Shanghai - Felixstowe', mode_of_transport: 'air')
+        create(:itinerary, organization: organization, name: 'Shanghai - Felixstowe', mode_of_transport: 'ocean'),
+        create(:itinerary, organization: organization, name: 'Shanghai - Felixstowe', mode_of_transport: 'ocean', transshipment: 'ZACPT'),
+        create(:itinerary, organization: organization, name: 'Shanghai - Felixstowe', mode_of_transport: 'air')
       ]
     end
 
@@ -33,7 +33,7 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
 
       it 'creates the trips for the correct itineraries with base pricing' do
         stats = Timecop.freeze(Time.utc(2019, 2, 22, 11, 54, 0)) do
-          described_class.insert(tenant: tenant, data: data, options: {})
+          described_class.insert(organization: organization, data: data, options: {})
         end
 
         aggregate_failures do

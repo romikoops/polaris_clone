@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Loaders::Base do
-  let(:tenant) { create(:tenant) }
-  let(:base_loader) { described_class.new(tenant: tenant) }
+  let(:organization) { create(:organizations_organization) }
+  let(:base_loader) { described_class.new(organization: organization) }
 
   describe '#perform' do
     it 'raises a NotImplementedError' do

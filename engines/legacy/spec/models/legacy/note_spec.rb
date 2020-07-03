@@ -28,6 +28,7 @@ end
 #  updated_at                   :datetime         not null
 #  hub_id                       :integer
 #  itinerary_id                 :integer
+#  organization_id              :uuid
 #  pricings_pricing_id          :uuid
 #  sandbox_id                   :uuid
 #  target_id                    :integer
@@ -36,9 +37,14 @@ end
 #
 # Indexes
 #
+#  index_notes_on_organization_id            (organization_id)
 #  index_notes_on_pricings_pricing_id        (pricings_pricing_id)
 #  index_notes_on_remarks                    (remarks)
 #  index_notes_on_sandbox_id                 (sandbox_id)
 #  index_notes_on_target_type_and_target_id  (target_type,target_id)
 #  index_notes_on_transshipment              (transshipment)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

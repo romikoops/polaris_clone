@@ -42,30 +42,25 @@ module ExcelTool
     end
 
     def client
-      @client = User.find_by(
-        tenant_id: @user.tenant_id,
-        email: @client_row[:email],
-        vat_number: @client_row[:vat_number],
-        external_id: @client_row[:external_id]
+      @client = Organizations::User.find_by(
+        organization_id: @user.organization_id,
+        email: @client_row[:email]
       )
     end
 
     def update_client
       @client.update_attributes(
-        tenant_id: @user.tenant_id,
+        organization_id: @user.organization_id,
         email: @client_row[:email],
-        vat_number: @client_row[:vat_number],
-        external_id: @client_row[:external_id]
       )
     end
 
     def create_client
-      @user.tenant.users.create!(
-        tenant_id: @user.tenant_id,
+      Authentication::User.create!(
+        type: 'Organizations::User',
+        organization_id: @user.organization_id,
         email: @client_row[:email],
-        vat_number: @client_row[:vat_number],
-        password: @client_row[:password],
-        external_id: @client_row[:external_id]
+        password: @client_row[:password]
       )
     end
 
@@ -94,8 +89,7 @@ module ExcelTool
     end
 
     def update_or_create_client_profile
-      tenants_user = Tenants::User.find_by(legacy_id: @client.id)
-      Profiles::ProfileService.create_or_update_profile(user: tenants_user,
+      Profiles::ProfileService.create_or_update_profile(user: @client,
                                                         first_name: @client_row[:first_name],
                                                         last_name: @client_row[:last_name],
                                                         company_name: @client_row[:company_name],

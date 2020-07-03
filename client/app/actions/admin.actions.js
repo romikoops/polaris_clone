@@ -966,7 +966,7 @@ function autoGenSchedules (data) {
     adminService.autoGenSchedules(data).then(
       (schedData) => {
         dispatch(success(schedData))
-        dispatch(documentActions.setStats(schedData.data.stats))
+        window.location.reload()
       },
       (error) => {
         dispatch(failure(error))

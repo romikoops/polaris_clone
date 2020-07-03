@@ -24,13 +24,14 @@ module AdmiraltyReports
       workbook.add_worksheet(name: 'Stat Overview') do |sheet|
         sheet.add_row ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Company', 'Status']
         @raw_request_data.each do |request|
-          request_user = request&.user
-          request_tenant = request.try(:tenant) || Legacy::Shipment.find(request.original_shipment_id).tenant
+          request_user = ::Users::User.find_by(id: request.user_id)
+          request_organization = request.try(:organization) || Legacy::Shipment.find(request.original_shipment_id).organization
+          company = Companies::Membership.find_by(member: request_user)&.company
           sheet.add_row(
-            [request_tenant.try(:name) || request_tenant.try(:slug),
+            [request_organization.try(:name) || request_organization.try(:slug),
              request.created_at.to_date,
              request_user&.email,
-             request_user&.company&.name,
+             company&.name,
              request.try(:status)]
           )
         end

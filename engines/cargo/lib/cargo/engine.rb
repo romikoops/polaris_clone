@@ -3,7 +3,7 @@
 require 'measured-rails'
 require 'cargo/measured_units'
 
-require 'tenants'
+require 'organizations'
 
 module Cargo
   class Engine < ::Rails::Engine

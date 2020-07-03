@@ -23,8 +23,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-pricings'
   s.add_dependency 'imc-profiles'
   s.add_dependency 'imc-quotations'
-  s.add_dependency 'imc-result_formatter'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
+  s.add_dependency 'imc-organization_manager'
 
   Gemhelper.common(s)
 end

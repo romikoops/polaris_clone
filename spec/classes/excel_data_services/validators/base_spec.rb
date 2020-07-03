@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::Base do
-  let(:tenant) { create(:tenant) }
+  let(:organization) { create(:organizations_organization) }
   let(:data) {}
-  let(:options) { { tenant: tenant, sheet_name: 'Sheet1', data: data } }
+  let(:options) { { organization: organization, sheet_name: 'Sheet1', data: data } }
   let(:base_validator) { described_class.new(options) }
 
   describe '.get' do

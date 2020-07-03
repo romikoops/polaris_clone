@@ -5,12 +5,12 @@ require 'will_paginate'
 module Trucking
   class Trucking < ApplicationRecord
     belongs_to :hub, class_name: 'Legacy::Hub'
-    belongs_to :tenant, class_name: 'Legacy::Tenant'
+    belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :location, class_name: 'Trucking::Location'
     belongs_to :courier, class_name: 'Trucking::Courier'
     validates :hub_id, :location_id, presence: true
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-    belongs_to :group, class_name: 'Tenants::Group', optional: true
+    belongs_to :group, class_name: 'Groups::Group', optional: true
     validates :hub_id,
               uniqueness: {
                 scope: %i(
@@ -21,7 +21,7 @@ module Trucking
                   courier_id
                   user_id
                   modifier
-                  tenant_id
+                  organization_id
                   truck_type
                   group_id
                 ),
@@ -94,22 +94,31 @@ end
 #  courier_id          :uuid
 #  group_id            :uuid
 #  hub_id              :integer
+#  legacy_user_id      :integer
 #  location_id         :uuid
+#  organization_id     :uuid
 #  parent_id           :uuid
 #  rate_id             :uuid
 #  sandbox_id          :uuid
 #  tenant_id           :integer
-#  user_id             :integer
+#  user_id             :uuid
 #
 # Indexes
 #
-#  index_trucking_truckings_on_cargo_class  (cargo_class)
-#  index_trucking_truckings_on_carriage     (carriage)
-#  index_trucking_truckings_on_group_id     (group_id)
-#  index_trucking_truckings_on_hub_id       (hub_id)
-#  index_trucking_truckings_on_load_type    (load_type)
-#  index_trucking_truckings_on_location_id  (location_id)
-#  index_trucking_truckings_on_sandbox_id   (sandbox_id)
-#  index_trucking_truckings_on_tenant_id    (tenant_id)
-#  trucking_foreign_keys                    (rate_id,location_id,hub_id) UNIQUE
+#  index_trucking_truckings_on_cargo_class      (cargo_class)
+#  index_trucking_truckings_on_carriage         (carriage)
+#  index_trucking_truckings_on_group_id         (group_id)
+#  index_trucking_truckings_on_hub_id           (hub_id)
+#  index_trucking_truckings_on_load_type        (load_type)
+#  index_trucking_truckings_on_location_id      (location_id)
+#  index_trucking_truckings_on_organization_id  (organization_id)
+#  index_trucking_truckings_on_sandbox_id       (sandbox_id)
+#  index_trucking_truckings_on_tenant_id        (tenant_id)
+#  index_trucking_truckings_on_user_id          (user_id)
+#  trucking_foreign_keys                        (rate_id,location_id,hub_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
+#  fk_rails_...  (user_id => users_users.id)
 #

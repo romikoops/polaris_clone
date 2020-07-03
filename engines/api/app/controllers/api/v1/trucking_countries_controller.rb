@@ -7,7 +7,7 @@ module Api
     class TruckingCountriesController < ApiController
       def index
         countries = Api::Routing::Trucking::CountriesService.new(
-          tenant: current_tenant,
+          organization: current_organization,
           load_type: trucking_params[:load_type],
           target: trucking_params[:location_type].to_sym
         ).perform

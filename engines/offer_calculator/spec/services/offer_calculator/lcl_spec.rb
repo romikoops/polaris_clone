@@ -14,12 +14,15 @@ RSpec.describe OfferCalculator::TruckingTools, :aggregate_failures do
   let(:cargos) { [FactoryBot.create(:legacy_cargo_item)] }
   let(:kms) { 42 }
   let(:carriage) { 'pre' }
-  let(:user) { FactoryBot.create(:legacy_user) }
+  let(:user) { FactoryBot.create(:organizations_user) }
 
   let(:trucking_tools) { described_class.new(trucking_pricing, cargos, kms, carriage, user) }
   let(:result) { trucking_tools.perform }
 
   describe '.perform' do
+    before do
+      ::Organizations.current_id = user.organization_id
+    end
     context 'when load type is LCL pre-carriage (PER_KG)' do
       let(:rates) { { kg: [{ rate: { base: 1.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_KG' }, min_kg: 0.0, max_kg: 2000.0 }] } }
 

@@ -18,12 +18,12 @@ module CustomValidations
                         greater_than_or_equal_to: 0,
                         less_than_or_equal_to: lambda { |obj|
                           mot = mode_of_transport || obj.shipment.itinerary.try(:mode_of_transport)
-                          obj.tenant.max_dimensions.dig(mot.to_sym, dimension)
+                          obj.organization.max_dimensions.dig(mot.to_sym, dimension)
                         }
                       },
                       if: lambda { |obj|
                         mot = mode_of_transport || obj.shipment.itinerary.try(:mode_of_transport)
-                        mot && obj.tenant.max_dimensions.dig(mot.to_sym, dimension)
+                        mot && obj.organization.max_dimensions.dig(mot.to_sym, dimension)
                       }
     end
     klass

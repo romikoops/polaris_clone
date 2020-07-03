@@ -7,7 +7,7 @@ class Incoterm < ApplicationRecord
   belongs_to :buyer_incoterm_scope, class_name: 'IncotermScope'
   belongs_to :seller_incoterm_charge, class_name: 'IncotermCharge'
   belongs_to :buyer_incoterm_charge, class_name: 'IncotermCharge'
-  has_many :tenant_incoterms
+  has_many :organization_incoterms, class_name: 'OrganizationIncoterm'
 end
 
 # == Schema Information

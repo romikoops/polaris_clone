@@ -6,23 +6,17 @@ require 'timecop'
 RSpec.describe Pricings::Finder do
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:vehicle) do
-    FactoryBot.create(:vehicle,
-                      tenant_vehicles: [tenant_vehicle_1])
-  end
-  let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
-  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'express', tenant: tenant) }
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly',  organization: organization) }
+  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'express', organization: organization) }
   let!(:currency) { FactoryBot.create(:legacy_currency) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
-  let!(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
+  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
-  let(:lcl_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-  let(:fcl_20_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-  let(:fcl_40_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-  let(:fcl_40_hq_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
-  let(:agg_shipment) { FactoryBot.create(:legacy_shipment, tenant: tenant, user: user) }
+  let(:lcl_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
+  let(:fcl_20_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
+  let(:fcl_40_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
+  let(:fcl_40_hq_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
+  let(:agg_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
   let(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1) }
   let(:lcl_cargo) { FactoryBot.create(:legacy_cargo_item, shipment_id: lcl_shipment.id, cargo_item_type_id: pallet.id) }
   let(:fcl_20_pricing) { FactoryBot.create(:fcl_20_pricing, tenant_vehicle: tenant_vehicle_1) }
@@ -47,12 +41,12 @@ RSpec.describe Pricings::Finder do
       quantity: 1
     }
   end
-  let!(:tenants_scope) { FactoryBot.create(:tenants_scope, content: { base_pricing: true }, target: tenants_tenant) }
-  let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
-  let(:itinerary_2) { FactoryBot.create(:felixstowe_shanghai_itinerary, tenant: tenant) }
+  let!(:organizations_scope) { FactoryBot.create(:organizations_scope, content: { base_pricing: true }, target: organization) }
+  let(:itinerary_1) { FactoryBot.create(:default_itinerary, organization: organization) }
+  let(:itinerary_2) { FactoryBot.create(:felixstowe_shanghai_itinerary, organization: organization) }
   let(:group) do
-    FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'Test1').tap do |tapped_group|
-      FactoryBot.create(:tenants_membership, member: tenants_user, group: tapped_group)
+    FactoryBot.create(:groups_group, organization: organization, name: 'Test1').tap do |tapped_group|
+      FactoryBot.create(:groups_membership, member: user, group: tapped_group)
     end
   end
   let(:dates) do
@@ -80,6 +74,7 @@ RSpec.describe Pricings::Finder do
   let(:klass) do
     described_class.new(
       schedules: schedules,
+      organization: organization,
       user_pricing_id: user.id,
       cargo_classes: target_cargo_classes,
       dates: dates,
@@ -91,8 +86,9 @@ RSpec.describe Pricings::Finder do
   let(:results) { klass.perform }
 
   before do
-    FactoryBot.create(:freight_margin, default_for: 'ocean', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
-    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
+    ::Organizations.current_id = organization.id
+    FactoryBot.create(:freight_margin, default_for: 'ocean', organization: organization, applicable: organization, value: 0)
+    FactoryBot.create(:profiles_profile, user_id: user.id)
   end
 
   describe '.perform' do
@@ -102,12 +98,12 @@ RSpec.describe Pricings::Finder do
         FactoryBot.create(:lcl_pricing,
                           itinerary: itinerary_2,
                           tenant_vehicle: tenant_vehicle_2)
-        FactoryBot.create(:pricings_margin, pricing: pricing_1, tenant: tenants_tenant, applicable: tenants_user)
+        FactoryBot.create(:pricings_margin, pricing: pricing_1, organization: organization, applicable: user)
       end
 
       let(:pricing_1) do
         FactoryBot.create(:lcl_pricing,
-                          tenant: tenant,
+                          organization: organization,
                           itinerary: itinerary_1,
                           tenant_vehicle: tenant_vehicle_1)
       end
@@ -123,14 +119,14 @@ RSpec.describe Pricings::Finder do
     context 'with base pricing and group pricings (lcl)' do
       let(:pricing_1) do
         FactoryBot.create(:lcl_pricing,
-                          tenant: tenant,
+                          organization: organization,
                           itinerary: itinerary_1,
                           tenant_vehicle: tenant_vehicle_1,
                           group_id: group.id)
       end
       let(:pricing_2) do
         FactoryBot.create(:lcl_pricing,
-                          tenant: tenant,
+                          organization: organization,
                           itinerary: itinerary_1,
                           tenant_vehicle: tenant_vehicle_1)
       end
@@ -164,18 +160,18 @@ RSpec.describe Pricings::Finder do
       let(:pricing_1) do
         FactoryBot.create(:fcl_20_pricing,
                           itinerary: itinerary_1,
-                          tenant: tenant,
+                          organization: organization,
                           tenant_vehicle: tenant_vehicle_1)
       end
       let(:pricing_2) do
         FactoryBot.create(:fcl_40_pricing,
-                          tenant: tenant,
+                          organization: organization,
                           itinerary: itinerary_1,
                           tenant_vehicle: tenant_vehicle_1)
       end
       let(:pricing_3) do
         FactoryBot.create(:fcl_40_hq_pricing,
-                          tenant: tenant,
+                          organization: organization,
                           itinerary: itinerary_1,
                           tenant_vehicle: tenant_vehicle_1)
       end
@@ -195,9 +191,9 @@ RSpec.describe Pricings::Finder do
       let(:target_shipment) { fcl_20_shipment }
 
       before do
-        FactoryBot.create(:pricings_margin, pricing: pricing_1, tenant: tenants_tenant, applicable: tenants_user)
-        FactoryBot.create(:pricings_margin, pricing: pricing_2, tenant: tenants_tenant, applicable: tenants_user)
-        FactoryBot.create(:pricings_margin, pricing: pricing_3, tenant: tenants_tenant, applicable: tenants_user)
+        FactoryBot.create(:pricings_margin, pricing: pricing_1, organization: organization, applicable: user)
+        FactoryBot.create(:pricings_margin, pricing: pricing_2, organization: organization, applicable: user)
+        FactoryBot.create(:pricings_margin, pricing: pricing_3, organization: organization, applicable: user)
       end
 
       it 'returns an object containing pricings grouped by transport category (fcl)' do
@@ -214,18 +210,18 @@ RSpec.describe Pricings::Finder do
       let(:pricing_1) do
         FactoryBot.create(:fcl_20_pricing,
                           itinerary: itinerary_1,
-                          tenant: tenant,
+                          organization: organization,
                           tenant_vehicle: tenant_vehicle_1)
       end
       let(:pricing_2) do
         FactoryBot.create(:fcl_40_pricing,
-                          tenant: tenant,
+                          organization: organization,
                           itinerary: itinerary_1,
                           tenant_vehicle: tenant_vehicle_1)
       end
       let(:pricing_3) do
         FactoryBot.create(:fcl_40_hq_pricing,
-                          tenant: tenant,
+                          organization: organization,
                           itinerary: itinerary_1,
                           tenant_vehicle: tenant_vehicle_1)
       end
@@ -245,10 +241,10 @@ RSpec.describe Pricings::Finder do
       let(:target_shipment) { fcl_20_shipment }
 
       before do
-        tenants_tenant.scope.update(content: { base_pricing: true, show_rate_overview: true })
-        FactoryBot.create(:pricings_margin, pricing: pricing_1, tenant: tenants_tenant, applicable: tenants_user)
-        FactoryBot.create(:pricings_margin, pricing: pricing_2, tenant: tenants_tenant, applicable: tenants_user)
-        FactoryBot.create(:pricings_margin, pricing: pricing_3, tenant: tenants_tenant, applicable: tenants_user)
+        organization.scope.update(content: { base_pricing: true, show_rate_overview: true })
+        FactoryBot.create(:pricings_margin, pricing: pricing_1, organization: organization, applicable: user)
+        FactoryBot.create(:pricings_margin, pricing: pricing_2, organization: organization, applicable: user)
+        FactoryBot.create(:pricings_margin, pricing: pricing_3, organization: organization, applicable: user)
       end
 
       it 'returns an object containing pricings grouped by transport category (fcl)' do
@@ -265,7 +261,7 @@ RSpec.describe Pricings::Finder do
         FactoryBot.create(:lcl_pricing,
                           itinerary: itinerary_1,
                           tenant_vehicle: tenant_vehicle_1,
-                          tenant: tenant,
+                          organization: organization,
                           effective_date: Date.parse('01/01/2019'),
                           expiration_date: Date.parse('31/01/2019'))
       end
@@ -289,8 +285,8 @@ RSpec.describe Pricings::Finder do
       before do
         FactoryBot.create(:pricings_margin,
                           pricing: pricing_1,
-                          tenant: tenants_tenant,
-                          applicable: tenants_user,
+                          organization: organization,
+                          applicable: user,
                           effective_date: Date.parse('28/01/2019'),
                           expiration_date: Time.zone.today + 32.days)
       end
@@ -308,14 +304,14 @@ RSpec.describe Pricings::Finder do
     describe '.pricings_for_cargo_classes_and_groups' do
       let(:pricing_1) do
         FactoryBot.create(:lcl_pricing,
-                          tenant: tenant,
+                          organization: organization,
                           itinerary: itinerary_1,
                           tenant_vehicle: tenant_vehicle_1,
                           group_id: group.id)
       end
       let(:pricing_2) do
         FactoryBot.create(:lcl_pricing,
-                          tenant: tenant,
+                          organization: organization,
                           itinerary: itinerary_1,
                           tenant_vehicle: tenant_vehicle_1)
       end

@@ -29,7 +29,7 @@ module ExcelDataServices
         def check_itinerary_exists(row)
           itinerary_name = row.itinerary_name
           return if Legacy::Itinerary.where("name ILIKE ?", itinerary_name)
-            .exists?(tenant: tenant, mode_of_transport: row.mode_of_transport)
+            .exists?(organization: organization, mode_of_transport: row.mode_of_transport)
 
           add_to_errors(
             type: :error,

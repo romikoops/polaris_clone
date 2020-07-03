@@ -6,8 +6,8 @@ module ExcelDataServices
       new(options).perform
     end
 
-    def initialize(tenant:, xlsx:, headers_for_all_sheets:, restructurer_names_for_all_sheets:)
-      @tenant = tenant
+    def initialize(organization:, xlsx:, headers_for_all_sheets:, restructurer_names_for_all_sheets:)
+      @organization = organization
       @xlsx = xlsx
       @headers_for_all_sheets = headers_for_all_sheets
       @restructurer_names_for_all_sheets = restructurer_names_for_all_sheets

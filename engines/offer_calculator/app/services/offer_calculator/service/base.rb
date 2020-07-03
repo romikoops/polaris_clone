@@ -5,9 +5,11 @@ module OfferCalculator
     class Base
       def initialize(shipment: false, sandbox: nil)
         @shipment = shipment
-        @scope = Tenants::ScopeService.new(
-          target: Tenants::User.find_by(legacy_id: @shipment.user_id),
-          tenant: Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
+        @organization = Organizations::Organization.find(@shipment.organization_id)
+        @creator = @params&.dig(:shipment, :creator)
+        @scope = OrganizationManager::ScopeService.new(
+          target: Users::User.find_by(id: @shipment.user_id) || @creator,
+          organization: organization
         ).fetch
         @sandbox = sandbox
       end
@@ -16,7 +18,7 @@ module OfferCalculator
         @scope['open_quotation_tool'] || @scope['closed_quotation_tool']
       end
 
-      attr_reader :scope
+      attr_reader :scope, :organization, :wheelhouse
     end
   end
 end

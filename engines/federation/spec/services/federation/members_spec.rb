@@ -5,10 +5,10 @@ require 'rails_helper'
 RSpec.describe Federation::Members do
   describe '#list' do
     context 'when returning the federated tenants' do
-      let(:tenant) { FactoryBot.build(:tenants_tenant) }
+      let(:organization) { FactoryBot.build(:organizations_organization) }
 
       it 'returns the correct hierarchy' do
-        expect(described_class.new(tenant: tenant).list).to eq([])
+        expect(described_class.new(organization: organization).list).to eq([])
       end
     end
   end

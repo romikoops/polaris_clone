@@ -32,6 +32,7 @@ module Api
       def validation
         validator = Wheelhouse::ValidationService.new(
           user: user,
+          organization: current_organization,
           cargo: cargo,
           routing: routing,
           load_type: load_type,
@@ -46,12 +47,12 @@ module Api
       end
 
       def quotation_service
-        Wheelhouse::QuotationService.new(quotation_details: quotation_details, shipping_info: modified_shipment_params)
+        Wheelhouse::QuotationService.new(organization: current_organization, quotation_details: quotation_details, shipping_info: modified_shipment_params)
       end
 
       def quotation_details
         details = quotation_params.to_h
-        details[:user_id] = current_user.id if details[:user_id].blank?
+        details[:creator] = current_user if details[:user_id].blank?
         details
       end
 
@@ -119,7 +120,7 @@ module Api
 
       def cargo
         Cargo::Cargo.new(
-          tenant: current_tenant,
+          organization: current_organization,
           units: load_type == 'container' ? containers : cargo_items
         )
       end
@@ -128,9 +129,10 @@ module Api
         modified_shipment_params.fetch(:cargo_items_attributes, []).map do |attrs|
           Cargo::Unit.new(
             id: attrs[:id],
+            organization_id: current_organization.id,
             cargo_class: '00',
             cargo_type: 'LCL',
-            tenant: current_tenant,
+            organization: current_organization,
             width_value: attrs[:width].to_f / 100,
             height_value: attrs[:height].to_f / 100,
             length_value: attrs[:length].to_f / 100,
@@ -146,7 +148,7 @@ module Api
             id: attrs[:id],
             cargo_class: Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER[attrs[[:cargo_class]]],
             cargo_type: 'GP',
-            tenant: current_tenant,
+            organization: current_organization,
             weight_value: attrs[:payload_in_kg].to_f,
             quantity: attrs[:quantity]
           )
@@ -154,7 +156,7 @@ module Api
       end
 
       def user
-        Tenants::User.find_by(id: quotation_params[:user_id]) || current_user
+        Users::User.find_by(id: quotation_params[:user_id]) || current_user
       end
     end
   end

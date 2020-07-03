@@ -13,7 +13,7 @@ module Api
 
       def availability
         Api::Routing::Trucking::AvailabilityService.availability(
-          tenant: current_tenant,
+          organization: current_organization,
           load_type: trucking_params[:load_type],
           coordinates: coordinates,
           target: target_param

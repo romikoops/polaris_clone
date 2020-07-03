@@ -3,29 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe Pdf::Handler do
-  let(:tenant) { FactoryBot.create(:legacy_tenant, currency: 'USD') }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: 'USD') }
-  let(:currency) { FactoryBot.create(:legacy_currency, base: 'USD', tenant_id: tenant.id) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let!(:shipment) {
     FactoryBot.create(:completed_legacy_shipment,
-      tenant: tenant,
+      organization: organization,
       user: user,
       load_type: 'cargo_item',
       with_breakdown: true,
-      with_tenders: true)
+      with_tenders: true
+    )
   }
-  let!(:agg_shipment) {
-    FactoryBot.create(:legacy_shipment,
-      tenant: tenant,
-      user: user,
-      load_type: 'cargo_item',
-      with_aggregated_cargo: true)
-  }
-  let(:pdf_service) { Pdf::Service.new(tenant: tenant, user: user) }
+  let!(:agg_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user, load_type: 'cargo_item', with_aggregated_cargo: true) }
+  let(:pdf_service) { Pdf::Service.new(organization: organization, user: user) }
   let(:default_args) do
     {
       shipment: shipment,
+      organization: organization,
       cargo_units: shipment.cargo_units,
       quotes: pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment])
     }
@@ -33,19 +27,16 @@ RSpec.describe Pdf::Handler do
   let(:klass) { described_class.new(default_args) }
 
   before do
+    ::Organizations.current_id = organization.id
     dummy_selected_offer = FactoryBot.build(:multi_currency_selected_offer, trip_id: shipment.trip_id)
     consolidated_selected_offer = FactoryBot.build(:consolidated_selected_offer, trip_id: shipment.trip_id)
     allow(shipment).to receive(:selected_offer).and_return(dummy_selected_offer)
     allow(agg_shipment).to receive(:selected_offer).and_return(consolidated_selected_offer)
-    %w[EUR USD BIF AED].each do |currency|
-      stub_request(:get, "http://data.fixer.io/latest?access_key=FAKEKEY&base=#{currency}")
-        .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
-    end
   end
 
   context 'with helper methods' do
     let!(:scope) do
-      FactoryBot.create(:tenants_scope, target: tenants_tenant, content: {
+      FactoryBot.create(:organizations_scope, target: organization, content: {
                hide_converted_grand_total: true,
                fine_fee_detail: true,
                chargeable_weight_view: 'weight'
@@ -158,16 +149,16 @@ RSpec.describe Pdf::Handler do
     describe '.generate_fee_string' do
       let(:charge_shipment) {
         FactoryBot.create(:legacy_shipment,
-          tenant: tenant,
           with_breakdown: true,
-          with_tenders: true)
+          organization: organization,
+          with_tenders: true
+        )
       }
       let(:quotes) { pdf_service.quotes_with_trip_id(quotation: nil, shipments: [charge_shipment]) }
       let(:string_klass) { described_class.new(default_args.merge(quotes: quotes, shipment: charge_shipment)) }
-      let(:tenants_tenant) { FactoryBot.create(:tenants_tenant, legacy_id: charge_shipment.tenant_id) }
 
       before do
-        FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
+        FactoryBot.create(:organizations_theme, organization: organization)
       end
 
       it 'returns MOT Freight as key' do

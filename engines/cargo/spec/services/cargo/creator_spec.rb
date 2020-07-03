@@ -5,19 +5,17 @@ require 'rails_helper'
 module Cargo
   RSpec.describe Creator, type: :model do
     describe 'Mapping legacy cargo to cargo' do
-      let(:tenant) { FactoryBot.create(:legacy_tenant) }
-      let(:currency) { FactoryBot.create(:legacy_currency) }
-      let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
       let(:tender) { FactoryBot.create(:quotations_tender) }
       let(:cargo) { ::Cargo::Cargo.find_by(quotation_id: tender.quotation_id) }
+      let(:legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, load_type: load_type, meta: { tender_id: tender.id }) }
 
       context 'when shipment is FCL' do
-        let(:fcl_legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, load_type: :container, tenant: tenant, user: user, meta: { tender_id: tender.id }) }
+        let(:load_type) { :container }
 
         before do
-          FactoryBot.create(:legacy_container, cargo_class: 'fcl_20', shipment: fcl_legacy_shipment)
-          FactoryBot.create(:legacy_container, cargo_class: 'fcl_40', shipment: fcl_legacy_shipment)
-          described_class.new(legacy_shipment: fcl_legacy_shipment).perform
+          FactoryBot.create(:legacy_container, cargo_class: 'fcl_20', shipment: legacy_shipment)
+          FactoryBot.create(:legacy_container, cargo_class: 'fcl_40', shipment: legacy_shipment)
+          described_class.new(legacy_shipment: legacy_shipment).perform
         end
 
         it 'creates a valid FCL cargo' do
@@ -29,9 +27,11 @@ module Cargo
       end
 
       context 'when shipment is LCL' do
-        let(:lcl_legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, load_type: :cargo_item, tenant: tenant, user: user, meta: { tender_id: tender.id }) }
+        let(:load_type) { :cargo_item }
 
-        before { described_class.new(legacy_shipment: lcl_legacy_shipment).perform }
+        before do
+          described_class.new(legacy_shipment: legacy_shipment).perform
+        end
 
         it 'creates a valid LCL cargo' do
           aggregate_failures do
@@ -42,7 +42,7 @@ module Cargo
       end
 
       context 'when shipment is aggregated cargo' do
-        let(:aggregated_legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, load_type: :cargo_item, with_aggregated_cargo: true, tenant: tenant, user: user, meta: { tender_id: tender.id }) }
+        let(:aggregated_legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, load_type: :cargo_item, with_aggregated_cargo: true, meta: { tender_id: tender.id }) }
 
         before { described_class.new(legacy_shipment: aggregated_legacy_shipment).perform }
 
@@ -51,22 +51,6 @@ module Cargo
             expect(cargo).to be_persisted
             expect(cargo.units.count).to eq 1
             expect(cargo.units.first.cargo_type).to eq('AGR')
-          end
-        end
-      end
-
-      context 'when cargo has errors' do
-        before do
-          tender.quotation.update_column(:tenant_id, nil)
-        end
-
-        let(:shipment) { FactoryBot.create(:complete_legacy_shipment, meta: { tender_id: tender.id }) }
-        let(:creator) { described_class.new(legacy_shipment: shipment).perform }
-
-        it 'does not create cargo' do
-          aggregate_failures do
-            expect(::Cargo::Cargo.count).to be_zero
-            expect(creator.errors).to be_present
           end
         end
       end

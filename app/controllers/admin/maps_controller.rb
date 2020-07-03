@@ -24,7 +24,7 @@ class Admin::MapsController < Admin::AdminBaseController # rubocop:disable Style
       west: params[:west],
       east: params[:east],
       south: params[:south],
-      north: params[:north],
+      north: params[:north]
     }
     raw_query = 
     <<-SQL

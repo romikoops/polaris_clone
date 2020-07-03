@@ -3,29 +3,31 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculator::Route do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let(:itinerary_2) { FactoryBot.create(:shanghai_gothenburg_itinerary, tenant: tenant) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:itinerary_2) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
   let(:current_etd) { 2.days.from_now }
   let(:lcl_transport_category) { FactoryBot.create(:ocean_lcl) }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'First', tenant: tenant) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'First', organization: organization) }
   let(:carrier) { FactoryBot.create(:legacy_carrier, name: 'MSC') }
-  let(:other_tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'bother', tenant: tenant, carrier: carrier) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, user: user, tenant: tenant, load_type: 'cargo_item') }
+  let(:other_tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'bother', organization: organization, carrier: carrier) }
+  let(:shipment) { FactoryBot.create(:legacy_shipment, user: user, organization: organization, load_type: 'cargo_item') }
   let(:date_range) { (Time.zone.today..Time.zone.today + 20.days) }
 
   before do
+    FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
+    FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
+
     FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle)
     FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle, load_type: 'container')
-    FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: {}, hub: origin_hub, tenant: tenant)
-    FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:fcl_20_pricing, tenant_vehicle: tenant_vehicle, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:fcl_40_pricing, tenant_vehicle: tenant_vehicle, itinerary: itinerary, tenant: tenant)
-    FactoryBot.create(:fcl_40_hq_pricing, tenant_vehicle: tenant_vehicle, itinerary: itinerary, tenant: tenant)
+    FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: {}, hub: origin_hub, organization: organization)
+    FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle, itinerary: itinerary, organization: organization)
+    FactoryBot.create(:fcl_20_pricing, tenant_vehicle: tenant_vehicle, itinerary: itinerary, organization: organization)
+    FactoryBot.create(:fcl_40_pricing, tenant_vehicle: tenant_vehicle, itinerary: itinerary, organization: organization)
+    FactoryBot.create(:fcl_40_hq_pricing, tenant_vehicle: tenant_vehicle, itinerary: itinerary, organization: organization)
   end
 
   describe '.detailed_hashes_from_itinerary_ids', :vcr do
@@ -64,7 +66,7 @@ RSpec.describe OfferCalculator::Route do
     context 'with single route and multiple service levels' do
       before do
         FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: other_tenant_vehicle)
-        FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle_id: other_tenant_vehicle.id)
+        FactoryBot.create(:lcl_pricing, itinerary: itinerary, organization: organization, tenant_vehicle_id: other_tenant_vehicle.id)
       end
 
       it 'return the route detail hashes' do

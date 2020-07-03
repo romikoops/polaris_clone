@@ -3,16 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculator::Calculator do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: tenant) }
-  let(:air_itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, mode_of_transport: 'air', tenant: tenant) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Hamburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
-  let(:origin_airport) { air_itinerary.hubs.find_by(name: 'Hamburg Port') }
-  let(:destination_airport) { air_itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
+  let(:air_itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, mode_of_transport: 'air', organization: organization) }
+  let(:origin_hub) { itinerary.hubs.find_by(name: 'Hamburg') }
+  let(:destination_hub) { itinerary.destination_hub }
+  let(:origin_airport) { air_itinerary.hubs.find_by(name: 'Hamburg') }
+  let(:destination_airport) { air_itinerary.hubs.find_by(name: 'Shanghai') }
   let(:shanghai_address) { FactoryBot.create(:shanghai_address) }
   let(:hamburg_address) { FactoryBot.create(:hamburg_address) }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
@@ -26,7 +24,7 @@ RSpec.describe OfferCalculator::Calculator do
                       origin_hub: nil,
                       desired_start_date: Time.zone.today + 4.days,
                       user: user,
-                      tenant: tenant)
+                      organization: organization)
   end
   let(:trip_itineraries) { [itinerary, air_itinerary] }
 
@@ -117,35 +115,42 @@ RSpec.describe OfferCalculator::Calculator do
   let(:zipcode_on_availability) { FactoryBot.create(:trucking_type_availability, query_method: :zipcode, carriage: 'on', load_type: 'cargo_item') }
 
   before do
+    ::Organizations.current_id = organization.id
+
+    FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
+    FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
+
     [origin_airport, origin_hub].each do |hub|
       FactoryBot.create(:trucking_hub_availability, hub: hub, type_availability: zipcode_pre_availability)
       FactoryBot.create(:trucking_trucking,
                         hub: hub,
-                        tenant: tenant,
+                        organization: organization,
                         location: pickup_location)
     end
     [destination_airport, destination_hub].each do |hub|
       FactoryBot.create(:trucking_hub_availability, hub: hub, type_availability: zipcode_on_availability)
       FactoryBot.create(:trucking_trucking,
                         hub: hub,
-                        tenant: tenant,
+                        organization: organization,
                         carriage: 'on',
                         location: delivery_location)
     end
-    FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-    FactoryBot.create(:lcl_pricing, itinerary: air_itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-    FactoryBot.create(:legacy_local_charge, tenant: tenant, hub: origin_hub, tenant_vehicle: tenant_vehicle, direction: 'export')
-    FactoryBot.create(:legacy_local_charge, tenant: tenant, hub: destination_hub, tenant_vehicle: tenant_vehicle, direction: 'import')
-    FactoryBot.create(:legacy_local_charge, tenant: tenant, hub: origin_airport, mode_of_transport: 'air', tenant_vehicle: tenant_vehicle, direction: 'export')
-    FactoryBot.create(:legacy_local_charge, tenant: tenant, hub: destination_airport, mode_of_transport: 'air', tenant_vehicle: tenant_vehicle, direction: 'import')
-    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
+    FactoryBot.create(:lcl_pricing, itinerary: itinerary, organization: organization, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:lcl_pricing, itinerary: air_itinerary, organization: organization, tenant_vehicle: tenant_vehicle)
+    FactoryBot.create(:legacy_local_charge, organization: organization, hub: origin_hub, tenant_vehicle: tenant_vehicle, direction: 'export')
+    FactoryBot.create(:legacy_local_charge, organization: organization, hub: destination_hub, tenant_vehicle: tenant_vehicle, direction: 'import')
+    FactoryBot.create(:legacy_local_charge, organization: organization, hub: origin_airport, mode_of_transport: 'air', tenant_vehicle: tenant_vehicle, direction: 'export')
+    FactoryBot.create(:legacy_local_charge, organization: organization, hub: destination_airport, mode_of_transport: 'air', tenant_vehicle: tenant_vehicle, direction: 'import')
+    FactoryBot.create(:organizations_scope, target: organization, content: { base_pricing: true })
+    stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
+      .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26, SEK: 8.26 } }.to_json, headers: {})
     %w[ocean trucking local_charge].flat_map do |mot|
       [
-        FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:trucking_on_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:trucking_pre_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:import_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:export_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+        FactoryBot.create(:freight_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:trucking_on_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:trucking_pre_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:import_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:export_margin, default_for: mot, organization: organization, applicable: organization, value: 0)
       ]
     end
     trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) }
@@ -199,8 +204,8 @@ RSpec.describe OfferCalculator::Calculator do
     end
 
     describe '.perform with transshipments' do
-      let(:transshipment_itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, tenant: tenant, transshipment: 'ZACPT') }
-      let!(:transshipment_pricing) { FactoryBot.create(:lcl_pricing, itinerary: transshipment_itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle, transshipment: 'ZACPT') }
+      let(:transshipment_itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization, transshipment: 'ZACPT') }
+      let!(:transshipment_pricing) { FactoryBot.create(:lcl_pricing, itinerary: transshipment_itinerary, organization: organization, tenant_vehicle: tenant_vehicle, transshipment: 'ZACPT') }
       let(:trip_itineraries) { [itinerary, air_itinerary, transshipment_itinerary] }
 
       it 'perform a booking calulation' do
@@ -234,7 +239,7 @@ RSpec.describe OfferCalculator::Calculator do
                             truck_type: 'default'
                           }
                         },
-                        tenant: tenant)
+                        organization: organization)
     end
     let(:port_to_port_params) do
       params[:shipment]['trucking'] = {
@@ -303,6 +308,27 @@ RSpec.describe OfferCalculator::Calculator do
           expect(results.length).to eq(1)
           expect(results.first.keys).to match_array(%i[quote schedules meta notes])
           expect(results.first.dig(:quote, :total, :value)).to eq(270.82)
+        end
+      end
+
+      it 'creates the Quotation correctly' do
+        aggregate_failures do
+          expect(Quotations::Quotation.count).to be(1)
+          expect(quotation.pickup_address_id).to eq(service.shipment.pickup_address.id)
+          expect(quotation.delivery_address_id).to eq(service.shipment.delivery_address.id)
+        end
+      end
+    end
+
+    describe '.perform with nil user' do
+      let(:user) { nil }
+      let!(:results) { service.perform }
+
+      it 'perform a booking calulation' do
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
+          expect(results.first.dig(:quote, :total, :value)).to eq(nil)
         end
       end
 

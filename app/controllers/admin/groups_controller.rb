@@ -15,8 +15,7 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
   end
 
   def create
-    tenant = ::Tenants::User.find_by(legacy_id: current_user.id, sandbox: @sandbox)&.tenant
-    group = ::Tenants::Group.create(name: params[:name], tenant_id: tenant&.id, sandbox: @sandbox)
+    group = ::Groups::Group.create(name: params[:name], organization: current_organization)
     params[:addedMembers].keys.each do |type|
       params[:addedMembers][type].each do |new_member|
         create_member_from_type(group: group, type: type, member: new_member)
@@ -26,8 +25,7 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
   end
 
   def edit_members # rubocop:disable Metrics/AbcSize
-    tenant = ::Tenants::User.find_by(legacy_id: current_user.id, sandbox: @sandbox)&.tenant
-    group = ::Tenants::Group.find_by(id: params[:id], tenant_id: tenant.id, sandbox: @sandbox)
+    group = ::Groups::Group.find_by(id: params[:id])
 
     params[:addedMembers].keys.each do |type|
       params[:addedMembers][type].each do |new_member|
@@ -36,8 +34,8 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
     end
     params_members_ids = params[:addedMembers].values.flatten.map { |param| param[:id].to_s }
     group.memberships.each do |membership|
-      if membership.member.is_a?(Tenants::User)
-        membership.destroy unless params_members_ids.include?(membership.member&.legacy_id&.to_s)
+      if membership.member.is_a?(Organizations::User)
+        membership.destroy unless params_members_ids.include?(membership.member&.id)
       else
         membership.destroy unless params_members_ids.include?(membership.member&.id)
       end
@@ -53,7 +51,7 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
     group = current_group
     if group
       group.memberships.destroy_all
-      group.margins.destroy_all
+      Pricings::Margin.where(applicable: group).destroy_all
       group.destroy
     end
     response_handler(success: true)
@@ -72,32 +70,31 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
   end
 
   def current_group
-    ::Tenants::Group.find_by(id: params[:id], sandbox: @sandbox)
+    ::Groups::Group.find_by(id: params[:id])
   end
 
   def create_member_from_type(group:, type:, member:) # rubocop:disable Metrics/CyclomaticComplexity
     case type
     when 'clients'
-      user = ::Tenants::User.find_by(legacy_id: member[:id], sandbox: @sandbox)
+      user = ::Organizations::User.find_by(id: member[:id])
       return nil unless user
 
-      ::Tenants::Membership.find_or_create_by(group_id: group.id, member: user)
+      ::Groups::Membership.find_or_create_by(group_id: group.id, member: user)
     when 'companies'
-      company = ::Tenants::Company.find_by(id: member[:id], sandbox: @sandbox)
+      company = ::Companies::Company.find_by(id: member[:id])
       return nil unless company
 
-      ::Tenants::Membership.find_or_create_by(group_id: group.id, member: company)
+      ::Groups::Membership.find_or_create_by(group_id: group.id, member: company)
     when 'groups'
-      member_group = ::Tenants::Group.find_by(id: member[:id], sandbox: @sandbox)
+      member_group = ::Groups::Group.find_by(id: member[:id])
       return nil unless member_group
 
-      ::Tenants::Membership.find_or_create_by(group_id: group.id, member: member_group, sandbox: @sandbox)
+      ::Groups::Membership.find_or_create_by(group_id: group.id, member: member_group)
     end
   end
 
   def groups
-    tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)
-    @groups ||= ::Tenants::Group.where(tenant_id: tenant.id, sandbox: @sandbox)
+    @groups ||= ::Groups::Group.where(organization_id: current_organization.id)
   end
 
   def pagination_options
@@ -111,28 +108,27 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
     params[:page]&.to_i || 1
   end
 
-  def handle_search(params) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
+  def handle_search(_params) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
     query = groups
     if search_params[:target_type] && search_params[:target_id]
       case search_params[:target_type]
       when 'company'
         query = query.joins(:memberships)
-                     .where(tenants_memberships: { member_type: 'Tenants::Company', member_id: search_params[:target_id] })
+                     .where(groups_memberships: { member_type: 'Companies::Company', member_id: search_params[:target_id] })
       when 'group'
         query = query.joins(:memberships)
-                     .where(tenants_memberships: { member_type: 'Tenants::Group', member_id: search_params[:target_id] })
+                     .where(groups_memberships: { member_type: 'Groups::Group', member_id: search_params[:target_id] })
       when 'user'
-        tenant_user = Tenants::User.find_by(legacy_id: search_params[:target_id], sandbox: @sandbox)
-        group_ids = tenant_user&.all_groups&.ids
-        query = query.where(id: group_ids)
+        query = query.joins(:memberships)
+                     .where(groups_memberships: { member_type: 'Users::User', member_id: search_params[:target_id] })
       end
     end
     query = query.order(name: search_params[:name_desc] == 'true' ? :desc : :asc) if search_params[:name_desc]
     if search_params[:member_count_desc]
       sorting_direction = search_params[:member_count_desc] == 'true' ? 'DESC' : 'ASC'
       query = query.left_joins(:memberships)
-                   .group('tenants_groups.id')
-                   .order("COUNT(tenants_memberships.id) #{sorting_direction}")
+                   .group('groups_groups.id')
+                   .order("COUNT(groups_memberships.id) #{sorting_direction}")
     end
     query = query.search(search_params[:query]) if search_params[:query]
     query = query.search(search_params[:name]) if search_params[:name]
@@ -142,22 +138,23 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
 
   def for_index_json(group, options = {})
     new_options = options.reverse_merge(
-      methods: %i(member_count margin_count)
+      member_count: group.memberships.size,
+      margin_count: Pricings::Margin.where(applicable: group).size
     )
-    group.as_json(new_options)
+    group.as_json.merge(new_options)
   end
 
   def for_show_json(group, options = {})
     group.as_json(options).reverse_merge(
-      margins_list: group.margins.map { |m| margin_list_json(m) },
+      margins_list: Pricings::Margin.where(applicable: group).map { |m| margin_list_json(m) },
       member_list: group.memberships.map { |m| membership_list_json(m) }
     )
   end
 
   def margin_list_json(margin, options = {})
     new_options = options.reverse_merge(
-      methods: %i(service_level itinerary_name fee_code cargo_class mode_of_transport),
-      except: %i(margin_type)
+      methods: %i[service_level itinerary_name fee_code cargo_class mode_of_transport],
+      except: %i[margin_type]
     )
     margin.as_json(new_options).reverse_merge(
       marginDetails: margin.details.map { |d| detail_list_json(d) }
@@ -166,17 +163,42 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
 
   def detail_list_json(detail, options = {})
     new_options = options.reverse_merge(
-      methods: %i(rate_basis itinerary_name fee_code)
+      methods: %i[rate_basis itinerary_name fee_code]
     )
     detail.as_json(new_options)
   end
 
-  def membership_list_json(membership, options = {})
-    new_options = options.reverse_merge(
-      methods: %i(member_name human_type member_email original_member_id)
-    )
-    membership.as_json(new_options)
+  def membership_list_json(membership)
+    info = member_info(membership: membership)
+    membership.as_json.merge(info)
   end
+
+  def member_info(membership:)
+    case membership.member_type
+    when 'Users::User'
+      {
+        member_name: Profiles::ProfileService.fetch(user_id: membership.member_id).full_name,
+        human_type: 'client',
+        member_email: membership.member.email,
+        original_member_id: membership.member_id
+      }
+    when 'Companies::Company'
+      {
+        member_name: membership.member.name,
+        human_type: 'company',
+        member_email: membership.member.email,
+        original_member_id: membership.member_id
+      }
+    when 'Groups::Group'
+      {
+        member_name: membership.member.name,
+        human_type: 'group',
+        member_email: '',
+        original_member_id: membership.member_id
+      }
+    end
+  end
+
   def search_params
     params.permit(
       :member_count_desc,

@@ -5,13 +5,13 @@ require 'rails_helper'
 module Api
   RSpec.describe V1::AhoyController, type: :controller do
     routes { Engine.routes }
-    let(:tenant) { FactoryBot.create(:tenants_tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
 
-    before { FactoryBot.create(:tenants_domain, tenant: tenant, default: true) }
+    before { FactoryBot.create(:organizations_domain, organization_id: organization.id, default: true) }
 
     describe 'GET #settings' do
-      it 'returns the settings of the tenant' do
-        get :settings, params: { id: tenant.id }, as: :json
+      it 'returns the settings of the organization' do
+        get :index, params: { organization_id: organization.id }, as: :json
 
         aggregate_failures do
           expect(response).to be_successful
@@ -22,8 +22,8 @@ module Api
         end
       end
 
-      it 'returns 404 if tenant does not exist' do
-        get :settings, params: { id: 'Invalid Tenant UUID' }, as: :json
+      it 'returns 404 if organization does not exist' do
+        get :index, params: { organization_id: 'Invalid Organization UUID' }, as: :json
 
         expect(response).to have_http_status(:not_found)
       end

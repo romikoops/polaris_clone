@@ -3,12 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe TruckingAvailabilityController, type: :controller do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:origin_location) do
     FactoryBot.create(:locations_location,
                       bounds: FactoryBot.build(:legacy_bounds, lat: origin_hub.latitude, lng: origin_hub.longitude, delta: 0.4),
@@ -28,11 +27,11 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
   let(:data) { response_body['data'] }
 
   before do
-    FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
+    FactoryBot.create(:organizations_scope, target: organization, content: { base_pricing: true })
     FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
     FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, query_type: :location)
-    FactoryBot.create(:trucking_trucking, tenant: tenant, hub: origin_hub, location: origin_trucking_location)
-    FactoryBot.create(:trucking_trucking, tenant: tenant, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+    FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
+    FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
     Geocoder::Lookup::Test.add_stub([wrong_lat, wrong_lng], [
                                       'address_components' => [{ 'types' => ['premise'] }],
                                       'address' => 'Helsingborg, Sweden',
@@ -57,8 +56,6 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
                                       'country_code' => 'CN',
                                       'postal_code' => '210001'
                                     ])
-    allow(controller).to receive(:current_user).at_least(:once).and_return(user)
-    allow(controller).to receive(:current_tenant).at_least(:once).and_return(tenant)
   end
 
   describe 'GET #index' do
@@ -67,7 +64,7 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
 
     context 'when trucking is available' do
       before do
-        params = { lat: lat, lng: lng, load_type: 'cargo_item', tenant_id: tenant.id, carriage: 'pre', hub_ids: hub_ids }
+        params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, carriage: 'pre', hub_ids: hub_ids }
         get :index, params: params, as: :json
       end
 
@@ -84,7 +81,7 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
 
     context 'when trucking is not available' do
       before do
-        params = { lat: wrong_lat, lng: wrong_lng, load_type: 'container', tenant_id: tenant.id, carriage: 'on', hub_ids: hub_ids }
+        params = { lat: wrong_lat, lng: wrong_lng, load_type: 'container', organization_id: organization.id, carriage: 'on', hub_ids: hub_ids }
         get :index, params: params, as: :json
       end
 

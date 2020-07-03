@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 class Shipments::BookingProcessController < ApplicationController
-  skip_before_action :require_non_guest_authentication!,
-                     except: %i[update_shipment request_shipment]
+  skip_before_action :doorkeeper_authorize!, only: [:create_shipment, :get_offers]
+
   def create_shipment
-    resp = ShippingTools.create_shipment(params[:details], current_user, @sandbox)
+    resp = ShippingTools.new.create_shipment(params[:details], organization_user, @sandbox)
     response_handler(resp)
   end
 
   def get_offers
-    resp = ShippingTools.get_offers(params, current_user, @sandbox)
+    resp = ShippingTools.new.get_offers(params, organization_user, @sandbox)
     Skylight.instrument title: 'Serialize Results' do
       resp = resp.to_json
     end
@@ -17,21 +17,21 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def choose_offer
-    resp = ShippingTools.choose_offer(params, current_user, @sandbox)
+    resp = ShippingTools.new.choose_offer(params, organization_user, @sandbox)
 
     response_handler(resp)
   end
 
   def send_quotes
-    ShippingTools.save_and_send_quotes(shipment,
+    ShippingTools.new.save_and_send_quotes(shipment,
                                        save_and_send_params[:quotes].map(&:to_h),
-                                       current_user.email,
+                                       organization_user.email,
                                        @sandbox)
     response_handler(params)
   end
 
   def update_shipment
-    resp = ShippingTools.update_shipment(params, current_user, @sandbox)
+    resp = ShippingTools.new.update_shipment(params, organization_user, @sandbox)
     response_handler(resp)
   end
 
@@ -39,7 +39,7 @@ class Shipments::BookingProcessController < ApplicationController
     resp = shipment.charge_breakdowns.map do |charge_breakdown|
       {
         trip_id: charge_breakdown.trip_id,
-        quote: charge_breakdown.to_nested_hash(Pdf::HiddenValueService.new(user: current_user).hide_total_args)
+        quote: charge_breakdown.to_nested_hash(Pdf::HiddenValueService.new(user: organization_user).hide_total_args)
       }
     end
 
@@ -47,12 +47,12 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def download_quotations
-    document = ShippingTools.save_pdf_quotes(shipment, current_user.tenant, result_params[:quotes].map(&:to_h), @sandbox)
+    document = ShippingTools.new.save_pdf_quotes(shipment, current_organization, result_params[:quotes].map(&:to_h), @sandbox)
     response_handler(key: 'quotations', url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment'))
   end
 
   def download_shipment
-    document = Pdf::Service.new(tenant: shipment.tenant, user: shipment.user).shipment_pdf(shipment: shipment)
+    document = Pdf::Service.new(organization: current_organization, user: shipment.user).shipment_pdf(shipment: shipment)
 
     response_handler(
       key: 'shipment_recap',
@@ -61,15 +61,15 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def view_more_schedules
-    response = ShippingTools.view_more_schedules(params[:trip_id], params[:delta], @sandbox)
+    response = ShippingTools.new.view_more_schedules(params[:trip_id], params[:delta], @sandbox)
 
     response_handler(response)
   end
 
   def request_shipment
-    resp = ShippingTools.request_shipment(params, current_user, @sandbox)
-    ShippingTools.tenant_notification_email(resp.user, resp, @sandbox)
-    ShippingTools.shipper_notification_email(resp.user, resp, @sandbox)
+    resp = ShippingTools.new.request_shipment(params, organization_user, @sandbox)
+    ShippingTools.new.tenant_notification_email(resp.user, resp, @sandbox)
+    ShippingTools.new.shipper_notification_email(resp.user, resp, @sandbox)
     response_handler(shipment: resp)
   end
 

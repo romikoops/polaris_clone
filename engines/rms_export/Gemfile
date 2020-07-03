@@ -15,8 +15,8 @@ end
 path '..' do
   # Add your development engines here
   gem 'imc-legacy'
+  gem 'imc-organizations'
   gem 'imc-pricings'
   gem 'imc-rms_sync'
   gem 'imc-tenant_routing'
-  gem 'imc-tenants'
 end

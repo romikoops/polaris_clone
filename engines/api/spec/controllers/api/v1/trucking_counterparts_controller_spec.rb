@@ -5,12 +5,12 @@ require 'rails_helper'
 module Api
   RSpec.describe V1::TruckingCounterpartsController, type: :controller do
     routes { Engine.routes }
-    let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
-    let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-    let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
-    let(:user) { FactoryBot.create(:tenants_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', tenant: tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+    let(:origin_hub) { itinerary.origin_hub }
+    let(:destination_hub) { itinerary.destination_hub }
+    let(:user) { FactoryBot.create(:users_user, email: 'test@example.com', organization_id: organization.id) }
+
     let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:data) { JSON.parse(response.body) }
@@ -32,8 +32,8 @@ module Api
     let!(:destination_hub_availability) { FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, custom_truck_type: 'default2', query_type: :location) }
 
     before do
-      FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: origin_hub, location: origin_trucking_location)
-      FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+      FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location)
+      FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
       Geocoder::Lookup::Test.add_stub([wrong_lat, wrong_lng], [
                                         'address_components' => [{ 'types' => ['premise'] }],
                                         'address' => 'Helsingborg, Sweden',
@@ -58,8 +58,7 @@ module Api
                                         'country_code' => 'CN',
                                         'postal_code' => '210001'
                                       ])
-      allow(controller).to receive(:current_user).at_least(:once).and_return(user)
-      allow(controller).to receive(:current_tenant).at_least(:once).and_return(tenant)
+      allow(controller).to receive(:current_organization).at_least(:once).and_return(organization)
     end
 
     describe 'GET #index' do
@@ -68,7 +67,7 @@ module Api
 
       context 'when destination trucking is available with lat lng args' do
         before do
-          params = { lat: lat, lng: lng, load_type: 'cargo_item', tenant_id: legacy_tenant.id, target: 'origin' }
+          params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, target: 'origin' }
           request.headers['Authorization'] = token_header
           get :index, params: params, as: :json
         end
@@ -85,7 +84,7 @@ module Api
 
       context 'when destination trucking is available with nexus_id args' do
         before do
-          params = { id: origin_hub.nexus_id, load_type: 'cargo_item', tenant_id: legacy_tenant.id, target: :origin }
+          params = { id: origin_hub.nexus_id, load_type: 'cargo_item', organization_id: organization.id, target: :origin }
           request.headers['Authorization'] = token_header
           get :index, params: params, as: :json
         end
@@ -105,7 +104,7 @@ module Api
         let(:lng) { destination_hub.longitude }
 
         before do
-          params = { lat: lat, lng: lng, load_type: 'cargo_item', tenant_id: legacy_tenant.id, target: :destination }
+          params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, target: :destination }
           request.headers['Authorization'] = token_header
           get :index, params: params, as: :json
         end
@@ -122,7 +121,7 @@ module Api
 
       context 'when origin trucking is available with nexus_id args' do
         before do
-          params = { id: destination_hub.nexus_id, load_type: 'cargo_item', tenant_id: legacy_tenant.id, target: :destination }
+          params = { id: destination_hub.nexus_id, load_type: 'cargo_item', organization_id: organization.id, target: :destination }
           request.headers['Authorization'] = token_header
           get :index, params: params, as: :json
         end

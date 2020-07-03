@@ -4,18 +4,11 @@ require 'rails_helper'
 
 module Wheelhouse
   RSpec.describe ValidationService, type: :service do
-    let(:tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-    let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}, with_profile: true) }
-    let(:tenants_user) { Tenants::User.find_by(legacy: user) }
-    let(:origin_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
-    let(:destination_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:itinerary) { FactoryBot.create(:default_itinerary, organization: organization) }
     let(:origin_hub) { itinerary.origin_hub }
     let(:destination_hub) { itinerary.destination_hub }
-    let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
-    let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'quickly') }
-    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-    let(:cargo) { FactoryBot.build(:cargo_cargo, tenant: tenants_tenant, units: cargos) }
     let(:cargos) do
       [
         FactoryBot.build(:lcl_unit,
@@ -27,13 +20,21 @@ module Wheelhouse
                          quantity: 1)
       ]
     end
+    let(:cargo) { FactoryBot.build(:cargo_cargo, organization: organization, units: cargos) }
     let(:origin) { { nexus_id: origin_hub.nexus_id } }
     let(:destination) { { nexus_id: destination_hub.nexus_id } }
     let(:routing) { { origin: origin, destination: destination } }
     let(:load_type) { 'cargo_item' }
     let(:final) { false }
     let(:validator) do
-      described_class.new(user: tenants_user, routing: routing, cargo: cargo, load_type: load_type, final: final)
+      described_class.new(
+        organization: organization,
+        user: user,
+        routing: routing,
+        cargo: cargo,
+        load_type: load_type,
+        final: final
+      )
     end
     let(:result) do
       validator.validate
@@ -41,6 +42,11 @@ module Wheelhouse
     end
 
     describe '.perform' do
+      before do
+        FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
+        FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
+      end
+
       context 'when port to port complete request (no pricings)' do
         let(:expected_error_codes) do
           [4008]
@@ -73,7 +79,7 @@ module Wheelhouse
         end
 
         before do
-          FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { dedicated_pricings_only: true })
+          FactoryBot.create(:organizations_scope, target: organization, content: { dedicated_pricings_only: true })
         end
 
         it 'returns an array of one error' do
@@ -100,7 +106,7 @@ module Wheelhouse
         end
 
         before do
-          FactoryBot.create(:lcl_pricing, tenant: tenant, itinerary: itinerary)
+          FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
         end
 
         it 'returns an array of one error' do
@@ -120,13 +126,14 @@ module Wheelhouse
           ]
         end
         let(:load_type) { 'container' }
-        let(:expected_error_codes) do
-          [4001]
-        end
+        let(:expected_error_codes) { [4001] }
 
         before do
-          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'fcl_20', tenant: tenant, payload_in_kg: 30_000)
-          FactoryBot.create(:fcl_20_pricing, tenant: tenant, itinerary: itinerary)
+          FactoryBot.create(:legacy_max_dimensions_bundle,
+                            cargo_class: 'fcl_20',
+                            organization: organization,
+                            payload_in_kg: 30_000)
+          FactoryBot.create(:fcl_20_pricing, organization: organization, itinerary: itinerary)
         end
 
         it 'returns an array of one error' do
@@ -148,9 +155,9 @@ module Wheelhouse
         let(:load_type) { 'container' }
 
         before do
-          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'fcl_20', tenant: tenant, payload_in_kg: 30_000)
-          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'fcl_20', mode_of_transport: 'air', tenant: tenant, payload_in_kg: 10_000)
-          FactoryBot.create(:fcl_20_pricing, tenant: tenant, itinerary: itinerary)
+          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'fcl_20', organization: organization, payload_in_kg: 30_000)
+          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'fcl_20', mode_of_transport: 'air', organization: organization, payload_in_kg: 10_000)
+          FactoryBot.create(:fcl_20_pricing, organization: organization, itinerary: itinerary)
         end
 
         it 'returns an array of one error' do
@@ -180,9 +187,11 @@ module Wheelhouse
         let(:routing) { { origin: {latitude: origin.latitude, longitude: origin.longitude}, destination: destination } }
 
         before do
-          FactoryBot.create(:lcl_pricing, tenant: tenant, itinerary: itinerary)
-          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'lcl', tenant: tenant, payload_in_kg: 100,
-                                                           mode_of_transport: 'truck_carriage')
+          FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
+          FactoryBot.create(:legacy_max_dimensions_bundle,
+                            cargo_class: 'lcl',
+                            organization: organization, payload_in_kg: 100,
+                            mode_of_transport: 'truck_carriage')
 
           Geocoder::Lookup::Test.add_stub([origin.latitude, origin.longitude], [
             'address_components' => [{ 'types' => ['premise'] }],
@@ -220,10 +229,11 @@ module Wheelhouse
         let(:routing) { { origin: {latitude: origin.latitude, longitude: origin.longitude}, destination: destination } }
 
         before do
-          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'fcl_20', tenant: tenant, payload_in_kg: 80_000)
-          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'fcl_20', tenant: tenant,
+          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'fcl_20',
+                                                           organization: organization, payload_in_kg: 80_000)
+          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'fcl_20', organization: organization,
                                                            payload_in_kg: 30_000, mode_of_transport: 'truck_carriage')
-          FactoryBot.create(:fcl_20_pricing, tenant: tenant, itinerary: itinerary)
+          FactoryBot.create(:fcl_20_pricing, organization: organization, itinerary: itinerary)
 
           Geocoder::Lookup::Test.add_stub([origin.latitude, origin.longitude], [
             'address_components' => [{ 'types' => ['premise'] }],
@@ -244,7 +254,7 @@ module Wheelhouse
 
       context 'when port to door (invalid aggregate on trucking)' do
         before do
-          FactoryBot.create(:lcl_pricing, tenant: tenant, itinerary: itinerary)
+          FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
 
           Geocoder::Lookup::Test.add_stub([origin.latitude, origin.longitude], [
             'address_components' => [{ 'types' => ['premise'] }],
@@ -257,16 +267,15 @@ module Wheelhouse
 
           FactoryBot.create(:legacy_max_dimensions_bundle,
                             aggregate: true,
-                            tenant: tenant,
+                            organization: organization,
                             mode_of_transport: 'truck_carriage',
-                            tenant_vehicle: tenant_vehicle,
                             payload_in_kg: 500)
         end
 
         let(:cargos) do
           [
             FactoryBot.build(:lcl_unit,
-                              tenant: tenants_tenant,
+                              organization: organization,
                               id: SecureRandom.uuid,
                               quantity: 1,
                               width_value: 1,
@@ -274,7 +283,7 @@ module Wheelhouse
                               height_value: 1,
                               weight_value: 1.2),
             FactoryBot.build(:lcl_unit,
-                              tenant: tenants_tenant,
+                              organization: organization,
                               id: SecureRandom.uuid,
                               quantity: 1,
                               width_value: 1,
@@ -319,8 +328,8 @@ module Wheelhouse
         let(:routing) { { origin: {latitude: origin.latitude, longitude: origin.longitude}, destination: destination } }
 
         before do
-          FactoryBot.create(:lcl_pricing, tenant: tenant, itinerary: itinerary)
-          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'lcl', tenant: tenant,
+          FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
+          FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: 'lcl', organization: organization,
                                                            payload_in_kg: 150, mode_of_transport: 'truck_carriage')
 
           Geocoder::Lookup::Test.add_stub([origin.latitude, origin.longitude], [

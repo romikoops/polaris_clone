@@ -3,9 +3,8 @@
 require "swagger_helper"
 
 RSpec.describe "Users" do
-  let(:role) { FactoryBot.create(:legacy_role) }
-  let(:legacy_user) { FactoryBot.create(:legacy_user, role: role) }
-  let(:user) { FactoryBot.create(:tenants_user, legacy: legacy_user) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
@@ -32,14 +31,13 @@ RSpec.describe "Users" do
                        type: :object,
                        properties: {
                          email: {type: :string},
-                         tenantId: {type: :string},
+                         organizationId: {type: :string},
                          firstName: {type: :string},
                          lastName: {type: :string},
                          phone: {type: :string},
                          companyName: {type: :string},
-                         role: {type: :string}
                        },
-                       required: %w[email tenantId firstName lastName phone companyName role]
+                       required: %w[email organizationId firstName lastName phone companyName]
                      }
                    },
                    required: %w[id type attributes]

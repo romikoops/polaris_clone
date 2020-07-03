@@ -3,19 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:membership) { FactoryBot.create(:tenants_membership, member: tenants_user, group: group) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:membership) { FactoryBot.create(:groups_membership, member: user, group: group) }
   let(:trucking_location) { FactoryBot.create(:trucking_location, zipcode: '43813') }
-  let(:itinerary) { FactoryBot.create(:legacy_itinerary, :gothenburg_shanghai, tenant: tenant) }
-  let(:hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let!(:common_trucking) { FactoryBot.create(:trucking_trucking, tenant: tenant, hub: hub, location: trucking_location) }
+  let(:itinerary) { FactoryBot.create(:legacy_itinerary, :gothenburg_shanghai, organization: organization) }
+  let(:hub) { itinerary.hubs.find_by(name: 'Gothenburg') }
+  let!(:common_trucking) { FactoryBot.create(:trucking_trucking, organization: organization, hub: hub, location: trucking_location) }
   let(:address) { FactoryBot.create(:gothenburg_address) }
   let(:shipment) do
     FactoryBot.create(:legacy_shipment,
                       load_type: 'cargo_item',
-                      tenant: tenant,
+                      organization: organization,
                       user: user,
                       trucking: {
                         'pre_carriage': {
@@ -33,18 +32,23 @@ RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
   let(:hub_result) { { origin: [hub] } }
 
   before do
+    ::Organizations.current_id = organization.id
+
+    FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
+    FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
+
     FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :zipcode)
     stub_request(:get, 'https://maps.googleapis.com/maps/api/directions/xml?alternative=false&departure_time=1576800000&destination=57.694253,11.854048&key=&language=en&mode=driving&origin=57.694253,11.854048&traffic_model=pessimistic')
       .to_return(status: 200, body: FactoryBot.create(:google_directions_response), headers: {})
-    FactoryBot.create(:puf_charge, tenant: tenant)
-    FactoryBot.create(:trucking_on_margin, default_for: 'trucking', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
-    FactoryBot.create(:trucking_pre_margin, default_for: 'trucking', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+    FactoryBot.create(:puf_charge, organization: organization)
+    FactoryBot.create(:trucking_on_margin, default_for: 'trucking', organization: organization, applicable: organization, value: 0)
+    FactoryBot.create(:trucking_pre_margin, default_for: 'trucking', organization: organization, applicable: organization, value: 0)
   end
 
   context 'with legacy' do
     before do
       allow(service).to receive(:calc_distance).and_return(10)
-      FactoryBot.create(:trucking_trucking, tenant: tenant, hub: hub, user_id: user.id, location: trucking_location)
+      FactoryBot.create(:trucking_trucking, organization: organization, hub: hub, user_id: user.id, location: trucking_location)
     end
 
     describe '.perform' do
@@ -61,14 +65,13 @@ RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
   Timecop.freeze(Time.utc(2020, 1, 1, 0, 0, 0)) do
     context 'with base_pricing' do
       before do
-        FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true })
-        FactoryBot.create(:tenants_membership, member: tenants_user, group: group)
-        FactoryBot.create(:trucking_trucking, tenant: tenant, hub: hub, group_id: group.id, location: trucking_location)
+        FactoryBot.create(:organizations_scope, target: organization, content: { base_pricing: true })
+        FactoryBot.create(:groups_membership, member: user, group: group)
+        FactoryBot.create(:trucking_trucking, organization: organization, hub: hub, group_id: group.id, location: trucking_location)
       end
 
       let(:results) { service.perform(hubs: hub_result) }
-      let!(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
-      let!(:group) { FactoryBot.create(:tenants_group, tenant: tenants_tenant, name: 'Test') }
+      let!(:group) { FactoryBot.create(:groups_group, organization: organization, name: 'Test') }
 
       describe '.perform (base pricing)' do
         it 'finds the trucking pricings and calculates the rates' do
@@ -86,7 +89,7 @@ RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
       let(:error_shipment) do
         FactoryBot.create(:legacy_shipment,
                           load_type: 'cargo_item',
-                          tenant: tenant,
+                          organization: organization,
                           user: user,
                           desired_start_date: Time.zone.today + 4.days,
                           trucking: {
@@ -108,7 +111,7 @@ RSpec.describe OfferCalculator::Service::TruckingDataBuilder do
                           has_pre_carriage: true)
       end
       let(:error_service) { described_class.new(shipment: error_shipment, sandbox: nil) }
-      let!(:scope) { FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { base_pricing: true }) }
+      let!(:scope) { FactoryBot.create(:organizations_scope, target: organization, content: { base_pricing: true }) }
 
       before do
         allow(error_service).to receive(:calc_distance).and_return(10)

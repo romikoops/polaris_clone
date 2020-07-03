@@ -94,7 +94,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       internal_code { 'PER_WM_RANGE' }
       external_code { 'PER_WM_RANGE' }
     end
-    \
+
     trait :container_range_flat do
       internal_code { 'PER_CONTAINER_RANGE_FLAT' }
       external_code { 'PER_CONTAINER_RANGE_FLAT' }
@@ -116,27 +116,28 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     end
 
     factory :per_wm_rate_basis, traits: [:wm]
-    factory :per_container, traits: [:container]
-    factory :per_hbl, traits: [:hbl]
-    factory :per_shipment, traits: [:shipment]
-    factory :per_item, traits: [:item]
-    factory :per_cbm, traits: [:cbm]
-    factory :per_kg, traits: [:kg]
-    factory :per_kg_per_cbm, traits: [:kg_per_cbm]
-    factory :per_x_kg_flat, traits: [:x_kg_flat]
-    factory :per_cbm_ton, traits: [:cbm_ton]
-    factory :per_ton, traits: [:ton]
-    factory :per_kg_range, traits: [:kg_range]
-    factory :per_kg_range_flat, traits: [:kg_range_flat]
-    factory :per_unit_ton_cbm_range, traits: [:unit_ton_cbm_range]
-    factory :per_container_range, traits: [:container_range]
-    factory :per_unit_range, traits: [:unit_range]
-    factory :per_cbm_range, traits: [:cbm_range]
-    factory :per_wm_range, traits: [:wm_range]
-    factory :per_container_range_flat, traits: [:container_range_flat]
-    factory :per_unit_range_flat, traits: [:unit_range_flat]
-    factory :per_cbm_range_flat, traits: [:cbm_range_flat]
-    factory :per_wm_range_flat, traits: [:wm_range_flat]
+    factory :per_container_rate_basis, traits: [:container]
+    factory :per_hbl_rate_basis, traits: [:hbl]
+    factory :per_shipment_rate_basis, traits: [:shipment]
+    factory :per_item_rate_basis, traits: [:item]
+    factory :per_cbm_rate_basis, traits: [:cbm]
+    factory :per_kg_rate_basis, traits: [:kg]
+    factory :per_kg_per_cbm_rate_basis, traits: [:kg_per_cbm]
+    factory :per_x_kg_flat_rate_basis, traits: [:x_kg_flat]
+    factory :per_cbm_ton_rate_basis, traits: [:cbm_ton]
+    factory :per_ton_rate_basis, traits: [:ton]
+    factory :per_kg_range_rate_basis, traits: [:kg_range]
+    factory :per_kg_range_bases_rate_basis, traits: [:kg_range]
+    factory :per_kg_range_flat_rate_basis, traits: [:kg_range_flat]
+    factory :per_unit_ton_cbm_range_rate_basis, traits: [:unit_ton_cbm_range]
+    factory :per_container_range_rate_basis, traits: [:container_range]
+    factory :per_unit_range_rate_basis, traits: [:unit_range]
+    factory :per_cbm_range_rate_basis, traits: [:cbm_range]
+    factory :per_wm_range_rate_basis, traits: [:wm_range]
+    factory :per_container_range_flat_rate_basis, traits: [:container_range_flat]
+    factory :per_unit_range_flat_rate_basis, traits: [:unit_range_flat]
+    factory :per_cbm_range_flat_rate_basis, traits: [:cbm_range_flat]
+    factory :per_wm_range_flat_rate_basis, traits: [:wm_range_flat]
   end
 end
 

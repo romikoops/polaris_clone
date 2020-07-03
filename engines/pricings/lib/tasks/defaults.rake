@@ -2,7 +2,7 @@
 
 namespace :pricings do
   task defaults: :environment do
-    ::Tenants::Tenant.find_in_batches do |group|
+    ::Organizations::Organization.find_in_batches do |group|
       group.each do |tenant|
         existing_margins = ::Pricings::Margin.where(applicable: tenant)
         next unless existing_margins.empty?

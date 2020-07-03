@@ -2,12 +2,12 @@
 
 FactoryBot.define do
   factory :legacy_shipment, class: 'Legacy::Shipment' do
-    association :user, factory: :legacy_user
+    association :user, factory: :organizations_user
     association :origin_hub, factory: :legacy_hub
     association :destination_hub, factory: :legacy_hub
     association :trip, factory: :legacy_trip
 
-    association :tenant, factory: :legacy_tenant
+    association :organization, factory: :organizations_organization
     load_type { :container }
     booking_placed_at { Date.today }
     planned_etd { Date.tomorrow + 7.days + 2.hours }
@@ -16,7 +16,7 @@ FactoryBot.define do
     sequence(:imc_reference) { |n| "#{SecureRandom.hex}#{n}" }
     has_pre_carriage { false }
     has_on_carriage { false }
-
+    billing { :external }
     total_goods_value do
       {
         value: 100,
@@ -91,8 +91,7 @@ FactoryBot.define do
                                       destination_nexus: shipment.destination_nexus,
                                       user: shipment.user,
                                       created_at: shipment.created_at,
-                                      tenants_user: Tenants::User.find_by(legacy_id: shipment.user_id),
-                                      tenant: Tenants::Tenant.find_by(legacy_id: shipment.tenant_id))
+                                      organization: shipment.organization)
       end
       if evaluator.with_aggregated_cargo
         create(:legacy_aggregated_cargo, shipment: shipment)
@@ -153,8 +152,11 @@ end
 #  updated_at                          :datetime         not null
 #  destination_hub_id                  :integer
 #  destination_nexus_id                :integer
+#  distinct_id                         :uuid
 #  incoterm_id                         :integer
 #  itinerary_id                        :integer
+#  old_user_id                         :integer
+#  organization_id                     :uuid
 #  origin_hub_id                       :integer
 #  origin_nexus_id                     :integer
 #  quotation_id                        :integer
@@ -162,11 +164,19 @@ end
 #  tenant_id                           :integer
 #  tender_id                           :uuid
 #  trip_id                             :integer
-#  user_id                             :integer
+#  user_id                             :uuid
 #
 # Indexes
 #
-#  index_shipments_on_sandbox_id  (sandbox_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tenant_id   (tenant_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tender_id   (tender_id)
+#  index_shipments_on_organization_id  (organization_id)
+#  index_shipments_on_sandbox_id       (sandbox_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tenant_id        (tenant_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tender_id        (tender_id)
+#  index_shipments_on_user_id          (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_     (user_id => users_users.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
+#  fk_rails_...  (transport_category_id => transport_categories_20200504.id)
 #

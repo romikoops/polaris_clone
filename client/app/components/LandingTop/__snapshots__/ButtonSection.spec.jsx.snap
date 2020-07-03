@@ -27,9 +27,9 @@ exports[`shallow render 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -72,7 +72,7 @@ exports[`shallow render 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -123,9 +123,9 @@ exports[`shallow render 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -168,7 +168,7 @@ exports[`shallow render 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -221,9 +221,9 @@ exports[`shallow render 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -266,7 +266,7 @@ exports[`shallow render 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -358,9 +358,9 @@ exports[`shallow render with no user 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -403,7 +403,7 @@ exports[`shallow render with no user 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -440,9 +440,9 @@ exports[`shallow render with no user 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -485,7 +485,7 @@ exports[`shallow render with no user 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -524,9 +524,9 @@ exports[`shallow render with no user 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -569,7 +569,7 @@ exports[`shallow render with no user 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -647,9 +647,9 @@ exports[`shallow render with user and no role 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -692,7 +692,7 @@ exports[`shallow render with user and no role 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -733,9 +733,9 @@ exports[`shallow render with user and no role 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -778,7 +778,7 @@ exports[`shallow render with user and no role 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",
@@ -821,9 +821,9 @@ exports[`shallow render with user and no role 1`] = `
             },
           },
           "id": 123,
-          "name": "TENANT_NAME",
+          "name": "ORGANIZATION_NAME",
           "phones": Object {
-            "support": "TENANT_SUPPORT_PHONE",
+            "support": "ORGANIZATION_SUPPORT_PHONE",
           },
           "scope": Object {
             "cargo_info_level": "text",
@@ -866,7 +866,7 @@ exports[`shallow render with user and no role 1`] = `
               "BAR_TERM",
             ],
           },
-          "subdomain": "TENANT_SUBDOMAIN",
+          "subdomain": "ORGANIZATION_SUBDOMAIN",
           "theme": Object {
             "colors": Object {
               "primary": "#333",

@@ -5,21 +5,22 @@ require 'rails_helper'
 RSpec.describe OfferCalculator::TruckingTools do
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
+  let!(:default_max_dimension) { FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization) }
+  let!(:default_aggr_max_dimension) { FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:trip) { FactoryBot.create(:legacy_trip) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:tenants_user) { ::Tenants::User.find_by(legacy_id: user.id) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:destination_nexus) { FactoryBot.create(:legacy_nexus, hubs: [destination_hub]) }
-  let!(:itinerary) { FactoryBot.create(:legacy_itinerary, tenant: tenant, stops: [origin_stop, destination_stop], layovers: [origin_layover, destination_layover], trips: [trip]) }
-  let!(:shipment) { FactoryBot.create(:legacy_shipment, load_type: load_type, direction: direction, user: user, tenant: tenant, origin_nexus: origin_nexus, destination_nexus: destination_nexus, trip: itinerary.trips.first, itinerary: itinerary) }
+  let!(:itinerary) { FactoryBot.create(:legacy_itinerary, organization: organization, stops: [origin_stop, destination_stop], layovers: [origin_layover, destination_layover], trips: [trip]) }
+  let(:shipment) { FactoryBot.create(:legacy_shipment, load_type: load_type, direction: direction, user: user, organization: organization, origin_nexus: origin_nexus, destination_nexus: destination_nexus, trip: itinerary.trips.first, itinerary: itinerary) }
   let(:origin_nexus) { FactoryBot.create(:legacy_nexus, hubs: [origin_hub]) }
-  let(:origin_hub) { FactoryBot.create(:legacy_hub, tenant: tenant) }
-  let(:destination_hub) { FactoryBot.create(:legacy_hub, tenant: tenant) }
+  let(:origin_hub) { FactoryBot.create(:legacy_hub, organization: organization) }
+  let(:destination_hub) { FactoryBot.create(:legacy_hub, organization: organization) }
   let(:origin_stop) { FactoryBot.create(:legacy_stop, index: 0, hub_id: origin_hub.id, layovers: [origin_layover]) }
   let(:destination_stop) { FactoryBot.create(:legacy_stop, index: 1, hub_id: destination_hub.id, layovers: [destination_layover]) }
   let(:origin_layover) { FactoryBot.create(:legacy_layover, stop_index: 0, trip: trip) }
   let(:destination_layover) { FactoryBot.create(:legacy_layover, stop_index: 1, trip: trip) }
-  let(:default_trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: {}, tenant: tenant) }
+  let(:default_trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: {}, organization: organization) }
   let(:cargo_object) do
     {
       'stackable' => {
@@ -100,6 +101,10 @@ RSpec.describe OfferCalculator::TruckingTools do
     }
   end
 
+  before do
+    Organizations.current_id = organization.id
+  end
+
   describe '.calc_aggregated_cargo_cbm_ratio' do
     it 'calculates the correct trucking weight for aggregate cargo with vol gt weight' do
       aggregated_cargo = FactoryBot.create(:legacy_aggregated_cargo, shipment_id: shipment.id, volume: 3.0, weight: 1500)
@@ -138,10 +143,10 @@ RSpec.describe OfferCalculator::TruckingTools do
                             quantity: 2)
         ]
       end
-      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: {}, tenant: tenant) }
+      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: {}, organization: organization) }
 
       before do
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'calculation': true } } })
+        FactoryBot.create(:organizations_scope, target: user, content: { 'consolidation': { 'trucking': { 'calculation': true } } })
       end
 
       it 'correctly consolidates the cargo values for scope consolidation.trucking.calculation' do
@@ -183,11 +188,11 @@ RSpec.describe OfferCalculator::TruckingTools do
                             ratio: 1000,
                             area: 48_000
                           },
-                          tenant: tenant)
+                          organization: organization)
       end
 
       before do
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'comparative': true } } })
+        FactoryBot.create(:organizations_scope, target: user, content: { 'consolidation': { 'trucking': { 'comparative': true } } })
       end
 
       it 'correctly consolidates the cargo values for scope consolidation.trucking.comparative' do
@@ -232,11 +237,11 @@ RSpec.describe OfferCalculator::TruckingTools do
                             ratio: 1000,
                             ldm_limit: 0.5
                           },
-                          tenant: tenant)
+                          organization: organization)
       end
 
       before do
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'comparative': true } } })
+        FactoryBot.create(:organizations_scope, target: user, content: { 'consolidation': { 'trucking': { 'comparative': true } } })
       end
 
       it 'correctly consolidates the cargo values for scope consolidation.trucking.comparative (non-stackable)' do
@@ -249,10 +254,10 @@ RSpec.describe OfferCalculator::TruckingTools do
       let(:cargos) do
         [FactoryBot.create(:legacy_aggregated_cargo, shipment_id: shipment.id, volume: 1.5, weight: 3000)]
       end
-      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: {}, tenant: tenant) }
+      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: {}, organization: organization) }
 
       before do
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'calculation': true } } })
+        FactoryBot.create(:organizations_scope, target: user, content: { 'consolidation': { 'trucking': { 'calculation': true } } })
       end
 
       it 'correctly consolidates the cargo values for scope consolidation.trucking.calculation with agg cargo' do
@@ -280,10 +285,10 @@ RSpec.describe OfferCalculator::TruckingTools do
                             quantity: 2)
         ]
       end
-      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: {}, tenant: tenant) }
+      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: {}, organization: organization) }
 
       before do
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'load_meterage_only': true } } })
+        FactoryBot.create(:organizations_scope, target: user, content: { 'consolidation': { 'trucking': { 'load_meterage_only': true } } })
       end
 
       it 'correctly consolidates the cargo values for scope consolidation.trucking.load_meterage_only' do
@@ -311,10 +316,10 @@ RSpec.describe OfferCalculator::TruckingTools do
                             quantity: 2)
         ]
       end
-      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: { area_limit: 0.5, ratio: 1000 }, tenant: tenant) }
+      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: { area_limit: 0.5, ratio: 1000 }, organization: organization) }
 
       before do
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'load_meterage_only': true } } })
+        FactoryBot.create(:organizations_scope, target: user, content: { 'consolidation': { 'trucking': { 'load_meterage_only': true } } })
       end
 
       it 'correctly consolidates the cargo values for scope consolidation.trucking.load_meterage_only (low limit)' do
@@ -329,10 +334,10 @@ RSpec.describe OfferCalculator::TruckingTools do
           FactoryBot.create(:legacy_aggregated_cargo, shipment_id: shipment.id)
         ]
       end
-      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: { area_limit: 0.5, ratio: 1000 }, tenant: tenant) }
+      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: { area_limit: 0.5, ratio: 1000 }, organization: organization) }
 
       before do
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { 'consolidation': { 'trucking': { 'load_meterage_only': true } } })
+        FactoryBot.create(:organizations_scope, target: user, content: { 'consolidation': { 'trucking': { 'load_meterage_only': true } } })
       end
 
       it 'correctly consolidates the cargo values for scope consolidation.trucking.load_meterage_only agg cargo' do
@@ -521,20 +526,20 @@ RSpec.describe OfferCalculator::TruckingTools do
   context 'when calculating' do
     describe '.perform' do
       it 'raises an error with hard trucking limit' do
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { hard_trucking_limit: true })
+        FactoryBot.create(:organizations_scope, target: user, content: { hard_trucking_limit: true })
 
         expect { described_class.new(default_trucking_pricing, [outsized_cargo], 0, 'pre', user).perform }.to raise_error(OfferCalculator::TruckingTools::LoadMeterageExceeded)
       end
 
       it 'raises an error with hard trucking limit (unit kg rates)' do
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { hard_trucking_limit: true })
+        FactoryBot.create(:organizations_scope, target: user, content: { hard_trucking_limit: true })
         trucking_pricing = FactoryBot.create(:trucking_with_unit_and_kg)
 
         expect { described_class.new(trucking_pricing, [outsized_cargo], 0, 'pre', user).perform }.to raise_error(OfferCalculator::TruckingTools::LoadMeterageExceeded)
       end
 
       it 'uses the max value without hard_trucking_limit' do
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { hard_trucking_limit: false })
+        FactoryBot.create(:organizations_scope, target: user, content: { hard_trucking_limit: false })
         result_object = described_class.new(default_trucking_pricing, [outsized_cargo], 0, 'pre', user).perform
         aggregate_failures do
           expect(result_object.dig('stackable', :currency)).to eq('SEK')
@@ -543,8 +548,8 @@ RSpec.describe OfferCalculator::TruckingTools do
       end
 
       it 'uses the area limit' do
-        area_trucking_pricing = FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: { area_limit: 1, ratio: 1000 }, tenant: tenant)
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { hard_trucking_limit: false })
+        area_trucking_pricing = FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: { area_limit: 1, ratio: 1000 }, organization: organization)
+        FactoryBot.create(:organizations_scope, target: user, content: { hard_trucking_limit: false })
         result_object = described_class.new(area_trucking_pricing, default_cargos, 0, 'pre', user).perform
         aggregate_failures do
           expect(result_object.dig('non_stackable', :currency)).to eq('SEK')
@@ -553,8 +558,8 @@ RSpec.describe OfferCalculator::TruckingTools do
       end
 
       it 'calulates for agg cargo' do
-        area_trucking_pricing = FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: { area_limit: 1, ratio: 1000 }, tenant: tenant)
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { continuous_rounding: true })
+        area_trucking_pricing = FactoryBot.create(:trucking_trucking, cbm_ratio: 250, load_meterage: { area_limit: 1, ratio: 1000 }, organization: organization)
+        FactoryBot.create(:organizations_scope, target: user, content: { continuous_rounding: true })
         result_object = described_class.new(area_trucking_pricing, [agg_cargo], 0, 'pre', user).perform
         aggregate_failures do
           expect(result_object.dig('stackable', :currency)).to eq('SEK')
@@ -564,7 +569,7 @@ RSpec.describe OfferCalculator::TruckingTools do
 
       it 'uses the max value without hard_trucking_limit (unit and kg)' do
         trucking_pricing = FactoryBot.create(:trucking_with_unit_and_kg)
-        FactoryBot.create(:tenants_scope, target: tenants_user, content: { hard_trucking_limit: false })
+        FactoryBot.create(:organizations_scope, target: user, content: { hard_trucking_limit: false })
         result_object = described_class.new(trucking_pricing, [outsized_cargo], 0, 'pre', user).perform
         aggregate_failures do
           expect(result_object.dig('non_stackable', :currency)).to eq('SEK')

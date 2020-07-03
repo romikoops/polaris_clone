@@ -4,7 +4,7 @@ module Admin
   class RemarksController < Admin::AdminBaseController
     def create
       remark = Legacy::Remark.new(remarks_params.merge(sandbox: @sandbox))
-      remark.tenant_id = current_tenant.id
+      remark.organization_id = current_organization.id
 
       raise ApplicationError::InvalidRemark unless remark.save
 
@@ -12,7 +12,7 @@ module Admin
     end
 
     def index
-      remarks = Legacy::Remark.where(tenant_id: current_tenant.id, sandbox: @sandbox).order(order: :asc)
+      remarks = Legacy::Remark.where(organization_id: current_organization.id, sandbox: @sandbox).order(order: :asc)
       response_handler(remarks)
     end
 

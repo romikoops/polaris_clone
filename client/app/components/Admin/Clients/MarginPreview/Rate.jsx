@@ -22,7 +22,7 @@ function AdminMarginPreviewRate ({
       case 'Tenants::User':
         url = `/admin/clients/client/${margin.url_id}`
         break
-      case 'Tenants::Group':
+      case 'Groups::Group':
         url = `/admin/clients/groups/${margin.url_id}`
         break
       case 'Tenants::Company':

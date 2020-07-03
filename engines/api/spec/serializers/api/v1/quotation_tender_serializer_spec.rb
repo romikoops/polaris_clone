@@ -4,12 +4,12 @@ require 'rails_helper'
 
 module Api
   RSpec.describe V1::QuotationTenderSerializer do
-    let!(:tenant) { FactoryBot.create(:legacy_tenant) }
+    let!(:organization) { FactoryBot.create(:organizations_organization) }
 
     let(:charge_category) { FactoryBot.create(:bas_charge) }
     let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary) }
     let(:trip) { FactoryBot.create(:legacy_trip, vessel: 'Cap San Diego', itinerary: itinerary) }
-    let(:shipment) { FactoryBot.create(:legacy_shipment, with_full_breakdown: true, with_tenders: true, trip: trip, tenant: tenant) }
+    let(:shipment) { FactoryBot.create(:legacy_shipment, with_full_breakdown: true, with_tenders: true, trip: trip, organization_id: organization.id) }
     let(:tender) { shipment.charge_breakdowns.first.tender }
     let(:decorated_tender) { Api::V1::TenderDecorator.new(tender, context: { scope: {} }) }
     let(:serialized_tender) { described_class.new(decorated_tender, params: { scope: {} }).serializable_hash }

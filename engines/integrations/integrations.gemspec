@@ -10,10 +10,12 @@ Gem::Specification.new do |s|
   s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'Provides integration with 3rd party systems.'
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
+  s.add_dependency 'imc-organization_manager'
+  s.add_dependency 'imc-companies'
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-legacy'
   s.add_dependency 'imc-profiles'

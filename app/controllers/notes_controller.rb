@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class NotesController < ApplicationController
-  skip_before_action :require_authentication!
-  skip_before_action :require_non_guest_authentication!
+  skip_before_action :doorkeeper_authorize!
 
   def index
-    itineraries = Itinerary.where(id: params[:itineraries])
+    itineraries = Legacy::Itinerary.where(id: params[:itineraries])
     pricings = Pricings::Pricing.where(itinerary_id: params[:itineraries])
-    raw_notes = Note.where(target: itineraries).or(Note.where(pricings_pricing_id: pricings.ids))
+    note_association = Legacy::Note.where(organization: current_organization)
+    raw_notes = note_association.where(target: itineraries)
+                            .or(note_association.where(pricings_pricing_id: pricings.ids))
     transformed_notes = raw_notes.map { |note| transform_note(note) }
                                  .uniq { |note| note.slice('header', 'body', 'service') }
 
@@ -15,7 +16,7 @@ class NotesController < ApplicationController
   end
 
   def delete
-    itinerary = current_tenant.itineraries.find_by(id: params[:itinerary_id], sandbox: @sandbox)
+    itinerary = current_organization.itineraries.find_by(id: params[:itinerary_id], sandbox: @sandbox)
     note = itinerary.notes.find_by(id: params[:id], sandbox: @sandbox)
     note.destroy
     resp = itinerary.notes.where(sandbox: @sandbox)

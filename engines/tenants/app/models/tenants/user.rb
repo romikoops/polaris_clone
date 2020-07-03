@@ -2,7 +2,6 @@
 
 module Tenants
   class User < ApplicationRecord
-    include ::Tenants::Legacy
     include PgSearch::Model
 
     pg_search_scope :search, against: %i[email], associated_against: {
@@ -11,16 +10,14 @@ module Tenants
       tsearch: { prefix: true }
     }
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-    belongs_to :legacy, class_name: 'Legacy::User', optional: true
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
     has_one :profile, class_name: 'Profiles::Profile', foreign_key: :user_id, dependent: :destroy
-    belongs_to :tenant, optional: true
+    belongs_to :organization, class_name: 'Organizations::Organization', optional: true
     belongs_to :company, optional: true, class_name: 'Tenants::Company'
     has_many :memberships, as: :member, dependent: :destroy
     has_many :groups, through: :memberships, as: :member
     has_many :margins, as: :applicable
-    validates :email, presence: true, uniqueness: { scope: :tenant_id }, format: { with: URI::MailTo::EMAIL_REGEXP }
-    authenticates_with_sorcery!
+    validates :email, presence: true, uniqueness: { scope: :organization_id }, format: { with: URI::MailTo::EMAIL_REGEXP }
 
     has_paper_trail
     acts_as_paranoid
@@ -29,7 +26,7 @@ module Tenants
 
     def all_groups
       membership_ids = [memberships.pluck(:group_id), company&.memberships&.pluck(:group_id)].compact.flatten
-      ::Tenants::Group.where(id: membership_ids)
+      ::Groups::Group.where(id: membership_ids)
     end
 
     def verify_company
@@ -38,12 +35,12 @@ module Tenants
       user_profile = Profiles::Profile.find_by(user_id: id)
       company_id = ::Tenants::Company.find_by(
         name: user_profile.company_name,
-        tenant_id: tenant_id
+        organization_id: organization_id
       )&.id
       company_id ||= ::Tenants::Company.find_or_create_by(
         name: user_profile.company_name,
         vat_number: legacy&.vat_number,
-        tenant_id: tenant_id
+        organization_id: organization_id
       )&.id
       update(company_id: company_id)
     end
@@ -51,7 +48,7 @@ module Tenants
     def attach_to_default_group
       return unless groups_exist?
 
-      Tenants::Membership.find_or_create_by(
+      Groups::Membership.find_or_create_by(
         member: self,
         group: default_group
       )
@@ -60,11 +57,11 @@ module Tenants
     def groups_exist?
       return false if groups.present? || company&.groups.present?
 
-      Tenants::Group.exists?(tenant_id: tenant_id, name: 'default')
+      Groups::Group.exists?(organization_id: organization_id, name: 'default')
     end
 
     def default_group
-      Tenants::Group.find_by(tenant_id: tenant_id, name: 'default')
+      Groups::Group.find_by(organization_id: organization_id, name: 'default')
     end
   end
 end

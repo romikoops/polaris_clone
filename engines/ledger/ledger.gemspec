@@ -18,10 +18,13 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-routing'
   s.add_dependency 'imc-tenant_routing'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
+
 
   s.add_dependency 'money-rails'
   s.add_dependency 'uuidtools'
+
+  s.add_development_dependency 'imc-legacy'
 
   Gemhelper.common(s)
 end

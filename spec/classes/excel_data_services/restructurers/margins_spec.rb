@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Restructurers::Margins do
-  let(:tenant) { create(:tenant) }
-  let(:options) { { tenant: tenant, data: input_data } }
+  let(:organization) { create(:organizations_organization) }
+  let(:options) { { organization: organization, data: input_data } }
 
   describe '.restructure' do
     let(:input_data) { build(:excel_data_parsed_correct_margins).first }

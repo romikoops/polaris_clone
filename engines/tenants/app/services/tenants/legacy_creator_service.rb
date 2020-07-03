@@ -54,14 +54,9 @@ module Tenants
       @legacy_tenant = tenant.legacy
     end
 
-    def create_default_max_dimensions
-      ::Legacy::MaxDimensionsBundle.create_defaults_for(legacy_tenant)
-      ::Legacy::MaxDimensionsBundle.create_defaults_for(legacy_tenant, aggregate: true)
-    end
-
     def create_cargo_item_types
       ::Legacy::TenantCargoItemType.import(
-        ::Legacy::CargoItemType.ids.map { |id| { tenant_id: legacy_tenant.id, cargo_item_type_id: id } }
+        ::Legacy::CargoItemType.ids.map { |id| { organization_id: legacy_tenant.id, cargo_item_type_id: id } }
       )
     end
 

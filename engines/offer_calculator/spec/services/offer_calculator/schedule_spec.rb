@@ -3,19 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculator::Schedule do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:itinerary) { FactoryBot.create(:legacy_itinerary, :gothenburg_shanghai, tenant: tenant) }
-  let!(:trip) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, :with_trip, organization: organization) }
+  let!(:trip) { itinerary.trips.first }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
   let(:routes) do
     [
       OfferCalculator::Route.new(
         itinerary_id: itinerary.id,
-        origin_stop_id: itinerary.stops.first.id,
-        destination_stop_id: itinerary.stops.last.id,
+        origin_stop_id: itinerary.origin_stops.first.id,
+        destination_stop_id: itinerary.destination_stops.first.id,
         tenant_vehicle_id: trip.tenant_vehicle_id,
         carrier_id: trip.tenant_vehicle&.carrier_id
       )

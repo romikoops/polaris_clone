@@ -18,7 +18,7 @@ module RateExtractor
 
     private
 
-    attr_reader :section_rates, :tenant, :cargo
+    attr_reader :section_rates, :organization, :cargo
 
     def cargo_classes
       cargo.units.object.select(:cargo_class).distinct

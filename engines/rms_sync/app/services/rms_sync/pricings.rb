@@ -3,9 +3,9 @@
 module RmsSync
   class Pricings < RmsSync::Base
 
-    def initialize(tenant_id:, sheet_type: :pricings, sandbox: nil)
+    def initialize(organization_id:, sheet_type: :pricings, sandbox: nil)
       super
-      @book = RmsData::Book.find_or_create_by(tenant: @tenant, sheet_type: sheet_type)
+      @book = RmsData::Book.find_or_create_by(organization: @organization, sheet_type: sheet_type)
     end
 
     def perform
@@ -21,12 +21,12 @@ module RmsSync
     end
 
     def pricings
-      ::Pricings::Pricing.where(tenant_id: @tenant.legacy_id, sandbox: @sandbox)
+      ::Pricings::Pricing.where(organization_id: @organization.id)
                           .for_dates(Date.today - 1, Date.today + 2.months)
     end
 
     def create_sheet
-      @sheet = @book.sheets.create(tenant_id: @tenant.id, sheet_index: 0)
+      @sheet = @book.sheets.create(organization_id: @organization.id, sheet_index: 0)
     end
 
     def create_data_cells
@@ -57,7 +57,7 @@ module RmsSync
     def create_header_row
       default_headers.each_with_index do |head, i|
         @sheet.cells.create!(
-          tenant_id: @tenant.id,
+          organization_id: @organization.id,
           row: 0,
           column: i,
           value: head
@@ -66,13 +66,13 @@ module RmsSync
     end
 
     def default_headers
-      %w(EFFECTIVE_DATE	EXPIRATION_DATE	ORIGIN	COUNTRY_ORIGIN	DESTINATION	COUNTRY_DESTINATION	MOT	
+      %w(EFFECTIVE_DATE	EXPIRATION_DATE	ORIGIN	COUNTRY_ORIGIN	DESTINATION	COUNTRY_DESTINATION	MOT
         CARRIER	SERVICE_LEVEL	LOAD_TYPE	RATE_BASIS	RANGE_MIN	RANGE_MAX	FEE_CODE	FEE_NAME	CURRENCY	FEE_MIN	FEE)
     end
 
     def pricing_data(fee:, header:, row:, index:, range: {})
       obj = {
-        tenant_id: @tenant.id,
+        organization_id: @organization.id,
         column: index,
         row: row
       }

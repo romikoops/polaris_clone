@@ -67,14 +67,13 @@ module ExcelDataServices
         new(options).perform
       end
 
-      def initialize(tenant:, file_name:, user:, sandbox:, options:)
-        @tenant = tenant
+      def initialize(organization:, file_name:, user:, sandbox:, options:)
+        @organization = organization
         @user = user
         @sandbox = sandbox
         @options = options
 
-        @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
-        @scope = ::Tenants::ScopeService.new(tenant: tenants_tenant, target: user).fetch
+        @scope = ::OrganizationManager::ScopeService.new(organization: organization, target: user).fetch
         @file_name = Pathname.new(file_name).sub_ext('.xlsx').to_s
         @xlsx = nil
       end
@@ -101,7 +100,7 @@ module ExcelDataServices
         Legacy::File.create!(
           text: file_name,
           doc_type: 'pricing',
-          tenant: tenant,
+          organization: organization,
           file: {
             io: File.open(tempfile.path),
             filename: file_name,
@@ -116,7 +115,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :tenant, :file_name, :xlsx, :tenants_tenant, :scope, :options
+      attr_reader :organization, :file_name, :xlsx, :scope, :options
 
       def load_and_prepare_data
         raise NotImplementedError, "This method must be implemented in #{self.class.name}."

@@ -16,12 +16,15 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'imc-analytics'
   s.add_dependency 'imc-api_auth'
+  s.add_dependency 'imc-authentication'
   s.add_dependency 'imc-cargo'
   s.add_dependency 'imc-core'
+  s.add_dependency 'imc-organizations'
+  s.add_dependency 'imc-organization_manager'
   s.add_dependency 'imc-profiles'
   s.add_dependency 'imc-result_formatter'
-  s.add_dependency 'imc-tenants'
   s.add_dependency 'imc-trucking'
+  s.add_dependency 'imc-users'
   s.add_dependency 'imc-wheelhouse'
 
   s.add_dependency 'draper', '~> 4.0'

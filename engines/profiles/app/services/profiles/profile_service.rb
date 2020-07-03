@@ -2,14 +2,15 @@
 
 module Profiles
   class ProfileService
-    def self.create_or_update_profile(user:, first_name:, last_name:, company_name: nil, phone: nil)
+    def self.create_or_update_profile(**profile_params)
+      user = profile_params.dig(:user)
       profile_attributes = {
-        first_name: first_name,
-        last_name: last_name,
-        company_name: company_name,
-        phone: phone
+        first_name: profile_params.dig(:first_name),
+        last_name: profile_params.dig(:last_name),
+        company_name: profile_params.dig(:company_name),
+        external_id: profile_params.dig(:external_id),
+        phone: profile_params.dig(:phone)
       }.compact
-      return if profile_attributes.blank?
 
       if Profiles::Profile.with_deleted.exists?(user_id: user.id)
         Profiles::Profile.with_deleted.find_by(user_id: user.id).update(profile_attributes)
@@ -19,7 +20,7 @@ module Profiles
     end
 
     def self.fetch(user_id:)
-      user_profile = Profiles::Profile.with_deleted.find_by(user_id: user_id)
+      user_profile = user_id.nil? ? Profiles::Profile.new :  Profiles::Profile.with_deleted.find_by(user_id: user_id)
       Profiles::ProfileDecorator.new(user_profile)
     end
   end

@@ -3,7 +3,7 @@
 module Trucking
   module Queries
     class Base
-      MANDATORY_ARGS = %i[tenant_id carriage].freeze
+      MANDATORY_ARGS = %i[organization_id carriage].freeze
 
       def initialize(args = {}) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         argument_errors(args)
@@ -16,7 +16,7 @@ module Trucking
         @city_name = args[:city_name] || args[:address].try(:city)
         @country_code = args[:country_code] || args[:address].try(:country).try(:code)
 
-        @tenant_id    = args[:tenant_id]
+        @organization_id = args[:organization_id]
         @load_type    = args[:load_type]
         @carriage     = args[:carriage]
         @truck_type   = args[:truck_type]
@@ -103,7 +103,7 @@ module Trucking
       def truckings_for_query
         ::Trucking::Trucking.joins(:hub)
                             .merge(tenant_hubs)
-                            .where(tenant_id: @tenant_id)
+                            .where(organization_id: @organization_id)
                             .where(cargo_class_condition)
                             .where(load_type_condition)
                             .where(truck_type_condition)
@@ -137,7 +137,7 @@ module Trucking
       end
 
       def hubs_condition
-        @hub_ids ? { tenant_id: @tenant_id, id: @hub_ids } : { tenant_id: @tenant_id }
+        @hub_ids ? { organization_id: @organization_id, id: @hub_ids } : { organization_id: @organization_id }
       end
 
       def trucking_location_where_statement

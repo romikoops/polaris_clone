@@ -6,6 +6,7 @@ module Api
       def create
         validator = Wheelhouse::ValidationService.new(
           user: user,
+          organization: current_organization,
           cargo: cargo,
           routing: routing,
           load_type: load_type
@@ -17,7 +18,7 @@ module Api
       private
 
       def user
-        Tenants::User.find_by(id: user_param) || current_user
+        Users::User.find_by(id: user_param) || current_user
       end
 
       def user_param
@@ -44,7 +45,7 @@ module Api
 
       def cargo
         Cargo::Cargo.new(
-          tenant: current_tenant,
+          organization: current_organization,
           units: load_type == 'container' ? containers : cargo_items
         )
       end
@@ -55,7 +56,7 @@ module Api
             id: attrs[:id],
             cargo_class: '00',
             cargo_type: 'LCL',
-            tenant: current_tenant,
+            organization: current_organization,
             width_value: attrs[:width].to_f / 100,
             height_value: attrs[:height].to_f / 100,
             length_value: attrs[:length].to_f / 100,
@@ -71,7 +72,7 @@ module Api
             id: attrs[:id],
             cargo_class: Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER[attrs[[:cargo_class]]],
             cargo_type: 'GP',
-            tenant: current_tenant,
+            organization: current_organization,
             weight_value: attrs[:payload_in_kg].to_f,
             quantity: attrs[:quantity]
           )

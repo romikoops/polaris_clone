@@ -31,18 +31,20 @@ RSpec.shared_examples 'Pricing .insert' do
 end
 
 RSpec.describe ExcelDataServices::Inserters::Pricing do
-  let(:tenant) { create(:tenant) }
+  let(:organization) { create(:organizations_organization) }
   let!(:itineraries) do
     [
-      create(:gothenburg_shanghai_itinerary, tenant: tenant)
+      create(:gothenburg_shanghai_itinerary, organization: organization),
+      create(:gothenburg_shanghai_itinerary, organization: organization, transshipment: 'ZACPT')
     ]
   end
   let(:tenant_vehicle) do
-    create(:tenant_vehicle, tenant: tenant)
+    create(:tenant_vehicle, organization: organization)
   end
-  let(:options) { { tenant: tenant, data: input_data, options: {} } }
+  let(:options) { { organization: organization, data: input_data, options: {} } }
   before  do
-    ::Tenants::Scope.find_or_create_by(target: ::Tenants::Tenant.find_by(legacy_id: tenant.id),
+    ::Organizations.current_id = organization.id
+    ::Organizations::Scope.find_or_create_by(target: organization,
                                        content: { 'base_pricing' => true })
   end
   describe '.insert' do
@@ -111,7 +113,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
 
       context 'with scope attribute \'base_pricing\' set to >>> true <<<' do
         let!(:expected_stats) do
-          { "legacy/itineraries": { number_created: 1, number_updated: 0, number_deleted: 0 },
+          { "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 2 },
             "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
@@ -191,17 +193,17 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    wm_rate: 0.1e4,
                    effective_date: DateTime.new(2018, 3, 1),
                    expiration_date: DateTime.new(2019, 3, 16, 23, 59, 59),
-                   tenant: tenant,
+                   organization: organization,
                    load_type: 'container',
                    cargo_class: 'fcl_20',
                    user_id: nil,
                    itinerary: itineraries.first,
                    tenant_vehicle: tenant_vehicle,
-                   fee_attrs: { rate: 1111, rate_basis: :per_container, min: nil })
+                   fee_attrs: { rate: 1111, rate_basis: :per_container_rate_basis, min: nil })
           ]
         end
         let!(:expected_stats) do
-          { "legacy/itineraries": { number_created: 1, number_updated: 0, number_deleted: 0 },
+          { "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 3 },
             "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
@@ -281,7 +283,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    wm_rate: 0.1e4,
                    effective_date: DateTime.new(2019, 6, 20),
                    expiration_date: DateTime.new(2019, 7, 20, 23, 59, 59),
-                   tenant: tenant,
+                   organization: organization,
                    cargo_class: 'lcl',
                    load_type: 'cargo_item',
                    user_id: nil,
@@ -291,7 +293,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           ]
         end
         let!(:expected_stats) do
-          { "legacy/itineraries": { number_created: 1, number_updated: 0, number_deleted: 0 },
+          { "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "pricings/pricings": { number_created: 22, number_deleted: 0, number_updated: 2 },
             "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
@@ -373,7 +375,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    wm_rate: 0.1e4,
                    effective_date: DateTime.new(2017, 6, 1),
                    expiration_date: DateTime.new(2019, 7, 20, 23, 59, 59),
-                   tenant: tenant,
+                   organization: organization,
                    cargo_class: 'lcl',
                    load_type: 'cargo_item',
                    user_id: nil,
@@ -383,7 +385,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           ]
         end
         let!(:expected_stats) do
-          { "legacy/itineraries": { number_created: 1, number_updated: 0, number_deleted: 0 },
+          { "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "pricings/pricings": { number_created: 23, number_deleted: 0, number_updated: 7 },
             "pricings/fees": { number_created: 29, number_deleted: 0, number_updated: 0 },
             errors: [] }
@@ -461,7 +463,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
                    wm_rate: 0.1e4,
                    effective_date: DateTime.new(2018, 3, 16),
                    expiration_date: DateTime.new(2019, 3, 20, 23, 59, 59),
-                   tenant: tenant,
+                   organization: organization,
                    cargo_class: 'lcl',
                    load_type: 'cargo_item',
                    user_id: nil,
@@ -471,7 +473,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           ]
         end
         let!(:expected_stats) do
-          { "legacy/itineraries": { number_created: 1, number_updated: 0, number_deleted: 0 },
+          { "legacy/itineraries": { number_created: 0, number_updated: 0, number_deleted: 0 },
             "pricings/pricings": { number_created: 22, number_deleted: 1, number_updated: 5 },
             "pricings/fees": { number_created: 29, number_deleted: 1, number_updated: 0 },
             errors: [] }
@@ -490,7 +492,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         "pricings/pricings": { number_created: 1, number_updated: 0, number_deleted: 0 },
         "pricings/fees": { number_created: 1, number_updated: 0, number_deleted: 0 } }
     end
-    let(:options) { { tenant: tenant, data: input_data, options: {} } }
+    let(:options) { { organization: organization, data: input_data, options: {} } }
 
     it 'finds the hub by the locode and inserts successfully' do
       expect(described_class.insert(options)).to eq(expected_stats)

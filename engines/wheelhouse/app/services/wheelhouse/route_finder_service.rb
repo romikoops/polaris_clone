@@ -2,17 +2,17 @@
 
 module Wheelhouse
   class RouteFinderService
-    attr_reader :origin, :destination, :tenant, :load_type, :user
+    attr_reader :origin, :destination, :organization, :load_type, :user
 
-    def self.routes(origin:, destination:, user:, load_type:)
-      new(origin: origin, destination: destination, user: user, load_type: load_type).routes
+    def self.routes(organization:, origin:, destination:, user:, load_type:)
+      new(organization: organization, origin: origin, destination: destination, user: user, load_type: load_type).routes
     end
 
-    def initialize(origin:, destination:, user:, load_type:)
+    def initialize(organization:, origin:, destination:, user:, load_type:)
       @origin = origin
       @destination = destination
+      @organization = organization
       @user = user
-      @tenant = user.tenant
       @load_type = load_type
     end
 
@@ -44,20 +44,20 @@ module Wheelhouse
     end
 
     def itineraries
-      Legacy::Itinerary.where(tenant_id: tenant.legacy_id)
+      Legacy::Itinerary.where(organization_id: organization.id)
     end
 
     def hubs_from_nexus(target:)
-      Legacy::Hub.where(tenant_id: tenant.legacy_id, nexus_id: target[:nexus_id])
+      Legacy::Hub.where(organization_id: organization.id, nexus_id: target[:nexus_id])
     end
 
     def hubs_from_coordinates(target:)
       carriage = target == origin ? 'pre' : 'on'
       ::Trucking::Queries::Hubs.new(
-        tenant_id: tenant.legacy_id,
+        organization_id: organization.id,
         address: address(target.slice(:latitude, :longitude)),
         carriage: carriage,
-        groups: user.all_groups,
+        groups: user_groups,
         load_type: load_type
       ).perform
     end
@@ -73,6 +73,12 @@ module Wheelhouse
         city_name: address.city,
         country: OpenStruct.new(code: address.country_code)
       )
+    end
+
+    def user_groups
+      companies = Companies::Membership.where(member: user)
+      membership_ids = Groups::Membership.where(member: user)
+                        .or(Groups::Membership.where(member: companies)).select(:group_id)
     end
   end
 end

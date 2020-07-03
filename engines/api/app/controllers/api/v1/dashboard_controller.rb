@@ -10,6 +10,7 @@ module Api
         {
           data: Api::DashboardService.data(
             user: current_user,
+            organization: current_organization,
             widget_name: widget_param,
             start_date: optional_params[:startDate],
             end_date: optional_params[:endDate]

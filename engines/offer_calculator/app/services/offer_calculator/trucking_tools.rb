@@ -11,15 +11,19 @@ module OfferCalculator
     DEFAULT_MAX = Float::INFINITY
     TRUCKING_CONTAINER_HEIGHT = 260
 
-    attr_accessor :trucking_pricing, :tenant, :user, :cargos, :kms, :carriage, :metadata
+    attr_accessor :trucking_pricing, :organization, :user, :cargos, :kms, :carriage, :metadata
+    attr_reader :scope
+
     def initialize(trucking_pricing, cargos, kms, carriage, user, metadata = [])
-      @tenant = user.tenant
+      @organization = ::Organizations::Organization.find(::Organizations.current_id)
+      @org_theme = @organization.theme
       @trucking_pricing = trucking_pricing
       @user = user
       @cargos = cargos
       @kms = kms
       @carriage = carriage
       @metadata = metadata
+      @scope = ::OrganizationManager::ScopeService.new(target: user, organization: organization).fetch
     end
 
     def perform
@@ -31,7 +35,7 @@ module OfferCalculator
                      end
 
       trucking_pricings = {}
-      scope = ::Tenants::ScopeService.new(target: ::Tenants::User.find_by(legacy_id: user.id)).fetch
+      
       return {} if trucking_pricing['rates'].empty?
 
       cargo_object.each do |stackable_type, cargo_values|
@@ -52,7 +56,7 @@ module OfferCalculator
         total[:currency] = trucking_fee[:currency]
       end
 
-      total[:currency] = @tenant.currency if total[:currency] == '' && total[:value].zero?
+      total[:currency] = @org_theme.currency if total[:currency] == '' && total[:value].zero?
 
       fees[:total] = total
       fees
@@ -401,9 +405,7 @@ module OfferCalculator
           'number_of_items' => 0
         }
       }
-      consolidation = ::Tenants::ScopeService.new(
-        target: ::Tenants::User.find_by(legacy_id: cargos.first.shipment.user_id)
-      ).fetch(:consolidation)
+      consolidation = scope.fetch(:consolidation)
 
       if consolidation.dig('trucking', 'load_meterage_only')
         consolidated_load_meterage(trucking_pricing, cargo_object, cargos)

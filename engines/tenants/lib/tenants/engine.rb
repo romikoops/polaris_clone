@@ -2,13 +2,12 @@
 
 require 'activerecord-import'
 require 'core'
+require 'groups'
 require 'legacy'
-require 'mailers'
 require 'profiles'
 
 require 'paranoia'
 require 'pg_search'
-require 'sorcery'
 
 module Tenants
   class Engine < ::Rails::Engine
@@ -28,13 +27,6 @@ module Tenants
       g.model_specs         false
       g.stylesheets         false
       g.view_specs          false
-    end
-
-    initializer :append_legacy_sync do
-      config.to_prepare do
-        ::Legacy::Tenant.send(:include, Tenants::LegacySync)
-        ::Legacy::User.send(:include, Tenants::LegacySync)
-      end
     end
 
     initializer :append_migrations do |app|

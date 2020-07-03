@@ -3,17 +3,17 @@
 require 'rails_helper'
 
 RSpec.describe DocumentsController, type: :controller do
-  let(:user) { create(:user) }
-  let(:document) { create(:legacy_file, :with_file, user: user) }
+  let(:org_user) { FactoryBot.create(:organizations_user) }
+  let(:user) { org_user.becomes(Authentication::User) }
+  let(:document) { FactoryBot.create(:legacy_file, :with_file, user: org_user) }
 
   before do
-    allow(controller).to receive(:user_signed_in?).and_return(true)
-    allow(controller).to receive(:current_user).and_return(user)
+    append_token_header
   end
 
   describe 'GET #download_url' do
     it 'returns http success with the file url' do
-      get :download_url, params: { tenant_id: user.tenant_id, document_id: document.id }
+      get :download_url, params: { organization_id: user.organization_id, document_id: document.id }
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
@@ -25,7 +25,7 @@ RSpec.describe DocumentsController, type: :controller do
 
   describe 'GET #delete' do
     it 'returns http success and deletes the file' do
-      get :delete, params: { tenant_id: user.tenant_id, document_id: document.id }
+      get :delete, params: { organization_id: user.organization_id, document_id: document.id }
 
       aggregate_failures do
         expect(response).to have_http_status(:success)

@@ -37,12 +37,16 @@ exports[`shallow rendering 1`] = `
         <p>
           From
           : 
-          <span />
+          <span>
+            SHIPMENT_ORIGIN_HUB
+          </span>
         </p>
         <p>
           To
           : 
-          <span />
+          <span>
+            SHIPMENT_DESTINATION_HUB
+          </span>
         </p>
       </div>
     </div>
@@ -281,12 +285,16 @@ exports[`shipment.has_on_carriage is true 1`] = `
         <p>
           From
           : 
-          <span />
+          <span>
+            SHIPMENT_ORIGIN_HUB
+          </span>
         </p>
         <p>
           To
           : 
-          <span />
+          <span>
+            SHIPMENT_DESTINATION_HUB
+          </span>
         </p>
       </div>
     </div>
@@ -525,12 +533,16 @@ exports[`shipment.has_pre_carriage is true 1`] = `
         <p>
           From
           : 
-          <span />
+          <span>
+            SHIPMENT_ORIGIN_HUB
+          </span>
         </p>
         <p>
           To
           : 
-          <span />
+          <span>
+            SHIPMENT_DESTINATION_HUB
+          </span>
         </p>
       </div>
     </div>
@@ -769,12 +781,16 @@ exports[`shipment.planned_eta is falsy 1`] = `
         <p>
           From
           : 
-          <span />
+          <span>
+            SHIPMENT_ORIGIN_HUB
+          </span>
         </p>
         <p>
           To
           : 
-          <span />
+          <span>
+            SHIPMENT_DESTINATION_HUB
+          </span>
         </p>
       </div>
     </div>
@@ -1055,12 +1071,16 @@ exports[`shipment.status !== finished 1`] = `
         <p>
           From
           : 
-          <span />
+          <span>
+            SHIPMENT_ORIGIN_HUB
+          </span>
         </p>
         <p>
           To
           : 
-          <span />
+          <span>
+            SHIPMENT_DESTINATION_HUB
+          </span>
         </p>
       </div>
     </div>
@@ -1387,12 +1407,16 @@ exports[`state.confirm is true 1`] = `
         <p>
           From
           : 
-          <span />
+          <span>
+            SHIPMENT_ORIGIN_HUB
+          </span>
         </p>
         <p>
           To
           : 
-          <span />
+          <span>
+            SHIPMENT_DESTINATION_HUB
+          </span>
         </p>
       </div>
     </div>
@@ -1631,12 +1655,16 @@ exports[`theme is falsy 1`] = `
         <p>
           From
           : 
-          <span />
+          <span>
+            SHIPMENT_ORIGIN_HUB
+          </span>
         </p>
         <p>
           To
           : 
-          <span />
+          <span>
+            SHIPMENT_DESTINATION_HUB
+          </span>
         </p>
       </div>
     </div>

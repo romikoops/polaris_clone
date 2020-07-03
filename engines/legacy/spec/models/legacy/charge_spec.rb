@@ -5,7 +5,7 @@ module Legacy
   RSpec.describe Charge, type: :model do
     describe 'instance methods' do
       let(:charge) { FactoryBot.create(:legacy_charge) }
-      let!(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
+      let!(:organization) { FactoryBot.create(:organizations_organization) }
 
       before do
         FactoryBot.create(:legacy_charge, parent: charge)
@@ -19,12 +19,6 @@ module Legacy
 
       it 'updates edited price' do
         expect(charge.update_edited_price!).to be true
-      end
-
-      it 'updates dup tree' do
-        pending('we have due circular reference between Legacy and Pricing engines')
-        charge_breakdown = FactoryBot.create(:legacy_charge_breakdown)
-        expect(charge.dup_tree(charge_breakdown: charge_breakdown)).to be true
       end
     end
   end

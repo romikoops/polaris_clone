@@ -1,7 +1,7 @@
 <div class="wrapper-quotations">
   <% primary_color = theme.primary_color %>
   <% neutral_color = '#C4C4C4' %>
-  <% tenant_logo_asset = "logoLarge_" + tenant["subdomain"] + ".png" %>
+  <% tenant_logo_asset = "logoLarge_" + organization["slug"] + ".png" %>
   <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
   <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
   <% weight_units = scope['values']['weight'] %>
@@ -10,18 +10,15 @@
     <div class="title-left">
       <h1>QUOTATIONS</h1>
       <hr style="border-color: <%= primary_color %>">
-      <p><%= tenant.name %></p>
+      <p><%= organization.slug %></p>
     </div>
     <div class="title-logo">
       <img src="data:image/png;base64,<%=logo%>" alt="" class="header-logo">
     </div>
     <div class="agent-info">
         <p><strong><%= shipper_profile.first_name %> <%= shipper_profile.last_name %></strong></p>
-        <p><%= shipment.user.email %></p>
+        <p><%= shipper_profile.email %></p>
         <p><%= shipper_profile.phone %></p>
-        <% if shipment.user.external_id %>
-          <p>Customer ID: <%= shipment.user.external_id.to_i %></p>
-        <% end %>
     </div>
   </div>
 

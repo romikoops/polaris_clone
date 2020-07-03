@@ -3,8 +3,8 @@
 module ExcelDataServices
   module Loaders
     class Base
-      def initialize(tenant:)
-        @tenant = tenant
+      def initialize(organization:)
+        @organization = organization
       end
 
       def perform
@@ -13,7 +13,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :tenant
+      attr_reader :organization
     end
   end
 end

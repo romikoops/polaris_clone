@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'api_auth/resource_helper.rb'
+
 ::Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
   orm :active_record
@@ -13,11 +15,8 @@
   # end
 
   resource_owner_from_credentials do
-    resource = if server.client.present? && server.client.name[/bridge/]
-      ::Tenants::User.joins(:legacy).where('role_id = 1')
-    else
-      ::Tenants::User
-    end
+    ::Organizations.current_id = params[:organization_id] if params[:organization_id]
+    resource = ApiAuth::ResourceHelper.resource_for_login(email: params[:email], client: server.client)
     resource.authenticate(params[:email], params[:password]) || nil
   end
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb

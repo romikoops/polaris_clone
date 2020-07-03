@@ -3,18 +3,14 @@
 module Validator
   class Itinerary
     attr_reader :itinerary, :tenant_vehicles, :origin_hub, :destination_hub, :date_range, :tenant_vehicle_lookup,
-                :tenant, :groups, :pricings, :origin_local_charges, :destination_local_charges, :tenant_vehicles, :scope
+                :organization, :groups, :pricings, :origin_local_charges, :destination_local_charges, :tenant_vehicles, :scope
 
     def initialize(itinerary:, user:)
       @itinerary = itinerary
       @origin_hub = itinerary.hubs.first
       @destination_hub = itinerary.hubs.last
-      @legacy_tenant = itinerary.tenant
-      @tenant = Tenants::Tenant.find_by(legacy_id: @legacy_tenant.id)
-      @scope = Tenants::ScopeService.new(
-        target: ::Tenants::User.find_by(legacy_id: user),
-        tenant: ::Tenants::Tenant.find_by(legacy_id: itinerary.tenant.id)
-      ).fetch
+      @organization = ::Organizations::Organization.find(itinerary.organization_id)
+      @scope = ::OrganizationManager::ScopeService.new(target: user, organization: organization).fetch
       @date_range = (Date.today..Date.today + 30.days)
     end
 
@@ -41,7 +37,7 @@ module Validator
             else
               pricings.pluck(:group_id) | origin_local_charges.pluck(:group_id) | destination_local_charges.pluck(:group_id)
       end
-      @groups ||= Tenants::Group.where(tenant: tenant, id: ids)
+      @groups ||= Groups::Group.where(organization: organization, id: ids)
     end
 
     def group_ids

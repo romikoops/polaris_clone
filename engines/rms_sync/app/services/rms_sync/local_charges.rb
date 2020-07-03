@@ -3,9 +3,9 @@
 module RmsSync
   class LocalCharges < RmsSync::Base
 
-    def initialize(tenant_id:, sheet_type: :local_charges, sandbox: nil)
+    def initialize(organization_id:, sheet_type: :local_charges, sandbox: nil)
       super
-      @book = RmsData::Book.find_or_create_by(tenant: @tenant, sheet_type: sheet_type)
+      @book = RmsData::Book.find_or_create_by(organization: @organization, sheet_type: sheet_type)
     end
 
     def perform
@@ -21,12 +21,12 @@ module RmsSync
     end
 
     def local_charges
-      ::Legacy::LocalCharge.where(tenant_id: @tenant.legacy_id, sandbox: @sandbox)
+      ::Legacy::LocalCharge.where(organization_id: @organization.id)
                           .for_dates(Date.today, 2.months.from_now)
     end
 
     def create_sheet
-      @sheet = @book.sheets.create(tenant_id: @tenant.id, sheet_index: 0)
+      @sheet = @book.sheets.create(organization_id: @organization.id, sheet_index: 0)
     end
 
     def create_data_cells
@@ -70,7 +70,7 @@ module RmsSync
     def create_header_row
       default_headers.each_with_index do |head, i|
         @sheet.cells.create!(
-          tenant_id: @tenant.id,
+          organization_id: @organization.id,
           row: 0,
           column: i,
           value: head
@@ -80,7 +80,7 @@ module RmsSync
 
     def default_headers
       %w(HUB COUNTRY EFFECTIVE_DATE EXPIRATION_DATE COUNTERPART_HUB COUNTERPART_COUNTRY SERVICE_LEVEL CARRIER FEE_CODE
-        FEE MOT LOAD_TYPE DIRECTION CURRENCY RATE_BASIS MINIMUM MAXIMUM BASE TON CBM KG ITEM SHIPMENT BILL CONTAINER 
+        FEE MOT LOAD_TYPE DIRECTION CURRENCY RATE_BASIS MINIMUM MAXIMUM BASE TON CBM KG ITEM SHIPMENT BILL CONTAINER
         WM RANGE_MIN	RANGE_MAX	DANGEROUS)
     end
 
@@ -97,7 +97,7 @@ module RmsSync
 
     def cell_data(sheet:, local_charge:, header:, row:, index:, fee:, range: {})
       obj = {
-        tenant_id: @tenant.id,
+        organization_id: @organization.id,
         column: index,
         row: row,
         sheet_id: sheet.id

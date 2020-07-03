@@ -10,10 +10,10 @@ module DocumentService
                 :user_shipments, :user_messages, :user_addresses, :user_sheet, :contacts_sheet, :shipment_sheet
 
     def initialize(options)
-      @user = User.find(options[:user_id])
-      @user_contacts = @user.contacts
-      @user_shipments = Shipment.where(user: @user)
-      @user_addresses = @user.user_addresses
+      @user = Users::User.find(options[:user_id])
+      @user_contacts = Legacy::Contact.where(user: @user)
+      @user_shipments = Legacy::Shipment.where(user: @user).where.not(status: 'booking_process_started')
+      @user_addresses = Legacy::UserAddress.where(user: @user)
       @filename = "#{user_profile.first_name}_#{user_profile.last_name}_GDPR.xlsx"
       @directory = "tmp/#{@filename}"
       @workbook = create_workbook(@directory)
@@ -29,7 +29,7 @@ module DocumentService
       write_contacts_data
       write_shipment_data
       workbook.close
-      write_to_aws(directory, user.tenant, filename, 'gdpr')
+      write_to_aws(directory, user.organization, filename, 'gdpr')
     end
 
     private
@@ -45,7 +45,6 @@ module DocumentService
          last_name
          phone
          currency
-         vat_number
          uid)
     end
 
@@ -63,7 +62,7 @@ module DocumentService
       user_contacts.each do |uc|
         uc.as_json.each do |k, value|
           if k.to_s == 'address_id'
-            loc = Address.find(value)
+            loc = Legacy::Address.find(value)
             loc.set_geocoded_address_from_fields! unless loc.geocoded_address
             contacts_sheet.write(row, 0, k.humanize)
             contacts_sheet.write(row, 1, loc.geocoded_address)
@@ -102,10 +101,10 @@ module DocumentService
       write_shipment_headers
       row = 1
       user_shipments.each do |shipment|
-        next unless shipment.status != 'booking_process_started'
+        tender = shipment.charge_breakdowns.selected.tender
 
-        shipment_sheet.write(row, 0, shipment.origin_hub.address.geocoded_address)
-        shipment_sheet.write(row, 1, shipment.destination_hub.address.geocoded_address)
+        shipment_sheet.write(row, 0, shipment.origin_hub&.address&.geocoded_address)
+        shipment_sheet.write(row, 1, shipment.destination_hub&.address&.geocoded_address)
         shipment_sheet.write(row, 2, shipment.imc_reference)
         shipment_sheet.write(row, 3, shipment.status)
         shipment_sheet.write(row, 4, shipment.load_type.humanize)
@@ -113,19 +112,34 @@ module DocumentService
         shipment_sheet.write(row, 6, shipment.has_on_carriage ? 'Yes' : 'No')
         shipment_sheet.write(row, 7, shipment.planned_etd)
         shipment_sheet.write(row, 8, shipment.planned_eta)
-        shipment_sheet.write(row, 9, "#{shipment.total_price[:currency]} #{shipment.total_price[:value].to_d.round(2)}")
-        shipment_sheet.write(row, 10, shipment.insurance && shipment.insurance['val'] ? "#{shipment.insurance['currency']} #{shipment.insurance['val'].to_d.round(2)}" : 'N/A')
-        shipment_sheet.write(row, 11, shipment.customs && shipment.customs['val'] ? "#{shipment.customs['currency']} #{shipment.customs['val'].to_d.round(2)}" : 'N/A')
+        shipment_sheet.write(
+          row,
+          9,
+          section_total(tender: tender)
+        )
+        shipment_sheet.write(
+          row,
+          10,
+          section_total(tender: tender, section: 'customs_section')
+        )
+        shipment_sheet.write(
+          row,
+          11,
+          section_total(tender: tender, section: 'insurance_section')
+        )
         row += 1
       end
     end
 
     def user_profile
-      @user_profile ||= Profiles::Profile.find_by(user_id: tenants_user.id)
+      @user_profile ||= Profiles::Profile.find_by(user_id: user.id)
     end
 
-    def tenants_user
-      @tenants_user ||= Tenants::User.find_by(legacy_id: @user.id)
+    def section_total(tender:, section: nil)
+      return 'N/A' unless tender.present? && (section.present? && tender.line_items.exists?(section: section))
+      return tender.amount.format if section.blank?
+
+      tender.line_items.where(section: section).sum(Money.new(0, tender.amount_currency), &:amount).format
     end
   end
 end

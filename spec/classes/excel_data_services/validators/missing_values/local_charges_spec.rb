@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::MissingValues::LocalCharges do
-  let(:tenant) { create(:tenant) }
-  let(:validator) { described_class.new(tenant: tenant, sheet_name: 'Sheet1', data: data) }
+  let(:organization) { create(:organizations_organization) }
+  let(:validator) { described_class.new(organization: organization, sheet_name: 'Sheet1', data: data) }
   let(:data) { build(:excel_data_restructured_faulty_local_charges) }
 
   describe '.perform' do

@@ -1,0 +1,528 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<WeekdayCheckboxes /> renders without crashing 1`] = `
+<WeekdayCheckboxes
+  toggleWeekdays={[MockFunction]}
+  weekdays={
+    Array [
+      1,
+      2,
+      3,
+      4,
+      5,
+    ]
+  }
+>
+  <WeekdayCheckbox
+    key="0"
+    toggleWeekdays={[MockFunction]}
+    weekday={1}
+    weekdays={
+      Array [
+        1,
+        2,
+        3,
+        4,
+        5,
+      ]
+    }
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <Checkbox
+        checked={2}
+        className=""
+        disabled={false}
+        id="weekdays-1"
+        name={1}
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={null}
+      >
+        <div
+          className="checkbox  flex-none"
+          onClick={null}
+          style={
+            Object {
+              "border": "1px solid #BDBDBD",
+            }
+          }
+        >
+          <label>
+            <input
+              checked={2}
+              className=""
+              disabled={false}
+              id="weekdays-1"
+              name={1}
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <span
+              style={Object {}}
+            >
+              <i
+                className="fa fa-check show"
+                style={
+                  Object {
+                    "color": "black",
+                    "fontSize": "15px",
+                  }
+                }
+              />
+            </span>
+          </label>
+        </div>
+      </Checkbox>
+      <label
+        className="offset-5 pointy"
+        htmlFor="weekdays-1"
+      >
+        <p>
+          Sun
+        </p>
+      </label>
+    </div>
+  </WeekdayCheckbox>
+  <WeekdayCheckbox
+    key="1"
+    toggleWeekdays={[MockFunction]}
+    weekday={2}
+    weekdays={
+      Array [
+        1,
+        2,
+        3,
+        4,
+        5,
+      ]
+    }
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <Checkbox
+        checked={3}
+        className=""
+        disabled={false}
+        id="weekdays-2"
+        name={2}
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={null}
+      >
+        <div
+          className="checkbox  flex-none"
+          onClick={null}
+          style={
+            Object {
+              "border": "1px solid #BDBDBD",
+            }
+          }
+        >
+          <label>
+            <input
+              checked={3}
+              className=""
+              disabled={false}
+              id="weekdays-2"
+              name={2}
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <span
+              style={Object {}}
+            >
+              <i
+                className="fa fa-check show"
+                style={
+                  Object {
+                    "color": "black",
+                    "fontSize": "15px",
+                  }
+                }
+              />
+            </span>
+          </label>
+        </div>
+      </Checkbox>
+      <label
+        className="offset-5 pointy"
+        htmlFor="weekdays-2"
+      >
+        <p>
+          Mon
+        </p>
+      </label>
+    </div>
+  </WeekdayCheckbox>
+  <WeekdayCheckbox
+    key="2"
+    toggleWeekdays={[MockFunction]}
+    weekday={3}
+    weekdays={
+      Array [
+        1,
+        2,
+        3,
+        4,
+        5,
+      ]
+    }
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <Checkbox
+        checked={4}
+        className=""
+        disabled={false}
+        id="weekdays-3"
+        name={3}
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={null}
+      >
+        <div
+          className="checkbox  flex-none"
+          onClick={null}
+          style={
+            Object {
+              "border": "1px solid #BDBDBD",
+            }
+          }
+        >
+          <label>
+            <input
+              checked={4}
+              className=""
+              disabled={false}
+              id="weekdays-3"
+              name={3}
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <span
+              style={Object {}}
+            >
+              <i
+                className="fa fa-check show"
+                style={
+                  Object {
+                    "color": "black",
+                    "fontSize": "15px",
+                  }
+                }
+              />
+            </span>
+          </label>
+        </div>
+      </Checkbox>
+      <label
+        className="offset-5 pointy"
+        htmlFor="weekdays-3"
+      >
+        <p>
+          Tue
+        </p>
+      </label>
+    </div>
+  </WeekdayCheckbox>
+  <WeekdayCheckbox
+    key="3"
+    toggleWeekdays={[MockFunction]}
+    weekday={4}
+    weekdays={
+      Array [
+        1,
+        2,
+        3,
+        4,
+        5,
+      ]
+    }
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <Checkbox
+        checked={5}
+        className=""
+        disabled={false}
+        id="weekdays-4"
+        name={4}
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={null}
+      >
+        <div
+          className="checkbox  flex-none"
+          onClick={null}
+          style={
+            Object {
+              "border": "1px solid #BDBDBD",
+            }
+          }
+        >
+          <label>
+            <input
+              checked={5}
+              className=""
+              disabled={false}
+              id="weekdays-4"
+              name={4}
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <span
+              style={Object {}}
+            >
+              <i
+                className="fa fa-check show"
+                style={
+                  Object {
+                    "color": "black",
+                    "fontSize": "15px",
+                  }
+                }
+              />
+            </span>
+          </label>
+        </div>
+      </Checkbox>
+      <label
+        className="offset-5 pointy"
+        htmlFor="weekdays-4"
+      >
+        <p>
+          Wed
+        </p>
+      </label>
+    </div>
+  </WeekdayCheckbox>
+  <WeekdayCheckbox
+    key="4"
+    toggleWeekdays={[MockFunction]}
+    weekday={5}
+    weekdays={
+      Array [
+        1,
+        2,
+        3,
+        4,
+        5,
+      ]
+    }
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <Checkbox
+        checked={false}
+        className=""
+        disabled={false}
+        id="weekdays-5"
+        name={5}
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={null}
+      >
+        <div
+          className="checkbox  flex-none"
+          onClick={null}
+          style={
+            Object {
+              "border": "1px solid #BDBDBD",
+            }
+          }
+        >
+          <label>
+            <input
+              checked={false}
+              className=""
+              disabled={false}
+              id="weekdays-5"
+              name={5}
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <span
+              style={Object {}}
+            >
+              <i
+                className="fa fa-check "
+                style={
+                  Object {
+                    "color": "black",
+                    "fontSize": "15px",
+                  }
+                }
+              />
+            </span>
+          </label>
+        </div>
+      </Checkbox>
+      <label
+        className="offset-5 pointy"
+        htmlFor="weekdays-5"
+      >
+        <p>
+          Thu
+        </p>
+      </label>
+    </div>
+  </WeekdayCheckbox>
+  <WeekdayCheckbox
+    key="5"
+    toggleWeekdays={[MockFunction]}
+    weekday={6}
+    weekdays={
+      Array [
+        1,
+        2,
+        3,
+        4,
+        5,
+      ]
+    }
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <Checkbox
+        checked={false}
+        className=""
+        disabled={false}
+        id="weekdays-6"
+        name={6}
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={null}
+      >
+        <div
+          className="checkbox  flex-none"
+          onClick={null}
+          style={
+            Object {
+              "border": "1px solid #BDBDBD",
+            }
+          }
+        >
+          <label>
+            <input
+              checked={false}
+              className=""
+              disabled={false}
+              id="weekdays-6"
+              name={6}
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <span
+              style={Object {}}
+            >
+              <i
+                className="fa fa-check "
+                style={
+                  Object {
+                    "color": "black",
+                    "fontSize": "15px",
+                  }
+                }
+              />
+            </span>
+          </label>
+        </div>
+      </Checkbox>
+      <label
+        className="offset-5 pointy"
+        htmlFor="weekdays-6"
+      >
+        <p>
+          Fri
+        </p>
+      </label>
+    </div>
+  </WeekdayCheckbox>
+  <WeekdayCheckbox
+    key="6"
+    toggleWeekdays={[MockFunction]}
+    weekday={7}
+    weekdays={
+      Array [
+        1,
+        2,
+        3,
+        4,
+        5,
+      ]
+    }
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <Checkbox
+        checked={false}
+        className=""
+        disabled={false}
+        id="weekdays-7"
+        name={7}
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={null}
+      >
+        <div
+          className="checkbox  flex-none"
+          onClick={null}
+          style={
+            Object {
+              "border": "1px solid #BDBDBD",
+            }
+          }
+        >
+          <label>
+            <input
+              checked={false}
+              className=""
+              disabled={false}
+              id="weekdays-7"
+              name={7}
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <span
+              style={Object {}}
+            >
+              <i
+                className="fa fa-check "
+                style={
+                  Object {
+                    "color": "black",
+                    "fontSize": "15px",
+                  }
+                }
+              />
+            </span>
+          </label>
+        </div>
+      </Checkbox>
+      <label
+        className="offset-5 pointy"
+        htmlFor="weekdays-7"
+      >
+        <p>
+          Sat
+        </p>
+      </label>
+    </div>
+  </WeekdayCheckbox>
+</WeekdayCheckboxes>
+`;

@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :ledger_rate, class: 'Ledger::Rate' do
     association :location, factory: :routing_location
-    association :tenant, factory: :tenants_tenant
+    association :organization, factory: :organizations_organization
     association :target, factory: :routing_route_line_service
 
     transient do
@@ -126,19 +126,25 @@ end
 #
 # Table name: ledger_rates
 #
-#  id          :uuid             not null, primary key
-#  target_type :string
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  location_id :uuid
-#  target_id   :uuid
-#  tenant_id   :uuid
-#  terminal_id :uuid
+#  id              :uuid             not null, primary key
+#  target_type     :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  location_id     :uuid
+#  organization_id :uuid
+#  target_id       :uuid
+#  tenant_id       :uuid
+#  terminal_id     :uuid
 #
 # Indexes
 #
-#  index_ledger_rates_on_location_id  (location_id)
-#  index_ledger_rates_on_tenant_id    (tenant_id)
-#  index_ledger_rates_on_terminal_id  (terminal_id)
-#  ledger_rate_target_index           (target_type,target_id)
+#  index_ledger_rates_on_location_id      (location_id)
+#  index_ledger_rates_on_organization_id  (organization_id)
+#  index_ledger_rates_on_tenant_id        (tenant_id)
+#  index_ledger_rates_on_terminal_id      (terminal_id)
+#  ledger_rate_target_index               (target_type,target_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

@@ -31,18 +31,18 @@ module ExcelDataServices
       def find_service_level(name:, carrier:)
         return nil if name.blank?
 
-        Legacy::TenantVehicle.find_by(name: name, carrier: carrier, tenant_id: @tenant.id)
+        Legacy::TenantVehicle.find_by(name: name, carrier: carrier, organization_id: @organization.id)
       end
 
       def find_itinerary(mode_of_transport:, origin_locode: nil, destination_locode: nil)
         return if origin_locode.blank? && destination_locode.blank?
 
         origin_stops = ::Legacy::Stop.joins(:hub)
-                                     .where(hubs: { hub_code: origin_locode, tenant_id: tenant.id })
+                                     .where(hubs: { hub_code: origin_locode, tenant_id: organization.id })
         destination_stops = ::Legacy::Stop.joins(:hub)
-                                          .where(hubs: { hub_code: destination_locode, tenant_id: tenant.id })
+                                          .where(hubs: { hub_code: destination_locode, tenant_id: organization.id })
         itinerary_ids = origin_stops.pluck(:itinerary_id) | destination_stops.pluck(:itinerary_id)
-        ::Legacy::Itinerary.find_by(tenant_id: tenant.id, mode_of_transport: mode_of_transport, id: itinerary_ids)
+        ::Legacy::Itinerary.find_by(tenant_id: organization.id, mode_of_transport: mode_of_transport, id: itinerary_ids)
       end
 
       def update_or_create_max_dimensions_bundle(params:, carrier:, tenant_vehicle:, itinerary:)
@@ -52,7 +52,7 @@ module ExcelDataServices
           itinerary: itinerary,
           aggregate: params[:aggregate],
           tenant_vehicle: tenant_vehicle,
-          tenant: @tenant,
+          organization: @organization,
           cargo_class: params[:cargo_class]
         )
         max_dimension.assign_attributes(

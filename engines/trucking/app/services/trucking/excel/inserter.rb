@@ -18,7 +18,7 @@ module Trucking
 
         @defaults = {}
         @trucking_rate_by_zone = {}
-        @tenant = @hub.tenant
+        @organization = @hub.organization
         @zip_char_length = nil
         @zones = {}
         @all_ident_values_and_countries = {}
@@ -175,7 +175,7 @@ module Trucking
           @all_trucking_locations << tl
           trucking_attr = trucking_rate.slice(
             :hub_id,
-            :tenant_id,
+            :organization_id,
             :identifier_modifier,
             :carriage,
             :cargo_class,
@@ -504,7 +504,7 @@ module Trucking
             }
           end
 
-          Legacy::ChargeCategory.from_code(code: row[:fee_code].downcase, name: row[:fee], tenant_id: @tenant.id)
+          Legacy::ChargeCategory.from_code(code: row[:fee_code].downcase, name: row[:fee], organization_id: @organization.id)
         end
       end
 
@@ -535,7 +535,7 @@ module Trucking
       end
 
       def create_trucking(meta:, sheet_name:, row_number:) # rubocop:disable Metrics/AbcSize
-        user_id = meta[:user_email] ? User.find_by(tenant_id: @tenant.id, email: meta[:user_email])&.id : nil
+        user_id = meta[:user_email] ? User.find_by(organization_id: @organization.id, email: meta[:user_email])&.id : nil
         {
           load_meterage: {
             ratio: meta[:load_meterage_ratio],
@@ -551,7 +551,7 @@ module Trucking
           modifier: meta[:scale],
           hub_id: @hub.id,
           group_id: @group_id,
-          tenant_id: tenant.id,
+          organization_id: organization.id,
           identifier_modifier: identifier_modifier,
           carriage: meta[:direction] == 'import' ? 'on' : 'pre',
           cargo_class: meta[:cargo_class],
@@ -637,7 +637,7 @@ module Trucking
       end
 
       def find_or_create_courier(courier_name)
-        Courier.find_or_create_by(name: courier_name, tenant: tenant)
+        Courier.find_or_create_by(name: courier_name, organization: organization)
       end
 
       def build_trucking_and_locations(single_ident_values_and_country, rate)

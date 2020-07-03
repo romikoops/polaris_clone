@@ -11,10 +11,17 @@ class QuoteMailerPreview < ActionMailer::Preview
   end
 
   def quotation_admin_email
-    ids = Tenant.find_by(subdomain: 'lclsaco').shipments.ids
-    quotation = Quotation.where(original_shipment_id: ids).last
-    @shipments = Shipment.where(quotation_id: quotation.id)
-    @shipment = @shipments.first
+    organization = Organizations::Organization.find_by(slug: 'lclsaco')
+    shipments = Shipment.where(organization: organization)
+    quotation = Quotation.where(original_shipment_id: shipments).last
+    QuoteMailer.quotation_admin_email(quotation)
+  end
+
+  def no_user_quotation_admin_email
+    organization = Organizations::Organization.find_by(slug: 'yourdemo')
+    shipments = Shipment.where(organization: organization, user_id: nil)
+    quotation = Quotation.where(original_shipment_id: shipments.ids, user_id: nil).last
+
     QuoteMailer.quotation_admin_email(quotation)
   end
 end

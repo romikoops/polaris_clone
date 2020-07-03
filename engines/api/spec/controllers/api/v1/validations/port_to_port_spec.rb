@@ -5,27 +5,27 @@ require 'rails_helper'
 module Api
   RSpec.describe V1::ValidationsController, type: :controller do
     routes { Engine.routes }
-    let(:tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-    let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}, with_profile: true) }
-    let(:tenants_user) { Tenants::User.find_by(legacy: user) }
-    let(:origin_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
-    let(:destination_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
+    let(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
+    let(:organizations_user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
+    let(:origin_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
+    let(:destination_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
     let(:origin_hub) { itinerary.origin_hub }
     let(:destination_hub) { itinerary.destination_hub }
     let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
     let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'quickly') }
-    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenants_user.id, scopes: 'public') }
+    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: organizations_user.id, scopes: 'public') }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:shipping_info) { { trucking_info: { pre_carriage: :pre } } }
     let(:cargo_item_id) { SecureRandom.uuid }
     let(:load_type) { 'cargo_item' }
     let(:params) do
       {
+        organization_id: organization.id,
         quote: {
-          tenant_id: tenant.id,
-          user_id: tenants_user.id,
+          organization_id: organization.id,
+          user_id: user.id,
           load_type: load_type,
           origin: origin,
           destination: destination
@@ -95,7 +95,7 @@ module Api
         end
 
         before do
-          FactoryBot.create(:tenants_scope, target: tenants_tenant, content: { dedicated_pricings_only: true })
+          FactoryBot.create(:organizations_scope, target: organization, content: { dedicated_pricings_only: true })
           request.headers['Authorization'] = token_header
           post :create, params: params
         end
@@ -150,7 +150,7 @@ module Api
         end
 
         before do
-          FactoryBot.create(:lcl_pricing, tenant: tenant, itinerary: itinerary)
+          FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
           request.headers['Authorization'] = token_header
           post :create, params: params
         end
@@ -205,7 +205,7 @@ module Api
         end
 
         before do
-          FactoryBot.create(:lcl_pricing, tenant: tenant, itinerary: itinerary)
+          FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
           request.headers['Authorization'] = token_header
           post :create, params: params
         end
@@ -254,11 +254,11 @@ module Api
 
         before do
           FactoryBot.create(:legacy_max_dimensions_bundle,
-                            tenant: tenant,
+                            organization: organization,
                             mode_of_transport: 'ocean',
                             payload_in_kg: 10_000,
                             cargo_class: 'fcl_20')
-          FactoryBot.create(:fcl_20_pricing, tenant: tenant, itinerary: itinerary)
+          FactoryBot.create(:fcl_20_pricing, organization: organization, itinerary: itinerary)
           request.headers['Authorization'] = token_header
           post :create, params: params
         end

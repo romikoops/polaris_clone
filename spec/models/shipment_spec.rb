@@ -10,11 +10,19 @@ RSpec.describe Shipment, type: :model do
            valid_until: 10.days.from_now.beginning_of_day,
            charge_category_name: 'Cargo1')
   end
-
-  let(:tenant) { build(:tenant) }
-  let(:shipment) { create(:shipment, tenant: tenant, with_breakdown: true) }
+  let(:itinerary) { create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:organization) { create(:organizations_organization) }
+  let(:shipment) { create(:shipment, organization: organization, with_breakdown: true) }
   let(:other_trip) { create(:trip) }
   let(:hidden_value_service) { instance_double(Pdf::HiddenValueService) }
+
+  before do
+    FactoryBot.create(:profiles_profile,
+                      first_name: 'Test',
+                      last_name: 'User',
+                      company_name: 'ItsMyCargo',
+                      user_id: shipment.user_id)
+  end
 
   context 'when hidden grand totals is true' do
     before do
@@ -31,54 +39,12 @@ RSpec.describe Shipment, type: :model do
         expect(shipment.valid_until(other_trip)).to eq(10.days.from_now.beginning_of_day)
       end
     end
-
-    describe 'as_options_json' do
-      it 'returns the shipment info in json' do
-        result = shipment.as_options_json
-
-        aggregate_failures 'testing response' do
-          expect(result.dig('id')).to be(shipment.id)
-          expect(result.dig('carrier')).to be(shipment.trip.tenant_vehicle.carrier&.name)
-          expect(result.dig(:selected_offer)).to be_truthy
-        end
-      end
-    end
-
-    describe 'as_index_json' do
-      it 'returns the shipments as a json with a total price when hidden scope is false' do
-        result = shipment.as_index_json
-        expect(result[:total_price].nil?).to be(false)
-      end
-    end
-  end
-
-  context 'when hidden_grand_totals scope is true' do
-    before do
-      allow(Pdf::HiddenValueService).to receive(:new).and_return(hidden_value_service)
-      allow(hidden_value_service).to receive(:hide_total_args).and_return(hidden_grand_total: true)
-    end
-
-    describe 'as_index_json' do
-      it 'returns the shipments as a json with a total price when hidden scope is false' do
-        result = shipment.as_index_json
-        expect(result[:total_price]).to be_nil
-      end
-    end
   end
 
   context 'when searching via user profiles' do
-    let(:tenant) { FactoryBot.create(:tenant) }
-    let(:user) { FactoryBot.create(:user, tenant: tenant) }
-    let!(:shipment) { FactoryBot.create(:shipment, tenant: tenant, user: user) }
-
-    before do
-      tenants_user = Tenants::User.find_by(legacy_id: user.id)
-      FactoryBot.create(:profiles_profile,
-                        first_name: 'Test',
-                        last_name: 'User',
-                        company_name: 'ItsMyCargo',
-                        user_id: tenants_user.id)
-    end
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let!(:shipment) { FactoryBot.create(:shipment, organization: organization, user: user) }
 
     context 'when searching via user names' do
       it 'returns shipments matching with users matching the name provided' do
@@ -130,8 +96,11 @@ end
 #  updated_at                          :datetime         not null
 #  destination_hub_id                  :integer
 #  destination_nexus_id                :integer
+#  distinct_id                         :uuid
 #  incoterm_id                         :integer
 #  itinerary_id                        :integer
+#  old_user_id                         :integer
+#  organization_id                     :uuid
 #  origin_hub_id                       :integer
 #  origin_nexus_id                     :integer
 #  quotation_id                        :integer
@@ -139,11 +108,19 @@ end
 #  tenant_id                           :integer
 #  tender_id                           :uuid
 #  trip_id                             :integer
-#  user_id                             :integer
+#  user_id                             :uuid
 #
 # Indexes
 #
-#  index_shipments_on_sandbox_id  (sandbox_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tenant_id   (tenant_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tender_id   (tender_id)
+#  index_shipments_on_organization_id  (organization_id)
+#  index_shipments_on_sandbox_id       (sandbox_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tenant_id        (tenant_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tender_id        (tender_id)
+#  index_shipments_on_user_id          (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_     (user_id => users_users.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
+#  fk_rails_...  (transport_category_id => transport_categories_20200504.id)
 #

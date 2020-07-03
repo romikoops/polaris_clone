@@ -3,13 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe Api::Routing::Trucking::CapabilityService, type: :service do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
   let(:load_type) { 'cargo_item' }
-  let(:args) { { tenant: tenant, load_type: load_type } }
+  let(:args) { { organization: organization, load_type: load_type } }
 
   describe '.capability' do
     context 'when origin and destination have no trucking' do

@@ -8,14 +8,15 @@ class ShipmentMailer < ApplicationMailer
   TESTING_EMAIL = 'angelica@itsmycargo.com'
 
   def tenant_notification(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
+    set_current_id(organization_id: shipment.organization_id)
     @user = user
-    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
-    tenant = user.tenant
-    @shipment = shipment
+    @user_profile = ProfileTools.profile_for_user(user: @user)
     @scope = scope_for(record: @user)
-    @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
-    @theme = ::Tenants::ThemeDecorator.new(@tenants_tenant.theme).legacy_format
-    base_url = base_url(tenant)
+    @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
+    @organization = ::Organizations::Organization.current
+    @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
+    @theme = @org_theme.legacy_format
+    base_url = base_url(@organization)
 
     @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
@@ -26,14 +27,14 @@ class ShipmentMailer < ApplicationMailer
     ).read
 
     create_pdf_attachment(@shipment)
-    email_logo = @tenants_tenant.theme.email_logo
-    attachments.inline['logo.png'] = email_logo.attached? ? @tenants_tenant.theme.email_logo&.download : ''
+    email_logo = @org_theme.email_logo
+    attachments.inline['logo.png'] = email_logo.attached? ? @org_theme.email_logo&.download : ''
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {
-      from: Mail::Address.new("no-reply@#{@tenants_tenant.slug}.itsmycargo.shop")
+      from: Mail::Address.new("no-reply@#{@organization.slug}.itsmycargo.shop")
                          .tap { |a| a.display_name = 'ItsMyCargo Bookings' }.format,
       reply_to: 'support@itsmycargo.com',
-      to: mail_target_interceptor(@user, tenant.email_for(:sales, shipment.mode_of_transport)),
+      to: mail_target_interceptor(@shipment.billing, @org_theme.email_for(:sales, shipment.mode_of_transport)),
       subject: subject_line(shipment: @shipment, type: :shipment, references: [@shipment.imc_reference])
     }
 
@@ -41,29 +42,30 @@ class ShipmentMailer < ApplicationMailer
   end
 
   def shipper_notification(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
+    set_current_id(organization_id: shipment.organization_id)
     @user = user
-    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
-    tenant = user.tenant
-    @shipment = shipment
+    @user_profile = ProfileTools.profile_for_user(user: @user)
     @scope = scope_for(record: @user)
-    @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
-    @theme = ::Tenants::ThemeDecorator.new(@tenants_tenant.theme).legacy_format
-    @shipment_page = "#{base_url(tenant)}account/shipments/view/#{shipment.id}"
+    @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
+    @organization = ::Organizations::Organization.current
+    @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
+    @theme = @org_theme.legacy_format
+    @shipment_page = "#{base_url(@organization)}account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
     ).read
 
     create_pdf_attachment(@shipment)
-    email_logo = @tenants_tenant.theme.email_logo
-    attachments.inline['logo.png'] = email_logo.attached? ? @tenants_tenant.theme.email_logo&.download : ''
-    small_logo = @tenants_tenant.theme.small_logo
+    email_logo = @org_theme.email_logo
+    attachments.inline['logo.png'] = email_logo.attached? ? @org_theme.email_logo&.download : ''
+    small_logo = @org_theme.small_logo
     attachments.inline['logo_small.png'] = small_logo.attached? ? small_logo&.download : ''
     attachments.inline['icon.png'] = @mot_icon
-    no_reply = Mail::Address.new("no-reply@#{@tenants_tenant.slug}.itsmycargo.shop")
+    no_reply = Mail::Address.new("no-reply@#{@organization.slug}.itsmycargo.shop")
     mail_options = {
-      from: no_reply.tap { |a| a.display_name = tenant.name }.format,
-      reply_to: tenant.emails.dig('support', 'general'),
-      to: mail_target_interceptor(@user, @user.email.blank? ? 'itsmycargodev@gmail.com' : @user.email),
+      from: no_reply.tap { |a| a.display_name = @org_theme.name }.format,
+      reply_to: @org_theme.emails.dig('support', 'general'),
+      to: mail_target_interceptor(@shipment.billing, @user.email.blank? ? 'itsmycargodev@gmail.com' : @user.email),
       bcc: [Settings.emails.booking],
       subject: subject_line(shipment: @shipment, type: :shipment, references: [@shipment.imc_reference])
     }
@@ -72,29 +74,30 @@ class ShipmentMailer < ApplicationMailer
   end
 
   def shipper_confirmation(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
+    set_current_id(organization_id: shipment.organization_id)
     @user = user
-    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
+    @user_profile = ProfileTools.profile_for_user(user: @user)
     @shipment = shipment
-    tenant = Tenant.find(shipment.tenant_id)
     @scope = scope_for(record: @user)
-    @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
-    @theme = ::Tenants::ThemeDecorator.new(@tenants_tenant.theme).legacy_format
-    @shipment_page = "#{base_url(tenant)}account/shipments/view/#{shipment.id}"
+    @organization = ::Organizations::Organization.current
+    @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
+    @theme = @org_theme.legacy_format
+    @shipment_page = "#{base_url(@organization)}account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
     ).read
 
     create_pdf_attachment(@shipment)
-    email_logo = @tenants_tenant.theme.email_logo
+    email_logo = @org_theme.email_logo
     attachments.inline['logo.png'] = email_logo.attached? ? email_logo&.download : ''
-    small_logo = @tenants_tenant.theme.small_logo
+    small_logo = @org_theme.small_logo
     attachments.inline['logo_small.png'] = small_logo.attached? ? small_logo&.download : ''
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {
-      from: Mail::Address.new("no-reply@#{@tenants_tenant.slug}.itsmycargo.shop")
-                         .tap { |a| a.display_name = tenant.name }.format,
-      reply_to: tenant.emails.dig('support', 'general'),
-      to: mail_target_interceptor(@user, user.email.presence || 'itsmycargodev@gmail.com'),
+      from: Mail::Address.new("no-reply@#{@organization.slug}.itsmycargo.shop")
+                         .tap { |a| a.display_name = @org_theme.name }.format,
+      reply_to: @org_theme.emails.dig('support', 'general'),
+      to: mail_target_interceptor(@shipment.billing, user.email.presence || 'itsmycargodev@gmail.com'),
       bcc: [Settings.emails.booking],
       subject: subject_line(shipment: @shipment, type: :shipment, references: [@shipment.imc_reference])
     }
@@ -118,7 +121,7 @@ class ShipmentMailer < ApplicationMailer
   end
 
   def create_pdf_attachment(shipment)
-    pdf = ShippingTools.generate_shipment_pdf(shipment: shipment)
+    pdf = ShippingTools.new.generate_shipment_pdf(shipment: shipment)
     attachments["shipment_#{shipment.imc_reference}.pdf"] = pdf
   end
 
@@ -133,7 +136,7 @@ class ShipmentMailer < ApplicationMailer
 
   def base_url(tenant)
     case Rails.env
-    when 'production'  then "https://#{::Tenants::Tenant.find_by(legacy_id: tenant.id).default_domain}/"
+    when 'production'  then "https://#{default_domain}/"
     when 'review'      then ENV['REVIEW_URL']
     when 'development' then 'http://localhost:8080/'
     when 'test'        then 'http://localhost:8080/'

@@ -4,7 +4,7 @@ require 'legacy'
 require 'pricings'
 require 'rms_data'
 require 'routing'
-require 'tenants'
+require 'organizations'
 
 module RmsSync
   class Engine < ::Rails::Engine

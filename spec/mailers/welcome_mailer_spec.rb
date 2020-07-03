@@ -3,21 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe WelcomeMailer do
-  let(:tenant) { create(:tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { create(:user, tenant: tenant, with_profile: true) }
+  let(:user) { create(:organizations_user) }
+  let(:organization) { user.organization }
+  let(:profile) { FactoryBot.build(:profiles_profile) }
 
   before do
-    create(:legacy_content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
-    create(:legacy_content, component: 'WelcomeMail', section: 'body', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
-    create(:legacy_content, component: 'WelcomeMail', section: 'social', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
-    create(:legacy_content, component: 'WelcomeMail', section: 'footer', text: 'WELCOME_EMAIL', tenant_id: tenant.id)
+    create(:legacy_content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', organization_id: organization.id)
+    create(:legacy_content, component: 'WelcomeMail', section: 'body', text: 'WELCOME_EMAIL', organization_id: organization.id)
+    create(:legacy_content, component: 'WelcomeMail', section: 'social', text: 'WELCOME_EMAIL', organization_id: organization.id)
+    create(:legacy_content, component: 'WelcomeMail', section: 'footer', text: 'WELCOME_EMAIL', organization_id: organization.id)
 
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/tenants/normanglobal/ngl_welcome_image.jpg').to_return(status: 200, body: '', headers: {})
     stub_request(:post, "#{Settings.breezy.url}/render/html").to_return(status: 201, body: '', headers: {})
-    FactoryBot.create(:tenants_theme, tenant: tenants_tenant)
+    allow(Profiles::ProfileService).to receive(:fetch).and_return(Profiles::ProfileDecorator.new(profile))
+    ::Organizations.current_id = organization.id
+    FactoryBot.create(:organizations_theme, organization: organization)
   end
 
   describe 'welcome_email', :aggregate_failures do
@@ -27,7 +29,7 @@ RSpec.describe WelcomeMailer do
 
     it 'renders correctly' do
       expect(mail.subject).to eq('WELCOME_EMAIL')
-      expect(mail.from).to eq(['no-reply@demo.itsmycargo.shop'])
+      expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
       expect(mail.reply_to).to eq(['support@demo.com'])
       expect(mail.to).to eq([user.email])
       expect(mail.body.encoded).to match('WELCOME_EMAIL')

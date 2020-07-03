@@ -4,13 +4,13 @@ module RmsSync
   class Trucking < RmsSync::Base
     FEE_HEADERS = %w(FEE MOT FEE_CODE TRUCK_TYPE DIRECTION CURRENCY RATE_BASIS TON CBM KG
          ITEM SHIPMENT BILL CONTAINER MINIMUM WM PERCENTAGE).freeze
-    def initialize(tenant_id:, sandbox: nil, group_id: nil)
+    def initialize(organization_id:, sandbox: nil, group_id: nil)
       @books = Hash.new { |h, k| h[k] = {} }
       @zones = Hash.new { |h, k| h[k] = [] }
       @group_id = group_id
       @pages = {}
       @dir_fees = {}
-      super(tenant_id: tenant_id, sheet_type: :trucking, sandbox: sandbox)
+      super(organization_id: organization_id, sheet_type: :trucking, sandbox: sandbox)
     end
 
     def perform
@@ -52,12 +52,12 @@ module RmsSync
     end
 
     def hubs
-      @hubs = ::Legacy::Hub.where(tenant_id: @tenant.legacy_id, sandbox: @sandbox)
+      @hubs = ::Legacy::Hub.where(organization_id: @organization.id)
     end
 
     def create_book
       books[hub.id][load_type] = RmsData::Book.find_or_create_by(
-        tenant: @tenant,
+        organization: @organization,
         sheet_type: :trucking,
         target: hub,
         book_type: load_type.to_sym
@@ -65,7 +65,7 @@ module RmsSync
     end
 
     def create_sheet_zone_sheet
-      @zone_sheet = books[hub.id][load_type].sheets.create(tenant_id: @tenant.id, sheet_index: 0)
+      @zone_sheet = books[hub.id][load_type].sheets.create(organization_id: @organization.id, sheet_index: 0)
       zone_headers.each_with_index do |head, i|
         write_cell(zone_sheet, 0, i, head)
       end
@@ -136,7 +136,7 @@ module RmsSync
     end
 
     def write_fees_to_sheet # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
-      @fees_sheet = @books[hub.id][load_type].sheets.create(tenant_id: @tenant.id, sheet_index: 1)
+      @fees_sheet = @books[hub.id][load_type].sheets.create(organization_id: @organization.id, sheet_index: 1)
       row = 1
       FEE_HEADERS.each_with_index { |hv, i| write_cell(fees_sheet, 0, i, hv) }
       dir_fees.each do |carriage_dir, truck_type_and_fees| # rubocop:disable Metrics/BlockLength
@@ -179,7 +179,7 @@ module RmsSync
 
     def write_rates_to_sheet # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       pages.values.each_with_index do |page, i| # rubocop:disable Metrics/BlockLength
-        @rates_sheet = @books[hub.id][load_type].sheets.create(tenant_id: @tenant.id, sheet_index: i + 2)
+        @rates_sheet = @books[hub.id][load_type].sheets.create(organization_id: @organization.id, sheet_index: i + 2)
         write_cell(rates_sheet, 3, 0, 'ZONE')
         write_cell(rates_sheet, 3, 1, 'MIN')
         write_cell(rates_sheet, 4, 0, 'MIN')
@@ -305,15 +305,15 @@ module RmsSync
     def write_cell(sheet, row, col, val)
       @cells << {
         sheet_id: sheet.id,
-        tenant_id: @tenant.id,
+        organization_id: @organization.id,
         row: row,
         column: col,
         value: val
       }
     end
-    
+
     private
-    
+
     attr_reader :purge_ids, :books, :book, :sheet, :hub, :load_type, :identifier, :identifier_modifier,
                   :group_id, :pages, :dir_fees, :zones, :zone_sheet, :fees_sheet, :rates_sheet, :data
   end

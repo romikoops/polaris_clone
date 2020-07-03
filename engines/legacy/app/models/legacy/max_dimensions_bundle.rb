@@ -6,14 +6,14 @@ module Legacy
 
     self.table_name = 'max_dimensions_bundles'
 
-    belongs_to :tenant
+    belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :tenant_vehicle, optional: true
     belongs_to :itinerary, optional: true
     belongs_to :carrier, optional: true
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     validates :mode_of_transport, presence: true, uniqueness: {
-      scope: %i[tenant_id aggregate tenant_vehicle_id carrier_id cargo_class itinerary_id],
+      scope: %i[organization_id aggregate tenant_vehicle_id carrier_id cargo_class itinerary_id],
       message: lambda do |obj, _|
         max_dimensions_name = "max#{aggregate ? '_aggregate' : ''}_dimensions"
 
@@ -81,21 +81,6 @@ module Legacy
       end
     end
 
-    def self.create_defaults_for(tenant, options = {})
-      return create_all_defaults_for(tenant, options) if options.delete(:all)
-
-      aggregate = !!options[:aggregate]
-
-      defaults = aggregate ? CARGO_ITEM_AGGREGATE_DEFAULTS : CARGO_ITEM_DEFAULTS
-      defaults.map do |mode_of_transport, max_dimensions_hash|
-        next if excluded_in_options?(options, mode_of_transport)
-
-        find_or_initialize_by(
-          tenant: tenant, mode_of_transport: mode_of_transport, aggregate: aggregate, cargo_class: 'lcl'
-        ).update(max_dimensions_hash)
-      end.compact
-    end
-
     def to_max_dimension_hash
       {
         mode_of_transport.to_sym => {
@@ -125,13 +110,6 @@ module Legacy
       modes_of_transport = [options[:modes_of_transport]].flatten.compact
       modes_of_transport.exclude?(mode_of_transport)
     end
-
-    def self.create_all_defaults_for(tenant, options)
-      [
-        create_defaults_for(tenant, options),
-        create_defaults_for(tenant, options.merge(aggregate: true))
-      ]
-    end
   end
 end
 
@@ -156,6 +134,7 @@ end
 #  updated_at        :datetime         not null
 #  carrier_id        :bigint
 #  itinerary_id      :bigint
+#  organization_id   :uuid
 #  sandbox_id        :uuid
 #  tenant_id         :integer
 #  tenant_vehicle_id :bigint
@@ -166,7 +145,12 @@ end
 #  index_max_dimensions_bundles_on_carrier_id         (carrier_id)
 #  index_max_dimensions_bundles_on_itinerary_id       (itinerary_id)
 #  index_max_dimensions_bundles_on_mode_of_transport  (mode_of_transport)
+#  index_max_dimensions_bundles_on_organization_id    (organization_id)
 #  index_max_dimensions_bundles_on_sandbox_id         (sandbox_id)
 #  index_max_dimensions_bundles_on_tenant_id          (tenant_id)
 #  index_max_dimensions_bundles_on_tenant_vehicle_id  (tenant_vehicle_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

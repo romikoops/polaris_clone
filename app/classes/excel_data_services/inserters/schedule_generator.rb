@@ -7,7 +7,7 @@ module ExcelDataServices
       STANDARD_PERIOD = 3.months
       def perform
         data.each do |datum|
-          generate_schedules(ExcelDataServices::Rows::ScheduleGenerator.new(row_data: datum, tenant: tenant))
+          generate_schedules(ExcelDataServices::Rows::ScheduleGenerator.new(row_data: datum, organization: organization))
         end
 
         stats
@@ -20,7 +20,7 @@ module ExcelDataServices
         transshipment = row.transshipment
         itinerary_name = row.itinerary_name
         itineraries = Itinerary.where(
-          tenant_id: tenant.id,
+          organization_id: organization.id,
           transshipment: transshipment,
           name: itinerary_name,
           sandbox: @sandbox
@@ -61,7 +61,7 @@ module ExcelDataServices
                              .for_load_type(row.cargo_class.to_s)
                              .pluck(:tenant_vehicle_id)
 
-        query = Legacy::TenantVehicle.where(id: tenant_vehicle_ids, tenant_id: tenant.id, sandbox: @sandbox)
+        query = Legacy::TenantVehicle.where(id: tenant_vehicle_ids, organization_id: organization.id, sandbox: @sandbox)
         carrier = row.carrier
         service_level = row.service_level
 

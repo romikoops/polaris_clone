@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :legacy_tenant_vehicle, class: 'Legacy::TenantVehicle' do
     name { 'standard' }
     mode_of_transport { 'ocean' }
-    association :tenant, factory: :legacy_tenant
+    association :organization, factory: :organizations_organization
     before(:create) do |tenant_vehicle|
       filter = tenant_vehicle.as_json(only: %i(mode_of_transport name))
       existing_vehicle = Legacy::Vehicle.where(filter).first
@@ -27,12 +27,18 @@ end
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  carrier_id        :integer
+#  organization_id   :uuid
 #  sandbox_id        :uuid
 #  tenant_id         :integer
 #  vehicle_id        :integer
 #
 # Indexes
 #
-#  index_tenant_vehicles_on_sandbox_id  (sandbox_id)
-#  index_tenant_vehicles_on_tenant_id   (tenant_id)
+#  index_tenant_vehicles_on_organization_id  (organization_id)
+#  index_tenant_vehicles_on_sandbox_id       (sandbox_id)
+#  index_tenant_vehicles_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

@@ -17,7 +17,7 @@ class Addon < Legacy::Addon
       tenant_vehicle_id: tenant_vehicle_id,
       mode_of_transport: mot,
       direction: 'export',
-      tenant_id: user.tenant_id
+      organization_id: user.organization_id
     )
     origin_addons = !counterpart_origin_addons.empty? ? counterpart_origin_addons : origin_hub.addons.where(
       cargo_class: cargo_class,
@@ -25,7 +25,7 @@ class Addon < Legacy::Addon
       tenant_vehicle_id: tenant_vehicle_id,
       mode_of_transport: mot,
       direction: 'export',
-      tenant_id: user.tenant_id
+      organization_id: user.organization_id
     )
     if origin_addons.empty?
       origin_addons = origin_hub.addons.where(
@@ -33,7 +33,7 @@ class Addon < Legacy::Addon
         counterpart_hub_id: nil,
         mode_of_transport: mot,
         direction: 'export',
-        tenant_id: user.tenant_id
+        organization_id: user.organization_id
       )
     end
     counterpart_destination_addons = destination_hub.addons.where(
@@ -42,7 +42,7 @@ class Addon < Legacy::Addon
       tenant_vehicle_id: tenant_vehicle_id,
       mode_of_transport: mot,
       direction: 'import',
-      tenant_id: user.tenant_id
+      organization_id: user.organization_id
     )
     destination_addons = !counterpart_destination_addons.empty? ? counterpart_destination_addons : destination_hub.addons.where(
       cargo_class: cargo_class,
@@ -50,7 +50,7 @@ class Addon < Legacy::Addon
       tenant_vehicle_id: tenant_vehicle_id,
       mode_of_transport: mot,
       direction: 'import',
-      tenant_id: user.tenant_id
+      organization_id: user.organization_id
     )
     if destination_addons.empty?
       destination_addons = destination_hub.addons.where(
@@ -58,7 +58,7 @@ class Addon < Legacy::Addon
         counterpart_hub_id: nil,
         mode_of_transport: mot,
         direction: 'import',
-        tenant_id: user.tenant_id
+        organization_id: user.organization_id
       )
     end
 
@@ -113,10 +113,16 @@ end
 #  updated_at           :datetime         not null
 #  counterpart_hub_id   :integer
 #  hub_id               :integer
+#  organization_id      :uuid
 #  tenant_id            :integer
 #  tenant_vehicle_id    :integer
 #
 # Indexes
 #
-#  index_addons_on_tenant_id  (tenant_id)
+#  index_addons_on_organization_id  (organization_id)
+#  index_addons_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

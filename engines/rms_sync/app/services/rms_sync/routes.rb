@@ -2,9 +2,9 @@
 
 module RmsSync
     class Routes < RmsSync::Base
-      def initialize(tenant_id:, sheet_type: :routes, sandbox: nil)
+      def initialize(organization_id:, sheet_type: :routes, sandbox: nil)
         super
-        @book = RmsData::Book.find_or_create_by(tenant: @tenant, sheet_type: sheet_type)
+        @book = RmsData::Book.find_or_create_by(organization: @organization, sheet_type: sheet_type)
       end
 
       def perform
@@ -28,11 +28,11 @@ module RmsSync
       end
 
       def itineraries
-        ::Legacy::Itinerary.where(tenant_id: @tenant.legacy_id, sandbox: @sandbox)
+        ::Legacy::Itinerary.where(organization_id: @organization.id)
       end
 
       def create_sheet
-        @sheet = @book.sheets.create(tenant_id: @tenant.id, sheet_index: 0)
+        @sheet = @book.sheets.create(organization_id: @organization.id, sheet_index: 0)
       end
 
       def create_data_cells
@@ -62,7 +62,7 @@ module RmsSync
       def create_header_row
         default_headers.each_with_index do |head, i|
           @sheet.cells.create!(
-            tenant_id: @tenant.id,
+            organization_id: @organization.id,
             row: 0,
             column: i,
             value: head
@@ -76,7 +76,7 @@ module RmsSync
 
       def cell_data(itinerary:, header:, row:, index:, tenant_vehicle:, cargo_classes:)
         obj = {
-          tenant_id: @tenant.id,
+          organization_id: @organization.id,
           column: index,
           row: row
         }

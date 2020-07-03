@@ -7,18 +7,18 @@ FactoryBot.define do
       longitude { '11.854048' }
     end
 
-    name { 'Gothenburg Port' }
+    name { 'Gothenburg' }
     hub_type { 'ocean' }
     hub_status { 'active' }
     hub_code { 'SEGOT' }
     free_out { false }
-    association :tenant, factory: :legacy_tenant
+    association :organization, factory: :organizations_organization
     association :address, factory: :legacy_address
     association :nexus, factory: :legacy_nexus
     association :mandatory_charge, factory: :legacy_mandatory_charge
 
     trait :gothenburg do
-      name { 'Gothenburg Port' }
+      name { 'Gothenburg' }
       hub_type { 'ocean' }
       hub_status { 'active' }
       hub_code { 'SEGOT' }
@@ -29,7 +29,7 @@ FactoryBot.define do
     end
 
     trait :shanghai do
-      name { 'Shanghai Port' }
+      name { 'Shanghai' }
       hub_type { 'ocean' }
       hub_status { 'active' }
       hub_code { 'CNSHA' }
@@ -40,7 +40,7 @@ FactoryBot.define do
     end
 
     trait :hamburg do
-      name { 'Hamburg Port' }
+      name { 'Hamburg' }
       hub_type { 'ocean' }
       hub_status { 'active' }
       hub_code { 'DEHAM' }
@@ -51,7 +51,7 @@ FactoryBot.define do
     end
 
     trait :felixstowe do
-      name { 'Felixstowe Port' }
+      name { 'Felixstowe' }
       hub_type { 'ocean' }
       hub_status { 'active' }
       hub_code { 'GBFXT' }
@@ -89,12 +89,18 @@ end
 #  address_id          :integer
 #  mandatory_charge_id :integer
 #  nexus_id            :integer
+#  organization_id     :uuid
 #  sandbox_id          :uuid
 #  tenant_id           :integer
 #
 # Indexes
 #
-#  index_hubs_on_point       (point) USING gist
-#  index_hubs_on_sandbox_id  (sandbox_id)
-#  index_hubs_on_tenant_id   (tenant_id)
+#  index_hubs_on_organization_id  (organization_id)
+#  index_hubs_on_point            (point) USING gist
+#  index_hubs_on_sandbox_id       (sandbox_id)
+#  index_hubs_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

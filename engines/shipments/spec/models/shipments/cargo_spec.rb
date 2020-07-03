@@ -57,18 +57,21 @@ end
 #  total_goods_value_currency :string           not null
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
+#  organization_id            :uuid
 #  sandbox_id                 :uuid
 #  shipment_id                :uuid
 #  tenant_id                  :uuid
 #
 # Indexes
 #
-#  index_shipments_cargos_on_sandbox_id   (sandbox_id)
-#  index_shipments_cargos_on_shipment_id  (shipment_id)
-#  index_shipments_cargos_on_tenant_id    (tenant_id)
+#  index_shipments_cargos_on_organization_id  (organization_id)
+#  index_shipments_cargos_on_sandbox_id       (sandbox_id)
+#  index_shipments_cargos_on_shipment_id      (shipment_id)
+#  index_shipments_cargos_on_tenant_id        (tenant_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (sandbox_id => tenants_sandboxes.id)
 #  fk_rails_...  (tenant_id => tenants_tenants.id)
 #

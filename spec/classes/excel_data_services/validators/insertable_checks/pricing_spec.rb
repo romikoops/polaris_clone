@@ -3,14 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
-  let(:tenant) { create(:tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:options) { { tenant: tenant, sheet_name: 'Sheet1', data: input_data } }
+  let(:organization) { create(:organizations_organization) }
+  let(:options) { { organization: organization, sheet_name: 'Sheet1', data: input_data } }
   let!(:pricings) do
     [
       create(
         :lcl_pricing,
-        tenant: tenant,
+        organization: organization,
         effective_date: Date.parse('Thu, 15 Mar 2018').beginning_of_day,
         expiration_date: Date.parse('Sun, 17 Mar 2019').end_of_day.change(usec: 0),
         itinerary: itineraries.first,
@@ -20,7 +19,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
   end
   let(:itineraries) do
     [
-      create(:gothenburg_shanghai_itinerary, tenant: tenant)
+      create(:gothenburg_shanghai_itinerary, organization: organization)
     ]
   end
 
@@ -28,17 +27,17 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
     create(:vehicle,
            tenant_vehicles: [tenant_vehicle])
   end
-  let(:tenant_vehicle) { create(:tenant_vehicle, tenant: tenant) }
+  let(:tenant_vehicle) { create(:tenant_vehicle, organization: organization) }
 
   context 'with faulty data' do
-    let(:group_a) { build_stubbed(:tenants_group, tenant: tenants_tenant, name: 'GROUP A', id: '000-gr0up-a-id-123') }
-    let(:group_b) { build_stubbed(:tenants_group, tenant: tenants_tenant, name: 'GROUP B', id: '000-gr0up-b-id-456') }
+    let(:group_a) { build_stubbed(:tenants_group, organization: organization, name: 'GROUP A', id: '000-gr0up-a-id-123') }
+    let(:group_b) { build_stubbed(:tenants_group, organization: organization, name: 'GROUP B', id: '000-gr0up-b-id-456') }
 
     before do
-      allow(Tenants::Group).to receive(:find_by).with(tenant: tenants_tenant, id: 'other-000-gr0up-a-id-123')
-      allow(Tenants::Group).to receive(:find_by).with(tenant: tenants_tenant, name: 'OTHER GROUP B')
-      allow(Tenants::Group).to receive(:find_by).with(tenant: tenants_tenant, id: '000-gr0up-a-id-123').and_return(group_a)
-      allow(Tenants::Group).to receive(:find_by).with(tenant: tenants_tenant, name: 'GROUP B').and_return(group_b)
+      allow(Groups::Group).to receive(:find_by).with(organization: organization, id: 'other-000-gr0up-a-id-123')
+      allow(Groups::Group).to receive(:find_by).with(organization: organization, name: 'OTHER GROUP B')
+      allow(Groups::Group).to receive(:find_by).with(organization: organization, id: '000-gr0up-a-id-123').and_return(group_a)
+      allow(Groups::Group).to receive(:find_by).with(organization: organization, name: 'GROUP B').and_return(group_b)
     end
 
     let(:input_data) { build(:excel_data_restructured_faulty_pricings_one_fee_col_and_ranges) }
@@ -78,11 +77,6 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
           row_nr: 3,
           sheet_name: 'Sheet1',
           reason: "The Group with ID '000-gr0up-a-id-123' is not the same as the group with name 'GROUP B'!",
-          exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks },
-        { type: :error,
-          row_nr: 3,
-          sheet_name: 'Sheet1',
-          reason: "\"W/M\" is not a valid Rate Basis.",
           exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks }]
       end
 

@@ -1,6 +1,6 @@
 import { Promise } from 'es6-promise-promise'
-import { getTenantApiUrl } from '../constants/api.constants'
-import { toQueryString, cookieKey, authHeader } from '../helpers'
+import { getApiHost, getTenantApiUrl } from '../constants/api.constants'
+import { authHeader, cookieKey, toQueryString } from '../helpers'
 
 const { fetch, FormData } = window
 
@@ -286,35 +286,17 @@ function reuseShipment (id) {
 
   return fetch(`${getTenantApiUrl()}/shipments/${id}/reuse_booking_data`, requestOptions).then(handleResponse)
 }
-
-function getPricings () {
+function getCurrentUser () {
   const requestOptions = {
     method: 'GET',
-    headers: authHeader()
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
 
-  return fetch(`${getTenantApiUrl()}/pricings`, requestOptions).then(handleResponse)
-}
-function getPricingsForItinerary (id) {
-  const requestOptions = {
-    method: 'GET',
-    headers: authHeader()
-  }
-
-  return fetch(`${getTenantApiUrl()}/pricings/${id}`, requestOptions).then(handleResponse)
-}
-function requestPricing (req) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify(req)
-  }
-
-  return fetch(`${getTenantApiUrl()}/pricings/${req.pricing_id}/request`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/user`, requestOptions).then(handleResponse)
 }
 
 function confirmAccount (token) {
-  return fetch(`${getTenantApiUrl()}/auth/confirmation?confirmation_token=${token}`).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/users/${token}/activate`).then(handleResponse)
 }
 
 export const userService = {
@@ -343,9 +325,7 @@ export const userService = {
   searchShipments,
   deltaShipmentsPage,
   searchContacts,
-  getPricings,
-  getPricingsForItinerary,
-  requestPricing,
-  confirmAccount
+  confirmAccount,
+  getCurrentUser
 }
 export default userService

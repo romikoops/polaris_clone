@@ -3,17 +3,17 @@
 require 'rails_helper'
 
 RSpec.describe ContactsController do
-  let(:user) { create(:user) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { create(:organizations_user, organization: organization) }
   let!(:contacts) { create_list(:contact, 5, user: user) }
 
   before do
-    allow(controller).to receive(:user_signed_in?).and_return(true)
-    allow(controller).to receive(:current_user).and_return(user)
+    append_token_header
   end
 
   describe 'GET #index' do
     it 'returns http success' do
-      get :index, params: { tenant_id: user.tenant.id }
+      get :index, params: { organization_id: user.organization_id }
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
@@ -30,7 +30,7 @@ RSpec.describe ContactsController do
 
     describe 'GET #search_contacts' do
       it 'returns the correct contact' do
-        get :search_contacts, params: { tenant_id: user.tenant.id, query: 'Bober' }
+        get :search_contacts, params: { organization_id: user.organization_id, query: 'Bober' }
 
         aggregate_failures do
           expect(response).to have_http_status(:success)
@@ -44,7 +44,7 @@ RSpec.describe ContactsController do
 
     describe 'GET #booking_process' do
       it 'returns the correct contact' do
-        get :booking_process, params: { tenant_id: user.tenant.id, query: 'Bober' }
+        get :booking_process, params: { organization_id: user.organization_id, query: 'Bober' }
 
         aggregate_failures do
           expect(response).to have_http_status(:success)
@@ -54,6 +54,32 @@ RSpec.describe ContactsController do
           expect(json.dig('data', 'contacts', 0, 'contact', 'id')).to eq target_contact.id
         end
       end
+    end
+  end
+
+  describe 'POST #create' do
+    let(:contact_params) {
+      {
+        organization_id: user.organization_id,
+        new_contact: JSON.generate({
+          "firstName": "First Name",
+          "lastName": "Last Name",
+          "companyName": "Company",
+          "phone": "123456789",
+          "email": "email@itsmytest.com",
+          "street": "brooktorkai",
+          "number": "brooktorkai",
+          "zipCode": "20457",
+          "city": "Hamburg",
+          "country": "Germany"
+        })
+      }
+    }
+
+    it 'returns http success' do
+      post :create, params: contact_params
+
+      expect(response).to have_http_status(:success)
     end
   end
 end

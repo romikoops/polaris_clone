@@ -10,12 +10,12 @@ Gem::Specification.new do |s|
   s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'Services for prociding contextual information regarding pricing Federations.'
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'imc-core'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
 
   Gemhelper.common(s)
 end

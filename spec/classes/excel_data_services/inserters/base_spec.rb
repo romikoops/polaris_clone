@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Inserters::Base do
-  let(:tenant) { create(:tenant) }
+  let(:organization) { create(:organizations_organization) }
   let(:data) {}
-  let(:options) { { tenant: tenant, data: data, options: {} } }
+  let(:options) { { organization: organization, data: data, options: {} } }
 
   describe '.get' do
     it 'finds the correct child class' do

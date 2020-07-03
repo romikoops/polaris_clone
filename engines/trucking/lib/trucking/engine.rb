@@ -5,7 +5,7 @@ require 'locations'
 require 'paper_trail'
 require 'roo'
 require 'roo-xls'
-require 'tenants'
+require 'organizations'
 require 'will_paginate'
 
 module Trucking

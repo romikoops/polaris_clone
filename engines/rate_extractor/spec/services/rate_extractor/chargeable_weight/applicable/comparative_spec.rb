@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe RateExtractor::ChargeableWeight::Applicable::Comparative do
   describe 'calculating chargeable weight when tenant configuration is set as comparative' do
-    let(:tenant) { FactoryBot.create(:tenants_tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
 
     let(:cargo) do
       FactoryBot.create(:cargo_cargo, units:
@@ -35,7 +35,7 @@ RSpec.describe RateExtractor::ChargeableWeight::Applicable::Comparative do
 
     context 'when cargo is stackable' do
       let(:stackable) { true }
-      let(:section_rate) { FactoryBot.create(:rates_section, tenant: tenant, ldm_ratio: 1000, ldm_threshold: 48_000) }
+      let(:section_rate) { FactoryBot.create(:rates_section, organization: organization, ldm_ratio: 1000, ldm_threshold: 48_000) }
       let(:cargo_rate) { FactoryBot.create(:rates_cargo, section: section_rate, cbm_ratio: 200) }
       let(:klass) { described_class.new(cargo: cargo, cargo_rate: cargo_rate) }
 
@@ -49,7 +49,7 @@ RSpec.describe RateExtractor::ChargeableWeight::Applicable::Comparative do
     context 'with cargo is not stackable' do
       let(:stackable) { false }
       let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: { rate: cargo_rate }) }
-      let(:section_rate) { FactoryBot.create(:rates_section, tenant: tenant, ldm_ratio: 1000, ldm_threshold: 0.5, ldm_measurement: :load_meters) }
+      let(:section_rate) { FactoryBot.create(:rates_section, organization: organization, ldm_ratio: 1000, ldm_threshold: 0.5, ldm_measurement: :load_meters) }
       let(:cargo_rate) { FactoryBot.create(:rates_cargo, section: section_rate, cbm_ratio: 200) }
       let(:klass) { described_class.new(cargo: decorated_cargo, cargo_rate: cargo_rate) }
 

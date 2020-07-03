@@ -4,14 +4,12 @@ require 'rails_helper'
 require 'roo'
 
 RSpec.describe ::RmsExport::Excel::Base do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let!(:tenants_tenant) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowest', tenant: tenant) }
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowest', organization: organization) }
   let!(:carrier) { FactoryBot.create(:routing_carrier) }
   let!(:currency) { FactoryBot.create(:legacy_currency) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
-  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let!(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle) }
+  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let!(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, organization: organization, tenant_vehicle: tenant_vehicle) }
   let!(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary, load_type: 'cargo_item', tenant_vehicle: tenant_vehicle) }
   let!(:pricing_headers) do
     %w(EFFECTIVE_DATE	EXPIRATION_DATE	ORIGIN	COUNTRY_ORIGIN
@@ -45,8 +43,8 @@ RSpec.describe ::RmsExport::Excel::Base do
 
   describe '.perform' do
     it 'creates the routes' do
-      RmsSync::Pricings.new(tenant_id: tenants_tenant.id, sheet_type: :pricings).perform
-      result = described_class.write_document(tenant_id: tenants_tenant.id, sheet_type: :pricings)
+      RmsSync::Pricings.new(organization_id: organization.id, sheet_type: :pricings).perform
+      result = described_class.write_document(organization_id: organization.id, sheet_type: :pricings)
       xlsx = Roo::Excelx.new(StringIO.new(result.file.download))
       first_sheet = xlsx.sheet(xlsx.sheets.first)
       expect(first_sheet.row(1)).to eq(pricing_headers)

@@ -14,20 +14,17 @@ module ExcelDataServices
       private
 
       def update_or_create_employee(params)
-        legacy_user = ::User.find_by(email: params[:email], tenant: @tenant)
-        legacy_user ||= ::User.create!(
+        user = Organizations::User.find_by(email: params[:email], organization: @organization)
+        user ||= Authentication::User.create!(
+          type: 'Organizations::User',
           password: params[:password],
-          tenant_id: @tenant.id,
-          email: params[:email],
-          vat_number: params[:vat_number],
-          company_number: params[:company_number],
-          role_id: Role.find_by(name: 'shipper'),
-          sandbox: @sandbox
+          organization_id: @organization.id,
+          email: params[:email]
         )
-        tenants_user = Tenants::User.find_by(legacy_id: legacy_user)
-        tenants_user.update(company: params[:company])
-        update_or_create_employee_profile(employee: tenants_user, params: params)
-        add_stats(tenants_user, params[:row_nr], true)
+        user = user.becomes(Organizations::User)
+        ::Companies::Membership.first_or_create(company: params[:company], member: user)
+        update_or_create_employee_profile(employee: user, params: params)
+        add_stats(user, params[:row_nr], true)
       end
 
       def update_or_create_employee_profile(employee:, params:)

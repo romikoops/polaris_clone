@@ -3,7 +3,7 @@
       <mj-column width="100%" padding="0 2.5%">
         <mj-text>
           <p>
-            <p>Thank you for your using <%= user.tenant.name %> Shop and best regards,</p>
+            <p>Thank you for your using <%= @org_theme.name %> Shop and best regards,</p>
           </p>
         </mj-text>
 
@@ -13,8 +13,8 @@
       <mj-column width="100%" padding="0 2.5%">
         <mj-text line-height="24px">
           <p>
-            <span class="bold"><%= user.tenant.name %></span><br>
-            <% user.tenant.addresses["components"].each do |address_line| %>
+            <span class="bold"><%= @org_theme.name %></span><br>
+            <% @org_theme.addresses&.dig("components")&.each do |address_line| %>
               <%= address_line %> <br>
                 <% end %>
         </mj-text>

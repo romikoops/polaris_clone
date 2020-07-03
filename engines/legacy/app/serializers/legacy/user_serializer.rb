@@ -2,7 +2,7 @@
 
 module Legacy
   class UserSerializer < ActiveModel::Serializer
-    attributes %i[id email tenant_id]
+    attributes %i[id email organization_id]
   end
 end
 

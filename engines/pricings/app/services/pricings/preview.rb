@@ -2,18 +2,17 @@
 
 module Pricings
   class Preview # rubocop:disable Metrics/ClassLength
-    attr_accessor :itinerary, :tenant_vehicle_id, :cargo_class, :target, :date, :tenant
+    attr_accessor :itinerary, :tenant_vehicle_id, :cargo_class, :target, :date, :organization
 
-    def initialize(params:, target:, tenant: nil, tenant_vehicle_id: nil, date: Date.today + 5.days)
+    def initialize(params:, target:, organization: nil, tenant_vehicle_id: nil, date: Date.today + 5.days)
       @params = params
       @target = target
-      @tenant = tenant
-      @legacy_tenant = tenant.legacy
-      @scope = Tenants::ScopeService.new(target: target, tenant: tenant).fetch
+      @organization = organization
+      @scope = OrganizationManager::ScopeService.new(target: target, organization: organization).fetch
       @local_charges = { origin: [], destination: [] }
       @cargo_class = params[:selectedCargoClass]
       @load_type = params[:selectedCargoClass] == 'lcl' ? 'cargo_item' : 'container'
-      @hierarchy = Tenants::HierarchyService.new(target: target).fetch
+      @hierarchy = OrganizationManager::HierarchyService.new(target: target).fetch
       @pricings_to_return = []
       @date = date
       @truckings = {}
@@ -105,8 +104,8 @@ module Pricings
       adjusted_breakdown[:target_id] = adjusted_breakdown.delete(:margin_target_id)
       adjusted_breakdown[:target_type] = adjusted_breakdown.delete(:margin_target_type)
       adjusted_breakdown[:url_id] =
-        if breakdown[:margin_target_type] == 'Tenants::User'
-          Tenants::User.find(breakdown[:margin_target_id]).legacy_id
+        if breakdown[:margin_target_type] == 'Organizations::User'
+          Organizations::User.find(breakdown[:margin_target_id]).id
         else
           breakdown[:margin_target_id]
         end
@@ -134,7 +133,7 @@ module Pricings
     def handle_trucking
       args = {
         load_type: @load_type,
-        tenant_id: @tenant.legacy_id,
+        organization_id: @organization.id,
         truck_type: @cargo_class == 'lcl' ? 'default' : 'chassis',
         cargo_classes: [@cargo_class],
         sandbox: @sandbox,
@@ -219,7 +218,7 @@ module Pricings
         manipulated, metadata = Pricings::Manipulator.new(
           type: :freight_margin,
           target: @target,
-          tenant: @tenant,
+          organization: @organization,
           args: {
             schedules: default_schedules(tenant_vehicle_id: pricing.tenant_vehicle_id),
             pricing: pricing,
@@ -240,7 +239,7 @@ module Pricings
         manipulated, metadata = Pricings::Manipulator.new(
           type: "#{local_charge.direction}_margin".to_sym,
           target: @target,
-          tenant: @tenant,
+          organization: @organization,
           args: {
             schedules: scheds,
             local_charge: local_charge,
@@ -258,7 +257,7 @@ module Pricings
         manipulated, metadata = Pricings::Manipulator.new(
           type: "trucking_#{trucking[:carriage]}_margin".to_sym,
           target: @target,
-          tenant: @tenant,
+          organization: @organization,
           args: {
             schedules: default_schedules(tenant_vehicle_id: nil),
             trucking_pricing: trucking,
@@ -305,9 +304,9 @@ module Pricings
     end
 
     def group_ids
-      if @target.is_a?(Tenants::User)
-        @hierarchy.select { |hier| hier.is_a?(Tenants::Group) }.map(&:id)
-      elsif @target.is_a?(Tenants::Group)
+      if @target.is_a?(Organizations::User)
+        @hierarchy.select { |hier| hier.is_a?(Groups::Group) }.map(&:id)
+      elsif @target.is_a?(Groups::Group)
         [@target.id]
       end
     end

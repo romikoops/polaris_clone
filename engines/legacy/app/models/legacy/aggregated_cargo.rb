@@ -13,7 +13,7 @@ module Legacy
       chargeable_weight: 'chargeable_weight'
     }.freeze
 
-    delegate :tenant, to: :shipment
+    delegate :organization, to: :shipment
 
     def set_chargeable_weight!
       return nil if shipment.itinerary.nil?

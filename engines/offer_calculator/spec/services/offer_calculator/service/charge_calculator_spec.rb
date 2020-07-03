@@ -5,8 +5,7 @@ require 'rails_helper'
 RSpec.describe OfferCalculator::Service::ChargeCalculator do
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:vehicle) do
     FactoryBot.create(:legacy_vehicle, tenant_vehicles: [tenant_vehicle1, tenant_vehicle2])
   end
@@ -19,21 +18,17 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
     FactoryBot.create(:legacy_trip, itinerary: itinerary2, load_type: 'cargo_item', tenant_vehicle: tenant_vehicle2)
   end
 
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}) }
-  let!(:tenants_user) do
-    Tenants::User.find_by(legacy_id: user.id).tap do |tapped_user|
-      tapped_user.company = FactoryBot.create(:tenants_company)
-    end
-  end
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+
   let(:group) do
-    FactoryBot.create(:tenants_group, tenant: tenants_tenant).tap do |group|
-      FactoryBot.create(:tenants_membership, member: tenants_user, group: group)
+    FactoryBot.create(:groups_group, organization: organization).tap do |group|
+      FactoryBot.create(:groups_membership, member: user, group: group)
     end
   end
   let(:trucking_location) { FactoryBot.create(:trucking_location, zipcode: '43813') }
-  let(:hub) { itinerary1.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary1.hubs.find_by(name: 'Shanghai Port') }
-  let(:common_trucking) { FactoryBot.create(:trucking_trucking, tenant: tenant, hub: hub, location: trucking_location) }
+  let(:hub) { itinerary1.hubs.find_by(name: 'Gothenburg') }
+  let(:destination_hub) { itinerary1.hubs.find_by(name: 'Shanghai') }
+  let(:common_trucking) { FactoryBot.create(:trucking_trucking, organization: organization, hub: hub, location: trucking_location) }
   let(:address) { FactoryBot.create(:gothenburg_address) }
   let(:cargo_shipment) do
     FactoryBot.create(:legacy_shipment,
@@ -41,7 +36,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
                       direction: direction,
                       user: user,
                       has_pre_carriage: true,
-                      tenant: tenant,
+                      organization: organization,
                       trucking: {
                         'pre_carriage': {
                           'address_id': address.id,
@@ -58,7 +53,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
                       direction: direction,
                       user: user,
                       has_pre_carriage: true,
-                      tenant: tenant,
+                      organization: organization,
                       trucking: {
                         'pre_carriage': {
                           'address_id': address.id,
@@ -83,12 +78,12 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
                         }
                       },
                       desired_start_date: Time.zone.today + 4.days,
-                      tenant: tenant,
+                      organization: organization,
                       containers: containers)
   end
 
-  let(:itinerary1) { FactoryBot.create(:legacy_itinerary, :gothenburg_shanghai, tenant: tenant) }
-  let(:itinerary2) { FactoryBot.create(:legacy_itinerary, :shanghai_gothenburg, tenant: tenant) }
+  let(:itinerary1) { FactoryBot.create(:legacy_itinerary, :gothenburg_shanghai, organization: organization) }
+  let(:itinerary2) { FactoryBot.create(:legacy_itinerary, :shanghai_gothenburg, organization: organization) }
   let(:cargo_item) { FactoryBot.create(:legacy_cargo_item) }
   let(:schedules) do
     [
@@ -103,9 +98,9 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
     ]
   end
 
-  let!(:cargo_charge_category) { FactoryBot.create(:cargo_charge_category, tenant: tenant) }
-  let!(:export_charge_category) { FactoryBot.create(:export_charge_category, tenant: tenant) }
-  let!(:isps_charge_category) { FactoryBot.create(:legacy_charge_categories, code: 'isps', name: 'isps', tenant: tenant) }
+  let!(:cargo_charge_category) { FactoryBot.create(:cargo_charge_category, organization: organization) }
+  let!(:export_charge_category) { FactoryBot.create(:export_charge_category, organization: organization) }
+  let!(:isps_charge_category) { FactoryBot.create(:legacy_charge_categories, code: 'isps', name: 'isps', organization: organization) }
   let(:lcl_local_charge_fees) { FactoryBot.build(:lcl_local_charge_fees_hash) }
   let(:fcl_local_charge_fees) { FactoryBot.build(:fcl_local_charge_fees_hash) }
   let(:lcl_trucking_data) { FactoryBot.build(:lcl_trucking_data, hub: hub) }
@@ -125,18 +120,23 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
   end
 
   before do
-    FactoryBot.create(:profiles_profile, user_id: tenants_user.id)
+    FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
+    FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
+
+    ::Organizations.current_id = organization.id
+
+    FactoryBot.create(:profiles_profile, user_id: user.id)
     %w[ocean air rail truck trucking local_charge].flat_map do |mot|
       [
-        FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:trucking_on_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:trucking_pre_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:import_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:export_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+        FactoryBot.create(:freight_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:trucking_on_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:trucking_pre_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:import_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:export_margin, default_for: mot, organization: organization, applicable: organization, value: 0)
       ]
     end
     FactoryBot.create(:legacy_local_charge,
-                      tenant: tenant,
+                      organization: organization,
                       hub: hub,
                       mode_of_transport: 'ocean',
                       load_type: 'lcl',
@@ -146,7 +146,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
                       effective_date: Time.zone.today,
                       expiration_date: Time.zone.today + 3.months)
     FactoryBot.create(:legacy_local_charge,
-                      tenant: tenant,
+                      organization: organization,
                       hub: destination_hub,
                       mode_of_transport: 'ocean',
                       load_type: 'lcl',
@@ -156,7 +156,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
                       effective_date: Time.zone.today,
                       expiration_date: Time.zone.today + 3.months)
     FactoryBot.create(:legacy_local_charge,
-                      tenant: tenant,
+                      organization: organization,
                       hub: hub,
                       mode_of_transport: 'ocean',
                       load_type: 'fcl_20',
@@ -166,7 +166,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
                       effective_date: Time.zone.today,
                       expiration_date: Time.zone.today + 3.months)
     FactoryBot.create(:legacy_local_charge,
-                      tenant: tenant,
+                      organization: organization,
                       hub: hub,
                       mode_of_transport: 'ocean',
                       load_type: 'fcl_40',
@@ -176,7 +176,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
                       effective_date: Time.zone.today,
                       expiration_date: Time.zone.today + 3.months)
     FactoryBot.create(:legacy_local_charge,
-                      tenant: tenant,
+                      organization: organization,
                       hub: hub,
                       mode_of_transport: 'ocean',
                       load_type: 'fcl_40_hq',
@@ -210,24 +210,24 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
         FactoryBot.create(:lcl_pricing,
                           itinerary: itinerary1,
                           tenant_vehicle: tenant_vehicle1,
-                          tenant: tenant)
+                          organization: organization)
       end
       let(:pricing_fcl_20) do
         FactoryBot.create(:fcl_20_pricing,
                           itinerary: itinerary1,
-                          tenant: tenant,
+                          organization: organization,
                           tenant_vehicle: tenant_vehicle1)
       end
       let(:pricing_fcl_40) do
         FactoryBot.create(:fcl_40_pricing,
                           itinerary: itinerary1,
-                          tenant: tenant,
+                          organization: organization,
                           tenant_vehicle: tenant_vehicle1)
       end
       let(:pricing_fcl_40_hq) do
         FactoryBot.create(:fcl_40_hq_pricing,
                           itinerary: itinerary1,
-                          tenant: tenant,
+                          organization: organization,
                           tenant_vehicle: tenant_vehicle1)
       end
       let(:lcl_data) do
@@ -372,7 +372,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
 
       context 'with relative margins' do
         before do
-          FactoryBot.create(:export_margin, origin_hub_id: hub.id, applicable: tenants_user, tenant: tenants_tenant)
+          FactoryBot.create(:export_margin, origin_hub_id: hub.id, applicable: user, organization: organization)
         end
 
         let(:metadata_list) { trucking_metadata_list }
@@ -404,11 +404,11 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
 
       context 'with consolidated backend cargo' do
         before do
-          allow(Tenants::ScopeService).to receive(:new).and_return(scope_service)
+          allow(OrganizationManager::ScopeService).to receive(:new).and_return(scope_service)
           allow(scope_service).to receive(:fetch).and_return('validity_logic' => 'vatos', 'consolidation' => { 'cargo' => { 'backend' => true } })
         end
 
-        let!(:scope_service) { instance_double(Tenants::ScopeService) }
+        let!(:scope_service) { instance_double(OrganizationManager::ScopeService) }
         let!(:current_results) { results }
 
         it 'returns an object with calculated totals and schedules for aggregated cargo' do
@@ -423,8 +423,8 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
         before do
           FactoryBot.create(:export_margin,
                             origin_hub_id: hub.id,
-                            applicable: tenants_user,
-                            tenant: tenants_tenant,
+                            applicable: user,
+                            organization: organization,
                             value: 0,
                             operator: '%').tap do |tapped_margin|
             FactoryBot.create(:bas_margin_detail,
@@ -469,8 +469,8 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
         before do
           FactoryBot.create(:export_margin,
                             origin_hub_id: hub.id,
-                            applicable: tenants_user,
-                            tenant: tenants_tenant,
+                            applicable: user,
+                            organization: organization,
                             value: 0,
                             operator: '%').tap do |tapped_margin|
             FactoryBot.create(:bas_margin_detail,

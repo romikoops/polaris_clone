@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class TruckingCounterpartsController < ApplicationController
-  skip_before_action :require_authentication!
-  skip_before_action :require_non_guest_authentication!
+  skip_before_action :doorkeeper_authorize!
 
   def index
     response_handler(counterpart_countries)
@@ -12,7 +11,7 @@ class TruckingCounterpartsController < ApplicationController
 
   def counterpart_countries
     countries = Api::Routing::Trucking::CountriesService.new(
-      tenant: ::Tenants::Tenant.find_by(legacy_id: current_tenant&.id),
+      organization: current_organization,
       load_type: query_params[:load_type],
       target: target,
       coordinates: query_params.slice(:lat, :lng),

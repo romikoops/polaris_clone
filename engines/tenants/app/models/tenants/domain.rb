@@ -3,10 +3,10 @@
 
 module Tenants
   class Domain < ApplicationRecord
-    belongs_to :tenant
+    belongs_to :organization, class_name: 'Organizations::Organization'
 
     validates :domain, uniqueness: true
-    validates :default, inclusion: { in: [true, false] }, uniqueness: { scope: :tenant_id, if: :default? }
+    validates :default, inclusion: { in: [true, false] }, uniqueness: { scope: :organization_id, if: :default? }
   end
 end
 

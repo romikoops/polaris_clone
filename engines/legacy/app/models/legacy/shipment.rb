@@ -2,6 +2,8 @@
 
 module Legacy
   class Shipment < ApplicationRecord
+    include PgSearch::Model
+
     self.table_name = 'shipments'
     STATUSES = %w[
       booking_process_started
@@ -21,9 +23,9 @@ module Legacy
 
     acts_as_paranoid
 
-    belongs_to :user, -> { with_deleted }
+    belongs_to :user, -> { with_deleted }, class_name: 'Organizations::User', optional: true
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-    belongs_to :tenant, class_name: 'Legacy::Tenant'
+    belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :origin_nexus, class_name: 'Legacy::Nexus', optional: true
     belongs_to :destination_nexus, class_name: 'Legacy::Nexus', optional: true
     belongs_to :origin_hub, class_name: 'Legacy::Hub', optional: true
@@ -57,7 +59,9 @@ module Legacy
     scope :archived, -> { where(status: 'archived') }
     scope :finished, -> { where(status: 'finished') }
     scope :quoted, -> { where(status: 'quoted') }
-    scope :external_user, -> { joins(:user).where(users: { internal: false }) }
+    scope :excluding_tests, -> { where.not(billing: :test) }
+
+    enum billing: {external: 0, internal: 1, test: 2}
 
     validates_with Legacy::MaxAggregateDimensionsValidator
     validates_with Legacy::HubNexusMatchValidator
@@ -73,11 +77,50 @@ module Legacy
     end
 
     before_validation :generate_imc_reference,
-                      :set_default_trucking, :set_tenant,
+                      :set_default_trucking,
+                      :set_organization,
+                      :set_distinct_id,
                       on: :create
     before_validation :update_carriage_properties!, :set_default_destination_dates
 
     delegate :mode_of_transport, to: :itinerary, allow_nil: true
+
+    pg_search_scope :index_search,
+    against: %i(imc_reference),
+    associated_against: {
+      user: %i[email],
+      origin_hub: %i(name),
+      destination_hub: %i(name)
+    },
+    using: {
+      tsearch: { prefix: true }
+    }
+
+    scope :user_name, lambda { |query|
+      user_ids = Profiles::Profile
+        .where('first_name ILIKE ? OR last_name ILIKE ?', "%#{query}%", "%#{query}%")
+        .pluck(:user_id)
+      where(user_id: user_ids)
+    }
+
+    scope :company_name, lambda { |query|
+      user_ids = Profiles::Profile.where('company_name ILIKE ? ', "%#{query}%").pluck(:user_id)
+      where(user_id: user_ids)
+    }
+
+    scope :reference_number, lambda { |query|
+      where('imc_reference ILIKE ? ', "%#{query}%")
+    }
+
+    scope :hub_names, lambda { |query|
+      hub_ids = Hub.where('name ILIKE ?', "%#{query}%").ids
+      where('origin_hub_id IN (?) OR destination_hub_id IN (?)', hub_ids, hub_ids)
+    }
+
+    scope :user_search, lambda { |query|
+      user_name(query).or(Shipment.company_name(query)).or(Shipment.reference_number(query))
+        .or(Shipment.hub_names(query))
+    }
 
     has_many :charge_breakdowns, class_name: 'Legacy::ChargeBreakdown' do
       def to_schedules_charges
@@ -200,6 +243,57 @@ module Legacy
       { value: price.value, currency: price.currency }
     end
 
+    def edited_total
+      return if trip_id.nil?
+
+      price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').edited_price
+
+      return nil if price.nil?
+
+      { value: price.value, currency: price.currency }
+    end
+
+    def cargo_count
+      if aggregated_cargo
+        1
+      else
+        cargo_units.reduce(0) { |sum, unit| sum + unit.quantity }
+      end
+    end
+
+    def pickup_address_with_country
+      pickup_address.as_json(include: :country)
+    end
+
+    def delivery_address_with_country
+      delivery_address.as_json(include: :country)
+    end
+
+    def client_name
+      shipment_user_profile.full_name
+    end
+
+    delegate :company_name, to: :shipment_user_profile
+
+    def shipment_user_profile
+      profile = Profiles::Profile.find_by(user_id: user_id)
+      Profiles::ProfileDecorator.new(profile)
+    end
+
+    def with_address_options_json(options = {})
+      as_options_json(options).merge(
+        pickup_address: pickup_address_with_country,
+        delivery_address: delivery_address_with_country
+      )
+    end
+
+    def with_address_index_json(options = {})
+      as_index_json(options).merge(
+        pickup_address: pickup_address_with_country,
+        delivery_address: delivery_address_with_country
+      )
+    end
+
     private
 
     def update_carriage_properties!
@@ -255,20 +349,18 @@ module Legacy
       self.trucking ||= { on_carriage: { truck_type: '' }, pre_carriage: { truck_type: '' } }
     end
 
-    def set_tenant
-      self.tenant_id ||= user&.tenant_id
-    end
-
-    def user_tenant_match
-      return if user.nil? || tenant_id == user.tenant_id
-
-      errors.add(:user, "tenant_id does not match the shipment's tenant_id")
-    end
-
     def itinerary_trip_match
       return if trip.nil? || trip.itinerary_id == itinerary_id
 
       errors.add(:itinerary, "id does not match the trips's itinerary_id")
+    end
+
+    def set_distinct_id
+      self.distinct_id = [Time.zone.now.gmtime.tv_sec, SecureRandom.uuid].join('-') if user_id.blank?
+    end
+
+    def set_organization
+      self.organization_id ||= user&.organization_id
     end
   end
 end
@@ -278,6 +370,7 @@ end
 # Table name: shipments
 #
 #  id                                  :bigint           not null, primary key
+#  billing                             :integer          default("external")
 #  booking_placed_at                   :datetime
 #  cargo_notes                         :string
 #  closing_date                        :datetime
@@ -309,8 +402,11 @@ end
 #  updated_at                          :datetime         not null
 #  destination_hub_id                  :integer
 #  destination_nexus_id                :integer
+#  distinct_id                         :uuid
 #  incoterm_id                         :integer
 #  itinerary_id                        :integer
+#  legacy_user_id                      :integer
+#  organization_id                     :uuid
 #  origin_hub_id                       :integer
 #  origin_nexus_id                     :integer
 #  quotation_id                        :integer
@@ -318,18 +414,22 @@ end
 #  tenant_id                           :integer
 #  tender_id                           :uuid
 #  trip_id                             :integer
-#  user_id                             :integer
+#  user_id                             :uuid
 #
 # Indexes
 #
-#  index_shipments_on_sandbox_id  (sandbox_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tenant_id   (tenant_id) WHERE (deleted_at IS NULL)
-#  index_shipments_on_tender_id   (tender_id)
+#  index_shipments_on_organization_id  (organization_id)
+#  index_shipments_on_sandbox_id       (sandbox_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tenant_id        (tenant_id) WHERE (deleted_at IS NULL)
+#  index_shipments_on_tender_id        (tender_id)
+#  index_shipments_on_user_id          (user_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (destination_hub_id => hubs.id) ON DELETE => nullify
 #  fk_rails_...  (destination_nexus_id => nexuses.id) ON DELETE => nullify
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (origin_hub_id => hubs.id) ON DELETE => nullify
 #  fk_rails_...  (origin_nexus_id => nexuses.id) ON DELETE => nullify
+#  fk_rails_...  (user_id => users_users.id)
 #

@@ -4,11 +4,12 @@ module DocumentService
   class ScheduleSheetWriter
     include AwsConfig
     include WritingTool
-    attr_reader :tenant, :options, :trips, :worksheet, :directory, :workbook, :worksheet, :itinerary, :filename
+    attr_reader :organization, :options, :trips, :worksheet, :directory, :workbook, :worksheet, :itinerary, :filename
 
     def initialize(options)
       @options = options
-      @tenant = tenant_finder(options[:tenant_id])
+      @organization = Organizations::Organization.find(options[:organization_id])
+      @organization_theme = @organization.theme
       pre_initialize
       @directory = "tmp/#{@filename}"
       workbook_hash    = add_worksheet_to_workbook(create_workbook(@directory), header_values)
@@ -19,7 +20,7 @@ module DocumentService
     def perform
       write_schedule_to_sheet
       workbook.close
-      write_to_aws(directory, tenant, filename, 'schedules_sheet')
+      write_to_aws(directory, organization, filename, 'schedules_sheet')
     end
 
     private
@@ -46,12 +47,17 @@ module DocumentService
       # variables hardcoded until params are sent from front end
       if options[:mode_of_transport] && !options[:itinerary_id]
         Trip
-          .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.mode_of_transport = '#{options[:mode_of_transport]}' AND itineraries.tenant_id = #{options[:tenant_id]}")
+          .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id 
+            AND itineraries.mode_of_transport = '#{options[:mode_of_transport]}' 
+            AND itineraries.organization_id = '#{options[:organization_id]}'"
+          )
           .where('start_date > ? AND end_date < ?', start_date, end_date)
           .order(:start_date)
       else
         Trip
-          .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.tenant_id = #{options[:tenant_id]}")
+          .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id 
+            AND itineraries.organization_id = '#{options[:organization_id]}'"
+          )
           .where('start_date > ? AND end_date < ?', start_date, end_date)
           .order(:start_date)
       end
@@ -67,7 +73,7 @@ module DocumentService
       elsif options[:itinerary_id]
         "#{itinerary.name}_schedules_#{formated_date}.xlsx"
       else
-        "#{tenant.name}_schedules_#{formated_date}.xlsx"
+        "#{@organization_theme.name}_schedules_#{formated_date}.xlsx"
       end
     end
 

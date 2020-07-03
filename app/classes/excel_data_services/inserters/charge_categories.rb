@@ -15,7 +15,7 @@ module ExcelDataServices
 
       def update_or_create_charge_category(params)
         correct_charge_category = Legacy::ChargeCategory.find_or_initialize_by(
-          tenant_id: @tenant.id,
+          organization_id: @organization.id,
           code: params[:fee_code].downcase,
           sandbox_id: @sandbox&.id
         )
@@ -30,7 +30,7 @@ module ExcelDataServices
         other_charge_category_ids =
           Legacy::ChargeCategory.where.not(id: charge_category.id)
                                 .where(
-                                  tenant_id: @tenant.id,
+                                  organization_id: @organization.id,
                                   code: [charge_category.code.upcase, charge_category.code.downcase]
                                 ).select(:id)
         Charge.where(charge_category_id: other_charge_category_ids)

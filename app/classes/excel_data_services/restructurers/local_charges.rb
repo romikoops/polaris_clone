@@ -202,9 +202,9 @@ module ExcelDataServices
 
       def add_hub_names(charges_data)
         charges_data.each do |params|
-          hub_name = append_hub_suffix(params[:hub], params[:mot])
-          if params[:counterpart_hub]
-            counterpart_hub_name = append_hub_suffix(params[:counterpart_hub], params[:mot])
+          hub_name = params[:hub]
+          if params[:counterpart_hub] && !params[:counterpart_hub].casecmp?('all')
+            counterpart_hub_name = params[:counterpart_hub]
           end
           params[:hub_name] = hub_name
           params[:counterpart_hub_name] = counterpart_hub_name

@@ -8,12 +8,16 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
   def initialize(user:, shipment: nil, sandbox: nil, metadata: [])
     @user = user
     @shipment = shipment
-    @scope = ::Tenants::ScopeService.new(
-      target: ::Tenants::User.find_by(legacy_id: @user),
-      tenant: ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
+    @target = @user
+    @organization = ::Organizations::Organization.find(shipment.organization_id)
+    @target ||= Groups::Group.find_by(name: 'default', organization_id: shipment.organization_id)
+    @scope = ::OrganizationManager::ScopeService.new(
+      target: @target,
+      organization: @organization
     )
     @sandbox = sandbox
     @metadata = metadata
+    @currency = Users::Settings.find_by(user: user)&.currency || @scope.fetch(:default_currency)
   end
 
   DEFAULT_MAX = Float::INFINITY
@@ -43,7 +47,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     charges_for_filtering = []
     all_charges_with_metadata = []
     cargos_for_loop(cargos: cargos).each do |cargo_data|
-      group_ids = user.group_ids | [nil]
+      group_ids = user_groups.pluck(:group_id) | [nil]
       group_ids.each do |group_id|
         charge = effective_local_charges.find_by(
           group_id: group_id,
@@ -167,7 +171,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       totals[key]['value'] += charge_object.dig('flat_margins', key) if charge_object.dig('flat_margins', key).present?
     end
 
-    converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(totals, user.currency)
+    converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(totals, @currency)
     return nil if converted.zero?
 
     totals['total'] = { value: converted.cents / 100.0, currency: converted.currency }
@@ -256,7 +260,8 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       end
     end
 
-    converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(totals, user.currency)
+    currency = Users::Settings.find_by(user: user).currency
+    converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(totals, currency)
     value = converted.cents / 100.0
     totals['total'] = { 'value' => value, 'currency' => converted.currency.iso_code }
     totals
@@ -392,8 +397,8 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
     Pricings::Manipulator.new(
       type: "#{local_charge.direction}_margin".to_sym,
-      target: ::Tenants::User.find_by(legacy_id: shipment.user_id),
-      tenant: ::Tenants::Tenant.find_by(legacy_id: shipment.tenant_id),
+      target: ::Organizations::User.find_by(id: shipment.user_id),
+      organization: ::Organizations::Organization.find(shipment.organization_id),
       args: {
         cargo_class: local_charge.load_type,
         schedules: schedules,
@@ -430,5 +435,11 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
         }
       end
     end
+  end
+
+  def user_groups
+    companies = Companies::Membership.where(member: user)
+    membership_ids = Groups::Membership.where(member: user)
+                      .or(Groups::Membership.where(member: companies)).select(:group_id)
   end
 end

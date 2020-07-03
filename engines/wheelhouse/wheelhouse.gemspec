@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
     calculator engine
   SUMMARY
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
@@ -22,7 +22,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-legacy'
   s.add_dependency 'imc-offer_calculator'
   s.add_dependency 'imc-pdf'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
+  s.add_dependency 'imc-organization_manager'
 
   s.add_dependency 'draper', '~> 4.0'
 

@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe RmsSync::Hubs do
-  let!(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let!(:shanghai) { FactoryBot.create(:shanghai_hub, tenant: tenant) }
-  let!(:gothenburg) { FactoryBot.create(:legacy_hub, tenant: tenant) }
+
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let!(:shanghai) { FactoryBot.create(:shanghai_hub, organization: organization) }
+  let!(:gothenburg) { FactoryBot.create(:legacy_hub, organization: organization) }
   describe '.perform' do
     it 'should create a Book, Sheet and Cells' do
-      described_class.new(tenant_id: tenants_tenant.id, sheet_type: :hubs).perform
+      described_class.new(organization_id: organization.id, sheet_type: :hubs).perform
       expect(RmsData::Book.where(sheet_type: :hubs).length).to eq(1)
       book = RmsData::Book.where(sheet_type: :hubs).first
       expect(RmsData::Sheet.where(book_id: book.id).length).to eq(1)

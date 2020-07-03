@@ -3,11 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ::RmsSync::Trucking do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let!(:tenants_tenant) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:hub) { FactoryBot.create(:hamburg_hub, tenant: tenant) }
-  let(:courier) { FactoryBot.create(:trucking_courier, name: 'TEST', tenant: tenant) }
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:hub) { FactoryBot.create(:hamburg_hub, organization: organization) }
+  let(:courier) { FactoryBot.create(:trucking_courier, name: 'TEST', organization: organization) }
   let(:zip_trucking_locations) do
     [
       {
@@ -63,7 +61,7 @@ RSpec.describe ::RmsSync::Trucking do
       tl_obj[:locations].map do |tl|
         FactoryBot.create(:trucking_with_fees,
           location: tl,
-          tenant: tenant,
+          organization: organization,
           hub: hub,
           courier: courier,
           parent_id: tl_obj[:parent_id]
@@ -76,7 +74,7 @@ RSpec.describe ::RmsSync::Trucking do
       tl_obj[:locations].map do |tl|
         FactoryBot.create(:trucking_with_return,
           location: tl,
-          tenant: tenant,
+          organization: organization,
           cargo_class: 'fcl_20',
           load_type: 'container',
           hub: hub,
@@ -95,8 +93,8 @@ RSpec.describe ::RmsSync::Trucking do
 
   describe '.perform' do
     it 'creates the Trucking' do
-      RmsSync::Trucking.new(tenant_id: tenants_tenant.id).perform
-      books = RmsData::Book.where(tenant_id: tenants_tenant.id, sheet_type: :trucking, target: hub)
+      RmsSync::Trucking.new(organization_id: organization.id).perform
+      books = RmsData::Book.where(organization_id: organization.id, sheet_type: :trucking, target: hub)
       expect(books.length).to eq(2)
       expect(RmsData::Sheet.where(book_id: books.ids).length).to eq(7)
     end

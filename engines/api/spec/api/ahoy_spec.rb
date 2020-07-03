@@ -3,15 +3,16 @@
 require "swagger_helper"
 
 RSpec.describe "Ahoy API" do
-  let(:tenant) { FactoryBot.create(:tenants_tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:organization_id) { organization.id }
+  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
+  before { FactoryBot.create(:organizations_domain, organization: organization, default: true) }
 
-  before { FactoryBot.create(:tenants_domain, tenant: tenant, default: true) }
-
-  path "/v1/ahoy/{id}/settings" do
+  path "/v1/organizations/{organization_id}/ahoy" do
     get "Fetch Settings" do
       tags "Ahoy"
       produces "application/json"
-      parameter name: :id, in: :path, type: :string, description: "Customer UUID"
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
 
       response "200", "successful operation" do
         schema type: :object,
@@ -89,13 +90,12 @@ RSpec.describe "Ahoy API" do
                  }
                },
                required: ["endpoint", "pre_carriage", "on_carriage", "modes_of_transport"]
-        let(:id) { tenant.id }
 
         run_test!
       end
 
       response "404", "Invalid Customer UUID" do
-        let(:id) { "invalid" }
+        let(:organization_id) { "invalid" }
 
         run_test!
       end

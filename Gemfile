@@ -141,6 +141,8 @@ gem 'marginalia', '~> 1.5'
 # Determines holidays by region
 gem 'holidays'
 
+gem 'liquid'
+
 # Translated customer content
 gem 'mobility', '~> 0.8.6'
 

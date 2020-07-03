@@ -4,13 +4,13 @@ require "rails_helper"
 
 module ResultFormatter
   RSpec.describe FeeTableService, type: :service do
-    let!(:tenant) { FactoryBot.create(:legacy_tenant) }
+    let!(:organization) { FactoryBot.create(:organizations_organization) }
     let(:scope) { {primary_freight_code: "BAS"} }
     let(:shipment) {
       FactoryBot.create(:legacy_shipment,
         with_full_breakdown: true,
         with_tenders: true,
-        tenant: tenant)
+        organization: organization)
     }
     let(:type) { :table }
     let(:tender) { shipment.charge_breakdowns.first.tender }
@@ -59,7 +59,7 @@ module ResultFormatter
             load_type: "cargo_item",
             with_full_breakdown: true,
             with_tenders: true,
-            tenant: tenant)
+            organization: organization)
         }
         let(:expected_descriptions) do
           ["Pre-Carriage",

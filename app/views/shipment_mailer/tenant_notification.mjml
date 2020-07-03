@@ -1,7 +1,7 @@
 <mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
     <mj-text>
-      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.name}", style: "width: 150px; max-height: 150px;" %>
+      <%= image_tag attachments['logo.png'].url, alt: "#{@org_theme.name}", style: "width: 150px; max-height: 150px;" %>
     </mj-text>
   </mj-column>
   <mj-column>
@@ -33,8 +33,8 @@
     <mj-text>
       <p>If you have questions about the ItsMyCargo Shop System or are experiencing problems with this mail or shipment – do not hesitate to ask us:</p>
       <p><span class="bold text-center">Support:</span></p>
-      <p><span class="bold text-center">By email: <%= mail_to("#{@user.tenant.emails['support']['general']}") %></span></p>
-      <p><span class="bold text-center">By phone: <%= @user.tenant.phones['support'] %></span></p>
+      <p><span class="bold text-center">By email: <%= mail_to("#{@org_theme.emails['support']['general']}") %></span></p>
+      <p><span class="bold text-center">By phone: <%= @org_theme.phones['support'] %></span></p>
    </mj-text>
   </mj-column>
 </mj-section>

@@ -7,121 +7,115 @@ module AdmiraltyReports
     routes { Engine.routes }
     render_views
 
+    let!(:quote_organization) { FactoryBot.create(:organizations_organization, slug: 'demo1') }
+    let!(:booking_organization) { FactoryBot.create(:organizations_organization, slug: 'demo2') }
+    let!(:user) { FactoryBot.create(:organizations_user, organization: booking_organization) }
+    let!(:user_two) { FactoryBot.create(:organizations_user, organization: quote_organization) }
+    let!(:quote_organizations_scope) { FactoryBot.create(:organizations_scope, target: quote_organization, content: { open_quotation_tool: true }) }
+    let!(:booking_organizations_scope) { FactoryBot.create(:organizations_scope, target: booking_organization, content: { open_quotation_tool: false }) }
+
     before do
       allow_any_instance_of(AdmiraltyAuth::AuthorizedController).to receive(:authenticate!).and_return(true)
     end
 
-    let!(:quote_tenant) { FactoryBot.create(:legacy_tenant, name: 'Demo1', subdomain: 'demo1') }
-    let!(:booking_tenant) { FactoryBot.create(:legacy_tenant, name: 'Demo2', subdomain: 'demo2') }
-
-    let!(:quote_tenants_tenant) { Tenants::Tenant.find_by(legacy_id: quote_tenant.id) }
-    let!(:booking_tenants_tenant) { Tenants::Tenant.find_by(legacy_id: booking_tenant.id) }
-
-    let!(:quote_tenants_scope) { FactoryBot.create(:tenants_scope, target: quote_tenants_tenant, content: { open_quotation_tool: true }) }
-    let!(:booking_tenants_scope) { FactoryBot.create(:tenants_scope, target: booking_tenants_tenant, content: { open_quotation_tool: false }) }
-
     describe 'GET #index' do
-      let!(:tenant) { quote_tenant }
+      let!(:organization) { quote_organization }
 
       it 'renders page' do
         get :index
 
         expect(response).to be_successful
-        expect(response.body).to match(/<td>#{Regexp.quote(Tenant.find_by(legacy_id: tenant.id).slug)}/im)
+        expect(response.body).to match(/<td>#{Regexp.quote(Organizations::Organization.find(organization.id).slug)}/im)
       end
     end
 
     describe 'GET #show' do
       context 'quotation tool' do
-        let!(:tenant) { quote_tenant }
+        let!(:organization) { quote_organization }
 
         it 'renders page' do
-          get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id }
+          get :show, params: { id: organization.id }
 
           expect(response).to be_successful
-          expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
+          expect(response.body).to match(/<h2>#{Regexp.quote(organization.slug)}/im)
         end
       end
 
       context 'when the results are filtered' do
         before do
-          tenants_user.update(company: company)
-          tenants_user_two.update(company: company)
+          FactoryBot.create(:companies_company, :with_member, organization: quote_organization, member: user_two)
+          FactoryBot.create(:companies_company, :with_member, organization: booking_organization, member: user)
           FactoryBot.create(:legacy_quotation,
                             original_shipment_id: shipments.first.id,
-                            user_id: user.id,
+                            user: user,
                             updated_at: DateTime.new(2019, 2, 3),
                             created_at: DateTime.new(2019, 2, 2))
           FactoryBot.create(:legacy_quotation,
                             original_shipment_id: shipments.last.id,
-                            user_id: user_two.id,
+                            user: user_two,
                             updated_at: DateTime.new(2019, 2, 3),
                             created_at: DateTime.new(2019, 2, 2))
           ::Quotations::Quotation.create(user_id: user.id, updated_at: DateTime.new(2020, 1, 2), created_at: DateTime.new(2020, 1, 1))
           ::Quotations::Quotation.create(user_id: user_two.id, updated_at: DateTime.new(2020, 1, 2), created_at: DateTime.new(2020, 1, 1))
         end
 
-        let!(:tenant) { quote_tenant }
-        let(:company) { FactoryBot.create(:tenants_company) }
-        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id) }
-        let!(:user_two) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id) }
-        let!(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
-        let!(:tenants_user_two) { Tenants::User.find_by(legacy_id: user_two.id) }
+        let!(:organization) { quote_organization }
+        let(:company) { FactoryBot.create(:companies_company) }
 
         let!(:shipments) do
           [
             FactoryBot.create(:legacy_shipment,
-                              user_id: user.id,
-                              tenant_id: quote_tenant.id,
+                              user: user,
+                              organization_id: quote_organization.id,
                               updated_at: DateTime.new(2019, 2, 3),
                               created_at: DateTime.new(2019, 2, 2)),
             FactoryBot.create(:legacy_shipment,
-                              user_id: user_two.id,
-                              tenant_id: quote_tenant.id,
+                              user: user_two,
+                              organization_id: quote_organization.id,
                               updated_at: DateTime.new(2019, 2, 5),
                               created_at: DateTime.new(2019, 2, 4))
           ]
         end
 
         it 'renders page' do
-          get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id, month: '2', year: '2019' }
+          get :show, params: { id: organization.id, month: '2', year: '2019' }
 
           expect(response).to be_successful
-          expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
+          expect(response.body).to match(/<h2>#{Regexp.quote(organization.slug)}/im)
           expect(response.body).to include('Quotations')
         end
 
         it 'renders page if it is current month' do
-          get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id, month: Time.zone.now.month, year: Time.zone.now.year }
+          get :show, params: { id: organization.id, month: Time.zone.now.month, year: Time.zone.now.year }
 
           expect(response).to be_successful
-          expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
+          expect(response.body).to match(/<h2>#{Regexp.quote(organization.slug)}/im)
         end
       end
 
       context 'booking tool' do
-        let!(:tenant) { booking_tenant }
-        let!(:user) { FactoryBot.create(:legacy_user, tenant_id: quote_tenant.id) }
+        let!(:organization) { booking_organization }
+        let!(:user) { FactoryBot.create(:organizations_user, organization_id: quote_organization.id) }
 
         let!(:shipments) do
           [
             FactoryBot.create(:legacy_shipment,
-                              user_id: user.id,
-                              tenant_id: booking_tenant.id,
+                              user: user,
+                              organization_id: booking_organization.id,
                               updated_at: DateTime.new(2019, 2, 3),
                               created_at: DateTime.new(2019, 2, 2)),
             FactoryBot.create(:legacy_shipment,
-                              user_id: user.id,
-                              tenant_id: booking_tenant.id,
+                              user: user,
+                              organization_id: booking_organization.id,
                               updated_at: DateTime.new(2019, 2, 5),
                               created_at: DateTime.new(2019, 2, 4))
           ]
         end
 
         it 'renders page' do
-          get :show, params: { id: Tenant.find_by(legacy_id: tenant.id).id }
+          get :show, params: { id: organization.id }
           expect(response).to be_successful
-          expect(response.body).to match(/<h2>#{Regexp.quote(tenant.name)}/im)
+          expect(response.body).to match(/<h2>#{Regexp.quote(organization.slug)}/im)
         end
       end
     end

@@ -18,7 +18,7 @@ module ExcelTool
     def overwrite_local_charges
       xlsx.sheets.each do |sheet_name|
         first_sheet = xlsx.sheet(sheet_name)
-        hub = Hub.find_by(name: sheet_name, tenant_id: user.tenant_id)
+        hub = Hub.find_by(name: sheet_name, organization_id: user.organization_id)
         hub_fees = _hub_fees
         customs = _customs
         if hub
@@ -122,16 +122,16 @@ module ExcelTool
 
     def find_hub(row)
       hub_name = row[:destination].ends_with?(" #{hub_type_name[row[:mot].downcase]}") ? row[:destination] : "#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"
-      Hub.find_by(name: hub_name, tenant_id: user.tenant_id)
+      Hub.find_by(name: hub_name, organization_id: user.organization_id)
     end
 
     def tenant_vehicle_id(row)
       if row[:carrier]
         carrier = Carrier.find_or_create_by!(name: row[:carrier])
-        carrier.get_tenant_vehicle(user.tenant_id, row[:mot].downcase, row[:service_level]).try(:id)
+        carrier.get_tenant_vehicle(user.organization_id, row[:mot].downcase, row[:service_level]).try(:id)
       else
         TenantVehicle.find_by(
-          tenant_id: user.tenant_id,
+          organization_id: user.organization_id,
           mode_of_transport: row[:mot].downcase,
           name: row[:service_level]
         ).try(:id)
@@ -143,7 +143,7 @@ module ExcelTool
       Vehicle.create_from_name(
         name: name,
         mot: row[:mot].downcase,
-        tenant_id: user.tenant_id,
+        organization_id: user.organization_id,
         carrier: row[:carrier],
         sandbox: @sandbox
       ).try(:id)
@@ -265,7 +265,7 @@ module ExcelTool
         'fees' => {},
         'direction' => direction,
         'mode_of_transport' => mot,
-        'tenant_id' => hub.tenant_id,
+        'organization_id' => hub.organization_id,
         'hub_id' => hub.id,
         'load_type' => lt,
         'tenant_vehicle_id' => tv_id != 'general' ? tv_id : nil,
@@ -433,7 +433,7 @@ module ExcelTool
 
       charge[:expiration_date] = row[:expiration_date]
       charge[:effective_date] = row[:effective_date]
-      ChargeCategory.find_or_create_by!(code: row[:fee_code].downcase, name: row[:fee], tenant_id: @user.tenant_id)
+      ChargeCategory.find_or_create_by!(code: row[:fee_code].downcase, name: row[:fee], organization_id: @user.organization_id)
       charge
     end
 

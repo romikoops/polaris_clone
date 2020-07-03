@@ -101,14 +101,14 @@ module ExcelTool
     def find_or_creat_tenant_vehicle(row)
       service_level = row[:service_level] || 'standard'
       tv = TenantVehicle.find_by(
-        tenant_id: @user.tenant_id,
+        organization_id: @user.organization_id,
         mode_of_transport: itinerary.mode_of_transport,
         name: row[:service_level],
         sandbox: @sandbox,
         carrier: Carrier.find_by(name: row[:carrier])
       )
       tv ||= TenantVehicle.find_by(
-        tenant_id: @user.tenant_id,
+        organization_id: @user.organization_id,
         mode_of_transport: itinerary.mode_of_transport,
         sandbox: @sandbox,
         name: row[:service_level]
@@ -116,7 +116,7 @@ module ExcelTool
       tv ||= Vehicle.create_from_name(
         name: service_level,
         mot: itinerary.mode_of_transport,
-        tenant_id: @user.tenant_id,
+        organization_id: @user.organization_id,
         carrier: row[:carrier],
         sandbox: @sandbox
       )

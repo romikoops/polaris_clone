@@ -4,10 +4,9 @@ require 'rails_helper'
 require 'roo'
 
 RSpec.describe ExcelDataServices::FileWriters::Hubs do
-  let(:tenant) { FactoryBot.create(:tenant) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
-  let!(:hubs) { create(:gothenburg_hub, free_out: false, tenant: tenant, mandatory_charge: create(:mandatory_charge), nexus: create(:gothenburg_nexus)) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let!(:hubs) { create(:gothenburg_hub, free_out: false, organization: organization, mandatory_charge: create(:mandatory_charge), nexus: create(:gothenburg_nexus)) }
   let!(:hub_headers) do
     %w(status
        type
@@ -45,7 +44,7 @@ RSpec.describe ExcelDataServices::FileWriters::Hubs do
 
   describe '.perform' do
     it 'creates the routes' do
-      result = described_class.write_document(tenant: tenant, user: tenants_user, file_name: 'test.xlsx', sandbox: nil, options: {})
+      result = described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', sandbox: nil, options: {})
       xlsx = Roo::Excelx.new(StringIO.new(result.file.download))
       first_sheet = xlsx.sheet(xlsx.sheets.first)
       expect(first_sheet.row(1)).to eq(hub_headers)

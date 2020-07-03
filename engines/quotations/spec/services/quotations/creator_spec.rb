@@ -3,23 +3,22 @@
 require 'rails_helper'
 
 RSpec.describe Quotations::Creator do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:legacy_user) { FactoryBot.create(:legacy_user) }
-  let(:origin_nexus) { FactoryBot.create(:legacy_nexus, tenant: legacy_tenant) }
-  let(:destination_nexus) { FactoryBot.create(:legacy_nexus, tenant: legacy_tenant) }
+  let(:user) { FactoryBot.create(:organizations_user) }
+  let(:origin_nexus) { FactoryBot.create(:legacy_nexus, organization: user.organization) }
+  let(:destination_nexus) { FactoryBot.create(:legacy_nexus, organization: user.organization) }
   let(:bas_charge) { FactoryBot.create(:legacy_charge_categories, :bas) }
-  let(:itinerary) { FactoryBot.create(:legacy_itinerary, :default, tenant: legacy_tenant, name: 'Gothenburg - Shanghai') }
-  let(:origin_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: legacy_tenant, nexus: origin_nexus) }
-  let(:destination_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: legacy_tenant, nexus: destination_nexus) }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'express', tenant: legacy_tenant) }
-  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slow', tenant: legacy_tenant) }
+  let(:itinerary) { FactoryBot.create(:legacy_itinerary, :default, organization: user.organization, name: 'Gothenburg - Shanghai') }
+  let(:origin_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: user.organization, nexus: origin_nexus) }
+  let(:destination_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: user.organization, nexus: destination_nexus) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'express', organization: user.organization) }
+  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slow', organization: user.organization) }
   let(:desired_start_date) { 1.month.from_now.to_date }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, tenant: legacy_tenant, desired_start_date: desired_start_date) }
+  let(:shipment) { FactoryBot.create(:legacy_shipment, organization: user.organization, desired_start_date: desired_start_date) }
   let(:charge_breakdown) { FactoryBot.create(:legacy_charge_breakdown, shipment: shipment) }
   let(:charge) { charge_breakdown.grand_total }
   let(:charge_breakdown_2) { FactoryBot.create(:legacy_charge_breakdown, shipment: shipment) }
   let(:charge_2) { charge_breakdown.grand_total }
-  let(:target_charge) { Legacy::ChargeCategory.find_by(code: 'bas', tenant: legacy_tenant) }
+  let(:target_charge) { Legacy::ChargeCategory.find_by(code: 'bas', organization: user.organization) }
   let(:trip_1) { FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
   let(:trip_2) { FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2) }
   let(:results) do
@@ -46,10 +45,8 @@ RSpec.describe Quotations::Creator do
   end
 
   describe '#perform' do
-    let!(:klass) { described_class.new(results: results, shipment: shipment, user: legacy_user) }
+    let!(:klass) { described_class.new(results: results, shipment: shipment, user: user) }
     let(:result) { klass.perform }
-
-    before { Tenants::Tenant.create(legacy: legacy_tenant) }
 
     context 'when creating quotations' do
       it 'creates a single quotation for a user per input object received' do

@@ -17,9 +17,11 @@ const propsBase = {
   user,
   contentDispatch: {
     getContentForComponent: () => []
+  },
+  authenticationDispatch: {
+    goTo: jest.fn((x) => true)
   }
 }
-
 
 test('shallow render', () => {
   expect(shallow(<Landing {...propsBase} />)).toMatchSnapshot()
@@ -77,5 +79,22 @@ describe('shouldShowLogin()', () => {
     const wrapper = shallow(<BasicLanding {...props} />)
     expect(wrapper.instance().shouldShowLogin()).toEqual(true)
   })
-})
 
+  it('redirects to /booking when the shop is open', () => {
+    const props = {
+      ...propsBase,
+      tenant: {
+        ...propsBase.tenant,
+        scope: {
+          ...propsBase.tenant.scope,
+          closed_shop: false,
+          closed_quotation_tool: false
+        }
+      },
+      user: null
+    }
+    const wrapper = shallow(<BasicLanding {...props} />)
+    wrapper.instance().bookNow()
+    expect(props.authenticationDispatch.goTo.mock.calls.length).toBe(1)
+  })
+})

@@ -1,0 +1,8 @@
+  <mj-section full-width="full-width" padding="0px">
+    <mj-column width="100%" padding="0 2.5%">
+      <mj-text line-height="10px">
+        <p>A guest user has generated a quote through your ItsMyCargo Quotation Tool
+        </p>
+      </mj-text>
+    </mj-column>
+  </mj-section>

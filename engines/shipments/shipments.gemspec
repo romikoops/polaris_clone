@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
     The Shipments Engine is responsible for handling the data level of shipment requests and shipments
   SUMMARY
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-quotations'
   s.add_dependency 'imc-routing'
   s.add_dependency 'imc-sequential'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
 
   Gemhelper.common(s)
 end

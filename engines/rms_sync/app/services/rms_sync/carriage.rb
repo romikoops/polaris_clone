@@ -3,9 +3,9 @@
 module RmsSync
   class Carriage < RmsSync::Base
 
-    def initialize(tenant_id:, sheet_type: :carriage, sandbox: nil)
+    def initialize(organization_id:, sheet_type: :carriage, sandbox: nil)
       super
-      @book = RmsData::Book.find_or_create_by(tenant: @tenant, sheet_type: sheet_type)
+      @book = RmsData::Book.find_or_create_by(organization: @organization, sheet_type: sheet_type)
       @hash = Hash.new { |h, k| h[k] = {} }
     end
 
@@ -35,11 +35,11 @@ module RmsSync
     end
 
     def hubs_by_country
-      ::Legacy::Hub.where(tenant_id: @tenant.legacy_id, sandbox: @sandbox).group_by { |h| h.address&.country&.code }
+      ::Legacy::Hub.where(organization_id: @organization.id).group_by { |h| h.address&.country&.code }
     end
 
     def create_sheet(index:, name: '', metadata: {})
-      @book.sheets.create(tenant_id: @tenant.id, sheet_index: index, name: name, metadata: metadata)
+      @book.sheets.create(organization_id: @organization.id, sheet_index: index, name: name, metadata: metadata)
     end
 
     def write_sheets
@@ -50,7 +50,7 @@ module RmsSync
           @sheet = create_sheet(
             index: sheet_index,
             name: courier&.name,
-            metadata: { 
+            metadata: {
               courier_id: courier_id,
               courier_name: courier&.name,
               modifier: data[:modifier]

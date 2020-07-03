@@ -9,8 +9,8 @@ const genericEvents = {
           hitType: 'identify',
           userId: get(state, 'authentication.user.uuid'),
           traits: {
-            tenant_id: get(state, 'app.tenant.id'),
-            tenant: get(state, 'app.tenant.slug'),
+            organization_id: get(state, 'app.organization.id'),
+            organization: get(state, 'app.organization.slug'),
 
             email: get(state, 'authentication.user.email'),
             firstName: get(state, 'authentication.user.first_name'),
@@ -24,20 +24,20 @@ const genericEvents = {
       return {
         hitType: 'identify',
         traits: {
-          tenant_id: get(state, 'app.tenant.id'),
-          tenant: get(state, 'app.tenant.slug')
+          organization_id: get(state, 'app.organization.id'),
+          organization: get(state, 'app.organization.slug')
         }
       }
     }
   }
 }
 
-const tenantEvents = {
-  SET_TENANT_SUCCESS: (action, state) => ({
+const organizationEvents = {
+  SET_ORGANIZATION_SUCCESS: (action, state) => ({
     hitType: 'identify',
     traits: {
-      tenant_id: get(state, 'app.tenant.id'),
-      tenant: get(state, 'app.tenant.slug')
+      organization_id: get(state, 'app.organization.id'),
+      organization: get(state, 'app.organization.slug')
     }
   })
 }
@@ -52,8 +52,8 @@ const userEvents = {
         hitType: 'identify',
         userId: get(state, 'authentication.user.uuid'),
         traits: {
-          tenant_id: get(state, 'app.tenant.id'),
-          tenant: get(state, 'app.tenant.slug'),
+          organization_id: get(state, 'app.organization.id'),
+          organization: get(state, 'app.organization.slug'),
 
           email: get(state, 'authentication.user.email'),
           firstName: get(state, 'authentication.user.first_name'),
@@ -121,7 +121,7 @@ const eventsMap = {
   ...adminEvents,
   ...navigationEvents,
   ...offerEvents,
-  ...tenantEvents,
+  ...organizationEvents,
   ...userEvents
 }
 

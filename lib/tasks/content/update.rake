@@ -456,12 +456,12 @@ namespace :content do
     }
     s3 = Aws::S3::Client.new
 
-    custom_content.each do |subdomain, content_array|
-      tenant = ::Tenant.find_by(subdomain: subdomain)
-      ::Legacy::Content.where(tenant_id: tenant.id).destroy_all
+    custom_content.each do |slug, content_array|
+      organizations = ::Organizations::Organization.find_by(slug: slug)
+      ::Legacy::Content.where(organization_id: organizations.id).destroy_all
       content_array.each do |content_hash|
         content = ::Legacy::Content.find_or_create_by!(
-          tenant_id: tenant.id,
+          organization_id: organizations.id,
           component: content_hash[:component],
           section: content_hash[:section],
           index: content_hash[:index]

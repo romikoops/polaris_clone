@@ -12,7 +12,7 @@ describe('deletePricing', () => {
   const dummyPricing = {
     id: 123,
     group_id: v4(),
-    tenant_id: 1,
+    organization_id: 1,
     itinerary_id: 2
   }
   const store = mockStore({})
@@ -25,7 +25,7 @@ describe('deletePricing', () => {
 
   it('creates DELETE_PRICING_SUCCESS when it originates from a group', () => {
     expect.assertions(1)
-    fetch.once(() => new Promise(resolve => setTimeout(() => resolve({ body: JSON.stringify({ data: { tenant_id: null } }) }), 10)))
+    fetch.once(() => new Promise(resolve => setTimeout(() => resolve({ body: JSON.stringify({ data: { organization_id: null } }) }), 10)))
     const expectedActions = [
       { type: adminConstants.DELETE_PRICING_REQUEST },
       { type: adminConstants.DELETE_PRICING_SUCCESS, payload: { fromGroup: true, pricing: dummyPricing } }
@@ -38,7 +38,7 @@ describe('deletePricing', () => {
 
   it('creates DELETE_PRICING_SUCCESS when it originates from a group', () => {
     expect.assertions(1)
-    fetch.once(() => new Promise(resolve => setTimeout(() => resolve({ body: JSON.stringify({ data: { tenant_id: null } }) }), 10)))
+    fetch.once(() => new Promise(resolve => setTimeout(() => resolve({ body: JSON.stringify({ data: { organization_id: null } }) }), 10)))
     const expectedActions = [
       { type: adminConstants.DELETE_PRICING_REQUEST },
       { type: adminConstants.DELETE_PRICING_SUCCESS, payload: { fromGroup: true, pricing: dummyPricing } }

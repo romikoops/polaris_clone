@@ -7,8 +7,7 @@ module Legacy
 
     has_paper_trail
 
-    belongs_to :tenant, class_name: 'Legacy::Tenant'
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+    belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :nexus, class_name: 'Legacy::Nexus'
     belongs_to :mandatory_charge, optional: true
     belongs_to :address, class_name: 'Legacy::Address'
@@ -60,7 +59,8 @@ module Legacy
     MOT_HUB_NAME = {
       'ocean' => 'Port',
       'air' => 'Airport',
-      'rail' => 'Railway Station'
+      'rail' => 'Railway Station',
+      'truck' => 'Depot'
     }.freeze
 
     def lat_lng_string
@@ -120,12 +120,18 @@ end
 #  address_id          :integer
 #  mandatory_charge_id :integer
 #  nexus_id            :integer
+#  organization_id     :uuid
 #  sandbox_id          :uuid
 #  tenant_id           :integer
 #
 # Indexes
 #
-#  index_hubs_on_point       (point) USING gist
-#  index_hubs_on_sandbox_id  (sandbox_id)
-#  index_hubs_on_tenant_id   (tenant_id)
+#  index_hubs_on_organization_id  (organization_id)
+#  index_hubs_on_point            (point) USING gist
+#  index_hubs_on_sandbox_id       (sandbox_id)
+#  index_hubs_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

@@ -2,7 +2,7 @@
 
 module Tenants
   class SamlMetadatum < ApplicationRecord
-    belongs_to :tenant
+    belongs_to :organization, class_name: 'Organizations::Organization'
     validates :content, presence: true
   end
 end

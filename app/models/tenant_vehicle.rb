@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TenantVehicle < Legacy::TenantVehicle
-  belongs_to :tenant
+  belongs_to :organization, class_name: 'Organizations::Organization'
   belongs_to :vehicle
   belongs_to :carrier, optional: true
   has_many :pricings
@@ -13,7 +13,7 @@ class TenantVehicle < Legacy::TenantVehicle
     default_tvt = TenantVehicle.find_by(
       mode_of_transport: tvt.mode_of_transport,
       is_default: true,
-      tenant_id: tvt.tenant_id
+      organization_id: tvt.organization_id
     )
     tvt.is_default = true unless default_tvt
     tvt.save!
@@ -31,12 +31,18 @@ end
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  carrier_id        :integer
+#  organization_id   :uuid
 #  sandbox_id        :uuid
 #  tenant_id         :integer
 #  vehicle_id        :integer
 #
 # Indexes
 #
-#  index_tenant_vehicles_on_sandbox_id  (sandbox_id)
-#  index_tenant_vehicles_on_tenant_id   (tenant_id)
+#  index_tenant_vehicles_on_organization_id  (organization_id)
+#  index_tenant_vehicles_on_sandbox_id       (sandbox_id)
+#  index_tenant_vehicles_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

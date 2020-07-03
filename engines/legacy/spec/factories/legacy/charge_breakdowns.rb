@@ -34,20 +34,20 @@ FactoryBot.define do
         section_charge_category = Legacy::ChargeCategory.find_by(
           name: section.humanize,
           code: section,
-          tenant_id: shipment.tenant_id
+          organization_id: shipment.organization_id
         ) || create(:legacy_charge_categories,
                     name: section.humanize,
                     code: section,
-                    tenant_id: shipment.tenant_id)
+                    organization_id: shipment.organization_id)
 
         base_charge = create(
           :legacy_charge,
           charge_breakdown: charge_breakdown,
           charge_category: Legacy::ChargeCategory.from_code(
-            code: 'base_node', name: 'Base Node', tenant_id: shipment.tenant_id
+            code: 'base_node', name: 'Base Node', organization_id: shipment.organization_id
           ),
           children_charge_category: Legacy::ChargeCategory.from_code(
-            code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+            code: 'grand_total', name: 'Grand Total', organization_id: shipment.organization_id
           )
         )
 
@@ -55,7 +55,7 @@ FactoryBot.define do
           :legacy_charge,
           charge_breakdown: charge_breakdown,
           charge_category: Legacy::ChargeCategory.from_code(
-            code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+            code: 'grand_total', name: 'Grand Total', organization_id: shipment.organization_id
           ),
           children_charge_category: section_charge_category,
           parent_id: base_charge.id,
@@ -67,7 +67,7 @@ FactoryBot.define do
                                               name: cargo_unit_charge_category_code.humanize,
                                               code: cargo_unit_charge_category_code,
                                               cargo_unit_id: cargo_unit[:id],
-                                              tenant_id: shipment.tenant_id)
+                                              organization_id: shipment.organization_id)
 
           cargo_charge = create(
             :legacy_charge,
@@ -87,7 +87,7 @@ FactoryBot.define do
             children_charge_category: create(:legacy_charge_categories,
                                              name: 'Basic Freight',
                                              code: 'bas',
-                                             tenant_id: shipment.tenant_id)
+                                             organization_id: shipment.organization_id)
           )
           if evaluator.with_tender
             FactoryBot.create(:quotations_line_item,
@@ -101,7 +101,10 @@ FactoryBot.define do
           charge_breakdown.charges << cargo_charge
           charge_breakdown.charges << cargo_unit_charge
         end
-        tender.update(amount: tender.line_items.sum(&:amount)) if evaluator.with_tender
+        if evaluator.with_tender
+          line_item_total = tender.line_items.sum(&:amount)
+          tender.update(amount: line_item_total, original_amount: line_item_total)
+        end
       end
     end
   end

@@ -8,26 +8,27 @@ module Api
 
     before do
       request.headers['Authorization'] = token_header
+      { USD: 1.26, SEK: 8.26 }.each do |currency, rate|
+        FactoryBot.create(:legacy_exchange_rate, from: currency, to: "EUR", rate: rate)
+      end
     end
 
-    let(:tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-    let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, tokens: {}, with_profile: true) }
-    let(:tenants_user) { Tenants::User.find_by(legacy: user) }
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenants_user.id, scopes: 'public') }
+    let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
+    let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization_id: organization.id) }
+    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
     let(:token_header) { "Bearer #{access_token.token}" }
 
     describe 'POST #create' do
-      let(:origin_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
-      let(:destination_nexus) { FactoryBot.create(:legacy_nexus, tenant: tenant) }
-      let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-      let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+      let(:origin_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
+      let(:destination_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
+      let(:origin_hub) { itinerary.origin_hub }
+      let(:destination_hub) { itinerary.destination_hub }
       let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
       let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'quickly') }
-      let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
+      let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
       let(:trip_1) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle) }
       let(:trip_2) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: 'container', tenant_vehicle: tenant_vehicle_2) }
-      let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: tenants_user.id, scopes: 'public') }
+      let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
       let(:token_header) { "Bearer #{access_token.token}" }
       let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
       let(:trips) do
@@ -43,10 +44,11 @@ module Api
       let(:load_type) { 'container' }
       let(:params) do
         {
+          organization_id: organization.id,
           quote: {
             selected_date: Time.zone.now,
-            tenant_id: tenant.id,
-            user_id: tenants_user.id,
+            organization_id: organization.id,
+            user_id: user.id,
             load_type: load_type,
             origin: { nexus_id: origin_hub.nexus_id },
             destination: { nexus_id: destination_hub.nexus_id }
@@ -62,12 +64,12 @@ module Api
       context 'with available tenders' do
         before do
           [tenant_vehicle, tenant_vehicle_2].each do |t_vehicle|
-            FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, tenant: tenant)
-            FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, tenant: tenant)
+            FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, organization: organization)
+            FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, organization: organization)
           end
           OfferCalculator::Schedule.from_trips(trips)
-          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, tenant: tenant)
-          FactoryBot.create(:freight_margin, default_for: 'ocean', tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, organization: organization)
+          FactoryBot.create(:freight_margin, default_for: 'ocean', organization_id: organization.id, applicable: organization, value: 0)
         end
 
         context 'when client is provided' do
@@ -87,6 +89,8 @@ module Api
         context 'when no client is provided' do
           before do
             params[:quote][:user_id] = nil
+            FactoryBot.create(:groups_group, organization: organization, name: 'default')
+            FactoryBot.create(:organizations_scope, target: organization, content: { default_currency: 'usd' })
           end
 
           it 'returns prices with default margins' do
@@ -143,7 +147,7 @@ module Api
 
           before do
             FactoryBot.create(:legacy_max_dimensions_bundle,
-                              tenant: tenant,
+                              organization: organization,
                               mode_of_transport: 'ocean',
                               payload_in_kg: 10_000,
                               cargo_class: 'fcl_20')
@@ -199,14 +203,14 @@ module Api
 
     describe 'GET #show' do
       before do
-        FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, tenant: tenant, user: user)
+        FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, organization_id: organization.id, user: user)
       end
 
       context 'when origin and destinations are nexuses' do
         let(:quotation) { Quotations::Quotation.last }
 
         it 'renders origin and destination as nexus objects' do
-          get :show, params: { id: quotation.id }
+          get :show, params: { organization_id: organization.id, id: quotation.id }
 
           aggregate_failures do
             expect(response_data.dig('attributes', 'origin', 'data', 'id').to_i).to eq quotation.origin_nexus_id
@@ -225,7 +229,7 @@ module Api
         end
 
         it 'renders origin and destination as address objects' do
-          get :show, params: { id: quotation.id }
+          get :show, params: { organization_id: organization.id, id: quotation.id }
 
           aggregate_failures do
             expect(response_data.dig('attributes', 'origin', 'data', 'id').to_i).to eq quotation.pickup_address_id
@@ -239,7 +243,7 @@ module Api
         let!(:cargo_item) { FactoryBot.create(:legacy_cargo_item, shipment: Legacy::Shipment.last) }
 
         it 'returns the cargo items' do
-          get :show, params: { id: quotation.id }
+          get :show, params: { organization_id: organization.id, id: quotation.id }
 
           expect(response_data.dig('attributes', 'cargoItems', 'data', 0, 'id').to_i).to eq cargo_item.id
         end

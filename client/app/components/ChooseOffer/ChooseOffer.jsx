@@ -368,19 +368,20 @@ class ChooseOffer extends Component {
                   </div>
                 ))
               ) : ''}
-              <div className={`flex-100 layout-row layout-align-center-center ${styles.download_button}`}>
-                <div className="flex-90 layout-row layout-align-center-center layout-wrap">
-                  <DocumentsDownloader
-                    theme={theme}
-                    target="quotations"
-                    disabled={selectedOffers.length < 1}
-                    options={{ quotes: selectedOffers, shipment }}
-                    size="full"
-                    shipment={shipment}
-                  />
-                </div>
-              </div>
-              <div className={`flex-100 layout-row layout-align-center-center ${styles.send_email}`}>
+              { !user.guest && [(
+                <div className={`flex-100 layout-row layout-align-center-center ${styles.download_button}`}>
+                  <div className="flex-90 layout-row layout-align-center-center layout-wrap">
+                    <DocumentsDownloader
+                      theme={theme}
+                      target="quotations"
+                      disabled={selectedOffers.length < 1}
+                      options={{ quotes: selectedOffers, shipment }}
+                      size="full"
+                      shipment={shipment}
+                    />
+                  </div>
+                </div>),
+              (<div className={`flex-100 layout-row layout-align-center-center ${styles.send_email}`}>
                 <div className="flex-90 layout-row layout-align-center-center layout-wrap">
                   <RoundButton
                     theme={theme}
@@ -391,7 +392,7 @@ class ChooseOffer extends Component {
                     handleNext={() => this.selectQuotes(shipment, selectedOffers, this.props.user.email)}
                   />
                 </div>
-              </div>
+              </div>)]}
               <p style={{ fontSize: '10px', margin: '10px' }}>
                 <ExchangeRatesHolder exchangeRates={exchangeRates} />
               </p>

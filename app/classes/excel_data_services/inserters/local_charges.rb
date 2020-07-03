@@ -24,14 +24,14 @@ module ExcelDataServices
       def create_missing_charge_categories(charges_data)
         keys_and_names = charges_data.flat_map { |single| single[:fees].values.map { |fee| fee.slice(:key, :name) } }
         keys_and_names.uniq { |pair| pair[:key] }.each do |pair|
-          ChargeCategory.from_code(code: pair[:key], tenant_id: tenant.id, name: pair[:name], sandbox: @sandbox)
+          ChargeCategory.from_code(code: pair[:key], organization_id: organization.id, name: pair[:name], sandbox: @sandbox)
         end
       end
 
       def assign_correct_hubs(charges_data)
         charges_data.each do |params|
           row = ExcelDataServices::Rows::Base.get(klass_identifier).new(
-            row_data: params, tenant: tenant
+            row_data: params, organization: organization
           )
 
           origin_hub_with_info = find_hub_by_name_or_locode_with_info(
@@ -62,7 +62,7 @@ module ExcelDataServices
 
       def all_carriers_of_tenant
         @all_carriers_of_tenant ||= Carrier.where(
-          id: TenantVehicle.where(tenant_id: tenant.id, sandbox: @sandbox).pluck(:carrier_id).compact.uniq
+          id: TenantVehicle.where(organization_id: organization.id, sandbox: @sandbox).pluck(:carrier_id).compact.uniq
         )
       end
 
@@ -70,7 +70,7 @@ module ExcelDataServices
         service_level = params[:service_level]
         tv_params = { name: service_level,
                       carrier: carrier,
-                      tenant: tenant,
+                      organization: organization,
                       mode_of_transport: params[:mot],
                       sandbox: @sandbox }
         tv_params.delete(:name) if service_level.casecmp?('all')
@@ -80,7 +80,7 @@ module ExcelDataServices
           [Vehicle.create_from_name(
             name: service_level,
             carrier_name: carrier&.name,
-            tenant_id: tenant.id,
+            organization_id: organization.id,
             mot: params[:mot], sandbox: @sandbox
           )]
       end
@@ -108,7 +108,7 @@ module ExcelDataServices
           :hub_id,
           :counterpart_hub_id
         ).merge(
-          tenant_id: tenant.id,
+          organization_id: organization.id,
           effective_date: Date.parse(params[:effective_date].to_s).beginning_of_day,
           expiration_date: Date.parse(params[:expiration_date].to_s).end_of_day.change(usec: 0),
           mode_of_transport: params[:mot],

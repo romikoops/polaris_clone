@@ -4,12 +4,12 @@ module Api
   module Routing
     module Trucking
       class CapabilityService < Api::Routing::Trucking::Base
-        def self.capability(tenant:, load_type:)
-          new(tenant: tenant, load_type: load_type).perform
+        def self.capability(organization:, load_type:)
+          new(organization: organization, load_type: load_type).perform
         end
 
-        def initialize(tenant:, load_type:)
-          super(tenant: tenant, load_type: load_type, target: nil)
+        def initialize(organization:, load_type:)
+          super(organization: organization, load_type: load_type, target: nil)
         end
 
         def perform

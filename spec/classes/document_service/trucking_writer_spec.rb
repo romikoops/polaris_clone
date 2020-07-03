@@ -4,12 +4,12 @@ require 'rails_helper'
 
 RSpec.describe DocumentService::TruckingWriter do
   context 'class methods' do
-    let(:tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: tenant) }
-    let(:args) { { hub_id: hub.id, tenant_id: tenant.id } }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: organization) }
+    let(:args) { { hub_id: hub.id, organization_id: organization.id } }
     let(:trucking_location) { FactoryBot.create(:trucking_location, zipcode: '30001') }
     let!(:target) { FactoryBot.create(:trucking_trucking, hub: hub, location: trucking_location) }
-    
+
     describe '.consecutive_arrays' do
       it 'returns the correct alphanumeric range' do
         data = %w(AB12 AB13 AB14 AB15 AB16).map { |code| { city_name: code, country_code: 'UK' } }

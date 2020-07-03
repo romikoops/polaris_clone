@@ -5,10 +5,9 @@ require 'rails_helper'
 module Pricings
   RSpec.describe Pricing, type: :model do
     context 'class methods' do
-      let(:tenant) { FactoryBot.create(:legacy_tenant) }
-      let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-      let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
-      let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
+      let!(:organization) { FactoryBot.create(:organizations_organization) }
+      let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', organization: organization) }
+      let(:itinerary_1) { FactoryBot.create(:default_itinerary, organization: organization) }
       let!(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
       let!(:fcl_20_pricing) { FactoryBot.create(:fcl_20_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
       let!(:fcl_40_pricing) { FactoryBot.create(:fcl_40_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
@@ -55,10 +54,9 @@ module Pricings
     end
 
     context 'instance methods' do
-      let(:tenant) { FactoryBot.create(:legacy_tenant) }
-      let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-      let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
-      let(:itinerary_1) { FactoryBot.create(:default_itinerary, tenant: tenant) }
+      let(:organization) { FactoryBot.create(:organizations_organization) }
+      let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', organization: organization) }
+      let(:itinerary_1) { FactoryBot.create(:default_itinerary, organization: organization) }
       let!(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
       describe '.for_table_json' do
         it 'returns the pricing as a hash' do
@@ -67,7 +65,7 @@ module Pricings
           expect(result['effective_date']).to eq(lcl_pricing.effective_date)
           expect(result['expiration_date']).to eq(lcl_pricing.expiration_date)
           expect(result['wm_rate']).to eq(lcl_pricing.wm_rate)
-          expect(result['tenant_id']).to eq(lcl_pricing.tenant_id)
+          expect(result['organization_id']).to eq(lcl_pricing.organization_id)
           expect(result['itinerary_id']).to eq(lcl_pricing.itinerary_id)
           expect(result['load_type']).to eq(lcl_pricing.load_type)
           expect(result['cargo_class']).to eq(lcl_pricing.cargo_class)
@@ -96,10 +94,12 @@ end
 #  group_id          :uuid
 #  itinerary_id      :bigint
 #  legacy_id         :integer
+#  old_user_id       :bigint
+#  organization_id   :uuid
 #  sandbox_id        :uuid
 #  tenant_id         :bigint
 #  tenant_vehicle_id :integer
-#  user_id           :bigint
+#  user_id           :uuid
 #
 # Indexes
 #
@@ -107,9 +107,16 @@ end
 #  index_pricings_pricings_on_group_id           (group_id)
 #  index_pricings_pricings_on_itinerary_id       (itinerary_id)
 #  index_pricings_pricings_on_load_type          (load_type)
+#  index_pricings_pricings_on_old_user_id        (old_user_id)
+#  index_pricings_pricings_on_organization_id    (organization_id)
 #  index_pricings_pricings_on_sandbox_id         (sandbox_id)
 #  index_pricings_pricings_on_tenant_id          (tenant_id)
 #  index_pricings_pricings_on_tenant_vehicle_id  (tenant_vehicle_id)
 #  index_pricings_pricings_on_user_id            (user_id)
 #  index_pricings_pricings_on_validity           (validity) USING gist
+#
+# Foreign Keys
+#
+#  fk_rails_     (user_id => users_users.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

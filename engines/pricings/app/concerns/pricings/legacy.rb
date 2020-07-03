@@ -23,7 +23,7 @@ module Pricings
           wm_rate: pricing.wm_rate,
           effective_date: pricing.effective_date,
           expiration_date: pricing.expiration_date,
-          tenant_id: pricing.tenant_id,
+          organization_id: pricing.organization_id,
           cargo_class: pricing.transport_category.cargo_class,
           load_type: pricing.transport_category.load_type,
           user_id: pricing.user_id,
@@ -42,13 +42,13 @@ module Pricings
           hw_rate_basis: pricing_detail.hw_rate_basis,
           charge_category_id: Legacy::ChargeCategory.find_by(
             code: pricing_detail.shipping_type,
-            tenant_id: pricing_detail.tenant_id
+            organization_id: pricing_detail.organization_id
           )&.id,
           range: pricing_detail.range,
           currency_name: pricing_detail.currency_name,
           currency_id: pricing_detail.currency_id,
           pricing_id: pricing_detail.pricing_id,
-          tenant_id: pricing_detail.tenant_id
+          organization_id: pricing_detail.organization_id
         }
       end
     end

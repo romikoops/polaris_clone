@@ -18,13 +18,16 @@ end
 #  first_name   :string           default(""), not null
 #  last_name    :string           default(""), not null
 #  phone        :string
+#  old_user_id  :uuid
 #  user_id      :uuid
 #
 # Indexes
 #
-#  index_profiles_profiles_on_user_id  (user_id)
+#  index_profiles_profiles_on_old_user_id  (old_user_id)
+#  index_profiles_profiles_on_user_id      (user_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (user_id => tenants_users.id) ON DELETE => cascade
+#  fk_rails_     (user_id => users_users.id)
+#  fk_rails_...  (old_user_id => tenants_users.id) ON DELETE => cascade
 #

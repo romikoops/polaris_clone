@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe Trucking::Queries::FindByHubIds do
   describe '.perform' do
-    let(:tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: organization) }
 
     let(:trucking_location_zipcode) { FactoryBot.create(:trucking_location, :zipcode) }
     let(:trucking_location_geometry)  { FactoryBot.create(:trucking_location, :with_location) }
@@ -23,8 +23,7 @@ RSpec.describe Trucking::Queries::FindByHubIds do
     end
 
     describe '.find_by_hub_id' do
-      let(:tenant) { FactoryBot.create(:legacy_tenant) }
-      let(:hub)    { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: tenant) }
+      let(:hub)    { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: organization) }
       let(:courier_name) { 'Test Courier' }
       let(:courier) { FactoryBot.create(:trucking_courier, name: courier_name) }
 

@@ -4,7 +4,7 @@ module Pricings
   class Fee < ApplicationRecord
     include ::Pricings::Legacy
     has_paper_trail
-    belongs_to :tenant, class_name: 'Legacy::Tenant'
+    belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :pricing, class_name: '::Pricings::Pricing'
     belongs_to :rate_basis, class_name: '::Pricings::RateBasis'
     belongs_to :hw_rate_basis, class_name: '::Pricings::RateBasis', optional: true
@@ -64,6 +64,7 @@ end
 #  currency_id        :bigint
 #  hw_rate_basis_id   :uuid
 #  legacy_id          :integer
+#  organization_id    :uuid
 #  pricing_id         :uuid
 #  rate_basis_id      :uuid
 #  sandbox_id         :uuid
@@ -71,7 +72,12 @@ end
 #
 # Indexes
 #
-#  index_pricings_fees_on_pricing_id  (pricing_id)
-#  index_pricings_fees_on_sandbox_id  (sandbox_id)
-#  index_pricings_fees_on_tenant_id   (tenant_id)
+#  index_pricings_fees_on_organization_id  (organization_id)
+#  index_pricings_fees_on_pricing_id       (pricing_id)
+#  index_pricings_fees_on_sandbox_id       (sandbox_id)
+#  index_pricings_fees_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

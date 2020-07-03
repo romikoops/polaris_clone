@@ -3,13 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe Wheelhouse::RouteFinderService, type: :service do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-  let(:user) { FactoryBot.create(:tenants_user, tenant: tenant) }
-  let!(:ocean_itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let!(:ocean_itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:gothenburg_port) { ocean_itinerary.origin_hub }
   let(:shanghai_port) { ocean_itinerary.destination_hub }
-  let(:air_itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, mode_of_transport: 'air', tenant: legacy_tenant) }
+  let(:air_itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, mode_of_transport: 'air', organization: organization) }
   let(:gothenburg_airport) { air_itinerary.origin_hub }
   let(:shanghai_airport) { air_itinerary.destination_hub }
   let(:gothenburg_address) { FactoryBot.create(:gothenburg_address) }
@@ -28,6 +27,7 @@ RSpec.describe Wheelhouse::RouteFinderService, type: :service do
   let(:destination_trucking_location) { FactoryBot.create(:trucking_location, location: destination_location, country_code: 'CN') }
   let(:result) do
     described_class.routes(
+      organization: organization,
       user: user,
       origin: origin,
       destination: destination,
@@ -38,8 +38,8 @@ RSpec.describe Wheelhouse::RouteFinderService, type: :service do
   before do
     FactoryBot.create(:lcl_pre_carriage_availability, hub: gothenburg_port, query_type: :location)
     FactoryBot.create(:lcl_on_carriage_availability, hub: shanghai_port, query_type: :location)
-    FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: gothenburg_port, location: origin_trucking_location)
-    FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: shanghai_port, carriage: 'on', location: destination_trucking_location)
+    FactoryBot.create(:trucking_trucking, organization: organization, hub: gothenburg_port, location: origin_trucking_location)
+    FactoryBot.create(:trucking_trucking, organization: organization, hub: shanghai_port, carriage: 'on', location: destination_trucking_location)
     Geocoder::Lookup::Test.add_stub([gothenburg_address.latitude, gothenburg_address.longitude], [
                                       'address_components' => [{ 'types' => ['premise'] }],
                                       'address' => gothenburg_address.geocoded_address,

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Hub < Legacy::Hub
-  belongs_to :tenant
+  belongs_to :organization, class_name: 'Organizations::Organization'
   belongs_to :nexus
   belongs_to :address
 
@@ -70,14 +70,14 @@ class Hub < Legacy::Hub
     end
   end
 
-  def self.create_from_nexus(nexus, mot, tenant_id)
+  def self.create_from_nexus(nexus, mot, organization_id)
     nexus.hubs.find_or_create_by(
       nexus_id: nexus.id,
-      tenant_id: tenant_id,
+      organization_id: organization_id,
       hub_type: mot,
       latitude: nexus.latitude,
       longitude: nexus.longitude,
-      name: "#{nexus.name} #{MOT_HUB_NAME[mot]}",
+      name: nexus.name,
       photo: nexus.photo
     )
   end
@@ -87,7 +87,7 @@ class Hub < Legacy::Hub
   end
 
   def self.prepped(user)
-    where(tenant_id: user.tenant_id).map do |hub|
+    where(organization_id: user.organization_id).map do |hub|
       { data: hub, address: hub.address.to_custom_hash }
     end
   end
@@ -215,12 +215,18 @@ end
 #  address_id          :integer
 #  mandatory_charge_id :integer
 #  nexus_id            :integer
+#  organization_id     :uuid
 #  sandbox_id          :uuid
 #  tenant_id           :integer
 #
 # Indexes
 #
-#  index_hubs_on_point       (point) USING gist
-#  index_hubs_on_sandbox_id  (sandbox_id)
-#  index_hubs_on_tenant_id   (tenant_id)
+#  index_hubs_on_organization_id  (organization_id)
+#  index_hubs_on_point            (point) USING gist
+#  index_hubs_on_sandbox_id       (sandbox_id)
+#  index_hubs_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

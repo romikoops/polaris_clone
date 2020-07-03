@@ -15,7 +15,7 @@ module ExcelDataServices
         def check_itinerary(row)
           itinerary = Itinerary.find_by(
             name: row.itinerary_name,
-            tenant: tenant,
+            organization: organization,
             mode_of_transport: row.mode_of_transport
           )
           return itinerary if itinerary.present?
@@ -65,7 +65,7 @@ module ExcelDataServices
           carrier = Carrier.find_by(name: row.carrier) if row.carrier.present?
 
           tenant_vehicle = TenantVehicle.find_by(
-            tenant: tenant,
+            organization: organization,
             name: row.service_level,
             mode_of_transport: row.mot,
             carrier: carrier

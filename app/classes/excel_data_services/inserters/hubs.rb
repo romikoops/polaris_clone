@@ -42,7 +42,7 @@ module ExcelDataServices
 
       def update_or_create_port_of_call(params:, type:)
         association, code_key = association_and_locode_key(type: type, mot: params[:hub_type])
-        assocation = association.where(params.slice(:tenant_id))
+        assocation = association.where(params.slice(:organization_id))
         port_of_call = assocation.find_by(params.slice(code_key))
         port_of_call ||= assocation.find_by(params.slice(:name))
         port_of_call ||= assocation.new(params.slice(:name, code_key))

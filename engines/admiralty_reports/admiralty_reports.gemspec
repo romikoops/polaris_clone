@@ -16,9 +16,11 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'imc-admiralty_assets'
   s.add_dependency 'imc-admiralty_auth'
+  s.add_dependency 'imc-companies'
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-quotations'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
+  s.add_dependency 'imc-organization_manager'
 
   s.add_dependency 'axlsx'
   s.add_dependency 'axlsx_rails'

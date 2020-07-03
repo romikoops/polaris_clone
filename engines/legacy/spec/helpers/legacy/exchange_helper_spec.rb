@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Legacy::ExchangeHelper do
   let(:base) { 'EUR' }
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
 
   describe '.sum_and_convert' do
     it 'sums and converts the hash object sent' do

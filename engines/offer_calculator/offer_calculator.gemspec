@@ -10,16 +10,17 @@ Gem::Specification.new do |s|
   s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'This engine houses the logic for determining offers in the legacy system'
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-legacy'
+  s.add_dependency 'imc-organizations'
+  s.add_dependency 'imc-organization_manager'
   s.add_dependency 'imc-pricings'
   s.add_dependency 'imc-quotations'
   s.add_dependency 'imc-result_formatter'
-  s.add_dependency 'imc-tenants'
   s.add_dependency 'imc-trucking'
 
   s.add_dependency 'chronic'

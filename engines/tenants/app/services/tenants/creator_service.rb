@@ -20,9 +20,10 @@ module Tenants
     end
 
     def create_tenant
-      @tenant = ::Tenants::Tenant.new(slug: tenant_params[:slug]).tap do |tenant|
+      @tenant = ::Organizations::Organization.new(slug: tenant_params[:slug]).tap do |tenant|
         tenant.scope = Tenants::Scope.new(target: tenant, content: JSON.parse(scope_params))
-        tenant.theme = Tenants::Theme.new(theme_params.merge(tenant_id: tenant.id))
+        tenant.domains.new(default: true, domain: "#{tenant.slug}.itsmycargo.shop")
+        tenant.theme = Tenants::Theme.new(theme_params.merge(organization_id: tenant.id))
         tenant.save
       end
     end

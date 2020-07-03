@@ -4,7 +4,7 @@ require 'rails_helper'
 
 module Quotations
   RSpec.describe LineItem, type: :model do
-    subject { FactoryBot.build :quotations_line_item }
+    subject { FactoryBot.build(:quotations_line_item) }
 
     context 'with Associations' do
       %i[tender charge_category].each do |association|

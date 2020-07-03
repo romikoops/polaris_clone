@@ -60,15 +60,15 @@ export const emails = {
 }
 
 const phones = {
-  support: 'TENANT_SUPPORT_PHONE'
+  support: 'ORGANIZATION_SUPPORT_PHONE'
 }
 
 export const tenant = {
   emails,
   id: 123,
-  name: 'TENANT_NAME',
+  name: 'ORGANIZATION_NAME',
   phones,
   scope,
-  subdomain: 'TENANT_SUBDOMAIN',
+  subdomain: 'ORGANIZATION_SUBDOMAIN',
   theme
 }

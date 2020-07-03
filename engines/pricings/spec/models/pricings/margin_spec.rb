@@ -4,12 +4,12 @@ require 'rails_helper'
 
 module Pricings
   RSpec.describe Margin, type: :model do
-    let!(:tenant) { FactoryBot.create(:legacy_tenant) }
-    let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+    let!(:organization) { FactoryBot.create(:organizations_organization) }
     let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle_1]) }
-    let(:hub) { FactoryBot.create(:legacy_hub, tenant: tenant, name: 'Gothenburg Port') }
-    let(:pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, tenant: tenant) }
-    let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
+    let(:hub) { FactoryBot.create(:legacy_hub, organization: organization, name: 'Gothenburg') }
+    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+    let(:pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary) }
+    let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', organization: organization) }
 
     context 'instance methods' do
       let!(:no_pricing_margin) do
@@ -17,47 +17,47 @@ module Pricings
                           tenant_vehicle: tenant_vehicle_1,
                           cargo_class: 'lcl',
                           itinerary: pricing.itinerary,
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
       let!(:pricing_margin) do
         FactoryBot.create(:pricings_margin,
                           pricing: pricing,
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
       let!(:dates_margin) do
         FactoryBot.create(:pricings_margin,
                           pricing: pricing,
                           effective_date: Date.parse('2019/01/01'),
                           expiration_date: Date.parse('2019/01/31'),
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
       let!(:margin) do
         FactoryBot.create(:pricings_margin,
                           pricing: pricing,
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
       let!(:origin_hub_margin) do
         FactoryBot.create(:pricings_margin,
                           origin_hub: hub,
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
       let!(:destination_hub_margin) do
         FactoryBot.create(:pricings_margin,
                           destination_hub: hub,
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
       let!(:all_hub_margin) do
         FactoryBot.create(:pricings_margin,
                           destination_hub: hub,
                           origin_hub: hub,
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
       let!(:all_margin) do
         FactoryBot.create(:pricings_margin,
@@ -66,8 +66,8 @@ module Pricings
                           tenant_vehicle: nil,
                           destination_hub: nil,
                           origin_hub: nil,
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
 
       let!(:margin_detail) { FactoryBot.create(:bas_margin_detail, margin: margin) }
@@ -116,13 +116,13 @@ module Pricings
           expect(no_pricing_margin.itinerary_name).to eq('Gothenburg - Shanghai')
         end
         it 'renders the itinerary_name with origin hub attached' do
-          expect(origin_hub_margin.itinerary_name).to eq('Departing Gothenburg Port')
+          expect(origin_hub_margin.itinerary_name).to eq('Departing Gothenburg')
         end
         it 'renders the itinerary_name with destination hub attached' do
-          expect(destination_hub_margin.itinerary_name).to eq('Entering Gothenburg Port')
+          expect(destination_hub_margin.itinerary_name).to eq('Entering Gothenburg')
         end
         it 'renders the itinerary_name with destination hub attached' do
-          expect(all_hub_margin.itinerary_name).to eq('Gothenburg Port')
+          expect(all_hub_margin.itinerary_name).to eq('Gothenburg')
         end
         it 'renders the itinerary_name with destination hub attached' do
           expect(all_margin.itinerary_name).to eq('All')
@@ -143,26 +143,26 @@ module Pricings
       let!(:lcl_margin) do
         FactoryBot.create(:pricings_margin,
                           cargo_class: 'lcl',
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
       let!(:fcl_20_margin) do
         FactoryBot.create(:pricings_margin,
                           cargo_class: 'fcl_20',
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
       let!(:fcl_40_margin) do
         FactoryBot.create(:pricings_margin,
                           cargo_class: 'fcl_40',
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
       let!(:fcl_40_hq_margin) do
         FactoryBot.create(:pricings_margin,
                           cargo_class: 'fcl_40_hq',
-                          tenant: tenants_tenant,
-                          applicable: tenants_tenant)
+                          organization: organization,
+                          applicable: organization)
       end
       describe '.for_cargo_classes' do
         it 'finds margins for lcl cargo class' do
@@ -198,6 +198,7 @@ end
 #  applicable_id      :uuid
 #  destination_hub_id :integer
 #  itinerary_id       :integer
+#  organization_id    :uuid
 #  origin_hub_id      :integer
 #  pricing_id         :uuid
 #  sandbox_id         :uuid
@@ -214,9 +215,14 @@ end
 #  index_pricings_margins_on_expiration_date                    (expiration_date)
 #  index_pricings_margins_on_itinerary_id                       (itinerary_id)
 #  index_pricings_margins_on_margin_type                        (margin_type)
+#  index_pricings_margins_on_organization_id                    (organization_id)
 #  index_pricings_margins_on_origin_hub_id                      (origin_hub_id)
 #  index_pricings_margins_on_pricing_id                         (pricing_id)
 #  index_pricings_margins_on_sandbox_id                         (sandbox_id)
 #  index_pricings_margins_on_tenant_id                          (tenant_id)
 #  index_pricings_margins_on_tenant_vehicle_id                  (tenant_vehicle_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

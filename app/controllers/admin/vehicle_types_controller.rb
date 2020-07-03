@@ -2,18 +2,11 @@
 
 class Admin::VehicleTypesController < Admin::AdminBaseController
   def index
+    tenant_vehicles = Legacy::TenantVehicle.where(organization: current_organization)
     if params[:itinerary_id]
-      itinerary = Itinerary.find_by(id: params[:itinerary_id], sandbox: @sandbox)
-      @vehicle_types = itinerary.pricings
-                                .where(sandbox: @sandbox)
-                                .map(&:tenant_vehicle).uniq
-                                .map(&:with_carrier)
-    else
-      @vehicle_types = TenantVehicle.where(
-        tenant_id: current_user.tenant_id,
-        sandbox: @sandbox
-      ).map(&:with_carrier)
+      tenant_vehicles = tenant_vehicles.where(id:
+        Pricings::Pricing.where(itinerary_id: params[:itinerary_id]).select(:tenant_vehicle_id).distinct)
     end
-    response_handler(@vehicle_types)
+    response_handler(tenant_vehicles.map(&:with_carrier))
   end
 end

@@ -3,18 +3,17 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::ScheduleFinder do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
   let(:address) { FactoryBot.create(:gothenburg_address) }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, tenant: tenant) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
   let(:shipment) do
     FactoryBot.create(:legacy_shipment,
                       load_type: 'cargo_item',
-                      tenant: tenant,
+                      organization: organization,
                       user: user,
                       trip: nil,
                       origin_hub: nil,
@@ -46,14 +45,33 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
 
   Timecop.freeze(Time.utc(2020, 1, 1, 0, 0, 0)) do
     before do
-      FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-      FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-      FactoryBot.create(:fcl_40_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-      FactoryBot.create(:fcl_40_hq_pricing, itinerary: itinerary, tenant: tenant, tenant_vehicle: tenant_vehicle)
-      FactoryBot.create(:tenants_scope, target: tenants_tenant, content: {departure_query_type: departure_type})
+      FactoryBot.create(:lcl_pricing,
+        itinerary: itinerary,
+        organization: organization,
+        tenant_vehicle: tenant_vehicle
+      )
+      FactoryBot.create(:fcl_20_pricing,
+        itinerary: itinerary,
+        organization: organization,
+        tenant_vehicle: tenant_vehicle
+      )
+      FactoryBot.create(:fcl_40_pricing,
+        itinerary: itinerary,
+        organization: organization,
+        tenant_vehicle: tenant_vehicle
+      )
+      FactoryBot.create(:fcl_40_hq_pricing,
+        itinerary: itinerary,
+        organization: organization,
+        tenant_vehicle: tenant_vehicle
+      )
+      FactoryBot.create(:organizations_scope,
+        target: organization,
+        content: {departure_query_type: departure_type}
+      )
     end
 
-    describe '.perform', :vcr do
+    describe '.perform' do
       before do
         allow(klass).to receive(:current_etd_in_search).and_return(start_date)
       end

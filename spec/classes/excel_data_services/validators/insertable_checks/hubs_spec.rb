@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::Validators::InsertableChecks::Hubs do
-  let(:tenant) { create(:tenant) }
-  let(:options) { {tenant: tenant, data: input_data, sheet_name: "Sheet1"} }
+  let(:organization) { create(:organizations_organization) }
+  let(:options) { { organization: organization, data: input_data, sheet_name: 'Sheet1' } }
 
   before do
     Geocoder::Lookup::Test.add_stub([24.806936, 54.644405], [{

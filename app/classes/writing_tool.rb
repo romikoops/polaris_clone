@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 module WritingTool
-  def write_to_aws(dir, tenant, filename, doc_type)
-    new_doc = tenant.files.create!(
+  def write_to_aws(dir, organization, filename, doc_type)
+    new_doc = Legacy::File.create!(
+      organization: organization,
       file: { io: File.open(dir), filename: filename, content_type: 'application/vnd.ms-excel' },
       text: filename, doc_type: doc_type
     )
@@ -29,10 +30,6 @@ module WritingTool
       vehicle: {},
       transit_times: {}
     }
-  end
-
-  def tenant_finder(tenant_id)
-    Tenant.find(tenant_id)
   end
 
   def itinerary(itinerary_id)

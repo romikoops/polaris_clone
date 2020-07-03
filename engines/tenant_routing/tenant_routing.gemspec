@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-routing'
-  s.add_dependency 'imc-tenants'
+  s.add_dependency 'imc-organizations'
 
   Gemhelper.common(s)
 end

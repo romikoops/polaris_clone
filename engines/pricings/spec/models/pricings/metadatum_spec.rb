@@ -23,11 +23,17 @@ end
 #  updated_at          :datetime         not null
 #  cargo_unit_id       :integer
 #  charge_breakdown_id :integer
+#  organization_id     :uuid
 #  pricing_id          :uuid
 #  tenant_id           :uuid
 #
 # Indexes
 #
 #  index_pricings_metadata_on_charge_breakdown_id  (charge_breakdown_id)
+#  index_pricings_metadata_on_organization_id      (organization_id)
 #  index_pricings_metadata_on_tenant_id            (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

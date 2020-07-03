@@ -8,7 +8,7 @@ module Trucking
     has_many :shipments
     belongs_to :scope, class_name: '::Trucking::Scope'
     delegate :courier, to: :scope
-    belongs_to :tenant, class_name: 'Legacy::Tenant'
+    belongs_to :organization, class_name: 'Organizations::Organization'
     has_many :truckings, dependent: :destroy, class_name: '::Trucking::Trucking'
     has_many :hubs, class_name: 'Legacy::Hub', through: :truckings
     has_many :locations, class_name: '::Trucking::Location', through: :truckings
@@ -91,11 +91,17 @@ end
 #  rates               :jsonb
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  organization_id     :uuid
 #  scope_id            :uuid
 #  tenant_id           :integer
 #
 # Indexes
 #
+#  index_trucking_rates_on_organization_id    (organization_id)
 #  index_trucking_rates_on_tenant_id          (tenant_id)
 #  index_trucking_rates_on_trucking_scope_id  (scope_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

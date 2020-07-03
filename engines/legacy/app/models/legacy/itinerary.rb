@@ -2,6 +2,8 @@
 
 module Legacy
   class Itinerary < ApplicationRecord # rubocop:disable Metrics/ClassLength
+    self.table_name = 'itineraries'
+
     include PgSearch::Model
 
     MODES_OF_TRANSPORT = %w[
@@ -10,8 +12,8 @@ module Legacy
       rail
       truck
     ].freeze
-    self.table_name = 'itineraries'
-    belongs_to :tenant
+
+    belongs_to :organization, class_name: 'Organizations::Organization'
     has_many :stops, dependent: :destroy
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_many :shipments, dependent: :nullify
@@ -25,7 +27,7 @@ module Legacy
     belongs_to :destination_hub, class_name: 'Legacy::Hub'
     has_many :map_data,  dependent: :destroy
     scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
-    scope :for_tenant, ->(tenant_id) { where(tenant_id: tenant_id) }
+    scope :for_organization, ->(organization_id) { where(organization_id: organization_id) }
 
     validate :must_have_stops
     pg_search_scope :list_search, against: %i[name], using: {
@@ -34,12 +36,8 @@ module Legacy
     pg_search_scope :mot_search, against: %i[mode_of_transport], using: {
       tsearch: { prefix: true }
     }
-    pg_search_scope :transshipment_search, against: %i[transshipment], using: {
-      tsearch: { prefix: true }
-    }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
-    validates :origin_hub_id, uniqueness: { scope: %i[destination_hub_id tenant_id transshipment mode_of_transport] }
-    validates :mode_of_transport, inclusion: { in: MODES_OF_TRANSPORT }
+    validates :origin_hub_id, uniqueness: { scope: %i[destination_hub_id organization_id transshipment mode_of_transport] }
 
     def generate_schedules_from_sheet(stops:, # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
                                       start_date:,
@@ -224,7 +222,7 @@ module Legacy
             etd: lc[0].etd,
             mode_of_transport: lc[0].itinerary.mode_of_transport,
             hub_route_key: "#{lc[0].stop.hub_id}-#{lc[1].stop.hub_id}",
-            tenant_id: tenant_id,
+            organization_id: organization_id,
             trip_id: lc[0].trip_id,
             origin_layover_id: lc[0].id,
             destination_layover_id: lc[1].id,
@@ -237,7 +235,7 @@ module Legacy
     end
 
     def self.ids_dedicated(user = nil)
-      get_itineraries_with_dedicated_pricings(user.id, user.tenant_id)
+      get_itineraries_with_dedicated_pricings(user.id, user.organization_id)
     end
 
     def modes_of_transport
@@ -358,7 +356,7 @@ module Legacy
 
     def generate_map_data
       routes.each do |route_data|
-        route_data[:tenant_id] = tenant_id
+        route_data[:organization_id] = organization_id
         map_data.find_or_create_by!(route_data)
       end
     end
@@ -389,7 +387,7 @@ module Legacy
         start_hubs = Hub.where(id: start_hub_ids)
       else
         start_city = shipment.origin_nexus
-        start_hubs = start_city.hubs.where(tenant_id: shipment.tenant_id)
+        start_hubs = start_city.hubs.where(organization_id: shipment.organization_id)
         start_hub_ids = start_hubs.ids
       end
 
@@ -398,11 +396,11 @@ module Legacy
         end_hubs = Hub.where(id: end_hub_ids)
       else
         end_city = shipment.destination_nexus
-        end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
+        end_hubs = end_city.hubs.where(organization_id: shipment.organization_id)
         end_hub_ids = end_hubs.ids
       end
 
-      itineraries = shipment.tenant.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
+      itineraries = shipment.organization.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
 
       { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
     end
@@ -466,6 +464,7 @@ end
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  destination_hub_id :bigint
+#  organization_id    :uuid
 #  origin_hub_id      :bigint
 #  sandbox_id         :uuid
 #  tenant_id          :integer
@@ -475,6 +474,7 @@ end
 #  index_itineraries_on_destination_hub_id  (destination_hub_id)
 #  index_itineraries_on_mode_of_transport   (mode_of_transport)
 #  index_itineraries_on_name                (name)
+#  index_itineraries_on_organization_id     (organization_id)
 #  index_itineraries_on_origin_hub_id       (origin_hub_id)
 #  index_itineraries_on_sandbox_id          (sandbox_id)
 #  index_itineraries_on_tenant_id           (tenant_id)
@@ -482,5 +482,6 @@ end
 # Foreign Keys
 #
 #  fk_rails_...  (destination_hub_id => hubs.id) ON DELETE => cascade
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (origin_hub_id => hubs.id) ON DELETE => cascade
 #

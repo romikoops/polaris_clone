@@ -35,9 +35,8 @@ module ExcelDataServices
         child_klass.new(options).perform
       end
 
-      def initialize(tenant:, data:)
-        @tenant = tenant
-        @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
+      def initialize(organization:, data:)
+        @organization = organization
         @data = data
       end
 
@@ -47,10 +46,10 @@ module ExcelDataServices
 
       private
 
-      attr_reader :tenant, :tenants_tenant, :data
+      attr_reader :organization, :data
 
       def scope
-        @scope ||= ::Tenants::ScopeService.new(tenant: tenants_tenant).fetch
+        @scope ||= ::OrganizationManager::ScopeService.new(organization: organization).fetch
       end
 
       def extract_notes(row_data)
@@ -147,15 +146,15 @@ module ExcelDataServices
 
       def add_hub_names(rows_data)
         rows_data.each do |row_data|
-          row_data[:origin_name] = append_hub_suffix(row_data[:origin], row_data[:mot])
-          row_data[:destination_name] = append_hub_suffix(row_data[:destination], row_data[:mot])
+          row_data[:origin_name] = row_data[:origin]
+          row_data[:destination_name] = row_data[:destination]
         end
       end
 
       def add_group_ids(raw_data)
         raw_data.map do |raw_datum|
           if raw_datum[:group_name].present?
-            raw_datum[:group_id] = Tenants::Group.find_by(tenant_id: @tenants_tenant.id, name: raw_datum[:group_name])&.id
+            raw_datum[:group_id] = Groups::Group.find_by(organization_id: @organization.id, name: raw_datum[:group_name])&.id
           end
           raw_datum
         end

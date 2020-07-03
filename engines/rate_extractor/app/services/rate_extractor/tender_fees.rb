@@ -2,11 +2,11 @@
 
 module RateExtractor
   class TenderFees
-    attr_reader :cargo, :tenant, :desired_date
+    attr_reader :cargo, :organization, :desired_date
     attr_accessor :tender
 
-    def initialize(tenant:, tender:, cargo:, desired_date:, sandbox: nil)
-      @tenant = tenant
+    def initialize(organization:, tender:, cargo:, desired_date:, sandbox: nil)
+      @organization = organization
       @tender = tender
       @cargo = RateExtractor::Decorators::Cargo.new(cargo)
       @desired_date = desired_date
@@ -23,7 +23,7 @@ module RateExtractor
     end
 
     def section_rates
-      Section.new(tenant: tenant, path: tender.path).rates
+      Section.new(organization: organization, path: tender.path).rates
     end
 
     def cargo_rates
@@ -41,7 +41,7 @@ module RateExtractor
     end
 
     def consolidation
-      consolidation = Tenants::ScopeService.new(target: nil, tenant: tenant).fetch(:consolidation)
+      consolidation = OrganizationManager::ScopeService.new(target: nil, organization: organization).fetch(:consolidation)
       consolidation['trucking']['calculation']
     end
   end

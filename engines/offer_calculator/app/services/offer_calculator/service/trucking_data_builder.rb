@@ -119,8 +119,8 @@ module OfferCalculator
       def get_manipulated_trucking_pricing(trucking_pricing)
         manipulated_trucking_pricings, trucking_pricing_meta = Pricings::Manipulator.new(
           type: "trucking_#{trucking_pricing.carriage}_margin".to_sym,
-          target: ::Tenants::User.find_by(legacy_id: @shipment.user_id),
-          tenant: ::Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id),
+          target: ::Organizations::User.find_by(id: @shipment.user_id),
+          organization: ::Organizations::Organization.find(@shipment.organization_id),
           args: {
             cargo_class: trucking_pricing.cargo_class,
             date: @shipment.desired_start_date,

@@ -419,7 +419,7 @@ export const tenant = {
 export const user = {
   id: 1,
   email: 'shipper@itsmycargo.com',
-  tenant_id: 3,
+  organization_id: 3,
   uid: '3***shipper@itsmycargo.com',
   provider: 'tenant_email',
   nickname: null,

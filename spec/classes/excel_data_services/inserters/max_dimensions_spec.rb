@@ -3,15 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Inserters::MaxDimensions do
-  let(:tenant) { create(:tenant) }
+  let(:organization) { create(:organizations_organization) }
   let(:carrier) { create(:carrier, code: 'msc', name: 'msc') }
   let(:applicable) { tenant }
-  let(:options) { { tenant: tenant, data: input_data, options: {} } }
+  let(:options) { { organization: organization, data: input_data, options: {} } }
 
   before do
-    create(:tenant_vehicle, tenant: tenant, name: 'standard', carrier: carrier)
-    create(:tenant_vehicle, tenant: tenant, name: 'faster', carrier: carrier)
-    create(:gothenburg_shanghai_itinerary, tenant: tenant)
+    create(:tenant_vehicle, organization: organization, name: 'standard', carrier: carrier)
+    create(:tenant_vehicle, organization: organization, name: 'faster', carrier: carrier)
+    create(:gothenburg_shanghai_itinerary, organization: organization)
   end
 
   describe '.insert' do

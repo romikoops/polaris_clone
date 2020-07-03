@@ -3,8 +3,8 @@
 class Admin::CompaniesController < Admin::AdminBaseController
   def index
     paginated_companies = handle_search.paginate(pagination_options)
-    response_companies = paginated_companies.map do |company|
-      company.for_table_json.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+    response_companies = paginated_companies.map do |page|
+      for_table_json(table_company: page).deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
     response_handler(
       pagination_options.merge(
@@ -15,34 +15,31 @@ class Admin::CompaniesController < Admin::AdminBaseController
   end
 
   def show
-    employees = company&.employees&.map(&:legacy) || []
-    groups = company&.groups&.map { |g| group_index_json(g) } || []
+    employees = Companies::Membership.where(company: company).map do |membership|
+      user = membership.member
+      ProfileTools.merge_profile(
+        target: user.as_json,
+        profile: ProfileTools.profile_for_user(user: user)
+      )
+    end
+    groups = Groups::Membership.where(member: company).map do |membership|
+      group_index_json(membership.group)
+    end
     response_handler(groups: groups, employees: employees, data: company)
   end
 
   def create # rubocop:disable Metrics/AbcSize
-    tenant = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id)
-    address_string = [
-      params[:address][:streetNumber],
-      params[:address][:street],
-      params[:address][:city],
-      params[:address][:zipCode],
-      params[:address][:country]
-    ].join(', ')
-    address = Legacy::Address.geocoded_address(address_string, @sandbox)
-    new_company = ::Tenants::Company.find_or_create_by(
-      name: params[:name],
-      email: params[:email],
-      vat_number: params[:vatNumber],
-      address: address,
-      tenant: tenant,
-      sandbox: @sandbox
+    new_company = ::Companies::Company.find_or_create_by(
+      name: create_params[:name],
+      email: create_params[:email],
+      vat_number: create_params[:vatNumber],
+      organization: current_organization,
+      address: address_from_params
     )
-    unless params[:addedMembers].nil? || params[:addedMembers].empty?
-      params[:addedMembers].each do |id|
-        tenants_user = ::Tenants::User.find_by(legacy_id: id)
-        tenants_user.company = new_company
-        tenants_user.save!
+
+    if create_params[:addedMembers].present?
+      ::Organizations::User.where(id: create_params[:addedMembers]).each do |user|
+        ::Companies::Membership.create!(member: user, company: new_company)
       end
     end
 
@@ -50,26 +47,24 @@ class Admin::CompaniesController < Admin::AdminBaseController
   end
 
   def company
-    @company ||= ::Tenants::Company.find_by(id: params[:id], sandbox: @sandbox)
+    @company ||= ::Companies::Company.find_by(id: params[:id])
   end
 
   def destroy
     company_to_destroy = company
     if company_to_destroy
-      company_to_destroy.employees.destroy_all
-      result = company_to_destroy.destroy
-      resp = result.destroyed? || result.deleted_at
+      Companies::Membership.where(company: company_to_destroy).destroy_all
+      company_to_destroy.destroy
+      resp = company_to_destroy.destroyed? || company_to_destroy.deleted_at
     end
     response_handler(success: resp)
   end
 
   def edit_employees
-    company.employees.each do |employee|
-      employee.update(company: nil) unless params[:addedMembers].include?(employee.legacy_id)
-    end
+    Companies::Membership.where(company: company).where.not(member_id: params[:addedMembers].pluck(:id)).destroy_all
     unless params[:addedMembers].nil? || params[:addedMembers].empty?
       params[:addedMembers].each do |user|
-        ::Tenants::User.find_by(legacy_id: user[:id], sandbox: @sandbox).update(company: company)
+        Companies::Membership.create(company: company, member: ::Organizations::User.find(user[:id]))
       end
     end
     response_handler(company)
@@ -78,35 +73,42 @@ class Admin::CompaniesController < Admin::AdminBaseController
   private
 
   def handle_search
-    user = ::Tenants::User.find_by(legacy_id: current_user.id, sandbox: @sandbox)
-    query = ::Tenants::Company.where(tenant_id: user.tenant_id, sandbox: @sandbox)
-    query = query.country_search(search_params[:country]) if search_params[:country].present?
-    query = query.name_search(search_params[:name]) if search_params[:name].present?
-    query = query.order(name: search_params[:name_desc] == 'true' ? :desc : :asc) if search_params[:name_desc].present?
-    query = query.vat_search(search_params[:vat_number]) if search_params[:vat_number].present?
-    if search_params[:vat_number_desc].present?
-      query = query.order(vat_number: search_params[:vat_number_desc] == 'true' ? :desc : :asc)
+    companies_relation = ::Companies::Company.where(organization: current_organization).left_joins(:address)
+    {
+      country: ->(query, param) { query.country_search(param) },
+      name: ->(query, param) { query.name_search(param) },
+      name_desc: ->(query, param) { query.ordered_by(:name, param) },
+      vat_number: ->(query, param) { query.vat_search(param) },
+      vat_number_desc: ->(query, param) { query.ordered_by(:vat_number, param) },
+      address: ->(query, param) { query.address_search(param) },
+      address_desc: ->(query, param) {
+        query
+        .order("#{address_table_ref}.geocoded_address #{search_params[:address_desc] == 'true' ? 'desc' : 'asc'}")
+      },
+      country_desc: lambda do |query, param|
+                      query.left_joins(address: :country)
+                      .order("#{country_table_ref}.name #{param.to_s == 'true' ? 'DESC' : 'ASC'}")
+                    end
+    }.each do |key, lambd|
+      companies_relation = lambd.call(companies_relation, search_params[key]) if search_params[key]
     end
-    if search_params[:address_desc]
-      query = query.left_joins(:address)
-                   .order(addresses: { geocoded_address: search_params[:address_desc] == 'true' ? 'DESC' : 'ASC' })
-    end
-    if search_params[:country_desc].present?
-      query.left_joins(:address).left_joins(address: :country)
-           .order(countries: { name: search_params[:address_desc] == 'true' ? 'DESC' : 'ASC' })
-    end
-    if search_params[:employee_count_desc].present?
-      query = query.left_joins(:users).group(:id)
-                   .order("COUNT(tenants_users.id) #{search_params[:member_count_desc] == 'true' ? 'DESC' : 'ASC'}")
-    end
-    query
+
+    companies_relation
   end
 
   def group_index_json(group, options = {})
-    new_options = options.reverse_merge(
-      methods: %i(member_count margin_count)
+    group.as_json(options).merge(
+      margin_count: Pricings::Margin.where(applicable: group).count,
+      member_count: group.memberships.size
     )
-    group.as_json(new_options)
+  end
+
+  def for_table_json(table_company:)
+    table_company.as_json.reverse_merge(
+      address: table_company.address&.geocoded_address,
+      country: table_company.address&.country&.name,
+      employee_count: Companies::Membership.where(company: table_company).count
+    )
   end
 
   def pagination_options
@@ -122,7 +124,9 @@ class Admin::CompaniesController < Admin::AdminBaseController
 
   def search_params
     params.permit(
+      :vat_number,
       :vat_number_desc,
+      :address,
       :address_desc,
       :name_desc,
       :country_desc,
@@ -132,5 +136,35 @@ class Admin::CompaniesController < Admin::AdminBaseController
       :page_size,
       :per_page
     )
+  end
+
+  def address_params
+    params.permit(address: %i[streetNumber street city zipCode country])
+  end
+
+  def create_params
+    params.permit(:name, :email, :vatNumber, addedMembers: [])
+  end
+
+  def address_from_params
+    return nil if address_params.empty?
+
+    address_string = %i[streetNumber street city zipCode country].reduce('') do |memo, key|
+      section = address_params.dig(:address, key)
+      memo + (section.presence || '')
+    end
+    Legacy::Address.geocoded_address(address_string, @sandbox)
+  end
+
+  def country_table_ref
+    return 'countries_addresses' if search_params[:country].present? && search_params[:country_desc].present?
+
+    'countries'
+  end
+
+  def address_table_ref
+    return 'addresses_companies_companies' if search_params[:address].present? && search_params[:address_desc].present?
+
+    'addresses'
   end
 end

@@ -6,7 +6,8 @@ module Rates
     enum ldm_threshold_applicable: { unit: 0, consolidated: 1 }
     enum ldm_measurement: { height: 0, area: 1, stacked_area: 2, load_meters: 3 }
     belongs_to :target, polymorphic: true
-    belongs_to :tenant, class_name: 'Tenants::Tenant'
+    belongs_to :organization, class_name: 'Organizations::Organization'
+
     belongs_to :location, class_name: 'Routing::Location', optional: true
     belongs_to :terminal, class_name: 'Routing::Terminal', optional: true
 
@@ -32,6 +33,7 @@ end
 #  updated_at               :datetime         not null
 #  carrier_id               :bigint
 #  location_id              :uuid
+#  organization_id          :uuid
 #  target_id                :uuid
 #  tenant_id                :uuid
 #  terminal_id              :uuid
@@ -40,6 +42,7 @@ end
 #
 #  index_rates_sections_on_carrier_id                 (carrier_id)
 #  index_rates_sections_on_location_id                (location_id)
+#  index_rates_sections_on_organization_id            (organization_id)
 #  index_rates_sections_on_target_type_and_target_id  (target_type,target_id)
 #  index_rates_sections_on_tenant_id                  (tenant_id)
 #  index_rates_sections_on_terminal_id                (terminal_id)
@@ -48,6 +51,6 @@ end
 #
 #  fk_rails_...  (carrier_id => carriers.id)
 #  fk_rails_...  (location_id => routing_locations.id)
-#  fk_rails_...  (tenant_id => tenants_tenants.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (terminal_id => routing_terminals.id)
 #

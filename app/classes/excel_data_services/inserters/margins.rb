@@ -3,14 +3,10 @@
 module ExcelDataServices
   module Inserters
     class Margins < ExcelDataServices::Inserters::Base
-      def tenants_tenant
-        @tenants_tenant ||= ::Tenants::Tenant.find_by(legacy_id: tenant.id)
-      end
-
       def perform
         data.each do |group_of_row_data|
           row = ExcelDataServices::Rows::Base.get(klass_identifier).new(
-            row_data: group_of_row_data.first, tenant: tenant
+            row_data: group_of_row_data.first, organization: organization
           )
 
           itinerary = find_itinerary(row)
@@ -26,7 +22,7 @@ module ExcelDataServices
 
       def find_itinerary(row)
         Itinerary.find_by(
-          tenant: tenant,
+          organization: organization,
           name: row.itinerary_name,
           mode_of_transport: row.mot,
           sandbox: @sandbox
@@ -37,7 +33,7 @@ module ExcelDataServices
         carrier = carrier_from_code(name: row.carrier) if row.carrier.present?
 
         TenantVehicle.find_by(
-          tenant: tenant,
+          organization: organization,
           name: row.service_level,
           mode_of_transport: row.mot,
           carrier: carrier,
@@ -48,7 +44,7 @@ module ExcelDataServices
       def create_margin_with_margin_details(group_of_row_data, row, tenant_vehicle, itinerary) # rubocop:disable Metrics/AbcSize
         margin_applies_to_all_fees = margin_applies_to_all_fees?(group_of_row_data.size, row.fee_code)
         margin_params =
-          { tenant: tenants_tenant,
+          { organization: organization,
             tenant_vehicle: tenant_vehicle,
             applicable: options[:applicable],
             operator: margin_applies_to_all_fees ? row.operator : '%',
@@ -110,15 +106,15 @@ module ExcelDataServices
 
       def build_margin_detail_params_for_margin(group_of_row_data)
         group_of_row_data.map do |row_data|
-          row = ExcelDataServices::Rows::Base.get(klass_identifier).new(row_data: row_data, tenant: tenant)
+          row = ExcelDataServices::Rows::Base.get(klass_identifier).new(row_data: row_data, organization: organization)
 
           charge_category = ChargeCategory.from_code(
-            tenant_id: tenant.id,
+            organization_id: organization.id,
             code: row.fee_code,
             sandbox: @sandbox
           )
 
-          { tenant_id: tenants_tenant.id,
+          { organization_id: organization.id,
             charge_category_id: charge_category.id,
             operator: row.operator,
             sandbox: @sandbox,

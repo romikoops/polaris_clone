@@ -104,14 +104,6 @@ class Tenant < Legacy::Tenant
       h.merge v.each_with_object({}) { |(_k, _v), _h| _h["#{k}_#{_k}"] = _v }
     end
   end
-
-  def create_default_max_dimensions
-    MaxDimensionsBundle.create_defaults_for(self)
-  end
-
-  def create_default_aggregate_max_dimensions
-    MaxDimensionsBundle.create_defaults_for(self, aggregate: true)
-  end
 end
 
 # == Schema Information

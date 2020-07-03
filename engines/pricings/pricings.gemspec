@@ -10,12 +10,16 @@ Gem::Specification.new do |s|
   s.authors     = ['ItsMyCargo ApS']
   s.summary     = 'Manages all margin based rates.'
 
-  s.metadata = { 'type' => 'services' }
+  s.metadata = { 'type' => 'service' }
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
+  s.add_dependency 'imc-companies'
   s.add_dependency 'imc-core'
+  s.add_dependency 'imc-groups'
   s.add_dependency 'imc-legacy'
+  s.add_dependency 'imc-organizations'
+  s.add_dependency 'imc-organization_manager'
   s.add_dependency 'imc-tenants'
   s.add_dependency 'imc-trucking'
 

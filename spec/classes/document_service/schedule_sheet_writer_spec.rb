@@ -3,14 +3,18 @@
 require "rails_helper"
 
 RSpec.describe DocumentService::ScheduleSheetWriter do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:schedule_headers) do
     %w[FROM TO CLOSING_DATE ETD ETA TRANSIT_TIME SERVICE_LEVEL CARRIER MODE_OF_TRANSPORT VESSEL VOYAGE_CODE LOAD_TYPE]
   end
 
+  before do
+    FactoryBot.create(:organizations_theme, organization: organization)
+  end
+
   describe ".perform" do
-    subject { described_class.new(tenant_id: tenant.id) }
+    subject { described_class.new(organization_id: organization.id) }
 
     let(:xlsx) { Roo::Spreadsheet.open("tmp/#{subject.filename}") }
     let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
@@ -34,7 +38,6 @@ RSpec.describe DocumentService::ScheduleSheetWriter do
 
     before do
       allow(subject).to receive(:write_to_aws).and_return("http://AWS")
-
       subject.perform
     end
 

@@ -9,7 +9,7 @@ module OfferCalculator
         @carriage         = args.fetch(:carriage)
         @sandbox          = args.fetch(:sandbox)
         @shipment         = args.fetch(:shipment)
-        @user = Legacy::User.find(args[:user_id]) if args[:user_id]
+        @user = Users::User.find(args[:user_id]) if args[:user_id]
         super(shipment: @shipment, sandbox: @sandbox)
       end
 
@@ -17,7 +17,7 @@ module OfferCalculator
         args = {
           address: @address,
           load_type: @shipment.load_type,
-          tenant_id: @shipment.tenant_id,
+          organization_id: @shipment.organization_id,
           truck_type: @trucking_details['truck_type'],
           cargo_classes: @shipment.cargo_classes,
           carriage: @carriage,
@@ -34,7 +34,7 @@ module OfferCalculator
         truckings = @shipment.cargo_classes.each_with_object({}) { |cargo_class, h| h[cargo_class] = nil }
         grouped_results = results.group_by(&:cargo_class)
         if @scope['base_pricing']
-          group_ids = @user&.all_groups&.ids&.reverse || []
+          group_ids = user_groups&.reverse || []
           group_ids.unshift(nil)
           group_ids.each do |group_id|
             grouped_results.each do |cargo_class, truckings_by_cargo_class|
@@ -43,7 +43,7 @@ module OfferCalculator
             end
           end
         else
-          [nil, @user&.pricing_id].each do |user_id|
+          [nil, @user&.id].each do |user_id|
             grouped_results.each do |cargo_class, truckings_by_cargo_class|
               trucking = truckings_by_cargo_class.find { |trp| trp.group_id.nil? && user_id == trp.user_id }
               truckings[cargo_class] = trucking if trucking.present?
@@ -52,6 +52,12 @@ module OfferCalculator
         end
 
         truckings
+      end
+
+      def user_groups
+        companies = Companies::Membership.where(member: @user)
+        membership_ids = Groups::Membership.where(member: @user)
+                          .or(Groups::Membership.where(member: companies)).map(&:group_id)
       end
     end
   end

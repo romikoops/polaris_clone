@@ -3,44 +3,96 @@
 require 'rails_helper'
 
 RSpec.describe Admin::MarginsController, type: :controller do
-  let!(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant) }
-  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'faster', tenant: tenant) }
-  let!(:currency) { FactoryBot.create(:legacy_currency) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
-  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
-  let!(:user_profile) { create(:profiles_profile, user_id: tenants_user.id) }
-  let(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: tenant) }
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:organization_vehicle_1) { FactoryBot.create(:tenant_vehicle, name: 'slowly', organization: organization) }
+  let(:organization_vehicle_2) { FactoryBot.create(:tenant_vehicle, name: 'faster', organization: organization) }
+  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let!(:currency) { Users::Settings.find_by(user: user).currency }
+  let!(:user_profile) { create(:profiles_profile, user_id: user.id) }
+  let(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:company) do
-    company = create(:tenants_company, name: 'Test', tenant: tenants_tenant)
-    tenants_user.update(company_id: company.id)
+    company = create(:companies_company, name: 'Test', organization: organization)
+    membership = create(:companies_membership, company: company, member: user)
     company
   end
 
   let(:group) do
-    group = create(:tenants_group, tenant: tenants_tenant)
-    create(:tenants_membership, member: tenants_user, group: group)
+    group = create(:groups_group, organization: organization)
+    create(:groups_membership, member: user, group: group)
     group
   end
   let(:json_response) { JSON.parse(response.body) }
-  let(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
+  let(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: organization_vehicle_1, itinerary: itinerary_1) }
 
   before do
-    allow(controller).to receive(:user_signed_in?).and_return(true)
-    allow(controller).to receive(:current_user).and_return(user)
-    allow(controller).to receive(:current_tenant).and_return(tenant)
-    allow(controller).to receive(:require_login_and_role_is_admin).and_return(true)
+    ::Organizations.current_id = organization.id
+    append_token_header
 
-    FactoryBot.create(:tenants_scope, content: {}, target: tenants_tenant)
+    FactoryBot.create(:organizations_scope, content: {}, target: organization)
     %w[ocean air rail truck trucking local_charge].map do |mot|
       [
-        FactoryBot.create(:freight_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:trucking_on_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:trucking_pre_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:import_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0),
-        FactoryBot.create(:export_margin, default_for: mot, tenant: tenants_tenant, applicable: tenants_tenant, value: 0)
+        FactoryBot.create(:freight_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:trucking_on_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:trucking_pre_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:import_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
+        FactoryBot.create(:export_margin, default_for: mot, organization: organization, applicable: organization, value: 0)
       ]
+    end
+  end
+
+  describe 'Get #index' do
+    shared_examples_for 'a searchable margin target' do
+      context "<<" do
+        before do
+          FactoryBot.create(:pricings_margin, organization: organization, applicable: target)
+        end
+
+        it 'returns the margins for the specified target' do
+          get :index, params: {organization_id: organization.id, target_type: target_type, target_id: target.id}
+          aggregate_failures do
+            expect(json_response.dig('data', 'marginData').count).to be >= 1
+          end
+        end
+      end
+    end
+
+    context 'Searching for company margins' do
+      it_should_behave_like "a searchable margin target" do
+        let(:target) { FactoryBot.create(:companies_company, name: 'Test 2', organization: organization) }
+        let(:target_type) { 'company' }
+      end
+    end
+
+    context 'Searching for group margins' do
+      it_should_behave_like "a searchable margin target" do
+        let(:target) { group }
+        let(:target_type) { 'group' }
+      end
+    end
+
+    context 'Searching for user margins' do
+      it_should_behave_like 'a searchable margin target' do
+        let(:target) { user }
+        let(:target_type) { 'user' }
+      end
+    end
+
+    context 'Searching for organization margins' do
+      it_should_behave_like 'a searchable margin target' do
+        let(:target) { organization }
+        let(:target_type) { 'tenant' }
+      end
+    end
+
+    context 'Searching for itinerary margins' do
+      before do
+        FactoryBot.create(:pricings_margin, itinerary: itinerary_1, organization: organization)
+      end
+
+      it_should_behave_like 'a searchable margin target' do
+        let(:target) { itinerary_1 }
+        let(:target_type) { 'itinerary' }
+      end
     end
   end
 
@@ -50,14 +102,14 @@ RSpec.describe Admin::MarginsController, type: :controller do
         selectedOriginHub: itinerary_1.hubs.first.id,
         selectedDestinationHub: itinerary_1.hubs.last.id,
         selectedCargoClass: 'lcl',
-        tenant_id: tenant.id
+        organization_id: organization.id
       }
     end
     let(:json) { JSON.parse(response.body) }
     let(:results) { json.dig('data', 'results') }
 
     it 'returns http success for a User target' do
-      user_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, tenant: tenants_tenant, applicable: tenants_user)
+      user_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, organization: organization, applicable: user)
       params = args.merge(targetId: user.id, targetType: 'user')
 
       post :test, params: params
@@ -65,12 +117,12 @@ RSpec.describe Admin::MarginsController, type: :controller do
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(results.length).to eq(1)
-        expect(results.first).to include(build(:margin_preview_result, target: tenants_user, target_name: "#{user_profile.first_name} #{user_profile.last_name}", margin: user_margin, service_level: tenant_vehicle_1))
+        expect(results.first).to include(build(:margin_preview_result, target: user, target_name: "#{user_profile.first_name} #{user_profile.last_name}", margin: user_margin, service_level: organization_vehicle_1))
       end
     end
 
     it 'returns http success for a Company target' do
-      company_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, tenant: tenants_tenant, applicable: company)
+      company_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, organization: organization, applicable: company)
       params = args.merge(targetId: company.id, targetType: 'company')
 
       post :test, params: params
@@ -78,12 +130,12 @@ RSpec.describe Admin::MarginsController, type: :controller do
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(results.length).to eq(1)
-        expect(results.first).to include(build(:margin_preview_result, target: company, target_name: company.name, margin: company_margin, service_level: tenant_vehicle_1))
+        expect(results.first).to include(build(:margin_preview_result, target: company, target_name: company.name, margin: company_margin, service_level: organization_vehicle_1))
       end
     end
 
     it 'returns http success for a Group target' do
-      group_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, tenant: tenants_tenant, applicable: group)
+      group_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, organization: organization, applicable: group)
       params = args.merge(targetId: group.id, targetType: 'group')
 
       post :test, params: params
@@ -91,7 +143,7 @@ RSpec.describe Admin::MarginsController, type: :controller do
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(results.length).to eq(1)
-        expect(results.first).to include(build(:margin_preview_result, target: group, target_name: group.name, margin: group_margin, service_level: tenant_vehicle_1))
+        expect(results.first).to include(build(:margin_preview_result, target: group, target_name: group.name, margin: group_margin, service_level: organization_vehicle_1))
       end
     end
   end
@@ -102,10 +154,158 @@ RSpec.describe Admin::MarginsController, type: :controller do
     end
 
     it 'returns error with messages when an error is raised' do
-      post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), tenant_id: 1 }
+      post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id }
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(json_response['data']).not_to be_empty
+      end
+    end
+  end
+
+  describe "GET #form_data" do
+    before do
+      FactoryBot.create_list(:lcl_pricing, 3, itinerary: itinerary_1, tenant_vehicle: organization_vehicle_1)
+      FactoryBot.create(:groups_group, organization: organization)
+    end
+
+    context 'when requested with an itinerary id' do
+      it 'returns the service levels, pricings, and groups for the itinerary and organization' do
+        get :form_data, params: {organization_id: organization, itinerary_id: itinerary_1.id}
+        aggregate_failures do
+          expect(json_response.dig('data', 'service_levels').count).to eq(3)
+          expect(json_response.dig('data', 'pricings').count).to eq(3)
+          expect(json_response.dig('data', 'groups').count).to eq(1)
+        end
+      end
+    end
+
+    context 'when requested without an itinerary id' do
+      let(:organization_3) { FactoryBot.create(:organizations_organization) }
+
+      before do
+        FactoryBot.create_list(:tenant_vehicle, 2, organization: organization_3)
+        FactoryBot.create_list(:groups_group, 2, organization: organization_3)
+        ::Organizations.current_id = organization_3.id
+      end
+
+      it 'returns the groups and service levels (tenant vehicles) of the organization' do
+        get :form_data, params: {organization_id: organization_3.id}
+        aggregate_failures do
+          expect(json_response.dig('data', 'groups').count).to eq(2)
+          expect(json_response.dig('data', 'service_levels').count).to eq(2)
+        end
+      end
+    end
+  end
+
+  describe 'Get #itinerary_list' do
+    before do
+      FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization)
+    end
+
+    it 'returns the  (formatted) list of itineraries requested by the query' do
+      get :itinerary_list, params: {organization_id: organization.id, query: 'Hamburg'}
+      aggregate_failures do
+        target_name = json_response.dig('data').last.dig('value', 'name')
+        expect(target_name).to eq('Hamburg - Shanghai')
+      end
+    end
+  end
+
+  describe 'Get #fee_data' do
+    let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
+
+    context 'with margin type: local charges' do
+      let(:expected_fee_value) { "SOLAS - SOLAS" }
+      let(:params) do
+        {
+          organization_id: organization.id,
+          itinerary_id: itinerary.id,
+          cargo_classes: 'all',
+          hub_ids: itinerary.hubs.pluck(:id),
+          tenant_vehicle_ids: 'all',
+          margin_type: 'local_charges',
+          directions: 'export'
+        }
+      end
+
+      before do
+        FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: organization_vehicle_1)
+        itinerary.hubs.each do |hub|
+          FactoryBot.create(:legacy_local_charge,
+            hub: hub,
+            organization: organization,
+            tenant_vehicle: organization_vehicle_1,
+            load_type: 'lcl')
+        end
+      end
+
+      it 'returns the compound local charges for the specified itinerary' do
+        get :fee_data, params: params
+        aggregate_failures do
+          expect(json_response.dig('data')).to include(expected_fee_value)
+        end
+      end
+    end
+
+    describe 'querying fee data with no margin type' do
+      let(:pricing) {
+        FactoryBot.create(:lcl_pricing, itinerary: itinerary,
+                                        tenant_vehicle: organization_vehicle_1,
+                                        organization: organization)
+      }
+
+      context 'when requested with pricing id' do
+        let(:expected_fee_value) { "BAS - Basic Ocean Freight" }
+        let(:params) do
+          {
+            pricing_id: pricing.id,
+            organization_id: organization.id
+          }
+        end
+
+        it 'returns the formatted list of fees for the specified pricing' do
+          get :fee_data, params: params
+          aggregate_failures do
+            expect(json_response.dig('data')).to include(expected_fee_value)
+          end
+        end
+      end
+
+      context "when requested without pricing id" do
+        let(:expected_fee_value) { "BAS - Basic Ocean Freight" }
+        let(:params) do
+          {
+            organization_id: organization.id,
+            itinerary_id: itinerary.id,
+            itinerary_ids: [itinerary.id],
+            cargo_classes: 'all',
+            tenant_vehicle_ids: 'all',
+            directions: 'export'
+          }
+        end
+
+        before do
+          FactoryBot.create(:lcl_pricing,
+            organization: organization,
+            itinerary: itinerary,
+            tenant_vehicle: organization_vehicle_1)
+        end
+
+        it 'returns the fees for the pricings matching the params sent' do
+          get :fee_data, params: params
+          aggregate_failures do
+            expect(json_response.dig('data')).to include(expected_fee_value)
+          end
+        end
+
+        it "gets the fees for all pricings if an itinerary id isnt specified" do
+          params.delete(:itinerary_id)
+          get :fee_data, params: params
+          aggregate_failures do
+            expect(json_response.dig('data')).to include(expected_fee_value)
+          end
+        end
       end
     end
   end

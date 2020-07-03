@@ -36,7 +36,7 @@ describe('async actions', () => {
       { type: authenticationConstants.SAML_USER_SUCCESS, payload: user },
       { type: userConstants.GET_DASHBOARD_REQUEST, payload: undefined }
     ]
-    const payload = { userId: 1, headers: {}, tenantId: 1 }
+    const payload = { userId: 1, headers: {}, organizationId: 1 }
 
     return store.dispatch(authenticationActions.postSamlActions(payload)).then(() => {
       expect(store.getActions()).toEqual(expectedActions)
@@ -45,16 +45,17 @@ describe('async actions', () => {
   it('creates LOGIN_SUCCESS when login is successful', () => {
     expect.assertions(2)
     const authHeader = {
-      'access-token': '1234',
-      client: '1234',
-      expiry: '1234',
-      'token-type': '1234',
-      uid: '1234'
+      access_token: '1234',
+      token_type: 'Bearer'
     }
     fetch.mockResponses(
       [
+        JSON.stringify(authHeader),
+        { status: 200 }
+      ],
+      [
         JSON.stringify({ data: user }),
-        { status: 200, headers: authHeader }
+        { status: 200 }
       ],
       [
         JSON.stringify({ data: {} }),

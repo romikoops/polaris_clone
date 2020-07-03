@@ -3,8 +3,8 @@
 module Analytics
   module Dashboard
     class Base < Analytics::Base
-      def self.data(user:, start_date: 30.days.ago, end_date: DateTime.now, sandbox: nil)
-        new(user: user, start_date: start_date, end_date: end_date, sandbox: sandbox).data
+      def self.data(user:, organization:, start_date: 30.days.ago, end_date: DateTime.now, sandbox: nil)
+        new(user: user, organization: organization, start_date: start_date, end_date: end_date, sandbox: sandbox).data
       end
 
       private

@@ -2,12 +2,13 @@
 
 module Pricings
   class Finder
-    attr_accessor :schedules, :tenant_vehicle_id, :start_date, :end_date,
+    attr_accessor :schedules, :tenant_vehicle_id, :start_date, :end_date, :organization,
                   :closing_start_date, :closing_end_date, :cargo_classes, :user_pricing_id
 
     def initialize( # rubocop:disable Metrics/ParameterLists
       schedules:,
       user_pricing_id:,
+      organization:,
       cargo_classes:,
       dates:,
       dedicated_pricings_only:,
@@ -23,10 +24,12 @@ module Pricings
       @closing_start_date = dates[:closing_start_date]
       @closing_end_date = dates[:closing_end_date]
       @cargo_classes = cargo_classes
-      @user = ::Tenants::User.find_by(legacy_id: user_pricing_id)
-      @tenant = @user.tenant
-      @scope = ::Tenants::ScopeService.new(target: @user, tenant: @tenant).fetch
-      @hierarchy = ::Tenants::HierarchyService.new(target: @user).fetch.select { |target| target.is_a?(Tenants::Group) }
+      @organization = organization
+      @user = ::Users::User.find(user_pricing_id) if user_pricing_id.present?
+      @target = @user
+      @target ||= Groups::Group.find_by(organization: organization, name: 'default')
+      @scope = ::OrganizationManager::ScopeService.new(target: @target, organization: @organization).fetch
+      @hierarchy = ::OrganizationManager::HierarchyService.new(target: @target).fetch.select { |target| target.is_a?(Groups::Group) }
       @sandbox = sandbox
       @dedicated_pricings_only = dedicated_pricings_only
     end
@@ -66,8 +69,8 @@ module Pricings
 
         Pricings::Manipulator.new(
           type: :freight_margin,
-          target: @user,
-          tenant: @user.tenant,
+          target: @target,
+          organization: organization,
           args: {
             schedules: filtered_schedules,
             cargo_class_count: @shipment.cargo_classes.count,
@@ -117,7 +120,7 @@ module Pricings
         internal: false,
         tenant_vehicle_id: tenant_vehicle_id,
         itinerary_id: schedules.first.trip.itinerary_id,
-        tenant_id: @shipment.tenant_id,
+        organization_id: @shipment.organization_id,
         sandbox: @sandbox
       ).for_cargo_classes(target_cargo_classes)
 
@@ -129,7 +132,8 @@ module Pricings
 
         query.where(group_id: nil)
       else
-        @dedicated_pricings_only ? query.where(user_id: user_pricing_id) : query
+        query = query.where(user_id: user_pricing_id) if @dedicated_pricings_only && user_pricing_id.present?
+        query
       end
     end
 

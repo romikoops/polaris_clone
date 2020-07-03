@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::FileParser do
-  let(:tenant) { create(:tenant) }
+  let(:organization) { create(:organizations_organization) }
   let(:options) do
-    { tenant: tenant,
+    { organization: organization,
       xlsx: xlsx,
       headers_for_all_sheets: headers_for_all_sheets,
       restructurer_names_for_all_sheets: restructurer_names_for_all_sheets }

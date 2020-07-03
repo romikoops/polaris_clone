@@ -31,7 +31,7 @@ module ExcelDataServices
           return if row[:origin_locode].blank? && row[:destination_locode].blank?
 
           %i[origin_locode destination_locode].each do |locode_key|
-            next if Legacy::Hub.exists?(hub_code: row[locode_key], tenant_id: tenant.id)
+            next if Legacy::Hub.exists?(hub_code: row[locode_key], organization_id: organization.id)
 
             add_to_errors(
               type: :error,

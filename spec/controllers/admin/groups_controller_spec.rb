@@ -3,28 +3,25 @@
 require "rails_helper"
 
 RSpec.describe Admin::GroupsController, type: :controller do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
-  let(:user) { create(:legacy_user, tenant: tenant, email: "user@itsmycargo.com", with_profile: true) }
-  let(:tenants_user) { Tenants::User.find_by(legacy_id: user.id) }
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let!(:user) { create(:organizations_user, :with_profile, organization: organization, email: 'user@itsmycargo.com') }
   let(:group) do
-    create(:tenants_group, tenant: tenants_tenant, name: "Test").tap do |tapped_group|
-      FactoryBot.create(:tenants_membership, group: tapped_group, member: tenants_user)
+    create(:groups_group, organization: organization, name: "Test").tap do |grp|
+      FactoryBot.create(:groups_membership, group: grp, member: user)
     end
   end
 
   before do
-    allow(controller).to receive(:user_signed_in?).and_return(true)
-    allow(controller).to receive(:current_user).and_return(user)
-    allow(controller).to receive(:require_login_and_role_is_admin).and_return(true)
+    ::Organizations.current_id = organization.id
+    append_token_header
   end
 
   describe "GET #index" do
-    let!(:groups) { create_list(:tenants_group, 5, tenant: tenants_tenant) }
+    let!(:groups) { create_list(:groups_group, 5, organization: organization) }
 
     context "without sorting" do
       it "returns http success" do
-        get :index, params: {tenant_id: tenant.id}
+        get :index, params: {organization_id: organization.id}
         aggregate_failures do
           expect(response).to have_http_status(:success)
           json = JSON.parse(response.body)
@@ -37,20 +34,40 @@ RSpec.describe Admin::GroupsController, type: :controller do
 
     context "with member count sorting" do
       before do
-        FactoryBot.create_list(:tenants_membership, 4, :user, group: group)
-        FactoryBot.create_list(:tenants_membership, 3, :user, group: other_group)
-        FactoryBot.create_list(:tenants_group, 2, tenant: tenants_tenant)
+        FactoryBot.create_list(:groups_membership, 4, :user, group: group)
+        FactoryBot.create_list(:groups_membership, 3, :user, group: other_group)
+        FactoryBot.create_list(:groups_group, 2, organization: organization)
       end
 
-      let(:other_group) { FactoryBot.create(:tenants_group, tenant: tenants_tenant) }
+      let(:other_group) { FactoryBot.create(:groups_group, organization: organization) }
 
       it "returns http success" do
-        get :index, params: {tenant_id: tenant.id, member_count_desc: "true"}
+        get :index, params: {organization_id: organization.id, member_count_desc: "true"}
         aggregate_failures do
           expect(response).to have_http_status(:success)
           json = JSON.parse(response.body)
           expect(json.dig("data", "groupData", 0, "id")).to eq group.id
           expect(json.dig("data", "groupData", 1, "id")).to eq other_group.id
+        end
+      end
+    end
+
+    context "when search target is a user" do
+      let(:user_2) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+      let(:user_group) { FactoryBot.create(:groups_group, organization: organization, name: "Test Group 2") }
+
+      before do
+        FactoryBot.create(:groups_membership, member: user_2, group: user_group)
+      end
+
+      it "returns the users groups" do
+        get :index, params: {organization_id: organization.id,
+                             target_type: 'user',
+                             target_id: user_2.id}
+        aggregate_failures do
+          json_response = JSON.parse(response.body)
+          expect(response).to have_http_status(:success)
+          expect(json_response.dig('data', 'groupData').first.dig('id')).to eq(user_group.id)
         end
       end
     end
@@ -64,7 +81,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
          "groups" => [],
          "companies" => []},
        "name" => "Test",
-       "tenant_id" => tenant.id,
+       "organization_id" => organization.id,
        "group" => {"name" => "Test"}}
     end
 
@@ -75,16 +92,16 @@ RSpec.describe Admin::GroupsController, type: :controller do
         json = JSON.parse(response.body)
         expect(json["success"]).to eq true
         expect(json.dig("data", "name")).to eq "Test"
-        expect(::Tenants::Group.find(json.dig("data", "id")).members.map { |c| c["id"] }).to eq [user.id]
+        expect(::Groups::Group.find(json.dig("data", "id")).members.map { |c| c["id"] }).to eq [user.id]
       end
     end
   end
 
   describe "POST #edit_members" do
-    let!(:user_a) { create(:legacy_user, tenant: tenant, with_profile: true) }
-    let!(:user_b) { create(:legacy_user, tenant: tenant, with_profile: true) }
-    let(:company_a) { create(:tenants_company, tenant: tenants_tenant) }
-    let(:company_b) { create(:tenants_company, tenant: tenants_tenant) }
+    let!(:user_a) { create(:organizations_user, :with_profile, organization: organization) }
+    let!(:user_b) { create(:organizations_user, :with_profile, organization: organization) }
+    let(:company_a) { create(:companies_company, organization: organization) }
+    let(:company_b) { create(:companies_company, organization: organization) }
 
     let(:profile) { FactoryBot.build(:profiles_profile) }
     let(:edit_params) do
@@ -94,14 +111,14 @@ RSpec.describe Admin::GroupsController, type: :controller do
          "groups" => [],
          "companies" => [company_a.as_json]},
        "name" => "Test",
-       "tenant_id" => tenant.id,
+       "organization_id" => organization.id,
        "id" => group.id}
     end
     let(:expected) { [user_a.id, company_a.id] }
 
     before do
-      create(:tenants_membership, group: group, member: Tenants::User.find_by(legacy_id: user_b.id))
-      create(:tenants_membership, group: group, member: company_b)
+      create(:groups_membership, group: group, member: user_b)
+      create(:groups_membership, group: group, member: company_b)
     end
 
     it "returns http success" do
@@ -110,7 +127,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
         expect(response).to have_http_status(:success)
         json = JSON.parse(response.body)
         expect(json.dig("data", "name")).to eq "Test"
-        expect(::Tenants::Group.find(json.dig("data", "id")).members.map { |c| c["id"] }).to eq(expected)
+        expect(::Groups::Group.find(json.dig("data", "id")).members.map { |c| c["id"] }).to eq(expected)
       end
     end
   end
@@ -119,12 +136,12 @@ RSpec.describe Admin::GroupsController, type: :controller do
     let(:edit_params) do
       {
         "name" => "Test2",
-        "tenant_id" => tenant.id,
+        "organization_id" => organization.id,
         "id" => group.id
       }
     end
 
-    it "rupdates the group name" do
+    it "updates the group name" do
       post :update, params: edit_params
       aggregate_failures do
         expect(response).to have_http_status(:success)
@@ -137,7 +154,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
   describe "GET #show" do
     let(:edit_params) do
       {
-        "tenant_id" => tenant.id,
+        "organization_id" => organization.id,
         "id" => group.id
       }
     end
@@ -156,7 +173,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
   describe "DELETE #destroy" do
     let(:edit_params) do
       {
-        "tenant_id" => tenant.id,
+        "organization_id" => organization.id,
         "id" => group.id
       }
     end
@@ -165,7 +182,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
       delete :destroy, params: edit_params
       aggregate_failures do
         expect(response).to have_http_status(:success)
-        expect(Tenants::Group.find_by(edit_params[:id])).to be_falsy
+        expect(Groups::Group.find_by(edit_params[:id])).to be_falsy
       end
     end
   end

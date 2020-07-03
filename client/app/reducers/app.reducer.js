@@ -10,16 +10,16 @@ export default function app (state = {}, action) {
         lastActivity: action.payload
       }
     }
-    case appConstants.SET_TENANT_REQUEST: {
+    case appConstants.SET_ORGANIZATION_REQUEST: {
       return state
     }
-    case appConstants.SET_TENANT_SUCCESS: {
+    case appConstants.SET_ORGANIZATION_SUCCESS: {
       return {
         ...state,
         tenant: action.payload.tenant
       }
     }
-    case appConstants.SET_TENANT_ERROR: {
+    case appConstants.SET_ORGANIZATION_ERROR: {
       const err = merge({}, state, {
         error: action.payload
       })
@@ -27,33 +27,33 @@ export default function app (state = {}, action) {
       return err
     }
 
-    case appConstants.OVERRIDE_TENANT_REQUEST: {
+    case appConstants.OVERRIDE_ORGANIZATION_REQUEST: {
       return state
     }
 
-    case appConstants.OVERRIDE_TENANT_SUCCESS: {
+    case appConstants.OVERRIDE_ORGANIZATION_SUCCESS: {
       return {
         tenants: state.tenants
       }
     }
 
-    case appConstants.OVERRIDE_TENANT_ERROR: {
+    case appConstants.OVERRIDE_ORGANIZATION_ERROR: {
       const err = merge({}, state, {
         error: action.payload
       })
 
       return err
     }
-    case appConstants.SET_TENANTS_REQUEST: {
+    case appConstants.SET_ORGANIZATIONS_REQUEST: {
       return state
     }
-    case appConstants.SET_TENANTS_SUCCESS: {
+    case appConstants.SET_ORGANIZATIONS_SUCCESS: {
       return {
         ...state,
         tenants: action.payload
       }
     }
-    case appConstants.SET_TENANTS_ERROR: {
+    case appConstants.SET_ORGANIZATIONS_ERROR: {
       const err = merge({}, state, {
         error: action.payload
       })
@@ -153,7 +153,7 @@ export default function app (state = {}, action) {
 
       return currErr
     }
-    case appConstants.RECEIVE_TENANTS: {
+    case appConstants.RECEIVE_ORGANIZATIONS: {
       return {
         ...state,
         tenants: action.payload.data

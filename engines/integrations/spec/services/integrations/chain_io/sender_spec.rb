@@ -6,10 +6,10 @@ module Integrations
   module ChainIo
     RSpec.describe Sender do
       describe 'Sending the json  chain.io' do
-        let(:tenant) { FactoryBot.create(:legacy_tenant) }
-        let(:tenants_tenant) { Tenants::Tenant.find_by(legacy: tenant) }
+        let(:organization) { FactoryBot.create(:organizations_organization) }
+
         let!(:scope) {
-          FactoryBot.create(:tenants_scope, target: tenants_tenant,
+          FactoryBot.create(:organizations_scope, target: organization,
                                             content: {
                                               integrations: {
                                                 chainio: {
@@ -77,7 +77,7 @@ module Integrations
         }
 
         it 'sends a json to chainIo successfully' do
-          described_class.new(data: data, tenant_id: tenants_tenant.id).send_shipment
+          described_class.new(data: data, organization_id: organization.id).send_shipment
           expect(chainio_stub_req).to have_been_requested
         end
       end

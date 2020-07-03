@@ -1,5 +1,5 @@
-import { merge, get } from 'lodash'
-import { adminConstants } from '../constants'
+import { get, merge } from 'lodash';
+import { adminConstants } from '../constants';
 
 export default function admin (state = {}, action) {
   switch (action.type) {
@@ -237,7 +237,7 @@ export default function admin (state = {}, action) {
     }
     // eslint-disable-next-line no-case-declarations
     case adminConstants.DELETE_HUB_SUCCESS: {
-      const hubs = state.hubs.filter(x => x.id !== parseInt(action.payload.id, 10))
+      const hubs = state.hubs.filter((x) => x.id !== parseInt(action.payload.id, 10))
       const hub = state.hub.hub.id === parseInt(action.payload.id, 10) ? {} : state.hub
 
       return {
@@ -404,11 +404,11 @@ export default function admin (state = {}, action) {
     case adminConstants.CONFIRM_SHIPMENT_SUCCESS: {
       const req =
         state.shipments && state.shipments.requested
-          ? state.shipments.requested.filter(x => x.id !== action.payload.id)
+          ? state.shipments.requested.filter((x) => x.id !== action.payload.id)
           : []
       const dashReq =
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested
-          ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
+          ? state.dashboard.shipments.requested.filter((x) => x.id !== action.payload.id)
           : []
       const open = state.shipments && state.shipments.open ? state.shipments.open : []
       const dashOpen =
@@ -470,13 +470,13 @@ export default function admin (state = {}, action) {
     case adminConstants.REQUESTED_SHIPMENT_SUCCESS: {
       const req =
         state.shipments && state.shipments.requested
-          ? state.shipments.requested.filter(x => x.id !== action.payload.id)
+          ? state.shipments.requested.filter((x) => x.id !== action.payload.id)
           : []
       const dashReq =
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested
-          ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
+          ? state.dashboard.shipments.requested.filter((x) => x.id !== action.payload.id)
           : []
-      const open = state.shipments && state.shipments.open ? state.shipments.open.filter(x => x.id !== action.payload.id) : []
+      const open = state.shipments && state.shipments.open ? state.shipments.open.filter((x) => x.id !== action.payload.id) : []
       const shipment = state.shipment && state.shipment.shipment ? {
         ...state.shipment.shipment,
         ...action.payload
@@ -543,19 +543,19 @@ export default function admin (state = {}, action) {
     case adminConstants.FINISHED_SHIPMENT_SUCCESS: {
       const req =
         state.shipments && state.shipments.open
-          ? state.shipments.open.filter(x => x.id !== action.payload.id)
+          ? state.shipments.open.filter((x) => x.id !== action.payload.id)
           : []
       const dashReq =
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.open
-          ? state.dashboard.shipments.open.filter(x => x.id !== action.payload.id)
+          ? state.dashboard.shipments.open.filter((x) => x.id !== action.payload.id)
           : []
       const rejected =
         state.shipments && state.shipments.rejected
-          ? state.shipments.rejected.filter(x => x.id !== action.payload.id)
+          ? state.shipments.rejected.filter((x) => x.id !== action.payload.id)
           : []
       const dashRejected =
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.rejected
-          ? state.dashboard.shipments.rejected.filter(x => x.id !== action.payload.id)
+          ? state.dashboard.shipments.rejected.filter((x) => x.id !== action.payload.id)
           : []
       const finished = state.shipments && state.shipments.finished ? state.shipments.finished : []
       const dashFinished =
@@ -600,11 +600,11 @@ export default function admin (state = {}, action) {
     case adminConstants.DENY_SHIPMENT_SUCCESS: {
       const denReq =
         state.shipments && state.shipments.requested
-          ? state.shipments.requested.filter(x => x.id !== action.payload.id)
+          ? state.shipments.requested.filter((x) => x.id !== action.payload.id)
           : []
       const denDashReq =
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested
-          ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
+          ? state.dashboard.shipments.requested.filter((x) => x.id !== action.payload.id)
           : []
       const rejected = state.shipments && state.shipments.rejected ? state.shipments.rejected : []
       const dashRejected =
@@ -680,7 +680,7 @@ export default function admin (state = {}, action) {
     case adminConstants.ADMIN_UPLOAD_DOCUMENT_REQUEST:
       return state
     case adminConstants.ADMIN_UPLOAD_DOCUMENT_SUCCESS: {
-      const docs = state.shipment.documents.filter(x => x.id !== action.payload.id)
+      const docs = state.shipment.documents.filter((x) => x.id !== action.payload.id)
       docs.push(action.payload)
 
       return {
@@ -749,9 +749,9 @@ export default function admin (state = {}, action) {
     }
     case adminConstants.EDIT_TRUCKING_PRICE_SUCCESS: {
       const otps = state.truckingDetail.truckingPricings
-        .filter(tp => tp.truckingPricing.id === action.payload.id)[0]
+        .filter((tp) => tp.truckingPricing.id === action.payload.id)[0]
       const tps = state.truckingDetail.truckingPricings
-        .filter(tp => tp.truckingPricing.id !== action.payload.id)
+        .filter((tp) => tp.truckingPricing.id !== action.payload.id)
       otps.truckingPricing = action.payload
       tps.push(otps)
 
@@ -896,7 +896,7 @@ export default function admin (state = {}, action) {
     case adminConstants.DISABLE_PRICING_SUCCESS: {
       const pricings = get(state, ['pricings', 'show', action.payload.itinerary_id, 'pricings'], false)
       if (!pricings) { return state }
-      const index = pricings.findIndex(p => p.id === action.payload.id)
+      const index = pricings.findIndex((p) => p.id === action.payload.id)
       pricings[index] = action.payload
 
       return {
@@ -1005,7 +1005,7 @@ export default function admin (state = {}, action) {
       const { show } = state.pricings
       const { pricing, fromGroup } = action.payload
       const targetId = fromGroup ? pricing.group_id : pricing.itinerary_id
-      const pricings = show[targetId].pricings.filter(x => x.id !== pricing.id)
+      const pricings = show[targetId].pricings.filter((x) => x.id !== pricing.id)
 
       return {
         ...state,
@@ -1053,7 +1053,7 @@ export default function admin (state = {}, action) {
       return state
     case adminConstants.UPDATE_PRICING_SUCCESS: {
       const exItineraryPricings = state.itineraryPricings.itineraryPricingData
-        .filter(pricingObj => pricingObj.pricing.id !== action.payload.pricing.id)
+        .filter((pricingObj) => pricingObj.pricing.id !== action.payload.pricing.id)
       exItineraryPricings.push(action.payload)
 
       return {
@@ -1176,7 +1176,7 @@ export default function admin (state = {}, action) {
         loading: true
       }
     case adminConstants.NEW_ROUTE_SUCCESS: {
-      const itineraries = state.itineraries.filter(x => x.id !== action.payload.id)
+      const itineraries = state.itineraries.filter((x) => x.id !== action.payload.id)
       itineraries.push(action.payload)
 
       return {
@@ -1293,15 +1293,19 @@ export default function admin (state = {}, action) {
       return reqHubActivate
     }
     case adminConstants.ACTIVATE_HUB_SUCCESS: {
-      const newHubs = state.hubs.filter(h => h.data.id !== action.payload.data.id)
-      newHubs.push(action.payload)
+      const updatedHub = { ...action.payload.data, address: action.payload.address }
+      const hubsData = state.hubs.hubsData.filter((x) => x.id !== updatedHub.id)
+      hubsData.push(updatedHub)
 
       return {
         ...state,
-        hubs: newHubs,
+        hubs: {
+          ...state.hubs,
+          hubsData
+        },
         hub: {
           ...state.hub,
-          hub: action.payload.data
+          hub: updatedHub
         },
         loading: false
       }
@@ -1324,7 +1328,7 @@ export default function admin (state = {}, action) {
     }
     case adminConstants.DOCUMENT_ACTION_SUCCESS: {
       const docs = state.shipment.documents
-        .filter(x => x.id !== parseInt(action.payload.id, 10))
+        .filter((x) => x.id !== parseInt(action.payload.id, 10))
       docs.push(action.payload)
 
       return {
@@ -1352,7 +1356,7 @@ export default function admin (state = {}, action) {
     }
     case adminConstants.DOCUMENT_DELETE_SUCCESS: {
       const docs = state.shipment.documents
-        .filter(x => x.id !== parseInt(action.payload.id, 10))
+        .filter((x) => x.id !== parseInt(action.payload.id, 10))
 
       return {
         ...state,
@@ -1396,7 +1400,7 @@ export default function admin (state = {}, action) {
         loading: true
       })
     case adminConstants.EDIT_HUB_SUCCESS: {
-      const newHubs = state.hubs.filter(x => x.id !== action.payload.hub.id)
+      const newHubs = state.hubs.filter((x) => x.id !== action.payload.hub.id)
       newHubs.push({ data: action.payload.hub, address: action.payload.address })
 
       return {
@@ -1619,7 +1623,7 @@ export default function admin (state = {}, action) {
     case adminConstants.EDIT_CUSTOMS_FEES_REQUEST:
       return state
     case adminConstants.EDIT_CUSTOMS_FEES_SUCCESS: {
-      const newCustoms = state.hub.customs.filter(c => c.id !== action.payload.id)
+      const newCustoms = state.hub.customs.filter((c) => c.id !== action.payload.id)
       newCustoms.push(action.payload)
 
       return {
@@ -1670,7 +1674,7 @@ export default function admin (state = {}, action) {
       return state
     // eslint-disable-next-line no-case-declarations
     case adminConstants.UPLOAD_HUB_IMAGE_SUCCESS:
-      const hubsArr = state.hubs.filter(h => h.id !== action.payload.id)
+      const hubsArr = state.hubs.filter((h) => h.id !== action.payload.id)
       hubsArr.push(action.payload)
 
       return {
@@ -1707,7 +1711,7 @@ export default function admin (state = {}, action) {
     case adminConstants.DELETE_CLIENT_REQUEST:
       return state
     case adminConstants.DELETE_CLIENT_SUCCESS: {
-      const clients = state.clients.filter(client => client.id !== action.payload)
+      const clients = state.clients.filter((client) => client.id !== action.payload)
 
       return {
         ...state,
@@ -1729,7 +1733,7 @@ export default function admin (state = {}, action) {
         ...state,
         itinerarySchedules: {
           ...state.itinerarySchedules,
-          schedules: state.itinerarySchedules.schedules.filter(x => x.id !== action.payload)
+          schedules: state.itinerarySchedules.schedules.filter((x) => x.id !== action.payload)
         },
         loading: false
       }

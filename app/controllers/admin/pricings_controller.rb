@@ -26,7 +26,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
   def search # rubocop:disable Metrics/AbcSize
     query = {
-      tenant_id: current_user.tenant_id,
+      organization_id: current_organization.id,
       sandbox: @sandbox
     }
 
@@ -47,10 +47,10 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   def disable
     pricing = Pricings::Pricing.find_by(
       id: params[:pricing_id],
-      tenant_id: params[:tenant_id],
+      organization_id: params[:organization_id],
       sandbox: @sandbox
     )
-    pricing.update(internal: params[:action] == 'disable')
+    pricing.update(internal: params[:target_action] == 'disable')
 
     response_handler(pricing.for_table_json)
   end
@@ -59,10 +59,10 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
 
     pricings = pricings_based_on_scope(itinerary)
-    unless current_user.internal
+    if current_user.is_a? Organizations::User
       # Filter out all pricings that have a user with `internal == true`, but keep the ones that don't have a user
       pricings = pricings.left_outer_joins(:user)
-                         .where(users: { internal: [nil, false] })
+                         .where.not(users_users: { organization_id: nil })
     end
 
     response_handler(
@@ -83,7 +83,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
   def destroy
     Pricings::Pricing.find_by(
-      tenant_id: current_tenant.id,
+      organization_id: current_organization.id,
       id: params[:id],
       sandbox: @sandbox
     )&.destroy
@@ -98,25 +98,24 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       type: 'pricings',
       options: {
         sandbox: @sandbox,
-        user: current_user,
+        user: organization_user,
         group_id: upload_params[:group_id]
       }
     )
   end
 
   def download
-    tenant_slug = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug
     category_identifier = 'pricings'
     mot = download_params[:mot].downcase
     load_type = download_params[:load_type].downcase
     cargo_class = generic_cargo_class_from_load_type(load_type)
-    file_name = "#{tenant_slug}__#{category_identifier}_#{mot}_#{cargo_class}"
+    file_name = "#{current_organization.slug}__#{category_identifier}_#{mot}_#{cargo_class}"
 
     document = ExcelDataServices::Loaders::Downloader.new(
-      tenant: current_tenant,
+      organization: current_organization,
       category_identifier: category_identifier,
       file_name: file_name,
-      user: Tenants::User.find_by(legacy_id: current_user.id),
+      user: organization_user,
       sandbox: @sandbox,
       options: {
         mode_of_transport: mot,
@@ -147,12 +146,12 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     sanitized_params['data'].each do |shipping_type, pricing_detail_data|
       currency = pricing_detail_data.delete('currency')
       pricing_detail_params = pricing_detail_data.merge(
-        shipping_type: shipping_type, tenant: current_tenant
+        shipping_type: shipping_type, tenant: current_organization
       )
 
       range = pricing_detail_params.delete('range')
       pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
-        shipping_type: shipping_type, tenant: current_tenant
+        shipping_type: shipping_type, tenant: current_organization
       )
 
       pricing_detail.update!(pricing_detail_params)
@@ -165,14 +164,14 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       pricing_details = pricing_exception_data.delete('data')
       pricing_exception = pricing_to_update.pricing_exceptions.where(
         pricing_exception_data
-      ).first_or_create(pricing_exception_data.merge(tenant: current_tenant))
+      ).first_or_create(pricing_exception_data.merge(tenant: current_organization))
 
       pricing_details.each do |shipping_type, pricing_detail_data|
         currency = pricing_detail_data.delete('currency')
         range = pricing_detail_data.delete('range')
 
         pricing_detail_params = pricing_detail_data.merge(
-          shipping_type: shipping_type, tenant: current_tenant
+          shipping_type: shipping_type, tenant: current_organization
         )
 
         pricing_detail = pricing_exception.pricing_details.where(
@@ -211,7 +210,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def handle_search
-    itinerary_relation = ::Legacy::Itinerary.where(tenant_id: current_tenant.id, sandbox: @sandbox)
+    itinerary_relation = ::Legacy::Itinerary.where(organization_id: current_organization.id, sandbox: @sandbox)
 
     relation_modifiers = {
       name: ->(query, param) { query.list_search(param) },

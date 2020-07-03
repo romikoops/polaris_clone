@@ -3,12 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe Api::Routing::GeoRoutingService, type: :service do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-  let(:user) { FactoryBot.create(:tenants_user, tenant: tenant) }
-  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, tenant: legacy_tenant) }
-  let(:origin_hub) { itinerary.hubs.find_by(name: 'Gothenburg Port') }
-  let(:destination_hub) { itinerary.hubs.find_by(name: 'Shanghai Port') }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+  let(:origin_hub) { itinerary.origin_hub }
+  let(:destination_hub) { itinerary.destination_hub }
   let(:origin_location) do
     FactoryBot.create(:locations_location,
                       bounds: FactoryBot.build(:legacy_bounds, lat: origin_hub.latitude, lng: origin_hub.longitude, delta: 0.4),
@@ -24,7 +23,7 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
   let(:query) { nil }
   let(:result) do
     described_class.nexuses(
-      tenant: tenant,
+      organization: organization,
       coordinates: { lat: lat, lng: lng },
       query: query,
       load_type: 'cargo_item',
@@ -33,12 +32,12 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
   end
 
   before do
-    FactoryBot.create(:felixstowe_shanghai_itinerary, tenant: legacy_tenant)
-    FactoryBot.create(:hamburg_shanghai_itinerary, tenant: legacy_tenant)
+    FactoryBot.create(:felixstowe_shanghai_itinerary, organization_id: organization.id)
+    FactoryBot.create(:hamburg_shanghai_itinerary, organization_id: organization.id)
     FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
     FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, query_type: :location)
-    FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: origin_hub, location: origin_trucking_location)
-    FactoryBot.create(:trucking_trucking, tenant: legacy_tenant, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+    FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location)
+    FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
     Geocoder::Lookup::Test.add_stub([origin_hub.latitude, origin_hub.longitude], [
                                       'address_components' => [{ 'types' => ['premise'] }],
                                       'address' => 'Göteborg, Sweden',
@@ -60,7 +59,7 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
   describe '.nexuses' do
     context 'when targeting the origin with destination lat lng' do
       let(:expected_results) do
-        legacy_tenant.itineraries.map { |itin| itin.first_nexus.name }
+        Legacy::Itinerary.where(organization: organization).map { |itin| itin.first_nexus.name }
       end
       let(:lat) { destination_hub.latitude }
       let(:lng) { destination_hub.longitude }

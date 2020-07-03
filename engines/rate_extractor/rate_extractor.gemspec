@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'imc-cargo'
+  s.add_dependency 'imc-organization_manager'
   s.add_dependency 'imc-quotations'
   s.add_dependency 'imc-rates'
   s.add_dependency 'imc-routing'

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'organizations'
 require 'routing'
 require 'write_xlsx'
 

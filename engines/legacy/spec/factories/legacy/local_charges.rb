@@ -40,9 +40,9 @@ FactoryBot.define do
 
     after(:create) do |local_charge|
       local_charge.fees.each do |key, fee|
-        next if Legacy::ChargeCategory.exists?(tenant: local_charge.tenant, code: key.downcase)
+        next if Legacy::ChargeCategory.exists?(organization: local_charge.organization, code: key.downcase)
 
-        FactoryBot.create(:legacy_charge_categories, tenant: local_charge.tenant, code: key.downcase, name: fee['name'])
+        FactoryBot.create(:legacy_charge_categories, organization: local_charge.organization, code: key.downcase, name: fee['name'])
       end
     end
 
@@ -71,10 +71,12 @@ end
 #  counterpart_hub_id :integer
 #  group_id           :uuid
 #  hub_id             :integer
+#  old_user_id        :integer
+#  organization_id    :uuid
 #  sandbox_id         :uuid
 #  tenant_id          :integer
 #  tenant_vehicle_id  :integer
-#  user_id            :integer
+#  user_id            :uuid
 #
 # Indexes
 #
@@ -82,9 +84,16 @@ end
 #  index_local_charges_on_group_id           (group_id)
 #  index_local_charges_on_hub_id             (hub_id)
 #  index_local_charges_on_load_type          (load_type)
+#  index_local_charges_on_organization_id    (organization_id)
 #  index_local_charges_on_sandbox_id         (sandbox_id)
 #  index_local_charges_on_tenant_id          (tenant_id)
 #  index_local_charges_on_tenant_vehicle_id  (tenant_vehicle_id)
+#  index_local_charges_on_user_id            (user_id)
 #  index_local_charges_on_uuid               (uuid) UNIQUE
 #  index_local_charges_on_validity           (validity) USING gist
+#
+# Foreign Keys
+#
+#  fk_rails_     (user_id => users_users.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

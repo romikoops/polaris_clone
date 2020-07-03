@@ -24,17 +24,17 @@ class Admin::DashboardController < Admin::AdminBaseController
   private
 
   def initialize_variables
-    tenant_shipments = Shipment.where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
-    @shipments = current_user.internal ? tenant_shipments : tenant_shipments.external_user
+    tenant_shipments = Legacy::Shipment.where(organization: current_organization)
+      .joins(:user).where(users_users: { deleted_at: nil })
+    @shipments = test_user? ? tenant_shipments : tenant_shipments.excluding_tests
     @requested_shipments = requested_shipments
     @quoted_shipments = quoted_shipments
     @detailed_itineraries = detailed_itin_json
-    hubs = Hub.where(sandbox: @sandbox, tenant_id: current_tenant.id)
+    hubs = Hub.where(sandbox: @sandbox, organization_id: current_organization.id)
     @hubs = hubs.limit(8).map do |hub|
-      { data: hub, address: hub.address.to_custom_hash }
+      { data: Legacy::HubDecorator.new(hub), address: hub.address.to_custom_hash }
     end
-    @map_data = MapDatum.where(tenant_id: current_tenant.id, sandbox: @sandbox)
-    @tenant = Tenant.find(current_user.tenant_id)
+    @map_data = MapDatum.where(organization_id: current_organization.id)
   end
 
   def shipments_hash
@@ -47,20 +47,20 @@ class Admin::DashboardController < Admin::AdminBaseController
   end
 
   def requested_shipments
-    @shipments.requested.order_booking_desc.limit(DASH_SHIPMENTS).map(&:with_address_index_json)
+    decorate_shipments(shipments: @shipments.requested.order_booking_desc.limit(DASH_SHIPMENTS)).map(&:legacy_index_json)
   end
 
   def open_shipments
-    @shipments.open.order_booking_desc.limit(DASH_SHIPMENTS).map(&:with_address_options_json)
+    decorate_shipments(shipments: @shipments.open.order_booking_desc.limit(DASH_SHIPMENTS)).map(&:legacy_index_json)
   end
 
   def quoted_shipments
-    @shipments.quoted.order_booking_desc.limit(DASH_SHIPMENTS).map(&:with_address_index_json)
+    decorate_shipments(shipments: @shipments.quoted.order_booking_desc.limit(DASH_SHIPMENTS)).map(&:legacy_index_json)
   end
 
   def detailed_itin_json
     Itinerary
-      .where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
+      .where(organization: current_organization)
       .limit(DASH_ITINERARIES)
       .map(&:as_options_json)
   end

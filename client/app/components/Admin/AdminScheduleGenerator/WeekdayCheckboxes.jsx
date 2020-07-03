@@ -1,7 +1,7 @@
-import React from 'react'
 import moment from 'moment'
-import Checkbox from '../../Checkbox/Checkbox'
+import React from 'react'
 import PropTypes from '../../../prop-types'
+import Checkbox from '../../Checkbox/Checkbox'
 
 const WeekdayCheckbox = ({
   theme, toggleWeekdays, weekdays, weekday
@@ -15,13 +15,15 @@ const WeekdayCheckbox = ({
       checked={weekdays[weekday]}
     />
     <label htmlFor={`weekdays-${weekday}`} className="offset-5 pointy">
-      <p>{moment.weekdaysShort()[weekday]}</p>
+      <p>{moment.weekdaysShort()[weekday - 1]}</p>
     </label>
   </div>
 )
 
-const WeekdayCheckboxes = props => (
-  Array(7).fill().map((_, i) => <WeekdayCheckbox {...props} weekday={i + 1} />)
+const WeekdayCheckboxes = (props) => (
+  <>
+    { Array(7).fill(0, 0, 7).map((_, i) => <WeekdayCheckbox key={i} {...props} weekday={i + 1} />) }
+  </>
 )
 
 WeekdayCheckbox.propTypes = {

@@ -3,43 +3,34 @@
 require 'rails_helper'
 
 RSpec.describe Analytics::Dashboard::MostActiveRoutes, type: :service do
-  let(:legacy_tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:tenant) { Tenants::Tenant.find_by(legacy_id: legacy_tenant.id) }
-  let(:admin_role) { FactoryBot.create(:legacy_role, name: 'admin') }
-  let(:shipper_role) { FactoryBot.create(:legacy_role, name: 'shipper') }
-  let(:legacy_user) { FactoryBot.create(:legacy_user, tenant: legacy_tenant, role: admin_role, with_profile: true) }
-  let(:user) { Tenants::User.find_by(legacy_id: legacy_user.id) }
-  let(:company) { FactoryBot.create(:tenants_company, name: 'Company Name') }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:company) { FactoryBot.create(:companies_company, organization: organization, name: 'Company Name') }
+  let(:clients) { FactoryBot.create_list(:organizations_user, 2, organization: organization) }
+  let(:start_date) { Time.zone.now - 1.month }
+  let(:end_date) { Time.zone.now }
+  let(:result) { described_class.data(user: user, organization: organization, start_date: start_date, end_date: end_date) }
   let(:itineraries) do
     itin_syms = %i[gothenburg_shanghai_itinerary shanghai_gothenburg_itinerary]
     itin_syms.map do |sym|
-      FactoryBot.create(sym, tenant: legacy_tenant)
+      FactoryBot.create(sym, organization: organization)
     end
   end
-  let(:clients) do
-    %w[John Jane].map do |name|
-      FactoryBot.create(:legacy_user, tenant: legacy_tenant, role: shipper_role, with_profile: true, first_name: name)
-    end
-  end
-
-  let(:start_date) { Time.zone.now - 1.month }
-  let(:end_date) { Time.zone.now }
-
-  let(:result) { described_class.data(user: user, start_date: start_date, end_date: end_date) }
 
   before do
-    itineraries.product(clients).map do |itinerary, client|
+    ::Organizations.current_id = organization.id
+    itineraries.product(clients).each do |itinerary, client|
       FactoryBot.create(:legacy_shipment,
                         itinerary: itinerary,
                         user: client,
-                        tenant: legacy_tenant,
+                        organization: organization,
                         with_breakdown: true,
                         with_tenders: true)
     end
   end
 
   context 'when a quote shop' do
-    before { FactoryBot.create(:tenants_scope, target: tenant, content: { closed_quotation_tool: true }) }
+    before { FactoryBot.create(:organizations_scope, target: organization, content: { closed_quotation_tool: true }) }
 
     describe '.data' do
       it 'returns an array with the itinerary count for the time period' do
@@ -52,8 +43,8 @@ RSpec.describe Analytics::Dashboard::MostActiveRoutes, type: :service do
     before do
       Quotations::Tender.find_each do |tender|
         FactoryBot.create(:shipments_shipment_request,
-                          user: tender.quotation.tenants_user,
-                          tenant: tenant,
+                          user: Organizations::User.unscoped.find(tender.quotation.user_id),  # Find a better way for this
+                          organization: organization,
                           tender: tender,
                           created_at: tender.quotation.created_at)
       end

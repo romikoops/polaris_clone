@@ -80,24 +80,6 @@ const EditProfileBox = ({
         <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
           <div className="flex-100 layout-row layout-align-start-start ">
             <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
-              {t('user:vatNo')}
-            </sup>
-          </div>
-          <div className="input_box flex-100 layout-row layout-align-start-center ">
-            <input
-              className={`flex-none ${styles.input_style}`}
-              type="text"
-              value={user.vat_number}
-              onChange={handleChange}
-              name="vat_number"
-            />
-          </div>
-        </div>
-      )}
-      {!restrictions.company && (
-        <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
-          <div className="flex-100 layout-row layout-align-start-start ">
-            <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
               {t('user:companyNumber')}
             </sup>
           </div>
@@ -105,9 +87,9 @@ const EditProfileBox = ({
             <input
               className={`flex-none ${styles.input_style}`}
               type="text"
-              value={user.company_number}
+              value={user.external_id}
               onChange={handleChange}
-              name="company_number"
+              name="external_id"
             />
           </div>
         </div>

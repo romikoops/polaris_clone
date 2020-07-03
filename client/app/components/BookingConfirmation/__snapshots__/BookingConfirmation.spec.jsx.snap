@@ -384,9 +384,9 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -429,7 +429,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -651,9 +651,9 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -696,7 +696,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -1834,9 +1834,9 @@ exports[`shallow render 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -1879,7 +1879,7 @@ exports[`shallow render 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -2087,9 +2087,9 @@ exports[`shallow render 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -2132,7 +2132,7 @@ exports[`shallow render 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -3270,9 +3270,9 @@ exports[`shipment.cargo_notes is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -3315,7 +3315,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -3523,9 +3523,9 @@ exports[`shipment.cargo_notes is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -3568,7 +3568,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -4690,9 +4690,9 @@ exports[`shipment.eori is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -4735,7 +4735,7 @@ exports[`shipment.eori is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -4943,9 +4943,9 @@ exports[`shipment.eori is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -4988,7 +4988,7 @@ exports[`shipment.eori is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -6110,9 +6110,9 @@ exports[`shipment.incoterm_text is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -6155,7 +6155,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -6363,9 +6363,9 @@ exports[`shipment.incoterm_text is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -6408,7 +6408,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -7530,9 +7530,9 @@ exports[`shipment.notes is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -7575,7 +7575,7 @@ exports[`shipment.notes is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -7783,9 +7783,9 @@ exports[`shipment.notes is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -7828,7 +7828,7 @@ exports[`shipment.notes is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -8947,9 +8947,9 @@ exports[`shipment.total_goods_value is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -8992,7 +8992,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -9197,9 +9197,9 @@ exports[`shipment.total_goods_value is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -9242,7 +9242,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -10370,9 +10370,9 @@ exports[`shipmentData.notifyees is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -10415,7 +10415,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -10623,9 +10623,9 @@ exports[`shipmentData.notifyees is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -10668,7 +10668,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -11674,9 +11674,9 @@ exports[`state.acceptTerms is true 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -11719,7 +11719,7 @@ exports[`state.acceptTerms is true 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -11927,9 +11927,9 @@ exports[`state.acceptTerms is true 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -11972,7 +11972,7 @@ exports[`state.acceptTerms is true 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -13107,9 +13107,9 @@ exports[`tenant.scope.terms.length is 0 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -13149,7 +13149,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
                       },
                       "terms": Array [],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -13357,9 +13357,9 @@ exports[`tenant.scope.terms.length is 0 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -13399,7 +13399,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
                       },
                       "terms": Array [],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -14066,7 +14066,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
                         key="UUID_MOCK_KEY_64"
                       >
                          
-                        You agree to our Terms and Conditions and the General Conditions of the Nordic Association of Freight Forwarders (NSAB) and those of TENANT_NAME
+                        You agree to our Terms and Conditions and the General Conditions of the Nordic Association of Freight Forwarders (NSAB) and those of ORGANIZATION_NAME
                       </li>
                       <li
                         key="UUID_MOCK_KEY_65"
@@ -14529,9 +14529,9 @@ exports[`theme is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -14574,7 +14574,7 @@ exports[`theme is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",
@@ -14768,9 +14768,9 @@ exports[`theme is falsy 1`] = `
                       },
                     },
                     "id": 123,
-                    "name": "TENANT_NAME",
+                    "name": "ORGANIZATION_NAME",
                     "phones": Object {
-                      "support": "TENANT_SUPPORT_PHONE",
+                      "support": "ORGANIZATION_SUPPORT_PHONE",
                     },
                     "scope": Object {
                       "cargo_info_level": "text",
@@ -14813,7 +14813,7 @@ exports[`theme is falsy 1`] = `
                         "BAR_TERM",
                       ],
                     },
-                    "subdomain": "TENANT_SUBDOMAIN",
+                    "subdomain": "ORGANIZATION_SUBDOMAIN",
                     "theme": Object {
                       "colors": Object {
                         "primary": "#333",

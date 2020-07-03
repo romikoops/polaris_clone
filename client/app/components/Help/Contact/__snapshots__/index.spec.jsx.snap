@@ -83,9 +83,9 @@ exports[`shallow render 1`] = `
               />
               <a
                 className="flex-80 pointy"
-                href="tel:TENANT_SUPPORT_PHONE"
+                href="tel:ORGANIZATION_SUPPORT_PHONE"
               >
-                TENANT_SUPPORT_PHONE
+                ORGANIZATION_SUPPORT_PHONE
               </a>
             </div>
           </div>

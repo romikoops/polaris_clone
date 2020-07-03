@@ -57,7 +57,7 @@ module ExcelDataServices
         'DEZ' => 'DEC'
       }.freeze
 
-      def initialize(tenant:, data:)
+      def initialize(organization:, data:)
         super
         @restructured_data = nil # TODO: Transfer this to base class
       end

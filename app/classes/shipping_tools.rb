@@ -9,12 +9,18 @@ class ShippingTools
   DataMappingError = Class.new(StandardError)
   ContactsRedundancyError = Class.new(StandardError)
 
-  def self.create_shipments_from_quotation(shipment, results, sandbox = nil)
-    main_quote = ShippingTools.handle_existing_quote(shipment, results, sandbox)
+  attr_reader :current_organization
+
+  def initialize
+    @current_organization = ::Organizations::Organization.current
+  end
+
+  def create_shipments_from_quotation(shipment, results, sandbox = nil)
+    main_quote = ShippingTools.new.handle_existing_quote(shipment, results, sandbox)
     results.each do |result|
       next unless main_quote.shipments.where(trip_id: result['meta']['charge_trip_id']).empty?
 
-      ShippingTools.create_shipment_from_result(
+      ShippingTools.new.create_shipment_from_result(
         main_quote: main_quote,
         original_shipment: shipment,
         result: result.with_indifferent_access,
@@ -25,10 +31,10 @@ class ShippingTools
     main_quote
   end
 
-  def self.handle_existing_quote(shipment, results, sandbox = nil)
+  def handle_existing_quote(shipment, results, sandbox = nil)
     existing_quote = Legacy::Quotation.find_by(
-      user_id: shipment.user_id,
-      original_shipment_id: shipment.id,
+      user: shipment.user,
+      original_shipment: shipment,
       sandbox: sandbox
     )
 
@@ -41,46 +47,45 @@ class ShippingTools
       main_quote.shipments.destroy_all
     elsif !existing_quote
       main_quote = Legacy::Quotation.create(
-        user_id: shipment.user_id,
-        original_shipment_id: shipment.id,
-        sandbox: sandbox
+        user: shipment.user,
+        original_shipment: shipment,
+        sandbox: sandbox,
+        billing: shipment.billing
       )
     end
 
-    main_quote.touch
+    main_quote.touch unless main_quote.new_record?
     main_quote
   end
 
-  def self.create_shipment(details, current_user, sandbox = nil)
-    scope = Tenants::ScopeService.new(
-      target: ::Tenants::User.find_by(legacy_id: current_user.id),
-      tenant: ::Tenants::Tenant.find_by(legacy_id: current_user.tenant.id),
-      sandbox: sandbox
+  def create_shipment(details, current_user, sandbox = nil)
+    scope = OrganizationManager::ScopeService.new(
+      target: current_user,
+      organization: current_organization
     ).fetch
 
-    raise ApplicationError::NotLoggedIn if scope[:closed_shop] && current_user.guest
+    raise ApplicationError::NotLoggedIn if scope[:closed_shop] && current_user.blank?
 
-    tenant = current_user.tenant
     load_type = details['loadType'].underscore
     direction = details['direction']
 
     shipment = Legacy::Shipment.new(
-      user_id: current_user.id,
+      user: current_user,
       status: 'booking_process_started',
       load_type: load_type,
       direction: direction,
-      tenant_id: tenant.id,
+      organization: current_organization,
       sandbox: sandbox
     )
     shipment.save!
 
-    tenant_itineraries = Itinerary.where(tenant_id: tenant.id, sandbox: sandbox)
+    tenant_itineraries = Itinerary.where(organization_id: current_organization.id, sandbox: sandbox)
 
     if scope[:display_itineraries_with_rates]
       cargo_classes = [nil] + (load_type == 'cargo_item' ? ['lcl'] : Container::CARGO_CLASSES)
       no_general_margins = Pricings::Margin.where(
         itinerary_id: nil,
-        applicable: current_user.all_groups,
+        applicable: current_user.groups,
         cargo_class: cargo_classes,
         sandbox: sandbox
       ).empty?
@@ -89,13 +94,13 @@ class ShippingTools
           sandbox: sandbox,
           itinerary_id: id,
           load_type: load_type,
-          group_id: current_user.all_groups.ids,
+          group_id: current_user.groups.ids,
           internal: false
         ).where('expiration_date > ?', Time.zone.tomorrow).empty?
         no_margins = if no_general_margins
                        Pricings::Margin.where(
                          itinerary_id: id,
-                         applicable: current_user.all_groups,
+                         applicable: current_user.groups,
                          cargo_class: cargo_classes,
                          sandbox: sandbox
                        ).empty?
@@ -114,30 +119,29 @@ class ShippingTools
         ).where('expiration_date > ?', Time.zone.tomorrow).empty?
       end
     end
-
     routes_data = OfferCalculator::Route.detailed_hashes_from_itinerary_ids(
       itinerary_ids,
       with_truck_types: { load_type: load_type },
       base_pricing: scope['base_pricing']
     )
-
     {
       shipment: shipment,
       routes: routes_data[:route_hashes],
       lookup_tables_for_routes: routes_data[:look_ups],
-      cargo_item_types: tenant.cargo_item_types,
-      max_dimensions: tenant.max_dimensions,
-      max_aggregate_dimensions: tenant.max_aggregate_dimensions,
+      cargo_item_types: Legacy::TenantCargoItemType.where(organization: current_organization).map(&:cargo_item_type),
+      max_dimensions: Legacy::MaxDimensionsBundle.unit.where(organization: current_organization).to_max_dimensions_hash,
+      max_aggregate_dimensions: Legacy::MaxDimensionsBundle.aggregate.where(organization: current_organization).to_max_dimensions_hash,
       last_available_date: Date.today
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
-  def self.get_offers(params, current_user, sandbox = nil)
-    scope = Tenants::ScopeService.new(
-      target: ::Tenants::User.find_by(legacy_id: current_user.id),
-      tenant: ::Tenants::Tenant.find_by(legacy_id: current_user.tenant_id)
+  def get_offers(params, current_user, sandbox = nil)
+    scope = OrganizationManager::ScopeService.new(
+      target: current_user,
+      organization: current_organization
     ).fetch
-    raise ApplicationError::NotLoggedIn if scope[:closed_after_map] && current_user.guest
+
+    raise ApplicationError::NotLoggedIn if scope[:closed_after_map] && current_user.blank?
 
     shipment = Legacy::Shipment.where(sandbox: sandbox).find(params[:shipment_id])
     offer_calculator = OfferCalculator::Calculator.new(shipment: shipment, params: params, user: current_user, sandbox: sandbox)
@@ -157,14 +161,15 @@ class ShippingTools
 
     quote = if scope['open_quotation_tool'] || scope['closed_quotation_tool']
               Skylight.instrument title: 'Create Shipments From Quote' do
-                ShippingTools.create_shipments_from_quotation(
+                ShippingTools.new.create_shipments_from_quotation(
                   offer_calculator.shipment,
                   offer_calculator.detailed_schedules.map(&:deep_stringify_keys!)
                 )
               end
             end
-
-    QuoteMailer.quotation_admin_email(quote, offer_calculator.shipment).deliver_later if scope.fetch(:email_all_quotes)
+    if scope.fetch(:email_all_quotes) && offer_calculator.shipment.billing == 'external'
+      QuoteMailer.quotation_admin_email(quote, offer_calculator.shipment).deliver_later
+    end
 
     {
       shipment: offer_calculator.shipment,
@@ -200,16 +205,12 @@ class ShippingTools
     raise ApplicationError::InternalError
   end
 
-  def self.generate_shipment_pdf(shipment:, sandbox: nil)
-    document = Pdf::Service.new(user: shipment.user, tenant: shipment.tenant).shipment_pdf(shipment: shipment)
+  def generate_shipment_pdf(shipment:, sandbox: nil)
+    document = Pdf::Service.new(user: shipment.user, organization: shipment.organization).shipment_pdf(shipment: shipment)
     document.attachment
   end
 
-  def self.update_shipment(params, current_user, sandbox = nil)
-    scope = Tenants::ScopeService.new(
-      target: ::Tenants::User.find_by(legacy_id: current_user.id),
-      tenant: ::Tenants::Tenant.find_by(legacy_id: current_user.tenant_id)
-    ).fetch
+  def update_shipment(params, current_user, sandbox = nil)
     shipment = Shipment.where(sandbox: sandbox).find(params[:shipment_id])
     shipment_data = params[:shipment]
 
@@ -261,7 +262,7 @@ class ShippingTools
       contact
     end || []
 
-    ShippingTools.handle_extra_charges(shipment: shipment, shipment_data: shipment_data)
+    ShippingTools.new.handle_extra_charges(shipment: shipment, shipment_data: shipment_data)
     shipment.customs_credit = shipment_data[:customsCredit]
     shipment.notes = shipment_data['notes']
 
@@ -356,9 +357,9 @@ class ShippingTools
     }
   end
 
-  def self.request_shipment(params, current_user, sandbox = nil)
+  def request_shipment(params, current_user, sandbox = nil)
     shipment = Legacy::Shipment.find_by(id: params[:shipment_id], sandbox: sandbox)
-    shipment.status = current_user.confirmed? ? 'requested' : 'requested_by_unconfirmed_account'
+    shipment.status = current_user.activation_state == 'active' ? 'requested' : 'requested_by_unconfirmed_account'
     shipment.booking_placed_at = DateTime.now
     shipment.save!
 
@@ -374,26 +375,26 @@ class ShippingTools
 
     shipment_request = shipment_request_creator.shipment_request
 
-    Integrations::Processor.process(shipment_request_id: shipment_request.id, tenant_id: shipment_request.tenant_id)
+    Integrations::Processor.process(shipment_request_id: shipment_request.id, organization_id: shipment_request.organization_id)
 
     shipment
   end
 
-  def self.contact_address_params(resource)
+  def contact_address_params(resource)
     resource.require(:address)
             .permit(:street, :streetNumber, :zipCode, :city, :country)
             .to_h.deep_transform_keys(&:underscore)
   end
 
-  def self.contact_params(resource, address_id = nil)
+  def contact_params(resource, address_id = nil)
     resource.require(:contact)
             .permit(:companyName, :firstName, :lastName, :email, :phone)
             .to_h.deep_transform_keys(&:underscore)
             .merge(address_id: address_id)
   end
 
-  def self.choose_offer(params, current_user, sandbox = nil)
-    raise ApplicationError::NotLoggedIn if current_user.guest
+  def choose_offer(params, current_user, sandbox = nil)
+    raise ApplicationError::NotLoggedIn if current_user.blank?
 
     shipment = Shipment.find_by(id: params[:shipment_id] || params[:id], sandbox: sandbox)
 
@@ -402,7 +403,7 @@ class ShippingTools
     shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
     shipment.meta['pricing_breakdown'] = params[:meta][:pricing_breakdown]
 
-    shipment.user_id = current_user.id
+    shipment.user = current_user
     shipment.customs_credit = params[:customs_credit]
     shipment.trip_id = params[:schedule]['trip_id']
     shipment.tender_id = shipment.charge_breakdowns.find_by(trip_id: params[:schedule]['charge_trip_id']).tender_id
@@ -443,7 +444,7 @@ class ShippingTools
       documents[doc.doc_type] << doc
     end
 
-    @user_addresses = current_user.user_addresses.map do |uloc|
+    @user_addresses = UserAddress.where(user: current_user).map do |uloc|
       {
         address: uloc.address.to_custom_hash,
         contact: current_user.attributes
@@ -504,7 +505,8 @@ class ShippingTools
                       mode_of_transport: shipment.mode_of_transport
                     )
                   end
-    total_fees = { total: { value: 0, currency: current_user.currency } }
+    currency = Users::Settings.find_by(user: current_user).currency
+    total_fees = { total: { value: 0, currency: currency } }
     total_fees[:total][:value] += import_fees.dig('total', 'value') if import_fees
     total_fees[:total][:value] += export_fees.dig('total', 'value') if export_fees
 
@@ -545,13 +547,13 @@ class ShippingTools
     }
   end
 
-  def self.search_contacts(contact_params, current_user, sandbox = nil)
+  def search_contacts(contact_params, current_user, sandbox = nil)
     contact_email = contact_params['email']
-    existing_contact = current_user.contacts.where(email: contact_email, sandbox: sandbox).first
-    existing_contact || current_user.contacts.create(contact_params.merge(sandbox: sandbox))
+    existing_contact = Contact.where(user: current_user, email: contact_email, sandbox: sandbox).first
+    existing_contact || Contact.create(contact_params.merge(sandbox: sandbox, user: current_user))
   end
 
-  def self.reuse_cargo_units(shipment, cargo_units)
+  def reuse_cargo_units(shipment, cargo_units)
     cargo_units.each do |cargo_unit|
       cargo_json = cargo_unit.clone.as_json
       cargo_json.delete('id')
@@ -560,7 +562,7 @@ class ShippingTools
     end
   end
 
-  def self.reuse_contacts(old_shipment, new_shipment)
+  def reuse_contacts(old_shipment, new_shipment)
     old_shipment.shipment_contacts.each do |old_contact|
       new_contact_json = old_contact.clone.as_json
       new_contact_json.delete('id')
@@ -569,7 +571,7 @@ class ShippingTools
     end
   end
 
-  def self.view_more_schedules(trip_id, delta, sandbox = nil)
+  def view_more_schedules(trip_id, delta, sandbox = nil)
     trip = Trip.find(trip_id)
     trips = if delta.to_i.positive?
               trip.later_trips(sandbox: sandbox)
@@ -593,39 +595,38 @@ class ShippingTools
     }
   end
 
-  def self.save_pdf_quotes(shipment, tenant, schedules, sandbox = nil)
-    main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules, sandbox)
-    send_on_download = ::Tenants::ScopeService.new(
-      target: ::Tenants::User.find_by(legacy_id: shipment.user.id)
+  def save_pdf_quotes(shipment, organization, schedules, sandbox = nil)
+    main_quote = ShippingTools.new.create_shipments_from_quotation(shipment, schedules, sandbox)
+    send_on_download = ::OrganizationManager::ScopeService.new(
+      target: shipment.user
     ).fetch(:send_email_on_quote_download)
     QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_download
-    Pdf::Service.new(user: shipment.user, tenant: tenant).quotation_pdf(quotation: main_quote)
+    Pdf::Service.new(user: shipment.user, organization: organization).quotation_pdf(quotation: main_quote)
   end
 
-  def self.save_and_send_quotes(shipment, schedules, email, sandbox = nil)
-    main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules, sandbox)
+  def save_and_send_quotes(shipment, schedules, email, sandbox = nil)
+    main_quote = ShippingTools.new.create_shipments_from_quotation(shipment, schedules, sandbox)
     QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote, sandbox).deliver_later
-    send_on_quote = ::Tenants::ScopeService.new(
-      target: ::Tenants::User.find_by(legacy_id: shipment.user.id),
-      sandbox: sandbox
+    send_on_quote = ::OrganizationManager::ScopeService.new(
+      target: shipment.user,
     ).fetch(:send_email_on_quote_email)
     QuoteMailer.quotation_admin_email(main_quote, sandbox).deliver_later if send_on_quote
   end
 
-  def self.tenant_notification_email(user, shipment, sandbox = nil)
+  def tenant_notification_email(user, shipment, sandbox = nil)
     ShipmentMailer.tenant_notification(user, shipment, sandbox).deliver_later
   end
 
-  def self.shipper_notification_email(user, shipment, sandbox = nil)
+  def shipper_notification_email(user, shipment, sandbox = nil)
     ShipmentMailer.shipper_notification(user, shipment, sandbox).deliver_later
   end
 
-  def self.shipper_welcome_email(user, sandbox = nil)
-    no_welcome_content = Legacy::Content.where(tenant_id: user.tenant_id, component: 'WelcomeMail').empty?
+  def shipper_welcome_email(user, sandbox = nil)
+    no_welcome_content = Legacy::Content.where(organization_id: user.organization_id, component: 'WelcomeMail').empty?
     WelcomeMailer.welcome_email(user, sandbox).deliver_later unless no_welcome_content
   end
 
-  def self.shipper_confirmation_email(user, shipment, sandbox = nil)
+  def shipper_confirmation_email(user, shipment, sandbox = nil)
     ShipmentMailer.shipper_confirmation(
       user,
       shipment,
@@ -643,7 +644,7 @@ class ShippingTools
     results
   end
 
-  def self.copy_charge_breakdowns(shipment, original_trip_id, new_trip_id)
+  def copy_charge_breakdowns(shipment, original_trip_id, new_trip_id)
     shipment.charge_breakdowns.find_by(trip_id: new_trip_id) && return
 
     charge_breakdown = shipment.charge_breakdowns.find_by(trip_id: original_trip_id)
@@ -653,7 +654,7 @@ class ShippingTools
     new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
   end
 
-  def self.create_shipment_from_result(main_quote:, original_shipment:, result:, sandbox: nil)
+  def create_shipment_from_result(main_quote:, original_shipment:, result:, sandbox: nil)
     schedule = result['schedules'].first
     trip = Trip.find(schedule['trip_id'])
     original_charge_breakdown = original_shipment.charge_breakdowns.find_by(trip: trip)
@@ -661,7 +662,8 @@ class ShippingTools
     destination_hub = Legacy::Hub.find(schedule['destination_hub']['id'])
     new_shipment = main_quote.shipments.create!(
       status: 'quoted',
-      user_id: original_shipment.user_id,
+      user: original_shipment.user,
+      organization: original_shipment.organization,
       imc_reference: original_shipment.imc_reference,
       origin_hub: origin_hub,
       destination_hub: destination_hub,
@@ -679,7 +681,8 @@ class ShippingTools
       itinerary_id: trip.itinerary_id,
       desired_start_date: original_shipment.desired_start_date,
       meta: result['meta'].slice('pricing_rate_data', 'pricing_breakdown', 'meta_id'),
-      sandbox: sandbox
+      sandbox: sandbox,
+      billing: original_shipment.billing
     )
 
     charge_category_map = {}
@@ -729,7 +732,7 @@ class ShippingTools
         new_charge_category = Legacy::ChargeCategory.find_or_initialize_by(
           code: old_charge_category.code,
           name: old_charge_category.name,
-          tenant_id: old_charge_category.tenant_id,
+          organization_id: old_charge_category.organization_id,
           cargo_unit_id: charge_category_map[old_charge_category.cargo_unit_id]
         )
         new_charge_category.save!
@@ -753,7 +756,7 @@ class ShippingTools
     new_shipment.save!
   end
 
-  def self.handle_extra_charges(shipment:, shipment_data:) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def handle_extra_charges(shipment:, shipment_data:) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     charge_breakdown = shipment.charge_breakdowns.selected
     tender = charge_breakdown.tender
     existing_insurance_charge = charge_breakdown.charge('insurance')
@@ -766,12 +769,12 @@ class ShippingTools
     existing_addons_charge&.destroy
     tender.line_items.where(section: 'addons_section').destroy_all
     grand_total_charge_category = Legacy::ChargeCategory.from_code(
-      code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id
+      code: 'grand_total', name: 'Grand Total', organization_id: shipment.organization_id
     )
     if shipment_data[:insurance][:isSelected]
       insurance_parent_charge = Legacy::Charge.create(
         children_charge_category: Legacy::ChargeCategory.from_code(
-          code: 'insurance', tenant_id: shipment.tenant_id
+          code: 'insurance', organization_id: shipment.organization_id
         ),
         charge_category: grand_total_charge_category,
         charge_breakdown: charge_breakdown,
@@ -782,7 +785,7 @@ class ShippingTools
       )
       insurance_charge = Legacy::Charge.create(
         children_charge_category: Legacy::ChargeCategory.from_code(
-          code: 'freight_insurance', tenant_id: shipment.tenant_id
+          code: 'freight_insurance', organization_id: shipment.organization_id
         ),
         charge_category: insurance_parent_charge.children_charge_category,
         charge_breakdown: charge_breakdown,
@@ -802,7 +805,7 @@ class ShippingTools
     if shipment_data[:customs][:total][:val].to_d.positive? || shipment_data[:customs][:total][:hasUnknown]
       customs_parent_charge = Legacy::Charge.create(
         children_charge_category: Legacy::ChargeCategory.from_code(
-          code: 'customs', tenant_id: shipment.tenant_id
+          code: 'customs', organization_id: shipment.organization_id
         ),
         charge_category: grand_total_charge_category,
         charge_breakdown: charge_breakdown,
@@ -816,7 +819,7 @@ class ShippingTools
         if shipment_data.dig(:customs, direction, :bool)
           customs_charge = Legacy::Charge.create(
             children_charge_category: Legacy::ChargeCategory.from_code(
-              code: "#{direction}_customs", tenant_id: shipment.tenant_id
+              code: "#{direction}_customs", organization_id: shipment.organization_id
             ),
             charge_category: customs_parent_charge.children_charge_category,
             charge_breakdown: charge_breakdown,
@@ -839,7 +842,7 @@ class ShippingTools
     if shipment_data.dig(:addons, :customs_export_paper)
       addons_charge = Legacy::Charge.create(
         children_charge_category: Legacy::ChargeCategory.from_code(
-          code: 'addons', tenant_id: shipment.tenant_id
+          code: 'addons', organization_id: shipment.organization_id
         ),
         charge_category: grand_total_charge_category,
         charge_breakdown: charge_breakdown,
@@ -851,7 +854,7 @@ class ShippingTools
       )
       customs_export_paper = Legacy::Charge.create(
         children_charge_category: Legacy::ChargeCategory.from_code(
-          code: 'customs_export_paper', tenant_id: shipment.tenant_id
+          code: 'customs_export_paper', organization_id: shipment.organization_id
         ),
         charge_category: addons_charge.children_charge_category,
         charge_breakdown: charge_breakdown,

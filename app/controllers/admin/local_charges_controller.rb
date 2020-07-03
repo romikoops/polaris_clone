@@ -72,19 +72,18 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
       options: {
         sandbox: @sandbox,
         group_id: upload_params[:group_id],
-        user: current_user
+        user: organization_user
       }
     )
   end
 
   def download
-    tenant_slug = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug
     category_identifier = 'local_charges'
     mot = download_params[:mot]
-    file_name = "#{tenant_slug}__#{category_identifier}_#{mot}"
+    file_name = "#{current_organization.slug}__#{category_identifier}_#{mot}"
 
     document = ExcelDataServices::Loaders::Downloader.new(
-      tenant: current_tenant,
+      organization: current_organization,
       category_identifier: category_identifier,
       file_name: file_name,
       sandbox: @sandbox,
@@ -119,7 +118,7 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
   end
 
   def handle_search
-    query = ::Legacy::LocalCharge.where(tenant: current_tenant)
+    query = ::Legacy::LocalCharge.where(organization: current_organization)
     query = query.where(group_id: search_params[:group_id]) if search_params[:group_id]
     query = query.search(search_params[:query]) if search_params[:query]
     if search_params[:name_desc]

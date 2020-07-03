@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_29_095915) do
+ActiveRecord::Schema.define(version: 2020_07_03_062014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -54,12 +54,14 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.jsonb "fees"
     t.integer "hub_id"
     t.string "mode_of_transport"
+    t.uuid "organization_id"
     t.string "read_more"
     t.integer "tenant_id"
     t.integer "tenant_vehicle_id"
     t.jsonb "text", default: [], array: true
     t.string "title"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_addons_on_organization_id"
     t.index ["tenant_id"], name: "index_addons_on_tenant_id"
   end
 
@@ -72,6 +74,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.string "first_name"
     t.string "geocoded_address"
     t.string "last_name"
+    t.uuid "legacy_user_id"
     t.string "phone"
     t.geometry "point", limit: {:srid=>0, :type=>"geometry"}
     t.string "postal_code"
@@ -83,6 +86,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.string "tms_id"
     t.datetime "updated_at", null: false
     t.uuid "user_id"
+    t.index ["legacy_user_id"], name: "index_address_book_contacts_on_legacy_user_id"
     t.index ["sandbox_id"], name: "index_address_book_contacts_on_sandbox_id"
     t.index ["user_id"], name: "index_address_book_contacts_on_user_id"
   end
@@ -112,8 +116,10 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "agency_manager_id"
     t.datetime "created_at", null: false
     t.string "name"
+    t.uuid "organization_id"
     t.integer "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_agencies_on_organization_id"
     t.index ["tenant_id"], name: "index_agencies_on_tenant_id"
   end
 
@@ -139,11 +145,13 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
 
   create_table "cargo_cargos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.uuid "organization_id"
     t.uuid "quotation_id"
     t.uuid "tenant_id"
     t.integer "total_goods_value_cents", default: 0, null: false
     t.string "total_goods_value_currency", null: false
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_cargo_cargos_on_organization_id"
     t.index ["quotation_id"], name: "index_cargo_cargos_on_quotation_id"
     t.index ["tenant_id"], name: "index_cargo_cargos_on_tenant_id"
   end
@@ -197,6 +205,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.decimal "height_value", precision: 100, scale: 4, default: "0.0"
     t.string "length_unit", default: "m"
     t.decimal "length_value", precision: 100, scale: 4, default: "0.0"
+    t.uuid "organization_id"
     t.integer "quantity", default: 0
     t.boolean "stackable", default: false
     t.uuid "tenant_id"
@@ -210,6 +219,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.index ["cargo_class"], name: "index_cargo_units_on_cargo_class"
     t.index ["cargo_id"], name: "index_cargo_units_on_cargo_id"
     t.index ["cargo_type"], name: "index_cargo_units_on_cargo_type"
+    t.index ["organization_id"], name: "index_cargo_units_on_organization_id"
     t.index ["tenant_id"], name: "index_cargo_units_on_tenant_id"
   end
 
@@ -238,11 +248,13 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.string "code"
     t.datetime "created_at", null: false
     t.string "name"
+    t.uuid "organization_id"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.datetime "updated_at", null: false
     t.index ["cargo_unit_id"], name: "index_charge_categories_on_cargo_unit_id"
     t.index ["code"], name: "index_charge_categories_on_code"
+    t.index ["organization_id"], name: "index_charge_categories_on_organization_id"
     t.index ["sandbox_id"], name: "index_charge_categories_on_sandbox_id"
     t.index ["tenant_id"], name: "index_charge_categories_on_tenant_id"
   end
@@ -263,19 +275,48 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.index ["sandbox_id"], name: "index_charges_on_sandbox_id"
   end
 
+  create_table "companies_companies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "address_id"
+    t.datetime "created_at", null: false
+    t.datetime "deleted_at"
+    t.string "email"
+    t.string "name"
+    t.uuid "organization_id"
+    t.string "phone"
+    t.uuid "tenants_company_id"
+    t.datetime "updated_at", null: false
+    t.string "vat_number"
+    t.index ["address_id"], name: "index_companies_companies_on_address_id"
+    t.index ["organization_id"], name: "index_companies_companies_on_organization_id"
+    t.index ["tenants_company_id"], name: "index_companies_companies_on_tenants_company_id"
+  end
+
+  create_table "companies_memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "company_id"
+    t.datetime "created_at", null: false
+    t.uuid "member_id"
+    t.string "member_type"
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_companies_memberships_on_company_id"
+    t.index ["member_id", "company_id"], name: "index_companies_memberships_on_member_id_and_company_id", unique: true
+    t.index ["member_type", "member_id"], name: "index_companies_memberships_on_member_type_and_member_id"
+  end
+
   create_table "contacts", force: :cascade do |t|
     t.integer "address_id"
     t.boolean "alias", default: false
     t.string "company_name"
     t.datetime "created_at", null: false
-    t.string "email", comment: "MASKED WITH EmailAddress"
-    t.string "first_name", comment: "MASKED WITH FirstName"
-    t.string "last_name", comment: "MASKED WITH LastName"
-    t.string "phone", comment: "MASKED WITH Phone"
+    t.string "email"
+    t.string "first_name"
+    t.string "last_name"
+    t.integer "legacy_user_id"
+    t.string "phone"
     t.uuid "sandbox_id"
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.uuid "user_id"
     t.index ["sandbox_id"], name: "index_contacts_on_sandbox_id"
+    t.index ["user_id"], name: "index_contacts_on_user_id"
   end
 
   create_table "containers", force: :cascade do |t|
@@ -342,10 +383,12 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
   create_table "currencies", force: :cascade do |t|
     t.string "base"
     t.datetime "created_at", null: false
+    t.uuid "organization_id"
     t.integer "tenant_id"
     t.jsonb "today"
     t.datetime "updated_at", null: false
     t.jsonb "yesterday"
+    t.index ["organization_id"], name: "index_currencies_on_organization_id"
     t.index ["tenant_id"], name: "index_currencies_on_tenant_id"
   end
 
@@ -357,9 +400,11 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "hub_id"
     t.string "load_type"
     t.string "mode_of_transport"
+    t.uuid "organization_id"
     t.integer "tenant_id"
     t.integer "tenant_vehicle_id"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_customs_fees_on_organization_id"
     t.index ["tenant_id"], name: "index_customs_fees_on_tenant_id"
   end
 
@@ -400,6 +445,27 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "groups_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.uuid "organization_id"
+    t.uuid "tenants_group_id"
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_groups_groups_on_organization_id"
+    t.index ["tenants_group_id"], name: "index_groups_groups_on_tenants_group_id"
+  end
+
+  create_table "groups_memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "group_id"
+    t.uuid "member_id"
+    t.string "member_type"
+    t.integer "priority"
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_groups_memberships_on_group_id"
+    t.index ["member_type", "member_id"], name: "index_groups_memberships_on_member_type_and_member_id"
+  end
+
   create_table "hub_truck_type_availabilities_20200504", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "hub_id"
@@ -429,12 +495,14 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "mandatory_charge_id"
     t.string "name"
     t.integer "nexus_id"
+    t.uuid "organization_id"
     t.string "photo"
     t.geometry "point", limit: {:srid=>4326, :type=>"geometry"}
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.string "trucking_type"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_hubs_on_organization_id"
     t.index ["point"], name: "index_hubs_on_point", using: :gist
     t.index ["sandbox_id"], name: "index_hubs_on_sandbox_id"
     t.index ["tenant_id"], name: "index_hubs_on_tenant_id"
@@ -508,6 +576,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.bigint "destination_hub_id"
     t.string "mode_of_transport"
     t.string "name"
+    t.uuid "organization_id"
     t.bigint "origin_hub_id"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
@@ -516,6 +585,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.index ["destination_hub_id"], name: "index_itineraries_on_destination_hub_id"
     t.index ["mode_of_transport"], name: "index_itineraries_on_mode_of_transport"
     t.index ["name"], name: "index_itineraries_on_name"
+    t.index ["organization_id"], name: "index_itineraries_on_organization_id"
     t.index ["origin_hub_id"], name: "index_itineraries_on_origin_hub_id"
     t.index ["sandbox_id"], name: "index_itineraries_on_sandbox_id"
     t.index ["tenant_id"], name: "index_itineraries_on_tenant_id"
@@ -595,12 +665,14 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
   create_table "ledger_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.uuid "location_id"
+    t.uuid "organization_id"
     t.uuid "target_id"
     t.string "target_type"
     t.uuid "tenant_id"
     t.uuid "terminal_id"
     t.datetime "updated_at", null: false
     t.index ["location_id"], name: "index_ledger_rates_on_location_id"
+    t.index ["organization_id"], name: "index_ledger_rates_on_organization_id"
     t.index ["target_type", "target_id"], name: "ledger_rate_target_index"
     t.index ["tenant_id"], name: "index_ledger_rates_on_tenant_id"
     t.index ["terminal_id"], name: "index_ledger_rates_on_terminal_id"
@@ -640,11 +712,13 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.string "component"
     t.datetime "created_at", null: false
     t.integer "index"
+    t.uuid "organization_id"
     t.string "section"
     t.integer "tenant_id"
     t.jsonb "text", default: {}
     t.datetime "updated_at", null: false
     t.index ["component"], name: "index_legacy_contents_on_component"
+    t.index ["organization_id"], name: "index_legacy_contents_on_organization_id"
     t.index ["tenant_id"], name: "index_legacy_contents_on_tenant_id"
   end
 
@@ -663,6 +737,8 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.string "approved"
     t.datetime "created_at", null: false
     t.string "doc_type"
+    t.integer "legacy_user_id"
+    t.uuid "organization_id"
     t.integer "quotation_id"
     t.uuid "sandbox_id"
     t.integer "shipment_id"
@@ -670,11 +746,13 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.string "text"
     t.datetime "updated_at", null: false
     t.string "url"
-    t.integer "user_id"
+    t.uuid "user_id"
+    t.index ["organization_id"], name: "index_legacy_files_on_organization_id"
     t.index ["quotation_id"], name: "index_legacy_files_on_quotation_id"
     t.index ["sandbox_id"], name: "index_legacy_files_on_sandbox_id"
     t.index ["shipment_id"], name: "index_legacy_files_on_shipment_id"
     t.index ["tenant_id"], name: "index_legacy_files_on_tenant_id"
+    t.index ["user_id"], name: "index_legacy_files_on_user_id"
   end
 
   create_table "legacy_hubs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -748,23 +826,27 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.uuid "group_id"
     t.integer "hub_id"
     t.boolean "internal", default: false
+    t.integer "legacy_user_id"
     t.string "load_type"
     t.jsonb "metadata", default: {}
     t.string "mode_of_transport"
+    t.uuid "organization_id"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.integer "tenant_vehicle_id"
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.uuid "user_id"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }
     t.daterange "validity"
     t.index ["direction"], name: "index_local_charges_on_direction"
     t.index ["group_id"], name: "index_local_charges_on_group_id"
     t.index ["hub_id"], name: "index_local_charges_on_hub_id"
     t.index ["load_type"], name: "index_local_charges_on_load_type"
+    t.index ["organization_id"], name: "index_local_charges_on_organization_id"
     t.index ["sandbox_id"], name: "index_local_charges_on_sandbox_id"
     t.index ["tenant_id"], name: "index_local_charges_on_tenant_id"
     t.index ["tenant_vehicle_id"], name: "index_local_charges_on_tenant_vehicle_id"
+    t.index ["user_id"], name: "index_local_charges_on_user_id"
     t.index ["uuid"], name: "index_local_charges_on_uuid", unique: true
     t.index ["validity"], name: "index_local_charges_on_validity", using: :gist
   end
@@ -852,10 +934,12 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.jsonb "geo_json"
     t.string "itinerary_id"
     t.jsonb "line"
+    t.uuid "organization_id"
     t.decimal "origin", default: [], array: true
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_map_data_on_organization_id"
     t.index ["sandbox_id"], name: "index_map_data_on_sandbox_id"
     t.index ["tenant_id"], name: "index_map_data_on_tenant_id"
   end
@@ -873,6 +957,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.bigint "itinerary_id"
     t.decimal "length"
     t.string "mode_of_transport"
+    t.uuid "organization_id"
     t.decimal "payload_in_kg"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
@@ -884,6 +969,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.index ["carrier_id"], name: "index_max_dimensions_bundles_on_carrier_id"
     t.index ["itinerary_id"], name: "index_max_dimensions_bundles_on_itinerary_id"
     t.index ["mode_of_transport"], name: "index_max_dimensions_bundles_on_mode_of_transport"
+    t.index ["organization_id"], name: "index_max_dimensions_bundles_on_organization_id"
     t.index ["sandbox_id"], name: "index_max_dimensions_bundles_on_sandbox_id"
     t.index ["tenant_id"], name: "index_max_dimensions_bundles_on_tenant_id"
     t.index ["tenant_vehicle_id"], name: "index_max_dimensions_bundles_on_tenant_vehicle_id"
@@ -898,6 +984,23 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "sender_id"
     t.string "title"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "migrator_syncs", id: false, force: :cascade do |t|
+    t.uuid "organizations_organization_id"
+    t.integer "tenant_id"
+    t.uuid "tenants_tenant_id"
+    t.uuid "tenants_user_id"
+    t.integer "user_id"
+    t.uuid "users_user_id"
+    t.index ["organizations_organization_id", "tenant_id"], name: "index_migrator_syncs_on_organization_id_and_tenant_id", unique: true
+    t.index ["organizations_organization_id"], name: "index_migrator_syncs_on_organizations_organization_id"
+    t.index ["tenant_id"], name: "index_migrator_syncs_on_tenant_id"
+    t.index ["tenants_tenant_id"], name: "index_migrator_syncs_on_tenants_tenant_id"
+    t.index ["tenants_user_id"], name: "index_migrator_syncs_on_tenants_user_id"
+    t.index ["user_id"], name: "index_migrator_syncs_on_user_id"
+    t.index ["users_user_id", "user_id"], name: "index_migrator_syncs_on_users_user_id_and_user_id", unique: true
+    t.index ["users_user_id"], name: "index_migrator_syncs_on_users_user_id"
   end
 
   create_table "mot_scopes_20200504", force: :cascade do |t|
@@ -918,22 +1021,25 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.string "locode"
     t.float "longitude"
     t.string "name"
+    t.uuid "organization_id"
     t.string "photo"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_nexuses_on_organization_id"
     t.index ["sandbox_id"], name: "index_nexuses_on_sandbox_id"
     t.index ["tenant_id"], name: "index_nexuses_on_tenant_id"
   end
 
   create_table "notes", force: :cascade do |t|
-    t.string "body", comment: "MASKED WITH literal:"
+    t.string "body"
     t.boolean "contains_html"
     t.datetime "created_at", null: false
-    t.string "header", comment: "MASKED WITH literal:"
+    t.string "header"
     t.integer "hub_id"
     t.integer "itinerary_id"
     t.string "level"
+    t.uuid "organization_id"
     t.uuid "pricings_pricing_id"
     t.boolean "remarks", default: false, null: false
     t.uuid "sandbox_id"
@@ -943,6 +1049,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.boolean "transshipment", default: false, null: false
     t.integer "trucking_pricing_id"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_notes_on_organization_id"
     t.index ["pricings_pricing_id"], name: "index_notes_on_pricings_pricing_id"
     t.index ["remarks"], name: "index_notes_on_remarks"
     t.index ["sandbox_id"], name: "index_notes_on_sandbox_id"
@@ -1003,6 +1110,70 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.boolean "tenant"
     t.datetime "updated_at", null: false
     t.index ["sandbox_id"], name: "index_optin_statuses_20200504_on_sandbox_id"
+  end
+
+  create_table "organizations_domains", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "aliases", array: true
+    t.datetime "created_at", null: false
+    t.boolean "default", default: false, null: false
+    t.string "domain"
+    t.uuid "organization_id"
+    t.datetime "updated_at", null: false
+    t.index ["domain"], name: "index_organizations_domains_on_domain", unique: true
+    t.index ["organization_id"], name: "index_organizations_domains_on_organization_id"
+  end
+
+  create_table "organizations_memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "organization_id"
+    t.integer "role", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id"
+    t.index ["organization_id"], name: "index_organizations_memberships_on_organization_id"
+    t.index ["role"], name: "index_organizations_memberships_on_role"
+    t.index ["user_id", "organization_id"], name: "index_organizations_memberships_on_user_id_and_organization_id", unique: true
+    t.index ["user_id"], name: "index_organizations_memberships_on_user_id"
+  end
+
+  create_table "organizations_organizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "slug"
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_organizations_organizations_on_slug", unique: true
+  end
+
+  create_table "organizations_saml_metadata", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.uuid "organization_id"
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_organizations_saml_metadata_on_organization_id"
+  end
+
+  create_table "organizations_scopes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.jsonb "content"
+    t.datetime "created_at", null: false
+    t.uuid "target_id"
+    t.string "target_type"
+    t.datetime "updated_at", null: false
+    t.index ["target_type", "target_id"], name: "index_organizations_scopes_on_target_type_and_target_id", unique: true
+  end
+
+  create_table "organizations_themes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.jsonb "addresses"
+    t.string "bright_primary_color"
+    t.string "bright_secondary_color"
+    t.datetime "created_at", null: false
+    t.jsonb "email_links"
+    t.jsonb "emails"
+    t.string "name"
+    t.uuid "organization_id"
+    t.jsonb "phones"
+    t.string "primary_color"
+    t.string "secondary_color"
+    t.datetime "updated_at", null: false
+    t.string "welcome_text"
+    t.index ["organization_id"], name: "index_organizations_themes_on_organization_id", unique: true
   end
 
   create_table "ports", force: :cascade do |t|
@@ -1128,12 +1299,14 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.datetime "created_at", null: false
     t.uuid "margin_id"
     t.string "operator"
+    t.uuid "organization_id"
     t.uuid "sandbox_id"
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
     t.decimal "value"
     t.index ["charge_category_id"], name: "index_pricings_details_on_charge_category_id"
     t.index ["margin_id"], name: "index_pricings_details_on_margin_id"
+    t.index ["organization_id"], name: "index_pricings_details_on_organization_id"
     t.index ["sandbox_id"], name: "index_pricings_details_on_sandbox_id"
     t.index ["tenant_id"], name: "index_pricings_details_on_tenant_id"
   end
@@ -1149,6 +1322,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "legacy_id"
     t.jsonb "metadata", default: {}
     t.decimal "min"
+    t.uuid "organization_id"
     t.uuid "pricing_id"
     t.jsonb "range", default: []
     t.decimal "rate"
@@ -1156,6 +1330,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.uuid "sandbox_id"
     t.bigint "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_pricings_fees_on_organization_id"
     t.index ["pricing_id"], name: "index_pricings_fees_on_pricing_id"
     t.index ["sandbox_id"], name: "index_pricings_fees_on_sandbox_id"
     t.index ["tenant_id"], name: "index_pricings_fees_on_tenant_id"
@@ -1174,6 +1349,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "itinerary_id"
     t.integer "margin_type"
     t.string "operator"
+    t.uuid "organization_id"
     t.integer "origin_hub_id"
     t.uuid "pricing_id"
     t.uuid "sandbox_id"
@@ -1190,6 +1366,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.index ["expiration_date"], name: "index_pricings_margins_on_expiration_date"
     t.index ["itinerary_id"], name: "index_pricings_margins_on_itinerary_id"
     t.index ["margin_type"], name: "index_pricings_margins_on_margin_type"
+    t.index ["organization_id"], name: "index_pricings_margins_on_organization_id"
     t.index ["origin_hub_id"], name: "index_pricings_margins_on_origin_hub_id"
     t.index ["pricing_id"], name: "index_pricings_margins_on_pricing_id"
     t.index ["sandbox_id"], name: "index_pricings_margins_on_sandbox_id"
@@ -1201,10 +1378,12 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "cargo_unit_id"
     t.integer "charge_breakdown_id"
     t.datetime "created_at", null: false
+    t.uuid "organization_id"
     t.uuid "pricing_id"
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
     t.index ["charge_breakdown_id"], name: "index_pricings_metadata_on_charge_breakdown_id"
+    t.index ["organization_id"], name: "index_pricings_metadata_on_organization_id"
     t.index ["tenant_id"], name: "index_pricings_metadata_on_tenant_id"
   end
 
@@ -1217,19 +1396,23 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.boolean "internal", default: false
     t.bigint "itinerary_id"
     t.integer "legacy_id"
+    t.bigint "legacy_user_id"
     t.string "load_type"
+    t.uuid "organization_id"
     t.uuid "sandbox_id"
     t.bigint "tenant_id"
     t.integer "tenant_vehicle_id"
     t.string "transshipment"
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.uuid "user_id"
     t.daterange "validity"
     t.decimal "wm_rate"
     t.index ["cargo_class"], name: "index_pricings_pricings_on_cargo_class"
     t.index ["group_id"], name: "index_pricings_pricings_on_group_id"
     t.index ["itinerary_id"], name: "index_pricings_pricings_on_itinerary_id"
+    t.index ["legacy_user_id"], name: "index_pricings_pricings_on_legacy_user_id"
     t.index ["load_type"], name: "index_pricings_pricings_on_load_type"
+    t.index ["organization_id"], name: "index_pricings_pricings_on_organization_id"
     t.index ["sandbox_id"], name: "index_pricings_pricings_on_sandbox_id"
     t.index ["tenant_id"], name: "index_pricings_pricings_on_tenant_id"
     t.index ["tenant_vehicle_id"], name: "index_pricings_pricings_on_tenant_vehicle_id"
@@ -1251,22 +1434,29 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
   create_table "profiles_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "company_name"
     t.datetime "deleted_at"
+    t.string "external_id"
     t.string "first_name", default: "", null: false
     t.string "last_name", default: "", null: false
+    t.uuid "legacy_user_id"
     t.string "phone"
     t.uuid "user_id"
+    t.index ["legacy_user_id"], name: "index_profiles_profiles_on_legacy_user_id"
     t.index ["user_id"], name: "index_profiles_profiles_on_user_id"
   end
 
   create_table "quotations", force: :cascade do |t|
+    t.integer "billing", default: 0
     t.datetime "created_at", null: false
+    t.uuid "distinct_id"
+    t.integer "legacy_user_id"
     t.string "name"
     t.integer "original_shipment_id"
     t.uuid "sandbox_id"
     t.string "target_email"
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.uuid "user_id"
     t.index ["sandbox_id"], name: "index_quotations_on_sandbox_id"
+    t.index ["user_id"], name: "index_quotations_on_user_id"
   end
 
   create_table "quotations_line_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1287,19 +1477,25 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
   end
 
   create_table "quotations_quotations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "billing", default: 0
     t.datetime "created_at", null: false
     t.integer "delivery_address_id"
     t.integer "destination_nexus_id"
     t.integer "legacy_shipment_id"
+    t.bigint "legacy_user_id"
+    t.uuid "organization_id"
     t.integer "origin_nexus_id"
     t.integer "pickup_address_id"
     t.bigint "sandbox_id"
     t.datetime "selected_date"
+    t.integer "shipment_id"
     t.uuid "tenant_id"
     t.uuid "tenants_user_id"
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.uuid "user_id"
     t.index ["destination_nexus_id"], name: "index_quotations_quotations_on_destination_nexus_id"
+    t.index ["legacy_user_id"], name: "index_quotations_quotations_on_legacy_user_id"
+    t.index ["organization_id"], name: "index_quotations_quotations_on_organization_id"
     t.index ["origin_nexus_id"], name: "index_quotations_quotations_on_origin_nexus_id"
     t.index ["sandbox_id"], name: "index_quotations_quotations_on_sandbox_id"
     t.index ["tenant_id"], name: "index_quotations_quotations_on_tenant_id"
@@ -1391,6 +1587,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "ldm_threshold_applicable"
     t.uuid "location_id"
     t.integer "mode_of_transport"
+    t.uuid "organization_id"
     t.uuid "target_id"
     t.string "target_type"
     t.uuid "tenant_id"
@@ -1399,6 +1596,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.datetime "updated_at", null: false
     t.index ["carrier_id"], name: "index_rates_sections_on_carrier_id"
     t.index ["location_id"], name: "index_rates_sections_on_location_id"
+    t.index ["organization_id"], name: "index_rates_sections_on_organization_id"
     t.index ["target_type", "target_id"], name: "index_rates_sections_on_target_type_and_target_id"
     t.index ["tenant_id"], name: "index_rates_sections_on_tenant_id"
     t.index ["terminal_id"], name: "index_rates_sections_on_terminal_id"
@@ -1409,10 +1607,12 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.string "category"
     t.datetime "created_at", null: false
     t.integer "order"
+    t.uuid "organization_id"
     t.uuid "sandbox_id"
     t.string "subcategory"
     t.bigint "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_remarks_on_organization_id"
     t.index ["sandbox_id"], name: "index_remarks_on_sandbox_id"
     t.index ["tenant_id"], name: "index_remarks_on_tenant_id"
   end
@@ -1421,11 +1621,13 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "book_type", default: 0, null: false
     t.datetime "created_at", null: false
     t.jsonb "metadata", default: {}
+    t.uuid "organization_id"
     t.integer "sheet_type"
     t.uuid "target_id"
     t.string "target_type"
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_rms_data_books_on_organization_id"
     t.index ["sheet_type"], name: "index_rms_data_books_on_sheet_type"
     t.index ["target_type", "target_id"], name: "index_rms_data_books_on_target_type_and_target_id"
     t.index ["tenant_id"], name: "index_rms_data_books_on_tenant_id"
@@ -1434,12 +1636,14 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
   create_table "rms_data_cells", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "column"
     t.datetime "created_at", null: false
+    t.uuid "organization_id"
     t.integer "row"
     t.uuid "sheet_id"
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
     t.string "value"
     t.index ["column"], name: "index_rms_data_cells_on_column"
+    t.index ["organization_id"], name: "index_rms_data_cells_on_organization_id"
     t.index ["row"], name: "index_rms_data_cells_on_row"
     t.index ["sheet_id"], name: "index_rms_data_cells_on_sheet_id"
     t.index ["tenant_id"], name: "index_rms_data_cells_on_tenant_id"
@@ -1450,10 +1654,12 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.datetime "created_at", null: false
     t.jsonb "metadata", default: {}
     t.string "name"
+    t.uuid "organization_id"
     t.integer "sheet_index"
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
     t.index ["book_id"], name: "index_rms_data_sheets_on_book_id"
+    t.index ["organization_id"], name: "index_rms_data_sheets_on_organization_id"
     t.index ["sheet_index"], name: "index_rms_data_sheets_on_sheet_index"
     t.index ["tenant_id"], name: "index_rms_data_sheets_on_tenant_id"
   end
@@ -1567,6 +1773,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
   end
 
   create_table "shipments", force: :cascade do |t|
+    t.integer "billing", default: 0
     t.datetime "booking_placed_at"
     t.string "cargo_notes"
     t.datetime "closing_date"
@@ -1578,6 +1785,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "destination_hub_id"
     t.integer "destination_nexus_id"
     t.string "direction"
+    t.uuid "distinct_id"
     t.string "eori"
     t.boolean "has_on_carriage"
     t.boolean "has_pre_carriage"
@@ -1586,9 +1794,11 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.string "incoterm_text"
     t.jsonb "insurance"
     t.integer "itinerary_id"
+    t.integer "legacy_user_id"
     t.string "load_type"
     t.jsonb "meta", default: {}
     t.string "notes"
+    t.uuid "organization_id"
     t.integer "origin_hub_id"
     t.integer "origin_nexus_id"
     t.datetime "planned_delivery_date"
@@ -1606,21 +1816,25 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "trip_id"
     t.jsonb "trucking"
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.uuid "user_id"
     t.string "uuid"
+    t.index ["organization_id"], name: "index_shipments_on_organization_id"
     t.index ["sandbox_id"], name: "index_shipments_on_sandbox_id", where: "(deleted_at IS NULL)"
     t.index ["tenant_id"], name: "index_shipments_on_tenant_id", where: "(deleted_at IS NULL)"
     t.index ["tender_id"], name: "index_shipments_on_tender_id"
+    t.index ["user_id"], name: "index_shipments_on_user_id"
   end
 
   create_table "shipments_cargos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.uuid "organization_id"
     t.uuid "sandbox_id"
     t.uuid "shipment_id"
     t.uuid "tenant_id"
     t.integer "total_goods_value_cents", default: 0, null: false
     t.string "total_goods_value_currency", null: false
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_shipments_cargos_on_organization_id"
     t.index ["sandbox_id"], name: "index_shipments_cargos_on_sandbox_id"
     t.index ["shipment_id"], name: "index_shipments_cargos_on_shipment_id"
     t.index ["tenant_id"], name: "index_shipments_cargos_on_tenant_id"
@@ -1698,21 +1912,26 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
   end
 
   create_table "shipments_shipment_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "billing", default: 0
     t.string "cargo_notes"
     t.datetime "created_at", null: false
     t.string "eori"
     t.datetime "eta"
     t.datetime "etd"
     t.string "incoterm_text"
+    t.uuid "legacy_user_id"
     t.string "notes"
+    t.uuid "organization_id"
     t.string "ref_number", null: false
     t.uuid "sandbox_id"
     t.string "status"
     t.datetime "submitted_at"
-    t.uuid "tenant_id", null: false
+    t.uuid "tenant_id"
     t.uuid "tender_id", null: false
     t.datetime "updated_at", null: false
-    t.uuid "user_id", null: false
+    t.uuid "user_id"
+    t.index ["legacy_user_id"], name: "index_shipments_shipment_requests_on_legacy_user_id"
+    t.index ["organization_id"], name: "index_shipments_shipment_requests_on_organization_id"
     t.index ["sandbox_id"], name: "index_shipments_shipment_requests_on_sandbox_id"
     t.index ["tenant_id"], name: "index_shipments_shipment_requests_on_tenant_id"
     t.index ["tender_id"], name: "index_shipments_shipment_requests_on_tender_id"
@@ -1724,15 +1943,19 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.uuid "destination_id", null: false
     t.string "eori"
     t.string "incoterm_text"
+    t.uuid "legacy_user_id"
     t.string "notes"
+    t.uuid "organization_id"
     t.uuid "origin_id", null: false
     t.uuid "sandbox_id"
     t.uuid "shipment_request_id"
     t.string "status"
-    t.uuid "tenant_id", null: false
+    t.uuid "tenant_id"
     t.datetime "updated_at", null: false
-    t.uuid "user_id", null: false
+    t.uuid "user_id"
     t.index ["destination_id"], name: "index_shipments_shipments_on_destination_id"
+    t.index ["legacy_user_id"], name: "index_shipments_shipments_on_legacy_user_id"
+    t.index ["organization_id"], name: "index_shipments_shipments_on_organization_id"
     t.index ["origin_id"], name: "index_shipments_shipments_on_origin_id"
     t.index ["sandbox_id"], name: "index_shipments_shipments_on_sandbox_id"
     t.index ["shipment_request_id"], name: "index_shipments_shipments_on_shipment_request_id"
@@ -1790,10 +2013,12 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
   create_table "tenant_cargo_item_types", force: :cascade do |t|
     t.bigint "cargo_item_type_id"
     t.datetime "created_at", null: false
+    t.uuid "organization_id"
     t.uuid "sandbox_id"
     t.bigint "tenant_id"
     t.datetime "updated_at", null: false
     t.index ["cargo_item_type_id"], name: "index_tenant_cargo_item_types_on_cargo_item_type_id"
+    t.index ["organization_id"], name: "index_tenant_cargo_item_types_on_organization_id"
     t.index ["sandbox_id"], name: "index_tenant_cargo_item_types_on_sandbox_id"
     t.index ["tenant_id"], name: "index_tenant_cargo_item_types_on_tenant_id"
   end
@@ -1801,8 +2026,10 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
   create_table "tenant_incoterms", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "incoterm_id"
+    t.uuid "organization_id"
     t.integer "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_tenant_incoterms_on_organization_id"
     t.index ["tenant_id"], name: "index_tenant_incoterms_on_tenant_id"
   end
 
@@ -1811,10 +2038,12 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.uuid "inbound_id"
     t.uuid "line_service_id"
     t.integer "mode_of_transport", default: 0
+    t.uuid "organization_id"
     t.uuid "outbound_id"
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
     t.index ["inbound_id"], name: "index_tenant_routing_connections_on_inbound_id"
+    t.index ["organization_id"], name: "index_tenant_routing_connections_on_organization_id"
     t.index ["outbound_id"], name: "index_tenant_routing_connections_on_outbound_id"
     t.index ["tenant_id"], name: "index_tenant_routing_connections_on_tenant_id"
   end
@@ -1823,6 +2052,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.datetime "created_at", null: false
     t.uuid "line_service_id"
     t.integer "mode_of_transport", default: 0
+    t.uuid "organization_id"
     t.integer "price_factor"
     t.uuid "route_id"
     t.uuid "tenant_id"
@@ -1830,6 +2060,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.datetime "updated_at", null: false
     t.index ["line_service_id"], name: "index_tenant_routing_routes_on_line_service_id"
     t.index ["mode_of_transport"], name: "index_tenant_routing_routes_on_mode_of_transport"
+    t.index ["organization_id"], name: "index_tenant_routing_routes_on_organization_id"
     t.index ["tenant_id"], name: "index_tenant_routing_routes_on_tenant_id"
   end
 
@@ -1849,10 +2080,12 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.boolean "is_default"
     t.string "mode_of_transport"
     t.string "name"
+    t.uuid "organization_id"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.datetime "updated_at", null: false
     t.integer "vehicle_id"
+    t.index ["organization_id"], name: "index_tenant_vehicles_on_organization_id"
     t.index ["sandbox_id"], name: "index_tenant_vehicles_on_sandbox_id"
     t.index ["tenant_id"], name: "index_tenant_vehicles_on_tenant_id"
   end
@@ -2041,9 +2274,11 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
   create_table "trucking_couriers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
+    t.uuid "organization_id"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_trucking_couriers_on_organization_id"
     t.index ["sandbox_id"], name: "index_trucking_couriers_on_sandbox_id"
     t.index ["tenant_id"], name: "index_trucking_couriers_on_tenant_id"
   end
@@ -2134,10 +2369,12 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.string "identifier_modifier"
     t.jsonb "load_meterage"
     t.string "modifier"
+    t.uuid "organization_id"
     t.jsonb "rates"
     t.uuid "scope_id"
     t.integer "tenant_id"
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_trucking_rates_on_organization_id"
     t.index ["scope_id"], name: "index_trucking_rates_on_trucking_scope_id"
     t.index ["tenant_id"], name: "index_trucking_rates_on_tenant_id"
   end
@@ -2162,11 +2399,13 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.uuid "group_id"
     t.integer "hub_id"
     t.string "identifier_modifier"
+    t.integer "legacy_user_id"
     t.jsonb "load_meterage"
     t.string "load_type"
     t.uuid "location_id"
     t.jsonb "metadata", default: {}
     t.string "modifier"
+    t.uuid "organization_id"
     t.uuid "parent_id"
     t.uuid "rate_id"
     t.jsonb "rates"
@@ -2174,16 +2413,18 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.integer "tenant_id"
     t.string "truck_type"
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.uuid "user_id"
     t.index ["cargo_class"], name: "index_trucking_truckings_on_cargo_class"
     t.index ["carriage"], name: "index_trucking_truckings_on_carriage"
     t.index ["group_id"], name: "index_trucking_truckings_on_group_id"
     t.index ["hub_id"], name: "index_trucking_truckings_on_hub_id"
     t.index ["load_type"], name: "index_trucking_truckings_on_load_type"
     t.index ["location_id"], name: "index_trucking_truckings_on_location_id"
+    t.index ["organization_id"], name: "index_trucking_truckings_on_organization_id"
     t.index ["rate_id", "location_id", "hub_id"], name: "trucking_foreign_keys", unique: true
     t.index ["sandbox_id"], name: "index_trucking_truckings_on_sandbox_id"
     t.index ["tenant_id"], name: "index_trucking_truckings_on_tenant_id"
+    t.index ["user_id"], name: "index_trucking_truckings_on_user_id"
   end
 
   create_table "trucking_type_availabilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -2205,21 +2446,25 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.string "category"
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
+    t.integer "legacy_user_id"
     t.boolean "primary", default: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.uuid "user_id"
     t.index ["deleted_at"], name: "index_user_addresses_on_deleted_at"
+    t.index ["user_id"], name: "index_user_addresses_on_user_id"
   end
 
   create_table "user_managers", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.integer "legacy_user_id"
     t.integer "manager_id"
     t.string "section"
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.uuid "user_id"
+    t.index ["user_id"], name: "index_user_managers_on_user_id"
   end
 
-  create_table "users", comment: "FILTER WITH users.email NOT LIKE '%@itsmycargo.com' AND users.email NOT LIKE '%demo%@%'", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.integer "agency_id"
     t.boolean "allow_password_change", default: false, null: false
     t.string "company_name_20200207"
@@ -2232,20 +2477,21 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.datetime "current_sign_in_at"
     t.string "current_sign_in_ip"
     t.datetime "deleted_at"
-    t.string "email", comment: "MASKED WITH EmailAddress"
+    t.string "email"
     t.string "encrypted_password", default: "", null: false
     t.string "external_id"
-    t.string "first_name_20200207", comment: "MASKED WITH FirstName"
+    t.string "first_name_20200207"
     t.boolean "guest", default: false
     t.string "image"
     t.boolean "internal", default: false
-    t.string "last_name_20200207", comment: "MASKED WITH LastName"
+    t.string "last_name_20200207"
     t.datetime "last_sign_in_at"
     t.string "last_sign_in_ip"
     t.string "nickname"
     t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
-    t.string "phone_20200207", comment: "MASKED WITH Phone"
+    t.uuid "organization_id"
+    t.string "phone_20200207"
     t.string "provider", default: "tenant_email", null: false
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
@@ -2262,11 +2508,69 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email"
+    t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role_id"], name: "index_users_on_role_id"
     t.index ["sandbox_id"], name: "index_users_on_sandbox_id"
     t.index ["tenant_id"], name: "index_users_on_tenant_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+  end
+
+  create_table "users_authentications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "provider", null: false
+    t.string "uid", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id"
+    t.index ["provider", "uid"], name: "provider_uid_on_users_authentications"
+    t.index ["user_id"], name: "index_users_authentications_on_user_id"
+  end
+
+  create_table "users_settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "currency", default: "EUR"
+    t.string "language", default: "en-GB"
+    t.string "locale", default: "en-GB"
+    t.datetime "updated_at", null: false
+    t.uuid "user_id"
+    t.index ["user_id"], name: "index_users_settings_on_user_id", unique: true
+  end
+
+  create_table "users_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "access_count_to_reset_password_page", default: 0
+    t.string "activation_state"
+    t.string "activation_token"
+    t.datetime "activation_token_expires_at"
+    t.datetime "created_at", null: false
+    t.string "crypted_password"
+    t.datetime "deleted_at"
+    t.string "email", null: false
+    t.integer "failed_logins_count", default: 0
+    t.datetime "last_activity_at"
+    t.datetime "last_login_at"
+    t.string "last_login_from_ip_address"
+    t.datetime "last_logout_at"
+    t.datetime "lock_expires_at"
+    t.datetime "magic_login_email_sent_at"
+    t.string "magic_login_token"
+    t.datetime "magic_login_token_expires_at"
+    t.uuid "organization_id"
+    t.datetime "reset_password_email_sent_at"
+    t.string "reset_password_token"
+    t.datetime "reset_password_token_expires_at"
+    t.string "salt"
+    t.string "type"
+    t.string "unlock_token"
+    t.datetime "updated_at", null: false
+    t.index ["activation_token"], name: "index_users_users_on_activation_token", where: "(deleted_at IS NULL)"
+    t.index ["email", "organization_id"], name: "index_users_users_on_email_and_organization_id", unique: true
+    t.index ["email", "type"], name: "index_users_users_on_email_and_type", unique: true, where: "(organization_id IS NULL)"
+    t.index ["email"], name: "index_users_users_on_email", where: "(deleted_at IS NULL)"
+    t.index ["last_logout_at", "last_activity_at"], name: "users_users_activity", where: "(deleted_at IS NULL)"
+    t.index ["magic_login_token"], name: "index_users_users_on_magic_login_token", where: "(deleted_at IS NULL)"
+    t.index ["organization_id"], name: "index_users_users_on_organization_id"
+    t.index ["reset_password_token"], name: "index_users_users_on_reset_password_token", where: "(deleted_at IS NULL)"
+    t.index ["unlock_token"], name: "index_users_users_on_unlock_token", where: "(deleted_at IS NULL)"
   end
 
   create_table "vehicles", force: :cascade do |t|
@@ -2276,7 +2580,7 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "versions", comment: "IGNORE DATA", force: :cascade do |t|
+  create_table "versions", force: :cascade do |t|
     t.datetime "created_at"
     t.string "event", null: false
     t.integer "item_id", null: false
@@ -2287,47 +2591,106 @@ ActiveRecord::Schema.define(version: 2020_06_29_095915) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "addons", "organizations_organizations", column: "organization_id"
   add_foreign_key "address_book_contacts", "tenants_sandboxes", column: "sandbox_id"
-  add_foreign_key "address_book_contacts", "tenants_users", column: "user_id"
+  add_foreign_key "address_book_contacts", "users_users", column: "user_id"
+  add_foreign_key "agencies", "organizations_organizations", column: "organization_id"
+  add_foreign_key "cargo_cargos", "organizations_organizations", column: "organization_id"
   add_foreign_key "cargo_cargos", "quotations_quotations", column: "quotation_id"
   add_foreign_key "cargo_units", "cargo_cargos", column: "cargo_id"
+  add_foreign_key "cargo_units", "organizations_organizations", column: "organization_id"
+  add_foreign_key "charge_categories", "organizations_organizations", column: "organization_id"
+  add_foreign_key "companies_companies", "addresses"
+  add_foreign_key "companies_companies", "organizations_organizations", column: "organization_id"
+  add_foreign_key "companies_memberships", "companies_companies", column: "company_id"
+  add_foreign_key "contacts", "users_users", column: "user_id"
+  add_foreign_key "currencies", "organizations_organizations", column: "organization_id"
+  add_foreign_key "customs_fees", "organizations_organizations", column: "organization_id"
+  add_foreign_key "groups_groups", "organizations_organizations", column: "organization_id"
+  add_foreign_key "groups_memberships", "groups_groups", column: "group_id"
+  add_foreign_key "hubs", "organizations_organizations", column: "organization_id"
   add_foreign_key "itineraries", "hubs", column: "destination_hub_id", on_delete: :cascade
   add_foreign_key "itineraries", "hubs", column: "origin_hub_id", on_delete: :cascade
+  add_foreign_key "itineraries", "organizations_organizations", column: "organization_id"
+  add_foreign_key "ledger_rates", "organizations_organizations", column: "organization_id"
+  add_foreign_key "legacy_contents", "organizations_organizations", column: "organization_id"
+  add_foreign_key "legacy_files", "organizations_organizations", column: "organization_id"
+  add_foreign_key "legacy_files", "users_users", column: "user_id"
   add_foreign_key "legacy_transit_times", "itineraries", on_delete: :cascade
   add_foreign_key "legacy_transit_times", "tenant_vehicles", on_delete: :cascade
+  add_foreign_key "local_charges", "organizations_organizations", column: "organization_id"
+  add_foreign_key "local_charges", "users_users", column: "user_id"
+  add_foreign_key "map_data", "organizations_organizations", column: "organization_id"
+  add_foreign_key "max_dimensions_bundles", "organizations_organizations", column: "organization_id"
+  add_foreign_key "migrator_syncs", "organizations_organizations"
+  add_foreign_key "migrator_syncs", "users_users"
+  add_foreign_key "nexuses", "organizations_organizations", column: "organization_id"
+  add_foreign_key "notes", "organizations_organizations", column: "organization_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
-  add_foreign_key "profiles_profiles", "tenants_users", column: "user_id", on_delete: :cascade
+  add_foreign_key "organizations_domains", "organizations_organizations", column: "organization_id"
+  add_foreign_key "organizations_memberships", "organizations_organizations", column: "organization_id"
+  add_foreign_key "organizations_memberships", "users_users", column: "user_id"
+  add_foreign_key "organizations_saml_metadata", "organizations_organizations", column: "organization_id"
+  add_foreign_key "organizations_themes", "organizations_organizations", column: "organization_id"
+  add_foreign_key "pricings_details", "organizations_organizations", column: "organization_id"
+  add_foreign_key "pricings_fees", "organizations_organizations", column: "organization_id"
+  add_foreign_key "pricings_margins", "organizations_organizations", column: "organization_id"
+  add_foreign_key "pricings_metadata", "organizations_organizations", column: "organization_id"
+  add_foreign_key "pricings_pricings", "organizations_organizations", column: "organization_id"
+  add_foreign_key "pricings_pricings", "users_users", column: "user_id"
+  add_foreign_key "profiles_profiles", "users_users", column: "user_id"
+  add_foreign_key "quotations", "users_users", column: "user_id"
+  add_foreign_key "quotations_quotations", "organizations_organizations", column: "organization_id"
+  add_foreign_key "quotations_quotations", "users_users", column: "user_id"
   add_foreign_key "quotations_tenders", "quotations_quotations", column: "quotation_id"
   add_foreign_key "rates_cargos", "rates_sections", column: "section_id"
   add_foreign_key "rates_fees", "rates_cargos", column: "cargo_id"
   add_foreign_key "rates_sections", "carriers"
+  add_foreign_key "rates_sections", "organizations_organizations", column: "organization_id"
   add_foreign_key "rates_sections", "routing_locations", column: "location_id"
   add_foreign_key "rates_sections", "routing_terminals", column: "terminal_id"
-  add_foreign_key "rates_sections", "tenants_tenants", column: "tenant_id"
-  add_foreign_key "remarks", "tenants"
+  add_foreign_key "remarks", "organizations_organizations", column: "organization_id"
+  add_foreign_key "rms_data_books", "organizations_organizations", column: "organization_id"
+  add_foreign_key "rms_data_cells", "organizations_organizations", column: "organization_id"
+  add_foreign_key "rms_data_sheets", "organizations_organizations", column: "organization_id"
   add_foreign_key "shipments", "hubs", column: "destination_hub_id", on_delete: :nullify
   add_foreign_key "shipments", "hubs", column: "origin_hub_id", on_delete: :nullify
   add_foreign_key "shipments", "nexuses", column: "destination_nexus_id", on_delete: :nullify
   add_foreign_key "shipments", "nexuses", column: "origin_nexus_id", on_delete: :nullify
+  add_foreign_key "shipments", "organizations_organizations", column: "organization_id"
+  add_foreign_key "shipments", "users_users", column: "user_id"
+  add_foreign_key "shipments_cargos", "organizations_organizations", column: "organization_id"
   add_foreign_key "shipments_cargos", "tenants_sandboxes", column: "sandbox_id"
-  add_foreign_key "shipments_cargos", "tenants_tenants", column: "tenant_id"
   add_foreign_key "shipments_contacts", "tenants_sandboxes", column: "sandbox_id"
   add_foreign_key "shipments_documents", "tenants_sandboxes", column: "sandbox_id"
   add_foreign_key "shipments_invoices", "tenants_sandboxes", column: "sandbox_id"
   add_foreign_key "shipments_shipment_request_contacts", "address_book_contacts", column: "contact_id"
+  add_foreign_key "shipments_shipment_requests", "organizations_organizations", column: "organization_id"
   add_foreign_key "shipments_shipment_requests", "quotations_tenders", column: "tender_id"
   add_foreign_key "shipments_shipment_requests", "tenants_sandboxes", column: "sandbox_id"
-  add_foreign_key "shipments_shipment_requests", "tenants_tenants", column: "tenant_id"
-  add_foreign_key "shipments_shipment_requests", "tenants_users", column: "user_id"
+  add_foreign_key "shipments_shipment_requests", "users_users", column: "user_id"
+  add_foreign_key "shipments_shipments", "organizations_organizations", column: "organization_id"
   add_foreign_key "shipments_shipments", "routing_terminals", column: "destination_id"
   add_foreign_key "shipments_shipments", "routing_terminals", column: "origin_id"
   add_foreign_key "shipments_shipments", "tenants_sandboxes", column: "sandbox_id"
-  add_foreign_key "shipments_shipments", "tenants_tenants", column: "tenant_id"
-  add_foreign_key "shipments_shipments", "tenants_users", column: "user_id"
+  add_foreign_key "shipments_shipments", "users_users", column: "user_id"
   add_foreign_key "shipments_units", "tenants_sandboxes", column: "sandbox_id"
   add_foreign_key "stops", "itineraries"
   add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
-  add_foreign_key "tenant_cargo_item_types", "tenants"
+  add_foreign_key "tenant_cargo_item_types", "organizations_organizations", column: "organization_id"
+  add_foreign_key "tenant_incoterms", "organizations_organizations", column: "organization_id"
+  add_foreign_key "tenant_routing_connections", "organizations_organizations", column: "organization_id"
+  add_foreign_key "tenant_routing_routes", "organizations_organizations", column: "organization_id"
+  add_foreign_key "tenant_vehicles", "organizations_organizations", column: "organization_id"
+  add_foreign_key "trucking_couriers", "organizations_organizations", column: "organization_id"
+  add_foreign_key "trucking_rates", "organizations_organizations", column: "organization_id"
+  add_foreign_key "trucking_truckings", "organizations_organizations", column: "organization_id"
+  add_foreign_key "trucking_truckings", "users_users", column: "user_id"
+  add_foreign_key "user_addresses", "users_users", column: "user_id"
+  add_foreign_key "user_managers", "users_users", column: "user_id"
+  add_foreign_key "users", "organizations_organizations", column: "organization_id"
   add_foreign_key "users", "roles"
+  add_foreign_key "users_authentications", "users_users", column: "user_id"
+  add_foreign_key "users_settings", "users_users", column: "user_id"
 end

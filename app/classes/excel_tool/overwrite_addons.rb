@@ -17,7 +17,7 @@ module ExcelTool
     def overwrite_addons
       xlsx.sheets.each do |sheet_name|
         first_sheet = xlsx.sheet(sheet_name)
-        hub = Hub.find_by(name: sheet_name, tenant_id: user.tenant_id)
+        hub = Hub.find_by(name: sheet_name, organization_id: user.organization_id)
         addons = _addons
         customs = _customs
         if hub
@@ -122,12 +122,12 @@ module ExcelTool
 
     def find_hub(row)
       hub_name = row[:destination].include?(hub_type_name[row[:mot].downcase]) ? row[:destination] : "#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"
-      Hub.find_by(name: hub_name, tenant_id: user.tenant_id)
+      Hub.find_by(name: hub_name, organization_id: user.organization_id)
     end
 
     def tenant_vehicle_id(row)
       TenantVehicle.find_by(
-        tenant_id: user.tenant_id,
+        organization_id: user.organization_id,
         mode_of_transport: row[:mot].downcase,
         name: row[:service_level],
         carrier: Carrier.find_by_name(row[:carrier])
@@ -139,7 +139,7 @@ module ExcelTool
       Vehicle.create_from_name(
         name: name,
         mot: row[:mot].downcase,
-        tenant_id: user.tenant_id,
+        organization_id: user.organization_id,
         carrier: row[:carrier],
         sandbox: @sandbox
       ).try(:id)
@@ -197,7 +197,7 @@ module ExcelTool
         'fees' => {},
         'direction' => row[:direction].downcase,
         'mode_of_transport' => row[:mot].downcase,
-        'tenant_id' => hub.tenant_id,
+        'organization_id' => hub.organization_id,
         'hub_id' => hub.id,
         'cargo_class' => lt,
         'tenant_vehicle_id' => tv_id != 'general' ? tv_id : nil,

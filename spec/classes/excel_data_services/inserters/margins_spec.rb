@@ -4,17 +4,16 @@ require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Inserters::Margins do
   before do
-    create(:itinerary, tenant: tenant, name: 'Ningbo - Gothenburg')
+    create(:itinerary, organization: organization, name: 'Ningbo - Gothenburg')
   end
 
-  let(:tenant) { create(:tenant) }
-  let(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let(:organization) { create(:organizations_organization) }
   let(:carrier) { create(:carrier, code: 'consolidation', name: 'Consolidation') }
-  let(:applicable) { tenants_tenant }
-  let!(:itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Gothenburg') }
-  let!(:tenant_vehicle) { create(:tenant_vehicle, tenant: tenant, carrier: carrier) }
-  let!(:charge_category) { create(:charge_category, :bas, tenant: tenant) }
-  let(:options) { { tenant: tenant, data: input_data, options: { applicable: applicable } } }
+  let(:applicable) { organization }
+  let!(:itinerary) { create(:itinerary, organization: organization, name: 'Dalian - Gothenburg') }
+  let!(:tenant_vehicle) { create(:tenant_vehicle, organization: organization, carrier: carrier) }
+  let!(:charge_category) { create(:charge_category, :bas, organization: organization) }
+  let(:options) { { organization: organization, data: input_data, options: { applicable: applicable } } }
   let(:input_data) { build(:excel_data_restructured_correct_margins) }
 
   describe '.insert' do
@@ -36,10 +35,10 @@ RSpec.describe ExcelDataServices::Inserters::Margins do
         FactoryBot.create(:freight_margin,
                           tenant_vehicle: tenant_vehicle,
                           itinerary: itinerary,
-                          applicable: tenants_tenant,
+                          applicable: organization,
                           operator: '%',
                           value: 0,
-                          tenant: tenants_tenant,
+                          organization: organization,
                           cargo_class: 'lcl',
                           effective_date: Date.parse('Tue, 01 Jan 2019'),
                           expiration_date: Date.parse('25 Mar 2019')).tap do |tapped_margin|

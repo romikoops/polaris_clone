@@ -7,9 +7,9 @@ module ExcelDataServices
         "#{parent}::#{klass_identifier.titleize.delete(' ')}".constantize
       end
 
-      def initialize(row_data:, tenant:)
+      def initialize(row_data:, organization:)
         @data = row_data
-        @tenant = tenant
+        @organization = organization
       end
 
       def [](key)
@@ -119,7 +119,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :data, :tenant
+      attr_reader :data, :organization
     end
   end
 end

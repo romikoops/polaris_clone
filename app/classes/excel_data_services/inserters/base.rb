@@ -11,12 +11,11 @@ module ExcelDataServices
         new(options).perform
       end
 
-      def initialize(tenant:, data:, options:)
-        @tenant = tenant
-        @tenants_tenant = Tenants::Tenant.find_by(legacy_id: tenant.id)
-        @scope = ::Tenants::ScopeService.new(
-          tenant: tenants_tenant,
-          target: ::Tenants::User.find_by(legacy_id: options[:user]&.id)
+      def initialize(organization:, data:, options:)
+        @organization = organization
+        @scope = ::OrganizationManager::ScopeService.new(
+          organization: organization,
+          target: ::Organizations::User.find_by(id: options[:user]&.id)
         ).fetch
         @data = data
         @klass_identifier = self.class.name.split('::').last
@@ -32,7 +31,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :tenant, :data, :klass_identifier, :options, :stats, :scope, :tenants_tenant
+      attr_reader :organization, :data, :klass_identifier, :options, :stats, :scope
 
       def metadata(row:)
         document = options[:document]
@@ -49,7 +48,7 @@ module ExcelDataServices
 
         return row.group_id if row.group_id.present?
 
-        Tenants::Group.find_by(tenant: tenants_tenant, name: row.group_name).id if row.group_name
+        Groups::Group.find_by(organization: organization, name: row.group_name).id if row.group_name
       end
 
       def carrier_from_code(name:)

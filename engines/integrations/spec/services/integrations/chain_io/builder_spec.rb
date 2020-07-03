@@ -6,12 +6,12 @@ module Integrations
   module ChainIo
     RSpec.describe Builder do
       describe 'Preparing the json for chain.io' do
-        let(:tenant) { FactoryBot.create(:legacy_tenant) }
+        let(:organization) { FactoryBot.create(:organizations_organization) }
         let(:currency) { FactoryBot.create(:legacy_currency) }
-        let(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
-        let(:profile) { FactoryBot.create(:profiles_profile) }
+        let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+        let(:profile) { FactoryBot.create(:profiles_profile, user_id: user.id) }
         let(:tender) { FactoryBot.create(:quotations_tender) }
-        let(:fcl_legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, tenant: tenant, user: user, meta: { tender_id: tender.id }, tender_id: tender.id) }
+        let(:fcl_legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, meta: { tender_id: tender.id }, tender_id: tender.id) }
         let(:shipment_request_creator) { ::Shipments::ShipmentRequestCreator.new(legacy_shipment: fcl_legacy_shipment, user: user, sandbox: nil) }
         let(:shipment_request) { shipment_request_creator.create.shipment_request }
         let(:data) { described_class.new(shipment_request_id: shipment_request.id).prepare }
@@ -19,9 +19,9 @@ module Integrations
         let(:json_shipment) { data[:shipments].first }
 
         before do
+          profile
+          ::Organizations.current_id = organization.id
           FactoryBot.create(:legacy_charge_breakdown, shipment: fcl_legacy_shipment, tender_id: tender.id)
-          allow(Profiles::ProfileService).to receive(:fetch).and_return(Profiles::ProfileDecorator.new(profile))
-          FactoryBot.create(:tenants_tenant, legacy: tenant)
           FactoryBot.create(:cargo_cargo,
                             quotation_id: tender.quotation_id,
                             units:
@@ -93,7 +93,7 @@ module Integrations
         end
 
         context 'with no notifyee' do
-          let(:no_notifyee_shipment) { FactoryBot.create(:legacy_shipment_without_notifyee, tenant: tenant, user: user, meta: { tender_id: tender.id }, tender_id: tender.id) }
+          let(:no_notifyee_shipment) { FactoryBot.create(:legacy_shipment_without_notifyee, organization: organization, user: user, meta: { tender_id: tender.id }, tender_id: tender.id) }
           let(:shipment_request_creator) { ::Shipments::ShipmentRequestCreator.new(legacy_shipment: no_notifyee_shipment, user: user, sandbox: nil) }
           let(:shipment_request) { shipment_request_creator.create.shipment_request }
           let(:data) { described_class.new(shipment_request_id: shipment_request.id).prepare }

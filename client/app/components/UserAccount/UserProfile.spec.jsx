@@ -1,12 +1,13 @@
 import '../../mocks/libraries/react-redux'
 import * as React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import {
   theme, identity, user, tenant, scope
 } from '../../mocks/index'
 
 import UserProfile from './UserProfile'
 
+const setCurrencyMock = jest.fn()
 const propsBase = {
   theme,
   user,
@@ -17,7 +18,7 @@ const propsBase = {
   },
   setNav: identity,
   appDispatch: {
-    setCurrency: identity
+    setCurrency: setCurrencyMock
   },
   addresses: [],
   authDispatch: {
@@ -52,4 +53,11 @@ test('reset passowrd is hidden', () => {
     }
   }
   expect(shallow(<UserProfile {...props} />)).toMatchSnapshot()
+})
+
+test('setting currency', () => {
+  const wrapper = mount(<UserProfile {...propsBase} />)
+  const instance = wrapper.instance()
+  instance.handleCurrencyUpdate({ value: 'AUD' })
+  expect(setCurrencyMock).toHaveBeenCalledWith('AUD')
 })

@@ -3,9 +3,7 @@
 require 'active_storage'
 module Pdf
   class Service < Pdf::Base
-    BreezyError = Class.new(StandardError)
-
-    attr_reader :tenant, :user, :pdf, :url, :sandbox
+    attr_reader :organization, :user, :pdf, :url, :sandbox
 
     def generate_pdf(
       template:,
@@ -24,7 +22,7 @@ module Pdf
         layout: 'pdfs/simple.pdf.html.erb',
         margin: { top: 10, bottom: 5, left: 8, right: 8 },
         logo: logo,
-        remarks: Legacy::Remark.where(tenant_id: tenant.id, sandbox_id: sandbox&.id).order(order: :asc),
+        remarks: Legacy::Remark.where(organization: organization, sandbox_id: sandbox&.id).order(order: :asc),
         template: template,
         name: name,
         shipment: shipment,
@@ -34,13 +32,12 @@ module Pdf
         quotation: quotation,
         load_type: load_type,
         note_remarks: note_remarks,
-        cargo_units: cargo_units
+        cargo_units: cargo_units,
+        organization: organization
       )
       pdf.generate
     rescue Errno::ECONNRESET => e
       Raven.capture_exception(e)
-      nil
-    rescue Pdf::Handler::BreezyError
       nil
     end
 
@@ -123,7 +120,7 @@ module Pdf
       object = quotation || shipment
       document = if quotation.present?
                    Legacy::File.find_by(
-                     tenant_id: tenant.id,
+                     organization: organization,
                      user: user,
                      quotation: quotation,
                      doc_type: type,
@@ -131,7 +128,7 @@ module Pdf
                    )
                  else
                    Legacy::File.find_by(
-                     tenant_id: tenant.id,
+                     organization: organization,
                      user: user,
                      shipment: shipment,
                      doc_type: type,
@@ -176,8 +173,8 @@ module Pdf
     def offer_manipulation_block(charge_breakdown:, shipment:, trip: nil, admin: false)
       hidden_args = hidden_value_args(admin: admin)
       trip = charge_breakdown.trip if trip.nil?
-      origin_hub = trip.itinerary.first_stop.hub
-      destination_hub = trip.itinerary.last_stop.hub
+      origin_hub = Legacy::HubDecorator.new(trip.itinerary.first_stop.hub, context: {scope: scope})
+      destination_hub = Legacy::HubDecorator.new(trip.itinerary.last_stop.hub, context: {scope: scope})
       tender = charge_breakdown.tender
       charge_breakdown.to_nested_hash(hidden_args).merge(
         offer_merge_data(
@@ -243,9 +240,9 @@ module Pdf
         itinerary_id: trip.itinerary_id,
         tenant_vehicle_id: trip.tenant_vehicle_id
       ).for_dates(start_date, end_date).ids
-      note_association = Legacy::Note.where(tenant_id: tenant.id, remarks: true)
+      note_association = Legacy::Note.where(organization: organization, remarks: true)
       note_association.where(pricings_pricing_id: pricing_ids)
-                      .or(note_association.where(target: tenant))
+                      .or(note_association.where(target: organization))
                       .distinct
                       .pluck(:body)
     end
@@ -263,7 +260,7 @@ module Pdf
         valid_until: shipment.valid_until(trip),
         imc_reference: shipment.imc_reference,
         shipment_id: shipment.id,
-        load_type: shipment.load_type,
+        load_type: shipment.lcl? ? 'cargo_item' : 'container',
         carrier: trip.tenant_vehicle.carrier&.name&.upcase,
         service_level: trip.tenant_vehicle.name,
         transshipment: transshipment(trip: trip),
@@ -285,7 +282,7 @@ module Pdf
         text: file_text(object: object, shipments: shipments),
         doc_type: doc_type(object: object),
         user: user,
-        tenant: user.tenant,
+        organization: @organization,
         sandbox_id: sandbox&.id,
         file: {
           io: StringIO.new(file),

@@ -2,12 +2,12 @@
 
 module Quotations
   class Creator
-    def initialize(results:, shipment:, user:)
+    def initialize(results:, shipment:, user: nil)
       @results = results
       @shipment = shipment
       @origin_nexus = results.dig(0, :schedules, 0).origin_hub.nexus
       @destination_nexus = results.dig(0, :schedules, 0).destination_hub.nexus
-      @user = user
+      @user = user || shipment.user
     end
 
     def perform
@@ -21,10 +21,9 @@ module Quotations
     private
 
     def find_or_create_quotation
-      tenant = Tenants::Tenant.find_by(legacy_id: @shipment.tenant_id)
-      @quotation = Quotations::Quotation.create(tenant: tenant,
+      @quotation = Quotations::Quotation.create(organization: shipment.organization,
                                                 user: @user,
-                                                tenants_user: Tenants::User.find_by(legacy_id: @user.id),
+                                                billing: @shipment.billing,
                                                 selected_date: @shipment.desired_start_date,
                                                 origin_nexus: @origin_nexus,
                                                 destination_nexus: @destination_nexus,

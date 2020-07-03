@@ -4,12 +4,12 @@ class Admin::NotesController < Admin::AdminBaseController
   def upload
     handle_upload(
       params: upload_params,
-      text: "#{current_tenant.subdomain}:notes",
+      text: "#{current_organization.slug}:notes",
       type: 'notes',
       options: {
         sandbox: @sandbox,
         group_id: upload_params[:group_id],
-        user: current_user
+        user: organization_user
       }
     )
   end

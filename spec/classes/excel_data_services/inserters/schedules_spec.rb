@@ -6,19 +6,19 @@ RSpec.describe ExcelDataServices::Inserters::Schedules do
   describe '.perform' do
     let(:carrier) { create(:carrier, name: 'MSC', code: 'msc') }
     let(:data) { build(:excel_data_restructured_schedules) }
-    let(:tenant) { create(:tenant) }
-    let!(:tenant_vehicle_1) { create(:tenant_vehicle, name: 'standard', tenant: tenant) }
-    let!(:tenant_vehicle_2) { create(:tenant_vehicle, name: 'standard', carrier: carrier, tenant: tenant) }
-    let!(:tenant_vehicle_3) { create(:tenant_vehicle, name: 'standard', tenant: tenant, mode_of_transport: 'air') }
+    let(:organization) { create(:organizations_organization) }
+    let!(:tenant_vehicle_1) { create(:tenant_vehicle, name: 'standard', organization: organization) }
+    let!(:tenant_vehicle_2) { create(:tenant_vehicle, name: 'standard', carrier: carrier, organization: organization) }
+    let!(:tenant_vehicle_3) { create(:tenant_vehicle, name: 'standard', organization: organization, mode_of_transport: 'air') }
 
-    let!(:itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe') }
-    let!(:transshipment_itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe', transshipment: 'ZACPT') }
-    let!(:air_itinerary) { create(:itinerary, tenant: tenant, name: 'Dalian - Felixstowe', mode_of_transport: 'air') }
+    let!(:itinerary) { create(:itinerary, organization: organization, name: 'Dalian - Felixstowe') }
+    let!(:transshipment_itinerary) { create(:itinerary, organization: organization, name: 'Dalian - Felixstowe', transshipment: 'ZACPT') }
+    let!(:air_itinerary) { create(:itinerary, organization: organization, name: 'Dalian - Felixstowe', mode_of_transport: 'air') }
 
     context 'when uploading a schedules sheet' do
       let!(:stats) do
         Timecop.freeze(Time.utc(2019, 2, 22, 11, 54, 0)) do
-          described_class.insert(tenant: tenant, data: data, options: {})
+          described_class.insert(organization: organization, data: data, options: {})
         end
       end
 

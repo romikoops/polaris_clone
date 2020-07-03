@@ -3,7 +3,7 @@
 class Nexus < Legacy::Nexus
   has_many :hubs
   has_many :shipments
-  belongs_to :tenant
+  belongs_to :organization, class_name: 'Organizations::Organization'
   belongs_to :country, class_name: 'Legacy::Country'
   geocoded_by :geocoded_address
   belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
@@ -16,8 +16,8 @@ class Nexus < Legacy::Nexus
     location
   end
 
-  def hubs_by_type(hub_type, tenant_id)
-    hubs.where(hub_type: hub_type, tenant_id: tenant_id)
+  def hubs_by_type(hub_type, organization_id)
+    hubs.where(hub_type: hub_type, organization_id: organization_id)
   end
 
   def to_custom_hash
@@ -48,14 +48,14 @@ class Nexus < Legacy::Nexus
         nexus_name = hub.name.gsub(" #{hub_type_name[hub.hub_type]}", '')
         old_nexus = Address.where('name ILIKE ? AND location_type = ?', nexus_name, 'nexus').first
       end
-      new_nexus = Nexus.find_by(name: old_nexus.name, tenant_id: hub.tenant_id)
+      new_nexus = Nexus.find_by(name: old_nexus.name, organization_id: hub.organization_id)
       new_nexus ||= Nexus.create!(
         name: old_nexus.name,
         latitude: old_nexus.latitude,
         longitude: old_nexus.longitude,
         photo: old_nexus.photo,
         country_id: old_nexus.country_id,
-        tenant_id: hub.tenant_id
+        organization_id: hub.organization_id
       )
       hub.nexus_id = new_nexus.id
       hub.save!
@@ -80,14 +80,14 @@ class Nexus < Legacy::Nexus
           nexus_name = shipment["#{dir}_hub"].name.gsub(" #{shipment_type_name[shipment.shipment_type]}", '')
           old_nexus = Address.where('name ILIKE ? AND location_type = ?', nexus_name, 'nexus').first
         end
-        new_nexus = Nexus.find_by(name: old_nexus.name, tenant_id: shipment.tenant_id)
+        new_nexus = Nexus.find_by(name: old_nexus.name, organization_id: shipment.organization_id)
         new_nexus ||= Nexus.create!(
           name: old_nexus.name,
           latitude: old_nexus.latitude,
           longitude: old_nexus.longitude,
           photo: old_nexus.photo,
           country_id: old_nexus.country_id,
-          tenant_id: shipment.tenant_id
+          organization_id: shipment.organization_id
         )
         shipment["#{dir}_nexus_id"] = new_nexus.id
       end
@@ -108,18 +108,18 @@ class Nexus < Legacy::Nexus
     "#{name}, #{country.name}"
   end
 
-  def self.from_short_name(input, tenant_id)
+  def self.from_short_name(input, organization_id)
     city, country_name = *input.split(' ,')
 
     country = Country.geo_find_by_name(country_name)
 
-    address = Nexus.find_by(name: city, country: country, tenant_id: tenant_id)
+    address = Nexus.find_by(name: city, country: country, organization_id: organization_id)
     return address unless address.nil?
 
     temp_address = Address.new(geocoded_address: input)
     temp_address.geocode
     temp_address.reverse_geocode
-    nexus = Nexus.find_by(name: city, country: country, tenant_id: tenant_id)
+    nexus = Nexus.find_by(name: city, country: country, organization_id: organization_id)
     return nexus unless nexus.nil?
 
     country_to_save = country || temp_address.country
@@ -129,7 +129,7 @@ class Nexus < Legacy::Nexus
       longitude: temp_address.longitude,
       photo: '',
       country_id: country_to_save.id,
-      tenant_id: tenant_id
+      organization_id: organization_id
     )
 
     nexus
@@ -140,20 +140,26 @@ end
 #
 # Table name: nexuses
 #
-#  id         :bigint           not null, primary key
-#  latitude   :float
-#  locode     :string
-#  longitude  :float
-#  name       :string
-#  photo      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  country_id :integer
-#  sandbox_id :uuid
-#  tenant_id  :integer
+#  id              :bigint           not null, primary key
+#  latitude        :float
+#  locode          :string
+#  longitude       :float
+#  name            :string
+#  photo           :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  country_id      :integer
+#  organization_id :uuid
+#  sandbox_id      :uuid
+#  tenant_id       :integer
 #
 # Indexes
 #
-#  index_nexuses_on_sandbox_id  (sandbox_id)
-#  index_nexuses_on_tenant_id   (tenant_id)
+#  index_nexuses_on_organization_id  (organization_id)
+#  index_nexuses_on_sandbox_id       (sandbox_id)
+#  index_nexuses_on_tenant_id        (tenant_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #

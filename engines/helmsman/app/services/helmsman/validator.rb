@@ -4,12 +4,12 @@ module Helmsman
   class Validator
     attr_reader :route_line_services, :carriage_ids, :tenant_connections
 
-    def initialize(tenant_id:, paths:, user:)
-      @tenant = Tenants::Tenant.find(tenant_id)
-      federated_targets = Federation::Members.new(tenant: @tenant).list
-      route_targets = Tenants::HierarchyService.new(target: user, tenant: @tenant).fetch
+    def initialize(organization_id:, paths:, user:)
+      @organization = Organizations::Organization.find(organization_id)
+      federated_targets = Federation::Members.new(organization: @organization).list
+      route_targets = OrganizationManager::HierarchyService.new(target: user, organization: @organization).fetch
       @visibilities = TenantRouting::Visibility.where(target: route_targets)
-      @tenant_connections = TenantRouting::Connection.where(tenant_id: federated_targets)
+      @tenant_connections = TenantRouting::Connection.where(organization_id: federated_targets)
       @route_line_services = Routing::RouteLineService.where(route_id: paths.flatten)
       @carriage_ids = Routing::RouteLineService.joins(:route)
                                                .where(

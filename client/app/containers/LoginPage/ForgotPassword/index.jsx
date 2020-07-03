@@ -16,10 +16,8 @@ export default class ForgotPassword extends React.PureComponent {
     super(props)
     this.state = { focus: {}, sendingEmail: false }
   }
-  handleSubmit (model) {
-    console.log(this.props)
-    console.log(model)
 
+  handleSubmit (model) {
     this.setState({ sendingEmail: true })
 
     const payload = {
@@ -27,7 +25,7 @@ export default class ForgotPassword extends React.PureComponent {
       redirect_url: getTenantApiUrl() // TBD - + 'path_to_password_reset'
     }
 
-    fetch(`${getTenantApiUrl()}/auth/password`, {
+    fetch(`${getTenantApiUrl()}/password_resets`, {
       method: 'POST',
       headers: { ...authHeader(), 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -38,6 +36,7 @@ export default class ForgotPassword extends React.PureComponent {
       })
     })
   }
+
   handleInvalidSubmit () {
     if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
   }

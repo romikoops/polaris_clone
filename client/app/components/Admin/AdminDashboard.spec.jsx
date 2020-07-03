@@ -1,12 +1,10 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import {
-  theme, identity, client, user, shipment, tenant
-} from '../../mock'
+import { theme, identity, client, user, shipment, tenant } from '../../mock'
 
 import AdminDashboard from './AdminDashboard'
 
-jest.mock('../../helpers/tenant', () => x => x && x.isQuote)
+jest.mock('../../helpers/tenant', () => (x) => x && x.isQuote)
 
 const propsBase = {
   tenant,
@@ -76,4 +74,16 @@ test('tenant is falsy', () => {
   }
 
   expect(shallow(<AdminDashboard {...props} />)).toMatchSnapshot()
+})
+
+test('view hub method', () => {
+  const viewHubMock = jest.fn()
+  const props = {
+    ...propsBase,
+    adminDispatch: { ...propsBase.adminDispatch, getHub: viewHubMock }
+  }
+  const wrapper = shallow(<AdminDashboard {...props} />)
+  const instance = wrapper.instance()
+  instance.viewHub({ id: 'Test ID' })
+  expect(viewHubMock).toHaveBeenCalledWith('Test ID', true)
 })

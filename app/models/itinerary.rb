@@ -2,7 +2,8 @@
 
 class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
 
-  belongs_to :tenant
+  belongs_to :organization, class_name: 'Organizations::Organization'
+  has_many :stops,     dependent: :destroy
   has_many :layovers,  dependent: :destroy
   has_many :trips,     dependent: :destroy
   has_many :notes,     dependent: :destroy, as: :target
@@ -66,7 +67,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
   end
 
   def parse_load_type(raw_load_type)
-    if %w(cargo_item lcl).include?(raw_load_type.downcase.strip)
+    if raw_load_type.respond_to?(:downcase) && %w(cargo_item lcl).include?(raw_load_type.downcase.strip)
       'cargo_item'
     else
       'container'
@@ -169,7 +170,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
           etd: lc[0].etd,
           mode_of_transport: lc[0].itinerary.mode_of_transport,
           hub_route_key: "#{lc[0].stop.hub_id}-#{lc[1].stop.hub_id}",
-          tenant_id: tenant_id,
+          organization_id: organization_id,
           trip_id: lc[0].trip_id,
           origin_layover_id: lc[0].id,
           destination_layover_id: lc[1].id,
@@ -182,7 +183,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
   end
 
   def self.ids_dedicated(user = nil)
-    get_itineraries_with_dedicated_pricings(user.id, user.tenant_id)
+    get_itineraries_with_dedicated_pricings(user.id, user.organization_id)
   end
 
   def modes_of_transport
@@ -301,7 +302,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
 
   def generate_map_data
     routes.each do |route_data|
-      route_data[:tenant_id] = tenant_id
+      route_data[:organization_id] = organization_id
       map_data.find_or_create_by!(route_data)
     end
   end
@@ -356,7 +357,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
       start_hubs = Hub.where(id: start_hub_ids)
     else
       start_city = shipment.origin_nexus
-      start_hubs = start_city.hubs.where(tenant_id: shipment.tenant_id)
+      start_hubs = start_city.hubs.where(organization_id: shipment.organization_id)
       start_hub_ids = start_hubs.ids
     end
 
@@ -365,11 +366,11 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
       end_hubs = Hub.where(id: end_hub_ids)
     else
       end_city = shipment.destination_nexus
-      end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
+      end_hubs = end_city.hubs.where(organization_id: shipment.organization_id)
       end_hub_ids = end_hubs.ids
     end
 
-    itineraries = shipment.tenant.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
+    itineraries = shipment.organization.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
 
     { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
   end
@@ -440,6 +441,7 @@ end
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  destination_hub_id :bigint
+#  organization_id    :uuid
 #  origin_hub_id      :bigint
 #  sandbox_id         :uuid
 #  tenant_id          :integer
@@ -449,6 +451,7 @@ end
 #  index_itineraries_on_destination_hub_id  (destination_hub_id)
 #  index_itineraries_on_mode_of_transport   (mode_of_transport)
 #  index_itineraries_on_name                (name)
+#  index_itineraries_on_organization_id     (organization_id)
 #  index_itineraries_on_origin_hub_id       (origin_hub_id)
 #  index_itineraries_on_sandbox_id          (sandbox_id)
 #  index_itineraries_on_tenant_id           (tenant_id)
@@ -456,5 +459,6 @@ end
 # Foreign Keys
 #
 #  fk_rails_...  (destination_hub_id => hubs.id) ON DELETE => cascade
+#  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (origin_hub_id => hubs.id) ON DELETE => cascade
 #

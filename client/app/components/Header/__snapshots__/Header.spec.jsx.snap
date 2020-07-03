@@ -550,9 +550,9 @@ exports[`showModal is true 1`] = `
                     },
                   },
                   "id": 123,
-                  "name": "TENANT_NAME",
+                  "name": "ORGANIZATION_NAME",
                   "phones": Object {
-                    "support": "TENANT_SUPPORT_PHONE",
+                    "support": "ORGANIZATION_SUPPORT_PHONE",
                   },
                   "scope": Object {
                     "cargo_info_level": "text",
@@ -595,7 +595,7 @@ exports[`showModal is true 1`] = `
                       "BAR_TERM",
                     ],
                   },
-                  "subdomain": "TENANT_SUBDOMAIN",
+                  "subdomain": "ORGANIZATION_SUBDOMAIN",
                   "theme": Object {
                     "colors": Object {
                       "primary": "#333",

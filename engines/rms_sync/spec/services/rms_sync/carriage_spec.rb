@@ -3,13 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe ::RmsSync::Carriage do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let!(:tenants_tenant) { FactoryBot.create(:tenants_tenant, legacy: tenant) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:hub_1) { FactoryBot.create(:hamburg_hub, tenant: tenant) }
-  let(:hub_2) { FactoryBot.create(:shanghai_hub, tenant: tenant) }
-  let(:hub_3) { FactoryBot.create(:gothenburg_hub, tenant: tenant) }
-  let(:courier) { FactoryBot.create(:trucking_courier, name: 'TEST', tenant: tenant) }
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:hub_1) { FactoryBot.create(:hamburg_hub, organization: organization) }
+  let(:hub_2) { FactoryBot.create(:shanghai_hub, organization: organization) }
+  let(:hub_3) { FactoryBot.create(:gothenburg_hub, organization: organization) }
+  let(:courier) { FactoryBot.create(:trucking_courier, name: 'TEST', organization: organization) }
   let(:hub_1_trucking_locations) do
     [
       FactoryBot.create(:trucking_location, zipcode: '12344'),
@@ -31,13 +30,13 @@ RSpec.describe ::RmsSync::Carriage do
   end
   let!(:truckings) do
     truckings_1 = hub_1_trucking_locations.map do |tl|
-      FactoryBot.create(:trucking_trucking, location: tl, tenant: tenant, hub: hub_1, courier: courier)
+      FactoryBot.create(:trucking_trucking, location: tl, organization: organization, hub: hub_1, courier: courier)
     end
     truckings_2 = hub_2_trucking_locations.map do |tl|
-      FactoryBot.create(:trucking_trucking, location: tl, tenant: tenant, hub: hub_2, courier: courier)
+      FactoryBot.create(:trucking_trucking, location: tl, organization: organization, hub: hub_2, courier: courier)
     end
     truckings_3 = hub_3_trucking_locations.map do |tl|
-      FactoryBot.create(:trucking_trucking, location: tl, tenant: tenant, hub: hub_3, courier: courier)
+      FactoryBot.create(:trucking_trucking, location: tl, organization: organization, hub: hub_3, courier: courier)
     end
     truckings_1 | truckings_2 | truckings_3
   end
@@ -49,8 +48,8 @@ RSpec.describe ::RmsSync::Carriage do
 
   describe '.perform' do
     it 'creates the carriage' do
-      RmsSync::Carriage.new(tenant_id: tenants_tenant.id, sheet_type: :carriage).perform
-      book = RmsData::Book.find_by(tenant_id: tenants_tenant.id, sheet_type: :carriage)
+      RmsSync::Carriage.new(organization_id: organization.id, sheet_type: :carriage).perform
+      book = RmsData::Book.find_by(organization_id: organization.id, sheet_type: :carriage)
       expect(RmsData::Sheet.where(book_id: book.id).length).to eq(3)
       city_sheet = book.sheets.find { |sheet| sheet.metadata['modifier'] == 'city_name' }
       postal_sheet = book.sheets.find { |sheet| sheet.metadata['modifier'] == 'zipcode' }
@@ -59,9 +58,9 @@ RSpec.describe ::RmsSync::Carriage do
       expect(RmsData::Cell.where(sheet_id: postal_sheet.id).length).to eq(8)
       expect(RmsData::Cell.where(sheet_id: distance_sheet.id).length).to eq(8)
 
-      expect(postal_sheet.rows_values).to eq([['DE', 'Hamburg Port'], %w(12344 x), %w(12345 x), %w(12346 x)])
-      expect(city_sheet.rows_values).to eq([['SE', 'Gothenburg Port'], %w(Gothenburg x)])
-      expect(distance_sheet.rows_values).to eq([['CN', 'Shanghai Port'], %w(120 x), %w(121 x), %w(122 x)])
+      expect(postal_sheet.rows_values).to eq([['DE', 'Hamburg'], %w(12344 x), %w(12345 x), %w(12346 x)])
+      expect(city_sheet.rows_values).to eq([['SE', 'Gothenburg'], %w(Gothenburg x)])
+      expect(distance_sheet.rows_values).to eq([['CN', 'Shanghai'], %w(120 x), %w(121 x), %w(122 x)])
     end
   end
 end

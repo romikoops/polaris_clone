@@ -4,22 +4,21 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:d
   def upload
     handle_upload(
       params: upload_params,
-      text: "#{current_tenant.subdomain}_charge_categories",
+      text: "#{current_organization.slug}_charge_categories",
       type: 'charge_categories',
       options: {
         sandbox: @sandbox,
-        user: current_user
+        user: organization_user
       }
     )
   end
 
   def download
-    tenant_slug = ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).slug
     category_identifier = 'charge_categories'
-    file_name = "#{tenant_slug}__#{category_identifier}"
+    file_name = "#{current_organization.slug}__#{category_identifier}"
 
     document = ExcelDataServices::Loaders::Downloader.new(
-      tenant: current_tenant,
+      organization: current_organization,
       category_identifier: category_identifier,
       file_name: file_name,
       sandbox: @sandbox

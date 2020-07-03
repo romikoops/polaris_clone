@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Pdf::HiddenValueService, type: :service do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let(:user) { FactoryBot.create(:legacy_user, tenant: tenant) }
-  let(:scope) { FactoryBot.create(:tenants_scope, target: Tenants::Tenant.find_by(legacy_id: tenant.id), content: {}) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:scope) { FactoryBot.create(:organizations_scope, target: user, content: {}) }
   let(:klass) { described_class.new(user: user) }
 
   context 'with hidden grand totals' do
@@ -19,6 +19,7 @@ RSpec.describe Pdf::HiddenValueService, type: :service do
   end
 
   context 'with hidden sub totals' do
+    let(:klass) { described_class.new(user: nil) }
     before do
       scope.update(content: { hide_sub_totals: true })
     end

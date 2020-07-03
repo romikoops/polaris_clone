@@ -7,7 +7,7 @@ FactoryBot.define do
     sequence(:phone) { |n| "1234567#{n}" }
     sequence(:email) { |n| "email#{n}@example.com" }
 
-    association :user, factory: :tenants_user
+    association :user, factory: :organizations_user
   end
 end
 
@@ -32,17 +32,20 @@ end
 #  street_number    :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  old_user_id      :uuid
 #  sandbox_id       :uuid
 #  tms_id           :string
 #  user_id          :uuid
 #
 # Indexes
 #
-#  index_address_book_contacts_on_sandbox_id  (sandbox_id)
-#  index_address_book_contacts_on_user_id     (user_id)
+#  index_address_book_contacts_on_old_user_id  (old_user_id)
+#  index_address_book_contacts_on_sandbox_id   (sandbox_id)
+#  index_address_book_contacts_on_user_id      (user_id)
 #
 # Foreign Keys
 #
+#  fk_rails_     (user_id => users_users.id)
+#  fk_rails_...  (old_user_id => tenants_users.id)
 #  fk_rails_...  (sandbox_id => tenants_sandboxes.id)
-#  fk_rails_...  (user_id => tenants_users.id)
 #

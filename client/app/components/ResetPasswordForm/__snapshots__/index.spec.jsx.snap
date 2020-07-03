@@ -4,24 +4,9 @@ exports[`shallow rendering 1`] = `
 <div
   className="flex-100 layout-row layout-wrap"
 >
-  <Header
-    component={null}
-    currentStage="stage1"
-    error={null}
-    invert={false}
-    isLanding={false}
-    loggingIn={false}
-    loginAttempt={false}
+  <Connect(Header)
     noMessages={true}
-    noRedirect={false}
-    registering={false}
-    req={null}
-    scrollable={false}
-    showModal={false}
-    showRegistration={false}
-    stage={null}
-    t={[Function]}
-    tenant={null}
+    t={[MockFunction]}
     theme={
       Object {
         "colors": Object {
@@ -212,24 +197,9 @@ exports[`state.focus.password_confirmation is truthy 1`] = `
 <div
   className="flex-100 layout-row layout-wrap"
 >
-  <Header
-    component={null}
-    currentStage="stage1"
-    error={null}
-    invert={false}
-    isLanding={false}
-    loggingIn={false}
-    loginAttempt={false}
+  <Connect(Header)
     noMessages={true}
-    noRedirect={false}
-    registering={false}
-    req={null}
-    scrollable={false}
-    showModal={false}
-    showRegistration={false}
-    stage={null}
-    t={[Function]}
-    tenant={null}
+    t={[MockFunction]}
     theme={
       Object {
         "colors": Object {
@@ -434,24 +404,9 @@ exports[`state.settingPassword is true 1`] = `
 <div
   className="flex-100 layout-row layout-wrap"
 >
-  <Header
-    component={null}
-    currentStage="stage1"
-    error={null}
-    invert={false}
-    isLanding={false}
-    loggingIn={false}
-    loginAttempt={false}
+  <Connect(Header)
     noMessages={true}
-    noRedirect={false}
-    registering={false}
-    req={null}
-    scrollable={false}
-    showModal={false}
-    showRegistration={false}
-    stage={null}
-    t={[Function]}
-    tenant={null}
+    t={[MockFunction]}
     theme={
       Object {
         "colors": Object {
@@ -647,24 +602,9 @@ exports[`theme is falsy 1`] = `
 <div
   className="flex-100 layout-row layout-wrap"
 >
-  <Header
-    component={null}
-    currentStage="stage1"
-    error={null}
-    invert={false}
-    isLanding={false}
-    loggingIn={false}
-    loginAttempt={false}
+  <Connect(Header)
     noMessages={true}
-    noRedirect={false}
-    registering={false}
-    req={null}
-    scrollable={false}
-    showModal={false}
-    showRegistration={false}
-    stage={null}
-    t={[Function]}
-    tenant={null}
+    t={[MockFunction]}
     theme={null}
     user={
       Object {

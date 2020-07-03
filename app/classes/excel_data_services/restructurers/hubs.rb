@@ -78,7 +78,7 @@ module ExcelDataServices
           longitude: row[:longitude],
           locode: row[:locode],
           country: { name: row[:country] },
-          tenant_id: tenant.id,
+          organization_id: organization.id,
           sandbox: @sandbox
         }
       end
@@ -94,12 +94,12 @@ module ExcelDataServices
 
       def hub_section(row:)
         {
-          tenant_id: tenant.id,
+          organization_id: organization.id,
           hub_type: row[:type],
           latitude: row[:latitude],
           longitude: row[:longitude],
-          name: append_hub_suffix(row[:name], row[:type]),
-          sandbox: @sandbox,
+          name: row[:name],
+          sandbox_id: @sandbox&.id,
           hub_code: row[:locode]
         }
       end

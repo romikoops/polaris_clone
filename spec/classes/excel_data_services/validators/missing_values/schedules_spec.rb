@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::MissingValues::Schedules do
-  let(:tenant) { create(:tenant) }
-  let(:options) { { tenant: tenant, sheet_name: 'Sheet1', data: input_data } }
+  let(:organization) { create(:organizations_organization) }
+  let(:options) { { organization: organization, sheet_name: 'Sheet1', data: input_data } }
 
   context 'with faulty data' do
     let(:input_data) do
@@ -22,7 +22,7 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::Schedules do
         voyage_code: nil,
         load_type: nil,
         row_nr: 2
-      }].map { |row| ExcelDataServices::Rows::Schedules.new(tenant: tenant, row_data: row) }
+      }].map { |row| ExcelDataServices::Rows::Schedules.new(organization: organization, row_data: row) }
     end
 
     describe '.validate' do

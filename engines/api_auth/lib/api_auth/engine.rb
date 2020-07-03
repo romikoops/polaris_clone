@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require 'active_model_serializers'
+require 'authentication'
 require 'doorkeeper'
-require 'sorcery'
+# require 'sorcery'
 
 require 'core'
-require 'tenants'
+require 'users'
+require 'organizations'
 
 module ApiAuth
   class Engine < ::Rails::Engine

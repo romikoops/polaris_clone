@@ -18,7 +18,7 @@ module OfferCalculator
       private
 
       def tenant_max_dimensions_bundles
-        query = { tenant_id: @shipment.tenant_id, cargo_class: @shipment.cargo_classes }
+        query = { organization_id: @shipment.organization_id, cargo_class: @shipment.cargo_classes }
         Legacy::MaxDimensionsBundle.where(query)
       end
 

@@ -23,13 +23,12 @@ class Admin::ClientsController < Admin::AdminBaseController
   # Return selected User, assigned managers, shipments made and user addresses
 
   def show
-    client = User.find_by(id: params[:id], sandbox: @sandbox)
-    addresses = client.addresses
+    client = Users::User.find_by(organization_id: params[:organization_id], id: params[:id])
+    addresses = Address.joins(:user_addresses).where(user_addresses: { user_id: client.id })
     groups = client.groups.map { |g| group_index_json(g) }
-    manager_assignments = UserManager.where(user_id: client)
-    tenants_user = Tenants::User.find_by(legacy_id: client.id)
-    profile = Profiles::Profile.find_by(user_id: tenants_user.id).as_json(except: %i[user_id id])
-    client_data = client.token_validation_response.merge(profile)
+    manager_assignments = UserManager.where(user_id: client.id)
+    profile = Profiles::Profile.find_by(user_id: client.id).as_json(except: %i[user_id id])
+    client_data = client.as_json.merge(profile)
     resp = { clientData: client_data, addresses: addresses, managerAssignments: manager_assignments, groups: groups }
     response_handler(resp)
   end
@@ -41,28 +40,27 @@ class Admin::ClientsController < Admin::AdminBaseController
       email: json['email'],
       password: json['password'],
       password_confirmation: json['password_confirmation'],
-      sandbox: @sandbox,
-      tenant_id: current_tenant.id
+      organization_id: current_organization.id,
+      type: 'Organizations::User'
     }
-    new_user = User.create(user_data)
-    tenants_user = Tenants::User.find_by(legacy_id: new_user.id)
-    profile = Profiles::ProfileService.create_or_update_profile(user: tenants_user,
+    user = Authentication::User.create(user_data)
+    profile = Profiles::ProfileService.create_or_update_profile(user: user,
                                                                 first_name: json['firstName'],
                                                                 last_name: json['lastName'],
                                                                 company_name: json['companyName'],
                                                                 phone: json['phone'])
-    user_response = new_user.token_validation_response.merge(profile.as_json(except: %i[user_id id]))
+    user_response = serialized_user(user: user)
     response_handler(user_response)
   end
 
   def agents
     handle_upload(
       params: upload_params,
-      text: "#{current_tenant.subdomain}_clients",
+      text: "#{current_organization.slug}_clients",
       type: 'clients',
       options: {
         sandbox: @sandbox,
-        user: current_user
+        user: organization_user
       }
     )
   end
@@ -70,18 +68,19 @@ class Admin::ClientsController < Admin::AdminBaseController
   # Destroy User account
 
   def destroy
-    User.find_by(id: params[:id], sandbox: @sandbox).destroy
+    Users::User.find_by(id: params[:id]).destroy
     response_handler(params[:id])
   end
 
   private
 
+  def serialized_user(user:)
+    Api::V1::UserSerializer.new(Api::V1::UserDecorator.decorate(user))
+  end
+
   def clients
-    blocked_roles = Role.where(name: %w[admin super_admin])
-    @clients ||=  current_tenant.users
-                                .where(guest: false, sandbox: @sandbox)
-                                .where.not(role: blocked_roles)
-                                .order(updated_at: :desc)
+    @clients ||= Users::User.where(organization_id: current_organization.id)
+                                    .order(updated_at: :desc)
   end
 
   def pagination_options
@@ -98,16 +97,18 @@ class Admin::ClientsController < Admin::AdminBaseController
   def handle_search(params)
     user_query = clients
     user_query = user_query.search(params[:query]) if params[:query]
-    user_query = user_query.email_search(params[:email]) if params[:email]
+    user_query = user_query.search(params[:email]) if params[:email]
     profile_query = handle_profile_search(clients: clients)
     if params[:company_name]
+      companies = Companies::Company.where(
+        organization: current_organization
+      ).name_search(params[:company_name])
+
       user_ids =
-        Tenants::User.where(
-          company_id: ::Tenants::Company
-                        .where(tenant_id: ::Tenants::Tenant.find_by(legacy_id: current_tenant.id).id)
-                        .name_search(params[:company_name])
-                        .ids
-        ).ids
+        Companies::Membership.where(company: companies)
+                             .where(member_type: 'Users::User')
+                             .pluck(:member_id)
+
       profile_query = profile_query.where(user_id: user_ids)
     end
     # merge results from Tenant::User search and Profiles Search into one list
@@ -119,8 +120,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   def handle_profile_search(clients:)
     return [] if params[:email] || params[:email_desc]
 
-    tenant_user_ids = Tenants::User.where(legacy_id: clients.pluck(:id))
-    query = Profiles::Profile.where(user_id: tenant_user_ids)
+    query = Profiles::Profile.where(user: clients)
     query = query.search(params[:query]) if params[:query]
     query = query.first_name_search(params[:first_name]) if params[:first_name]
     query = query.last_name_search(params[:last_name]) if params[:last_name]
@@ -128,7 +128,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   end
 
   def merge_search_results(users_search_results:, profiles_search_results:)
-    user_ids = Tenants::User.where(id: profiles_search_results.pluck(:user_id)).pluck(:legacy_id)
+    user_ids = Organizations::User.where(id: profiles_search_results.pluck(:user_id)).ids
     email_params_present = %i[email email_desc query].any? { |key| params[key] }
     users_search_results_ids = email_params_present ? users_search_results.pluck(:id) : []
     results = clients.where(id: [*user_ids, *users_search_results_ids].uniq)
@@ -147,15 +147,15 @@ class Admin::ClientsController < Admin::AdminBaseController
   end
 
   def group_index_json(group, options = {})
-    new_options = options.reverse_merge(
-      methods: %i[member_count margin_count]
+    group.as_json(options).merge(
+      margin_count: Pricings::Margin.where(applicable: group).count,
+      member_count: group.memberships.size
     )
-    group.as_json(new_options)
   end
 
   def merge_profile(user:, profile: nil)
     ProfileTools
-      .merge_profile(target: user.for_admin_json, profile: profile)
+      .merge_profile(target: user.as_json, profile: profile)
       .deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
@@ -187,8 +187,8 @@ class Admin::ClientsController < Admin::AdminBaseController
       end
     end
     profiles.map do |profile|
-      legacy_user_id = Tenants::User.find(profile.user_id).legacy_id
-      merge_profile(user: User.find(legacy_user_id), profile: profile)
+      user = Users::User.find(profile.user_id)
+      merge_profile(user: user, profile: profile)
     end
   end
 end

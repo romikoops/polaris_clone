@@ -3,8 +3,8 @@
 module ExcelDataServices
   module Loaders
     class Downloader < ExcelDataServices::Loaders::Base
-      def initialize(tenant:, category_identifier: nil, file_name:, user: nil, sandbox:, options: {})
-        super(tenant: tenant)
+      def initialize(organization:, category_identifier: nil, file_name:, user: nil, sandbox:, options: {})
+        super(organization: organization)
         @category_identifier = category_identifier
         @file_name = file_name
         @user = user
@@ -15,7 +15,7 @@ module ExcelDataServices
 
       def perform
         ExcelDataServices::FileWriters::Base.get(category_identifier).write_document(
-          tenant: tenant,
+          organization: organization,
           file_name: file_name,
           user: user,
           sandbox: sandbox,

@@ -39,7 +39,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
     itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
     resp = {
              itinerary: itinerary,
-             validationResult: Validator::Itinerary.new(user: current_user, itinerary: itinerary).perform,
+             validationResult: Validator::Itinerary.new(user: organization_user, itinerary: itinerary).perform,
              notes: itinerary.notes }
     response_handler(resp)
   end
@@ -47,7 +47,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   private
 
   def handle_search
-    itinerary_relation = ::Legacy::Itinerary.where(tenant_id: current_tenant.id, sandbox: @sandbox)
+    itinerary_relation = ::Legacy::Itinerary.where(organization: current_organization, sandbox: @sandbox)
 
     {
       name: ->(query, param) { query.list_search(param) },
@@ -100,13 +100,13 @@ class Admin::ItinerariesController < Admin::AdminBaseController
     {
       mode_of_transport: params['itinerary']['mot'],
       name: params['itinerary']['name'],
-      tenant_id: current_user.tenant_id,
+      organization_id: current_organization_id,
       sandbox: @sandbox
     }
   end
 
   def as_json_itineraries
-    itineraries = Itinerary.where(tenant_id: current_user.tenant_id, sandbox: @sandbox)
+    itineraries = Itinerary.where(organization: current_organization, sandbox: @sandbox)
     itineraries.map(&:as_options_json)
   end
 

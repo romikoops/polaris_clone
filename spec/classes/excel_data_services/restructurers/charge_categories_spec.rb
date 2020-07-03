@@ -22,10 +22,10 @@ RSpec.describe ExcelDataServices::Restructurers::ChargeCategories do
                     { internal_code: nil, fee_code: 'THC', fee_name: 'Container Service Charges', row_nr: 14 },
                     { internal_code: nil, fee_code: 'IMPORT', fee_name: 'Destination Local Charges', row_nr: 15 }] }
     end
-    let(:tenant) { create(:tenant) }
+    let(:organization) { create(:organizations_organization) }
 
     it 'extracts the row data from the sheet hash' do
-      result = described_class.restructure(tenant: tenant, data: data)
+      result = described_class.restructure(organization: organization, data: data)
       expect(result).to eq('ChargeCategories' => data[:rows_data])
       expect(result['ChargeCategories'].length).to be(14)
       expect(result.class).to be(Hash)

@@ -1,2 +1,2 @@
 export const FILTER = 'FILTER'
-export const SET_TENANT = 'SET_TENANT'
+export const SET_ORGANIZATION = 'SET_ORGANIZATION'

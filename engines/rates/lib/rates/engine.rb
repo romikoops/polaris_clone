@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'organizations'
+
 require 'activerecord-postgis-adapter'
 require 'config'
 require 'money-rails'

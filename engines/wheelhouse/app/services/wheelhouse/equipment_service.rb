@@ -2,12 +2,12 @@
 
 module Wheelhouse
   class EquipmentService
-    def initialize(user:, origin: nil, destination: nil, dedicated_pricings_only: false)
+    def initialize(user:, organization:, origin: nil, destination: nil, dedicated_pricings_only: false)
       @user = user
-      @tenant_id = user.tenant.legacy_id
+      @organization_id = organization.id
       @origin_nexus_ids = nexus_ids(target: 'origin', location: origin)
       @destination_nexus_ids = nexus_ids(target: 'destination', location: destination)
-      @group_ids = @user.all_groups.ids
+      @group_ids = user_groups
       @dedicated_pricings_only = dedicated_pricings_only
     end
 
@@ -18,11 +18,11 @@ module Wheelhouse
 
     private
 
-    attr_reader :tenant_id, :user, :origin_nexus_ids, :destination_nexus_ids, :group_ids, :dedicated_pricings_only
+    attr_reader :organization_id, :user, :origin_nexus_ids, :destination_nexus_ids, :group_ids, :dedicated_pricings_only
 
     def binds
       {
-        tenant_id: tenant_id,
+        organization_id: organization_id,
         origin_nexus_ids: origin_nexus_ids,
         destination_nexus_ids: destination_nexus_ids,
         group_ids: group_ids
@@ -37,7 +37,7 @@ module Wheelhouse
         #{origin_condition}
         #{destination_condition}
         JOIN itineraries
-          ON itineraries.tenant_id = :tenant_id
+          ON itineraries.organization_id = :organization_id
         #{itinerary_condition}
         WHERE pricings_pricings.itinerary_id = itineraries.id
         AND pricings_pricings.load_type = 'container'
@@ -57,7 +57,7 @@ module Wheelhouse
       <<-SQL
        JOIN hubs as origin_hubs
          ON origin_hubs.nexus_id IN (:origin_nexus_ids)
-         AND origin_hubs.tenant_id = :tenant_id
+         AND origin_hubs.organization_id = :organization_id
        JOIN stops AS origin_stops
          ON origin_stops.hub_id = origin_hubs.id
       SQL
@@ -69,7 +69,7 @@ module Wheelhouse
       <<-SQL
         JOIN hubs as destination_hubs
           ON destination_hubs.nexus_id IN (:destination_nexus_ids)
-          AND destination_hubs.tenant_id = :tenant_id
+          AND destination_hubs.organization_id = :organization_id
         JOIN stops AS destination_stops
           ON destination_stops.hub_id = destination_hubs.id
       SQL
@@ -89,7 +89,7 @@ module Wheelhouse
       return [location[:nexus_id]] if location[:nexus_id].present?
 
       ::Trucking::Queries::Hubs.new(
-        tenant_id: tenant_id,
+        organization_id: organization_id,
         address: address(latitude: location[:latitude], longitude: location[:longitude]),
         carriage: target == 'origin' ? 'pre' : 'on',
         order_by: 'group_id',
@@ -108,6 +108,12 @@ module Wheelhouse
         city_name: address.city,
         country: OpenStruct.new(code: address.country_code)
       )
+    end
+
+    def user_groups
+        companies = Companies::Membership.where(member: user)
+        membership_ids = Groups::Membership.where(member: user)
+                          .or(Groups::Membership.where(member: companies)).select(:group_id)
     end
   end
 end

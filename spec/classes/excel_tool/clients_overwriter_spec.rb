@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ExcelTool::ClientsOverwriter do
-  let(:tenant) { create(:tenant) }
-  let(:user) { create(:user, tenant: tenant) }
+  let(:organization) { create(:organizations_organization) }
+  let(:user) { create(:organizations_user, organization: organization) }
   let(:xlsx) { instance_double('xlsx') }
 
   describe '.parse' do
@@ -37,6 +37,7 @@ RSpec.describe ExcelTool::ClientsOverwriter do
       allow(xlsx).to receive(:sheet).and_return(sheet_double)
       allow(xlsx).to receive(:sheets).and_return(['Clients'])
       allow(Roo::Spreadsheet).to receive(:open).and_return(xlsx)
+      FactoryBot.create(:organizations_theme, organization: organization)
     end
 
     it 'returns successfully' do

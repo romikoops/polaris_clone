@@ -8,7 +8,7 @@ module Legacy
       let(:charge_breakdown) { FactoryBot.create(:legacy_charge_breakdown) }
       let(:shipment) { charge_breakdown.shipment }
       let(:price) { FactoryBot.create(:legacy_price) }
-      let(:grand_total_category) { Legacy::ChargeCategory.find_by(code: 'grand_total', tenant_id: shipment.tenant_id) }
+      let(:grand_total_category) { Legacy::ChargeCategory.find_by(code: 'grand_total', organization_id: shipment.organization_id) }
       let(:hidden_args) do
         {
           hidden_grand_total: false,
@@ -21,15 +21,15 @@ module Legacy
         FactoryBot.create(
           :legacy_charge,
           charge_breakdown: charge_breakdown,
-          charge_category: Legacy::ChargeCategory.from_code(code: 'base_node', name: 'Base Node', tenant_id: shipment.tenant_id),
-          children_charge_category: Legacy::ChargeCategory.from_code(code: 'grand_total', name: 'Grand Total', tenant_id: shipment.tenant_id),
+          charge_category: Legacy::ChargeCategory.from_code(code: 'base_node', name: 'Base Node', organization_id: shipment.organization_id),
+          children_charge_category: Legacy::ChargeCategory.from_code(code: 'grand_total', name: 'Grand Total', organization_id: shipment.organization_id),
           price: price
         )
       end
 
       describe '.charges.from_category' do
         it 'returns a collection of charges' do
-          result = charge_breakdown.charges.from_category(Legacy::ChargeCategory.from_code(code: 'base_node', name: 'Base Node', tenant_id: shipment.tenant_id).code)
+          result = charge_breakdown.charges.from_category(Legacy::ChargeCategory.from_code(code: 'base_node', name: 'Base Node', organization_id: shipment.organization_id).code)
 
           expect(result).not_to be_empty
           expect(result).to all be_a Charge
@@ -101,14 +101,6 @@ module Legacy
           }
 
           expect(charge_breakdown.to_nested_hash(hidden_args)['cargo']).to eq(expected['cargo'])
-        end
-      end
-
-      describe '#dup_charges' do
-        it 'duplicate the charges' do
-          pending('we have due circular reference between Legacy and Pricing engines')
-          second_charge_breakdown = FactoryBot.create(:legacy_charge_breakdown)
-          charge_breakdown.dup_charges(charge_breakdown: second_charge_breakdown)
         end
       end
     end

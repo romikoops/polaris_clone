@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require 'companies'
 require 'core'
 require 'geocoder'
+require 'groups'
 require 'legacy'
+require 'organizations'
 require 'tenants'
 require 'trucking'
 

@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Validators::InsertableChecks::Base do
-  let(:tenant) { create(:tenant) }
+  let(:organization) { create(:organizations_organization) }
   let(:data) { [[nil]] }
-  let(:options) { { tenant: tenant, sheet_name: 'Sheet1', data: data } }
+  let(:options) { { organization: organization, sheet_name: 'Sheet1', data: data } }
 
   describe '.validate' do
     it 'raises a NotImplementedError' do

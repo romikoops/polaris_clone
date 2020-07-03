@@ -53,13 +53,13 @@ pipeline {
           }
         }
 
-        stage("Wolfhound") {
-          steps {
-            wolfhound(
-              required: ["eslintnpm", "rubocop"]
-            )
-          }
-        }
+        // stage("Wolfhound") {
+        //   steps {
+        //     wolfhound(
+        //       required: ["eslintnpm", "rubocop"]
+        //     )
+        //   }
+        // }
 
         stage("Prepare") {
           parallel {

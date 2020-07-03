@@ -38,13 +38,6 @@ class SideNav extends Component {
       },
       {
         key: v4(),
-        icon: 'fa-money',
-        text: t('account:pricings'),
-        url: '/account/pricings',
-        target: 'pricings'
-      },
-      {
-        key: v4(),
         icon: 'fa-user',
         text: t('account:profile'),
         url: '/account/profile',

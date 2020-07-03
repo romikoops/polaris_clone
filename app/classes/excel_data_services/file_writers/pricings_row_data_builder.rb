@@ -22,7 +22,7 @@ module ExcelDataServices
           :created_at,
           :updated_at,
           :wm_rate,
-          :tenant_id,
+          :organization_id,
           :user_id,
           :itinerary_id,
           :tenant_vehicle_id
@@ -32,10 +32,10 @@ module ExcelDataServices
         itinerary = pricing.itinerary
         mot = itinerary.mode_of_transport
         origin_hub = itinerary.origin_hub
-        origin_hub_name = remove_hub_suffix(origin_hub.name, mot)
+        origin_hub_name = origin_hub.name
         origin_country_name = origin_hub.address.country.name
         destination_hub = itinerary.destination_hub
-        destination_hub_name = remove_hub_suffix(destination_hub.name, mot)
+        destination_hub_name = destination_hub.name
         destination_country_name = destination_hub.address.country.name
         carrier_name = pricing.carrier
         service_level = pricing.tenant_vehicle.name
@@ -44,7 +44,7 @@ module ExcelDataServices
         transit_time = ::Legacy::TransitTime.find_by(
           itinerary: itinerary, tenant_vehicle_id: pricing.tenant_vehicle_id
         )&.duration
-        group_name = Tenants::Group.find_by(id: pricing.group_id)&.name
+        group_name = Groups::Group.find_by(id: pricing.group_id)&.name
         pricing_attributes.merge(
           customer_email: customer_email,
           mot: mot,
@@ -63,12 +63,6 @@ module ExcelDataServices
         )
       end
 
-      def self.remove_hub_suffix(name, mot)
-        str_to_remove = MOT_HUB_NAME_LOOKUP[mot]
-
-        name.remove(/ #{str_to_remove}$/)
-      end
-
       def self.build_pricing_detail_only_row_data(pricing_detail)
         charge_category = pricing_detail.charge_category
         fee_name = charge_category.name
@@ -80,7 +74,7 @@ module ExcelDataServices
           :rate_basis_id,
           :charge_category_id,
           :pricing_id,
-          :tenant_id
+          :organization_id
         ).merge(fee_name: fee_name, rate_basis: rate_basis_string, shipping_type: charge_category.code.upcase)
       end
 

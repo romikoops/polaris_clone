@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe RateExtractor::ChargeableWeight::Applicable::Regular do
   describe 'calculating chargeable weight for each unit separately' do
-    let(:tenant) { FactoryBot.create(:tenants_tenant) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
 
     context 'when volumetric weight is the highest' do
       let(:cargo) do
@@ -35,7 +35,7 @@ RSpec.describe RateExtractor::ChargeableWeight::Applicable::Regular do
       end
 
       let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: { rate: cargo_rate }) }
-      let(:section_rate) { FactoryBot.create(:rates_section, tenant: tenant, ldm_ratio: 1000, ldm_threshold: 10, ldm_measurement: :height) }
+      let(:section_rate) { FactoryBot.create(:rates_section, organization: organization, ldm_ratio: 1000, ldm_threshold: 10, ldm_measurement: :height) }
       let(:cargo_rate) { FactoryBot.create(:rates_cargo, section: section_rate, cbm_ratio: cbm_ratio) }
       let(:cbm_ratio) { 200 }
 
@@ -77,7 +77,7 @@ RSpec.describe RateExtractor::ChargeableWeight::Applicable::Regular do
       end
 
       let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: { rate: cargo_rate }) }
-      let(:section_rate) { FactoryBot.create(:rates_section, tenant: tenant, ldm_ratio: 1000, ldm_threshold: 10, ldm_measurement: :height) }
+      let(:section_rate) { FactoryBot.create(:rates_section, organization: organization, ldm_ratio: 1000, ldm_threshold: 10, ldm_measurement: :height) }
       let(:cargo_rate) { FactoryBot.create(:rates_cargo, section: section_rate, cbm_ratio: cbm_ratio) }
       let(:cbm_ratio) { 200 }
 
@@ -117,7 +117,7 @@ RSpec.describe RateExtractor::ChargeableWeight::Applicable::Regular do
       end
 
       let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: { rate: cargo_rate }) }
-      let(:section_rate) { FactoryBot.create(:rates_section, tenant: tenant, ldm_ratio: 2000, ldm_threshold: 1, ldm_measurement: :height) }
+      let(:section_rate) { FactoryBot.create(:rates_section, organization: organization, ldm_ratio: 2000, ldm_threshold: 1, ldm_measurement: :height) }
       let(:cargo_rate) { FactoryBot.create(:rates_cargo, section: section_rate, cbm_ratio: cbm_ratio) }
       let(:cbm_ratio) { 100 }
 

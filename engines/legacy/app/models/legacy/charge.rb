@@ -46,8 +46,8 @@ module Legacy
       }.merge(children_charges)
     end
 
-    def tenant_id
-      charge_breakdown.shipment.tenant_id
+    def organization_id
+      charge_breakdown.shipment.organization_id
     end
 
     def update_price!
@@ -66,6 +66,9 @@ module Legacy
       edited_price.money = new_total
       edited_price.save
       save
+
+      parent.update_edited_price! if parent.present?
+      persisted?
     end
 
     def dup_tree(charge_breakdown:, parent: nil)

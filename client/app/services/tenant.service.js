@@ -20,7 +20,7 @@ function updateEmails (emails, tenant) {
     body: JSON.stringify({ tenant: { emails } })
   }
 
-  return fetch(`${getTenantApiUrl()}/admin/tenants/${tenant.id}`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/admin/organizations/${tenant.id}`, requestOptions)
     .then(handleResponse)
 }
 

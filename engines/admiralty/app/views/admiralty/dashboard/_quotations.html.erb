@@ -17,7 +17,7 @@
             <td><%= quotation.created_at.strftime('%B %e, %Y, %H:%M') %></td>
             <td><%= link_to(quotation.id, booking_link(quotation), target: '_blank')%></td>
             <td><%= booking_slug(quotation)%></td>
-            <td><%= quotation.user.email %></td>
+            <td><%= Users::User.with_deleted.find(quotation.user_id).email %></td>
           </tr>
         <% end %>
       </tbody>

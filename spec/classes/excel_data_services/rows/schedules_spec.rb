@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Rows::Schedules do
-  let(:tenant) { create(:tenant) }
+  let(:organization) { create(:organizations_organization) }
   let(:input_data) do
     {
       from: 'DALIAN',
@@ -21,7 +21,7 @@ RSpec.describe ExcelDataServices::Rows::Schedules do
       row_nr: 2
     }
   end
-  let(:row) { described_class.new(tenant: tenant, row_data: input_data) }
+  let(:row) { described_class.new(organization: organization, row_data: input_data) }
 
   describe '.closing_date' do
     it 'returns the wavlue form the row' do

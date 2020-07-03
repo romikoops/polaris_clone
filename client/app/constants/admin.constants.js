@@ -499,7 +499,7 @@ export const lclPricingSchema = {
       rate_basis: 'PER_SHIPMENT'
     }
   },
-  tenant_id: null,
+  organization_id: null,
   route_id: null,
   hub_route_id: null
 }
@@ -777,7 +777,7 @@ export const fclPricingSchema = {
       rate_basis: 'PER_DOC'
     }
   },
-  tenant_id: null
+  organization_id: null
 }
 
 export const managerRoles = [

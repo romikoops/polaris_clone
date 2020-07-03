@@ -11,9 +11,9 @@ module Pricings
       @directions = args[:directions]
       @margin_type = args[:marginType]
       @attached_to = args[:attached_to]
-      @pricing = args[:pricing_id] ? current_tenant.rates.find(args[:pricing_id]) : nil
-      @new_tenant = Tenants::Tenant.find_by(legacy_id: args[:tenant_id])
-      @group = Tenants::Group.find(args[:groupId])
+      @pricing = args[:pricing_id] ? Pricings::Pricing.where(organization_id: current_organization.id).find(args[:pricing_id]) : nil
+      @new_organization = Organizations::Organization.find(args[:organization_id])
+      @group = Groups::Group.find(args[:groupId])
       @args = args
     end
 
@@ -29,7 +29,7 @@ module Pricings
         margin = Pricings::Margin.create!(
           operator: @args[:operand][:value],
           value: get_margin_value(@args[:operand][:value], @args[:marginValue]),
-          tenant: @new_tenant,
+          organization: @new_organization,
           pricing: @pricing,
           applicable: @group,
           effective_date: effective_date,
@@ -45,10 +45,10 @@ module Pricings
         unless @args[:fineFeeValues].empty?
           @args[:fineFeeValues].keys.each do |key|
             fee_code = key.to_s.split(' - ').first
-            charge_category = ::Legacy::ChargeCategory.from_code(code: fee_code, tenant_id: @new_tenant.legacy_id)
+            charge_category = ::Legacy::ChargeCategory.from_code(code: fee_code, organization_id: @new_organization.id)
             ::Pricings::Detail.create!(
               margin_id: margin.id,
-              tenant: @new_tenant,
+              organization: @new_organization,
               value: get_margin_value(@args[:fineFeeValues][key][:operand][:value], @args[:fineFeeValues][key][:value]),
               operator: @args[:fineFeeValues][key][:operand][:value],
               charge_category_id: charge_category.id
@@ -187,15 +187,15 @@ module Pricings
       iterations
     end
 
-    def self.create_default_margins(tenant)
+    def self.create_default_margins(organization)
       ['rail', 'ocean', 'air', 'truck', 'local_charge', 'trucking', nil].each do |default|
         %i[freight_margin export_margin import_margin trucking_pre_margin trucking_on_margin].each do |m_type|
           ::Pricings::Margin.find_or_create_by!(
-            tenant: tenant,
+            organization: organization,
             value: 0,
             default_for: default,
             operator: '%',
-            applicable: tenant,
+            applicable: organization,
             margin_type: m_type,
             effective_date: Date.current,
             expiration_date: Date.current + 5.years

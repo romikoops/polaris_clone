@@ -14,13 +14,13 @@ function handleResponse (response) {
   return respJSON
 }
 
-function getTenant (tenantId) {
+function getTenant (organizationId) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/tenants/${tenantId}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/organizations/${organizationId}`, requestOptions).then(handleResponse)
 }
 
 function getTenantId () {
@@ -29,7 +29,7 @@ function getTenantId () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/tenants/current`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/organizations/current`, requestOptions).then(handleResponse)
 }
 
 function getScope () {
@@ -38,7 +38,7 @@ function getScope () {
     headers: authHeader()
   }
 
-  return fetch(`${getTenantApiUrl()}/tenants/scope/refresh`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/organizations/scope/refresh`, requestOptions).then(handleResponse)
 }
 
 function setTenants () {
@@ -47,7 +47,7 @@ function setTenants () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/tenants`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/organizations`, requestOptions).then(handleResponse)
 }
 
 function fetchCurrencies () {

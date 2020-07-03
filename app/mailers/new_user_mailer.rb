@@ -5,21 +5,22 @@ class NewUserMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  def new_user_email(user_id:) # rubocop:disable Metrics/AbcSize
-    @user = User.find(user_id)
-    @user_profile = ProfileTools.profile_for_user(legacy_user: @user)
-    @tenant = Tenant.find(@user.tenant_id)
-    @tenants_tenant = ::Tenants::Tenant.find_by(legacy_id: @user.tenant_id)
-    @theme = ::Tenants::ThemeDecorator.new(@tenants_tenant.theme)
+  def new_user_email(user:) # rubocop:disable Metrics/AbcSize
+    @user = user
+    set_current_id(organization_id: user.organization_id)
+    @user_profile = ProfileTools.profile_for_user(user: @user)
+    @organization = current_organization
+    @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
+    @theme = @org_theme.legacy_format
     @scope = scope_for(record: @user)
 
     @mot_icon = URI.open(
       'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png'
     ).read
-    email_logo = @tenants_tenant.theme.email_logo
+    email_logo = @organization.theme.email_logo
     attachments.inline['logo.png'] = email_logo.attached? ? email_logo&.download : ''
     attachments.inline['icon.png'] = @mot_icon
-    email = @tenant.emails.dig('sales', 'general')
+    email = @org_theme.emails.dig('sales', 'general')
 
     return if email.nil?
 
@@ -27,7 +28,7 @@ class NewUserMailer < ApplicationMailer
       from: Mail::Address.new("no-reply@#{Settings.emails.domain}")
                          .tap { |a| a.display_name = 'ItsMyCargo Service Request' }.format,
       reply_to: 'support@itsmycargo.com',
-      to: mail_target_interceptor(@user, email),
+      to: email,
       subject: 'A New User Has Registered!'
     ) do |format|
       format.html

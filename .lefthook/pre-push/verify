@@ -16,12 +16,12 @@ require "git"
 git = Git.open(File.expand_path("../..", __dir__))
 
 log = git.log.between(remote, "HEAD")
-commits = log.reject { |commit| COMMIT_PATTERN.match?(commit.message) }
+commits = log.reject { |commit| COMMIT_PATTERN.match?(commit.message) || commit.committer.name == "GitHub" }
 
 unless commits.count.zero?
   warn "Found invalid commits, prevent pushing"
   commits.each do |commit|
-    warn "  • #{commit.sha[0..8]} #{commit.message}"
+    warn "  • #{commit.sha[0..8]} #{commit.message.split("\n")[0]}"
   end
   exit 1
 end

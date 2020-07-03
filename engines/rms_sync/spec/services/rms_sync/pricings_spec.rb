@@ -3,30 +3,29 @@
 require 'rails_helper'
 
 RSpec.describe RmsSync::Pricings do
-  let(:tenant) { FactoryBot.create(:legacy_tenant) }
-  let!(:tenants_tenant) { Tenants::Tenant.find_by(legacy_id: tenant.id) }
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:tenant_vehicles) do
     [
-      FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', tenant: tenant),
+      FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', organization: organization),
       FactoryBot.create(:legacy_tenant_vehicle,
                         name: 'faster',
-                        tenant: tenant,
+                        organization: organization,
                         carrier: FactoryBot.build(:legacy_carrier, name: 'MSC'))
     ]
   end
   let!(:currency) { FactoryBot.create(:legacy_currency) }
-  let!(:user) { FactoryBot.create(:legacy_user, tenant: tenant, currency: currency.base) }
 
   describe '.perform' do
     it 'should create a Book, Sheet and Cells' do
       pricings = []
       tenant_vehicles.each do |tv|
-        pricings << FactoryBot.create(:lcl_pricing, tenant: tenant, tenant_vehicle: tv)
-        pricings << FactoryBot.create(:fcl_20_pricing, tenant: tenant, tenant_vehicle: tv)
-        pricings << FactoryBot.create(:fcl_40_pricing, tenant: tenant, tenant_vehicle: tv)
-        pricings << FactoryBot.create(:fcl_40_hq_pricing, tenant: tenant, tenant_vehicle: tv)
+        pricings << FactoryBot.create(:lcl_pricing, organization: organization, tenant_vehicle: tv, itinerary: itinerary)
+        pricings << FactoryBot.create(:fcl_20_pricing, organization: organization, tenant_vehicle: tv, itinerary: itinerary)
+        pricings << FactoryBot.create(:fcl_40_pricing, organization: organization, tenant_vehicle: tv, itinerary: itinerary)
+        pricings << FactoryBot.create(:fcl_40_hq_pricing, organization: organization, tenant_vehicle: tv, itinerary: itinerary)
       end
-      described_class.new(tenant_id: tenants_tenant.id, sheet_type: :pricings).perform
+      described_class.new(organization_id: organization.id, sheet_type: :pricings).perform
       expect(RmsData::Book.where(sheet_type: :pricings).length).to eq(1)
       book = RmsData::Book.where(sheet_type: :pricings).first
       expect(RmsData::Sheet.where(book_id: book.id).length).to eq(1)
@@ -56,8 +55,8 @@ RSpec.describe RmsSync::Pricings do
                                pricings.first.expiration_date.to_s,
                                'Gothenburg',
                                'Sweden',
-                               'Gothenburg',
-                               'Sweden',
+                               'Shanghai',
+                               'China',
                                'ocean',
                                nil,
                                'slowly',
@@ -73,8 +72,8 @@ RSpec.describe RmsSync::Pricings do
     end
 
     it 'should create multiple rows for range fees' do
-      pricing = FactoryBot.create(:lcl_range_pricing, tenant: tenant, tenant_vehicle: tenant_vehicles.first)
-      described_class.new(tenant_id: tenants_tenant.id, sheet_type: :pricings).perform
+      pricing = FactoryBot.create(:lcl_range_pricing, organization: organization, tenant_vehicle: tenant_vehicles.first, itinerary: itinerary)
+      described_class.new(organization_id: organization.id, sheet_type: :pricings).perform
       expect(RmsData::Book.where(sheet_type: :pricings).length).to eq(1)
       book = RmsData::Book.where(sheet_type: :pricings).first
       expect(RmsData::Sheet.where(book_id: book.id).length).to eq(1)
@@ -101,8 +100,8 @@ RSpec.describe RmsSync::Pricings do
                                         pricing.expiration_date.to_s,
                                         'Gothenburg',
                                         'Sweden',
-                                        'Gothenburg',
-                                        'Sweden',
+                                        'Shanghai',
+                                        'China',
                                         'ocean',
                                         nil,
                                         'slowly',
@@ -119,8 +118,8 @@ RSpec.describe RmsSync::Pricings do
                                         pricing.expiration_date.to_s,
                                         'Gothenburg',
                                         'Sweden',
-                                        'Gothenburg',
-                                        'Sweden',
+                                        'Shanghai',
+                                        'China',
                                         'ocean',
                                         nil,
                                         'slowly',
@@ -137,8 +136,8 @@ RSpec.describe RmsSync::Pricings do
                                         pricing.expiration_date.to_s,
                                         'Gothenburg',
                                         'Sweden',
-                                        'Gothenburg',
-                                        'Sweden',
+                                        'Shanghai',
+                                        'China',
                                         'ocean',
                                         nil,
                                         'slowly',
