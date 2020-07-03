@@ -1,62 +1,34 @@
-FROM ruby:2.6@sha256:51ffdb09a2769cf3635fdf3838a501d737c42612ae8930ab7739c109f011cf59 AS builder
-LABEL maintainer="development@itsmycargo.com"
+FROM ruby:2.6-alpine AS builder
 
 ARG BUNDLE_WITHOUT="development test"
 
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 
 # Minimal requirements to run a Rails app
-RUN apt-get update && apt-get install -y \
-  apt-transport-https \
+RUN apk add --no-cache \
   automake \
-  build-essential \
+  build-base \
   cmake \
+  geos-dev \
   git \
-  libgeos-dev \
-  libpq-dev \
-  libssl-dev \
-  locales \
-  tzdata \
-  wkhtmltopdf \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales && \
-    locale-gen C.UTF-8 && \
-    /usr/sbin/update-locale LANG=C.UTF-8
-
-ENV LC_ALL C.UTF-8
-
-# Add user
-RUN groupadd -r app && useradd -r -d /app/tmp -s /sbin/nologin -g app app
-
-# Install Node
-ARG NODE_VERSION=node_10.x
-RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
-  && echo "deb https://deb.nodesource.com/$NODE_VERSION stretch main" | tee /etc/apt/sources.list.d/nodesource.list \
-  && apt-get update && apt-get install -y \
-    nodejs \
-  && rm -rf /var/lib/apt/lists/*
-
+  nodejs \
+  npm \
+  postgresql-dev \
+  tzdata
+# Install MJML
 RUN npm install -g 'mjml@4.3.1'
 
 WORKDIR /app
 
-COPY --chown=app:app Gemfile Gemfile.lock .build/docker/ .
+COPY Gemfile Gemfile.lock .build/docker/ .
 
-RUN bundle config --global frozen 1 \
-    && bundle install -j4 --retry 3 \
-    && rm -rf /usr/local/bundle/cache/*.gem \
-    && find /usr/local/bundle/gems/ -name "*.c" -delete \
-    && find /usr/local/bundle/gems/ -name "*.o" -delete
+RUN \
+  bundle install --frozen --without=development test --retry 3 \
+  && rm -rf /usr/local/bundle/cache/*.gem \
+  && find /usr/local/bundle/gems/ -name "*.c" -delete \
+  && find /usr/local/bundle/gems/ -name "*.o" -delete
 
-RUN chown -R app:app /app/
-
-ARG RELEASE=""
-RUN echo "$RELEASE" > ./REVISION
-
-COPY --chown=app:app . ./
-
-USER app
+COPY . ./
 
 RUN RAILS_ENV=production bin/rails assets:precompile
 
@@ -66,55 +38,38 @@ RUN RAILS_ENV=production bin/rails assets:precompile
 #
 #
 #
-FROM ruby:2.6-slim@sha256:3a68690b80fdef858ea5bc42249ebd399fef02b428bce3c9ee1230f8c9211e5c AS app
-LABEL maintainer="development@itsmycargo.com"
+FROM ruby:2.6-alpine AS app
 
 ENV MALLOC_ARENA_MAX 2
 
 # Minimal requirements to run a Rails app
-RUN apt-get update && apt-get install -y \
-  apt-transport-https \
-  fonts-noto \
-  gnupg \
-  libfontconfig1 \
-  libfreetype6 \
-  libgeos-c1v5 \
-  libpq5 \
-  libssl1.1 \
-  libx11-6 \
-  libxext6 \
-  libxrender1 \
-  locales \
+RUN apk add --no-cache \
+  font-noto \
+  geos \
+  less \
+  libpq \
+  nodejs \
+  npm \
   tzdata \
-  wkhtmltopdf \
-  && rm -rf /var/lib/apt/lists/*
+  wkhtmltopdf
 
-ARG NODE_VERSION=node_10.x
-ADD https://deb.nodesource.com/gpgkey/nodesource.gpg.key /root
-RUN apt-key add /root/nodesource.gpg.key \
-  && echo "deb https://deb.nodesource.com/$NODE_VERSION stretch main" | tee /etc/apt/sources.list.d/nodesource.list \
-  && apt-get update && apt-get install -y \
-    nodejs \
-  && rm -rf /var/lib/apt/lists/* /root/nodesource.gpg.key
-
+# Install MJML
 RUN npm install -g 'mjml@4.3.1'
 
+WORKDIR /app
+
 # Add user
-RUN groupadd -r -g 1000 app && useradd -r -d /app/tmp -s /sbin/nologin -g app -u 1000 app
+RUN addgroup -g 1000 app && adduser -D -h /app/tmp -s /sbin/nologin -G app -u 1000 app
+USER app
 
 # Copy app with gems from former build stage
-COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
+COPY --from=builder --chown=app:app /usr/local/bundle/ /usr/local/bundle/
 COPY --from=builder --chown=app:app /app /app
-RUN chown -R app:app /app/
-
-USER app
 
 # Set Rails env
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
 ENV RAILS_ENV review
-
-WORKDIR /app
 
 EXPOSE 3000
 

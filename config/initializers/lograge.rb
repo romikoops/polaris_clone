@@ -9,12 +9,16 @@ Rails.application.configure do
 
   config.lograge.custom_options = lambda do |event|
     exceptions = %w(controller action format id)
-    {
-      host: event.payload[:host],
-      tenant: event.payload[:tenant],
-      user_id: event.payload[:user_id],
-      params: event.payload[:params].except(*exceptions)
-    }
+
+    options = {}
+
+    options[:host] = event.payload[:host]
+    options[:params] = event.payload[:params].except(*exceptions)
+    options[:search] = event.payload[:searchkick_runtime] if event.payload[:searchkick_runtime].to_f > 0
+    options[:organization] = event.payload[:organization]
+    options[:user_id] = event.payload[:user_id]
+
+    options
   end
 
   config.lograge.custom_payload do |controller|

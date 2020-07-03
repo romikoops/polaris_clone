@@ -30,7 +30,6 @@ RSpec.describe QuoteMailer, type: :mailer do
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
-    stub_request(:post, "#{Settings.breezy.url}/render/html").to_return(status: 201, body: '', headers: {})
     ::Organizations.current_id = organization.id
     FactoryBot.create(:organizations_theme, organization: organization)
   end

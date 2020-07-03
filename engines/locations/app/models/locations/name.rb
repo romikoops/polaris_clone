@@ -2,7 +2,9 @@
 
 module Locations
   class Name < ApplicationRecord
-    searchkick word_middle: %i(name display_name alternative_names city postal_code country_code), locations: [:location], settings: {blocks: {read_only: false}}
+    searchkick word_middle: %i(name display_name alternative_names city postal_code country_code),
+               locations: [:location],
+               settings: {blocks: {read_only: false}}
     belongs_to :location, optional: true
 
     def search_data
@@ -19,7 +21,7 @@ module Locations
 
     def transliterated_name
       return if name.nil?
-      
+
       locale = I18n.available_locales.find { |l| l[/#{country_code}/i] }
       I18n.with_locale(locale) do
         ActiveSupport::Inflector.transliterate(name)

@@ -4,10 +4,6 @@ aws:
   region: eu-central-1
   bucket:
 
-breezy:
-  secret: iqY!O}_LOnP]A-]bkBq$WJRXSn9t%0-(
-  url: https://breezy-pdf.armada.itsmycargo.io
-
 cors:
   origins: <%= ENV['CORS_ORIGINS'] %>
 

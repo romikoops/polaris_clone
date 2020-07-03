@@ -32,6 +32,9 @@ pipeline {
               [ name: 'postgis', image: 'mdillon/postgis',
                 requests: [ memory: '500Mi', cpu: '250m' ]
               ],
+              [ name: 'redis', image: 'redis',
+                requests: [ memory: '50Mi', cpu: '100m' ]
+              ],
               [ name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:7.1.1',
                 requests: [ memory: '1500Mi', cpu: '250m' ],
                 env: [ [ name: "discovery.type", value: "single-node" ] ]
