@@ -23,7 +23,8 @@ WORKDIR /app
 COPY Gemfile Gemfile.lock .build/docker/ .
 
 RUN \
-  bundle install --frozen --without=development test --retry 3 \
+  bundle config --local build.sassc --disable-march-tune-native \
+  && bundle install --frozen --without=development test --retry 3 \
   && rm -rf /usr/local/bundle/cache/*.gem \
   && find /usr/local/bundle/gems/ -name "*.c" -delete \
   && find /usr/local/bundle/gems/ -name "*.o" -delete
