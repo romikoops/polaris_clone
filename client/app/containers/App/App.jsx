@@ -182,16 +182,6 @@ class App extends Component {
                   theme={theme}
                 />
 
-                <GenericError theme={theme}>
-                  <Route
-                    path="/authentication/confirmation/:confirmation_token"
-                    render={(props) => (
-                      <UserConfirmation
-                        theme={theme}
-                      />
-                    )}
-                  />
-                </GenericError>
                 <Route path="/login/saml/success" render={(props) => (<SamlRedirect theme={theme} {...props} />)} />
                 <Route
                   path="/login/saml/error"
@@ -201,6 +191,15 @@ class App extends Component {
                 />
 
                 <Route render={() => <Redirect to="/" />} />
+
+                <Route
+                  path="/authentication/confirmation/:confirmation_token"
+                  render={(props) => (
+                    <UserConfirmation
+                      theme={theme}
+                    />
+                  )}
+                />
 
               </Switch>
             </GenericError>
