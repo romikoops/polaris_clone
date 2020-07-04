@@ -57,7 +57,8 @@ module OfferCalculator
         raise OfferCalculator::Calculator::MissingTruckingData
       rescue OfferCalculator::TruckingTools::LoadMeterageExceeded
         raise OfferCalculator::TruckingTools::LoadMeterageExceeded
-      rescue StandardError
+      rescue StandardError => e
+        Raven.capture_exception(e)
         raise OfferCalculator::Calculator::MissingTruckingData
       end
 
@@ -88,7 +89,8 @@ module OfferCalculator
         end
       rescue OfferCalculator::TruckingTools::LoadMeterageExceeded => e
         { error: e }
-      rescue StandardError
+      rescue StandardError => e
+        Raven.capture_exception(e)
         raise OfferCalculator::Calculator::MissingTruckingData
       end
 
