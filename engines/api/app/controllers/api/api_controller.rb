@@ -24,7 +24,7 @@ module Api
     end
 
     def organization_user
-      current_user.becomes(::Organizations::User)
+      current_user&.becomes(::Organizations::User)
     end
 
     def current_organization
