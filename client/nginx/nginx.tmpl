@@ -49,8 +49,10 @@ http {
 
       return 200 'window.keel = {
 apiUrl: \'{{ .Env.API_URL }}\',
+appName: \'{{ .Env.APP_NAME }}\',
 environment: \'{{ .Env.APP_ENVIRONMENT }}\',
-appName: \'{{ .Env.APP_NAME }}\'
+oauthClientId: \'{{ .Env.OAUTH_CLIENT_ID }}\',
+oauthClientSecret: \'{{ .Env.OAUTH_CLIENT_SECRET }}\'
 }
 ';
     }
