@@ -64,7 +64,6 @@ class OrganizationsController < ApplicationController
   end
 
   def saml_enabled?
-    false
-    #::Tenants::SamlMetadatum.exists?(organization_id: organization.id)
+    Organizations::SamlMetadatum.exists?(organization: organization)
   end
 end
