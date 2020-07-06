@@ -2,8 +2,14 @@
 
 module Groups
   class Group < ApplicationRecord
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    include PgSearch::Model
+
+    belongs_to :organization, class_name: "Organizations::Organization"
     has_many :memberships, dependent: :destroy
+
+    pg_search_scope :search, against: %i[name], using: {
+      tsearch: {prefix: true}
+    }
 
     def members
       memberships.map(&:member)
