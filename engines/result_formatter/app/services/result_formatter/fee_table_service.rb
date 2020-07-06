@@ -49,6 +49,8 @@ module ResultFormatter
     end
 
     def create_cargo_section_rows(row:, items:)
+      return create_cargo_currency_section_rows(row: row, items: items, cargo: nil, level: 2) if consolidated_cargo?
+
       items.group_by(&:cargo).each do |cargo, items_by_cargo|
         fee_value = value(items: items_by_cargo)
         original_fee_value = original_value(items: items_by_cargo)
@@ -65,13 +67,15 @@ module ResultFormatter
           chargeCategoryId: applicable_charge_category_id(cargo: cargo)
         )
         @rows << cargo_row
-        create_cargo_currency_section_rows(row: cargo_row, items: items_by_cargo, cargo: cargo)
+        create_cargo_currency_section_rows(row: cargo_row, items: items_by_cargo, cargo: cargo, level: 3)
       end
     end
 
-    def create_cargo_currency_section_rows(row:, items:, cargo:)
-      sorted_items_for_currency_sections(items: items)
-        .each do |currency, items_by_currency|
+    def create_cargo_currency_section_rows(row:, items:, cargo:, level:)
+      sorted_currency_items = sorted_items_for_currency_sections(items: items)
+      return create_fee_rows(row: row, items: items, level: level) if sorted_currency_items.keys.length == 1
+
+      sorted_currency_items.each do |currency, items_by_currency|
         fee_value = value(items: items_by_currency, currency: currency)
         original_fee_value = original_value(items: items_by_currency, currency: currency)
         currency_row = default_values.merge(
@@ -83,14 +87,14 @@ module ResultFormatter
           lineItemId: nil,
           tenderId: tender.id,
           section: items_by_currency.first.section,
-          level: 3
+          level: level
         )
         @rows << currency_row
-        create_fee_rows(row: currency_row, items: items_by_currency)
+        create_fee_rows(row: currency_row, items: items_by_currency, level: level + 1)
       end
     end
 
-    def create_fee_rows(row:, items:)
+    def create_fee_rows(row:, items:, level:)
       sorted_items_for_section(items: items).each do |item|
         decorated_line_item = ::ResultFormatter::LineItemDecorator.new(item, context: {scope: scope})
         @rows << default_values.merge(
@@ -103,7 +107,7 @@ module ResultFormatter
           lineItemId: item.id,
           tenderId: tender.id,
           section: item.section,
-          level: 4,
+          level: level,
           code: item.code,
           chargeCategoryId: applicable_charge_category_id(item: item)
         )
@@ -230,6 +234,10 @@ module ResultFormatter
         description: nil,
         section: nil
       }
+    end
+
+    def consolidated_cargo?
+      tender.load_type =='cargo_item' && scope.dig(:consolidation, :cargo, :backend)
     end
   end
 end
