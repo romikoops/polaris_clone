@@ -23,7 +23,7 @@ module Api
 
         def perform
           {
-            countryCodes: country_codes(target_index: index).pluck(:country_code).map(&:downcase),
+            countryCodes: countries(target_index: index).pluck(:code).map(&:downcase),
             truckTypes: available_truck_types,
             truckingAvailable: available_truck_types.present?
           }

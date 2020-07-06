@@ -14,6 +14,7 @@ class TruckingCounterpartsController < ApplicationController
       organization: current_organization,
       load_type: query_params[:load_type],
       target: target,
+      user: organization_user,
       coordinates: query_params.slice(:lat, :lng),
       nexus_id: query_params[:nexus_id]
     ).perform

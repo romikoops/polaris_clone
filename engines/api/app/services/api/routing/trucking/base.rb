@@ -25,11 +25,8 @@ module Api
             )
         end
 
-        def country_codes(target_index:)
-          ::Trucking::Location
-            .where(id: trucking_location_ids(target_index: target_index))
-            .select(:country_code)
-            .distinct
+        def countries(target_index:)
+          Legacy::Country.where(id: type_availabilities(target_index: target_index).select(:country_id)).distinct
         end
 
         def index
@@ -46,13 +43,6 @@ module Api
 
         def truck_type_carriage
           carriage
-        end
-
-        def trucking_location_ids(target_index:)
-          ::Trucking::Trucking.where(
-            organization: organization,
-            hub: itineraries_hubs(target_index: target_index)
-          ).select(:location_id)
         end
 
         def itineraries

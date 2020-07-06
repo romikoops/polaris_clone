@@ -28,6 +28,8 @@ module Trucking
         @trucking_rates = []
         @trucking_truckings = []
         @missing_locations = []
+        @countries = []
+        @truck_types = []
       end
 
       def perform
@@ -40,6 +42,7 @@ module Trucking
         load_zones
         load_ident_values_and_countries
         load_fees_and_charges
+        find_availabilities
         overwrite_zonal_trucking_rates_by_hub
         create_coverage
         end_time = DateTime.now
@@ -79,7 +82,7 @@ module Trucking
         }
       end
 
-      def find_availabilities(row_truck_type, direction, load_type, hub)
+      def find_availabilities
         query_method = case @identifier_type
                        when 'location_id'
                          :location
@@ -90,18 +93,21 @@ module Trucking
                        else
                          :not_set
                         end
-        trucking_type_availability = TypeAvailability.find_or_create_by(
-          truck_type: row_truck_type,
-          carriage: direction,
-          load_type: load_type,
-          query_method: query_method,
-          sandbox: @sandbox
-        )
-        HubAvailability.find_or_create_by(
-          hub_id: hub.id,
-          type_availability_id: trucking_type_availability.id,
-          sandbox: @sandbox
-        )
+        @countries.product(@truck_types).each do |country_code, truck_type|
+          trucking_type_availability = TypeAvailability.find_or_create_by(
+            truck_type: truck_type,
+            carriage: direction,
+            load_type: load_type,
+            query_method: query_method,
+            country: ::Legacy::Country.find_by(code: country_code),
+            sandbox: @sandbox
+          )
+          HubAvailability.find_or_create_by(
+            hub_id: hub.id,
+            type_availability_id: trucking_type_availability.id,
+            sandbox: @sandbox
+          )
+        end
       end
 
       def overwrite_zonal_trucking_rates_by_hub # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
@@ -113,8 +119,6 @@ module Trucking
 
           load_type = meta[:load_type].downcase == 'container' ? 'container' : 'cargo_item'
           direction = meta[:direction].downcase == 'import' ? 'on' : 'pre'
-
-          find_availabilities(row_truck_type, direction, load_type, hub)
 
           modifier_position_objs = populate_modifier(rates_sheet)
           raise MissingModifierKeys if modifier_position_objs.empty?
@@ -148,7 +152,7 @@ module Trucking
                 trucking_rates(weight_min_row, val, meta, row_min_value, row_zone_name, m_index, mod_key)
               end
             end
-
+            @truck_types << row_truck_type unless @truck_types.include?(row_truck_type)
             modify_charges(trucking, row_truck_type, direction)
 
             insert_or_update_truckings(trucking, single_ident_values_and_country)
@@ -211,7 +215,7 @@ module Trucking
           row_data = zone_sheet.row(line)
           zone_name = row_data[0]
           zones[zone_name] = [] if zones[zone_name].nil?
-
+  
           if row_data[1] && !row_data[2]
             row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1].strip
             @zip_char_length ||= row_zip.to_s.length
@@ -316,13 +320,14 @@ module Trucking
         current_country = { name: nil, code: nil }
 
         zones.each do |zone_name, idents_and_countries|
-          current_country = {}
           all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
             if current_country[:code] != idents_and_country[:country]
+              country = Legacy::Country.find_by(code: idents_and_country[:country])
               current_country = {
-                name: Legacy::Country.find_by(code: idents_and_country[:country]).name,
+                name: country.name,
                 code: idents_and_country[:country]
               }
+              @countries << country
               @valid_postal_codes = ::Trucking::PostalCodes.for(country_code: idents_and_country[:country])
             end
             if idents_and_country[:min] && idents_and_country[:max]
@@ -551,7 +556,7 @@ module Trucking
           modifier: meta[:scale],
           hub_id: @hub.id,
           group_id: @group_id,
-          organization_id: organization.id,
+          organization_id: @organization.id,
           identifier_modifier: identifier_modifier,
           carriage: meta[:direction] == 'import' ? 'on' : 'pre',
           cargo_class: meta[:cargo_class],
@@ -637,23 +642,7 @@ module Trucking
       end
 
       def find_or_create_courier(courier_name)
-        Courier.find_or_create_by(name: courier_name, organization: organization)
-      end
-
-      def build_trucking_and_locations(single_ident_values_and_country, rate)
-        single_ident_values_and_country.each do |values|
-          location = Location.find_or_initialize_by(
-            'country_code' => values[:country].downcase,
-            identifier_type.to_s => values[:ident]
-          )
-          @trucking_locations << location
-          trucking = Trucking.find_or_initialize_by(
-            hub: @hub,
-            rate: rate,
-            location: location
-          )
-          @trucking_truckings << trucking
-        end
+        Courier.find_or_create_by(name: courier_name, organization: @organization)
       end
 
       def determine_identifier_type_and_modifier(identifier_type) # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity

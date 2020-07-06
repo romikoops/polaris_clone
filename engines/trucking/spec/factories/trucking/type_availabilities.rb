@@ -6,6 +6,7 @@ FactoryBot.define do
     carriage   { 'pre' }
     truck_type { 'default' }
     query_method { :not_set }
+    association :country, factory: :legacy_country
 
     transient do
       custom_truck_type { nil }

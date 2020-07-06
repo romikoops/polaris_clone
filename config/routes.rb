@@ -250,11 +250,13 @@ end
 
 # == Route Map
 #
+# D, [2020-07-06T12:35:54.028894 #34714] DEBUG -- : using default configuration
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
 #                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                          api        /                                                                                                  Api::Engine
 #                                                    admiralty        /admiralty                                                                                         Admiralty::Engine
+#                                                  sidekiq_web        /sidekiq                                                                                           Sidekiq::Web
 #                                                     rswag_ui        /docs                                                                                              Rswag::Ui::Engine
 #                                                    rswag_api        /docs                                                                                              Rswag::Api::Engine
 #                                                    saml_init GET    /saml/init(.:format)                                                                               saml#init

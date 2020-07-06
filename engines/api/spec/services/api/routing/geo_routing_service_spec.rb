@@ -21,13 +21,15 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
   let(:origin_trucking_location) { FactoryBot.create(:trucking_location, location: origin_location, country_code: 'SE') }
   let(:destination_trucking_location) { FactoryBot.create(:trucking_location, location: destination_location, country_code: 'CN') }
   let(:query) { nil }
+  let(:target_user) { nil }
   let(:result) do
     described_class.nexuses(
       organization: organization,
       coordinates: { lat: lat, lng: lng },
       query: query,
       load_type: 'cargo_item',
-      target: target
+      target: target,
+      user: target_user
     )
   end
 
@@ -70,6 +72,29 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
       end
     end
 
+    context 'when targeting the origin with destination lat lng and groups' do
+      let(:expected_results) do
+        Legacy::Itinerary.where(organization: organization).map { |itin| itin.first_nexus.name }
+      end
+      let(:lat) { destination_hub.latitude }
+      let(:lng) { destination_hub.longitude }
+      let(:target) { :origin_destination }
+      let(:target_user) { user }
+      let(:group) {
+        FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
+          FactoryBot.create(:groups_membership, member: user, group: tapped_group)
+        end
+      }
+
+      before do
+        FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location, group: group)
+      end
+
+      it 'Renders a json of origins for given a destination lat lng' do
+        expect(result.pluck(:name)).to match_array(expected_results)
+      end
+    end
+
     context 'when targeting the origin with destination lat lng and query' do
       let(:lat) { destination_hub.latitude }
       let(:lng) { destination_hub.longitude }
@@ -83,8 +108,7 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
 
     context 'when targeting the origin with destination lat lng and query and multiple hubs' do
       before do
-        hub_name = origin_hub.name.split(' ').first + ' Airport'
-        FactoryBot.create(:legacy_hub, name: hub_name, hub_type: 'air', nexus: origin_hub.nexus)
+        FactoryBot.create(:legacy_hub, name: origin_hub.name, hub_type: 'air', nexus: origin_hub.nexus)
       end
 
       let(:lat) { destination_hub.latitude }

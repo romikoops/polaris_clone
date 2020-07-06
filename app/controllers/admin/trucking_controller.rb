@@ -62,7 +62,7 @@ class Admin::TruckingController < Admin::AdminBaseController
       document = Legacy::File.create!(
         text: '',
         doc_type: 'truckings',
-        tenant: current_organization,
+        organization: current_organization,
         file: upload_params[:file]
       )
 

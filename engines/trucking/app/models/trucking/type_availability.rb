@@ -8,10 +8,11 @@ module Trucking
     QUERY_METHODS = %i(distance zipcode location not_set).freeze
 
     has_many :hub_availabilities
+    belongs_to :country, class_name: 'Legacy::Country', optional: true
     belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     validates :truck_type,
               uniqueness: {
-                scope: %i(carriage load_type query_method),
+                scope: %i(carriage load_type query_method country_id),
                 message: lambda { |obj, _msg|
                   "#{obj.truck_type} taken for '#{obj.carriage}-carriage', #{obj.load_type}"
                 }
@@ -47,10 +48,12 @@ end
 #  truck_type   :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  country_id   :bigint
 #  sandbox_id   :uuid
 #
 # Indexes
 #
+#  index_trucking_type_availabilities_on_country_id    (country_id)
 #  index_trucking_type_availabilities_on_load_type     (load_type)
 #  index_trucking_type_availabilities_on_query_method  (query_method)
 #  index_trucking_type_availabilities_on_sandbox_id    (sandbox_id)

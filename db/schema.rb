@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_03_062014) do
+ActiveRecord::Schema.define(version: 2020_07_06_094923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -2429,12 +2429,14 @@ ActiveRecord::Schema.define(version: 2020_07_03_062014) do
 
   create_table "trucking_type_availabilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "carriage"
+    t.bigint "country_id"
     t.datetime "created_at", null: false
     t.string "load_type"
     t.integer "query_method"
     t.uuid "sandbox_id"
     t.string "truck_type"
     t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_trucking_type_availabilities_on_country_id"
     t.index ["load_type"], name: "index_trucking_type_availabilities_on_load_type"
     t.index ["query_method"], name: "index_trucking_type_availabilities_on_query_method"
     t.index ["sandbox_id"], name: "index_trucking_type_availabilities_on_sandbox_id"

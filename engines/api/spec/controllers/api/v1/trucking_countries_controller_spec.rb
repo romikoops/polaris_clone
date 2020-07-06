@@ -40,10 +40,10 @@ module Api
       end
 
       context "with cross country trucking" do
-        let(:location_2) { FactoryBot.create(:zipcode_location, zipcode: "00002", country_code: "DE") }
+        let(:country) { FactoryBot.create(:legacy_country, code: "DE", name: "Germany") }
 
         before do
-          FactoryBot.create(:legacy_country, code: "DE", name: "Germany")
+          FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location, country: country)
         end
 
         it "renders the list correct list of countries" do

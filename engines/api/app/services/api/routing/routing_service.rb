@@ -6,20 +6,22 @@ module Api
       ORIGIN_INDEX = 0
       DESTINATION_INDEX = 1
 
-      def self.nexuses(organization:, load_type:, target:, coordinates: nil, nexus_id: nil, query: nil)
+      def self.nexuses(organization:, load_type:, target:, user: nil, coordinates: nil, nexus_id: nil, query: nil)
         new(organization: organization,
             load_type: load_type,
             target: target,
             coordinates: coordinates,
+            user: user,
             nexus_id: nexus_id,
             query: query).perform
       end
 
-      def initialize(organization:, load_type:, target:, coordinates: nil, nexus_id: nil, query: nil)
+      def initialize(organization:, load_type:, target:, user: nil, coordinates: nil, nexus_id: nil, query: nil)
         @organization = organization
         @query = query
         @load_type = load_type
         @target = target
+        @user = user
         @lat = coordinates&.dig(:lat)
         @lng = coordinates&.dig(:lng)
         @nexus_id = nexus_id
@@ -31,7 +33,7 @@ module Api
 
       private
 
-      attr_reader :organization, :lat, :lng, :nexus_id, :load_type, :target, :query
+      attr_reader :organization, :lat, :lng, :nexus_id, :load_type, :target, :query, :user
 
       def itineraries_from_lat_lng
         return organization_itineraries.where(origin_hub: carriage_hubs) if index == DESTINATION_INDEX
@@ -66,9 +68,11 @@ module Api
       end
 
       def itineraries_hubs(target_index:)
-        return Legacy::Hub.where(id: itineraries.select(:origin_hub_id)) if target_index == ORIGIN_INDEX
+        if target_index == ORIGIN_INDEX
+          return Legacy::Hub.joins(:as_origin_itineraries).merge(itineraries)
+        end
 
-        Legacy::Hub.where(id: itineraries.select(:destination_hub_id))
+        Legacy::Hub.joins(:as_destination_itineraries).merge(itineraries)
       end
 
       def itineraries_nexuses(target_index:)
@@ -93,7 +97,8 @@ module Api
           address: address,
           carriage: carriage,
           order_by: 'group_id',
-          load_type: load_type
+          load_type: load_type,
+          groups: user_groups
         }
       end
 
@@ -108,6 +113,16 @@ module Api
           city_name: address.city,
           country: OpenStruct.new(code: address.country_code)
         )
+      end
+
+      def user_groups
+        return default_group if user.blank?
+
+        Groups::Group.joins(:memberships).where(groups_memberships: {member_id: user.id, member_type: 'Users::User'})
+      end
+
+      def default_group
+        Groups::Group.where(name: 'default', organization: organization)
       end
     end
   end
