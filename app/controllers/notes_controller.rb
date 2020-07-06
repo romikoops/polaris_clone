@@ -9,7 +9,7 @@ class NotesController < ApplicationController
     note_association = Legacy::Note.where(organization: current_organization)
     raw_notes = note_association.where(target: itineraries)
                             .or(note_association.where(pricings_pricing_id: pricings.ids))
-    transformed_notes = raw_notes.map { |note| transform_note(note) }
+    transformed_notes = raw_notes.map { |note| Api::V1::NoteDecorator.new(note).legacy_json }
                                  .uniq { |note| note.slice('header', 'body', 'service') }
 
     response_handler(transformed_notes)
@@ -21,19 +21,5 @@ class NotesController < ApplicationController
     note.destroy
     resp = itinerary.notes.where(sandbox: @sandbox)
     response_handler(resp)
-  end
-
-  private
-
-  def transform_note(note)
-    return unless note
-
-    nt = note.as_json
-    nt['itineraryTitle'] = note.target&.name if note.target_type.include?('Itinerary')
-    nt['itineraryTitle'] = note.target&.itinerary&.name if note.target_type.include?('Pricing')
-    nt['mode_of_transport'] = note.target&.mode_of_transport if note.target_type.include?('Itinerary')
-    nt['mode_of_transport'] = note.target&.itinerary&.mode_of_transport if note.target_type.include?('Pricing')
-    nt['service'] = note.target&.tenant_vehicle&.full_name if note.target_type.include?('Pricing')
-    nt
   end
 end

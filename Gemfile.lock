@@ -154,6 +154,7 @@ PATH
       imc-core
       imc-organization_manager
       imc-organizations
+      imc-pricings
       imc-profiles
       imc-result_formatter
       imc-trucking

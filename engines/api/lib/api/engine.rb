@@ -3,6 +3,7 @@
 require 'api_auth'
 require 'cargo'
 require 'core'
+require 'pricings'
 require 'profiles'
 require 'organizations'
 require 'users'

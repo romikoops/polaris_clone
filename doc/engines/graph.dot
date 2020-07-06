@@ -101,6 +101,7 @@ digraph G {
     "api" -> "core" [color=grey];
     "api" -> "organizations" [color=grey];
     "api" -> "organization_manager" [color=grey];
+    "api" -> "pricings" [color=grey];
     "api" -> "profiles" [color=grey];
     "api" -> "result_formatter" [color=grey];
     "api" -> "trucking" [color=grey];
