@@ -186,9 +186,10 @@ class Admin::ClientsController < Admin::AdminBaseController
         profiles = profiles.reorder(order_params)
       end
     end
-    profiles.map do |profile|
-      user = Users::User.find(profile.user_id)
-      merge_profile(user: user, profile: profile)
+
+    profiles.joins(:user).map do |profile|
+      profile = profile.as_json.merge!(profile.user.as_json)
+      profile.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
   end
 end
