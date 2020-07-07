@@ -47,6 +47,7 @@ ENV MALLOC_ARENA_MAX 2
 RUN apk add --no-cache \
   font-noto \
   geos \
+  graphicsmagick \
   less \
   libpq \
   nodejs \
