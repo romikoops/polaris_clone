@@ -3,7 +3,6 @@
 class ApplicationController < Api::ApiController
   include Response
 
-  before_action :set_organization_id
   before_action :set_sandbox
   before_action :set_raven_context
   before_action :set_paper_trail_whodunnit
@@ -25,7 +24,7 @@ class ApplicationController < Api::ApiController
   def current_organization
     @current_organization ||= begin
                                 Organizations::Organization.current ||
-                                  Organizations::Organization.find_by(id: params[:organization_id])
+                                  Organizations::Organization.find_by(id: organization_id)
                               end
   end
 
@@ -76,10 +75,6 @@ class ApplicationController < Api::ApiController
     # @sandbox = Tenants::Sandbox.find_by(id: request.headers[:sandbox])
   end
 
-  def set_organization_id
-    ::Organizations.current_id = params[:organization_id] if params[:organization_id]
-  end
-
   def test_user?
     current_user&.email&.ends_with?('@itsmycargo.com')
   end
@@ -106,7 +101,7 @@ class ApplicationController < Api::ApiController
       'shipper'
     end
   end
-  
+
   def decorate_shipments(shipments:)
     Legacy::ShipmentDecorator.decorate_collection(
       shipments,

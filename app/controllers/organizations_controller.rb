@@ -53,8 +53,9 @@ class OrganizationsController < ApplicationController
   private
 
   def organization_id
-    domains = [URI(request.referer).host, ENV.fetch('DEFAULT_TENANT', 'demo.local')]
-    Organizations::Domain.where(domain: domains).first&.organization_id
+    return params[:id] if params[:id].present?
+
+    super
   end
 
   def organization

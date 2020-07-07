@@ -7,6 +7,7 @@ module Api
     routes { Engine.routes }
     before do
       request.headers["Authorization"] = token_header
+      request.env["HTTP_REFERER"] = "http://itsmycargo.example"
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization) }

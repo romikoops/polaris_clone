@@ -11,6 +11,7 @@ module Api
 
     skip_before_action :verify_authenticity_token
     before_action :doorkeeper_authorize!
+    before_action :set_organization_id
     helper_method :current_user
 
     private
@@ -20,7 +21,14 @@ module Api
     end
 
     def organization_id
-      params[:organization_id]
+      return params[:organization_id] if params[:organization_id]
+
+      domains = [URI(request.referer || 'demo.local').host, ENV.fetch("DEFAULT_TENANT", "demo.local")]
+      Organizations::Domain.where(domain: domains).first&.organization_id
+    end
+
+    def set_organization_id
+      ::Organizations.current_id = organization_id
     end
 
     def organization_user
@@ -28,7 +36,6 @@ module Api
     end
 
     def current_organization
-      ::Organizations.current_id = organization_id
       @current_organization ||= ::Organizations::Organization.find(organization_id)
     end
 
@@ -40,10 +47,6 @@ module Api
       organizations = Organizations::Organization.joins(:memberships)
       .where(organizations_memberships: {user_id: current_user}).first
     end
-
-    #def set_sandbox
-    #  @sandbox = ::Tenants::Sandbox.find_by(id: request.headers[:sandbox])
-    #end
 
     def current_scope
       @current_scope ||= ::OrganizationManager::ScopeService.new(
