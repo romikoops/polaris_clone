@@ -71,18 +71,6 @@ pipeline {
                 container("ruby") { appPrepare() }
               }
             }
-
-            stage("NPM") {
-              steps {
-                container("node") {
-                  withCache(["client/node_modules=client/package-lock.json"]) {
-                    dir("client") {
-                      sh(label: "NPM Install", script: "npm install --no-progress")
-                    }
-                  }
-                }
-              }
-            }
           }
         }
 
@@ -97,16 +85,6 @@ pipeline {
             stage("Engines") {
               steps {
                 container("ruby") { appRunner("engines") }
-              }
-            }
-
-            stage("Client") {
-              steps {
-                container("node") {
-                  dir("client") {
-                    sh(label: "Run Tests", script: "npm run test:ci")
-                  }
-                }
               }
             }
           }
@@ -141,33 +119,6 @@ pipeline {
                 memory: 1500,
                 stash: "backend",
                 pre_script: "scripts/docker-prepare.sh"
-              )
-            }
-          }
-        }
-
-        stage("Dipper") {
-          agent { kubernetes {} }
-
-          steps {
-            checkpoint(30) {
-              dockerBuild(
-                dir: "client/",
-                image: "dipper",
-                memory: 3000,
-                args: [ RELEASE: env.GIT_COMMIT ],
-                stash: "frontend",
-                artifacts: [source: "/usr/share/nginx/html", destination: "client/dist"],
-                postAction: {
-                  s3Upload(
-                    bucket: env.DIPPER_BUCKET,
-                    workingDir: "client/dist",
-                    includePathPattern: "**",
-                    excludePathPattern: "index.html,config*.js",
-                    metadatas: ["Revision:${env.GIT_COMMIT}", "Jenkins-Build:${env.BUILD_URL}"],
-                    verbose: true
-                  )
-                }
               )
             }
           }
