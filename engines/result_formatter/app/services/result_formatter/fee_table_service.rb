@@ -31,7 +31,10 @@ module ResultFormatter
     attr_reader :tender, :rows, :scope, :charge_breakdown, :base_currency
 
     def create_rows
-      tender.line_items.group_by(&:section).each do |section, items|
+      sections_in_order.each do |section|
+        items = tender.line_items.where(section: section)
+        next if items.empty?
+
         charge_category_id = applicable_charge_category_id(section: section)
         section_row = default_values.merge(
           description: section_description(section: section),
@@ -49,7 +52,7 @@ module ResultFormatter
     end
 
     def create_cargo_section_rows(row:, items:)
-      return create_cargo_currency_section_rows(row: row, items: items, cargo: nil, level: 2) if consolidated_cargo?
+      return create_cargo_currency_section_rows(row: row, items: items, cargo: nil, level: 3) if consolidated_cargo?
 
       items.group_by(&:cargo).each do |cargo, items_by_cargo|
         fee_value = value(items: items_by_cargo)
@@ -156,16 +159,26 @@ module ResultFormatter
       end
     end
 
+    def sections_in_order
+      SECTIONS.sort_by { |section| section_order(section: section) }
+    end
+
     def section_description(section:)
-      SECTIONS.zip(["Freight Charges",
+      SECTIONS.zip([
         "Pre-Carriage",
-        "On-Carriage",
         "Export Local Charges",
-        "Import Local Charges"]).to_h.fetch(section)
+        "Freight Charges",
+        "Import Local Charges",
+        "On-Carriage",
+        "Customs Charges",
+        "Insurance Charges",
+        "Addon Charges"
+      ]).to_h.fetch(section)
     end
 
     def section_order(section:)
-      SECTIONS.zip([3, 1, 5, 2, 4]).to_h.fetch(section)
+      scope.dig(:quote_card, :order)&.index(section.gsub("_section", "")) ||
+        SECTIONS.zip([1, 2, 3, 4, 5, 6, 7, 8]).to_h.fetch(section)
     end
 
     def value(items:, currency: base_currency)
@@ -237,7 +250,7 @@ module ResultFormatter
     end
 
     def consolidated_cargo?
-      tender.load_type =='cargo_item' && scope.dig(:consolidation, :cargo, :backend)
+      tender.load_type == "cargo_item" && scope.dig(:consolidation, :cargo, :backend)
     end
   end
 end

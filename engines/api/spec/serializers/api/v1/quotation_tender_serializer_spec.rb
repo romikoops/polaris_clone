@@ -11,8 +11,9 @@ module Api
     let(:trip) { FactoryBot.create(:legacy_trip, vessel: 'Cap San Diego', itinerary: itinerary) }
     let(:shipment) { FactoryBot.create(:legacy_shipment, with_full_breakdown: true, with_tenders: true, trip: trip, organization_id: organization.id) }
     let(:tender) { shipment.charge_breakdowns.first.tender }
-    let(:decorated_tender) { Api::V1::TenderDecorator.new(tender, context: { scope: {} }) }
-    let(:serialized_tender) { described_class.new(decorated_tender, params: { scope: {} }).serializable_hash }
+    let(:default_scope) { Organizations::DEFAULT_SCOPE.deep_dup.with_indifferent_access }
+    let(:decorated_tender) { Api::V1::TenderDecorator.new(tender, context: { scope: default_scope }) }
+    let(:serialized_tender) { described_class.new(decorated_tender, params: { scope: default_scope }).serializable_hash }
     let(:target) { serialized_tender.dig(:data, :attributes) }
 
     before do

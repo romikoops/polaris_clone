@@ -112,6 +112,15 @@ quote_card:
     cargo: true
     trucking_pre: true
     trucking_on: true
+  order:
+    - trucking_pre
+    - export
+    - cargo
+    - import
+    - trucking_on
+    - customs
+    - insurance
+    - addons
   consolidated_fees: false
 values:
   weight:

@@ -8,7 +8,7 @@ RSpec.describe Api::V1::TenderDecorator do
   let(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary) }
   let(:charge_breakdown) { FactoryBot.create(:legacy_charge_breakdown, trip: trip) }
   let(:tender) { FactoryBot.create(:quotations_tender, charge_breakdown: charge_breakdown) }
-  let(:scope) { { fee_detail: 'key_and_name' }.with_indifferent_access }
+  let(:scope) { Organizations::DEFAULT_SCOPE.deep_dup.with_indifferent_access }
 
   before do
     FactoryBot.create(:quotations_line_item, charge_category: charge_category)

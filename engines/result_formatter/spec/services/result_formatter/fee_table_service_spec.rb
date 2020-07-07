@@ -5,7 +5,8 @@ require "rails_helper"
 module ResultFormatter
   RSpec.describe FeeTableService, type: :service do
     let!(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:scope) { {primary_freight_code: "BAS"} }
+    let(:custom_scope) { {primary_freight_code: "BAS", fee_detail: "name"} }
+    let(:scope) { Organizations::DEFAULT_SCOPE.deep_dup.merge(custom_scope).with_indifferent_access }
     let(:load_type) { "container" }
     let(:shipment) {
       FactoryBot.create(:legacy_shipment,
@@ -21,7 +22,8 @@ module ResultFormatter
 
     describe ".perform" do
       let(:expected_descriptions) do
-        ["Pre-Carriage",
+        [nil,
+          "Pre-Carriage",
           "1 x Fcl 20",
           "Trucking Rate",
           "Export Local Charges",
@@ -29,14 +31,13 @@ module ResultFormatter
           "Basic Freight",
           "Freight Charges",
           "1 x Fcl 20",
-          "Ocean Freight Rate",
+          "Basic Freight",
           "Import Local Charges",
           "1 x Fcl 20",
           "Basic Freight",
           "On-Carriage",
           "1 x Fcl 20",
-          "Trucking Rate",
-          nil]
+          "Trucking Rate"]
       end
 
       context "with container load type" do
@@ -44,7 +45,7 @@ module ResultFormatter
           results = klass.perform
           aggregate_failures do
             expect(results.length).to eq(16)
-            expect(results.pluck(:description)).to match_array(expected_descriptions)
+            expect(results.pluck(:description)).to eq(expected_descriptions)
             expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
           end
         end
@@ -59,7 +60,8 @@ module ResultFormatter
             organization: organization)
         }
         let(:expected_descriptions) do
-          ["Pre-Carriage",
+          [nil,
+            "Pre-Carriage",
             "1 x Pallet",
             "Trucking Rate",
             "Export Local Charges",
@@ -67,34 +69,31 @@ module ResultFormatter
             "Basic Freight",
             "Freight Charges",
             "1 x Pallet",
-            "Ocean Freight Rate",
+            "Basic Freight",
             "Import Local Charges",
             "1 x Pallet",
             "Basic Freight",
             "On-Carriage",
             "1 x Pallet",
-            "Trucking Rate",
-            nil]
+            "Trucking Rate"]
         end
 
         it "returns rows for each level of charge table" do
           results = klass.perform
           aggregate_failures do
             expect(results.length).to eq(16)
-            expect(results.pluck(:description)).to match_array(expected_descriptions)
+            expect(results.pluck(:description)).to eq(expected_descriptions)
             expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
           end
         end
       end
 
       context "with cargo_item load type" do
-        let(:scope) { {primary_freight_code: "BAS"} }
         let!(:second_line_item) {
           FactoryBot.create(:quotations_line_item,
             charge_category: FactoryBot.create(:baf_charge),
             section: "cargo_section",
-            tender: tender
-          )
+            tender: tender)
         }
         let(:results) { klass.perform }
         let(:main_fee_item_index) { results.index(results.find { |r| r[:lineItemId] == line_item.id }) }
@@ -106,27 +105,27 @@ module ResultFormatter
       end
 
       context "with cargo consolidation" do
-        let(:scope) { {consolidation: {cargo: {backend: true}}} }
+        let(:custom_scope) { {consolidation: {cargo: {backend: true}}, fee_detail: "name"} }
         let(:load_type) { "cargo_item" }
         let(:results) { klass.perform }
         let(:expected_descriptions) do
-          ["Pre-Carriage",
+          [nil,
+            "Pre-Carriage",
             "Trucking Rate",
             "Export Local Charges",
             "Basic Freight",
             "Freight Charges",
-            "Ocean Freight Rate",
+            "Basic Freight",
             "Import Local Charges",
             "Basic Freight",
             "On-Carriage",
-            "Trucking Rate",
-            nil]
+            "Trucking Rate"]
         end
 
         it "returns rows for each level of charge table" do
           aggregate_failures do
             expect(results.length).to eq(11)
-            expect(results.pluck(:description)).to match_array(expected_descriptions)
+            expect(results.pluck(:description)).to eq(expected_descriptions)
             expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
           end
         end
@@ -138,28 +137,27 @@ module ResultFormatter
             charge_category: FactoryBot.create(:baf_charge),
             section: "export_section",
             tender: tender,
-            amount: Money.new(1000, 'SEK')
-          )
+            amount: Money.new(1000, "SEK"))
         }
         let(:load_type) { "cargo_item" }
         let(:results) { klass.perform }
         let(:expected_descriptions) do
           [nil,
-            "Freight Charges",
+            "Pre-Carriage",
             "1 x Pallet",
             "Trucking Rate",
-            "Pre-Carriage",
+            "Export Local Charges",
             "1 x Pallet",
             "Basic Freight",
             "Shipment",
             "Bunker Adjustment Fee",
-            "On-Carriage",
-            "1 x Pallet",
-            "Ocean Freight Rate",
-            "Export Local Charges",
+            "Freight Charges",
             "1 x Pallet",
             "Basic Freight",
             "Import Local Charges",
+            "1 x Pallet",
+            "Basic Freight",
+            "On-Carriage",
             "1 x Pallet",
             "Trucking Rate"]
         end
@@ -167,7 +165,54 @@ module ResultFormatter
         it "returns rows for each level of charge table" do
           aggregate_failures do
             expect(results.length).to eq(18)
-            expect(results.pluck(:description)).to match_array(expected_descriptions)
+            expect(results.pluck(:description)).to eq(expected_descriptions)
+            expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+          end
+        end
+      end
+
+      context "with custom order" do
+        let(:custom_scope) do
+          {
+            quote_card: {
+              order: %w[
+                trucking_on
+                cargo
+                import
+                export
+                trucking_pre
+              ]
+            },
+            fee_detail: "name"
+          }
+        end
+        let(:load_type) { "cargo_item" }
+        let(:results) { klass.perform }
+        let(:expected_descriptions) do
+          [
+            nil,
+            "On-Carriage",
+            "1 x Pallet",
+            "Trucking Rate",
+            "Freight Charges",
+            "1 x Pallet",
+            "Basic Freight",
+            "Import Local Charges",
+            "1 x Pallet",
+            "Basic Freight",
+            "Export Local Charges",
+            "1 x Pallet",
+            "Basic Freight",
+            "Pre-Carriage",
+            "1 x Pallet",
+            "Trucking Rate"
+          ]
+        end
+
+        it "returns rows for each level of charge table" do
+          aggregate_failures do
+            expect(results.length).to eq(16)
+            expect(results.pluck(:description)).to eq(expected_descriptions)
             expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
           end
         end
