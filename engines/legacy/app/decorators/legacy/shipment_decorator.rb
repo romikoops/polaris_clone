@@ -26,7 +26,7 @@ class Legacy::ShipmentDecorator < Draper::Decorator
   end
 
   def destination_locode
-    destination_nexus.locode
+    destination_nexus&.locode
   end
 
   def pickup_postal_code
