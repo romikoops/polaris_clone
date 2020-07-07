@@ -75,4 +75,4 @@ ENV RAILS_ENV review
 
 EXPOSE 3000
 
-CMD ["bin/rails", "server", "puma", "-b", "0.0.0.0", "-p", "3000"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

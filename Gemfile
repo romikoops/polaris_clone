@@ -11,7 +11,7 @@ gem "pg", ">= 0.18", "< 2.0"
 gem "activerecord-postgis-adapter", "~> 5.2.2"
 
 # Use Puma as the app server
-gem "puma", "~> 3.11"
+gem "puma", "~> 4.3.5"
 # Use activerecord-import for bulk insertion
 gem "activerecord-import"
 # Strong Migrations - Prevent Non Zero-Down time Migrations
