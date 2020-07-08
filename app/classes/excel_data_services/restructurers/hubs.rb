@@ -120,6 +120,8 @@ module ExcelDataServices
 
       def apply_booleans(row:)
         COLS_TO_BOOLEAN.each do |sym|
+          next if row[sym].in?([true, false])
+
           row[sym] = row[sym].present? && TRUE_SYNONYMS.include?(row[sym].downcase)
         end
         row

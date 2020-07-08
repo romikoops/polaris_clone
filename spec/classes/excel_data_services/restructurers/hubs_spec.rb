@@ -87,5 +87,16 @@ RSpec.describe ExcelDataServices::Restructurers::Hubs do
         expect(result['Hubs'].first[:address]).to eq(target[:address])
       end
     end
+
+    context 'with a boolean values' do
+      let(:data) { FactoryBot.build(:excel_data_parsed, :hubs_with_boolean_values).first }
+      let(:expected_result) { FactoryBot.build(:excel_data_restructured, :restructured_hubs_data, organization: organization) }
+
+      it 'extracts the row data from the sheet hash' do
+        result = described_class.restructure(organization: organization, data: data)
+        target = expected_result.find { |hub| hub.dig(:hub, :name) == data.dig(:rows_data).first[:name] }
+        expect(result['Hubs'].length).to eq(1)
+      end
+    end
   end
 end

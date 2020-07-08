@@ -716,6 +716,31 @@ FactoryBot.define do
       end
     end
 
+    trait :hubs_with_boolean_values do
+      restructurer_name { { restructurer_name: 'hubs' } }
+      all_sheets_data do
+        [{
+          sheet_name: 'Hubs',
+          rows_data:   [{ status: 'active',
+            type: 'OCEAN',
+            name: 'Abu Dhabi',
+            locode: 'AEAUH',
+            latitude: nil,
+            longitude: nil,
+            country: 'United Arab Emirates',
+            full_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
+            photo: nil,
+            free_out: false,
+            import_charges: true,
+            export_charges: false,
+            pre_carriage: nil,
+            on_carriage: false,
+            alternative_names: nil,
+            row_nr: 2 }]
+        }]
+      end
+    end
+
     trait :correct_max_dimensions do
       all_sheets_data do
         [{ sheet_name: 'Sheet1',
