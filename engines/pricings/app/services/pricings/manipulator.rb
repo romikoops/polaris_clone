@@ -29,6 +29,7 @@ module Pricings
       @applicable_margins = find_applicable_margins
       @margins_to_apply = sort_margins
       manipulate_pricings
+      
       [pricings_to_return.compact, metadata_list]
     end
 
@@ -59,6 +60,7 @@ module Pricings
 
         query.or(margins.where(args.merge(applicable: hier[:data])))
       end
+
       all_margins = decorate_margins(target_margins: margin_relation.distinct.to_a, target_hierarchy: hierarchy)
       handle_default_margin(margins: all_margins, for_organization: for_organization)
     end
@@ -125,13 +127,16 @@ module Pricings
       date_keys = extract_date_keys(margin_periods: margin_periods)
       result_date_keys = date_keys.map.with_index do |date, i|
         effective_date = date.hour == 23 ? date.beginning_of_day + 1.day : date.beginning_of_day
+        effective_date = DateTime.now.utc.beginning_of_day if effective_date < DateTime.now
         next_date = date_keys[i + 1]
         next unless next_date
 
         expiration_date = next_date.hour == 23 ? next_date : next_date.end_of_day - 1.day
+        
+        next if expiration_date < effective_date
 
         {
-          effective_date: effective_date < DateTime.now ? DateTime.now.utc.beginning_of_day : effective_date,
+          effective_date: effective_date,
           expiration_date: expiration_date
         }
       end
@@ -537,7 +542,7 @@ module Pricings
     def apply_trucking_rate_manipulation(value:, operator:, rates:)
       rates.entries.each_with_object({}).each do |(key, range), hash|
         new_range = range.map do |rate|
-          new_rate = rate.dup
+          new_rate = rate.deep_dup
           new_rate['rate']['value'] = determine_manipulation(
             rate: rate['rate']['value'].to_d,
             value: value,
