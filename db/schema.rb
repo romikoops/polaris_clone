@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_06_094923) do
+ActiveRecord::Schema.define(version: 2020_07_07_171145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -431,6 +431,7 @@ ActiveRecord::Schema.define(version: 2020_07_06_094923) do
     t.decimal "rate"
     t.string "to"
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_exchange_rates_on_created_at"
     t.index ["from"], name: "index_exchange_rates_on_from"
     t.index ["to"], name: "index_exchange_rates_on_to"
   end

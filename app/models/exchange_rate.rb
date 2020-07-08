@@ -16,6 +16,7 @@ end
 #
 # Indexes
 #
-#  index_exchange_rates_on_from  (from)
-#  index_exchange_rates_on_to    (to)
+#  index_exchange_rates_on_created_at  (created_at)
+#  index_exchange_rates_on_from        (from)
+#  index_exchange_rates_on_to          (to)
 #

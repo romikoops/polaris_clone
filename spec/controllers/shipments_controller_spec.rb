@@ -22,12 +22,12 @@ RSpec.describe ShipmentsController do
 
   describe "GET #show" do
     let(:shipment) { FactoryBot.create(:legacy_shipment, user: user, organization: organization, with_breakdown: true) }
-    let(:tender) { FactoryBot.create(:quotations_tender, amount: tender_amount) }
+    let(:tender) { FactoryBot.create(:quotations_tender, amount: tender_amount, created_at: 15.minutes.ago) }
     let(:tender_amount) { Money.new(100, "EUR") }
     let(:rate) { 1.24 }
 
     before do
-      Legacy::ExchangeRate.create(from: tender_amount.currency.iso_code, to: "USD", rate: rate)
+      Legacy::ExchangeRate.create(from: tender_amount.currency.iso_code, to: "USD", rate: rate, created_at: 16.minutes.ago)
       shipment.charge_breakdowns.update_all(tender_id: tender.id)
       FactoryBot.create_list(:quotations_line_item, 5, tender: tender)
     end

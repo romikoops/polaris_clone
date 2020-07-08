@@ -12,6 +12,7 @@ begin
     config.default_bank.add_rate('EUR', 'USD', 1.26)
     config.default_bank.add_rate('EUR', 'SEK', 8)
     config.default_bank.add_rate('SEK', 'EUR', 0.125)
+    config.default_bank.add_rate('EUR', 'AED', 1.34)
     config.default_bank.add_rate('EUR', 'CNY', 0.29)
     config.default_bank.add_rate('CNY', 'EUR', (1 / 0.29))
     config.default_currency = 'EUR'

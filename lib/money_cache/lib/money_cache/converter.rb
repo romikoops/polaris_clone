@@ -57,7 +57,7 @@ module MoneyCache
 
     def rates
       @rates ||= if date.present?
-        klass.where("created_at < ?", date).order(created_at: :asc)
+        klass.for_date(date: date)
       else
         klass.current
       end
