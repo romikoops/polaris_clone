@@ -79,51 +79,13 @@ class ShippingTools
     )
     shipment.save!
 
-    tenant_itineraries = Itinerary.where(organization_id: current_organization.id, sandbox: sandbox)
-
-    if scope[:display_itineraries_with_rates]
-      cargo_classes = [nil] + (load_type == 'cargo_item' ? ['lcl'] : Container::CARGO_CLASSES)
-      no_general_margins = Pricings::Margin.where(
-        itinerary_id: nil,
-        applicable: current_user.groups,
-        cargo_class: cargo_classes,
-        sandbox: sandbox
-      ).empty?
-      itinerary_ids = tenant_itineraries.ids.reject do |id|
-        no_pricings = Pricings::Pricing.where(
-          sandbox: sandbox,
-          itinerary_id: id,
-          load_type: load_type,
-          group_id: current_user.groups.ids,
-          internal: false
-        ).where('expiration_date > ?', Time.zone.tomorrow).empty?
-        no_margins = if no_general_margins
-                       Pricings::Margin.where(
-                         itinerary_id: id,
-                         applicable: current_user.groups,
-                         cargo_class: cargo_classes,
-                         sandbox: sandbox
-                       ).empty?
-                     else
-                       no_general_margins
-                     end
-        no_pricings && no_margins
-      end
-    else
-      itinerary_ids = tenant_itineraries.ids.reject do |id|
-        Pricings::Pricing.where(
-          sandbox: sandbox,
-          itinerary_id: id,
-          load_type: load_type,
-          internal: false
-        ).where('expiration_date > ?', Time.zone.tomorrow).empty?
-      end
-    end
-    routes_data = OfferCalculator::Route.detailed_hashes_from_itinerary_ids(
-      itinerary_ids,
-      with_truck_types: { load_type: load_type },
-      base_pricing: scope['base_pricing']
+    routes_data = Api::Routing::LegacyRoutingService.routes(
+      organization: current_organization,
+      user: current_user,
+      scope: scope,
+      load_type: load_type
     )
+
     {
       shipment: shipment,
       routes: routes_data[:route_hashes],
