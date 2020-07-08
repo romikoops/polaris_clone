@@ -28,7 +28,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def stops
-    response_handler(itinerary_stops.where(sandbox: @sandbox).map(&:as_options_json))
+    response_handler(itinerary_stops.where(sandbox: @sandbox).map { |stop| stop_index_json(stop: stop) })
   end
 
   def edit_notes

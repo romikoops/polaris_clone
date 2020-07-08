@@ -82,4 +82,16 @@ RSpec.describe Admin::ItinerariesController, type: :controller do
       expect(json.dig('data', 'itinerary', 'id')).to eq(itineraries.first.id)
     end
   end
+
+  describe 'GET #stops' do
+    it 'returns http success' do
+      get :stops, params: { organization_id: organization.id, id: itineraries.first.id }
+
+      expect(response).to have_http_status(:success)
+      json = JSON.parse(response.body)
+      expect(json['success']).to eq true
+      expect(json.dig('data').length).to eq(2)
+      expect(json.dig('data').pluck('id')).to eq(itineraries.first.stops.ids)
+    end
+  end
 end

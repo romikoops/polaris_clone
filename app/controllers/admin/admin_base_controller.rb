@@ -26,4 +26,16 @@ class Admin::AdminBaseController < ApplicationController
 
     response_handler(uploader.perform)
   end
+
+  def stop_index_json(stop:)
+    stop.as_json(include: {
+      hub: {
+        include: {
+          nexus: { only: %i[id name] },
+          address: { only: %i[longitude latitude geocoded_address] }
+        },
+        only: %i[id name]
+      }
+    })
+  end
 end
