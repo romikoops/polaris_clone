@@ -130,10 +130,6 @@ pipeline {
       when { branch "master" }
 
       stages {
-        stage("Elastic Beanstalk") {
-          steps { checkpoint(40) { createApplicationVersion() } }
-        }
-
         stage("Sentry") {
           steps {
             checkpoint(50) { sentryRelease(projects: ["polaris", "dipper"]) }
@@ -180,53 +176,3 @@ void appRunner(String name) {
   }
 }
 
-void createApplicationVersion() {
-  // Build Elastic Beanstalk archive
-  podTemplate(
-    containers: [
-      containerTemplate(name: "deploy", image: "itsmycargo/deploy:latest",
-            ttyEnabled: true, command: "cat", alwaysPullImage: true,
-            resourceRequestCpu: "250m", resourceRequestMemory: "500Mi")
-    ]
-  ) {
-    node(POD_LABEL) {
-      checkout(scm)
-
-      container("deploy") {
-        sh(label: "Create Archive", script: """
-          zip -r "${env.GIT_COMMIT}.zip" . \
-            -x '*/spec/*' \
-            -x '*/test/*' \
-            -x '.git/*' \
-            -x '.github/*' \
-            -x '.lefthook/*' \
-            -x 'client/*' \
-            -x 'danger/*' \
-            -x 'qa/*' \
-            -x 'spec/*' \
-            -x 'test/*'
-        """)
-        archiveArtifacts(artifacts: "${env.GIT_COMMIT}.zip", allowEmptyArchive: false, fingerprint: true)
-
-        // Upload Archive
-        s3Upload(
-          bucket: env.ELASTIC_BEANSTALK_BUCKET,
-          path: "${jobName()}/",
-          file: "${env.GIT_COMMIT}.zip"
-        )
-
-        // Create EB Application Version
-        sh(label: "Create Application Version", script: """
-        aws elasticbeanstalk \
-          create-application-version \
-          --region ${env.AWS_REGION} \
-          --application-name imcr-staging \
-          --version-label ${env.GIT_COMMIT} \
-          --description "\$(git log --format="%s" -n 1)" \
-          --source-bundle "S3Bucket=${env.ELASTIC_BEANSTALK_BUCKET},S3Key=${jobName()}/${env.GIT_COMMIT}.zip" \
-          --process
-        """)
-      }
-    }
-  }
-}
