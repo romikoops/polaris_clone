@@ -8,7 +8,11 @@ module Api
       skip_before_action :ensure_organization!, only: :show
 
       def show
-        render json: UserSerializer.new(UserDecorator.decorate(current_user))
+        if current_user.present?
+          render json: UserSerializer.new(UserDecorator.decorate(current_user))
+        else
+          head :not_found
+        end
       end
     end
   end
