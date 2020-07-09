@@ -31,19 +31,28 @@ class OrganizationsController < ApplicationController
   end
 
   def show
-    theme = ::Organizations::Theme.find_by(organization_id: organization)
-    auth_methods = ['password'].tap { |methods| methods << 'saml' if saml_enabled? }
-    response = organization.as_json.merge(
-      theme: ::Organizations::ThemeDecorator.new(theme).legacy_format,
-      scope: current_scope,
-      subdomain: organization.slug,
-      slug: organization.slug,
-      auth_methods: auth_methods,
-      name: theme.name,
-      emails: theme.emails,
-      phones: theme.phones
-    )
-    response_handler(tenant: response)
+    if organization
+      theme = ::Organizations::Theme.find_by(organization_id: organization)
+      auth_methods = ['password'].tap { |methods| methods << 'saml' if saml_enabled? }
+      response = organization.as_json.merge(
+        theme: ::Organizations::ThemeDecorator.new(theme).legacy_format,
+        scope: current_scope,
+        subdomain: organization.slug,
+        slug: organization.slug,
+        auth_methods: auth_methods,
+        name: theme.name,
+        emails: theme.emails,
+        phones: theme.phones
+      )
+      response_handler(tenant: response)
+    else
+      response_handler(
+        ApplicationError.new(
+          http_code: 404,
+          message: "Organization not found"
+        )
+      )
+    end
   end
 
   def current
@@ -61,7 +70,7 @@ class OrganizationsController < ApplicationController
   def organization
     # Old code. not sure why params changes with environment? {H.Ezekiel}
     # tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : (params[:tenant_id] || params[:id]))
-    @organization ||= Organizations::Organization.find(params[:id])
+    @organization ||= Organizations::Organization.find_by(id: params[:id])
   end
 
   def saml_enabled?

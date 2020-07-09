@@ -87,18 +87,23 @@ RSpec.describe OrganizationsController do
       expect(response).to have_http_status(:success)
     end
 
-    it "returns the tenant without user" do
+    it "returns the organization without user" do
       get :show, params: {id: organization.id}
 
       json = JSON.parse(response.body)
       expect(json.dig("data", "tenant", "id")).to eq(organization.id)
     end
 
-    it "returns the tenant with user" do
+    it "returns the organization with user" do
       get :show, params: {id: organization.id}
 
       json = JSON.parse(response.body)
       expect(json.dig("data", "tenant", "id")).to eq(organization.id)
+    end
+
+    it "returns 404 when id does not exist" do
+      get :show, params: {id: "wrong_id"}
+      expect(response).to have_http_status(:not_found)
     end
   end
 
