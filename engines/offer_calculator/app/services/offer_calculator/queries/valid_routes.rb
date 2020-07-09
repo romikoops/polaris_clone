@@ -11,8 +11,12 @@ module OfferCalculator
         @shipment = args[:shipment]
         @scope = args[:scope]
         @cargo_classes = @shipment.cargo_classes
-        @user = @shipment.user
+        @user = Organizations::User.find_by(id: @shipment.user_id)
         @date_range = args[:date_range] || (Time.zone.today..1.month.from_now)
+        @user_groups = OrganizationManager::HierarchyService.new(
+          organization: @shipment.organization,
+          target: @user
+        ).fetch.select { |target| target.is_a?(Groups::Group) }
       end
 
       def perform
@@ -28,7 +32,7 @@ module OfferCalculator
           origin_hub_ids: @origin_hub_ids,
           destination_hub_ids: @destination_hub_ids,
           cargo_classes: @cargo_classes,
-          group_ids: user_groups,
+          group_ids: @user_groups.pluck(:id),
           load_type: @shipment.load_type
         }.merge(date_range_values)
       end
@@ -121,12 +125,6 @@ module OfferCalculator
 
       def quotation_tool
         @scope[:closed_quotation_tool] || @scope[:open_quotation_tool]
-      end
-
-      def user_groups
-        companies = Companies::Membership.where(member: @user)
-        membership_ids = Groups::Membership.where(member: @user)
-                          .or(Groups::Membership.where(member: companies)).select(:group_id)
       end
     end
   end

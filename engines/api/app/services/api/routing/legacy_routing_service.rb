@@ -3,12 +3,11 @@
 module Api
   module Routing
     class LegacyRoutingService
-     
-      def self.routes(organization:, user: , scope:, load_type:)
-        new(organization: organization, user: user,scope: scope, load_type: load_type).perform
+      def self.routes(organization:, user:, scope:, load_type:)
+        new(organization: organization, user: user, scope: scope, load_type: load_type).perform
       end
 
-      def initialize(organization:, user: , scope:, load_type:)
+      def initialize(organization:, user:, scope:, load_type:)
         @organization = organization
         @user = user
         @scope = scope
@@ -19,7 +18,7 @@ module Api
       def perform
         OfferCalculator::Route.detailed_hashes_from_itinerary_ids(
           itinerary_ids,
-          with_truck_types: { load_type: load_type }
+          with_truck_types: {load_type: load_type}
         )
       end
 
@@ -29,7 +28,7 @@ module Api
 
       def itinerary_ids
         return dedicated_itineraries.ids if scope[:display_itineraries_with_rates]
-        
+
         itineraries.ids
       end
 
@@ -38,23 +37,18 @@ module Api
       end
 
       def margins
-        @margins ||= Pricings::Margin.where(applicable: hierarchy, cargo_class: margin_cargo_classes)
+        @margins ||= Pricings::Margin.where(applicable: margin_hierarchy, cargo_class: margin_cargo_classes)
       end
 
       def margin_itineraries
         itineraries
           .where(id: margins.select(:itinerary_id))
-          .or(itineraries.where(id: margin_pricings.select(:itinerary_id)))
-      end
-
-      def margin_pricings
-        pricings.where(cargo_class: margins.select(:cargo_class))
       end
 
       def pricings
         @pricings ||= Pricings::Pricing
-                       .where(organization: organization)
-                       .where('validity @> ?::date', Time.zone.tomorrow)
+          .where(organization: organization)
+          .where("validity @> ?::date", Time.zone.tomorrow)
       end
 
       def dedicated_pricings
@@ -67,17 +61,21 @@ module Api
 
       def itineraries
         @itineraries ||= Legacy::Itinerary
-                          .where(organization: organization)
-                          .joins(:rates)
-                          .merge(pricings)
+          .where(organization: organization)
+          .joins(:rates)
+          .merge(pricings)
       end
 
       def hierarchy_groups
-        @hierarchy_groups ||= hierarchy.select {|hier| hier.is_a?(Groups::Group)}
+        @hierarchy_groups ||= hierarchy.select { |hier| hier.is_a?(Groups::Group) }
       end
 
       def margin_cargo_classes
-        [nil] + (load_type == 'cargo_item' ? ['lcl'] : Legacy::Container::CARGO_CLASSES)
+        [nil] + (load_type == "cargo_item" ? ["lcl"] : Legacy::Container::CARGO_CLASSES)
+      end
+
+      def margin_hierarchy
+        @margin_hierarchy ||= hierarchy.reject { |hier| hier.is_a?(Organizations::Organization) }
       end
     end
   end

@@ -29,7 +29,10 @@ module Pricings
       @target = @user
       @target ||= Groups::Group.find_by(organization: organization, name: 'default')
       @scope = ::OrganizationManager::ScopeService.new(target: @target, organization: @organization).fetch
-      @hierarchy = ::OrganizationManager::HierarchyService.new(target: @target).fetch.select { |target| target.is_a?(Groups::Group) }
+      @hierarchy = ::OrganizationManager::HierarchyService.new(
+        target: @target,
+        organization: @organization
+      ).fetch.select { |target| target.is_a?(Groups::Group) }
       @sandbox = sandbox
       @dedicated_pricings_only = dedicated_pricings_only
     end
@@ -124,17 +127,12 @@ module Pricings
         sandbox: @sandbox
       ).for_cargo_classes(target_cargo_classes)
 
-      if @scope[:base_pricing]
-        @hierarchy.reverse_each do |group|
-          group_result = query.where(group_id: group.id, user_id: nil)
-          return group_result unless group_result.empty?
-        end
-
-        query.where(group_id: nil)
-      else
-        query = query.where(user_id: user_pricing_id) if @dedicated_pricings_only && user_pricing_id.present?
-        query
+      @hierarchy.reverse_each do |group|
+        group_result = query.where(group_id: group.id, user_id: nil)
+        return group_result unless group_result.empty?
       end
+
+      query.where(group_id: nil)
     end
 
     def schedules_for_pricing(schedules:, pricing:)

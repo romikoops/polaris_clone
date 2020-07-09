@@ -30,6 +30,7 @@ RSpec.describe OfferCalculator::Queries:: ValidRoutes do
   end
 
   before do
+    Organizations.current_id = organization.id
     FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle_1)
     FactoryBot.create(:legacy_trip, itinerary: itinerary_2, tenant_vehicle: tenant_vehicle_2)
 

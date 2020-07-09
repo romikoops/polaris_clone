@@ -12,7 +12,7 @@ module Pricings
       @local_charges = { origin: [], destination: [] }
       @cargo_class = params[:selectedCargoClass]
       @load_type = params[:selectedCargoClass] == 'lcl' ? 'cargo_item' : 'container'
-      @hierarchy = OrganizationManager::HierarchyService.new(target: target).fetch
+      @hierarchy = OrganizationManager::HierarchyService.new(target: target, organization: organization).fetch
       @pricings_to_return = []
       @date = date
       @truckings = {}
