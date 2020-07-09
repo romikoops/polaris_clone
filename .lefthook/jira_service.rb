@@ -52,7 +52,8 @@ class JiraService
     jql += " AND key != \"#{issue_key}\"" if issue_key
 
     jira_client.Issue.jql(jql, expand: "transitions.fields").each do |issue|
-      if issue.status.name == "In Progress" && (transition = issue.transitions.find { |t| t.name == "To Do" })
+      if issue.status.name == "In Progress" &&
+          (transition = issue.transitions.find { |t| t.name == "Ready for Development" })
         issue_transition = issue.transitions.build
         issue_transition.save!("transition" => {"id" => transition.id.to_i})
         puts "Issue #{issue.key}: #{issue.status.name} -> #{jira_client.Issue.find(issue.key).status.name}"
@@ -62,10 +63,10 @@ class JiraService
 
   def move_active
     return unless issue_key
-
     return unless issue.assignee.nil? || issue.assignee.emailAddress == jira_client.options[:username]
 
-    if issue.status.name == "To Do" && (transition = issue.transitions.find { |t| t.name == "In Progress" })
+    if issue.status.name == "Ready for Development" &&
+        (transition = issue.transitions.find { |t| t.name == "In Development" })
       issue_transition = issue.transitions.build
       issue_transition.save!("transition" => {"id" => transition.id.to_i})
       puts "Issue #{issue.key}: #{issue.status.name} -> #{jira_client.Issue.find(issue.key).status.name}"

@@ -1,10 +1,10 @@
 #!groovy
 
-prettyBuild()
+defaultBuild()
 
 pipeline {
   options {
-    podTemplate(inheritFrom: 'default')
+    podTemplate(inheritFrom: "default")
     preserveStashes()
     skipDefaultCheckout()
     timeout(60)
@@ -13,90 +13,104 @@ pipeline {
   agent none
 
   stages {
+    stage("Wolfhound") {
+      steps { wolfhound(required: ["rubocop"]) }
+    }
+
     stage("Test") {
-      agent {
-        kubernetes {
-          yaml podSpec(
-            containers: [
-              [
-                name: 'ruby', image: 'itsmycargo/builder:ruby-2.6', interactive: true,
-                requests: [ memory: '1500Mi', cpu: '1000m' ],
-                env: [
-                  [ name: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test' ],
-                  [ name: 'ELASTICSEARCH_URL', value: 'localhost:9200']
+      parallel {
+        stage("App") {
+          agent {
+            kubernetes {
+              defaultContainer "ruby"
+              yaml podSpec(
+                containers: [
+                  [
+                    name: "ruby", image: "itsmycargo/builder:ruby-2.6", interactive: true,
+                    requests: [ memory: "1500Mi", cpu: "1000m" ],
+                    env: [
+                      [ name: "DATABASE_URL", value: "postgis://postgres:@localhost/polaris_test" ],
+                      [ name: "ELASTICSEARCH_URL", value: "localhost:9200"]
+                    ]
+                  ],
+                  [ name: "postgis", image: "postgis/postgis:11-2.5-alpine",
+                    requests: [ memory: "500Mi", cpu: "250m" ],
+                    env: [[name: "POSTGRES_HOST_AUTH_METHOD", value: "trust"]]
+                  ],
+                  [ name: "redis", image: "redis",
+                    requests: [ memory: "50Mi", cpu: "100m" ]
+                  ]
                 ]
-              ],
-              [ name: 'node', image: 'itsmycargo/builder:node-12', command: 'cat', tty: true,
-                requests: [ memory: '3000Mi', cpu: '1000m' ],
-              ],
-              [ name: 'postgis', image: 'mdillon/postgis',
-                requests: [ memory: '500Mi', cpu: '250m' ]
-              ],
-              [ name: 'redis', image: 'redis',
-                requests: [ memory: '50Mi', cpu: '100m' ]
-              ],
-              [ name: 'elasticsearch', image: 'docker.elastic.co/elasticsearch/elasticsearch:7.1.1',
-                requests: [ memory: '1500Mi', cpu: '250m' ],
-                env: [ [ name: "discovery.type", value: "single-node" ] ]
-              ]
-            ]
-          )
-        }
-      }
+              )
+            }
+          }
 
-      stages {
-        stage("Checkout") {
           steps {
-            checkpoint(10)
-
             defaultCheckout()
-
-            stash(name: "backend", excludes: "client/**/*,qa/**/*")
-            stash(name: "frontend", includes: "client/**/*")
-          }
-        }
-
-        // stage("Wolfhound") {
-        //   steps {
-        //     wolfhound(
-        //       required: ["eslintnpm", "rubocop"]
-        //     )
-        //   }
-        // }
-
-        stage("Prepare") {
-          parallel {
-            stage("Ruby") {
-              steps {
-                container("ruby") { appPrepare() }
-              }
-            }
-          }
-        }
-
-        stage("Test") {
-          parallel {
-            stage("App") {
-              steps {
-                container("ruby") { appRunner("app") }
-              }
-            }
-
-            stage("Engines") {
-              steps {
-                container("ruby") { appRunner("engines") }
-              }
-            }
+            appPrepare()
+            appRunner("app")
           }
 
           post {
             always {
-              junit(allowEmptyResults: true, testResults: '**/junit.xml')
-
-              reportCoverage()
-              coverDiff()
+              junit(allowEmptyResults: true, testResults: "**/junit.xml")
+              captureCoverage()
             }
           }
+        }
+
+        stage("Engine") {
+          agent {
+            kubernetes {
+              defaultContainer "ruby"
+              yaml podSpec(
+                containers: [
+                  [
+                    name: "ruby", image: "itsmycargo/builder:ruby-2.6", interactive: true,
+                    requests: [ memory: "1500Mi", cpu: "1000m" ],
+                    env: [
+                      [ name: "DATABASE_URL", value: "postgis://postgres:@localhost/polaris_test" ],
+                      [ name: "ELASTICSEARCH_URL", value: "http://localhost:9200"]
+                    ]
+                  ],
+                  [ name: "postgis", image: "postgis/postgis:11-2.5-alpine",
+                    requests: [ memory: "500Mi", cpu: "250m" ],
+                    env: [[name: "POSTGRES_HOST_AUTH_METHOD", value: "trust"]]
+                  ],
+                  [ name: "redis", image: "redis",
+                    requests: [ memory: "50Mi", cpu: "100m" ]
+                  ],
+                  [ name: "elasticsearch", image: "amazon/opendistro-for-elasticsearch:1.8.0",
+                    requests: [ memory: "1500Mi", cpu: "250m" ],
+                    env: [
+                      [ name: "discovery.type", value: "single-node" ],
+                      [ name: "opendistro_security.disabled", value: "true"]
+                    ]
+                  ]
+                ]
+              )
+            }
+          }
+
+          steps {
+            defaultCheckout()
+            appPrepare()
+            appRunner("engines")
+          }
+
+          post {
+            always {
+              junit(allowEmptyResults: true, testResults: "**/junit.xml")
+              captureCoverage()
+            }
+          }
+        }
+      }
+
+      post {
+        always {
+          reportCoverage()
+          coverDiff()
         }
       }
     }
@@ -109,32 +123,23 @@ pipeline {
         }
       }
 
-      stages {
-        stage("Polaris") {
-          steps {
-            checkpoint(20) {
-              dockerBuild(
-                dir: ".",
-                image: "polaris",
-                memory: 1500,
-                stash: "backend",
-                pre_script: "scripts/docker-prepare.sh"
-              )
-            }
-          }
+      steps {
+        checkpoint(10) {
+          dockerBuild(
+            dir: ".",
+            image: "polaris",
+            memory: 1500,
+            pre_script: "scripts/docker-prepare.sh"
+          )
         }
       }
     }
 
-    stage("Deploy") {
+    stage("Sentry") {
       when { branch "master" }
 
-      stages {
-        stage("Sentry") {
-          steps {
-            checkpoint(50) { sentryRelease(projects: ["polaris", "dipper"]) }
-          }
-        }
+      steps {
+        checkpoint(20) { sentryRelease(projects: ["polaris"]) }
       }
     }
   }
@@ -175,4 +180,3 @@ void appRunner(String name) {
     sh(label: "Test", script: "scripts/ci-test ${name}")
   }
 }
-
