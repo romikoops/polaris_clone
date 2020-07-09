@@ -70,7 +70,7 @@
     "image-webpack-loader": "4.6.0",
     "intersection-observer": "0.11.0",
     "isomorphic-fetch": "2.2.1",
-    "lodash": "4.17.13",
+    "lodash": "4.17.19",
     "mailcheck": "1.1.1",
     "map-keys-deep-lodash": "1.2.2",
     "match-sorter": "2.3.0",
