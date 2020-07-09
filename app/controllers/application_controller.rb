@@ -7,6 +7,8 @@ class ApplicationController < Api::ApiController
   before_action :set_raven_context
   before_action :set_paper_trail_whodunnit
 
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+
   rescue_from ApplicationError do |error|
     response_handler(error)
   end

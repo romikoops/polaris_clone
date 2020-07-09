@@ -70,6 +70,12 @@ RSpec.describe Admin::MembershipsController, type: :controller do
       delete :destroy, params: { id: membership.id, organization_id: organization.id }
       expect(JSON.parse(response.body)['data']).to eq(['error'])
     end
+
+    it 'renders 404 when membership is not found' do
+      delete :destroy, params: { id: "wrong_id", organization_id: organization.id }
+
+      expect(response).to have_http_status(:not_found)
+    end
   end
 
   describe 'GET #index' do

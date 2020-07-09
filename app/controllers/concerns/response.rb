@@ -20,5 +20,9 @@ module Response
     def success_handler(res)
       json_response({ success: true, data: res }, 200)
     end
+
+    def not_found
+      head :not_found
+    end
   end
 end
