@@ -5,10 +5,12 @@ require 'rails_helper'
 RSpec.describe UsersController do
   let(:addresses) { create_list(:address, 5) }
   let(:organization) { create(:organizations_organization) }
-  let(:user) { create(:authentication_user, :organizations_user, organization_id: organization.id) }
+  let!(:user) { create(:authentication_user, :organizations_user, organization_id: organization.id) }
+  let(:domain) { create(:organizations_domain, organization: organization, domain: 'itsmycargo.example') }
 
   before do
-    ::Organizations.current_id = organization.id
+    request.env["HTTP_REFERER"] = "http://#{domain.domain}"
+    Organizations.current_id = organization.id
     append_token_header
     FactoryBot.create(:profiles_profile, user_id: user.id)
     addresses.each do |address|
