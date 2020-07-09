@@ -23,19 +23,19 @@ module ResultFormatter
     describe ".perform" do
       let(:expected_descriptions) do
         [nil,
-          "Pre-Carriage",
+          "Trucking pre",
           "1 x Fcl 20",
           "Trucking Rate",
-          "Export Local Charges",
+          "Export",
           "1 x Fcl 20",
           "Basic Freight",
-          "Freight Charges",
+          "Cargo",
           "1 x Fcl 20",
           "Basic Freight",
-          "Import Local Charges",
+          "Import",
           "1 x Fcl 20",
           "Basic Freight",
-          "On-Carriage",
+          "Trucking on",
           "1 x Fcl 20",
           "Trucking Rate"]
       end
@@ -52,28 +52,57 @@ module ResultFormatter
       end
 
       context "with cargo_item load type" do
-        let(:shipment) {
-          FactoryBot.create(:legacy_shipment,
-            load_type: "cargo_item",
-            with_full_breakdown: true,
-            with_tenders: true,
-            organization: organization)
-        }
+        let(:load_type) { "cargo_item" }
         let(:expected_descriptions) do
           [nil,
-            "Pre-Carriage",
+            "Trucking pre",
             "1 x Pallet",
             "Trucking Rate",
-            "Export Local Charges",
+            "Export",
             "1 x Pallet",
             "Basic Freight",
-            "Freight Charges",
+            "Cargo",
             "1 x Pallet",
             "Basic Freight",
-            "Import Local Charges",
+            "Import",
             "1 x Pallet",
             "Basic Freight",
-            "On-Carriage",
+            "Trucking on",
+            "1 x Pallet",
+            "Trucking Rate"]
+        end
+
+        it "returns rows for each level of charge table" do
+          results = klass.perform
+          aggregate_failures do
+            expect(results.length).to eq(16)
+            expect(results.pluck(:description)).to eq(expected_descriptions)
+            expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+          end
+        end
+      end
+
+      context "with custom names" do
+        before do
+          FactoryBot.create(:legacy_charge_categories, code: 'cargo', name: 'Bananas', organization: organization)
+        end
+
+        let(:load_type) { "cargo_item" }
+        let(:expected_descriptions) do
+          [nil,
+            "Trucking pre",
+            "1 x Pallet",
+            "Trucking Rate",
+            "Export",
+            "1 x Pallet",
+            "Basic Freight",
+            "Bananas",
+            "1 x Pallet",
+            "Basic Freight",
+            "Import",
+            "1 x Pallet",
+            "Basic Freight",
+            "Trucking on",
             "1 x Pallet",
             "Trucking Rate"]
         end
@@ -110,15 +139,15 @@ module ResultFormatter
         let(:results) { klass.perform }
         let(:expected_descriptions) do
           [nil,
-            "Pre-Carriage",
+            "Trucking pre",
             "Trucking Rate",
-            "Export Local Charges",
+            "Export",
             "Basic Freight",
-            "Freight Charges",
+            "Cargo",
             "Basic Freight",
-            "Import Local Charges",
+            "Import",
             "Basic Freight",
-            "On-Carriage",
+            "Trucking on",
             "Trucking Rate"]
         end
 
@@ -143,21 +172,21 @@ module ResultFormatter
         let(:results) { klass.perform }
         let(:expected_descriptions) do
           [nil,
-            "Pre-Carriage",
+            "Trucking pre",
             "1 x Pallet",
             "Trucking Rate",
-            "Export Local Charges",
+            "Export",
             "1 x Pallet",
             "Basic Freight",
             "Shipment",
             "Bunker Adjustment Fee",
-            "Freight Charges",
+            "Cargo",
             "1 x Pallet",
             "Basic Freight",
-            "Import Local Charges",
+            "Import",
             "1 x Pallet",
             "Basic Freight",
-            "On-Carriage",
+            "Trucking on",
             "1 x Pallet",
             "Trucking Rate"]
         end
@@ -191,19 +220,19 @@ module ResultFormatter
         let(:expected_descriptions) do
           [
             nil,
-            "On-Carriage",
+            "Trucking on",
             "1 x Pallet",
             "Trucking Rate",
-            "Freight Charges",
+            "Cargo",
             "1 x Pallet",
             "Basic Freight",
-            "Import Local Charges",
+            "Import",
             "1 x Pallet",
             "Basic Freight",
-            "Export Local Charges",
+            "Export",
             "1 x Pallet",
             "Basic Freight",
-            "Pre-Carriage",
+            "Trucking pre",
             "1 x Pallet",
             "Trucking Rate"
           ]

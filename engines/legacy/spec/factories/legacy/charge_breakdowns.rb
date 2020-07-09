@@ -32,7 +32,6 @@ FactoryBot.define do
       end
       evaluator.sections.each do |section|
         section_charge_category = Legacy::ChargeCategory.find_by(
-          name: section.humanize,
           code: section,
           organization_id: shipment.organization_id
         ) || create(:legacy_charge_categories,

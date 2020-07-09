@@ -35,16 +35,16 @@ module ResultFormatter
         items = tender.line_items.where(section: section)
         next if items.empty?
 
-        charge_category_id = applicable_charge_category_id(section: section)
+        charge_category = applicable_charge_category(section: section)
         section_row = default_values.merge(
-          description: section_description(section: section),
+          description: charge_category.name,
           value: value_with_currency(value(items: items)),
           originalValue: value_with_currency(original_value(items: items)),
           tenderId: tender.id,
           order: section_order(section: section),
           section: section,
           level: 1,
-          chargeCategoryId: charge_category_id
+          chargeCategoryId: charge_category&.id
         )
         @rows << section_row
         create_cargo_section_rows(row: section_row, items: items)
@@ -67,7 +67,7 @@ module ResultFormatter
           tenderId: tender.id,
           section: items_by_cargo.first.section,
           level: 2,
-          chargeCategoryId: applicable_charge_category_id(cargo: cargo)
+          chargeCategoryId: applicable_charge_category(cargo: cargo)&.id
         )
         @rows << cargo_row
         create_cargo_currency_section_rows(row: cargo_row, items: items_by_cargo, cargo: cargo, level: 3)
@@ -112,22 +112,22 @@ module ResultFormatter
           section: item.section,
           level: level,
           code: item.code,
-          chargeCategoryId: applicable_charge_category_id(item: item)
+          chargeCategoryId: applicable_charge_category(item: item)&.id
         )
       end
     end
 
-    def applicable_charge_category_id(item: nil, cargo: nil, section: nil)
+    def applicable_charge_category(item: nil, cargo: nil, section: nil)
       if item
-        item.charge_category_id
+        item.charge_category
       elsif item.nil? && section.present?
         section_code = section.sub("_section", "")
-        charge_breakdown.charge_categories.find_by(code: section_code)&.id
+        charge_breakdown.charge_categories.find_by(code: section_code)
       else
         charge_breakdown.charge_categories.find_by(
           cargo_unit_id: cargo&.id,
           code: shipment_or_cargo_unit_code(cargo: cargo)
-        )&.id
+        )
       end
     end
 
@@ -161,19 +161,6 @@ module ResultFormatter
 
     def sections_in_order
       SECTIONS.sort_by { |section| section_order(section: section) }
-    end
-
-    def section_description(section:)
-      SECTIONS.zip([
-        "Pre-Carriage",
-        "Export Local Charges",
-        "Freight Charges",
-        "Import Local Charges",
-        "On-Carriage",
-        "Customs Charges",
-        "Insurance Charges",
-        "Addon Charges"
-      ]).to_h.fetch(section)
     end
 
     def section_order(section:)
