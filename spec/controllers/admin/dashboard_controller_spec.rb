@@ -17,5 +17,18 @@ RSpec.describe Admin::DashboardController, type: :controller do
 
       expect(response).to have_http_status(:success)
     end
+
+    context "when current organization is missing" do
+      before do
+        append_token_header
+        allow(controller).to receive(:current_organization).and_return(nil)
+      end
+
+      it "halts the request and returns a 404" do
+        get :index, params: { organization_id: organization }
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 end

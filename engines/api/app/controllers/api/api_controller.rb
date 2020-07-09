@@ -12,6 +12,7 @@ module Api
     skip_before_action :verify_authenticity_token
     before_action :doorkeeper_authorize!
     before_action :set_organization_id
+    before_action :ensure_organization!
     helper_method :current_user
 
     private
@@ -57,6 +58,10 @@ module Api
 
     def doorkeeper_authorize!
       super(:public, :admin)
+    end
+
+    def ensure_organization!
+      return head :not_found unless current_organization
     end
   end
 end

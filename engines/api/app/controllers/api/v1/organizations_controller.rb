@@ -3,6 +3,8 @@
 module Api
   module V1
     class OrganizationsController < ApiController
+      skip_before_action :ensure_organization!, only: %i[index scope countries]
+
       def index
         organizations = Organizations::Organization.joins(:memberships)
                                                    .where(organizations_memberships: {user_id: current_user})
