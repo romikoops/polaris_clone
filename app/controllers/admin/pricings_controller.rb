@@ -68,7 +68,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     response_handler(
       pricings: pricings.map(&:for_table_json),
       itinerary: itinerary,
-      stops: Stop.where(itinerary_id: itinerary.id).map {|stop| stop_index_json(stop:}
+      stops: Stop.where(itinerary_id: itinerary.id).map { |stop| stop_index_json(stop: stop) }
     )
   end
 

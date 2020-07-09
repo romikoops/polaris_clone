@@ -24,7 +24,7 @@ module ExcelDataServices
           )[:hub]
 
           itinerary = find_or_initialize_itinerary(origin_hub, destination_hub, row)
-
+          
           stops = find_or_initialize_stops([origin_hub, destination_hub], itinerary, row[:row_nr])
           itinerary.stops << stops - itinerary.stops
 

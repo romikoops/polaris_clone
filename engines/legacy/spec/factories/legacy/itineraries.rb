@@ -64,8 +64,8 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(hub_code: 'CNSHA', organization: itinerary.organization)
-        gothenburg = Legacy::Hub.find_by(hub_code: 'SEGOT', organization: itinerary.organization)
+        shanghai = Legacy::Hub.find_by(hub_code: 'CNSHA', name: 'Shanghai', organization: itinerary.organization)
+        gothenburg = Legacy::Hub.find_by(hub_code: 'SEGOT', name: 'Gothenburg', organization: itinerary.organization)
 
         itinerary.stops << build(:legacy_stop,
                                  itinerary: itinerary,

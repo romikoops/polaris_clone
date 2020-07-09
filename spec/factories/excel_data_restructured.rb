@@ -3281,6 +3281,137 @@ FactoryBot.define do
       end
     end
 
+    trait :same_name_pricing_one_fee_col_and_ranges do
+      data do
+        [[{sheet_name: "Sheet1",
+            restructurer_name: "pricing_one_fee_col_and_ranges",
+            effective_date: Date.parse("Thu, 15 Mar 2018"),
+            expiration_date: Date.parse("Fri, 15 Nov 2019"),
+            customer_email: nil,
+            origin: "Gothenburg",
+            country_origin: "Sweden",
+            destination: "Shanghai",
+            country_destination: "China",
+            mot: "ocean",
+            carrier: nil,
+            service_level: "standard",
+            load_type: "lcl",
+            rate_basis: "PER_WM",
+            fee_code: "BAS",
+            fee_name: "Bas",
+            currency: "USD",
+            fee_min: 17,
+            fee: 17,
+            transit_time: 24,
+            transshipment: nil,
+            row_nr: 2,
+            internal: false,
+            origin_name: "Gothenburg",
+            destination_name: "Shanghai"}]]
+
+      end
+    end
+
+    trait :same_name_different_locode_pricing_one_fee_col_and_ranges do
+      data do
+         [ [{sheet_name: "Sheet1",
+            restructurer_name: "pricing_one_fee_col_and_ranges",
+            effective_date: Date.parse("Thu, 15 Mar 2018"),
+            expiration_date: Date.parse("Fri, 15 Nov 2019"),
+            customer_email: nil,
+            origin: "Gothenburg",
+            country_origin: "Sweden",
+            destination: "Shanghai",
+            country_destination: "China",
+            mot: "ocean",
+            carrier: nil,
+            service_level: "standard",
+            load_type: "lcl",
+            rate_basis: "PER_WM",
+            fee_code: "BAS",
+            fee_name: "Bas",
+            currency: "USD",
+            fee_min: 17,
+            fee: 17,
+            transit_time: 24,
+            transshipment: nil,
+            row_nr: 2,
+            internal: false,
+            origin_name: "Gothenburg",
+            destination_name: "Shanghai"}]]
+      end
+    end
+
+    trait :same_locode_different_name_pricing_one_fee_col_and_ranges do
+      data do
+         [ [{sheet_name: "Sheet1",
+            restructurer_name: "pricing_one_fee_col_and_ranges",
+            effective_date: Date.parse("Thu, 15 Mar 2018"),
+            expiration_date: Date.parse("Fri, 15 Nov 2019"),
+            customer_email: nil,
+            origin: "Gothenburg - Key 4",
+            country_origin: "Sweden",
+            destination: "Shanghai",
+            country_destination: "China",
+            mot: "ocean",
+            carrier: nil,
+            service_level: "standard",
+            load_type: "lcl",
+            rate_basis: "PER_WM",
+            fee_code: "BAS",
+            fee_name: "Bas",
+            currency: "USD",
+            fee_min: 17,
+            fee: 17,
+            transit_time: 24,
+            transshipment: nil,
+            row_nr: 2,
+            internal: false,
+            origin_name: "Gothenburg - Key 4",
+            destination_name: "Shanghai",
+            origin_locode: "SEGOT",
+            destination_locode: 'CNSHA'
+            }]]
+      end
+    end
+
+    trait :notes_in_pricing_one_fee_col_and_ranges do
+      data do
+        [[{sheet_name: "Sheet1",
+          restructurer_name: "pricing_one_fee_col_and_ranges",
+          effective_date: Date.parse("Thu, 15 Mar 2018"),
+          expiration_date: Date.parse("Fri, 15 Nov 2019"),
+          customer_email: nil,
+          origin: "Gothenburg",
+          country_origin: "Sweden",
+          destination: "Shanghai",
+          country_destination: "China",
+          mot: "ocean",
+          carrier: nil,
+          service_level: "standard",
+          load_type: "lcl",
+          rate_basis: "PER_WM",
+          fee_code: "BAS",
+          fee_name: "Bas",
+          currency: "USD",
+          fee_min: 17,
+          fee: 17,
+          transit_time: 24,
+          transshipment: nil,
+          row_nr: 2,
+          internal: false,
+          notes: [
+            {header: "Electronic Cargo Tracking Note/Waiver (Ectn/Besc)",
+             body: nil,
+             remarks: false,
+             transshipment: false},
+            {header: "Remarks", body: "some remark", remarks: true, transshipment: false}
+          ],
+          origin_name: "Gothenburg",
+          destination_name: "Shanghai"}]]
+      end
+    end
+
     factory :missing_values_hubs_row_data, traits: %i[restructured_hubs_missing_values]
     factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges,
       traits: %i[correct_pricings_one_fee_col_and_ranges]
@@ -3304,5 +3435,9 @@ FactoryBot.define do
     factory :excel_data_restructured_schedules, traits: %i[restructured_schedules]
     factory :excel_data_restructured_max_dimensions, traits: %i[restructured_max_dimensions]
     factory :excel_data_restructured_schedule_generator, traits: %i[restructured_schedule_generator]
+    factory :excel_data_restructured_same_name_pricing, traits: %i[same_name_pricing_one_fee_col_and_ranges]
+    factory :excel_data_restructured_same_name_locode_pricing, traits: %i[same_name_different_locode_pricing_one_fee_col_and_ranges]
+    factory :excel_data_restructured_pricing_with_notes, traits: %i[notes_in_pricing_one_fee_col_and_ranges]
+    factory :excel_data_restructured_same_locode_pricing, traits: %i[same_locode_different_name_pricing_one_fee_col_and_ranges]
   end
 end

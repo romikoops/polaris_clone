@@ -18,39 +18,25 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
      errors: []}
   end
 
-  before do
-    create(:tenants_scope, target: organization, content: {"base_pricing" => true})
+  describe ".insert with two identical names" do
+    let(:input_data) { FactoryBot.build(:excel_data_restructured_same_name_pricing) }
+     
+    it "attaches the pricing to the correct itinerary" do
+      aggregate_failures do
+        expect(stats).to eq(expected_stats)
+        expect(itinerary.rates.count).to eq(1)
+        expect(faux_itinerary.rates).to be_empty
+      end
+    end
   end
 
-  describe ".insert with two identical names" do
-    let(:input_data) do
-      [
-        [{sheet_name: "Sheet1",
-          restructurer_name: "pricing_one_fee_col_and_ranges",
-          effective_date: Date.parse("Thu, 15 Mar 2018"),
-          expiration_date: Date.parse("Fri, 15 Nov 2019"),
-          customer_email: nil,
-          origin: "Gothenburg",
-          country_origin: "Sweden",
-          destination: "Shanghai",
-          country_destination: "China",
-          mot: "ocean",
-          carrier: nil,
-          service_level: "standard",
-          load_type: "lcl",
-          rate_basis: "PER_WM",
-          fee_code: "BAS",
-          fee_name: "Bas",
-          currency: "USD",
-          fee_min: 17,
-          fee: 17,
-          transit_time: 24,
-          transshipment: nil,
-          row_nr: 2,
-          internal: false,
-          origin_name: "Gothenburg",
-          destination_name: "Shanghai"}]
-      ]
+  describe ".insert with two identical names, different  locode" do
+    let(:input_data) { FactoryBot.build(:excel_data_restructured_same_name_locode_pricing) }
+
+    before do
+      FactoryBot.create(:gothenburg_nexus, locode: nil).tap do |tapped_nexus|
+        FactoryBot.create(:gothenburg_hub, nexus: tapped_nexus, hub_code: nil)
+      end
     end
 
     it "attaches the pricing to the correct itinerary" do
@@ -62,43 +48,26 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
     end
   end
 
-  describe ".insert notes" do
-    let(:input_data) do
-      [
-        [{sheet_name: "Sheet1",
-          restructurer_name: "pricing_one_fee_col_and_ranges",
-          effective_date: Date.parse("Thu, 15 Mar 2018"),
-          expiration_date: Date.parse("Fri, 15 Nov 2019"),
-          customer_email: nil,
-          origin: "Gothenburg",
-          country_origin: "Sweden",
-          destination: "Shanghai",
-          country_destination: "China",
-          mot: "ocean",
-          carrier: nil,
-          service_level: "standard",
-          load_type: "lcl",
-          rate_basis: "PER_WM",
-          fee_code: "BAS",
-          fee_name: "Bas",
-          currency: "USD",
-          fee_min: 17,
-          fee: 17,
-          transit_time: 24,
-          transshipment: nil,
-          row_nr: 2,
-          internal: false,
-          notes: [
-            {header: "Electronic Cargo Tracking Note/Waiver (Ectn/Besc)",
-             body: nil,
-             remarks: false,
-             transshipment: false},
-            {header: "Remarks", body: "some remark", remarks: true, transshipment: false}
-          ],
-          origin_name: "Gothenburg",
-          destination_name: "Shanghai"}]
-      ]
+  describe ".insert with two identical locodes, different  names" do
+    let(:input_data) { FactoryBot.build(:excel_data_restructured_same_locode_pricing) }
+    let(:faux_origin_country) { FactoryBot.create(:country_se)}
+    let(:faux_destination_country) { FactoryBot.create(:country_cn)}
+    let(:faux_origin_name) { 'Gothenburg - Key 4' }
+    let(:faux_destination_name) { 'Shanghai' }
+    let(:faux_origin_locode) { 'SEGOT' }
+    let(:faux_destination_locode) { 'CNSHA' }
+
+    it "attaches the pricing to the correct itinerary" do
+      aggregate_failures do
+        expect(stats).to eq(expected_stats)
+        expect(faux_itinerary.rates.count).to eq(1)
+        expect(itinerary.rates).to be_empty
+      end
     end
+  end
+
+  describe ".insert notes" do
+    let(:input_data) { FactoryBot.build(:excel_data_restructured_pricing_with_notes) }
 
     it "creates notes attached to the pricings" do
       aggregate_failures do
