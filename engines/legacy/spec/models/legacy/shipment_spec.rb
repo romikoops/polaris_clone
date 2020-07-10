@@ -112,6 +112,25 @@ module Legacy
         expect(shipment.carrier).to be(shipment.trip.tenant_vehicle.carrier&.name)
       end
     end
+
+    describe "self.modes_of_transport" do
+      before do
+        %w[ocean air rail truck].each do |mot|
+          FactoryBot.create(:legacy_shipment,
+            itinerary: FactoryBot.create(:default_itinerary, mode_of_transport: mot))
+        end
+      end
+
+      it 'returns only the ocean shipments' do
+        expect(described_class.modes_of_transport('ocean').map(&:mode_of_transport)).to eq(['ocean'])
+      end
+
+      it 'returns only the ocean and air shipments' do
+        expect(
+          described_class.modes_of_transport('ocean', 'air').map(&:mode_of_transport)
+        ).to match_array(['ocean', 'air'])
+      end
+    end
   end
 end
 

@@ -277,22 +277,22 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     when 'accept'
       @shipment.confirm!
       ShippingTools.new.shipper_confirmation_email(@shipment.user, @shipment)
-      response_handler(@shipment.with_address_options_json)
+      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
     when 'decline'
       @shipment.decline!
-      response_handler(@shipment.with_address_options_json)
+      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
     when 'ignore'
       @shipment.ignore!
-      response_handler(@shipment.with_address_options_json)
+      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
     when 'archive'
       @shipment.archive!
-      response_handler(@shipment.with_address_options_json)
+      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
     when 'finished'
       @shipment.finish!
-      response_handler(@shipment.with_address_options_json)
+      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
     when 'requested'
       @shipment.request!
-      response_handler(@shipment.with_address_options_json)
+      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
     else
       raise 'Unknown action!'
     end
@@ -366,7 +366,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def shipment_as_json
     hidden_args = Pdf::HiddenValueService.new(user: @shipment.user).admin_args
-    Legacy::ShipmentDecorator.new(@shipment, context: {scope: current_scope}).legacy_address_json(offer_args: hidden_args)
+    Legacy::ShipmentDecorator.new(@shipment, context: {scope: current_scope})
+                             .legacy_address_json(offer_args: hidden_args)
   end
 
   def addresses

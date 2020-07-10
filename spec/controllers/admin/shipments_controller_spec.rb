@@ -137,6 +137,76 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
     end
   end
 
+  describe 'POST #update' do
+    let(:action) { 'accept' }
+
+    before do
+      post :update, params: { id: shipment.id, organization_id: organization.id, shipment_action: action }
+    end
+
+    it 'returns http success' do
+      expect(response).to have_http_status(:success)
+    end
+
+    context 'when confirming' do
+      it 'returns approves the document and returns it' do
+        aggregate_failures do
+          expect(json.dig(:data, :status)).to eq('confirmed')
+        end
+      end
+    end
+
+    context 'when declining' do
+      let(:action) { 'decline' }
+
+      it 'returns approves the document and returns it' do
+        aggregate_failures do
+          expect(json.dig(:data, :status)).to eq('declined')
+        end
+      end
+    end
+
+    context 'when ignoring' do
+      let(:action) { 'ignore' }
+
+      it 'returns approves the document and returns it' do
+        aggregate_failures do
+          expect(json.dig(:data, :status)).to eq('ignored')
+        end
+      end
+    end
+
+    context 'when archiving' do
+      let(:action) { 'archive' }
+
+      it 'returns approves the document and returns it' do
+        aggregate_failures do
+          expect(json.dig(:data, :status)).to eq('archived')
+        end
+      end
+    end
+
+    context 'when finished' do
+      let(:action) { 'finished' }
+
+      it 'returns approves the document and returns it' do
+        aggregate_failures do
+          expect(json.dig(:data, :status)).to eq('finished')
+        end
+      end
+    end
+
+    context 'when request' do
+      let(:action) { 'requested' }
+
+      it 'returns approves the document and returns it' do
+        aggregate_failures do
+          expect(json.dig(:data, :status)).to eq('requested_by_unconfirmed_account')
+        end
+      end
+    end
+  end
+
   describe 'POST #document_delete' do
     let(:file) { FactoryBot.create(:legacy_file, shipment: shipment) }
 

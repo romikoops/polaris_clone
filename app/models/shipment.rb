@@ -36,16 +36,6 @@ class Shipment < Legacy::Shipment
   accepts_nested_attributes_for :contacts, allow_destroy: true
   accepts_nested_attributes_for :documents, allow_destroy: true
 
-  %i(ocean air rail).each do |mot|
-    scope mot, -> { joins(:itinerary).where(Itinerary.arel_table[:mode_of_transport].eq(mot)) }
-  end
-
-  scope :modes_of_transport, lambda { |*mots|
-    mots[1..-1].reduce(send(mots.first)) do |result, mot|
-      result.or(send(mot))
-    end
-  }
-
   # Class methods
 
   # Instance methods
@@ -179,7 +169,7 @@ class Shipment < Legacy::Shipment
   end
 
   def request!
-    new_status = user.confirmed? ? 'requested' : 'requested_by_unconfirmed_account'
+    new_status = confirmed_user? ? 'requested' : 'requested_by_unconfirmed_account'
     update!(status: new_status)
   end
 
@@ -201,6 +191,9 @@ class Shipment < Legacy::Shipment
     Note.where(target: itinerary&.pricings)
   end
 
+  def confirmed_user?
+    user&.activation_state == 'active'
+  end
 
   def self.create_all_empty_charge_breakdowns!
     where.not(id: ChargeBreakdown.pluck(:shipment_id).uniq, schedules_charges: {})
