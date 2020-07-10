@@ -59,6 +59,8 @@ module OfferCalculator
         else
           @shipment.cargo_units = cargo_unit_const.extract(cargo_units_params)
         end
+      rescue ActiveRecord::RecordNotSaved
+        raise OfferCalculator::Calculator::InvalidCargoUnit
       end
 
       def update_incoterm

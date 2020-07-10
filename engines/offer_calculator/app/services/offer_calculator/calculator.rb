@@ -17,6 +17,7 @@ module OfferCalculator
     InvalidLocalCharges = Class.new(StandardError)
     InvalidFreightResult = Class.new(StandardError)
     InvalidLocalChargeResult = Class.new(StandardError)
+    InvalidCargoUnit = Class.new(StandardError)
 
     def initialize(shipment:, params:, user:, wheelhouse: false, sandbox: nil)
       @user           = user

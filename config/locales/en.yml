@@ -68,6 +68,10 @@ en:
       http_code: 400
       code: 1007
       message: "There are no departures for this timeframe."
+    invalid_cargo_unit:
+      http_code: 400
+      code: 1008
+      message: 'Cargo Units entered are invalid. Please reenter shipment data and if the problem persists, restart shipment.'
 
     # Pricing : Code prefix 2
     no_valid_pricings:

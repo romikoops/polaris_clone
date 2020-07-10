@@ -163,6 +163,8 @@ class ShippingTools
     raise ApplicationError::NoValidPricings
   rescue OfferCalculator::Calculator::NoValidSchedules
     raise ApplicationError::NoValidSchedules
+  rescue  OfferCalculator::Calculator::InvalidCargoUnit
+    raise ApplicationError::InvalidCargoUnit
   rescue ArgumentError
     raise ApplicationError::InternalError
   end

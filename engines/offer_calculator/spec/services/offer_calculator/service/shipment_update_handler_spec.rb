@@ -39,6 +39,23 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
     ]
   end
 
+  let(:invalid_cargo_item_attributes) do
+    [
+      {
+        'payload_in_kg' => 0,
+        'total_volume' => 4.5,
+        'total_weight' => 724.0,
+        'width' => 0,
+        'length' => 0,
+        'height' => 0,
+        'quantity' => 1,
+        'cargo_item_type_id' => "",
+        'dangerous_goods' => false,
+        'stackable' => true
+      }
+    ]
+  end
+
   let(:aggregated_cargo_attributes) do
     {
       'volume' => 2.0,
@@ -174,6 +191,20 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
         aggregated_cargo = base_shipment.aggregated_cargo
         expect(aggregated_cargo.weight).to eq(aggregated_cargo_attributes['weight'])
         expect(aggregated_cargo.volume).to eq(aggregated_cargo_attributes['volume'])
+      end
+
+      it 'raises the proper error when cargo units are invalid' do
+        invalid_params = port_to_port_params.dup
+        invalid_params[:shipment][:cargo_items_attributes] = invalid_cargo_item_attributes
+
+        agg_service = described_class.new(
+          shipment: base_shipment,
+          params: invalid_params,
+          sandbox: nil,
+          wheelhouse: wheelhouse
+        )
+
+        expect { agg_service.update_cargo_units }.to raise_error(OfferCalculator::Calculator::InvalidCargoUnit)
       end
     end
 
