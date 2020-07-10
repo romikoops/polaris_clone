@@ -438,8 +438,10 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
   end
 
   def user_groups
-    companies = Companies::Membership.where(member: user)
-    membership_ids = Groups::Membership.where(member: user)
-                      .or(Groups::Membership.where(member: companies)).select(:group_id)
+    company_ids = Companies::Membership.where(member: user).select(:company_id)
+    Groups::Membership.where(member: user)
+                      .or(
+                        Groups::Membership.where(member_id: company_ids, member_type: 'Companies::Company')
+                      ).select(:group_id)
   end
 end
