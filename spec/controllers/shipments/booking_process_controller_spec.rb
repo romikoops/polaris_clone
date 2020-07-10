@@ -56,10 +56,11 @@ RSpec.describe Shipments::BookingProcessController do
         }.with_indifferent_access
       ]
     end
+    let(:quote) { create(:legacy_quotation, user: user, original_shipment_id: shipment.id) }
 
     before do
       quote_mailer = object_double('Mailer')
-      create(:legacy_quotation, user: user, original_shipment_id: shipment.id)
+      allow(QuotedShipmentsService).to receive(:initialize).and_return(double(perform: quote))
       allow(QuoteMailer).to receive(:quotation_admin_email).at_least(:once).and_return(quote_mailer)
       allow(QuoteMailer).to receive(:quotation_email).at_least(:once).and_return(quote_mailer)
       allow(quote_mailer).to receive(:deliver_later).at_least(:twice)
@@ -236,7 +237,6 @@ RSpec.describe Shipments::BookingProcessController do
   end
 
   describe 'POST #create_shipment' do
-
     it 'returns an http status of success' do
       post :create_shipment, params: { organization_id: shipment.organization, details: {loadType: 'cargo_item', direction: 'import'} }
 

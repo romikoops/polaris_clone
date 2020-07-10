@@ -15,49 +15,6 @@ class ShippingTools
     @current_organization = ::Organizations::Organization.current
   end
 
-  def create_shipments_from_quotation(shipment, results, sandbox = nil)
-    main_quote = ShippingTools.new.handle_existing_quote(shipment, results, sandbox)
-    results.each do |result|
-      next unless main_quote.shipments.where(trip_id: result['meta']['charge_trip_id']).empty?
-
-      ShippingTools.new.create_shipment_from_result(
-        main_quote: main_quote,
-        original_shipment: shipment,
-        result: result.with_indifferent_access,
-        sandbox: sandbox
-      )
-    end
-    main_quote.shipments.map(&:reload)
-    main_quote
-  end
-
-  def handle_existing_quote(shipment, results, sandbox = nil)
-    existing_quote = Legacy::Quotation.find_by(
-      user: shipment.user,
-      original_shipment: shipment,
-      sandbox: sandbox
-    )
-
-    trip_ids = results.map { |r| r['meta']['charge_trip_id'] }
-    if existing_quote && shipment.updated_at < existing_quote.updated_at
-      main_quote = existing_quote
-      main_quote.shipments.where.not(trip_id: trip_ids).destroy_all
-    elsif existing_quote && shipment.updated_at > existing_quote.updated_at
-      main_quote = existing_quote
-      main_quote.shipments.destroy_all
-    elsif !existing_quote
-      main_quote = Legacy::Quotation.create(
-        user: shipment.user,
-        original_shipment: shipment,
-        sandbox: sandbox,
-        billing: shipment.billing
-      )
-    end
-
-    main_quote.touch unless main_quote.new_record?
-    main_quote
-  end
-
   def create_shipment(details, current_user, sandbox = nil)
     scope = OrganizationManager::ScopeService.new(
       target: current_user,
@@ -122,16 +79,11 @@ class ShippingTools
                   end
 
     quote = if scope['open_quotation_tool'] || scope['closed_quotation_tool']
-              Skylight.instrument title: 'Create Shipments From Quote' do
-                ShippingTools.new.create_shipments_from_quotation(
-                  offer_calculator.shipment,
-                  offer_calculator.detailed_schedules.map(&:deep_stringify_keys!)
-                )
-              end
+              QuotedShipmentsJob.perform_later(
+                shipment: offer_calculator.shipment,
+                send_email: scope.fetch(:email_all_quotes) && offer_calculator.shipment.billing == 'external'
+              )
             end
-    if scope.fetch(:email_all_quotes) && offer_calculator.shipment.billing == 'external'
-      QuoteMailer.quotation_admin_email(quote, offer_calculator.shipment).deliver_later
-    end
 
     {
       shipment: offer_calculator.shipment,
@@ -560,7 +512,8 @@ class ShippingTools
   end
 
   def save_pdf_quotes(shipment, organization, schedules, sandbox = nil)
-    main_quote = ShippingTools.new.create_shipments_from_quotation(shipment, schedules, sandbox)
+    trip_ids = schedules.map { |sched| sched.dig('meta', 'trip_id') }
+    main_quote = QuotedShipmentsService.new(shipment: shipment, trip_ids: trip_ids).perform
     send_on_download = ::OrganizationManager::ScopeService.new(
       target: shipment.user
     ).fetch(:send_email_on_quote_download)
@@ -569,7 +522,8 @@ class ShippingTools
   end
 
   def save_and_send_quotes(shipment, schedules, email, sandbox = nil)
-    main_quote = ShippingTools.new.create_shipments_from_quotation(shipment, schedules, sandbox)
+    trip_ids = schedules.map { |sched| sched.dig('meta', 'trip_id') }
+    main_quote = QuotedShipmentsService.new(shipment: shipment, trip_ids: trip_ids).perform
     QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote, sandbox).deliver_later
     send_on_quote = ::OrganizationManager::ScopeService.new(
       target: shipment.user,
@@ -616,108 +570,6 @@ class ShippingTools
     new_charge_breakdown.update(trip_id: new_trip_id)
 
     new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
-  end
-
-  def create_shipment_from_result(main_quote:, original_shipment:, result:, sandbox: nil)
-    schedule = result['schedules'].first
-    trip = Trip.find(schedule['trip_id'])
-    original_charge_breakdown = original_shipment.charge_breakdowns.find_by(trip: trip)
-    origin_hub = Legacy::Hub.find(schedule['origin_hub']['id'])
-    destination_hub = Legacy::Hub.find(schedule['destination_hub']['id'])
-    new_shipment = main_quote.shipments.create!(
-      status: 'quoted',
-      user: original_shipment.user,
-      organization: original_shipment.organization,
-      imc_reference: original_shipment.imc_reference,
-      origin_hub: origin_hub,
-      destination_hub: destination_hub,
-      origin_nexus_id: origin_hub.nexus_id,
-      destination_nexus_id: destination_hub.nexus_id,
-      quotation_id: schedule['id'],
-      trip_id: trip.id,
-      booking_placed_at: DateTime.now,
-      closing_date: original_shipment.closing_date,
-      planned_eta: trip.end_date,
-      planned_etd: trip.start_date,
-      trucking: original_shipment.trucking,
-      tender_id: original_charge_breakdown.tender_id,
-      load_type: original_shipment.load_type,
-      itinerary_id: trip.itinerary_id,
-      desired_start_date: original_shipment.desired_start_date,
-      meta: result['meta'].slice('pricing_rate_data', 'pricing_breakdown', 'meta_id'),
-      sandbox: sandbox,
-      billing: original_shipment.billing
-    )
-
-    charge_category_map = {}
-
-    if original_shipment.aggregated_cargo.present?
-      new_shipment.aggregated_cargo = original_shipment.aggregated_cargo.dup
-    else
-      original_shipment.cargo_units.each do |unit|
-        new_unit = unit.dup
-        new_unit.shipment_id = new_shipment.id
-        new_unit.save!
-        charge_category_map[unit.id] = new_unit.id
-      end
-    end
-
-    if new_shipment.lcl? && new_shipment.aggregated_cargo.present?
-      new_shipment.aggregated_cargo.set_chargeable_weight!
-    elsif new_shipment.lcl? && new_shipment.aggregated_cargo.nil?
-      new_shipment.cargo_units.map(&:set_chargeable_weight!)
-    end
-
-    if new_shipment.has_pre_carriage?
-      trucking_seconds = original_shipment.trucking['pre_carriage']['trucking_time_in_seconds'].seconds
-      new_shipment.planned_pickup_date = trip.closing_date - 1.day - trucking_seconds
-    else
-      new_shipment.planned_origin_drop_off_date = trip.closing_date - 1.day
-    end
-
-    new_charge_breakdown = original_charge_breakdown.dup
-    new_charge_breakdown.update(shipment: new_shipment)
-    metadatum = Pricings::Metadatum.find_by(charge_breakdown_id: original_charge_breakdown.id)
-    if metadatum
-      new_metadatum = metadatum.dup.tap do |meta|
-        meta.charge_breakdown_id = new_charge_breakdown.id
-        meta.save
-      end
-    end
-
-    new_charge_breakdown.dup_charges(charge_breakdown: original_charge_breakdown)
-    %w[import export cargo trucking_pre trucking_on].each do |charge_key|
-      next if new_charge_breakdown.charge(charge_key).nil?
-
-      new_charge_breakdown.charge(charge_key).children.each do |new_charge|
-        old_charge_category = new_charge&.children_charge_category
-        next if old_charge_category.nil?
-
-        new_charge_category = Legacy::ChargeCategory.find_or_initialize_by(
-          code: old_charge_category.code,
-          name: old_charge_category.name,
-          organization_id: old_charge_category.organization_id,
-          cargo_unit_id: charge_category_map[old_charge_category.cargo_unit_id]
-        )
-        new_charge_category.save!
-
-        if metadatum && new_metadatum
-          Pricings::Breakdown.where(metadatum_id: metadatum.id, cargo_unit_id: old_charge_category.cargo_unit_id)
-                             .each do |breakdown|
-                               breakdown.dup.tap do |breakd|
-                                 breakd.update(
-                                   metadatum_id: new_metadatum.id,
-                                   cargo_unit_id: charge_category_map[old_charge_category.cargo_unit_id]
-                                 )
-                               end
-                             end
-        end
-        new_charge.children_charge_category = new_charge_category
-        new_charge.save!
-      end
-    end
-
-    new_shipment.save!
   end
 
   def handle_extra_charges(shipment:, shipment_data:) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize

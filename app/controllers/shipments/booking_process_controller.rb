@@ -74,7 +74,7 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def shipment
-    @shipment ||= ::Shipment.find_by(id: params[:shipment_id], sandbox: @sandbox)
+    @shipment ||= Legacy::Shipment.find_by(id: params[:shipment_id], sandbox: @sandbox)
   end
 
   private
