@@ -4,6 +4,7 @@ class OrganizationsController < ApplicationController
   include Response
 
   skip_before_action :doorkeeper_authorize!
+  skip_before_action :ensure_organization!, only: [:index]
 
   def index
     tenants = if Rails.env.production?
