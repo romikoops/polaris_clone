@@ -22,10 +22,23 @@ module Api
     end
 
     def organization_id
-      return params[:organization_id] if params[:organization_id]
+      return @organization_id if defined?(@organization_id)
 
-      domains = [URI(request.referer || 'demo.local').host, ENV.fetch("DEFAULT_TENANT", "demo.local")]
-      Organizations::Domain.where(domain: domains).first&.organization_id
+      @organization_id ||= begin
+        org_id = params[:organization_id] if params[:organization_id]
+
+        org_id ||= begin
+          domains = [
+            URI(request.referer.to_s).host,
+            request.host,
+            ENV.fetch("DEFAULT_TENANT") { "demo.local" }
+          ]
+
+          Organizations::Domain.where(domain: domains).pluck(:organization_id).first
+        end
+
+        org_id
+      end
     end
 
     def set_organization_id
@@ -45,8 +58,9 @@ module Api
     end
 
     def default_organization
-      organizations = Organizations::Organization.joins(:memberships)
-      .where(organizations_memberships: {user_id: current_user}).first
+      Organizations::Organization
+        .joins(:memberships)
+        .where(organizations_memberships: {user_id: current_user}).first
     end
 
     def current_scope

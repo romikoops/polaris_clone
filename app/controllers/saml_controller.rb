@@ -42,9 +42,7 @@ class SamlController < ApplicationController
   end
 
   def organization
-    @organization ||= begin
-      ::Organizations::Domain.find_by(':domain ~* domain', domain: request.host)&.organization
-    end
+    @organization ||= ::Organizations::Organization.find(organization_id)
   end
 
   def create_or_update_user_profile(user:, response:)
@@ -56,7 +54,7 @@ class SamlController < ApplicationController
 
   def saml_settings
     @saml_settings ||= begin
-      organization_saml_metadata = Organizations::SamlMetadatum.find_by(organization: organization)
+      organization_saml_metadata = Organizations::SamlMetadatum.find_by(organization_id: organization_id)
       return if organization_saml_metadata.blank?
 
       idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
