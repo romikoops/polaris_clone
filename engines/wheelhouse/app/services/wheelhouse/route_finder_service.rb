@@ -76,9 +76,9 @@ module Wheelhouse
     end
 
     def user_groups
-      companies = Companies::Membership.where(member: user)
-      membership_ids = Groups::Membership.where(member: user)
-                        .or(Groups::Membership.where(member: companies)).select(:group_id)
+      companies = Companies::Membership.where(member: user).map(&:company)
+      Groups::Membership.where(member: user)
+        .or(Groups::Membership.where(member: companies)).select(:group_id)
     end
   end
 end

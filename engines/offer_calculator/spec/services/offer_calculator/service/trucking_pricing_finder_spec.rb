@@ -25,39 +25,6 @@ RSpec.describe OfferCalculator::Service::TruckingPricingFinder do
     FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
   end
 
-  describe '.perform (no base pricing)', :vcr do
-    before do
-      FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :zipcode)
-      FactoryBot.create(:organizations_scope, target: organization, content: { base_pricing: false })
-    end
-
-    it 'returns a common trucking pricing for the correct hub with no user' do
-      service = described_class.new(
-        trucking_details: { 'truck_type' => 'default', 'address_id' => address.id },
-        address: address,
-        carriage: 'pre',
-        shipment: shipment,
-        user_id: nil,
-        sandbox: nil
-      )
-      results = service.perform(hub.id, 0)
-      expect(results['lcl']).to eq(common_trucking)
-    end
-
-    it 'returns a common trucking pricing for the correct hub with user' do
-      service = described_class.new(
-        trucking_details: { 'truck_type' => 'default', 'address_id' => address.id },
-        address: address,
-        carriage: 'pre',
-        shipment: shipment,
-        user_id: user.id,
-        sandbox: nil
-      )
-      results = service.perform(hub.id, 0)
-      expect(results['lcl']).to eq(user_trucking)
-    end
-  end
-
   describe '.perform (base pricing)', :vcr do
     before do
       FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :zipcode)

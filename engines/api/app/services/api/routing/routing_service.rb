@@ -118,7 +118,11 @@ module Api
       def user_groups
         return default_group if user.blank?
 
-        Groups::Group.joins(:memberships).where(groups_memberships: {member_id: user.id, member_type: 'Users::User'})
+        company_ids = Companies::Membership.where(member: user).select(:company_id)
+        query = Groups::Group.joins(:memberships)
+        query.where(groups_memberships: {member_type: 'Users::User', member_id: user.id}).or(
+          query.where(groups_memberships: {member_type: 'Companies::Companies', member_id: company_ids})
+        )
       end
 
       def default_group

@@ -47,7 +47,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     charges_for_filtering = []
     all_charges_with_metadata = []
     cargos_for_loop(cargos: cargos).each do |cargo_data|
-      group_ids = user_groups.pluck(:group_id) | [nil]
+      group_ids = user_group_ids | [nil]
       group_ids.each do |group_id|
         charge = effective_local_charges.find_by(
           group_id: group_id,
@@ -437,11 +437,10 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def user_groups
-    company_ids = Companies::Membership.where(member: user).select(:company_id)
-    Groups::Membership.where(member: user)
-                      .or(
-                        Groups::Membership.where(member_id: company_ids, member_type: 'Companies::Company')
-                      ).select(:group_id)
+  def user_group_ids
+    OrganizationManager::HierarchyService.new(target: @user, organization: @organization)
+        .fetch
+        .select { |target| target.is_a?(Groups::Group) }
+        .map(&:id)
   end
 end

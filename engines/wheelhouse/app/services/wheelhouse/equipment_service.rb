@@ -4,7 +4,7 @@ module Wheelhouse
   class EquipmentService
     def initialize(user:, organization:, origin: nil, destination: nil, dedicated_pricings_only: false)
       @user = user
-      @organization_id = organization.id
+      @organization = organization
       @origin_nexus_ids = nexus_ids(target: 'origin', location: origin)
       @destination_nexus_ids = nexus_ids(target: 'destination', location: destination)
       @group_ids = user_groups
@@ -18,11 +18,11 @@ module Wheelhouse
 
     private
 
-    attr_reader :organization_id, :user, :origin_nexus_ids, :destination_nexus_ids, :group_ids, :dedicated_pricings_only
+    attr_reader :organization, :user, :origin_nexus_ids, :destination_nexus_ids, :group_ids, :dedicated_pricings_only
 
     def binds
       {
-        organization_id: organization_id,
+        organization_id: organization.id,
         origin_nexus_ids: origin_nexus_ids,
         destination_nexus_ids: destination_nexus_ids,
         group_ids: group_ids
@@ -89,7 +89,7 @@ module Wheelhouse
       return [location[:nexus_id]] if location[:nexus_id].present?
 
       ::Trucking::Queries::Hubs.new(
-        organization_id: organization_id,
+        organization_id: organization.id,
         address: address(latitude: location[:latitude], longitude: location[:longitude]),
         carriage: target == 'origin' ? 'pre' : 'on',
         order_by: 'group_id',
@@ -111,9 +111,13 @@ module Wheelhouse
     end
 
     def user_groups
-        companies = Companies::Membership.where(member: user)
-        membership_ids = Groups::Membership.where(member: user)
-                          .or(Groups::Membership.where(member: companies)).select(:group_id)
+      return [] if user.blank?
+
+      company_ids = Companies::Membership.where(member: user).select(:company_id)
+      query = Groups::Group.joins(:memberships)
+      query.where(groups_memberships: {member_type: 'Users::User', member_id: user.id}).or(
+        query.where(groups_memberships: {member_type: 'Companies::Companies', member_id: company_ids})
+      ).ids
     end
   end
 end

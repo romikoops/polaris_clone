@@ -24,7 +24,7 @@ module OfferCalculator
           hub_ids: [hub_id],
           distance: distance.round,
           sandbox: @sandbox,
-          order_by: @scope['base_pricing'] ? 'group_id' : 'user_id'
+          order_by: 'group_id'
         }
 
         results = Trucking::Queries::Availability.new(args).perform
@@ -33,21 +33,12 @@ module OfferCalculator
 
         truckings = @shipment.cargo_classes.each_with_object({}) { |cargo_class, h| h[cargo_class] = nil }
         grouped_results = results.group_by(&:cargo_class)
-        if @scope['base_pricing']
-          group_ids = user_groups&.reverse || []
-          group_ids.unshift(nil)
-          group_ids.each do |group_id|
-            grouped_results.each do |cargo_class, truckings_by_cargo_class|
-              trucking = truckings_by_cargo_class.find { |trp| trp.user_id.nil? && group_id == trp.group_id }
-              truckings[cargo_class] = trucking if trucking.present?
-            end
-          end
-        else
-          [nil, @user&.id].each do |user_id|
-            grouped_results.each do |cargo_class, truckings_by_cargo_class|
-              trucking = truckings_by_cargo_class.find { |trp| trp.group_id.nil? && user_id == trp.user_id }
-              truckings[cargo_class] = trucking if trucking.present?
-            end
+        group_ids = user_groups&.reverse || []
+        group_ids.unshift(nil)
+        group_ids.each do |group_id|
+          grouped_results.each do |cargo_class, truckings_by_cargo_class|
+            trucking = truckings_by_cargo_class.find { |trp| trp.user_id.nil? && group_id == trp.group_id }
+            truckings[cargo_class] = trucking if trucking.present?
           end
         end
 
@@ -55,9 +46,10 @@ module OfferCalculator
       end
 
       def user_groups
-        companies = Companies::Membership.where(member: @user)
-        membership_ids = Groups::Membership.where(member: @user)
-                          .or(Groups::Membership.where(member: companies)).map(&:group_id)
+        OrganizationManager::HierarchyService.new(target: @user, organization: organization)
+          .fetch
+          .select { |target| target.is_a?(Groups::Group) }
+          .pluck(:id)
       end
     end
   end
