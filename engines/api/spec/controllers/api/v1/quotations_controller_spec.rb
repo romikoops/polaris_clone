@@ -249,5 +249,32 @@ module Api
         end
       end
     end
+
+    describe 'GET #index' do
+      context "when quotations exist" do
+        before do
+          FactoryBot.create_list(:legacy_shipment, 5, with_breakdown: true, with_tenders: true,
+                                                      organization_id: organization.id, user: user)
+        end
+
+        it 'renders a list of quotations' do
+          get :index, params: { organization_id: organization.id }
+
+          aggregate_failures do
+            expect(response_data.count).to eq 5
+          end
+        end
+      end
+
+      context "when quotations do not exist" do
+        it 'renders an empty list' do
+          get :index, params: { organization_id: organization.id }
+
+          aggregate_failures do
+            expect(response_data).to eq []
+          end
+        end
+      end
+    end
   end
 end

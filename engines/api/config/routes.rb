@@ -13,7 +13,7 @@ Api::Engine.routes.draw do
       end
 
       resource :dashboard, controller: :dashboard, only: %i[show]
-      resources :quotations, only: %i[create show] do
+      resources :quotations, only: %i[create show index] do
         post :download
         resources :charges, only: %i[show]
         resources :schedules, only: %i[show]

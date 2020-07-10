@@ -5,6 +5,14 @@ require_dependency 'api/api_controller'
 module Api
   module V1
     class QuotationsController < ApiController
+      def index
+        quotations = quotations_filter.perform
+
+        decorated_quotations = QuotationDecorator.decorate_collection(quotations)
+
+        render json: QuotationSerializer.new(decorated_quotations, params: { scope: current_scope })
+      end
+
       def create
         if validation.errors.present?
           render json: ValidationErrorSerializer.new(validation.errors), status: 417
@@ -40,6 +48,16 @@ module Api
         )
         validator.validate
         validator
+      end
+
+      def index_params
+        params.permit(:start_date, :end_date)
+      end
+
+      def quotations_filter
+        Quotations::Filter.new(organization: current_organization,
+                               start_date: index_params[:start_date],
+                               end_date: index_params[:end_date])
       end
 
       def quotation
