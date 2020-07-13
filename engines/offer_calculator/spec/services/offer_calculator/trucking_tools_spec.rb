@@ -830,4 +830,45 @@ RSpec.describe OfferCalculator::TruckingTools do
       expect(klass.hard_limit_checker(rates: ranges, key: 'max_kg', limit: false, value: 3000)).to be_falsy
     end
   end
+
+  describe '.consolidate_cargo' do
+    let(:klass) { described_class.new(default_trucking_pricing, default_cargos, 0, 'pre', user, []) }
+    let(:cargos) do
+      [
+        FactoryBot.create(:legacy_cargo_item,
+                          shipment_id: shipment.id,
+                          width: 120,
+                          length: 80,
+                          height: 140,
+                          payload_in_kg: 200,
+                          quantity: 1),
+        FactoryBot.create(:legacy_cargo_item,
+                          shipment_id: shipment.id,
+                          width: 120,
+                          length: 80,
+                          height: 150,
+                          payload_in_kg: 400,
+                          quantity: 2)
+      ]
+    end
+    let(:expected_result) {
+      {
+        id: "ids-#{cargos.map(&:id).join("-")}",
+        payload_in_kg: 1000.to_d,
+        height: 440.to_d,
+        length: 240.to_d,
+        width: 360.to_d,
+        area: (120.0 * 80.0 * 3.0).to_d,
+        volume: cargos.sum { |cargo| cargo.volume * cargo.quantity }.to_d,
+        quantity: 1,
+        cargo_class: 'lcl',
+        num_of_items: 3,
+        stackable: true
+      }
+    }
+
+    it 'consolidates the cargo correctly' do
+      expect(klass.consolidate_cargo(cargos)).to include(expected_result)
+    end
+  end
 end

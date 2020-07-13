@@ -440,6 +440,7 @@ module OfferCalculator
       cargo = {
         id: 'ids',
         width: 0,
+        area: 0.0,
         length: 0,
         height: 0,
         volume: 0,
@@ -455,6 +456,7 @@ module OfferCalculator
         cargo[:length] += (cargo_unit.length * cargo_unit.quantity)
         cargo[:height] += (cargo_unit.height * cargo_unit.quantity)
         cargo[:volume] += (cargo_unit.volume * cargo_unit.quantity)
+        cargo[:area] += (cargo_unit.width * cargo_unit.length * cargo_unit.quantity)
         cargo[:payload_in_kg] += (cargo_unit.payload_in_kg * cargo_unit.quantity)
         cargo[:cargo_class] = cargo_unit.cargo_class
         cargo[:num_of_items] += cargo_unit.quantity
@@ -675,6 +677,8 @@ module OfferCalculator
     def cargo_unit_area(cargo)
       if cargo.is_a?(Legacy::AggregatedCargo)
         Legacy::AggregatedCargo::DEFAULT_HEIGHT
+      elsif cargo.is_a?(Hash)
+        cargo[:area]
       else
         cargo_data_value(:width, cargo) * cargo_data_value(:length, cargo)
       end
