@@ -14,6 +14,7 @@ end
 
 Rails.application.routes.draw do
   mount Easymon::Engine, at: "/up"
+  get "/healthz", to: "application#health"
   mount Api::Engine, at: "/"
   mount Admiralty::Engine, at: "/admiralty"
   mount Sidekiq::Web, at: "/sidekiq"

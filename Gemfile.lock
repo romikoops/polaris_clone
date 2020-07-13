@@ -1135,6 +1135,7 @@ GEM
       activerecord (>= 4.2)
       activesupport (>= 4.2)
     popper_js (1.16.0)
+    prometheus_exporter (0.5.2)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -1484,6 +1485,7 @@ DEPENDENCIES
   pdfkit
   pg (>= 0.18, < 2.0)
   pg_search (~> 2.3.0)
+  prometheus_exporter (~> 0.5.2)
   pry-rails
   puma (~> 4.3.5)
   rack-cors

@@ -97,7 +97,8 @@ gem "rack-cors"
 # Use geocoder for backend geocoding
 gem "geocoder"
 
-# gem 'remote_syslog_logger'
+# Monitoring
+gem "prometheus_exporter", "~> 0.5.2"
 gem "sentry-raven"
 
 # Use Nokogiri for XML-parsing
@@ -150,7 +151,7 @@ gem "marginalia", "~> 1.5"
 # Determines holidays by region
 gem "holidays"
 
-gem 'liquid'
+gem "liquid"
 
 # Translated customer content
 gem "mobility", "~> 0.8.6"

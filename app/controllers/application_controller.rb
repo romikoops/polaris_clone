@@ -3,14 +3,22 @@
 class ApplicationController < Api::ApiController
   include Response
 
-  before_action :set_sandbox
-  before_action :set_raven_context
-  before_action :set_paper_trail_whodunnit
+  before_action :set_sandbox, except: [:health]
+  before_action :set_raven_context, except: [:health]
+  before_action :set_paper_trail_whodunnit, except: [:health]
+
+  skip_before_action :doorkeeper_authorize!, only: [:health]
+  skip_before_action :set_organization_id, only: [:health]
+  skip_before_action :ensure_organization!, only: [:health]
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
   rescue_from ApplicationError do |error|
     response_handler(error)
+  end
+
+  def health
+    head :ok
   end
 
   def response_handler(res)

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Find Pid
 SIDEKIQ_PID=$(ps aux | grep sidekiq | grep busy | awk '{ print $2 }')
