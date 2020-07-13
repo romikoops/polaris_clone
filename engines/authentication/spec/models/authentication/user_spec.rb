@@ -42,5 +42,17 @@ module Authentication
         expect(described_class.with_membership.find_by(email: email).id).to eq(user.id)
       end
     end
+
+    context "when creeating and default group exists" do
+      let(:user) { FactoryBot.create(:authentication_user, :organizations_user, organization_id: organization.id) }
+      let!(:default_group) { FactoryBot.create(:groups_group, name: "default", organization: organization) }
+
+      it "attaches to the default group" do
+        aggregate_failures do
+          expect(user).to be_valid
+          expect(Groups::Membership.find_by(member: user, group: default_group)).to be_present
+        end
+      end
+    end
   end
 end

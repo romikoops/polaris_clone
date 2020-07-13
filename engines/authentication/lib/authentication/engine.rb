@@ -8,6 +8,7 @@ require "rails"
 require "strong_migrations"
 require "sorcery"
 
+require "groups"
 require "organization_manager"
 
 module Authentication

@@ -167,6 +167,7 @@ digraph G {
     "authentication" -> "organizations" [color=grey];
     "authentication" -> "organization_manager" [color=grey];
     "authentication" -> "users" [color=grey];
+    "authentication" -> "groups" [color=grey];
     "result_formatter" [shape=ellipse];
     "result_formatter" -> "legacy" [color=grey];
     "result_formatter" -> "pricings" [color=grey];
