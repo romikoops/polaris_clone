@@ -5,15 +5,21 @@ require "rails_helper"
 RSpec.describe QuotedShipmentsService, type: :service do
   let(:shipment) {
     FactoryBot.create(:complete_legacy_shipment,
+      itinerary: itinerary,
+      trip: trip,
       with_breakdown: true,
       with_tenders: true,
+      organization: organization,
       trucking: trucking)
   }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:send_email) { false }
   let(:trucking) { {} }
   let(:service) { described_class.new(shipment: shipment, send_email: send_email) }
   let(:quotation) { Legacy::Quotation.find_by(original_shipment_id: shipment) }
   let(:quotation_shipments) { quotation.shipments }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary) }
 
   describe ".perform" do
     context "without existing quotation" do
@@ -71,6 +77,9 @@ RSpec.describe QuotedShipmentsService, type: :service do
     context "with agg cargo" do
       let(:shipment) {
         FactoryBot.create(:complete_legacy_shipment,
+          itinerary: itinerary,
+          trip: trip,
+          organization: organization,
           with_breakdown: true,
           with_tenders: true,
           with_aggregated_cargo: true)
@@ -141,6 +150,25 @@ RSpec.describe QuotedShipmentsService, type: :service do
         aggregate_failures do
           expect(quotation_shipments.length).to eq(shipment.charge_breakdowns.length)
           expect(quotation_shipments.pluck(:trip_id)).to eq(shipment.charge_breakdowns.pluck(:trip_id))
+        end
+      end
+    end
+
+    context "incorrect charge breakdowns" do
+      let(:false_trip) {
+        FactoryBot.create(:legacy_trip,
+          itinerary: FactoryBot.create(:felixstowe_shanghai_itinerary, organization: shipment.organization))
+      }
+
+      before do
+        FactoryBot.create(:legacy_charge_breakdown, shipment: shipment, trip: false_trip)
+        service.perform
+      end
+
+      it "creates a quotation and shipments" do
+        aggregate_failures do
+          expect(quotation_shipments.length).to eq(1)
+          expect(quotation_shipments.pluck(:trip_id)).to_not include(false_trip.id)
         end
       end
     end

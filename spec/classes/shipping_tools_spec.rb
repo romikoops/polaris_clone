@@ -61,8 +61,7 @@ RSpec.describe ShippingTools do
              origin_nexus: origin_hub&.nexus,
              destination_nexus: destination_hub&.nexus,
              with_breakdown: true,
-             with_tenders: true
-            )
+             with_tenders: true)
     end
     let!(:charge_breakdown) { shipment.charge_breakdowns.first }
     let(:results) do
@@ -339,9 +338,14 @@ RSpec.describe ShippingTools do
                           destination: [destination_hub]
                         })
       end
+      let(:tender) {
+        FactoryBot.create(:quotations_tender,
+          origin_hub: origin_hub,
+          destination_hub: destination_hub)
+      }
 
       before do
-        create(:charge_breakdown, shipment: shipment, trip: trip)
+        create(:charge_breakdown, shipment: shipment, trip: trip, tender: tender)
         allow(OfferCalculator::Calculator).to receive(:new).and_return(mock_offer_calculator)
         allow(mock_offer_calculator).to receive(:perform)
         allow(QuotedShipmentsJob).to receive(:perform_later)

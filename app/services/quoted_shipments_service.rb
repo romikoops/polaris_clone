@@ -27,20 +27,33 @@ class QuotedShipmentsService
   end
 
   def reset_quotation
-    if quotation && shipment.updated_at < quotation.updated_at
-      clear_past_shipments
-    elsif quotation && shipment.updated_at > quotation.updated_at
-      clear_all_shipments
-    end
+    clear_shipments
     quotation.touch unless quotation.new_record?
   end
 
   def target_trip_ids
-    trip_ids || shipment.charge_breakdowns.select(:trip_id)
+    Legacy::Trip.where(id: trip_ids || shipment.charge_breakdowns.select(:trip_id))
+      .joins(:itinerary)
+      .merge(itineraries)
   end
 
-  def clear_past_shipments
-    quotation.shipments.where.not(trip_id: target_trip_ids).destroy_all
+  def clear_shipments
+    if shipment.updated_at < quotation.updated_at
+      quotation.shipments.where.not(trip_id: target_trip_ids).destroy_all
+    elsif shipment.updated_at > quotation.updated_at
+      quotation.shipments.destroy_all
+    end
+  end
+
+  def itineraries
+    query = Legacy::Itinerary.where(organization: shipment.organization)
+    if shipment.origin_nexus_id.present?
+      query = query.where(origin_hub: Legacy::Hub.where(nexus_id: shipment.origin_nexus_id))
+    end
+    if shipment.destination_nexus_id.present?
+      query = query.where(destination_hub: Legacy::Hub.where(nexus_id: shipment.destination_nexus_id))
+    end
+    query
   end
 
   def clear_all_shipments
@@ -48,7 +61,9 @@ class QuotedShipmentsService
   end
 
   def clone_shipments
-    shipment.charge_breakdowns.map { |charge_breakdown| clone_offer(charge_breakdown: charge_breakdown) }
+    shipment.charge_breakdowns
+      .where(trip_id: target_trip_ids)
+      .map { |charge_breakdown| clone_offer(charge_breakdown: charge_breakdown) }
   end
 
   def clone_offer(charge_breakdown:)

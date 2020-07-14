@@ -74,8 +74,8 @@ FactoryBot.define do
 
     trait :with_hubs do
       after(:create) do |shipment|
-        shipment.origin_hub = shipment.itinerary.first_stop.hub if shipment.itinerary.present?
-        shipment.destination_hub = shipment.itinerary.last_stop.hub if shipment.itinerary.present?
+        shipment.origin_hub = shipment.itinerary.origin_hub if shipment.itinerary.present?
+        shipment.destination_hub = shipment.itinerary.destination_hub if shipment.itinerary.present?
         shipment.origin_nexus = shipment.origin_hub.nexus if shipment.origin_hub.present?
         shipment.destination_nexus = shipment.destination_hub.nexus if shipment.destination_hub.present?
       end
@@ -102,7 +102,7 @@ FactoryBot.define do
       if evaluator.with_breakdown || evaluator.with_full_breakdown
         sections = evaluator.with_full_breakdown ? %w[trucking_pre export cargo import trucking_on] : ['cargo']
         shipment.charge_breakdowns << create(:legacy_charge_breakdown,
-                                             trip: shipment.trip,
+                                             trip: shipment.trip || create(:legacy_trip, itinerary: shipment.itinerary),
                                              shipment: shipment,
                                              with_tender: evaluator.with_tenders,
                                              sections: sections,
