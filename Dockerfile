@@ -1,4 +1,4 @@
-FROM ruby:2.6-alpine AS builder
+FROM ruby:2.6-alpine@sha256:d0344b44c927c253718f96b4e5b5fc07f6467127a82ca931cba41cf14e7aa49d AS builder
 
 ARG BUNDLE_WITHOUT="development test"
 
@@ -39,7 +39,7 @@ RUN RAILS_ENV=production bin/rails assets:precompile
 #
 #
 #
-FROM ruby:2.6-alpine AS app
+FROM ruby:2.6-alpine@sha256:d0344b44c927c253718f96b4e5b5fc07f6467127a82ca931cba41cf14e7aa49d AS app
 
 ENV MALLOC_ARENA_MAX 2
 
