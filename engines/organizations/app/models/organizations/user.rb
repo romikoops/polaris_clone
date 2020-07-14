@@ -5,7 +5,6 @@ module Organizations
     default_scope { where(organization_id: ::Organizations.current_id) }
 
     belongs_to :organization
-    has_many :memberships
   end
 end
 

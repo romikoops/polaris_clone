@@ -31,6 +31,8 @@ end
 #  first_name     :string           default(""), not null
 #  last_name      :string           default(""), not null
 #  phone          :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #  external_id    :string
 #  legacy_user_id :uuid
 #  user_id        :uuid
