@@ -30,6 +30,8 @@ RSpec.describe "Quotations" do
       FactoryBot.create_list(:quotations_tender, 5))
   end
 
+  let(:quotation_2) { FactoryBot.create(:quotations_quotation, user: user) }
+
   before do
     ::Organizations.current_id = organization.id
     FactoryBot.create(:organizations_scope, target: organization, content: {base_pricing: true})
@@ -41,6 +43,8 @@ RSpec.describe "Quotations" do
     FactoryBot.create(:freight_margin,
       default_for: "ocean", organization: organization, applicable: organization, value: 0)
     shipment.charge_breakdowns.update(tender_id: quotation.tenders.first.id)
+
+    FactoryBot.create(:legacy_charge_breakdown, with_tender: true, quotation: quotation_2)
   end
 
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
@@ -160,7 +164,7 @@ RSpec.describe "Quotations" do
 
       response "200", "successful operation" do
         let(:organization_id) { organization.id }
-        let(:id) { quotation.id }
+        let(:id) { quotation_2.id }
 
         run_test!
       end

@@ -4,6 +4,7 @@ module Wheelhouse
   class TenderDecorator < Draper::Decorator
     decorates 'Quotations::Tender'
     delegate_all
+    delegate :valid_until, to: :charge_breakdown
 
     def origin
       origin_hub.name
@@ -45,8 +46,25 @@ module Wheelhouse
       }
     end
 
+    def remarks
+      notes = Legacy::Note.where(organization: organization, remarks: true)
+      notes = notes.where(pricings_pricing_id: pricings.ids)
+        .or(notes.where(target: [organization, origin_hub, destination_hub, itinerary]))
+      notes.pluck(:body)
+    end
+
     def uuid
       SecureRandom.uuid
+    end
+
+    private
+
+    def organization
+      quotation.organization
+    end
+
+    def pricings
+      Pricings::Pricing.current.where(tenant_vehicle: tenant_vehicle, load_type: load_type, itinerary: itinerary)
     end
   end
 end

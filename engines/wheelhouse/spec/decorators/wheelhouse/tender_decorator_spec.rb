@@ -11,8 +11,10 @@ RSpec.describe Wheelhouse::TenderDecorator do
   let(:amount) { Money.new(25_090, 'EUR') }
   let(:transshipment) { nil }
   let(:context) { nil }
+  let(:quotation) { FactoryBot.create(:quotations_quotation) }
   let(:tender) do
     FactoryBot.create(:quotations_tender,
+                      quotation: quotation,
                       itinerary: itinerary,
                       origin_hub: origin_hub,
                       destination_hub: destination_hub,
@@ -53,6 +55,37 @@ RSpec.describe Wheelhouse::TenderDecorator do
 
       it 'returns estimated as true' do
         expect(decorated_tender.estimated).to be_truthy
+      end
+    end
+
+    context 'with validity' do
+      before do
+        FactoryBot.create(:legacy_charge_breakdown, tender_id: decorated_tender.id, valid_until: 2.days.ago.to_date)
+      end
+
+      it 'returns the validity of the charge berakdown' do
+        expect(decorated_tender.valid_until).to eq 2.days.ago.to_date
+      end
+    end
+
+    context 'with remarks' do
+      let(:pricing) { FactoryBot.create(:pricings_pricing, itinerary: itinerary) }
+      let!(:itinerary_remark) do
+        FactoryBot.create(:legacy_note, organization: quotation.organization,
+                                        remarks: true, target: itinerary)
+      end
+
+      let(:pricing_remark) do
+        FactoryBot.create(:legacy_note, organization: quotation.organization,
+                                        remarks: true, pricings_pricing_id: pricing.id)
+      end
+
+      it "returns the remarks on the itinerary target" do
+        expect(decorated_tender.remarks).to eq [itinerary_remark.body]
+      end
+
+      it "returns the pricing remarks" do
+        expect(decorated_tender.remarks).to eq [pricing_remark.body]
       end
     end
   end
