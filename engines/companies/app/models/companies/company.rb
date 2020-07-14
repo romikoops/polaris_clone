@@ -7,7 +7,7 @@ module Companies
     belongs_to :address, class_name: "Legacy::Address", optional: true
     belongs_to :organization, class_name: "Organizations::Organization"
     has_one :country, through: :address, class_name: "Legacy::Country"
-    has_many :memberships, class_name: "Companies::Membership"
+    has_many :memberships, class_name: "Companies::Membership", dependent: :destroy
 
     pg_search_scope :name_search, against: %i[name], using: {
       tsearch: {prefix: true}
