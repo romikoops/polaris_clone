@@ -215,7 +215,6 @@ module Trucking
           row_data = zone_sheet.row(line)
           zone_name = row_data[0]
           zones[zone_name] = [] if zones[zone_name].nil?
-  
           if row_data[1] && !row_data[2]
             row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1].strip
             @zip_char_length ||= row_zip.to_s.length
@@ -284,10 +283,11 @@ module Trucking
           end
         else
           (postal_codes_data[:min].to_i..postal_codes_data[:max].to_i).map do |ident|
+            string_ident = ident.to_s
             ident_value = if identifier_type == 'zipcode'
-                            ident.to_s.rjust(zip_char_length, '0')
+                            string_ident.rjust(zip_char_length, '0')
                           else
-                            ident
+                            string_ident
                           end
 
             postal_code_range_data(ident_and_country: { ident: ident_value, country: postal_codes_data[:country] })
@@ -296,7 +296,7 @@ module Trucking
       end
 
       def postal_code_range_data(ident_and_country:)
-        return nil if valid_postal_codes&.exclude?(ident_and_country[:ident])
+        return nil if valid_postal_codes&.exclude?(ident_and_country[:ident].to_s)
 
         if identifier_type == 'location_id'
           find_and_prep_geometry(geometry_data: ident_and_country)
