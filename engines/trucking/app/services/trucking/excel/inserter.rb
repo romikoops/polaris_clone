@@ -258,7 +258,7 @@ module Trucking
         (numeric_min..numeric_max).map do |numeric|
           alphanumeric = [alpha, numeric].join('')
 
-          { ident: alphanumeric, country: country }
+          { ident: alphanumeric.to_s, country: country }
         end
       end
 
