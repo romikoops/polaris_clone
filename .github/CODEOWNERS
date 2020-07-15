@@ -1,0 +1,6 @@
+# By default, backend team
+*               @itsmycargo/Backend
+
+# Data related changes
+**/db/migrate/* @itsmycargo/Data
+db/schema.rb    @itsmycargo/Data
