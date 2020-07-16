@@ -1,0 +1,7 @@
+migrations:
+  - '**/db/migrate/*'
+  - 'db/schema.rb'
+
+translations:
+  - '**/config/locales/*'
+  - 'config/locales/*'
