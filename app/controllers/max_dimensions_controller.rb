@@ -14,7 +14,7 @@ class MaxDimensionsController < ApplicationController
   private
 
   def max_dimensions_result(aggregate:)
-    max_dimensions(aggregate: aggregate).presence || default_max_dimensions(aggregate: true)
+    max_dimensions(aggregate: aggregate).presence || default_max_dimensions(aggregate: aggregate)
   end
 
   def default_max_dimensions(aggregate:)
