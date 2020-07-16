@@ -14,7 +14,7 @@ module Api
       def update
         ActiveRecord::Base.transaction do
           auth_user.update(email: client_params[:email])
-          profile.update!(profile_params)
+          update_profile_from_params(user: client, params: profile_params)
           auth_user.save!
         end
       rescue ActiveRecord::RecordInvalid => e
@@ -102,7 +102,7 @@ module Api
       def create_user_profile(user:)
         profile_keys = %i[first_name last_name company_name phone]
         profile_params = client_params.slice(*profile_keys)
-        Profiles::Profile.create!(profile_params.merge(user_id: user.id))
+        update_profile_from_params(user: user, params: profile_params)
       end
 
       def address

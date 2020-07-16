@@ -71,7 +71,8 @@ class UsersController < ApplicationController
       Profiles::ProfileService.create_or_update_profile(user: user,
                                                         first_name: profile_params[:first_name],
                                                         last_name: profile_params[:last_name],
-                                                        company_name: profile_params[:company_name])
+                                                        company_name: profile_params[:company_name],
+                                                        phone: profile_params[:phone])
       response = generate_token_for(user: user, scope: 'public')
       response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
     rescue ActiveRecord::RecordInvalid => e
@@ -200,13 +201,5 @@ class UsersController < ApplicationController
     currency = Users::Settings.find_by(user_id: user.id)&.currency
     user_metadata = {role: role, inactivityLimit: inactivity_limit, currency: currency}
     merge_profile(user: user).merge(user_metadata)
-  end
-
-  def update_profile_from_params(user:, params:)
-    Profiles::ProfileService.create_or_update_profile(user: user,
-                                                      first_name: params[:first_name],
-                                                      last_name: params[:last_name],
-                                                      external_id: params[:external_id],
-                                                      company_name: params[:company_name])
   end
 end

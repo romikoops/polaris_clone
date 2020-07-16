@@ -70,6 +70,14 @@ module Api
       ).fetch
     end
 
+    def update_profile_from_params(user:, params:)
+      Profiles::ProfileService.create_or_update_profile(user: user,
+                                                        first_name: params[:first_name],
+                                                        last_name: params[:last_name],
+                                                        external_id: params[:external_id],
+                                                        company_name: params[:company_name])
+    end
+
     def doorkeeper_authorize!
       super(:public, :admin)
     end

@@ -43,10 +43,13 @@ RSpec.describe UsersController do
       create(:organizations_theme, organization: organization)
     end
 
+    let(:test_email) { 'test@itsmycargo.com' }
+    let(:created_user) { Organizations::User.find_by(email: test_email, organization: organization) }
+
     it 'creates a new user' do
       params = {
         user: {
-          email: 'test@itsmycargo.com',
+          email: test_email,
           password: '123456789',
           organization_id: user.organization_id,
           company_name: 'Person Freight',
@@ -63,7 +66,7 @@ RSpec.describe UsersController do
       let(:params) do
         {
           user: {
-            email: 'test@itsmycargo.com',
+            email: test_email,
             password: '123456789',
             organization_id: user.organization_id
           }
@@ -72,7 +75,10 @@ RSpec.describe UsersController do
 
       it 'returns http status and updates the user' do
         post :create, params: params
-        expect(response).to have_http_status(:success)
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(Profiles::Profile.exists?(user: created_user)).to be_truthy
+        end
       end
     end
 

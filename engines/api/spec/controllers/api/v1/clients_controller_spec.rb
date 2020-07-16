@@ -129,33 +129,6 @@ module Api
           expect(json['error']).to include("Validation failed: Email can't be blank, Email is invalid")
         end
       end
-
-      context 'when update profile request is invalid' do
-        let(:request_object) {
-          patch :update, params: { organization_id: organization,
-                                   id: user.id, client: {
-                                     email: 'bassam@itsmycargo.com',
-                                     first_name: nil, last_name: 'Aziz',
-                                     company_name: 'ItsMyCargo',
-                                     phone: '1231234'
-                                   }}, as: :json
-        }
-
-        it 'returns with a 422 response' do
-          perform_request
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
-
-        it 'does not update profile' do
-          perform_request
-          expect(profile.first_name).not_to be_nil
-        end
-
-        it 'returns list of errors' do
-          json = JSON.parse(perform_request.body)
-          expect(json['error']).to include("Validation failed: First name can't be blank")
-        end
-      end
     end
 
     describe 'POST #create' do
