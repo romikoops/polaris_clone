@@ -3,6 +3,8 @@
 module OfferCalculator
   module Service
     class RouteFilter < Base
+      DEFAULT_MOT = 'general'
+
       def perform(routes)
         return routes unless should_apply_filter?(routes)
 
@@ -40,6 +42,8 @@ module OfferCalculator
         mode_of_transport = route.mode_of_transport
         cargo.chargeable_weight = cargo.calc_chargeable_weight(mode_of_transport)
         max_dimensions = target_max_dimension(route: route, aggregate: aggregate, cargo_class: cargo.cargo_class)
+        return true if max_dimensions.blank?
+
         exceeded_dimensions = validate_cargo_dimensions(
           max_dimensions: max_dimensions,
           cargo: cargo,
@@ -68,7 +72,21 @@ module OfferCalculator
       end
 
       def target_max_dimension(route:, aggregate:, cargo_class:)
-        args = {
+        args = args_from_inputs(route: route, aggregate: aggregate, cargo_class: cargo_class)
+        mot_filtered_max_dimensions = tenant_max_dimensions_bundles.exists?(args.slice(:mode_of_transport))
+        args[:mode_of_transport] = DEFAULT_MOT if mot_filtered_max_dimensions.blank?
+        bundle = tenant_max_dimensions_bundles.find_by(args)
+        bundle ||= tenant_max_dimensions_bundles.find_by(args.except(:itinerary_id))
+        bundle ||= tenant_max_dimensions_bundles.find_by(args.except(:tenant_vehicle_id))
+        bundle ||= tenant_max_dimensions_bundles.find_by(args.except(:tenant_vehicle_id, :itinerary_id))
+        bundle ||= tenant_max_dimensions_bundles.find_by(args.slice(:mode_of_transport, :aggregate))
+        bundle || tenant_max_dimensions_bundles.find_by(
+          mode_of_transport: DEFAULT_MOT, aggregate: aggregate, cargo_class: cargo_class
+        )
+      end
+
+      def args_from_inputs(route:, aggregate:, cargo_class:)
+        {
           carrier_id: route.carrier_id,
           tenant_vehicle_id: route.tenant_vehicle_id,
           mode_of_transport: route.mode_of_transport,
@@ -76,13 +94,6 @@ module OfferCalculator
           itinerary_id: route.itinerary_id,
           aggregate: aggregate
         }
-        mot_filtered_max_dimensions = tenant_max_dimensions_bundles.exists?(args.slice(:mode_of_transport))
-        args[:mode_of_transport] = 'general' if mot_filtered_max_dimensions.blank?
-        bundle = tenant_max_dimensions_bundles.find_by(args)
-        bundle ||= tenant_max_dimensions_bundles.find_by(args.except(:itinerary_id))
-        bundle ||= tenant_max_dimensions_bundles.find_by(args.except(:tenant_vehicle_id))
-        bundle ||= tenant_max_dimensions_bundles.find_by(args.except(:tenant_vehicle_id, :itinerary_id))
-        bundle || tenant_max_dimensions_bundles.find_by(args.slice(:mode_of_transport, :aggregate))
       end
     end
   end
