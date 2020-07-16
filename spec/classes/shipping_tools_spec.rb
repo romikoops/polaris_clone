@@ -75,7 +75,7 @@ RSpec.describe ShippingTools do
               'destination_hub': destination_hub
             }
           ],
-          meta: { trip_id: trip.id }
+          meta: { charge_trip_id: trip.id }
         }.with_indifferent_access
       ]
     end
