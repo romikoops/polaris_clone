@@ -66,9 +66,6 @@
           "last_name": {
             "type": "string"
           },
-          "role": {
-            "type": "string"
-          },
           "company_name": {
             "type": "string"
           },
@@ -95,7 +92,6 @@
           "email",
           "first_name",
           "last_name",
-          "role",
           "company_name",
           "phone",
           "house_number",
@@ -292,7 +288,7 @@
           "attributes"
         ]
       },
-      "tenant": {
+      "organization": {
         "type": "object",
         "properties": {
           "id": {
@@ -306,14 +302,10 @@
             "properties": {
               "slug": {
                 "type": "string"
-              },
-              "name": {
-                "type": "string"
               }
             },
             "required": [
-              "slug",
-              "name"
+              "slug"
             ]
           }
         },
@@ -338,7 +330,7 @@
               "email": {
                 "type": "string"
               },
-              "tenantId": {
+              "organizationId": {
                 "type": "string"
               },
               "firstName": {
@@ -352,19 +344,15 @@
               },
               "companyName": {
                 "type": "string"
-              },
-              "role": {
-                "type": "string"
               }
             },
             "required": [
               "email",
-              "tenantId",
+              "organizationId",
               "firstName",
               "lastName",
               "phone",
-              "companyName",
-              "role"
+              "companyName"
             ]
           }
         },
@@ -432,7 +420,7 @@
     }
   },
   "paths": {
-    "/v1/ahoy/{id}/settings": {
+    "/v1/organizations/{organization_id}/ahoy": {
       "get": {
         "summary": "Fetch Settings",
         "tags": [
@@ -440,9 +428,9 @@
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "organization_id",
             "in": "path",
-            "description": "Customer UUID",
+            "description": "The current organization ID",
             "required": true,
             "schema": {
               "type": "string"
@@ -550,7 +538,7 @@
         }
       }
     },
-    "/v1/cargo_item_types": {
+    "/v1/organizations/{organization_id}/cargo_item_types": {
       "get": {
         "summary": "Fetch all available cargo types",
         "tags": [
@@ -561,6 +549,17 @@
             "oauth": [
 
             ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -593,7 +592,7 @@
         }
       }
     },
-    "/v1/quotations/{quotation_id}/charges/{id}": {
+    "/v1/organizations/{organization_id}/quotations/{quotation_id}/charges/{id}": {
       "get": {
         "summary": "Fetch tender charges",
         "tags": [
@@ -607,6 +606,15 @@
           }
         ],
         "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "id",
             "in": "path",
@@ -700,7 +708,7 @@
         }
       }
     },
-    "/v1/clients": {
+    "/v1/organizations/{organization_id}/clients": {
       "get": {
         "summary": "Fetch all clients",
         "tags": [
@@ -714,6 +722,15 @@
           }
         ],
         "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "q",
             "in": "query",
@@ -792,7 +809,15 @@
           }
         ],
         "parameters": [
-
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "201": {
@@ -830,7 +855,7 @@
         }
       }
     },
-    "/v1/clients/{id}": {
+    "/v1/organizations/{organization_id}/clients/{id}": {
       "get": {
         "summary": "Fetch specific client",
         "tags": [
@@ -844,6 +869,15 @@
           }
         ],
         "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "id",
             "in": "path",
@@ -887,7 +921,7 @@
         }
       }
     },
-    "/v1/clients/{id}/password_reset": {
+    "/v1/organizations/{organization_id}/clients/{id}/password_reset": {
       "patch": {
         "summary": "Password Reset",
         "tags": [
@@ -901,6 +935,15 @@
           }
         ],
         "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "id",
             "in": "path",
@@ -952,7 +995,72 @@
         }
       }
     },
-    "/v1/dashboard": {
+    "/v1/organizations/{organization_id}/clients/{id}/": {
+      "patch": {
+        "summary": "Update",
+        "tags": [
+          "Clients"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Client ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful operation",
+            "content": {
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client": {
+                    "$ref": "#/components/schemas/client"
+                  }
+                },
+                "required": [
+                  "client"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/dashboard": {
       "get": {
         "summary": "Fetch Dashboard Widget",
         "tags": [
@@ -966,6 +1074,15 @@
           }
         ],
         "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "widget",
             "in": "query",
@@ -1013,7 +1130,7 @@
         }
       }
     },
-    "/v1/equipments": {
+    "/v1/organizations/{organization_id}/equipments": {
       "get": {
         "summary": "Fetch all available equipment",
         "tags": [
@@ -1027,6 +1144,15 @@
           }
         ],
         "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "origin_nexus_id",
             "in": "query",
@@ -1076,7 +1202,7 @@
         }
       }
     },
-    "/v1/groups": {
+    "/v1/organizations/{organization_id}/groups": {
       "get": {
         "summary": "Fetch all groups",
         "tags": [
@@ -1087,6 +1213,17 @@
             "oauth": [
 
             ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1119,9 +1256,9 @@
         }
       }
     },
-    "/v1/itineraries": {
+    "/v1/organizations/{organization_id}/itineraries": {
       "get": {
-        "summary": "Fetch list of itineraries belonging to a tenant",
+        "summary": "Fetch list of itineraries belonging to an organization",
         "tags": [
           "Quote"
         ],
@@ -1130,6 +1267,17 @@
             "oauth": [
 
             ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1221,7 +1369,251 @@
         }
       }
     },
-    "/v1/itineraries/ports/{tenant_id}": {
+    "/v1/organizations/{organization_id}/locations/origins": {
+      "get": {
+        "summary": "Fetch available origins",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/nexus"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/locations/destinations": {
+      "get": {
+        "summary": "Fetch available destinations",
+        "tags": [
+          "Quote"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/nexus"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations": {
+      "get": {
+        "summary": "Fetch all organizations",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/organization"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{id}/countries": {
+      "get": {
+        "summary": "Fetch enabled countries for an organization",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Organization ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/country"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/ports": {
       "get": {
         "summary": "Fetch list of ports",
         "tags": [
@@ -1229,7 +1621,7 @@
         ],
         "parameters": [
           {
-            "name": "tenant_id",
+            "name": "organization_id",
             "in": "path",
             "type": "string",
             "schema": {
@@ -1322,135 +1714,7 @@
         }
       }
     },
-    "/v1/locations/origins": {
-      "get": {
-        "summary": "Fetch available origins",
-        "tags": [
-          "Quote"
-        ],
-        "security": [
-          {
-            "oauth": [
-
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "type": "string",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "type": "string",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "load_type",
-            "in": "query",
-            "type": "string",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/nexus"
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/locations/destinations": {
-      "get": {
-        "summary": "Fetch available destinations",
-        "tags": [
-          "Quote"
-        ],
-        "security": [
-          {
-            "oauth": [
-
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "type": "string",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "type": "string",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "load_type",
-            "in": "query",
-            "type": "string",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/nexus"
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/quotations": {
+    "/v1/organizations/{organization_id}/quotations": {
       "post": {
         "summary": "Create new quotation",
         "tags": [
@@ -1464,7 +1728,15 @@
           }
         ],
         "parameters": [
-
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -1563,7 +1835,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "tenant_id": {
+                  "organization_id": {
                     "type": "string"
                   },
                   "quote": {
@@ -1572,7 +1844,7 @@
                       "selected_date": {
                         "type": "date"
                       },
-                      "tenant_id": {
+                      "organization_id": {
                         "type": "string"
                       },
                       "user_id": {
@@ -1613,7 +1885,7 @@
         }
       }
     },
-    "/v1/quotations/{id}": {
+    "/v1/organizations/{organization_id}/quotations/{id}": {
       "get": {
         "summary": "Fetch existing quotation",
         "tags": [
@@ -1628,6 +1900,15 @@
         ],
         "parameters": [
           {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "id",
             "in": "path",
             "type": "string",
@@ -1637,7 +1918,7 @@
             "required": true
           },
           {
-            "name": "tenant_id",
+            "name": "organization_id",
             "in": "query",
             "type": "string",
             "schema": {
@@ -1654,7 +1935,7 @@
         }
       }
     },
-    "/v1/quotations/{id}/download": {
+    "/v1/organizations/{organization_id}/quotations/{id}/download": {
       "post": {
         "summary": "Download quotation as PDF",
         "tags": [
@@ -1669,6 +1950,15 @@
         ],
         "parameters": [
           {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "id",
             "in": "path",
             "type": "string",
@@ -1678,7 +1968,7 @@
             "required": true
           },
           {
-            "name": "tenant_id",
+            "name": "organization_id",
             "in": "query",
             "type": "string",
             "schema": {
@@ -1717,7 +2007,7 @@
         }
       }
     },
-    "/v1/quotations/{quotation_id}/schedules/{id}": {
+    "/v1/organizations/{organization_id}/quotations/{quotation_id}/schedules/{id}": {
       "get": {
         "summary": "Fetch available schedules",
         "tags": [
@@ -1731,6 +2021,15 @@
           }
         ],
         "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "quotation_id",
             "in": "path",
@@ -1829,7 +2128,7 @@
         }
       }
     },
-    "/v1/itineraries/{id}/schedules/enabled": {
+    "/v1/organizations/{organization_id}/itineraries/{id}/schedules/enabled": {
       "get": {
         "summary": "Fetch status of schedules",
         "tags": [
@@ -1844,6 +2143,15 @@
         ],
         "parameters": [
           {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "id",
             "in": "path",
             "type": "string",
@@ -1851,14 +2159,6 @@
               "type": "string"
             },
             "required": true
-          },
-          {
-            "name": "tenant_id",
-            "in": "query",
-            "type": "string",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1891,105 +2191,7 @@
         }
       }
     },
-    "/v1/tenants": {
-      "get": {
-        "summary": "Fetch all tenants",
-        "tags": [
-          "Users"
-        ],
-        "security": [
-          {
-            "oauth": [
-
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/tenant"
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid Credentials",
-            "content": {
-            }
-          }
-        }
-      }
-    },
-    "/v1/tenants/{id}/countries": {
-      "get": {
-        "summary": "Fetch enabled countries for tenant",
-        "tags": [
-          "Users"
-        ],
-        "security": [
-          {
-            "oauth": [
-
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "type": "string",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Tenant ID",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/country"
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid Credentials",
-            "content": {
-            }
-          }
-        }
-      }
-    },
-    "/v1/tenders/{id}": {
+    "/v1/organizations/{organization_id}/tenders/{id}": {
       "put": {
         "summary": "Update Tenders",
         "tags": [
@@ -2004,6 +2206,15 @@
         ],
         "parameters": [
           {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "id",
             "in": "path",
             "type": "string",
@@ -2013,7 +2224,7 @@
             "required": true
           },
           {
-            "name": "tenant_id",
+            "name": "organization_id",
             "in": "query",
             "type": "string",
             "schema": {
@@ -2154,7 +2365,7 @@
         }
       }
     },
-    "/v1/trucking_availabilities": {
+    "/v1/organizations/{organization_id}/trucking_availabilities": {
       "get": {
         "summary": "Fetch Available Truckings",
         "tags": [
@@ -2168,6 +2379,15 @@
           }
         ],
         "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "lat",
             "in": "query",
@@ -2193,7 +2413,7 @@
             }
           },
           {
-            "name": "tenant_id",
+            "name": "organization_id",
             "in": "query",
             "type": "string",
             "schema": {
@@ -2238,7 +2458,7 @@
         }
       }
     },
-    "/v1/trucking_counterparts": {
+    "/v1/organizations/{organization_id}/trucking_counterparts": {
       "get": {
         "summary": "Fetch counterparts fgor trucking",
         "tags": [
@@ -2252,6 +2472,15 @@
           }
         ],
         "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "lat",
             "in": "query",
@@ -2277,7 +2506,7 @@
             }
           },
           {
-            "name": "tenant_id",
+            "name": "organization_id",
             "in": "query",
             "type": "string",
             "schema": {
@@ -2329,6 +2558,79 @@
         }
       }
     },
+    "/v1/organizations/{organization_id}/trucking_countries": {
+      "get": {
+        "summary": "Fetch enabled countries for organization",
+        "tags": [
+          "Trucking"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Organization ID",
+            "required": true
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Load Type"
+          },
+          {
+            "name": "location_type",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Location Type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/country"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        }
+      }
+    },
     "/v1/me": {
       "get": {
         "summary": "Fetch information of current user",
@@ -2365,7 +2667,7 @@
                             "email": {
                               "type": "string"
                             },
-                            "tenantId": {
+                            "organizationId": {
                               "type": "string"
                             },
                             "firstName": {
@@ -2379,19 +2681,15 @@
                             },
                             "companyName": {
                               "type": "string"
-                            },
-                            "role": {
-                              "type": "string"
                             }
                           },
                           "required": [
                             "email",
-                            "tenantId",
+                            "organizationId",
                             "firstName",
                             "lastName",
                             "phone",
-                            "companyName",
-                            "role"
+                            "companyName"
                           ]
                         }
                       },

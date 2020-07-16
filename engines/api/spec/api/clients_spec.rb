@@ -13,6 +13,8 @@ RSpec.describe "Clients" do
 
   before do
     Organizations.current_id = organization_id
+    FactoryBot.create(:organizations_theme, organization: organization, name: "Demo")
+    FactoryBot.create(:organizations_domain, default: true, organization: organization, domain: "demo")
   end
 
   path "/v1/organizations/{organization_id}/clients" do
@@ -181,6 +183,57 @@ RSpec.describe "Clients" do
 
       response "404", "Invalid Client ID" do
         let(:id) { "deadbeef" }
+
+        run_test!
+      end
+    end
+  end
+
+  path "/v1/organizations/{organization_id}/clients/{id}/" do
+    patch "Update" do
+      tags "Clients"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :id, in: :path, type: :string, schema: {type: :string}, description: "Client ID"
+
+      parameter name: :client, in: :body, schema: {
+        type: :object,
+        properties: {
+          client: {"$ref" => "#/components/schemas/client"}
+        },
+        required: %w[client]
+      }
+
+      let(:id) { clients.sample.id }
+
+      response "204", "successful operation" do
+        let(:client) do
+          {client: {
+            email: "john@example.com",
+            first_name: "John",
+            last_name: "Doe",
+            company_name: "LumberJacks Ltd",
+            phone: "+1 2345 2345"
+          }}
+        end
+
+        run_test!
+      end
+
+      response "422", "Unprocessable Entity" do
+        let(:client) do
+          {client: {
+            email: nil,
+            first_name: "John",
+            last_name: "Doe",
+            company_name: "LumberJacks Ltd",
+            phone: "+1 2345 2345"
+          }}
+        end
 
         run_test!
       end

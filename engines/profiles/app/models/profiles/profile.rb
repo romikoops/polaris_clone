@@ -3,6 +3,9 @@
 module Profiles
   class Profile < ApplicationRecord
     validates :user_id, uniqueness: true
+    validates :first_name, presence: true
+    validates :last_name, presence: true
+
     belongs_to :user, class_name: 'Users::User', foreign_key: :user_id
 
     acts_as_paranoid

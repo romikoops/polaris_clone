@@ -4,6 +4,10 @@ FactoryBot.define do
       type { "Organizations::User" }
     end
 
+    trait :active do
+      activation_state { "active" }
+    end
+
     trait :users_user do
       type { "Users::User" }
     end

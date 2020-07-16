@@ -11,6 +11,16 @@ module Api
         render json: UserSerializer.new(UserDecorator.decorate(client))
       end
 
+      def update
+        ActiveRecord::Base.transaction do
+          auth_user.update(email: client_params[:email])
+          Profiles::Profile.find_by(user_id: client.id).update!(profile_params)
+          auth_user.save!
+        end
+      rescue ActiveRecord::RecordInvalid => e
+        render(json: {error: e.message}, status: :unprocessable_entity)
+      end
+
       def create
         ActiveRecord::Base.transaction do
           client = Organizations::User.create!(email: client_params[:email], organization_id: current_organization.id).tap do |user|
@@ -54,6 +64,10 @@ module Api
           group_id
           country]
         params.require(:client).permit(*client_keys)
+      end
+
+      def profile_params
+        params.require(:client).permit(%i[first_name last_name company_name phone])
       end
 
       def address_from_params

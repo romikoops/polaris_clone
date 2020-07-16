@@ -63,6 +63,101 @@ module Api
       end
     end
 
+    describe 'PATCH #update' do
+      let(:user) {
+        FactoryBot.create(:authentication_user,
+       :organizations_user,
+        :with_profile,
+        :active,
+         organization_id: organization.id)
+      }
+      let(:profile) { Profiles::Profile.find_by(user_id: user.id) }
+
+      before do
+        FactoryBot.create(:organizations_theme, organization: organization, name: "Demo")
+        FactoryBot.create(:organizations_domain, default: true, organization: organization, domain: "demo")
+      end
+
+      context 'when request is successful' do
+        let(:request_object) {
+          patch :update, params: { organization_id: organization.id,
+                                   id: user.id,
+                                   client: {
+                                     email: 'bassam@itsmycargo.com',
+                                     first_name: 'Bassam', last_name: 'Aziz',
+                                     company_name: 'ItsMyCargo',
+                                     phone: '123123'
+                                   }}, as: :json
+        }
+
+        it 'returns an http status of success' do
+          perform_request
+          expect(response).to be_successful
+        end
+
+        it 'updates the user profile successfully' do
+          perform_request
+          expect(profile.first_name).to eq('Bassam')
+        end
+
+        it 'updates the user email successfully' do
+          perform_request
+          user.reload
+          expect(user.activation_state).to eq('pending')
+          expect(user.email).to eq('bassam@itsmycargo.com')
+        end
+      end
+
+      context 'when update email request is invalid' do
+        let(:request_object) {
+          patch :update, params: { organization_id: organization,
+                                   id: user.id, client: {
+                                     email: nil,
+                                     first_name: 'Bassam', last_name: 'Aziz',
+                                     company_name: 'ItsMyCargo',
+                                     phone: '123123'
+                                   } }, as: :json
+        }
+
+        it 'returns with a 422 response' do
+          perform_request
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it 'returns list of errors' do
+          json = JSON.parse(perform_request.body)
+          expect(json['error']).to include("Validation failed: Email can't be blank, Email is invalid")
+        end
+      end
+
+      context 'when update profile request is invalid' do
+        let(:request_object) {
+          patch :update, params: { organization_id: organization,
+                                   id: user.id, client: {
+                                     email: 'bassam@itsmycargo.com',
+                                     first_name: nil, last_name: 'Aziz',
+                                     company_name: 'ItsMyCargo',
+                                     phone: '1231234'
+                                   }}, as: :json
+        }
+
+        it 'returns with a 422 response' do
+          perform_request
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it 'does not update profile' do
+          perform_request
+          expect(profile.first_name).not_to be_nil
+        end
+
+        it 'returns list of errors' do
+          json = JSON.parse(perform_request.body)
+          expect(json['error']).to include("Validation failed: First name can't be blank")
+        end
+      end
+    end
+
     describe 'POST #create' do
       let(:user_info) { FactoryBot.attributes_for(:organizations_user, organization_id: organization.id).merge(group_id: organization_group.id) }
       let(:profile_info) { FactoryBot.attributes_for(:profiles_profile) }
