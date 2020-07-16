@@ -14,7 +14,7 @@ module Api
       def update
         ActiveRecord::Base.transaction do
           auth_user.update(email: client_params[:email])
-          Profiles::Profile.find_by(user_id: client.id).update!(profile_params)
+          profile.update!(profile_params)
           auth_user.save!
         end
       rescue ActiveRecord::RecordInvalid => e
@@ -41,6 +41,13 @@ module Api
         render json: {data: {password: random_password}}
       end
 
+      def destroy
+        ActiveRecord::Base.transaction do
+          profile.destroy!
+          auth_user.destroy!
+        end
+      end
+
       private
 
       def auth_user
@@ -49,6 +56,10 @@ module Api
 
       def client
         @client ||= Organizations::User.find(params[:id])
+      end
+
+      def profile
+        @profile ||= Profiles::Profile.find_by(user_id: client.id)
       end
 
       def client_params

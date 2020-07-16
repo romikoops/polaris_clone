@@ -146,6 +146,31 @@ RSpec.describe "Clients" do
     end
   end
 
+  path "/v1/organizations/{organization_id}/clients/{id}" do
+    delete "Destroy a specific client" do
+      tags "Clients"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :id, in: :path, type: :string, schema: {type: :string}, description: "Client ID"
+
+      response "204", "successful operation" do
+        let(:id) { clients.sample.id }
+
+        run_test!
+      end
+
+      response "404", "Invalid Client ID" do
+        let(:id) { "deadbeef" }
+
+        run_test!
+      end
+    end
+  end
+
   path "/v1/organizations/{organization_id}/clients/{id}/password_reset" do
     patch "Password Reset" do
       tags "Clients"

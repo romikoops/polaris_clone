@@ -251,10 +251,11 @@ end
 
 # == Route Map
 #
-# D, [2020-07-09T16:08:35.083927 #71592] DEBUG -- : using default configuration
+# D, [2020-07-16T10:30:29.332007 #1161] DEBUG -- : using default configuration
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
 #                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
+#                                                      healthz GET    /healthz(.:format)                                                                                 application#health
 #                                                          api        /                                                                                                  Api::Engine
 #                                                    admiralty        /admiralty                                                                                         Admiralty::Engine
 #                                                  sidekiq_web        /sidekiq                                                                                           Sidekiq::Web
@@ -522,7 +523,8 @@ end
 #          v1_organization_quotation_download POST   /v1/organizations/:organization_id/quotations/:quotation_id/download(.:format)           api/v1/quotations#download
 #            v1_organization_quotation_charge GET    /v1/organizations/:organization_id/quotations/:quotation_id/charges/:id(.:format)        api/v1/charges#show
 #          v1_organization_quotation_schedule GET    /v1/organizations/:organization_id/quotations/:quotation_id/schedules/:id(.:format)      api/v1/schedules#show
-#                  v1_organization_quotations POST   /v1/organizations/:organization_id/quotations(.:format)                                  api/v1/quotations#create
+#                  v1_organization_quotations GET    /v1/organizations/:organization_id/quotations(.:format)                                  api/v1/quotations#index
+#                                             POST   /v1/organizations/:organization_id/quotations(.:format)                                  api/v1/quotations#create
 #                   v1_organization_quotation GET    /v1/organizations/:organization_id/quotations/:id(.:format)                              api/v1/quotations#show
 #                      v1_organization_tender PATCH  /v1/organizations/:organization_id/tenders/:id(.:format)                                 api/v1/tenders#update
 #                                             PUT    /v1/organizations/:organization_id/tenders/:id(.:format)                                 api/v1/tenders#update
@@ -545,6 +547,8 @@ end
 #                     v1_organization_clients GET    /v1/organizations/:organization_id/clients(.:format)                                     api/v1/clients#index
 #                                             POST   /v1/organizations/:organization_id/clients(.:format)                                     api/v1/clients#create
 #                      v1_organization_client GET    /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#show
+#                                             PATCH  /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#update
+#                                             PUT    /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#update
 #                  v1_organization_equipments GET    /v1/organizations/:organization_id/equipments(.:format)                                  api/v1/equipments#index
 #                                             GET    /v1/organizations/:organization_id/dashboard(.:format)                                   api/v1/dashboard#show
 #                                             POST   /v1/organizations/:organization_id/quotations/:quotation_id/download(.:format)           api/v1/quotations#download

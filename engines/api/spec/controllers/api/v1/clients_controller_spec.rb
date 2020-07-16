@@ -224,5 +224,58 @@ module Api
         end
       end
     end
+
+    describe 'DELETE #destroy' do
+      let(:user) {
+        FactoryBot.create(:authentication_user,
+        :organizations_user,
+        :with_profile,
+        :active,
+        organization_id: organization.id)
+      }
+      let(:profile) { Profiles::Profile.with_deleted.find_by(user_id: user.id) }
+      let(:organization_user) { Organizations::User.with_deleted.find_by(id: user.id) }
+      let(:request_object) {
+        delete :destroy,
+        params: { organization_id: organization.id,
+                  id: user.id },
+        as: :json
+      }
+
+      context 'when request is successful' do
+        it 'deletes the client successfully' do
+          perform_request
+          expect(response).to be_successful
+        end
+
+        it 'deletes the profile successfully' do
+          perform_request
+          expect(profile.deleted?).to be_truthy
+        end
+
+        it 'deletes the authentication user successfully' do
+          perform_request
+          user.reload
+          expect(user.deleted?).to be_truthy
+        end
+
+        it 'deletes the organization user successfully' do
+          perform_request
+          user.reload
+          expect(organization_user.deleted?).to be_truthy
+        end
+      end
+
+      context 'when request cannot find a user' do
+        before do
+          user.destroy!
+        end
+
+        it 'returns with a 404 response' do
+          perform_request
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
   end
 end

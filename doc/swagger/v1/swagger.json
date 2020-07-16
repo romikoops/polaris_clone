@@ -919,6 +919,52 @@
             }
           }
         }
+      },
+      "delete": {
+        "summary": "Destroy a specific client",
+        "tags": [
+          "Clients"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Client ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful operation",
+            "content": {
+            }
+          },
+          "404": {
+            "description": "Invalid Client ID",
+            "content": {
+            }
+          }
+        }
       }
     },
     "/v1/organizations/{organization_id}/clients/{id}/password_reset": {

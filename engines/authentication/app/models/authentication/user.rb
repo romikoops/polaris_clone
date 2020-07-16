@@ -4,6 +4,7 @@ module Authentication
   class User < Users::User
     before_update :setup_activation, if: -> { email_changed? }
     after_update :send_activation_needed_email!, if: -> { previous_changes["email"].present? }
+    acts_as_paranoid
 
     self.inheritance_column = :_sti_type_disabled
     authenticates_with_sorcery!

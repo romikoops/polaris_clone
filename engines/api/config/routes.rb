@@ -34,7 +34,7 @@ Api::Engine.routes.draw do
 
       resources :ahoy, only: :index
 
-      resources :clients, only: %i[index show update create] do
+      resources :clients, only: %i[index show update create destroy] do
         member do
           patch 'password_reset'
         end
