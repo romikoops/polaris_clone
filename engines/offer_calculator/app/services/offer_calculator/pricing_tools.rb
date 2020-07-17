@@ -4,6 +4,7 @@ require 'bigdecimal'
 
 class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
   attr_accessor :scope, :user, :shipment, :metadata
+  attr_reader :currency
 
   def initialize(user:, shipment: nil, sandbox: nil, metadata: [])
     @user = user
@@ -54,7 +55,6 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       end
     end
 
-    currency = Users::Settings.find_by(user: user).currency
     converted = ::Legacy::ExchangeHelper.sum_and_convert_cargo(totals, currency)
     value = converted.cents / 100.0
     totals['total'] = { 'value' => value, 'currency' => converted.currency.iso_code }
